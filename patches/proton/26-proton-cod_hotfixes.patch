@@ -103,3 +103,33 @@ index 7e7e6fbdf29..3de4d241b8e 100644
 -- 
 2.29.2
 
+From f0fc38651b0e5975c0f0ee98a2739a865fc7d7b4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 19 Nov 2020 10:25:20 +0100
+Subject: [PATCH] include: Fix DPFLTR_MASK value to 0x80000000.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is most likely a typo from MSDN.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 65af0b67024002f6fb3eb485a6775baf41db2050)
+---
+ include/dpfilter.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/dpfilter.h b/include/dpfilter.h
+index 5b09dc9c23c..deb8db3fc41 100644
+--- a/include/dpfilter.h
++++ b/include/dpfilter.h
+@@ -23,7 +23,7 @@
+ #define DPFLTR_WARNING_LEVEL    1
+ #define DPFLTR_TRACE_LEVEL      2
+ #define DPFLTR_INFO_LEVEL       3
+-#define DPFLTR_MASK     0x8000000
++#define DPFLTR_MASK    0x80000000
+ 
+ typedef enum _DPFLTR_TYPE
+ {

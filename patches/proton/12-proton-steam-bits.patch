@@ -106,16 +106,15 @@ diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
 index cc7bf6900b..28bbb26f79 100644
 --- a/dlls/ntdll/loader.c
 +++ b/dlls/ntdll/loader.c
-@@ -74,7 +74,8 @@ const WCHAR syswow64_dir[] = {'C',':','\\','w','i','n','d','o','w','s','\\',
- static const WCHAR system_path[] =
-     {'C',':','\\','w','i','n','d','o','w','s','\\','s','y','s','t','e','m','3','2',';',
-      'C',':','\\','w','i','n','d','o','w','s','\\','s','y','s','t','e','m',';',
--     'C',':','\\','w','i','n','d','o','w','s',0};
-+     'C',':','\\','w','i','n','d','o','w','s',';',
-+     'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m',0};
+@@ -75,7 +75,7 @@ const WCHAR syswow64_dir[] = L"C:\\windows\\syswow64\\";
+ BOOL is_wow64 = FALSE;
  
- static const WCHAR dotW[] = {'.',0};
+ /* system search path */
+-static const WCHAR system_path[] = L"C:\\windows\\system32;C:\\windows\\system;C:\\windows";
++static const WCHAR system_path[] = L"C:\\windows\\system32;C:\\windows\\system;C:\\windows;C:\\Program Files (x86)\\Steam";
  
+ static BOOL imports_fixup_done = FALSE;  /* set once the imports have been fixed up, before attaching them */
+ static BOOL process_detaching = FALSE;  /* set on process detach to avoid deadlocks with thread detach */
 From f319dc029be11156c22429c8e0892b4c0e3d0657 Mon Sep 17 00:00:00 2001
 From: Tk-Glitch <ti3nou@gmail.com>
 Date: Sat, 18 Apr 2020 5:53:14 +0200

@@ -538,10 +538,10 @@ index 4505a8d965c..6f6571ea3f4 100644
      case ALG_ID_ECDH_P256:
      case ALG_ID_ECDSA_P256:
      case ALG_ID_ECDSA_P384:
-@@ -1849,7 +1915,9 @@ static const struct key_funcs key_funcs =
-     key_export_ecc,
+@@ -1915,7 +1981,9 @@ static const struct key_funcs key_funcs =
      key_import_dsa_capi,
      key_import_ecc,
+     key_import_rsa,
 -    NULL
 +    NULL,
 +    key_export_dh,
@@ -572,10 +572,10 @@ index e44436a73fb..ed4a74b2796 100644
  static const struct key_funcs key_funcs =
  {
      key_set_property,
-@@ -285,7 +297,9 @@ static const struct key_funcs key_funcs =
-     key_export_ecc,
+@@ -297,7 +309,9 @@ static const struct key_funcs key_funcs =
      key_import_dsa_capi,
      key_import_ecc,
+     key_import_rsa,
 -    NULL
 +    NULL,
 +    key_export_dh,

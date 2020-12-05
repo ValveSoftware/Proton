@@ -1449,109 +1449,6 @@ index 20eb6a05922..d99c6b462b2 100644
  
      name     = attr->ObjectName->Buffer;
      name_len = attr->ObjectName->Length / sizeof(WCHAR);
-From cb427c70056654bf12fb0d7d6dcb13386d193ff4 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
-Date: Fri, 24 Apr 2020 14:37:58 +0300
-Subject: [PATCH] server: Try to retrieve the unix name on handles created from
- file descriptors.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=46070
-Signed-off-by: Gabriel Ivăncescu <gabrielopcode@gmail.com>
-
-Fixes Unity of Command II, and possibly other games that use
-Python38.dll.
----
- server/fd.c   | 39 +++++++++++++++++++++++++++++++++++++++
- server/file.c |  1 +
- server/file.h |  2 ++
- 3 files changed, 42 insertions(+)
-
-diff --git a/server/fd.c b/server/fd.c
-index 904c99029ca..990a1a708a0 100644
---- a/server/fd.c
-+++ b/server/fd.c
-@@ -2079,6 +2079,45 @@ struct fd *create_anonymous_fd( const struct fd_ops *fd_user_ops, int unix_fd, s
-     return NULL;
- }
- 
-+void set_unix_name_of_fd( struct fd *fd, const struct stat *fd_st )
-+{
-+#ifdef __linux__
-+    static const char procfs_fmt[] = "/proc/self/fd/%d";
-+
-+    char path[PATH_MAX], procfs_path[sizeof(procfs_fmt) - 2 /* %d */ + 11];
-+    struct stat path_st;
-+    ssize_t len;
-+
-+    sprintf( procfs_path, procfs_fmt, fd->unix_fd );
-+    len = readlink( procfs_path, path, sizeof(path) );
-+    if (len == -1 || len >= sizeof(path) )
-+        return;
-+    path[len] = '\0';
-+
-+    /* Make sure it's an absolute path, has at least one hardlink, and the same inode */
-+    if (path[0] != '/' || stat( path, &path_st ) || path_st.st_nlink < 1 ||
-+        path_st.st_dev != fd_st->st_dev || path_st.st_ino != fd_st->st_ino)
-+        return;
-+
-+    if (!(fd->unix_name = mem_alloc( len + 1 )))
-+        return;
-+    memcpy( fd->unix_name, path, len + 1 );
-+
-+#elif defined(F_GETPATH)
-+    char path[PATH_MAX];
-+    size_t size;
-+
-+    if (fcntl( fd->unix_fd, F_GETPATH, path ) == -1 || path[0] != '/')
-+        return;
-+
-+    size = strlen(path) + 1;
-+    if (!(fd->unix_name = mem_alloc( size )))
-+        return;
-+    memcpy( fd->unix_name, path, size );
-+
-+#endif
-+}
-+
- /* retrieve the object that is using an fd */
- void *get_fd_user( struct fd *fd )
- {
-diff --git a/server/file.c b/server/file.c
-index e5e367478ce..e469341c746 100644
---- a/server/file.c
-+++ b/server/file.c
-@@ -147,6 +147,7 @@ struct file *create_file_for_fd( int fd, unsigned int access, unsigned int shari
-         release_object( file );
-         return NULL;
-     }
-+    set_unix_name_of_fd( file->fd, &st );
-     allow_fd_caching( file->fd );
-     return file;
- }
-diff --git a/server/file.h b/server/file.h
-index 0e43a8170df..7d614569a16 100644
---- a/server/file.h
-+++ b/server/file.h
-@@ -22,6 +22,7 @@
- #define __WINE_SERVER_FILE_H
- 
- #include <sys/types.h>
-+#include <sys/stat.h>
- 
- #include "object.h"
- 
-@@ -82,6 +83,7 @@ extern struct fd *open_fd( struct fd *root, const char *name, int flags, mode_t
-                            unsigned int access, unsigned int sharing, unsigned int options );
- extern struct fd *create_anonymous_fd( const struct fd_ops *fd_user_ops,
-                                        int unix_fd, struct object *user, unsigned int options );
-+extern void set_unix_name_of_fd( struct fd *fd, const struct stat *fd_st );
- extern struct fd *dup_fd_object( struct fd *orig, unsigned int access, unsigned int sharing,
-                                  unsigned int options );
- extern struct fd *get_fd_object_for_mapping( struct fd *fd, unsigned int access, unsigned int sharing );
-
 From 514d3e11c999b11a95ab35df5b4ab454d34fe791 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Wed, 13 May 2020 13:55:55 +0300
@@ -1773,9 +1670,9 @@ index eb2ef57c7d6..c7881fe4516 100644
 +        return INVALID_HANDLE_VALUE;
 +    }
 +
-     if (!wcsncmp( filename, L"\\\\.\\", 4 ))
-     {
-         if ((filename[4] && filename[5] == ':' && !filename[6]) ||
+     if ((GetVersion() & 0x80000000) && !wcsncmp( filename, L"\\\\.\\", 4 ) &&
+         !RtlIsDosDeviceName_U( filename + 4 ) &&
+         wcsnicmp( filename + 4, L"PIPE\\", 5 ) &&
 
 From 2409bd1f74be116172688a25df725290637c255a Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -2035,7 +1932,363 @@ index 680defc2071..0ced1a5cd91 100644
          SERVER_START_REQ( get_desktop_window )
          {
              req->force = 1;
-From ad790a96ee434f75e6f660e453871445f74c6389 Mon Sep 17 00:00:00 2001
+From ff790e8d99f2026af9b8569355fc1df5e6f0c639 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Sat, 5 Sep 2020 01:09:37 +0300
+Subject: [PATCH] wbemprox: HACK: Make Bloons TD6 happy so it does not exit
+ after getting string Wine from bios info.
+
+---
+ dlls/wbemprox/builtin.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
+index 43268221936..f39d6f0cd7b 100644
+--- a/dlls/wbemprox/builtin.c
++++ b/dlls/wbemprox/builtin.c
+@@ -1181,7 +1181,7 @@ static WCHAR *get_bios_string( BYTE id, const char *buf, UINT len )
+ static WCHAR *get_bios_manufacturer( const char *buf, UINT len )
+ {
+     WCHAR *ret = get_bios_string( 1, buf, len );
+-    if (!ret) return heap_strdupW( L"The Wine Project" );
++    if (!ret) return heap_strdupW( L"The Proton Project" );
+     return ret;
+ }
+ 
+@@ -1227,7 +1227,7 @@ static WCHAR *get_bios_releasedate( const char *buf, UINT len )
+ static WCHAR *get_bios_smbiosbiosversion( const char *buf, UINT len )
+ {
+     WCHAR *ret = get_bios_string( 2, buf, len );
+-    if (!ret) return heap_strdupW( L"Wine" );
++    if (!ret) return heap_strdupW( L"Proton" );
+     return ret;
+ }
+ 
+@@ -1307,7 +1307,7 @@ static enum fill_status fill_bios( struct table *table, const struct expr *cond
+     rec->smbiosminorversion     = get_bios_smbiosminorversion( buf, len );
+     rec->systembiosmajorversion = get_bios_system_bios_major_release( buf, len );
+     rec->systembiosminorversion = get_bios_system_bios_minor_release( buf, len );
+-    rec->version                = L"WINE   - 1";
++    rec->version                = L"PROTON - 1";
+     if (!match_row( table, row, cond, &status )) free_row_values( table, row );
+     else row++;
+ 
+@@ -1468,8 +1468,8 @@ static enum fill_status fill_compsys( struct table *table, const struct expr *co
+     rec->description            = L"AT/AT COMPATIBLE";
+     rec->domain                 = L"WORKGROUP";
+     rec->domainrole             = 0; /* standalone workstation */
+-    rec->manufacturer           = L"The Wine Project";
+-    rec->model                  = L"Wine";
++    rec->manufacturer           = L"The Proton Project";
++    rec->model                  = L"Proton";
+     rec->name                   = get_computername();
+     rec->num_logical_processors = get_logical_processor_count( NULL, &rec->num_processors );
+     rec->total_physical_memory  = get_total_physical_memory();
+@@ -1505,7 +1505,7 @@ static WCHAR *get_compsysproduct_identifyingnumber( const char *buf, UINT len )
+ static WCHAR *get_compsysproduct_name( const char *buf, UINT len )
+ {
+     WCHAR *ret = get_compsysproduct_string( 2, buf, len );
+-    if (!ret) return heap_strdupW( L"Wine" );
++    if (!ret) return heap_strdupW( L"Proton" );
+     return ret;
+ }
+ 
+@@ -1533,7 +1533,7 @@ done:
+ static WCHAR *get_compsysproduct_vendor( const char *buf, UINT len )
+ {
+     WCHAR *ret = get_compsysproduct_string( 1, buf, len );
+-    if (!ret) return heap_strdupW( L"The Wine Project" );
++    if (!ret) return heap_strdupW( L"The Proton Project" );
+     return ret;
+ }
+ 
+@@ -2652,7 +2652,7 @@ static enum fill_status fill_networkadapter( struct table *table, const struct e
+         rec->index                = aa->u.s.IfIndex;
+         rec->interface_index      = aa->u.s.IfIndex;
+         rec->mac_address          = get_mac_address( aa->PhysicalAddress, aa->PhysicalAddressLength );
+-        rec->manufacturer         = L"The Wine Project";
++        rec->manufacturer         = L"The Proton Project";
+         rec->name                 = heap_strdupW( aa->FriendlyName );
+         rec->netconnection_status = get_connection_status( aa->OperStatus );
+         rec->physicaladapter      = physical;
+@@ -3475,7 +3475,7 @@ static enum fill_status fill_operatingsystem( struct table *table, const struct
+     rec->lastbootuptime         = get_lastbootuptime();
+     rec->localdatetime          = get_localdatetime();
+     rec->locale                 = get_locale();
+-    rec->manufacturer           = L"The Wine Project";
++    rec->manufacturer           = L"The Proton Project";
+     rec->name                   = get_osname( rec->caption );
+     rec->operatingsystemsku     = get_operatingsystemsku();
+     rec->osarchitecture         = get_osarchitecture();
+@@ -3740,7 +3740,7 @@ static WCHAR *get_systemenclosure_string( BYTE id, const char *buf, UINT len )
+ static WCHAR *get_systemenclosure_manufacturer( const char *buf, UINT len )
+ {
+     WCHAR *ret = get_systemenclosure_string( 1, buf, len );
+-    if (!ret) return heap_strdupW( L"Wine" );
++    if (!ret) return heap_strdupW( L"Proton" );
+     return ret;
+ }
+ 
+@@ -3955,7 +3955,7 @@ static enum fill_status fill_sounddevice( struct table *table, const struct expr
+ 
+     rec = (struct record_sounddevice *)table->data;
+     rec->deviceid = get_sounddevice_pnpdeviceid( &desc );
+-    rec->manufacturer = L"The Wine Project";
++    rec->manufacturer = L"The Proton Project";
+     rec->name = L"Wine Audio Device";
+     rec->pnpdeviceid = get_sounddevice_pnpdeviceid( &desc );
+     rec->productname = L"Wine Audio Device";
+-- 
+2.26.2
+
+From: Paul Gofman <pgofman@codeweavers.com>
+Subject: [PATCH] ntdll: Restore non-volatile registers in call_user_exception_dispatcher() on x86_64.
+Message-Id: <20201022112037.675138-1-pgofman@codeweavers.com>
+Date: Thu, 22 Oct 2020 14:20:37 +0300
+
+Required to correctly restore non-volatile registers during unwind.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+---
+ dlls/ntdll/tests/exception.c    | 56 +++++++++++++++++++++++++++----
+ dlls/ntdll/unix/signal_x86_64.c | 59 +++++++++++++++++++++++----------
+ 2 files changed, 91 insertions(+), 24 deletions(-)
+
+diff --git a/dlls/ntdll/tests/exception.c b/dlls/ntdll/tests/exception.c
+index b2331b739ac..47b4c6a8918 100644
+--- a/dlls/ntdll/tests/exception.c
++++ b/dlls/ntdll/tests/exception.c
+@@ -56,6 +56,7 @@ static void *    (WINAPI *pRtlLocateExtendedFeature)(CONTEXT_EX *context_ex, ULO
+ static void *    (WINAPI *pRtlLocateLegacyContext)(CONTEXT_EX *context_ex, ULONG *length);
+ static void      (WINAPI *pRtlSetExtendedFeaturesMask)(CONTEXT_EX *context_ex, ULONG64 feature_mask);
+ static ULONG64   (WINAPI *pRtlGetExtendedFeaturesMask)(CONTEXT_EX *context_ex);
++static NTSTATUS  (WINAPI *pNtRaiseException)(EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_chance);
+ static NTSTATUS  (WINAPI *pNtReadVirtualMemory)(HANDLE, const void*, void*, SIZE_T, SIZE_T*);
+ static NTSTATUS  (WINAPI *pNtTerminateProcess)(HANDLE handle, LONG exit_code);
+ static NTSTATUS  (WINAPI *pNtQueryInformationProcess)(HANDLE, PROCESSINFOCLASS, PVOID, ULONG, PULONG);
+@@ -3716,6 +3717,8 @@ static struct
+ }
+ test_kiuserexceptiondispatcher_regs;
+ 
++static ULONG64 test_kiuserexceptiondispatcher_saved_r12;
++
+ static DWORD dbg_except_continue_handler(EXCEPTION_RECORD *rec, EXCEPTION_REGISTRATION_RECORD *frame,
+         CONTEXT *context, EXCEPTION_REGISTRATION_RECORD **dispatcher)
+ {
+@@ -3738,6 +3741,13 @@ static LONG WINAPI dbg_except_continue_vectored_handler(struct _EXCEPTION_POINTE
+ 
+     trace("dbg_except_continue_vectored_handler, code %#x, Rip %#lx.\n", rec->ExceptionCode, context->Rip);
+ 
++    if (rec->ExceptionCode == 0xceadbeef)
++    {
++        ok(context->P1Home == (ULONG64)0xdeadbeeffeedcafe, "Got unexpected context->P1Home %#lx.\n", context->P1Home);
++        context->R12 = test_kiuserexceptiondispatcher_saved_r12;
++        return EXCEPTION_CONTINUE_EXECUTION;
++    }
++
+     ok(rec->ExceptionCode == 0x80000003, "Got unexpected exception code %#x.\n", rec->ExceptionCode);
+ 
+     got_exception = 1;
+@@ -3760,7 +3770,7 @@ void WINAPI hook_KiUserExceptionDispatcher(EXCEPTION_RECORD *rec, CONTEXT *conte
+ 
+     hook_called = TRUE;
+     /* Broken on Win2008, probably rec offset in stack is different. */
+-    ok(rec->ExceptionCode == 0x80000003 || broken(!rec->ExceptionCode),
++    ok(rec->ExceptionCode == 0x80000003 || rec->ExceptionCode == 0xceadbeef || broken(!rec->ExceptionCode),
+             "Got unexpected ExceptionCode %#x.\n", rec->ExceptionCode);
+ 
+     hook_KiUserExceptionDispatcher_rip = (void *)context->Rip;
+@@ -3769,7 +3779,7 @@ void WINAPI hook_KiUserExceptionDispatcher(EXCEPTION_RECORD *rec, CONTEXT *conte
+             sizeof(saved_KiUserExceptionDispatcher_bytes));
+ }
+ 
+-static void test_kiuserexceptiondispatcher(void)
++ void test_kiuserexceptiondispatcher(void)
+ {
+     LPVOID vectored_handler;
+     HMODULE hntdll = GetModuleHandleA("ntdll.dll");
+@@ -3810,15 +3820,15 @@ static void test_kiuserexceptiondispatcher(void)
+         0x48, 0x89, 0xe2,           /* mov %rsp,%rdx */
+         0x48, 0x8d, 0x8c, 0x24, 0xf0, 0x04, 0x00, 0x00,
+                                     /* lea 0x4f0(%rsp),%rcx */
+-
++        0x4c, 0x89, 0x22,           /* mov %r12,(%rdx) */
+         0xff, 0x14, 0x25,
+-        /* offset: 14 bytes */
++        /* offset: 17 bytes */
+         0x00, 0x00, 0x00, 0x00,     /* callq *addr */ /* call hook implementation. */
+         0x48, 0x31, 0xc9,           /* xor %rcx, %rcx */
+         0x48, 0x31, 0xd2,           /* xor %rdx, %rdx */
+ 
+         0xff, 0x24, 0x25,
+-        /* offset: 27 bytes */
++        /* offset: 30 bytes */
+         0x00, 0x00, 0x00, 0x00,     /* jmpq *addr */ /* jump to original function. */
+     };
+ 
+@@ -3827,6 +3837,8 @@ static void test_kiuserexceptiondispatcher(void)
+     DWORD old_protect1, old_protect2;
+     EXCEPTION_RECORD record;
+     void *bpt_address;
++    CONTEXT ctx;
++    LONG pass;
+     BYTE *ptr;
+     BOOL ret;
+ 
+@@ -3845,8 +3857,8 @@ static void test_kiuserexceptiondispatcher(void)
+     ok(((ULONG64)&pKiUserExceptionDispatcher & 0xffffffff) == ((ULONG64)&pKiUserExceptionDispatcher),
+             "Address is too long.\n");
+ 
+-    *(unsigned int *)(hook_trampoline + 14) = (unsigned int)(ULONG_PTR)&phook_KiUserExceptionDispatcher;
+-    *(unsigned int *)(hook_trampoline + 27) = (unsigned int)(ULONG_PTR)&pKiUserExceptionDispatcher;
++    *(unsigned int *)(hook_trampoline + 17) = (unsigned int)(ULONG_PTR)&phook_KiUserExceptionDispatcher;
++    *(unsigned int *)(hook_trampoline + 30) = (unsigned int)(ULONG_PTR)&pKiUserExceptionDispatcher;
+ 
+     ret = VirtualProtect(hook_trampoline, ARRAY_SIZE(hook_trampoline), PAGE_EXECUTE_READWRITE, &old_protect1);
+     ok(ret, "Got unexpected ret %#x, GetLastError() %u.\n", ret, GetLastError());
+@@ -3954,6 +3966,35 @@ static void test_kiuserexceptiondispatcher(void)
+ 
+     NtCurrentTeb()->Peb->BeingDebugged = 0;
+ 
++    vectored_handler = AddVectoredExceptionHandler(TRUE, dbg_except_continue_vectored_handler);
++    pass = 0;
++    InterlockedIncrement(&pass);
++    pRtlCaptureContext(&ctx);
++    if (InterlockedIncrement(&pass) == 2) /* interlocked to prevent compiler from moving before capture */
++    {
++        memcpy(pKiUserExceptionDispatcher, patched_KiUserExceptionDispatcher_bytes,
++                sizeof(patched_KiUserExceptionDispatcher_bytes));
++        got_exception = 0;
++        hook_called = FALSE;
++
++        record.ExceptionCode = 0xceadbeef;
++        test_kiuserexceptiondispatcher_saved_r12 = ctx.R12;
++        ctx.R12 = (ULONG64)0xdeadbeeffeedcafe;
++
++#ifdef __GNUC__
++        /* Spoil r12 value to make sure it doesn't come from the current userspace registers. */
++        __asm__ volatile("movq $0xdeadcafe, %%r12" : : : "%r12");
++#endif
++        pNtRaiseException(&record, &ctx, TRUE);
++        ok(0, "Shouldn't be reached.\n");
++    }
++    else
++    {
++        ok(pass == 3, "Got unexpected pass %d.\n", pass);
++    }
++    ok(hook_called, "Hook was not called.\n");
++    RemoveVectoredExceptionHandler(vectored_handler);
++
+     ret = VirtualProtect(pKiUserExceptionDispatcher, sizeof(saved_KiUserExceptionDispatcher_bytes),
+             old_protect2, &old_protect2);
+     ok(ret, "Got unexpected ret %#x, GetLastError() %u.\n", ret, GetLastError());
+@@ -8046,6 +8087,7 @@ START_TEST(exception)
+     X(NtQueryInformationThread);
+     X(NtSetInformationProcess);
+     X(NtSuspendProcess);
++    X(NtRaiseException);
+     X(NtResumeProcess);
+     X(RtlGetUnloadEventTrace);
+     X(RtlGetUnloadEventTraceEx);
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 124032714c7..8cdf129f5cc 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -1551,6 +1551,34 @@ static void restore_context( const struct xcontext *xcontext, ucontext_t *sigcon
+ }
+ 
+ 
++/***********************************************************************
++ *           set_nonvolatile_regs_from_context
++ *
++ * Set the non-volatile registers from CPU context.
++ */
++extern void set_nonvolatile_regs_from_context( const CONTEXT *context );
++__ASM_GLOBAL_FUNC( set_nonvolatile_regs_from_context,
++                   "movq 0xa0(%rcx),%rbp\n\t"
++                   "movq 0x90(%rcx),%rbx\n\t"
++                   "movq 0xa8(%rcx),%rsi\n\t"
++                   "movq 0xb0(%rcx),%rdi\n\t"
++                   "movq 0xd8(%rcx),%r12\n\t"
++                   "movq 0xe0(%rcx),%r13\n\t"
++                   "movq 0xe8(%rcx),%r14\n\t"
++                   "movq 0xf0(%rcx),%r15\n\t"
++                   "movdqa 0x200(%rcx),%xmm6\n\t"
++                   "movdqa 0x210(%rcx),%xmm7\n\t"
++                   "movdqa 0x220(%rcx),%xmm8\n\t"
++                   "movdqa 0x230(%rcx),%xmm9\n\t"
++                   "movdqa 0x240(%rcx),%xmm10\n\t"
++                   "movdqa 0x250(%rcx),%xmm11\n\t"
++                   "movdqa 0x260(%rcx),%xmm12\n\t"
++                   "movdqa 0x270(%rcx),%xmm13\n\t"
++                   "movdqa 0x280(%rcx),%xmm14\n\t"
++                   "movdqa 0x290(%rcx),%xmm15\n\t"
++                   "ret" );
++
++
+ /***********************************************************************
+  *           set_full_cpu_context
+  *
+@@ -2081,19 +2109,7 @@ __ASM_GLOBAL_FUNC( call_raise_user_exception_dispatcher,
+ /***********************************************************************
+  *           call_user_exception_dispatcher
+  */
+-
+-extern void WINAPI user_exception_dispatcher_trampoline( struct stack_layout *stack,
+-        void *pKiUserExceptionDispatcher );
+-
+-__ASM_GLOBAL_FUNC( user_exception_dispatcher_trampoline,
+-                   "movq %rcx,%rsp\n\t"
+-                   "movq 0x98(%rsp),%rcx\n\t" /* context->Rsp */
+-                   "movq 0xa0(%rsp),%rbp\n\t"
+-                   "movq 0xa8(%rsp),%rsi\n\t"
+-                   "movq 0xb0(%rsp),%rdi\n\t"
+-                   "jmpq *%rdx")
+-
+-void WINAPI do_call_user_exception_dispatcher( EXCEPTION_RECORD *rec, CONTEXT *context,
++struct stack_layout * WINAPI setup_user_exception_dispatcher_stack( EXCEPTION_RECORD *rec, CONTEXT *context,
+                                                NTSTATUS (WINAPI *dispatcher)(EXCEPTION_RECORD*,CONTEXT*),
+                                                struct stack_layout *stack )
+ {
+@@ -2127,12 +2143,13 @@ void WINAPI do_call_user_exception_dispatcher( EXCEPTION_RECORD *rec, CONTEXT *c
+     /* fix up instruction pointer in context for EXCEPTION_BREAKPOINT */
+     if (stack->rec.ExceptionCode == EXCEPTION_BREAKPOINT) stack->context.Rip--;
+ 
+-    amd64_thread_data()->syscall_frame = NULL;
+-    user_exception_dispatcher_trampoline( stack, dispatcher );
++    return stack;
+ }
+ 
+ __ASM_GLOBAL_FUNC( call_user_exception_dispatcher,
+-                   "movq 0x98(%rdx),%r9\n\t" /* context->Rsp */
++                   "movq %gs:0x30,%rax\n\t"
++                   "movq $0,0x328(%rax)\n\t"   /* amd64_thread_data()->syscall_frame */
++                   "movq 0x98(%rdx),%r9\n\t"   /* context->Rsp */
+                    "andq $~0xf,%r9\n\t"
+                    "btl $6,0x30(%rdx)\n\t" /* context->ContextFlags, CONTEXT_XSTATE bit. */
+                    "jnc 1f\n\t"
+@@ -2141,7 +2158,15 @@ __ASM_GLOBAL_FUNC( call_user_exception_dispatcher,
+                    "1:\tsubq $0x5b0,%r9\n\t" /* sizeof(struct stack_layout) */
+                    "cmpq %rsp,%r9\n\t"
+                    "cmovbq %r9,%rsp\n\t"
+-                   "jmp " __ASM_NAME("do_call_user_exception_dispatcher") "\n\t")
++                   "pushq %r8\n\t"
++                   "subq $0x20,%rsp\n\t"
++                   "call " __ASM_NAME("setup_user_exception_dispatcher_stack") "\n\t"
++                   "mov %rax,%rcx\n\t"
++                   "call " __ASM_NAME("set_nonvolatile_regs_from_context") "\n\t"
++                   "addq $0x20,%rsp\n\t"
++                   "popq %r8\n\t"
++                   "mov %rcx,%rsp\n\t"
++                   "jmpq *%r8")
+ 
+ /***********************************************************************
+  *           is_privileged_instr
+
+-- 
+2.26.2
+
+From 87326687df23529255c2493d178dac1310919980 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Wed, 4 Nov 2020 18:08:21 +0300
 Subject: [PATCH] ws2_32: HACK Fail 'download-alt.easyanticheat.net' DNS name
@@ -2048,7 +2301,7 @@ but allows those ciphers to be used for other programs.
  1 file changed, 14 insertions(+)
 
 diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
-index 4010a727a08..c6d243e7960 100644
+index 4010a727a08..ef9a640a771 100644
 --- a/dlls/ws2_32/socket.c
 +++ b/dlls/ws2_32/socket.c
 @@ -6483,6 +6483,13 @@ struct WS_hostent* WINAPI WS_gethostbyname(const char* name)
@@ -2065,11 +2318,11 @@ index 4010a727a08..c6d243e7960 100644
              if( res != ERANGE) break;
              ebufsize *=2;
              extrabuf=HeapReAlloc(GetProcessHeap(),0,extrabuf,ebufsize) ;
-@@ -6741,6 +6748,13 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+@@ -6734,6 +6741,13 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
          return WSAHOST_NOT_FOUND;
      }
  
-+    if (!strcmp(nodename, "download-alt.easyanticheat.net"))
++    if (nodename && !strcmp(nodename, "download-alt.easyanticheat.net"))
 +    {
 +        ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
 +        SetLastError(WSAHOST_NOT_FOUND);
@@ -2079,44 +2332,85 @@ index 4010a727a08..c6d243e7960 100644
      if (!nodename)
          node = NULL;
      else if (!nodename[0])
-From: Paul Gofman <pgofman@codeweavers.com>
-Subject: [PATCH] kernelbase: Get language sort only when required in LCMapStringEx().
-Message-Id: <20201019180605.1225175-1-pgofman@codeweavers.com>
-Date: Mon, 19 Oct 2020 21:06:05 +0300
+From 5d0bdb1470b47224bf359456be9f6c78a43704f7 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jun 2018 15:07:28 -0500
+Subject: [PATCH] user32: Remove hooks that time out.
 
-Fixes very slow loading (a few minutes) of Warhammer 40000: Inquisitor - Martyr.
-
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+In accordance with Win7+ behaviour.
 ---
- dlls/kernelbase/locale.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ dlls/user32/hook.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/dlls/kernelbase/locale.c b/dlls/kernelbase/locale.c
-index 9cfb9f129ee..7e6ac2829d2 100644
---- a/dlls/kernelbase/locale.c
-+++ b/dlls/kernelbase/locale.c
-@@ -5204,7 +5204,7 @@ INT WINAPI DECLSPEC_HOTPATCH LCMapStringEx( const WCHAR *locale, DWORD flags, co
-                                             WCHAR *dst, int dstlen, NLSVERSIONINFO *version,
-                                             void *reserved, LPARAM handle )
+diff --git a/dlls/user32/hook.c b/dlls/user32/hook.c
+index b6a3b3661f7..aff8cae262f 100644
+--- a/dlls/user32/hook.c
++++ b/dlls/user32/hook.c
+@@ -382,6 +382,7 @@ void *get_hook_proc( void *proc, const WCHAR *module, HMODULE *free_module )
+ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARAM lparam )
  {
--    const struct sortguid *sortid;
-+    const struct sortguid *sortid = NULL;
-     LPWSTR dst_ptr;
-     INT len;
+     DWORD_PTR ret = 0;
++    LRESULT lres;
  
-@@ -5235,7 +5235,7 @@ INT WINAPI DECLSPEC_HOTPATCH LCMapStringEx( const WCHAR *locale, DWORD flags, co
- 
-     if (!dstlen) dst = NULL;
- 
--    if (!(sortid = get_language_sort( locale )))
-+    if (flags & LCMAP_LINGUISTIC_CASING && !(sortid = get_language_sort( locale )))
+     if (info->tid)
      {
-         FIXME( "unknown locale %s\n", debugstr_w(locale) );
-         SetLastError( ERROR_INVALID_PARAMETER );
+@@ -395,20 +396,24 @@ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARA
+         switch(info->id)
+         {
+         case WH_KEYBOARD_LL:
+-            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
+-                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
+-                                            get_ll_hook_timeout(), &ret );
++            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
++                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
+             break;
+         case WH_MOUSE_LL:
+-            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
+-                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
+-                                            get_ll_hook_timeout(), &ret );
++            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
++                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
+             break;
+         default:
+             ERR("Unknown hook id %d\n", info->id);
+             assert(0);
+             break;
+         }
++
++        if (!lres && GetLastError() == ERROR_TIMEOUT)
++        {
++            TRACE("Hook %p timed out; removing it.\n", info->handle);
++            UnhookWindowsHookEx( info->handle );
++        }
+     }
+     else if (info->proc)
+     {
+From b48ce9a2778a4ff7ee14067f0ea73693ed70c52d Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jun 2018 15:10:08 -0500
+Subject: [PATCH] server: Don't check for a hung queue when sending low-level
+ hooks.
 
--- 
-2.26.2
-From 8db5778b62749f5ed439aa8eb122ffa08e8e462b Mon Sep 17 00:00:00 2001
+Since user32 does this.
+
+This logic is independent of the SMTO_ABORTIFHUNG logic on Windows. In fact, IsHungAppWindow() uses yet another algorithm.
+---
+ server/queue.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 968f2ffe701..aa8e627211a 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1641,7 +1641,6 @@ static int send_hook_ll_message( struct desktop *desktop, struct message *hardwa
+ 
+     if (!(hook_thread = get_first_global_hook( id ))) return 0;
+     if (!(queue = hook_thread->queue)) return 0;
+-    if (is_queue_hung( queue )) return 0;
+ 
+     if (!(msg = mem_alloc( sizeof(*msg) ))) return 0;
+ 
+From c9a5fcb0966ab0ca0722c8c07476c131844f98e1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 16 Oct 2020 23:37:09 +0200
 Subject: [PATCH] dotnetfx35.exe: Add stub program.
@@ -2216,3 +2510,1006 @@ index 00000000000..cd6df5bcf41
 +    FIXME("stub!");
 +    return 0;
 +}
+From 8a0f4add2096d213999d9be7a04229d288f1af75 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 24 Aug 2018 14:41:44 -0500
+Subject: [PATCH] HACK: winex11: Grab mouse in fullscreen windows by default
+
+---
+ dlls/winex11.drv/x11drv_main.c | 2 +-
+ programs/winecfg/x11drvdlg.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index af2094a96f0..9c98209d43d 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -76,7 +76,7 @@ BOOL use_primary_selection = FALSE;
+ BOOL use_system_cursors = TRUE;
+ BOOL show_systray = TRUE;
+ BOOL grab_pointer = TRUE;
+-BOOL grab_fullscreen = FALSE;
++BOOL grab_fullscreen = TRUE;
+ BOOL managed_mode = TRUE;
+ BOOL decorated_mode = TRUE;
+ BOOL private_color_map = FALSE;
+diff --git a/programs/winecfg/x11drvdlg.c b/programs/winecfg/x11drvdlg.c
+index fbc6716e94e..1ca8c3ed0fd 100644
+--- a/programs/winecfg/x11drvdlg.c
++++ b/programs/winecfg/x11drvdlg.c
+@@ -123,7 +123,7 @@ static void init_dialog(HWND dialog)
+     SendDlgItemMessageW(dialog, IDC_DESKTOP_WIDTH, EM_LIMITTEXT, RES_MAXLEN, 0);
+     SendDlgItemMessageW(dialog, IDC_DESKTOP_HEIGHT, EM_LIMITTEXT, RES_MAXLEN, 0);
+ 
+-    buf = get_reg_key(config_key, keypath("X11 Driver"), "GrabFullscreen", "N");
++    buf = get_reg_key(config_key, keypath("X11 Driver"), "GrabFullscreen", "Y");
+     if (IS_OPTION_TRUE(*buf))
+ 	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
+     else
+From 625a473504e0f55cc62db6dad96bf09c4c7e59cf Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 27 Jun 2018 10:06:48 -0500
+Subject: [PATCH] HACK: winex11: Let the WM focus our windows by default
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This should fix game windows not being in focus when first started
+and when exiting, which can cause surprising keyboard behavior (e.g.
+accidentally Alt-F4ing Steam itself, which is in the background).
+
+This may break modal dialogs in some WMs (fvwm2?) which do not respect
+our responses to WM_TAKE_FOCUS. For games that show that issue, we can
+re-enable UseTakeFocus.
+
+From Zeb:
+
+"""
+The basic problem, if I understand it correctly, is that Wine uses the
+"globally active" focus model by default. This means that the window
+manager won't focus our windows unless we respond in the affirmative to
+a WM_TAKE_FOCUS event. Since the GUI thread isn't processing messages,
+this doesn't happen.
+
+Luckily, there is a very easy workaround: create the registry key
+HKCU\Software\Wine\X11 Driver and set the somewhat inaptly named value
+"UseTakeFocus" to "N" (i.e. No). This causes Wine to use the "locally
+active" model instead, which means that the window manager will focus
+our windows when it sees fit—i.e. when the user clicks on them, or when
+they are created.
+"""
+---
+ dlls/winex11.drv/x11drv_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index 9456caba088..af2094a96f0 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -71,7 +71,7 @@ BOOL usexvidmode = FALSE;
+ BOOL usexrandr = FALSE;
+ BOOL usexcomposite = TRUE;
+ BOOL use_xkb = TRUE;
+-BOOL use_take_focus = TRUE;
++BOOL use_take_focus = FALSE;
+ BOOL use_primary_selection = FALSE;
+ BOOL use_system_cursors = TRUE;
+ BOOL show_systray = TRUE;
+ 
+From a58fde69e0ac1945d2e2733d9506cfe4bfe145e7 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 26 Jun 2019 08:09:27 -0500
+Subject: [PATCH] Revert "winex11.drv: Activate window when restoring from
+ iconic state."
+
+This reverts commit 82c6ec3a32f44e8b3e0cc88b7f10e0c0d7fa1b89.
+
+Causes alt-tab problems with several games.
+---
+ dlls/winex11.drv/event.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
+index 236c9f862af..d1c15b1de94 100644
+--- a/dlls/winex11.drv/event.c
++++ b/dlls/winex11.drv/event.c
+@@ -1342,8 +1342,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
+             {
+                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
+                 release_win_data( data );
+-                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
+-                    SetActiveWindow( hwnd );
+                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
+                 return;
+             }
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH] server: Only allocate the required size in get_rawinput_buffer.
+Message-Id: <20201110133651.553337-1-rbernon@codeweavers.com>
+Date: Tue, 10 Nov 2020 14:36:51 +0100
+
+Instead of allocating the maximum reply size.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+
+CoD: WWII calls this with large buffer and it causes a high load on
+wineserver, although there may not even be any message to return.
+
+ server/queue.c | 60 ++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 38 insertions(+), 22 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 7e7e6fbdf29..3de4d241b8e 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -3251,19 +3251,13 @@ DECL_HANDLER(get_cursor_history)
+             pos[i] = cursor_history[(i + cursor_history_latest) % ARRAY_SIZE(cursor_history)];
+ }
+ 
+-DECL_HANDLER(get_rawinput_buffer)
++static void copy_rawinput_buffer( struct thread_input *input, char *reply_buf, data_size_t reply_buf_size, data_size_t *reply_size,
++                                  data_size_t client_buf_size, data_size_t client_elt_size, data_size_t *next_size, unsigned int *count )
+ {
+-    struct thread_input *input = current->queue->input;
+-    data_size_t size = 0, next_size = 0;
++    unsigned int n = 0;
+     struct list *ptr;
+-    char *buf, *cur;
+-    int count = 0;
++    char *reply_ptr = reply_buf;
+ 
+-    if (!req->buffer_size) buf = NULL;
+-    else if (!(buf = mem_alloc( get_reply_max_size() )))
+-        return;
+-
+-    cur = buf;
+     ptr = list_head( &input->msg_list );
+     while (ptr)
+     {
+@@ -3459,22 +3459,44 @@ static void copy_rawinput_buffer( struct thread_input *input, char *reply_buf, d
+         ptr = list_next( &input->msg_list, ptr );
+         if (msg->msg != WM_INPUT) continue;
+ 
+-        next_size = req->rawinput_size;
+-        if (size + next_size > req->buffer_size) break;
+-        if (cur + msg_size > buf + get_reply_max_size()) break;
++        if (next_size) *next_size = client_elt_size;
++        if (client_buf_size < client_elt_size) break;
++        if (reply_buf_size < sizeof(*data)) break;
+ 
+-        memcpy(cur, data, msg_size);
+-        list_remove( &msg->entry );
+-        free_message( msg );
++        if (reply_buf)
++        {
++            memcpy( reply_ptr, data, sizeof(*data) );
++            list_remove( &msg->entry );
++            free_message( msg );
++        }
+ 
+-        size += next_size;
+-        cur += msg_size;
+-        count++;
++        client_buf_size -= client_elt_size;
++        reply_buf_size -= sizeof(*data);
++        reply_ptr += sizeof(*data);
++        n++;
+     }
+ 
+-    reply->next_size = next_size;
+-    reply->count = count;
+-    set_reply_data_ptr( buf, cur - buf );
++    if (reply_size) *reply_size = reply_ptr - reply_buf;
++    if (count) *count = n;
++}
++
++DECL_HANDLER(get_rawinput_buffer)
++{
++    struct thread_input *input = current->queue->input;
++    data_size_t reply_size;
++    char *reply_buf;
++
++    reply->next_size = 0;
++    reply->count = 0;
++
++    copy_rawinput_buffer( input, NULL, get_reply_max_size(), &reply_size, req->buffer_size,
++                          req->rawinput_size, &reply->next_size, &reply->count );
++
++    if (!req->buffer_size || !reply_size) return;
++    if (!(reply_buf = set_reply_data_size( reply_size ))) return;
++
++    copy_rawinput_buffer( input, reply_buf, reply_size, NULL, req->buffer_size,
++                          req->rawinput_size, NULL, NULL );
+ }
+ 
+ DECL_HANDLER(update_rawinput_devices)
+
+-- 
+2.29.2
+From c9a5fcb0966ab0ca0722c8c07476c131844f98e1 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Subject: [PATCH] kernelbase: Get language sort only when required in LCMapStringEx().
+Message-Id: <20201019180605.1225175-1-pgofman@codeweavers.com>
+Date: Mon, 19 Oct 2020 21:06:05 +0300
+
+Fixes very slow loading (a few minutes) of Warhammer 40000: Inquisitor - Martyr.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+---
+ dlls/kernelbase/locale.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/kernelbase/locale.c b/dlls/kernelbase/locale.c
+index 9cfb9f129ee..7e6ac2829d2 100644
+--- a/dlls/kernelbase/locale.c
++++ b/dlls/kernelbase/locale.c
+@@ -5204,7 +5204,7 @@ INT WINAPI DECLSPEC_HOTPATCH LCMapStringEx( const WCHAR *locale, DWORD flags, co
+                                             WCHAR *dst, int dstlen, NLSVERSIONINFO *version,
+                                             void *reserved, LPARAM handle )
+ {
+-    const struct sortguid *sortid;
++    const struct sortguid *sortid = NULL;
+     LPWSTR dst_ptr;
+     INT len;
+ 
+@@ -5235,7 +5235,7 @@ INT WINAPI DECLSPEC_HOTPATCH LCMapStringEx( const WCHAR *locale, DWORD flags, co
+ 
+     if (!dstlen) dst = NULL;
+ 
+-    if (!(sortid = get_language_sort( locale )))
++    if (flags & LCMAP_LINGUISTIC_CASING && !(sortid = get_language_sort( locale )))
+     {
+         FIXME( "unknown locale %s\n", debugstr_w(locale) );
+         SetLastError( ERROR_INVALID_PARAMETER );
+
+-- 
+2.26.2
+From c511e51b9b729a8cf7534650a1603369f00edf65 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 13 Nov 2020 19:26:41 +0300
+Subject: [PATCH] directmanipulation: Return S_OK form
+ viewport_SetViewportOptions stub.
+
+Fixes Paradox launcher crash on start when Windows version is set to 10.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit b58882993e7b28bd71f50f1eecd4750d576167e5)
+---
+ dlls/directmanipulation/directmanipulation.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/directmanipulation/directmanipulation.c b/dlls/directmanipulation/directmanipulation.c
+index 987f780c6ca..d22e7ee8649 100644
+--- a/dlls/directmanipulation/directmanipulation.c
++++ b/dlls/directmanipulation/directmanipulation.c
+@@ -610,7 +610,7 @@ static HRESULT WINAPI viewport_SetViewportOptions(IDirectManipulationViewport2 *
+ {
+     struct directviewport *This = impl_from_IDirectManipulationViewport2(iface);
+     FIXME("%p, %d\n", This, options);
+-    return E_NOTIMPL;
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI viewport_AddConfiguration(IDirectManipulationViewport2 *iface, DIRECTMANIPULATION_CONFIGURATION configuration)
+From b5e21dfb1d301bf3c95307ed1cec21175f0c68e0 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 11 Nov 2020 13:17:30 +0300
+Subject: [PATCH] wininet: Correctly return error status from
+ InternetSetFilePointer() stub.
+
+Fixes Freestyle 2: Street Basketball update check failure.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 67295a7844b94ccbfce85dbee22a76f12c9f5b36)
+---
+ dlls/wininet/internet.c   |  4 +++-
+ dlls/wininet/tests/http.c | 35 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/wininet/internet.c b/dlls/wininet/internet.c
+index fb02488934d..91bff2ece93 100644
+--- a/dlls/wininet/internet.c
++++ b/dlls/wininet/internet.c
+@@ -2096,7 +2096,9 @@ DWORD WINAPI InternetSetFilePointer(HINTERNET hFile, LONG lDistanceToMove,
+     PVOID pReserved, DWORD dwMoveContext, DWORD_PTR dwContext)
+ {
+     FIXME("(%p %d %p %d %lx): stub\n", hFile, lDistanceToMove, pReserved, dwMoveContext, dwContext);
+-    return FALSE;
++
++    SetLastError(ERROR_INTERNET_INVALID_OPERATION);
++    return INVALID_SET_FILE_POINTER;
+ }
+ 
+ /***********************************************************************
+diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
+index c07d60d2a9d..5a158704c52 100644
+--- a/dlls/wininet/tests/http.c
++++ b/dlls/wininet/tests/http.c
+@@ -570,6 +570,8 @@ static void InternetReadFile_test(int flags, const test_data_t *test)
+     DWORD length, length2, index, exlen = 0, post_len = 0;
+     const char *types[2] = { "*", NULL };
+     HINTERNET hi, hic = 0, hor = 0;
++    DWORD contents_length, accepts_ranges;
++    BOOL not_supported;
+ 
+     trace("Starting InternetReadFile test with flags 0x%x on url %s\n",flags,test->url);
+     reset_events();
+@@ -796,10 +798,23 @@ static void InternetReadFile_test(int flags, const test_data_t *test)
+     res = HttpQueryInfoA(hor,HTTP_QUERY_CONTENT_LENGTH,&buffer,&length,&index);
+     trace("Option HTTP_QUERY_CONTENT_LENGTH -> %i  %s  (%u)\n",res,buffer,GetLastError());
+     if(test->flags & TESTF_COMPRESSED)
++    {
+         ok(!res && GetLastError() == ERROR_HTTP_HEADER_NOT_FOUND,
+            "expected ERROR_HTTP_HEADER_NOT_FOUND, got %x (%u)\n", res, GetLastError());
++        contents_length = 0;
++    }
++    else
++    {
++        contents_length = atoi(buffer);
++    }
+     ok(!res || index == 1, "Index was not incremented although result is %x (index = %u)\n", res, index);
+ 
++    length = 64;
++    *buffer = 0;
++    res = HttpQueryInfoA(hor,HTTP_QUERY_ACCEPT_RANGES,&buffer,&length,0x0);
++    trace("Option HTTP_QUERY_ACCEPT_RANGES -> %i  %s  (%u)\n",res,buffer,GetLastError());
++    accepts_ranges = res && !strcmp(buffer, "bytes");
++
+     length = 100;
+     res = HttpQueryInfoA(hor,HTTP_QUERY_CONTENT_TYPE,buffer,&length,0x0);
+     buffer[length]=0;
+@@ -810,6 +825,26 @@ static void InternetReadFile_test(int flags, const test_data_t *test)
+     buffer[length]=0;
+     trace("Option HTTP_QUERY_CONTENT_ENCODING -> %i  %s\n",res,buffer);
+ 
++    SetLastError(0xdeadbeef);
++    length = InternetSetFilePointer(hor, 0, NULL, FILE_END, 0);
++    not_supported = length == INVALID_SET_FILE_POINTER
++            && GetLastError() == ERROR_INTERNET_INVALID_OPERATION;
++    if (accepts_ranges)
++        todo_wine ok((length == contents_length && (GetLastError() == ERROR_SUCCESS
++                || broken(GetLastError() == 0xdeadbeef))) || broken(not_supported),
++                "Got unexpected length %#x, GetLastError() %u, contents_length %u, accepts_ranges %#x.\n",
++                length, GetLastError(), contents_length, accepts_ranges);
++    else
++        ok(not_supported, "Got unexpected length %#x, GetLastError() %u.\n", length, GetLastError());
++
++    if (length != INVALID_SET_FILE_POINTER)
++    {
++        SetLastError(0xdeadbeef);
++        length = InternetSetFilePointer(hor, 0, NULL, FILE_BEGIN, 0);
++        ok(!length && (GetLastError() == ERROR_SUCCESS || broken(GetLastError() == 0xdeadbeef)),
++                "Got unexpected length %#x, GetLastError() %u.\n", length, GetLastError());
++    }
++
+     SetLastError(0xdeadbeef);
+     res = InternetReadFile(NULL, buffer, 100, &length);
+     ok(!res, "InternetReadFile should have failed\n");
+From 073b6dc240bada1f700a7c37d6797a6b15a176d2 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 16 Nov 2020 18:48:02 +0300
+Subject: [PATCH] user32: Avoid holding display_dc_section when creating
+ display DC.
+
+get_display_dc() may be locking display_dc_section at the end of
+user driver initialization in LoadCursorA() called from
+register_builtin_classes(). If the driver initialization initiated
+in CreateDCW() goes in parallel with the initialization started
+elsewhere without holding display_dc_section, the process can deadlock.
+
+Fixes random lockup on start in Hammerting.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/sysparams.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/user32/sysparams.c b/dlls/user32/sysparams.c
+index 1381f387e03..a620116053a 100644
+--- a/dlls/user32/sysparams.c
++++ b/dlls/user32/sysparams.c
+@@ -548,7 +548,18 @@ static BOOL init_entry_string( struct sysparam_entry *entry, const WCHAR *str )
+ HDC get_display_dc(void)
+ {
+     EnterCriticalSection( &display_dc_section );
+-    if (!display_dc) display_dc = CreateDCW( L"DISPLAY", NULL, NULL, NULL );
++    if (!display_dc)
++    {
++        HDC dc;
++
++        LeaveCriticalSection( &display_dc_section );
++        dc = CreateDCW( L"DISPLAY", NULL, NULL, NULL );
++        EnterCriticalSection( &display_dc_section );
++        if (display_dc)
++            DeleteDC(dc);
++        else
++            display_dc = dc;
++    }
+     return display_dc;
+ }
+From d101fdb4499e174498c6378d1e47950113795009 Mon Sep 17 00:00:00 2001
+From: Piotr Caban <piotr@codeweavers.com>
+Date: Fri, 18 Sep 2020 14:30:23 +0200
+Subject: [PATCH] msasn1: Fix buffer allocations.
+
+Signed-off-by: Piotr Caban <piotr@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/msasn1/main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/msasn1/main.c b/dlls/msasn1/main.c
+index d1513629057..fc867e7b815 100644
+--- a/dlls/msasn1/main.c
++++ b/dlls/msasn1/main.c
+@@ -56,7 +56,7 @@ ASN1module_t WINAPI ASN1_CreateModule(ASN1uint32_t ver, ASN1encodingrule_e rule,
+     if (!encoder || !decoder || !freemem || !size)
+         return module;
+ 
+-    module = heap_alloc(sizeof(module));
++    module = heap_alloc(sizeof(*module));
+     if (module)
+     {
+         module->nModuleName = magic;
+@@ -103,7 +103,7 @@ ASN1error_e WINAPI ASN1_CreateEncoder(ASN1module_t module, ASN1encoding_t *encod
+     if (!module || !encoder)
+         return ASN1_ERR_BADARGS;
+ 
+-    enc = heap_alloc(sizeof(enc));
++    enc = heap_alloc(sizeof(*enc));
+     if (!enc)
+     {
+         return ASN1_ERR_MEMORY;
+@@ -153,7 +153,7 @@ ASN1error_e WINAPI ASN1_CreateDecoder(ASN1module_t module, ASN1decoding_t *decod
+     if (!module || !decoder)
+         return ASN1_ERR_BADARGS;
+ 
+-    dec = heap_alloc(sizeof(dec));
++    dec = heap_alloc(sizeof(*dec));
+     if (!dec)
+     {
+         return ASN1_ERR_MEMORY;
+From 7962ce50b41ecf2c722dd6953d04c8759f1825d7 Mon Sep 17 00:00:00 2001
+From: Piotr Caban <piotr@codeweavers.com>
+Date: Fri, 18 Sep 2020 15:52:54 +0200
+Subject: [PATCH] msvcrt: Use default user locale when only codepage is passed
+ to setlocale.
+
+Signed-off-by: Piotr Caban <piotr@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit dc117553905c1b779ef083aa7418d169cd180a3d)
+---
+ dlls/msvcrt/locale.c | 172 ++++++++++++++++++-------------------------
+ 1 file changed, 71 insertions(+), 101 deletions(-)
+
+diff --git a/dlls/msvcrt/locale.c b/dlls/msvcrt/locale.c
+index bde08f2117a..75245c10907 100644
+--- a/dlls/msvcrt/locale.c
++++ b/dlls/msvcrt/locale.c
+@@ -177,18 +177,17 @@ static void remap_synonym(char *name)
+ }
+ 
+ /* Note: Flags are weighted in order of matching importance */
+-#define FOUND_SNAME            0x8
+-#define FOUND_LANGUAGE         0x4
+-#define FOUND_COUNTRY          0x2
+-#define FOUND_CODEPAGE         0x1
++#define FOUND_SNAME            0x4
++#define FOUND_LANGUAGE         0x2
++#define FOUND_COUNTRY          0x1
+ 
+ typedef struct {
+   char search_language[MAX_ELEM_LEN];
+   char search_country[MAX_ELEM_LEN];
+-  char search_codepage[MAX_ELEM_LEN];
+   DWORD found_codepage;
+   unsigned int match_flags;
+   LANGID found_lang_id;
++  BOOL allow_sname;
+ } locale_search_t;
+ 
+ #define CONTINUE_LOOKING TRUE
+@@ -227,8 +226,7 @@ find_best_locale_proc(HMODULE hModule, LPCSTR type, LPCSTR name, WORD LangID, LO
+     return CONTINUE_LOOKING;
+ 
+ #if _MSVCR_VER >= 110
+-  if (!res->search_country[0] && !res->search_codepage[0] &&
+-          compare_info(lcid,LOCALE_SNAME,buff,res->search_language, TRUE))
++  if (res->allow_sname && compare_info(lcid,LOCALE_SNAME,buff,res->search_language, TRUE))
+   {
+     TRACE(":Found locale: %s->%s\n", res->search_language, buff);
+     res->match_flags = FOUND_SNAME;
+@@ -263,27 +261,14 @@ find_best_locale_proc(HMODULE hModule, LPCSTR type, LPCSTR name, WORD LangID, LO
+     return CONTINUE_LOOKING;
+   }
+ 
+-  /* Check codepage */
+-  if (compare_info(lcid,LOCALE_IDEFAULTCODEPAGE,buff,res->search_codepage, TRUE) ||
+-      (compare_info(lcid,LOCALE_IDEFAULTANSICODEPAGE,buff,res->search_codepage, TRUE)))
+-  {
+-    TRACE("Found codepage:%s->%s\n", res->search_codepage, buff);
+-    flags |= FOUND_CODEPAGE;
+-    res->found_codepage = atoi(res->search_codepage);
+-  }
+-  else if (!flags && (res->match_flags & FOUND_CODEPAGE))
+-  {
+-    return CONTINUE_LOOKING;
+-  }
+-
+   if (flags > res->match_flags)
+   {
+     /* Found a better match than previously */
+     res->match_flags = flags;
+     res->found_lang_id = LangID;
+   }
+-  if ((flags & (FOUND_LANGUAGE | FOUND_COUNTRY | FOUND_CODEPAGE)) ==
+-        (FOUND_LANGUAGE | FOUND_COUNTRY | FOUND_CODEPAGE))
++  if ((flags & (FOUND_LANGUAGE | FOUND_COUNTRY)) ==
++        (FOUND_LANGUAGE | FOUND_COUNTRY))
+   {
+     TRACE(":found exact locale match\n");
+     return STOP_LOOKING;
+@@ -291,15 +276,14 @@ find_best_locale_proc(HMODULE hModule, LPCSTR type, LPCSTR name, WORD LangID, LO
+   return CONTINUE_LOOKING;
+ }
+ 
+-extern int atoi(const char *);
+-
+ /* Internal: Find the LCID for a locale specification */
+ LCID MSVCRT_locale_to_LCID(const char *locale, unsigned short *codepage, BOOL *sname)
+ {
+     thread_data_t *data = msvcrt_get_thread_data();
+-    LCID lcid;
+-    locale_search_t search;
+     const char *cp, *region;
++    BOOL is_sname = FALSE;
++    DWORD locale_cp;
++    LCID lcid;
+ 
+     if (!strcmp(locale, data->cached_locale)) {
+         if (codepage)
+@@ -309,88 +293,84 @@ LCID MSVCRT_locale_to_LCID(const char *locale, unsigned short *codepage, BOOL *s
+         return data->cached_lcid;
+     }
+ 
+-    memset(&search, 0, sizeof(locale_search_t));
+-
+     cp = strchr(locale, '.');
+     region = strchr(locale, '_');
+ 
+-    lstrcpynA(search.search_language, locale, MAX_ELEM_LEN);
+-    if(region) {
+-        lstrcpynA(search.search_country, region+1, MAX_ELEM_LEN);
+-        if(region-locale < MAX_ELEM_LEN)
+-            search.search_language[region-locale] = '\0';
+-    } else
+-        search.search_country[0] = '\0';
+-
+-    if(cp) {
+-        lstrcpynA(search.search_codepage, cp+1, MAX_ELEM_LEN);
+-        if(region && cp-region-1<MAX_ELEM_LEN)
+-          search.search_country[cp-region-1] = '\0';
+-        if(cp-locale < MAX_ELEM_LEN)
+-            search.search_language[cp-locale] = '\0';
+-    } else
+-        search.search_codepage[0] = '\0';
++    if(!locale[0] || (cp == locale && !region)) {
++        lcid = GetUserDefaultLCID();
++    } else {
++        locale_search_t search;
++
++        memset(&search, 0, sizeof(locale_search_t));
++        lstrcpynA(search.search_language, locale, MAX_ELEM_LEN);
++        if(region) {
++            lstrcpynA(search.search_country, region+1, MAX_ELEM_LEN);
++            if(region-locale < MAX_ELEM_LEN)
++                search.search_language[region-locale] = '\0';
++        } else
++            search.search_country[0] = '\0';
++
++        if(cp) {
++            if(region && cp-region-1<MAX_ELEM_LEN)
++                search.search_country[cp-region-1] = '\0';
++            if(cp-locale < MAX_ELEM_LEN)
++                search.search_language[cp-locale] = '\0';
++        }
++
++        if(!cp && !region)
++        {
++            remap_synonym(search.search_language);
++            search.allow_sname = TRUE;
++        }
+ 
+-    if(!search.search_country[0] && !search.search_codepage[0])
+-        remap_synonym(search.search_language);
++        if(!MSVCRT__stricmp(search.search_country, "China"))
++            strcpy(search.search_country, "People's Republic of China");
+ 
+-    if(!MSVCRT__stricmp(search.search_country, "China"))
+-        strcpy(search.search_country, "People's Republic of China");
++        EnumResourceLanguagesA(GetModuleHandleA("KERNEL32"), (LPSTR)RT_STRING,
++                (LPCSTR)LOCALE_ILANGUAGE,find_best_locale_proc,
++                (LONG_PTR)&search);
+ 
+-    EnumResourceLanguagesA(GetModuleHandleA("KERNEL32"), (LPSTR)RT_STRING,
+-            (LPCSTR)LOCALE_ILANGUAGE,find_best_locale_proc,
+-            (LONG_PTR)&search);
++        if (!search.match_flags)
++            return -1;
+ 
+-    if (!search.match_flags)
+-        return -1;
++        /* If we were given something that didn't match, fail */
++        if (search.search_language[0] && !(search.match_flags & (FOUND_SNAME | FOUND_LANGUAGE)))
++            return -1;
++        if (search.search_country[0] && !(search.match_flags & FOUND_COUNTRY))
++            return -1;
++
++        lcid =  MAKELCID(search.found_lang_id, SORT_DEFAULT);
++        is_sname = (search.match_flags & FOUND_SNAME) != 0;
++    }
+ 
+-    /* If we were given something that didn't match, fail */
+-    if (search.search_language[0] && !(search.match_flags & (FOUND_SNAME | FOUND_LANGUAGE)))
++    /* Obtain code page */
++    if (!cp || !cp[1] || !MSVCRT__strnicmp(cp, ".ACP", 4)) {
++        GetLocaleInfoW(lcid, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER,
++                (WCHAR *)&locale_cp, sizeof(DWORD)/sizeof(WCHAR));
++        if (!locale_cp)
++            locale_cp = GetACP();
++    } else if (!MSVCRT__strnicmp(cp, ".OCP", 4)) {
++        GetLocaleInfoW(lcid, LOCALE_IDEFAULTCODEPAGE | LOCALE_RETURN_NUMBER,
++                (WCHAR *)&locale_cp, sizeof(DWORD)/sizeof(WCHAR));
++    } else {
++        locale_cp = atoi(cp + 1);
++    }
++    if (!IsValidCodePage(locale_cp))
+         return -1;
+-    if (search.search_country[0] && !(search.match_flags & FOUND_COUNTRY))
++
++    if (!locale_cp)
+         return -1;
+ 
+-    lcid =  MAKELCID(search.found_lang_id, SORT_DEFAULT);
+-
+-    /* Populate partial locale, translating LCID to locale string elements */
+-    if (!(search.match_flags & FOUND_CODEPAGE)) {
+-        /* Even if a codepage is not enumerated for a locale
+-         * it can be set if valid */
+-        if (search.search_codepage[0]) {
+-            search.found_codepage = atoi(search.search_codepage);
+-            if (!IsValidCodePage(atoi(search.search_codepage)))
+-            {
+-                /* Special codepage values: OEM & ANSI */
+-                if (!MSVCRT__stricmp(search.search_codepage,"OCP")) {
+-                    GetLocaleInfoW(lcid, LOCALE_IDEFAULTCODEPAGE | LOCALE_RETURN_NUMBER,
+-                                   (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
+-                } else if (!MSVCRT__stricmp(search.search_codepage,"ACP")) {
+-                    GetLocaleInfoW(lcid, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER,
+-                                   (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
+-                } else
+-                    return -1;
+-                if (!search.found_codepage)
+-                    return -1;
+-            }
+-        } else {
+-            /* Prefer ANSI codepages if present */
+-            GetLocaleInfoW(lcid, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER,
+-                           (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
+-            if (!search.found_codepage)
+-                GetLocaleInfoW(lcid, LOCALE_IDEFAULTCODEPAGE | LOCALE_RETURN_NUMBER,
+-                               (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
+-        }
+-    }
+     if (codepage)
+-        *codepage = search.found_codepage;
++        *codepage = locale_cp;
+     if (sname)
+-        *sname = (search.match_flags & FOUND_SNAME) != 0;
++        *sname = is_sname;
+ 
+     if (strlen(locale) < sizeof(data->cached_locale)) {
+         strcpy(data->cached_locale, locale);
+         data->cached_lcid = lcid;
+-        data->cached_cp = codepage ? *codepage : search.found_codepage;
+-        data->cached_sname = (search.match_flags & FOUND_SNAME) != 0;
++        data->cached_cp = locale_cp;
++        data->cached_sname = is_sname;
+     }
+ 
+     return lcid;
+@@ -1130,16 +1110,6 @@ static MSVCRT_pthreadlocinfo create_locinfo(int category,
+     if(locale[0]=='C' && !locale[1]) {
+         lcid[0] = 0;
+         cp[0] = CP_ACP;
+-    } else if(!locale[0]) {
+-        lcid[0] = GetSystemDefaultLCID();
+-        GetLocaleInfoA(lcid[0], LOCALE_IDEFAULTANSICODEPAGE
+-                |LOCALE_NOUSEROVERRIDE, buf, sizeof(buf));
+-        cp[0] = atoi(buf);
+-
+-        for(i=1; i<6; i++) {
+-            lcid[i] = lcid[0];
+-            cp[i] = cp[0];
+-        }
+     } else if (locale[0] == 'L' && locale[1] == 'C' && locale[2] == '_') {
+         const char *p;
+ 
+From 4913d6c3004207f0fafce73429b48dbc0d6d6313 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 18 Sep 2020 15:53:06 +0200
+Subject: [PATCH] msvcrt/tests: Test .{O|A}CP locale string.
+
+Used by Marvel's Avengers.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Piotr Caban <piotr@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit e6a42874a2bf345c41f94a5c78c5b81510e667d3)
+---
+ dlls/msvcrt/tests/locale.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/dlls/msvcrt/tests/locale.c b/dlls/msvcrt/tests/locale.c
+index 08abac00bed..e0bafe3a0dd 100644
+--- a/dlls/msvcrt/tests/locale.c
++++ b/dlls/msvcrt/tests/locale.c
+@@ -45,6 +45,8 @@ static void test_setlocale(void)
+         "LC_MONETARY=Greek_Greece.1253;LC_NUMERIC=Polish_Poland.1250;LC_TIME=C";
+ 
+     char *ret, buf[100];
++    char *ptr;
++    int len;
+ 
+     ret = setlocale(20, "C");
+     ok(ret == NULL, "ret = %s\n", ret);
+@@ -612,6 +614,27 @@ static void test_setlocale(void)
+         ok(!strcmp(ret, buf), "ret = %s, expected %s\n", ret, buf);
+     }
+ 
++    GetLocaleInfoA(GetUserDefaultLCID(), LOCALE_IDEFAULTCODEPAGE, buf, sizeof(buf));
++    if(IsValidCodePage(atoi(buf))) {
++        ret = setlocale(LC_ALL, ".OCP");
++        ok(ret != NULL, "ret == NULL\n");
++        ptr = strchr(ret, '.');
++        ok(ptr && !strcmp(ptr + 1, buf), "ret %s, buf %s.\n", ret, buf);
++    }
++
++    len = GetLocaleInfoA(GetUserDefaultLCID(), LOCALE_IDEFAULTANSICODEPAGE, buf, sizeof(buf)) - 1;
++    if(buf[0] == '0' && !buf[1])
++        len = sprintf(buf, "%d", GetACP());
++    ret = setlocale(LC_ALL, ".ACP");
++    ok(ret != NULL, "ret == NULL\n");
++    ptr = strchr(ret, '.');
++    ok(ptr && !strncmp(ptr + 1, buf, len), "ret %s, buf %s.\n", ret, buf);
++
++    ret = setlocale(LC_ALL, ".1250");
++    ok(ret != NULL, "ret == NULL\n");
++    ptr = strchr(ret, '.');
++    ok(ptr && !strcmp(ptr, ".1250"), "ret %s, buf %s.\n", ret, buf);
++
+     ret = setlocale(LC_ALL, "English_United States.UTF8");
+     ok(ret == NULL, "ret != NULL\n");
+ 
+From 45bb53db6b4b7c130cadb46dd8f5a016fed02e60 Mon Sep 17 00:00:00 2001
+From: Piotr Caban <piotr@codeweavers.com>
+Date: Thu, 26 Nov 2020 15:26:27 +0100
+Subject: [PATCH] msvcrt: Don't write Unicode BOM if file is not empty in
+ _wsopen_dispatch.
+
+Signed-off-by: Piotr Caban <piotr@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 00a024725e86f3dd3f8bb52849fd2597bbf58d40)
+---
+ dlls/msvcrt/file.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/msvcrt/file.c b/dlls/msvcrt/file.c
+index 9c42aa56993..059bd89f4cb 100644
+--- a/dlls/msvcrt/file.c
++++ b/dlls/msvcrt/file.c
+@@ -2302,9 +2302,14 @@ int CDECL MSVCRT__wsopen_dispatch( const MSVCRT_wchar_t* path, int oflags, int s
+ 
+   if (oflags & (MSVCRT__O_WTEXT|MSVCRT__O_U16TEXT|MSVCRT__O_U8TEXT))
+   {
++      LARGE_INTEGER size = {{0}};
++
++      if ((access & GENERIC_WRITE) && (creation==OPEN_EXISTING || creation==OPEN_ALWAYS))
++          GetFileSizeEx(hand, &size);
++
+       if ((access & GENERIC_WRITE) && (creation==CREATE_NEW
+                   || creation==CREATE_ALWAYS || creation==TRUNCATE_EXISTING
+-                  || (creation==OPEN_ALWAYS && GetLastError()==ERROR_ALREADY_EXISTS)))
++                  || ((creation==OPEN_EXISTING || creation==OPEN_ALWAYS) && !size.QuadPart)))
+       {
+           if (oflags & MSVCRT__O_U8TEXT)
+           {
+From 8767d2ae94f63580cf501cc04f4f8d126ff06323 Mon Sep 17 00:00:00 2001
+From: Piotr Caban <piotr@codeweavers.com>
+Date: Thu, 26 Nov 2020 15:26:35 +0100
+Subject: [PATCH] msvcrt: Implement opening Unicode files with no BOM in
+ _wsopen_dispatch.
+
+Spotted by Alistair Leslie-Hughes.
+
+Signed-off-by: Piotr Caban <piotr@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit b0ab1b76029eaface724a28483fe8b0ea36029dc)
+---
+ dlls/msvcrt/file.c       |  8 ++-----
+ dlls/msvcrt/tests/file.c | 49 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/msvcrt/file.c b/dlls/msvcrt/file.c
+index 059bd89f4cb..3c57a75494f 100644
+--- a/dlls/msvcrt/file.c
++++ b/dlls/msvcrt/file.c
+@@ -2179,17 +2179,15 @@ static int check_bom(HANDLE h, int oflags, BOOL seek)
+     char bom[sizeof(utf8_bom)];
+     DWORD r;
+ 
+-    oflags &= ~(MSVCRT__O_WTEXT|MSVCRT__O_U16TEXT|MSVCRT__O_U8TEXT);
+-
+     if (!ReadFile(h, bom, sizeof(utf8_bom), &r, NULL))
+         return oflags;
+ 
+     if (r==sizeof(utf8_bom) && !memcmp(bom, utf8_bom, sizeof(utf8_bom))) {
+-        oflags |= MSVCRT__O_U8TEXT;
++        oflags = (oflags & ~(MSVCRT__O_WTEXT | MSVCRT__O_U16TEXT)) | MSVCRT__O_U8TEXT;
+     }else if (r>=sizeof(utf16_bom) && !memcmp(bom, utf16_bom, sizeof(utf16_bom))) {
+         if (seek && r>2)
+             SetFilePointer(h, 2, NULL, FILE_BEGIN);
+-        oflags |= MSVCRT__O_U16TEXT;
++        oflags = (oflags & ~(MSVCRT__O_WTEXT | MSVCRT__O_U8TEXT)) | MSVCRT__O_U16TEXT;
+     }else if (seek) {
+         SetFilePointer(h, 0, NULL, FILE_BEGIN);
+     }
+@@ -2289,8 +2287,6 @@ int CDECL MSVCRT__wsopen_dispatch( const MSVCRT_wchar_t* path, int oflags, int s
+           oflags = check_bom(hand, oflags, FALSE);
+           CloseHandle(hand);
+       }
+-      else
+-          oflags &= ~(MSVCRT__O_WTEXT|MSVCRT__O_U16TEXT|MSVCRT__O_U8TEXT);
+   }
+ 
+   hand = CreateFileW(path, access, sharing, &sa, creation, attrib, 0);
+diff --git a/dlls/msvcrt/tests/file.c b/dlls/msvcrt/tests/file.c
+index fc6dacd71ff..a413d674164 100644
+--- a/dlls/msvcrt/tests/file.c
++++ b/dlls/msvcrt/tests/file.c
+@@ -971,6 +971,38 @@ static void test_fgetwc_unicode(void)
+     ok(ch == WEOF, "got %04hx, expected WEOF (unicode)\n", ch);
+     fclose(tempfh);
+ 
++    tempfh = fopen(tempfile, "r,ccs=utf-8");
++    ok(tempfh != NULL, "can't open tempfile\n");
++    for (i = 1; i < ARRAY_SIZE(wchar_text); i++)
++    {
++        ch = fgetwc(tempfh);
++        ok(ch == wchar_text[i],
++                "got %04hx, expected %04x (unicode[%d])\n", ch, wchar_text[i], i-1);
++    }
++    ch = fgetwc(tempfh);
++    ok(ch == WEOF, "got %04hx, expected WEOF (unicode)\n", ch);
++    fclose(tempfh);
++
++    tempfh = fopen(tempfile, "a,ccs=utf-16le");
++    ok(tempfh != NULL, "can't open tempfile\n");
++    ch = fputwc('a', tempfh);
++    ok(ch == 'a', "fputwc returned %x\n", ch);
++    fclose(tempfh);
++
++    tempfh = fopen(tempfile, "a+,ccs=utf-8");
++    ok(tempfh != NULL, "can't open tempfile\n");
++    for (i = 1; i < ARRAY_SIZE(wchar_text); i++)
++    {
++        ch = fgetwc(tempfh);
++        ok(ch == wchar_text[i],
++                "got %04hx, expected %04x (unicode[%d])\n", ch, wchar_text[i], i-1);
++    }
++    ch = fgetwc(tempfh);
++    ok(ch == 'a', "got %04x, expected 'a'\n", ch);
++    ch = fgetwc(tempfh);
++    ok(ch == WEOF, "got %04hx, expected WEOF (unicode)\n", ch);
++    fclose(tempfh);
++
+     tempfh = fopen(tempfile, "wb");
+     ok(tempfh != NULL, "can't open tempfile\n");
+     ret = WideCharToMultiByte(CP_UTF8, 0, wchar_text, ARRAY_SIZE(wchar_text),
+@@ -990,6 +1022,23 @@ static void test_fgetwc_unicode(void)
+     ch = fgetwc(tempfh);
+     ok(ch == WEOF, "got %04hx, expected WEOF (utf8)\n", ch);
+     fclose(tempfh);
++
++    tempfh = fopen(tempfile, "wb");
++    ok(tempfh != NULL, "can't open tempfile\n");
++    fwrite(wchar_text+1, 1, sizeof(wchar_text)-1, tempfh);
++    fclose(tempfh);
++
++    tempfh = fopen(tempfile, "rt,ccs=utf-16le");
++    ok(tempfh != NULL, "can't open tempfile\n");
++    for (i = 1; i < ARRAY_SIZE(wchar_text); i++)
++    {
++        ch = fgetwc(tempfh);
++        ok(ch == wchar_text[i],
++                "got %04hx, expected %04x (unicode[%d])\n", ch, wchar_text[i], i-1);
++    }
++    ch = fgetwc(tempfh);
++    ok(ch == WEOF, "got %04hx, expected WEOF (unicode)\n", ch);
++    fclose(tempfh);
+     unlink(temppath);
+ }
+ 
+From 6f07f0b8676c553bef6bbdbbe42dd7312926a2a9 Mon Sep 17 00:00:00 2001
+From: Daniel Lehman <dlehman25@gmail.com>
+Date: Tue, 28 Jul 2020 22:55:45 -0700
+Subject: [PATCH] msvcp140_1: Add stub msvcp140_1.
+
+Signed-off-by: Daniel Lehman <dlehman25@gmail.com>
+Signed-off-by: Piotr Caban <piotr@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 4401d4608894ba71937cd02571b689869c77f555)
+---
+ configure                       | 2 ++
+ configure.ac                    | 1 +
+ dlls/msvcp140_1/Makefile.in     | 1 +
+ dlls/msvcp140_1/msvcp140_1.spec | 7 +++++++
+ 4 files changed, 11 insertions(+)
+ create mode 100644 dlls/msvcp140_1/Makefile.in
+ create mode 100644 dlls/msvcp140_1/msvcp140_1.spec
+
+diff --git a/configure b/configure
+index d676b1c82ee..e47e492a93e 100755
+--- a/configure
++++ b/configure
+@@ -1469,6 +1469,7 @@ enable_msvcp110
+ enable_msvcp120
+ enable_msvcp120_app
+ enable_msvcp140
++enable_msvcp140_1
+ enable_msvcp60
+ enable_msvcp70
+ enable_msvcp71
+@@ -21137,6 +21138,7 @@ wine_fn_config_makefile dlls/msvcp120/tests enable_tests
+ wine_fn_config_makefile dlls/msvcp120_app enable_msvcp120_app
+ wine_fn_config_makefile dlls/msvcp140 enable_msvcp140
+ wine_fn_config_makefile dlls/msvcp140/tests enable_tests
++wine_fn_config_makefile dlls/msvcp140_1 enable_msvcp140_1
+ wine_fn_config_makefile dlls/msvcp60 enable_msvcp60
+ wine_fn_config_makefile dlls/msvcp60/tests enable_tests
+ wine_fn_config_makefile dlls/msvcp70 enable_msvcp70
+diff --git a/configure.ac b/configure.ac
+index 63d26ff123c..0667fad7af6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3554,6 +3554,7 @@ WINE_CONFIG_MAKEFILE(dlls/msvcp120/tests)
+ WINE_CONFIG_MAKEFILE(dlls/msvcp120_app)
+ WINE_CONFIG_MAKEFILE(dlls/msvcp140)
+ WINE_CONFIG_MAKEFILE(dlls/msvcp140/tests)
++WINE_CONFIG_MAKEFILE(dlls/msvcp140_1)
+ WINE_CONFIG_MAKEFILE(dlls/msvcp60)
+ WINE_CONFIG_MAKEFILE(dlls/msvcp60/tests)
+ WINE_CONFIG_MAKEFILE(dlls/msvcp70)
+diff --git a/dlls/msvcp140_1/Makefile.in b/dlls/msvcp140_1/Makefile.in
+new file mode 100644
+index 00000000000..6582299d7d6
+--- /dev/null
++++ b/dlls/msvcp140_1/Makefile.in
+@@ -0,0 +1 @@
++MODULE = msvcp140_1.dll
+diff --git a/dlls/msvcp140_1/msvcp140_1.spec b/dlls/msvcp140_1/msvcp140_1.spec
+new file mode 100644
+index 00000000000..bfe82ab00da
+--- /dev/null
++++ b/dlls/msvcp140_1/msvcp140_1.spec
+@@ -0,0 +1,7 @@
++@ stub _Aligned_get_default_resource
++@ stub _Aligned_new_delete_resource
++@ stub _Aligned_set_default_resource
++@ stub _Unaligned_get_default_resource
++@ stub _Unaligned_new_delete_resource
++@ stub _Unaligned_set_default_resource
++@ stub null_memory_resource

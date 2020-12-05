@@ -49,6 +49,7 @@
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
+    patch -Np1 < ../patches/dxvk/1582.patch
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
@@ -82,6 +83,11 @@
     # -W dinput-joy-mappings \
     # -W dinput-reconnect-joystick \
     # -W dinput-remap-joystick \
+
+    # these cause window freezes/hangs with origin
+    # -W winex11-MWM_Decorations \
+    # -W winex11-_NET_ACTIVE_WINDOW \
+    # -W winex11-WM_WINDOWPOSCHANGING
     
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -89,11 +95,14 @@
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick
+    -W dinput-remap-joystick \
+    -W winex11-MWM_Decorations \
+    -W winex11-_NET_ACTIVE_WINDOW \
+    -W winex11-WM_WINDOWPOSCHANGING
 
-    # this is only used when staging disables mfplat if Derek provides an updated rebase
-    # echo "mfplat rebase"
-    # patch -Np1 < ../patches/wine-hotfixes/mfplat_rebase.patch
+#    # this is only used when staging disables mfplat if Derek provides an updated rebase
+#    echo "mfplat rebase"
+#    patch -Np1 < ../patches/wine-hotfixes/mfplat_rebase.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
@@ -113,12 +122,6 @@
     # echo "blackops 2 fix"
     # patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
-    echo "bloons TD6 fix"
-    patch -Np1 < ../patches/game-patches/bloons_TD6_fix.patch
-    
-    echo "avengers and mafia definitive edition patches"
-    patch -Np1 < ../patches/game-patches/mafia_de.patch
-    
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
 
@@ -219,21 +222,13 @@
     #this is needed specifically for proton, not needed for normal wine
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/proton/30-proton-mediafoundation_dllreg.patch
-
-    # use the below patch only when disabling mfplat-streaming-support in staging
-    # when using this, find the 'class Session:' section of proton script and
-    # modify the self.dlloverrides section like so:
-    #
-    #    self.dlloverrides = {
-    #            "steam.exe": "b", #always use our special built-in steam.exe
-    #            "mfplay": "n" #disable built-in mfplay
-    #    }
-    #
-    #echo "mfplat proton hacks"
-    #patch -Np1 < ../patches/proton/31-proton-mfplat-hacks.patch
     
     echo "proton-specific winegstreamer patches"
     patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
+    
+    echo "proton udev container patches"
+    patch -Np1 < ../patches/proton/35-proton-udev_container_patches.patch
+
     
     ### END PROTON PATCH SECTION ###
 
@@ -248,8 +243,6 @@
     
     echo "Endless Space 2 video color fix"
     patch -Np1 < ../patches/wine-hotfixes/195961.patch
-        
-    patch -Np1 < ../patches/wine-hotfixes/194920.patch
 
     ### END WINEPATCH SECTION ###
     
