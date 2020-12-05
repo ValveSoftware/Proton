@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.22-GE-1"
+CURRENT_PREFIX_VERSION="6.0-GE-rc1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -716,9 +716,8 @@ class Session:
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
-        if "vkd3dfl12" in self.compat_config:
-            if not "VKD3D_FEATURE_LEVEL" in self.env:
-                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
+        if not "VKD3D_FEATURE_LEVEL" in self.env:
+            self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
