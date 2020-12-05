@@ -148,6 +148,8 @@ This section is for those that use the Steam flatpak.
 
 ##### Flathub
 
+This unofficial build isn't supported by GloriousEggroll nor Valve and wasn't tested with all possible games and cases. It can behave differently from upstream builds. Use at your own risk.
+
 1. [Add the Flathub repository](https://flatpak.org/setup/).
 2. Run:
 	```bash
