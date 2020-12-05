@@ -1,0 +1,31 @@
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Subject: [PATCH 1/2] dlls/d3d12: Fix D3D12SerializeVersionedRootSignature.
+Message-Id: <20191016110642.44741-1-post@arntzen-software.no>
+Date: Wed, 16 Oct 2019 13:06:41 +0200
+
+Use the proper versioned serializer from vkd3d.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ dlls/d3d12/d3d12_main.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/dlls/d3d12/d3d12_main.c b/dlls/d3d12/d3d12_main.c
+index bd680d8254..9f0fa12ee8 100644
+--- a/dlls/d3d12/d3d12_main.c
++++ b/dlls/d3d12/d3d12_main.c
+@@ -420,9 +420,5 @@ HRESULT WINAPI D3D12SerializeVersionedRootSignature(const D3D12_VERSIONED_ROOT_S
+ {
+     TRACE("desc %p, blob %p, error_blob %p.\n", desc, blob, error_blob);
+ 
+-    if (desc->Version == D3D_ROOT_SIGNATURE_VERSION_1_0)
+-        return vkd3d_serialize_root_signature(&desc->Desc_1_0, desc->Version, blob, error_blob);
+-
+-    FIXME("Unsupported version %#x.\n", desc->Version);
+-    return E_NOTIMPL;
++    return vkd3d_serialize_versioned_root_signature(desc, blob, error_blob);
+ }
+
+-- 
+2.23.0
+

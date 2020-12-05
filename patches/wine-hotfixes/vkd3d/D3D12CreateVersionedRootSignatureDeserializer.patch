@@ -1,0 +1,50 @@
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Subject: [PATCH 2/2] dlls/d3d12: Add D3D12CreateVersionedRootSignatureDeserializer.
+Message-Id: <20191016110642.44741-2-post@arntzen-software.no>
+Date: Wed, 16 Oct 2019 13:06:42 +0200
+In-Reply-To: <20191016110642.44741-1-post@arntzen-software.no>
+References: <20191016110642.44741-1-post@arntzen-software.no>
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ dlls/d3d12/d3d12.spec   | 2 +-
+ dlls/d3d12/d3d12_main.c | 9 +++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/d3d12/d3d12.spec b/dlls/d3d12/d3d12.spec
+index 7c2ae98806..21231d3955 100644
+--- a/dlls/d3d12/d3d12.spec
++++ b/dlls/d3d12/d3d12.spec
+@@ -5,7 +5,7 @@
+ @ stub D3D12CoreGetLayeredDeviceSize
+ @ stub D3D12CoreRegisterLayers
+ @ stdcall D3D12CreateRootSignatureDeserializer(ptr long ptr ptr)
+-#@ stub D3D12CreateVersionedRootSignatureDeserializer
++@ stdcall D3D12CreateVersionedRootSignatureDeserializer(ptr long ptr ptr)
+ @ stdcall D3D12EnableExperimentalFeatures(long ptr ptr ptr)
+ @ stdcall D3D12SerializeRootSignature(ptr long ptr ptr)
+ @ stdcall D3D12SerializeVersionedRootSignature(ptr ptr ptr)
+diff --git a/dlls/d3d12/d3d12_main.c b/dlls/d3d12/d3d12_main.c
+index 9f0fa12ee8..b8810848cd 100644
+--- a/dlls/d3d12/d3d12_main.c
++++ b/dlls/d3d12/d3d12_main.c
+@@ -406,6 +406,15 @@ HRESULT WINAPI D3D12CreateRootSignatureDeserializer(const void *data, SIZE_T dat
+     return vkd3d_create_root_signature_deserializer(data, data_size, iid, deserializer);
+ }
+ 
++HRESULT WINAPI D3D12CreateVersionedRootSignatureDeserializer(const void *data, SIZE_T data_size,
++        REFIID iid, void **deserializer)
++{
++    TRACE("data %p, data_size %lu, iid %s, deserializer %p.\n",
++            data, data_size, debugstr_guid(iid), deserializer);
++
++    return vkd3d_create_versioned_root_signature_deserializer(data, data_size, iid, deserializer);
++}
++
+ HRESULT WINAPI D3D12SerializeRootSignature(const D3D12_ROOT_SIGNATURE_DESC *root_signature_desc,
+         D3D_ROOT_SIGNATURE_VERSION version, ID3DBlob **blob, ID3DBlob **error_blob)
+ {
+
+-- 
+2.23.0
+
