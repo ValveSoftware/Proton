@@ -155,12 +155,6 @@
     echo "LAA"
     patch -Np1 < ../patches/proton/04-proton-LAA_staging.patch
     
-    echo "proton force mouse fullscreen grab"
-    patch -Np1 < ../patches/proton/06-proton-nofshack-force-fullscreen-grab-mouse.patch
-    
-    echo "proton alt-tab hotfixes"
-    patch -Np1 < ../patches/proton/07-proton-alt-tab-focus-hotfixes.patch
-
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/08-proton-steamclient_swap.patch
 
@@ -206,9 +200,6 @@
     # -- pending work
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
-
-    echo "cod fixes"
-    patch -Np1 < ../patches/proton/26-proton-cod_hotfixes.patch
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
