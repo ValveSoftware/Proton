@@ -128,9 +128,6 @@
     echo "SKSE64 updated fix"
     patch -Np1 < ../patches/game-patches/skse64_fix.patch
 
-    echo "gta v key input fix"
-    patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
-
     # Disabled for now -- non-steam game, needs double check, may be fixed already
     # echo "Paul's Diablo 1 menu fix"
     # patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
