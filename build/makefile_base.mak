@@ -238,6 +238,15 @@ LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
 LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
 LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
 
+WINEOPENXR := $(SRCDIR)/wineopenxr
+WINEOPENXR64 := ./syn-wineopenxr64/wineopenxr
+WINEOPENXR_OBJ64 := ./obj-wineopenxr64
+WINEOPENXR_JSON64 := $(SRCDIR)/wineopenxr/wineopenxr64.json
+WINEOPENXR_FAKEDLL64 := $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake
+
+OPENXR := $(SRCDIR)/OpenXR-SDK
+OPENXR_OBJ64 := ./obj-openxr64
+
 STEAMEXE_SRC := $(SRCDIR)/steam_helper
 STEAMEXE_OBJ := ./obj-steam
 STEAMEXE_SYN := ./syn-steam/steam
@@ -289,6 +298,8 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
+            $(WINEOPENXR_OBJ64) \
+            $(OPENXR_OBJ64) \
             $(STEAMEXE_OBJ)                             \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
@@ -366,6 +377,8 @@ DIST_GECKO64 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
 DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
 DIST_WINEMONO := $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
 DIST_FONTS := $(DST_DIR)/share/fonts
+DIST_WINEOPENXR_JSON64 := $(DIST_PREFIX)/drive_c/openxr/wineopenxr64.json
+DIST_WINEOPENXR64 := $(DIST_PREFIX)/drive_c/windows/system32/wineopenxr.dll
 
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
@@ -444,18 +457,30 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/*.ttf "$@"
 	cp $(FONTS_OBJ)/*.otf "$@"
 
+$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_JSON64)
+	mkdir -p $(dir $@)
+	cp -a $< $@
+
+$(DIST_WINEOPENXR64): wineopenxr64
+	mkdir -p $(dir $@)
+	cp -a $(WINEOPENXR_FAKEDLL64) $@
+
 .PHONY: dist
 
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine gst_good vrclient lsteamclient steam dxvk vkd3d-proton mediaconv | $(DST_DIR)
-	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
-	cp $(DIST_VERSION) $(DST_BASE)/
+dist_prefix: wine gst_good
 	find $(DST_DIR)/lib/wine -type f -execdir chmod a-w '{}' '+'
 	find $(DST_DIR)/lib64/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
 	python3 $(SRCDIR)/default_pfx.py $(abspath $(DIST_PREFIX)) $(abspath $(DST_DIR)) $(STEAM_RUNTIME_RUNSH)
+
+dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64) $(DIST_WINEOPENXR64)
+
+dist: $(DIST_TARGETS) vrclient lsteamclient wineopenxr steam dxvk vkd3d-proton mediaconv dist_wineopenxr | $(DST_DIR)
+	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
+	cp $(DIST_VERSION) $(DST_BASE)/
 
 deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
@@ -1052,6 +1077,104 @@ lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filte
 	mkdir -pv $(DST_DIR)/lib/wine/
 	cp -af $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
 
+
+##
+## openxr
+## Note 32-bit is not supported by SteamVR, so we don't build it.
+##
+
+OPENXR_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR="lib"
+
+OPENXR_TARGETS = openxr openxr64
+
+ALL_TARGETS += $(OPENXR_TARGETS)
+GOAL_TARGETS_LIBS += openxr
+
+.PHONY: openxr openxr64
+
+openxr: openxr64
+
+OPENXR_CONFIGURE_FILES64 := $(OPENXR_OBJ64)/Makefile
+
+$(OPENXR_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(OPENXR_CONFIGURE_FILES64): $(OPENXR)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENXR_OBJ64)
+	cd $(dir $@) && \
+		CFLAGS="$(OPTIMIZE_FLAGS)" \
+		cmake $(abspath $(OPENXR)) \
+			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
+			$(OPENXR_CMAKE_FLAGS)
+
+openxr64: SHELL = $(CONTAINER_SHELL64)
+openxr64: $(OPENXR_CONFIGURE_FILES64)
+	+$(MAKE) -C $(OPENXR_OBJ64) VERBOSE=1
+	+$(MAKE) -C $(OPENXR_OBJ64) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib64
+	cp -a $(TOOLS_DIR64)/lib/libopenxr_loader* $(DST_DIR)/lib64/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libopenxr_loader.so
+
+##
+## wineopenxr
+## Note 32-bit is not supported by SteamVR, so we don't build it.
+##
+
+# The source directory for wineopenxr is a synthetic symlink clone of the source directory, because we need to run
+# winemaker in tree and it can stomp itself in parallel builds.
+$(WINEOPENXR64)/.created: $(WINEOPENXR) $(MAKEFILE_DEP)
+	rm -rf ./$(WINEOPENXR64)
+	mkdir -p $(WINEOPENXR64)/
+	cd $(WINEOPENXR64)/ && ln -sfv ../../$(WINEOPENXR)/* .
+	touch $@
+
+$(WINEOPENXR64): $(WINEOPENXR64)/.created
+
+## Create & configure object directory for wineopenxr
+
+WINEOPENXR_CONFIGURE_FILES64 := $(WINEOPENXR_OBJ64)/Makefile
+
+# 64bit-configure
+$(WINEOPENXR_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(WINEOPENXR_CONFIGURE_FILES64): $(WINEOPENXR64) $(MAKEFILE_DEP) | $(WINEOPENXR_OBJ64) $(WINEMAKER)
+	cd $(dir $@) && \
+		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
+			-I"../$(TOOLS_DIR64)"/include/ \
+			-I"../$(TOOLS_DIR64)"/include/wine/ \
+			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
+			-I"../$(WINE)"/include/ \
+			-I"$(abspath $(OPENXR))"/include/ \
+			-L"../$(TOOLS_DIR64)"/lib/ \
+			-l"openxr_loader" \
+			-l"dxgi" \
+			-l"vulkan" \
+			--dll ../$(WINEOPENXR64) && \
+		cp ../$(WINEOPENXR64)/Makefile . && \
+		echo >> ./Makefile 'SRCDIR := ../$(WINEOPENXR64)' && \
+		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
+		echo >> ./Makefile 'wineopenxr_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(wineopenxr_dll_LDFLAGS))'
+
+#			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
+## wineopenxr goals
+WINEOPENXR_TARGETS = wineopenxr wineopenxr_configure wineopenxr64 wineopenxr_configure64
+
+ALL_TARGETS += $(WINEOPENXR_TARGETS)
+GOAL_TARGETS_LIBS += wineopenxr
+
+.PHONY: $(WINEOPENXR_TARGETS)
+
+wineopenxr_configure: $(WINEOPENXR_CONFIGURE_FILES64)
+
+wineopenxr_configure64: $(WINEOPENXR_CONFIGURE_FILES64)
+
+wineopenxr: wineopenxr64
+
+wineopenxr64: SHELL = $(CONTAINER_SHELL64)
+wineopenxr64: $(WINEOPENXR_CONFIGURE_FILES64) openxr64 | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CFLAGS="$(COMMON_FLAGS) -g" \
+		$(MAKE) -C $(WINEOPENXR_OBJ64)
+	$(TOOLS_DIR64)/bin/winebuild -m64 --dll --fake-module -E $(abspath $(WINEOPENXR))/wineopenxr.spec -o $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake
+	[ x"$(STRIP)" = x ] || $(STRIP) $(WINEOPENXR_OBJ64)/wineopenxr.dll.so
+	mkdir -pv $(DST_DIR)/lib64/wine/
+	cp -af $(WINEOPENXR_OBJ64)/wineopenxr.dll.so $(DST_DIR)/lib64/wine/
+
 ## steam.exe
 
 $(STEAMEXE_SYN)/.created: $(STEAMEXE_SRC) $(MAKEFILE_DEP)
@@ -1322,7 +1445,7 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt | $(DXVK_OBJ64)
+$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt wineopenxr64 | $(DXVK_OBJ64)
 	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
 	fi
