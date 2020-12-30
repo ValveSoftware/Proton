@@ -172,3 +172,8 @@ vrclient: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vrclient && \
 		cp -f $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
 		cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine'
+
+wineopenxr: configure
+	mkdir -p vagrant_share/wineopenxr/lib64/wine
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) wineopenxr && \
+		cp -f $(BUILD_DIR)/dist/dist/lib64/wine/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine'

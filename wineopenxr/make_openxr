@@ -1,0 +1,2893 @@
+#!/usr/bin/python3
+# Wine Vulkan generator
+#
+# Copyright 2017-2018 Roderick Colenbrander
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+#  License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+
+import argparse
+import logging
+import os
+import re
+import sys
+import urllib.request
+import xml.etree.ElementTree as ET
+from collections import OrderedDict
+from collections.abc import Sequence
+from enum import Enum
+
+# This script generates code for a Wine Vulkan ICD driver from Vulkan's xr.xml.
+# Generating the code is like 10x worse than OpenGL, which is mostly a calling
+# convention passthrough.
+#
+# The script parses xr.xml and maps functions and types to helper objects. These
+# helper objects simplify the xml parsing and map closely to the Vulkan types.
+# The code generation utilizes the helper objects during code generation and
+# most of the ugly work is carried out by these objects.
+#
+# Vulkan ICD challenges:
+# - Vulkan ICD loader (vulkan-1.dll) relies on a section at the start of
+#   'dispatchable handles' (e.g. XrDevice, XrInstance) for it to insert
+#   its private data. It uses this area to stare its own dispatch tables
+#   for loader internal use. This means any dispatchable objects need wrapping.
+#
+# - Vulkan structures have different alignment between win32 and 32-bit Linux.
+#   This means structures with alignment differences need conversion logic.
+#   Often structures are nested, so the parent structure may not need any
+#   conversion, but some child may need some.
+#
+# xr.xml parsing challenges:
+# - Contains type data for all platforms (generic Vulkan, Windows, Linux,..).
+#   Parsing of extension information required to pull in types and functions
+#   we really want to generate. Just tying all the data together is tricky.
+#
+# - Arrays are used all over the place for parameters or for structure members.
+#   Array length is often stored in a previous parameter or another structure
+#   member and thus needs careful parsing.
+
+LOGGER = logging.Logger("openxr")
+LOGGER.addHandler(logging.StreamHandler())
+
+XR_XML_VERSION = "1.0.11"
+WINE_XR_VERSION = (1, 0)
+
+# Filenames to create.
+WINE_OPENXR_H = "./wineopenxr.h"
+WINE_OPENXR_DRIVER_H = "./wineopenxr_driver.h"
+WINE_OPENXR_JSON = "./wineopenxr.json"
+WINE_OPENXR_THUNKS_C = "./openxr_thunks.c"
+WINE_OPENXR_THUNKS_H = "./openxr_thunks.h"
+
+# Extension enum values start at a certain offset (EXT_BASE).
+# Relative to the offset each extension has a block (EXT_BLOCK_SIZE)
+# of values.
+# Start for a given extension is:
+# EXT_BASE + (extension_number-1) * EXT_BLOCK_SIZE
+EXT_BASE = 1000000000
+EXT_BLOCK_SIZE = 1000
+
+UNSUPPORTED_EXTENSIONS = [
+    # Instance extensions
+    "XR_EXT_debug_report",
+    # Handling of XR_EXT_debug_report requires some consideration. The win32
+    # loader already provides it for us and it is somewhat usable. If we add
+    # plumbing down to the native layer, we will get each message twice as we
+    # use 2 loaders (win32+native), but we may get output from the driver.
+    # In any case callback conversion is required.
+    "XR_EXT_debug_utils",
+    "XR_EXT_validation_features",
+    "XR_EXT_validation_flags",
+    "XR_KHR_display", # Needs WSI work.
+    "XR_KHR_surface_protected_capabilities",
+
+    # Device extensions
+    "XR_AMD_display_native_hdr",
+    "XR_EXT_display_control", # Requires XR_EXT_display_surface_counter
+    "XR_EXT_full_screen_exclusive",
+    "XR_EXT_hdr_metadata", # Needs WSI work.
+    "XR_EXT_pipeline_creation_feedback",
+    "XR_GOOGLE_display_timing",
+    "XR_KHR_external_fence_win32",
+    "XR_KHR_external_memory_win32",
+    "XR_KHR_external_semaphore_win32",
+    # Relates to external_semaphore and needs type conversions in bitflags.
+    "XR_KHR_shared_presentable_image", # Needs WSI work.
+    "XR_KHR_win32_keyed_mutex",
+
+    # Extensions for other platforms
+    "XR_EXT_external_memory_dma_buf",
+    "XR_EXT_image_drm_format_modifier",
+    "XR_KHR_external_fence_fd",
+    "XR_KHR_external_memory_fd",
+    "XR_KHR_external_semaphore_fd",
+
+    # Deprecated extensions
+    "XR_NV_external_memory_capabilities",
+    "XR_NV_external_memory_win32",
+]
+
+ALLOWED_PROTECTS = [
+        "XR_USE_PLATFORM_WIN32",
+        "XR_USE_GRAPHICS_API_VULKAN",
+        "XR_USE_GRAPHICS_API_OPENGL",
+        "XR_USE_GRAPHICS_API_D3D11",
+        "XR_USE_GRAPHICS_API_D3D12",
+]
+
+# Functions part of our wineopenxr graphics driver interface.
+# DRIVER_VERSION should be bumped on any change to driver interface
+# in FUNCTION_OVERRIDES
+DRIVER_VERSION = 1
+
+# Table of functions for which we have a special implementation.
+# These are regular device / instance functions for which we need
+# to do more work compared to a regular thunk or because they are
+# part of the driver interface.
+# - dispatch set whether we need a function pointer in the device
+#   / instance dispatch table.
+# - driver sets whether the API is part of the driver interface.
+# - thunk sets whether to create a thunk in openxr_thunks.c.
+FUNCTION_OVERRIDES = {
+    # Global functions
+    "xrCreateInstance" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrDestroyInstance" : {"dispatch" : False, "driver" : True, "thunk" : False},
+
+    "xrCreateSession" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroySession" : {"dispatch" : True, "driver" : True, "thunk" : False},
+
+    "xrCreateHandTrackerEXT" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroyHandTrackerEXT" : {"dispatch" : True, "driver" : True, "thunk" : False},
+
+    "xrCreateSpatialAnchorMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroySpatialAnchorMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
+
+    "xrGetInstanceProcAddr" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrEnumerateInstanceExtensionProperties" : {"dispatch" : False, "driver" : True, "thunk" : False},
+
+    "xrConvertTimeToWin32PerformanceCounterKHR" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrConvertWin32PerformanceCounterToTimeKHR" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrGetD3D11GraphicsRequirementsKHR" : {"dispatch" : False, "driver" : True, "thunk" : False},
+    "xrGetD3D12GraphicsRequirementsKHR" : {"dispatch" : False, "driver" : True, "thunk" : False},
+
+    "xrGetVulkanGraphicsDeviceKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrGetVulkanDeviceExtensionsKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrGetVulkanInstanceExtensionsKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+
+    "xrPollEvent" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrEnumerateSwapchainImages" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrGetSystem" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrEnumerateSwapchainFormats" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateSwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroySwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrEndFrame" : {"dispatch" : True, "driver" : True, "thunk" : False},
+}
+
+STRUCT_CHAIN_CONVERSIONS = [
+    "XrInstanceCreateInfo",
+]
+
+
+class Direction(Enum):
+    """ Parameter direction: input, output, input_output. """
+    INPUT = 1
+    OUTPUT = 2
+    INPUT_OUTPUT = 3
+
+
+class XrBaseType(object):
+    def __init__(self, name, _type, text, alias=None, requires=None):
+        """ OpenXR base type class.
+
+        XrBaseType is mostly used by OpenXR to define its own
+        base types like XrFlags through typedef out of e.g. uint32_t.
+
+        Args:
+            name (:obj:'str'): Name of the base type.
+            _type (:obj:'str'): Underlying type
+            alias (bool): type is an alias or not.
+            requires (:obj:'str', optional): Other types required.
+                Often bitmask values pull in a *FlagBits type.
+        """
+        self.name = name
+        self.type = _type
+        self.alias = alias
+        self.requires = requires
+        self.required = False
+        self.text = text
+
+    def definition(self):
+        # Definition is similar for alias or non-alias as type
+        # is already set to alias.
+        return self.text + "\n"
+
+    def is_alias(self):
+        return bool(self.alias)
+
+
+class XrConstant(object):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    def definition(self):
+        text = "#define {0} {1}\n".format(self.name, self.value)
+        return text
+
+
+class XrDefine(object):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    @staticmethod
+    def from_xml(define):
+        name_elem = define.find("name")
+
+        if name_elem is None:
+            # <type category="define" name="some_name">some_value</type>
+            # At the time of writing there is only 1 define of this category
+            # 'XR_DEFINE_NON_DISPATCHABLE_HANDLE'.
+            name = define.attrib.get("name")
+
+            # We override behavior of XR_DEFINE_NON_DISPATCHABLE handle as the default
+            # definition various between 64-bit (uses pointers) and 32-bit (uses uint64_t).
+            # This complicates TRACEs in the thunks, so just use uint64_t.
+            if name == "XR_DEFINE_NON_DISPATCHABLE_HANDLE":
+                value = "#define XR_DEFINE_NON_DISPATCHABLE_HANDLE(object) typedef uint64_t object;"
+            else:
+                value = define.text
+            return XrDefine(name, value)
+
+        # With a name element the structure is like:
+        # <type category="define"><name>some_name</name>some_value</type>
+        name = name_elem.text
+
+        # Perform minimal parsing for constants, which we don't need, but are referenced
+        # elsewhere in xr.xml.
+        # - XR_API_VERSION is a messy, deprecated constant and we don't want generate code for it.
+        # - AHardwareBuffer/ANativeWindow are forward declarations for Android types, which leaked
+        #   into the define region.
+        if name in ["XR_API_VERSION", "ANativeWindow"]:
+            return XrDefine(name, None)
+
+        # The body of the define is basically unstructured C code. It is not meant for easy parsing.
+        # Some lines contain deprecated values or comments, which we try to filter out.
+        value = ""
+        for line in define.text.splitlines():
+            value += "\n"
+            # Skip comments or deprecated values.
+            if "//" in line:
+                continue
+            value += line
+
+        for child in define:
+            value += child.text
+            if child.tail is not None:
+                # Split comments for XR_API_VERSION_1_0 / XR_API_VERSION_1_1
+                if "//" in child.tail:
+                    value += child.tail.split("//")[0]
+                else:
+                    value += child.tail
+
+        return XrDefine(name, value.rstrip(' '))
+
+    def definition(self):
+        if self.value is None:
+            return ""
+
+        # Nothing to do as the value was already put in the right form during parsing.
+        return "{0}\n".format(self.value)
+
+    def is_alias(self):
+        return False
+
+
+class XrEnum(object):
+    def __init__(self, name, values, alias=None):
+        self.name = name
+        self.values = values
+        self.required = False
+        self.alias = alias
+        self.aliased_by = []
+
+    @staticmethod
+    def from_alias(enum, alias):
+        name = enum.attrib.get("name")
+        aliasee = XrEnum(name, alias.values, alias=alias)
+
+        alias.add_aliased_by(aliasee)
+        return aliasee
+
+    @staticmethod
+    def from_xml(enum):
+        name = enum.attrib.get("name")
+        values = []
+
+        for v in enum.findall("enum"):
+            # Value is either a value or a bitpos, only one can exist.
+            value = v.attrib.get("value")
+            alias_name = v.attrib.get("alias")
+            if alias_name:
+                alias = next(x for x in values if x.name == alias_name)
+                values.append(XrEnumValue(v.attrib.get("name"), value=alias.value, hex=alias.hex))
+            elif value:
+                # Some values are in hex form. We want to preserve the hex representation
+                # at least when we convert back to a string. Internally we want to use int.
+                if "0x" in value:
+                    values.append(XrEnumValue(v.attrib.get("name"), value=int(value, 0), hex=True))
+                else:
+                    values.append(XrEnumValue(v.attrib.get("name"), value=int(value, 0)))
+            else:
+                # bitmask
+                value = 1 << int(v.attrib.get("bitpos"))
+                values.append(XrEnumValue(v.attrib.get("name"), value=value, hex=True))
+
+        # vulkan.h contains a *_MAX_ENUM value set to 32-bit at the time of writing,
+        # which is to prepare for extensions as they can add values and hence affect
+        # the size definition.
+        max_name = re.sub(r'([0-9a-z_])([A-Z0-9])',r'\1_\2', name).upper() + "_MAX_ENUM"
+        values.append(XrEnumValue(max_name, value=0x7fffffff, hex=True))
+
+        return XrEnum(name, values)
+
+    def add(self, value):
+        """ Add a value to enum. """
+
+        # Extensions can add new enum values. When an extension is promoted to Core
+        # the registry defines the value twice once for old extension and once for
+        # new Core features. Add the duplicate if it's explicitly marked as an
+        # alias, otherwise ignore it.
+        for v in self.values:
+            if not value.is_alias() and v.value == value.value:
+                LOGGER.debug("Adding duplicate enum value {0} to {1}".format(v, self.name))
+                return
+        # Avoid adding duplicate aliases multiple times
+        if not any(x.name == value.name for x in self.values):
+            self.values.append(value)
+
+    def definition(self):
+        if self.is_alias():
+            return ""
+
+        text = "typedef enum {0}\n{{\n".format(self.name)
+
+        # Print values sorted, values can have been added in a random order.
+        values = sorted(self.values, key=lambda value: value.value if value.value is not None else 0x7ffffffe)
+        for value in values:
+            text += "    {0},\n".format(value.definition())
+        text += "}} {0};\n".format(self.name)
+
+        for aliasee in self.aliased_by:
+            text += "typedef {0} {1};\n".format(self.name, aliasee.name)
+
+        text += "\n"
+        return text
+
+    def is_alias(self):
+        return bool(self.alias)
+
+    def add_aliased_by(self, aliasee):
+        self.aliased_by.append(aliasee)
+
+
+class XrEnumValue(object):
+    def __init__(self, name, value=None, hex=False, alias=None):
+        self.name = name
+        self.value = value
+        self.hex = hex
+        self.alias = alias
+
+    def __repr__(self):
+        if self.is_alias():
+            return "{0}={1}".format(self.name, self.alias)
+        return "{0}={1}".format(self.name, self.value)
+
+    def definition(self):
+        """ Convert to text definition e.g. XR_FOO = 1 """
+        if self.is_alias():
+            return "{0} = {1}".format(self.name, self.alias)
+
+        # Hex is commonly used for FlagBits and sometimes within
+        # a non-FlagBits enum for a bitmask value as well.
+        if self.hex:
+            return "{0} = 0x{1:08x}".format(self.name, self.value)
+        else:
+            return "{0} = {1}".format(self.name, self.value)
+
+    def is_alias(self):
+        return self.alias is not None
+
+
+class XrFunction(object):
+    def __init__(self, _type=None, name=None, params=[], extensions=[], alias=None):
+        self.extensions = []
+        self.name = name
+        self.type = _type
+        self.params = params
+        self.alias = alias
+
+        # For some functions we need some extra metadata from FUNCTION_OVERRIDES.
+        func_info = FUNCTION_OVERRIDES.get(self.name, None)
+        self.dispatch = func_info["dispatch"] if func_info else True
+        self.driver = func_info["driver"] if func_info else False
+        self.thunk_needed = func_info["thunk"] if func_info else True
+        self.private_thunk = func_info["private_thunk"] if func_info and "private_thunk" in func_info else False
+        if self.private_thunk:
+            self.thunk_needed = True
+
+        # Required is set while parsing which APIs and types are required
+        # and is used by the code generation.
+        self.required = True if func_info else False
+
+    @staticmethod
+    def from_alias(command, alias):
+        """ Create XrFunction from an alias command.
+
+        Args:
+            command: xml data for command
+            alias (XrFunction): function to use as a base for types / parameters.
+
+        Returns:
+            XrFunction
+        """
+        func_name = command.attrib.get("name")
+        func_type = alias.type
+        params = alias.params
+
+        return XrFunction(_type=func_type, name=func_name, params=params, alias=alias)
+
+    @staticmethod
+    def from_xml(command, types):
+        proto = command.find("proto")
+        func_name = proto.find("name").text
+        func_type = proto.find("type").text
+
+        params = []
+        for param in command.findall("param"):
+            xr_param = XrParam.from_xml(param, types)
+            params.append(xr_param)
+
+        return XrFunction(_type=func_type, name=func_name, params=params)
+
+    def get_conversions(self):
+        """ Get a list of conversion functions required for this function if any.
+        Parameters which are structures may require conversion between win32
+        and the host platform. This function returns a list of conversions
+        required.
+        """
+
+        conversions = []
+        for param in self.params:
+            convs = param.get_conversions()
+            if convs is not None:
+                conversions.extend(convs)
+
+        return conversions
+
+    def is_alias(self):
+        return bool(self.alias)
+
+    def is_core_func(self):
+        """ Returns whether the function is a core function.
+        Core functions are APIs defined by the spec to be part of the
+        Core API.
+        """
+        return not self.extensions
+
+    def is_driver_func(self):
+        """ Returns if function is part of Wine driver interface. """
+        return self.driver
+
+    def is_global_func(self):
+        # Treat xrGetInstanceProcAddr as a global function as it
+        # can operate with NULL for xrInstance.
+        if self.name == "xrGetInstanceProcAddr":
+            return True
+        # Global functions are not passed a dispatchable object.
+        elif self.params[0].is_dispatchable():
+            return False
+        return True
+
+    def is_instance_func(self):
+        # Instance functions are passed XrInstance.
+        if self.params[0].type in ["XrInstance"]:
+            return True
+        return False
+
+    def is_required(self):
+        return self.required
+
+    def needs_conversion(self):
+        """ Check if the function needs any input/output type conversion.
+        Functions need input/output conversion if struct parameters have
+        alignment differences between Win32 and Linux 32-bit.
+        """
+
+        for p in self.params:
+            if p.needs_conversion():
+                LOGGER.debug("Parameter {0} to {1} requires conversion".format(p.name, self.name))
+                return True
+
+        return False
+
+    def needs_dispatch(self):
+        return self.dispatch
+
+    def needs_thunk(self):
+        return self.thunk_needed
+
+    def needs_private_thunk(self):
+        return self.private_thunk
+
+    def pfn(self, prefix="p", call_conv=None, conv=False):
+        """ Create function pointer. """
+
+        if call_conv:
+            pfn = "{0} ({1} *{2}_{3})(".format(self.type, call_conv, prefix, self.name)
+        else:
+            pfn = "{0} (*{1}_{2})(".format(self.type, prefix, self.name)
+
+        for i, param in enumerate(self.params):
+            if param.const:
+                pfn += param.const + " "
+
+            pfn += param.type
+            if conv and param.needs_conversion():
+                pfn += "_host"
+
+            if param.is_pointer():
+                pfn += " " + param.pointer
+
+            if param.array_len is not None:
+                pfn += "[{0}]".format(param.array_len)
+
+            if i < len(self.params) - 1:
+                pfn += ", "
+        pfn += ")"
+        return pfn
+
+    def prototype(self, call_conv=None, prefix=None, postfix=None):
+        """ Generate prototype for given function.
+
+        Args:
+            call_conv (str, optional): calling convention e.g. WINAPI
+            prefix (str, optional): prefix to append prior to function name e.g. xrFoo -> wine_xrFoo
+            postfix (str, optional): text to append after function name but prior to semicolon e.g. DECLSPEC_HIDDEN
+        """
+
+        proto = "{0}".format(self.type)
+
+        if call_conv is not None:
+            proto += " {0}".format(call_conv)
+
+        if prefix is not None:
+            proto += " {0}{1}(".format(prefix, self.name)
+        else:
+            proto += " {0}(".format(self.name)
+
+        # Add all the parameters.
+        proto += ", ".join([p.definition() for p in self.params])
+
+        if postfix is not None:
+            proto += ") {0}".format(postfix)
+        else:
+            proto += ")"
+
+        return proto
+
+    def body(self):
+        body = ""
+
+        if not self.needs_private_thunk():
+            body += "    {0}".format(self.trace())
+
+        params = ", ".join([p.variable(conv=False) for p in self.params])
+
+        # Call the native Vulkan function.
+        if self.is_core_func():
+            # core functions are exported by the native loader, so avoid dispatch for those
+            if self.type == "void":
+                body += "    {0}({1});\n".format(self.name, params)
+            else:
+                body += "    return {0}({1});\n".format(self.name, params)
+        else:
+            if self.type == "void":
+                body += "    {0}.p_{1}({2});\n".format(self.params[0].dispatch_table(), self.name, params)
+            else:
+                body += "    return {0}.p_{1}({2});\n".format(self.params[0].dispatch_table(), self.name, params)
+
+        return body
+
+    def body_conversion(self):
+        body = ""
+
+        # Declare a variable to hold the result for non-void functions.
+        if self.type != "void":
+            body += "    {0} result;\n".format(self.type)
+
+        # Declare any tmp parameters for conversion.
+        for p in self.params:
+            if not p.needs_conversion():
+                continue
+
+            if p.is_dynamic_array():
+                body += "    {0}_host *{1}_host;\n".format(p.type, p.name)
+            else:
+                body += "    {0}_host {1}_host;\n".format(p.type, p.name)
+
+        if not self.needs_private_thunk():
+            body += "    {0}\n".format(self.trace())
+
+        # Call any win_to_host conversion calls.
+        for p in self.params:
+            if not p.needs_input_conversion():
+                continue
+
+            body += p.copy(Direction.INPUT)
+
+        # Build list of parameters containing converted and non-converted parameters.
+        # The param itself knows if conversion is needed and applies it when we set conv=True.
+        params = ", ".join([p.variable(conv=True) for p in self.params])
+
+        # Call the native function.
+        if self.type == "void":
+            body += "    {0}.p_{1}({2});\n".format(self.params[0].dispatch_table(), self.name, params)
+        else:
+            body += "    result = {0}.p_{1}({2});\n".format(self.params[0].dispatch_table(), self.name, params)
+
+        body += "\n"
+
+        # Call any host_to_win conversion calls.
+        for p in self.params:
+            if not p.needs_output_conversion():
+                continue
+
+            body += p.copy(Direction.OUTPUT)
+
+        # Perform any required cleanups. Most of these are for array functions.
+        for p in self.params:
+            if not p.needs_free():
+                continue
+
+            body += p.free()
+
+        # Finally return the result.
+        if self.type != "void":
+            body += "    return result;\n"
+
+        return body
+
+    def stub(self, call_conv=None, prefix=None):
+        stub = self.prototype(call_conv=call_conv, prefix=prefix)
+        stub += "\n{\n"
+        stub += "    {0}".format(self.trace(message="stub: ", trace_func="WINE_FIXME"))
+
+        if self.type == "XrResult":
+            stub += "    return XR_ERROR_OUT_OF_HOST_MEMORY;\n"
+        elif self.type == "XrBool32":
+            stub += "    return XR_FALSE;\n"
+        elif self.type == "PFN_xrVoidFunction":
+            stub += "    return NULL;\n"
+
+        stub += "}\n\n"
+        return stub
+
+    def thunk(self, call_conv=None, prefix=None):
+        thunk = self.prototype(call_conv=call_conv, prefix=prefix)
+        thunk += "\n{\n"
+
+        if self.needs_conversion():
+            thunk += "#if defined(USE_STRUCT_CONVERSION)\n"
+            thunk += self.body_conversion()
+            thunk += "#else\n"
+            thunk += self.body()
+            thunk += "#endif\n"
+        else:
+            thunk += self.body()
+
+        thunk += "}\n\n"
+        return thunk
+
+    def trace(self, message=None, trace_func=None):
+        """ Create a trace string including all parameters.
+
+        Args:
+            message (str, optional): text to print at start of trace message e.g. 'stub: '
+            trace_func (str, optional): used to override trace function e.g. FIXME, printf, etcetera.
+        """
+        if trace_func is not None:
+            trace = "{0}(\"".format(trace_func)
+        else:
+            trace = "WINE_TRACE(\""
+
+        if message is not None:
+            trace += message
+
+        # First loop is for all the format strings.
+        trace += ", ".join([p.format_string() for p in self.params])
+        trace += "\\n\""
+
+        # Second loop for parameter names and optional conversions.
+        for param in self.params:
+            if param.format_conv is not None:
+                trace += ", " + param.format_conv.format(param.name)
+            else:
+                trace += ", {0}".format(param.name)
+        trace += ");\n"
+
+        return trace
+
+
+class XrFunctionPointer(object):
+    def __init__(self, _type, name, members):
+        self.name = name
+        self.members = members
+        self.type = _type
+        self.required = False
+
+    @staticmethod
+    def from_xml(funcpointer):
+        members = []
+        begin = None
+
+        for t in funcpointer.findall("type"):
+            # General form:
+            # <type>void</type>*       pUserData,
+            # Parsing of the tail (anything past </type>) is tricky since there
+            # can be other data on the next line like: const <type>int</type>..
+
+            const = True if begin and "const" in begin else False
+            _type = t.text
+            lines = t.tail.split(",\n")
+            if lines[0][0] == "*":
+                pointer = "*"
+                name = lines[0][1:].strip()
+            else:
+                pointer = None
+                name = lines[0].strip()
+
+            # Filter out ); if it is contained.
+            name = name.partition(");")[0]
+
+            # If tail encompasses multiple lines, assign the second line to begin
+            # for the next line.
+            try:
+                begin = lines[1].strip()
+            except IndexError:
+                begin = None
+
+            members.append(XrMember(const=const, _type=_type, pointer=pointer, name=name))
+
+        _type = funcpointer.text
+        name = funcpointer.find("name").text
+        return XrFunctionPointer(_type, name, members)
+
+    def definition(self):
+        text = "{0} {1})(\n".format(self.type, self.name)
+
+        first = True
+        if len(self.members) > 0:
+            for m in self.members:
+                if first:
+                    text += "    " + m.definition()
+                    first = False
+                else:
+                    text += ",\n    " + m.definition()
+        else:
+            # Just make the compiler happy by adding a void parameter.
+            text += "void"
+        text += ");\n"
+        return text
+
+
+class XrHandle(object):
+    def __init__(self, name, _type, parent, alias=None):
+        self.name = name
+        self.type = _type
+        self.parent = parent
+        self.alias = alias
+        self.required = False
+
+    @staticmethod
+    def from_alias(handle, alias):
+        name = handle.attrib.get("name")
+        return XrHandle(name, alias.type, alias.parent, alias=alias)
+
+    @staticmethod
+    def from_xml(handle):
+        name = handle.find("name").text
+        _type = handle.find("type").text
+        parent = handle.attrib.get("parent")
+        return XrHandle(name, _type, parent)
+
+    def dispatch_table(self):
+        if not self.is_dispatchable():
+            return None
+
+        if self.parent is None:
+            # Should only happen for XrInstance
+            return "funcs"
+        if self.parent in ["XrInstance"]:
+            return "wine_instance->funcs"
+        if self.parent in ["XrSession"]:
+            return "wine_session->wine_instance->funcs"
+        if self.parent in ["XrActionSet"]:
+            return "wine_action_set->wine_instance->funcs"
+
+        LOGGER.error("Unhandled dispatchable parent: {0}".format(self.parent))
+
+    def definition(self):
+        """ Generates handle definition e.g. XR_DEFINE_HANDLE(xrInstance) """
+
+        # Legacy types are typedef'ed to the new type if they are aliases.
+        if self.is_alias():
+            return "typedef {0} {1};\n".format(self.alias.name, self.name)
+
+        return "{0}({1})\n".format(self.type, self.name)
+
+    def is_alias(self):
+        return self.alias is not None
+
+    def is_dispatchable(self):
+        """ Some handles, like XrInstance, are dispatchable objects,
+        which means they contain a dispatch table of function pointers.
+        """
+        return self.type == "XR_DEFINE_HANDLE"
+
+    def is_required(self):
+        return self.required
+
+    def native_handle(self, name):
+        """ Provide access to the native handle of a wrapped object. """
+
+        # Remember to add any new native handle whose parent is XrDevice
+        # to unwrap_object_handle() in openxr.c
+        if self.name == "XrCommandPool":
+            return "wine_cmd_pool_from_handle({0})->command_pool".format(name)
+
+        native_handle_name = None
+
+        if self.name == "XrInstance":
+            native_handle_name = "instance"
+        if self.name == "XrSession":
+            native_handle_name = "session"
+        if self.name == "XrHandTrackerEXT":
+            native_handle_name = "hand_tracker"
+        if self.name == "XrSpatialAnchorMSFT":
+            native_handle_name = "spatial_anchor"
+        if self.name == "XrSwapchain":
+            native_handle_name = "swapchain"
+        if self.name == "XrActionSet":
+            return None
+        if self.name == "XrAction":
+            return None
+        if self.name == "XrSpace":
+            return None
+
+        if native_handle_name:
+            return "((wine_{0} *){1})->{2}".format(self.name, name, native_handle_name)
+
+        if self.is_dispatchable():
+            LOGGER.error("Unhandled native handle for: {0}".format(self.name))
+        return None
+
+
+class XrMember(object):
+    def __init__(self, const=False, struct_fwd_decl=False,_type=None, pointer=None, name=None, array_len=None,
+            dyn_array_len=None, optional=False, values=None):
+        self.const = const
+        self.struct_fwd_decl = struct_fwd_decl
+        self.name = name
+        self.pointer = pointer
+        self.type = _type
+        self.type_info = None
+        self.array_len = array_len
+        self.dyn_array_len = dyn_array_len
+        self.optional = optional
+        self.values = values
+
+    def __eq__(self, other):
+        """ Compare member based on name against a string.
+
+        This method is for convenience by XrStruct, which holds a number of members and needs quick checking
+        if certain members exist.
+        """
+
+        return self.name == other
+
+    def __repr__(self):
+        return "{0} {1} {2} {3} {4} {5} {6}".format(self.const, self.struct_fwd_decl, self.type, self.pointer,
+                self.name, self.array_len, self.dyn_array_len)
+
+    @staticmethod
+    def from_xml(member):
+        """ Helper function for parsing a member tag within a struct or union. """
+
+        name_elem = member.find("name")
+        type_elem = member.find("type")
+
+        const = False
+        struct_fwd_decl = False
+        member_type = None
+        pointer = None
+        array_len = None
+
+        values = member.get("values")
+
+        if member.text:
+            if "const" in member.text:
+                const = True
+
+            # Some members contain forward declarations:
+            # - XrBaseInstructure has a member "const struct XrBaseInStructure *next"
+            # - XrWaylandSurfaceCreateInfoKHR has a member "struct wl_display *display"
+            if "struct" in member.text:
+                struct_fwd_decl = True
+
+        if type_elem is not None:
+            member_type = type_elem.text
+            if type_elem.tail is not None:
+                pointer = type_elem.tail.strip() if type_elem.tail.strip() != "" else None
+
+        # Name of other member within, which stores the number of
+        # elements pointed to be by this member.
+        dyn_array_len = member.get("len")
+
+        # Some members are optional, which is important for conversion code e.g. not dereference NULL pointer.
+        optional = True if member.get("optional") else False
+
+        # Usually we need to allocate memory for dynamic arrays. We need to do the same in a few other cases
+        # like for XrCommandBufferBeginInfo.pInheritanceInfo. Just threat such cases as dynamic arrays of
+        # size 1 to simplify code generation.
+        if dyn_array_len is None and pointer is not None:
+            dyn_array_len = 1
+
+        # Some members are arrays, attempt to parse these. Formats include:
+        # <member><type>char</type><name>extensionName</name>[<enum>XR_MAX_EXTENSION_NAME_SIZE</enum>]</member>
+        # <member><type>uint32_t</type><name>foo</name>[4]</member>
+        if name_elem.tail and name_elem.tail[0] == '[':
+            LOGGER.debug("Found array type")
+            enum_elem = member.find("enum")
+            if enum_elem is not None:
+                array_len = enum_elem.text
+            else:
+                # Remove brackets around length
+                array_len = name_elem.tail.strip("[]")
+
+        return XrMember(const=const, struct_fwd_decl=struct_fwd_decl, _type=member_type, pointer=pointer, name=name_elem.text,
+                array_len=array_len, dyn_array_len=dyn_array_len, optional=optional, values=values)
+
+    def copy(self, input, output, direction):
+        """ Helper method for use by conversion logic to generate a C-code statement to copy this member. """
+
+        if self.needs_conversion():
+            if self.is_dynamic_array():
+                if direction == Direction.OUTPUT:
+                    LOGGER.warn("TODO: implement copying of returnedonly dynamic array for {0}.{1}".format(self.type, self.name))
+                else:
+                    # Array length is either a variable name (string) or an int.
+                    count = self.dyn_array_len if isinstance(self.dyn_array_len, int) else "{0}{1}".format(input, self.dyn_array_len)
+                    return "{0}{1} = convert_{2}_array_win_to_host({3}{1}, {4});\n".format(output, self.name, self.type, input, count)
+            elif self.is_static_array():
+                count = self.array_len
+                if direction == Direction.OUTPUT:
+                    # Needed by XrMemoryHeap.memoryHeaps
+                    return "convert_{0}_static_array_host_to_win({2}{1}, {3}{1}, {4});\n".format(self.type, self.name, input, output, count)
+                else:
+                    # Nothing needed this yet.
+                    LOGGER.warn("TODO: implement copying of static array for {0}.{1}".format(self.type, self.name))
+            else:
+                if direction == Direction.OUTPUT:
+                    return "convert_{0}_host_to_win(&{2}{1}, &{3}{1});\n".format(self.type, self.name, input, output)
+                else:
+                    return "convert_{0}_win_to_host(&{2}{1}, &{3}{1});\n".format(self.type, self.name, input, output)
+        elif self.is_static_array():
+            bytes_count = "{0} * sizeof({1})".format(self.array_len, self.type)
+            return "memcpy({0}{1}, {2}{1}, {3});\n".format(output, self.name, input, bytes_count)
+        else:
+            return "{0}{1} = {2}{1};\n".format(output, self.name, input)
+
+    def definition(self, align=False, conv=False):
+        """ Generate prototype for given function.
+
+        Args:
+            align (bool, optional): Enable alignment if a type needs it. This adds WINE_XR_ALIGN(8) to a member.
+            conv (bool, optional): Enable conversion if a type needs it. This appends '_host' to the name.
+        """
+
+        text = ""
+        if self.is_const():
+            text += "const "
+
+        if self.is_struct_forward_declaration():
+            text += "struct "
+
+        if conv and self.is_struct():
+            text += "{0}_host".format(self.type)
+        else:
+            text += self.type
+
+        if self.is_pointer():
+            text += " {0}{1}".format(self.pointer, self.name)
+        else:
+            if align and self.needs_alignment():
+                text += " WINE_XR_ALIGN(8) " + self.name
+            else:
+                text += " " + self.name
+
+        if self.is_static_array():
+            text += "[{0}]".format(self.array_len)
+
+        return text
+
+    def get_conversions(self):
+        """ Return any conversion description for this member and its children when conversion is needed. """
+
+        # Check if we need conversion either for this member itself or for any child members
+        # in case member represents a struct.
+        if not self.needs_conversion():
+            return None
+
+        conversions = []
+
+        # Collect any conversion for any member structs.
+        struct = self.type_info["data"]
+        for m in struct:
+            m.needs_struct_extensions_conversion()
+            if m.needs_conversion():
+                conversions.extend(m.get_conversions())
+
+        struct.needs_struct_extensions_conversion()
+
+        struct = self.type_info["data"]
+        direction = Direction.OUTPUT if struct.returnedonly else Direction.INPUT
+        if self.is_dynamic_array():
+            conversions.append(ConversionFunction(False, True, direction, struct))
+        elif self.is_static_array():
+            conversions.append(ConversionFunction(True, False, direction, struct))
+        else:
+            conversions.append(ConversionFunction(False, False, direction, struct))
+
+        if self.needs_free():
+            conversions.append(FreeFunction(self.is_dynamic_array(), struct))
+
+        return conversions
+
+    def is_const(self):
+        return self.const
+
+    def is_dynamic_array(self):
+        """ Returns if the member is an array element.
+        OpenXR uses this for dynamically sized arrays for which
+        there is a 'count' parameter.
+        """
+        return self.dyn_array_len is not None
+
+    def is_handle(self):
+        return self.type_info["category"] == "handle"
+
+    def is_pointer(self):
+        return self.pointer is not None
+
+    def is_static_array(self):
+        """ Returns if the member is an array.
+        OpenXR uses this often for fixed size arrays in which the
+        length is part of the member.
+        """
+        return self.array_len is not None
+
+    def is_struct(self):
+        return self.type_info["category"] == "struct"
+
+    def is_struct_forward_declaration(self):
+        return self.struct_fwd_decl
+
+    def is_union(self):
+        return self.type_info["category"] == "union"
+
+    def needs_alignment(self):
+        """ Check if this member needs alignment for 64-bit data.
+        Various structures need alignment on 64-bit variables due
+        to compiler differences on 32-bit between Win32 and Linux.
+        """
+
+        if self.is_pointer():
+            return False
+        elif self.type == "size_t":
+            return False
+        elif self.type in ["uint64_t"]:
+            return True
+        elif self.is_struct():
+            struct = self.type_info["data"]
+            return struct.needs_alignment()
+        elif self.is_handle():
+            # Dispatchable handles are pointers to objects, while
+            # non-dispatchable are uint64_t and hence need alignment.
+            handle = self.type_info["data"]
+            return False if handle.is_dispatchable() else True
+        return False
+
+    def needs_conversion(self):
+        """ Structures requiring alignment, need conversion between win32 and host. """
+
+        if not self.is_struct():
+            return False
+
+        struct = self.type_info["data"]
+        return struct.needs_conversion()
+
+    def needs_free(self):
+        if not self.needs_conversion():
+            return False
+
+        if self.is_dynamic_array():
+            return True
+
+        # TODO: some non-pointer structs and optional pointer structs may need freeing,
+        # though none of this type have been encountered yet.
+        return False
+
+    def needs_struct_extensions_conversion(self):
+        if not self.is_struct():
+            return False
+
+        struct = self.type_info["data"]
+        return struct.needs_struct_extensions_conversion()
+
+    def set_type_info(self, type_info):
+        """ Helper function to set type information from the type registry.
+        This is needed, because not all type data is available at time of
+        parsing.
+        """
+        self.type_info = type_info
+
+
+class XrParam(object):
+    """ Helper class which describes a parameter to a function call. """
+
+    def __init__(self, type_info, const=None, pointer=None, name=None, array_len=None, dyn_array_len=None):
+        self.const = const
+        self.name = name
+        self.array_len = array_len
+        self.dyn_array_len = dyn_array_len
+        self.pointer = pointer
+        self.type_info = type_info
+        self.type = type_info["name"] # For convenience
+        self.handle = type_info["data"] if type_info["category"] == "handle" else None
+        self.struct = type_info["data"] if type_info["category"] == "struct" else None
+
+        self._set_direction()
+        self._set_format_string()
+        self._set_conversions()
+
+    def __repr__(self):
+        return "{0} {1} {2} {3} {4} {5}".format(self.const, self.type, self.pointer, self.name, self.array_len, self.dyn_array_len)
+
+    @staticmethod
+    def from_xml(param, types):
+        """ Helper function to create XrParam from xml. """
+
+        # Parameter parsing is slightly tricky. All the data is contained within
+        # a param tag, but some data is within subtags while others are text
+        # before or after the type tag.
+        # Common structure:
+        # <param>const <type>char</type>* <name>pLayerName</name></param>
+
+        name_elem = param.find("name")
+        array_len = None
+        name = name_elem.text
+        # Tail contains array length e.g. for blendConstants param of xrSetBlendConstants
+        if name_elem.tail is not None:
+            array_len = name_elem.tail.strip("[]")
+
+        # Name of other parameter in function prototype, which stores the number of
+        # elements pointed to be by this parameter.
+        dyn_array_len = param.get("len", None)
+
+        const = param.text.strip() if param.text else None
+        type_elem = param.find("type")
+        pointer = type_elem.tail.strip() if type_elem.tail.strip() != "" else None
+
+        # Since we have parsed all types before hand, this should not happen.
+        type_info = types.get(type_elem.text, None)
+        if type_info is None:
+            LOGGER.err("type info not found for: {0}".format(type_elem.text))
+
+        return XrParam(type_info, const=const, pointer=pointer, name=name, array_len=array_len, dyn_array_len=dyn_array_len)
+
+    def _set_conversions(self):
+        """ Internal helper function to configure any needed conversion functions. """
+
+        self.free_func = None
+        self.input_conv = None
+        self.output_conv = None
+        if not self.needs_conversion():
+            return
+
+        # Input functions require win to host conversion.
+        if self._direction in [Direction.INPUT, Direction.INPUT_OUTPUT]:
+            self.input_conv = ConversionFunction(False, self.is_dynamic_array(), Direction.INPUT, self.struct)
+
+        # Output functions require host to win conversion.
+        if self._direction in [Direction.INPUT_OUTPUT, Direction.OUTPUT]:
+            self.output_conv = ConversionFunction(False, self.is_dynamic_array(), Direction.OUTPUT, self.struct)
+
+        # Dynamic arrays, but also some normal structs (e.g. XrCommandBufferBeginInfo) need memory
+        # allocation and thus some cleanup.
+        if self.is_dynamic_array() or self.struct.needs_free():
+            self.free_func = FreeFunction(self.is_dynamic_array(), self.struct)
+
+    def _set_direction(self):
+        """ Internal helper function to set parameter direction (input/output/input_output). """
+
+        # The parameter direction needs to be determined from hints in xr.xml like returnedonly,
+        # parameter constness and other heuristics.
+        # For now we need to get this right for structures as we need to convert these, we may have
+        # missed a few other edge cases (e.g. count variables).
+        # See also https://github.com/KhronosGroup/Vulkan-Docs/issues/610
+
+        if not self.is_pointer():
+            self._direction = Direction.INPUT
+        elif self.is_const() and self.is_pointer():
+            self._direction = Direction.INPUT
+        elif self.is_struct():
+            if not self.struct.returnedonly:
+                self._direction = Direction.INPUT
+                return
+
+            # Returnedonly hints towards output, however in some cases
+            # it is inputoutput. In particular if next / type exist,
+            # which are used to link in other structures without having
+            # to introduce new APIs. E.g. xrGetPhysicalDeviceProperties2KHR.
+            if "next" in self.struct:
+                self._direction = Direction.INPUT_OUTPUT
+                return
+
+            self._direction = Direction.OUTPUT
+        else:
+            # This should mostly be right. Count variables can be inout, but we don't care about these yet.
+            self._direction = Direction.OUTPUT
+
+    def _set_format_string(self):
+        """ Internal helper function to be used by constructor to set format string. """
+
+        # Determine a format string used by code generation for traces.
+        # 64-bit types need a conversion function.
+        self.format_conv = None
+        if self.is_static_array() or self.is_pointer():
+            self.format_str = "%p"
+        else:
+            if self.type_info["category"] in ["bitmask", "enum"]:
+                self.format_str = "%#x"
+            elif self.is_handle():
+                # We use uint64_t for non-dispatchable handles as opposed to pointers
+                # for dispatchable handles.
+                if self.handle.is_dispatchable():
+                    self.format_str = "%p"
+                else:
+                    self.format_str = "0x%s"
+                    self.format_conv = "wine_dbgstr_longlong({0})"
+            elif self.type == "float":
+                self.format_str = "%f"
+            elif self.type == "int":
+                self.format_str = "%d"
+            elif self.type == "int32_t":
+                self.format_str = "%d"
+            elif self.type == "size_t":
+                self.format_str = "0x%s"
+                self.format_conv = "wine_dbgstr_longlong({0})"
+            elif self.type in ["uint16_t", "uint32_t", "XrBool32"]:
+                self.format_str = "%u"
+            elif self.type in ["uint64_t"]:
+                self.format_str = "0x%s"
+                self.format_conv = "wine_dbgstr_longlong({0})"
+            elif self.type == "HANDLE":
+                self.format_str = "%p"
+            elif self.type in ["XrSystemId", "XrPath", "XrTime"]:
+                self.format_str = "0x%s"
+                self.format_conv = "wine_dbgstr_longlong({0})"
+            elif self.type in ["XrVector2f"]:
+                self.format_str = "%f, %f"
+                self.format_conv = "{0}.x, {0}.y"
+            elif self.type in ["VisualID", "xcb_visualid_t", "VkInstance", "XrPosef"]:
+                # Don't care about Linux specific types.
+                self.format_str = ""
+            else:
+                LOGGER.warning("Unhandled type: {0}".format(self.type_info))
+
+    def copy(self, direction):
+        if direction == Direction.INPUT:
+            if self.is_dynamic_array():
+                return "    {0}_host = convert_{1}_array_win_to_host({0}, {2});\n".format(self.name, self.type, self.dyn_array_len)
+            else:
+                return "    convert_{0}_win_to_host({1}, &{1}_host);\n".format(self.type, self.name)
+        else:
+            if self.is_dynamic_array():
+                LOGGER.error("Unimplemented output conversion for: {0}".format(self.name))
+            else:
+                return "    convert_{0}_host_to_win(&{1}_host, {1});\n".format(self.type, self.name)
+
+    def definition(self, postfix=None):
+        """ Return prototype for the parameter. E.g. 'const char *foo' """
+
+        proto = ""
+        if self.const:
+            proto += self.const + " "
+
+        proto += self.type
+
+        if self.is_pointer():
+            proto += " {0}{1}".format(self.pointer, self.name)
+        else:
+            proto += " " + self.name
+
+        # Allows appending something to the variable name useful for
+        # win32 to host conversion.
+        if postfix is not None:
+            proto += postfix
+
+        if self.is_static_array():
+            proto += "[{0}]".format(self.array_len)
+
+        return proto
+
+    def direction(self):
+        """ Returns parameter direction: input, output, input_output.
+
+        Parameter direction in OpenXR is not straight-forward, which this function determines.
+        """
+
+        return self._direction
+
+    def dispatch_table(self):
+        """ Return functions dispatch table pointer for dispatchable objects. """
+
+        if not self.is_dispatchable():
+            return None
+
+        return "((wine_{0} *){1})->{2}".format(self.type, self.name, self.handle.dispatch_table())
+
+    def format_string(self):
+        return self.format_str
+
+    def free(self):
+        if self.is_dynamic_array():
+            if self.struct.returnedonly:
+                # For returnedonly, counts is stored in a pointer.
+                return "    free_{0}_array({1}_host, *{2});\n".format(self.type, self.name, self.dyn_array_len)
+            else:
+                return "    free_{0}_array({1}_host, {2});\n".format(self.type, self.name, self.dyn_array_len)
+        else:
+            # We are operating on a single structure. Some structs (very rare) contain dynamic members,
+            # which would need freeing.
+            if self.struct.needs_free():
+                return "    free_{0}(&{1}_host);\n".format(self.type, self.name)
+        return ""
+
+    def get_conversions(self):
+        """ Get a list of conversions required for this parameter if any.
+        Parameters which are structures may require conversion between win32
+        and the host platform. This function returns a list of conversions
+        required.
+        """
+
+        if not self.is_struct():
+            return None
+
+        self.struct.needs_struct_extensions_conversion()
+        for m in self.struct:
+            m.needs_struct_extensions_conversion()
+
+        if not self.needs_conversion():
+            return None
+
+        conversions = []
+
+        # Collect any member conversions first, so we can guarantee
+        # those functions will be defined prior to usage by the
+        # 'parent' param requiring conversion.
+        for m in self.struct:
+            if not m.is_struct():
+                continue
+
+            if not m.needs_conversion():
+                continue
+
+            conversions.extend(m.get_conversions())
+
+        # Conversion requirements for the 'parent' parameter.
+        if self.input_conv is not None:
+            conversions.append(self.input_conv)
+        if self.output_conv is not None:
+            conversions.append(self.output_conv)
+        if self.free_func is not None:
+            conversions.append(self.free_func)
+
+        return conversions
+
+    def is_const(self):
+        return self.const is not None
+
+    def is_dynamic_array(self):
+        return self.dyn_array_len is not None
+
+    def is_dispatchable(self):
+        if not self.is_handle():
+            return False
+
+        return self.handle.is_dispatchable()
+
+    def is_handle(self):
+        return self.handle is not None
+
+    def is_pointer(self):
+        return self.pointer is not None
+
+    def is_static_array(self):
+        return self.array_len is not None
+
+    def is_struct(self):
+        return self.struct is not None
+
+    def needs_conversion(self):
+        """ Returns if parameter needs conversion between win32 and host. """
+
+        if not self.is_struct():
+            return False
+
+        # If a structure needs alignment changes, it means we need to
+        # perform parameter conversion between win32 and host.
+        if self.struct.needs_conversion():
+            return True
+
+        return False
+
+    def needs_free(self):
+        return self.free_func is not None
+
+    def needs_input_conversion(self):
+        return self.input_conv is not None
+
+    def needs_output_conversion(self):
+        return self.output_conv is not None
+
+    def variable(self, conv=False):
+        """ Returns 'glue' code during generation of a function call on how to access the variable.
+        This function handles various scenarios such as 'unwrapping' if dispatchable objects and
+        renaming of parameters in case of win32 -> host conversion.
+
+        Args:
+            conv (bool, optional): Enable conversion if the param needs it. This appends '_host' to the name.
+        """
+
+        if conv and self.needs_conversion():
+            if self.is_dynamic_array():
+                return "{0}_host".format(self.name)
+            else:
+                return "&{0}_host".format(self.name)
+        else:
+            # We need to pass the native handle to the native calls.
+            native_handle = self.handle.native_handle(self.name) if self.is_handle() else None
+            return native_handle if native_handle else self.name
+
+
+class XrStruct(Sequence):
+    """ Class which represents the type union and struct. """
+
+    def __init__(self, name, members, returnedonly, structextends, alias=None, union=False):
+        self.name = name
+        self.members = members
+        self.returnedonly = returnedonly
+        self.structextends = structextends
+        self.required = False
+        self.alias = alias
+        self.union = union
+        self.type_info = None # To be set later.
+        self.struct_extensions = []
+        self.aliased_by = []
+
+    def __getitem__(self, i):
+        return self.members[i]
+
+    def __len__(self):
+        return len(self.members)
+
+    @staticmethod
+    def from_alias(struct, alias):
+        name = struct.attrib.get("name")
+        aliasee = XrStruct(name, alias.members, alias.returnedonly, alias.structextends, alias=alias)
+
+        alias.add_aliased_by(aliasee)
+        return aliasee
+
+    @staticmethod
+    def from_xml(struct):
+        # Unions and structs are the same parsing wise, but we need to
+        # know which one we are dealing with later on for code generation.
+        union = True if struct.attrib["category"] == "union" else False
+
+        name = struct.attrib.get("name")
+
+        # 'Output' structures for which data is filled in by the API are
+        # marked as 'returnedonly'.
+        returnedonly = True if struct.attrib.get("returnedonly") else False
+
+        structextends = struct.attrib.get("structextends")
+        structextends = structextends.split(",") if structextends else []
+
+        members = []
+        for member in struct.findall("member"):
+            xr_member = XrMember.from_xml(member)
+            members.append(xr_member)
+
+        return XrStruct(name, members, returnedonly, structextends, union=union)
+
+    @staticmethod
+    def decouple_structs(structs):
+        """ Helper function which decouples a list of structs.
+        Structures often depend on other structures. To make the C compiler
+        happy we need to define 'substructures' first. This function analyzes
+        the list of structures and reorders them in such a way that they are
+        decoupled.
+        """
+
+        tmp_structs = list(structs) # Don't modify the original structures.
+        decoupled_structs = []
+
+        while (len(tmp_structs) > 0):
+            for struct in tmp_structs:
+                dependends = False
+
+                if not struct.required:
+                    tmp_structs.remove(struct)
+                    continue
+
+                for m in struct:
+                    if not (m.is_struct() or m.is_union()):
+                        continue
+
+                    # XrBaseInstructure and XrBaseOutStructure reference themselves.
+                    if m.type == struct.name:
+                        break
+
+                    found = False
+                    # Check if a struct we depend on has already been defined.
+                    for s in decoupled_structs:
+                        if s.name == m.type:
+                            found = True
+                            break
+
+                    if not found:
+                        # Check if the struct we depend on is even in the list of structs.
+                        # If found now, it means we haven't met all dependencies before we
+                        # can operate on the current struct.
+                        # When generating 'host' structs we may not be able to find a struct
+                        # as the list would only contain the structs requiring conversion.
+                        for s in tmp_structs:
+                            if s.name == m.type:
+                                dependends = True
+                                break
+
+                if dependends == False:
+                    decoupled_structs.append(struct)
+                    tmp_structs.remove(struct)
+
+        return decoupled_structs
+
+    def typedef(self):
+        if self.union:
+            text = "typedef union {0} {0};\n".format(self.name)
+        else:
+            text = "typedef struct {0} {0};\n".format(self.name)
+
+        for aliasee in self.aliased_by:
+            text += "typedef {0} {1};\n".format(self.name, aliasee.name)
+
+        return text
+
+    def definition(self, align=False, conv=False, postfix=None):
+        """ Convert structure to textual definition.
+
+        Args:
+            align (bool, optional): enable alignment to 64-bit for win32 struct compatibility.
+            conv (bool, optional): enable struct conversion if the struct needs it.
+            postfix (str, optional): text to append to end of struct name, useful for struct renaming.
+        """
+
+        # Only define alias structs when doing conversions
+        if self.is_alias() and not conv:
+            return ""
+
+        if self.union:
+            text = "union {0}".format(self.name)
+        else:
+            text = "struct {0}".format(self.name)
+
+        if postfix is not None:
+            text += postfix
+
+        text += "\n{\n"
+
+        for m in self:
+            if align and m.needs_alignment():
+                text += "    {0};\n".format(m.definition(align=align))
+            elif conv and m.needs_conversion():
+                text += "    {0};\n".format(m.definition(conv=conv))
+            else:
+                text += "    {0};\n".format(m.definition())
+
+        if postfix is not None:
+            text += "}} {1};\n\n".format(self.name, postfix)
+        else:
+            text += "}};\n".format(self.name)
+
+        text += "\n"
+
+        return text
+
+    def is_alias(self):
+        return bool(self.alias)
+
+    def add_aliased_by(self, aliasee):
+        self.aliased_by.append(aliasee)
+
+    def needs_alignment(self):
+        """ Check if structure needs alignment for 64-bit data.
+        Various structures need alignment on 64-bit variables due
+        to compiler differences on 32-bit between Win32 and Linux.
+        """
+
+        for m in self.members:
+            if m.needs_alignment():
+                return True
+        return False
+
+    def needs_conversion(self):
+        """ Returns if struct members needs conversion between win32 and host.
+        Structures need conversion if they contain members requiring alignment
+        or if they include other structures which need alignment.
+        """
+
+        if self.needs_alignment():
+            return True
+
+        for m in self.members:
+            if m.needs_conversion():
+                return True
+        return False
+
+    def needs_free(self):
+        """ Check if any struct member needs some memory freeing."""
+
+        for m in self.members:
+            if m.needs_free():
+                return True
+
+            continue
+
+        return False
+
+    def needs_struct_extensions_conversion(self):
+        """ Checks if structure extensions in next chain need conversion. """
+        ret = False
+
+        for e in self.struct_extensions:
+            if e.required and e.needs_conversion():
+                LOGGER.error("Unhandled next chain conversion for {0}".format(e.name))
+                ret = True
+
+        return ret
+
+    def set_type_info(self, types):
+        """ Helper function to set type information from the type registry.
+        This is needed, because not all type data is available at time of
+        parsing.
+        """
+        for m in self.members:
+            type_info = types[m.type]
+            m.set_type_info(type_info)
+
+
+class ConversionFunction(object):
+    def __init__(self, array, dyn_array, direction, struct):
+        self.array = array
+        self.direction = direction
+        self.dyn_array = dyn_array
+        self.struct = struct
+        self.type = struct.name
+
+        self._set_name()
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def _generate_array_conversion_func(self):
+        """ Helper function for generating a conversion function for array structs. """
+
+        if self.direction == Direction.OUTPUT:
+            params = ["const {0}_host *in".format(self.type), "uint32_t count"]
+            return_type = self.type
+        else:
+            params = ["const {0} *in".format(self.type), "uint32_t count"]
+            return_type = "{0}_host".format(self.type)
+
+        # Generate function prototype.
+        body = "static inline {0} *{1}(".format(return_type, self.name)
+        body += ", ".join(p for p in params)
+        body += ")\n{\n"
+
+        body += "    {0} *out;\n".format(return_type)
+        body += "    unsigned int i;\n\n"
+        body += "    if (!in) return NULL;\n\n"
+
+        body += "    out = HeapAlloc(GetProcessHeap(), 0, count * sizeof(*out));\n"
+
+        body += "    for (i = 0; i < count; i++)\n"
+        body += "    {\n"
+
+        for m in self.struct:
+            # TODO: support copying of next extension structures!
+            # Luckily though no extension struct at this point needs conversion.
+            body += "        " + m.copy("in[i].", "out[i].", self.direction)
+
+        body += "    }\n\n"
+        body += "    return out;\n"
+        body += "}\n\n"
+        return body
+
+    def _generate_conversion_func(self):
+        """ Helper function for generating a conversion function for non-array structs. """
+
+        if self.direction == Direction.OUTPUT:
+            params = ["const {0}_host *in".format(self.type), "{0} *out".format(self.type)]
+        else:
+            params = ["const {0} *in".format(self.type), "{0}_host *out".format(self.type)]
+
+        body = "static inline void {0}(".format(self.name)
+
+        # Generate parameter list
+        body += ", ".join(p for p in params)
+        body += ")\n{\n"
+
+        body += "    if (!in) return;\n\n"
+
+        if self.direction == Direction.INPUT and "next" in self.struct and self.struct.returnedonly:
+            # We are dealing with an input_output parameter. For these we only need to copy
+            # next and type as the other fields are filled in by the host. We do potentially
+            # have to iterate over next and perform conversions based on switch(type)!
+            # Luckily though no extension structs at this point need conversion.
+            # TODO: support copying of next extension structures!
+            body += "    out->next = in->next;\n"
+            body += "    out->type = in->type;\n"
+        else:
+            for m in self.struct:
+                # TODO: support copying of next extension structures!
+                body += "    " + m.copy("in->", "out->", self.direction)
+
+        body += "}\n\n"
+        return body
+
+    def _generate_static_array_conversion_func(self):
+        """ Helper function for generating a conversion function for array structs. """
+
+        if self.direction == Direction.OUTPUT:
+            params = ["const {0}_host *in".format(self.type), "{0} *out".format(self.type), "uint32_t count"]
+        else:
+            params = ["const {0} *in".format(self.type), "{0} *out_host".format(self.type), "uint32_t count"]
+
+        # Generate function prototype.
+        body = "static inline void {0}(".format(self.name)
+        body += ", ".join(p for p in params)
+        body += ")\n{\n"
+        body += "    unsigned int i;\n\n"
+        body += "    if (!in) return;\n\n"
+        body += "    for (i = 0; i < count; i++)\n"
+        body += "    {\n"
+
+        for m in self.struct:
+            # TODO: support copying of next extension structures!
+            body += "        " + m.copy("in[i].", "out[i].", self.direction)
+
+        body += "    }\n"
+        body += "}\n\n"
+        return body
+
+    def _set_name(self):
+        if self.direction == Direction.INPUT:
+            if self.array:
+                name = "convert_{0}_static_array_win_to_host".format(self.type)
+            elif self.dyn_array:
+                name = "convert_{0}_array_win_to_host".format(self.type)
+            else:
+                name = "convert_{0}_win_to_host".format(self.type)
+        else: # Direction.OUTPUT
+            if self.array:
+                name = "convert_{0}_static_array_host_to_win".format(self.type)
+            elif self.dyn_array:
+                name = "convert_{0}_array_host_to_win".format(self.type)
+            else:
+                name = "convert_{0}_host_to_win".format(self.type)
+
+        self.name = name
+
+    def definition(self):
+        if self.array:
+            return self._generate_static_array_conversion_func()
+        elif self.dyn_array:
+            return self._generate_array_conversion_func()
+        else:
+            return self._generate_conversion_func()
+
+
+class FreeFunction(object):
+    def __init__(self, dyn_array, struct):
+        self.dyn_array = dyn_array
+        self.struct = struct
+        self.type = struct.name
+
+        if dyn_array:
+            self.name = "free_{0}_array".format(self.type)
+        else:
+            self.name = "free_{0}".format(self.type)
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def _generate_array_free_func(self):
+        """ Helper function for cleaning up temporary buffers required for array conversions. """
+
+        # Generate function prototype.
+        body = "static inline void {0}({1}_host *in, uint32_t count)\n{{\n".format(self.name, self.type)
+
+        # E.g. XrGraphicsPipelineCreateInfo_host needs freeing for pStages.
+        if self.struct.needs_free():
+            body += "    unsigned int i;\n\n"
+            body += "    if (!in) return;\n\n"
+            body += "    for (i = 0; i < count; i++)\n"
+            body += "    {\n"
+
+            for m in self.struct:
+                if m.needs_conversion() and m.is_dynamic_array():
+                    if m.is_const():
+                        # Add a cast to ignore const on conversion structs we allocated ourselves.
+                        body += "        free_{0}_array(({0}_host *)in[i].{1}, in[i].{2});\n".format(m.type, m.name, m.dyn_array_len)
+                    else:
+                        body += "        free_{0}_array(in[i].{1}, in[i].{2});\n".format(m.type, m.name, m.dyn_array_len)
+                elif m.needs_conversion():
+                    LOGGER.error("Unhandled conversion for {0}".format(m.name))
+            body += "    }\n"
+        else:
+            body += "    if (!in) return;\n\n"
+
+        body += "    HeapFree(GetProcessHeap(), 0, in);\n"
+
+        body += "}\n\n"
+        return body
+
+    def _generate_free_func(self):
+        # E.g. XrCommandBufferBeginInfo.pInheritanceInfo needs freeing.
+        if not self.struct.needs_free():
+            return ""
+
+        # Generate function prototype.
+        body = "static inline void {0}({1}_host *in)\n{{\n".format(self.name, self.type)
+
+        for m in self.struct:
+            if m.needs_conversion() and m.is_dynamic_array():
+                count = m.dyn_array_len if isinstance(m.dyn_array_len, int) else "in->{0}".format(m.dyn_array_len)
+                if m.is_const():
+                    # Add a cast to ignore const on conversion structs we allocated ourselves.
+                    body += "    free_{0}_array(({0}_host *)in->{1}, {2});\n".format(m.type, m.name, count)
+                else:
+                    body += "    free_{0}_array(in->{1}, {2});\n".format(m.type, m.name, count)
+
+        body += "}\n\n"
+        return body
+
+    def definition(self):
+        if self.dyn_array:
+            return self._generate_array_free_func()
+        else:
+            # Some structures need freeing too if they contain dynamic arrays.
+            # E.g. XrCommandBufferBeginInfo
+            return self._generate_free_func()
+
+
+class StructChainConversionFunction(object):
+    def __init__(self, direction, struct):
+        self.direction = direction
+        self.struct = struct
+        self.type = struct.name
+
+        self.name = "convert_{0}_struct_chain".format(self.type)
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def prototype(self, postfix=""):
+        return "XrResult {0}(const void *next, {1} *out_struct) {2}".format(self.name, self.type, postfix).strip()
+
+    def definition(self):
+        body = self.prototype()
+        body += "\n{\n"
+
+        body += "    XrBaseOutStructure *out_header = (XrBaseOutStructure *)out_struct;\n";
+        body += "    const XrBaseInStructure *in_header;\n\n";
+
+        body += "    out_header->next = NULL;\n\n"
+
+        body += "    for (in_header = next; in_header; in_header = in_header->next)\n"
+        body += "    {\n"
+        body += "        switch (in_header->type)\n"
+        body += "        {\n"
+
+        # Ignore to not confuse host loader.
+        body += "        case XR_TYPE_INSTANCE_CREATE_INFO:\n"
+        body += "            break;\n\n"
+
+        for e in self.struct.struct_extensions:
+            if not e.required:
+                continue
+
+            stype = next(x for x in e.members if x.name == "type")
+
+            body += "        case {0}:\n".format(stype.values)
+            body += "        {\n"
+
+            body += "            const {0} *in = (const {0} *)in_header;\n".format(e.name)
+            body += "            {0} *out;\n\n".format(e.name)
+
+            body += "            if (!(out = HeapAlloc(GetProcessHeap(), 0, sizeof(*out)))) goto out_of_memory;\n\n"
+
+            for m in e:
+                if m.name == "next":
+                    body += "            out->next = NULL;\n"
+                else:
+                    body += "            " + m.copy("in->", "out->", self.direction)
+
+            body += "\n            out_header->next = (XrBaseOutStructure *)out;\n"
+            body += "            out_header = out_header->next;\n"
+            body += "            break;\n"
+            body += "        }\n\n"
+
+        body += "        default:\n"
+        body += "            WINE_FIXME(\"Application requested a linked structure of type %u.\\n\", in_header->type);\n"
+
+        body += "        }\n"
+        body += "    }\n\n"
+
+        body += "    return XR_SUCCESS;\n"
+
+        if any(x for x in self.struct.struct_extensions if x.required):
+            body += "\nout_of_memory:\n"
+            body += "    free_{0}_struct_chain(out_struct);\n".format(self.type)
+            body += "    return XR_ERROR_OUT_OF_HOST_MEMORY;\n"
+
+        body += "}\n\n"
+        return body
+
+class FreeStructChainFunction(object):
+    def __init__(self, struct):
+        self.struct = struct
+        self.type = struct.name
+
+        self.name = "free_{0}_struct_chain".format(self.type)
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def prototype(self, postfix=""):
+        return "void {0}({1} *s) {2}".format(self.name, self.type, postfix).strip()
+
+    def definition(self):
+        body = self.prototype()
+        body += "\n{\n"
+
+        body += "    XrBaseOutStructure *header = (void *)s->next;\n\n";
+
+        body += "    while (header)\n"
+        body += "    {\n"
+        body += "        void *prev = header;\n"
+        body += "        header = header->next;\n"
+        body += "        HeapFree(GetProcessHeap(), 0, prev);\n"
+        body += "    }\n\n"
+
+        body += "    s->next = NULL;\n"
+
+        body += "}\n\n"
+        return body
+
+
+class XrGenerator(object):
+    def __init__(self, registry):
+        self.registry = registry
+
+        # Build a list conversion functions for struct conversion.
+        self.conversions = []
+        self.struct_chain_conversions = []
+        self.host_structs = []
+        for func in self.registry.funcs.values():
+            if not func.is_required():
+                continue
+
+            if not func.needs_conversion():
+                continue
+
+            conversions = func.get_conversions()
+            for conv in conversions:
+                # Pull in any conversions for openxr_thunks.c.
+                if func.needs_thunk():
+                    # Append if we don't already have this conversion.
+                    if not any(c == conv for c in self.conversions):
+                        self.conversions.append(conv)
+
+                # Structs can be used in different ways by different conversions
+                # e.g. array vs non-array. Just make sure we pull in each struct once.
+                if not any(s.name == conv.struct.name for s in self.host_structs):
+                    self.host_structs.append(conv.struct)
+
+        for struct in self.registry.structs:
+            if struct.name in STRUCT_CHAIN_CONVERSIONS:
+                self.struct_chain_conversions.append(StructChainConversionFunction(Direction.INPUT, struct))
+                self.struct_chain_conversions.append(FreeStructChainFunction(struct))
+
+    def _generate_copyright(self, f, spec_file=False):
+        f.write("# " if spec_file else "/* ")
+        f.write("Automatically generated from OpenXR xr.xml; DO NOT EDIT!\n")
+        lines = ["", "This file is generated from OpenXR xr.xml file covered",
+            "by the following copyright and permission notice:"]
+        lines.extend([l.rstrip(" ") for l in self.registry.copyright.splitlines()])
+        for line in lines:
+            f.write("{0}{1}".format("# " if spec_file else " * ", line).rstrip(" ") + "\n")
+        f.write("\n" if spec_file else " */\n\n")
+
+    def generate_thunks_c(self, f, prefix):
+        self._generate_copyright(f)
+
+        f.write("#include \"wine/debug.h\"\n")
+        f.write("#include \"wine/vulkan.h\"\n")
+        f.write("#include \"d3d11.h\"\n")
+        f.write("#include \"d3d12.h\"\n")
+        f.write("#define WINE_XR_HOST\n")
+        f.write("#include \"wineopenxr.h\"\n")
+        f.write("#include \"openxr_private.h\"\n\n")
+
+        f.write("WINE_DEFAULT_DEBUG_CHANNEL(openxr);\n\n")
+
+        # Generate any conversion helper functions.
+        f.write("#if defined(USE_STRUCT_CONVERSION)\n")
+        for conv in self.conversions:
+            f.write(conv.definition())
+        f.write("#endif /* USE_STRUCT_CONVERSION */\n\n")
+
+        for conv in self.struct_chain_conversions:
+            f.write(conv.definition())
+
+        # Create thunks for instance and device functions.
+        # Global functions don't go through the thunks.
+        for xr_func in self.registry.funcs.values():
+            if not xr_func.is_required():
+                continue
+
+            #if xr_func.is_global_func():
+            #    continue
+
+            if not xr_func.needs_thunk():
+                continue
+
+            # Exports symbols for Core functions.
+            if not xr_func.is_core_func() and not xr_func.needs_private_thunk():
+                f.write("static ")
+
+            if xr_func.needs_private_thunk():
+                f.write(xr_func.thunk(prefix="thunk_"))
+            else:
+                f.write(xr_func.thunk(prefix=prefix, call_conv="WINAPI"))
+
+        f.write("static const struct openxr_func xr_dispatch_table[] =\n{\n")
+        for xr_func in self.registry.instance_funcs:
+            if not xr_func.is_required():
+                continue
+            f.write("    {{\"{0}\", &{1}{0}}},\n".format(xr_func.name, prefix))
+        f.write("};\n\n")
+
+        f.write("void *wine_xr_proc_addr(const char *name)\n")
+        f.write("{\n")
+        f.write("    unsigned int i;\n")
+        f.write("    for (i = 0; i < ARRAY_SIZE(xr_dispatch_table); i++)\n")
+        f.write("    {\n")
+        f.write("        if (strcmp(xr_dispatch_table[i].name, name) == 0)\n")
+        f.write("        {\n")
+        f.write("            WINE_TRACE(\"Found name=%s in instance table\\n\", wine_dbgstr_a(name));\n")
+        f.write("            return xr_dispatch_table[i].func;\n")
+        f.write("        }\n")
+        f.write("    }\n")
+        f.write("    return NULL;\n")
+        f.write("}\n\n")
+
+        # Create array of instance extensions.
+        f.write("static const char * const xr_extensions[] =\n{\n")
+        for ext in self.registry.extensions:
+            f.write("    \"{0}\",\n".format(ext["name"]))
+        f.write("};\n\n")
+
+        f.write("BOOL wine_xr_extension_supported(const char *name)\n")
+        f.write("{\n")
+        f.write("    unsigned int i;\n")
+        f.write("    for (i = 0; i < ARRAY_SIZE(xr_extensions); i++)\n")
+        f.write("    {\n")
+        f.write("        if (strcmp(xr_extensions[i], name) == 0)\n")
+        f.write("            return TRUE;\n")
+        f.write("    }\n")
+        f.write("    return FALSE;\n")
+        f.write("}\n")
+
+    def generate_thunks_h(self, f, prefix):
+        self._generate_copyright(f)
+
+        f.write("#ifndef __WINE_OPENXR_THUNKS_H\n")
+        f.write("#define __WINE_OPENXR_THUNKS_H\n\n")
+
+        f.write("#define WINE_XR_VERSION XR_API_VERSION_{0}_{1}\n\n".format(WINE_XR_VERSION[0], WINE_XR_VERSION[1]))
+
+        # Generate prototypes for device and instance functions requiring a custom implementation.
+        f.write("/* Functions for which we have custom implementations outside of the thunks. */\n")
+        for xr_func in self.registry.funcs.values():
+            if not xr_func.is_required():# or xr_func.is_global_func():
+                continue
+            if xr_func.needs_thunk() and not xr_func.needs_private_thunk():
+                continue
+
+            if xr_func.is_core_func():
+                f.write("{0};\n".format(xr_func.prototype("WINAPI", prefix="wine_")))
+            else:
+                f.write("{0};\n".format(xr_func.prototype("WINAPI", prefix="wine_", postfix="DECLSPEC_HIDDEN")))
+        f.write("\n")
+
+        f.write("/* Private thunks */\n")
+        for xr_func in self.registry.funcs.values():
+            if xr_func.needs_private_thunk():
+                f.write("{0};\n".format(xr_func.prototype(prefix="thunk_", postfix="DECLSPEC_HIDDEN")))
+        f.write("\n")
+
+        for struct in self.host_structs:
+            f.write(struct.definition(align=False, conv=True, postfix="_host"))
+        f.write("\n")
+
+        for func in self.struct_chain_conversions:
+            f.write(func.prototype(postfix="DECLSPEC_HIDDEN") + ";\n")
+        f.write("\n")
+
+        f.write("/* For use by xrInstance and children */\n")
+        f.write("struct openxr_instance_funcs\n{\n")
+        for xr_func in self.registry.instance_funcs:
+            if not xr_func.is_required():
+                continue
+
+            if not xr_func.needs_dispatch():
+                LOGGER.debug("skipping {0} in openxr_instance_funcs".format(xr_func.name))
+                continue
+
+            if xr_func.needs_conversion():
+                f.write("#if defined(USE_STRUCT_CONVERSION)\n")
+                f.write("    {0};\n".format(xr_func.pfn(conv=True)))
+                f.write("#else\n")
+                f.write("    {0};\n".format(xr_func.pfn(conv=False)))
+                f.write("#endif\n")
+            else:
+                f.write("    {0};\n".format(xr_func.pfn(conv=False)))
+        f.write("};\n\n")
+
+        f.write("#define ALL_XR_INSTANCE_FUNCS() \\\n")
+        first = True
+        for xr_func in self.registry.instance_funcs:
+            if not xr_func.is_required():
+                continue
+
+            if not xr_func.needs_dispatch():
+                LOGGER.debug("skipping {0} in ALL_XR_INSTANCE_FUNCS".format(xr_func.name))
+                continue
+
+            if first:
+                f.write("    USE_XR_FUNC({0})".format(xr_func.name))
+                first = False
+            else:
+                f.write(" \\\n    USE_XR_FUNC({0})".format(xr_func.name))
+        f.write("\n\n")
+
+        f.write("#endif /* __WINE_OPENXR_THUNKS_H */\n")
+
+    def generate_openxr_h(self, f):
+        self._generate_copyright(f)
+        f.write("#ifndef __WINE_OPENXR_H\n")
+        f.write("#define __WINE_OPENXR_H\n\n")
+
+        f.write("#include <windef.h>\n")
+        f.write("#include <stdint.h>\n\n")
+
+        f.write("/* Define WINE_XR_HOST to get 'host' headers. */\n")
+        f.write("#ifdef WINE_XR_HOST\n")
+        f.write("#define XRAPI_CALL\n")
+        f.write('#define WINE_XR_ALIGN(x)\n')
+        f.write("#endif\n\n")
+
+        f.write("#ifndef XRAPI_CALL\n")
+        f.write("#define XRAPI_CALL __stdcall\n")
+        f.write("#endif\n\n")
+
+        f.write("#ifndef XRAPI_PTR\n")
+        f.write("#define XRAPI_PTR XRAPI_CALL\n")
+        f.write("#endif\n\n")
+
+        f.write("#ifndef WINE_XR_ALIGN\n")
+        f.write("#define WINE_XR_ALIGN DECLSPEC_ALIGN\n")
+        f.write("#endif\n\n")
+
+        # The overall strategy is to define independent constants and datatypes,
+        # prior to complex structures and function calls to avoid forward declarations.
+        for const in self.registry.consts:
+            # For now just generate things we may not need. The amount of parsing needed
+            # to get some of the info is tricky as you need to figure out which structure
+            # references a certain constant.
+            f.write(const.definition())
+        f.write("\n")
+
+        for define in self.registry.defines:
+            f.write(define.definition())
+
+        for handle in self.registry.handles:
+            # For backward compatibility also create definitions for aliases.
+            # These types normally don't get pulled in as we use the new types
+            # even in legacy functions if they are aliases.
+            if handle.is_required() or handle.is_alias():
+                 f.write(handle.definition())
+        f.write("\n")
+
+        for base_type in self.registry.base_types:
+            f.write(base_type.definition())
+        f.write("\n")
+
+        for bitmask in self.registry.bitmasks:
+            f.write(bitmask.definition())
+        f.write("\n")
+
+        # Define enums, this includes values for some of the bitmask types as well.
+        for enum in self.registry.enums.values():
+            if enum.required:
+                f.write(enum.definition())
+
+        # This generates both structures and unions. Since structures
+        # may depend on other structures/unions, we need a list of
+        # decoupled structs.
+        # Note: unions are stored in structs for dependency reasons,
+        # see comment in parsing section.
+        structs = XrStruct.decouple_structs(self.registry.structs)
+
+        for struct in structs:
+            f.write(struct.typedef())
+
+        for fp in self.registry.funcpointers:
+            if fp.required:
+                f.write(fp.definition())
+        f.write("\n")
+
+        for struct in structs:
+            LOGGER.debug("Generating struct: {0}".format(struct.name))
+            f.write(struct.definition(align=True))
+
+        for func in self.registry.funcs.values():
+            if not func.is_required():
+                LOGGER.debug("Skipping PFN definition for: {0}".format(func.name))
+                continue
+
+            f.write("typedef {0};\n".format(func.pfn(prefix="PFN", call_conv="XRAPI_PTR")))
+        f.write("\n")
+
+        f.write("#ifndef XR_NO_PROTOTYPES\n")
+        for func in self.registry.funcs.values():
+            if not func.is_required():
+                LOGGER.debug("Skipping API definition for: {0}".format(func.name))
+                continue
+
+            LOGGER.debug("Generating API definition for: {0}".format(func.name))
+            f.write("{0};\n".format(func.prototype(call_conv="XRAPI_CALL")))
+        f.write("#endif /* XR_NO_PROTOTYPES */\n\n")
+
+        f.write("#endif /* __WINE_OPENXR_H */\n")
+
+
+class XrRegistry(object):
+    def __init__(self, reg_filename):
+        # Used for storage of type information.
+        self.base_types = None
+        self.bitmasks = None
+        self.consts = None
+        self.defines = None
+        self.enums = None
+        self.funcpointers = None
+        self.handles = None
+        self.structs = None
+
+        # We aggregate all types in here for cross-referencing.
+        self.funcs = {}
+        self.types = {}
+
+        self.version_regex = re.compile(
+            r'^'
+            r'XR_VERSION_'
+            r'(?P<major>[0-9])'
+            r'_'
+            r'(?P<minor>[0-9])'
+            r'$'
+        )
+
+        # Overall strategy for parsing the registry is to first
+        # parse all type / function definitions. Then parse
+        # features and extensions to decide which types / functions
+        # to actually 'pull in' for code generation. For each type or
+        # function call we want we set a member 'required' to True.
+        tree = ET.parse(reg_filename)
+        root = tree.getroot()
+        self._parse_enums(root)
+        self._parse_types(root)
+        self._parse_commands(root)
+
+        # Pull in any required types and functions.
+        self._parse_features(root)
+        self._parse_extensions(root)
+
+        self.copyright = root.find('./comment').text
+
+    def _is_feature_supported(self, feature):
+        version = self.version_regex.match(feature)
+        if not version:
+            return True
+
+        version = tuple(map(int, version.group('major', 'minor')))
+        return version <= WINE_XR_VERSION
+
+    def _is_extension_supported(self, extension):
+        # We disable some extensions as either we haven't implemented
+        # support yet or because they are for platforms other than win32.
+        return extension not in UNSUPPORTED_EXTENSIONS
+
+    def mark_bitmask_dependencies(self, bitmask):
+        if bitmask.requires is not None:
+            self.types[bitmask.requires]["data"].required = True
+
+    def mark_funcpointer_dependencies(self, fp):
+        for m in fp.members:
+            type_info = self.types[m.type]
+
+            # Complex types have a matching definition e.g. XrStruct.
+            # Not needed for base types such as uint32_t.
+            if "data" in type_info:
+                self.types[m.type]["data"].required = True
+
+    def mark_struct_dependencies(self, struct):
+         for m in struct:
+            type_info = self.types[m.type]
+
+
+            # Complex types have a matching definition e.g. XrStruct.
+            # Not needed for base types such as uint32_t.
+            if "data" in type_info:
+                if self.types[m.type]["data"].required:
+                    continue
+                self.types[m.type]["data"].required = True
+
+            if type_info["category"] == "struct":
+                # Yay, recurse
+                self.mark_struct_dependencies(type_info["data"])
+            elif type_info["category"] == "funcpointer":
+                self.mark_funcpointer_dependencies(type_info["data"])
+            elif type_info["category"] == "bitmask":
+                self.mark_bitmask_dependencies(type_info["data"])
+
+    def _mark_command_required(self, command):
+        """ Helper function to mark a certain command and the datatypes it needs as required."""
+        LOGGER.debug("marking " + command + " as required")
+        func = self.funcs[command]
+        func.required = True
+
+        # Pull in return type
+        if func.type != "void":
+            self.types[func.type]["data"].required = True
+
+        # Analyze parameter dependencies and pull in any type needed.
+        for p in func.params:
+            type_info = self.types[p.type]
+
+            # Check if we are dealing with a complex type e.g. XrEnum, XrStruct and others.
+            if "data" not in type_info:
+                continue
+
+            # Mark the complex type as required.
+            type_info["data"].required = True
+            if type_info["category"] == "struct":
+                struct = type_info["data"]
+                self.mark_struct_dependencies(struct)
+            elif type_info["category"] == "bitmask":
+                self.mark_bitmask_dependencies(type_info["data"])
+
+    def _parse_commands(self, root):
+        """ Parse command section containing the OpenXR function calls. """
+        funcs = {}
+        commands = root.findall("./commands/")
+
+        # As of Vulkan 1.1, various extensions got promoted to Core.
+        # The old commands (e.g. KHR) are available for backwards compatibility
+        # and are marked in xr.xml as 'alias' to the non-extension type.
+        # The registry likes to avoid data duplication, so parameters and other
+        # metadata need to be looked up from the Core command.
+        # We parse the alias commands in a second pass.
+        alias_commands = []
+        for command in commands:
+            alias_name = command.attrib.get("alias")
+            if alias_name:
+                alias_commands.append(command)
+                continue
+
+            func = XrFunction.from_xml(command, self.types)
+            funcs[func.name] = func
+
+        for command in alias_commands:
+            alias_name = command.attrib.get("alias")
+            alias = funcs[alias_name]
+            func = XrFunction.from_alias(command, alias)
+            funcs[func.name] = func
+
+        # To make life easy for the code generation, separate all function
+        # calls out in the 3 types of functions: device, global and instance.
+        instance_funcs = []
+        for func in funcs.values():
+            instance_funcs.append(func)
+
+        # Sort function lists by name and store them.
+        self.instance_funcs = sorted(instance_funcs, key=lambda func: func.name)
+
+        # The funcs dictionary is used as a convenient way to lookup function
+        # calls when needed e.g. to adjust member variables.
+        self.funcs = OrderedDict(sorted(funcs.items()))
+
+    def _parse_enums(self, root):
+        """ Parse enums section or better described as constants section. """
+        enums = {}
+        self.consts = []
+        for enum in root.findall("./enums"):
+            name = enum.attrib.get("name")
+            _type = enum.attrib.get("type")
+
+            if _type in ("enum", "bitmask"):
+                enums[name] = XrEnum.from_xml(enum)
+            else:
+                # If no type is set, we are dealing with API constants.
+                for value in enum.findall("enum"):
+                    # If enum is an alias, set the value to the alias name.
+                    # E.g. XR_LUID_SIZE_KHR is an alias to XR_LUID_SIZE.
+                    alias = value.attrib.get("alias")
+                    if alias:
+                        self.consts.append(XrConstant(value.attrib.get("name"), alias))
+                    else:
+                        self.consts.append(XrConstant(value.attrib.get("name"), value.attrib.get("value")))
+
+        self.enums = OrderedDict(sorted(enums.items()))
+
+    def _process_require_enum(self, enum_elem, ext=None, only_aliased=False):
+        if "extends" in enum_elem.keys():
+            enum = self.types[enum_elem.attrib["extends"]]["data"]
+
+            # Need to define XrEnumValues which were aliased to by another value. This is necessary
+            # from XR spec version 1.2.135 where the provisional XR_KHR_ray_tracing extension was
+            # added which altered XR_NV_ray_tracing's XrEnumValues to alias to the provisional
+            # extension.
+            aliased = False
+            for _, t in self.types.items():
+                if t["category"] != "enum":
+                    continue
+                if not t["data"]:
+                    continue
+                for value in t["data"].values:
+                    if value.alias == enum_elem.attrib["name"]:
+                        aliased = True
+
+            if only_aliased and not aliased:
+                return
+
+            if "bitpos" in enum_elem.keys():
+                # We need to add an extra value to an existing enum type.
+                # E.g. XR_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG to XrFormatFeatureFlagBits.
+                enum.add(XrEnumValue(enum_elem.attrib["name"], value=(1 << int(enum_elem.attrib["bitpos"])), hex=True))
+
+            elif "offset" in enum_elem.keys():
+                # Extensions promoted to Core, have the extension number as part
+                # of the enum value. Else retrieve from the extension tag.
+                if enum_elem.attrib.get("extnumber"):
+                    ext_number = int(enum_elem.attrib.get("extnumber"))
+                else:
+                    ext_number = int(ext.attrib["number"])
+                offset = int(enum_elem.attrib["offset"])
+                value = EXT_BASE + (ext_number - 1) * EXT_BLOCK_SIZE + offset
+
+                # Deal with negative values.
+                direction = enum_elem.attrib.get("dir")
+                if direction is not None:
+                    value = -value
+
+                enum.add(XrEnumValue(enum_elem.attrib["name"], value=value))
+
+            elif "value" in enum_elem.keys():
+                enum.add(XrEnumValue(enum_elem.attrib["name"], value=int(enum_elem.attrib["value"])))
+            elif "alias" in enum_elem.keys():
+                enum.add(XrEnumValue(enum_elem.attrib["name"], alias=enum_elem.attrib["alias"]))
+
+        elif "value" in enum_elem.keys():
+            # Constants are not aliased, no need to add them here, they'll get added later on.
+            if only_aliased:
+                return
+
+            self.consts.append(XrConstant(enum_elem.attrib["name"], enum_elem.attrib["value"]))
+
+    @staticmethod
+    def _require_type(type_info):
+        if type_info.is_alias():
+            type_info = type_info.alias
+        type_info.required = True
+        if type(type_info) == XrStruct:
+            for member in type_info.members:
+                if "data" in member.type_info:
+                  XrRegistry._require_type(member.type_info["data"])
+
+    def _parse_extensions(self, root):
+        """ Parse extensions section and pull in any types and commands for this extension. """
+        extensions = []
+        exts = root.findall("./extensions/extension")
+        deferred_exts = []
+
+        def process_ext(ext, deferred=False):
+            ext_name = ext.attrib["name"]
+
+            # Set extension name on any functions calls part of this extension as we
+            # were not aware of the name during initial parsing.
+            commands = ext.findall("require/command")
+            for command in commands:
+                cmd_name = command.attrib["name"]
+                self.funcs[cmd_name].extensions.append(ext_name)
+
+            # Some extensions are not ready or have numbers reserved as a place holder.
+            if ext.attrib["supported"] == "disabled":
+                LOGGER.debug("Skipping disabled extension: {0}".format(ext_name))
+                return
+
+            protect = ext.attrib.get("protect", None)
+            if not protect is None and \
+                    not protect in ALLOWED_PROTECTS:
+                return
+
+            # Defer extensions with 'sortorder' as they are order-dependent for spec-parsing.
+            if not deferred and "sortorder" in ext.attrib:
+                deferred_exts.append(ext)
+                return
+
+            # Disable highly experimental extensions as the APIs are unstable and can
+            # change between minor revisions until API is final and becomes KHR
+            # or NV.
+            if "KHX" in ext_name or "NVX" in ext_name:
+                LOGGER.debug("Skipping experimental extension: {0}".format(ext_name))
+                return
+
+            # Extensions can define XrEnumValues which alias to provisional extensions. Pre-process
+            # extensions to define any required XrEnumValues before the platform check below.
+            for require in ext.findall("require"):
+                # Extensions can add enum values to Core / extension enums, so add these.
+                for enum_elem in require.findall("enum"):
+                    self._process_require_enum(enum_elem, ext, only_aliased=True)
+
+            platform = ext.attrib.get("platform")
+            if platform and platform != "win32":
+                LOGGER.debug("Skipping extensions {0} for platform {1}".format(ext_name, platform))
+                return
+
+            if not self._is_extension_supported(ext_name):
+                LOGGER.debug("Skipping unsupported extension: {0}".format(ext_name))
+                return
+            elif "requires" in ext.attrib:
+                # Check if this extension builds on top of another unsupported extension.
+                requires = ext.attrib["requires"].split(",")
+                if len(set(requires).intersection(UNSUPPORTED_EXTENSIONS)) > 0:
+                    return
+
+            LOGGER.debug("Loading extension: {0}".format(ext_name))
+
+            # Extensions can define one or more require sections each requiring
+            # different features (e.g. Vulkan 1.1). Parse each require section
+            # separately, so we can skip sections we don't want.
+            for require in ext.findall("require"):
+                # Extensions can add enum values to Core / extension enums, so add these.
+                for enum_elem in require.findall("enum"):
+                    self._process_require_enum(enum_elem, ext)
+
+                for t in require.findall("type"):
+                    if t.attrib["name"] in self.types:
+                        type_info = self.types[t.attrib["name"]]["data"]
+                        self._require_type(type_info)
+                feature = require.attrib.get("feature")
+                if feature and not self._is_feature_supported(feature):
+                    continue
+
+                required_extension = require.attrib.get("extension")
+                if required_extension and not self._is_extension_supported(required_extension):
+                    continue
+
+                # Pull in any commands we need. We infer types to pull in from the command
+                # as well.
+                for command in require.findall("command"):
+                    cmd_name = command.attrib["name"]
+                    self._mark_command_required(cmd_name)
+
+
+            # Store a list with extensions.
+            ext_info = {"name" : ext_name, "type" : ext.attrib["type"]}
+            extensions.append(ext_info)
+
+
+        # Process extensions, allowing for sortorder to defer extension processing
+        for ext in exts:
+            process_ext(ext)
+
+        deferred_exts.sort(key=lambda ext: ext.attrib["sortorder"])
+
+        # Respect sortorder
+        for ext in deferred_exts:
+            process_ext(ext, deferred=True)
+
+        # Sort in alphabetical order.
+        self.extensions = sorted(extensions, key=lambda ext: ext["name"])
+
+    def _parse_features(self, root):
+        """ Parse the feature section, which describes Core commands and types needed. """
+
+        for feature in root.findall("./feature"):
+            feature_name = feature.attrib["name"]
+            for require in feature.findall("require"):
+                LOGGER.info("Including features for {0}".format(require.attrib.get("comment")))
+                for tag in require:
+                    if tag.tag == "comment":
+                        continue
+                    elif tag.tag == "command":
+                        if not self._is_feature_supported(feature_name):
+                            continue
+                        name = tag.attrib["name"]
+                        LOGGER.debug("found command: " + name)
+                        self._mark_command_required(name)
+                    elif tag.tag == "enum":
+                        self._process_require_enum(tag)
+                    elif tag.tag == "type":
+                        name = tag.attrib["name"]
+
+                        # Skip pull in for openxr_platform_defines.h for now.
+                        if name == "openxr_platform_defines":
+                            continue
+
+                        type_info = self.types[name]
+                        type_info["data"].required = True
+
+    def _parse_types(self, root):
+        """ Parse types section, which contains all data types e.g. structs, typedefs etcetera. """
+        types = root.findall("./types/type")
+
+        base_types = []
+        bitmasks = []
+        defines = []
+        funcpointers = []
+        handles = []
+        structs = []
+
+        alias_types = []
+        for t in types:
+            type_info = {}
+            type_info["category"] = t.attrib.get("category", None)
+            type_info["requires"] = t.attrib.get("requires", None)
+
+            # We parse aliases in a second pass when we know more.
+            alias = t.attrib.get("alias")
+            if alias:
+                LOGGER.debug("Alias found: {0}".format(alias))
+                alias_types.append(t)
+                continue
+
+            protect = t.attrib.get("protect", None)
+            if not protect is None and \
+                    not protect in ALLOWED_PROTECTS:
+                continue
+
+            if type_info["category"] in ["include"]:
+                continue
+
+            if type_info["category"] == "basetype":
+                name = t.find("name").text
+                _type = None
+                if not t.find("type") is None:
+                    _type = t.find("type").text
+                basetype = XrBaseType(name, _type, collect_element_text(t))
+                base_types.append(basetype)
+                type_info["data"] = basetype
+
+            # Basic C types don't need us to define them, but we do need data for them
+            if type_info["requires"] == "xr_platform":
+                requires = type_info["requires"]
+                basic_c = XrBaseType(name, _type, collect_element_text(t), requires=requires)
+                type_info["data"] = basic_c
+
+            if type_info["category"] == "bitmask":
+                name = t.find("name").text
+                _type = t.find("type").text
+
+                # Most bitmasks have a requires attribute used to pull in
+                # required '*FlagBits" enum.
+                requires = type_info["requires"]
+                bitmask = XrBaseType(name, _type, collect_element_text(t), requires=requires)
+                bitmasks.append(bitmask)
+                type_info["data"] = bitmask
+
+            if type_info["category"] == "define":
+                define = XrDefine.from_xml(t)
+                defines.append(define)
+                type_info["data"] = define
+
+            if type_info["category"] == "enum":
+                name = t.attrib.get("name")
+                # The type section only contains enum names, not the actual definition.
+                # Since we already parsed the enum before, just link it in.
+                try:
+                    type_info["data"] = self.enums[name]
+                except KeyError as e:
+                    # Not all enums seem to be defined yet, typically that's for
+                    # ones ending in 'FlagBits' where future extensions may add
+                    # definitions.
+                    type_info["data"] = None
+
+            if type_info["category"] == "funcpointer":
+                funcpointer = XrFunctionPointer.from_xml(t)
+                funcpointers.append(funcpointer)
+                type_info["data"] = funcpointer
+
+            if type_info["category"] == "handle":
+                handle = XrHandle.from_xml(t)
+                handles.append(handle)
+                type_info["data"] = handle
+
+            if type_info["category"] in ["struct", "union"]:
+                # We store unions among structs as some structs depend
+                # on unions. The types are very similar in parsing and
+                # generation anyway. The official Vulkan scripts use
+                # a similar kind of hack.
+                struct = XrStruct.from_xml(t)
+                structs.append(struct)
+                type_info["data"] = struct
+
+            # Name is in general within a name tag else it is an optional
+            # attribute on the type tag.
+            name_elem = t.find("name")
+            if name_elem is not None:
+                type_info["name"] = name_elem.text
+            else:
+                type_info["name"] = t.attrib.get("name", None)
+
+            # Store all type data in a shared dictionary, so we can easily
+            # look up information for a given type. There are no duplicate
+            # names.
+            self.types[type_info["name"]] = type_info
+
+        # Second pass for alias types, so we can retrieve all data from
+        # the aliased object.
+        for t in alias_types:
+            type_info = {}
+            type_info["category"] = t.attrib.get("category")
+            type_info["name"] = t.attrib.get("name")
+
+            alias = t.attrib.get("alias")
+
+            if type_info["category"] == "bitmask":
+                bitmask = XrBaseType(type_info["name"], alias, collect_element_text(t), alias=self.types[alias]["data"])
+                bitmasks.append(bitmask)
+                type_info["data"] = bitmask
+
+            if type_info["category"] == "enum":
+                enum = XrEnum.from_alias(t, self.types[alias]["data"])
+                type_info["data"] = enum
+                self.enums[enum.name] = enum
+
+            if type_info["category"] == "handle":
+                handle = XrHandle.from_alias(t, self.types[alias]["data"])
+                handles.append(handle)
+                type_info["data"] = handle
+
+            if type_info["category"] == "struct":
+                struct = XrStruct.from_alias(t, self.types[alias]["data"])
+                structs.append(struct)
+                type_info["data"] = struct
+
+            self.types[type_info["name"]] = type_info
+
+        # We need detailed type information during code generation
+        # on structs for alignment reasons. Unfortunately structs
+        # are parsed among other types, so there is no guarantee
+        # that any types needed have been parsed already, so set
+        # the data now.
+        for struct in structs:
+            struct.set_type_info(self.types)
+
+            # Alias structures have enum values equivalent to those of the
+            # structure which they are aliased against. we need to ignore alias
+            # structs when populating the struct extensions list, otherwise we
+            # will create duplicate case entries.
+            if struct.alias:
+                continue
+
+            for structextend in struct.structextends:
+                s = self.types[structextend]["data"]
+                s.struct_extensions.append(struct)
+
+            self.mark_struct_dependencies(struct)
+
+        # Guarantee everything is sorted, so code generation doesn't have
+        # to deal with this.
+        self.base_types = sorted(base_types, key=lambda base_type: base_type.name)
+        self.bitmasks = sorted(bitmasks, key=lambda bitmask: bitmask.name)
+        self.defines = defines
+        self.enums = OrderedDict(sorted(self.enums.items()))
+        self.funcpointers = sorted(funcpointers, key=lambda fp: fp.name)
+        self.handles = sorted(handles, key=lambda handle: handle.name)
+        self.structs = sorted(structs, key=lambda struct: struct.name)
+
+def collect_element_text(e):
+    return "".join(e.itertext())
+
+def set_working_directory():
+    path = os.path.abspath(__file__)
+    path = os.path.dirname(path)
+    os.chdir(path)
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--verbose", action="count", default=0, help="increase output verbosity")
+
+    args = parser.parse_args()
+    if args.verbose == 0:
+        LOGGER.setLevel(logging.WARNING)
+    elif args.verbose == 1:
+        LOGGER.setLevel(logging.INFO)
+    else: # > 1
+        LOGGER.setLevel(logging.DEBUG)
+
+    set_working_directory()
+
+    xr_xml = "xr.xml".format(XR_XML_VERSION)
+    registry = XrRegistry(xr_xml)
+    generator = XrGenerator(registry)
+
+    with open(WINE_OPENXR_H, "w") as f:
+        generator.generate_openxr_h(f)
+
+    with open(WINE_OPENXR_THUNKS_H, "w") as f:
+        generator.generate_thunks_h(f, "wine_")
+
+    with open(WINE_OPENXR_THUNKS_C, "w") as f:
+        generator.generate_thunks_c(f, "wine_")
+
+if __name__ == "__main__":
+    main()
