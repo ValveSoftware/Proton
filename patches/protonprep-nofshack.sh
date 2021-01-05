@@ -69,14 +69,14 @@
     cd wine
     git reset --hard HEAD
     git clean -xdf
-
-    echo "proton gamepad conflict fix"
-    git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "this reverts bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
-    
+
+    # revert this in favor of the staging hack, as this breaks dmc and some other games
+    git revert --no-commit 1fceb1213992b79aa7f1a5dc0a72ab3756ee524d
+
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
     # -W dinput-axis-recalc \
@@ -169,10 +169,10 @@
 
     echo "SDL Joystick"
     patch -Np1 < ../patches/proton/13-proton-sdl_joy.patch
-    patch -Np1 < ../patches/proton/14-proton-sdl_joy_2.patch
+#    patch -Np1 < ../patches/proton/14-proton-sdl_joy_2.patch
 
-    echo "proton gamepad additions"
-    patch -Np1 < ../patches/proton/15-proton-gamepad-additions.patch
+#    echo "proton gamepad additions"
+#    patch -Np1 < ../patches/proton/15-proton-gamepad-additions.patch
 
     echo "Valve VR patches"
     patch -Np1 < ../patches/proton/16-proton-vrclient.patch
@@ -197,9 +197,9 @@
     patch -Np1 < ../patches/proton/32-proton-05_spellforce_registry.patch
     patch -Np1 < ../patches/proton/33-proton-06_shadow_of_war_registry.patch
 
-    # -- pending work
-    echo "valve rdr2 fixes"
-    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
+#    # -- pending work -- still broken
+#    echo "valve rdr2 fixes"
+#    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
@@ -228,15 +228,16 @@
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
-    
-    echo "Endless Space 2 video color fix"
-    patch -Np1 < ../patches/wine-hotfixes/195961.patch
 
-    ### END WINEPATCH SECTION ###
+    echo "pending fixes"
+    patch -Np1 < ../patches/wine-hotfixes/0033-HACK-Switch-between-all-selection-streams-on-MF_SOUR.patch
+
     
+    ### END WINEPATCH SECTION ###
+
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
-        
+
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
     autoreconf -f

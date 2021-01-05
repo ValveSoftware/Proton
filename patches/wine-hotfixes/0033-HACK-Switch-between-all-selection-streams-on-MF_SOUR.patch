@@ -1,0 +1,48 @@
+From d087bd05fe0f24fdce30b355b7f574e7006aec7b Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 12 May 2020 16:48:52 -0500
+Subject: [PATCH 33/45] HACK: Switch between all selection streams on
+ MF_SOURCE_READER_ANY_STREAM.
+
+---
+ dlls/mfreadwrite/reader.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
+index 9d86a5a0f8f..41880fa3289 100644
+--- a/dlls/mfreadwrite/reader.c
++++ b/dlls/mfreadwrite/reader.c
+@@ -1046,7 +1046,29 @@ static HRESULT source_reader_get_stream_read_index(struct source_reader *reader,
+             {
+                 /* Cycle through all selected streams once, next pick first selected. */
+                 if (FAILED(hr = source_reader_get_first_selected_stream(reader, STREAM_FLAG_REQUESTED_ONCE, stream_index)))
+-                    hr = source_reader_get_first_selected_stream(reader, 0, stream_index);
++                {
++                    //hr = source_reader_get_first_selected_stream(reader, 0, stream_index);
++                    static int last_selection = -1;
++                    int i;
++                    BOOL selected;
++
++                    for (i = 0; i < (int) reader->stream_count; ++i)
++                    {
++                        source_reader_get_stream_selection(reader, i, &selected);
++                        if (selected && i > last_selection)
++                        {
++                            last_selection = i;
++                            *stream_index = i;
++                            hr = S_OK;
++                            break;
++                        }
++                    }
++                    if (i == reader->stream_count)
++                    {
++                        hr = source_reader_get_first_selected_stream(reader, 0, stream_index);
++                        last_selection = hr == S_OK ? *stream_index : -1;
++                    }
++                }
+             }
+             return hr;
+         default:
+-- 
+2.28.0
+
