@@ -2041,253 +2041,6 @@ index 43268221936..f39d6f0cd7b 100644
 -- 
 2.26.2
 
-From: Paul Gofman <pgofman@codeweavers.com>
-Subject: [PATCH] ntdll: Restore non-volatile registers in call_user_exception_dispatcher() on x86_64.
-Message-Id: <20201022112037.675138-1-pgofman@codeweavers.com>
-Date: Thu, 22 Oct 2020 14:20:37 +0300
-
-Required to correctly restore non-volatile registers during unwind.
-
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
----
- dlls/ntdll/tests/exception.c    | 56 +++++++++++++++++++++++++++----
- dlls/ntdll/unix/signal_x86_64.c | 59 +++++++++++++++++++++++----------
- 2 files changed, 91 insertions(+), 24 deletions(-)
-
-diff --git a/dlls/ntdll/tests/exception.c b/dlls/ntdll/tests/exception.c
-index b2331b739ac..47b4c6a8918 100644
---- a/dlls/ntdll/tests/exception.c
-+++ b/dlls/ntdll/tests/exception.c
-@@ -56,6 +56,7 @@ static void *    (WINAPI *pRtlLocateExtendedFeature)(CONTEXT_EX *context_ex, ULO
- static void *    (WINAPI *pRtlLocateLegacyContext)(CONTEXT_EX *context_ex, ULONG *length);
- static void      (WINAPI *pRtlSetExtendedFeaturesMask)(CONTEXT_EX *context_ex, ULONG64 feature_mask);
- static ULONG64   (WINAPI *pRtlGetExtendedFeaturesMask)(CONTEXT_EX *context_ex);
-+static NTSTATUS  (WINAPI *pNtRaiseException)(EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_chance);
- static NTSTATUS  (WINAPI *pNtReadVirtualMemory)(HANDLE, const void*, void*, SIZE_T, SIZE_T*);
- static NTSTATUS  (WINAPI *pNtTerminateProcess)(HANDLE handle, LONG exit_code);
- static NTSTATUS  (WINAPI *pNtQueryInformationProcess)(HANDLE, PROCESSINFOCLASS, PVOID, ULONG, PULONG);
-@@ -3716,6 +3717,8 @@ static struct
- }
- test_kiuserexceptiondispatcher_regs;
- 
-+static ULONG64 test_kiuserexceptiondispatcher_saved_r12;
-+
- static DWORD dbg_except_continue_handler(EXCEPTION_RECORD *rec, EXCEPTION_REGISTRATION_RECORD *frame,
-         CONTEXT *context, EXCEPTION_REGISTRATION_RECORD **dispatcher)
- {
-@@ -3738,6 +3741,13 @@ static LONG WINAPI dbg_except_continue_vectored_handler(struct _EXCEPTION_POINTE
- 
-     trace("dbg_except_continue_vectored_handler, code %#x, Rip %#lx.\n", rec->ExceptionCode, context->Rip);
- 
-+    if (rec->ExceptionCode == 0xceadbeef)
-+    {
-+        ok(context->P1Home == (ULONG64)0xdeadbeeffeedcafe, "Got unexpected context->P1Home %#lx.\n", context->P1Home);
-+        context->R12 = test_kiuserexceptiondispatcher_saved_r12;
-+        return EXCEPTION_CONTINUE_EXECUTION;
-+    }
-+
-     ok(rec->ExceptionCode == 0x80000003, "Got unexpected exception code %#x.\n", rec->ExceptionCode);
- 
-     got_exception = 1;
-@@ -3760,7 +3770,7 @@ void WINAPI hook_KiUserExceptionDispatcher(EXCEPTION_RECORD *rec, CONTEXT *conte
- 
-     hook_called = TRUE;
-     /* Broken on Win2008, probably rec offset in stack is different. */
--    ok(rec->ExceptionCode == 0x80000003 || broken(!rec->ExceptionCode),
-+    ok(rec->ExceptionCode == 0x80000003 || rec->ExceptionCode == 0xceadbeef || broken(!rec->ExceptionCode),
-             "Got unexpected ExceptionCode %#x.\n", rec->ExceptionCode);
- 
-     hook_KiUserExceptionDispatcher_rip = (void *)context->Rip;
-@@ -3769,7 +3779,7 @@ void WINAPI hook_KiUserExceptionDispatcher(EXCEPTION_RECORD *rec, CONTEXT *conte
-             sizeof(saved_KiUserExceptionDispatcher_bytes));
- }
- 
--static void test_kiuserexceptiondispatcher(void)
-+ void test_kiuserexceptiondispatcher(void)
- {
-     LPVOID vectored_handler;
-     HMODULE hntdll = GetModuleHandleA("ntdll.dll");
-@@ -3810,15 +3820,15 @@ static void test_kiuserexceptiondispatcher(void)
-         0x48, 0x89, 0xe2,           /* mov %rsp,%rdx */
-         0x48, 0x8d, 0x8c, 0x24, 0xf0, 0x04, 0x00, 0x00,
-                                     /* lea 0x4f0(%rsp),%rcx */
--
-+        0x4c, 0x89, 0x22,           /* mov %r12,(%rdx) */
-         0xff, 0x14, 0x25,
--        /* offset: 14 bytes */
-+        /* offset: 17 bytes */
-         0x00, 0x00, 0x00, 0x00,     /* callq *addr */ /* call hook implementation. */
-         0x48, 0x31, 0xc9,           /* xor %rcx, %rcx */
-         0x48, 0x31, 0xd2,           /* xor %rdx, %rdx */
- 
-         0xff, 0x24, 0x25,
--        /* offset: 27 bytes */
-+        /* offset: 30 bytes */
-         0x00, 0x00, 0x00, 0x00,     /* jmpq *addr */ /* jump to original function. */
-     };
- 
-@@ -3827,6 +3837,8 @@ static void test_kiuserexceptiondispatcher(void)
-     DWORD old_protect1, old_protect2;
-     EXCEPTION_RECORD record;
-     void *bpt_address;
-+    CONTEXT ctx;
-+    LONG pass;
-     BYTE *ptr;
-     BOOL ret;
- 
-@@ -3845,8 +3857,8 @@ static void test_kiuserexceptiondispatcher(void)
-     ok(((ULONG64)&pKiUserExceptionDispatcher & 0xffffffff) == ((ULONG64)&pKiUserExceptionDispatcher),
-             "Address is too long.\n");
- 
--    *(unsigned int *)(hook_trampoline + 14) = (unsigned int)(ULONG_PTR)&phook_KiUserExceptionDispatcher;
--    *(unsigned int *)(hook_trampoline + 27) = (unsigned int)(ULONG_PTR)&pKiUserExceptionDispatcher;
-+    *(unsigned int *)(hook_trampoline + 17) = (unsigned int)(ULONG_PTR)&phook_KiUserExceptionDispatcher;
-+    *(unsigned int *)(hook_trampoline + 30) = (unsigned int)(ULONG_PTR)&pKiUserExceptionDispatcher;
- 
-     ret = VirtualProtect(hook_trampoline, ARRAY_SIZE(hook_trampoline), PAGE_EXECUTE_READWRITE, &old_protect1);
-     ok(ret, "Got unexpected ret %#x, GetLastError() %u.\n", ret, GetLastError());
-@@ -3954,6 +3966,35 @@ static void test_kiuserexceptiondispatcher(void)
- 
-     NtCurrentTeb()->Peb->BeingDebugged = 0;
- 
-+    vectored_handler = AddVectoredExceptionHandler(TRUE, dbg_except_continue_vectored_handler);
-+    pass = 0;
-+    InterlockedIncrement(&pass);
-+    pRtlCaptureContext(&ctx);
-+    if (InterlockedIncrement(&pass) == 2) /* interlocked to prevent compiler from moving before capture */
-+    {
-+        memcpy(pKiUserExceptionDispatcher, patched_KiUserExceptionDispatcher_bytes,
-+                sizeof(patched_KiUserExceptionDispatcher_bytes));
-+        got_exception = 0;
-+        hook_called = FALSE;
-+
-+        record.ExceptionCode = 0xceadbeef;
-+        test_kiuserexceptiondispatcher_saved_r12 = ctx.R12;
-+        ctx.R12 = (ULONG64)0xdeadbeeffeedcafe;
-+
-+#ifdef __GNUC__
-+        /* Spoil r12 value to make sure it doesn't come from the current userspace registers. */
-+        __asm__ volatile("movq $0xdeadcafe, %%r12" : : : "%r12");
-+#endif
-+        pNtRaiseException(&record, &ctx, TRUE);
-+        ok(0, "Shouldn't be reached.\n");
-+    }
-+    else
-+    {
-+        ok(pass == 3, "Got unexpected pass %d.\n", pass);
-+    }
-+    ok(hook_called, "Hook was not called.\n");
-+    RemoveVectoredExceptionHandler(vectored_handler);
-+
-     ret = VirtualProtect(pKiUserExceptionDispatcher, sizeof(saved_KiUserExceptionDispatcher_bytes),
-             old_protect2, &old_protect2);
-     ok(ret, "Got unexpected ret %#x, GetLastError() %u.\n", ret, GetLastError());
-@@ -8046,6 +8087,7 @@ START_TEST(exception)
-     X(NtQueryInformationThread);
-     X(NtSetInformationProcess);
-     X(NtSuspendProcess);
-+    X(NtRaiseException);
-     X(NtResumeProcess);
-     X(RtlGetUnloadEventTrace);
-     X(RtlGetUnloadEventTraceEx);
-diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
-index 124032714c7..8cdf129f5cc 100644
---- a/dlls/ntdll/unix/signal_x86_64.c
-+++ b/dlls/ntdll/unix/signal_x86_64.c
-@@ -1551,6 +1551,34 @@ static void restore_context( const struct xcontext *xcontext, ucontext_t *sigcon
- }
- 
- 
-+/***********************************************************************
-+ *           set_nonvolatile_regs_from_context
-+ *
-+ * Set the non-volatile registers from CPU context.
-+ */
-+extern void set_nonvolatile_regs_from_context( const CONTEXT *context );
-+__ASM_GLOBAL_FUNC( set_nonvolatile_regs_from_context,
-+                   "movq 0xa0(%rcx),%rbp\n\t"
-+                   "movq 0x90(%rcx),%rbx\n\t"
-+                   "movq 0xa8(%rcx),%rsi\n\t"
-+                   "movq 0xb0(%rcx),%rdi\n\t"
-+                   "movq 0xd8(%rcx),%r12\n\t"
-+                   "movq 0xe0(%rcx),%r13\n\t"
-+                   "movq 0xe8(%rcx),%r14\n\t"
-+                   "movq 0xf0(%rcx),%r15\n\t"
-+                   "movdqa 0x200(%rcx),%xmm6\n\t"
-+                   "movdqa 0x210(%rcx),%xmm7\n\t"
-+                   "movdqa 0x220(%rcx),%xmm8\n\t"
-+                   "movdqa 0x230(%rcx),%xmm9\n\t"
-+                   "movdqa 0x240(%rcx),%xmm10\n\t"
-+                   "movdqa 0x250(%rcx),%xmm11\n\t"
-+                   "movdqa 0x260(%rcx),%xmm12\n\t"
-+                   "movdqa 0x270(%rcx),%xmm13\n\t"
-+                   "movdqa 0x280(%rcx),%xmm14\n\t"
-+                   "movdqa 0x290(%rcx),%xmm15\n\t"
-+                   "ret" );
-+
-+
- /***********************************************************************
-  *           set_full_cpu_context
-  *
-@@ -2081,19 +2109,7 @@ __ASM_GLOBAL_FUNC( call_raise_user_exception_dispatcher,
- /***********************************************************************
-  *           call_user_exception_dispatcher
-  */
--
--extern void WINAPI user_exception_dispatcher_trampoline( struct stack_layout *stack,
--        void *pKiUserExceptionDispatcher );
--
--__ASM_GLOBAL_FUNC( user_exception_dispatcher_trampoline,
--                   "movq %rcx,%rsp\n\t"
--                   "movq 0x98(%rsp),%rcx\n\t" /* context->Rsp */
--                   "movq 0xa0(%rsp),%rbp\n\t"
--                   "movq 0xa8(%rsp),%rsi\n\t"
--                   "movq 0xb0(%rsp),%rdi\n\t"
--                   "jmpq *%rdx")
--
--void WINAPI do_call_user_exception_dispatcher( EXCEPTION_RECORD *rec, CONTEXT *context,
-+struct stack_layout * WINAPI setup_user_exception_dispatcher_stack( EXCEPTION_RECORD *rec, CONTEXT *context,
-                                                NTSTATUS (WINAPI *dispatcher)(EXCEPTION_RECORD*,CONTEXT*),
-                                                struct stack_layout *stack )
- {
-@@ -2127,12 +2143,13 @@ void WINAPI do_call_user_exception_dispatcher( EXCEPTION_RECORD *rec, CONTEXT *c
-     /* fix up instruction pointer in context for EXCEPTION_BREAKPOINT */
-     if (stack->rec.ExceptionCode == EXCEPTION_BREAKPOINT) stack->context.Rip--;
- 
--    amd64_thread_data()->syscall_frame = NULL;
--    user_exception_dispatcher_trampoline( stack, dispatcher );
-+    return stack;
- }
- 
- __ASM_GLOBAL_FUNC( call_user_exception_dispatcher,
--                   "movq 0x98(%rdx),%r9\n\t" /* context->Rsp */
-+                   "movq %gs:0x30,%rax\n\t"
-+                   "movq $0,0x328(%rax)\n\t"   /* amd64_thread_data()->syscall_frame */
-+                   "movq 0x98(%rdx),%r9\n\t"   /* context->Rsp */
-                    "andq $~0xf,%r9\n\t"
-                    "btl $6,0x30(%rdx)\n\t" /* context->ContextFlags, CONTEXT_XSTATE bit. */
-                    "jnc 1f\n\t"
-@@ -2141,7 +2158,15 @@ __ASM_GLOBAL_FUNC( call_user_exception_dispatcher,
-                    "1:\tsubq $0x5b0,%r9\n\t" /* sizeof(struct stack_layout) */
-                    "cmpq %rsp,%r9\n\t"
-                    "cmovbq %r9,%rsp\n\t"
--                   "jmp " __ASM_NAME("do_call_user_exception_dispatcher") "\n\t")
-+                   "pushq %r8\n\t"
-+                   "subq $0x20,%rsp\n\t"
-+                   "call " __ASM_NAME("setup_user_exception_dispatcher_stack") "\n\t"
-+                   "mov %rax,%rcx\n\t"
-+                   "call " __ASM_NAME("set_nonvolatile_regs_from_context") "\n\t"
-+                   "addq $0x20,%rsp\n\t"
-+                   "popq %r8\n\t"
-+                   "mov %rcx,%rsp\n\t"
-+                   "jmpq *%r8")
- 
- /***********************************************************************
-  *           is_privileged_instr
-
--- 
-2.26.2
-
 From 87326687df23529255c2493d178dac1310919980 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Wed, 4 Nov 2020 18:08:21 +0300
@@ -2726,41 +2479,1869 @@ index 7e7e6fbdf29..3de4d241b8e 100644
 
 -- 
 2.29.2
-From c9a5fcb0966ab0ca0722c8c07476c131844f98e1 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Subject: [PATCH] kernelbase: Get language sort only when required in LCMapStringEx().
-Message-Id: <20201019180605.1225175-1-pgofman@codeweavers.com>
-Date: Mon, 19 Oct 2020 21:06:05 +0300
 
-Fixes very slow loading (a few minutes) of Warhammer 40000: Inquisitor - Martyr.
+From 85d049746cd99a66fd646d5f97ba76b603bed0cd Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 10 Dec 2020 14:01:45 -0600
+Subject: [PATCH] mmdevapi: Implement SpatialAudio features
 
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
 ---
- dlls/kernelbase/locale.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ dlls/mmdevapi/Makefile.in      |   3 +-
+ dlls/mmdevapi/audiovolume.c    |   1 +
+ dlls/mmdevapi/devenum.c        |   5 +
+ dlls/mmdevapi/main.c           |   1 +
+ dlls/mmdevapi/mmdevapi.h       |   1 +
+ dlls/mmdevapi/spatialaudio.c   | 948 +++++++++++++++++++++++++++++++++
+ include/spatialaudioclient.idl | 121 +++++
+ 7 files changed, 1079 insertions(+), 1 deletion(-)
+ create mode 100644 dlls/mmdevapi/spatialaudio.c
 
-diff --git a/dlls/kernelbase/locale.c b/dlls/kernelbase/locale.c
-index 9cfb9f129ee..7e6ac2829d2 100644
---- a/dlls/kernelbase/locale.c
-+++ b/dlls/kernelbase/locale.c
-@@ -5204,7 +5204,7 @@ INT WINAPI DECLSPEC_HOTPATCH LCMapStringEx( const WCHAR *locale, DWORD flags, co
-                                             WCHAR *dst, int dstlen, NLSVERSIONINFO *version,
-                                             void *reserved, LPARAM handle )
+diff --git a/dlls/mmdevapi/Makefile.in b/dlls/mmdevapi/Makefile.in
+index 5f44f7ba53b..903b14335a9 100644
+--- a/dlls/mmdevapi/Makefile.in
++++ b/dlls/mmdevapi/Makefile.in
+@@ -6,6 +6,7 @@ EXTRADLLFLAGS = -mno-cygwin
+ C_SRCS = \
+ 	audiovolume.c \
+ 	devenum.c \
+-	main.c
++	main.c \
++	spatialaudio.c
+ 
+ IDL_SRCS = mmdevapi_classes.idl
+diff --git a/dlls/mmdevapi/audiovolume.c b/dlls/mmdevapi/audiovolume.c
+index 9214980120e..6f403cf348a 100644
+--- a/dlls/mmdevapi/audiovolume.c
++++ b/dlls/mmdevapi/audiovolume.c
+@@ -33,6 +33,7 @@
+ #include "audioclient.h"
+ #include "endpointvolume.h"
+ #include "audiopolicy.h"
++#include "spatialaudioclient.h"
+ 
+ #include "mmdevapi.h"
+ 
+diff --git a/dlls/mmdevapi/devenum.c b/dlls/mmdevapi/devenum.c
+index 999ec2b0e78..30a2131eab5 100644
+--- a/dlls/mmdevapi/devenum.c
++++ b/dlls/mmdevapi/devenum.c
+@@ -35,6 +35,7 @@
+ #include "audioclient.h"
+ #include "endpointvolume.h"
+ #include "audiopolicy.h"
++#include "spatialaudioclient.h"
+ 
+ #include "mmdevapi.h"
+ #include "devpkey.h"
+@@ -658,6 +659,10 @@ static HRESULT WINAPI MMDevice_Activate(IMMDevice *iface, REFIID riid, DWORD cls
+                 IDirectSoundCapture_Release((IDirectSoundCapture*)*ppv);
+         }
+     }
++    else if (IsEqualIID(riid, &IID_ISpatialAudioClient))
++    {
++        hr = SpatialAudioClient_Create(iface, (ISpatialAudioClient**)ppv);
++    }
+     else
+         ERR("Invalid/unknown iid %s\n", debugstr_guid(riid));
+ 
+diff --git a/dlls/mmdevapi/main.c b/dlls/mmdevapi/main.c
+index 8e9127a7507..8dc0b0df820 100644
+--- a/dlls/mmdevapi/main.c
++++ b/dlls/mmdevapi/main.c
+@@ -37,6 +37,7 @@
+ #include "audiopolicy.h"
+ #include "devpkey.h"
+ #include "winreg.h"
++#include "spatialaudioclient.h"
+ 
+ #include "mmdevapi.h"
+ #include "wine/debug.h"
+diff --git a/dlls/mmdevapi/mmdevapi.h b/dlls/mmdevapi/mmdevapi.h
+index bc9788e95c8..3bcf568cddf 100644
+--- a/dlls/mmdevapi/mmdevapi.h
++++ b/dlls/mmdevapi/mmdevapi.h
+@@ -71,5 +71,6 @@ typedef struct MMDevice {
+ 
+ extern HRESULT AudioClient_Create(MMDevice *parent, IAudioClient **ppv) DECLSPEC_HIDDEN;
+ extern HRESULT AudioEndpointVolume_Create(MMDevice *parent, IAudioEndpointVolumeEx **ppv) DECLSPEC_HIDDEN;
++extern HRESULT SpatialAudioClient_Create(IMMDevice *device, ISpatialAudioClient **out) DECLSPEC_HIDDEN;
+ 
+ extern const WCHAR drv_keyW[] DECLSPEC_HIDDEN;
+diff --git a/dlls/mmdevapi/spatialaudio.c b/dlls/mmdevapi/spatialaudio.c
+new file mode 100644
+index 00000000000..edc28cd9f76
+--- /dev/null
++++ b/dlls/mmdevapi/spatialaudio.c
+@@ -0,0 +1,948 @@
++/*
++ * Copyright 2020 Andrew Eikum for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#define COBJMACROS
++#define NONAMELESSUNION
++
++#include <stdarg.h>
++
++#include "windef.h"
++#include "winbase.h"
++#include "winnls.h"
++#include "winreg.h"
++#include "wine/heap.h"
++#include "wine/debug.h"
++#include "wine/list.h"
++
++#include "ole2.h"
++#include "mmdeviceapi.h"
++#include "mmsystem.h"
++#include "audioclient.h"
++#include "endpointvolume.h"
++#include "audiopolicy.h"
++#include "spatialaudioclient.h"
++
++#include "mmdevapi.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(mmdevapi);
++
++#define MAX_PERIODS 3
++
++static UINT32 AudioObjectType_to_index(AudioObjectType type)
++{
++    UINT32 o = 0;
++    while(type){
++        type >>= 1;
++        ++o;
++    }
++    return o - 2;
++}
++
++typedef struct SpatialAudioImpl SpatialAudioImpl;
++typedef struct SpatialAudioStreamImpl SpatialAudioStreamImpl;
++typedef struct SpatialAudioObjectImpl SpatialAudioObjectImpl;
++
++struct SpatialAudioObjectImpl {
++    ISpatialAudioObject ISpatialAudioObject_iface;
++    LONG ref;
++
++    SpatialAudioStreamImpl *sa_stream;
++    AudioObjectType type;
++    UINT32 static_idx;
++
++    float *buf;
++
++    struct list entry;
++};
++
++struct SpatialAudioStreamImpl {
++    ISpatialAudioObjectRenderStream ISpatialAudioObjectRenderStream_iface;
++    LONG ref;
++    CRITICAL_SECTION lock;
++
++    SpatialAudioImpl *sa_client;
++    SpatialAudioObjectRenderStreamActivationParams params;
++
++    IAudioClient *client;
++    IAudioRenderClient *render;
++
++    UINT32 period_frames, update_frames;
++    WAVEFORMATEXTENSIBLE stream_fmtex;
++
++    float *buf;
++
++    UINT32 static_object_map[17];
++
++    struct list objects;
++};
++
++struct SpatialAudioImpl {
++    ISpatialAudioClient ISpatialAudioClient_iface;
++    IAudioFormatEnumerator IAudioFormatEnumerator_iface;
++    IMMDevice *mmdev;
++    LONG ref;
++    WAVEFORMATEXTENSIBLE object_fmtex;
++};
++
++static inline SpatialAudioObjectImpl *impl_from_ISpatialAudioObject(ISpatialAudioObject *iface)
++{
++    return CONTAINING_RECORD(iface, SpatialAudioObjectImpl, ISpatialAudioObject_iface);
++}
++
++static inline SpatialAudioStreamImpl *impl_from_ISpatialAudioObjectRenderStream(ISpatialAudioObjectRenderStream *iface)
++{
++    return CONTAINING_RECORD(iface, SpatialAudioStreamImpl, ISpatialAudioObjectRenderStream_iface);
++}
++
++static inline SpatialAudioImpl *impl_from_ISpatialAudioClient(ISpatialAudioClient *iface)
++{
++    return CONTAINING_RECORD(iface, SpatialAudioImpl, ISpatialAudioClient_iface);
++}
++
++static inline SpatialAudioImpl *impl_from_IAudioFormatEnumerator(IAudioFormatEnumerator *iface)
++{
++    return CONTAINING_RECORD(iface, SpatialAudioImpl, IAudioFormatEnumerator_iface);
++}
++
++static HRESULT WINAPI SAO_QueryInterface(ISpatialAudioObject *iface,
++        REFIID riid, void **ppv)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++
++    TRACE("(%p)->(%s,%p)\n", This, debugstr_guid(riid), ppv);
++
++    if (!ppv)
++        return E_POINTER;
++
++    *ppv = NULL;
++
++    if (IsEqualIID(riid, &IID_IUnknown) ||
++            IsEqualIID(riid, &IID_ISpatialAudioObjectBase) ||
++            IsEqualIID(riid, &IID_ISpatialAudioObject)) {
++        *ppv = &This->ISpatialAudioObject_iface;
++    }
++    else
++        return E_NOINTERFACE;
++
++    IUnknown_AddRef((IUnknown *)*ppv);
++
++    return S_OK;
++}
++
++static ULONG WINAPI SAO_AddRef(ISpatialAudioObject *iface)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++    ULONG ref = InterlockedIncrement(&This->ref);
++    TRACE("(%p) new ref %u\n", This, ref);
++    return ref;
++}
++
++static ULONG WINAPI SAO_Release(ISpatialAudioObject *iface)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++    ULONG ref = InterlockedDecrement(&This->ref);
++    TRACE("(%p) new ref %u\n", This, ref);
++    if(!ref){
++        EnterCriticalSection(&This->sa_stream->lock);
++        list_remove(&This->entry);
++        LeaveCriticalSection(&This->sa_stream->lock);
++
++        ISpatialAudioObjectRenderStream_Release(&This->sa_stream->ISpatialAudioObjectRenderStream_iface);
++        heap_free(This->buf);
++        heap_free(This);
++    }
++    return ref;
++}
++
++static HRESULT WINAPI SAO_GetBuffer(ISpatialAudioObject *iface,
++        BYTE **buffer, UINT32 *bytes)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++
++    TRACE("(%p)->(%p, %p)\n", This, buffer, bytes);
++
++    EnterCriticalSection(&This->sa_stream->lock);
++
++    if(This->sa_stream->update_frames == ~0){
++        LeaveCriticalSection(&This->sa_stream->lock);
++        return SPTLAUDCLNT_E_OUT_OF_ORDER;
++    }
++
++    *buffer = (BYTE *)This->buf;
++    *bytes = This->sa_stream->update_frames *
++        This->sa_stream->sa_client->object_fmtex.Format.nBlockAlign;
++
++    LeaveCriticalSection(&This->sa_stream->lock);
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAO_SetEndOfStream(ISpatialAudioObject *iface, UINT32 frames)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++    FIXME("(%p)->(%u)\n", This, frames);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAO_IsActive(ISpatialAudioObject *iface, BOOL *active)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++    FIXME("(%p)->(%p)\n", This, active);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAO_GetAudioObjectType(ISpatialAudioObject *iface,
++        AudioObjectType *type)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++
++    TRACE("(%p)->(%p)\n", This, type);
++
++    *type = This->type;
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAO_SetPosition(ISpatialAudioObject *iface, float x,
++        float y, float z)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++    FIXME("(%p)->(%f, %f, %f)\n", This, x, y, z);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAO_SetVolume(ISpatialAudioObject *iface, float vol)
++{
++    SpatialAudioObjectImpl *This = impl_from_ISpatialAudioObject(iface);
++    FIXME("(%p)->(%f)\n", This, vol);
++    return E_NOTIMPL;
++}
++
++static ISpatialAudioObjectVtbl ISpatialAudioObject_vtbl = {
++    SAO_QueryInterface,
++    SAO_AddRef,
++    SAO_Release,
++    SAO_GetBuffer,
++    SAO_SetEndOfStream,
++    SAO_IsActive,
++    SAO_GetAudioObjectType,
++    SAO_SetPosition,
++    SAO_SetVolume,
++};
++
++static HRESULT WINAPI SAORS_QueryInterface(ISpatialAudioObjectRenderStream *iface,
++        REFIID riid, void **ppv)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++
++    TRACE("(%p)->(%s,%p)\n", This, debugstr_guid(riid), ppv);
++
++    if (!ppv)
++        return E_POINTER;
++
++    *ppv = NULL;
++
++    if (IsEqualIID(riid, &IID_IUnknown) ||
++            IsEqualIID(riid, &IID_ISpatialAudioObjectRenderStreamBase) ||
++            IsEqualIID(riid, &IID_ISpatialAudioObjectRenderStream)) {
++        *ppv = &This->ISpatialAudioObjectRenderStream_iface;
++    }
++    else
++        return E_NOINTERFACE;
++
++    IUnknown_AddRef((IUnknown *)*ppv);
++
++    return S_OK;
++}
++
++static ULONG WINAPI SAORS_AddRef(ISpatialAudioObjectRenderStream *iface)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    ULONG ref = InterlockedIncrement(&This->ref);
++    TRACE("(%p) new ref %u\n", This, ref);
++    return ref;
++}
++
++static ULONG WINAPI SAORS_Release(ISpatialAudioObjectRenderStream *iface)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    ULONG ref = InterlockedDecrement(&This->ref);
++    TRACE("(%p) new ref %u\n", This, ref);
++    if(!ref){
++        IAudioClient_Stop(This->client);
++        if(This->update_frames != ~0 && This->update_frames > 0)
++            IAudioRenderClient_ReleaseBuffer(This->render, This->update_frames, 0);
++        IAudioRenderClient_Release(This->render);
++        IAudioClient_Release(This->client);
++        if(This->params.NotifyObject)
++            ISpatialAudioObjectRenderStreamNotify_Release(This->params.NotifyObject);
++        heap_free((void*)This->params.ObjectFormat);
++        CloseHandle(This->params.EventHandle);
++        DeleteCriticalSection(&This->lock);
++        ISpatialAudioClient_Release(&This->sa_client->ISpatialAudioClient_iface);
++        heap_free(This);
++    }
++    return ref;
++}
++
++static HRESULT WINAPI SAORS_GetAvailableDynamicObjectCount(
++        ISpatialAudioObjectRenderStream *iface, UINT32 *count)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    FIXME("(%p)->(%p)\n", This, count);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAORS_GetService(ISpatialAudioObjectRenderStream *iface,
++        REFIID riid, void **service)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    FIXME("(%p)->(%s, %p)\n", This, debugstr_guid(riid), service);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAORS_Start(ISpatialAudioObjectRenderStream *iface)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    HRESULT hr;
++
++    TRACE("(%p)->()\n", This);
++
++    hr = IAudioClient_Start(This->client);
++    if(FAILED(hr)){
++        WARN("IAudioClient::Start failed: %08x\n", hr);
++        return hr;
++    }
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAORS_Stop(ISpatialAudioObjectRenderStream *iface)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    HRESULT hr;
++
++    TRACE("(%p)->()\n", This);
++
++    hr = IAudioClient_Stop(This->client);
++    if(FAILED(hr)){
++        WARN("IAudioClient::Stop failed: %08x\n", hr);
++        return hr;
++    }
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAORS_Reset(ISpatialAudioObjectRenderStream *iface)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    FIXME("(%p)->()\n", This);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAORS_BeginUpdatingAudioObjects(ISpatialAudioObjectRenderStream *iface,
++        UINT32 *count, UINT32 *frames)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    SpatialAudioObjectImpl *object;
++    UINT32 pad;
++    HRESULT hr;
++
++    TRACE("(%p)->(%p, %p)\n", This, count, frames);
++
++    EnterCriticalSection(&This->lock);
++
++    if(This->update_frames != ~0){
++        LeaveCriticalSection(&This->lock);
++        return SPTLAUDCLNT_E_OUT_OF_ORDER;
++    }
++
++    hr = IAudioClient_GetCurrentPadding(This->client, &pad);
++    if(FAILED(hr)){
++        WARN("GetCurrentPadding failed: %08x\n", hr);
++        LeaveCriticalSection(&This->lock);
++        return hr;
++    }
++
++    if(pad < This->period_frames * MAX_PERIODS){
++        This->update_frames = This->period_frames * MAX_PERIODS - pad;
++    }else{
++        This->update_frames = 0;
++    }
++
++    if(This->update_frames > 0){
++        hr = IAudioRenderClient_GetBuffer(This->render, This->update_frames, (BYTE **)&This->buf);
++        if(FAILED(hr)){
++            WARN("GetBuffer failed: %08x\n", hr);
++            This->update_frames = ~0;
++            LeaveCriticalSection(&This->lock);
++            return hr;
++        }
++
++        *count = 0;
++        LIST_FOR_EACH_ENTRY(object, &This->objects, SpatialAudioObjectImpl, entry){
++            memset(object->buf, 0, This->update_frames * This->sa_client->object_fmtex.Format.nBlockAlign);
++            *count += 1;
++        }
++    }else{
++        *count = list_count(&This->objects);
++    }
++
++    *frames = This->update_frames;
++
++    LeaveCriticalSection(&This->lock);
++
++    return S_OK;
++}
++
++static void mix_static_object(SpatialAudioStreamImpl *stream, SpatialAudioObjectImpl *object)
++{
++    float *in = object->buf, *out;
++    UINT32 i;
++    if(object->static_idx == ~0 ||
++            stream->static_object_map[object->static_idx] == ~0){
++        WARN("Got unmapped static object?! Not mixing. Type: 0x%x\n", object->type);
++        return;
++    }
++    out = stream->buf + stream->static_object_map[object->static_idx];
++    for(i = 0; i < stream->update_frames; ++i){
++        *out += *in;
++        ++in;
++        out += stream->stream_fmtex.Format.nChannels;
++    }
++}
++
++static HRESULT WINAPI SAORS_EndUpdatingAudioObjects(ISpatialAudioObjectRenderStream *iface)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    SpatialAudioObjectImpl *object;
++    HRESULT hr;
++
++    TRACE("(%p)->()\n", This);
++
++    EnterCriticalSection(&This->lock);
++
++    if(This->update_frames == ~0){
++        LeaveCriticalSection(&This->lock);
++        return SPTLAUDCLNT_E_OUT_OF_ORDER;
++    }
++
++    if(This->update_frames > 0){
++        LIST_FOR_EACH_ENTRY(object, &This->objects, SpatialAudioObjectImpl, entry){
++            if(object->type != AudioObjectType_Dynamic)
++                mix_static_object(This, object);
++            else
++                WARN("Don't know how to mix dynamic object yet. %p\n", object);
++        }
++
++        hr = IAudioRenderClient_ReleaseBuffer(This->render, This->update_frames, 0);
++        if(FAILED(hr))
++            WARN("ReleaseBuffer failed: %08x\n", hr);
++    }
++
++    This->update_frames = ~0;
++
++    LeaveCriticalSection(&This->lock);
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAORS_ActivateSpatialAudioObject(ISpatialAudioObjectRenderStream *iface,
++        AudioObjectType type, ISpatialAudioObject **object)
++{
++    SpatialAudioStreamImpl *This = impl_from_ISpatialAudioObjectRenderStream(iface);
++    SpatialAudioObjectImpl *obj;
++
++    TRACE("(%p)->(0x%x, %p)\n", This, type, object);
++
++    obj = heap_alloc_zero(sizeof(*obj));
++    obj->ISpatialAudioObject_iface.lpVtbl = &ISpatialAudioObject_vtbl;
++    obj->ref = 1;
++    obj->type = type;
++    if(type == AudioObjectType_Dynamic){
++        FIXME("AudioObjectType_Dynamic not implemented yet!\n");
++        obj->static_idx = ~0;
++    }else if(type == AudioObjectType_None){
++        FIXME("AudioObjectType_None not implemented yet!\n");
++        obj->static_idx = ~0;
++    }else{
++        obj->static_idx = AudioObjectType_to_index(type);
++    }
++
++    obj->sa_stream = This;
++    SAORS_AddRef(&This->ISpatialAudioObjectRenderStream_iface);
++
++    obj->buf = heap_alloc_zero(This->period_frames * MAX_PERIODS * This->sa_client->object_fmtex.Format.nBlockAlign);
++
++    EnterCriticalSection(&This->lock);
++
++    list_add_tail(&This->objects, &obj->entry);
++
++    LeaveCriticalSection(&This->lock);
++
++    *object = &obj->ISpatialAudioObject_iface;
++
++    return S_OK;
++}
++
++static ISpatialAudioObjectRenderStreamVtbl ISpatialAudioObjectRenderStream_vtbl = {
++    SAORS_QueryInterface,
++    SAORS_AddRef,
++    SAORS_Release,
++    SAORS_GetAvailableDynamicObjectCount,
++    SAORS_GetService,
++    SAORS_Start,
++    SAORS_Stop,
++    SAORS_Reset,
++    SAORS_BeginUpdatingAudioObjects,
++    SAORS_EndUpdatingAudioObjects,
++    SAORS_ActivateSpatialAudioObject,
++};
++
++static HRESULT WINAPI SAC_QueryInterface(ISpatialAudioClient *iface, REFIID riid, void **ppv)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++
++    TRACE("(%p)->(%s,%p)\n", This, debugstr_guid(riid), ppv);
++
++    if (!ppv)
++        return E_POINTER;
++
++    *ppv = NULL;
++
++    if (IsEqualIID(riid, &IID_IUnknown) ||
++            IsEqualIID(riid, &IID_ISpatialAudioClient)) {
++        *ppv = &This->ISpatialAudioClient_iface;
++    }
++    else
++        return E_NOINTERFACE;
++
++    IUnknown_AddRef((IUnknown *)*ppv);
++
++    return S_OK;
++}
++
++static ULONG WINAPI SAC_AddRef(ISpatialAudioClient *iface)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    ULONG ref = InterlockedIncrement(&This->ref);
++    TRACE("(%p) new ref %u\n", This, ref);
++    return ref;
++}
++
++static ULONG WINAPI SAC_Release(ISpatialAudioClient *iface)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    ULONG ref = InterlockedDecrement(&This->ref);
++    TRACE("(%p) new ref %u\n", This, ref);
++    if (!ref) {
++        IMMDevice_Release(This->mmdev);
++        heap_free(This);
++    }
++    return ref;
++}
++
++static HRESULT WINAPI SAC_GetStaticObjectPosition(ISpatialAudioClient *iface,
++        AudioObjectType type, float *x, float *y, float *z)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    FIXME("(%p)->(0x%x, %p, %p, %p)\n", This, type, x, y, z);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAC_GetNativeStaticObjectTypeMask(ISpatialAudioClient *iface,
++        AudioObjectType *mask)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    FIXME("(%p)->(%p)\n", This, mask);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAC_GetMaxDynamicObjectCount(ISpatialAudioClient *iface,
++        UINT32 *value)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    FIXME("(%p)->(%p)\n", This, value);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAC_GetSupportedAudioObjectFormatEnumerator(
++        ISpatialAudioClient *iface, IAudioFormatEnumerator **enumerator)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++
++    TRACE("(%p)->(%p)\n", This, enumerator);
++
++    *enumerator = &This->IAudioFormatEnumerator_iface;
++    SAC_AddRef(iface);
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAC_GetMaxFrameCount(ISpatialAudioClient *iface,
++        const WAVEFORMATEX *format, UINT32 *count)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++
++    /* FIXME: should get device period from the device */
++    static const REFERENCE_TIME period = 100000;
++
++    TRACE("(%p)->(%p, %p)\n", This, format, count);
++
++    *count = MulDiv(period, format->nSamplesPerSec, 10000000) * MAX_PERIODS;
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAC_IsAudioObjectFormatSupported(ISpatialAudioClient *iface,
++        const WAVEFORMATEX *format)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    FIXME("(%p)->(%p)\n", This, format);
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI SAC_IsSpatialAudioStreamAvailable(ISpatialAudioClient *iface,
++        REFIID stream_uuid, const PROPVARIANT *info)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    FIXME("(%p)->(%s, %p)\n", This, debugstr_guid(stream_uuid), info);
++    return E_NOTIMPL;
++}
++
++static WAVEFORMATEX *clone_fmtex(const WAVEFORMATEX *src)
++{
++    WAVEFORMATEX *r = heap_alloc(sizeof(WAVEFORMATEX) + src->cbSize);
++    memcpy(r, src, sizeof(WAVEFORMATEX) + src->cbSize);
++    return r;
++}
++
++static const char *debugstr_fmtex(const WAVEFORMATEX *fmt)
++{
++    static char buf[2048];
++    if(fmt->wFormatTag == WAVE_FORMAT_EXTENSIBLE){
++        const WAVEFORMATEXTENSIBLE *fmtex = (const WAVEFORMATEXTENSIBLE *)fmt;
++        snprintf(buf, sizeof(buf), "tag: 0x%x (%s), ch: %u (mask: 0x%x), rate: %u, depth: %u",
++                fmt->wFormatTag, debugstr_guid(&fmtex->SubFormat),
++                fmt->nChannels, fmtex->dwChannelMask, fmt->nSamplesPerSec,
++                fmt->wBitsPerSample);
++    }else{
++        snprintf(buf, sizeof(buf), "tag: 0x%x, ch: %u, rate: %u, depth: %u",
++                fmt->wFormatTag, fmt->nChannels, fmt->nSamplesPerSec,
++                fmt->wBitsPerSample);
++    }
++    return buf;
++}
++
++static void static_mask_to_channels(AudioObjectType static_mask, WORD *count, DWORD *mask, UINT32 *map)
++{
++    UINT32 out_chan = 0, map_idx = 0;
++    *count = 0;
++    *mask = 0;
++#define CONVERT_MASK(f, t) \
++    if(static_mask & f){ \
++        *count += 1; \
++        *mask |= t; \
++        map[map_idx++] = out_chan++; \
++        TRACE("mapping 0x%x to %u\n", f, out_chan - 1); \
++    }else{ \
++        map[map_idx++] = ~0; \
++    }
++    CONVERT_MASK(AudioObjectType_FrontLeft, SPEAKER_FRONT_LEFT);
++    CONVERT_MASK(AudioObjectType_FrontRight, SPEAKER_FRONT_RIGHT);
++    CONVERT_MASK(AudioObjectType_FrontCenter, SPEAKER_FRONT_CENTER);
++    CONVERT_MASK(AudioObjectType_LowFrequency, SPEAKER_LOW_FREQUENCY);
++    CONVERT_MASK(AudioObjectType_SideLeft, SPEAKER_SIDE_LEFT);
++    CONVERT_MASK(AudioObjectType_SideRight, SPEAKER_SIDE_RIGHT);
++    CONVERT_MASK(AudioObjectType_BackLeft, SPEAKER_BACK_LEFT);
++    CONVERT_MASK(AudioObjectType_BackRight, SPEAKER_BACK_RIGHT);
++    CONVERT_MASK(AudioObjectType_TopFrontLeft, SPEAKER_TOP_FRONT_LEFT);
++    CONVERT_MASK(AudioObjectType_TopFrontRight, SPEAKER_TOP_FRONT_RIGHT);
++    CONVERT_MASK(AudioObjectType_TopBackLeft, SPEAKER_TOP_BACK_LEFT);
++    CONVERT_MASK(AudioObjectType_TopBackRight, SPEAKER_TOP_BACK_RIGHT);
++    CONVERT_MASK(AudioObjectType_BackCenter, SPEAKER_BACK_CENTER);
++}
++
++static HRESULT activate_stream(SpatialAudioStreamImpl *stream)
++{
++    WAVEFORMATEXTENSIBLE *object_fmtex = (WAVEFORMATEXTENSIBLE *)stream->params.ObjectFormat;
++    HRESULT hr;
++    REFERENCE_TIME period;
++
++    if(!(object_fmtex->Format.wFormatTag == WAVE_FORMAT_IEEE_FLOAT ||
++                (object_fmtex->Format.wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
++                 IsEqualGUID(&object_fmtex->SubFormat, &KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)))){
++        FIXME("Only float formats are supported for now\n");
++        return E_INVALIDARG;
++    }
++
++    hr = IMMDevice_Activate(stream->sa_client->mmdev, &IID_IAudioClient,
++            CLSCTX_INPROC_SERVER, NULL, (void**)&stream->client);
++    if(FAILED(hr)){
++        WARN("Activate failed: %08x\n", hr);
++        return hr;
++    }
++
++    hr = IAudioClient_GetDevicePeriod(stream->client, &period, NULL);
++    if(FAILED(hr)){
++        WARN("GetDevicePeriod failed: %08x\n", hr);
++        IAudioClient_Release(stream->client);
++        return hr;
++    }
++
++    stream->stream_fmtex.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
++    static_mask_to_channels(stream->params.StaticObjectTypeMask,
++            &stream->stream_fmtex.Format.nChannels, &stream->stream_fmtex.dwChannelMask,
++            stream->static_object_map);
++    stream->stream_fmtex.Format.nSamplesPerSec = stream->params.ObjectFormat->nSamplesPerSec;
++    stream->stream_fmtex.Format.wBitsPerSample = stream->params.ObjectFormat->wBitsPerSample;
++    stream->stream_fmtex.Format.nBlockAlign = (stream->stream_fmtex.Format.nChannels * stream->stream_fmtex.Format.wBitsPerSample) / 8;
++    stream->stream_fmtex.Format.nAvgBytesPerSec = stream->stream_fmtex.Format.nSamplesPerSec * stream->stream_fmtex.Format.nBlockAlign;
++    stream->stream_fmtex.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
++    stream->stream_fmtex.Samples.wValidBitsPerSample = stream->stream_fmtex.Format.wBitsPerSample;
++    stream->stream_fmtex.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
++
++    hr = IAudioClient_Initialize(stream->client, AUDCLNT_SHAREMODE_SHARED,
++            AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
++            period * MAX_PERIODS, 0, &stream->stream_fmtex.Format, NULL);
++    if(FAILED(hr)){
++        WARN("Initialize failed: %08x\n", hr);
++        IAudioClient_Release(stream->client);
++        return hr;
++    }
++
++    /* XXX: OK that this is the user's handle? */
++    hr = IAudioClient_SetEventHandle(stream->client, stream->params.EventHandle);
++    if(FAILED(hr)){
++        WARN("SetEventHandle failed: %08x\n", hr);
++        IAudioClient_Release(stream->client);
++        return hr;
++    }
++
++    hr = IAudioClient_GetService(stream->client, &IID_IAudioRenderClient, (void**)&stream->render);
++    if(FAILED(hr)){
++        WARN("GetService(AudioRenderClient) failed: %08x\n", hr);
++        IAudioClient_Release(stream->client);
++        return hr;
++    }
++
++    stream->period_frames = MulDiv(period, stream->stream_fmtex.Format.nSamplesPerSec, 10000000);
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAC_ActivateSpatialAudioStream(ISpatialAudioClient *iface,
++        const PROPVARIANT *params, REFIID riid, void **stream)
++{
++    SpatialAudioImpl *This = impl_from_ISpatialAudioClient(iface);
++    HRESULT hr;
++
++    TRACE("(%p)->(%s, %p)\n", This, debugstr_guid(riid), stream);
++
++    if(IsEqualIID(riid, &IID_ISpatialAudioObjectRenderStream)){
++        SpatialAudioStreamImpl *obj;
++
++        if(params &&
++                (params->vt != VT_BLOB ||
++                 params->u.blob.cbSize != sizeof(SpatialAudioObjectRenderStreamActivationParams))){
++            WARN("Got invalid params\n");
++            return E_INVALIDARG;
++        }
++
++        obj = heap_alloc_zero(sizeof(SpatialAudioStreamImpl));
++
++        obj->ISpatialAudioObjectRenderStream_iface.lpVtbl = &ISpatialAudioObjectRenderStream_vtbl;
++        obj->ref = 1;
++        memcpy(&obj->params, params->u.blob.pBlobData, sizeof(obj->params));
++
++        obj->update_frames = ~0;
++
++        InitializeCriticalSection(&obj->lock);
++        list_init(&obj->objects);
++
++        obj->sa_client = This;
++        SAC_AddRef(&This->ISpatialAudioClient_iface);
++
++        obj->params.ObjectFormat = clone_fmtex(obj->params.ObjectFormat);
++
++        if(obj->params.EventHandle != INVALID_HANDLE_VALUE &&
++                obj->params.EventHandle != 0)
++            DuplicateHandle(GetCurrentProcess(), obj->params.EventHandle,
++                    GetCurrentProcess(), &obj->params.EventHandle, 0, FALSE,
++                    DUPLICATE_SAME_ACCESS);
++
++        if(obj->params.NotifyObject)
++            ISpatialAudioObjectRenderStreamNotify_AddRef(obj->params.NotifyObject);
++
++        if(TRACE_ON(mmdevapi)){
++            TRACE("ObjectFormat: {%s}\n", debugstr_fmtex(obj->params.ObjectFormat));
++            TRACE("StaticObjectTypeMask: 0x%x\n", obj->params.StaticObjectTypeMask);
++            TRACE("MinDynamicObjectCount: 0x%x\n", obj->params.MinDynamicObjectCount);
++            TRACE("MaxDynamicObjectCount: 0x%x\n", obj->params.MaxDynamicObjectCount);
++            TRACE("Category: 0x%x\n", obj->params.Category);
++            TRACE("EventHandle: %p\n", obj->params.EventHandle);
++            TRACE("NotifyObject: %p\n", obj->params.NotifyObject);
++        }
++
++        hr = activate_stream(obj);
++        if(FAILED(hr)){
++            if(obj->params.NotifyObject)
++                ISpatialAudioObjectRenderStreamNotify_Release(obj->params.NotifyObject);
++            DeleteCriticalSection(&obj->lock);
++            heap_free((void*)obj->params.ObjectFormat);
++            CloseHandle(obj->params.EventHandle);
++            ISpatialAudioClient_Release(&obj->sa_client->ISpatialAudioClient_iface);
++            heap_free(obj);
++            return hr;
++        }
++
++        *stream = &obj->ISpatialAudioObjectRenderStream_iface;
++    }else{
++        FIXME("Unsupported audio stream IID: %s\n", debugstr_guid(riid));
++        *stream = NULL;
++        return E_NOTIMPL;
++    }
++
++    return S_OK;
++}
++
++static ISpatialAudioClientVtbl ISpatialAudioClient_vtbl = {
++    SAC_QueryInterface,
++    SAC_AddRef,
++    SAC_Release,
++    SAC_GetStaticObjectPosition,
++    SAC_GetNativeStaticObjectTypeMask,
++    SAC_GetMaxDynamicObjectCount,
++    SAC_GetSupportedAudioObjectFormatEnumerator,
++    SAC_GetMaxFrameCount,
++    SAC_IsAudioObjectFormatSupported,
++    SAC_IsSpatialAudioStreamAvailable,
++    SAC_ActivateSpatialAudioStream,
++};
++
++static HRESULT WINAPI SAOFE_QueryInterface(IAudioFormatEnumerator *iface,
++        REFIID riid, void **ppvObject)
++{
++    SpatialAudioImpl *This = impl_from_IAudioFormatEnumerator(iface);
++    return SAC_QueryInterface(&This->ISpatialAudioClient_iface, riid, ppvObject);
++}
++
++static ULONG WINAPI SAOFE_AddRef(IAudioFormatEnumerator *iface)
++{
++    SpatialAudioImpl *This = impl_from_IAudioFormatEnumerator(iface);
++    return SAC_AddRef(&This->ISpatialAudioClient_iface);
++}
++
++static ULONG WINAPI SAOFE_Release(IAudioFormatEnumerator *iface)
++{
++    SpatialAudioImpl *This = impl_from_IAudioFormatEnumerator(iface);
++    return SAC_Release(&This->ISpatialAudioClient_iface);
++}
++
++static HRESULT WINAPI SAOFE_GetCount(IAudioFormatEnumerator *iface, UINT32 *count)
++{
++    SpatialAudioImpl *This = impl_from_IAudioFormatEnumerator(iface);
++
++    TRACE("(%p)->(%p)\n", This, count);
++
++    *count = 1;
++
++    return S_OK;
++}
++
++static HRESULT WINAPI SAOFE_GetFormat(IAudioFormatEnumerator *iface,
++        UINT32 index, WAVEFORMATEX **format)
++{
++    SpatialAudioImpl *This = impl_from_IAudioFormatEnumerator(iface);
++
++    TRACE("(%p)->(%u, %p)\n", This, index, format);
++
++    if(index > 0)
++        return E_INVALIDARG;
++
++    *format = &This->object_fmtex.Format;
++
++    return S_OK;
++}
++
++static IAudioFormatEnumeratorVtbl IAudioFormatEnumerator_vtbl = {
++    SAOFE_QueryInterface,
++    SAOFE_AddRef,
++    SAOFE_Release,
++    SAOFE_GetCount,
++    SAOFE_GetFormat,
++};
++
++HRESULT SpatialAudioClient_Create(IMMDevice *mmdev, ISpatialAudioClient **out)
++{
++    SpatialAudioImpl *obj;
++    IPropertyStore *ps;
++    PROPVARIANT pv;
++    HRESULT hr;
++    WAVEFORMATEXTENSIBLE *fmtex;
++
++    hr = IMMDevice_OpenPropertyStore(mmdev, STGM_READ, &ps);
++    if(FAILED(hr)){
++        WARN("OpenPropertyStore failed: %08x\n", hr);
++        return hr;
++    }
++
++    pv.vt = VT_EMPTY;
++    hr = IPropertyStore_GetValue(ps, (const PROPERTYKEY *)&PKEY_AudioEngine_DeviceFormat, &pv);
++    if(FAILED(hr)){
++        WARN("Failed to get DeviceFormat: %08x\n", hr);
++        IPropertyStore_Release(ps);
++        return hr;
++    }
++
++    if(pv.vt != VT_BLOB || pv.u.blob.cbSize == 0){
++        WARN("Got invalid DeviceFormat\n");
++        PropVariantClear(&pv);
++        IPropertyStore_Release(ps);
++        return E_FAIL;
++    }
++
++    obj = heap_alloc_zero(sizeof(*obj));
++
++    obj->ref = 1;
++    obj->ISpatialAudioClient_iface.lpVtbl = &ISpatialAudioClient_vtbl;
++    obj->IAudioFormatEnumerator_iface.lpVtbl = &IAudioFormatEnumerator_vtbl;
++
++    obj->mmdev = mmdev;
++    IMMDevice_AddRef(mmdev);
++
++    fmtex = (WAVEFORMATEXTENSIBLE *)pv.u.blob.pBlobData;
++
++    obj->object_fmtex.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
++    obj->object_fmtex.Format.nChannels = 1;
++    obj->object_fmtex.Format.nSamplesPerSec = fmtex->Format.nSamplesPerSec;
++    obj->object_fmtex.Format.wBitsPerSample = sizeof(float) * 8;
++    obj->object_fmtex.Format.nBlockAlign = (obj->object_fmtex.Format.nChannels * obj->object_fmtex.Format.wBitsPerSample) / 8;
++    obj->object_fmtex.Format.nAvgBytesPerSec = obj->object_fmtex.Format.nSamplesPerSec * obj->object_fmtex.Format.nBlockAlign;
++    obj->object_fmtex.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMAT);
++    obj->object_fmtex.Samples.wValidBitsPerSample = obj->object_fmtex.Format.wBitsPerSample;
++    obj->object_fmtex.dwChannelMask = 0;
++    obj->object_fmtex.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
++
++    PropVariantClear(&pv);
++    IPropertyStore_Release(ps);
++
++    *out = &obj->ISpatialAudioClient_iface;
++
++    return S_OK;
++}
+diff --git a/include/spatialaudioclient.idl b/include/spatialaudioclient.idl
+index 16a1541fd1d..08c84965566 100644
+--- a/include/spatialaudioclient.idl
++++ b/include/spatialaudioclient.idl
+@@ -43,6 +43,47 @@ typedef [v1_enum] enum AudioObjectType
+     AudioObjectType_BackCenter       = 0x00020000,
+ } AudioObjectType;
+ 
++cpp_quote("#define SPTLAUDCLNT_E_DESTROYED                     AUDCLNT_ERR(0x100)")
++cpp_quote("#define SPTLAUDCLNT_E_OUT_OF_ORDER                  AUDCLNT_ERR(0x101)")
++cpp_quote("#define SPTLAUDCLNT_E_RESOURCES_INVALIDATED         AUDCLNT_ERR(0x102)")
++cpp_quote("#define SPTLAUDCLNT_E_NO_MORE_OBJECTS               AUDCLNT_ERR(0x103)")
++cpp_quote("#define SPTLAUDCLNT_E_PROPERTY_NOT_SUPPORTED        AUDCLNT_ERR(0x104)")
++cpp_quote("#define SPTLAUDCLNT_E_ERRORS_IN_OBJECT_CALLS        AUDCLNT_ERR(0x105)")
++cpp_quote("#define SPTLAUDCLNT_E_METADATA_FORMAT_NOT_SUPPORTED AUDCLNT_ERR(0x106)")
++cpp_quote("#define SPTLAUDCLNT_E_STREAM_NOT_AVAILABLE          AUDCLNT_ERR(0x107)")
++cpp_quote("#define SPTLAUDCLNT_E_INVALID_LICENSE               AUDCLNT_ERR(0x108)")
++cpp_quote("#define SPTLAUDCLNT_E_STREAM_NOT_STOPPED            AUDCLNT_ERR(0x10a)")
++cpp_quote("#define SPTLAUDCLNT_E_STATIC_OBJECT_NOT_AVAILABLE   AUDCLNT_ERR(0x10b)")
++cpp_quote("#define SPTLAUDCLNT_E_OBJECT_ALREADY_ACTIVE         AUDCLNT_ERR(0x10c)")
++cpp_quote("#define SPTLAUDCLNT_E_INTERNAL                      AUDCLNT_ERR(0x10d)")
++
++interface ISpatialAudioObjectRenderStreamBase;
++
++[
++    object,
++    uuid(dddf83e6-68d7-4c70-883f-a1836afb4a50),
++    pointer_default(unique),
++    local
++]
++interface ISpatialAudioObjectRenderStreamNotify : IUnknown
++{
++    HRESULT OnAvailableDynamicObjectCountChange(
++        [in] ISpatialAudioObjectRenderStreamBase *stream,
++        [in] LONGLONG deadline,
++        [in] UINT32 object_count);
++}
++
++typedef struct tagSpatialAudioObjectRenderStreamActivationParams
++{
++    const WAVEFORMATEX *ObjectFormat;
++    AudioObjectType StaticObjectTypeMask;
++    UINT32 MinDynamicObjectCount;
++    UINT32 MaxDynamicObjectCount;
++    AUDIO_STREAM_CATEGORY Category;
++    HANDLE EventHandle;
++    ISpatialAudioObjectRenderStreamNotify *NotifyObject;
++} SpatialAudioObjectRenderStreamActivationParams;
++
+ [
+     object,
+     uuid(dcdaa858-895a-4a22-a5eb-67bda506096d),
+@@ -98,3 +139,83 @@ interface ISpatialAudioClient : IUnknown
+         [in] REFIID riid,
+         [out, iid_is(riid)] void **stream);
+ }
++
++[
++    object,
++    uuid(cce0b8f2-8d4d-4efb-a8cf-3d6ecf1c30e0),
++    pointer_default(unique),
++    local
++]
++interface ISpatialAudioObjectBase : IUnknown
++{
++    HRESULT GetBuffer(
++        [out] BYTE **buffer,
++        [out] UINT32 *bytes);
++
++    HRESULT SetEndOfStream(
++        [in] UINT32 frames);
++
++    HRESULT IsActive(
++        [out] BOOL *active);
++
++    HRESULT GetAudioObjectType(
++        [out] AudioObjectType *type);
++}
++
++[
++    object,
++    uuid(dde28967-521b-46e5-8f00-bd6f2bc8ab1d),
++    pointer_default(unique),
++    local
++]
++interface ISpatialAudioObject : ISpatialAudioObjectBase
++{
++    HRESULT SetPosition(
++        [in] float x,
++        [in] float y,
++        [in] float z);
++
++    HRESULT SetVolume(
++        [in] float vol);
++}
++
++[
++    object,
++    uuid(feaaf403-c1d8-450d-aa05-e0ccee7502a8),
++    pointer_default(unique),
++    local
++]
++interface ISpatialAudioObjectRenderStreamBase : IUnknown
++{
++    HRESULT GetAvailableDynamicObjectCount(
++        [out] UINT32 *count);
++
++    HRESULT GetService(
++        [in] REFIID riid,
++        [out] void **service);
++
++    HRESULT Start();
++
++    HRESULT Stop();
++
++    HRESULT Reset();
++
++    HRESULT BeginUpdatingAudioObjects(
++        [out] UINT32 *count,
++        [out] UINT32 *frames);
++
++    HRESULT EndUpdatingAudioObjects();
++}
++
++[
++    object,
++    uuid(bab5f473-b423-477b-85f5-b5a332a04153),
++    pointer_default(unique),
++    local
++]
++interface ISpatialAudioObjectRenderStream : ISpatialAudioObjectRenderStreamBase
++{
++    HRESULT ActivateSpatialAudioObject(
++        [in] AudioObjectType type,
++        [out] ISpatialAudioObject **object);
++}
+From e6c96f88d8f78a9890a5b96a8e85406ad9695f3c Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 2 Nov 2020 23:03:20 +0300
+Subject: [PATCH] ntdll: (HACK) Add variable to report all logical CPUs as
+ physical cores.
+
+---
+ dlls/ntdll/unix/system.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/unix/system.c b/dlls/ntdll/unix/system.c
+index 0b83761ed46..bf3d6c34f14 100644
+--- a/dlls/ntdll/unix/system.c
++++ b/dlls/ntdll/unix/system.c
+@@ -830,7 +830,8 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+     static const char core_info[] = "/sys/devices/system/cpu/cpu%u/topology/%s";
+     static const char cache_info[] = "/sys/devices/system/cpu/cpu%u/cache/index%u/%s";
+     static const char numa_info[] = "/sys/devices/system/node/node%u/cpumap";
+-
++    const char *env_fake_logical_cores = getenv("WINE_LOGICAL_CPUS_AS_CORES");
++    BOOL fake_logical_cpus_as_cores = env_fake_logical_cores && atoi(env_fake_logical_cores);
+     FILE *fcpu_list, *fnuma_list, *f;
+     DWORD len = 0, beg, end, i, j, r, num_cpus = 0, max_cpus = 0;
+     char op, name[MAX_PATH];
+@@ -902,7 +903,7 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+             {
+                 /* Mask of logical threads sharing same physical core in kernel core numbering. */
+                 sprintf(name, core_info, i, "thread_siblings");
+-                if(!sysfs_parse_bitmap(name, &thread_mask)) thread_mask = 1<<i;
++                if(fake_logical_cpus_as_cores || !sysfs_parse_bitmap(name, &thread_mask)) thread_mask = (ULONG_PTR)1<<i;
+ 
+                 /* Needed later for NumaNode and Group. */
+                 all_cpus_mask |= thread_mask;
+@@ -910,7 +911,7 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+                 if (relation == RelationAll || relation == RelationProcessorCore)
+                 {
+                     sprintf(name, core_info, i, "thread_siblings_list");
+-                    f = fopen(name, "r");
++                    f = fake_logical_cpus_as_cores ? NULL : fopen(name, "r");
+                     if (f)
+                     {
+                         fscanf(f, "%d%c", &phys_core, &op);
+From 2a3179a431c0b8df72f75ef5f134bd0098fabdc0 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 20 Nov 2020 18:01:11 +0300
+Subject: [PATCH] ntdll: Implement CPU topology override.
+
+---
+ dlls/ntdll/unix/server.c       |   3 +
+ dlls/ntdll/unix/system.c       | 167 ++++++++++++++++++++++++++++++---
+ dlls/ntdll/unix/thread.c       |  15 ++-
+ dlls/ntdll/unix/unix_private.h |   1 +
+ include/wine/server_protocol.h |   9 +-
+ server/process.c               |   7 ++
+ server/process.h               |   1 +
+ server/protocol.def            |   7 ++
+ server/thread.c                |  20 +++-
+ server/trace.c                 |  19 ++++
+ 10 files changed, 228 insertions(+), 21 deletions(-)
+
+diff --git a/dlls/ntdll/unix/server.c b/dlls/ntdll/unix/server.c
+index b1d3e863240..7b0c7c32f58 100644
+--- a/dlls/ntdll/unix/server.c
++++ b/dlls/ntdll/unix/server.c
+@@ -1467,6 +1467,7 @@ void CDECL server_init_process_done( void *relay )
+     PEB *peb = NtCurrentTeb()->Peb;
+     IMAGE_NT_HEADERS *nt = get_exe_nt_header();
+     void *entry = (char *)peb->ImageBaseAddress + nt->OptionalHeader.AddressOfEntryPoint;
++    struct cpu_topology_override *cpu_override = get_cpu_topology_override();
+     NTSTATUS status;
+     int suspend;
+ 
+@@ -1488,6 +1489,8 @@ void CDECL server_init_process_done( void *relay )
+ #endif
+         req->entry    = wine_server_client_ptr( entry );
+         req->gui      = (nt->OptionalHeader.Subsystem != IMAGE_SUBSYSTEM_WINDOWS_CUI);
++        if (cpu_override)
++            wine_server_add_data( req, cpu_override, sizeof(*cpu_override) );
+         status = wine_server_call( req );
+         suspend = reply->suspend;
+     }
+diff --git a/dlls/ntdll/unix/system.c b/dlls/ntdll/unix/system.c
+index bf3d6c34f14..fc8165f2828 100644
+--- a/dlls/ntdll/unix/system.c
++++ b/dlls/ntdll/unix/system.c
+@@ -29,6 +29,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <errno.h>
++#include <assert.h>
+ #ifdef HAVE_SYS_TIME_H
+ # include <sys/time.h>
+ #endif
+@@ -165,6 +166,12 @@ struct smbios_boot_info
+ #define RSMB 0x52534D42
+ 
+ static SYSTEM_CPU_INFORMATION cpu_info;
++static struct
++{
++    struct cpu_topology_override mapping;
++    BOOL smt;
++}
++cpu_override;
+ 
+ /*******************************************************************************
+  * Architecture specific feature detection for CPUs
+@@ -475,6 +482,88 @@ static void get_cpuinfo( SYSTEM_CPU_INFORMATION *info )
+ 
+ #endif /* End architecture specific feature detection for CPUs */
+ 
++static void fill_cpu_override(unsigned int host_cpu_count)
++{
++    const char *env_override = getenv("WINE_CPU_TOPOLOGY");
++    unsigned int i;
++    char *s;
++
++    if (!env_override)
++        return;
++
++    cpu_override.mapping.cpu_count = strtol(env_override, &s, 10);
++    if (s == env_override)
++        goto error;
++
++    if (!cpu_override.mapping.cpu_count || cpu_override.mapping.cpu_count > MAXIMUM_PROCESSORS)
++    {
++        ERR("Invalid logical CPU count %u, limit %u.\n", cpu_override.mapping.cpu_count, MAXIMUM_PROCESSORS);
++        goto error;
++    }
++
++    if (tolower(*s) == 's')
++    {
++        cpu_override.mapping.cpu_count *= 2;
++        if (cpu_override.mapping.cpu_count > MAXIMUM_PROCESSORS)
++        {
++            ERR("Logical CPU count exceeds limit %u.\n", MAXIMUM_PROCESSORS);
++            goto error;
++        }
++        cpu_override.smt = TRUE;
++        ++s;
++    }
++    if (*s != ':')
++        goto error;
++    ++s;
++    for (i = 0; i < cpu_override.mapping.cpu_count; ++i)
++    {
++        char *next;
++
++        if (i)
++        {
++            if (*s != ',')
++            {
++                if (!*s)
++                    ERR("Incomplete host CPU mapping string, %u CPUs mapping required.\n",
++                            cpu_override.mapping.cpu_count);
++                goto error;
++            }
++            ++s;
++        }
++
++        cpu_override.mapping.host_cpu_id[i] = strtol(s, &next, 10);
++        if (next == s)
++            goto error;
++        if (cpu_override.mapping.host_cpu_id[i] >= host_cpu_count)
++        {
++            ERR("Invalid host CPU index %u (host_cpu_count %u).\n",
++                    cpu_override.mapping.host_cpu_id[i], host_cpu_count);
++            goto error;
++        }
++        s = next;
++    }
++    if (*s)
++        goto error;
++
++    ERR("Overriding CPU configuration, %u logical CPUs, host CPUs ", cpu_override.mapping.cpu_count);
++    for (i = 0; i < cpu_override.mapping.cpu_count; ++i)
++    {
++        if (i)
++            ERR(",");
++        ERR("%u", cpu_override.mapping.host_cpu_id[i]);
++    }
++    ERR("\n");
++    return;
++error:
++    cpu_override.mapping.cpu_count = 0;
++    ERR("Invalid WINE_CPU_TOPOLOGY string %s (%s).\n", debugstr_a(env_override), debugstr_a(s));
++}
++
++struct cpu_topology_override *get_cpu_topology_override(void)
++{
++    return cpu_override.mapping.cpu_count ? &cpu_override.mapping : NULL;
++}
++
+ /******************************************************************
+  *		init_cpu_info
+  *
+@@ -508,7 +597,11 @@ void init_cpu_info(void)
+     num = 1;
+     FIXME("Detecting the number of processors is not supported.\n");
+ #endif
+-    NtCurrentTeb()->Peb->NumberOfProcessors = num;
++
++    fill_cpu_override(num);
++
++    NtCurrentTeb()->Peb->NumberOfProcessors = cpu_override.mapping.cpu_count
++            ? cpu_override.mapping.cpu_count : num;
+     get_cpuinfo( &cpu_info );
+     TRACE( "<- CPU arch %d, level %d, rev %d, features 0x%x\n",
+            cpu_info.Architecture, cpu_info.Level, cpu_info.Revision, cpu_info.FeatureSet );
+@@ -860,6 +953,12 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+         if (op == '-') fscanf(fcpu_list, "%u%c ", &end, &op);
+         else end = beg;
+ 
++        if (cpu_override.mapping.cpu_count)
++        {
++            beg = 0;
++            end = cpu_override.mapping.cpu_count - 1;
++        }
++
+         for(i = beg; i <= end; i++)
+         {
+             DWORD phys_core = 0;
+@@ -873,7 +972,9 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+ 
+             if (relation == RelationAll || relation == RelationProcessorPackage)
+             {
+-                sprintf(name, core_info, i, "physical_package_id");
++                sprintf(name, core_info, cpu_override.mapping.cpu_count ? cpu_override.mapping.host_cpu_id[i] : i,
++                        "physical_package_id");
++
+                 f = fopen(name, "r");
+                 if (f)
+                 {
+@@ -881,6 +982,7 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+                     fclose(f);
+                 }
+                 else r = 0;
++
+                 if (!logical_proc_info_add_by_id(data, dataex, &len, max_len, RelationProcessorPackage, r, (ULONG_PTR)1 << i))
+                 {
+                     fclose(fcpu_list);
+@@ -903,21 +1005,36 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+             {
+                 /* Mask of logical threads sharing same physical core in kernel core numbering. */
+                 sprintf(name, core_info, i, "thread_siblings");
+-                if(fake_logical_cpus_as_cores || !sysfs_parse_bitmap(name, &thread_mask)) thread_mask = (ULONG_PTR)1<<i;
++
++                if (cpu_override.mapping.cpu_count)
++                {
++                    thread_mask = cpu_override.smt ? (ULONG_PTR)0x3 << (i & ~1) : (ULONG_PTR)1 << i;
++                }
++                else
++                {
++                    if(fake_logical_cpus_as_cores || !sysfs_parse_bitmap(name, &thread_mask)) thread_mask = (ULONG_PTR)1<<i;
++                }
+ 
+                 /* Needed later for NumaNode and Group. */
+                 all_cpus_mask |= thread_mask;
+ 
+                 if (relation == RelationAll || relation == RelationProcessorCore)
+                 {
+-                    sprintf(name, core_info, i, "thread_siblings_list");
+-                    f = fake_logical_cpus_as_cores ? NULL : fopen(name, "r");
+-                    if (f)
++                    if (cpu_override.mapping.cpu_count)
+                     {
+-                        fscanf(f, "%d%c", &phys_core, &op);
+-                        fclose(f);
++                        phys_core = cpu_override.smt ? i / 2 : i;
++                    }
++                    else
++                    {
++                        sprintf(name, core_info, i, "thread_siblings_list");
++                        f = fake_logical_cpus_as_cores ? NULL : fopen(name, "r");
++                        if (f)
++                        {
++                            fscanf(f, "%d%c", &phys_core, &op);
++                            fclose(f);
++                        }
++                        else phys_core = i;
+                     }
+-                    else phys_core = i;
+ 
+                     if (!logical_proc_info_add_by_id(data, dataex, &len, max_len, RelationProcessorCore, phys_core, thread_mask))
+                     {
+@@ -929,36 +1046,40 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+ 
+             if (relation == RelationAll || relation == RelationCache)
+             {
++                unsigned int cpu_id;
++
++                cpu_id = cpu_override.mapping.cpu_count ? cpu_override.mapping.host_cpu_id[i] : i;
++
+                 for(j = 0; j < 4; j++)
+                 {
+                     CACHE_DESCRIPTOR cache;
+                     ULONG_PTR mask = 0;
+ 
+-                    sprintf(name, cache_info, i, j, "shared_cpu_map");
++                    sprintf(name, cache_info, cpu_id, j, "shared_cpu_map");
+                     if(!sysfs_parse_bitmap(name, &mask)) continue;
+ 
+-                    sprintf(name, cache_info, i, j, "level");
++                    sprintf(name, cache_info, cpu_id, j, "level");
+                     f = fopen(name, "r");
+                     if(!f) continue;
+                     fscanf(f, "%u", &r);
+                     fclose(f);
+                     cache.Level = r;
+ 
+-                    sprintf(name, cache_info, i, j, "ways_of_associativity");
++                    sprintf(name, cache_info, cpu_id, j, "ways_of_associativity");
+                     f = fopen(name, "r");
+                     if(!f) continue;
+                     fscanf(f, "%u", &r);
+                     fclose(f);
+                     cache.Associativity = r;
+ 
+-                    sprintf(name, cache_info, i, j, "coherency_line_size");
++                    sprintf(name, cache_info, cpu_id, j, "coherency_line_size");
+                     f = fopen(name, "r");
+                     if(!f) continue;
+                     fscanf(f, "%u", &r);
+                     fclose(f);
+                     cache.LineSize = r;
+ 
+-                    sprintf(name, cache_info, i, j, "size");
++                    sprintf(name, cache_info, cpu_id, j, "size");
+                     f = fopen(name, "r");
+                     if(!f) continue;
+                     fscanf(f, "%u%c", &r, &op);
+@@ -967,7 +1088,7 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+                         WARN("unknown cache size %u%c\n", r, op);
+                     cache.Size = (op=='K' ? r*1024 : r);
+ 
+-                    sprintf(name, cache_info, i, j, "type");
++                    sprintf(name, cache_info, cpu_id, j, "type");
+                     f = fopen(name, "r");
+                     if(!f) continue;
+                     fscanf(f, "%s", name);
+@@ -979,6 +1100,19 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+                     else
+                         cache.Type = CacheUnified;
+ 
++                    if (cpu_override.mapping.cpu_count)
++                    {
++                        ULONG_PTR host_mask = mask;
++                        unsigned int id;
++
++                        mask = 0;
++                        for (id = 0; id < cpu_override.mapping.cpu_count; ++id)
++                            if (host_mask & ((ULONG_PTR)1 << cpu_override.mapping.host_cpu_id[id]))
++                                mask |= (ULONG_PTR)1 << id;
++
++                        assert(mask);
++                    }
++
+                     if (!logical_proc_info_add_cache(data, dataex, &len, max_len, mask, &cache))
+                     {
+                         fclose(fcpu_list);
+@@ -987,6 +1121,9 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
+                 }
+             }
+         }
++
++        if (cpu_override.mapping.cpu_count)
++            break;
+     }
+     fclose(fcpu_list);
+ 
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index ca5dac43bb0..bc6a5451611 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -1323,7 +1323,20 @@ ULONG WINAPI NtGetCurrentProcessorNumber(void)
+ 
+ #if defined(__linux__) && defined(__NR_getcpu)
+     int res = syscall(__NR_getcpu, &processor, NULL, NULL);
+-    if (res != -1) return processor;
++    if (res != -1)
++    {
++        struct cpu_topology_override *override = get_cpu_topology_override();
++        unsigned int i;
++
++        if (!override)
++            return processor;
++
++        for (i = 0; i < override->cpu_count; ++i)
++            if (override->host_cpu_id[i] == processor)
++                return i;
++
++        WARN("Thread is running on processor which is not in the defined override.\n");
++    }
+ #endif
+ 
+     if (NtCurrentTeb()->Peb->NumberOfProcessors > 1)
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index a3a418cfaa5..8edd529afd8 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -247,6 +247,7 @@ extern NTSTATUS open_unix_file( HANDLE *handle, const char *unix_name, ACCESS_MA
+                                 ULONG options, void *ea_buffer, ULONG ea_length ) DECLSPEC_HIDDEN;
+ extern void init_files(void) DECLSPEC_HIDDEN;
+ extern void init_cpu_info(void) DECLSPEC_HIDDEN;
++extern struct cpu_topology_override *get_cpu_topology_override(void) DECLSPEC_HIDDEN;
+ 
+ extern void dbg_init(void) DECLSPEC_HIDDEN;
+ 
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index f4f45d958be..aed7090572b 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -794,6 +794,12 @@ typedef struct
+     lparam_t info;
+ } cursor_pos_t;
+ 
++struct cpu_topology_override
++{
++    unsigned int cpu_count;
++    unsigned char host_cpu_id[64];
++};
++
+ 
+ 
+ 
+@@ -895,6 +901,7 @@ struct init_process_done_request
+     mod_handle_t module;
+     client_ptr_t ldt_copy;
+     client_ptr_t entry;
++    /* VARARG(cpu_override,cpu_topology_override); */
+ };
+ struct init_process_done_reply
  {
--    const struct sortguid *sortid;
-+    const struct sortguid *sortid = NULL;
-     LPWSTR dst_ptr;
-     INT len;
+diff --git a/server/process.c b/server/process.c
+index 97e074a5261..d1f9ab764f7 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -73,6 +73,7 @@ static void process_destroy( struct object *obj );
+ static int process_get_esync_fd( struct object *obj, enum esync_type *type );
+ static unsigned int process_get_fsync_idx( struct object *obj, enum fsync_type *type );
+ static void terminate_process( struct process *process, struct thread *skip, int exit_code );
++static void set_process_affinity( struct process *process, affinity_t affinity );
  
-@@ -5235,7 +5235,7 @@ INT WINAPI DECLSPEC_HOTPATCH LCMapStringEx( const WCHAR *locale, DWORD flags, co
+ static const struct object_ops process_ops =
+ {
+@@ -550,6 +551,7 @@ struct process *create_process( int fd, struct process *parent, int inherit_all,
+     process->rawinput_kbd    = NULL;
+     process->esync_fd        = -1;
+     process->fsync_idx       = 0;
++    process->cpu_override.cpu_count = 0;
+     list_init( &process->kernel_object );
+     list_init( &process->thread_list );
+     list_init( &process->locks );
+@@ -1368,6 +1370,8 @@ DECL_HANDLER(init_process_done)
+ {
+     struct process_dll *dll;
+     struct process *process = current->process;
++    const struct cpu_topology_override *cpu_override = get_req_data();
++    unsigned int have_cpu_override = get_req_data_size() / sizeof(*cpu_override);
  
-     if (!dstlen) dst = NULL;
- 
--    if (!(sortid = get_language_sort( locale )))
-+    if (flags & LCMAP_LINGUISTIC_CASING && !(sortid = get_language_sort( locale )))
+     if (is_process_init_done(process))
      {
-         FIXME( "unknown locale %s\n", debugstr_w(locale) );
-         SetLastError( ERROR_INVALID_PARAMETER );
+@@ -1397,6 +1401,9 @@ DECL_HANDLER(init_process_done)
+     if (req->gui) process->idle_event = create_event( NULL, NULL, 0, 1, 0, NULL );
+     if (process->debugger) set_process_debug_flag( process, 1 );
+     reply->suspend = (current->suspend || process->suspend);
++
++    if (have_cpu_override)
++        process->cpu_override = *cpu_override;
+ }
+ 
+ /* open a handle to a process */
+diff --git a/server/process.h b/server/process.h
+index 430fd365508..d1b8b3fc222 100644
+--- a/server/process.h
++++ b/server/process.h
+@@ -100,6 +100,7 @@ struct process
+     struct list          kernel_object;   /* list of kernel object pointers */
+     int                  esync_fd;        /* esync file descriptor (signaled on exit) */
+     unsigned int         fsync_idx;
++    struct cpu_topology_override cpu_override; /* Overridden CPUs to host CPUs mapping. */
+ };
+ 
+ #define CPU_FLAG(cpu) (1 << (cpu))
+diff --git a/server/protocol.def b/server/protocol.def
+index 48f9f4fae90..0f2fe077b80 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -810,6 +810,12 @@ typedef struct
+     lparam_t info;
+ } cursor_pos_t;
+ 
++struct cpu_topology_override
++{
++    unsigned int cpu_count;
++    unsigned char host_cpu_id[64];
++};
++
+ /****************************************************************/
+ /* Request declarations */
+ 
+@@ -877,6 +883,7 @@ typedef struct
+     mod_handle_t module;       /* main module base address */
+     client_ptr_t ldt_copy;     /* address of LDT copy (in thread address space) */
+     client_ptr_t entry;        /* process entry point */
++    VARARG(cpu_override,cpu_topology_override); /* Overridden CPUs to host CPUs mapping. */
+ @REPLY
+     int          suspend;      /* is process suspended? */
+ @END
+diff --git a/server/thread.c b/server/thread.c
+index 0fb3aa0e727..31043c3df33 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -605,8 +605,19 @@ int set_thread_affinity( struct thread *thread, affinity_t affinity )
+ 
+         CPU_ZERO( &set );
+         for (i = 0, mask = 1; mask; i++, mask <<= 1)
+-            if (affinity & mask) CPU_SET( i, &set );
+-
++            if (affinity & mask)
++            {
++                if (thread->process->cpu_override.cpu_count)
++                {
++                    if (i >= thread->process->cpu_override.cpu_count)
++                        break;
++                    CPU_SET( thread->process->cpu_override.host_cpu_id[i], &set );
++                }
++                else
++                {
++                    CPU_SET( i, &set );
++                }
++            }
+         ret = sched_setaffinity( thread->unix_tid, sizeof(set), &set );
+     }
+ #endif
+@@ -1500,7 +1511,7 @@ DECL_HANDLER(init_thread)
+         reply->info_size  = init_process( current );
+         if (!process->parent_id)
+             process->affinity = current->affinity = get_thread_affinity( current );
+-        else
++        else if (!process->cpu_override.cpu_count)
+             set_thread_affinity( current, current->affinity );
+     }
+     else
+@@ -1514,7 +1525,8 @@ DECL_HANDLER(init_thread)
+             process->unix_pid = -1;  /* can happen with linuxthreads */
+         init_thread_context( current );
+         generate_debug_event( current, CREATE_THREAD_DEBUG_EVENT, &req->entry );
+-        set_thread_affinity( current, current->affinity );
++        if (!process->cpu_override.cpu_count)
++            set_thread_affinity( current, current->affinity );
+     }
+     debug_level = max( debug_level, req->debug_level );
+ 
+diff --git a/server/trace.c b/server/trace.c
+index e3a29beb6da..7df5681357b 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -1293,6 +1293,24 @@ static void dump_varargs_handle_infos( const char *prefix, data_size_t size )
+     fputc( '}', stderr );
+ }
+ 
++static void dump_varargs_cpu_topology_override( const char *prefix, data_size_t size )
++{
++    const struct cpu_topology_override *cpu_topology = cur_data;
++    unsigned int i;
++
++    if (size < sizeof(*cpu_topology))
++        return;
++
++    fprintf( stderr,"%s{", prefix );
++    for (i = 0; i < cpu_topology->cpu_count; ++i)
++    {
++        if (i) fputc( ',', stderr );
++        fprintf( stderr, "%u", cpu_topology->host_cpu_id[i] );
++    }
++    fputc( '}', stderr );
++    remove_data( size );
++}
++
+ typedef void (*dump_func)( const void *req );
+ 
+ /* Everything below this line is generated automatically by tools/make_requests */
+@@ -1369,6 +1387,7 @@ static void dump_init_process_done_request( const struct init_process_done_reque
+     dump_uint64( ", module=", &req->module );
+     dump_uint64( ", ldt_copy=", &req->ldt_copy );
+     dump_uint64( ", entry=", &req->entry );
++    dump_varargs_cpu_topology_override( ", cpu_override=", cur_size );
+ }
+ 
+ static void dump_init_process_done_reply( const struct init_process_done_reply *req )
+  
+From 3f104de1a4b4f1b0cb7244b12365cc7ace24a7de Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 10 Dec 2020 20:43:25 +0300
+Subject: [PATCH] iphlpapi: Mark adapter addresses as DNS eligible when
+ interface has a gateway.
 
--- 
-2.26.2
+For Kingdoms Reborn.
+---
+ dlls/iphlpapi/iphlpapi_main.c | 28 ++++++++++++++--------------
+ include/iptypes.h             |  3 +++
+ 2 files changed, 17 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/iphlpapi/iphlpapi_main.c b/dlls/iphlpapi/iphlpapi_main.c
+index c0390862295..b810d7555f3 100644
+--- a/dlls/iphlpapi/iphlpapi_main.c
++++ b/dlls/iphlpapi/iphlpapi_main.c
+@@ -940,16 +940,19 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
+     DWORD *v4addrs = NULL, *v4masks = NULL;
+     SOCKET_ADDRESS *v6addrs = NULL, *v6masks = NULL;
+     PMIB_IPFORWARDTABLE routeTable = NULL;
++    BOOL output_gateways;
++
++    if ((flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS) || !(flags & GAA_FLAG_SKIP_UNICAST))
++    {
++        ret = AllocateAndGetIpForwardTableFromStack(&routeTable, FALSE, GetProcessHeap(), 0);
++        if (ret) return ret;
++        num_v4_gateways = count_v4_gateways(index, routeTable);
++    }
++    output_gateways = (flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS) && (family == WS_AF_INET || family == WS_AF_UNSPEC);
+ 
+     if (family == WS_AF_INET)
+     {
+         ret = v4addressesFromIndex(index, &v4addrs, &num_v4addrs, &v4masks);
+-
+-        if (!ret && flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS)
+-        {
+-            ret = AllocateAndGetIpForwardTableFromStack(&routeTable, FALSE, GetProcessHeap(), 0);
+-            if (!ret) num_v4_gateways = count_v4_gateways(index, routeTable);
+-        }
+     }
+     else if (family == WS_AF_INET6)
+     {
+@@ -958,12 +961,6 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
+     else if (family == WS_AF_UNSPEC)
+     {
+         ret = v4addressesFromIndex(index, &v4addrs, &num_v4addrs, &v4masks);
+-
+-        if (!ret && flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS)
+-        {
+-            ret = AllocateAndGetIpForwardTableFromStack(&routeTable, FALSE, GetProcessHeap(), 0);
+-            if (!ret) num_v4_gateways = count_v4_gateways(index, routeTable);
+-        }
+         if (!ret) ret = v6addressesFromIndex(index, &v6addrs, &num_v6addrs, &v6masks);
+     }
+     else
+@@ -996,7 +993,8 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
+     }
+     total_size += sizeof(IP_ADAPTER_UNICAST_ADDRESS) * num_v4addrs;
+     total_size += sizeof(struct sockaddr_in) * num_v4addrs;
+-    total_size += (sizeof(IP_ADAPTER_GATEWAY_ADDRESS) + sizeof(SOCKADDR_IN)) * num_v4_gateways;
++    if (output_gateways)
++        total_size += (sizeof(IP_ADAPTER_GATEWAY_ADDRESS) + sizeof(SOCKADDR_IN)) * num_v4_gateways;
+     total_size += sizeof(IP_ADAPTER_UNICAST_ADDRESS) * num_v6addrs;
+     total_size += sizeof(SOCKET_ADDRESS) * num_v6addrs;
+     for (i = 0; i < num_v6addrs; i++)
+@@ -1043,7 +1041,7 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
+         aa->Luid.Info.NetLuidIndex = index;
+         aa->Luid.Info.IfType = aa->IfType;
+ 
+-        if (num_v4_gateways)
++        if (output_gateways && num_v4_gateways)
+         {
+             PMIB_IPFORWARDROW adapterRow;
+ 
+@@ -1082,6 +1080,8 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
+                 ua->u.s.Length              = sizeof(IP_ADAPTER_UNICAST_ADDRESS);
+                 ua->Address.iSockaddrLength = sizeof(struct sockaddr_in);
+                 ua->Address.lpSockaddr      = (SOCKADDR *)((char *)ua + ua->u.s.Length);
++                if (num_v4_gateways)
++                    ua->u.s.Flags |= IP_ADAPTER_ADDRESS_DNS_ELIGIBLE;
+ 
+                 sa = (struct WS_sockaddr_in *)ua->Address.lpSockaddr;
+                 sa->sin_family           = WS_AF_INET;
+diff --git a/include/iptypes.h b/include/iptypes.h
+index c1a253d7b41..c1ee7322b01 100644
+--- a/include/iptypes.h
++++ b/include/iptypes.h
+@@ -94,6 +94,9 @@ typedef NL_DAD_STATE IP_DAD_STATE;
+ 
+ #ifdef _WINSOCK2API_
+ 
++#define IP_ADAPTER_ADDRESS_DNS_ELIGIBLE 0x00000001
++#define IP_ADAPTER_ADDRESS_TRANSIENT    0x00000002
++
+ typedef struct _IP_ADAPTER_UNICAST_ADDRESS_LH {
+     union {
+         struct {

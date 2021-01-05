@@ -1,138 +1,121 @@
+From 378b72afd71a3d0ca2809d3b95ecf295946b84ab Mon Sep 17 00:00:00 2001
 From: Joshua Ashton <joshua@froggi.es>
-Subject: [PATCH v2 1/3] winevulkan: Migrate, vkGetPhysicalDeviceSurfaceFormats2KHR to a private thunk
-Message-Id: <e2f5743b-0618-090e-ccea-fa58efa114a8@froggi.es>
-Date: Tue, 13 Oct 2020 23:00:23 +0100
+Date: Thu, 12 Mar 2020 23:40:38 +0000
+Subject: [PATCH] winevulkan: Implement VK_KHR_get_surface_capabilities2 and
+ fake support for VK_EXT_full_screen_exclusive
 
-
-- Joshie 🐸✨
-
-From 13101988ff1f592db704daa121dadaf3c615d214 Mon Sep 17 00:00:00 2001
-From: Joshua Ashton <joshua@froggi.es>
-Date: Mon, 12 Oct 2020 23:31:21 +0100
-Subject: [PATCH v2 1/3] winevulkan: Migrate
- vkGetPhysicalDeviceSurfaceFormats2KHR to a private thunk
-
-Needed for VK_EXT_full_screen_exclusive
-
-Signed-off-by: Joshua Ashton <joshua@froggi.es>
 ---
- dlls/winevulkan/make_vulkan |  2 +-
- dlls/winevulkan/vulkan.c    | 13 +++++++++++++
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ dlls/vulkan-1/vulkan-1.spec      |   2 +
+ dlls/winevulkan/make_vulkan      |  50 +++++++-
+ dlls/winevulkan/vulkan.c         | 125 ++++++++++++++++++
+ dlls/winevulkan/vulkan_private.h |   4 +
+ dlls/winevulkan/vulkan_thunks.c  |  77 ++++++++++-
+ dlls/winevulkan/vulkan_thunks.h  |  47 +++++++
+ dlls/winevulkan/winevulkan.spec  |   2 +
+ dlls/winex11.drv/vulkan.c        |  34 +++++
+ include/wine/vulkan.h            | 212 +++++++++++++++++++++----------
+ include/wine/vulkan_driver.h     |   8 +-
+ 10 files changed, 482 insertions(+), 79 deletions(-)
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index 7f89cfdaba..db1d8edcf3 100755
+index b58ca9301cc..e6291d87efa 100755
 --- a/dlls/winevulkan/make_vulkan
 +++ b/dlls/winevulkan/make_vulkan
-@@ -189,7 +189,7 @@ FUNCTION_OVERRIDES = {
+@@ -95,7 +95,6 @@ BLACKLISTED_EXTENSIONS = [
+     "VK_AMD_display_native_hdr",
+     "VK_EXT_calibrated_timestamps",
+     "VK_EXT_display_control", # Requires VK_EXT_display_surface_counter
+-    "VK_EXT_full_screen_exclusive",
+     "VK_EXT_hdr_metadata", # Needs WSI work.
+     "VK_EXT_pipeline_creation_feedback",
+     "VK_GOOGLE_display_timing",
+@@ -133,6 +131,11 @@ CORE_EXTENSIONS = [
+     "VK_KHR_surface",
+     "VK_KHR_swapchain",
+     "VK_KHR_win32_surface",
++    "VK_KHR_get_surface_capabilities2",
++]
++
++FAKED_EXTENSIONS = [
++    {"name": "VK_EXT_full_screen_exclusive", "version": 4}
+ ]
  
-     # VK_KHR_get_surface_capabilities2
-     "vkGetPhysicalDeviceSurfaceCapabilities2KHR" : {"dispatch" : True, "driver" : True, "thunk" : False, "private_thunk" : True},
--    "vkGetPhysicalDeviceSurfaceFormats2KHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
-+    "vkGetPhysicalDeviceSurfaceFormats2KHR" : {"dispatch" : True, "driver" : True, "thunk" : False, "private_thunk" : True},
+ # Functions part of our winevulkan graphics driver interface.
+@@ -183,7 +186,7 @@ FUNCTION_OVERRIDES = {
+     "vkGetPhysicalDeviceSurfaceSupportKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
+     "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" : {"dispatch" : True, "driver" : True, "thunk" : False, "private_thunk" : True},
+     "vkGetPhysicalDeviceSurfaceFormatsKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
+-    "vkGetPhysicalDeviceSurfacePresentModesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
++    "vkGetPhysicalDeviceSurfacePresentModesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True, "private_thunk" : True},
  
      # VK_KHR_win32_surface
      "vkCreateWin32SurfaceKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
-diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index f730c04923..4352c5536e 100644
---- a/dlls/winevulkan/vulkan.c
-+++ b/dlls/winevulkan/vulkan.c
-@@ -1616,6 +1616,19 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
-     return res;
- }
+@@ -210,8 +213,18 @@ FUNCTION_OVERRIDES = {
+     "vkEnumeratePhysicalDeviceGroupsKHR" : {"dispatch" : True, "driver" : False, "thunk" : False},
  
-+VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceFormats2KHR(VkPhysicalDevice phys_dev,
-+        const VkPhysicalDeviceSurfaceInfo2KHR *surface_info, uint32_t *surface_format_count,
-+        VkSurfaceFormat2KHR *surface_formats)
-+{
-+    VkResult res;
+     # VK_KHR_device_group
+-    "vkGetDeviceGroupSurfacePresentModesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
++    "vkGetDeviceGroupSurfacePresentModesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True, "private_thunk": True},
+     "vkGetPhysicalDevicePresentRectanglesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
 +
-+    TRACE("%p, %p, %p, %p\n", phys_dev, surface_info, surface_format_count, surface_formats);
++    # VK_KHR_get_surface_capabilities2
++    #"vkGetPhysicalDeviceSurfaceCapabilities2KHR" : {"dispatch" : True, "driver" : True, "thunk" : False, "private_thunk" : True},
++    #"vkGetPhysicalDeviceSurfaceFormats2KHR" : {"dispatch" : True, "driver" : True, "thunk" : False, "private_thunk" : True},
 +
-+    res = thunk_vkGetPhysicalDeviceSurfaceFormats2KHR(phys_dev, surface_info, surface_format_count, surface_formats);
-+
-+    return res;
-+}
-+
- BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
- {
-     TRACE("%p, %u, %p\n", hinst, reason, reserved);
-
--- 
-2.28.0
-From: Joshua Ashton <joshua@froggi.es>
-Subject: [PATCH v2 2/3] winevulkan: Implement extension faking mechanism
-Message-Id: <617aa045-fc31-bd2e-6c32-093de96ec199@froggi.es>
-Date: Tue, 13 Oct 2020 23:00:47 +0100
-
-
-- Joshie 🐸✨
-
-From b1130393ee4f577c3a28e44b375144c675ae34b9 Mon Sep 17 00:00:00 2001
-From: Joshua Ashton <joshua@froggi.es>
-Date: Mon, 12 Oct 2020 23:39:58 +0100
-Subject: [PATCH v2 2/3] winevulkan: Implement extension faking mechanism
-
-Needed for VK_EXT_full_screen_exclusive
-
-Signed-off-by: Joshua Ashton <joshua@froggi.es>
----
- dlls/winevulkan/make_vulkan      | 21 +++++++++++++++++++
- dlls/winevulkan/vulkan.c         | 36 ++++++++++++++++++++++++++++++++
- dlls/winevulkan/vulkan_private.h |  3 +++
- 3 files changed, 60 insertions(+)
-
-diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index db1d8edcf3..097aecabd9 100755
---- a/dlls/winevulkan/make_vulkan
-+++ b/dlls/winevulkan/make_vulkan
-@@ -232,6 +232,10 @@ STRUCT_CHAIN_CONVERSIONS = [
-     "VkInstanceCreateInfo",
- ]
++    # VK_EXT_full_screen_exclusive
++    "vkGetPhysicalDeviceSurfacePresentModes2EXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
++    "vkGetDeviceGroupSurfacePresentModes2EXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
++    "vkAcquireFullScreenExclusiveModeEXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
++    "vkReleaseFullScreenExclusiveModeEXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
  
-+# List of device extensions to ensure that we support regardless of whether 
-+# the actual driver supports them or not.
-+FAKED_DEVICE_EXTENSIONS = [
-+]
- 
- class Direction(Enum):
-     """ Parameter direction: input, output, input_output. """
-@@ -2247,6 +2251,13 @@ class VkGenerator(object):
+     # VK_KHR_device_group
+     "vkGetDeviceGroupSurfacePresentModesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
+@@ -2241,6 +2254,12 @@ class VkGenerator(object):
              f.write("    \"{0}\",\n".format(ext["name"]))
          f.write("};\n\n")
  
 +        # Create array of faked device extensions.
-+        f.write("static const VkExtensionProperties vk_device_extension_faked[] =\n{\n")
-+        for ext in FAKED_DEVICE_EXTENSIONS:
++        f.write("static const VkExtensionProperties vk_device_extension_discards[] =\n{\n")
++        for ext in FAKED_EXTENSIONS:
 +            f.write("    {{\"{0}\", {1}}},\n".format(ext["name"], ext["version"]))
-+        f.write("    {\"\", 0}\n")
 +        f.write("};\n\n")
 +
          # Create array of instance extensions.
          f.write("static const char * const vk_instance_extensions[] =\n{\n")
          for ext in self.registry.extensions:
-@@ -2299,6 +2299,16 @@ class VkGenerator(object):
-         f.write("    }\n")
+@@ -2261,6 +2280,27 @@ class VkGenerator(object):
          f.write("    return FALSE;\n")
          f.write("}\n\n")
-+        
+ 
++        f.write("BOOL wine_vk_device_extension_faked(const char *name)\n")
++        f.write("{\n")
++        f.write("    unsigned int i;\n")
++        f.write("    for (i = 0; i < ARRAY_SIZE(vk_device_extension_discards); i++)\n")
++        f.write("    {\n")
++        f.write("        if (strcmp(vk_device_extension_discards[i].extensionName, name) == 0)\n")
++        f.write("            return TRUE;\n")
++        f.write("    }\n")
++        f.write("    return FALSE;\n")
++        f.write("}\n\n")
++
 +        f.write("unsigned int wine_vk_device_extension_faked_count(void)\n")
 +        f.write("{\n")
-+        f.write("    return ARRAY_SIZE(vk_device_extension_faked) - 1;\n")
++        f.write("    return ARRAY_SIZE(vk_device_extension_discards);\n")
 +        f.write("}\n\n")
 +
 +        f.write("const VkExtensionProperties* wine_vk_device_extension_faked_idx(unsigned int idx)\n")
 +        f.write("{\n")
-+        f.write("    return &vk_device_extension_faked[idx];\n")
++        f.write("    return &vk_device_extension_discards[idx];\n")
 +        f.write("}\n\n")
- 
-         f.write("BOOL wine_vk_is_type_wrapped(VkObjectType type)\n")
++
+         f.write("BOOL wine_vk_instance_extension_supported(const char *name)\n")
          f.write("{\n")
+         f.write("    unsigned int i;\n")
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 4352c5536e..4378632adf 100644
+index e2991c2dc47..1e730a415bc 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -130,6 +130,8 @@ static struct VkPhysicalDevice_T *wine_vk_physical_device_alloc(struct VkInstanc
+@@ -121,6 +121,8 @@ static struct VkPhysicalDevice_T *wine_vk_physical_device_alloc(struct VkInstanc
          }
      }
  
@@ -141,19 +124,21 @@ index 4352c5536e..4378632adf 100644
      TRACE("Host supported extensions %u, Wine supported extensions %u\n", num_host_properties, num_properties);
  
      if (!(object->extensions = heap_calloc(num_properties, sizeof(*object->extensions))))
-@@ -146,6 +148,11 @@ static struct VkPhysicalDevice_T *wine_vk_physical_device_alloc(struct VkInstanc
+@@ -137,6 +139,13 @@ static struct VkPhysicalDevice_T *wine_vk_physical_device_alloc(struct VkInstanc
              j++;
          }
      }
++
 +    for (i = 0; i < wine_vk_device_extension_faked_count(); i++)
 +    {
 +        object->extensions[j] = *wine_vk_device_extension_faked_idx(i);
 +        j++;
 +    }
++
      object->extension_count = num_properties;
  
      heap_free(host_properties);
-@@ -226,13 +233,27 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
+@@ -217,6 +226,8 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
          heap_free((void *)group_info->pPhysicalDevices);
      }
  
@@ -162,32 +147,18 @@ index 4352c5536e..4378632adf 100644
      free_VkDeviceCreateInfo_struct_chain(create_info);
  }
  
-+static BOOL wine_vk_device_extension_faked(const char *name)
-+{
-+    unsigned int i;
-+    for (i = 0; i < wine_vk_device_extension_faked_count(); i++)
-+    {
-+        if (strcmp(wine_vk_device_extension_faked_idx(i)->extensionName, name) == 0)
-+            return TRUE;
-+    }
-+    return FALSE;
-+}
-+
- static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src,
-         VkDeviceCreateInfo *dst)
- {
+@@ -226,6 +237,7 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
      VkDeviceGroupDeviceCreateInfo *group_info;
-+    const char** extensions;
      unsigned int i;
      VkResult res;
++    const char** extensions;
  
-@@ -261,6 +282,21 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
+     *dst = *src;
+ 
+@@ -252,6 +264,18 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
          group_info->pPhysicalDevices = physical_devices;
      }
  
-+
-+    /* Allocate our own extension list, and remove any faked extensions
-+     * so they don't get passed through to the driver. */
 +    extensions = heap_alloc(sizeof(const char*) * src->enabledExtensionCount);
 +    dst->ppEnabledExtensionNames = extensions;
 +    dst->enabledExtensionCount = 0;
@@ -203,177 +174,1889 @@ index 4352c5536e..4378632adf 100644
      /* Should be filtered out by loader as ICDs don't support layers. */
      dst->enabledLayerCount = 0;
      dst->ppEnabledLayerNames = NULL;
+@@ -1035,6 +1059,59 @@ VkResult WINAPI wine_vk_icdNegotiateLoaderICDInterfaceVersion(uint32_t *supported_version)
+     return VK_SUCCESS;
+ }
+ 
++/* VK_EXT_full_screen_exclusive */
++
++VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModes2EXT(
++    VkPhysicalDevice                            physicalDevice,
++    const VkPhysicalDeviceSurfaceInfo2KHR*      pSurfaceInfo,
++    uint32_t*                                   pPresentModeCount,
++    VkPresentModeKHR*                           pPresentModes)
++{
++    TRACE("%p, %p, %p, %p", physicalDevice, pSurfaceInfo, pPresentModeCount, pPresentModes);
++    return thunk_vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, pSurfaceInfo->surface, pPresentModeCount, pPresentModes);
++}
++
++VkResult WINAPI wine_vkGetDeviceGroupSurfacePresentModes2EXT(
++    VkDevice                                    device,
++    const VkPhysicalDeviceSurfaceInfo2KHR*      pSurfaceInfo,
++    VkDeviceGroupPresentModeFlagsKHR*           pModes)
++{
++    TRACE("%p, %p, %p", device, pSurfaceInfo, pModes);
++    return thunk_vkGetDeviceGroupSurfacePresentModesKHR(device, pSurfaceInfo->surface, pModes);
++}
++
++VkResult WINAPI wine_vkAcquireFullScreenExclusiveModeEXT(
++    VkDevice                                    device,
++    VkSwapchainKHR                              swapchain)
++{
++    /* don't care */
++    TRACE("%p, %s", device, wine_dbgstr_longlong(swapchain));
++
++    return VK_SUCCESS;
++}
++
++VkResult WINAPI wine_vkReleaseFullScreenExclusiveModeEXT(
++    VkDevice                                    device,
++    VkSwapchainKHR                              swapchain)
++{
++    /* don't care */
++    TRACE("%p, %s", device, wine_dbgstr_longlong(swapchain));
++
++    return VK_SUCCESS;
++}
++
++/* extra crap we moved to private thunks */
++
++VkResult WINAPI wine_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes)
++{
++    return thunk_vkGetDeviceGroupSurfacePresentModesKHR(device, surface, pModes);
++}
++
++VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes)
++{
++    return thunk_vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, pPresentModeCount, pPresentModes);
++}
++
+ VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t count,
+         const VkSubmitInfo *submits, VkFence fence)
+ {
 diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
-index 4bcc4de440..bb4a3e7ded 100644
+index 001ce85a1fd..0d9c9b9dc23 100644
 --- a/dlls/winevulkan/vulkan_private.h
 +++ b/dlls/winevulkan/vulkan_private.h
-@@ -135,6 +135,9 @@ static inline VkCommandPool wine_cmd_pool_to_handle(struct wine_cmd_pool *cmd_po
+@@ -175,6 +175,10 @@ struct VkSwapchainKHR_T
  void *wine_vk_get_device_proc_addr(const char *name) DECLSPEC_HIDDEN;
  void *wine_vk_get_instance_proc_addr(const char *name) DECLSPEC_HIDDEN;
  
++BOOL wine_vk_device_extension_faked(const char *name) DECLSPEC_HIDDEN;
 +unsigned int wine_vk_device_extension_faked_count(void) DECLSPEC_HIDDEN;
 +const VkExtensionProperties* wine_vk_device_extension_faked_idx(unsigned int idx) DECLSPEC_HIDDEN;
 +
  BOOL wine_vk_device_extension_supported(const char *name) DECLSPEC_HIDDEN;
  BOOL wine_vk_instance_extension_supported(const char *name) DECLSPEC_HIDDEN;
  
-
--- 
-2.28.0
-From: Joshua Ashton <joshua@froggi.es>
-Subject: [PATCH v2 3/3] winevulkan: Fake support for, VK_EXT_full_screen_exclusive
-Message-Id: <4e236530-ff4d-8d0e-0f92-eabf40ae042e@froggi.es>
-Date: Tue, 13 Oct 2020 23:01:09 +0100
-
-
-- Joshie 🐸✨
-
-From 1d0f3a965f787668b0106fadc724989670d3f2a8 Mon Sep 17 00:00:00 2001
-From: Joshua Ashton <joshua@froggi.es>
-Date: Mon, 12 Oct 2020 23:53:59 +0100
-Subject: [PATCH v2 3/3] winevulkan: Fake support for
- VK_EXT_full_screen_exclusive
-
-Signed-off-by: Joshua Ashton <joshua@froggi.es>
----
- dlls/winevulkan/make_vulkan |  8 ++++-
- dlls/winevulkan/vulkan.c    | 67 +++++++++++++++++++++++++++++++++++--
- 2 files changed, 72 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index 097aecabd9..a23b900fee 100755
---- a/dlls/winevulkan/make_vulkan
-+++ b/dlls/winevulkan/make_vulkan
-@@ -101,7 +101,6 @@ UNSUPPORTED_EXTENSIONS = [
-     # Device extensions
-     "VK_AMD_display_native_hdr",
-     "VK_EXT_display_control", # Requires VK_EXT_display_surface_counter
--    "VK_EXT_full_screen_exclusive",
-     "VK_EXT_hdr_metadata", # Needs WSI work.
-     "VK_EXT_pipeline_creation_feedback",
-     "VK_GOOGLE_display_timing",
-@@ -229,6 +229,12 @@ FUNCTION_OVERRIDES = {
-     # VK_EXT_debug_marker
-     "vkDebugMarkerSetObjectNameEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
-     "vkDebugMarkerSetObjectTagEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
-+    
-+    # VK_EXT_full_screen_exclusive
-+    "vkGetPhysicalDeviceSurfacePresentModes2EXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
-+    "vkGetDeviceGroupSurfacePresentModes2EXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
-+    "vkAcquireFullScreenExclusiveModeEXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
-+    "vkReleaseFullScreenExclusiveModeEXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index ea9e8262d83..bd304556617 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -3770,9 +3779,8 @@ VkResult WINAPI wine_vkGetDeviceGroupPresentCapabilitiesKHR(VkDevice device, VkD
+     return device->funcs.p_vkGetDeviceGroupPresentCapabilitiesKHR(device->device, pDeviceGroupPresentCapabilities);
  }
  
- STRUCT_CHAIN_CONVERSIONS = [
-@@ -235,6 +240,7 @@ STRUCT_CHAIN_CONVERSIONS = [
- # List of device extensions to ensure that we support regardless of whether 
- # the actual driver supports them or not.
- FAKED_DEVICE_EXTENSIONS = [
-+    {"name": "VK_EXT_full_screen_exclusive", "version": 4}
- ]
+-VkResult WINAPI wine_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes)
++VkResult thunk_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes)
+ {
+-    TRACE("%p, 0x%s, %p\n", device, wine_dbgstr_longlong(surface), pModes);
+     return device->funcs.p_vkGetDeviceGroupSurfacePresentModesKHR(device->device, surface, pModes);
+ }
  
- class Direction(Enum):
+@@ -4145,9 +4153,8 @@ static VkResult WINAPI wine_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesC
+     return physicalDevice->instance->funcs.p_vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice->phys_dev, surface, pSurfaceFormatCount, pSurfaceFormats);
+ }
+ 
+-VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes)
++VkResult thunk_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes)
+ {
+-    TRACE("%p, 0x%s, %p, %p\n", physicalDevice, wine_dbgstr_longlong(surface), pPresentModeCount, pPresentModes);
+     return physicalDevice->instance->funcs.p_vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice->phys_dev, surface, pPresentModeCount, pPresentModes);
+ }
+ 
+@@ -4479,6 +4514,7 @@ static VkResult WINAPI wine_vkWaitSemaphoresKHR(VkDevice device, const VkSemapho
+ 
+ static const struct vulkan_func vk_device_dispatch_table[] =
+ {
++    {"vkAcquireFullScreenExclusiveModeEXT", &wine_vkAcquireFullScreenExclusiveModeEXT},
+     {"vkAcquireNextImage2KHR", &wine_vkAcquireNextImage2KHR},
+     {"vkAcquireNextImageKHR", &wine_vkAcquireNextImageKHR},
+     {"vkAcquirePerformanceConfigurationINTEL", &wine_vkAcquirePerformanceConfigurationINTEL},
+@@ -4650,6 +4686,7 @@ static const struct vulkan_func vk_device_dispatch_table[] =
+     {"vkGetDeviceGroupPeerMemoryFeatures", &wine_vkGetDeviceGroupPeerMemoryFeatures},
+     {"vkGetDeviceGroupPeerMemoryFeaturesKHR", &wine_vkGetDeviceGroupPeerMemoryFeaturesKHR},
+     {"vkGetDeviceGroupPresentCapabilitiesKHR", &wine_vkGetDeviceGroupPresentCapabilitiesKHR},
++    {"vkGetDeviceGroupSurfacePresentModes2EXT", &wine_vkGetDeviceGroupSurfacePresentModes2EXT},
+     {"vkGetDeviceGroupSurfacePresentModesKHR", &wine_vkGetDeviceGroupSurfacePresentModesKHR},
+     {"vkGetDeviceMemoryCommitment", &wine_vkGetDeviceMemoryCommitment},
+     {"vkGetDeviceProcAddr", &wine_vkGetDeviceProcAddr},
+@@ -4688,6 +4725,7 @@ static const struct vulkan_func vk_device_dispatch_table[] =
+     {"vkQueueSetPerformanceConfigurationINTEL", &wine_vkQueueSetPerformanceConfigurationINTEL},
+     {"vkQueueSubmit", &wine_vkQueueSubmit},
+     {"vkQueueWaitIdle", &wine_vkQueueWaitIdle},
++    {"vkReleaseFullScreenExclusiveModeEXT", &wine_vkReleaseFullScreenExclusiveModeEXT},
+     {"vkReleasePerformanceConfigurationINTEL", &wine_vkReleasePerformanceConfigurationINTEL},
+     {"vkResetCommandBuffer", &wine_vkResetCommandBuffer},
+     {"vkResetCommandPool", &wine_vkResetCommandPool},
+@@ -4751,6 +4789,7 @@ static const struct vulkan_func vk_instance_dispatch_table[] =
+     {"vkGetPhysicalDeviceSurfaceCapabilitiesKHR", &wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR},
+     {"vkGetPhysicalDeviceSurfaceFormats2KHR", &wine_vkGetPhysicalDeviceSurfaceFormats2KHR},
+     {"vkGetPhysicalDeviceSurfaceFormatsKHR", &wine_vkGetPhysicalDeviceSurfaceFormatsKHR},
++    {"vkGetPhysicalDeviceSurfacePresentModes2EXT", &wine_vkGetPhysicalDeviceSurfacePresentModes2EXT},
+     {"vkGetPhysicalDeviceSurfacePresentModesKHR", &wine_vkGetPhysicalDeviceSurfacePresentModesKHR},
+     {"vkGetPhysicalDeviceSurfaceSupportKHR", &wine_vkGetPhysicalDeviceSurfaceSupportKHR},
+     {"vkGetPhysicalDeviceToolPropertiesEXT", &wine_vkGetPhysicalDeviceToolPropertiesEXT},
+@@ -4821,6 +4862,7 @@ static const char * const vk_device_extensions[] =
+     "VK_EXT_filter_cubic",
+     "VK_EXT_fragment_density_map",
+     "VK_EXT_fragment_shader_interlock",
++    "VK_EXT_full_screen_exclusive",
+     "VK_EXT_global_priority",
+     "VK_EXT_host_query_reset",
+     "VK_EXT_index_type_uint8",
+@@ -4921,6 +4963,11 @@ static const char * const vk_device_extensions[] =
+     "VK_NV_viewport_swizzle",
+ };
+ 
++static const VkExtensionProperties vk_device_extension_discards[] =
++{
++    {"VK_EXT_full_screen_exclusive", 4},
++};
++
+ static const char * const vk_instance_extensions[] =
+ {
+     "VK_EXT_headless_surface",
+@@ -4945,6 +4993,27 @@ BOOL wine_vk_device_extension_supported(const char *name)
+     return FALSE;
+ }
+ 
++BOOL wine_vk_device_extension_faked(const char *name)
++{
++    unsigned int i;
++    for (i = 0; i < ARRAY_SIZE(vk_device_extension_discards); i++)
++    {
++        if (strcmp(vk_device_extension_discards[i].extensionName, name) == 0)
++            return TRUE;
++    }
++    return FALSE;
++}
++
++unsigned int wine_vk_device_extension_faked_count(void)
++{
++    return ARRAY_SIZE(vk_device_extension_discards);
++}
++
++const VkExtensionProperties* wine_vk_device_extension_faked_idx(unsigned int idx)
++{
++    return &vk_device_extension_discards[idx];
++}
++
+ BOOL wine_vk_instance_extension_supported(const char *name)
+ {
+     unsigned int i;
+diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
+index 82d0c3a0a5e..8da14348c18 100644
+--- a/dlls/winevulkan/vulkan_thunks.h
++++ b/dlls/winevulkan/vulkan_thunks.h
+@@ -41,6 +41,7 @@
+ #define WINE_VK_VERSION VK_API_VERSION_1_2
+ 
+ /* Functions for which we have custom implementations outside of the thunks. */
++VkResult WINAPI wine_vkAcquireFullScreenExclusiveModeEXT(VkDevice device, VkSwapchainKHR swapchain) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkAllocateCommandBuffers(VkDevice device, const VkCommandBufferAllocateInfo *pAllocateInfo, VkCommandBuffer *pCommandBuffers);
+ void WINAPI wine_vkCmdExecuteCommands(VkCommandBuffer commandBuffer, uint32_t commandBufferCount, const VkCommandBuffer *pCommandBuffers);
+ VkResult WINAPI wine_vkCreateCommandPool(VkDevice device, const VkCommandPoolCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkCommandPool *pCommandPool);
+@@ -56,6 +57,8 @@ VkResult WINAPI wine_vkEnumeratePhysicalDeviceGroups(VkInstance instance, uint32
+ VkResult WINAPI wine_vkEnumeratePhysicalDevices(VkInstance instance, uint32_t *pPhysicalDeviceCount, VkPhysicalDevice *pPhysicalDevices);
+ void WINAPI wine_vkFreeCommandBuffers(VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount, const VkCommandBuffer *pCommandBuffers);
+ VkResult WINAPI wine_vkGetCalibratedTimestampsEXT(VkDevice device, uint32_t timestampCount, const VkCalibratedTimestampInfoEXT *pTimestampInfos, uint64_t *pTimestamps, uint64_t *pMaxDeviation) DECLSPEC_HIDDEN;
++VkResult WINAPI wine_vkGetDeviceGroupSurfacePresentModes2EXT(VkDevice device, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkDeviceGroupPresentModeFlagsKHR *pModes) DECLSPEC_HIDDEN;
++VkResult WINAPI wine_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes);
+ PFN_vkVoidFunction WINAPI wine_vkGetDeviceProcAddr(VkDevice device, const char *pName);
+ void WINAPI wine_vkGetDeviceQueue(VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue *pQueue);
+ void WINAPI wine_vkGetDeviceQueue2(VkDevice device, const VkDeviceQueueInfo2 *pQueueInfo, VkQueue *pQueue);
+@@ -67,22 +70,27 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice
+ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceExternalSemaphoreInfo *pExternalSemaphoreInfo, VkExternalSemaphoreProperties *pExternalSemaphoreProperties) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties);
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
++VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModes2EXT(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes) DECLSPEC_HIDDEN;
++VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes);
+ void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties);
+ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities);
+ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities);
+ void WINAPI wine_vkGetPrivateDataEXT(VkDevice device, VkObjectType objectType, uint64_t objectHandle, VkPrivateDataSlotEXT privateDataSlot, uint64_t *pData) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
+ VkResult WINAPI wine_vkSetDebugUtilsObjectNameEXT(VkDevice device, const VkDebugUtilsObjectNameInfoEXT *pNameInfo) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkSetDebugUtilsObjectTagEXT(VkDevice device, const VkDebugUtilsObjectTagInfoEXT *pTagInfo) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkSetPrivateDataEXT(VkDevice device, VkObjectType objectType, uint64_t objectHandle, VkPrivateDataSlotEXT privateDataSlot, uint64_t data) DECLSPEC_HIDDEN;
+ void WINAPI wine_vkSubmitDebugUtilsMessageEXT(VkInstance instance, VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData) DECLSPEC_HIDDEN;
++VkResult WINAPI wine_vkReleaseFullScreenExclusiveModeEXT(VkDevice device, VkSwapchainKHR swapchain) DECLSPEC_HIDDEN;
+ 
+ /* Private thunks */
+ VkResult thunk_vkDebugMarkerSetObjectNameEXT(VkDevice device, const VkDebugMarkerObjectNameInfoEXT *pNameInfo) DECLSPEC_HIDDEN;
+ VkResult thunk_vkDebugMarkerSetObjectTagEXT(VkDevice device, const VkDebugMarkerObjectTagInfoEXT *pTagInfo) DECLSPEC_HIDDEN;
++VkResult thunk_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes) DECLSPEC_HIDDEN;
+ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
+ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
++VkResult thunk_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes) DECLSPEC_HIDDEN;
+ void thunk_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ void thunk_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ VkResult thunk_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities) DECLSPEC_HIDDEN;
+@@ -528,6 +540,13 @@ typedef struct VkMemoryRequirements2_host
+     VkMemoryRequirements_host memoryRequirements;
+ } VkMemoryRequirements2_host;
+ 
++typedef struct VkPhysicalDeviceSurfaceInfo2KHR_host
++{
++    VkStructureType sType;
++    const void *pNext;
++    VkSurfaceKHR surface;
++} VkPhysicalDeviceSurfaceInfo2KHR_host;
++
+ typedef struct VkImageMemoryRequirementsInfo2_host
+ {
+     VkStructureType sType;
+@@ -823,6 +842,7 @@ void free_VkImageMemoryBarrier_array(VkImageMemoryBarrier_host *in, uint32_t cou
+ /* For use by vkDevice and children */
+ struct vulkan_device_funcs
+ {
++    VkResult (*p_vkAcquireFullScreenExclusiveModeEXT)(VkDevice, VkSwapchainKHR);
+ #if defined(USE_STRUCT_CONVERSION)
+     VkResult (*p_vkAcquireNextImage2KHR)(VkDevice, const VkAcquireNextImageInfoKHR_host *, uint32_t *);
+ #else
+@@ -1150,6 +1170,11 @@ struct vulkan_device_funcs
+     void (*p_vkGetDeviceGroupPeerMemoryFeatures)(VkDevice, uint32_t, uint32_t, uint32_t, VkPeerMemoryFeatureFlags *);
+     void (*p_vkGetDeviceGroupPeerMemoryFeaturesKHR)(VkDevice, uint32_t, uint32_t, uint32_t, VkPeerMemoryFeatureFlags *);
+     VkResult (*p_vkGetDeviceGroupPresentCapabilitiesKHR)(VkDevice, VkDeviceGroupPresentCapabilitiesKHR *);
++#if defined(USE_STRUCT_CONVERSION)
++    VkResult (*p_vkGetDeviceGroupSurfacePresentModes2EXT)(VkDevice, const VkPhysicalDeviceSurfaceInfo2KHR_host *, VkDeviceGroupPresentModeFlagsKHR *);
++#else
++    VkResult (*p_vkGetDeviceGroupSurfacePresentModes2EXT)(VkDevice, const VkPhysicalDeviceSurfaceInfo2KHR *, VkDeviceGroupPresentModeFlagsKHR *);
++#endif
+     VkResult (*p_vkGetDeviceGroupSurfacePresentModesKHR)(VkDevice, VkSurfaceKHR, VkDeviceGroupPresentModeFlagsKHR *);
+     void (*p_vkGetDeviceMemoryCommitment)(VkDevice, VkDeviceMemory, VkDeviceSize *);
+     void (*p_vkGetDeviceQueue)(VkDevice, uint32_t, uint32_t, VkQueue *);
+@@ -1231,6 +1256,7 @@ struct vulkan_device_funcs
+     VkResult (*p_vkQueueSetPerformanceConfigurationINTEL)(VkQueue, VkPerformanceConfigurationINTEL);
+     VkResult (*p_vkQueueSubmit)(VkQueue, uint32_t, const VkSubmitInfo *, VkFence);
+     VkResult (*p_vkQueueWaitIdle)(VkQueue);
++    VkResult (*p_vkReleaseFullScreenExclusiveModeEXT)(VkDevice, VkSwapchainKHR);
+     VkResult (*p_vkReleasePerformanceConfigurationINTEL)(VkDevice, VkPerformanceConfigurationINTEL);
+     VkResult (*p_vkResetCommandBuffer)(VkCommandBuffer, VkCommandBufferResetFlags);
+     VkResult (*p_vkResetCommandPool)(VkDevice, VkCommandPool, VkCommandPoolResetFlags);
+@@ -1332,18 +1358,24 @@ struct vulkan_instance_funcs
+     VkResult (*p_vkGetPhysicalDeviceSurfaceFormats2KHR)(VkPhysicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *, uint32_t *, VkSurfaceFormat2KHR *);
+ #endif
+     VkResult (*p_vkGetPhysicalDeviceSurfaceFormatsKHR)(VkPhysicalDevice, VkSurfaceKHR, uint32_t *, VkSurfaceFormatKHR *);
++#if defined(USE_STRUCT_CONVERSION)
++    VkResult (*p_vkGetPhysicalDeviceSurfacePresentModes2EXT)(VkPhysicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR_host *, uint32_t *, VkPresentModeKHR *);
++#else
++    VkResult (*p_vkGetPhysicalDeviceSurfacePresentModes2EXT)(VkPhysicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *, uint32_t *, VkPresentModeKHR *);
++#endif
+     VkResult (*p_vkGetPhysicalDeviceSurfacePresentModesKHR)(VkPhysicalDevice, VkSurfaceKHR, uint32_t *, VkPresentModeKHR *);
+     VkResult (*p_vkGetPhysicalDeviceSurfaceSupportKHR)(VkPhysicalDevice, uint32_t, VkSurfaceKHR, VkBool32 *);
+     VkResult (*p_vkGetPhysicalDeviceToolPropertiesEXT)(VkPhysicalDevice, uint32_t *, VkPhysicalDeviceToolPropertiesEXT *);
+     VkBool32 (*p_vkGetPhysicalDeviceWin32PresentationSupportKHR)(VkPhysicalDevice, uint32_t);
+ #if defined(USE_STRUCT_CONVERSION)
+     void (*p_vkSubmitDebugUtilsMessageEXT)(VkInstance, VkDebugUtilsMessageSeverityFlagBitsEXT, VkDebugUtilsMessageTypeFlagsEXT, const VkDebugUtilsMessengerCallbackDataEXT_host *);
+ #else
+     void (*p_vkSubmitDebugUtilsMessageEXT)(VkInstance, VkDebugUtilsMessageSeverityFlagBitsEXT, VkDebugUtilsMessageTypeFlagsEXT, const VkDebugUtilsMessengerCallbackDataEXT *);
+ #endif
+ };
+ 
+ #define ALL_VK_DEVICE_FUNCS() \
++    USE_VK_FUNC(vkAcquireFullScreenExclusiveModeEXT) \
+     USE_VK_FUNC(vkAcquireNextImage2KHR) \
+     USE_VK_FUNC(vkAcquireNextImageKHR) \
+     USE_VK_FUNC(vkAcquirePerformanceConfigurationINTEL) \
+@@ -1511,6 +1553,7 @@ struct vulkan_instance_funcs
+     USE_VK_FUNC(vkGetDeviceGroupPeerMemoryFeatures) \
+     USE_VK_FUNC(vkGetDeviceGroupPeerMemoryFeaturesKHR) \
+     USE_VK_FUNC(vkGetDeviceGroupPresentCapabilitiesKHR) \
++    USE_VK_FUNC(vkGetDeviceGroupSurfacePresentModes2EXT) \
+     USE_VK_FUNC(vkGetDeviceGroupSurfacePresentModesKHR) \
+     USE_VK_FUNC(vkGetDeviceMemoryCommitment) \
+     USE_VK_FUNC(vkGetDeviceQueue) \
+@@ -1548,6 +1591,7 @@ struct vulkan_instance_funcs
+     USE_VK_FUNC(vkQueueSetPerformanceConfigurationINTEL) \
+     USE_VK_FUNC(vkQueueSubmit) \
+     USE_VK_FUNC(vkQueueWaitIdle) \
++    USE_VK_FUNC(vkReleaseFullScreenExclusiveModeEXT) \
+     USE_VK_FUNC(vkReleasePerformanceConfigurationINTEL) \
+     USE_VK_FUNC(vkResetCommandBuffer) \
+     USE_VK_FUNC(vkResetCommandPool) \
+@@ -1602,6 +1646,7 @@ struct vulkan_instance_funcs
+     USE_VK_FUNC(vkGetPhysicalDeviceSurfaceCapabilitiesKHR) \
+     USE_VK_FUNC(vkGetPhysicalDeviceSurfaceFormats2KHR) \
+     USE_VK_FUNC(vkGetPhysicalDeviceSurfaceFormatsKHR) \
++    USE_VK_FUNC(vkGetPhysicalDeviceSurfacePresentModes2EXT) \
+     USE_VK_FUNC(vkGetPhysicalDeviceSurfacePresentModesKHR) \
+     USE_VK_FUNC(vkGetPhysicalDeviceSurfaceSupportKHR) \
+     USE_VK_FUNC(vkGetPhysicalDeviceWin32PresentationSupportKHR)
+diff --git a/include/wine/vulkan.h b/include/wine/vulkan.h
+index 7bf6a0a07f8..0f8de3d21c2 100644
+--- a/include/wine/vulkan.h
++++ b/include/wine/vulkan.h
+@@ -348,6 +350,8 @@
+ #define VK_EXT_YCBCR_IMAGE_ARRAYS_EXTENSION_NAME "VK_EXT_ycbcr_image_arrays"
+ #define VK_KHR_UNIFORM_BUFFER_STANDARD_LAYOUT_SPEC_VERSION 1
+ #define VK_KHR_UNIFORM_BUFFER_STANDARD_LAYOUT_EXTENSION_NAME "VK_KHR_uniform_buffer_standard_layout"
++#define VK_EXT_FULL_SCREEN_EXCLUSIVE_SPEC_VERSION 4
++#define VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME "VK_EXT_full_screen_exclusive"
+ #define VK_EXT_HEADLESS_SURFACE_SPEC_VERSION 1
+ #define VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME "VK_EXT_headless_surface"
+ #define VK_EXT_LINE_RASTERIZATION_SPEC_VERSION 1
+@@ -1403,6 +1407,15 @@ typedef enum VkFrontFace
+     VK_FRONT_FACE_MAX_ENUM = 0x7fffffff,
+ } VkFrontFace;
+ 
++typedef enum VkFullScreenExclusiveEXT
++{
++    VK_FULL_SCREEN_EXCLUSIVE_DEFAULT_EXT = 0,
++    VK_FULL_SCREEN_EXCLUSIVE_ALLOWED_EXT = 1,
++    VK_FULL_SCREEN_EXCLUSIVE_DISALLOWED_EXT = 2,
++    VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT = 3,
++    VK_FULL_SCREEN_EXCLUSIVE_EXT_MAX_ENUM = 0x7fffffff,
++} VkFullScreenExclusiveEXT;
++
+ typedef enum VkGeometryFlagBitsKHR
+ {
+     VK_GEOMETRY_OPAQUE_BIT_KHR = 0x00000001,
+@@ -1909,6 +1922,7 @@ typedef enum VkResolveModeFlagBitsKHR
+ 
+ typedef enum VkResult
+ {
++    VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT = -1000255000,
+     VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS = -1000257000,
+     VK_ERROR_NOT_PERMITTED_EXT = -1000174001,
+     VK_ERROR_FRAGMENTATION = -1000161000,
+@@ -2411,6 +2428,9 @@ typedef enum VkStructureType
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT = 1000251000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_IMAGE_ARRAYS_FEATURES_EXT = 1000252000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES = 1000253000,
++    VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT = 1000255000,
++    VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT = 1000255001,
++    VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT = 1000255002,
+     VK_STRUCTURE_TYPE_HEADLESS_SURFACE_CREATE_INFO_EXT = 1000256000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES = 1000257000,
+     VK_STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO = 1000257002,
+@@ -4546,6 +4543,20 @@ typedef struct VkSubresourceLayout
+     VkDeviceSize WINE_VK_ALIGN(8) depthPitch;
+ } VkSubresourceLayout;
+ 
++typedef struct VkSurfaceCapabilitiesFullScreenExclusiveEXT
++{
++    VkStructureType sType;
++    void *pNext;
++    VkBool32 fullScreenExclusiveSupported;
++} VkSurfaceCapabilitiesFullScreenExclusiveEXT;
++
++typedef struct VkSurfaceFullScreenExclusiveWin32InfoEXT
++{
++    VkStructureType sType;
++    const void *pNext;
++    HMONITOR hmonitor;
++} VkSurfaceFullScreenExclusiveWin32InfoEXT;
++
+ typedef struct VkSurfaceFormatKHR
+ {
+     VkFormat format;
+@@ -5106,6 +5133,13 @@ typedef struct VkVertexInputAttributeDescription
+     uint32_t offset;
+ } VkVertexInputAttributeDescription;
+ 
++typedef struct VkSurfaceFullScreenExclusiveInfoEXT
++{
++    VkStructureType sType;
++    void *pNext;
++    VkFullScreenExclusiveEXT fullScreenExclusive;
++} VkSurfaceFullScreenExclusiveInfoEXT;
++
+ typedef struct VkVertexInputBindingDivisorDescriptionEXT
+ {
+     uint32_t binding;
+@@ -7057,6 +7119,7 @@ typedef struct VkBindSparseInfo
+     const VkSemaphore *pSignalSemaphores;
+ } VkBindSparseInfo;
+ 
++typedef VkResult (VKAPI_PTR *PFN_vkAcquireFullScreenExclusiveModeEXT)(VkDevice, VkSwapchainKHR);
+ typedef VkResult (VKAPI_PTR *PFN_vkAcquireNextImage2KHR)(VkDevice, const VkAcquireNextImageInfoKHR *, uint32_t *);
+ typedef VkResult (VKAPI_PTR *PFN_vkAcquireNextImageKHR)(VkDevice, VkSwapchainKHR, uint64_t, VkSemaphore, VkFence, uint32_t *);
+ typedef VkResult (VKAPI_PTR *PFN_vkAcquirePerformanceConfigurationINTEL)(VkDevice, const VkPerformanceConfigurationAcquireInfoINTEL *, VkPerformanceConfigurationINTEL *);
+@@ -7242,6 +7305,7 @@ typedef void (VKAPI_PTR *PFN_vkGetDescriptorSetLayoutSupportKHR)(VkDevice, const
+ typedef void (VKAPI_PTR *PFN_vkGetDeviceGroupPeerMemoryFeatures)(VkDevice, uint32_t, uint32_t, uint32_t, VkPeerMemoryFeatureFlags *);
+ typedef void (VKAPI_PTR *PFN_vkGetDeviceGroupPeerMemoryFeaturesKHR)(VkDevice, uint32_t, uint32_t, uint32_t, VkPeerMemoryFeatureFlags *);
+ typedef VkResult (VKAPI_PTR *PFN_vkGetDeviceGroupPresentCapabilitiesKHR)(VkDevice, VkDeviceGroupPresentCapabilitiesKHR *);
++typedef VkResult (VKAPI_PTR *PFN_vkGetDeviceGroupSurfacePresentModes2EXT)(VkDevice, const VkPhysicalDeviceSurfaceInfo2KHR *, VkDeviceGroupPresentModeFlagsKHR *);
+ typedef VkResult (VKAPI_PTR *PFN_vkGetDeviceGroupSurfacePresentModesKHR)(VkDevice, VkSurfaceKHR, VkDeviceGroupPresentModeFlagsKHR *);
+ typedef void (VKAPI_PTR *PFN_vkGetDeviceMemoryCommitment)(VkDevice, VkDeviceMemory, VkDeviceSize *);
+ typedef PFN_vkVoidFunction (VKAPI_PTR *PFN_vkGetDeviceProcAddr)(VkDevice, const char *);
+@@ -7290,6 +7354,7 @@ typedef void (VKAPI_PTR *PFN_vkGetPhysicalDeviceSparseImageFormatProperties)(VkP
+ typedef VkResult (VKAPI_PTR *PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR)(VkPhysicalDevice, VkSurfaceKHR, VkSurfaceCapabilitiesKHR *);
+ typedef VkResult (VKAPI_PTR *PFN_vkGetPhysicalDeviceSurfaceFormats2KHR)(VkPhysicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *, uint32_t *, VkSurfaceFormat2KHR *);
+ typedef VkResult (VKAPI_PTR *PFN_vkGetPhysicalDeviceSurfaceFormatsKHR)(VkPhysicalDevice, VkSurfaceKHR, uint32_t *, VkSurfaceFormatKHR *);
++typedef VkResult (VKAPI_PTR *PFN_vkGetPhysicalDeviceSurfacePresentModes2EXT)(VkPhysicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *, uint32_t *, VkPresentModeKHR *);
+ typedef VkResult (VKAPI_PTR *PFN_vkGetPhysicalDeviceSurfacePresentModesKHR)(VkPhysicalDevice, VkSurfaceKHR, uint32_t *, VkPresentModeKHR *);
+ typedef VkResult (VKAPI_PTR *PFN_vkGetPhysicalDeviceSurfaceSupportKHR)(VkPhysicalDevice, uint32_t, VkSurfaceKHR, VkBool32 *);
+ typedef VkBool32 (VKAPI_PTR *PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR)(VkPhysicalDevice, uint32_t);
+@@ -7317,6 +7384,7 @@ typedef VkResult (VKAPI_PTR *PFN_vkQueuePresentKHR)(VkQueue, const VkPresentInfo
+ typedef VkResult (VKAPI_PTR *PFN_vkQueueSetPerformanceConfigurationINTEL)(VkQueue, VkPerformanceConfigurationINTEL);
+ typedef VkResult (VKAPI_PTR *PFN_vkQueueSubmit)(VkQueue, uint32_t, const VkSubmitInfo *, VkFence);
+ typedef VkResult (VKAPI_PTR *PFN_vkQueueWaitIdle)(VkQueue);
++typedef VkResult (VKAPI_PTR *PFN_vkReleaseFullScreenExclusiveModeEXT)(VkDevice, VkSwapchainKHR);
+ typedef VkResult (VKAPI_PTR *PFN_vkReleasePerformanceConfigurationINTEL)(VkDevice, VkPerformanceConfigurationINTEL);
+ typedef VkResult (VKAPI_PTR *PFN_vkResetCommandBuffer)(VkCommandBuffer, VkCommandBufferResetFlags);
+ typedef VkResult (VKAPI_PTR *PFN_vkResetCommandPool)(VkDevice, VkCommandPool, VkCommandPoolResetFlags);
+@@ -7337,6 +7405,7 @@ typedef VkResult (VKAPI_PTR *PFN_vkWaitForFences)(VkDevice, uint32_t, const VkFe
+ typedef VkResult (VKAPI_PTR *PFN_vkWaitSemaphoresKHR)(VkDevice, const VkSemaphoreWaitInfoKHR *, uint64_t);
+ 
+ #ifndef VK_NO_PROTOTYPES
++VkResult VKAPI_CALL vkAcquireFullScreenExclusiveModeEXT(VkDevice device, VkSwapchainKHR swapchain);
+ VkResult VKAPI_CALL vkAcquireNextImage2KHR(VkDevice device, const VkAcquireNextImageInfoKHR *pAcquireInfo, uint32_t *pImageIndex);
+ VkResult VKAPI_CALL vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t *pImageIndex);
+ VkResult VKAPI_CALL vkAcquirePerformanceConfigurationINTEL(VkDevice device, const VkPerformanceConfigurationAcquireInfoINTEL *pAcquireInfo, VkPerformanceConfigurationINTEL *pConfiguration);
+@@ -7522,6 +7591,7 @@ void VKAPI_CALL vkGetDescriptorSetLayoutSupportKHR(VkDevice device, const VkDesc
+ void VKAPI_CALL vkGetDeviceGroupPeerMemoryFeatures(VkDevice device, uint32_t heapIndex, uint32_t localDeviceIndex, uint32_t remoteDeviceIndex, VkPeerMemoryFeatureFlags *pPeerMemoryFeatures);
+ void VKAPI_CALL vkGetDeviceGroupPeerMemoryFeaturesKHR(VkDevice device, uint32_t heapIndex, uint32_t localDeviceIndex, uint32_t remoteDeviceIndex, VkPeerMemoryFeatureFlags *pPeerMemoryFeatures);
+ VkResult VKAPI_CALL vkGetDeviceGroupPresentCapabilitiesKHR(VkDevice device, VkDeviceGroupPresentCapabilitiesKHR *pDeviceGroupPresentCapabilities);
++VkResult VKAPI_CALL vkGetDeviceGroupSurfacePresentModes2EXT(VkDevice device, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkDeviceGroupPresentModeFlagsKHR *pModes);
+ VkResult VKAPI_CALL vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes);
+ void VKAPI_CALL vkGetDeviceMemoryCommitment(VkDevice device, VkDeviceMemory memory, VkDeviceSize *pCommittedMemoryInBytes);
+ PFN_vkVoidFunction VKAPI_CALL vkGetDeviceProcAddr(VkDevice device, const char *pName);
+@@ -7570,6 +7640,7 @@ void VKAPI_CALL vkGetPhysicalDeviceSparseImageFormatProperties(VkPhysicalDevice
+ VkResult VKAPI_CALL vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities);
+ VkResult VKAPI_CALL vkGetPhysicalDeviceSurfaceFormats2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pSurfaceFormatCount, VkSurfaceFormat2KHR *pSurfaceFormats);
+ VkResult VKAPI_CALL vkGetPhysicalDeviceSurfaceFormatsKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pSurfaceFormatCount, VkSurfaceFormatKHR *pSurfaceFormats);
++VkResult VKAPI_CALL vkGetPhysicalDeviceSurfacePresentModes2EXT(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes);
+ VkResult VKAPI_CALL vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes);
+ VkResult VKAPI_CALL vkGetPhysicalDeviceSurfaceSupportKHR(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex, VkSurfaceKHR surface, VkBool32 *pSupported);
+ VkBool32 VKAPI_CALL vkGetPhysicalDeviceWin32PresentationSupportKHR(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex);
+@@ -7597,6 +7670,7 @@ VkResult VKAPI_CALL vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pPr
+ VkResult VKAPI_CALL vkQueueSetPerformanceConfigurationINTEL(VkQueue queue, VkPerformanceConfigurationINTEL configuration);
+ VkResult VKAPI_CALL vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
+ VkResult VKAPI_CALL vkQueueWaitIdle(VkQueue queue);
++VkResult VKAPI_CALL vkReleaseFullScreenExclusiveModeEXT(VkDevice device, VkSwapchainKHR swapchain);
+ VkResult VKAPI_CALL vkReleasePerformanceConfigurationINTEL(VkDevice device, VkPerformanceConfigurationINTEL configuration);
+ VkResult VKAPI_CALL vkResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags);
+ VkResult VKAPI_CALL vkResetCommandPool(VkDevice device, VkCommandPool commandPool, VkCommandPoolResetFlags flags);
+
+From 312d5ea558e2756f5893d33d8e3c90afcb44811c Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <coldpie@fastmail.com>
+Date: Wed, 18 Mar 2020 13:26:02 -0500
+Subject: [PATCH] make exts optional
+
+---
+ dlls/winevulkan/vulkan.c  | 33 +++++++++++++++++++++++++++------
+ dlls/winex11.drv/vulkan.c | 15 ++++++++++++---
+ 2 files changed, 39 insertions(+), 9 deletions(-)
+
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 4378632adf..b4424f908b 100644
+index 1e730a415bc..f36315534b9 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -1640,15 +1640,34 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice
- VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice phys_dev,
-         const VkPhysicalDeviceSurfaceInfo2KHR *surface_info, VkSurfaceCapabilities2KHR *capabilities)
- {
-+    VkPhysicalDeviceSurfaceInfo2KHR surface_info_modified;
-     VkResult res;
+@@ -142,11 +142,19 @@ static struct VkPhysicalDevice_T *wine_vk_physical_device_alloc(struct VkInstanc
  
-     TRACE("%p, %p, %p\n", phys_dev, surface_info, capabilities);
- 
--    res = thunk_vkGetPhysicalDeviceSurfaceCapabilities2KHR(phys_dev, surface_info, capabilities);
-+    /* Toss out VkSurfaceFullScreenExclusiveInfoEXT
-+     * and VkSurfaceFullScreenExclusiveWin32InfoEXT
-+     *
-+     * TODO: Properly convert the pNext chain and don't
-+     * unconditionally toss out every element.
-+     */
-+    surface_info_modified.sType   = surface_info->sType;
-+    surface_info_modified.pNext   = NULL;
-+    surface_info_modified.surface = surface_info->surface;
+     for (i = 0; i < wine_vk_device_extension_faked_count(); i++)
+     {
+-        object->extensions[j] = *wine_vk_device_extension_faked_idx(i);
+-        j++;
++        const VkExtensionProperties *e = wine_vk_device_extension_faked_idx(i);
 +
-+    res = thunk_vkGetPhysicalDeviceSurfaceCapabilities2KHR(phys_dev, &surface_info_modified, capabilities);
++        if(!strcmp(e->extensionName, "VK_EXT_full_screen_exclusive") &&
++                (!vk_funcs->p_vkGetPhysicalDeviceSurfaceCapabilities2KHR ||
++                 !vk_funcs->p_vkGetPhysicalDeviceSurfaceFormats2KHR)){
++            /* ignore */
++        }else{
++            object->extensions[j] = *e;
++            j++;
++        }
+     }
  
-     if (res == VK_SUCCESS)
-+    {
-+        VkSurfaceCapabilitiesFullScreenExclusiveEXT *full_screen_exclusive_caps;
+-    object->extension_count = num_properties;
++    object->extension_count = j;
+ 
+     heap_free(host_properties);
+     return object;
+@@ -807,7 +815,14 @@ VkResult WINAPI wine_vkEnumerateInstanceExtensionProperties(const char *layer_na
+     for (i = 0; i < num_host_properties; i++)
+     {
+         if (wine_vk_instance_extension_supported(host_properties[i].extensionName))
+-            num_properties++;
++        {
++            if(!strcmp(host_properties[i].extensionName, "VK_KHR_get_physical_device_properties2") &&
++                    (!vk_funcs->p_vkGetPhysicalDeviceSurfaceCapabilities2KHR ||
++                     !vk_funcs->p_vkGetPhysicalDeviceSurfaceFormats2KHR)){
++                /* ignore - outdated vulkan loader */
++            }else
++                num_properties++;
++        }
+         else
+             TRACE("Instance extension '%s' is not supported.\n", host_properties[i].extensionName);
+     }
+@@ -824,8 +839,14 @@ VkResult WINAPI wine_vkEnumerateInstanceExtensionProperties(const char *layer_na
+     {
+         if (wine_vk_instance_extension_supported(host_properties[i].extensionName))
+         {
+-            TRACE("Enabling extension '%s'.\n", host_properties[i].extensionName);
+-            properties[j++] = host_properties[i];
++            if(!strcmp(host_properties[i].extensionName, "VK_KHR_get_physical_device_properties2") &&
++                    (!vk_funcs->p_vkGetPhysicalDeviceSurfaceCapabilities2KHR ||
++                     !vk_funcs->p_vkGetPhysicalDeviceSurfaceFormats2KHR)){
++                /* ignore - outdated vulkan loader */
++            }else{
++                TRACE("Enabling extension '%s'.\n", host_properties[i].extensionName);
++                properties[j++] = host_properties[i];
++            }
+         }
+     }
+     *count = min(*count, num_properties);
+diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
+index 9bb33339af5..8f08ac19a2a 100644
+--- a/dlls/winex11.drv/vulkan.c
++++ b/dlls/winex11.drv/vulkan.c
+@@ -56,6 +56,8 @@ static CRITICAL_SECTION context_section = { &critsect_debug, -1, 0, 0, 0, 0 };
+ 
+ static XContext vulkan_hwnd_context;
+ 
++static struct vulkan_funcs vulkan_funcs;
 +
-         adjust_max_image_count(phys_dev, &capabilities->surfaceCapabilities);
+ #define VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR 1000004000
  
-+        /* Lie and say we support exclusive fullscreen. */
-+        if ((full_screen_exclusive_caps = wine_vk_find_struct(capabilities, SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT)))
-+            full_screen_exclusive_caps->fullScreenExclusiveSupported = VK_TRUE;
+ struct wine_vk_surface
+@@ -135,6 +137,13 @@ static BOOL WINAPI wine_vk_init(INIT_ONCE *once, void *param, void **context)
+     LOAD_FUNCPTR(vkQueuePresentKHR);
+     LOAD_OPTIONAL_FUNCPTR(vkGetDeviceGroupSurfacePresentModesKHR);
+     LOAD_OPTIONAL_FUNCPTR(vkGetPhysicalDevicePresentRectanglesKHR);
++
++    if(!pvkGetPhysicalDeviceSurfaceCapabilities2KHR){
++        vulkan_funcs.p_vkGetPhysicalDeviceSurfaceCapabilities2KHR = NULL;
 +    }
-+
-     return res;
++    if(!pvkGetPhysicalDeviceSurfaceFormats2KHR){
++        vulkan_funcs.p_vkGetPhysicalDeviceSurfaceFormats2KHR = NULL;
++    }
+ #undef LOAD_FUNCPTR
+ #undef LOAD_OPTIONAL_FUNCPTR
+ 
+@@ -612,7 +621,7 @@ static VkBool32 X11DRV_query_fs_hack(VkExtent2D *real_sz, VkExtent2D *user_sz,
+     return VK_FALSE;
  }
  
-@@ -1656,15 +1675,59 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceFormats2KHR(VkPhysicalDevice phys
-         const VkPhysicalDeviceSurfaceInfo2KHR *surface_info, uint32_t *surface_format_count,
-         VkSurfaceFormat2KHR *surface_formats)
+-static const struct vulkan_funcs vulkan_funcs =
++static struct vulkan_funcs vulkan_funcs =
  {
-+    VkPhysicalDeviceSurfaceInfo2KHR surface_info_modified;
+     X11DRV_vkCreateInstance,
+     X11DRV_vkCreateSwapchainKHR,
+From 252d6abc7b52a5f506c7fc621c4469d7fd0252f7 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 23 Oct 2020 17:11:18 +0300
+Subject: [PATCH] winevulkan: HACK: Set default mxcsr for
+ vkEnumeratePhysicalDevices() call.
+
+Workaround Killer Instinct crash on start with AMD GPU.
+---
+ dlls/winevulkan/vulkan.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 6e2a5b01359..ca080798f64 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -650,6 +650,7 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+ {
+     VkInstanceCreateInfo create_info_host;
+     const VkApplicationInfo *app_info;
++    uint32_t new_mxcsr, old_mxcsr;
+     struct VkInstance_T *object;
      VkResult res;
  
-     TRACE("%p, %p, %p, %p\n", phys_dev, surface_info, surface_format_count, surface_formats);
- 
--    res = thunk_vkGetPhysicalDeviceSurfaceFormats2KHR(phys_dev, surface_info, surface_format_count, surface_formats);
-+    /* Toss out VkSurfaceFullScreenExclusiveInfoEXT
-+     * and VkSurfaceFullScreenExclusiveWin32InfoEXT
-+     *
-+     * TODO: Properly convert the pNext chain and don't
-+     * unconditionally toss out every element.
-+     */
-+    surface_info_modified.sType   = surface_info->sType;
-+    surface_info_modified.pNext   = NULL;
-+    surface_info_modified.surface = surface_info->surface;
-+
-+    res = thunk_vkGetPhysicalDeviceSurfaceFormats2KHR(phys_dev, &surface_info_modified, surface_format_count, surface_formats);
- 
-     return res;
- }
- 
-+VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes);
-+VkResult WINAPI wine_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes);
-+
-+VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModes2EXT(
-+    VkPhysicalDevice phys_dev, const VkPhysicalDeviceSurfaceInfo2KHR *surface_info,
-+    uint32_t *present_mode_count, VkPresentModeKHR *present_modes)
-+{
-+    TRACE("%p, %p, %p, %p", phys_dev, surface_info, present_mode_count, present_modes);
-+    return wine_vkGetPhysicalDeviceSurfacePresentModesKHR(phys_dev, surface_info->surface, present_mode_count, present_modes);
-+}
-+
-+VkResult WINAPI wine_vkGetDeviceGroupSurfacePresentModes2EXT(
-+    VkDevice device, const VkPhysicalDeviceSurfaceInfo2KHR *surface_info,
-+    VkDeviceGroupPresentModeFlagsKHR *modes)
-+{
-+    TRACE("%p, %p, %p", device, surface_info, modes);
-+    return wine_vkGetDeviceGroupSurfacePresentModesKHR(device, surface_info->surface, modes);
-+}
-+
-+VkResult WINAPI wine_vkAcquireFullScreenExclusiveModeEXT(
-+    VkDevice device, VkSwapchainKHR swapchain)
-+{
-+    TRACE("%p, %s", device, wine_dbgstr_longlong(swapchain));
-+    return VK_SUCCESS;
-+}
-+
-+VkResult WINAPI wine_vkReleaseFullScreenExclusiveModeEXT(
-+    VkDevice device, VkSwapchainKHR swapchain)
-+{
-+    TRACE("%p, %s", device, wine_dbgstr_longlong(swapchain));
-+    return VK_SUCCESS;
-+}
-+
- BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
- {
-     TRACE("%p, %u, %p\n", hinst, reason, reserved);
-
+@@ -694,7 +695,12 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+      * the native physical devices and present those to the application.
+      * Cleanup happens as part of wine_vkDestroyInstance.
+      */
++    __asm__ volatile("stmxcsr %0" : "=m"(old_mxcsr));
++    new_mxcsr = 0x1f80;
++    __asm__ volatile("ldmxcsr %0" : : "m"(new_mxcsr));
+     res = wine_vk_instance_load_physical_devices(object);
++    __asm__ volatile("ldmxcsr %0" : : "m"(old_mxcsr));
++    TRACE("old_mxcsr %#x.\n", old_mxcsr);
+     if (res != VK_SUCCESS)
+     {
+         ERR("Failed to load physical devices, res=%d\n", res);
 -- 
-2.28.0
+2.26.2
+
+From aa1660d35088cc623315b4188b5eaffe792da343 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 7 Dec 2020 08:46:12 -0600
+Subject: [PATCH] winevulkan: Update to 1.2.164
+
+---
+ dlls/winevulkan/make_vulkan     |   3 +-
+ dlls/winevulkan/vulkan_thunks.c |  17 +
+ dlls/winevulkan/winevulkan.json |   2 +-
+ include/wine/vulkan.h           | 849 +++++++++++++++++---------------
+ 4 files changed, 459 insertions(+), 412 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 4db3fe80efd..cb1e20775e6 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -64,7 +64,7 @@ from enum import Enum
+ LOGGER = logging.Logger("vulkan")
+ LOGGER.addHandler(logging.StreamHandler())
+ 
+-VK_XML_VERSION = "1.2.162"
++VK_XML_VERSION = "1.2.164"
+ WINE_VK_VERSION = (1, 2)
+ 
+ # Filenames to create.
+@@ -102,6 +102,7 @@ UNSUPPORTED_EXTENSIONS = [
+     # Relates to external_semaphore and needs type conversions in bitflags.
+     "VK_KHR_shared_presentable_image", # Needs WSI work.
+     "VK_KHR_win32_keyed_mutex",
++    "VK_NV_acquire_winrt_display",
+ 
+     # Extensions for other platforms
+     "VK_EXT_external_memory_dma_buf",
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index 9454463f01f..8a9b4c190f8 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -3366,6 +3366,22 @@ VkResult convert_VkInstanceCreateInfo_struct_chain(const void *pNext, VkInstance
+             break;
+         }
+ 
++        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MUTABLE_DESCRIPTOR_TYPE_FEATURES_VALVE:
++        {
++            const VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE *in = (const VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE *)in_header;
++            VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE *out;
++
++            if (!(out = heap_alloc(sizeof(*out)))) goto out_of_memory;
++
++            out->sType = in->sType;
++            out->pNext = NULL;
++            out->mutableDescriptorType = in->mutableDescriptorType;
++
++            out_header->pNext = (VkBaseOutStructure *)out;
++            out_header = out_header->pNext;
++            break;
++        }
++
+         default:
+             FIXME("Application requested a linked structure of type %u.\n", in_header->sType);
+         }
+@@ -7095,6 +7111,7 @@ static const char * const vk_device_extensions[] =
+     "VK_QCOM_render_pass_store_ops",
+     "VK_QCOM_render_pass_transform",
+     "VK_QCOM_rotated_copy_commands",
++    "VK_VALVE_mutable_descriptor_type",
+ };
+ 
+ static const char * const vk_instance_extensions[] =
+diff --git a/dlls/winevulkan/winevulkan.json b/dlls/winevulkan/winevulkan.json
+index 60d69d7463c..cb2f4664501 100644
+--- a/dlls/winevulkan/winevulkan.json
++++ b/dlls/winevulkan/winevulkan.json
+@@ -2,6 +2,6 @@
+     "file_format_version": "1.0.0",
+     "ICD": {
+         "library_path": ".\\winevulkan.dll",
+-        "api_version": "1.2.162"
++        "api_version": "1.2.164"
+     }
+ }
+diff --git a/include/wine/vulkan.h b/include/wine/vulkan.h
+index e60582a5b3e..a6c516ebf13 100644
+--- a/include/wine/vulkan.h
++++ b/include/wine/vulkan.h
+@@ -409,6 +409,8 @@
+ #define VK_KHR_COPY_COMMANDS_2_EXTENSION_NAME "VK_KHR_copy_commands2"
+ #define VK_EXT_4444_FORMATS_SPEC_VERSION 1
+ #define VK_EXT_4444_FORMATS_EXTENSION_NAME "VK_EXT_4444_formats"
++#define VK_VALVE_MUTABLE_DESCRIPTOR_TYPE_SPEC_VERSION 1
++#define VK_VALVE_MUTABLE_DESCRIPTOR_TYPE_EXTENSION_NAME "VK_VALVE_mutable_descriptor_type"
+ #define VK_KHR_ACCELERATION_STRUCTURE_SPEC_VERSION 11
+ #define VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME "VK_KHR_acceleration_structure"
+ #define VK_KHR_RAY_TRACING_PIPELINE_SPEC_VERSION 1
+@@ -424,7 +426,7 @@
+ #define VK_API_VERSION_1_0 VK_MAKE_VERSION(1, 0, 0)
+ #define VK_API_VERSION_1_1 VK_MAKE_VERSION(1, 1, 0)
+ #define VK_API_VERSION_1_2 VK_MAKE_VERSION(1, 2, 0)
+-#define VK_HEADER_VERSION 162
++#define VK_HEADER_VERSION 164
+ #define VK_HEADER_VERSION_COMPLETE VK_MAKE_VERSION(1, 2, VK_HEADER_VERSION)
+ #define VK_DEFINE_HANDLE(object) typedef struct object##_T* object;
+ #define VK_DEFINE_NON_DISPATCHABLE_HANDLE(object) typedef uint64_t object;
+@@ -1175,6 +1177,7 @@ typedef enum VkDescriptorPoolCreateFlagBits
+ {
+     VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT = 0x00000001,
+     VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT = 0x00000002,
++    VK_DESCRIPTOR_POOL_CREATE_HOST_ONLY_BIT_VALVE = 0x00000004,
+     VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT,
+     VK_DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM = 0x7fffffff,
+ } VkDescriptorPoolCreateFlagBits;
+@@ -1183,6 +1186,7 @@ typedef enum VkDescriptorSetLayoutCreateFlagBits
+ {
+     VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR = 0x00000001,
+     VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT = 0x00000002,
++    VK_DESCRIPTOR_SET_LAYOUT_CREATE_HOST_ONLY_POOL_BIT_VALVE = 0x00000004,
+     VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+     VK_DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM = 0x7fffffff,
+ } VkDescriptorSetLayoutCreateFlagBits;
+@@ -1203,6 +1207,7 @@ typedef enum VkDescriptorType
+     VK_DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT = 1000138000,
+     VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR = 1000150000,
+     VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV = 1000165000,
++    VK_DESCRIPTOR_TYPE_MUTABLE_VALVE = 1000351000,
+     VK_DESCRIPTOR_TYPE_MAX_ENUM = 0x7fffffff,
+ } VkDescriptorType;
+ 
+@@ -3150,6 +3155,8 @@ typedef enum VkStructureType
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR = 1000347000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR = 1000347001,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR = 1000348013,
++    VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MUTABLE_DESCRIPTOR_TYPE_FEATURES_VALVE = 1000351000,
++    VK_STRUCTURE_TYPE_MUTABLE_DESCRIPTOR_TYPE_CREATE_INFO_VALVE = 1000351002,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES,
+     VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
+@@ -3399,6 +3406,7 @@ typedef enum VkVendorId
+     VK_VENDOR_ID_KAZAN = 0x00010003,
+     VK_VENDOR_ID_CODEPLAY = 0x00010004,
+     VK_VENDOR_ID_MESA = 0x00010005,
++    VK_VENDOR_ID_POCL = 0x00010006,
+     VK_VENDOR_ID_MAX_ENUM = 0x7fffffff,
+ } VkVendorId;
+ 
+@@ -4100,6 +4108,12 @@ typedef struct VkMultisamplePropertiesEXT
+     VkExtent2D maxSampleLocationGridSize;
+ } VkMultisamplePropertiesEXT;
+ 
++typedef struct VkMutableDescriptorTypeListVALVE
++{
++    uint32_t descriptorTypeCount;
++    const VkDescriptorType *pDescriptorTypes;
++} VkMutableDescriptorTypeListVALVE;
++
+ typedef struct VkOffset3D
+ {
+     int32_t x;
+@@ -4585,36 +4599,35 @@ typedef struct VkPhysicalDeviceMultiviewProperties
+ } VkPhysicalDeviceMultiviewProperties;
+ typedef VkPhysicalDeviceMultiviewProperties VkPhysicalDeviceMultiviewPropertiesKHR;
+ 
+-typedef struct VkPhysicalDevicePCIBusInfoPropertiesEXT
++typedef struct VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint32_t pciDomain;
+-    uint32_t pciBus;
+-    uint32_t pciDevice;
+-    uint32_t pciFunction;
+-} VkPhysicalDevicePCIBusInfoPropertiesEXT;
++    VkBool32 mutableDescriptorType;
++} VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE;
+ 
+-typedef struct VkPhysicalDevicePerformanceQueryPropertiesKHR
++typedef struct VkPhysicalDevicePerformanceQueryFeaturesKHR
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 allowCommandBufferQueryCopies;
+-} VkPhysicalDevicePerformanceQueryPropertiesKHR;
++    VkBool32 performanceCounterQueryPools;
++    VkBool32 performanceCounterMultipleQueryPools;
++} VkPhysicalDevicePerformanceQueryFeaturesKHR;
+ 
+-typedef struct VkPhysicalDevicePipelineExecutablePropertiesFeaturesKHR
++typedef struct VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 pipelineExecutableInfo;
+-} VkPhysicalDevicePipelineExecutablePropertiesFeaturesKHR;
++    VkBool32 pipelineCreationCacheControl;
++} VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT;
+ 
+-typedef struct VkPhysicalDevicePrivateDataFeaturesEXT
++typedef struct VkPhysicalDevicePointClippingProperties
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 privateData;
+-} VkPhysicalDevicePrivateDataFeaturesEXT;
++    VkPointClippingBehavior pointClippingBehavior;
++} VkPhysicalDevicePointClippingProperties;
++typedef VkPhysicalDevicePointClippingProperties VkPhysicalDevicePointClippingPropertiesKHR;
+ 
+ typedef struct VkPhysicalDeviceProtectedMemoryProperties
+ {
+@@ -5781,301 +5794,203 @@ typedef struct VkMemoryRequirements2
+ } VkMemoryRequirements2;
+ typedef VkMemoryRequirements2 VkMemoryRequirements2KHR;
+ 
+-typedef struct VkOffset2D
++typedef union VkPerformanceCounterResultKHR
+ {
+-    int32_t x;
+-    int32_t y;
+-} VkOffset2D;
++    int32_t int32;
++    int64_t int64;
++    uint32_t uint32;
++    uint64_t WINE_VK_ALIGN(8) uint64;
++    float float32;
++    double float64;
++} VkPerformanceCounterResultKHR;
+ 
+-typedef struct VkPerformanceCounterDescriptionKHR
++typedef struct VkPerformanceStreamMarkerInfoINTEL
+ {
+     VkStructureType sType;
+     const void *pNext;
+-    VkPerformanceCounterDescriptionFlagsKHR flags;
+-    char name[VK_MAX_DESCRIPTION_SIZE];
+-    char category[VK_MAX_DESCRIPTION_SIZE];
+-    char description[VK_MAX_DESCRIPTION_SIZE];
+-} VkPerformanceCounterDescriptionKHR;
++    uint32_t marker;
++} VkPerformanceStreamMarkerInfoINTEL;
+ 
+-typedef struct VkPerformanceOverrideInfoINTEL
++typedef struct VkPhysicalDeviceASTCDecodeFeaturesEXT
+ {
+     VkStructureType sType;
+-    const void *pNext;
+-    VkPerformanceOverrideTypeINTEL type;
+-    VkBool32 enable;
+-    uint64_t WINE_VK_ALIGN(8) parameter;
+-} VkPerformanceOverrideInfoINTEL;
++    void *pNext;
++    VkBool32 decodeModeSharedExponent;
++} VkPhysicalDeviceASTCDecodeFeaturesEXT;
+ 
+-typedef struct VkPerformanceValueINTEL
++typedef struct VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT
+ {
+-    VkPerformanceValueTypeINTEL type;
+-    VkPerformanceValueDataINTEL data;
+-} VkPerformanceValueINTEL;
++    VkStructureType sType;
++    void *pNext;
++    uint32_t advancedBlendMaxColorAttachments;
++    VkBool32 advancedBlendIndependentBlend;
++    VkBool32 advancedBlendNonPremultipliedSrcColor;
++    VkBool32 advancedBlendNonPremultipliedDstColor;
++    VkBool32 advancedBlendCorrelatedOverlap;
++    VkBool32 advancedBlendAllOperations;
++} VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT;
+ 
+-typedef struct VkPhysicalDevice8BitStorageFeatures
++typedef struct VkPhysicalDeviceConservativeRasterizationPropertiesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 storageBuffer8BitAccess;
+-    VkBool32 uniformAndStorageBuffer8BitAccess;
+-    VkBool32 storagePushConstant8;
+-} VkPhysicalDevice8BitStorageFeatures;
+-typedef VkPhysicalDevice8BitStorageFeatures VkPhysicalDevice8BitStorageFeaturesKHR;
++    float primitiveOverestimationSize;
++    float maxExtraPrimitiveOverestimationSize;
++    float extraPrimitiveOverestimationSizeGranularity;
++    VkBool32 primitiveUnderestimation;
++    VkBool32 conservativePointAndLineRasterization;
++    VkBool32 degenerateTrianglesRasterized;
++    VkBool32 degenerateLinesRasterized;
++    VkBool32 fullyCoveredFragmentShaderInputVariable;
++    VkBool32 conservativeRasterizationPostDepthCoverage;
++} VkPhysicalDeviceConservativeRasterizationPropertiesEXT;
+ 
+-typedef struct VkPhysicalDeviceAccelerationStructurePropertiesKHR
++typedef struct VkPhysicalDeviceCoverageReductionModeFeaturesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint64_t WINE_VK_ALIGN(8) maxGeometryCount;
+-    uint64_t WINE_VK_ALIGN(8) maxInstanceCount;
+-    uint64_t WINE_VK_ALIGN(8) maxPrimitiveCount;
+-    uint32_t maxPerStageDescriptorAccelerationStructures;
+-    uint32_t maxPerStageDescriptorUpdateAfterBindAccelerationStructures;
+-    uint32_t maxDescriptorSetAccelerationStructures;
+-    uint32_t maxDescriptorSetUpdateAfterBindAccelerationStructures;
+-    uint32_t minAccelerationStructureScratchOffsetAlignment;
+-} VkPhysicalDeviceAccelerationStructurePropertiesKHR;
++    VkBool32 coverageReductionMode;
++} VkPhysicalDeviceCoverageReductionModeFeaturesNV;
+ 
+-typedef struct VkPhysicalDeviceBufferDeviceAddressFeatures
++typedef struct VkPhysicalDeviceDepthClipEnableFeaturesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 bufferDeviceAddress;
+-    VkBool32 bufferDeviceAddressCaptureReplay;
+-    VkBool32 bufferDeviceAddressMultiDevice;
+-} VkPhysicalDeviceBufferDeviceAddressFeatures;
+-typedef VkPhysicalDeviceBufferDeviceAddressFeatures VkPhysicalDeviceBufferDeviceAddressFeaturesKHR;
++    VkBool32 depthClipEnable;
++} VkPhysicalDeviceDepthClipEnableFeaturesEXT;
+ 
+-typedef struct VkPhysicalDeviceComputeShaderDerivativesFeaturesNV
++typedef struct VkPhysicalDeviceDeviceGeneratedCommandsPropertiesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 computeDerivativeGroupQuads;
+-    VkBool32 computeDerivativeGroupLinear;
+-} VkPhysicalDeviceComputeShaderDerivativesFeaturesNV;
++    uint32_t maxGraphicsShaderGroupCount;
++    uint32_t maxIndirectSequenceCount;
++    uint32_t maxIndirectCommandsTokenCount;
++    uint32_t maxIndirectCommandsStreamCount;
++    uint32_t maxIndirectCommandsTokenOffset;
++    uint32_t maxIndirectCommandsStreamStride;
++    uint32_t minSequencesCountBufferOffsetAlignment;
++    uint32_t minSequencesIndexBufferOffsetAlignment;
++    uint32_t minIndirectCommandsBufferOffsetAlignment;
++} VkPhysicalDeviceDeviceGeneratedCommandsPropertiesNV;
+ 
+-typedef struct VkPhysicalDeviceCooperativeMatrixPropertiesNV
++typedef struct VkPhysicalDeviceDriverProperties
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkShaderStageFlags cooperativeMatrixSupportedStages;
+-} VkPhysicalDeviceCooperativeMatrixPropertiesNV;
++    VkDriverId driverID;
++    char driverName[VK_MAX_DRIVER_NAME_SIZE];
++    char driverInfo[VK_MAX_DRIVER_INFO_SIZE];
++    VkConformanceVersion conformanceVersion;
++} VkPhysicalDeviceDriverProperties;
++typedef VkPhysicalDeviceDriverProperties VkPhysicalDeviceDriverPropertiesKHR;
+ 
+-typedef struct VkPhysicalDeviceCustomBorderColorPropertiesEXT
++typedef struct VkPhysicalDeviceExternalBufferInfo
++{
++    VkStructureType sType;
++    const void *pNext;
++    VkBufferCreateFlags flags;
++    VkBufferUsageFlags usage;
++    VkExternalMemoryHandleTypeFlagBits handleType;
++} VkPhysicalDeviceExternalBufferInfo;
++typedef VkPhysicalDeviceExternalBufferInfo VkPhysicalDeviceExternalBufferInfoKHR;
++
++typedef struct VkPhysicalDeviceExternalImageFormatInfo
++{
++    VkStructureType sType;
++    const void *pNext;
++    VkExternalMemoryHandleTypeFlagBits handleType;
++} VkPhysicalDeviceExternalImageFormatInfo;
++typedef VkPhysicalDeviceExternalImageFormatInfo VkPhysicalDeviceExternalImageFormatInfoKHR;
++
++typedef struct VkPhysicalDeviceFragmentDensityMap2PropertiesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint32_t maxCustomBorderColorSamplers;
+-} VkPhysicalDeviceCustomBorderColorPropertiesEXT;
++    VkBool32 subsampledLoads;
++    VkBool32 subsampledCoarseReconstructionEarlyAccess;
++    uint32_t maxSubsampledArrayLayers;
++    uint32_t maxDescriptorSetSubsampledSamplers;
++} VkPhysicalDeviceFragmentDensityMap2PropertiesEXT;
+ 
+-typedef struct VkPhysicalDeviceDiagnosticsConfigFeaturesNV
++typedef struct VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 diagnosticsConfig;
+-} VkPhysicalDeviceDiagnosticsConfigFeaturesNV;
++    VkBool32 fragmentShaderSampleInterlock;
++    VkBool32 fragmentShaderPixelInterlock;
++    VkBool32 fragmentShaderShadingRateInterlock;
++} VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT;
+ 
+-typedef struct VkPhysicalDeviceExclusiveScissorFeaturesNV
++typedef struct VkPhysicalDeviceFragmentShadingRateKHR
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 exclusiveScissor;
+-} VkPhysicalDeviceExclusiveScissorFeaturesNV;
++    VkSampleCountFlags sampleCounts;
++    VkExtent2D fragmentSize;
++} VkPhysicalDeviceFragmentShadingRateKHR;
+ 
+-typedef struct VkPhysicalDeviceExternalFenceInfo
++typedef struct VkPhysicalDeviceHostQueryResetFeatures
+ {
+     VkStructureType sType;
+-    const void *pNext;
+-    VkExternalFenceHandleTypeFlagBits handleType;
+-} VkPhysicalDeviceExternalFenceInfo;
+-typedef VkPhysicalDeviceExternalFenceInfo VkPhysicalDeviceExternalFenceInfoKHR;
++    void *pNext;
++    VkBool32 hostQueryReset;
++} VkPhysicalDeviceHostQueryResetFeatures;
++typedef VkPhysicalDeviceHostQueryResetFeatures VkPhysicalDeviceHostQueryResetFeaturesEXT;
+ 
+-typedef struct VkPhysicalDeviceExternalMemoryHostPropertiesEXT
++typedef struct VkPhysicalDeviceImageViewImageFormatInfoEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkDeviceSize WINE_VK_ALIGN(8) minImportedHostPointerAlignment;
+-} VkPhysicalDeviceExternalMemoryHostPropertiesEXT;
++    VkImageViewType imageViewType;
++} VkPhysicalDeviceImageViewImageFormatInfoEXT;
+ 
+-typedef struct VkPhysicalDeviceFeatures2
++typedef struct VkPhysicalDeviceInlineUniformBlockFeaturesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkPhysicalDeviceFeatures features;
+-} VkPhysicalDeviceFeatures2;
+-typedef VkPhysicalDeviceFeatures2 VkPhysicalDeviceFeatures2KHR;
++    VkBool32 inlineUniformBlock;
++    VkBool32 descriptorBindingInlineUniformBlockUpdateAfterBind;
++} VkPhysicalDeviceInlineUniformBlockFeaturesEXT;
+ 
+-typedef struct VkPhysicalDeviceFragmentDensityMapPropertiesEXT
++typedef struct VkPhysicalDeviceLineRasterizationPropertiesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkExtent2D minFragmentDensityTexelSize;
+-    VkExtent2D maxFragmentDensityTexelSize;
+-    VkBool32 fragmentDensityInvocations;
+-} VkPhysicalDeviceFragmentDensityMapPropertiesEXT;
++    uint32_t lineSubPixelPrecisionBits;
++} VkPhysicalDeviceLineRasterizationPropertiesEXT;
+ 
+-typedef struct VkPhysicalDeviceFragmentShadingRateEnumsPropertiesNV
++typedef struct VkPhysicalDeviceMemoryPriorityFeaturesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkSampleCountFlagBits maxFragmentShadingRateInvocationCount;
+-} VkPhysicalDeviceFragmentShadingRateEnumsPropertiesNV;
++    VkBool32 memoryPriority;
++} VkPhysicalDeviceMemoryPriorityFeaturesEXT;
+ 
+-typedef struct VkPhysicalDeviceGroupProperties
++typedef struct VkPhysicalDeviceMeshShaderFeaturesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint32_t physicalDeviceCount;
+-    VkPhysicalDevice physicalDevices[VK_MAX_DEVICE_GROUP_SIZE];
+-    VkBool32 subsetAllocation;
+-} VkPhysicalDeviceGroupProperties;
+-typedef VkPhysicalDeviceGroupProperties VkPhysicalDeviceGroupPropertiesKHR;
++    VkBool32 taskShader;
++    VkBool32 meshShader;
++} VkPhysicalDeviceMeshShaderFeaturesNV;
+ 
+-typedef struct VkPhysicalDeviceIDProperties
++typedef struct VkPhysicalDevicePCIBusInfoPropertiesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint8_t deviceUUID[VK_UUID_SIZE];
+-    uint8_t driverUUID[VK_UUID_SIZE];
+-    uint8_t deviceLUID[VK_LUID_SIZE];
+-    uint32_t deviceNodeMask;
+-    VkBool32 deviceLUIDValid;
+-} VkPhysicalDeviceIDProperties;
+-typedef VkPhysicalDeviceIDProperties VkPhysicalDeviceIDPropertiesKHR;
++    uint32_t pciDomain;
++    uint32_t pciBus;
++    uint32_t pciDevice;
++    uint32_t pciFunction;
++} VkPhysicalDevicePCIBusInfoPropertiesEXT;
+ 
+-typedef struct VkPhysicalDeviceLimits
+-{
+-    uint32_t maxImageDimension1D;
+-    uint32_t maxImageDimension2D;
+-    uint32_t maxImageDimension3D;
+-    uint32_t maxImageDimensionCube;
+-    uint32_t maxImageArrayLayers;
+-    uint32_t maxTexelBufferElements;
+-    uint32_t maxUniformBufferRange;
+-    uint32_t maxStorageBufferRange;
+-    uint32_t maxPushConstantsSize;
+-    uint32_t maxMemoryAllocationCount;
+-    uint32_t maxSamplerAllocationCount;
+-    VkDeviceSize WINE_VK_ALIGN(8) bufferImageGranularity;
+-    VkDeviceSize WINE_VK_ALIGN(8) sparseAddressSpaceSize;
+-    uint32_t maxBoundDescriptorSets;
+-    uint32_t maxPerStageDescriptorSamplers;
+-    uint32_t maxPerStageDescriptorUniformBuffers;
+-    uint32_t maxPerStageDescriptorStorageBuffers;
+-    uint32_t maxPerStageDescriptorSampledImages;
+-    uint32_t maxPerStageDescriptorStorageImages;
+-    uint32_t maxPerStageDescriptorInputAttachments;
+-    uint32_t maxPerStageResources;
+-    uint32_t maxDescriptorSetSamplers;
+-    uint32_t maxDescriptorSetUniformBuffers;
+-    uint32_t maxDescriptorSetUniformBuffersDynamic;
+-    uint32_t maxDescriptorSetStorageBuffers;
+-    uint32_t maxDescriptorSetStorageBuffersDynamic;
+-    uint32_t maxDescriptorSetSampledImages;
+-    uint32_t maxDescriptorSetStorageImages;
+-    uint32_t maxDescriptorSetInputAttachments;
+-    uint32_t maxVertexInputAttributes;
+-    uint32_t maxVertexInputBindings;
+-    uint32_t maxVertexInputAttributeOffset;
+-    uint32_t maxVertexInputBindingStride;
+-    uint32_t maxVertexOutputComponents;
+-    uint32_t maxTessellationGenerationLevel;
+-    uint32_t maxTessellationPatchSize;
+-    uint32_t maxTessellationControlPerVertexInputComponents;
+-    uint32_t maxTessellationControlPerVertexOutputComponents;
+-    uint32_t maxTessellationControlPerPatchOutputComponents;
+-    uint32_t maxTessellationControlTotalOutputComponents;
+-    uint32_t maxTessellationEvaluationInputComponents;
+-    uint32_t maxTessellationEvaluationOutputComponents;
+-    uint32_t maxGeometryShaderInvocations;
+-    uint32_t maxGeometryInputComponents;
+-    uint32_t maxGeometryOutputComponents;
+-    uint32_t maxGeometryOutputVertices;
+-    uint32_t maxGeometryTotalOutputComponents;
+-    uint32_t maxFragmentInputComponents;
+-    uint32_t maxFragmentOutputAttachments;
+-    uint32_t maxFragmentDualSrcAttachments;
+-    uint32_t maxFragmentCombinedOutputResources;
+-    uint32_t maxComputeSharedMemorySize;
+-    uint32_t maxComputeWorkGroupCount[3];
+-    uint32_t maxComputeWorkGroupInvocations;
+-    uint32_t maxComputeWorkGroupSize[3];
+-    uint32_t subPixelPrecisionBits;
+-    uint32_t subTexelPrecisionBits;
+-    uint32_t mipmapPrecisionBits;
+-    uint32_t maxDrawIndexedIndexValue;
+-    uint32_t maxDrawIndirectCount;
+-    float maxSamplerLodBias;
+-    float maxSamplerAnisotropy;
+-    uint32_t maxViewports;
+-    uint32_t maxViewportDimensions[2];
+-    float viewportBoundsRange[2];
+-    uint32_t viewportSubPixelBits;
+-    size_t minMemoryMapAlignment;
+-    VkDeviceSize WINE_VK_ALIGN(8) minTexelBufferOffsetAlignment;
+-    VkDeviceSize WINE_VK_ALIGN(8) minUniformBufferOffsetAlignment;
+-    VkDeviceSize WINE_VK_ALIGN(8) minStorageBufferOffsetAlignment;
+-    int32_t minTexelOffset;
+-    uint32_t maxTexelOffset;
+-    int32_t minTexelGatherOffset;
+-    uint32_t maxTexelGatherOffset;
+-    float minInterpolationOffset;
+-    float maxInterpolationOffset;
+-    uint32_t subPixelInterpolationOffsetBits;
+-    uint32_t maxFramebufferWidth;
+-    uint32_t maxFramebufferHeight;
+-    uint32_t maxFramebufferLayers;
+-    VkSampleCountFlags framebufferColorSampleCounts;
+-    VkSampleCountFlags framebufferDepthSampleCounts;
+-    VkSampleCountFlags framebufferStencilSampleCounts;
+-    VkSampleCountFlags framebufferNoAttachmentsSampleCounts;
+-    uint32_t maxColorAttachments;
+-    VkSampleCountFlags sampledImageColorSampleCounts;
+-    VkSampleCountFlags sampledImageIntegerSampleCounts;
+-    VkSampleCountFlags sampledImageDepthSampleCounts;
+-    VkSampleCountFlags sampledImageStencilSampleCounts;
+-    VkSampleCountFlags storageImageSampleCounts;
+-    uint32_t maxSampleMaskWords;
+-    VkBool32 timestampComputeAndGraphics;
+-    float timestampPeriod;
+-    uint32_t maxClipDistances;
+-    uint32_t maxCullDistances;
+-    uint32_t maxCombinedClipAndCullDistances;
+-    uint32_t discreteQueuePriorities;
+-    float pointSizeRange[2];
+-    float lineWidthRange[2];
+-    float pointSizeGranularity;
+-    float lineWidthGranularity;
+-    VkBool32 strictLines;
+-    VkBool32 standardSampleLocations;
+-    VkDeviceSize WINE_VK_ALIGN(8) optimalBufferCopyOffsetAlignment;
+-    VkDeviceSize WINE_VK_ALIGN(8) optimalBufferCopyRowPitchAlignment;
+-    VkDeviceSize WINE_VK_ALIGN(8) nonCoherentAtomSize;
+-} VkPhysicalDeviceLimits;
+-
+-typedef struct VkPhysicalDeviceMeshShaderFeaturesNV
+-{
+-    VkStructureType sType;
+-    void *pNext;
+-    VkBool32 taskShader;
+-    VkBool32 meshShader;
+-} VkPhysicalDeviceMeshShaderFeaturesNV;
+-
+-typedef struct VkPhysicalDevicePerformanceQueryFeaturesKHR
+-{
+-    VkStructureType sType;
+-    void *pNext;
+-    VkBool32 performanceCounterQueryPools;
+-    VkBool32 performanceCounterMultipleQueryPools;
+-} VkPhysicalDevicePerformanceQueryFeaturesKHR;
+-
+-typedef struct VkPhysicalDevicePointClippingProperties
++typedef struct VkPhysicalDevicePipelineExecutablePropertiesFeaturesKHR
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkPointClippingBehavior pointClippingBehavior;
+-} VkPhysicalDevicePointClippingProperties;
+-typedef VkPhysicalDevicePointClippingProperties VkPhysicalDevicePointClippingPropertiesKHR;
++    VkBool32 pipelineExecutableInfo;
++} VkPhysicalDevicePipelineExecutablePropertiesFeaturesKHR;
+ 
+ typedef struct VkPhysicalDeviceProtectedMemoryFeatures
+ {
+@@ -6411,12 +6326,14 @@ typedef struct VkRayTracingShaderGroupCreateInfoKHR
+     const void *pShaderGroupCaptureReplayHandle;
+ } VkRayTracingShaderGroupCreateInfoKHR;
+ 
+-typedef struct VkRectLayerKHR
++typedef struct VkRenderPassAttachmentBeginInfo
+ {
+-    VkOffset2D offset;
+-    VkExtent2D extent;
+-    uint32_t layer;
+-} VkRectLayerKHR;
++    VkStructureType sType;
++    const void *pNext;
++    uint32_t attachmentCount;
++    const VkImageView *pAttachments;
++} VkRenderPassAttachmentBeginInfo;
++typedef VkRenderPassAttachmentBeginInfo VkRenderPassAttachmentBeginInfoKHR;
+ 
+ typedef struct VkRenderPassFragmentDensityMapCreateInfoEXT
+ {
+@@ -6839,76 +6756,199 @@ typedef struct VkMemoryType
+     uint32_t heapIndex;
+ } VkMemoryType;
+ 
+-typedef struct VkPerformanceStreamMarkerInfoINTEL
++typedef struct VkOffset2D
++{
++    int32_t x;
++    int32_t y;
++} VkOffset2D;
++
++typedef struct VkPerformanceOverrideInfoINTEL
+ {
+     VkStructureType sType;
+     const void *pNext;
+-    uint32_t marker;
+-} VkPerformanceStreamMarkerInfoINTEL;
++    VkPerformanceOverrideTypeINTEL type;
++    VkBool32 enable;
++    uint64_t WINE_VK_ALIGN(8) parameter;
++} VkPerformanceOverrideInfoINTEL;
+ 
+-typedef struct VkPhysicalDeviceASTCDecodeFeaturesEXT
++typedef struct VkPhysicalDevice8BitStorageFeatures
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 decodeModeSharedExponent;
+-} VkPhysicalDeviceASTCDecodeFeaturesEXT;
++    VkBool32 storageBuffer8BitAccess;
++    VkBool32 uniformAndStorageBuffer8BitAccess;
++    VkBool32 storagePushConstant8;
++} VkPhysicalDevice8BitStorageFeatures;
++typedef VkPhysicalDevice8BitStorageFeatures VkPhysicalDevice8BitStorageFeaturesKHR;
+ 
+-typedef struct VkPhysicalDeviceCoverageReductionModeFeaturesNV
++typedef struct VkPhysicalDeviceBufferDeviceAddressFeatures
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 coverageReductionMode;
+-} VkPhysicalDeviceCoverageReductionModeFeaturesNV;
++    VkBool32 bufferDeviceAddress;
++    VkBool32 bufferDeviceAddressCaptureReplay;
++    VkBool32 bufferDeviceAddressMultiDevice;
++} VkPhysicalDeviceBufferDeviceAddressFeatures;
++typedef VkPhysicalDeviceBufferDeviceAddressFeatures VkPhysicalDeviceBufferDeviceAddressFeaturesKHR;
+ 
+-typedef struct VkPhysicalDeviceDriverProperties
++typedef struct VkPhysicalDeviceCooperativeMatrixPropertiesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkDriverId driverID;
+-    char driverName[VK_MAX_DRIVER_NAME_SIZE];
+-    char driverInfo[VK_MAX_DRIVER_INFO_SIZE];
+-    VkConformanceVersion conformanceVersion;
+-} VkPhysicalDeviceDriverProperties;
+-typedef VkPhysicalDeviceDriverProperties VkPhysicalDeviceDriverPropertiesKHR;
++    VkShaderStageFlags cooperativeMatrixSupportedStages;
++} VkPhysicalDeviceCooperativeMatrixPropertiesNV;
+ 
+-typedef struct VkPhysicalDeviceExternalImageFormatInfo
++typedef struct VkPhysicalDeviceDiagnosticsConfigFeaturesNV
+ {
+     VkStructureType sType;
+-    const void *pNext;
+-    VkExternalMemoryHandleTypeFlagBits handleType;
+-} VkPhysicalDeviceExternalImageFormatInfo;
+-typedef VkPhysicalDeviceExternalImageFormatInfo VkPhysicalDeviceExternalImageFormatInfoKHR;
++    void *pNext;
++    VkBool32 diagnosticsConfig;
++} VkPhysicalDeviceDiagnosticsConfigFeaturesNV;
+ 
+-typedef struct VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT
++typedef struct VkPhysicalDeviceExternalFenceInfo
+ {
+     VkStructureType sType;
+-    void *pNext;
+-    VkBool32 fragmentShaderSampleInterlock;
+-    VkBool32 fragmentShaderPixelInterlock;
+-    VkBool32 fragmentShaderShadingRateInterlock;
+-} VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT;
++    const void *pNext;
++    VkExternalFenceHandleTypeFlagBits handleType;
++} VkPhysicalDeviceExternalFenceInfo;
++typedef VkPhysicalDeviceExternalFenceInfo VkPhysicalDeviceExternalFenceInfoKHR;
+ 
+-typedef struct VkPhysicalDeviceHostQueryResetFeatures
++typedef struct VkPhysicalDeviceFeatures2
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 hostQueryReset;
+-} VkPhysicalDeviceHostQueryResetFeatures;
+-typedef VkPhysicalDeviceHostQueryResetFeatures VkPhysicalDeviceHostQueryResetFeaturesEXT;
++    VkPhysicalDeviceFeatures features;
++} VkPhysicalDeviceFeatures2;
++typedef VkPhysicalDeviceFeatures2 VkPhysicalDeviceFeatures2KHR;
+ 
+-typedef struct VkPhysicalDeviceImageViewImageFormatInfoEXT
++typedef struct VkPhysicalDeviceFragmentDensityMapPropertiesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkImageViewType imageViewType;
+-} VkPhysicalDeviceImageViewImageFormatInfoEXT;
++    VkExtent2D minFragmentDensityTexelSize;
++    VkExtent2D maxFragmentDensityTexelSize;
++    VkBool32 fragmentDensityInvocations;
++} VkPhysicalDeviceFragmentDensityMapPropertiesEXT;
+ 
+-typedef struct VkPhysicalDeviceLineRasterizationPropertiesEXT
++typedef struct VkPhysicalDeviceGroupProperties
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint32_t lineSubPixelPrecisionBits;
+-} VkPhysicalDeviceLineRasterizationPropertiesEXT;
++    uint32_t physicalDeviceCount;
++    VkPhysicalDevice physicalDevices[VK_MAX_DEVICE_GROUP_SIZE];
++    VkBool32 subsetAllocation;
++} VkPhysicalDeviceGroupProperties;
++typedef VkPhysicalDeviceGroupProperties VkPhysicalDeviceGroupPropertiesKHR;
++
++typedef struct VkPhysicalDeviceLimits
++{
++    uint32_t maxImageDimension1D;
++    uint32_t maxImageDimension2D;
++    uint32_t maxImageDimension3D;
++    uint32_t maxImageDimensionCube;
++    uint32_t maxImageArrayLayers;
++    uint32_t maxTexelBufferElements;
++    uint32_t maxUniformBufferRange;
++    uint32_t maxStorageBufferRange;
++    uint32_t maxPushConstantsSize;
++    uint32_t maxMemoryAllocationCount;
++    uint32_t maxSamplerAllocationCount;
++    VkDeviceSize WINE_VK_ALIGN(8) bufferImageGranularity;
++    VkDeviceSize WINE_VK_ALIGN(8) sparseAddressSpaceSize;
++    uint32_t maxBoundDescriptorSets;
++    uint32_t maxPerStageDescriptorSamplers;
++    uint32_t maxPerStageDescriptorUniformBuffers;
++    uint32_t maxPerStageDescriptorStorageBuffers;
++    uint32_t maxPerStageDescriptorSampledImages;
++    uint32_t maxPerStageDescriptorStorageImages;
++    uint32_t maxPerStageDescriptorInputAttachments;
++    uint32_t maxPerStageResources;
++    uint32_t maxDescriptorSetSamplers;
++    uint32_t maxDescriptorSetUniformBuffers;
++    uint32_t maxDescriptorSetUniformBuffersDynamic;
++    uint32_t maxDescriptorSetStorageBuffers;
++    uint32_t maxDescriptorSetStorageBuffersDynamic;
++    uint32_t maxDescriptorSetSampledImages;
++    uint32_t maxDescriptorSetStorageImages;
++    uint32_t maxDescriptorSetInputAttachments;
++    uint32_t maxVertexInputAttributes;
++    uint32_t maxVertexInputBindings;
++    uint32_t maxVertexInputAttributeOffset;
++    uint32_t maxVertexInputBindingStride;
++    uint32_t maxVertexOutputComponents;
++    uint32_t maxTessellationGenerationLevel;
++    uint32_t maxTessellationPatchSize;
++    uint32_t maxTessellationControlPerVertexInputComponents;
++    uint32_t maxTessellationControlPerVertexOutputComponents;
++    uint32_t maxTessellationControlPerPatchOutputComponents;
++    uint32_t maxTessellationControlTotalOutputComponents;
++    uint32_t maxTessellationEvaluationInputComponents;
++    uint32_t maxTessellationEvaluationOutputComponents;
++    uint32_t maxGeometryShaderInvocations;
++    uint32_t maxGeometryInputComponents;
++    uint32_t maxGeometryOutputComponents;
++    uint32_t maxGeometryOutputVertices;
++    uint32_t maxGeometryTotalOutputComponents;
++    uint32_t maxFragmentInputComponents;
++    uint32_t maxFragmentOutputAttachments;
++    uint32_t maxFragmentDualSrcAttachments;
++    uint32_t maxFragmentCombinedOutputResources;
++    uint32_t maxComputeSharedMemorySize;
++    uint32_t maxComputeWorkGroupCount[3];
++    uint32_t maxComputeWorkGroupInvocations;
++    uint32_t maxComputeWorkGroupSize[3];
++    uint32_t subPixelPrecisionBits;
++    uint32_t subTexelPrecisionBits;
++    uint32_t mipmapPrecisionBits;
++    uint32_t maxDrawIndexedIndexValue;
++    uint32_t maxDrawIndirectCount;
++    float maxSamplerLodBias;
++    float maxSamplerAnisotropy;
++    uint32_t maxViewports;
++    uint32_t maxViewportDimensions[2];
++    float viewportBoundsRange[2];
++    uint32_t viewportSubPixelBits;
++    size_t minMemoryMapAlignment;
++    VkDeviceSize WINE_VK_ALIGN(8) minTexelBufferOffsetAlignment;
++    VkDeviceSize WINE_VK_ALIGN(8) minUniformBufferOffsetAlignment;
++    VkDeviceSize WINE_VK_ALIGN(8) minStorageBufferOffsetAlignment;
++    int32_t minTexelOffset;
++    uint32_t maxTexelOffset;
++    int32_t minTexelGatherOffset;
++    uint32_t maxTexelGatherOffset;
++    float minInterpolationOffset;
++    float maxInterpolationOffset;
++    uint32_t subPixelInterpolationOffsetBits;
++    uint32_t maxFramebufferWidth;
++    uint32_t maxFramebufferHeight;
++    uint32_t maxFramebufferLayers;
++    VkSampleCountFlags framebufferColorSampleCounts;
++    VkSampleCountFlags framebufferDepthSampleCounts;
++    VkSampleCountFlags framebufferStencilSampleCounts;
++    VkSampleCountFlags framebufferNoAttachmentsSampleCounts;
++    uint32_t maxColorAttachments;
++    VkSampleCountFlags sampledImageColorSampleCounts;
++    VkSampleCountFlags sampledImageIntegerSampleCounts;
++    VkSampleCountFlags sampledImageDepthSampleCounts;
++    VkSampleCountFlags sampledImageStencilSampleCounts;
++    VkSampleCountFlags storageImageSampleCounts;
++    uint32_t maxSampleMaskWords;
++    VkBool32 timestampComputeAndGraphics;
++    float timestampPeriod;
++    uint32_t maxClipDistances;
++    uint32_t maxCullDistances;
++    uint32_t maxCombinedClipAndCullDistances;
++    uint32_t discreteQueuePriorities;
++    float pointSizeRange[2];
++    float lineWidthRange[2];
++    float pointSizeGranularity;
++    float lineWidthGranularity;
++    VkBool32 strictLines;
++    VkBool32 standardSampleLocations;
++    VkDeviceSize WINE_VK_ALIGN(8) optimalBufferCopyOffsetAlignment;
++    VkDeviceSize WINE_VK_ALIGN(8) optimalBufferCopyRowPitchAlignment;
++    VkDeviceSize WINE_VK_ALIGN(8) nonCoherentAtomSize;
++} VkPhysicalDeviceLimits;
+ 
+ typedef struct VkPhysicalDeviceMemoryProperties
+ {
+@@ -6928,12 +6968,19 @@ typedef struct VkPhysicalDeviceMultiviewFeatures
+ } VkPhysicalDeviceMultiviewFeatures;
+ typedef VkPhysicalDeviceMultiviewFeatures VkPhysicalDeviceMultiviewFeaturesKHR;
+ 
+-typedef struct VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT
++typedef struct VkPhysicalDevicePerformanceQueryPropertiesKHR
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 pipelineCreationCacheControl;
+-} VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT;
++    VkBool32 allowCommandBufferQueryCopies;
++} VkPhysicalDevicePerformanceQueryPropertiesKHR;
++
++typedef struct VkPhysicalDevicePrivateDataFeaturesEXT
++{
++    VkStructureType sType;
++    void *pNext;
++    VkBool32 privateData;
++} VkPhysicalDevicePrivateDataFeaturesEXT;
+ 
+ typedef struct VkPhysicalDevicePushDescriptorPropertiesKHR
+ {
+@@ -7068,12 +7115,6 @@ typedef struct VkPipelineVertexInputStateCreateInfo
+     const VkVertexInputAttributeDescription *pVertexAttributeDescriptions;
+ } VkPipelineVertexInputStateCreateInfo;
+ 
+-typedef struct VkPresentRegionKHR
+-{
+-    uint32_t rectangleCount;
+-    const VkRectLayerKHR *pRectangles;
+-} VkPresentRegionKHR;
+-
+ typedef struct VkProtectedSubmitInfo
+ {
+     VkStructureType sType;
+@@ -7393,51 +7434,41 @@ typedef struct VkIndirectCommandsStreamNV
+     VkDeviceSize WINE_VK_ALIGN(8) offset;
+ } VkIndirectCommandsStreamNV;
+ 
+-typedef struct VkPhysicalDeviceConservativeRasterizationPropertiesEXT
++typedef struct VkMutableDescriptorTypeCreateInfoVALVE
+ {
+     VkStructureType sType;
+-    void *pNext;
+-    float primitiveOverestimationSize;
+-    float maxExtraPrimitiveOverestimationSize;
+-    float extraPrimitiveOverestimationSizeGranularity;
+-    VkBool32 primitiveUnderestimation;
+-    VkBool32 conservativePointAndLineRasterization;
+-    VkBool32 degenerateTrianglesRasterized;
+-    VkBool32 degenerateLinesRasterized;
+-    VkBool32 fullyCoveredFragmentShaderInputVariable;
+-    VkBool32 conservativeRasterizationPostDepthCoverage;
+-} VkPhysicalDeviceConservativeRasterizationPropertiesEXT;
++    const void *pNext;
++    uint32_t mutableDescriptorTypeListCount;
++    const VkMutableDescriptorTypeListVALVE *pMutableDescriptorTypeLists;
++} VkMutableDescriptorTypeCreateInfoVALVE;
+ 
+-typedef struct VkPhysicalDeviceDeviceGeneratedCommandsPropertiesNV
++typedef struct VkPerformanceValueINTEL
++{
++    VkPerformanceValueTypeINTEL type;
++    VkPerformanceValueDataINTEL data;
++} VkPerformanceValueINTEL;
++
++typedef struct VkPhysicalDeviceComputeShaderDerivativesFeaturesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint32_t maxGraphicsShaderGroupCount;
+-    uint32_t maxIndirectSequenceCount;
+-    uint32_t maxIndirectCommandsTokenCount;
+-    uint32_t maxIndirectCommandsStreamCount;
+-    uint32_t maxIndirectCommandsTokenOffset;
+-    uint32_t maxIndirectCommandsStreamStride;
+-    uint32_t minSequencesCountBufferOffsetAlignment;
+-    uint32_t minSequencesIndexBufferOffsetAlignment;
+-    uint32_t minIndirectCommandsBufferOffsetAlignment;
+-} VkPhysicalDeviceDeviceGeneratedCommandsPropertiesNV;
++    VkBool32 computeDerivativeGroupQuads;
++    VkBool32 computeDerivativeGroupLinear;
++} VkPhysicalDeviceComputeShaderDerivativesFeaturesNV;
+ 
+-typedef struct VkPhysicalDeviceFragmentShadingRateKHR
++typedef struct VkPhysicalDeviceExternalMemoryHostPropertiesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkSampleCountFlags sampleCounts;
+-    VkExtent2D fragmentSize;
+-} VkPhysicalDeviceFragmentShadingRateKHR;
++    VkDeviceSize WINE_VK_ALIGN(8) minImportedHostPointerAlignment;
++} VkPhysicalDeviceExternalMemoryHostPropertiesEXT;
+ 
+-typedef struct VkPhysicalDeviceInlineUniformBlockFeaturesEXT
++typedef struct VkPhysicalDeviceFragmentShadingRateEnumsPropertiesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 inlineUniformBlock;
+-    VkBool32 descriptorBindingInlineUniformBlockUpdateAfterBind;
+-} VkPhysicalDeviceInlineUniformBlockFeaturesEXT;
++    VkSampleCountFlagBits maxFragmentShadingRateInvocationCount;
++} VkPhysicalDeviceFragmentShadingRateEnumsPropertiesNV;
+ 
+ typedef struct VkPhysicalDeviceMemoryProperties2
+ {
+@@ -7537,30 +7568,21 @@ typedef struct VkPipelineViewportExclusiveScissorStateCreateInfoNV
+     const VkRect2D *pExclusiveScissors;
+ } VkPipelineViewportExclusiveScissorStateCreateInfoNV;
+ 
+-typedef struct VkPresentRegionsKHR
++typedef struct VkQueryPoolPerformanceCreateInfoKHR
+ {
+     VkStructureType sType;
+     const void *pNext;
+-    uint32_t swapchainCount;
+-    const VkPresentRegionKHR *pRegions;
+-} VkPresentRegionsKHR;
+-
+-typedef struct VkQueueFamilyProperties2
+-{
+-    VkStructureType sType;
+-    void *pNext;
+-    VkQueueFamilyProperties queueFamilyProperties;
+-} VkQueueFamilyProperties2;
+-typedef VkQueueFamilyProperties2 VkQueueFamilyProperties2KHR;
++    uint32_t queueFamilyIndex;
++    uint32_t counterIndexCount;
++    const uint32_t *pCounterIndices;
++} VkQueryPoolPerformanceCreateInfoKHR;
+ 
+-typedef struct VkRenderPassAttachmentBeginInfo
++typedef struct VkRectLayerKHR
+ {
+-    VkStructureType sType;
+-    const void *pNext;
+-    uint32_t attachmentCount;
+-    const VkImageView *pAttachments;
+-} VkRenderPassAttachmentBeginInfo;
+-typedef VkRenderPassAttachmentBeginInfo VkRenderPassAttachmentBeginInfoKHR;
++    VkOffset2D offset;
++    VkExtent2D extent;
++    uint32_t layer;
++} VkRectLayerKHR;
+ 
+ typedef struct VkSamplerCustomBorderColorCreateInfoEXT
+ {
+@@ -7744,39 +7766,22 @@ typedef struct VkMemoryAllocateFlagsInfo
+ } VkMemoryAllocateFlagsInfo;
+ typedef VkMemoryAllocateFlagsInfo VkMemoryAllocateFlagsInfoKHR;
+ 
+-typedef union VkPerformanceCounterResultKHR
+-{
+-    int32_t int32;
+-    int64_t int64;
+-    uint32_t uint32;
+-    uint64_t WINE_VK_ALIGN(8) uint64;
+-    float float32;
+-    double float64;
+-} VkPerformanceCounterResultKHR;
+-
+-typedef struct VkPhysicalDeviceDepthClipEnableFeaturesEXT
+-{
+-    VkStructureType sType;
+-    void *pNext;
+-    VkBool32 depthClipEnable;
+-} VkPhysicalDeviceDepthClipEnableFeaturesEXT;
+-
+-typedef struct VkPhysicalDeviceFragmentDensityMap2PropertiesEXT
++typedef struct VkPerformanceCounterDescriptionKHR
+ {
+     VkStructureType sType;
+-    void *pNext;
+-    VkBool32 subsampledLoads;
+-    VkBool32 subsampledCoarseReconstructionEarlyAccess;
+-    uint32_t maxSubsampledArrayLayers;
+-    uint32_t maxDescriptorSetSubsampledSamplers;
+-} VkPhysicalDeviceFragmentDensityMap2PropertiesEXT;
++    const void *pNext;
++    VkPerformanceCounterDescriptionFlagsKHR flags;
++    char name[VK_MAX_DESCRIPTION_SIZE];
++    char category[VK_MAX_DESCRIPTION_SIZE];
++    char description[VK_MAX_DESCRIPTION_SIZE];
++} VkPerformanceCounterDescriptionKHR;
+ 
+-typedef struct VkPhysicalDeviceMemoryPriorityFeaturesEXT
++typedef struct VkPhysicalDeviceCustomBorderColorPropertiesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 memoryPriority;
+-} VkPhysicalDeviceMemoryPriorityFeaturesEXT;
++    uint32_t maxCustomBorderColorSamplers;
++} VkPhysicalDeviceCustomBorderColorPropertiesEXT;
+ 
+ typedef struct VkPhysicalDeviceProperties
+ {
+@@ -7836,6 +7841,14 @@ typedef struct VkPipelineViewportWScalingStateCreateInfoNV
+     const VkViewportWScalingNV *pViewportWScalings;
+ } VkPipelineViewportWScalingStateCreateInfoNV;
+ 
++typedef struct VkQueueFamilyProperties2
++{
++    VkStructureType sType;
++    void *pNext;
++    VkQueueFamilyProperties queueFamilyProperties;
++} VkQueueFamilyProperties2;
++typedef VkQueueFamilyProperties2 VkQueueFamilyProperties2KHR;
++
+ typedef struct VkRenderPassCreateInfo
+ {
+     VkStructureType sType;
+@@ -7993,15 +8006,12 @@ typedef struct VkMemoryPriorityAllocateInfoEXT
+     float priority;
+ } VkMemoryPriorityAllocateInfoEXT;
+ 
+-typedef struct VkPhysicalDeviceExternalBufferInfo
++typedef struct VkPhysicalDeviceExclusiveScissorFeaturesNV
+ {
+     VkStructureType sType;
+-    const void *pNext;
+-    VkBufferCreateFlags flags;
+-    VkBufferUsageFlags usage;
+-    VkExternalMemoryHandleTypeFlagBits handleType;
+-} VkPhysicalDeviceExternalBufferInfo;
+-typedef VkPhysicalDeviceExternalBufferInfo VkPhysicalDeviceExternalBufferInfoKHR;
++    void *pNext;
++    VkBool32 exclusiveScissor;
++} VkPhysicalDeviceExclusiveScissorFeaturesNV;
+ 
+ typedef struct VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT
+ {
+@@ -8087,14 +8097,23 @@ typedef struct VkImportMemoryHostPointerInfoEXT
+     void *pHostPointer;
+ } VkImportMemoryHostPointerInfoEXT;
+ 
+-typedef struct VkQueryPoolPerformanceCreateInfoKHR
++typedef struct VkPhysicalDeviceIDProperties
+ {
+     VkStructureType sType;
+-    const void *pNext;
+-    uint32_t queueFamilyIndex;
+-    uint32_t counterIndexCount;
+-    const uint32_t *pCounterIndices;
+-} VkQueryPoolPerformanceCreateInfoKHR;
++    void *pNext;
++    uint8_t deviceUUID[VK_UUID_SIZE];
++    uint8_t driverUUID[VK_UUID_SIZE];
++    uint8_t deviceLUID[VK_LUID_SIZE];
++    uint32_t deviceNodeMask;
++    VkBool32 deviceLUIDValid;
++} VkPhysicalDeviceIDProperties;
++typedef VkPhysicalDeviceIDProperties VkPhysicalDeviceIDPropertiesKHR;
++
++typedef struct VkPresentRegionKHR
++{
++    uint32_t rectangleCount;
++    const VkRectLayerKHR *pRectangles;
++} VkPresentRegionKHR;
+ 
+ typedef struct VkSamplerYcbcrConversionInfo
+ {
+@@ -8141,17 +8160,19 @@ typedef struct VkCopyBufferToImageInfo2KHR
+     const VkBufferImageCopy2KHR *pRegions;
+ } VkCopyBufferToImageInfo2KHR;
+ 
+-typedef struct VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT
++typedef struct VkPhysicalDeviceAccelerationStructurePropertiesKHR
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint32_t advancedBlendMaxColorAttachments;
+-    VkBool32 advancedBlendIndependentBlend;
+-    VkBool32 advancedBlendNonPremultipliedSrcColor;
+-    VkBool32 advancedBlendNonPremultipliedDstColor;
+-    VkBool32 advancedBlendCorrelatedOverlap;
+-    VkBool32 advancedBlendAllOperations;
+-} VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT;
++    uint64_t WINE_VK_ALIGN(8) maxGeometryCount;
++    uint64_t WINE_VK_ALIGN(8) maxInstanceCount;
++    uint64_t WINE_VK_ALIGN(8) maxPrimitiveCount;
++    uint32_t maxPerStageDescriptorAccelerationStructures;
++    uint32_t maxPerStageDescriptorUpdateAfterBindAccelerationStructures;
++    uint32_t maxDescriptorSetAccelerationStructures;
++    uint32_t maxDescriptorSetUpdateAfterBindAccelerationStructures;
++    uint32_t minAccelerationStructureScratchOffsetAlignment;
++} VkPhysicalDeviceAccelerationStructurePropertiesKHR;
+ 
+ typedef struct VkPipelineShaderStageCreateInfo
+ {
+@@ -8164,7 +8185,7 @@ typedef struct VkPipelineShaderStageCreateInfo
+     const VkSpecializationInfo *pSpecializationInfo;
+ } VkPipelineShaderStageCreateInfo;
+ 
+-typedef struct VkRayTracingPipelineCreateInfoNV
++typedef struct VkRayTracingPipelineCreateInfoKHR
+ {
+     VkStructureType sType;
+     const void *pNext;
+@@ -8172,12 +8193,23 @@ typedef struct VkRayTracingPipelineCreateInfoNV
+     uint32_t stageCount;
+     const VkPipelineShaderStageCreateInfo *pStages;
+     uint32_t groupCount;
+-    const VkRayTracingShaderGroupCreateInfoNV *pGroups;
+-    uint32_t maxRecursionDepth;
++    const VkRayTracingShaderGroupCreateInfoKHR *pGroups;
++    uint32_t maxPipelineRayRecursionDepth;
++    const VkPipelineLibraryCreateInfoKHR *pLibraryInfo;
++    const VkRayTracingPipelineInterfaceCreateInfoKHR *pLibraryInterface;
++    const VkPipelineDynamicStateCreateInfo *pDynamicState;
+     VkPipelineLayout WINE_VK_ALIGN(8) layout;
+     VkPipeline WINE_VK_ALIGN(8) basePipelineHandle;
+     int32_t basePipelineIndex;
+-} VkRayTracingPipelineCreateInfoNV;
++} VkRayTracingPipelineCreateInfoKHR;
++
++typedef struct VkSparseImageMemoryRequirements2
++{
++    VkStructureType sType;
++    void *pNext;
++    VkSparseImageMemoryRequirements WINE_VK_ALIGN(8) memoryRequirements;
++} VkSparseImageMemoryRequirements2;
++typedef VkSparseImageMemoryRequirements2 VkSparseImageMemoryRequirements2KHR;
+ 
+ typedef struct VkComputePipelineCreateInfo
+ {
+@@ -8208,23 +8240,13 @@ typedef struct VkGraphicsShaderGroupCreateInfoNV
+     const VkPipelineTessellationStateCreateInfo *pTessellationState;
+ } VkGraphicsShaderGroupCreateInfoNV;
+ 
+-typedef struct VkRayTracingPipelineCreateInfoKHR
++typedef struct VkPresentRegionsKHR
+ {
+     VkStructureType sType;
+     const void *pNext;
+-    VkPipelineCreateFlags flags;
+-    uint32_t stageCount;
+-    const VkPipelineShaderStageCreateInfo *pStages;
+-    uint32_t groupCount;
+-    const VkRayTracingShaderGroupCreateInfoKHR *pGroups;
+-    uint32_t maxPipelineRayRecursionDepth;
+-    const VkPipelineLibraryCreateInfoKHR *pLibraryInfo;
+-    const VkRayTracingPipelineInterfaceCreateInfoKHR *pLibraryInterface;
+-    const VkPipelineDynamicStateCreateInfo *pDynamicState;
+-    VkPipelineLayout WINE_VK_ALIGN(8) layout;
+-    VkPipeline WINE_VK_ALIGN(8) basePipelineHandle;
+-    int32_t basePipelineIndex;
+-} VkRayTracingPipelineCreateInfoKHR;
++    uint32_t swapchainCount;
++    const VkPresentRegionKHR *pRegions;
++} VkPresentRegionsKHR;
+ 
+ typedef struct VkCopyImageToBufferInfo2KHR
+ {
+@@ -8247,13 +8269,20 @@ typedef struct VkGraphicsPipelineShaderGroupsCreateInfoNV
+     const VkPipeline *pPipelines;
+ } VkGraphicsPipelineShaderGroupsCreateInfoNV;
+ 
+-typedef struct VkSparseImageMemoryRequirements2
++typedef struct VkRayTracingPipelineCreateInfoNV
+ {
+     VkStructureType sType;
+-    void *pNext;
+-    VkSparseImageMemoryRequirements WINE_VK_ALIGN(8) memoryRequirements;
+-} VkSparseImageMemoryRequirements2;
+-typedef VkSparseImageMemoryRequirements2 VkSparseImageMemoryRequirements2KHR;
++    const void *pNext;
++    VkPipelineCreateFlags flags;
++    uint32_t stageCount;
++    const VkPipelineShaderStageCreateInfo *pStages;
++    uint32_t groupCount;
++    const VkRayTracingShaderGroupCreateInfoNV *pGroups;
++    uint32_t maxRecursionDepth;
++    VkPipelineLayout WINE_VK_ALIGN(8) layout;
++    VkPipeline WINE_VK_ALIGN(8) basePipelineHandle;
++    int32_t basePipelineIndex;
++} VkRayTracingPipelineCreateInfoNV;
+ 
+ typedef struct VkGraphicsPipelineCreateInfo
+ {

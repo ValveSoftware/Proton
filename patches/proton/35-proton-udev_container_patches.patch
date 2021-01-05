@@ -96,18 +96,18 @@ index 280ffc9323f..db8744b96a1 100644
      }
  #endif
  
-@@ -1347,8 +1369,10 @@ static void try_add_device(struct udev_device *dev)
+@@ -1391,8 +1413,10 @@ static void try_add_device(struct udev_device *dev)
          private->vidpid.vid = vid;
          private->vidpid.pid = pid;
          private->bus_type = bus_type;
 +        private->vtbl = vtbl;
+         set_quirks(private);
 +
  #ifdef HAS_PROPER_INPUT_HEADER
 -        if (strcmp(subsystem, "input") == 0)
 +        if (private->vtbl == &lnxev_vtbl)
              if (!build_report_descriptor((struct wine_input_private*)private, dev))
              {
-                 ERR("Building report descriptor failed, removing device\n");
 @@ -1375,17 +1399,11 @@ static void try_remove_device(struct udev_device *dev)
  {
      DEVICE_OBJECT *device = NULL;
