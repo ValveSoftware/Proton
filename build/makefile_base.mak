@@ -64,12 +64,11 @@ cc-option = $(shell if test -z "`echo 'void*p=1;' | \
               then echo "$(2)"; else echo "$(3)"; fi ;)
 
 # Selected container mode shell
-DOCKER_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security-opt apparmor:unconfined \
+DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
                                     -v $(HOME):$(HOME) -v /tmp:/tmp \
-                                    -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro  -v /etc/shadow:/etc/shadow:ro \
-                                    -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) $(DOCKER_CCACHE_FLAG) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
+                                    -w $(CURDIR) -e PATH=$(PATH) $(DOCKER_CCACHE_FLAG) \
                                     $(DOCKER_OPTS) \
-                                    $(STEAMRT_IMAGE) /sbin/docker-init -sg --
+                                    $(STEAMRT_IMAGE)
 
 STEAMRT_NAME ?= soldier
 ifeq ($(STEAMRT_NAME),soldier)
