@@ -264,44 +264,37 @@ index 19b5d85f..3da24c49 100644
      
    };
 diff --git a/src/dxvk/dxvk_options.cpp b/src/dxvk/dxvk_options.cpp
-index 904082f6..999723cc 100644
+index 73dd69d1..c3da6bb5 100644
 --- a/src/dxvk/dxvk_options.cpp
 +++ b/src/dxvk/dxvk_options.cpp
-@@ -3,8 +3,10 @@
- namespace dxvk {
- 
-   DxvkOptions::DxvkOptions(const Config& config) {
-+    enableAsync           = config.getOption<bool>    ("dxvk.enableAsync",            false);
-     enableStateCache      = config.getOption<bool>    ("dxvk.enableStateCache",       true);
-     enableOpenVR          = config.getOption<bool>    ("dxvk.enableOpenVR",           true);
-+    numAsyncThreads       = config.getOption<int32_t> ("dxvk.numAsyncThreads",        0);
-     numCompilerThreads    = config.getOption<int32_t> ("dxvk.numCompilerThreads",     0);
+@@ -10,6 +10,8 @@ namespace dxvk {
      useRawSsbo            = config.getOption<Tristate>("dxvk.useRawSsbo",             Tristate::Auto);
      useEarlyDiscard       = config.getOption<Tristate>("dxvk.useEarlyDiscard",        Tristate::Auto);
+     hud                   = config.getOption<std::string>("dxvk.hud", "");
++    enableAsync           = config.getOption<bool>    ("dxvk.enableAsync",            false);
++    numAsyncThreads       = config.getOption<int32_t> ("dxvk.numAsyncThreads",        0);
+   }
+ 
+ }
+\ No newline at end of file
 diff --git a/src/dxvk/dxvk_options.h b/src/dxvk/dxvk_options.h
-index 6843c16f..84e1933f 100644
+index 3c5dde91..52a7be04 100644
 --- a/src/dxvk/dxvk_options.h
 +++ b/src/dxvk/dxvk_options.h
-@@ -8,12 +8,19 @@ namespace dxvk {
-     DxvkOptions() { }
-     DxvkOptions(const Config& config);
+@@ -21,6 +21,13 @@ namespace dxvk {
+     /// when using the state cache
+     int32_t numCompilerThreads;
  
 +    // Enable async pipelines
 +    bool enableAsync;
 +
-     /// Enable state cache
-     bool enableStateCache;
- 
-     /// Enables OpenVR loading
-     bool enableOpenVR;
- 
 +    /// Number of compiler threads
 +    /// when using async pipelines
 +    int32_t numAsyncThreads;
 +
-     /// Number of compiler threads
-     /// when using the state cache
-     int32_t numCompilerThreads;
+     /// Shader-related options
+     Tristate useRawSsbo;
+     Tristate useEarlyDiscard;
 diff --git a/src/dxvk/dxvk_pipecompiler.cpp b/src/dxvk/dxvk_pipecompiler.cpp
 new file mode 100644
 index 00000000..40218acd
