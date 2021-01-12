@@ -1,0 +1,60 @@
+FROM @PROTONSDK_URLBASE@/binutils-i686-linux-gnu:@BINUTILS_VERSION@ AS binutils-linux-i686
+FROM @PROTONSDK_URLBASE@/binutils-x86_64-linux-gnu:@BINUTILS_VERSION@ AS binutils-linux-x86_64
+FROM @PROTONSDK_URLBASE@/binutils-i686-w64-mingw32:@BINUTILS_VERSION@ AS binutils-mingw-i686
+FROM @PROTONSDK_URLBASE@/binutils-x86_64-w64-mingw32:@BINUTILS_VERSION@ AS binutils-mingw-x86_64
+FROM @PROTONSDK_URLBASE@/mingw-headers-i686:@MINGW_VERSION@ AS mingw-headers-i686
+FROM @PROTONSDK_URLBASE@/mingw-headers-x86_64:@MINGW_VERSION@ AS mingw-headers-x86_64
+FROM @PROTONSDK_URLBASE@/mingw-crt-i686:@MINGW_VERSION@ AS mingw-crt-i686
+FROM @PROTONSDK_URLBASE@/mingw-crt-x86_64:@MINGW_VERSION@ AS mingw-crt-x86_64
+FROM @PROTONSDK_URLBASE@/mingw-pthreads-i686:@MINGW_VERSION@ AS mingw-pthreads-i686
+FROM @PROTONSDK_URLBASE@/mingw-pthreads-x86_64:@MINGW_VERSION@ AS mingw-pthreads-x86_64
+FROM @PROTONSDK_URLBASE@/mingw-widl-i686:@MINGW_VERSION@ AS mingw-widl-i686
+FROM @PROTONSDK_URLBASE@/mingw-widl-x86_64:@MINGW_VERSION@ AS mingw-widl-x86_64
+FROM @PROTONSDK_URLBASE@/gcc-i686-linux-gnu:@GCC_VERSION@ AS gcc-linux-i686
+FROM @PROTONSDK_URLBASE@/gcc-x86_64-linux-gnu:@GCC_VERSION@ AS gcc-linux-x86_64
+FROM @PROTONSDK_URLBASE@/gcc-i686-w64-mingw32:@GCC_VERSION@ AS gcc-mingw-i686
+FROM @PROTONSDK_URLBASE@/gcc-x86_64-w64-mingw32:@GCC_VERSION@ AS gcc-mingw-x86_64
+
+FROM @BASE_IMAGE@ AS base
+COPY --from=binutils-linux-i686   /opt/usr /usr
+COPY --from=binutils-linux-x86_64 /opt/usr /usr
+COPY --from=binutils-mingw-i686   /opt/usr /usr
+COPY --from=binutils-mingw-x86_64 /opt/usr /usr
+COPY --from=mingw-headers-i686    /opt/usr /usr
+COPY --from=mingw-headers-x86_64  /opt/usr /usr
+COPY --from=mingw-crt-i686        /opt/usr /usr
+COPY --from=mingw-crt-x86_64      /opt/usr /usr
+COPY --from=mingw-pthreads-i686   /opt/usr /usr
+COPY --from=mingw-pthreads-x86_64 /opt/usr /usr
+COPY --from=mingw-widl-i686       /opt/usr /usr
+COPY --from=mingw-widl-x86_64     /opt/usr /usr
+COPY --from=gcc-linux-i686        /opt/usr /usr
+COPY --from=gcc-linux-x86_64      /opt/usr /usr
+COPY --from=gcc-mingw-i686        /opt/usr /usr
+COPY --from=gcc-mingw-x86_64      /opt/usr /usr
+
+RUN wget -q @RUST_URLBASE@/@RUST_SOURCE_x86_64@ \
+&& echo '@RUST_SHA256_x86_64@ @RUST_SOURCE_x86_64@' | sha256sum -c - \
+&& tar xf @RUST_SOURCE_x86_64@ -C /tmp && rm @RUST_SOURCE_x86_64@ \
+&& /tmp/rust-@RUST_VERSION@-x86_64-unknown-linux-gnu/install.sh --prefix=/opt/rust \
+&& rm -rf /tmp/rust-@RUST_VERSION@-x86_64-unknown-linux-gnu
+
+RUN wget -q @RUST_URLBASE@/@RUST_SOURCE_i686@ \
+&& echo '@RUST_SHA256_i686@ @RUST_SOURCE_i686@' | sha256sum -c - \
+&& tar xf @RUST_SOURCE_i686@ -C /tmp && rm @RUST_SOURCE_i686@ \
+&& /tmp/rust-@RUST_VERSION@-i686-unknown-linux-gnu/install.sh --prefix=/opt/rust \
+  --components=rust-std-i686-unknown-linux-gnu \
+&& rm -rf /tmp/rust-@RUST_VERSION@-i686-unknown-linux-gnu
+
+RUN bash -c 'ls /opt/rust/bin/* | xargs -n1 -I{} ln -sf {} /usr/bin/'
+
+RUN bash -c 'mkdir -p /usr/lib/ccache && ls /usr/bin/{,*-}{cc,c++,gcc,g++}{,-[0-9]*} | sed -re s:/bin:/lib/ccache: | xargs -n1 ln -sf ../../bin/ccache'
+ENV PATH=/usr/lib/ccache:$PATH
+
+RUN apt-get install -y \
+  tini \
+&& rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
+&& rm -rf /var/lib/apt/lists/*
+ENTRYPOINT ["/usr/bin/tini-static", "-s", "-g", "--"]
+
+CMD ["/bin/bash"]
