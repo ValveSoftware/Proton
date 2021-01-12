@@ -63,8 +63,8 @@ ifeq ($(ENABLE_CCACHE),1)
 else
 endif
 
-CC32 := gcc -m32 -mstackrealign
-CXX32 := g++ -m32 -mstackrealign
+CC32 := $(CC) -m32 -mstackrealign
+CXX32 := $(CXX) -m32 -mstackrealign
 PKG_CONFIG32 := i686-linux-gnu-pkg-config
 
 cc-option = $(shell if test -z "`echo 'void*p=1;' | \
@@ -159,6 +159,7 @@ QUOTE_VARIABLE_LIST = $(foreach a,$(1),$(call QUOTE_VARIABLE,$(a)))
 #   quoted
 STRIP_QUOTED = $(call QUOTE,$(STRIP))
 CC_QUOTED    = $(call QUOTE,$(CC))
+CC32_QUOTED  = $(call QUOTE,$(CC32))
 CXX_QUOTED   = $(call QUOTE,$(CXX))
 CROSSCC32_QUOTED = $(call QUOTE,$(CROSSCC32))
 CROSSCC64_QUOTED = $(call QUOTE,$(CROSSCC64))
@@ -1041,7 +1042,7 @@ lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filte
 
 lsteamclient32: SHELL = $(CONTAINER_SHELL)
 lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
+	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(LSTEAMCLIENT_OBJ32)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
 	mkdir -pv $(DST_DIR)/lib/wine/
@@ -1187,7 +1188,7 @@ steam_configure: $(STEAMEXE_CONFIGURE_FILES)
 
 steam: SHELL = $(CONTAINER_SHELL)
 steam: $(STEAMEXE_CONFIGURE_FILES) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-std=gnu++11 -m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
+	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-std=gnu++11 -m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(STEAMEXE_OBJ)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
 	mkdir -pv $(DST_DIR)/lib/wine/
@@ -1255,7 +1256,7 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 jxrlib32 gst_base32 $(WINE
 			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR32))/include/jxrlib \
-			CC=$(CC_QUOTED) \
+			CC=$(CC32_QUOTED) \
 			CROSSCC=$(CROSSCC32_QUOTED) \
 			PKG_CONFIG="$(PKG_CONFIG32)" \
 			CROSSDEBUG=split-dwarf
@@ -1393,7 +1394,7 @@ vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKE
 
 vrclient32: SHELL = $(CONTAINER_SHELL)
 vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+	+env CC="$(CC32)" CXX="$(CXX32)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
 		$(MAKE) -C $(VRCLIENT_OBJ32)
 	cd $(VRCLIENT_OBJ32) && \
 		PATH=$(abspath $(TOOLS_DIR32))/bin:$(PATH) \
