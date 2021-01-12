@@ -224,6 +224,65 @@ static void parse_extensions(const char *in, uint32_t *out_count,
     *out_strs = list;
 }
 
+static BOOL HACK_does_openvr_work(void)
+{
+    /* Linux SteamVR's xrCreateInstance will hang forever if SteamVR hasn't
+     * already been launched by the user.  Since that's the only way to tell if
+     * OpenXR is functioning, let's use OpenVR to tell whether SteamVR is
+     * functioning before calling xrCreateInstance.
+     *
+     * This should be removed when SteamVR's bug is fixed. */
+
+    static void *(CDECL *InitInternal)(int *err, int type);
+    static void (CDECL *ShutdownInternal)(void);
+    static void *(CDECL *GetGenericInterface)(const char *, int *err);
+
+    int error;
+    HANDLE openvr_api;
+    void *compositor;
+    BOOL need_unload = FALSE;
+
+    openvr_api = GetModuleHandleW(L"openvr_api.dll");
+    if(!openvr_api){
+        openvr_api = LoadLibraryW(L"openvr_api_dxvk.dll");
+        if(!openvr_api){
+            WINE_TRACE("no openvr_api_dxvk\n");
+            return FALSE;
+        }
+        need_unload = TRUE;
+    }
+
+    InitInternal = (void *)GetProcAddress(openvr_api, "VR_InitInternal");
+    ShutdownInternal = (void *)GetProcAddress(openvr_api, "VR_ShutdownInternal");
+    GetGenericInterface = (void *)GetProcAddress(openvr_api, "VR_GetGenericInterface");
+
+    if(!InitInternal || !ShutdownInternal || !GetGenericInterface){
+        WINE_TRACE("missing openvr function\n");
+        if(need_unload)
+            FreeLibrary(openvr_api);
+        return FALSE;
+    }
+
+    error = 1;
+    compositor = GetGenericInterface("IVRCompositor_022", &error);
+    if(!compositor || error != 0){
+        InitInternal(&error, 3 /* VRApplication_Background */);
+
+        if(error == 0 /* VRInitError_None */){
+            WINE_TRACE("openvr init succeeded\n");
+            ShutdownInternal();
+        }else
+            WINE_TRACE("openvr init failed\n");
+    }else{
+        WINE_TRACE("got openvr compositor\n");
+    }
+
+    if(need_unload)
+        FreeLibrary(openvr_api);
+
+    return error == 0 /* VRInitError_None */;
+}
+
 XrResult load_host_openxr_loader(void)
 {
     PFN_xrGetVulkanInstanceExtensionsKHR pxrGetVulkanInstanceExtensionsKHR;
@@ -249,6 +308,10 @@ XrResult load_host_openxr_loader(void)
     if(g_instance_extensions || g_device_extensions)
         /* already done */
         return XR_SUCCESS;
+
+    if(!HACK_does_openvr_work()){
+        return XR_ERROR_INITIALIZATION_FAILED;
+    }
 
     load_vk_unwrappers();
 
