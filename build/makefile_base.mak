@@ -161,6 +161,7 @@ STRIP_QUOTED = $(call QUOTE,$(STRIP))
 CC_QUOTED    = $(call QUOTE,$(CC))
 CC32_QUOTED  = $(call QUOTE,$(CC32))
 CXX_QUOTED   = $(call QUOTE,$(CXX))
+CXX32_QUOTED = $(call QUOTE,$(CXX32))
 CROSSCC32_QUOTED = $(call QUOTE,$(CROSSCC32))
 CROSSCC64_QUOTED = $(call QUOTE,$(CROSSCC64))
 
@@ -1238,6 +1239,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 jxrlib64 gst_base64 $(WINE
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR64))/include/jxrlib \
 			CC=$(CC_QUOTED) \
+			CXX=$(CXX_QUOTED) \
 			CROSSCC=$(CROSSCC64_QUOTED) \
 			CROSSDEBUG=split-dwarf
 
@@ -1257,6 +1259,7 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 jxrlib32 gst_base32 $(WINE
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR32))/include/jxrlib \
 			CC=$(CC32_QUOTED) \
+			CXX=$(CXX32_QUOTED) \
 			CROSSCC=$(CROSSCC32_QUOTED) \
 			PKG_CONFIG="$(PKG_CONFIG32)" \
 			CROSSDEBUG=split-dwarf
