@@ -8,6 +8,7 @@
 #include "windef.h"
 #include "winbase.h"
 #include "winnls.h"
+#include "winuser.h"
 #include "wine/debug.h"
 #include "wine/library.h"
 #include "wine/list.h"
@@ -564,7 +565,13 @@ bool CDECL Steam_BGetCallback(HSteamPipe pipe, struct winCallbackMsg_t *win_msg,
         {
             uint8 activated = *(uint8 *)lin_msg.m_pubParam;
             TRACE("steam overlay %sactivated, %sabling all X11 events.\n", activated ? "" : "de", activated ? "dis" : "en");
-            if (activated) SetEvent(steam_overlay_event);
+            if (activated)
+            {
+                SetEvent(steam_overlay_event);
+                keybd_event(VK_LSHIFT, 0x2a /* lshift scancode */, KEYEVENTF_KEYUP, 0);
+                keybd_event(VK_RSHIFT, 0x36 /* rshift scancode */, KEYEVENTF_KEYUP, 0);
+                keybd_event(VK_TAB, 0x0f /* tab scancode */, KEYEVENTF_KEYUP, 0);
+            }
             else ResetEvent(steam_overlay_event);
         }
 
