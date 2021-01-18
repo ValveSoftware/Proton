@@ -1,0 +1,217 @@
+From 700ee48e028333b7afbcf3ac0c2e2b3c6ccbfedf Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 30 Dec 2020 13:22:43 -0600
+Subject: [PATCH] winevulkan: Retrieve XR extensions from the environment
+
+---
+ dlls/winevulkan/vulkan.c | 136 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 132 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index d1606073662..7cdb0f11295 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -385,13 +385,83 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
+     free_VkDeviceCreateInfo_struct_chain(create_info);
+ }
+ 
++static char *strdupA(const char *s)
++{
++    size_t l = strlen(s) + 1;
++    char *r = heap_alloc(l);
++    memcpy(r, s, l);
++    return r;
++}
++
++static char **parse_xr_extensions(unsigned int *len)
++{
++    DWORD ev_len;
++    char *xr_str, *iter, *start, **list;
++    unsigned int extension_count = 0, o = 0;
++
++    static const char *xr_extensions_var = "__WINE_OPENXR_VK_DEVICE_EXTENSIONS";
++
++    ev_len = GetEnvironmentVariableA(xr_extensions_var, NULL, 0);
++    if(!ev_len){
++        *len = 0;
++        return NULL;
++    }
++
++    xr_str = heap_alloc(ev_len);
++    GetEnvironmentVariableA(xr_extensions_var, xr_str, ev_len);
++
++    TRACE("got var: %s\n", xr_str);
++
++    iter = xr_str;
++    while(*iter){
++        if(*iter++ == ' ')
++            extension_count++;
++    }
++    /* count the one ending in NUL */
++    if(iter != xr_str)
++        extension_count++;
++    if(!extension_count){
++        *len = 0;
++        return NULL;
++    }
++
++    TRACE("counted %u extensions\n", extension_count);
++
++    list = heap_alloc(extension_count * sizeof(char *));
++
++    start = iter = xr_str;
++    do{
++        if(*iter == ' '){
++            *iter = 0;
++            list[o++] = strdupA(start);
++            TRACE("added %s to list\n", list[o-1]);
++            iter++;
++            start = iter;
++        }else if(*iter == 0){
++            list[o++] = strdupA(start);
++            TRACE("added %s to list\n", list[o-1]);
++            break;
++        }else{
++            iter++;
++        }
++    }while(1);
++
++    heap_free(xr_str);
++
++    *len = extension_count;
++
++    return list;
++}
++
+ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src,
+-        VkDeviceCreateInfo *dst)
++        VkDeviceCreateInfo *dst, BOOL *must_free_extensions)
+ {
+     VkDeviceGroupDeviceCreateInfo *group_info;
+-    unsigned int i;
++    unsigned int i, append_xr = 0, wine_extension_count;
+     VkResult res;
+ 
++    static const char *wine_xr_extension_name = "VK_WINE_openxr_device_extensions";
++
+     *dst = *src;
+ 
+     if ((res = convert_VkDeviceCreateInfo_struct_chain(src->pNext, dst)) < 0)
+@@ -421,8 +491,54 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
+     dst->enabledLayerCount = 0;
+     dst->ppEnabledLayerNames = NULL;
+ 
+-    TRACE("Enabled extensions: %u.\n", dst->enabledExtensionCount);
+     for (i = 0; i < dst->enabledExtensionCount; i++)
++    {
++        const char *extension_name = dst->ppEnabledExtensionNames[i];
++        if (!strcmp(extension_name, wine_xr_extension_name))
++        {
++            append_xr = 1;
++            break;
++        }
++    }
++
++    if (append_xr)
++    {
++        unsigned int xr_extensions_len, o = 0;
++        char **xr_extensions_list = parse_xr_extensions(&xr_extensions_len);
++
++        char **new_extensions_list = heap_alloc(sizeof(char *) * (dst->enabledExtensionCount + xr_extensions_len));
++
++        if(!xr_extensions_list)
++            WARN("Requested to use XR extensions, but none are set!\n");
++
++        for (i = 0; i < dst->enabledExtensionCount; i++)
++        {
++            if (strcmp(dst->ppEnabledExtensionNames[i], wine_xr_extension_name) != 0)
++            {
++                new_extensions_list[o++] = strdupA(dst->ppEnabledExtensionNames[i]);
++            }
++        }
++
++        TRACE("appending XR extensions:\n");
++        for (i = 0; i < xr_extensions_len; ++i)
++        {
++            TRACE("\t%s\n", xr_extensions_list[i]);
++            new_extensions_list[o++] = xr_extensions_list[i];
++        }
++        dst->enabledExtensionCount = o;
++        dst->ppEnabledExtensionNames = (const char * const *)new_extensions_list;
++
++        heap_free(xr_extensions_list);
++
++        *must_free_extensions = TRUE;
++        wine_extension_count = dst->enabledExtensionCount - xr_extensions_len;
++    }else{
++        *must_free_extensions = FALSE;
++        wine_extension_count = dst->enabledExtensionCount;
++    }
++
++    TRACE("Enabled %u extensions.\n", dst->enabledExtensionCount);
++    for (i = 0; i < wine_extension_count; i++)
+     {
+         TRACE("Extension %u: %s.\n", i, debugstr_a(dst->ppEnabledExtensionNames[i]));
+     }
+@@ -430,6 +546,15 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
+     return VK_SUCCESS;
+ }
+ 
++static void wine_vk_device_free_create_info_extensions(VkDeviceCreateInfo *create_info)
++{
++    unsigned int i;
++    for(i = 0; i < create_info->enabledExtensionCount; ++i)
++        heap_free((void*)create_info->ppEnabledExtensionNames[i]);
++    heap_free((void*)create_info->ppEnabledExtensionNames);
++}
++
++
+ /* Helper function used for freeing a device structure. This function supports full
+  * and partial object cleanups and can thus be used for vkCreateDevice failures.
+  */
+@@ -762,6 +887,7 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
+     uint32_t max_queue_families;
+     struct VkDevice_T *object;
+     unsigned int i;
++    BOOL create_info_free_extensions;
+     VkResult res;
+ 
+     TRACE("%p, %p, %p, %p\n", phys_dev, create_info, allocator, device);
+@@ -786,13 +912,15 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
+     object->base.loader_magic = VULKAN_ICD_MAGIC_VALUE;
+     object->phys_dev = phys_dev;
+ 
+-    res = wine_vk_device_convert_create_info(create_info, &create_info_host);
++    res = wine_vk_device_convert_create_info(create_info, &create_info_host, &create_info_free_extensions);
+     if (res != VK_SUCCESS)
+         goto fail;
+ 
+     res = phys_dev->instance->funcs.p_vkCreateDevice(phys_dev->phys_dev,
+             &create_info_host, NULL /* allocator */, &object->device);
+     wine_vk_device_free_create_info(&create_info_host);
++    if(create_info_free_extensions)
++        wine_vk_device_free_create_info_extensions(&create_info_host);
+     WINE_VK_ADD_DISPATCHABLE_MAPPING(phys_dev->instance, object, object->device);
+     if (res != VK_SUCCESS)
+     {
+From ee64c2b291290753eefdca064b89ad86e2e6fcbe Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 4 Jan 2021 14:25:06 -0600
+Subject: [PATCH] wine.inf: Add OpenXR registry entries
+
+---
+ loader/wine.inf.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 009dd58600d..928c6883372 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -4017,6 +4017,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
+ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
+ HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
+ HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
++HKLM,Software\Khronos\OpenXR\1,"ActiveRuntime",,"C:\openxr\wineopenxr64.json"
+ HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+ HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+ HKCU,Software\Wine\AppDefaults\DarkSoulsIII.exe\X11 Driver,"LimitNumberOfResolutions",0x2,"32"
