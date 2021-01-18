@@ -1,0 +1,64 @@
+From 92d12f085cc32fa04ef15fe6d03969dff05fb8cd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 4 Nov 2020 01:25:43 +0100
+Subject: [PATCH] [d3d11] Use host memory in deferred context for "small"
+ updates.
+
+Instead of spinning like crazy in the slice allocator, thrashing the
+CPU caches while fighting other deferred context threads.
+
+Using the heap here gets us ~15 more fps in Dark Souls III.
+---
+ src/d3d11/d3d11_context_def.cpp | 39 +++++++++++++++++++++++----------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
+
+diff --git a/src/d3d11/d3d11_context_def.cpp b/src/d3d11/d3d11_context_def.cpp
+index b1fd6bdac..281ee3d25 100644
+--- a/src/d3d11/d3d11_context_def.cpp
++++ b/src/d3d11/d3d11_context_def.cpp
+@@ -276,18 +276,33 @@ namespace dxvk {
+     pMapEntry->DepthPitch   = pBuffer->Desc()->ByteWidth;
+     
+     if (likely(m_csFlags.test(DxvkCsChunkFlag::SingleUse))) {
+-      // For resources that cannot be written by the GPU,
+-      // we may write to the buffer resource directly and
+-      // just swap in the buffer slice as needed.
+-      auto bufferSlice = pBuffer->AllocSlice();
+-      pMapEntry->MapPointer = bufferSlice.mapPtr;
+-
+-      EmitCs([
+-        cDstBuffer = pBuffer->GetBuffer(),
+-        cPhysSlice = bufferSlice
+-      ] (DxvkContext* ctx) {
+-        ctx->invalidateBuffer(cDstBuffer, cPhysSlice);
+-      });
++      if (pBuffer->Desc()->ByteWidth <= 4096) {
++        pMapEntry->MapPointer = std::malloc(pBuffer->Desc()->ByteWidth);
++
++        EmitCs([
++          cDstBuffer = pBuffer->GetBuffer(),
++          cSliceLength = pBuffer->Desc()->ByteWidth,
++          cSlicePointer = pMapEntry->MapPointer
++        ] (DxvkContext* ctx) {
++          DxvkBufferSliceHandle slice = cDstBuffer->allocSlice();
++          std::memcpy(slice.mapPtr, cSlicePointer, cSliceLength);
++          std::free(cSlicePointer);
++          ctx->invalidateBuffer(cDstBuffer, slice);
++        });
++      } else {
++        // For resources that cannot be written by the GPU,
++        // we may write to the buffer resource directly and
++        // just swap in the buffer slice as needed.
++        auto bufferSlice = pBuffer->AllocSlice();
++        pMapEntry->MapPointer = bufferSlice.mapPtr;
++
++        EmitCs([
++          cDstBuffer = pBuffer->GetBuffer(),
++          cPhysSlice = bufferSlice
++        ] (DxvkContext* ctx) {
++          ctx->invalidateBuffer(cDstBuffer, cPhysSlice);
++        });
++      }
+     } else {
+       // For GPU-writable resources, we need a data slice
+       // to perform the update operation at execution time.
