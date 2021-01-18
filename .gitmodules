@@ -51,4 +51,7 @@
 	url = https://github.com/GStreamer/gst-libav/
 [submodule "gst-orc"]
         path = gst-orc
-        url = https://github.com/GStreamer/orc/
+	url = https://github.com/GStreamer/orc/
+[submodule "OpenXR-SDK"]
+	path = OpenXR-SDK
+	url = https://github.com/KhronosGroup/OpenXR-SDK
