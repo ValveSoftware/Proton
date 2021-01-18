@@ -1,0 +1,12 @@
+diff --git a/patches/patchinstall.sh b/patches/patchinstall.sh
+index e44774ef..579593e4 100755
+--- a/patches/patchinstall.sh
++++ b/patches/patchinstall.sh
+@@ -2978,7 +2978,6 @@ if test "$enable_mfplat_streaming_support" -eq 1; then
+ 	patch_apply mfplat-streaming-support/0049-winegstreamer-Introduce-MPEG-4-Section-2-video-decod.patch
+ 	patch_apply mfplat-streaming-support/0050-winegstreamer-Introduce-WMA-audio-decoder.patch
+ 	patch_apply mfplat-streaming-support/0051-winegstreamer-Implement-MF_SD_LANGUAGE.patch
+-	patch_apply mfplat-streaming-support/0052-winegstreamer-Force-audio-mpeg-to-decode-in-source.patch
+ 	patch_apply mfplat-streaming-support/0060-winegstreamer-Support-eAVEncH264VProfile_Constrained.patch
+ fi
+ 

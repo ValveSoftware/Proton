@@ -1,0 +1,124 @@
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Subject: [PATCH v2] dsound: IDirectSoundBuffer8 GetStatus return DSBSTATUS_LOCSOFTWARE for deferred buffers
+Message-Id: <SLXP216MB0621B27D278B239E6962766D93A70@SLXP216MB0621.KORP216.PROD.OUTLOOK.COM>
+Date: Fri, 15 Jan 2021 18:22:18 +1100
+In-Reply-To: <20210115072218.441157-1-leslie_alistair@hotmail.com>
+References: <20210115072218.441157-1-leslie_alistair@hotmail.com>
+
+Wine-bug: https://bugs.winehq.org/show_bug.cgi?id=21014
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ dlls/dsound/buffer.c        |  2 +
+ dlls/dsound/tests/dsound8.c | 74 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 76 insertions(+)
+
+diff --git a/dlls/dsound/buffer.c b/dlls/dsound/buffer.c
+index bc30a8a5448..fafa6fc6015 100644
+--- a/dlls/dsound/buffer.c
++++ b/dlls/dsound/buffer.c
+@@ -420,6 +420,8 @@ static HRESULT WINAPI IDirectSoundBufferImpl_GetStatus(IDirectSoundBuffer8 *ifac
+ 		if (This->playflags & DSBPLAY_LOOPING)
+ 			*status |= DSBSTATUS_LOOPING;
+ 	}
++	if (This->dsbd.dwFlags & DSBCAPS_LOCDEFER)
++		*status |= DSBSTATUS_LOCSOFTWARE;
+ 	ReleaseSRWLockShared(&This->lock);
+ 
+ 	TRACE("status=%x\n", *status);
+diff --git a/dlls/dsound/tests/dsound8.c b/dlls/dsound/tests/dsound8.c
+index 81c5710dbaf..85272dd9b55 100644
+--- a/dlls/dsound/tests/dsound8.c
++++ b/dlls/dsound/tests/dsound8.c
+@@ -1809,6 +1809,79 @@ static void test_effects(void)
+     ok(!ref, "Got outstanding refcount %u.\n", ref);
+ }
+ 
++static void test_AcquireResources(void)
++{
++    IDirectSound8 *dsound;
++    IDirectSoundBuffer *primary, *secondary;
++    DSBUFFERDESC bufdesc;
++    WAVEFORMATEX fmt;
++    HRESULT hr;
++
++    hr = DirectSoundCreate8(NULL, &dsound, NULL);
++    ok(hr == DS_OK || hr == DSERR_NODRIVER, "Got hr %#x.\n", hr);
++    if (FAILED(hr))
++        return;
++
++    hr = IDirectSound8_SetCooperativeLevel(dsound, get_hwnd(), DSSCL_PRIORITY);
++    ok(hr == DS_OK, "Got hr %#x.\n", hr);
++
++    bufdesc.dwSize = sizeof(bufdesc);
++    bufdesc.dwFlags = DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_PRIMARYBUFFER;
++    bufdesc.dwBufferBytes = 0;
++    bufdesc.dwReserved = 0;
++    bufdesc.lpwfxFormat = NULL;
++    bufdesc.guid3DAlgorithm = GUID_NULL;
++
++    hr = IDirectSound8_CreateSoundBuffer(dsound, &bufdesc, &primary, NULL);
++    ok(hr == S_OK, "CreateSoundBuffer failed: %08x\n", hr);
++    if(hr != S_OK) {
++        IDirectSound_Release(dsound);
++        return;
++    }
++
++    fmt.wFormatTag = WAVE_FORMAT_PCM;
++    fmt.nChannels = 2;
++    fmt.nSamplesPerSec = 48000;
++    fmt.wBitsPerSample = 16;
++    fmt.nBlockAlign = fmt.nChannels * fmt.wBitsPerSample / 8;
++    fmt.nAvgBytesPerSec = fmt.nBlockAlign * fmt.nSamplesPerSec;
++    fmt.cbSize = 0;
++
++    bufdesc.lpwfxFormat = &fmt;
++    bufdesc.dwBufferBytes = fmt.nSamplesPerSec * fmt.nBlockAlign / 10;
++    bufdesc.dwFlags = DSBCAPS_LOCDEFER | DSBCAPS_CTRLVOLUME;
++
++    /* see if we can create one more */
++    hr = IDirectSound8_CreateSoundBuffer(dsound, &bufdesc, &secondary, NULL);
++    ok(hr == S_OK, "CreateSoundBuffer gave wrong error: %08x\n", hr);
++    if(hr == S_OK) {
++        DWORD status;
++        IDirectSoundBuffer8 *buffer8;
++
++        hr = IDirectSoundBuffer_QueryInterface(secondary, &IID_IDirectSoundBuffer8, (void **)&buffer8);
++        ok(hr == S_OK, "got: %08x\n", hr);
++
++        status = 0xFFFF;
++        hr = IDirectSoundBuffer8_GetStatus(buffer8, &status);
++        ok(hr == S_OK, "got: %08x\n", hr);
++        todo_wine ok(status == 0, "got: %08x\n", status);
++
++        hr = IDirectSoundBuffer8_AcquireResources(buffer8, 0, 0, NULL);
++        ok(hr == S_OK, "got: %08x\n", hr);
++
++        status = 0xFFFF;
++        hr = IDirectSoundBuffer8_GetStatus(buffer8, &status);
++        ok(hr == S_OK, "got: %08x\n", hr);
++        ok(status == DSBSTATUS_LOCSOFTWARE, "got: %08x\n", status);
++
++        IDirectSoundBuffer8_Release(buffer8);
++        IDirectSoundBuffer_Release(secondary);
++    }
++
++    IDirectSoundBuffer_Release(primary);
++    IDirectSound_Release(dsound);
++}
++
+ START_TEST(dsound8)
+ {
+     DWORD cookie;
+@@ -1822,6 +1895,7 @@ START_TEST(dsound8)
+     test_hw_buffers();
+     test_first_device();
+     test_primary_flags();
++    test_AcquireResources();
+ 
+     hr = CoRegisterClassObject(&testdmo_clsid, (IUnknown *)&testdmo_cf,
+             CLSCTX_INPROC_SERVER, REGCLS_MULTIPLEUSE, &cookie);
+
+-- 
+2.29.2
+
