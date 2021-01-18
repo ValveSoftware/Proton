@@ -20,13 +20,25 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.0-GE-rc6"
+CURRENT_PREFIX_VERSION="6.0-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
 
 def nonzero(s):
     return len(s) > 0 and s != "0"
+
+def prepend_to_env_str(env, variable, prepend_str, separator):
+    if not variable in env:
+        env[variable] = prepend_str
+    else:
+        env[variable] = prepend_str + separator + env[variable]
+
+def append_to_env_str(env, variable, append_str, separator):
+    if not variable in env:
+        env[variable] = append_str
+    else:
+        env[variable] = env[variable] + separator + append_str
 
 def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
@@ -101,6 +113,19 @@ def getmtimestr(*path_fragments):
         return str(os.path.getmtime(path))
     except IOError:
         return "0"
+
+def try_get_game_library_dir():
+    if not "STEAM_COMPAT_INSTALL_PATH" in g_session.env or \
+            not "STEAM_COMPAT_LIBRARY_PATHS" in g_session.env:
+        return None
+
+    #find library path which is a subset of the game path
+    library_paths = g_session.env["STEAM_COMPAT_LIBRARY_PATHS"].split(":")
+    for l in library_paths:
+        if l in g_session.env["STEAM_COMPAT_INSTALL_PATH"]:
+            return l
+
+    return None
 
 EXT2_IOC_GETFLAGS = 0x80086601
 EXT2_IOC_SETFLAGS = 0x40086602
@@ -417,6 +442,28 @@ class CompatData:
                     "xapofx*.dll," +
                     "xaudio*.dll," +
                     "xinput*.dll," +
+                    "devenum.dll," +
+                    
+                    #directshow
+                    "amstream.dll," +
+                    "qasf.dll," +
+                    "qcap.dll," +
+                    "qdvd.dll," +
+                    "qedit.dll," +
+                    "quartz.dll," +
+                    
+                    #directmusic
+                    "dmband.dll," +
+                    "dmcompos.dll," +
+                    "dmime.dll," +
+                    "dmloader.dll," +
+                    "dmscript.dll," +
+                    "dmstyle.dll," +
+                    "dmsynth.dll," +
+                    "dmusic.dll," +
+                    "dmusic32.dll," +
+                    "dsound.dll," +
+                    "dswave.dll," +
 
                     #vcruntime redist
                     "atl1*.dll," +
@@ -439,7 +486,130 @@ class CompatData:
                     "ntdll.dll," +
 
                     #some games require official vulkan loader
-                    "vulkan-1.dll"
+                    "vulkan-1.dll," +
+
+                    #wmp9
+                    "dispex.dll," +
+                    "jscript.dll," +
+                    "scrobj.dll," +
+                    "scrrun.dll," +
+                    "vbscript.dll," +
+                    "cscript.exe," +
+                    "wscript.exe," +
+                    "wshom.ocx," +
+                    "9SeriesDefault.wmz," +
+                    "9SeriesDefault_.wmz," +
+                    "9xmigrat.dll," +
+                    "advpack.dll," +
+                    "asferror.dll," +
+                    "blackbox.dll," +
+                    "CEWMDM.dll," +
+                    "Compact.wmz," +
+                    "control.xml," +
+                    "custsat.dll," +
+                    "drm.cat," +
+                    "drm.inf," +
+                    "DRMClien.dll," +
+                    "DrmStor.dll," +
+                    "drmv2clt.dll," +
+                    "dw15.exe," +
+                    "dwintl.dll," +
+                    "engsetup.exe," +
+                    "eula.txt," +
+                    "fhg.inf," +
+                    "iexpress.inf," +
+                    "l3codeca.acm," +
+                    "LAPRXY.DLL," +
+                    "logagent.exe," +
+                    "migrate.dll," +
+                    "migrate.exe," +
+                    "MP43DMOD.DLL," +
+                    "MP4SDMOD.DLL," +
+                    "MPG4DMOD.DLL," +
+                    "mpvis.DLL," +
+                    "msdmo.dll," +
+                    "msnetobj.dll," +
+                    "msoobci.dll," +
+                    "MsPMSNSv.dll," +
+                    "MsPMSP.dll," +
+                    "MSSCP.dll," +
+                    "MSWMDM.dll," +
+                    "mymusic.inf," +
+                    "npdrmv2.dll," +
+                    "npdrmv2.zip," +
+                    "NPWMSDrm.dll," +
+                    "PidGen.dll," +
+                    "Plylst1.wpl," +
+                    "Plylst10.wpl," +
+                    "Plylst11.wpl," +
+                    "Plylst12.wpl," +
+                    "Plylst13.wpl," +
+                    "Plylst14.wpl," +
+                    "Plylst15.wpl," +
+                    "Plylst2.wpl," +
+                    "Plylst3.wpl," +
+                    "Plylst4.wpl," +
+                    "Plylst5.wpl," +
+                    "Plylst6.wpl," +
+                    "Plylst7.wpl," +
+                    "Plylst8.wpl," +
+                    "Plylst9.wpl," +
+                    "plyr_err.chm," +
+                    "qasf.dll," +
+                    "QuickSilver.wmz," +
+                    "Revert.wmz," +
+                    "roxio.inf," +
+                    "rsl.dll," +
+                    "setup_wm.cat," +
+                    "setup_wm.exe," +
+                    "setup_wm.inf," +
+                    "skins.inf," +
+                    "skinsmui.inf," +
+                    "unicows.dll," +
+                    "unregmp2.exe," +
+                    "w95inf16.dll," +
+                    "w95inf32.dll," +
+                    "wm1033.lng," +
+                    "WMADMOD.DLL," +
+                    "WMADMOE.DLL," +
+                    "WMASF.DLL," +
+                    "wmburn.exe," +
+                    "wmburn.rxc," +
+                    "wmdm.cat," +
+                    "wmdm.inf," +
+                    "WMDMLOG.dll," +
+                    "WMDMPS.dll," +
+                    "wmerror.dll," +
+                    "wmexpack.cat," +
+                    "wmexpack.inf," +
+                    "WMFSDK.cat," +
+                    "WMFSDK.inf," +
+                    "wmidx.dll," +
+                    "WMNetMgr.dll," +
+                    "wmp.cat," +
+                    "wmp.dll," +
+                    "wmp.inf," +
+                    "wmp.ocx," +
+                    "wmpasf.dll," +
+                    "wmpband.dll," +
+                    "wmpcd.dll," +
+                    "wmpcore.dll," +
+                    "wmpdxm.dll," +
+                    "wmplayer.adm," +
+                    "wmplayer.chm," +
+                    "wmplayer.exe," +
+                    "wmploc.DLL," +
+                    "WMPNS.dll," +
+                    "wmpns.jar," +
+                    "wmpshell.dll," +
+                    "wmpui.dll," +
+                    "WMSDMOD.DLL," +
+                    "WMSDMOE2.DLL," +
+                    "WMSPDMOD.DLL," +
+                    "WMSPDMOE.DLL," +
+                    "WMVCORE.DLL," +
+                    "WMVDMOD.DLL," +
+                    "WMVDMOE2.DLL"
                     )
 
             # If any of this info changes, we must rerun the tasks below
@@ -522,6 +692,9 @@ class CompatData:
             try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/syswow64/")
             try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/system32/")
 
+            makedirs(self.prefix_dir + "/drive_c/openxr/")
+            try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", self.prefix_dir + "/drive_c/openxr/")
+
             if use_wined3d:
                 dxvkfiles = ["dxvk_config"]
                 wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
@@ -552,6 +725,23 @@ class CompatData:
                     self.prefix_dir + "drive_c/windows/system32/d3d12.dll")
             try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll",
                     self.prefix_dir + "drive_c/windows/syswow64/d3d12.dll")
+
+            gamedrive_path = self.prefix_dir + "dosdevices/s:"
+            if "gamedrive" in g_session.compat_config:
+                library_dir = try_get_game_library_dir()
+                if not library_dir:
+                    if os.path.lexists(gamedrive_path):
+                        os.remove(gamedrive_path)
+                else:
+                    if os.path.lexists(gamedrive_path):
+                        cur_tgt = os.readlink(gamedrive_path)
+                        if cur_tgt != library_dir:
+                            os.remove(gamedrive_path)
+                            os.symlink(library_dir, gamedrive_path)
+                    else:
+                        os.symlink(library_dir, gamedrive_path)
+            elif os.path.lexists(gamedrive_path):
+                os.remove(gamedrive_path)
 
 def comma_escaped(s):
     escaped = False
@@ -606,10 +796,7 @@ class Session:
             # Allow wine to restore this when calling an external app.
             self.env['ORIG_'+ld_path_var] = os.environ.get(ld_path_var, '')
 
-        if ld_path_var in os.environ:
-            self.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
-        else:
-            self.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir
+        prepend_to_env_str(self.env, ld_path_var, g_proton.lib64_dir + ":" + g_proton.lib_dir, ":")
 
         self.env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
 
@@ -624,10 +811,7 @@ class Session:
             self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_audio.foz"
             self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_video.foz"
 
-        if "PATH" in os.environ:
-            self.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
-        else:
-            self.env["PATH"] = g_proton.bin_dir
+        prepend_to_env_str(self.env, "PATH", g_proton.bin_dir, ":")
 
     def check_environment(self, env_name, config_name):
         if not env_name in self.env:
@@ -695,6 +879,7 @@ class Session:
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
         self.check_environment("PROTON_NO_WRITE_WATCH", "nowritewatch")
         self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
+        self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -719,20 +904,16 @@ class Session:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
         if "vkd3dbindlesstb" in self.compat_config:
-            if not "VKD3D_CONFIG" in self.env:
-                self.env["VKD3D_CONFIG"] = "force_bindless_texel_buffer"
-            else:
-                self.env["VKD3D_CONFIG"] = self.env["VKD3D_CONFIG"] + ",force_bindless_texel_buffer"
+            append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
-        if not "VKD3D_FEATURE_LEVEL" in self.env:
-            self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
+        self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
-                basedir = os.environ.get("PROTON_LOG_DIR", os.environ["HOME"])
+                basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
                 makedirs(basedir)
                 lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
                 if os.path.exists(lfile_path):
@@ -776,10 +957,7 @@ class Session:
                 s = s + ";" + dll + "=" + setting
             else:
                 s = dll + "=" + setting
-        if "WINEDLLOVERRIDES" in self.env:
-            self.env["WINEDLLOVERRIDES"] = self.env["WINEDLLOVERRIDES"] + ";" + s
-        else:
-            self.env["WINEDLLOVERRIDES"] = s
+        append_to_env_str(self.env, "WINEDLLOVERRIDES", s, ";")
 
     def dump_dbg_env(self, f):
         f.write("PATH=\"" + self.env["PATH"] + "\" \\\n")
