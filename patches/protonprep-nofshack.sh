@@ -30,9 +30,7 @@
     git reset --hard HEAD
     git clean -xdf
     echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
-    patch -Np1 < ../patches/gstreamer/asfdemux-always_re-initialize_metadata_and_global_metadata.patch
     patch -Np1 < ../patches/gstreamer/asfdemux-Re-initialize_demux-adapter_in_gst_asf_demux_reset.patch
-    patch -Np1 < ../patches/gstreamer/asfdemux-Only_forward_SEEK_event_when_in_push_mode.patch
     patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
     cd ..
 
@@ -50,6 +48,9 @@
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
     patch -Np1 < ../patches/dxvk/1582.patch
+    patch -Np1 < ../patches/dxvk/1673.patch
+    patch -Np1 < ../patches/dxvk/1759.patch
+    patch -Np1 < ../patches/dxvk/1805.patch
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
@@ -76,6 +77,10 @@
 
     # revert this in favor of the staging hack, as this breaks dmc and some other games
     git revert --no-commit 1fceb1213992b79aa7f1a5dc0a72ab3756ee524d
+    
+    # revert this because it breaks controllers on some platforms
+    # https://github.com/Frogging-Family/wine-tkg-git/issues/248#issuecomment-760471607
+    git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -88,7 +93,7 @@
     # -W winex11-MWM_Decorations \
     # -W winex11-_NET_ACTIVE_WINDOW \
     # -W winex11-WM_WINDOWPOSCHANGING
-    
+        
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W dinput-SetActionMap-genre \
@@ -110,6 +115,9 @@
 
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
+
+#    echo "assetto corsa"
+#    patch -Np1 < ../patches/game-patches/wrc9.patch
 
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
@@ -167,12 +175,8 @@
     echo "steam bits"
     patch -Np1 < ../patches/proton/12-proton-steam-bits.patch
 
-    echo "SDL Joystick"
-    patch -Np1 < ../patches/proton/13-proton-sdl_joy.patch
-#    patch -Np1 < ../patches/proton/14-proton-sdl_joy_2.patch
-
-#    echo "proton gamepad additions"
-#    patch -Np1 < ../patches/proton/15-proton-gamepad-additions.patch
+    echo "proton gamepad additions"
+    patch -Np1 < ../patches/proton/15-proton-gamepad-additions.patch
 
     echo "Valve VR patches"
     patch -Np1 < ../patches/proton/16-proton-vrclient.patch
@@ -198,6 +202,9 @@
     patch -Np1 < ../patches/proton/33-proton-06_shadow_of_war_registry.patch
 
 #    # -- pending work -- still broken
+#    echo "staging disabled bcrypt patches"
+#    patch -Np1 < ../wine-staging/patches/bcrypt-ECDHSecretAgreement/0001-bcrypt-Allow-multiple-backends-to-coexist.patch
+#    patch -Np1 < ../wine-staging/patches/bcrypt-ECDHSecretAgreement/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 #    echo "valve rdr2 fixes"
 #    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
 
@@ -211,12 +218,20 @@
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/proton/30-proton-mediafoundation_dllreg.patch
     
-    echo "proton-specific winegstreamer patches"
-    patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
+#    echo "proton-specific winegstreamer patches"
+#    patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
+
+    # zf gstreamer pending patches
+    patch -Np1 < ../patches/wine-hotfixes/zf-gstreamer-pending.patch
     
     echo "proton udev container patches"
     patch -Np1 < ../patches/proton/35-proton-udev_container_patches.patch
+    
+    echo "proton overlay patches"
+    patch -Np1 < ../patches/proton/36-proton-overlay_fixes.patch
 
+    echo "proton openxr patches"
+    patch -Np1 < ../patches/proton/36-proton-OpenXR-patches.patch
     
     ### END PROTON PATCH SECTION ###
 
@@ -232,6 +247,11 @@
     echo "pending fixes"
     patch -Np1 < ../patches/wine-hotfixes/0033-HACK-Switch-between-all-selection-streams-on-MF_SOUR.patch
 
+    #https://bugs.winehq.org/show_bug.cgi?id=50448
+    patch -Np1 < ../patches/wine-hotfixes/ntdll-NtAlertThreadByThreadId_hotfix.patch
+    
+    #https://bugs.winehq.org/show_bug.cgi?id=21014
+    patch -Np1 < ../patches/wine-hotfixes/dsound-pending.patch
     
     ### END WINEPATCH SECTION ###
 
