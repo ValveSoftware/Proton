@@ -1,9 +1,9 @@
 [submodule "wine"]
     path = wine
-    url = https://github.com/ValveSoftware/wine/
+    url = https://github.com/ValveSoftware/wine
 [submodule "dxvk"]
 	path = dxvk
-	url = https://github.com/ValveSoftware/dxvk/
+	url = https://github.com/ValveSoftware/dxvk
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr
@@ -12,7 +12,7 @@
 	url = https://github.com/liberationfonts/liberation-fonts
 [submodule "FAudio"]
 	path = FAudio
-	url = https://github.com/FNA-XNA/FAudio/
+	url = https://github.com/FNA-XNA/FAudio
 [submodule "gstreamer"]
 	path = gstreamer
 	url = https://gitlab.freedesktop.org/gstreamer/gstreamer.git
