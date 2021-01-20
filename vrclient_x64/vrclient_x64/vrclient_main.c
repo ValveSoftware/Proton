@@ -931,15 +931,6 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
 
             our_depth.texture.handle = &our_vkdata;
 
-            their_vkdata = (struct VRVulkanTextureData_t *)our_depth.depth.handle;
-            our_depth_vkdata = *their_vkdata;
-            our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
-            our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
-            our_depth_vkdata.m_pInstance = get_native_VkInstance(our_depth_vkdata.m_pInstance);
-            our_depth_vkdata.m_pQueue = get_native_VkQueue(our_depth_vkdata.m_pQueue);
-
-            our_depth.depth.handle = &our_depth_vkdata;
-
             tex = &our_depth;
             break;
 
