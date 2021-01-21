@@ -85,6 +85,9 @@ Vagrant.configure(2) do |config|
       #allow vagrant user to run docker
       adduser vagrant docker
 
+      # use faster overlay2 docker driver
+      echo '{"storage-driver": "overlay2"}' >/etc/docker/daemon.json
+
       #allow user to run stuff in steamrt
       sysctl kernel.unprivileged_userns_clone=1
       mkdir -p /etc/sysctl.d/
