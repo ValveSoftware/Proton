@@ -140,10 +140,10 @@ endif
 ## Global config
 ##
 
-TOOLS_DIR32 := ./obj-tools32
-TOOLS_DIR64 := ./obj-tools64
-DST_BASE := ./dist
+DST_BASE := $(OBJ)/dist
 DST_DIR := $(DST_BASE)/dist
+DST_LIBDIR32 := $(DST_DIR)/lib
+DST_LIBDIR64 := $(DST_DIR)/lib64
 DEPLOY_DIR := ./deploy
 REDIST_DIR := ./redist
 
@@ -202,19 +202,8 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-# Wine outputs that need to exist for other steps (dist)
-WINE_OUT_BIN := $(DST_DIR)/bin/wine64
-WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
-WINE_OUT := $(WINE_OUT_BIN) $(WINE_OUT_SERVER)
-
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
-
-## Object directories
-OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)
-
-$(OBJ_DIRS):
-	mkdir -p $@
 
 ifeq ($(CONTAINER),)
 
@@ -271,8 +260,8 @@ DIST_COPY_TARGETS := $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
                      $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET)
 
 DIST_VERSION := $(DST_DIR)/version
-DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
-DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
+DIST_OVR32 := $(DST_LIBDIR32)/wine/dxvk/openvr_api_dxvk.dll
+DIST_OVR64 := $(DST_LIBDIR64)/wine/dxvk/openvr_api_dxvk.dll
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
@@ -304,11 +293,11 @@ $(DIST_OFL_LICENSE): $(OFL_LICENSE)
 	cp -a $< $@
 
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
-	mkdir -p $(DST_DIR)/lib/wine/dxvk
+	mkdir -p $(DST_LIBDIR32)/wine/dxvk
 	cp -a $< $@
 
 $(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
-	mkdir -p $(DST_DIR)/lib64/wine/dxvk
+	mkdir -p $(DST_LIBDIR64)/wine/dxvk
 	cp -a $< $@
 
 $(DIST_COPY_TARGETS): | $(DST_DIR)
@@ -370,14 +359,14 @@ ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
 dist_prefix: wine gst_good
-	find $(DST_DIR)/lib/wine -type f -execdir chmod a-w '{}' '+'
-	find $(DST_DIR)/lib64/wine -type f -execdir chmod a-w '{}' '+'
+	find $(DST_LIBDIR32)/wine -type f -execdir chmod a-w '{}' '+'
+	find $(DST_LIBDIR64)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
 	python3 $(SRCDIR)/default_pfx.py $(abspath $(DIST_PREFIX)) $(abspath $(DST_DIR)) $(STEAM_RUNTIME_RUNSH)
 
 dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64)
 
-dist: $(DIST_TARGETS) vrclient lsteamclient wineopenxr steam dxvk vkd3d-proton mediaconv dist_wineopenxr | $(DST_DIR)
+dist: $(DIST_TARGETS) all-dist dist_wineopenxr | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 
@@ -455,16 +444,6 @@ $(eval $(call rules-source,gstreamer,$(SRCDIR)/gstreamer))
 $(eval $(call rules-meson,gstreamer,32))
 $(eval $(call rules-meson,gstreamer,64))
 
-$(OBJ)/.gstreamer-post-build64:
-	cp -a $(TOOLS_DIR64)/lib64/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib64/gstreamer-1.0 $(DST_DIR)/lib64/
-	touch $@
-
-$(OBJ)/.gstreamer-post-build32:
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
-	touch $@
-
 
 ##
 ## gst-plugins-base
@@ -502,16 +481,6 @@ GST_BASE_DEPENDS = gst_orc gstreamer
 $(eval $(call rules-source,gst_base,$(SRCDIR)/gst-plugins-base))
 $(eval $(call rules-meson,gst_base,32))
 $(eval $(call rules-meson,gst_base,64))
-
-$(OBJ)/.gst_base-post-build64:
-	cp -a $(TOOLS_DIR64)/lib64/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib64/gstreamer-1.0 $(DST_DIR)/lib64/
-	touch $@
-
-$(OBJ)/.gst_base-post-build32:
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
-	touch $@
 
 
 ##
@@ -575,16 +544,6 @@ $(eval $(call rules-source,gst_good,$(SRCDIR)/gst-plugins-good))
 $(eval $(call rules-meson,gst_good,32))
 $(eval $(call rules-meson,gst_good,64))
 
-$(OBJ)/.gst_good-post-build64:
-	cp -a $(TOOLS_DIR64)/lib64/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib64/gstreamer-1.0 $(DST_DIR)/lib64/
-	touch $@
-
-$(OBJ)/.gst_good-post-build32:
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
-	touch $@
-
 
 ##
 ## FAudio
@@ -596,18 +555,6 @@ FAUDIO_DEPENDS = gst_orc gstreamer gst_base
 $(eval $(call rules-source,faudio,$(SRCDIR)/FAudio))
 $(eval $(call rules-cmake,faudio,32))
 $(eval $(call rules-cmake,faudio,64))
-
-$(OBJ)/.faudio-post-build32:
-	mkdir -p $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
-	touch $@
-
-$(OBJ)/.faudio-post-build64:
-	mkdir -p $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib64/libFAudio* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
-	touch $@
 
 
 ##
@@ -622,22 +569,6 @@ JXRLIB_INCDIR64 = $(JXRLIB_DST64)/include/jxrlib
 $(eval $(call rules-source,jxrlib,$(SRCDIR)/jxrlib))
 $(eval $(call rules-cmake,jxrlib,32))
 $(eval $(call rules-cmake,jxrlib,64))
-
-$(OBJ)/.jxrlib-post-build32:
-	mkdir -p $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/libjpegxr* $(DST_DIR)/lib/
-	cp -a $(TOOLS_DIR32)/lib/libjxrglue* $(DST_DIR)/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjpegxr.so
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjxrglue.so
-	touch $@
-
-$(OBJ)/.jxrlib-post-build64:
-	mkdir -p $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/libjpegxr* $(DST_DIR)/lib64/
-	cp -a $(TOOLS_DIR64)/lib/libjxrglue* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjpegxr.so
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjxrglue.so
-	touch $@
 
 
 ##
@@ -659,18 +590,8 @@ $(eval $(call rules-source,lsteamclient,$(SRCDIR)/lsteamclient))
 $(eval $(call rules-winemaker,lsteamclient,32,lsteamclient.dll))
 $(eval $(call rules-winemaker,lsteamclient,64,lsteamclient.dll))
 
-$(OBJ)/.lsteamclient-post-build64:
-	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so
-	mkdir -pv $(DST_DIR)/lib64/wine/
-	cp -af $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so $(DST_DIR)/lib64/wine/
-	touch $@
 
-$(OBJ)/.lsteamclient-post-build32:
-	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
-	mkdir -pv $(DST_DIR)/lib/wine/
-	cp -af $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
-	touch $@
-
+##
 
 ##
 ## openxr
@@ -701,13 +622,6 @@ $(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json
 	mkdir -p $(dir $@)
 	cp -a $< $@
 
-$(OBJ)/.wineopenxr-post-build64:
-	[ x"$(STRIP)" = x ] || $(STRIP) $(WINEOPENXR_OBJ64)/wineopenxr.dll.so && \
-	mkdir -pv $(DST_DIR)/lib64/wine/fakedlls && \
-	cp -a $(WINEOPENXR_OBJ64)/wineopenxr.dll.so $(DST_DIR)/lib64/wine/ && \
-	cp -a $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake $(DST_DIR)/lib64/wine/fakedlls/wineopenxr.dll
-	touch $@
-
 
 ##
 ## steam.exe
@@ -727,10 +641,7 @@ $(eval $(call rules-source,steamexe,$(SRCDIR)/steam_helper))
 $(eval $(call rules-winemaker,steamexe,32,steam.exe))
 
 $(OBJ)/.steamexe-post-build32:
-	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ32)/steam.exe.so
-	mkdir -pv $(DST_DIR)/lib/wine/
-	cp -af $(STEAMEXE_OBJ32)/steam.exe.so $(DST_DIR)/lib/wine/
-	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_DIR)/lib/
+	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_LIBDIR32)/
 	touch $@
 
 
@@ -764,20 +675,18 @@ $(OBJ)/.wine-post-source: $(WINE_SRC)/configure
 	touch $@
 
 $(OBJ)/.wine-post-build64:
-	mkdir -p $(DST_DIR)/{lib64,bin,share}
-	cp -a $(TOOLS_DIR64)/lib64 $(DST_DIR)/
-	cp -a $(TOOLS_DIR64)/bin/wine64 $(DST_DIR)/bin/
-	cp -a $(TOOLS_DIR64)/bin/wine64-preloader $(DST_DIR)/bin/
-	cp -a $(TOOLS_DIR64)/bin/wineserver $(DST_DIR)/bin/
-	cp -a $(TOOLS_DIR64)/bin/msidb $(DST_DIR)/bin/
-	cp -a $(TOOLS_DIR64)/share/wine $(DST_DIR)/share/
+	mkdir -p $(DST_DIR)/{bin,share}
+	$(call install-strip,$(WINE_DST64)/bin/wine64,$(DST_DIR)/bin)
+	$(call install-strip,$(WINE_DST64)/bin/wine64-preloader,$(DST_DIR)/bin)
+	$(call install-strip,$(WINE_DST64)/bin/wineserver,$(DST_DIR)/bin)
+	cp -a $(WINE_DST64)/share/wine $(DST_DIR)/share
+	cp -a $(WINE_DST64)/bin/msidb $(DST_DIR)/bin
 	touch $@
 
 $(OBJ)/.wine-post-build32:
-	mkdir -p $(DST_DIR)/{lib,bin}
-	cp -a $(TOOLS_DIR32)/lib $(DST_DIR)/
-	cp -a $(TOOLS_DIR32)/bin/wine $(DST_DIR)/bin/
-	cp -a $(TOOLS_DIR32)/bin/wine-preloader $(DST_DIR)/bin/
+	mkdir -p $(DST_DIR)/bin
+	$(call install-strip,$(WINE_DST32)/bin/wine,$(DST_DIR)/bin)
+	$(call install-strip,$(WINE_DST32)/bin/wine-preloader,$(DST_DIR)/bin)
 	touch $@
 
 
@@ -804,20 +713,6 @@ $(OBJ)/.vrclient-post-source:
 	mkdir -p $(VRCLIENT_OBJ64) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ64)/vrclient_x64.spec
 	touch $@
 
-$(OBJ)/.vrclient-post-build64:
-	[ x"$(STRIP)" = x ] || $(STRIP) $(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
-	mkdir -pv $(DST_DIR)/lib64/wine/fakedlls && \
-	cp -a $(VRCLIENT_OBJ64)/vrclient_x64.dll.so $(DST_DIR)/lib64/wine/ && \
-	cp -a $(VRCLIENT_OBJ64)/vrclient_x64.dll.fake $(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
-	touch $@
-
-$(OBJ)/.vrclient-post-build32:
-	[ x"$(STRIP)" = x ] || $(STRIP) $(VRCLIENT_OBJ32)/vrclient.dll.so && \
-	mkdir -pv $(DST_DIR)/lib/wine/fakedlls && \
-	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.so $(DST_DIR)/lib/wine/ && \
-	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.fake $(DST_DIR)/lib/wine/fakedlls/vrclient.dll
-	touch $@
-
 
 ##
 ## dxvk
@@ -835,26 +730,12 @@ $(eval $(call rules-meson,dxvk,32))
 $(eval $(call rules-meson,dxvk,64))
 
 $(OBJ)/.dxvk-post-build64:
-	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
-	cp -f "$(DXVK_OBJ64)"/bin/dxgi.dll "$(DST_DIR)"/lib64/wine/dxvk
-	cp -f "$(DXVK_OBJ64)"/bin/d3d11.dll "$(DST_DIR)"/lib64/wine/dxvk
-	cp -f "$(DXVK_OBJ64)"/bin/d3d10.dll "$(DST_DIR)"/lib64/wine/dxvk
-	cp -f "$(DXVK_OBJ64)"/bin/d3d10_1.dll "$(DST_DIR)"/lib64/wine/dxvk
-	cp -f "$(DXVK_OBJ64)"/bin/d3d10core.dll "$(DST_DIR)"/lib64/wine/dxvk
-	cp -f "$(DXVK_OBJ64)"/bin/d3d9.dll "$(DST_DIR)"/lib64/wine/dxvk
-	cp -f "$(DXVK_OBJ64)"/bin/dxvk_config.dll "$(DST_DIR)"/lib64/wine/dxvk
+	mkdir -p "$(DST_DIR)"/lib64/wine/dxvk
 	rm -f "$(DST_DIR)"/lib64/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version; fi
 	touch $@
 
 $(OBJ)/.dxvk-post-build32:
 	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
-	cp -f "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d10.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d10_1.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d10core.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/dxvk_config.dll "$(DST_DIR)"/lib/wine/dxvk
 	rm -f "$(DST_DIR)"/lib/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
 	touch $@
 
@@ -887,15 +768,11 @@ $(OBJ)/.vkd3d-proton-post-source:
 	touch $@
 
 $(OBJ)/.vkd3d-proton-post-build32:
-	mkdir -p $(abspath $(DST_DIR))/lib/ && \
-	cp -af "$(VKD3D_PROTON_DST32)/bin/d3d12.dll" "$(DST_DIR)"/lib/wine/vkd3d-proton/
 	mkdir -p "$(DST_DIR)"/lib/wine/vkd3d-proton
 	rm -f "$(DST_DIR)"/lib/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib/wine/vkd3d-proton/version; fi
 	touch $@
 
 $(OBJ)/.vkd3d-proton-post-build64:
-	mkdir -p $(abspath $(DST_DIR))/lib64/ && \
-	cp -af "$(VKD3D_PROTON_DST64)/bin/d3d12.dll" "$(DST_DIR)"/lib64/wine/vkd3d-proton/
 	mkdir -p "$(DST_DIR)"/lib64/wine/vkd3d-proton
 	rm -f "$(DST_DIR)"/lib64/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib64/wine/vkd3d-proton/version; fi
 	touch $@

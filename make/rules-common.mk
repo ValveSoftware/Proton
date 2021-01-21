@@ -4,7 +4,7 @@
 #   $(3): 32/64, build type
 define create-rules-common
 $(2)_OBJ$(3) := $$(OBJ)/obj-$(1)$(3)
-$(2)_DST$(3) := $$(abspath $$(TOOLS_DIR$(3)))
+$(2)_DST$(3) := $$(OBJ)/dst-$(1)$(3)
 $(2)_DEPS$(3) := $$(call toupper,$$($(2)_DEPENDS)) $$(call toupper,$$($(2)_DEPENDS$(3)))
 
 $(2)_BINDIR$(3) ?= $$($(2)_DST$(3))/bin
@@ -32,6 +32,7 @@ $$(OBJ)/.$(1)-build$(3): $$(OBJ)/.$(1)-configure$(3)
 ifeq ($(CONTAINER),)
 $$(OBJ)/.$(1)-build$(3): container-build
 $$(OBJ)/.$(1)-post-build$(3): container-build
+$$(OBJ)/.$(1)-dist$(3): container-build
 else
 $$(OBJ)/.$(1)-post-build$(3): $$(OBJ)/.$(1)-build$(3)
 endif
@@ -46,7 +47,49 @@ all-build: $(1)-build
 .PHONY: all-build
 
 
-$(1)$(3): $(1)-configure$(3) $(1)-build$(3)
+ifeq ($(CONTAINER),1)
+$$(OBJ)/.$(1)-dist$(3): $$(OBJ)/.$(1)-build$(3)
+$$(OBJ)/.$(1)-dist$(3): $$(OBJ)/.$(1)-post-build$(3)
+
+ifneq ($(UNSTRIPPED_BUILD),)
+$$(OBJ)/.$(1)-dist$(3):
+	@echo ":: installing $(3)bit $(1)..." >&2
+	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
+	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs --verbose -0 -r -P8 mkdir -p
+	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs --verbose -0 -r -P8 -n2 cp -a
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	    -printf '--only-keep-debug\0%p\0$$(DST_LIBDIR$(3))/%p.debug\0' | \
+	    xargs --verbose -0 -r -P8 -n3 objcopy --file-alignment=4096
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	    -printf '--add-gnu-debuglink=$$(DST_LIBDIR$(3))/%p.debug\0--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
+	    xargs --verbose -0 -r -P8 -n4 objcopy --file-alignment=4096
+	touch $$@
+else
+$$(OBJ)/.$(1)-dist$(3):
+	@echo ":: installing $(3)bit $(1)..." >&2
+	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
+	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs --verbose -0 -r -P8 mkdir -p
+	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs --verbose -0 -r -P8 -n2 cp -a
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	    -printf '$$(DST_LIBDIR$(3))/%p.debug\0' | xargs --verbose -0 -r -P8 rm -f
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	    -printf '--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
+	    xargs --verbose -0 -r -P8 -n3 objcopy --file-alignment=4096
+	touch $$@
+endif
+endif
+
+$(1)-dist$(3): $$(OBJ)/.$(1)-dist$(3)
+.INTERMEDIATE: $(1)-dist$(3)
+
+all-dist$(3) $(1)-dist: $(1)-dist$(3)
+.PHONY: all-dist$(3) $(1)-dist
+
+all-dist: $(1)-dist
+.PHONY: all-dist
+
+
+$(1)$(3): $(1)-configure$(3) $(1)-build$(3) $(1)-dist$(3)
 .INTERMEDIATE: $(1)$(3)
 
 all$(3) $(1): $(1)$(3)
@@ -69,16 +112,23 @@ $(2)_ENV$(3) = \
     CROSSCXX="$$(CCACHE_BIN) $$(ARCH$(3))-w64-mingw32-g++" \
     CROSSLD="$$(ARCH$(3))-w64-mingw32-ld" \
     CROSSPKG_CONFIG="$$(ARCH$(3))-linux-gnu-pkg-config" \
-    PATH="$$($(2)_BINDIR$(3)):$$(SRC)/glslang/bin:$$$$PATH" \
-    LD_LIBRARY_PATH="$$($(2)_LIBDIR$(3)):$$$$LD_LIBRARY_PATH" \
-    PKG_CONFIG_PATH="$$($(2)_LIBDIR$(3))/pkgconfig" \
-    CFLAGS="-I$$($(2)_INCDIR$(3)) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
-    CXXFLAGS="-I$$($(2)_INCDIR$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17" \
-    LDFLAGS="-L$$($(2)_LIBDIR$(3)) \
-             -Wl,-rpath-link=$$($(2)_LIBDIR$(3)) \
+    PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_BINDIR$(3))),,:):$$(SRC)/glslang/bin:$$$$PATH" \
+    LD_LIBRARY_PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_LIBDIR$(3))),,:)$$$$LD_LIBRARY_PATH" \
+    PKG_CONFIG_PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_LIBDIR$(3))/pkgconfig))" \
+    CFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
+    CXXFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17" \
+    LDFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \
+             $$(foreach d,$$($(2)_DEPS$(3)),-Wl,-rpath-link=$$($$(d)_LIBDIR$(3))) \
              $$($(2)_LDFLAGS) $$(LDFLAGS)"
 
 endef
+
+ifneq ($(UNSTRIPPED_BUILD),)
+install-strip = objcopy --file-alignment=4096 --only-keep-debug $(1) $(2)/$(notdir $(1)).debug && \
+                objcopy --file-alignment=4096 --add-gnu-debuglink=$(2)/$(notdir $(1)).debug --strip-debug $(1) $(2)/$(notdir $(1))
+else
+install-strip = objcopy --file-alignment=4096 --strip-debug $(1) $(2)/$(notdir $(1)) && rm -f $(2)/$(notdir $(1)).debug
+endif
 
 ARCH32 := i686
 ARCH64 := x86_64
