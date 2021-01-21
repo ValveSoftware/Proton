@@ -207,12 +207,6 @@ LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
 LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
 LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
 
-WINEOPENXR := $(SRCDIR)/wineopenxr
-WINEOPENXR64 := ./syn-wineopenxr64/wineopenxr
-WINEOPENXR_OBJ64 := ./obj-wineopenxr64
-WINEOPENXR_JSON64 := $(SRCDIR)/wineopenxr/wineopenxr64.json
-WINEOPENXR_FAKEDLL64 := $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake
-
 STEAMEXE_SRC := $(SRCDIR)/steam_helper
 STEAMEXE_OBJ := ./obj-steam
 STEAMEXE_SYN := ./syn-steam/steam
@@ -241,7 +235,6 @@ FONTS_OBJ := ./obj-fonts
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
-            $(WINEOPENXR_OBJ64) \
             $(STEAMEXE_OBJ)                             \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
@@ -398,14 +391,6 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/*.ttf "$@"
 	cp $(FONTS_OBJ)/*.otf "$@"
 
-$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_JSON64)
-	mkdir -p $(dir $@)
-	cp -a $< $@
-
-$(DIST_WINEOPENXR64): wineopenxr64
-	mkdir -p $(dir $@)
-	cp -a $(WINEOPENXR_FAKEDLL64) $@
-
 .PHONY: dist
 
 ALL_TARGETS += dist
@@ -417,7 +402,7 @@ dist_prefix: wine gst_good
 	rm -rf $(abspath $(DIST_PREFIX))
 	python3 $(SRCDIR)/default_pfx.py $(abspath $(DIST_PREFIX)) $(abspath $(DST_DIR)) $(STEAM_RUNTIME_RUNSH)
 
-dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64) $(DIST_WINEOPENXR64)
+dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64)
 
 dist: $(DIST_TARGETS) vrclient lsteamclient wineopenxr steam dxvk vkd3d-proton mediaconv dist_wineopenxr | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
@@ -798,63 +783,25 @@ $(eval $(call rules-cmake,openxr,64))
 ## Note 32-bit is not supported by SteamVR, so we don't build it.
 ##
 
-# The source directory for wineopenxr is a synthetic symlink clone of the source directory, because we need to run
-# winemaker in tree and it can stomp itself in parallel builds.
-$(WINEOPENXR64)/.created: $(WINEOPENXR) $(MAKEFILE_DEP)
-	rm -rf ./$(WINEOPENXR64)
-	mkdir -p $(WINEOPENXR64)/
-	cd $(WINEOPENXR64)/ && ln -sfv ../../$(WINEOPENXR)/* .
+WINEOPENXR_LDFLAGS = -lopenxr_loader -ldxgi -lvulkan
+
+WINEOPENXR_DEPENDS = wine openxr
+
+$(eval $(call rules-source,wineopenxr,$(SRCDIR)/wineopenxr))
+# $(eval $(call rules-winemaker,wineopenxr,32,wineopenxr.dll))
+$(eval $(call rules-winemaker,wineopenxr,64,wineopenxr.dll))
+
+$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json
+	mkdir -p $(dir $@)
+	cp -a $< $@
+
+$(OBJ)/.wineopenxr-post-build64:
+	[ x"$(STRIP)" = x ] || $(STRIP) $(WINEOPENXR_OBJ64)/wineopenxr.dll.so && \
+	mkdir -pv $(DST_DIR)/lib64/wine/fakedlls && \
+	cp -a $(WINEOPENXR_OBJ64)/wineopenxr.dll.so $(DST_DIR)/lib64/wine/ && \
+	cp -a $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake $(DST_DIR)/lib64/wine/fakedlls/wineopenxr.dll
 	touch $@
 
-$(WINEOPENXR64): $(WINEOPENXR64)/.created
-
-## Create & configure object directory for wineopenxr
-
-WINEOPENXR_CONFIGURE_FILES64 := $(WINEOPENXR_OBJ64)/Makefile
-
-# 64bit-configure
-$(WINEOPENXR_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(WINEOPENXR_CONFIGURE_FILES64): $(WINEOPENXR64) $(MAKEFILE_DEP) | $(WINEOPENXR_OBJ64) $(WINEMAKER)
-	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
-			-I"../$(TOOLS_DIR64)"/include/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
-			-I"../$(WINE)"/include/ \
-			-I"$(OPENXR_SRC)"/include/ \
-			-L"../$(TOOLS_DIR64)"/lib/ \
-			-l"openxr_loader" \
-			-l"dxgi" \
-			-l"vulkan" \
-			--dll ../$(WINEOPENXR64) && \
-		cp ../$(WINEOPENXR64)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(WINEOPENXR64)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'wineopenxr_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(wineopenxr_dll_LDFLAGS))'
-
-#			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
-## wineopenxr goals
-WINEOPENXR_TARGETS = wineopenxr wineopenxr_configure wineopenxr64 wineopenxr_configure64
-
-ALL_TARGETS += $(WINEOPENXR_TARGETS)
-GOAL_TARGETS_LIBS += wineopenxr
-
-.PHONY: $(WINEOPENXR_TARGETS)
-
-wineopenxr_configure: $(WINEOPENXR_CONFIGURE_FILES64)
-
-wineopenxr_configure64: $(WINEOPENXR_CONFIGURE_FILES64)
-
-wineopenxr: wineopenxr64
-
-wineopenxr64: SHELL = $(CONTAINER_SHELL)
-wineopenxr64: $(WINEOPENXR_CONFIGURE_FILES64) openxr64 | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CFLAGS="$(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(WINEOPENXR_OBJ64)
-	$(TOOLS_DIR64)/bin/winebuild -m64 --dll --fake-module -E $(abspath $(WINEOPENXR))/wineopenxr.spec -o $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake
-	[ x"$(STRIP)" = x ] || $(STRIP) $(WINEOPENXR_OBJ64)/wineopenxr.dll.so
-	mkdir -pv $(DST_DIR)/lib64/wine/
-	cp -af $(WINEOPENXR_OBJ64)/wineopenxr.dll.so $(DST_DIR)/lib64/wine/
 
 ## steam.exe
 
