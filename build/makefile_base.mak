@@ -201,10 +201,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-STEAMEXE_SRC := $(SRCDIR)/steam_helper
-STEAMEXE_OBJ := ./obj-steam
-STEAMEXE_SYN := ./syn-steam/steam
-
 # Wine outputs that need to exist for other steps (dist)
 WINE_OUT_BIN := $(DST_DIR)/bin/wine64
 WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
@@ -224,7 +220,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(STEAMEXE_OBJ)                             \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)
 
@@ -724,55 +719,29 @@ $(OBJ)/.wineopenxr-post-build64:
 	touch $@
 
 
+##
 ## steam.exe
+##
 
-$(STEAMEXE_SYN)/.created: $(STEAMEXE_SRC) $(MAKEFILE_DEP)
-	rm -rf $(STEAMEXE_SYN)
-	mkdir -p $(STEAMEXE_SYN)/
-	cd $(STEAMEXE_SYN)/ && ln -sfv ../../$(STEAMEXE_SRC)/* .
-	touch $@
+STEAMEXE_CFLAGS = -Wno-attributes
+STEAMEXE_CXXFLAGS = -Wno-attributes
+STEAMEXE_LDFLAGS = -lsteam_api -lole32 -static-libgcc -static-libstdc++
 
-$(STEAMEXE_SYN): $(STEAMEXE_SYN)/.created
+STEAMEXE_WINEMAKER_ARGS = \
+	"-I$(SRC)/lsteamclient/steamworks_sdk_142/" \
+	"-L$(SRC)/steam_helper/"
 
-STEAMEXE_CONFIGURE_FILES := $(STEAMEXE_OBJ)/Makefile
+STEAMEXE_DEPENDS = wine
 
-# 32-bit configure
-$(STEAMEXE_CONFIGURE_FILES): SHELL = $(CONTAINER_SHELL)
-$(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) wine32 | $(STEAMEXE_OBJ)
-	cd $(dir $@) && \
-	env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		winemaker --nosource-fix --nolower-include --nodlls --wine32 \
-			-I"../$(TOOLS_DIR32)"/include/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
-			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
-			-L"../$(TOOLS_DIR32)"/lib/ \
-			-L"../$(TOOLS_DIR32)"/lib/wine/ \
-			-L"../$(SRCDIR)"/steam_helper/ \
-			--guiexe --nomsvcrt ../$(STEAMEXE_SYN) && \
-		cp ../$(STEAMEXE_SYN)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -lsteam_api -lole32 $$(steam_exe_LDFLAGS)'
+$(eval $(call rules-source,steamexe,$(SRCDIR)/steam_helper))
+$(eval $(call rules-winemaker,steamexe,32,steam.exe))
 
-## steam goals
-STEAMEXE_TARGETS = steam steam_configure
-
-ALL_TARGETS += $(STEAMEXE_TARGETS)
-GOAL_TARGETS_LIBS += steam
-
-.PHONY: $(STEAMEXE_TARGETS)
-
-steam_configure: $(STEAMEXE_CONFIGURE_FILES)
-
-steam: SHELL = $(CONTAINER_SHELL)
-steam: $(STEAMEXE_CONFIGURE_FILES) wine32 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-std=gnu++11 -m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(STEAMEXE_OBJ)
-	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
+$(OBJ)/.steamexe-post-build32:
+	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ32)/steam.exe.so
 	mkdir -pv $(DST_DIR)/lib/wine/
-	cp -af $(STEAMEXE_OBJ)/steam.exe.so $(DST_DIR)/lib/wine/
+	cp -af $(STEAMEXE_OBJ32)/steam.exe.so $(DST_DIR)/lib/wine/
 	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_DIR)/lib/
+	touch $@
 
 
 ##
