@@ -219,9 +219,6 @@ WINEOPENXR_OBJ64 := ./obj-wineopenxr64
 WINEOPENXR_JSON64 := $(SRCDIR)/wineopenxr/wineopenxr64.json
 WINEOPENXR_FAKEDLL64 := $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake
 
-OPENXR := $(SRCDIR)/OpenXR-SDK
-OPENXR_OBJ64 := ./obj-openxr64
-
 STEAMEXE_SRC := $(SRCDIR)/steam_helper
 STEAMEXE_OBJ := ./obj-steam
 STEAMEXE_SYN := ./syn-steam/steam
@@ -266,7 +263,6 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(WINEOPENXR_OBJ64) \
-            $(OPENXR_OBJ64) \
             $(STEAMEXE_OBJ)                             \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
@@ -865,34 +861,12 @@ lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filte
 ## Note 32-bit is not supported by SteamVR, so we don't build it.
 ##
 
-OPENXR_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR="lib"
+OPENXR_CMAKE_ARGS = -DHAVE_FILESYSTEM_WITHOUT_LIB=0
 
-OPENXR_TARGETS = openxr openxr64
+$(eval $(call rules-source,openxr,$(SRCDIR)/OpenXR-SDK))
+# $(eval $(call rules-cmake,openxr,32))
+$(eval $(call rules-cmake,openxr,64))
 
-ALL_TARGETS += $(OPENXR_TARGETS)
-GOAL_TARGETS_LIBS += openxr
-
-.PHONY: openxr openxr64
-
-openxr: openxr64
-
-OPENXR_CONFIGURE_FILES64 := $(OPENXR_OBJ64)/Makefile
-
-$(OPENXR_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(OPENXR_CONFIGURE_FILES64): $(OPENXR)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENXR_OBJ64)
-	cd $(dir $@) && \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(OPENXR)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(OPENXR_CMAKE_FLAGS)
-
-openxr64: SHELL = $(CONTAINER_SHELL)
-openxr64: $(OPENXR_CONFIGURE_FILES64)
-	+$(MAKE) -C $(OPENXR_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(OPENXR_OBJ64) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/libopenxr_loader* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libopenxr_loader.so
 
 ##
 ## wineopenxr
@@ -922,7 +896,7 @@ $(WINEOPENXR_CONFIGURE_FILES64): $(WINEOPENXR64) $(MAKEFILE_DEP) | $(WINEOPENXR_
 			-I"../$(TOOLS_DIR64)"/include/wine/ \
 			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
 			-I"../$(WINE)"/include/ \
-			-I"$(abspath $(OPENXR))"/include/ \
+			-I"$(OPENXR_SRC)"/include/ \
 			-L"../$(TOOLS_DIR64)"/lib/ \
 			-l"openxr_loader" \
 			-l"dxgi" \
