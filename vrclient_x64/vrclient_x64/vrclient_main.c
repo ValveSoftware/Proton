@@ -116,7 +116,11 @@ bool vrclient_dos_path_to_unix_path(const char *src, char *dst)
             return 0;
         }
 
-        strncpy(dst, unix_path, PATH_MAX);
+        if (!realpath(unix_path, dst))
+        {
+            ERR("Could not get real path for %s.\n", unix_path);
+            strncpy(dst, unix_path, PATH_MAX);
+        }
 
         HeapFree(GetProcessHeap(), 0, unix_path);
     }else{
