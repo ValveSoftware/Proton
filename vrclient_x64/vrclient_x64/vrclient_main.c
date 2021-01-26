@@ -47,6 +47,8 @@ typedef struct winRenderModel_TextureMap_t_11415 winRenderModel_TextureMap_t_114
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+static void *vrclient_lib;
+
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
     TRACE("(%p, %u, %p)\n", instance, reason, reserved);
@@ -55,6 +57,14 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     {
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(instance);
+            break;
+
+        case DLL_PROCESS_DETACH:
+            if (vrclient_lib)
+            {
+                dlclose(vrclient_lib);
+                vrclient_lib = NULL;
+            }
             break;
     }
 
@@ -216,7 +226,6 @@ static pfn_dtor get_win_destructor(const char *name)
     return NULL;
 }
 
-static void *vrclient_lib;
 static void *(*vrclient_HmdSystemFactory)(const char *name, int *return_code);
 static void *(*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
 
