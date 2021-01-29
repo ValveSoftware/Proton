@@ -1095,6 +1095,119 @@ EVRCompositorError ivrcompositor_submit(
     }
 }
 
+void ivrcompositor_008_set_skybox_override(
+        void (*cpp_func)(void *, GraphicsAPIConvention, void *, void *, void *, void *, void *, void *),
+        void *linux_side, GraphicsAPIConvention api, void *front, void *back, void *left, void *right, void *top, void *bottom,
+        unsigned int version, struct compositor_data *user_data)
+{
+    TRACE("%p, %#x, %p, %p, %p, %p, %p, %p.\n", linux_side, api, front, back, left, right, top, bottom);
+
+    if (api == API_DirectX)
+        FIXME("Not implemented Direct3D API.\n");
+
+    cpp_func(linux_side, api, front, back, left, right, top, bottom);
+}
+
+static EVRCompositorError ivrcompositor_set_skybox_override_d3d11(
+        EVRCompositorError (*cpp_func)(void *, Texture_t *textures, uint32_t count),
+        void *linux_side, Texture_t *textures, uint32_t count,
+        struct compositor_data *user_data)
+{
+    struct VRVulkanTextureData_t vkdata[6];
+    IDXGIVkInteropSurface *dxvk_surface;
+    struct Texture_t vktexture[6];
+    EVRCompositorError result;
+    unsigned int i;
+
+    for (i = 0; i < count; ++i)
+    {
+        Texture_t *texture = &textures[i];
+        IUnknown *texture_iface;
+
+        if (!texture->handle)
+        {
+            ERR("No D3D11 texture %p.\n", texture);
+            return cpp_func(linux_side, textures, count);
+        }
+        if (textures[i].eType != TextureType_DirectX)
+        {
+            FIXME("Mixing texture types is not supported.\n");
+            return 0;
+        }
+
+        texture_iface = texture->handle;
+
+#ifdef VRCLIENT_HAVE_DXVK
+        if (SUCCEEDED(texture_iface->lpVtbl->QueryInterface(texture_iface,
+                &IID_IDXGIVkInteropSurface, (void **)&dxvk_surface)))
+        {
+            VkImageSubresourceRange subresources;
+            IDXGIVkInteropDevice *dxvk_device;
+            VkImageCreateInfo image_info;
+            VkImageLayout image_layout;
+
+            vktexture[i] = vrclient_translate_texture_dxvk(texture, &vkdata[i], dxvk_surface, &dxvk_device, &image_layout, &image_info);
+
+            if (user_data->dxvk_device && dxvk_device != user_data->dxvk_device)
+            {
+                ERR("Invalid dxvk_device %p, previous %p.\n", dxvk_device, user_data->dxvk_device);
+                dxvk_surface->lpVtbl->Release(dxvk_surface);
+                dxvk_device->lpVtbl->Release(dxvk_device);
+                return 0;
+            }
+
+            user_data->dxvk_device = dxvk_device;
+
+            subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            subresources.baseMipLevel = 0;
+            subresources.levelCount = image_info.mipLevels;
+            subresources.baseArrayLayer = 0;
+            subresources.layerCount = image_info.arrayLayers;
+
+            dxvk_device->lpVtbl->TransitionSurfaceLayout(dxvk_device, dxvk_surface, &subresources,
+                    image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+
+            dxvk_surface->lpVtbl->Release(dxvk_surface);
+            dxvk_device->lpVtbl->Release(dxvk_device);
+
+            continue;
+        }
+#endif
+        FIXME("Unsupported d3d11 texture %p, i %u.\n", texture, i);
+        return 0;
+    }
+    user_data->dxvk_device->lpVtbl->FlushRenderingCommands(user_data->dxvk_device);
+    user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
+
+    result = cpp_func(linux_side, vktexture, count);
+
+    user_data->dxvk_device->lpVtbl->ReleaseSubmissionQueue(user_data->dxvk_device);
+
+    TRACE("result %u.\n", result);
+    return result;
+}
+
+EVRCompositorError ivrcompositor_set_skybox_override(
+        EVRCompositorError (*cpp_func)(void *, Texture_t *textures, uint32_t count),
+        void *linux_side, Texture_t *textures, uint32_t count,
+        unsigned int version, struct compositor_data *user_data)
+{
+    TRACE("cpp_func %p, linux_side %p, textures %p, count %u, version %u.\n",
+            cpp_func, linux_side, textures, count, version);
+
+    if (!count || count > 6)
+    {
+        WARN("Invalid texture count %u.\n", count);
+        return cpp_func(linux_side, textures, count);
+    }
+
+    if (textures[0].eType == TextureType_DirectX)
+        return ivrcompositor_set_skybox_override_d3d11(cpp_func, linux_side, textures, count, user_data);
+
+    FIXME("Conversion for type %u is not supported.\n", textures[0].eType);
+    return 0;
+}
+
 struct post_present_handoff_data
 {
     void *linux_side;

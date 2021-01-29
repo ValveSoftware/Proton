@@ -131,6 +131,15 @@ EVRCompositorError ivrcompositor_submit(
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version, struct compositor_data *user_data);
 
+void ivrcompositor_008_set_skybox_override(
+        void (*cpp_func)(void *, GraphicsAPIConvention, void *, void *, void *, void *, void *, void *),
+        void *linux_side, GraphicsAPIConvention api, void *front, void *back, void *left, void *right, void *top, void *bottom,
+        unsigned int version, struct compositor_data *user_data);
+EVRCompositorError ivrcompositor_set_skybox_override(
+        EVRCompositorError (*cpp_func)(void *, Texture_t *textures, uint32_t count),
+        void *linux_side, Texture_t *textures, uint32_t count,
+        unsigned int version, struct compositor_data *user_data);
+
 void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
         void *linux_side, unsigned int version, struct compositor_data *user_data);
 
