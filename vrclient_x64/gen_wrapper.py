@@ -322,6 +322,11 @@ def ivrcompositor_submit(cppname, method):
         return "ivrcompositor_008_submit"
     return "ivrcompositor_submit"
 
+def ivrcompositor_set_skybox_override(cppname, method):
+    if "008" in cppname:
+        return "ivrcompositor_008_set_skybox_override"
+    return "ivrcompositor_set_skybox_override"
+
 def ivrcompositor_post_present_handoff(cppname, method):
     return "ivrcompositor_post_present_handoff"
 
@@ -381,6 +386,7 @@ method_overrides = [
     ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
     ("IVRSystem", "GetOutputDevice", ivrsystem_get_output_device),
     ("IVRCompositor", "Submit", ivrcompositor_submit),
+    ("IVRCompositor", "SetSkyboxOverride", ivrcompositor_set_skybox_override),
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
     ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),

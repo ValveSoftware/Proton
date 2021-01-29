@@ -143,7 +143,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(winIVRCompositor_IVRCompositor_026 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 26, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_ClearSkyboxOverride, 4)
@@ -666,7 +666,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(winIVRCompositor_IVRCompositor_024 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 24, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_ClearSkyboxOverride, 4)
@@ -1162,7 +1162,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(winIVRCompositor_IVRCompositor_022 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 22, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_ClearSkyboxOverride, 4)
@@ -1638,7 +1638,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(winIVRCompositor_IVRCompositor_021 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 21, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_ClearSkyboxOverride, 4)
@@ -2087,7 +2087,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(winIVRCompositor_IVRCompositor_020 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 20, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_ClearSkyboxOverride, 4)
@@ -2518,7 +2518,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(winIVRCompositor_IVRCompositor_019 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 19, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_ClearSkyboxOverride, 4)
@@ -2940,7 +2940,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(winIVRCompositor_IVRCompositor_018 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 18, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_ClearSkyboxOverride, 4)
@@ -3329,7 +3329,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(winIVRCompositor_IVRCompositor_017 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 17, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_ClearSkyboxOverride, 4)
@@ -3707,7 +3707,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(winIVRCompositor_IVRCompositor_016 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 16, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_ClearSkyboxOverride, 4)
@@ -4083,7 +4083,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(winIVRCompositor_IVRCompositor_015 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 15, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_ClearSkyboxOverride, 4)
@@ -4470,7 +4470,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(winIVRCompositor_IVRCompositor_014 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 14, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_ClearSkyboxOverride, 4)
@@ -4792,7 +4792,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(winIVRCompositor_IVRCompositor_013 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 13, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_ClearSkyboxOverride, 4)
@@ -5096,7 +5096,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(winIVRCompositor_IVRCompositor_012 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 12, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_ClearSkyboxOverride, 4)
@@ -5384,7 +5384,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(winIVRCompositor_IVRCompositor_011 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 11, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_ClearSkyboxOverride, 4)
@@ -5661,7 +5661,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(winIVRCompositor_IVRCompositor_010 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 10, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_ClearSkyboxOverride, 4)
@@ -5938,7 +5938,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(winIVRCompositor_IVRCompositor_009 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride(_this->linux_side, pTextures, unTextureCount);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 9, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_ClearSkyboxOverride, 4)
@@ -6215,7 +6215,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_SetSkyboxOverride, 32
 void __thiscall winIVRCompositor_IVRCompositor_008_SetSkyboxOverride(winIVRCompositor_IVRCompositor_008 *_this, GraphicsAPIConvention eTextureType, void * pFront, void * pBack, void * pLeft, void * pRight, void * pTop, void * pBottom)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride(_this->linux_side, eTextureType, pFront, pBack, pLeft, pRight, pTop, pBottom);
+    ivrcompositor_008_set_skybox_override(cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride, _this->linux_side, eTextureType, pFront, pBack, pLeft, pRight, pTop, pBottom, 8, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_ClearSkyboxOverride, 4)
