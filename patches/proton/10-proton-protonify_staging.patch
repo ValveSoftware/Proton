@@ -198,7 +198,61 @@ index d3b35603a17..4926cf9bf4f 100644
          case DLL_PROCESS_ATTACH:
              DisableThreadLibraryCalls(hinst);
              return TRUE;
+From e485252dfad51a7e463643d56fe138129597e4b6 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Mon, 23 Sep 2019 08:56:04 -0500
+Subject: [PATCH] ntdll: Always add a tail to heap allocations.
 
+Fixes the Rockstar Games Launcher installer (and possibly other
+NSIS-based installers) from crashing due to passing a too-small buffer
+to GetWindowInfo().
+---
+ dlls/ntdll/heap.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index 6344157f384..6fefe5d6d80 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -118,9 +118,8 @@ C_ASSERT( sizeof(ARENA_LARGE) % LARGE_ALIGNMENT == 0 );
+ #define HEAP_MIN_SHRINK_SIZE  (HEAP_MIN_DATA_SIZE+sizeof(ARENA_FREE))
+ /* minimum size to start allocating large blocks */
+ #define HEAP_MIN_LARGE_BLOCK_SIZE  0x7f000
+-/* extra size to add at the end of block for tail checking */
+-#define HEAP_TAIL_EXTRA_SIZE(flags) \
+-    ((flags & HEAP_TAIL_CHECKING_ENABLED) || RUNNING_ON_VALGRIND ? ALIGNMENT : 0)
++/* extra size to add at the end of block to mitigate overruns and allow tail checking */
++#define HEAP_TAIL_EXTRA_SIZE ALIGNMENT
+ 
+ /* size of the blocks on the free lists */
+ #define HEAP_FREELIST_SIZE(index) \
+@@ -800,7 +799,7 @@ static void HEAP_ShrinkBlock(SUBHEAP *subheap, ARENA_INUSE *pArena, SIZE_T size)
+ static void *allocate_large_block( HEAP *heap, DWORD flags, SIZE_T size )
+ {
+     ARENA_LARGE *arena;
+-    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
++    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+     LPVOID address = NULL;
+ 
+     if (block_size < size) return NULL;  /* overflow */
+@@ -1814,7 +1813,7 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+     if (!heapPtr) return NULL;
+     flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
+     flags |= heapPtr->flags;
+-    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE( flags );
++    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+     if (rounded_size < size)  /* overflow */
+     {
+         if (flags & HEAP_GENERATE_EXCEPTIONS) RtlRaiseStatus( STATUS_NO_MEMORY );
+@@ -1968,7 +1967,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+     flags |= heapPtr->flags;
+     if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
+ 
+-    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
++    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+     if (rounded_size < size) goto oom;  /* overflow */
+     if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
+ 
 From 90e3616c89ef7ed38763a3e3af3e9f0cd59697da Mon Sep 17 00:00:00 2001
 From: Nikolay Sivov <nsivov@codeweavers.com>
 Date: Wed, 8 Mar 2017 20:15:40 +0300
@@ -567,61 +621,6 @@ index 50240fb2860..f0f6a6da0c3 100644
          return E_OUTOFMEMORY;
  
      V_VT(&destVar) = VT_BSTR;
-From e485252dfad51a7e463643d56fe138129597e4b6 Mon Sep 17 00:00:00 2001
-From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Mon, 23 Sep 2019 08:56:04 -0500
-Subject: [PATCH] ntdll: Always add a tail to heap allocations.
-
-Fixes the Rockstar Games Launcher installer (and possibly other
-NSIS-based installers) from crashing due to passing a too-small buffer
-to GetWindowInfo().
----
- dlls/ntdll/heap.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index 6344157f384..6fefe5d6d80 100644
---- a/dlls/ntdll/heap.c
-+++ b/dlls/ntdll/heap.c
-@@ -118,9 +118,8 @@ C_ASSERT( sizeof(ARENA_LARGE) % LARGE_ALIGNMENT == 0 );
- #define HEAP_MIN_SHRINK_SIZE  (HEAP_MIN_DATA_SIZE+sizeof(ARENA_FREE))
- /* minimum size to start allocating large blocks */
- #define HEAP_MIN_LARGE_BLOCK_SIZE  0x7f000
--/* extra size to add at the end of block for tail checking */
--#define HEAP_TAIL_EXTRA_SIZE(flags) \
--    ((flags & HEAP_TAIL_CHECKING_ENABLED) || RUNNING_ON_VALGRIND ? ALIGNMENT : 0)
-+/* extra size to add at the end of block to mitigate overruns and allow tail checking */
-+#define HEAP_TAIL_EXTRA_SIZE ALIGNMENT
- 
- /* size of the blocks on the free lists */
- #define HEAP_FREELIST_SIZE(index) \
-@@ -800,7 +799,7 @@ static void HEAP_ShrinkBlock(SUBHEAP *subheap, ARENA_INUSE *pArena, SIZE_T size)
- static void *allocate_large_block( HEAP *heap, DWORD flags, SIZE_T size )
- {
-     ARENA_LARGE *arena;
--    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
-+    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
-     LPVOID address = NULL;
- 
-     if (block_size < size) return NULL;  /* overflow */
-@@ -1814,7 +1813,7 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
-     if (!heapPtr) return NULL;
-     flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
-     flags |= heapPtr->flags;
--    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE( flags );
-+    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
-     if (rounded_size < size)  /* overflow */
-     {
-         if (flags & HEAP_GENERATE_EXCEPTIONS) RtlRaiseStatus( STATUS_NO_MEMORY );
-@@ -1968,7 +1967,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
-     flags |= heapPtr->flags;
-     if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
- 
--    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
-+    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
-     if (rounded_size < size) goto oom;  /* overflow */
-     if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
- 
 From 5cd65deffffad9073538acf4fd8e794ac07824a5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 9 Oct 2019 09:47:12 +0200
@@ -1136,34 +1135,6 @@ index 868f898bbbb..95f498123ea 100644
      }
  
      if (TRACE_ON( bcrypt ))
-From 2f720e9aa8ded781ff457bdfab96f3651017299c Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 21 Jan 2020 21:05:05 +0100
-Subject: [PATCH] winex11.drv: Ignore ClipCursor if desktop window is
- foreground.
-
----
- dlls/winex11.drv/mouse.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index a5235b69a8d..4b2c9bd41ae 100644
---- a/dlls/winex11.drv/mouse.c
-+++ b/dlls/winex11.drv/mouse.c
-@@ -1625,6 +1625,13 @@ BOOL CDECL X11DRV_ClipCursor( LPCRECT clip )
-         HWND foreground = GetForegroundWindow();
-         DWORD tid, pid;
- 
-+        if (foreground == GetDesktopWindow())
-+        {
-+            WARN( "desktop is foreground, ignoring ClipCursor\n" );
-+            ungrab_clipping_window();
-+            return TRUE;
-+        }
-+
-         /* forward request to the foreground window if it's in a different thread */
-         tid = GetWindowThreadProcessId( foreground, &pid );
-         if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
 From 8fd9d6bd3d567893f933b7d55615446476745654 Mon Sep 17 00:00:00 2001
 From: Vincent Povirk <vincent@codeweavers.com>
 Date: Wed, 1 Apr 2020 11:47:05 -0500
@@ -2025,84 +1996,6 @@ index 4010a727a08..ef9a640a771 100644
      if (!nodename)
          node = NULL;
      else if (!nodename[0])
-From 5d0bdb1470b47224bf359456be9f6c78a43704f7 Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Wed, 20 Jun 2018 15:07:28 -0500
-Subject: [PATCH] user32: Remove hooks that time out.
-
-In accordance with Win7+ behaviour.
----
- dlls/user32/hook.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/dlls/user32/hook.c b/dlls/user32/hook.c
-index b6a3b3661f7..aff8cae262f 100644
---- a/dlls/user32/hook.c
-+++ b/dlls/user32/hook.c
-@@ -382,6 +382,7 @@ void *get_hook_proc( void *proc, const WCHAR *module, HMODULE *free_module )
- static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARAM lparam )
- {
-     DWORD_PTR ret = 0;
-+    LRESULT lres;
- 
-     if (info->tid)
-     {
-@@ -395,20 +396,24 @@ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARA
-         switch(info->id)
-         {
-         case WH_KEYBOARD_LL:
--            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
--                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
--                                            get_ll_hook_timeout(), &ret );
-+            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
-+                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
-             break;
-         case WH_MOUSE_LL:
--            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
--                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
--                                            get_ll_hook_timeout(), &ret );
-+            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
-+                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
-             break;
-         default:
-             ERR("Unknown hook id %d\n", info->id);
-             assert(0);
-             break;
-         }
-+
-+        if (!lres && GetLastError() == ERROR_TIMEOUT)
-+        {
-+            TRACE("Hook %p timed out; removing it.\n", info->handle);
-+            UnhookWindowsHookEx( info->handle );
-+        }
-     }
-     else if (info->proc)
-     {
-From b48ce9a2778a4ff7ee14067f0ea73693ed70c52d Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Wed, 20 Jun 2018 15:10:08 -0500
-Subject: [PATCH] server: Don't check for a hung queue when sending low-level
- hooks.
-
-Since user32 does this.
-
-This logic is independent of the SMTO_ABORTIFHUNG logic on Windows. In fact, IsHungAppWindow() uses yet another algorithm.
----
- server/queue.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/server/queue.c b/server/queue.c
-index 968f2ffe701..aa8e627211a 100644
---- a/server/queue.c
-+++ b/server/queue.c
-@@ -1641,7 +1641,6 @@ static int send_hook_ll_message( struct desktop *desktop, struct message *hardwa
- 
-     if (!(hook_thread = get_first_global_hook( id ))) return 0;
-     if (!(queue = hook_thread->queue)) return 0;
--    if (is_queue_hung( queue )) return 0;
- 
-     if (!(msg = mem_alloc( sizeof(*msg) ))) return 0;
- 
 From c9a5fcb0966ab0ca0722c8c07476c131844f98e1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 16 Oct 2020 23:37:09 +0200
@@ -2203,118 +2096,6 @@ index 00000000000..cd6df5bcf41
 +    FIXME("stub!");
 +    return 0;
 +}
-From 8a0f4add2096d213999d9be7a04229d288f1af75 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Fri, 24 Aug 2018 14:41:44 -0500
-Subject: [PATCH] HACK: winex11: Grab mouse in fullscreen windows by default
-
----
- dlls/winex11.drv/x11drv_main.c | 2 +-
- programs/winecfg/x11drvdlg.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index af2094a96f0..9c98209d43d 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -76,7 +76,7 @@ BOOL use_primary_selection = FALSE;
- BOOL use_system_cursors = TRUE;
- BOOL show_systray = TRUE;
- BOOL grab_pointer = TRUE;
--BOOL grab_fullscreen = FALSE;
-+BOOL grab_fullscreen = TRUE;
- BOOL managed_mode = TRUE;
- BOOL decorated_mode = TRUE;
- BOOL private_color_map = FALSE;
-diff --git a/programs/winecfg/x11drvdlg.c b/programs/winecfg/x11drvdlg.c
-index fbc6716e94e..1ca8c3ed0fd 100644
---- a/programs/winecfg/x11drvdlg.c
-+++ b/programs/winecfg/x11drvdlg.c
-@@ -123,7 +123,7 @@ static void init_dialog(HWND dialog)
-     SendDlgItemMessageW(dialog, IDC_DESKTOP_WIDTH, EM_LIMITTEXT, RES_MAXLEN, 0);
-     SendDlgItemMessageW(dialog, IDC_DESKTOP_HEIGHT, EM_LIMITTEXT, RES_MAXLEN, 0);
- 
--    buf = get_reg_key(config_key, keypath("X11 Driver"), "GrabFullscreen", "N");
-+    buf = get_reg_key(config_key, keypath("X11 Driver"), "GrabFullscreen", "Y");
-     if (IS_OPTION_TRUE(*buf))
- 	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
-     else
-From 625a473504e0f55cc62db6dad96bf09c4c7e59cf Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Wed, 27 Jun 2018 10:06:48 -0500
-Subject: [PATCH] HACK: winex11: Let the WM focus our windows by default
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-This should fix game windows not being in focus when first started
-and when exiting, which can cause surprising keyboard behavior (e.g.
-accidentally Alt-F4ing Steam itself, which is in the background).
-
-This may break modal dialogs in some WMs (fvwm2?) which do not respect
-our responses to WM_TAKE_FOCUS. For games that show that issue, we can
-re-enable UseTakeFocus.
-
-From Zeb:
-
-"""
-The basic problem, if I understand it correctly, is that Wine uses the
-"globally active" focus model by default. This means that the window
-manager won't focus our windows unless we respond in the affirmative to
-a WM_TAKE_FOCUS event. Since the GUI thread isn't processing messages,
-this doesn't happen.
-
-Luckily, there is a very easy workaround: create the registry key
-HKCU\Software\Wine\X11 Driver and set the somewhat inaptly named value
-"UseTakeFocus" to "N" (i.e. No). This causes Wine to use the "locally
-active" model instead, which means that the window manager will focus
-our windows when it sees fit—i.e. when the user clicks on them, or when
-they are created.
-"""
----
- dlls/winex11.drv/x11drv_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 9456caba088..af2094a96f0 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -71,7 +71,7 @@ BOOL usexvidmode = FALSE;
- BOOL usexrandr = FALSE;
- BOOL usexcomposite = TRUE;
- BOOL use_xkb = TRUE;
--BOOL use_take_focus = TRUE;
-+BOOL use_take_focus = FALSE;
- BOOL use_primary_selection = FALSE;
- BOOL use_system_cursors = TRUE;
- BOOL show_systray = TRUE;
- 
-From a58fde69e0ac1945d2e2733d9506cfe4bfe145e7 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Wed, 26 Jun 2019 08:09:27 -0500
-Subject: [PATCH] Revert "winex11.drv: Activate window when restoring from
- iconic state."
-
-This reverts commit 82c6ec3a32f44e8b3e0cc88b7f10e0c0d7fa1b89.
-
-Causes alt-tab problems with several games.
----
- dlls/winex11.drv/event.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index 236c9f862af..d1c15b1de94 100644
---- a/dlls/winex11.drv/event.c
-+++ b/dlls/winex11.drv/event.c
-@@ -1342,8 +1342,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
-             {
-                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
-                 release_win_data( data );
--                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
--                    SetActiveWindow( hwnd );
-                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
-                 return;
-             }
 From: "Rémi Bernon" <rbernon@codeweavers.com>
 Subject: [PATCH] server: Only allocate the required size in get_rawinput_buffer.
 Message-Id: <20201110133651.553337-1-rbernon@codeweavers.com>
@@ -4187,103 +3968,6 @@ index e3a29beb6da..7df5681357b 100644
  
  static void dump_init_process_done_reply( const struct init_process_done_reply *req )
   
-From 3f104de1a4b4f1b0cb7244b12365cc7ace24a7de Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Thu, 10 Dec 2020 20:43:25 +0300
-Subject: [PATCH] iphlpapi: Mark adapter addresses as DNS eligible when
- interface has a gateway.
-
-For Kingdoms Reborn.
----
- dlls/iphlpapi/iphlpapi_main.c | 28 ++++++++++++++--------------
- include/iptypes.h             |  3 +++
- 2 files changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/dlls/iphlpapi/iphlpapi_main.c b/dlls/iphlpapi/iphlpapi_main.c
-index c0390862295..b810d7555f3 100644
---- a/dlls/iphlpapi/iphlpapi_main.c
-+++ b/dlls/iphlpapi/iphlpapi_main.c
-@@ -940,16 +940,19 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
-     DWORD *v4addrs = NULL, *v4masks = NULL;
-     SOCKET_ADDRESS *v6addrs = NULL, *v6masks = NULL;
-     PMIB_IPFORWARDTABLE routeTable = NULL;
-+    BOOL output_gateways;
-+
-+    if ((flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS) || !(flags & GAA_FLAG_SKIP_UNICAST))
-+    {
-+        ret = AllocateAndGetIpForwardTableFromStack(&routeTable, FALSE, GetProcessHeap(), 0);
-+        if (ret) return ret;
-+        num_v4_gateways = count_v4_gateways(index, routeTable);
-+    }
-+    output_gateways = (flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS) && (family == WS_AF_INET || family == WS_AF_UNSPEC);
- 
-     if (family == WS_AF_INET)
-     {
-         ret = v4addressesFromIndex(index, &v4addrs, &num_v4addrs, &v4masks);
--
--        if (!ret && flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS)
--        {
--            ret = AllocateAndGetIpForwardTableFromStack(&routeTable, FALSE, GetProcessHeap(), 0);
--            if (!ret) num_v4_gateways = count_v4_gateways(index, routeTable);
--        }
-     }
-     else if (family == WS_AF_INET6)
-     {
-@@ -958,12 +961,6 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
-     else if (family == WS_AF_UNSPEC)
-     {
-         ret = v4addressesFromIndex(index, &v4addrs, &num_v4addrs, &v4masks);
--
--        if (!ret && flags & GAA_FLAG_INCLUDE_ALL_GATEWAYS)
--        {
--            ret = AllocateAndGetIpForwardTableFromStack(&routeTable, FALSE, GetProcessHeap(), 0);
--            if (!ret) num_v4_gateways = count_v4_gateways(index, routeTable);
--        }
-         if (!ret) ret = v6addressesFromIndex(index, &v6addrs, &num_v6addrs, &v6masks);
-     }
-     else
-@@ -996,7 +993,8 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
-     }
-     total_size += sizeof(IP_ADAPTER_UNICAST_ADDRESS) * num_v4addrs;
-     total_size += sizeof(struct sockaddr_in) * num_v4addrs;
--    total_size += (sizeof(IP_ADAPTER_GATEWAY_ADDRESS) + sizeof(SOCKADDR_IN)) * num_v4_gateways;
-+    if (output_gateways)
-+        total_size += (sizeof(IP_ADAPTER_GATEWAY_ADDRESS) + sizeof(SOCKADDR_IN)) * num_v4_gateways;
-     total_size += sizeof(IP_ADAPTER_UNICAST_ADDRESS) * num_v6addrs;
-     total_size += sizeof(SOCKET_ADDRESS) * num_v6addrs;
-     for (i = 0; i < num_v6addrs; i++)
-@@ -1043,7 +1041,7 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
-         aa->Luid.Info.NetLuidIndex = index;
-         aa->Luid.Info.IfType = aa->IfType;
- 
--        if (num_v4_gateways)
-+        if (output_gateways && num_v4_gateways)
-         {
-             PMIB_IPFORWARDROW adapterRow;
- 
-@@ -1082,6 +1080,8 @@ static ULONG adapterAddressesFromIndex(ULONG family, ULONG flags, IF_INDEX index
-                 ua->u.s.Length              = sizeof(IP_ADAPTER_UNICAST_ADDRESS);
-                 ua->Address.iSockaddrLength = sizeof(struct sockaddr_in);
-                 ua->Address.lpSockaddr      = (SOCKADDR *)((char *)ua + ua->u.s.Length);
-+                if (num_v4_gateways)
-+                    ua->u.s.Flags |= IP_ADAPTER_ADDRESS_DNS_ELIGIBLE;
- 
-                 sa = (struct WS_sockaddr_in *)ua->Address.lpSockaddr;
-                 sa->sin_family           = WS_AF_INET;
-diff --git a/include/iptypes.h b/include/iptypes.h
-index c1a253d7b41..c1ee7322b01 100644
---- a/include/iptypes.h
-+++ b/include/iptypes.h
-@@ -94,6 +94,9 @@ typedef NL_DAD_STATE IP_DAD_STATE;
- 
- #ifdef _WINSOCK2API_
- 
-+#define IP_ADAPTER_ADDRESS_DNS_ELIGIBLE 0x00000001
-+#define IP_ADAPTER_ADDRESS_TRANSIENT    0x00000002
-+
- typedef struct _IP_ADAPTER_UNICAST_ADDRESS_LH {
-     union {
-         struct {
 From 2452b57e7fed9ac5036df9bcace5c28366a8eb41 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 8 Jan 2021 13:47:39 -0600
@@ -4307,36 +3991,6 @@ index a33440107b6..397aa64dce2 100644
          };
  
          WCHAR cur_exe[MAX_PATH];
-From fd4b700ad559b512b150acacd3fae3016180c8bd Mon Sep 17 00:00:00 2001
-From: Jan Sikorski <jsikorski@codeweavers.com>
-Date: Mon, 19 Oct 2020 13:03:14 +0200
-Subject: [PATCH] dbghelp: Avoid forwarded exports.
-
-Fallout 76 does not handle forwarded exports of these functions.
-
-Signed-off-by: Jan Sikorski <jsikorski@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- dlls/dbghelp/dbghelp.spec | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/dbghelp/dbghelp.spec b/dlls/dbghelp/dbghelp.spec
-index 6ffa82da926..b17c7b18655 100644
---- a/dlls/dbghelp/dbghelp.spec
-+++ b/dlls/dbghelp/dbghelp.spec
-@@ -19,9 +19,9 @@
- @ stdcall GetTimestampForLoadedLibrary(long)
- @ stdcall ImageDirectoryEntryToData(ptr long long ptr)
- @ stdcall ImageDirectoryEntryToDataEx(ptr long long ptr ptr)
--@ stdcall ImageNtHeader(ptr) ntdll.RtlImageNtHeader
--@ stdcall ImageRvaToSection(ptr ptr long) ntdll.RtlImageRvaToSection
--@ stdcall ImageRvaToVa(ptr ptr long ptr) ntdll.RtlImageRvaToVa
-+@ stdcall -import ImageNtHeader(ptr) RtlImageNtHeader
-+@ stdcall -import ImageRvaToSection(ptr ptr long) RtlImageRvaToSection
-+@ stdcall -import ImageRvaToVa(ptr ptr long ptr) RtlImageRvaToVa
- @ stdcall ImagehlpApiVersion()
- @ stdcall ImagehlpApiVersionEx(ptr)
- @ stdcall MakeSureDirectoryPathExists(str)
 From 4ddb4142cf134a1939d897c4cd6d3b96028b4ed4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Mon, 30 Nov 2020 16:24:03 +0100
@@ -6345,158 +5999,3 @@ index 918f4eff8d2..f7ced5437bb 100644
  }
  
  static SECURITY_STATUS SEC_ENTRY schan_DeleteSecurityContext(PCtxtHandle context_handle)
-From b5e21dfb1d301bf3c95307ed1cec21175f0c68e0 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Wed, 11 Nov 2020 13:17:30 +0300
-Subject: [PATCH] wininet: Correctly return error status from
- InternetSetFilePointer() stub.
-
-Fixes Freestyle 2: Street Basketball update check failure.
-
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
-(cherry picked from commit 67295a7844b94ccbfce85dbee22a76f12c9f5b36)
----
- dlls/wininet/internet.c   |  4 +++-
- dlls/wininet/tests/http.c | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/wininet/internet.c b/dlls/wininet/internet.c
-index fb02488934d..91bff2ece93 100644
---- a/dlls/wininet/internet.c
-+++ b/dlls/wininet/internet.c
-@@ -2096,7 +2096,9 @@ DWORD WINAPI InternetSetFilePointer(HINTERNET hFile, LONG lDistanceToMove,
-     PVOID pReserved, DWORD dwMoveContext, DWORD_PTR dwContext)
- {
-     FIXME("(%p %d %p %d %lx): stub\n", hFile, lDistanceToMove, pReserved, dwMoveContext, dwContext);
--    return FALSE;
-+
-+    SetLastError(ERROR_INTERNET_INVALID_OPERATION);
-+    return INVALID_SET_FILE_POINTER;
- }
- 
- /***********************************************************************
-diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
-index c07d60d2a9d..5a158704c52 100644
---- a/dlls/wininet/tests/http.c
-+++ b/dlls/wininet/tests/http.c
-@@ -570,6 +570,8 @@ static void InternetReadFile_test(int flags, const test_data_t *test)
-     DWORD length, length2, index, exlen = 0, post_len = 0;
-     const char *types[2] = { "*", NULL };
-     HINTERNET hi, hic = 0, hor = 0;
-+    DWORD contents_length, accepts_ranges;
-+    BOOL not_supported;
- 
-     trace("Starting InternetReadFile test with flags 0x%x on url %s\n",flags,test->url);
-     reset_events();
-@@ -796,10 +798,23 @@ static void InternetReadFile_test(int flags, const test_data_t *test)
-     res = HttpQueryInfoA(hor,HTTP_QUERY_CONTENT_LENGTH,&buffer,&length,&index);
-     trace("Option HTTP_QUERY_CONTENT_LENGTH -> %i  %s  (%u)\n",res,buffer,GetLastError());
-     if(test->flags & TESTF_COMPRESSED)
-+    {
-         ok(!res && GetLastError() == ERROR_HTTP_HEADER_NOT_FOUND,
-            "expected ERROR_HTTP_HEADER_NOT_FOUND, got %x (%u)\n", res, GetLastError());
-+        contents_length = 0;
-+    }
-+    else
-+    {
-+        contents_length = atoi(buffer);
-+    }
-     ok(!res || index == 1, "Index was not incremented although result is %x (index = %u)\n", res, index);
- 
-+    length = 64;
-+    *buffer = 0;
-+    res = HttpQueryInfoA(hor,HTTP_QUERY_ACCEPT_RANGES,&buffer,&length,0x0);
-+    trace("Option HTTP_QUERY_ACCEPT_RANGES -> %i  %s  (%u)\n",res,buffer,GetLastError());
-+    accepts_ranges = res && !strcmp(buffer, "bytes");
-+
-     length = 100;
-     res = HttpQueryInfoA(hor,HTTP_QUERY_CONTENT_TYPE,buffer,&length,0x0);
-     buffer[length]=0;
-@@ -810,6 +825,26 @@ static void InternetReadFile_test(int flags, const test_data_t *test)
-     buffer[length]=0;
-     trace("Option HTTP_QUERY_CONTENT_ENCODING -> %i  %s\n",res,buffer);
- 
-+    SetLastError(0xdeadbeef);
-+    length = InternetSetFilePointer(hor, 0, NULL, FILE_END, 0);
-+    not_supported = length == INVALID_SET_FILE_POINTER
-+            && GetLastError() == ERROR_INTERNET_INVALID_OPERATION;
-+    if (accepts_ranges)
-+        todo_wine ok((length == contents_length && (GetLastError() == ERROR_SUCCESS
-+                || broken(GetLastError() == 0xdeadbeef))) || broken(not_supported),
-+                "Got unexpected length %#x, GetLastError() %u, contents_length %u, accepts_ranges %#x.\n",
-+                length, GetLastError(), contents_length, accepts_ranges);
-+    else
-+        ok(not_supported, "Got unexpected length %#x, GetLastError() %u.\n", length, GetLastError());
-+
-+    if (length != INVALID_SET_FILE_POINTER)
-+    {
-+        SetLastError(0xdeadbeef);
-+        length = InternetSetFilePointer(hor, 0, NULL, FILE_BEGIN, 0);
-+        ok(!length && (GetLastError() == ERROR_SUCCESS || broken(GetLastError() == 0xdeadbeef)),
-+                "Got unexpected length %#x, GetLastError() %u.\n", length, GetLastError());
-+    }
-+
-     SetLastError(0xdeadbeef);
-     res = InternetReadFile(NULL, buffer, 100, &length);
-     ok(!res, "InternetReadFile should have failed\n");
-From c511e51b9b729a8cf7534650a1603369f00edf65 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Fri, 13 Nov 2020 19:26:41 +0300
-Subject: [PATCH] directmanipulation: Return S_OK form
- viewport_SetViewportOptions stub.
-
-Fixes Paradox launcher crash on start when Windows version is set to 10.
-
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
-(cherry picked from commit b58882993e7b28bd71f50f1eecd4750d576167e5)
----
- dlls/directmanipulation/directmanipulation.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/directmanipulation/directmanipulation.c b/dlls/directmanipulation/directmanipulation.c
-index 987f780c6ca..d22e7ee8649 100644
---- a/dlls/directmanipulation/directmanipulation.c
-+++ b/dlls/directmanipulation/directmanipulation.c
-@@ -610,7 +610,7 @@ static HRESULT WINAPI viewport_SetViewportOptions(IDirectManipulationViewport2 *
- {
-     struct directviewport *This = impl_from_IDirectManipulationViewport2(iface);
-     FIXME("%p, %d\n", This, options);
--    return E_NOTIMPL;
-+    return S_OK;
- }
- 
- static HRESULT WINAPI viewport_AddConfiguration(IDirectManipulationViewport2 *iface, DIRECTMANIPULATION_CONFIGURATION configuration)
-From 5954b30171af8d309e0eb2d29fa75a353678e139 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Wed, 16 Dec 2020 11:58:27 +0300
-Subject: [PATCH] ws2_32: Fix buffer size check in WSAIoctl() for
- SIO_GET_INTERFACE_LIST.
-
-Fixes out of bound memory access in Anno 1404 Addon.
-
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
-(cherry picked from commit f17404f8ed2883e28ef33887c7e0a9c2fc2e4874)
----
- dlls/ws2_32/socket.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
-index ef9a640a771..3eb989dfcc4 100644
---- a/dlls/ws2_32/socket.c
-+++ b/dlls/ws2_32/socket.c
-@@ -4823,10 +4823,11 @@ INT WINAPI WSAIoctl(SOCKET s, DWORD code, LPVOID in_buff, DWORD in_size, LPVOID
-                         if (ptr->IpAddressList.IpAddress.String[0] == '\0')
-                             continue;
- 
--                        if ((numInt + 1)*sizeof(INTERFACE_INFO)/sizeof(IP_ADAPTER_INFO) > out_size)
-+                        if ((numInt + 1) * sizeof(INTERFACE_INFO) > out_size)
-                         {
-                             WARN("Buffer too small = %u, out_size = %u\n", numInt + 1, out_size);
-                             status = WSAEFAULT;
-+                            if (ret_size) *ret_size = 0;
-                             break;
-                         }
- 

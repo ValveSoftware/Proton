@@ -8,10 +8,10 @@ Subject: [PATCH] winevulkan: Retrieve XR extensions from the environment
  1 file changed, 132 insertions(+), 4 deletions(-)
 
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index d1606073662..7cdb0f11295 100644
+index a0009ae85f5..c10a53e4acf 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -385,13 +385,83 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
+@@ -402,14 +402,84 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
      free_VkDeviceCreateInfo_struct_chain(create_info);
  }
  
@@ -91,17 +91,19 @@ index d1606073662..7cdb0f11295 100644
 -    unsigned int i;
 +    unsigned int i, append_xr = 0, wine_extension_count;
      VkResult res;
+     const char** extensions;
  
 +    static const char *wine_xr_extension_name = "VK_WINE_openxr_device_extensions";
 +
      *dst = *src;
  
      if ((res = convert_VkDeviceCreateInfo_struct_chain(src->pNext, dst)) < 0)
-@@ -421,8 +491,54 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
+@@ -451,8 +521,55 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
      dst->enabledLayerCount = 0;
      dst->ppEnabledLayerNames = NULL;
  
--    TRACE("Enabled extensions: %u.\n", dst->enabledExtensionCount);
+-    TRACE("Enabled %u extensions.\n", dst->enabledExtensionCount);
++
      for (i = 0; i < dst->enabledExtensionCount; i++)
 +    {
 +        const char *extension_name = dst->ppEnabledExtensionNames[i];
@@ -143,7 +145,7 @@ index d1606073662..7cdb0f11295 100644
 +
 +        *must_free_extensions = TRUE;
 +        wine_extension_count = dst->enabledExtensionCount - xr_extensions_len;
-+    }else{
++    } else {
 +        *must_free_extensions = FALSE;
 +        wine_extension_count = dst->enabledExtensionCount;
 +    }
@@ -151,9 +153,9 @@ index d1606073662..7cdb0f11295 100644
 +    TRACE("Enabled %u extensions.\n", dst->enabledExtensionCount);
 +    for (i = 0; i < wine_extension_count; i++)
      {
-         TRACE("Extension %u: %s.\n", i, debugstr_a(dst->ppEnabledExtensionNames[i]));
-     }
-@@ -430,6 +546,15 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
+         const char *extension_name = dst->ppEnabledExtensionNames[i];
+         TRACE("Extension %u: %s.\n", i, debugstr_a(extension_name));
+@@ -435,6 +584,14 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
      return VK_SUCCESS;
  }
  
@@ -165,11 +167,10 @@ index d1606073662..7cdb0f11295 100644
 +    heap_free((void*)create_info->ppEnabledExtensionNames);
 +}
 +
-+
  /* Helper function used for freeing a device structure. This function supports full
   * and partial object cleanups and can thus be used for vkCreateDevice failures.
   */
-@@ -762,6 +887,7 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
+@@ -918,6 +918,7 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
      uint32_t max_queue_families;
      struct VkDevice_T *object;
      unsigned int i;
@@ -177,7 +178,7 @@ index d1606073662..7cdb0f11295 100644
      VkResult res;
  
      TRACE("%p, %p, %p, %p\n", phys_dev, create_info, allocator, device);
-@@ -786,13 +912,15 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
+@@ -942,13 +943,15 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
      object->base.loader_magic = VULKAN_ICD_MAGIC_VALUE;
      object->phys_dev = phys_dev;
  

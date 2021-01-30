@@ -8535,3 +8535,331 @@ index 8c16e6c24f8..cc490c0ea77 100644
      pSDL_JoystickEventState(SDL_ENABLE);
      pSDL_GameControllerEventState(SDL_ENABLE);
  
+From fa89eed93d71670d93c9728c8c049314652592da Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Wed, 25 Nov 2020 17:04:14 +0200
+Subject: [PATCH] user32: Fix WM_DEVICECHANGE handling.
+
+For DOOM (2016) hotplugging.
+
+WM_DEVICECHANGE's lParam can be either a pointer to a variant of
+DEV_BROADCAST_HDR or an immediate value (usually 0) depending on
+the wParam's value.
+
+This fixes a crash when broadcasting WM_DEVICECHANGE with
+wParam = DBT_DEVNODES_CHANGED, lParam = 0.
+
+Signed-off-by: Arkadiusz Hiler <ahiler@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit b4abe3889f95e74df77f9fac117b30d236b2b2cc)
+---
+ dlls/user32/message.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 316935b2b61..03ff8a7f099 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -1028,7 +1028,7 @@ static size_t pack_message( HWND hwnd, UINT message, WPARAM wparam, LPARAM lpara
+     case WM_DEVICECHANGE:
+     {
+         DEV_BROADCAST_HDR *header = (DEV_BROADCAST_HDR *)lparam;
+-        push_data( data, header, header->dbch_size );
++        if ((wparam & 0x8000) && header) push_data( data, header, header->dbch_size );
+         return 0;
+     }
+     case WM_WINE_KEYBOARD_LL_HOOK:
+@@ -1431,6 +1431,7 @@ static BOOL unpack_message( HWND hwnd, UINT message, WPARAM *wparam, LPARAM *lpa
+         if (!get_buffer_space( buffer, sizeof(BOOL) )) return FALSE;
+         break;
+     case WM_DEVICECHANGE:
++        if (!(*wparam & 0x8000)) return TRUE;
+         minsize = sizeof(DEV_BROADCAST_HDR);
+         break;
+     case WM_WINE_KEYBOARD_LL_HOOK:
+From dff6365adcbf657431146656c03ced69e26ff930 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Wed, 25 Nov 2020 17:04:15 +0200
+Subject: [PATCH] plugplay: Send WM_DEVICECHANGE with DBT_DEVNODES_CHANGED with
+ each event.
+
+For DOOM (2016) hotplugging.
+
+Windows sends *a lot* of those messages whenever there's a device / drive /
+etc. appearing or disappearing.
+
+This fixes controller hotplug in Doom (2016).
+
+Signed-off-by: Arkadiusz Hiler <ahiler@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 743c266e6496345d0a55c83b0cfc741b0f381d4e)
+---
+ programs/plugplay/main.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/programs/plugplay/main.c b/programs/plugplay/main.c
+index 8e007048422..e1bb9640cc5 100644
+--- a/programs/plugplay/main.c
++++ b/programs/plugplay/main.c
+@@ -19,6 +19,7 @@
+ #define WIN32_LEAN_AND_MEAN
+ 
+ #include <windows.h>
++#include <dbt.h>
+ #include "winsvc.h"
+ #include "wine/debug.h"
+ #include "wine/list.h"
+@@ -142,6 +143,7 @@ void __cdecl plugplay_send_event( DWORD code, const BYTE *data, unsigned int siz
+     struct event *event;
+ 
+     BroadcastSystemMessageW( BSF_FORCEIFHUNG | BSF_QUERY, NULL, WM_DEVICECHANGE, code, (LPARAM)data );
++    BroadcastSystemMessageW( BSF_FORCEIFHUNG | BSF_QUERY, NULL, WM_DEVICECHANGE, DBT_DEVNODES_CHANGED, 0 );
+ 
+     EnterCriticalSection( &plugplay_cs );
+ 
+From eeaa03e6d19fdb493b910d03473302c7e82a6038 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Mon, 14 Dec 2020 12:17:48 +0200
+Subject: [PATCH] dinput: Return lowercase path for devices
+
+For Yakuza: Like A Dragon Xbox controller support.
+
+Yakuza: Like A Dragon uses dinput to do controller discovery. It also tells
+xinput controllers apart the other kinds using the dinput device path.
+
+The game is looking for vid_ and ig_ in the path, both lowercase and the
+comparison is case sensitive.
+
+Patch c34e297b76f9 ("dinput: Return real rawinput path for dinput device")
+started using raw input paths for dinput devices, which looks like what
+Windows is doing but with the small omission of lowercasing the whole string.
+---
+ dlls/dinput/joystick_sdl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index a1ca99ee310..c7d5b7bda9d 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -1368,6 +1368,8 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
+                     return DIERR_GENERIC;
+                 }
+ 
++                strlwrW(pd->wszPath);
++
+                 pd->guidClass = GUID_DEVCLASS_HIDCLASS;
+ 
+                 TRACE("DIPROP_GUIDANDPATH(%s, %s): returning path\n", debugstr_guid(&pd->guidClass), debugstr_w(pd->wszPath));
+From 785c2650d686f8456f1aaba8282a69c072dcac31 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Wed, 9 Dec 2020 14:04:56 +0200
+Subject: [PATCH] hidclass.sys: Don't send raw input messages for fake xinput
+ hack controllers
+
+For Subnautica hotplugging.
+
+Xinput hack introduces extra fake HID devices for controllers that are
+intended to be only used internally by xinput dlls. There's a unintentional
+leak though - if a process subscribes for WM_INPUT messages for HID
+controllers using RegisterRawInputDevices() it will get the messages twice -
+one for the regular HID device and the second for the faux xinput device.
+
+The second copy of the messages had a few fields (e.g. hDevice) set to zeros.
+Some games (The Elder Scrolls Online, Cuphead) struggled with handling such
+messages, which caused a visible stutter.
+
+To mitigate that 46bfde7d5a36 ("user32: Also look up xinput-only HID devices")
+was introduced, which makes WM_INPUT messages filled out properly, but has
+unintentional effect of leaking those special xinput HID devices even further,
+through GetRawInputDeviceList(). This breaks controller hotplug for Subnautica
+(and likely other games that are using Unity's RI.Hid).
+
+To fix the original problem this patch makes hidclass.sys not send raw input
+messages for the xinput hack codepaths.
+
+Combined with a revert of 46bfde7d5a36 ("user32: Also look up xinput-only HID
+devices") all the games mentioned above seem to run just fine.
+---
+ dlls/hidclass.sys/device.c | 10 +++++-----
+ dlls/hidclass.sys/hid.h    |  4 +++-
+ dlls/hidclass.sys/pnp.c    |  4 +++-
+ 3 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/hidclass.sys/device.c b/dlls/hidclass.sys/device.c
+index 37448b315d1..18cf3a346fb 100644
+--- a/dlls/hidclass.sys/device.c
++++ b/dlls/hidclass.sys/device.c
+@@ -76,7 +76,7 @@ NTSTATUS HID_CreateDevice(DEVICE_OBJECT *native_device, HID_MINIDRIVER_REGISTRAT
+     return STATUS_SUCCESS;
+ }
+ 
+-NTSTATUS HID_LinkDevice(DEVICE_OBJECT *device, BOOL xinput_hack)
++NTSTATUS HID_LinkDevice(DEVICE_OBJECT *device)
+ {
+     static const WCHAR backslashW[] = {'\\',0};
+     WCHAR device_instance_id[MAX_DEVICE_ID_LEN];
+@@ -85,12 +85,10 @@ NTSTATUS HID_LinkDevice(DEVICE_OBJECT *device, BOOL xinput_hack)
+     NTSTATUS status;
+     HDEVINFO devinfo;
+     GUID hidGuid;
+-    BASE_DEVICE_EXTENSION *ext;
++    BASE_DEVICE_EXTENSION *ext = device->DeviceExtension;
+ 
+     HidD_GetHidGuid(&hidGuid);
+-    if(xinput_hack)
+-        hidGuid.Data4[7]++; /* HACK: use different GUID so only xinput will find this device */
+-    ext = device->DeviceExtension;
++    if (ext->xinput_hack) hidGuid.Data4[7]++; /* HACK: use different GUID so only xinput will find this device */
+ 
+     RtlInitUnicodeString( &nameW, ext->device_name);
+ 
+@@ -253,6 +251,8 @@ static void HID_Device_sendRawInput(DEVICE_OBJECT *device, HID_XFER_PACKET *pack
+ {
+     BASE_DEVICE_EXTENSION *ext = device->DeviceExtension;
+ 
++    if (ext->xinput_hack) return;
++
+     SERVER_START_REQ(send_hardware_message)
+     {
+         req->win                  = 0;
+diff --git a/dlls/hidclass.sys/hid.h b/dlls/hidclass.sys/hid.h
+index 459dca3b26f..a8341555746 100644
+--- a/dlls/hidclass.sys/hid.h
++++ b/dlls/hidclass.sys/hid.h
+@@ -59,6 +59,8 @@ typedef struct _BASE_DEVICE_EXTENSION {
+     BOOL is_mouse;
+     UNICODE_STRING mouse_link_name;
+ 
++    BOOL xinput_hack;
++
+     /* Minidriver Specific stuff will end up here */
+ } BASE_DEVICE_EXTENSION;
+ 
+@@ -97,7 +99,7 @@ minidriver* find_minidriver(DRIVER_OBJECT* driver) DECLSPEC_HIDDEN;
+ 
+ /* Internal device functions */
+ NTSTATUS HID_CreateDevice(DEVICE_OBJECT *native_device, HID_MINIDRIVER_REGISTRATION *driver, DEVICE_OBJECT **device) DECLSPEC_HIDDEN;
+-NTSTATUS HID_LinkDevice(DEVICE_OBJECT *device, BOOL xinput_hack) DECLSPEC_HIDDEN;
++NTSTATUS HID_LinkDevice(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
+ void HID_DeleteDevice(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
+ void HID_StartDeviceThread(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
+ 
+diff --git a/dlls/hidclass.sys/pnp.c b/dlls/hidclass.sys/pnp.c
+index abb517e10d5..6092ead1168 100644
+--- a/dlls/hidclass.sys/pnp.c
++++ b/dlls/hidclass.sys/pnp.c
+@@ -197,7 +197,9 @@ NTSTATUS WINAPI PNP_AddDevice(DRIVER_OBJECT *driver, DEVICE_OBJECT *PDO)
+     lstrcatW(ext->device_id, separator_W);
+     lstrcatW(ext->device_id, wcschr(device_id, '\\') + 1);
+ 
+-    HID_LinkDevice(device, attr.Reserved[0]/*xinput_hack*/);
++    ext->xinput_hack = attr.Reserved[0];
++
++    HID_LinkDevice(device);
+ 
+     ext->poll_interval = DEFAULT_POLL_INTERVAL;
+ 
+From d6fe20d6e7d2ee707d3498249cdb955ac9efa8a9 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Tue, 5 Jan 2021 19:34:25 +0200
+Subject: [PATCH] Revert "user32: Also look up xinput-only HID devices"
+
+For Subnautica hotplugging.
+
+This reverts commit 46bfde7d5a36c5cf18773a7181db3ab9d484d0c3.
+---
+ dlls/user32/rawinput.c | 65 ++++++++++++++----------------------------
+ 1 file changed, 22 insertions(+), 43 deletions(-)
+
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index 9ea5ea393e8..3fb19280101 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -191,18 +191,37 @@ static HANDLE rawinput_handle_from_device_handle(HANDLE device, BOOL rescan)
+     return rawinput_handle_from_device_handle(device, FALSE);
+ }
+ 
+-static void find_rawinput_devices_by_guid(const GUID *guid)
++static void find_devices(BOOL force)
+ {
++    static ULONGLONG last_check;
++
+     SP_DEVICE_INTERFACE_DATA iface = { sizeof(iface) };
+     struct device *device;
+     HIDD_ATTRIBUTES attr;
+     HIDP_CAPS caps;
++    GUID hid_guid;
+     HDEVINFO set;
+     DWORD idx;
+ 
+-    set = SetupDiGetClassDevsW(guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
++    if (!force && GetTickCount64() - last_check < 2000)
++        return;
++    last_check = GetTickCount64();
++
++    HidD_GetHidGuid(&hid_guid);
++
++    EnterCriticalSection(&rawinput_devices_cs);
++
++    /* destroy previous list */
++    for (idx = 0; idx < rawinput_devices_count; ++idx)
++    {
++        CloseHandle(rawinput_devices[idx].file);
++        heap_free(rawinput_devices[idx].path);
++    }
++    rawinput_devices_count = 0;
++
++    set = SetupDiGetClassDevsW(&hid_guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+ 
+-    for (idx = 0; SetupDiEnumDeviceInterfaces(set, NULL, guid, idx, &iface); ++idx)
++    for (idx = 0; SetupDiEnumDeviceInterfaces(set, NULL, &hid_guid, idx, &iface); ++idx)
+     {
+         if (!(device = add_device(set, &iface)))
+             continue;
+@@ -227,46 +246,6 @@ static void find_rawinput_devices_by_guid(const GUID *guid)
+     }
+ 
+     SetupDiDestroyDeviceInfoList(set);
+-}
+-
+-static void find_devices(BOOL force)
+-{
+-    static ULONGLONG last_check;
+-
+-    SP_DEVICE_INTERFACE_DATA iface = { sizeof(iface) };
+-    struct device *device;
+-    HDEVINFO set;
+-    DWORD idx;
+-    GUID hid_guid;
+-
+-    if (!force && GetTickCount64() - last_check < 2000)
+-        return;
+-
+-    HidD_GetHidGuid(&hid_guid);
+-
+-    EnterCriticalSection(&rawinput_devices_cs);
+-
+-    if (!force && GetTickCount64() - last_check < 2000)
+-    {
+-        LeaveCriticalSection(&rawinput_devices_cs);
+-        return;
+-    }
+-
+-    last_check = GetTickCount64();
+-
+-    /* destroy previous list */
+-    for (idx = 0; idx < rawinput_devices_count; ++idx)
+-    {
+-        CloseHandle(rawinput_devices[idx].file);
+-        heap_free(rawinput_devices[idx].path);
+-    }
+-    rawinput_devices_count = 0;
+-
+-    find_rawinput_devices_by_guid(&hid_guid);
+-
+-    /* HACK: also look up the xinput-specific devices */
+-    hid_guid.Data4[7]++;
+-    find_rawinput_devices_by_guid(&hid_guid);
+ 
+     set = SetupDiGetClassDevsW(&GUID_DEVINTERFACE_MOUSE, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+ 

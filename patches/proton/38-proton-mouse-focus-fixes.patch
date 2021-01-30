@@ -1,0 +1,218 @@
+From 2f720e9aa8ded781ff457bdfab96f3651017299c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 21 Jan 2020 21:05:05 +0100
+Subject: [PATCH] winex11.drv: Ignore ClipCursor if desktop window is
+ foreground.
+
+---
+ dlls/winex11.drv/mouse.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index a5235b69a8d..4b2c9bd41ae 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -1625,6 +1625,13 @@ BOOL CDECL X11DRV_ClipCursor( LPCRECT clip )
+         HWND foreground = GetForegroundWindow();
+         DWORD tid, pid;
+ 
++        if (foreground == GetDesktopWindow())
++        {
++            WARN( "desktop is foreground, ignoring ClipCursor\n" );
++            ungrab_clipping_window();
++            return TRUE;
++        }
++
+         /* forward request to the foreground window if it's in a different thread */
+         tid = GetWindowThreadProcessId( foreground, &pid );
+         if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
+From 5d0bdb1470b47224bf359456be9f6c78a43704f7 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jun 2018 15:07:28 -0500
+Subject: [PATCH] user32: Remove hooks that time out.
+
+In accordance with Win7+ behaviour.
+---
+ dlls/user32/hook.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/user32/hook.c b/dlls/user32/hook.c
+index b6a3b3661f7..aff8cae262f 100644
+--- a/dlls/user32/hook.c
++++ b/dlls/user32/hook.c
+@@ -382,6 +382,7 @@ void *get_hook_proc( void *proc, const WCHAR *module, HMODULE *free_module )
+ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARAM lparam )
+ {
+     DWORD_PTR ret = 0;
++    LRESULT lres;
+ 
+     if (info->tid)
+     {
+@@ -395,20 +396,24 @@ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARA
+         switch(info->id)
+         {
+         case WH_KEYBOARD_LL:
+-            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
+-                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
+-                                            get_ll_hook_timeout(), &ret );
++            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
++                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
+             break;
+         case WH_MOUSE_LL:
+-            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
+-                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
+-                                            get_ll_hook_timeout(), &ret );
++            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
++                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
+             break;
+         default:
+             ERR("Unknown hook id %d\n", info->id);
+             assert(0);
+             break;
+         }
++
++        if (!lres && GetLastError() == ERROR_TIMEOUT)
++        {
++            TRACE("Hook %p timed out; removing it.\n", info->handle);
++            UnhookWindowsHookEx( info->handle );
++        }
+     }
+     else if (info->proc)
+     {
+From b48ce9a2778a4ff7ee14067f0ea73693ed70c52d Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jun 2018 15:10:08 -0500
+Subject: [PATCH] server: Don't check for a hung queue when sending low-level
+ hooks.
+
+Since user32 does this.
+
+This logic is independent of the SMTO_ABORTIFHUNG logic on Windows. In fact, IsHungAppWindow() uses yet another algorithm.
+---
+ server/queue.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 968f2ffe701..aa8e627211a 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1641,7 +1641,6 @@ static int send_hook_ll_message( struct desktop *desktop, struct message *hardwa
+ 
+     if (!(hook_thread = get_first_global_hook( id ))) return 0;
+     if (!(queue = hook_thread->queue)) return 0;
+-    if (is_queue_hung( queue )) return 0;
+ 
+     if (!(msg = mem_alloc( sizeof(*msg) ))) return 0;
+ 
+From 8a0f4add2096d213999d9be7a04229d288f1af75 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 24 Aug 2018 14:41:44 -0500
+Subject: [PATCH] HACK: winex11: Grab mouse in fullscreen windows by default
+
+---
+ dlls/winex11.drv/x11drv_main.c | 2 +-
+ programs/winecfg/x11drvdlg.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index af2094a96f0..9c98209d43d 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -76,7 +76,7 @@ BOOL use_primary_selection = FALSE;
+ BOOL use_system_cursors = TRUE;
+ BOOL show_systray = TRUE;
+ BOOL grab_pointer = TRUE;
+-BOOL grab_fullscreen = FALSE;
++BOOL grab_fullscreen = TRUE;
+ BOOL managed_mode = TRUE;
+ BOOL decorated_mode = TRUE;
+ BOOL private_color_map = FALSE;
+diff --git a/programs/winecfg/x11drvdlg.c b/programs/winecfg/x11drvdlg.c
+index fbc6716e94e..1ca8c3ed0fd 100644
+--- a/programs/winecfg/x11drvdlg.c
++++ b/programs/winecfg/x11drvdlg.c
+@@ -123,7 +123,7 @@ static void init_dialog(HWND dialog)
+     SendDlgItemMessageW(dialog, IDC_DESKTOP_WIDTH, EM_LIMITTEXT, RES_MAXLEN, 0);
+     SendDlgItemMessageW(dialog, IDC_DESKTOP_HEIGHT, EM_LIMITTEXT, RES_MAXLEN, 0);
+ 
+-    buf = get_reg_key(config_key, keypath("X11 Driver"), "GrabFullscreen", "N");
++    buf = get_reg_key(config_key, keypath("X11 Driver"), "GrabFullscreen", "Y");
+     if (IS_OPTION_TRUE(*buf))
+ 	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
+     else
+From 625a473504e0f55cc62db6dad96bf09c4c7e59cf Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 27 Jun 2018 10:06:48 -0500
+Subject: [PATCH] HACK: winex11: Let the WM focus our windows by default
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This should fix game windows not being in focus when first started
+and when exiting, which can cause surprising keyboard behavior (e.g.
+accidentally Alt-F4ing Steam itself, which is in the background).
+
+This may break modal dialogs in some WMs (fvwm2?) which do not respect
+our responses to WM_TAKE_FOCUS. For games that show that issue, we can
+re-enable UseTakeFocus.
+
+From Zeb:
+
+"""
+The basic problem, if I understand it correctly, is that Wine uses the
+"globally active" focus model by default. This means that the window
+manager won't focus our windows unless we respond in the affirmative to
+a WM_TAKE_FOCUS event. Since the GUI thread isn't processing messages,
+this doesn't happen.
+
+Luckily, there is a very easy workaround: create the registry key
+HKCU\Software\Wine\X11 Driver and set the somewhat inaptly named value
+"UseTakeFocus" to "N" (i.e. No). This causes Wine to use the "locally
+active" model instead, which means that the window manager will focus
+our windows when it sees fit—i.e. when the user clicks on them, or when
+they are created.
+"""
+---
+ dlls/winex11.drv/x11drv_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index 9456caba088..af2094a96f0 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -71,7 +71,7 @@ BOOL usexvidmode = FALSE;
+ BOOL usexrandr = FALSE;
+ BOOL usexcomposite = TRUE;
+ BOOL use_xkb = TRUE;
+-BOOL use_take_focus = TRUE;
++BOOL use_take_focus = FALSE;
+ BOOL use_primary_selection = FALSE;
+ BOOL use_system_cursors = TRUE;
+ BOOL show_systray = TRUE;
+ 
+From a58fde69e0ac1945d2e2733d9506cfe4bfe145e7 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 26 Jun 2019 08:09:27 -0500
+Subject: [PATCH] Revert "winex11.drv: Activate window when restoring from
+ iconic state."
+
+This reverts commit 82c6ec3a32f44e8b3e0cc88b7f10e0c0d7fa1b89.
+
+Causes alt-tab problems with several games.
+---
+ dlls/winex11.drv/event.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
+index 236c9f862af..d1c15b1de94 100644
+--- a/dlls/winex11.drv/event.c
++++ b/dlls/winex11.drv/event.c
+@@ -1342,8 +1342,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
+             {
+                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
+                 release_win_data( data );
+-                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
+-                    SetActiveWindow( hwnd );
+                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
+                 return;
+             }

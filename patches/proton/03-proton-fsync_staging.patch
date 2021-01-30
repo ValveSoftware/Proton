@@ -1817,7 +1817,21 @@ index 78635f3fae1..824b930bba0 100644
      no_satisfied,                     /* satisfied */
      no_signal,                        /* signal */
      console_connection_get_fd,        /* get_fd */
-@@ -774,6 +782,13 @@ static int console_server_get_esync_fd( struct object *obj, enum esync_type *typ
+@@ -587,8 +587,13 @@ static void disconnect_console_server( struct console_server *server )
+         list_remove( &call->entry );
+         console_host_ioctl_terminate( call, STATUS_CANCELLED );
+     }
++
++    if (do_fsync())
++        fsync_clear_futex( server->fsync_idx );
++
+     if (do_esync())
+         esync_clear( server->esync_fd );
++
+     while (!list_empty( &server->read_queue ))
+     {
+         struct console_host_ioctl *call = LIST_ENTRY( list_head( &server->read_queue ), struct console_host_ioctl, entry );
+@@ -774,6 +787,13 @@ static int console_server_get_esync_fd( struct object *obj, enum esync_type *typ
      return server->esync_fd;
  }
  
@@ -1831,7 +1845,7 @@ index 78635f3fae1..824b930bba0 100644
  static struct fd *console_server_get_fd( struct object* obj )
  {
      struct console_server *server = (struct console_server*)obj;
-@@ -806,6 +821,9 @@ static struct object *create_console_server( void )
+@@ -806,6 +828,9 @@ static struct object *create_console_server( void )
      }
      allow_fd_caching(server->fd);
  
@@ -1840,6 +1854,28 @@ index 78635f3fae1..824b930bba0 100644
 +
      if (do_esync())
          server->esync_fd = esync_create_fd( 0, 0 );
+ 
+@@ -1545,6 +1560,10 @@ DECL_HANDLER(get_next_console_request)
+         /* set result of previous ioctl */
+         ioctl = LIST_ENTRY( list_head( &server->queue ), struct console_host_ioctl, entry );
+         list_remove( &ioctl->entry );
++
++        if (do_fsync() && list_empty( &server->queue ))
++            fsync_clear_futex( server->fsync_idx );
++
+         if (do_esync() && list_empty( &server->queue ))
+             esync_clear( server->esync_fd );
+     }
+@@ -1645,6 +1664,10 @@ DECL_HANDLER(get_next_console_request)
+     {
+         set_error( STATUS_PENDING );
+     }
++
++    if (do_fsync() && list_empty( &server->queue ))
++        fsync_clear_futex( server->fsync_idx );
++
+     if (do_esync() && list_empty( &server->queue ))
+         esync_clear( server->esync_fd );
  
 diff --git a/server/debugger.c b/server/debugger.c
 index c37f97aa0b6..b7d88cfd2f2 100644
@@ -1855,7 +1891,7 @@ index c37f97aa0b6..b7d88cfd2f2 100644
      no_get_fd,                     /* get_fd */
 @@ -103,6 +104,7 @@ static const struct object_ops debug_ctx_ops =
      remove_queue,                  /* remove_queue */
-     debug_ctx_signaled,            /* signaled */
+     debug_obj_signaled,            /* signaled */
      NULL,                          /* get_esync_fd */
 +    NULL,                          /* get_fsync_idx */
      no_satisfied,                  /* satisfied */
@@ -3456,7 +3492,7 @@ index 1a245c58396..1fb3603f2a7 100644
      thread->esync_fd        = -1;
      thread->esync_apc_fd    = -1;
 +    thread->fsync_idx       = 0;
-     thread->debug_ctx       = NULL;
+     thread->debug_obj       = NULL;
      thread->system_regs     = 0;
      thread->queue           = NULL;
 @@ -364,6 +370,12 @@ struct thread *create_thread( int fd, struct process *process, const struct secu
@@ -3543,7 +3579,7 @@ index 0f6108b684a..53627631343 100644
      int                    esync_apc_fd;  /* esync apc fd (signalled when APCs are present) */
 +    unsigned int           fsync_idx;
 +    unsigned int           fsync_apc_idx;
-     struct debug_ctx      *debug_ctx;     /* debugger context if this thread is a debugger */
+     struct debug_obj      *debug_obj;     /* debugger context if this thread is a debugger */
      unsigned int           system_regs;   /* which system regs have been set */
      struct msg_queue      *queue;         /* message queue */
 diff --git a/server/timer.c b/server/timer.c
