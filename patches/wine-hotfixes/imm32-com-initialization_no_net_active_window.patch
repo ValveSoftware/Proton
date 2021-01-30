@@ -1,0 +1,572 @@
+From 907420bdc128c5e0ac6ab91996baa1a70a7b50a0 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 30 Jan 2019 12:25:41 +0300
+Subject: [PATCH] imm32: Automatically initialize COM on window activation.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+---
+ dlls/imm32/Makefile.in     |   2 +-
+ dlls/imm32/imm.c           | 129 ++++++++++++++++++-
+ dlls/imm32/imm32.spec      |   1 +
+ dlls/imm32/tests/imm32.c   | 252 ++++++++++++++++++++++++++++++++++++-
+ dlls/user32/focus.c        |   2 +
+ dlls/user32/misc.c         |   2 +
+ dlls/user32/user_private.h |   1 +
+ 7 files changed, 386 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/imm32/Makefile.in b/dlls/imm32/Makefile.in
+index cebcf4ca30f..2ad39baf972 100644
+--- a/dlls/imm32/Makefile.in
++++ b/dlls/imm32/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = imm32.dll
+ IMPORTLIB = imm32
+-IMPORTS   = user32 gdi32 advapi32
++IMPORTS   = user32 gdi32 advapi32 ole32
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+ 
+diff --git a/dlls/imm32/imm.c b/dlls/imm32/imm.c
+index 9d2a09f22be..2625549712e 100644
+--- a/dlls/imm32/imm.c
++++ b/dlls/imm32/imm.c
+@@ -19,6 +19,8 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#define COBJMACROS
++
+ #include <stdarg.h>
+ #include <stdio.h>
+ 
+@@ -32,6 +34,8 @@
+ #include "ddk/imm.h"
+ #include "winnls.h"
+ #include "winreg.h"
++#include "initguid.h"
++#include "objbase.h"
+ #include "wine/list.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(imm);
+@@ -94,8 +98,16 @@ typedef struct _tagIMMThreadData {
+     HWND hwndDefault;
+     BOOL disableIME;
+     DWORD windowRefs;
++    IInitializeSpy IInitializeSpy_iface;
++    ULARGE_INTEGER spy_cookie;
++    BOOL apt_initialized;
+ } IMMThreadData;
+ 
++static inline IMMThreadData *impl_from_IInitializeSpy(IInitializeSpy *iface)
++{
++    return CONTAINING_RECORD(iface, IMMThreadData, IInitializeSpy_iface);
++}
++
+ static struct list ImmHklList = LIST_INIT(ImmHklList);
+ static struct list ImmThreadDataList = LIST_INIT(ImmThreadDataList);
+ 
+@@ -227,6 +239,88 @@ static DWORD convert_candidatelist_AtoW(
+     return ret;
+ }
+ 
++static HRESULT WINAPI initializespy_QueryInterface(IInitializeSpy *iface, REFIID riid, void **obj)
++{
++    if (IsEqualIID(&IID_IInitializeSpy, riid) ||
++            IsEqualIID(&IID_IUnknown, riid))
++    {
++        *obj = iface;
++        IInitializeSpy_AddRef(iface);
++        return S_OK;
++    }
++
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI initializespy_AddRef(IInitializeSpy *iface)
++{
++    return 2;
++}
++
++static ULONG WINAPI initializespy_Release(IInitializeSpy *iface)
++{
++    return 1;
++}
++
++static void imm_couninit_thread(IMMThreadData *thread_data)
++{
++    if (!thread_data->apt_initialized)
++        return;
++
++    thread_data->apt_initialized = FALSE;
++    CoUninitialize();
++}
++
++static HRESULT WINAPI initializespy_PreInitialize(IInitializeSpy *iface, DWORD coinit, DWORD refs)
++{
++    IMMThreadData *thread_data = impl_from_IInitializeSpy(iface);
++
++    /* Application requested initialization of different apartment type. */
++    if (!(coinit & COINIT_APARTMENTTHREADED))
++        imm_couninit_thread(thread_data);
++
++    return S_OK;
++}
++
++static HRESULT WINAPI initializespy_PostInitialize(IInitializeSpy *iface, HRESULT hr, DWORD coinit, DWORD refs)
++{
++    IMMThreadData *thread_data = impl_from_IInitializeSpy(iface);
++
++    /* Explicit initialization call should return S_OK first time. */
++    if (thread_data->apt_initialized && hr == S_FALSE && refs == 2)
++        hr = S_OK;
++
++    return hr;
++}
++
++static HRESULT WINAPI initializespy_PreUninitialize(IInitializeSpy *iface, DWORD refs)
++{
++    IMMThreadData *thread_data = impl_from_IInitializeSpy(iface);
++
++    /* Account for explicit uninitialization calls. */
++    if (thread_data->apt_initialized && refs == 1)
++        thread_data->apt_initialized = FALSE;
++
++    return S_OK;
++}
++
++static HRESULT WINAPI initializespy_PostUninitialize(IInitializeSpy *iface, DWORD refs)
++{
++    return S_OK;
++}
++
++static const IInitializeSpyVtbl initializespyvtbl =
++{
++    initializespy_QueryInterface,
++    initializespy_AddRef,
++    initializespy_Release,
++    initializespy_PreInitialize,
++    initializespy_PostInitialize,
++    initializespy_PreUninitialize,
++    initializespy_PostUninitialize,
++};
++
+ static IMMThreadData *IMM_GetThreadData(HWND hwnd, DWORD thread)
+ {
+     IMMThreadData *data;
+@@ -253,6 +347,7 @@ static IMMThreadData *IMM_GetThreadData(HWND hwnd, DWORD thread)
+         if (data->threadID == thread) return data;
+ 
+     data = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*data));
++    data->IInitializeSpy_iface.lpVtbl = &initializespyvtbl;
+     data->threadID = thread;
+     list_add_head(&ImmThreadDataList,&data->entry);
+     TRACE("Thread Data Created (%x)\n",thread);
+@@ -281,6 +376,7 @@ static void IMM_FreeThreadData(void)
+             list_remove(&data->entry);
+             LeaveCriticalSection(&threaddata_cs);
+             IMM_DestroyContext(data->defaultContext);
++            imm_couninit_thread(data);
+             HeapFree(GetProcessHeap(),0,data);
+             TRACE("Thread Data Destroyed\n");
+             return;
+@@ -1636,6 +1732,32 @@ static BOOL needs_ime_window(HWND hwnd)
+     return TRUE;
+ }
+ 
++void WINAPI __wine_activate_window(HWND hwnd)
++{
++    IMMThreadData *thread_data;
++
++    TRACE("(%p)\n", hwnd);
++
++    if (!needs_ime_window(hwnd))
++        return;
++
++    thread_data = IMM_GetThreadData(hwnd, 0);
++    if (!thread_data)
++        return;
++
++    if (thread_data->disableIME || disable_ime)
++    {
++        TRACE("IME for this thread is disabled\n");
++        LeaveCriticalSection(&threaddata_cs);
++        return;
++    }
++
++    if (!thread_data->apt_initialized)
++        thread_data->apt_initialized = SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED));
++
++    LeaveCriticalSection(&threaddata_cs);
++}
++
+ /***********************************************************************
+  *		__wine_register_window (IMM32.@)
+  */
+@@ -1665,6 +1787,8 @@ BOOL WINAPI __wine_register_window(HWND hwnd)
+     /* Create default IME window */
+     if (thread_data->windowRefs == 1)
+     {
++        CoRegisterInitializeSpy(&thread_data->IInitializeSpy_iface, &thread_data->spy_cookie);
++
+         /* Do not create the window inside of a critical section */
+         LeaveCriticalSection(&threaddata_cs);
+         new = CreateWindowExW( 0, L"IME", L"Default IME",
+@@ -1706,8 +1830,11 @@ void WINAPI __wine_unregister_window(HWND hwnd)
+           thread_data->windowRefs, thread_data->hwndDefault);
+ 
+     /* Destroy default IME window */
+-    if (thread_data->windowRefs == 0 && thread_data->hwndDefault)
++    if (thread_data->windowRefs == 0)
+     {
++        CoRevokeInitializeSpy(thread_data->spy_cookie);
++        thread_data->spy_cookie.QuadPart = 0;
++        imm_couninit_thread(thread_data);
+         to_destroy = thread_data->hwndDefault;
+         thread_data->hwndDefault = NULL;
+     }
+diff --git a/dlls/imm32/imm32.spec b/dlls/imm32/imm32.spec
+index 4197bb81e21..d9cdc794e9e 100644
+--- a/dlls/imm32/imm32.spec
++++ b/dlls/imm32/imm32.spec
+@@ -117,3 +117,4 @@
+ @ stdcall __wine_get_ui_window(ptr)
+ @ stdcall __wine_register_window(long)
+ @ stdcall __wine_unregister_window(long)
++@ stdcall __wine_activate_window(long)
+diff --git a/dlls/imm32/tests/imm32.c b/dlls/imm32/tests/imm32.c
+index cc9e0e8c01f..73cbb4fe5ec 100644
+--- a/dlls/imm32/tests/imm32.c
++++ b/dlls/imm32/tests/imm32.c
+@@ -18,6 +18,8 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#define COBJMACROS
++
+ #include <stdio.h>
+ 
+ #include "wine/test.h"
+@@ -25,10 +27,17 @@
+ #include "wingdi.h"
+ #include "imm.h"
+ #include "ddk/imm.h"
++#include "initguid.h"
++#include "objbase.h"
++#include "urlmon.h"
+ 
+ static BOOL (WINAPI *pImmAssociateContextEx)(HWND,HIMC,DWORD);
+ static BOOL (WINAPI *pImmIsUIMessageA)(HWND,UINT,WPARAM,LPARAM);
+ static UINT (WINAPI *pSendInput) (UINT, INPUT*, size_t);
++static HRESULT (WINAPI *pCoGetApartmentType)(APTTYPE *, APTTYPEQUALIFIER *);
++static HRESULT (WINAPI *pCoInitializeEx)(void *, DWORD);
++static void (WINAPI *pCoUninitialize)(void);
++static HRESULT (WINAPI *pCoCreateInstance)(REFCLSID, IUnknown *, DWORD, REFIID, void **);
+ 
+ /*
+  * msgspy - record and analyse message traces sent to a certain window
+@@ -2025,7 +2034,247 @@ static void test_InvalidIMC(void)
+     ok(ret == ERROR_INVALID_HANDLE, "wrong last error %08x!\n", ret);
+ }
+ 
+-START_TEST(imm32) {
++static LRESULT CALLBACK com_init_test_wndproc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
++{
++    return DefWindowProcA(hwnd, uMsg, wParam, lParam);
++}
++
++#define COM_INIT_TEST_APTTYPE(apttype) com_init_test_apttype(apttype, __LINE__)
++static void com_init_test_apttype(APTTYPE expected_type, unsigned int line)
++{
++    APTTYPEQUALIFIER apttypequal;
++    HRESULT hr, hr_expected;
++    APTTYPE apttype;
++    IUnknown *unk;
++
++    if (expected_type == -1)
++        hr_expected = CO_E_NOTINITIALIZED;
++    else
++        hr_expected = S_OK;
++
++    hr = pCoCreateInstance(&CLSID_InternetZoneManager, NULL, CLSCTX_INPROC_SERVER, &IID_IUnknown, (void **)&unk);
++    ok_(__FILE__, line)(hr == hr_expected, "Unexpected hr %#x.\n", hr);
++    if (SUCCEEDED(hr))
++        IUnknown_Release(unk);
++
++    hr = pCoGetApartmentType(&apttype, &apttypequal);
++    ok_(__FILE__, line)(hr == (expected_type == -1 ? CO_E_NOTINITIALIZED : S_OK),
++            "Failed to get apartment type, hr %#x.\n", hr);
++    if (SUCCEEDED(hr))
++        ok_(__FILE__, line)(apttype == expected_type && apttypequal == APTTYPEQUALIFIER_NONE,
++                "Unexpected apartment type %u/%u.\n", apttype, apttypequal);
++}
++
++static HWND test_com_create_window(DWORD style)
++{
++    WNDCLASSA clsA;
++    HWND hwnd;
++
++    clsA.style = 0;
++    clsA.lpfnWndProc = com_init_test_wndproc;
++    clsA.cbClsExtra = 0;
++    clsA.cbWndExtra = 0;
++    clsA.hInstance = GetModuleHandleA(NULL);
++    clsA.hIcon = 0;
++    clsA.hCursor = LoadCursorA(0, (LPCSTR)IDC_ARROW);
++    clsA.hbrBackground = NULL;
++    clsA.lpszMenuName = NULL;
++    clsA.lpszClassName = "COMInitTest";
++
++    RegisterClassA(&clsA);
++
++    hwnd = CreateWindowExA(0, "COMInitTest", "Test window", WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX |
++            WS_MAXIMIZEBOX | style, 0, 0, 100, 100, GetDesktopWindow(), NULL, GetModuleHandleA(NULL), NULL);
++    ok(hwnd != NULL, "Failed to create a test window.\n");
++
++    return hwnd;
++}
++
++static void test_com_init(const char *testname)
++{
++    WNDCLASSA clsA;
++    HMODULE hmod;
++    HRESULT hr;
++    HWND hwnd;
++
++    clsA.style = 0;
++    clsA.lpfnWndProc = com_init_test_wndproc;
++    clsA.cbClsExtra = 0;
++    clsA.cbWndExtra = 0;
++    clsA.hInstance = GetModuleHandleA(NULL);
++    clsA.hIcon = 0;
++    clsA.hCursor = LoadCursorA(0, (LPCSTR)IDC_ARROW);
++    clsA.hbrBackground = NULL;
++    clsA.lpszMenuName = NULL;
++    clsA.lpszClassName = "COMInitTest";
++
++    RegisterClassA(&clsA);
++
++    hmod = LoadLibraryA("ole32.dll");
++
++    pCoGetApartmentType = (void *)GetProcAddress(hmod, "CoGetApartmentType");
++    pCoInitializeEx = (void *)GetProcAddress(hmod, "CoInitializeEx");
++    pCoUninitialize = (void *)GetProcAddress(hmod, "CoUninitialize");
++    pCoCreateInstance = (void *)GetProcAddress(hmod, "CoCreateInstance");
++
++    if (!strcmp(testname, "visible"))
++    {
++        COM_INIT_TEST_APTTYPE(-1);
++
++        hwnd = test_com_create_window(WS_VISIBLE);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MAINSTA);
++
++        hr = pCoInitializeEx(NULL, COINIT_MULTITHREADED);
++        ok(hr == S_OK, "Failed to re-initialize, hr %#x.\n", hr);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MTA);
++
++        pCoUninitialize();
++
++        COM_INIT_TEST_APTTYPE(-1);
++
++        DestroyWindow(hwnd);
++    }
++    else if (!strcmp(testname, "invisible"))
++    {
++        COM_INIT_TEST_APTTYPE(-1);
++
++        hwnd = test_com_create_window(0);
++
++        COM_INIT_TEST_APTTYPE(-1);
++
++        ShowWindow(hwnd, SW_SHOW);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MAINSTA);
++
++        hr = pCoInitializeEx(NULL, COINIT_MULTITHREADED);
++        ok(hr == S_OK, "Failed to re-initialize, hr %#x.\n", hr);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MTA);
++
++        pCoUninitialize();
++
++        COM_INIT_TEST_APTTYPE(-1);
++
++        DestroyWindow(hwnd);
++    }
++    else if (!strcmp(testname, "imedisabled"))
++    {
++        COM_INIT_TEST_APTTYPE(-1);
++
++        ImmDisableIME(-1);
++
++        hwnd = test_com_create_window(WS_VISIBLE);
++
++        COM_INIT_TEST_APTTYPE(-1);
++
++        hr = pCoInitializeEx(NULL, COINIT_MULTITHREADED);
++        ok(hr == S_OK, "Failed to re-initialize, hr %#x.\n", hr);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MTA);
++
++        pCoUninitialize();
++
++        COM_INIT_TEST_APTTYPE(-1);
++
++        DestroyWindow(hwnd);
++    }
++    else if (!strcmp(testname, "sta"))
++    {
++        COM_INIT_TEST_APTTYPE(-1);
++
++        hwnd = test_com_create_window(WS_VISIBLE);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MAINSTA);
++
++        /* Initialize for STA explicitly, S_OK is forced, with incremented counter. */
++        hr = pCoInitializeEx(0, COINIT_APARTMENTTHREADED);
++        ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MAINSTA);
++
++        pCoUninitialize();
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MAINSTA);
++
++        DestroyWindow(hwnd);
++    }
++    else if (!strcmp(testname, "uninit"))
++    {
++        COM_INIT_TEST_APTTYPE(-1);
++
++        hwnd = test_com_create_window(WS_VISIBLE);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MAINSTA);
++
++        pCoUninitialize();
++
++        COM_INIT_TEST_APTTYPE(-1);
++
++        DestroyWindow(hwnd);
++
++        hwnd = test_com_create_window(WS_VISIBLE);
++
++        COM_INIT_TEST_APTTYPE(APTTYPE_MAINSTA);
++
++        DestroyWindow(hwnd);
++    }
++    else
++        ok(0, "Unknown test name %s.\n", testname);
++}
++
++static void test_com_initialization(void)
++{
++    char path_name[MAX_PATH];
++    PROCESS_INFORMATION info;
++    STARTUPINFOA startup;
++    HMODULE hmod;
++    char **argv;
++    int i;
++    static const char *test_params[] =
++    {
++        "imedisabled",
++        "visible",
++        "invisible",
++        "sta",
++        "uninit",
++    };
++
++    hmod = LoadLibraryA("ole32.dll");
++    pCoGetApartmentType = (void *)GetProcAddress(hmod, "CoGetApartmentType");
++    FreeLibrary(hmod);
++    if (!pCoGetApartmentType)
++    {
++        win_skip("Skipping COM initialization tests on older system.\n");
++        return;
++    }
++
++    winetest_get_mainargs( &argv );
++    for (i = 0; i < ARRAY_SIZE(test_params); ++i)
++    {
++        memset( &startup, 0, sizeof(startup) );
++        startup.cb = sizeof( startup );
++        sprintf( path_name, "%s imm32 %s", argv[0], test_params[i] );
++        ok( CreateProcessA( NULL, path_name, NULL, NULL, FALSE, 0, NULL, NULL, &startup, &info ),
++            "CreateProcess failed.\n" );
++        winetest_wait_child_process( info.hProcess );
++        CloseHandle( info.hProcess );
++        CloseHandle( info.hThread );
++    }
++}
++
++START_TEST(imm32)
++{
++    char **argv;
++    int argc = winetest_get_mainargs( &argv );
++
++    if (argc >= 3)
++    {
++        test_com_init( argv[2] );
++        return;
++    }
++
+     if (init())
+     {
+         test_ImmNotifyIME();
+@@ -2052,6 +2301,7 @@ START_TEST(imm32) {
+         if (pSendInput)
+             test_ime_processkey();
+         else win_skip("SendInput is not available\n");
++        test_com_initialization();
+     }
+     cleanup();
+ }
+diff --git a/dlls/user32/focus.c b/dlls/user32/focus.c
+index 460aea4820e..bbe596d5077 100644
+--- a/dlls/user32/focus.c
++++ b/dlls/user32/focus.c
+@@ -156,6 +156,8 @@ static BOOL set_active_window( HWND hwnd, HWND *prev, BOOL mouse, BOOL focus )
+                       (LPARAM)previous );
+         if (GetAncestor( hwnd, GA_PARENT ) == GetDesktopWindow())
+             PostMessageW( GetDesktopWindow(), WM_PARENTNOTIFY, WM_NCACTIVATE, (LPARAM)hwnd );
++
++        imm_activate_window( hwnd );
+     }
+ 
+     /* now change focus if necessary */
+diff --git a/dlls/user32/misc.c b/dlls/user32/misc.c
+index e12a1af5571..d37bc819447 100644
+--- a/dlls/user32/misc.c
++++ b/dlls/user32/misc.c
+@@ -38,6 +38,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(win);
+ static HWND (WINAPI *imm_get_ui_window)(HKL);
+ BOOL (WINAPI *imm_register_window)(HWND) = NULL;
+ void (WINAPI *imm_unregister_window)(HWND) = NULL;
++void (WINAPI *imm_activate_window)(HWND) = NULL;
+ 
+ /* MSIME messages */
+ static UINT WM_MSIME_SERVICE;
+@@ -344,6 +345,7 @@ BOOL WINAPI User32InitializeImmEntryTable(DWORD magic)
+     imm_get_ui_window = (void*)GetProcAddress(imm32, "__wine_get_ui_window");
+     imm_register_window = (void*)GetProcAddress(imm32, "__wine_register_window");
+     imm_unregister_window = (void*)GetProcAddress(imm32, "__wine_unregister_window");
++    imm_activate_window = (void*)GetProcAddress(imm32, "__wine_activate_window");
+     if (!imm_get_ui_window)
+         FIXME("native imm32.dll not supported\n");
+     return TRUE;
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index c460b1571c8..e5af441e33b 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -210,6 +210,7 @@ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo)
+ extern INT global_key_state_counter DECLSPEC_HIDDEN;
+ extern BOOL (WINAPI *imm_register_window)(HWND) DECLSPEC_HIDDEN;
+ extern void (WINAPI *imm_unregister_window)(HWND) DECLSPEC_HIDDEN;
++extern void (WINAPI *imm_activate_window)(HWND) DECLSPEC_HIDDEN;
+ 
+ struct user_key_state_info
+ {
+-- 
+2.29.2
+
