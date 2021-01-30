@@ -56,3 +56,18 @@ index 9d7dfafeb3c..c7f24168dac 100644
  DELAYIMPORTS = iphlpapi user32
  EXTRALIBS = $(POLL_LIBS)
  
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index b4b3981da0a..1ea738ce547 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -734,6 +734,10 @@ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *mo
+     hkey = SetupDiCreateDevRegKeyW(devinfo, &device_data, DICS_FLAG_GLOBAL, 0, DIREG_DRV, NULL, NULL);
+     RegCloseKey(hkey);
+ 
++    /* Create device key */
++    hkey = SetupDiCreateDevRegKeyW(devinfo, &device_data, DICS_FLAG_GLOBAL, 0, DIREG_DEV, NULL, NULL);
++    RegCloseKey(hkey);
++
+     /* FIXME:
+      * Following properties are Wine specific, see comments in X11DRV_InitAdapter for details */
+     /* StateFlags */
