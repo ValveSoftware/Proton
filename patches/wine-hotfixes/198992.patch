@@ -1,0 +1,31 @@
+From: "Roman Pišl" <rpisl@seznam.cz>
+Subject: [PATCH] conhost: Keep horizontal position of cursor within screen width.
+Message-Id: <20210131000407.13060-1-rpisl@seznam.cz>
+Date: Sun, 31 Jan 2021 01:04:07 +0100
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=50581
+
+Signed-off-by: Roman Pišl <rpisl@seznam.cz>
+---
+ programs/conhost/conhost.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/programs/conhost/conhost.c b/programs/conhost/conhost.c
+index 0ac1c5f507b..418098420c6 100644
+--- a/programs/conhost/conhost.c
++++ b/programs/conhost/conhost.c
+@@ -357,7 +357,9 @@ static void update_output( struct screen_buffer *screen_buffer, RECT *rect )
+             size = WideCharToMultiByte( get_tty_cp( screen_buffer->console ), 0,
+                                         &ch->ch, 1, buf, sizeof(buf), NULL, NULL );
+             tty_write( screen_buffer->console, buf, size );
+-            screen_buffer->console->tty_cursor_x++;
++
++            if (screen_buffer->console->tty_cursor_x < screen_buffer->width - 1)
++                screen_buffer->console->tty_cursor_x++;
+         }
+     }
+ 
+
+-- 
+2.20.1
+
