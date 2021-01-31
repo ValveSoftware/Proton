@@ -142,6 +142,7 @@ This section is for those that use the native version of Steam.
 1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
 2. Create a `~/.steam/root/compatibilitytools.d` directory if it does not exist.
 3. Extract the release tarball into `~/.steam/root/compatibilitytools.d/`.
+   * `tar -xf Proton-VERSION.tar.gz -C ~/.steam/root/compatibilitytools.d/`
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
 
@@ -152,6 +153,7 @@ This section is for those that use the Flatpak'd version of Steam.
 1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
 2. Create a `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/` directory if it does not exist.
 3. Extract the release tarball into `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`.
+   * `tar -xf Proton-VERSION.tar.gz -C ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
 
