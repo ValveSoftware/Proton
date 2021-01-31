@@ -26,10 +26,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    echo "temporary reverts until 1582 is rebased"
-    git revert --no-commit 2d670ec3db0c1502c84f844e5f9c79f6a5d23c65
-    git revert --no-commit c1073455bfb0ffe19a6f2f487966d44dc05f5f05
-    
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
