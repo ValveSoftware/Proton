@@ -1,0 +1,4206 @@
+From 5e2a30522b527dbde7ae9a47c9dea4a98e36bd4e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 23 Nov 2020 17:21:46 +0100
+Subject: [PATCH] user32: Refresh active hook list only when needed.
+
+Instead of doing it on every get_message request.
+---
+ dlls/user32/hook.c             | 32 ++++++++++++++++++++++++++------
+ dlls/user32/message.c          |  4 +++-
+ include/wine/server_protocol.h | 21 +++++++++++++++++++--
+ server/hook.c                  |  8 +++++++-
+ server/protocol.def            |  8 +++++++-
+ server/queue.c                 |  2 --
+ server/request.h               |  8 ++++++--
+ server/trace.c                 | 13 ++++++++++++-
+ server/user.h                  |  1 -
+ 9 files changed, 80 insertions(+), 17 deletions(-)
+
+diff --git a/dlls/user32/hook.c b/dlls/user32/hook.c
+index c6e363a5336..e046a7a9768 100644
+--- a/dlls/user32/hook.c
++++ b/dlls/user32/hook.c
+@@ -129,6 +129,27 @@ static UINT get_ll_hook_timeout(void)
+ }
+ 
+ 
++/***********************************************************************
++ *      get_active_hooks
++ *
++ */
++static UINT get_active_hooks(void)
++{
++    struct user_thread_info *thread_info = get_user_thread_info();
++
++    if (!thread_info->active_hooks)
++    {
++        SERVER_START_REQ( get_active_hooks )
++        {
++            if (!wine_server_call( req )) thread_info->active_hooks = reply->active_hooks;
++        }
++        SERVER_END_REQ;
++    }
++
++    return thread_info->active_hooks;
++}
++
++
+ /***********************************************************************
+  *		set_windows_hook
+  *
+@@ -462,10 +483,9 @@ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARA
+  */
+ static BOOL HOOK_IsHooked( INT id )
+ {
+-    struct user_thread_info *thread_info = get_user_thread_info();
+-
+-    if (!thread_info->active_hooks) return TRUE;
+-    return (thread_info->active_hooks & (1 << (id - WH_MINHOOK))) != 0;
++    UINT active_hooks = get_active_hooks();
++    if (!active_hooks) return TRUE;
++    return (active_hooks & (1 << (id - WH_MINHOOK))) != 0;
+ }
+ 
+ 
+@@ -482,7 +502,7 @@ LRESULT HOOK_CallHooks( INT id, INT code, WPARAM wparam, LPARAM lparam, BOOL uni
+ 
+     if (!HOOK_IsHooked( id ))
+     {
+-        TRACE( "skipping hook %s mask %x\n", hook_names[id-WH_MINHOOK], thread_info->active_hooks );
++        TRACE( "skipping hook %s mask %x\n", hook_names[id-WH_MINHOOK], get_active_hooks() );
+         return 0;
+     }
+ 
+@@ -798,7 +818,7 @@ static inline BOOL find_first_hook(DWORD id, DWORD event, HWND hwnd, LONG object
+ 
+     if (!HOOK_IsHooked( id ))
+     {
+-        TRACE( "skipping hook %s mask %x\n", hook_names[id-WH_MINHOOK], thread_info->active_hooks );
++        TRACE( "skipping hook %s mask %x\n", hook_names[id-WH_MINHOOK], get_active_hooks() );
+         return FALSE;
+     }
+ 
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index cf9c941ece2..92dee28c808 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2693,12 +2693,14 @@ static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags,
+                 info.msg.pt.x    = reply->x;
+                 info.msg.pt.y    = reply->y;
+                 hw_id            = 0;
+-                thread_info->active_hooks = reply->active_hooks;
+             }
+             else buffer_size = reply->total;
+         }
+         SERVER_END_REQ;
+ 
++        /* force refreshing hooks */
++        thread_info->active_hooks = 0;
++
+         if (res)
+         {
+             HeapFree( GetProcessHeap(), 0, buffer );
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index f38442be88e..59c5d040f4e 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -3043,9 +3043,9 @@ struct get_message_reply
+     int             x;
+     int             y;
+     unsigned int    time;
+-    unsigned int    active_hooks;
+     data_size_t     total;
+     /* VARARG(data,message_data); */
++    char __pad_52[4];
+ };
+ 
+ 
+@@ -4264,6 +4264,20 @@ enum caret_state
+ 
+ 
+ 
++struct get_active_hooks_request
++{
++    struct request_header __header;
++    char __pad_12[4];
++};
++struct get_active_hooks_reply
++{
++    struct reply_header __header;
++    unsigned int   active_hooks;
++    char __pad_12[4];
++};
++
++
++
+ struct set_hook_request
+ {
+     struct request_header __header;
+@@ -6029,6 +6043,7 @@ enum request
+     REQ_set_capture_window,
+     REQ_set_caret_window,
+     REQ_set_caret_info,
++    REQ_get_active_hooks,
+     REQ_set_hook,
+     REQ_remove_hook,
+     REQ_start_hook_chain,
+@@ -6335,6 +6350,7 @@ union generic_request
+     struct set_capture_window_request set_capture_window_request;
+     struct set_caret_window_request set_caret_window_request;
+     struct set_caret_info_request set_caret_info_request;
++    struct get_active_hooks_request get_active_hooks_request;
+     struct set_hook_request set_hook_request;
+     struct remove_hook_request remove_hook_request;
+     struct start_hook_chain_request start_hook_chain_request;
+@@ -6639,6 +6655,7 @@ union generic_reply
+     struct set_capture_window_reply set_capture_window_reply;
+     struct set_caret_window_reply set_caret_window_reply;
+     struct set_caret_info_reply set_caret_info_reply;
++    struct get_active_hooks_reply get_active_hooks_reply;
+     struct set_hook_reply set_hook_reply;
+     struct remove_hook_reply remove_hook_reply;
+     struct start_hook_chain_reply start_hook_chain_reply;
+@@ -6756,7 +6773,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 660
++#define SERVER_PROTOCOL_VERSION 661
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/hook.c b/server/hook.c
+index c2e4e9e492b..f3012994ef5 100644
+--- a/server/hook.c
++++ b/server/hook.c
+@@ -357,7 +357,7 @@ static int is_hook_active( struct hook_table *table, int index )
+ }
+ 
+ /* get a bitmap of all active hooks for the current thread */
+-unsigned int get_active_hooks(void)
++static unsigned int get_active_hooks(void)
+ {
+     struct hook_table *table = get_queue_hooks( current );
+     struct hook_table *global_hooks = get_global_hooks( current );
+@@ -384,6 +384,12 @@ struct thread *get_first_global_hook( int id )
+     return hook->owner;
+ }
+ 
++/* get thread active hooks */
++DECL_HANDLER(get_active_hooks)
++{
++    reply->active_hooks = get_active_hooks();
++}
++
+ /* set a window hook */
+ DECL_HANDLER(set_hook)
+ {
+diff --git a/server/protocol.def b/server/protocol.def
+index 3af55b00344..ba3e7db7a60 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -2244,7 +2244,6 @@ enum message_type
+     int             x;         /* message x position */
+     int             y;         /* message y position */
+     unsigned int    time;      /* message time */
+-    unsigned int    active_hooks; /* active hooks bitmap */
+     data_size_t     total;     /* total size of extra data */
+     VARARG(data,message_data); /* message data for sent messages */
+ @END
+@@ -3023,6 +3022,13 @@ enum caret_state
+ };
+ 
+ 
++/* get thread active hooks */
++@REQ(get_active_hooks)
++@REPLY
++    unsigned int   active_hooks;   /* active hooks bitmap */
++@END
++
++
+ /* Set a window hook */
+ @REQ(set_hook)
+     int            id;             /* id of the hook */
+diff --git a/server/queue.c b/server/queue.c
+index 6a9b239e7f8..43ab91dc671 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -2698,8 +2698,6 @@ DECL_HANDLER(get_message)
+     user_handle_t get_win = get_user_full_handle( req->get_win );
+     unsigned int filter = req->flags >> 16;
+ 
+-    reply->active_hooks = get_active_hooks();
+-
+     if (get_win && get_win != 1 && get_win != -1 && !get_user_object( get_win, USER_WINDOW ))
+     {
+         set_win32_error( ERROR_INVALID_WINDOW_HANDLE );
+diff --git a/server/request.h b/server/request.h
+index 92ee6e5a423..6e979d0ea67 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -322,6 +322,7 @@ DECL_HANDLER(set_active_window);
+ DECL_HANDLER(set_capture_window);
+ DECL_HANDLER(set_caret_window);
+ DECL_HANDLER(set_caret_info);
++DECL_HANDLER(get_active_hooks);
+ DECL_HANDLER(set_hook);
+ DECL_HANDLER(remove_hook);
+ DECL_HANDLER(start_hook_chain);
+@@ -627,6 +628,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_set_capture_window,
+     (req_handler)req_set_caret_window,
+     (req_handler)req_set_caret_info,
++    (req_handler)req_get_active_hooks,
+     (req_handler)req_set_hook,
+     (req_handler)req_remove_hook,
+     (req_handler)req_start_hook_chain,
+@@ -1504,8 +1506,7 @@ C_ASSERT( FIELD_OFFSET(struct get_message_reply, type) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct get_message_reply, x) == 36 );
+ C_ASSERT( FIELD_OFFSET(struct get_message_reply, y) == 40 );
+ C_ASSERT( FIELD_OFFSET(struct get_message_reply, time) == 44 );
+-C_ASSERT( FIELD_OFFSET(struct get_message_reply, active_hooks) == 48 );
+-C_ASSERT( FIELD_OFFSET(struct get_message_reply, total) == 52 );
++C_ASSERT( FIELD_OFFSET(struct get_message_reply, total) == 48 );
+ C_ASSERT( sizeof(struct get_message_reply) == 56 );
+ C_ASSERT( FIELD_OFFSET(struct reply_message_request, remove) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct reply_message_request, result) == 16 );
+@@ -1919,6 +1920,9 @@ C_ASSERT( FIELD_OFFSET(struct set_caret_info_reply, old_rect) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct set_caret_info_reply, old_hide) == 28 );
+ C_ASSERT( FIELD_OFFSET(struct set_caret_info_reply, old_state) == 32 );
+ C_ASSERT( sizeof(struct set_caret_info_reply) == 40 );
++C_ASSERT( sizeof(struct get_active_hooks_request) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_active_hooks_reply, active_hooks) == 8 );
++C_ASSERT( sizeof(struct get_active_hooks_reply) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct set_hook_request, id) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct set_hook_request, pid) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct set_hook_request, tid) == 20 );
+diff --git a/server/trace.c b/server/trace.c
+index 981b2377abf..4bf86fcce35 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -2802,7 +2802,6 @@ static void dump_get_message_reply( const struct get_message_reply *req )
+     fprintf( stderr, ", x=%d", req->x );
+     fprintf( stderr, ", y=%d", req->y );
+     fprintf( stderr, ", time=%08x", req->time );
+-    fprintf( stderr, ", active_hooks=%08x", req->active_hooks );
+     fprintf( stderr, ", total=%u", req->total );
+     dump_varargs_message_data( ", data=", cur_size );
+ }
+@@ -3621,6 +3620,15 @@ static void dump_set_caret_info_reply( const struct set_caret_info_reply *req )
+     fprintf( stderr, ", old_state=%d", req->old_state );
+ }
+ 
++static void dump_get_active_hooks_request( const struct get_active_hooks_request *req )
++{
++}
++
++static void dump_get_active_hooks_reply( const struct get_active_hooks_reply *req )
++{
++    fprintf( stderr, " active_hooks=%08x", req->active_hooks );
++}
++
+ static void dump_set_hook_request( const struct set_hook_request *req )
+ {
+     fprintf( stderr, " id=%d", req->id );
+@@ -4870,6 +4878,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_set_capture_window_request,
+     (dump_func)dump_set_caret_window_request,
+     (dump_func)dump_set_caret_info_request,
++    (dump_func)dump_get_active_hooks_request,
+     (dump_func)dump_set_hook_request,
+     (dump_func)dump_remove_hook_request,
+     (dump_func)dump_start_hook_chain_request,
+@@ -5172,6 +5181,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_set_capture_window_reply,
+     (dump_func)dump_set_caret_window_reply,
+     (dump_func)dump_set_caret_info_reply,
++    (dump_func)dump_get_active_hooks_reply,
+     (dump_func)dump_set_hook_reply,
+     (dump_func)dump_remove_hook_reply,
+     (dump_func)dump_start_hook_chain_reply,
+@@ -5474,6 +5484,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "set_capture_window",
+     "set_caret_window",
+     "set_caret_info",
++    "get_active_hooks",
+     "set_hook",
+     "remove_hook",
+     "start_hook_chain",
+diff --git a/server/user.h b/server/user.h
+index 2806e06832c..63931d240f4 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -90,7 +90,6 @@ extern void cleanup_clipboard_thread( struct thread *thread );
+ /* hook functions */
+ 
+ extern void remove_thread_hooks( struct thread *thread );
+-extern unsigned int get_active_hooks(void);
+ extern struct thread *get_first_global_hook( int id );
+ 
+ /* queue functions */
+From 8f7f3f91ebb8b03c505e0496a1a235322cdd57c4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Sat, 21 Nov 2020 00:20:27 +0100
+Subject: [PATCH] user32: Add a per-thread shared section for peek_message
+ optimization.
+
+---
+ dlls/user32/message.c          | 31 ++++++++++++++++++++-
+ dlls/user32/user_private.h     |  5 +++-
+ dlls/user32/winstation.c       | 51 +++++++++++++++++++++++++++++++---
+ include/wine/server_protocol.h | 11 +++++++-
+ server/directory.c             | 15 ++++++++++
+ server/file.h                  |  5 ++--
+ server/mapping.c               |  4 +--
+ server/protocol.def            |  9 ++++++
+ server/queue.c                 | 47 ++++++++++++++++++++++++++++++-
+ server/thread.c                | 32 +++++++++++++++++++++
+ server/thread.h                |  2 ++
+ server/winstation.c            |  4 +--
+ 12 files changed, 202 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 92dee28c808..05194e3abd9 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2651,12 +2651,14 @@ static inline void call_sendmsg_callback( SENDASYNCPROC callback, HWND hwnd, UIN
+ static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags, UINT changed_mask )
+ {
+     LRESULT result;
++    volatile struct thread_shared_memory *shared = get_thread_shared_memory();
+     struct user_thread_info *thread_info = get_user_thread_info();
+     INPUT_MESSAGE_SOURCE prev_source = thread_info->msg_source;
+     struct received_message_info info, *old_info;
+     unsigned int hw_id = 0;  /* id of previous hardware message */
+     void *buffer;
+     size_t buffer_size = 256;
++    BOOL skip = FALSE;
+ 
+     if (!(buffer = HeapAlloc( GetProcessHeap(), 0, buffer_size ))) return -1;
+ 
+@@ -2668,10 +2670,37 @@ static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags,
+         NTSTATUS res;
+         size_t size = 0;
+         const message_data_t *msg_data = buffer;
++        UINT wake_mask = changed_mask & (QS_SENDMESSAGE | QS_SMRESULT);
++        DWORD clear_bits = 0, filter = flags >> 16 ? flags >> 16 : QS_ALLINPUT;
++        if (filter & QS_POSTMESSAGE)
++        {
++            clear_bits |= QS_POSTMESSAGE | QS_HOTKEY | QS_TIMER;
++            if (first == 0 && last == ~0U) clear_bits |= QS_ALLPOSTMESSAGE;
++        }
++        if (filter & QS_INPUT) clear_bits |= QS_INPUT;
++        if (filter & QS_PAINT) clear_bits |= QS_PAINT;
+ 
+         thread_info->msg_source = prev_source;
+ 
+-        SERVER_START_REQ( get_message )
++        if (!shared) skip = FALSE;
++        else SHARED_READ_BEGIN( &shared->seq )
++        {
++            /* if the masks need an update */
++            if (shared->wake_mask != wake_mask) skip = FALSE;
++            else if (shared->changed_mask != changed_mask) skip = FALSE;
++            /* or if the queue is signaled */
++            else if (shared->wake_bits & wake_mask) skip = FALSE;
++            else if (shared->changed_bits & changed_mask) skip = FALSE;
++            /* or if the filter matches some bits */
++            else if (shared->wake_bits & filter) skip = FALSE;
++            /* or if we should clear some bits */
++            else if (shared->changed_bits & clear_bits) skip = FALSE;
++            else skip = TRUE;
++        }
++        SHARED_READ_END( &shared->seq );
++
++        if (skip) res = STATUS_PENDING;
++        else SERVER_START_REQ( get_message )
+         {
+             req->flags     = flags;
+             req->get_win   = wine_server_user_handle( hwnd );
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index bab8a131a60..f53c5ea33b4 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -203,7 +203,9 @@ struct user_thread_info
+     HWND                          msg_window;             /* HWND_MESSAGE parent window */
+     struct rawinput_thread_data  *rawinput;               /* RawInput thread local data / buffer */
+     HANDLE                        desktop_shared_map;     /* HANDLE to server's desktop shared memory */
+-    struct desktop_shared_memory *shared_memory;          /* Ptr to server's desktop shared memory */
++    struct desktop_shared_memory *desktop_shared_memory;  /* Ptr to server's desktop shared memory */
++    HANDLE                        thread_shared_map;      /* HANDLE to server's thread shared memory */
++    struct thread_shared_memory  *thread_shared_memory;   /* Ptr to server's thread shared memory */
+ };
+ 
+ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo) );
+@@ -289,6 +291,7 @@ extern BOOL WINPROC_call_window( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
+ extern const WCHAR *CLASS_GetVersionedName(const WCHAR *classname, UINT *basename_offset,
+         WCHAR *combined, BOOL register_class) DECLSPEC_HIDDEN;
+ extern volatile struct desktop_shared_memory *get_desktop_shared_memory( void ) DECLSPEC_HIDDEN;
++extern volatile struct thread_shared_memory *get_thread_shared_memory( void ) DECLSPEC_HIDDEN;
+ 
+ /* message spy definitions */
+ 
+diff --git a/dlls/user32/winstation.c b/dlls/user32/winstation.c
+index 54f9bc42090..575420c1f37 100644
+--- a/dlls/user32/winstation.c
++++ b/dlls/user32/winstation.c
+@@ -117,7 +117,7 @@ volatile struct desktop_shared_memory *get_desktop_shared_memory( void )
+     NTSTATUS status;
+     SIZE_T size;
+ 
+-    if (thread_info->shared_memory) return thread_info->shared_memory;
++    if (thread_info->desktop_shared_memory) return thread_info->desktop_shared_memory;
+ 
+     handles[0] = GetProcessWindowStation();
+     handles[1] = GetThreadDesktop( GetCurrentThreadId() );
+@@ -153,8 +153,51 @@ volatile struct desktop_shared_memory *get_desktop_shared_memory( void )
+     }
+ 
+     thread_info->desktop_shared_map = handles[0];
+-    thread_info->shared_memory = (struct desktop_shared_memory *)ptr;
+-    return thread_info->shared_memory;
++    thread_info->desktop_shared_memory = (struct desktop_shared_memory *)ptr;
++    return thread_info->desktop_shared_memory;
++}
++
++
++volatile struct thread_shared_memory *get_thread_shared_memory( void )
++{
++    static const WCHAR dir_thread_mapsW[] = {'\\','K','e','r','n','e','l','O','b','j','e','c','t','s',
++                                             '\\','_','_','w','i','n','e','_','t','h','r','e','a','d','_','m','a','p','p','i','n','g','s',
++                                             '\\','%','0','8','x',0};
++    struct user_thread_info *thread_info = get_user_thread_info();
++    HANDLE handle;
++    WCHAR buf[MAX_PATH];
++    OBJECT_ATTRIBUTES attr;
++    UNICODE_STRING section_str;
++    NTSTATUS status;
++    SIZE_T size;
++    void *ptr;
++
++    if (thread_info->thread_shared_memory) return thread_info->thread_shared_memory;
++
++    swprintf( buf, ARRAY_SIZE(buf), dir_thread_mapsW, GetCurrentThreadId() );
++    RtlInitUnicodeString( &section_str, buf );
++    InitializeObjectAttributes( &attr, &section_str, 0, NULL, NULL );
++    status = NtOpenSection( &handle, SECTION_ALL_ACCESS, &attr );
++    if (status)
++    {
++        ERR( "failed to open the thread section: %08x\n", status );
++        return NULL;
++    }
++
++    ptr = NULL;
++    size = sizeof(struct thread_shared_memory);
++    status = NtMapViewOfSection( handle, GetCurrentProcess(), (void *)&ptr, 0, 0, NULL,
++                                 &size, ViewUnmap, 0, PAGE_READONLY );
++    if (status)
++    {
++        ERR( "failed to map view of the thread section: %08x\n", status );
++        CloseHandle( handle );
++        return NULL;
++    }
++
++    thread_info->thread_shared_map = handle;
++    thread_info->thread_shared_memory = (struct thread_shared_memory *)ptr;
++    return thread_info->thread_shared_memory;
+ }
+ 
+ 
+@@ -520,7 +563,7 @@ BOOL WINAPI SetThreadDesktop( HDESK handle )
+         {
+             CloseHandle( thread_info->desktop_shared_map );
+             thread_info->desktop_shared_map = NULL;
+-            thread_info->shared_memory = NULL;
++            thread_info->desktop_shared_memory = NULL;
+         }
+     }
+     return ret;
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 59c5d040f4e..a34b22f7298 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -815,6 +815,15 @@ struct desktop_shared_memory
+     unsigned char        keystate[256];
+ };
+ 
++struct thread_shared_memory
++{
++    unsigned int         seq;
++    unsigned int         wake_bits;
++    unsigned int         changed_bits;
++    unsigned int         wake_mask;
++    unsigned int         changed_mask;
++};
++
+ 
+ #define SEQUENCE_MASK_BITS  4
+ #define SEQUENCE_MASK ((1UL << SEQUENCE_MASK_BITS) - 1)
+@@ -6765,7 +6774,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 661
++#define SERVER_PROTOCOL_VERSION 662
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/directory.c b/server/directory.c
+index d6c7330a60e..b68dd91bb5e 100644
+--- a/server/directory.c
++++ b/server/directory.c
+@@ -265,6 +265,21 @@ struct object *create_desktop_map_directory( struct winstation *winstation )
+     return &ret->obj;
+ }
+ 
++struct object *create_thread_map_directory( void )
++{
++    static const WCHAR dir_kernelW[] = {'K','e','r','n','e','l','O','b','j','e','c','t','s'};
++    static const WCHAR dir_thread_mapsW[] = {'_','_','w','i','n','e','_','t','h','r','e','a','d','_','m','a','p','p','i','n','g','s'};
++    static const struct unicode_str dir_kernel_str = {dir_kernelW, sizeof(dir_kernelW)};
++    static const struct unicode_str dir_thread_maps_str = {dir_thread_mapsW, sizeof(dir_thread_mapsW)};
++    struct directory *mapping_root, *ret;
++
++    mapping_root = create_directory( &root_directory->obj, &dir_kernel_str, OBJ_OPENIF, HASH_SIZE, NULL );
++    ret = create_directory( &mapping_root->obj, &dir_thread_maps_str, OBJ_OPENIF, HASH_SIZE, NULL );
++    release_object( &mapping_root->obj );
++
++    return &ret->obj;
++}
++
+ /* Global initialization */
+ 
+ static void create_session( unsigned int id )
+diff --git a/server/file.h b/server/file.h
+index f688a19d174..4def4ac760e 100644
+--- a/server/file.h
++++ b/server/file.h
+@@ -159,6 +159,7 @@ extern const char *get_timeout_str( timeout_t timeout );
+ /* directory functions */
+ 
+ extern struct object *create_desktop_map_directory( struct winstation *winstation );
++extern struct object *create_thread_map_directory( void );
+ 
+ /* file functions */
+ 
+@@ -182,8 +183,8 @@ extern void free_mapped_views( struct process *process );
+ extern int get_page_size(void);
+ extern struct object *create_user_data_mapping( struct object *root, const struct unicode_str *name,
+                                                 unsigned int attr, const struct security_descriptor *sd );
+-extern struct object *create_desktop_mapping( struct object *root, const struct unicode_str *name,
+-                                              mem_size_t size, const struct security_descriptor *sd, void **ptr );
++extern struct object *create_shared_mapping( struct object *root, const struct unicode_str *name,
++                                             mem_size_t size, const struct security_descriptor *sd, void **ptr );
+ 
+ /* device functions */
+ 
+diff --git a/server/mapping.c b/server/mapping.c
+index e4418879703..ecbb8f801ef 100644
+--- a/server/mapping.c
++++ b/server/mapping.c
+@@ -978,8 +978,8 @@ struct object *create_user_data_mapping( struct object *root, const struct unico
+     return &mapping->obj;
+ }
+ 
+-struct object *create_desktop_mapping( struct object *root, const struct unicode_str *name,
+-                                       mem_size_t size, const struct security_descriptor *sd, void **ptr )
++struct object *create_shared_mapping( struct object *root, const struct unicode_str *name,
++                                      mem_size_t size, const struct security_descriptor *sd, void **ptr )
+ {
+     struct mapping *mapping;
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index ba3e7db7a60..90a384112f5 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -831,6 +831,15 @@ struct desktop_shared_memory
+     unsigned char        keystate[256];    /* asynchronous key state */
+ };
+ 
++struct thread_shared_memory
++{
++    unsigned int         seq;              /* sequence number - server updating if (seq_no & SEQUENCE_MASK) != 0 */
++    unsigned int         wake_bits;
++    unsigned int         changed_bits;
++    unsigned int         wake_mask;
++    unsigned int         changed_mask;
++};
++
+ /* Bits that must be clear for client to read */
+ #define SEQUENCE_MASK_BITS  4
+ #define SEQUENCE_MASK ((1UL << SEQUENCE_MASK_BITS) - 1)
+diff --git a/server/queue.c b/server/queue.c
+index 43ab91dc671..585a2230654 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -146,6 +146,7 @@ struct msg_queue
+     int                    esync_in_msgwait; /* our thread is currently waiting on us */
+     unsigned int           fsync_idx;
+     int                    fsync_in_msgwait; /* our thread is currently waiting on us */
++    volatile struct thread_shared_memory *shared;  /* thread shared memory ptr */
+ };
+ 
+ struct hotkey
+@@ -319,6 +320,7 @@ static struct msg_queue *create_msg_queue( struct thread *thread, struct thread_
+         queue->esync_in_msgwait = 0;
+         queue->fsync_idx       = 0;
+         queue->fsync_in_msgwait = 0;
++        queue->shared          = thread->shared;
+         list_init( &queue->send_result );
+         list_init( &queue->callback_result );
+         list_init( &queue->pending_timers );
+@@ -546,6 +548,12 @@ static inline void set_queue_bits( struct msg_queue *queue, unsigned int bits )
+ {
+     queue->wake_bits |= bits;
+     queue->changed_bits |= bits;
++
++    SHARED_WRITE_BEGIN( &queue->shared->seq );
++    queue->shared->wake_bits = queue->wake_bits;
++    queue->shared->changed_bits = queue->changed_bits;
++    SHARED_WRITE_END( &queue->shared->seq );
++
+     if (is_signaled( queue )) wake_up( &queue->obj, 0 );
+ }
+ 
+@@ -555,6 +563,11 @@ static inline void clear_queue_bits( struct msg_queue *queue, unsigned int bits
+     queue->wake_bits &= ~bits;
+     queue->changed_bits &= ~bits;
+ 
++    SHARED_WRITE_BEGIN( &queue->shared->seq );
++    queue->shared->wake_bits = queue->wake_bits;
++    queue->shared->changed_bits = queue->changed_bits;
++    SHARED_WRITE_END( &queue->shared->seq );
++
+     if (do_fsync() && !is_signaled( queue ))
+         fsync_clear( &queue->obj );
+ 
+@@ -1090,6 +1103,11 @@ static void msg_queue_satisfied( struct object *obj, struct wait_queue_entry *en
+     struct msg_queue *queue = (struct msg_queue *)obj;
+     queue->wake_mask = 0;
+     queue->changed_mask = 0;
++
++    SHARED_WRITE_BEGIN( &queue->shared->seq );
++    queue->shared->wake_mask = queue->wake_mask;
++    queue->shared->changed_mask = queue->changed_mask;
++    SHARED_WRITE_END( &queue->shared->seq );
+ }
+ 
+ static void msg_queue_destroy( struct object *obj )
+@@ -2510,10 +2528,23 @@ DECL_HANDLER(set_queue_mask)
+         queue->changed_mask = req->changed_mask;
+         reply->wake_bits    = queue->wake_bits;
+         reply->changed_bits = queue->changed_bits;
++
++        SHARED_WRITE_BEGIN( &queue->shared->seq );
++        queue->shared->wake_mask = queue->wake_mask;
++        queue->shared->changed_mask = queue->changed_mask;
++        SHARED_WRITE_END( &queue->shared->seq );
++
+         if (is_signaled( queue ))
+         {
+             /* if skip wait is set, do what would have been done in the subsequent wait */
+-            if (req->skip_wait) queue->wake_mask = queue->changed_mask = 0;
++            if (req->skip_wait)
++            {
++                queue->wake_mask = queue->changed_mask = 0;
++                SHARED_WRITE_BEGIN( &queue->shared->seq );
++                queue->shared->wake_mask = queue->wake_mask;
++                queue->shared->changed_mask = queue->changed_mask;
++                SHARED_WRITE_END( &queue->shared->seq );
++            }
+             else wake_up( &queue->obj, 0 );
+         }
+     }
+@@ -2530,6 +2561,10 @@ DECL_HANDLER(get_queue_status)
+         reply->changed_bits = queue->changed_bits;
+         queue->changed_bits &= ~req->clear_bits;
+ 
++        SHARED_WRITE_BEGIN( &queue->shared->seq );
++        queue->shared->changed_bits = queue->changed_bits;
++        SHARED_WRITE_END( &queue->shared->seq );
++
+         if (do_fsync() && !is_signaled( queue ))
+             fsync_clear( &queue->obj );
+ 
+@@ -2725,6 +2760,10 @@ DECL_HANDLER(get_message)
+     if (filter & QS_INPUT) queue->changed_bits &= ~QS_INPUT;
+     if (filter & QS_PAINT) queue->changed_bits &= ~QS_PAINT;
+ 
++    SHARED_WRITE_BEGIN( &queue->shared->seq );
++    queue->shared->changed_bits = queue->changed_bits;
++    SHARED_WRITE_END( &queue->shared->seq );
++
+     /* then check for posted messages */
+     if ((filter & QS_POSTMESSAGE) &&
+         get_posted_message( queue, get_win, req->get_first, req->get_last, req->flags, reply ))
+@@ -2778,6 +2817,12 @@ DECL_HANDLER(get_message)
+     if (get_win == -1 && current->process->idle_event) set_event( current->process->idle_event );
+     queue->wake_mask = req->wake_mask;
+     queue->changed_mask = req->changed_mask;
++
++    SHARED_WRITE_BEGIN( &queue->shared->seq );
++    queue->shared->wake_mask = queue->wake_mask;
++    queue->shared->changed_mask = queue->changed_mask;
++    SHARED_WRITE_END( &queue->shared->seq );
++
+     set_error( STATUS_PENDING );  /* FIXME */
+ }
+ 
+diff --git a/server/thread.c b/server/thread.c
+index 31043c3df33..d38136c05c2 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -51,6 +51,7 @@
+ #include "request.h"
+ #include "user.h"
+ #include "security.h"
++#include "unicode.h"
+ #include "esync.h"
+ #include "fsync.h"
+ 
+@@ -253,6 +254,8 @@ static inline void init_thread_structure( struct thread *thread )
+     thread->desc            = NULL;
+     thread->desc_len        = 0;
+     thread->exit_poll       = NULL;
++    thread->shared_mapping  = NULL;
++    thread->shared          = NULL;
+ 
+     thread->creation_time = current_time;
+     thread->exit_time     = 0;
+@@ -300,6 +303,28 @@ static struct context *create_thread_context( struct thread *thread )
+ }
+ 
+ 
++static volatile void *init_thread_mapping( struct thread *thread )
++{
++    struct unicode_str name;
++    struct object *dir = create_thread_map_directory();
++    char nameA[MAX_PATH];
++    WCHAR *nameW;
++
++    if (!dir) return NULL;
++
++    sprintf( nameA, "%08x", thread->id );
++    nameW = ascii_to_unicode_str( nameA, &name );
++
++    thread->shared_mapping = create_shared_mapping( dir, &name, sizeof(struct thread_shared_memory),
++                                                    NULL, (void **)&thread->shared );
++    release_object( dir );
++    if (thread->shared) memset( (void *)thread->shared, 0, sizeof(*thread->shared) );
++
++    free( nameW );
++    return thread->shared;
++}
++
++
+ /* create a new thread */
+ struct thread *create_thread( int fd, struct process *process, const struct security_descriptor *sd )
+ {
+@@ -365,6 +390,11 @@ struct thread *create_thread( int fd, struct process *process, const struct secu
+         release_object( thread );
+         return NULL;
+     }
++    if (!init_thread_mapping( thread ))
++    {
++        release_object( thread );
++        return NULL;
++    }
+ 
+     if (do_fsync())
+     {
+@@ -435,6 +465,8 @@ static void cleanup_thread( struct thread *thread )
+         }
+     }
+     free( thread->desc );
++    if (thread->shared_mapping) release_object( thread->shared_mapping );
++    thread->shared_mapping = NULL;
+     thread->req_data = NULL;
+     thread->reply_data = NULL;
+     thread->request_fd = NULL;
+diff --git a/server/thread.h b/server/thread.h
+index f947edb94a6..6c801ad6421 100644
+--- a/server/thread.h
++++ b/server/thread.h
+@@ -95,6 +95,8 @@ struct thread
+     data_size_t            desc_len;      /* thread description length in bytes */
+     WCHAR                 *desc;          /* thread description string */
+     struct timeout_user   *exit_poll;     /* poll if the thread/process has exited already */
++    struct object         *shared_mapping;         /* thread shared memory mapping */
++    volatile struct thread_shared_memory *shared;  /* thread shared memory ptr */
+ };
+ 
+ extern struct thread *current;
+diff --git a/server/winstation.c b/server/winstation.c
+index 62e31e8942b..842c9afdbec 100644
+--- a/server/winstation.c
++++ b/server/winstation.c
+@@ -221,8 +221,8 @@ static volatile void *init_desktop_mapping( struct desktop *desktop, const struc
+ 
+     if (!dir) return NULL;
+ 
+-    desktop->shared_mapping = create_desktop_mapping( dir, name, sizeof(struct desktop_shared_memory),
+-                                                      NULL, (void **)&desktop->shared );
++    desktop->shared_mapping = create_shared_mapping( dir, name, sizeof(struct desktop_shared_memory),
++                                                     NULL, (void **)&desktop->shared );
+     release_object( dir );
+     if (desktop->shared) memset( (void *)desktop->shared, 0, sizeof(*desktop->shared) );
+     return desktop->shared;
+From 7ad846a53e8f4bc5b6d674ff661a1a148094b31b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 24 Nov 2020 16:03:15 +0100
+Subject: [PATCH] user32: Don't check for driver events so often.
+
+Now that PeekMessage may return quickly we don't want to check for
+driver events on every call.
+---
+ dlls/user32/message.c      | 14 ++++++++++----
+ dlls/user32/user_private.h |  1 +
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 05194e3abd9..aa3170007f6 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -3698,7 +3698,8 @@ void WINAPI PostQuitMessage( INT exit_code )
+ /* check for driver events if we detect that the app is not properly consuming messages */
+ static inline void check_for_driver_events( UINT msg )
+ {
+-    if (get_user_thread_info()->message_count > 200)
++    struct user_thread_info *thread_info = get_user_thread_info();
++    if (thread_info->message_count > 200)
+     {
+         flush_window_surfaces( FALSE );
+         USER_Driver->pMsgWaitForMultipleObjectsEx( 0, NULL, 0, QS_ALLINPUT, 0 );
+@@ -3706,9 +3707,9 @@ static inline void check_for_driver_events( UINT msg )
+     else if (msg == WM_TIMER || msg == WM_SYSTIMER)
+     {
+         /* driver events should have priority over timers, so make sure we'll check for them soon */
+-        get_user_thread_info()->message_count += 100;
++        thread_info->message_count += 100;
+     }
+-    else get_user_thread_info()->message_count++;
++    else thread_info->message_count++;
+ }
+ 
+ /***********************************************************************
+@@ -3716,17 +3717,21 @@ static inline void check_for_driver_events( UINT msg )
+  */
+ BOOL WINAPI DECLSPEC_HOTPATCH PeekMessageW( MSG *msg_out, HWND hwnd, UINT first, UINT last, UINT flags )
+ {
++    struct user_thread_info *thread_info = get_user_thread_info();
+     MSG msg;
+     int ret;
+ 
+     USER_CheckNotLock();
+-    check_for_driver_events( 0 );
++    if (thread_info->last_driver_time != GetTickCount())
++        check_for_driver_events( 0 );
+ 
+     ret = peek_message( &msg, hwnd, first, last, flags, 0 );
+     if (ret < 0) return FALSE;
+ 
+     if (!ret)
+     {
++        if (thread_info->last_driver_time == GetTickCount()) return FALSE;
++        thread_info->last_driver_time = GetTickCount();
+         flush_window_surfaces( TRUE );
+         ret = wow_handlers.wait_message( 0, NULL, 0, QS_ALLINPUT, 0 );
+         /* if we received driver events, check again for a pending message */
+@@ -3734,6 +3739,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH PeekMessageW( MSG *msg_out, HWND hwnd, UINT first,
+     }
+ 
+     check_for_driver_events( msg.message );
++    thread_info->last_driver_time = GetTickCount() - 1;
+ 
+     /* copy back our internal safe copy of message data to msg_out.
+      * msg_out is a variable from the *program*, so it can't be used
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index f53c5ea33b4..e5b36925f52 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -186,6 +186,7 @@ struct user_thread_info
+     HANDLE                        server_queue;           /* Handle to server-side queue */
+     DWORD                         wake_mask;              /* Current queue wake mask */
+     DWORD                         changed_mask;           /* Current queue changed mask */
++    DWORD                         last_driver_time;       /* Get/PeekMessage driver event time */
+     WORD                          recursion_count;        /* SendMessage recursion counter */
+     WORD                          message_count;          /* Get/PeekMessage loop counter */
+     WORD                          hook_call_depth;        /* Number of recursively called hook procs */
+From 78d38eaebf7bdcb17638605ebef719266c6d8045 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 24 Nov 2020 19:21:42 +0100
+Subject: [PATCH] esync: user32: Always call get_message request after waiting.
+
+Because with esync and fsync the wait happens on the client-side, so
+we need to make the request to do the server side effects.
+---
+ dlls/user32/message.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index aa3170007f6..316935b2b61 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2648,7 +2648,7 @@ static inline void call_sendmsg_callback( SENDASYNCPROC callback, HWND hwnd, UIN
+  * available; -1 on error.
+  * All pending sent messages are processed before returning.
+  */
+-static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags, UINT changed_mask )
++static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags, UINT changed_mask, BOOL waited )
+ {
+     LRESULT result;
+     volatile struct thread_shared_memory *shared = get_thread_shared_memory();
+@@ -2682,7 +2682,7 @@ static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags,
+ 
+         thread_info->msg_source = prev_source;
+ 
+-        if (!shared) skip = FALSE;
++        if (!shared || waited) skip = FALSE;
+         else SHARED_READ_BEGIN( &shared->seq )
+         {
+             /* if the masks need an update */
+@@ -2887,7 +2887,7 @@ static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags,
+                 }
+                 else
+                     peek_message( msg, info.msg.hwnd, info.msg.message,
+-                                  info.msg.message, flags | PM_REMOVE, changed_mask );
++                                  info.msg.message, flags | PM_REMOVE, changed_mask, TRUE );
+                 continue;
+             }
+ 	    if (info.msg.message >= WM_DDE_FIRST && info.msg.message <= WM_DDE_LAST)
+@@ -2931,7 +2931,7 @@ static int peek_message( MSG *msg, HWND hwnd, UINT first, UINT last, UINT flags,
+ static inline void process_sent_messages(void)
+ {
+     MSG msg;
+-    peek_message( &msg, 0, 0, 0, PM_REMOVE | PM_QS_SENDMESSAGE, 0 );
++    peek_message( &msg, 0, 0, 0, PM_REMOVE | PM_QS_SENDMESSAGE, 0, FALSE );
+ }
+ 
+ 
+@@ -3725,7 +3725,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH PeekMessageW( MSG *msg_out, HWND hwnd, UINT first,
+     if (thread_info->last_driver_time != GetTickCount())
+         check_for_driver_events( 0 );
+ 
+-    ret = peek_message( &msg, hwnd, first, last, flags, 0 );
++    ret = peek_message( &msg, hwnd, first, last, flags, 0, FALSE );
+     if (ret < 0) return FALSE;
+ 
+     if (!ret)
+@@ -3735,7 +3735,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH PeekMessageW( MSG *msg_out, HWND hwnd, UINT first,
+         flush_window_surfaces( TRUE );
+         ret = wow_handlers.wait_message( 0, NULL, 0, QS_ALLINPUT, 0 );
+         /* if we received driver events, check again for a pending message */
+-        if (ret == WAIT_TIMEOUT || peek_message( &msg, hwnd, first, last, flags, 0 ) <= 0) return FALSE;
++        if (ret == WAIT_TIMEOUT || peek_message( &msg, hwnd, first, last, flags, 0, TRUE ) <= 0) return FALSE;
+     }
+ 
+     check_for_driver_events( msg.message );
+@@ -3790,7 +3790,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetMessageW( MSG *msg, HWND hwnd, UINT first, UINT
+     }
+     else mask = QS_ALLINPUT;
+ 
+-    while (!(ret = peek_message( msg, hwnd, first, last, PM_REMOVE | (mask << 16), mask )))
++    while (!(ret = peek_message( msg, hwnd, first, last, PM_REMOVE | (mask << 16), mask, TRUE )))
+     {
+         wait_objects( 1, &server_queue, INFINITE, mask & (QS_SENDMESSAGE | QS_SMRESULT), mask, 0 );
+     }
+From 0b12f56fb7ab9d76629e0150dec633a9046435af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Sat, 25 Apr 2020 12:26:57 +0200
+Subject: [PATCH] kernel32: Catch page faults in GlobalSize.
+
+In the same way GlobalFree does already.
+---
+ dlls/kernel32/heap.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/dlls/kernel32/heap.c b/dlls/kernel32/heap.c
+index 02c5d4d3064..58075913d3f 100644
+--- a/dlls/kernel32/heap.c
++++ b/dlls/kernel32/heap.c
+@@ -331,6 +331,8 @@ SIZE_T WINAPI GlobalSize(HGLOBAL hmem)
+        return 0;
+    }
+ 
++    __TRY
++    {
+    if(ISPOINTER(hmem))
+    {
+       retval=HeapSize(GetProcessHeap(), 0, hmem);
+@@ -364,6 +366,14 @@ SIZE_T WINAPI GlobalSize(HGLOBAL hmem)
+       }
+       RtlUnlockHeap(GetProcessHeap());
+    }
++   }
++   __EXCEPT_PAGE_FAULT
++   {
++       SetLastError( ERROR_INVALID_HANDLE );
++       retval = 0;
++   }
++   __ENDTRY
++
+    if (retval == ~(SIZE_T)0) retval = 0;
+    return retval;
+ }
+From c0d7c98e4e3e7f1fd669cafe1989d5cedd259c95 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 5 May 2020 13:44:57 +0200
+Subject: [PATCH] kernel32/tests: Add HeapSetInformation and LFH tests.
+
+---
+ dlls/kernel32/tests/heap.c | 68 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+
+diff --git a/dlls/kernel32/tests/heap.c b/dlls/kernel32/tests/heap.c
+index fa372b14e21..a534ad039c8 100644
+--- a/dlls/kernel32/tests/heap.c
++++ b/dlls/kernel32/tests/heap.c
+@@ -42,6 +42,7 @@
+ static LPVOID (WINAPI *pHeapAlloc)(HANDLE,DWORD,SIZE_T);
+ static LPVOID (WINAPI *pHeapReAlloc)(HANDLE,DWORD,LPVOID,SIZE_T);
+ static BOOL (WINAPI *pHeapQueryInformation)(HANDLE, HEAP_INFORMATION_CLASS, PVOID, SIZE_T, PSIZE_T);
++static BOOL (WINAPI *pHeapSetInformation)(HANDLE, HEAP_INFORMATION_CLASS, PVOID, SIZE_T);
+ static BOOL (WINAPI *pGetPhysicallyInstalledSystemMemory)(ULONGLONG *);
+ static ULONG (WINAPI *pRtlGetNtGlobalFlags)(void);
+ 
+@@ -528,6 +529,8 @@ static void test_HeapCreate(void)
+     UINT i;
+     BOOL error;
+     DWORD dwSize;
++    ULONG hci;
++    SIZE_T size;
+ 
+     /* Retrieve the page size for this system */
+     GetSystemInfo(&sysInfo);
+@@ -624,6 +627,71 @@ static void test_HeapCreate(void)
+ 
+    /* Check that HeapDestroy works */
+    ok(HeapDestroy(heap),"HeapDestroy failed\n");
++
++
++    if (!(pHeapQueryInformation = (void *)GetProcAddress(GetModuleHandleA("kernel32.dll"), "HeapQueryInformation")) ||
++        !(pHeapSetInformation = (void *)GetProcAddress(GetModuleHandleA("kernel32.dll"), "HeapSetInformation")))
++        win_skip("HeapQueryInformation / HeapSetInformation not available\n");
++    else
++    {
++        heap = HeapCreate(0, 0, 0);
++        ok(!!heap, "HeapCreate failed\n");
++
++        mem1 = HeapAlloc(heap, 0, 16);
++        mem2 = HeapAlloc(heap, 0, 16);
++
++        ok(pHeapQueryInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci), &size),
++           "HeapQueryInformation failed\n");
++        trace("HeapQueryInformation returned %d\n", hci);
++
++        hci = 2;
++        ok(pHeapSetInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci)),
++           "HeapSetInformation failed\n");
++        ok(pHeapQueryInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci), &size),
++           "HeapQueryInformation failed\n");
++        trace("HeapQueryInformation returned %d\n", hci);
++
++        hci = 1;
++        SetLastError(0xdeadbeef);
++        todo_wine
++        ok(!pHeapSetInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci)),
++           "HeapSetInformation succeeded\n");
++        todo_wine
++        ok(GetLastError() == ERROR_GEN_FAILURE,
++           "expected ERROR_GEN_FAILURE, got %u\n", GetLastError());
++
++        mem3 = HeapAlloc(heap, 0, 16);
++
++        ok(HeapValidate(heap, 0, NULL), "HeapValidate failed\n");
++
++        SetLastError(0xdeadbeef);
++        dwSize = HeapSize(heap, 0, mem1);
++        ok(dwSize == 16, "HeapSize failed\n");
++        ok(GetLastError() == 0xdeadbeef, "GetLastError failed: %u\n", GetLastError());
++        mem1 = HeapReAlloc(heap, 0, mem1, 1024);
++        ok(mem1 != NULL, "HeapReAlloc failed\n");
++
++        dwSize = HeapSize(heap, 0, mem1);
++        ok(dwSize == 1024, "HeapSize failed\n");
++
++        dwSize = HeapSize(heap, 0, mem2);
++        ok(dwSize == 16, "HeapSize failed\n");
++        ok(GetLastError() == 0xdeadbeef, "GetLastError failed: %u\n", GetLastError());
++
++        dwSize = HeapSize(heap, 0, mem3);
++        ok(dwSize == 16, "HeapSize failed\n");
++        ok(GetLastError() == 0xdeadbeef, "GetLastError failed: %u\n", GetLastError());
++
++        ok(HeapValidate(heap, 0, NULL), "HeapValidate failed\n");
++
++        ok(HeapFree(heap, 0, mem1), "HeapFree failed\n");
++        ok(HeapFree(heap, 0, mem2), "HeapFree failed\n");
++        ok(HeapFree(heap, 0, mem3), "HeapFree failed\n");
++
++        ok(HeapValidate(heap, 0, NULL), "HeapValidate failed\n");
++
++        ok(HeapDestroy(heap),"HeapDestroy failed\n");
++    }
+ }
+ 
+ 
+From 6550fb093f526d8d217581ddf7887bc45f8c3956 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 28 Aug 2019 22:24:42 +0200
+Subject: [PATCH] ntdll: Split standard heap functions.
+
+---
+ dlls/ntdll/heap.c       | 113 +++++++++++++++++++++++++++-------------
+ dlls/ntdll/ntdll_misc.h |   7 +++
+ 2 files changed, 84 insertions(+), 36 deletions(-)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index b67b6cca92e..451ee495c21 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -1459,8 +1459,6 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
+     BOOL ret = FALSE;
+     const ARENA_LARGE *large_arena;
+ 
+-    flags &= HEAP_NO_SERIALIZE;
+-    flags |= heapPtr->flags;
+     /* calling HeapLock may result in infinite recursion, so do the critsect directly */
+     if (!(flags & HEAP_NO_SERIALIZE))
+         RtlEnterCriticalSection( &heapPtr->critSection );
+@@ -1774,18 +1772,27 @@ HANDLE WINAPI RtlDestroyHeap( HANDLE heap )
+  *  This call does not SetLastError().
+  */
+ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_T size )
++{
++    HEAP *heapPtr;
++
++    if (!(heapPtr = HEAP_GetPtr( heap )))
++        return NULL;
++
++    flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
++    flags |= heapPtr->flags;
++
++    return HEAP_std_allocate( heapPtr, flags, size );
++}
++
++void * HEAP_std_allocate( HEAP *heapPtr, ULONG flags, SIZE_T size )
+ {
+     ARENA_FREE *pArena;
+     ARENA_INUSE *pInUse;
+     SUBHEAP *subheap;
+-    HEAP *heapPtr = HEAP_GetPtr( heap );
+     SIZE_T rounded_size;
+ 
+     /* Validate the parameters */
+ 
+-    if (!heapPtr) return NULL;
+-    flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
+-    flags |= heapPtr->flags;
+     rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+     if (rounded_size < size)  /* overflow */
+     {
+@@ -1811,10 +1813,10 @@ void * HEAP_std_allocate( HEAP *heapPtr, ULONG flags, SIZE_T size )
+ 
+     if (rounded_size >= HEAP_MIN_LARGE_BLOCK_SIZE && (flags & HEAP_GROWABLE))
+     {
+-        void *ret = allocate_large_block( heap, flags, size );
++        void *ret = allocate_large_block( heapPtr, flags, size );
+         if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
+         if (!ret && (flags & HEAP_GENERATE_EXCEPTIONS)) RtlRaiseStatus( STATUS_NO_MEMORY );
+-        TRACE("(%p,%08x,%08lx): returning %p\n", heap, flags, size, ret );
++        TRACE("(%p,%08x,%08lx): returning %p\n", heapPtr, flags, size, ret );
+         return ret;
+     }
+ 
+@@ -1823,7 +1825,7 @@ void * HEAP_std_allocate( HEAP *heapPtr, ULONG flags, SIZE_T size )
+     if (!(pArena = HEAP_FindFreeBlock( heapPtr, rounded_size, &subheap )))
+     {
+         TRACE("(%p,%08x,%08lx): returning NULL\n",
+-                  heap, flags, size  );
++                  heapPtr, flags, size  );
+         if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
+         if (flags & HEAP_GENERATE_EXCEPTIONS) RtlRaiseStatus( STATUS_NO_MEMORY );
+         return NULL;
+@@ -1839,7 +1846,7 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+ 
+     if (!(flags & HEAP_NO_SERIALIZE)) RtlLeaveCriticalSection( &heapPtr->critSection );
+ 
+-    TRACE("(%p,%08x,%08lx): returning %p\n", heap, flags, size, pInUse + 1 );
++    TRACE("(%p,%08x,%08lx): returning %p\n", heapPtr, flags, size, pInUse + 1 );
+     return pInUse + 1;
+ }
+ 
+@@ -1860,16 +1867,11 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+  */
+ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *ptr )
+ {
+-    ARENA_INUSE *pInUse;
+-    SUBHEAP *subheap;
+     HEAP *heapPtr;
+ 
+-    /* Validate the parameters */
+-
+     if (!ptr) return TRUE;  /* freeing a NULL ptr isn't an error in Win2k */
+ 
+-    heapPtr = HEAP_GetPtr( heap );
+-    if (!heapPtr)
++    if (!(heapPtr = HEAP_GetPtr( heap )))
+     {
+         RtlSetLastWin32ErrorAndNtStatusFromNtStatus( STATUS_INVALID_HANDLE );
+         return FALSE;
+@@ -1885,6 +1887,25 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
+ 
+     flags &= HEAP_NO_SERIALIZE;
+     flags |= heapPtr->flags;
++
++    switch (heapPtr->extended_type)
++    {
++    case HEAP_LFH:
++        if (HEAP_lfh_validate( heapPtr, flags, ptr ))
++            return HEAP_lfh_free( heapPtr, flags, ptr );
++        /* fallthrough */
++    default:
++        return HEAP_std_free( heapPtr, flags, ptr );
++    }
++}
++
++BOOLEAN HEAP_std_free( HEAP *heapPtr, ULONG flags, void *ptr )
++{
++    ARENA_INUSE *pInUse;
++    SUBHEAP *subheap;
++
++    /* Validate the parameters */
++
+     if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
+ 
+     /* Inform valgrind we are trying to free memory, so it can throw up an error message */
+@@ -1900,13 +1921,13 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
+         HEAP_MakeInUseBlockFree( subheap, pInUse );
+ 
+     if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
+-    TRACE("(%p,%08x,%p): returning TRUE\n", heap, flags, ptr );
++    TRACE("(%p,%08x,%p): returning TRUE\n", heapPtr, flags, ptr );
+     return TRUE;
+ 
+ error:
+     if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
+     RtlSetLastWin32ErrorAndNtStatusFromNtStatus( STATUS_INVALID_PARAMETER );
+-    TRACE("(%p,%08x,%p): returning FALSE\n", heap, flags, ptr );
++    TRACE("(%p,%08x,%p): returning FALSE\n", heapPtr, flags, ptr );
+     return FALSE;
+ }
+ 
+@@ -1928,24 +1949,41 @@ error:
+  */
+ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size )
+ {
+-    ARENA_INUSE *pArena;
+     HEAP *heapPtr;
+-    SUBHEAP *subheap;
+-    SIZE_T oldBlockSize, oldActualSize, rounded_size;
+-    void *ret;
+ 
+-    if (!ptr) return NULL;
++    if (!ptr)
++        return NULL;
++
+     if (!(heapPtr = HEAP_GetPtr( heap )))
+     {
+         RtlSetLastWin32ErrorAndNtStatusFromNtStatus( STATUS_INVALID_HANDLE );
+         return NULL;
+     }
+ 
+-    /* Validate the parameters */
+-
+     flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY |
+              HEAP_REALLOC_IN_PLACE_ONLY;
+     flags |= heapPtr->flags;
++
++    switch (heapPtr->extended_type)
++    {
++    case HEAP_LFH:
++        if (HEAP_lfh_validate( heapPtr, flags, ptr ))
++            return HEAP_lfh_reallocate( heapPtr, flags, ptr, size );
++        /* fallthrough */
++    default:
++        return HEAP_std_reallocate( heapPtr, flags, ptr, size );
++    }
++}
++
++void *HEAP_std_reallocate( HEAP *heapPtr, ULONG flags, void *ptr, SIZE_T size )
++{
++    ARENA_INUSE *pArena;
++    SUBHEAP *subheap;
++    SIZE_T oldBlockSize, oldActualSize, rounded_size;
++    void *ret;
++
++    /* Validate the parameters */
++
+     if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
+ 
+     rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+@@ -2079,20 +2079,20 @@ void *HEAP_std_reallocate( HEAP *heapPtr, ULONG flags, void *ptr, SIZE_T size )
+     ret = pArena + 1;
+ done:
+     if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
+-    TRACE("(%p,%08x,%p,%08lx): returning %p\n", heap, flags, ptr, size, ret );
++    TRACE("(%p,%08x,%p,%08lx): returning %p\n", heapPtr, flags, ptr, size, ret );
+     return ret;
+ 
+ oom:
+     if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
+     if (flags & HEAP_GENERATE_EXCEPTIONS) RtlRaiseStatus( STATUS_NO_MEMORY );
+     RtlSetLastWin32ErrorAndNtStatusFromNtStatus( STATUS_NO_MEMORY );
+-    TRACE("(%p,%08x,%p,%08lx): returning NULL\n", heap, flags, ptr, size );
++    TRACE("(%p,%08x,%p,%08lx): returning NULL\n", heapPtr, flags, ptr, size );
+     return NULL;
+ 
+ error:
+     if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
+     RtlSetLastWin32ErrorAndNtStatusFromNtStatus( STATUS_INVALID_PARAMETER );
+-    TRACE("(%p,%08x,%p,%08lx): returning NULL\n", heap, flags, ptr, size );
++    TRACE("(%p,%08x,%p,%08lx): returning NULL\n", heapPtr, flags, ptr, size );
+     return NULL;
+ }
+ 
+@@ -2143,18 +2181,34 @@ BOOLEAN WINAPI RtlUnlockHeap( HANDLE heap )
+  */
+ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
+ {
+-    SIZE_T ret;
+-    const ARENA_INUSE *pArena;
+-    SUBHEAP *subheap;
+-    HEAP *heapPtr = HEAP_GetPtr( heap );
++    HEAP *heapPtr;
+ 
+-    if (!heapPtr)
++    if (!(heapPtr = HEAP_GetPtr( heap )))
+     {
+         RtlSetLastWin32ErrorAndNtStatusFromNtStatus( STATUS_INVALID_HANDLE );
+         return ~(SIZE_T)0;
+     }
++    
+     flags &= HEAP_NO_SERIALIZE;
+     flags |= heapPtr->flags;
++
++    switch (heapPtr->extended_type)
++    {
++    case HEAP_LFH:
++        if (HEAP_lfh_validate( heapPtr, flags, ptr ))
++            return HEAP_lfh_get_allocated_size( heapPtr, flags, ptr );
++        /* fallthrough */
++    default:
++        return HEAP_std_get_allocated_size( heapPtr, flags, ptr );
++    }
++}
++
++SIZE_T HEAP_std_get_allocated_size( HEAP *heapPtr, ULONG flags, const void *ptr )
++{
++    SIZE_T ret;
++    const ARENA_INUSE *pArena;
++    SUBHEAP *subheap;
++
+     if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
+ 
+     pArena = (const ARENA_INUSE *)ptr - 1;
+@@ -2166,7 +2196,7 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
+     }
+     if (!(flags & HEAP_NO_SERIALIZE)) RtlLeaveCriticalSection( &heapPtr->critSection );
+ 
+-    TRACE("(%p,%08x,%p): returning %08lx\n", heap, flags, ptr, ret );
++    TRACE("(%p,%08x,%p): returning %08lx\n", heapPtr, flags, ptr, ret );
+     return ret;
+ }
+ 
+@@ -2187,8 +2217,19 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
+  */
+ BOOLEAN WINAPI RtlValidateHeap( HANDLE heap, ULONG flags, LPCVOID ptr )
+ {
+-    HEAP *heapPtr = HEAP_GetPtr( heap );
+-    if (!heapPtr) return FALSE;
++    HEAP *heapPtr;
++
++    if (!(heapPtr = HEAP_GetPtr( heap )))
++        return FALSE;
++
++    flags &= HEAP_NO_SERIALIZE;
++    flags |= heapPtr->flags;
++
++    return HEAP_std_validate( heapPtr, flags, ptr );
++}
++
++BOOLEAN HEAP_std_validate( HEAP *heapPtr, ULONG flags, const void *ptr )
++{
+     return HEAP_IsRealArena( heapPtr, flags, ptr, QUIET );
+ }
+ 
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index 29586539256..92edc48c4de 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -134,6 +134,13 @@ static inline struct ntdll_thread_data *ntdll_get_thread_data(void)
+     return (struct ntdll_thread_data *)&NtCurrentTeb()->GdiTebBatch;
+ }
+ 
++struct tagHEAP;
++void   *HEAP_std_allocate( struct tagHEAP *heap, ULONG flags, SIZE_T size );
++BOOLEAN HEAP_std_free( struct tagHEAP *heap, ULONG flags, void *ptr );
++void   *HEAP_std_reallocate( struct tagHEAP *heap, ULONG flags, void *ptr, SIZE_T size );
++SIZE_T  HEAP_std_get_allocated_size( struct tagHEAP *heap, ULONG flags, const void *ptr );
++BOOLEAN HEAP_std_validate( struct tagHEAP *heap, ULONG flags, const void *ptr );
++
+ #define HASH_STRING_ALGORITHM_DEFAULT  0
+ #define HASH_STRING_ALGORITHM_X65599   1
+ #define HASH_STRING_ALGORITHM_INVALID  0xffffffff
+From 895e56055b0a4bdfc65b4f062bcefb941767d3be Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 28 Aug 2019 22:24:40 +0200
+Subject: [PATCH] ntdll: Add thread destroy notification function.
+
+This will be used in LFH to recycle the thread local data.
+---
+ dlls/ntdll/heap.c       | 4 ++++
+ dlls/ntdll/loader.c     | 1 +
+ dlls/ntdll/ntdll_misc.h | 2 ++
+ dlls/ntdll/thread.c     | 1 +
+ 4 files changed, 8 insertions(+)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index 451ee495c21..867cbf6bfde 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -2423,3 +2423,7 @@ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_
+     FIXME("%p %d %p %ld stub\n", heap, info_class, info, size);
+     return STATUS_SUCCESS;
+ }
++
++void HEAP_notify_thread_destroy( BOOLEAN last )
++{
++}
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index fe9e9fd2315..ab92df952d1 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -3429,6 +3429,7 @@ void WINAPI RtlExitUserProcess( DWORD status )
+     RtlAcquirePebLock();
+     NtTerminateProcess( 0, status );
+     LdrShutdownProcess();
++    HEAP_notify_thread_destroy(TRUE);
+     for (;;) NtTerminateProcess( GetCurrentProcess(), status );
+ }
+ 
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index 92edc48c4de..e5818703234 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -141,6 +141,8 @@ void   *HEAP_std_reallocate( struct tagHEAP *heap, ULONG flags, void *ptr, SIZE_
+ SIZE_T  HEAP_std_get_allocated_size( struct tagHEAP *heap, ULONG flags, const void *ptr );
+ BOOLEAN HEAP_std_validate( struct tagHEAP *heap, ULONG flags, const void *ptr );
+ 
++void HEAP_notify_thread_destroy( BOOLEAN last );
++
+ #define HASH_STRING_ALGORITHM_DEFAULT  0
+ #define HASH_STRING_ALGORITHM_X65599   1
+ #define HASH_STRING_ALGORITHM_INVALID  0xffffffff
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index 2fc240ae296..c6adaa9f914 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -100,6 +100,7 @@ void WINAPI RtlExitUserThread( ULONG status )
+     if (last) RtlExitUserProcess( status );
+     LdrShutdownThread();
+     RtlFreeThreadActivationContextStack();
++    HEAP_notify_thread_destroy(FALSE);
+     /* must be done last, in particular after any heap allocations */
+     addr_wait_free_entry();
+     for (;;) NtTerminateThread( GetCurrentThread(), status );
+From 9900117f53e382bc8bd81ede7b851b9c03a71d66 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 28 Aug 2019 22:24:47 +0200
+Subject: [PATCH] ntdll: Add extended heap type and LFH stubs.
+
+---
+ dlls/ntdll/Makefile.in  |  1 +
+ dlls/ntdll/heap.c       | 68 +++++++++++++++++++++++++++++++++++++----
+ dlls/ntdll/heap_lfh.c   | 55 +++++++++++++++++++++++++++++++++
+ dlls/ntdll/ntdll_misc.h | 12 ++++++++
+ 4 files changed, 130 insertions(+), 6 deletions(-)
+ create mode 100644 dlls/ntdll/heap_lfh.c
+
+diff --git a/dlls/ntdll/Makefile.in b/dlls/ntdll/Makefile.in
+index add758acb20..fc6cf48c5a9 100644
+--- a/dlls/ntdll/Makefile.in
++++ b/dlls/ntdll/Makefile.in
+@@ -18,6 +18,7 @@ C_SRCS = \
+ 	exception.c \
+ 	handletable.c \
+ 	heap.c \
++	heap_lfh.c \
+ 	large_int.c \
+ 	loader.c \
+ 	loadorder.c \
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index 867cbf6bfde..14c93220ebb 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -164,6 +164,7 @@ typedef struct tagHEAP
+     struct list     *freeList;      /* Free lists */
+     struct wine_rb_tree freeTree;   /* Free tree */
+     DWORD            freeMask[HEAP_NB_FREE_LISTS / (8 * sizeof(DWORD))];
++    int              extended_type; /* Extended heap type */
+ } HEAP;
+ 
+ #define HEAP_FREEMASK_BLOCK    (8 * sizeof(DWORD))
+@@ -1635,6 +1636,8 @@ void heap_set_debug_flags( HANDLE handle )
+                                               MAX_FREE_PENDING * sizeof(*heap->pending_free) );
+         heap->pending_pos = 0;
+     }
++
++    HEAP_lfh_set_debug_flags( flags );
+ }
+ 
+ 
+@@ -1675,11 +1675,13 @@ HANDLE WINAPI RtlCreateHeap( ULONG flags, PVOID addr, SIZE_T totalSize, SIZE_T c
+         HEAP *heapPtr = subheap->heap;
+         enter_critical_section( &processHeap->critSection );
+         list_add_head( &processHeap->entry, &heapPtr->entry );
++        heapPtr->extended_type = HEAP_STD;
+         leave_critical_section( &processHeap->critSection );
+     }
+     else if (!addr)
+     {
+         processHeap = subheap->heap;  /* assume the first heap we create is the process main heap */
++        processHeap->extended_type = HEAP_LFH;
+         list_init( &processHeap->entry );
+     }
+ 
+@@ -1774,6 +1779,7 @@ HANDLE WINAPI RtlDestroyHeap( HANDLE heap )
+ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_T size )
+ {
+     HEAP *heapPtr;
++    void *ptr;
+ 
+     if (!(heapPtr = HEAP_GetPtr( heap )))
+         return NULL;
+@@ -1781,7 +1787,15 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+     flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
+     flags |= heapPtr->flags;
+ 
+-    return HEAP_std_allocate( heapPtr, flags, size );
++    switch (heapPtr->extended_type)
++    {
++    case HEAP_LFH:
++        if ((ptr = HEAP_lfh_allocate( heapPtr, flags, size )))
++            return ptr;
++        /* fallthrough */
++    default:
++        return HEAP_std_allocate( heapPtr, flags, size );
++    }
+ }
+ 
+ void * HEAP_std_allocate( HEAP *heapPtr, ULONG flags, SIZE_T size )
+@@ -2225,7 +2263,17 @@ BOOLEAN WINAPI RtlValidateHeap( HANDLE heap, ULONG flags, LPCVOID ptr )
+     flags &= HEAP_NO_SERIALIZE;
+     flags |= heapPtr->flags;
+ 
+-    return HEAP_std_validate( heapPtr, flags, ptr );
++    switch (heapPtr->extended_type)
++    {
++    case HEAP_LFH:
++        if (!HEAP_lfh_validate( heapPtr, flags, ptr ))
++            return FALSE;
++        /* only fallback to std heap if pointer is NULL or didn't validate */
++        if (ptr) return TRUE;
++        /* fallthrough */
++    default:
++        return HEAP_std_validate( heapPtr, flags, ptr );
++    }
+ }
+ 
+ BOOLEAN HEAP_std_validate( HEAP *heapPtr, ULONG flags, const void *ptr )
+@@ -2398,6 +2446,13 @@ ULONG WINAPI RtlGetProcessHeaps( ULONG count, HANDLE *heaps )
+ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_class,
+                                          PVOID info, SIZE_T size_in, PSIZE_T size_out)
+ {
++    HEAP *heapPtr;
++
++    TRACE("%p %d %p %ld\n", heap, info_class, info, size_in);
++
++    if (!(heapPtr = HEAP_GetPtr( heap )))
++        return STATUS_INVALID_PARAMETER;
++
+     switch (info_class)
+     {
+     case HeapCompatibilityInformation:
+@@ -2406,7 +2461,7 @@ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS inf
+         if (size_in < sizeof(ULONG))
+             return STATUS_BUFFER_TOO_SMALL;
+ 
+-        *(ULONG *)info = 0; /* standard heap */
++        *(ULONG *)info = heapPtr->extended_type;
+         return STATUS_SUCCESS;
+ 
+     default:
+@@ -2426,4 +2481,5 @@ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_
+ 
+ void HEAP_notify_thread_destroy( BOOLEAN last )
+ {
++    HEAP_lfh_notify_thread_destroy( last );
+ }
+diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
+new file mode 100644
+index 00000000000..8dc3a391483
+--- /dev/null
++++ b/dlls/ntdll/heap_lfh.c
+@@ -0,0 +1,55 @@
++/*
++ * Wine Low Fragmentation Heap
++ *
++ * Copyright 2020 Remi Bernon for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include "ntdll_misc.h"
++
++void *HEAP_lfh_allocate(struct tagHEAP *std_heap, ULONG flags, SIZE_T size)
++{
++    return NULL;
++}
++
++BOOLEAN HEAP_lfh_free(struct tagHEAP *std_heap, ULONG flags, void *ptr)
++{
++    return FALSE;
++}
++
++void *HEAP_lfh_reallocate(struct tagHEAP *std_heap, ULONG flags, void *ptr, SIZE_T size)
++{
++    return NULL;
++}
++
++SIZE_T HEAP_lfh_get_allocated_size(struct tagHEAP *std_heap, ULONG flags, const void *ptr)
++{
++    return ~(SIZE_T)0;
++}
++
++BOOLEAN HEAP_lfh_validate(struct tagHEAP *std_heap, ULONG flags, const void *ptr)
++{
++    if (ptr) return FALSE;
++    else return TRUE;
++}
++
++void HEAP_lfh_notify_thread_destroy(BOOLEAN last)
++{
++}
++
++void HEAP_lfh_set_debug_flags(ULONG flags)
++{
++}
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index e5818703234..4662257a1ae 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -134,6 +134,10 @@ static inline struct ntdll_thread_data *ntdll_get_thread_data(void)
+     return (struct ntdll_thread_data *)&NtCurrentTeb()->GdiTebBatch;
+ }
+ 
++#define HEAP_STD 0
++#define HEAP_LAL 1
++#define HEAP_LFH 2
++
+ struct tagHEAP;
+ void   *HEAP_std_allocate( struct tagHEAP *heap, ULONG flags, SIZE_T size );
+ BOOLEAN HEAP_std_free( struct tagHEAP *heap, ULONG flags, void *ptr );
+@@ -141,7 +145,15 @@ void   *HEAP_std_reallocate( struct tagHEAP *heap, ULONG flags, void *ptr, SIZE_
+ SIZE_T  HEAP_std_get_allocated_size( struct tagHEAP *heap, ULONG flags, const void *ptr );
+ BOOLEAN HEAP_std_validate( struct tagHEAP *heap, ULONG flags, const void *ptr );
+ 
++void   *HEAP_lfh_allocate( struct tagHEAP *std_heap, ULONG flags, SIZE_T size );
++BOOLEAN HEAP_lfh_free( struct tagHEAP *std_heap, ULONG flags, void *ptr );
++void   *HEAP_lfh_reallocate( struct tagHEAP *std_heap, ULONG flags, void *ptr, SIZE_T size );
++SIZE_T  HEAP_lfh_get_allocated_size( struct tagHEAP *std_heap, ULONG flags, const void *ptr );
++BOOLEAN HEAP_lfh_validate( struct tagHEAP *std_heap, ULONG flags, const void *ptr );
++
+ void HEAP_notify_thread_destroy( BOOLEAN last );
++void HEAP_lfh_notify_thread_destroy( BOOLEAN last );
++void HEAP_lfh_set_debug_flags( ULONG flags );
+ 
+ #define HASH_STRING_ALGORITHM_DEFAULT  0
+ #define HASH_STRING_ALGORITHM_X65599   1
+From 16d2a6c7d571547b36afdf22ccf13303be120235 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 5 May 2020 14:24:35 +0200
+Subject: [PATCH] ntdll: Implement RtlSetHeapInformation for LFH.
+
+---
+ dlls/kernel32/tests/heap.c |  2 --
+ dlls/ntdll/heap.c          | 32 ++++++++++++++++++++++++++++++--
+ 2 files changed, 30 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/kernel32/tests/heap.c b/dlls/kernel32/tests/heap.c
+index a534ad039c8..d80453ad82f 100644
+--- a/dlls/kernel32/tests/heap.c
++++ b/dlls/kernel32/tests/heap.c
+@@ -653,10 +653,8 @@ static void test_HeapCreate(void)
+ 
+         hci = 1;
+         SetLastError(0xdeadbeef);
+-        todo_wine
+         ok(!pHeapSetInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci)),
+            "HeapSetInformation succeeded\n");
+-        todo_wine
+         ok(GetLastError() == ERROR_GEN_FAILURE,
+            "expected ERROR_GEN_FAILURE, got %u\n", GetLastError());
+ 
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index 14c93220ebb..44b36d81bbd 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -2475,8 +2475,36 @@ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS inf
+  */
+ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_class, PVOID info, SIZE_T size)
+ {
+-    FIXME("%p %d %p %ld stub\n", heap, info_class, info, size);
+-    return STATUS_SUCCESS;
++    HEAP *heapPtr;
++
++    TRACE("%p %d %p %ld stub\n", heap, info_class, info, size);
++
++    if (!(heapPtr = HEAP_GetPtr( heap )))
++        return STATUS_INVALID_PARAMETER;
++
++    switch (info_class)
++    {
++    case HeapCompatibilityInformation:
++        if (size < sizeof(ULONG))
++            return STATUS_BUFFER_TOO_SMALL;
++
++        if (heapPtr->extended_type != HEAP_STD)
++            return STATUS_UNSUCCESSFUL;
++
++        if (*(ULONG *)info != HEAP_STD &&
++            *(ULONG *)info != HEAP_LFH)
++        {
++            FIXME("unimplemented HeapCompatibilityInformation %d\n", *(ULONG *)info);
++            return STATUS_SUCCESS;
++        }
++
++        heapPtr->extended_type = *(ULONG *)info;
++        return STATUS_SUCCESS;
++
++    default:
++        FIXME("Unknown heap information class %u\n", info_class);
++        return STATUS_INVALID_INFO_CLASS;
++    }
+ }
+ 
+ void HEAP_notify_thread_destroy( BOOLEAN last )
+From 2eb937526a6d472f7f4262377da4dd1dbc0f49d1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 3 Feb 2020 13:25:59 +0100
+Subject: [PATCH] ntdll: Move undocumented flags to ntdll_misc.h.
+
+---
+ dlls/ntdll/heap.c       | 6 ------
+ dlls/ntdll/ntdll_misc.h | 6 ++++++
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index 44b36d81bbd..67fe7eb4fb8 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -179,12 +179,6 @@ C_ASSERT( HEAP_NB_FREE_LISTS % HEAP_FREEMASK_BLOCK == 0 );
+ #define COMMIT_MASK          0xffff  /* bitmask for commit/decommit granularity */
+ #define MAX_FREE_PENDING     1024    /* max number of free requests to delay */
+ 
+-/* some undocumented flags (names are made up) */
+-#define HEAP_PAGE_ALLOCS      0x01000000
+-#define HEAP_VALIDATE         0x10000000
+-#define HEAP_VALIDATE_ALL     0x20000000
+-#define HEAP_VALIDATE_PARAMS  0x40000000
+-
+ static HEAP *processHeap;  /* main process heap */
+ 
+ static BOOL HEAP_IsRealArena( HEAP *heapPtr, DWORD flags, LPCVOID block, BOOL quiet );
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index 4662257a1ae..ce08d5d6fd0 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -138,6 +138,12 @@ static inline struct ntdll_thread_data *ntdll_get_thread_data(void)
+ #define HEAP_LAL 1
+ #define HEAP_LFH 2
+ 
++/* some undocumented flags (names are made up) */
++#define HEAP_PAGE_ALLOCS      0x01000000
++#define HEAP_VALIDATE         0x10000000
++#define HEAP_VALIDATE_ALL     0x20000000
++#define HEAP_VALIDATE_PARAMS  0x40000000
++
+ struct tagHEAP;
+ void   *HEAP_std_allocate( struct tagHEAP *heap, ULONG flags, SIZE_T size );
+ BOOLEAN HEAP_std_free( struct tagHEAP *heap, ULONG flags, void *ptr );
+From d97aeb54733164ea74b6ceef9463ca9387ac88b5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 28 Aug 2019 22:24:49 +0200
+Subject: [PATCH] ntdll: Implement Low Fragmentation Heap.
+
+This is a high performance multithreaded heap implementation that tries
+to minimize memory fragmentation as well.
+
+It takes inspiration from rpmalloc / tcmalloc and other thread-local
+heap implementations, while avoiding the complexity of a cache.
+
+The low fragmentation part is achieved by using two layers of pools, or
+arenas, classified by block size:
+
+* The first, coarse grained, pools are called "large" arenas, and are
+  allocated directly by mapping 4MiB of virtual memory for each pool,
+  which is then split into blocks of fixed size. The large arena classes
+  are configured to support block sizes in a range from (64KiB - hs) up
+  to (2MiB - hs), increasing by 64KiB steps, where hs is the arena
+  header size.
+
+* The second pool layer, called "small" and "medium" arenas is built on
+  top of the first, using the exact same mechanism (and code). Each pool
+  is allocated by acquiring a block of (64KiB - hs) size from an arena
+  of the first "large" class. The "small" arena classes are configured
+  for block sizes in a range from 32 to 2048 bytes, increasing by 32B
+  steps. The "medium" arena classes are configured for block sizes in a
+  range from 2048 bytes up to ((64KiB - hs) - hs) / 2, increasing by
+  512B steps.
+
+Any memory allocation that is bigger than what "large" arenas can
+provide will be directly mapped from virtual memory.
+
+The multithreaded part is achieved by keeping thread local heap
+structures to hold the currently allocated classified arenas:
+
+* Whenever a thread needs it, a new thread local heap will be acquired
+  from a global orphan list - using an interlocked singly linked list of
+  unused heaps - or allocated from virtual memory. Whenever a thread
+  terminates, it will release its thread local heap to the global orphan
+  list.
+
+* Every alloc is done by using the current thread heap, and by
+  allocating a new block from its arenas. The virtual memory mapping
+  that may eventually be called is already thread safe and does not
+  require additional locking.
+
+* Every free is deferred to the thread that allocated the block, by
+  using an interlocked singly linked list.
+
+* Every time a thread allocates a new block, it will first cleanup its
+  deferred free block list.
+
+The thread local heaps may not be always associated with an live
+thread, so this means that deferred blocks may have to wait for the
+orphan heap to be adopted by a new thread before they are actually
+released.
+---
+ dlls/ntdll/heap_lfh.c          | 1012 +++++++++++++++++++++++++++++++-
+ dlls/ntdll/unix/unix_private.h |    1 +
+ 2 files changed, 1011 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
+index 8dc3a391483..cd9887ee5d8 100644
+--- a/dlls/ntdll/heap_lfh.c
++++ b/dlls/ntdll/heap_lfh.c
+@@ -18,38 +18,1046 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#include "ntstatus.h"
++#define WIN32_NO_STATUS
+ #include "ntdll_misc.h"
++#include "wine/list.h"
++#include "wine/debug.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(heap);
++
++typedef struct LFH_ptr LFH_ptr;
++typedef struct LFH_block LFH_block;
++typedef enum LFH_block_type LFH_block_type;
++typedef struct LFH_arena LFH_arena;
++typedef struct LFH_class LFH_class;
++typedef struct LFH_heap LFH_heap;
++typedef struct LFH_slist LFH_slist;
++
++#define ARENA_HEADER_SIZE (sizeof(LFH_arena))
++
++#define LARGE_ARENA_SIZE 0x400000 /* 4MiB */
++#define LARGE_ARENA_MASK (LARGE_ARENA_SIZE - 1)
++
++#define BLOCK_ARENA_SIZE 0x10000 /* 64kiB */
++#define BLOCK_ARENA_MASK (BLOCK_ARENA_SIZE - 1)
++
++#define SMALL_CLASS_STEP     0x20
++#define SMALL_CLASS_MASK     (SMALL_CLASS_STEP - 1)
++#define SMALL_CLASS_MIN_SIZE SMALL_CLASS_STEP
++#define SMALL_CLASS_MAX_SIZE 0x800
++#define SMALL_CLASS_COUNT    ((SMALL_CLASS_MAX_SIZE - SMALL_CLASS_MIN_SIZE) / SMALL_CLASS_STEP + 1)
++#define SMALL_CLASS_FIRST    0
++#define SMALL_CLASS_LAST     (SMALL_CLASS_FIRST + SMALL_CLASS_COUNT - 1)
++
++#define MEDIUM_CLASS_STEP     (16 * SMALL_CLASS_STEP)
++#define MEDIUM_CLASS_MASK     (MEDIUM_CLASS_STEP - 1)
++#define MEDIUM_CLASS_MIN_SIZE SMALL_CLASS_MAX_SIZE
++#define MEDIUM_CLASS_MAX_SIZE ((BLOCK_ARENA_SIZE - ARENA_HEADER_SIZE - ARENA_HEADER_SIZE) / 2)
++#define MEDIUM_CLASS_COUNT    ((MEDIUM_CLASS_MAX_SIZE - MEDIUM_CLASS_MIN_SIZE + MEDIUM_CLASS_MASK) / MEDIUM_CLASS_STEP + 1)
++#define MEDIUM_CLASS_FIRST    (SMALL_CLASS_LAST + 1)
++#define MEDIUM_CLASS_LAST     (MEDIUM_CLASS_FIRST + MEDIUM_CLASS_COUNT - 1)
++
++#define LARGE_CLASS_STEP      BLOCK_ARENA_SIZE
++#define LARGE_CLASS_MASK      (LARGE_CLASS_STEP - 1)
++#define LARGE_CLASS_MIN_SIZE  (BLOCK_ARENA_SIZE - ARENA_HEADER_SIZE)
++#define LARGE_CLASS_MAX_SIZE  (LARGE_ARENA_SIZE / 2 - ARENA_HEADER_SIZE) /* we need an arena header for every large block */
++#define LARGE_CLASS_COUNT     ((LARGE_CLASS_MAX_SIZE - LARGE_CLASS_MIN_SIZE) / LARGE_CLASS_STEP + 1)
++#define LARGE_CLASS_FIRST     0
++#define LARGE_CLASS_LAST      (LARGE_CLASS_FIRST + LARGE_CLASS_COUNT - 1)
++
++#define TOTAL_BLOCK_CLASS_COUNT (MEDIUM_CLASS_LAST + 1)
++#define TOTAL_LARGE_CLASS_COUNT (LARGE_CLASS_LAST + 1)
++
++struct LFH_slist
++{
++    LFH_slist *next;
++};
++
++static void LFH_slist_push(LFH_slist **list, LFH_slist *entry)
++{
++    /* There will be no ABA issue here, other threads can only replace
++     * list->next with a different entry, or NULL. */
++    entry->next = __atomic_load_n(list, __ATOMIC_RELAXED);
++    while (!__atomic_compare_exchange_n(list, &entry->next, entry, 0, __ATOMIC_RELEASE, __ATOMIC_ACQUIRE));
++}
++
++static LFH_slist *LFH_slist_flush(LFH_slist **list)
++{
++    if (!__atomic_load_n(list, __ATOMIC_RELAXED)) return NULL;
++    return __atomic_exchange_n(list, NULL, __ATOMIC_ACQUIRE);
++}
++
++/* be sure to keep these different from ARENA_INUSE magic */
++enum LFH_block_type
++{
++    LFH_block_type_used = 0xa55a5aa5a55a5aa5ul,
++    LFH_block_type_free = 0xc33c3cc3c33c3cc3ul,
++};
++
++struct DECLSPEC_ALIGN(16) LFH_block
++{
++    union
++    {
++        ssize_t next_free;
++        LFH_slist entry_defer;
++        size_t alloc_size;
++    };
++
++    LFH_block_type type;
++};
++
++C_ASSERT(sizeof(LFH_block) == 0x10);
++C_ASSERT(offsetof(LFH_block, entry_defer) == 0);
++
++struct DECLSPEC_ALIGN(16) LFH_arena
++{
++    ssize_t next_free;
++    LFH_arena *class_entry;
++
++    union
++    {
++        LFH_arena *parent;
++        LFH_class *class;
++    };
++
++    union
++    {
++        size_t huge_size;
++        size_t used_count;
++    };
++};
++
++#ifdef _WIN64
++C_ASSERT(sizeof(LFH_arena) == 0x20);
++#else
++C_ASSERT(sizeof(LFH_arena) == 0x10);
++#endif
++
++struct LFH_class
++{
++    LFH_arena *next;
++    size_t     size;
++};
++
++struct LFH_heap
++{
++    LFH_slist *list_defer;
++
++    LFH_class block_class[TOTAL_BLOCK_CLASS_COUNT];
++    LFH_class large_class[TOTAL_LARGE_CLASS_COUNT];
++
++    SLIST_ENTRY entry_orphan;
++};
++
++C_ASSERT(TOTAL_BLOCK_CLASS_COUNT == 0x7d);
++C_ASSERT(TOTAL_LARGE_CLASS_COUNT == 0x20);
++
++/* arena->class/arena->parent pointer low bits are used to discriminate between the two */
++C_ASSERT(offsetof(LFH_heap, block_class[0]) > 0);
++C_ASSERT(offsetof(LFH_heap, large_class[TOTAL_LARGE_CLASS_COUNT]) < BLOCK_ARENA_SIZE);
++
++/* helpers to retrieve parent arena from a child, or class pointer from a large or block arena */
++#define LFH_parent_from_arena(arena) (((arena)->parent && !((UINT_PTR)(arena)->parent & BLOCK_ARENA_MASK)) \
++                                      ? (arena)->parent : (arena))
++#define LFH_class_from_arena(arena) (((UINT_PTR)LFH_parent_from_arena(arena)->class & BLOCK_ARENA_MASK) \
++                                     ? LFH_parent_from_arena(arena)->class : NULL)
++
++/* helper to retrieve the heap from an arena, using its class pointer */
++#define LFH_heap_from_arena(arena) ((LFH_heap *)((UINT_PTR)LFH_class_from_arena(arena) & ~BLOCK_ARENA_MASK))
++
++/* helpers to retrieve block pointers to the containing block or large (maybe child) arena */
++#define LFH_large_arena_from_block(block) ((LFH_arena *)((UINT_PTR)(block) & ~BLOCK_ARENA_MASK))
++#define LFH_block_arena_from_block(block) (LFH_large_arena_from_block(block) + 1)
++#define LFH_arena_from_block(block) (LFH_block_arena_from_block(block) == ((LFH_arena *)(block)) \
++                                     ? LFH_large_arena_from_block(block) : LFH_block_arena_from_block(block))
++
++/* helpers to translate between data pointer and LFH_block header */
++#define LFH_block_from_ptr(ptr) ((LFH_block *)(ptr) - 1)
++#define LFH_ptr_from_block(block) ((LFH_ptr *)((block) + 1))
++
++static size_t LFH_block_get_class_size(const LFH_block *block)
++{
++    const LFH_arena *arena = LFH_arena_from_block(block);
++    const LFH_class *class = LFH_class_from_arena(arena);
++    return class ? class->size : arena->huge_size;
++}
++
++static size_t LFH_block_get_alloc_size(const LFH_block *block, ULONG flags)
++{
++    return block->alloc_size;
++}
++
++static size_t LFH_get_class_size(ULONG flags, size_t size)
++{
++    size_t extra = sizeof(LFH_block) + ((flags & HEAP_TAIL_CHECKING_ENABLED) ? 16 : 0);
++    if (size + extra < size) return ~(size_t)0;
++    return size + extra;
++}
++
++static void *LFH_memory_allocate(size_t size)
++{
++    void *addr = NULL;
++    SIZE_T alloc_size = size;
++
++    if (NtAllocateVirtualMemory(NtCurrentProcess(), (void **)&addr, 0, &alloc_size,
++                                MEM_RESERVE | MEM_COMMIT | MEM_TOP_DOWN, PAGE_READWRITE))
++        return NULL;
++
++    return addr;
++}
++
++static BOOLEAN LFH_memory_deallocate(void *addr, size_t size)
++{
++    SIZE_T release_size = 0;
++
++    if (NtFreeVirtualMemory(NtCurrentProcess(), &addr, &release_size, MEM_RELEASE))
++        return FALSE;
++
++    return TRUE;
++}
++
++static LFH_block *LFH_arena_get_block(const LFH_arena *arena, size_t offset)
++{
++    return (LFH_block *)((UINT_PTR)arena + offset);
++}
++
++static void LFH_arena_push_block(LFH_arena *arena, LFH_block *block)
++{
++    block->type = LFH_block_type_free;
++    block->next_free = arena->next_free;
++    arena->next_free = (UINT_PTR)block - (UINT_PTR)arena;
++    arena->used_count--;
++}
++
++static LFH_block *LFH_arena_pop_block(LFH_arena *arena)
++{
++    if (arena->next_free > 0)
++    {
++        LFH_block *block = LFH_arena_get_block(arena, arena->next_free);
++        arena->next_free = block->next_free;
++        arena->used_count++;
++        return block;
++    }
++    else
++    {
++        LFH_arena *large_arena = LFH_large_arena_from_block(arena);
++        LFH_class *large_class = LFH_class_from_arena(large_arena);
++        LFH_class *class = LFH_class_from_arena(arena);
++        LFH_block *block = LFH_arena_get_block(arena, -arena->next_free);
++        LFH_arena *child = LFH_large_arena_from_block(block);
++
++        ssize_t extra = (arena == large_arena ? ARENA_HEADER_SIZE : 0);
++        ssize_t limit = (arena == large_arena ? LARGE_ARENA_SIZE : large_class->size);
++
++        if (arena == large_arena && arena != child)
++            child->parent = arena;
++
++        arena->next_free -= class->size + extra;
++        if (-arena->next_free > limit - class->size)
++            arena->next_free = 0;
++
++        arena->used_count++;
++        return block;
++    }
++}
++
++static int LFH_arena_is_empty(LFH_arena *arena)
++{
++    return arena->next_free == 0;
++}
++
++static int LFH_arena_is_used(LFH_arena *arena)
++{
++    return arena->used_count > 0;
++}
++
++static int LFH_class_is_block(LFH_heap *heap, LFH_class *class)
++{
++    return class >= heap->block_class && class < (heap->block_class + TOTAL_BLOCK_CLASS_COUNT);
++}
++
++static void LFH_class_initialize(LFH_heap *heap, LFH_class *class, size_t index)
++{
++    class->next = NULL;
++
++    if (LFH_class_is_block(heap, class))
++    {
++        if (index <= SMALL_CLASS_LAST)
++            class->size = min(SMALL_CLASS_MIN_SIZE + SMALL_CLASS_STEP * (index - SMALL_CLASS_FIRST), SMALL_CLASS_MAX_SIZE);
++        else
++            class->size = min(MEDIUM_CLASS_MIN_SIZE + MEDIUM_CLASS_STEP * (index - MEDIUM_CLASS_FIRST), MEDIUM_CLASS_MAX_SIZE);
++    }
++    else
++    {
++        class->size = min(LARGE_CLASS_MIN_SIZE + LARGE_CLASS_STEP * (index - LARGE_CLASS_FIRST), LARGE_CLASS_MAX_SIZE);
++    }
++}
++
++static LFH_arena *LFH_class_pop_arena(LFH_class *class)
++{
++    LFH_arena *arena = class->next;
++    if (!arena) return NULL;
++    class->next = arena->class_entry;
++    return arena;
++}
++
++static void LFH_class_remove_arena(LFH_class *class, LFH_arena *arena)
++{
++    LFH_arena **next = &class->next;
++    while (*next != arena) next = &(*next)->class_entry;
++    *next = arena->class_entry;
++}
++
++static LFH_arena *LFH_class_peek_arena(LFH_class *class)
++{
++    return class->next;
++}
++
++static void LFH_class_push_arena(LFH_class *class, LFH_arena *arena)
++{
++    arena->class_entry = class->next;
++    class->next = arena;
++}
++
++static LFH_class *LFH_heap_get_class(LFH_heap *heap, size_t size)
++{
++    if (size == 0)
++        return &heap->block_class[0];
++    else if (size <= SMALL_CLASS_MAX_SIZE)
++        return &heap->block_class[SMALL_CLASS_FIRST + (size + SMALL_CLASS_MASK - SMALL_CLASS_MIN_SIZE) / SMALL_CLASS_STEP];
++    else if (size <= MEDIUM_CLASS_MAX_SIZE)
++        return &heap->block_class[MEDIUM_CLASS_FIRST + (size + MEDIUM_CLASS_MASK - MEDIUM_CLASS_MIN_SIZE) / MEDIUM_CLASS_STEP];
++    else if (size <= LARGE_CLASS_MAX_SIZE)
++        return &heap->large_class[LARGE_CLASS_FIRST + (size + LARGE_CLASS_MASK - LARGE_CLASS_MIN_SIZE) / LARGE_CLASS_STEP];
++    else
++        return NULL;
++}
++
++static void LFH_arena_initialize(LFH_heap *heap, LFH_class *class, LFH_arena *arena, size_t huge_size)
++{
++    arena->class = class;
++    arena->next_free = -ARENA_HEADER_SIZE;
++
++    if (class == NULL)
++        arena->huge_size = huge_size;
++    else
++        arena->used_count = 0;
++}
++
++static LFH_arena *LFH_acquire_arena(LFH_heap *heap, LFH_class *class);
++static BOOLEAN LFH_release_arena(LFH_heap *heap, LFH_arena *arena);
++
++static LFH_block *LFH_allocate_block(LFH_heap *heap, LFH_class *class, LFH_arena *arena);
++static BOOLEAN LFH_deallocate_block(LFH_heap *heap, LFH_arena *arena, LFH_block *block);
++
++static BOOLEAN LFH_deallocate_deferred_blocks(LFH_heap *heap)
++{
++    LFH_slist *entry = LFH_slist_flush(&heap->list_defer);
++
++    while (entry)
++    {
++        LFH_block *block = LIST_ENTRY(entry, LFH_block, entry_defer);
++        entry = entry->next;
++
++        if (!LFH_deallocate_block(heap, LFH_arena_from_block(block), block))
++            return FALSE;
++    }
++
++    return TRUE;
++}
++
++static size_t LFH_huge_alloc_size(size_t size)
++{
++    return (ARENA_HEADER_SIZE + size + BLOCK_ARENA_MASK) & ~BLOCK_ARENA_MASK;
++}
++
++static LFH_arena *LFH_allocate_huge_arena(LFH_heap *heap, size_t size)
++{
++    LFH_arena *arena;
++    size_t alloc_size = LFH_huge_alloc_size(size);
++    if (alloc_size < size) return NULL;
++
++    if ((arena = LFH_memory_allocate(alloc_size)))
++        LFH_arena_initialize(heap, NULL, arena, size);
++
++    return arena;
++}
++
++static LFH_arena *LFH_allocate_large_arena(LFH_heap *heap, LFH_class *class)
++{
++    LFH_arena *arena;
++
++    if ((arena = LFH_memory_allocate(LARGE_ARENA_SIZE)))
++    {
++        LFH_arena_initialize(heap, class, arena, 0);
++        LFH_class_push_arena(class, arena);
++    }
++
++    return arena;
++}
++
++static LFH_arena *LFH_allocate_block_arena(LFH_heap *heap, LFH_class *large_class, LFH_class *block_class)
++{
++    LFH_arena *large_arena;
++    LFH_arena *arena = NULL;
++
++    if ((large_arena = LFH_acquire_arena(heap, large_class)))
++    {
++        arena = (LFH_arena *)LFH_allocate_block(heap, large_class, large_arena);
++        LFH_arena_initialize(heap, block_class, arena, 0);
++        LFH_class_push_arena(block_class, arena);
++    }
++
++    return arena;
++}
++
++static LFH_arena *LFH_acquire_arena(LFH_heap *heap, LFH_class *class)
++{
++    LFH_arena *arena;
++
++    if (!(arena = LFH_class_peek_arena(class)))
++    {
++        if (LFH_class_is_block(heap, class))
++            arena = LFH_allocate_block_arena(heap, &heap->large_class[0], class);
++        else
++            arena = LFH_allocate_large_arena(heap, class);
++    }
++
++    return arena;
++}
++
++static BOOLEAN LFH_release_arena(LFH_heap *heap, LFH_arena *arena)
++{
++    LFH_arena *large_arena = LFH_large_arena_from_block(arena);
++    if (arena == large_arena)
++        return LFH_memory_deallocate(arena, LARGE_ARENA_SIZE);
++    else
++        return LFH_deallocate_block(heap, large_arena, (LFH_block *)arena);
++};
++
++static LFH_block *LFH_allocate_block(LFH_heap *heap, LFH_class *class, LFH_arena *arena)
++{
++    LFH_block *block = LFH_arena_pop_block(arena);
++    if (LFH_arena_is_empty(arena))
++        LFH_class_pop_arena(class);
++    return block;
++}
++
++static BOOLEAN LFH_deallocate_block(LFH_heap *heap, LFH_arena *arena, LFH_block *block)
++{
++    LFH_class *class = LFH_class_from_arena(arena);
++
++    arena = LFH_parent_from_arena(arena);
++    if (LFH_arena_is_empty(arena))
++        LFH_class_push_arena(class, arena);
++
++    LFH_arena_push_block(arena, block);
++    if (LFH_arena_is_used(arena))
++        return TRUE;
++
++    LFH_class_remove_arena(class, arena);
++    return LFH_release_arena(heap, arena);
++}
++
++static SLIST_HEADER *LFH_orphan_list(void)
++{
++    static SLIST_HEADER *header;
++    SLIST_HEADER *ptr, *expected = NULL;
++
++    if ((ptr = __atomic_load_n(&header, __ATOMIC_RELAXED)))
++        return ptr;
++
++    if (!(ptr = LFH_memory_allocate(sizeof(*header))))
++        return NULL;
++
++    RtlInitializeSListHead(ptr);
++    if (__atomic_compare_exchange_n(&header, &expected, ptr, 0, __ATOMIC_RELEASE, __ATOMIC_ACQUIRE))
++        return ptr;
++
++    LFH_memory_deallocate(ptr, sizeof(*header));
++    return expected;
++}
++
++static void LFH_heap_initialize(LFH_heap *heap)
++{
++    size_t i;
++
++    for (i = 0; i < TOTAL_LARGE_CLASS_COUNT; ++i)
++        LFH_class_initialize(heap, &heap->large_class[i], i);
++    for (i = 0; i < TOTAL_BLOCK_CLASS_COUNT; ++i)
++        LFH_class_initialize(heap, &heap->block_class[i], i);
++
++    heap->list_defer = NULL;
++}
++
++static void LFH_heap_finalize(LFH_heap *heap)
++{
++    LFH_arena *arena;
++
++    LFH_deallocate_deferred_blocks(heap);
++
++    for (size_t i = 0; i < TOTAL_BLOCK_CLASS_COUNT; ++i)
++    {
++        while ((arena = LFH_class_pop_arena(&heap->block_class[i])))
++        {
++            WARN("block arena %p still has used blocks\n", arena);
++            LFH_release_arena(heap, arena);
++        }
++    }
++
++    for (size_t i = 0; i < TOTAL_LARGE_CLASS_COUNT; ++i)
++    {
++        while ((arena = LFH_class_pop_arena(&heap->large_class[i])))
++        {
++            WARN("large arena %p still has used blocks\n", arena);
++            LFH_memory_deallocate(arena, LARGE_ARENA_SIZE);
++        }
++    }
++}
++
++static LFH_heap *LFH_heap_allocate(void)
++{
++    void *addr;
++    addr = LFH_memory_allocate(sizeof(LFH_heap));
++    if (!addr)
++        return NULL;
++
++    LFH_heap_initialize(addr);
++    return addr;
++}
++
++static void LFH_heap_deallocate(LFH_heap *heap)
++{
++    LFH_heap_finalize(heap);
++    LFH_memory_deallocate(heap, sizeof(*heap));
++}
++
++static LFH_heap *LFH_thread_heap(BOOL create)
++{
++    SLIST_ENTRY *entry;
++
++    LFH_heap *heap = (LFH_heap *)NtCurrentTeb()->Reserved5[2];
++    if (!heap && create)
++    {
++        if ((entry = RtlInterlockedPopEntrySList(LFH_orphan_list())))
++            heap = LIST_ENTRY(entry, LFH_heap, entry_orphan);
++        else
++            heap = LFH_heap_allocate();
++
++        NtCurrentTeb()->Reserved5[2] = heap;
++    }
++
++    return heap;
++}
++
++static void LFH_dump_arena(LFH_heap *heap, LFH_class *class, LFH_arena *arena)
++{
++    LFH_arena *large_arena = LFH_large_arena_from_block(arena);
++    LFH_arena *block_arena = LFH_block_arena_from_block(arena);
++
++    if (arena == block_arena)
++        WARN("    block arena: %p-%p", arena, (void *)((UINT_PTR)large_arena + BLOCK_ARENA_SIZE - 1));
++    else if (arena == large_arena)
++        WARN("    large arena: %p-%p", arena, (void *)((UINT_PTR)large_arena + LARGE_ARENA_SIZE - 1));
++
++    WARN(" heap: %p class: %p parent: %p free: %Id used: %Id\n",
++          LFH_heap_from_arena(arena), LFH_class_from_arena(arena), LFH_parent_from_arena(arena), arena->next_free, arena->used_count);
++}
++
++static void LFH_dump_class(LFH_heap *heap, LFH_class *class)
++{
++    LFH_arena *arena = class->next;
++    if (!arena) return;
++
++    if (LFH_class_is_block(heap, class))
++        WARN("  block class: %p size: %Ix\n", class, class->size);
++    else
++        WARN("  large class: %p size: %Ix\n", class, class->size);
++
++    while (arena)
++    {
++        LFH_dump_arena(heap, class, arena);
++        arena = arena->class_entry;
++    }
++}
++
++static void LFH_dump_heap(LFH_heap *heap)
++{
++    size_t i;
++
++    WARN("heap: %p\n", heap);
++
++    for (i = 0; i < TOTAL_BLOCK_CLASS_COUNT; ++i)
++        LFH_dump_class(heap, &heap->block_class[i]);
++
++    for (i = 0; i < TOTAL_LARGE_CLASS_COUNT; ++i)
++        LFH_dump_class(heap, &heap->large_class[i]);
++}
++
++static BOOLEAN LFH_validate_block(ULONG flags, const LFH_block *block);
++static BOOLEAN LFH_validate_arena(ULONG flags, const LFH_arena *arena);
++static BOOLEAN LFH_validate_heap(ULONG flags, const LFH_heap *heap);
++
++static BOOLEAN LFH_validate_block(ULONG flags, const LFH_block *block)
++{
++    const LFH_arena *arena = LFH_arena_from_block(block);
++    const LFH_arena *large_arena = LFH_large_arena_from_block(block);
++    const LFH_arena *block_arena = LFH_block_arena_from_block(block);
++    const char *err = NULL;
++
++    if (flags & HEAP_VALIDATE)
++        return LFH_validate_arena(flags, arena);
++
++    if (!arena)
++        err = "invalid arena";
++    else if (arena != LFH_large_arena_from_block(arena) &&
++             arena != (LFH_large_arena_from_block(arena) + 1))
++        err = "invalid arena alignment";
++    else if (arena == block_arena)
++    {
++        if ((UINT_PTR)block < (UINT_PTR)block_arena + ARENA_HEADER_SIZE ||
++            ((UINT_PTR)block & (sizeof(*block) - 1)) != 0)
++            err = "invalid block alignment";
++    }
++    else
++    {
++        if (arena != large_arena)
++            err = "large/huge arena mismatch";
++        else if ((UINT_PTR)block != (UINT_PTR)block_arena)
++            err = "invalid block for large/huge arena";
++    }
++
++    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    return err == NULL;
++}
++
++static BOOLEAN LFH_validate_free_block(ULONG flags, const LFH_block *block)
++{
++    const char *err = NULL;
++
++    if (!LFH_validate_block(flags, block))
++        return FALSE;
++    if (block->type != LFH_block_type_free)
++        err = "invalid free block type";
++
++    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    return err == NULL;
++}
++
++static BOOLEAN LFH_validate_defer_block(ULONG flags, const LFH_block *block)
++{
++    const char *err = NULL;
++
++    if (!LFH_validate_block(flags, block))
++        return FALSE;
++    if (block->type != LFH_block_type_free)
++        err = "invalid defer block type";
++    else if (flags & HEAP_FREE_CHECKING_ENABLED)
++    {
++        const unsigned int *data = (const unsigned int *)LFH_ptr_from_block(block);
++        size_t class_size = LFH_block_get_class_size(block);
++        for (size_t i = 0; i < class_size / 4 - (data - (const unsigned int *)block) && !err; ++i)
++            if (data[i] != 0xfeeefeee) err = "invalid free filler";
++    }
++
++    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    return err == NULL;
++}
++
++static BOOLEAN LFH_validate_used_block(ULONG flags, const LFH_block *block)
++{
++    const char *err = NULL;
++
++    if (!LFH_validate_block(flags, block))
++        return FALSE;
++    if (block->type != LFH_block_type_used)
++        err = "invalid used block type";
++    else if (flags & HEAP_TAIL_CHECKING_ENABLED)
++    {
++        const unsigned char *data = (const unsigned char *)LFH_ptr_from_block(block);
++        size_t alloc_size = LFH_block_get_alloc_size(block, flags);
++        size_t class_size = LFH_block_get_class_size(block);
++        for (size_t i = alloc_size; i < class_size - (data - (const unsigned char *)block) && !err; ++i)
++            if (data[i] != 0xab) err = "invalid tail filler";
++    }
++
++    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    return err == NULL;
++}
++
++static BOOLEAN LFH_validate_arena_free_blocks(ULONG flags, const LFH_arena *arena)
++{
++    ssize_t offset = arena->next_free;
++    while (offset > 0)
++    {
++        LFH_block *block = LFH_arena_get_block(arena, offset);
++        if (!LFH_validate_free_block(flags, block))
++            return FALSE;
++        offset = block->next_free;
++    }
++
++    return TRUE;
++}
++
++static BOOLEAN LFH_validate_arena(ULONG flags, const LFH_arena *arena)
++{
++    const char *err = NULL;
++    const LFH_arena *parent;
++
++    if (flags & HEAP_VALIDATE)
++        return LFH_validate_heap(flags, LFH_heap_from_arena(arena));
++
++    if (arena != LFH_large_arena_from_block(arena) &&
++        arena != (LFH_large_arena_from_block(arena) + 1))
++        err = "invalid arena alignment";
++    else if (arena == LFH_block_arena_from_block(arena))
++    {
++        if (!LFH_validate_block(flags, (LFH_block *)arena))
++            err = "invalid block arena";
++        else if (!LFH_validate_arena_free_blocks(flags, arena))
++            err = "invalid block arena free list";
++    }
++    else if (arena == LFH_large_arena_from_block(arena) && !LFH_class_from_arena(arena))
++    {
++        if (arena->huge_size <= LARGE_CLASS_MAX_SIZE)
++            err = "invalid huge arena size";
++    }
++    else if (arena == LFH_large_arena_from_block(arena) &&
++             (parent = LFH_parent_from_arena(arena)) != arena)
++    {
++        if (arena > parent || LFH_large_arena_from_block(parent) != parent)
++            err = "invalid child arena parent";
++    }
++    else
++    {
++        if (!LFH_validate_arena_free_blocks(flags, arena))
++            err = "invalid large arena free list";
++    }
++
++    if (err) WARN("%08x %p: %s\n", flags, arena, err);
++    return err == NULL;
++}
++
++static BOOLEAN LFH_validate_class_arenas(ULONG flags, const LFH_class *class)
++{
++    LFH_arena *arena = class->next;
++    while (arena)
++    {
++        if (!LFH_validate_arena(flags, arena))
++            return FALSE;
++
++        arena = arena->class_entry;
++    }
++
++    return TRUE;
++}
++
++static BOOLEAN LFH_validate_heap_defer_blocks(ULONG flags, const LFH_heap *heap)
++{
++    const LFH_slist *entry = heap->list_defer;
++
++    while (entry)
++    {
++        const LFH_block *block = LIST_ENTRY(entry, LFH_block, entry_defer);
++        if (!LFH_validate_defer_block(flags, block))
++            return FALSE;
++        entry = entry->next;
++    }
++
++    return TRUE;
++}
++
++static BOOLEAN LFH_validate_heap(ULONG flags, const LFH_heap *heap)
++{
++    const char *err = NULL;
++    UINT i;
++
++    flags &= ~HEAP_VALIDATE;
++
++    if (heap != LFH_thread_heap(FALSE))
++        err = "unable to validate foreign heap";
++    else if (!LFH_validate_heap_defer_blocks(flags, heap))
++        err = "invalid heap defer blocks";
++    else
++    {
++        for (i = 0; err == NULL && i < TOTAL_BLOCK_CLASS_COUNT; ++i)
++        {
++            if (!LFH_validate_class_arenas(flags, &heap->block_class[i]))
++                return FALSE;
++        }
++
++        for (i = 0; err == NULL && i < TOTAL_LARGE_CLASS_COUNT; ++i)
++        {
++            if (!LFH_validate_class_arenas(flags, &heap->large_class[i]))
++                return FALSE;
++        }
++    }
++
++    if (err) WARN("%08x %p: %s\n", flags, heap, err);
++    return err == NULL;
++}
++
++static void LFH_block_initialize(LFH_block *block, ULONG flags, size_t old_size, size_t new_size, size_t class_size)
++{
++    char *ptr = (char *)LFH_ptr_from_block(block);
++
++    TRACE("block %p, flags %x, old_size %Ix, new_size %Ix, class_size %Ix, ptr %p\n", block, flags, old_size, new_size, class_size, ptr);
++
++    if ((flags & HEAP_ZERO_MEMORY) && new_size > old_size)
++        memset(ptr + old_size, 0, new_size - old_size);
++    else if ((flags & HEAP_FREE_CHECKING_ENABLED) && new_size > old_size && class_size < BLOCK_ARENA_SIZE)
++        memset(ptr + old_size, 0x55, new_size - old_size);
++
++    if ((flags & HEAP_TAIL_CHECKING_ENABLED))
++        memset(ptr + new_size, 0xab, class_size - new_size - (ptr - (char *)block));
++
++    block->type = LFH_block_type_used;
++    block->alloc_size = new_size;
++}
++
++static LFH_ptr *LFH_allocate(ULONG flags, size_t size)
++{
++    LFH_block *block = NULL;
++    LFH_class *class;
++    LFH_arena *arena;
++    LFH_heap *heap = LFH_thread_heap(TRUE);
++    size_t class_size = LFH_get_class_size(flags, size);
++
++    if (!LFH_deallocate_deferred_blocks(heap))
++        return NULL;
++
++    if (class_size == ~(size_t)0)
++        return NULL;
++
++    if ((class = LFH_heap_get_class(heap, class_size)))
++    {
++        arena = LFH_acquire_arena(heap, class);
++        if (arena) block = LFH_allocate_block(heap, class, arena);
++        if (block) LFH_block_initialize(block, flags, 0, size, LFH_block_get_class_size(block));
++    }
++    else
++    {
++        arena = LFH_allocate_huge_arena(heap, class_size);
++        if (arena) block = LFH_arena_get_block(arena, ARENA_HEADER_SIZE);
++        if (block) LFH_block_initialize(block, flags, 0, size, LFH_block_get_class_size(block));
++    }
++
++    if (!block) return NULL;
++    return LFH_ptr_from_block(block);
++}
++
++static BOOLEAN LFH_free(ULONG flags, LFH_ptr *ptr)
++{
++    LFH_block *block = LFH_block_from_ptr(ptr);
++    LFH_arena *arena = LFH_arena_from_block(block);
++    LFH_heap *heap = LFH_heap_from_arena(arena);
++
++    if (!LFH_class_from_arena(arena))
++        return LFH_memory_deallocate(arena, LFH_block_get_class_size(block));
++
++    if (flags & HEAP_FREE_CHECKING_ENABLED)
++    {
++        unsigned int *data = (unsigned int *)LFH_ptr_from_block(block);
++        size_t class_size = LFH_block_get_class_size(block);
++        for (size_t i = 0; i < class_size / 4 - (data - (const unsigned int *)block); ++i)
++            data[i] = 0xfeeefeee;
++    }
++
++    block->type = LFH_block_type_free;
++
++    if (heap == LFH_thread_heap(FALSE))
++        LFH_deallocate_block(heap, LFH_arena_from_block(block), block);
++    else
++        LFH_slist_push(&heap->list_defer, &block->entry_defer);
++
++    return TRUE;
++}
++
++static LFH_ptr *LFH_reallocate(ULONG flags, LFH_ptr *old_ptr, size_t new_size)
++{
++    LFH_block *block = LFH_block_from_ptr(old_ptr);
++    LFH_arena *arena = LFH_arena_from_block(block);
++    LFH_heap *heap = LFH_heap_from_arena(arena);
++    size_t old_size = LFH_block_get_alloc_size(block, flags);
++    size_t old_class_size = LFH_block_get_class_size(block);
++    size_t new_class_size = LFH_get_class_size(flags, new_size);
++    LFH_class *new_class, *old_class = LFH_class_from_arena(arena);
++    LFH_ptr *new_ptr = NULL;
++
++    if (new_class_size == ~(size_t)0)
++        return NULL;
++
++    if (new_class_size <= old_class_size)
++        goto in_place;
++
++    if ((new_class = LFH_heap_get_class(heap, new_class_size)) && new_class == old_class)
++        goto in_place;
++
++    if (new_class == old_class && LFH_huge_alloc_size(old_class_size) == LFH_huge_alloc_size(new_class_size))
++        goto in_place;
++
++    if (flags & HEAP_REALLOC_IN_PLACE_ONLY)
++        return NULL;
++
++    if (!(new_ptr = LFH_allocate(flags, new_size)))
++        return NULL;
++
++    memcpy(new_ptr, old_ptr, old_size);
++
++    if (LFH_free(flags, old_ptr))
++        return new_ptr;
++
++    LFH_free(flags, new_ptr);
++    return NULL;
++
++in_place:
++    LFH_block_initialize(block, flags, old_size, new_size, old_class_size);
++    return old_ptr;
++}
++
++static size_t LFH_get_allocated_size(ULONG flags, const LFH_ptr *ptr)
++{
++    const LFH_block *block = LFH_block_from_ptr(ptr);
++    return LFH_block_get_alloc_size(block, flags);
++}
++
++static BOOLEAN LFH_validate(ULONG flags, const LFH_ptr *ptr)
++{
++    const LFH_block *block = LFH_block_from_ptr(ptr);
++    const LFH_heap *heap;
++
++    /* clear HEAP_VALIDATE so we only validate block */
++    if (ptr) return LFH_validate_used_block(flags & ~HEAP_VALIDATE, block);
++
++    if (!(heap = LFH_thread_heap(FALSE)))
++        return TRUE;
++
++    return LFH_validate_heap(flags, heap);
++}
++
++static BOOLEAN LFH_try_validate_all(ULONG flags)
++{
++    if (!(flags & HEAP_VALIDATE_ALL))
++        return TRUE;
++
++    if (LFH_validate(flags, NULL))
++        return TRUE;
++
++    LFH_dump_heap(LFH_thread_heap(FALSE));
++    return FALSE;
++}
+ 
+ void *HEAP_lfh_allocate(struct tagHEAP *std_heap, ULONG flags, SIZE_T size)
+ {
++    void *ptr;
++
++    TRACE("%p %08x %lx\n", std_heap, flags, size);
++
++    if (!LFH_try_validate_all(flags))
++        goto error;
++
++    if ((ptr = LFH_allocate(flags, size)))
++        return ptr;
++
++    if (flags & HEAP_GENERATE_EXCEPTIONS) RtlRaiseStatus(STATUS_NO_MEMORY);
++    RtlSetLastWin32ErrorAndNtStatusFromNtStatus(STATUS_NO_MEMORY);
++    return NULL;
++
++error:
++    RtlSetLastWin32ErrorAndNtStatusFromNtStatus(STATUS_INVALID_PARAMETER);
+     return NULL;
+ }
+ 
+ BOOLEAN HEAP_lfh_free(struct tagHEAP *std_heap, ULONG flags, void *ptr)
+ {
++    TRACE("%p %08x %p\n", std_heap, flags, ptr);
++
++    if (!LFH_try_validate_all(flags))
++        goto error;
++
++    if (!LFH_validate(flags, ptr))
++        goto error;
++
++    return LFH_free(flags, ptr);
++
++error:
++    RtlSetLastWin32ErrorAndNtStatusFromNtStatus(STATUS_INVALID_PARAMETER);
+     return FALSE;
+ }
+ 
+ void *HEAP_lfh_reallocate(struct tagHEAP *std_heap, ULONG flags, void *ptr, SIZE_T size)
+ {
++    TRACE("%p %08x %p %lx\n", std_heap, flags, ptr, size);
++
++    if (!LFH_try_validate_all(flags))
++        goto error;
++
++    if (!LFH_validate(flags, ptr))
++        goto error;
++
++    if ((ptr = LFH_reallocate(flags, ptr, size)))
++        return ptr;
++
++    if (flags & HEAP_GENERATE_EXCEPTIONS) RtlRaiseStatus(STATUS_NO_MEMORY);
++    RtlSetLastWin32ErrorAndNtStatusFromNtStatus(STATUS_NO_MEMORY);
++    return NULL;
++
++error:
++    RtlSetLastWin32ErrorAndNtStatusFromNtStatus(STATUS_INVALID_PARAMETER);
+     return NULL;
+ }
+ 
+ SIZE_T HEAP_lfh_get_allocated_size(struct tagHEAP *std_heap, ULONG flags, const void *ptr)
+ {
++    TRACE("%p %08x %p\n", std_heap, flags, ptr);
++
++    if (!LFH_try_validate_all(flags))
++        goto error;
++
++    if (!LFH_validate(flags, ptr))
++        goto error;
++
++    return LFH_get_allocated_size(flags, ptr);
++
++error:
++    RtlSetLastWin32ErrorAndNtStatusFromNtStatus(STATUS_INVALID_PARAMETER);
+     return ~(SIZE_T)0;
+ }
+ 
+ BOOLEAN HEAP_lfh_validate(struct tagHEAP *std_heap, ULONG flags, const void *ptr)
+ {
+-    if (ptr) return FALSE;
+-    else return TRUE;
++    TRACE("%p %08x %p\n", std_heap, flags, ptr);
++
++    if (!LFH_try_validate_all(flags))
++        return FALSE;
++
++    return LFH_validate(flags, ptr);
+ }
+ 
+ void HEAP_lfh_notify_thread_destroy(BOOLEAN last)
+ {
++    SLIST_HEADER *list_orphan = LFH_orphan_list();
++    SLIST_ENTRY *entry_orphan = NULL;
++    LFH_heap *heap;
++
++    if (last)
++    {
++        while ((entry_orphan || (entry_orphan = RtlInterlockedFlushSList(list_orphan))))
++        {
++            LFH_heap *orphan = LIST_ENTRY(entry_orphan, LFH_heap, entry_orphan);
++            entry_orphan = entry_orphan->Next;
++            LFH_heap_deallocate(orphan);
++        }
++    }
++    else if ((heap = LFH_thread_heap(FALSE)) && LFH_validate_heap(0, heap))
++        RtlInterlockedPushEntrySList(list_orphan, &heap->entry_orphan);
+ }
+ 
+ void HEAP_lfh_set_debug_flags(ULONG flags)
+ {
++    LFH_heap *heap = LFH_thread_heap(FALSE);
++    if (!heap) return;
++
++    LFH_deallocate_deferred_blocks(heap);
+ }
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index c7e84ca5854..777132090c8 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -61,6 +61,7 @@ struct ntdll_thread_data
+ #endif
+     HANDLE             tid_alert_event; /* event for thread-id alerts */
+ #endif
++    void              *heap;          /* thread local heap data */
+ };
+ 
+ C_ASSERT( sizeof(struct ntdll_thread_data) <= sizeof(((TEB *)0)->GdiTebBatch) );
+From 9d41c19bf4268446f08c1aca31ee5f937da3b8bc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 5 May 2020 15:00:46 +0200
+Subject: [PATCH] msvcrt: Enable LFH for internal heaps.
+
+---
+ dlls/msvcrt/heap.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dlls/msvcrt/heap.c b/dlls/msvcrt/heap.c
+index 31153fa5b18..ffe34726851 100644
+--- a/dlls/msvcrt/heap.c
++++ b/dlls/msvcrt/heap.c
+@@ -530,7 +530,9 @@ int CDECL _set_sbh_threshold(MSVCRT_size_t threshold)
+ 
+   if(!sb_heap)
+   {
++      ULONG hci = 2;
+       sb_heap = HeapCreate(0, 0, 0);
++      HeapSetInformation(sb_heap, HeapCompatibilityInformation, &hci, sizeof(hci));
+       if(!sb_heap)
+           return 0;
+   }
+@@ -867,7 +869,9 @@ int CDECL MSVCRT_strncpy_s(char *dest, MSVCRT_size_t numberOfElements,
+ 
+ BOOL msvcrt_init_heap(void)
+ {
++    ULONG hci = 2;
+     heap = HeapCreate(0, 0, 0);
++    HeapSetInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci));
+     return heap != NULL;
+ }
+ 
+From 874114f9aceefca70a5863ebbc104227a42c258f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Sun, 18 Oct 2020 15:44:37 +0200
+Subject: [PATCH] ntdll: Disable thread local heap tail checking.
+
+L.A.Noire does ugly things and that breaks its assumptions!?
+---
+ dlls/ntdll/heap_lfh.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
+index cd9887ee5d8..7a03c27c26f 100644
+--- a/dlls/ntdll/heap_lfh.c
++++ b/dlls/ntdll/heap_lfh.c
+@@ -673,7 +673,7 @@ static BOOLEAN LFH_validate_used_block(ULONG flags, const LFH_block *block)
+         return FALSE;
+     if (block->type != LFH_block_type_used)
+         err = "invalid used block type";
+-    else if (flags & HEAP_TAIL_CHECKING_ENABLED)
++    else if (0 && (flags & HEAP_TAIL_CHECKING_ENABLED))
+     {
+         const unsigned char *data = (const unsigned char *)LFH_ptr_from_block(block);
+         size_t alloc_size = LFH_block_get_alloc_size(block, flags);
+From d67b3ebfb1ea06d1f3f1a69a683b3dce664b8524 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 23 Dec 2020 14:44:10 +0100
+Subject: [PATCH] ntdll: Allocate LFH memory bottom-up instead of top-down.
+
+And only enable LFH for process heap after executable has been loaded
+so that it doesn't allocate memory in its load range.
+---
+ dlls/ntdll/heap.c     | 2 +-
+ dlls/ntdll/heap_lfh.c | 2 +-
+ dlls/ntdll/loader.c   | 2 ++
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index 145a42ea040..67fe7eb4fb8 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -1681,7 +1681,7 @@ HANDLE WINAPI RtlCreateHeap( ULONG flags, PVOID addr, SIZE_T totalSize, SIZE_T c
+     else if (!addr)
+     {
+         processHeap = subheap->heap;  /* assume the first heap we create is the process main heap */
+-        processHeap->extended_type = HEAP_LFH;
++        processHeap->extended_type = HEAP_STD;
+         list_init( &processHeap->entry );
+     }
+ 
+diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
+index 7a03c27c26f..07acf9123e0 100644
+--- a/dlls/ntdll/heap_lfh.c
++++ b/dlls/ntdll/heap_lfh.c
+@@ -201,7 +201,7 @@ static void *LFH_memory_allocate(size_t size)
+     SIZE_T alloc_size = size;
+ 
+     if (NtAllocateVirtualMemory(NtCurrentProcess(), (void **)&addr, 0, &alloc_size,
+-                                MEM_RESERVE | MEM_COMMIT | MEM_TOP_DOWN, PAGE_READWRITE))
++                                MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE))
+         return NULL;
+ 
+     return addr;
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index ab92df952d1..7f242d3b17b 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -4213,6 +4213,7 @@ void __wine_process_init(void)
+     TEB *teb = NtCurrentTeb();
+     PEB *peb = teb->Peb;
+     DWORD i;
++    DWORD hci = 2;
+ 
+     peb->LdrData            = &ldr;
+     peb->FastPebLock        = &peb_lock;
+@@ -4310,6 +4310,8 @@ static NTSTATUS process_init(void)
+     }
+ #endif
+ 
++    RtlSetHeapInformation( GetProcessHeap(), HeapCompatibilityInformation, &hci, sizeof(hci) );
++
+     /* the main exe needs to be the first in the load order list */
+     RemoveEntryList( &wm->ldr.InLoadOrderLinks );
+     InsertHeadList( &peb->LdrData->InLoadOrderModuleList, &wm->ldr.InLoadOrderLinks );
+From 64091980541f13e00c68b9dd0917fc1d741c9ca6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 23 Dec 2020 10:31:43 +0100
+Subject: [PATCH] ntdll: Cache one large arena to prevent bad patterns.
+
+When the deferred blocks deallocation free an arena right before the
+new block allocation will need one.
+---
+ dlls/ntdll/heap_lfh.c | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
+index 07acf9123e0..fb4736d11d8 100644
+--- a/dlls/ntdll/heap_lfh.c
++++ b/dlls/ntdll/heap_lfh.c
+@@ -143,6 +143,7 @@ struct LFH_class
+ struct LFH_heap
+ {
+     LFH_slist *list_defer;
++    LFH_arena *cached_large_arena;
+ 
+     LFH_class block_class[TOTAL_BLOCK_CLASS_COUNT];
+     LFH_class large_class[TOTAL_LARGE_CLASS_COUNT];
+@@ -367,6 +368,13 @@ static BOOLEAN LFH_deallocate_deferred_blocks(LFH_heap *heap)
+     return TRUE;
+ }
+ 
++static void LFH_deallocated_cached_arenas(LFH_heap *heap)
++{
++    if (!heap->cached_large_arena) return;
++    LFH_memory_deallocate(heap->cached_large_arena, LARGE_ARENA_SIZE);
++    heap->cached_large_arena = NULL;
++}
++
+ static size_t LFH_huge_alloc_size(size_t size)
+ {
+     return (ARENA_HEADER_SIZE + size + BLOCK_ARENA_MASK) & ~BLOCK_ARENA_MASK;
+@@ -388,8 +396,10 @@ static LFH_arena *LFH_allocate_large_arena(LFH_heap *heap, LFH_class *class)
+ {
+     LFH_arena *arena;
+ 
+-    if ((arena = LFH_memory_allocate(LARGE_ARENA_SIZE)))
++    if ((arena = heap->cached_large_arena) ||
++        (arena = LFH_memory_allocate(LARGE_ARENA_SIZE)))
+     {
++        heap->cached_large_arena = NULL;
+         LFH_arena_initialize(heap, class, arena, 0);
+         LFH_class_push_arena(class, arena);
+     }
+@@ -430,7 +440,12 @@ static LFH_arena *LFH_acquire_arena(LFH_heap *heap, LFH_class *class)
+ static BOOLEAN LFH_release_arena(LFH_heap *heap, LFH_arena *arena)
+ {
+     LFH_arena *large_arena = LFH_large_arena_from_block(arena);
+-    if (arena == large_arena)
++    if (arena == large_arena && !heap->cached_large_arena)
++    {
++        heap->cached_large_arena = arena;
++        return TRUE;
++    }
++    else if (arena == large_arena)
+         return LFH_memory_deallocate(arena, LARGE_ARENA_SIZE);
+     else
+         return LFH_deallocate_block(heap, large_arena, (LFH_block *)arena);
+@@ -489,6 +504,7 @@ static void LFH_heap_initialize(LFH_heap *heap)
+         LFH_class_initialize(heap, &heap->block_class[i], i);
+ 
+     heap->list_defer = NULL;
++    heap->cached_large_arena = NULL;
+ }
+ 
+ static void LFH_heap_finalize(LFH_heap *heap)
+@@ -514,6 +530,8 @@ static void LFH_heap_finalize(LFH_heap *heap)
+             LFH_memory_deallocate(arena, LARGE_ARENA_SIZE);
+         }
+     }
++
++    LFH_deallocated_cached_arenas(heap);
+ }
+ 
+ static LFH_heap *LFH_heap_allocate(void)
+@@ -824,10 +842,10 @@ static LFH_ptr *LFH_allocate(ULONG flags, size_t size)
+     LFH_heap *heap = LFH_thread_heap(TRUE);
+     size_t class_size = LFH_get_class_size(flags, size);
+ 
+-    if (!LFH_deallocate_deferred_blocks(heap))
++    if (class_size == ~(size_t)0)
+         return NULL;
+ 
+-    if (class_size == ~(size_t)0)
++    if (!LFH_deallocate_deferred_blocks(heap))
+         return NULL;
+ 
+     if ((class = LFH_heap_get_class(heap, class_size)))
+@@ -843,6 +861,8 @@ static LFH_ptr *LFH_allocate(ULONG flags, size_t size)
+         if (block) LFH_block_initialize(block, flags, 0, size, LFH_block_get_class_size(block));
+     }
+ 
++    LFH_deallocated_cached_arenas(heap);
++
+     if (!block) return NULL;
+     return LFH_ptr_from_block(block);
+ }
+@@ -1060,4 +1080,5 @@ void HEAP_lfh_set_debug_flags(ULONG flags)
+     if (!heap) return;
+ 
+     LFH_deallocate_deferred_blocks(heap);
++    LFH_deallocated_cached_arenas(heap);
+ }
+From 028176dd80d84baa85973f99f19625ebc8e3b0a9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 23 Dec 2020 10:34:57 +0100
+Subject: [PATCH] ntdll: Use whole orphan list and heap memory pages.
+
+Instead of wasting them, we can prepare more heaps there.
+---
+ dlls/ntdll/heap_lfh.c | 54 ++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 40 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
+index fb4736d11d8..b7bb83257b9 100644
+--- a/dlls/ntdll/heap_lfh.c
++++ b/dlls/ntdll/heap_lfh.c
+@@ -149,11 +149,23 @@ struct LFH_heap
+     LFH_class large_class[TOTAL_LARGE_CLASS_COUNT];
+ 
+     SLIST_ENTRY entry_orphan;
++#ifdef _WIN64
++    void *pad[0xc2];
++#else
++    void *pad[0xc3];
++#endif
+ };
+ 
+ C_ASSERT(TOTAL_BLOCK_CLASS_COUNT == 0x7d);
+ C_ASSERT(TOTAL_LARGE_CLASS_COUNT == 0x20);
+ 
++/* make sure this aligns to power of two so we can mask class pointers in LFH_heap_from_arena */
++#ifdef _WIN64
++C_ASSERT(sizeof(LFH_heap) == 0x1000);
++#else
++C_ASSERT(sizeof(LFH_heap) == 0x800);
++#endif
++
+ /* arena->class/arena->parent pointer low bits are used to discriminate between the two */
+ C_ASSERT(offsetof(LFH_heap, block_class[0]) > 0);
+ C_ASSERT(offsetof(LFH_heap, large_class[TOTAL_LARGE_CLASS_COUNT]) < BLOCK_ARENA_SIZE);
+@@ -165,7 +177,7 @@ C_ASSERT(offsetof(LFH_heap, large_class[TOTAL_LARGE_CLASS_COUNT]) < BLOCK_ARENA_
+                                      ? LFH_parent_from_arena(arena)->class : NULL)
+ 
+ /* helper to retrieve the heap from an arena, using its class pointer */
+-#define LFH_heap_from_arena(arena) ((LFH_heap *)((UINT_PTR)LFH_class_from_arena(arena) & ~BLOCK_ARENA_MASK))
++#define LFH_heap_from_arena(arena) ((LFH_heap *)((UINT_PTR)LFH_class_from_arena(arena) & ~(sizeof(LFH_heap) - 1)))
+ 
+ /* helpers to retrieve block pointers to the containing block or large (maybe child) arena */
+ #define LFH_large_arena_from_block(block) ((LFH_arena *)((UINT_PTR)(block) & ~BLOCK_ARENA_MASK))
+@@ -475,22 +487,33 @@ static BOOLEAN LFH_deallocate_block(LFH_heap *heap, LFH_arena *arena, LFH_block
+     return LFH_release_arena(heap, arena);
+ }
+ 
++static void LFH_heap_initialize(LFH_heap *heap);
++
+ static SLIST_HEADER *LFH_orphan_list(void)
+ {
+     static SLIST_HEADER *header;
+     SLIST_HEADER *ptr, *expected = NULL;
++    LFH_heap *tmp;
++
++    C_ASSERT(sizeof(LFH_heap) >= sizeof(SLIST_HEADER));
+ 
+     if ((ptr = __atomic_load_n(&header, __ATOMIC_RELAXED)))
+         return ptr;
+ 
+-    if (!(ptr = LFH_memory_allocate(sizeof(*header))))
++    if (!(ptr = LFH_memory_allocate(BLOCK_ARENA_SIZE)))
+         return NULL;
+ 
+     RtlInitializeSListHead(ptr);
++    for (tmp = (LFH_heap *)ptr + 1; tmp < (LFH_heap *)ptr + BLOCK_ARENA_SIZE / sizeof(*tmp); tmp++)
++    {
++        LFH_heap_initialize(tmp);
++        RtlInterlockedPushEntrySList(ptr, &tmp->entry_orphan);
++    }
++
+     if (__atomic_compare_exchange_n(&header, &expected, ptr, 0, __ATOMIC_RELEASE, __ATOMIC_ACQUIRE))
+         return ptr;
+ 
+-    LFH_memory_deallocate(ptr, sizeof(*header));
++    LFH_memory_deallocate(ptr, BLOCK_ARENA_SIZE);
+     return expected;
+ }
+ 
+@@ -536,19 +559,21 @@ static void LFH_heap_finalize(LFH_heap *heap)
+ 
+ static LFH_heap *LFH_heap_allocate(void)
+ {
+-    void *addr;
+-    addr = LFH_memory_allocate(sizeof(LFH_heap));
+-    if (!addr)
++    SLIST_HEADER *list_orphan = LFH_orphan_list();
++    LFH_heap *heap, *tmp;
++
++    heap = LFH_memory_allocate(BLOCK_ARENA_SIZE);
++    if (!heap)
+         return NULL;
+ 
+-    LFH_heap_initialize(addr);
+-    return addr;
+-}
++    for (tmp = heap + 1; tmp < heap + BLOCK_ARENA_SIZE / sizeof(*tmp); tmp++)
++    {
++        LFH_heap_initialize(tmp);
++        RtlInterlockedPushEntrySList(list_orphan, &tmp->entry_orphan);
++    }
+ 
+-static void LFH_heap_deallocate(LFH_heap *heap)
+-{
+-    LFH_heap_finalize(heap);
+-    LFH_memory_deallocate(heap, sizeof(*heap));
++    LFH_heap_initialize(heap);
++    return heap;
+ }
+ 
+ static LFH_heap *LFH_thread_heap(BOOL create)
+@@ -1067,8 +1092,9 @@ void HEAP_lfh_notify_thread_destroy(BOOLEAN last)
+         {
+             LFH_heap *orphan = LIST_ENTRY(entry_orphan, LFH_heap, entry_orphan);
+             entry_orphan = entry_orphan->Next;
+-            LFH_heap_deallocate(orphan);
++            LFH_heap_finalize(orphan);
+         }
++        LFH_memory_deallocate(list_orphan, BLOCK_ARENA_SIZE);
+     }
+     else if ((heap = LFH_thread_heap(FALSE)) && LFH_validate_heap(0, heap))
+         RtlInterlockedPushEntrySList(list_orphan, &heap->entry_orphan);
+From 59d561c09c75f600677b33faf47911a8a052406b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 17 Dec 2020 20:24:12 +0100
+Subject: [PATCH] server: Introduce new set_thread_priority helper.
+
+For thread priority support.
+---
+ server/thread.c | 41 ++++++++++++++++++++++++++++-------------
+ server/thread.h |  1 +
+ 2 files changed, 29 insertions(+), 13 deletions(-)
+
+diff --git a/server/thread.c b/server/thread.c
+index d38136c05c2..906c8801917 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -834,28 +834,39 @@ static int get_unix_niceness( int base_priority, int limit )
+ #define THREAD_PRIORITY_REALTIME_HIGHEST 6
+ #define THREAD_PRIORITY_REALTIME_LOWEST -7
+ 
++int set_thread_priority( struct thread *thread, int priority_class, int priority )
++{
++    int max = THREAD_PRIORITY_HIGHEST;
++    int min = THREAD_PRIORITY_LOWEST;
++    if (priority_class == PROCESS_PRIOCLASS_REALTIME)
++    {
++        max = THREAD_PRIORITY_REALTIME_HIGHEST;
++        min = THREAD_PRIORITY_REALTIME_LOWEST;
++    }
++    if ((priority < min || priority > max) &&
++        priority != THREAD_PRIORITY_IDLE &&
++        priority != THREAD_PRIORITY_TIME_CRITICAL)
++    {
++        errno = EINVAL;
++        return -1;
++    }
++
++    if (thread->process->priority == priority_class &&
++        thread->priority == priority)
++        return 0;
++    thread->priority = priority;
++
++    return 0;
++}
++
+ /* set all information about a thread */
+ static void set_thread_info( struct thread *thread,
+                              const struct set_thread_info_request *req )
+ {
+     if (req->mask & SET_THREAD_INFO_PRIORITY)
+     {
+-        int max = THREAD_PRIORITY_HIGHEST;
+-        int min = THREAD_PRIORITY_LOWEST;
+-        if (thread->process->priority == PROCESS_PRIOCLASS_REALTIME)
+-        {
+-            max = THREAD_PRIORITY_REALTIME_HIGHEST;
+-            min = THREAD_PRIORITY_REALTIME_LOWEST;
+-        }
+-        if ((req->priority >= min && req->priority <= max) ||
+-            req->priority == THREAD_PRIORITY_IDLE ||
+-            req->priority == THREAD_PRIORITY_TIME_CRITICAL)
+-        {
+-            thread->priority = req->priority;
+-            set_scheduler_priority( thread );
+-        }
+-        else
+-            set_error( STATUS_INVALID_PARAMETER );
++        if (set_thread_priority( thread, thread->process->priority, req->priority ))
++            file_set_error();
+     }
+     if (req->mask & SET_THREAD_INFO_AFFINITY)
+     {
+@@ -1557,6 +1571,7 @@ DECL_HANDLER(init_thread)
+             process->unix_pid = -1;  /* can happen with linuxthreads */
+         init_thread_context( current );
+         generate_debug_event( current, CREATE_THREAD_DEBUG_EVENT, &req->entry );
++        set_thread_priority( current, current->process->priority, current->priority );
+         if (!process->cpu_override.cpu_count)
+             set_thread_affinity( current, current->affinity );
+     }
+diff --git a/server/thread.h b/server/thread.h
+index 6c801ad6421..d8c0dad368e 100644
+--- a/server/thread.h
++++ b/server/thread.h
+@@ -125,6 +125,7 @@ extern void thread_cancel_apc( struct thread *thread, struct object *owner, enum
+ extern int thread_add_inflight_fd( struct thread *thread, int client, int server );
+ extern int thread_get_inflight_fd( struct thread *thread, int client );
+ extern struct token *thread_get_impersonation_token( struct thread *thread );
++extern int set_thread_priority( struct thread *thread, int priority_class, int priority );
+ extern int set_thread_affinity( struct thread *thread, affinity_t affinity );
+ extern int is_cpu_supported( enum cpu_type cpu );
+ extern unsigned int get_supported_cpu_mask(void);
+From 78c49187ea86b6d867535c171537e0068485402e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 17 Dec 2020 20:27:10 +0100
+Subject: [PATCH] server: Update individual thread priority when process
+ priority changes.
+
+For thread priority support.
+---
+ server/process.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/server/process.c b/server/process.c
+index d1f9ab764f7..7de4e5f44ea 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -1505,6 +1505,22 @@ DECL_HANDLER(get_process_vm_counters)
+     release_object( process );
+ }
+ 
++static void set_process_priority( struct process *process, int priority )
++{
++    struct thread *thread;
++
++    if (!process->running_threads)
++    {
++        set_error( STATUS_PROCESS_IS_TERMINATING );
++        return;
++    }
++
++    LIST_FOR_EACH_ENTRY( thread, &process->thread_list, struct thread, proc_entry )
++        set_thread_priority( thread, priority, thread->priority );
++
++    process->priority = priority;
++}
++
+ static void set_process_affinity( struct process *process, affinity_t affinity )
+ {
+     struct thread *thread;
+@@ -1530,7 +1546,7 @@ DECL_HANDLER(set_process_info)
+ 
+     if ((process = get_process_from_handle( req->handle, PROCESS_SET_INFORMATION )))
+     {
+-        if (req->mask & SET_PROCESS_INFO_PRIORITY) process->priority = req->priority;
++        if (req->mask & SET_PROCESS_INFO_PRIORITY) set_process_priority( process, req->priority );
+         if (req->mask & SET_PROCESS_INFO_AFFINITY) set_process_affinity( process, req->affinity );
+         release_object( process );
+     }
+From ecfae3ae8a4d576d5977b761255d7ab50b4f6161 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 18 Dec 2020 14:43:00 +0100
+Subject: [PATCH] server: Delay set_thread_priority until unix_tid is known.
+
+For thread priority support.
+---
+ server/thread.c | 26 ++++++++++++++++++++++++++
+ server/thread.h |  1 +
+ 2 files changed, 27 insertions(+)
+
+diff --git a/server/thread.c b/server/thread.c
+index 906c8801917..c34dd94ac1e 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -247,6 +247,7 @@ static inline void init_thread_structure( struct thread *thread )
+     thread->state           = RUNNING;
+     thread->exit_code       = 0;
+     thread->priority        = 0;
++    thread->delay_priority  = NULL;
+     thread->suspend         = 0;
+     thread->dbg_hidden      = 0;
+     thread->desktop_users   = 0;
+@@ -438,6 +439,9 @@ static void cleanup_thread( struct thread *thread )
+ {
+     int i;
+ 
++    if (thread->delay_priority) remove_timeout_user( thread->delay_priority );
++    thread->delay_priority = NULL;
++
+     if (thread->context)
+     {
+         thread->context->status = STATUS_ACCESS_DENIED;
+@@ -678,6 +682,27 @@ affinity_t get_thread_affinity( struct thread *thread )
+ #define THREAD_PRIORITY_REALTIME_HIGHEST 6
+ #define THREAD_PRIORITY_REALTIME_LOWEST -7
+ 
++static void apply_thread_priority( struct thread *thread, int priority_class, int priority, int delayed );
++
++static void delayed_set_thread_priority( void *private )
++{
++    struct thread *thread = private;
++    int priority_class = thread->process->priority, priority = thread->priority;
++    apply_thread_priority( thread, priority_class, priority, TRUE );
++}
++
++static void apply_thread_priority( struct thread *thread, int priority_class, int priority, int delayed )
++{
++    if (!delayed && thread->delay_priority) remove_timeout_user( thread->delay_priority );
++    thread->delay_priority = NULL;
++
++    if (thread->unix_tid == -1)
++    {
++        thread->delay_priority = add_timeout_user( -TICKS_PER_SEC, delayed_set_thread_priority, thread );
++        return;
++    }
++}
++
+ int set_thread_priority( struct thread *thread, int priority_class, int priority )
+ {
+     int max = THREAD_PRIORITY_HIGHEST;
+@@ -700,6 +725,7 @@ int set_thread_priority( struct thread *thread, int priority_class, int priority
+         return 0;
+     thread->priority = priority;
+ 
++    apply_thread_priority( thread, priority_class, priority, FALSE );
+     return 0;
+ }
+ 
+diff --git a/server/thread.h b/server/thread.h
+index d8c0dad368e..2ca9b6a61dc 100644
+--- a/server/thread.h
++++ b/server/thread.h
+@@ -85,6 +85,7 @@ struct thread
+     client_ptr_t           entry_point;   /* entry point (in client address space) */
+     affinity_t             affinity;      /* affinity mask */
+     int                    priority;      /* priority level */
++    struct timeout_user   *delay_priority;/* delayed set_thread_priority */
+     int                    suspend;       /* suspend count */
+     int                    dbg_hidden;    /* hidden from debugger */
+     obj_handle_t           desktop;       /* desktop handle */
+From 1fd9974805ac638c301e6a9f7941100e05e7ad47 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 17 Dec 2020 20:48:54 +0100
+Subject: [PATCH] ntdll: Set RLIMIT_NICE to its hard limit and inform the
+ server.
+
+For thread priority support.
+---
+ dlls/ntdll/unix/loader.c       |  3 +++
+ dlls/ntdll/unix/server.c       | 14 ++++++++++++++
+ include/wine/server_protocol.h |  6 ++++--
+ server/process.h               |  1 +
+ server/protocol.def            |  1 +
+ server/request.h               | 15 ++++++++-------
+ server/thread.c                |  7 +++++++
+ server/trace.c                 |  1 +
+ 8 files changed, 39 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 83044462e0a..013e0326563 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1837,6 +1837,9 @@ void __wine_main( int argc, char *argv[], char *envp[] )
+ #ifdef RLIMIT_AS
+     set_max_limit( RLIMIT_AS );
+ #endif
++#ifdef RLIMIT_NICE
++    set_max_limit( RLIMIT_NICE );
++#endif
+ 
+     virtual_init();
+ 
+diff --git a/dlls/ntdll/unix/server.c b/dlls/ntdll/unix/server.c
+index 7b0c7c32f58..903536f85c9 100644
+--- a/dlls/ntdll/unix/server.c
++++ b/dlls/ntdll/unix/server.c
+@@ -58,6 +58,9 @@
+ #ifdef HAVE_SYS_PRCTL_H
+ # include <sys/prctl.h>
+ #endif
++#ifdef HAVE_SYS_RESOURCE_H
++# include <sys/resource.h>
++#endif
+ #ifdef HAVE_SYS_STAT_H
+ # include <sys/stat.h>
+ #endif
+@@ -1515,6 +1518,8 @@ size_t server_init_thread( void *entry_point, BOOL *suspend )
+     struct sigaction sig_act;
+     stack_t ss;
+     size_t info_size;
++    struct rlimit rlimit;
++    int nice_limit = 0;
+ 
+     /* ignore SIGPIPE so that we get an EPIPE error instead  */
+     sig_act.sa_handler = SIG_IGN;
+@@ -1535,10 +1540,19 @@ size_t server_init_thread( void *entry_point, BOOL *suspend )
+     ntdll_get_thread_data()->reply_fd = reply_pipe[0];
+     close( reply_pipe[1] );
+ 
++#ifdef RLIMIT_NICE
++    if (!getrlimit( RLIMIT_NICE, &rlimit ))
++    {
++        if (rlimit.rlim_cur <= 40) nice_limit = 20 - rlimit.rlim_cur;
++        else if (rlimit.rlim_cur == -1 /* RLIMIT_INFINITY */) nice_limit = -20;
++    }
++#endif
++
+     SERVER_START_REQ( init_thread )
+     {
+         req->unix_pid    = getpid();
+         req->unix_tid    = get_unix_tid();
++        req->nice_limit  = nice_limit;
+         req->teb         = wine_server_client_ptr( NtCurrentTeb() );
+         req->entry       = wine_server_client_ptr( entry_point );
+         req->reply_fd    = reply_pipe[1];
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index a34b22f7298..72636b2ce9b 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -945,13 +945,15 @@ struct init_thread_request
+     struct request_header __header;
+     int          unix_pid;
+     int          unix_tid;
++    int          nice_limit;
+     int          debug_level;
++    char __pad_28[4];
+     client_ptr_t teb;
+     client_ptr_t entry;
+     int          reply_fd;
+     int          wait_fd;
+     client_cpu_t cpu;
+-    char __pad_52[4];
++    char __pad_60[4];
+ };
+ struct init_thread_reply
+ {
+@@ -6765,7 +6767,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 662
++#define SERVER_PROTOCOL_VERSION 663
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/process.h b/server/process.h
+index d1b8b3fc222..d98533bb0ec 100644
+--- a/server/process.h
++++ b/server/process.h
+@@ -65,6 +65,7 @@ struct process
+     struct timeout_user *sigkill_timeout; /* timeout for final SIGKILL */
+     enum cpu_type        cpu;             /* client CPU type */
+     int                  unix_pid;        /* Unix pid for final SIGKILL */
++    int                  nice_limit;      /* RLIMIT_NICE of the process */
+     int                  exit_code;       /* process exit code */
+     int                  running_threads; /* number of threads running in this process */
+     timeout_t            start_time;      /* absolute time at process start */
+diff --git a/server/protocol.def b/server/protocol.def
+index 90a384112f5..f7628301553 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -921,6 +921,7 @@ struct thread_shared_memory
+ @REQ(init_thread)
+     int          unix_pid;     /* Unix pid of new thread */
+     int          unix_tid;     /* Unix tid of new thread */
++    int          nice_limit;   /* RLIMIT_NICE of new thread */
+     int          debug_level;  /* new debug level */
+     client_ptr_t teb;          /* TEB of new thread (in thread address space) */
+     client_ptr_t entry;        /* entry point or PEB if initial thread (in thread address space) */
+diff --git a/server/request.h b/server/request.h
+index 6e979d0ea67..38741ca778e 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -798,13 +798,14 @@ C_ASSERT( FIELD_OFFSET(struct init_process_done_reply, suspend) == 8 );
+ C_ASSERT( sizeof(struct init_process_done_reply) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct init_thread_request, unix_pid) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct init_thread_request, unix_tid) == 16 );
+-C_ASSERT( FIELD_OFFSET(struct init_thread_request, debug_level) == 20 );
+-C_ASSERT( FIELD_OFFSET(struct init_thread_request, teb) == 24 );
+-C_ASSERT( FIELD_OFFSET(struct init_thread_request, entry) == 32 );
+-C_ASSERT( FIELD_OFFSET(struct init_thread_request, reply_fd) == 40 );
+-C_ASSERT( FIELD_OFFSET(struct init_thread_request, wait_fd) == 44 );
+-C_ASSERT( FIELD_OFFSET(struct init_thread_request, cpu) == 48 );
+-C_ASSERT( sizeof(struct init_thread_request) == 56 );
++C_ASSERT( FIELD_OFFSET(struct init_thread_request, nice_limit) == 20 );
++C_ASSERT( FIELD_OFFSET(struct init_thread_request, debug_level) == 24 );
++C_ASSERT( FIELD_OFFSET(struct init_thread_request, teb) == 32 );
++C_ASSERT( FIELD_OFFSET(struct init_thread_request, entry) == 40 );
++C_ASSERT( FIELD_OFFSET(struct init_thread_request, reply_fd) == 48 );
++C_ASSERT( FIELD_OFFSET(struct init_thread_request, wait_fd) == 52 );
++C_ASSERT( FIELD_OFFSET(struct init_thread_request, cpu) == 56 );
++C_ASSERT( sizeof(struct init_thread_request) == 64 );
+ C_ASSERT( FIELD_OFFSET(struct init_thread_reply, pid) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct init_thread_reply, tid) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct init_thread_reply, server_start) == 16 );
+diff --git a/server/thread.c b/server/thread.c
+index c34dd94ac1e..25a3512f4a5 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -38,6 +38,12 @@
+ #ifdef HAVE_SCHED_H
+ #include <sched.h>
+ #endif
++#ifdef HAVE_SYS_TIME_H
++#include <sys/time.h>
++#endif
++#ifdef HAVE_SYS_RESOURCE_H
++#include <sys/resource.h>
++#endif
+ 
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
+@@ -1580,6 +1586,7 @@ DECL_HANDLER(init_thread)
+         process->unix_pid = current->unix_pid;
+         process->peb      = req->entry;
+         process->cpu      = req->cpu;
++        process->nice_limit = req->nice_limit;
+         reply->info_size  = init_process( current );
+         if (!process->parent_id)
+             process->affinity = current->affinity = get_thread_affinity( current );
+diff --git a/server/trace.c b/server/trace.c
+index 4bf86fcce35..6e2840f62e5 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -1399,6 +1399,7 @@ static void dump_init_thread_request( const struct init_thread_request *req )
+ {
+     fprintf( stderr, " unix_pid=%d", req->unix_pid );
+     fprintf( stderr, ", unix_tid=%d", req->unix_tid );
++    fprintf( stderr, ", nice_limit=%d", req->nice_limit );
+     fprintf( stderr, ", debug_level=%d", req->debug_level );
+     dump_uint64( ", teb=", &req->teb );
+     dump_uint64( ", entry=", &req->entry );
+From 7262a63758cfe431eae23fc1fa0b92f0c6072cd7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 18 Dec 2020 12:13:19 +0100
+Subject: [PATCH] server: Use setpriority to update thread niceness when safe.
+
+For thread priority support.
+---
+ configure           | 35 ++++++++++++++++++++++++++++++++
+ configure.ac        | 10 +++++++++
+ include/config.h.in |  3 +++
+ server/main.c       |  1 +
+ server/object.h     |  4 ++++
+ server/thread.c     | 49 +++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 102 insertions(+)
+
+diff --git a/configure b/configure
+index 54dfbca334a..ecb69507c6d 100755
+--- a/configure
++++ b/configure
+@@ -18912,6 +18912,41 @@ $as_echo "#define HAVE_SCHED_SETAFFINITY 1" >>confdefs.h
+ 
+ fi
+ 
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for setpriority" >&5
++$as_echo_n "checking for setpriority... " >&6; }
++if ${wine_cv_have_setpriority+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#define _GNU_SOURCE
++#include <sys/resource.h>
++#include <sys/time.h>
++int
++main ()
++{
++setpriority(0, 0, 0);
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_c_try_link "$LINENO"; then :
++  wine_cv_have_setpriority=yes
++else
++  wine_cv_have_setpriority=no
++fi
++rm -f core conftest.err conftest.$ac_objext \
++    conftest$ac_exeext conftest.$ac_ext
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wine_cv_have_setpriority" >&5
++$as_echo "$wine_cv_have_setpriority" >&6; }
++if test "$wine_cv_have_setpriority" = "yes"
++then
++
++$as_echo "#define HAVE_SETPRIORITY 1" >>confdefs.h
++
++fi
++
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for fallocate" >&5
+ $as_echo_n "checking for fallocate... " >&6; }
+ if ${wine_cv_have_fallocate+:} false; then :
+diff --git a/configure.ac b/configure.ac
+index 9d491d054b4..67a4fe4f26e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2347,6 +2347,16 @@ then
+   AC_DEFINE(HAVE_SCHED_SETAFFINITY, 1, [Define to 1 if you have the `sched_setaffinity' function.])
+ fi
+ 
++AC_CACHE_CHECK([for setpriority],wine_cv_have_setpriority,
++                AC_LINK_IFELSE([AC_LANG_PROGRAM(
++[[#define _GNU_SOURCE
++#include <sys/resource.h>
++#include <sys/time.h>]], [[setpriority(0, 0, 0);]])],[wine_cv_have_setpriority=yes],[wine_cv_have_setpriority=no]))
++if test "$wine_cv_have_setpriority" = "yes"
++then
++  AC_DEFINE(HAVE_SETPRIORITY, 1, [Define to 1 if you have the `setpriority' function.])
++fi
++
+ AC_CACHE_CHECK([for fallocate],wine_cv_have_fallocate,
+                 AC_LINK_IFELSE([AC_LANG_PROGRAM(
+ [[#define _GNU_SOURCE
+diff --git a/include/config.h.in b/include/config.h.in
+index 89709dc6283..43534230588 100644
+--- a/include/config.h.in
++++ b/include/config.h.in
+@@ -813,6 +813,9 @@
+ /* Define to 1 if you have the `select' function. */
+ #undef HAVE_SELECT
+ 
++/* Define to 1 if you have the `setpriority' function. */
++#undef HAVE_SETPRIORITY
++
+ /* Define to 1 if you have the `setproctitle' function. */
+ #undef HAVE_SETPROCTITLE
+ 
+diff --git a/server/main.c b/server/main.c
+index 592c76b4b8a..94713e58539 100644
+--- a/server/main.c
++++ b/server/main.c
+@@ -155,6 +155,7 @@ int main( int argc, char *argv[] )
+     init_scheduler();
+     init_signals();
+     init_directories( load_intl_file() );
++    init_threading();
+     init_registry();
+     init_types();
+     main_loop();
+diff --git a/server/object.h b/server/object.h
+index 5b70b9a0338..791f57b117b 100644
+--- a/server/object.h
++++ b/server/object.h
+@@ -245,6 +245,10 @@ extern struct object_type *get_object_type( const struct unicode_str *name );
+ extern int directory_link_name( struct object *obj, struct object_name *name, struct object *parent );
+ extern void init_directories(void);
+ 
++/* thread functions */
++
++extern void init_threading(void);
++
+ /* symbolic link functions */
+ 
+ extern struct object *create_obj_symlink( struct object *root, const struct unicode_str *name,
+diff --git a/server/thread.c b/server/thread.c
+index 25a3512f4a5..bc184eaa3e6 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -224,6 +224,23 @@ static const struct fd_ops thread_fd_ops =
+ };
+ 
+ static struct list thread_list = LIST_INIT(thread_list);
++static int nice_limit;
++
++void init_threading(void)
++{
++#ifdef RLIMIT_NICE
++    struct rlimit rlimit;
++    if (!getrlimit( RLIMIT_NICE, &rlimit ))
++    {
++        rlimit.rlim_cur = rlimit.rlim_max;
++        setrlimit( RLIMIT_NICE, &rlimit );
++        if (rlimit.rlim_max <= 40) nice_limit = 20 - rlimit.rlim_max;
++        else if (rlimit.rlim_max == -1) nice_limit = -20;
++        if (nice_limit >= 0) fprintf(stderr, "wine: RLIMIT_NICE is <= 20, unable to use setpriority safely\n");
++    }
++#endif
++    if (nice_limit < 0) fprintf(stderr, "wine: Using setpriority to control niceness in the [%d,%d] range\n", nice_limit, -nice_limit );
++}
+ 
+ /* initialize the structure for a newly allocated thread */
+ static inline void init_thread_structure( struct thread *thread )
+@@ -685,6 +702,21 @@ affinity_t get_thread_affinity( struct thread *thread )
+     return mask;
+ }
+ 
++static int get_base_priority( int priority_class, int priority )
++{
++    static const int class_offsets[] = { 4, 8, 13, 24, 6, 10 };
++    assert(priority_class <= ARRAY_SIZE(class_offsets));
++    if (priority == THREAD_PRIORITY_IDLE) return (priority_class == PROCESS_PRIOCLASS_REALTIME ? 16 : 1);
++    else if (priority == THREAD_PRIORITY_TIME_CRITICAL) return (priority_class == PROCESS_PRIOCLASS_REALTIME ? 31 : 15);
++    else return class_offsets[priority_class - 1] + priority;
++}
++
++static int get_unix_niceness( int base_priority, int limit )
++{
++    int min = -limit, max = limit, range = max - min;
++    return min + (base_priority - 1) * range / 14;
++}
++
+ #define THREAD_PRIORITY_REALTIME_HIGHEST 6
+ #define THREAD_PRIORITY_REALTIME_LOWEST -7
+ 
+@@ -699,6 +731,8 @@ static void delayed_set_thread_priority( void *private )
+ 
+ static void apply_thread_priority( struct thread *thread, int priority_class, int priority, int delayed )
+ {
++    int niceness, limit = min( nice_limit, thread->process->nice_limit );
++
+     if (!delayed && thread->delay_priority) remove_timeout_user( thread->delay_priority );
+     thread->delay_priority = NULL;
+ 
+@@ -707,6 +741,21 @@ static void apply_thread_priority( struct thread *thread, int priority_class, in
+         thread->delay_priority = add_timeout_user( -TICKS_PER_SEC, delayed_set_thread_priority, thread );
+         return;
+     }
++
++    /* FIXME: handle REALTIME class using SCHED_RR if possible, for now map it to HIGH */
++    if (priority_class == PROCESS_PRIOCLASS_REALTIME) priority_class = PROCESS_PRIOCLASS_HIGH;
++
++#ifdef __linux__
++#ifdef HAVE_SETPRIORITY
++    if (limit < 0)
++    {
++        niceness = get_unix_niceness( get_base_priority( priority_class, priority ), limit );
++        if (setpriority( PRIO_PROCESS, thread->unix_tid, niceness ) != 0)
++            fprintf( stderr, "wine: setpriority %d for pid %d failed: %d\n", niceness, thread->unix_tid, errno );
++        return;
++    }
++#endif
++#endif
+ }
+ 
+ int set_thread_priority( struct thread *thread, int priority_class, int priority )
+From 2341a4ec0dbd5ec37cfb67993cc65cff0a348d27 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 18 Dec 2020 13:58:07 +0100
+Subject: [PATCH] server: Check wineserver privileges on init with -20
+ niceness.
+
+For thread priority support.
+---
+ server/thread.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/server/thread.c b/server/thread.c
+index bc184eaa3e6..de80a94cf40 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -230,7 +230,13 @@ void init_threading(void)
+ {
+ #ifdef RLIMIT_NICE
+     struct rlimit rlimit;
+-    if (!getrlimit( RLIMIT_NICE, &rlimit ))
++#endif
++#ifdef HAVE_SETPRIORITY
++    if (setpriority( PRIO_PROCESS, getpid(), -20 ) == 0) nice_limit = -19;
++    setpriority( PRIO_PROCESS, getpid(), 0 );
++#endif
++#ifdef RLIMIT_NICE
++    if (!nice_limit && !getrlimit( RLIMIT_NICE, &rlimit ))
+     {
+         rlimit.rlim_cur = rlimit.rlim_max;
+         setrlimit( RLIMIT_NICE, &rlimit );
+From 99c86f18a648b22c5f28c296d611a32bcc3ff216 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 17 Dec 2020 21:06:31 +0100
+Subject: [PATCH] server: Use RTKit as a fallback to set thread priorities.
+
+For thread priority support.
+---
+ configure           |  10 +++-
+ configure.ac        |   2 +-
+ include/config.h.in |   3 ++
+ server/Makefile.in  |   3 +-
+ server/thread.c     | 116 ++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 130 insertions(+), 4 deletions(-)
+
+diff --git a/configure b/configure
+index ecb69507c6d..5a5f7dc521f 100755
+--- a/configure
++++ b/configure
+@@ -13535,9 +13535,14 @@ $as_echo "$as_me:${as_lineno-$LINENO}: dbus-1 cflags: $DBUS_CFLAGS" >&5
+ $as_echo "$as_me:${as_lineno-$LINENO}: dbus-1 libs: $DBUS_LIBS" >&5
+ ac_save_CPPFLAGS=$CPPFLAGS
+ CPPFLAGS="$CPPFLAGS $DBUS_CFLAGS"
+-ac_fn_c_check_header_mongrel "$LINENO" "dbus/dbus.h" "ac_cv_header_dbus_dbus_h" "$ac_includes_default"
++for ac_header in dbus/dbus.h
++do :
++  ac_fn_c_check_header_mongrel "$LINENO" "dbus/dbus.h" "ac_cv_header_dbus_dbus_h" "$ac_includes_default"
+ if test "x$ac_cv_header_dbus_dbus_h" = xyes; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -ldbus-1" >&5
++  cat >>confdefs.h <<_ACEOF
++#define HAVE_DBUS_DBUS_H 1
++_ACEOF
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -ldbus-1" >&5
+ $as_echo_n "checking for -ldbus-1... " >&6; }
+ if ${ac_cv_lib_soname_dbus_1+:} false; then :
+   $as_echo_n "(cached) " >&6
+@@ -13596,6 +13601,7 @@ else
+   DBUS_CFLAGS=""
+ fi
+ 
++done
+ 
+ CPPFLAGS=$ac_save_CPPFLAGS
+ test -z "$DBUS_CFLAGS" || DBUS_CFLAGS=`echo " $DBUS_CFLAGS" | sed 's/ -I\([^/]\)/ -I\$(top_builddir)\/\1/g'`
+diff --git a/configure.ac b/configure.ac
+index 67a4fe4f26e..906f291cbb7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1436,7 +1436,7 @@ dnl **** Check for libdbus ****
+ if test "x$with_dbus" != "xno"
+ then
+     WINE_PACKAGE_FLAGS(DBUS,[dbus-1],,,,
+-        [AC_CHECK_HEADER([dbus/dbus.h],
++        [AC_CHECK_HEADERS([dbus/dbus.h],
+             [WINE_CHECK_SONAME(dbus-1, dbus_connection_close,,[DBUS_CFLAGS=""],[$DBUS_LIBS])],
+             [DBUS_CFLAGS=""])])
+ fi
+diff --git a/include/config.h.in b/include/config.h.in
+index 43534230588..fbf7b8d911c 100644
+--- a/include/config.h.in
++++ b/include/config.h.in
+@@ -97,6 +97,9 @@
+ /* Define to 1 if you have the <curses.h> header file. */
+ #undef HAVE_CURSES_H
+ 
++/* Define to 1 if you have the <dbus/dbus.h> header file. */
++#undef HAVE_DBUS_DBUS_H
++
+ /* Define to 1 if you have the <dirent.h> header file. */
+ #undef HAVE_DIRENT_H
+ 
+diff --git a/server/Makefile.in b/server/Makefile.in
+index 51bf533f99e..7afce22bc24 100644
+--- a/server/Makefile.in
++++ b/server/Makefile.in
+@@ -52,6 +52,7 @@ MANPAGES = \
+ 	wineserver.fr.UTF-8.man.in \
+ 	wineserver.man.in
+ 
+-EXTRALIBS = $(LDEXECFLAGS) $(POLL_LIBS) $(RT_LIBS) $(INOTIFY_LIBS)
++EXTRAINCL = $(DBUS_CFLAGS)
++EXTRALIBS = $(LDEXECFLAGS) $(POLL_LIBS) $(RT_LIBS) $(INOTIFY_LIBS) $(DBUS_LIBS)
+ 
+ unicode_EXTRADEFS = -DNLSDIR="\"${nlsdir}\"" -DBIN_TO_NLSDIR=\"`$(MAKEDEP) -R ${bindir} ${nlsdir}`\"
+diff --git a/server/thread.c b/server/thread.c
+index de80a94cf40..fcde9a64ff9 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -44,6 +44,9 @@
+ #ifdef HAVE_SYS_RESOURCE_H
+ #include <sys/resource.h>
+ #endif
++#ifdef HAVE_DBUS_DBUS_H
++#include <dbus/dbus.h>
++#endif
+ 
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
+@@ -226,6 +229,98 @@ static const struct fd_ops thread_fd_ops =
+ static struct list thread_list = LIST_INIT(thread_list);
+ static int nice_limit;
+ 
++#ifdef HAVE_DBUS_DBUS_H
++static DBusConnection *dbus;
++
++static const char *rtkit_iface = "org.freedesktop.RealtimeKit1";
++static const char *rtkit_path = "/org/freedesktop/RealtimeKit1";
++static int rtkit_nice_limit;
++
++static void dbus_cleanup(void)
++{
++    static int do_it_once;
++    if (!do_it_once++) dbus_connection_unref( dbus );
++}
++
++static int rtkit_get_int_value( DBusMessageIter *it, int *val )
++{
++    DBusMessageIter subit;
++    dbus_int32_t i32;
++    dbus_int64_t i64;
++    int type;
++    while ((type = dbus_message_iter_get_arg_type( it )) != DBUS_TYPE_INVALID)
++    {
++        switch (type)
++        {
++        case DBUS_TYPE_VARIANT:
++            dbus_message_iter_recurse( it, &subit );
++            if (!rtkit_get_int_value( &subit, val )) break;
++            return 1;
++        case DBUS_TYPE_INT32:
++            dbus_message_iter_get_basic( it, &i32 );
++            *val = i32;
++            return 1;
++        case DBUS_TYPE_INT64:
++            dbus_message_iter_get_basic( it, &i64 );
++            *val = i64;
++            return 1;
++        }
++        dbus_message_iter_next( it );
++    }
++    return 0;
++}
++
++static int rtkit_get_nice_limit(void)
++{
++    static const char *property = "MinNiceLevel";
++    DBusMessageIter it;
++    DBusMessage *reply = NULL;
++    DBusMessage *msg;
++    DBusError error;
++    int ret = 0;
++
++    if (!dbus) return 0;
++    if (!(msg = dbus_message_new_method_call( rtkit_iface, rtkit_path, "org.freedesktop.DBus.Properties", "Get" )))
++        return 0;
++
++    dbus_error_init( &error );
++    if (dbus_message_append_args( msg, DBUS_TYPE_STRING, &rtkit_iface, DBUS_TYPE_STRING, &property, DBUS_TYPE_INVALID ) &&
++        (reply = dbus_connection_send_with_reply_and_block( dbus, msg, DBUS_TIMEOUT_USE_DEFAULT, &error )) &&
++        !dbus_set_error_from_message( &error, reply ))
++    {
++        dbus_message_iter_init( reply, &it );
++        rtkit_get_int_value( &it, &ret );
++    }
++
++    if (reply) dbus_message_unref( reply );
++    dbus_message_unref( msg );
++    return ret;
++}
++
++static int rtkit_set_niceness( dbus_uint64_t process, dbus_uint64_t thread, dbus_int32_t niceness )
++{
++    DBusMessage *reply = NULL;
++    DBusMessage *msg;
++    DBusError error;
++    int ret = FALSE;
++
++    if (!(msg = dbus_message_new_method_call( rtkit_iface, rtkit_path, rtkit_iface, "MakeThreadHighPriorityWithPID" )))
++        return FALSE;
++
++    dbus_error_init( &error );
++    if (dbus_message_append_args( msg, DBUS_TYPE_UINT64, &process, DBUS_TYPE_UINT64, &thread,
++                                  DBUS_TYPE_INT32, &niceness, DBUS_TYPE_INVALID ) &&
++        (reply = dbus_connection_send_with_reply_and_block( dbus, msg, DBUS_TIMEOUT_USE_DEFAULT, &error )) &&
++        !dbus_set_error_from_message( &error, reply ))
++        ret = TRUE;
++
++    if (reply) dbus_message_unref( reply );
++    dbus_message_unref( msg );
++
++    return ret;
++}
++#endif
++
+ void init_threading(void)
+ {
+ #ifdef RLIMIT_NICE
+@@ -246,6 +341,15 @@ void init_threading(void)
+     }
+ #endif
+     if (nice_limit < 0) fprintf(stderr, "wine: Using setpriority to control niceness in the [%d,%d] range\n", nice_limit, -nice_limit );
++#ifdef HAVE_DBUS_DBUS_H
++    else if ((dbus = dbus_bus_get( DBUS_BUS_SYSTEM, NULL )))
++    {
++        atexit( dbus_cleanup );
++        rtkit_nice_limit = rtkit_get_nice_limit();
++        if (rtkit_nice_limit >= 0) fprintf(stderr, "wine: Unable to use RTKit to control niceness, rtkit-daemon not found or MinNiceLevel >= 0\n");
++        else fprintf(stderr, "wine: Using RTKit to control niceness in the [%d,%d] range\n", rtkit_nice_limit, -rtkit_nice_limit );
++    }
++#endif
+ }
+ 
+ /* initialize the structure for a newly allocated thread */
+@@ -761,6 +865,18 @@ static void apply_thread_priority( struct thread *thread, int priority_class, in
+         return;
+     }
+ #endif
++#ifdef HAVE_DBUS_DBUS_H
++    if (rtkit_nice_limit < 0)
++    {
++        niceness = get_unix_niceness( get_base_priority( priority_class, priority ), rtkit_nice_limit );
++        if (!delayed)
++            thread->delay_priority = add_timeout_user( -TICKS_PER_SEC, delayed_set_thread_priority, thread );
++        else if (setpriority( PRIO_PROCESS, thread->unix_tid, niceness ) == 0)
++            return;
++        else if (!rtkit_set_niceness( thread->unix_pid, thread->unix_tid, niceness ))
++            thread->delay_priority = add_timeout_user( -TICKS_PER_SEC, delayed_set_thread_priority, thread );
++    }
++#endif
+ #endif
+ }
+ 

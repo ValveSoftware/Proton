@@ -1,0 +1,1946 @@
+From 9825767d24230aea712ee1d756beb273c136b69b Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Fri, 19 Jun 2020 16:06:17 +0100
+Subject: [PATCH] server: Create a desktop shared mapping.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ include/wine/server_protocol.h |  7 ++++++-
+ server/directory.c             | 17 +++++++++++++++++
+ server/file.h                  |  6 ++++++
+ server/mapping.c               | 19 ++++++++++++++++++-
+ server/protocol.def            |  5 +++++
+ server/user.h                  | 28 +++++++++++++++-------------
+ server/winstation.c            | 22 ++++++++++++++++++++++
+ 7 files changed, 89 insertions(+), 15 deletions(-)
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index aed7090572b..0b956894110 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -800,6 +800,11 @@ struct cpu_topology_override
+     unsigned char host_cpu_id[64];
+ };
+ 
++struct desktop_shared_memory
++{
++    int placeholder;
++};
++
+ 
+ 
+ 
+@@ -6721,7 +6726,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 654
++#define SERVER_PROTOCOL_VERSION 655
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/directory.c b/server/directory.c
+index 386d615fcf7..d6c7330a60e 100644
+--- a/server/directory.c
++++ b/server/directory.c
+@@ -38,6 +38,7 @@
+ #include "process.h"
+ #include "file.h"
+ #include "unicode.h"
++#include "user.h"
+ 
+ #define HASH_SIZE 7  /* default hash size */
+ 
+@@ -248,6 +249,22 @@ struct object_type *get_object_type( const struct unicode_str *name )
+     return type;
+ }
+ 
++struct object *create_desktop_map_directory( struct winstation *winstation )
++{
++    static const WCHAR dir_desktop_mapsW[] = {'_','_','w','i','n','e','_','d','e','s','k','t','o','p','_','m','a','p','p','i','n','g','s'};
++    static const struct unicode_str dir_desktop_maps_str = {dir_desktop_mapsW, sizeof(dir_desktop_mapsW)};
++    struct object *root;
++    struct directory *mapping_root, *ret;
++    const struct unicode_str winsta_name = {winstation->obj.name->name, winstation->obj.name->len};
++
++    root = winstation->obj.name->parent;
++    mapping_root = create_directory( root, &dir_desktop_maps_str, OBJ_OPENIF, HASH_SIZE, NULL );
++    ret = create_directory( &mapping_root->obj, &winsta_name, OBJ_OPENIF, HASH_SIZE, NULL );
++    release_object( &mapping_root->obj );
++
++    return &ret->obj;
++}
++
+ /* Global initialization */
+ 
+ static void create_session( unsigned int id )
+diff --git a/server/file.h b/server/file.h
+index bfe14ec353a..f688a19d174 100644
+--- a/server/file.h
++++ b/server/file.h
+@@ -156,6 +156,10 @@ extern struct timeout_user *add_timeout_user( timeout_t when, timeout_callback f
+ extern void remove_timeout_user( struct timeout_user *user );
+ extern const char *get_timeout_str( timeout_t timeout );
+ 
++/* directory functions */
++
++extern struct object *create_desktop_map_directory( struct winstation *winstation );
++
+ /* file functions */
+ 
+ extern struct file *get_file_obj( struct process *process, obj_handle_t handle,
+@@ -178,6 +182,8 @@ extern void free_mapped_views( struct process *process );
+ extern int get_page_size(void);
+ extern struct object *create_user_data_mapping( struct object *root, const struct unicode_str *name,
+                                                 unsigned int attr, const struct security_descriptor *sd );
++extern struct object *create_desktop_mapping( struct object *root, const struct unicode_str *name,
++                                              mem_size_t size, const struct security_descriptor *sd, void **ptr );
+ 
+ /* device functions */
+ 
+diff --git a/server/mapping.c b/server/mapping.c
+index 8d9890d4619..e4418879703 100644
+--- a/server/mapping.c
++++ b/server/mapping.c
+@@ -962,7 +962,7 @@ int get_page_size(void)
+ }
+ 
+ struct object *create_user_data_mapping( struct object *root, const struct unicode_str *name,
+-                                        unsigned int attr, const struct security_descriptor *sd )
++                                         unsigned int attr, const struct security_descriptor *sd )
+ {
+     void *ptr;
+     struct mapping *mapping;
+@@ -978,6 +978,23 @@ struct object *create_user_data_mapping( struct object *root, const struct unico
+     return &mapping->obj;
+ }
+ 
++struct object *create_desktop_mapping( struct object *root, const struct unicode_str *name,
++                                       mem_size_t size, const struct security_descriptor *sd, void **ptr )
++{
++    struct mapping *mapping;
++
++    if (!(mapping = create_mapping( root, name, OBJ_OPENIF, size, SEC_COMMIT, 0,
++                                    FILE_READ_DATA | FILE_WRITE_DATA, sd ))) return NULL;
++    *ptr = mmap( NULL, mapping->size, PROT_WRITE, MAP_SHARED, get_unix_fd( mapping->fd ), 0 );
++    if (*ptr == MAP_FAILED)
++    {
++        release_object( &mapping->obj );
++        return NULL;
++    }
++
++    return &mapping->obj;
++}
++
+ /* create a file mapping */
+ DECL_HANDLER(create_mapping)
+ {
+diff --git a/server/protocol.def b/server/protocol.def
+index 0f2fe077b80..7a561ee45c1 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -816,6 +816,11 @@ struct cpu_topology_override
+     unsigned char host_cpu_id[64];
+ };
+ 
++struct desktop_shared_memory
++{
++    int placeholder;
++};
++
+ /****************************************************************/
+ /* Request declarations */
+ 
+diff --git a/server/user.h b/server/user.h
+index 6267f3e2881..9a28ba7f449 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -64,19 +64,21 @@ struct global_cursor
+ 
+ struct desktop
+ {
+-    struct object        obj;              /* object header */
+-    unsigned int         flags;            /* desktop flags */
+-    struct winstation   *winstation;       /* winstation this desktop belongs to */
+-    struct list          entry;            /* entry in winstation list of desktops */
+-    struct window       *top_window;       /* desktop window for this desktop */
+-    struct window       *msg_window;       /* HWND_MESSAGE top window */
+-    struct hook_table   *global_hooks;     /* table of global hooks on this desktop */
+-    struct list          hotkeys;          /* list of registered hotkeys */
+-    struct timeout_user *close_timeout;    /* timeout before closing the desktop */
+-    struct thread_input *foreground_input; /* thread input of foreground thread */
+-    unsigned int         users;            /* processes and threads using this desktop */
+-    struct global_cursor cursor;           /* global cursor information */
+-    unsigned char        keystate[256];    /* asynchronous key state */
++    struct object                          obj;              /* object header */
++    unsigned int                           flags;            /* desktop flags */
++    struct winstation                     *winstation;       /* winstation this desktop belongs to */
++    struct list                            entry;            /* entry in winstation list of desktops */
++    struct window                         *top_window;       /* desktop window for this desktop */
++    struct window                         *msg_window;       /* HWND_MESSAGE top window */
++    struct hook_table                     *global_hooks;     /* table of global hooks on this desktop */
++    struct list                            hotkeys;          /* list of registered hotkeys */
++    struct timeout_user                   *close_timeout;    /* timeout before closing the desktop */
++    struct thread_input                   *foreground_input; /* thread input of foreground thread */
++    unsigned int                           users;            /* processes and threads using this desktop */
++    struct global_cursor                   cursor;           /* global cursor information */
++    struct object                         *shared_mapping;   /* desktop shared memory mapping */
++    volatile struct desktop_shared_memory *shared;           /* desktop shared memory ptr */
++    unsigned char                          keystate[256];    /* asynchronous key state */
+ };
+ 
+ /* user handles functions */
+diff --git a/server/winstation.c b/server/winstation.c
+index e4100e316ec..a3f6cfbfdf3 100644
+--- a/server/winstation.c
++++ b/server/winstation.c
+@@ -212,6 +212,22 @@ struct desktop *get_desktop_obj( struct process *process, obj_handle_t handle, u
+     return (struct desktop *)get_handle_obj( process, handle, access, &desktop_ops );
+ }
+ 
++static volatile void *init_desktop_mapping( struct desktop *desktop, const struct unicode_str *name )
++{
++    struct object *dir = create_desktop_map_directory( desktop->winstation );
++
++    desktop->shared = NULL;
++    desktop->shared_mapping = NULL;
++
++    if (!dir) return NULL;
++
++    desktop->shared_mapping = create_desktop_mapping( dir, name, sizeof(struct desktop_shared_memory),
++                                                      NULL, (void **)&desktop->shared );
++    release_object( dir );
++    if (desktop->shared) memset( (void *)desktop->shared, 0, sizeof(*desktop->shared) );
++    return desktop->shared;
++}
++
+ /* create a desktop object */
+ static struct desktop *create_desktop( const struct unicode_str *name, unsigned int attr,
+                                        unsigned int flags, struct winstation *winstation )
+@@ -235,6 +251,11 @@ static struct desktop *create_desktop( const struct unicode_str *name, unsigned
+             memset( desktop->keystate, 0, sizeof(desktop->keystate) );
+             list_add_tail( &winstation->desktops, &desktop->entry );
+             list_init( &desktop->hotkeys );
++            if (!init_desktop_mapping( desktop, name ))
++            {
++                release_object( desktop );
++                return NULL;
++            }
+         }
+         else clear_error();
+     }
+@@ -295,6 +316,7 @@ static void desktop_destroy( struct object *obj )
+     if (desktop->global_hooks) release_object( desktop->global_hooks );
+     if (desktop->close_timeout) remove_timeout_user( desktop->close_timeout );
+     list_remove( &desktop->entry );
++    release_object( desktop->shared_mapping );
+     release_object( desktop->winstation );
+ }
+ 
+From c664dccf746da80efd88444e6e13a0b345c181ca Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Mon, 29 Jun 2020 11:12:12 +0100
+Subject: [PATCH] server: Use the helper to update the cursor last change time.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ server/queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 36ff33b7da1..b945c96f7ea 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1803,7 +1803,7 @@ static int queue_mouse_message( struct desktop *desktop, user_handle_t win, cons
+         WM_MOUSEHWHEEL   /* 0x1000 = MOUSEEVENTF_HWHEEL */
+     };
+ 
+-    desktop->cursor.last_change = get_tick_count();
++    update_desktop_cursor_pos( desktop, desktop->cursor.x, desktop->cursor.y ); /* Update last change time */
+     flags = input->mouse.flags;
+     time  = input->mouse.time;
+     if (!time) time = desktop->cursor.last_change;
+From f663f9eb66e2d7ca42a6b2b05c71938924e45c9e Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Mon, 29 Jun 2020 11:30:14 +0100
+Subject: [PATCH] server: Move the cursor position and last change time to the
+ shared data.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ include/wine/server_protocol.h | 11 ++++--
+ server/protocol.def            |  9 ++++-
+ server/queue.c                 | 62 +++++++++++++++++-----------------
+ server/user.h                  |  3 --
+ 4 files changed, 48 insertions(+), 37 deletions(-)
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 0b956894110..ba6d198f95d 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -800,9 +800,16 @@ struct cpu_topology_override
+     unsigned char host_cpu_id[64];
+ };
+ 
++struct shared_cursor
++{
++    int                  x;
++    int                  y;
++    unsigned int         last_change;
++};
++
+ struct desktop_shared_memory
+ {
+-    int placeholder;
++    struct shared_cursor cursor;
+ };
+ 
+ 
+@@ -6726,7 +6733,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 655
++#define SERVER_PROTOCOL_VERSION 656
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 7a561ee45c1..3ea38463f80 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -816,9 +816,16 @@ struct cpu_topology_override
+     unsigned char host_cpu_id[64];
+ };
+ 
++struct shared_cursor
++{
++    int                  x;                /* cursor position */
++    int                  y;
++    unsigned int         last_change;      /* time of last position change */
++};
++
+ struct desktop_shared_memory
+ {
+-    int placeholder;
++    struct shared_cursor cursor;           /* global cursor information */
+ };
+ 
+ /****************************************************************/
+diff --git a/server/queue.c b/server/queue.c
+index b945c96f7ea..e6ebfd2d0b5 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -397,10 +397,10 @@ static int update_desktop_cursor_pos( struct desktop *desktop, int x, int y )
+ 
+     x = max( min( x, desktop->cursor.clip.right - 1 ), desktop->cursor.clip.left );
+     y = max( min( y, desktop->cursor.clip.bottom - 1 ), desktop->cursor.clip.top );
+-    updated = (desktop->cursor.x != x || desktop->cursor.y != y);
+-    desktop->cursor.x = x;
+-    desktop->cursor.y = y;
+-    desktop->cursor.last_change = get_tick_count();
++    updated = (desktop->shared->cursor.x != x || desktop->shared->cursor.y != y);
++    desktop->shared->cursor.x = x;
++    desktop->shared->cursor.y = y;
++    desktop->shared->cursor.last_change = get_tick_count();
+ 
+     return updated;
+ }
+@@ -431,8 +431,8 @@ static void get_message_defaults( struct msg_queue *queue, int *x, int *y, unsig
+ {
+     struct desktop *desktop = queue->input->desktop;
+ 
+-    *x = desktop->cursor.x;
+-    *y = desktop->cursor.y;
++    *x = desktop->shared->cursor.x;
++    *y = desktop->shared->cursor.y;
+     *time = get_tick_count();
+ }
+ 
+@@ -459,9 +459,9 @@ static void set_clip_rectangle( struct desktop *desktop, const rectangle_t *rect
+         post_desktop_message( desktop, desktop->cursor.clip_msg, rect != NULL, 0 );
+ 
+     /* warp the mouse to be inside the clip rect */
+-    x = max( min( desktop->cursor.x, desktop->cursor.clip.right - 1 ), desktop->cursor.clip.left );
+-    y = max( min( desktop->cursor.y, desktop->cursor.clip.bottom - 1 ), desktop->cursor.clip.top );
+-    if (x != desktop->cursor.x || y != desktop->cursor.y) set_cursor_pos( desktop, x, y );
++    x = max( min( desktop->shared->cursor.x, desktop->cursor.clip.right - 1 ), desktop->cursor.clip.left );
++    y = max( min( desktop->shared->cursor.y, desktop->cursor.clip.bottom - 1 ), desktop->cursor.clip.top );
++    if (x != desktop->shared->cursor.x || y != desktop->shared->cursor.y) set_cursor_pos( desktop, x, y );
+ }
+ 
+ /* change the foreground input and reset the cursor clip rect */
+@@ -1615,8 +1615,8 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+         if (desktop->keystate[VK_XBUTTON1] & 0x80) msg->wparam |= MK_XBUTTON1;
+         if (desktop->keystate[VK_XBUTTON2] & 0x80) msg->wparam |= MK_XBUTTON2;
+     }
+-    msg->x = desktop->cursor.x;
+-    msg->y = desktop->cursor.y;
++    msg->x = desktop->shared->cursor.x;
++    msg->y = desktop->shared->cursor.y;
+ 
+     if (msg->win && (thread = get_window_thread( msg->win )))
+     {
+@@ -1803,10 +1803,10 @@ static int queue_mouse_message( struct desktop *desktop, user_handle_t win, cons
+         WM_MOUSEHWHEEL   /* 0x1000 = MOUSEEVENTF_HWHEEL */
+     };
+ 
+-    update_desktop_cursor_pos( desktop, desktop->cursor.x, desktop->cursor.y ); /* Update last change time */
++    update_desktop_cursor_pos( desktop, desktop->shared->cursor.x, desktop->shared->cursor.y ); /* Update last change time */
+     flags = input->mouse.flags;
+     time  = input->mouse.time;
+-    if (!time) time = desktop->cursor.last_change;
++    if (!time) time = desktop->shared->cursor.last_change;
+ 
+     if (flags & MOUSEEVENTF_MOVE)
+     {
+@@ -1815,19 +1815,19 @@ static int queue_mouse_message( struct desktop *desktop, user_handle_t win, cons
+             x = input->mouse.x;
+             y = input->mouse.y;
+             if (flags & ~(MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE) &&
+-                x == desktop->cursor.x && y == desktop->cursor.y)
++                x == desktop->shared->cursor.x && y == desktop->shared->cursor.y)
+                 flags &= ~MOUSEEVENTF_MOVE;
+         }
+         else
+         {
+-            x = desktop->cursor.x + input->mouse.x;
+-            y = desktop->cursor.y + input->mouse.y;
++            x = desktop->shared->cursor.x + input->mouse.x;
++            y = desktop->shared->cursor.y + input->mouse.y;
+         }
+     }
+     else
+     {
+-        x = desktop->cursor.x;
+-        y = desktop->cursor.y;
++        x = desktop->shared->cursor.x;
++        y = desktop->shared->cursor.y;
+     }
+ 
+     if ((foreground = get_foreground_thread( desktop, win )))
+@@ -1843,8 +1843,8 @@ static int queue_mouse_message( struct desktop *desktop, user_handle_t win, cons
+         msg_data->info                = input->mouse.info;
+         msg_data->flags               = flags;
+         msg_data->rawinput.type       = RIM_TYPEMOUSE;
+-        msg_data->rawinput.mouse.x    = input->mouse.x;
+-        msg_data->rawinput.mouse.y    = input->mouse.y;
++        msg_data->rawinput.mouse.x    = x - desktop->shared->cursor.x;
++        msg_data->rawinput.mouse.y    = y - desktop->shared->cursor.y;
+         msg_data->rawinput.mouse.data = input->mouse.data;
+ 
+         if ((req_flags & SEND_HWMSG_RAWINPUT))
+@@ -2045,8 +2045,8 @@ static void queue_custom_hardware_message( struct desktop *desktop, user_handle_
+     msg->msg       = input->hw.msg;
+     msg->wparam    = 0;
+     msg->lparam    = input->hw.lparam;
+-    msg->x         = desktop->cursor.x;
+-    msg->y         = desktop->cursor.y;
++    msg->x         = desktop->shared->cursor.x;
++    msg->y         = desktop->shared->cursor.y;
+ 
+     queue_hardware_message( desktop, msg, 1 );
+ }
+@@ -2586,8 +2586,8 @@ DECL_HANDLER(send_hardware_message)
+         }
+     }
+ 
+-    reply->prev_x = desktop->cursor.x;
+-    reply->prev_y = desktop->cursor.y;
++    reply->prev_x = desktop->shared->cursor.x;
++    reply->prev_y = desktop->shared->cursor.y;
+ 
+     switch (req->input.type)
+     {
+@@ -2614,8 +2614,8 @@ DECL_HANDLER(send_hardware_message)
+     }
+     if (thread) release_object( thread );
+ 
+-    reply->new_x = desktop->cursor.x;
+-    reply->new_y = desktop->cursor.y;
++    reply->new_x = desktop->shared->cursor.x;
++    reply->new_y = desktop->shared->cursor.y;
+     set_reply_data( desktop->keystate, size );
+     release_object( desktop );
+ }
+@@ -3325,8 +3325,8 @@ DECL_HANDLER(set_cursor)
+ 
+     reply->prev_handle = input->cursor;
+     reply->prev_count  = input->cursor_count;
+-    reply->prev_x      = input->desktop->cursor.x;
+-    reply->prev_y      = input->desktop->cursor.y;
++    reply->prev_x      = input->desktop->shared->cursor.x;
++    reply->prev_y      = input->desktop->shared->cursor.y;
+ 
+     if (req->flags & SET_CURSOR_HANDLE)
+     {
+@@ -3357,10 +3357,10 @@ DECL_HANDLER(set_cursor)
+         set_clip_rectangle( desktop, (req->flags & SET_CURSOR_NOCLIP) ? NULL : &req->clip, 0 );
+     }
+ 
+-    reply->new_x       = input->desktop->cursor.x;
+-    reply->new_y       = input->desktop->cursor.y;
++    reply->new_x       = input->desktop->shared->cursor.x;
++    reply->new_y       = input->desktop->shared->cursor.y;
+     reply->new_clip    = input->desktop->cursor.clip;
+-    reply->last_change = input->desktop->cursor.last_change;
++    reply->last_change = input->desktop->shared->cursor.last_change;
+ }
+ 
+ /* Get the history of the 64 last cursor positions */
+diff --git a/server/user.h b/server/user.h
+index 9a28ba7f449..e525957c5bc 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -54,11 +54,8 @@ struct winstation
+ 
+ struct global_cursor
+ {
+-    int                  x;                /* cursor position */
+-    int                  y;
+     rectangle_t          clip;             /* cursor clip rectangle */
+     unsigned int         clip_msg;         /* message to post for cursor clip changes */
+-    unsigned int         last_change;      /* time of last position change */
+     user_handle_t        win;              /* window that contains the cursor */
+ };
+ 
+From 713522aa275580871126ee93c77ce01d2f8a6e73 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Mon, 29 Jun 2020 12:57:39 +0100
+Subject: [PATCH] server: Add a sequence number to the shared data.
+
+The client should check that the lower SEQUENCE_MASK_BITS are zero before
+reading the data and confirm that the number is unchanged when it's finished.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ include/wine/server_protocol.h |  7 +++++-
+ server/protocol.def            |  5 ++++
+ server/queue.c                 | 46 +++++++++++++++++++++++++++++++++-
+ 3 files changed, 56 insertions(+), 2 deletions(-)
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index ba6d198f95d..170b643d7ea 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -809,10 +809,15 @@ struct shared_cursor
+ 
+ struct desktop_shared_memory
+ {
++    unsigned int         seq;
+     struct shared_cursor cursor;
+ };
+ 
+ 
++#define SEQUENCE_MASK_BITS  4
++#define SEQUENCE_MASK ((1UL << SEQUENCE_MASK_BITS) - 1)
++
++
+ 
+ 
+ 
+@@ -6733,7 +6738,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 656
++#define SERVER_PROTOCOL_VERSION 657
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 3ea38463f80..273b7d33e91 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -825,9 +825,14 @@ struct shared_cursor
+ 
+ struct desktop_shared_memory
+ {
++    unsigned int         seq;              /* sequence number - server updating if (seq_no & SEQUENCE_MASK) != 0 */
+     struct shared_cursor cursor;           /* global cursor information */
+ };
+ 
++/* Bits that must be clear for client to read */
++#define SEQUENCE_MASK_BITS  4
++#define SEQUENCE_MASK ((1UL << SEQUENCE_MASK_BITS) - 1)
++
+ /****************************************************************/
+ /* Request declarations */
+ 
+diff --git a/server/queue.c b/server/queue.c
+index e6ebfd2d0b5..ae9b783ba8a 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -391,16 +391,60 @@ static struct message *alloc_hardware_message( lparam_t info, struct hw_msg_sour
+     return msg;
+ }
+ 
++#if defined(__i386__) || defined(__x86_64__)
++
++#define SHARED_WRITE_BEGIN( x )                                  \
++    do {                                                         \
++        volatile unsigned int __seq = *(x);                      \
++        assert( (__seq & SEQUENCE_MASK) != SEQUENCE_MASK );      \
++        *(x) = ++__seq;                                          \
++    } while(0)
++
++#define SHARED_WRITE_END( x )                                    \
++    do {                                                         \
++        volatile unsigned int __seq = *(x);                      \
++        assert( (__seq & SEQUENCE_MASK) != 0 );                  \
++        if ((__seq & SEQUENCE_MASK) > 1) __seq--;                \
++        else __seq += SEQUENCE_MASK;                             \
++        *(x) = __seq;                                            \
++    } while(0)
++
++#else
++
++#define SHARED_WRITE_BEGIN( x )                                         \
++    do {                                                                \
++        assert( (*(x) & SEQUENCE_MASK) != SEQUENCE_MASK );              \
++        if ((__atomic_add_fetch( x, 1, __ATOMIC_RELAXED ) & SEQUENCE_MASK) == 1) \
++            __atomic_thread_fence( __ATOMIC_RELEASE );                  \
++    } while(0)
++
++#define SHARED_WRITE_END( x )                                           \
++    do {                                                                \
++        assert( (*(x) & SEQUENCE_MASK) != 0 );                          \
++        if ((*(x) & SEQUENCE_MASK) > 1)                                 \
++            __atomic_sub_fetch( x, 1, __ATOMIC_RELAXED );               \
++        else {                                                          \
++            __atomic_thread_fence( __ATOMIC_RELEASE );                  \
++            __atomic_add_fetch( x, SEQUENCE_MASK, __ATOMIC_RELAXED );   \
++        }                                                               \
++    } while(0)
++
++#endif
++
+ static int update_desktop_cursor_pos( struct desktop *desktop, int x, int y )
+ {
+     int updated;
++    unsigned int time = get_tick_count();
+ 
+     x = max( min( x, desktop->cursor.clip.right - 1 ), desktop->cursor.clip.left );
+     y = max( min( y, desktop->cursor.clip.bottom - 1 ), desktop->cursor.clip.top );
+     updated = (desktop->shared->cursor.x != x || desktop->shared->cursor.y != y);
++
++    SHARED_WRITE_BEGIN( &desktop->shared->seq );
+     desktop->shared->cursor.x = x;
+     desktop->shared->cursor.y = y;
+-    desktop->shared->cursor.last_change = get_tick_count();
++    desktop->shared->cursor.last_change = time;
++    SHARED_WRITE_END( &desktop->shared->seq );
+ 
+     return updated;
+ }
+From ac9e9c8bb70999d99f58cbb148f6584359b70c9c Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Tue, 30 Jun 2020 11:24:53 +0100
+Subject: [PATCH] user32: Use the desktop shared data for GetCursorPos().
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ dlls/user32/input.c        | 20 ++++++-------
+ dlls/user32/user_private.h | 23 +++++++++++++++
+ dlls/user32/winstation.c   | 60 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 92 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/user32/input.c b/dlls/user32/input.c
+index 12129d9324b..6bfd91cf710 100644
+--- a/dlls/user32/input.c
++++ b/dlls/user32/input.c
+@@ -250,25 +250,23 @@ void WINAPI mouse_event( DWORD dwFlags, DWORD dx, DWORD dy,
+  */
+ BOOL WINAPI DECLSPEC_HOTPATCH GetCursorPos( POINT *pt )
+ {
+-    BOOL ret;
++    BOOL ret = TRUE;
+     DWORD last_change;
+     UINT dpi;
++    volatile struct desktop_shared_memory *shared = get_desktop_shared_memory();
+ 
+-    if (!pt) return FALSE;
++    if (!pt || !shared) return FALSE;
+ 
+-    SERVER_START_REQ( set_cursor )
++    SHARED_READ_BEGIN( &shared->seq )
+     {
+-        if ((ret = !wine_server_call( req )))
+-        {
+-            pt->x = reply->new_x;
+-            pt->y = reply->new_y;
+-            last_change = reply->last_change;
+-        }
++        pt->x = shared->cursor.x;
++        pt->y = shared->cursor.y;
++        last_change = shared->cursor.last_change;
+     }
+-    SERVER_END_REQ;
++    SHARED_READ_END( &shared->seq );
+ 
+     /* query new position from graphics driver if we haven't updated recently */
+-    if (ret && GetTickCount() - last_change > 100) ret = USER_Driver->pGetCursorPos( pt );
++    if (GetTickCount() - last_change > 100) ret = USER_Driver->pGetCursorPos( pt );
+     if (ret && (dpi = get_thread_dpi()))
+     {
+         DPI_AWARENESS_CONTEXT context;
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 6bc357476fe..6a5c2fd1e46 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -203,6 +203,8 @@ struct user_thread_info
+     HWND                          top_window;             /* Desktop window */
+     HWND                          msg_window;             /* HWND_MESSAGE parent window */
+     struct rawinput_thread_data  *rawinput;               /* RawInput thread local data / buffer */
++    HANDLE                        desktop_shared_map;     /* HANDLE to server's desktop shared memory */
++    struct desktop_shared_memory *shared_memory;          /* Ptr to server's desktop shared memory */
+ };
+ 
+ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo) );
+@@ -295,6 +297,7 @@ extern BOOL WINPROC_call_window( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
+ 
+ extern const WCHAR *CLASS_GetVersionedName(const WCHAR *classname, UINT *basename_offset,
+         WCHAR *combined, BOOL register_class) DECLSPEC_HIDDEN;
++extern volatile struct desktop_shared_memory *get_desktop_shared_memory( void ) DECLSPEC_HIDDEN;
+ 
+ /* message spy definitions */
+ 
+@@ -387,4 +390,24 @@ static inline WCHAR *heap_strdupW(const WCHAR *src)
+     return dst;
+ }
+ 
++#if defined(__i386__) || defined(__x86_64__)
++#define __SHARED_READ_SEQ( x ) (*(x))
++#define __SHARED_READ_FENCE do {} while(0)
++#else
++#define __SHARED_READ_SEQ( x ) __atomic_load_n( x, __ATOMIC_RELAXED )
++#define __SHARED_READ_FENCE __atomic_thread_fence( __ATOMIC_ACQUIRE )
++#endif
++
++#define SHARED_READ_BEGIN( x )                                          \
++    do {                                                                \
++        unsigned int __seq;                                             \
++        do {                                                            \
++            while ((__seq = __SHARED_READ_SEQ( x )) & SEQUENCE_MASK) NtYieldExecution(); \
++            __SHARED_READ_FENCE;
++
++#define SHARED_READ_END( x )                       \
++            __SHARED_READ_FENCE;                   \
++        } while (__SHARED_READ_SEQ( x ) != __seq); \
++    } while(0)
++
+ #endif /* __WINE_USER_PRIVATE_H */
+diff --git a/dlls/user32/winstation.c b/dlls/user32/winstation.c
+index b5d5a372faf..71a97e585e8 100644
+--- a/dlls/user32/winstation.c
++++ b/dlls/user32/winstation.c
+@@ -104,6 +104,60 @@ static const WCHAR *get_winstation_default_name( void )
+     return ret ? name : NULL;
+ }
+ 
++
++volatile struct desktop_shared_memory *get_desktop_shared_memory( void )
++{
++    static const WCHAR dir_desktop_mapsW[] = {'_','_','w','i','n','e','_','d','e','s','k','t','o','p','_','m','a','p','p','i','n','g','s','\\'};
++    struct user_thread_info *thread_info = get_user_thread_info();
++    HANDLE root = get_winstations_dir_handle(), handles[2];
++    WCHAR buf[MAX_PATH], *ptr;
++    DWORD i, needed;
++    OBJECT_ATTRIBUTES attr;
++    UNICODE_STRING section_str;
++    NTSTATUS status;
++    SIZE_T size;
++
++    if (thread_info->shared_memory) return thread_info->shared_memory;
++
++    handles[0] = GetProcessWindowStation();
++    handles[1] = GetThreadDesktop( GetCurrentThreadId() );
++
++    memcpy( buf, dir_desktop_mapsW, sizeof(dir_desktop_mapsW) );
++    ptr = buf + ARRAY_SIZE(dir_desktop_mapsW);
++
++    for (i = 0; i < 2; i++)
++    {
++        GetUserObjectInformationW( handles[i], UOI_NAME, (void *)ptr, sizeof(buf) - (ptr - buf) * sizeof(WCHAR), &needed );
++        ptr += needed / sizeof(WCHAR);
++        if (i == 0) *(ptr - 1) = '\\';
++    }
++
++    RtlInitUnicodeString( &section_str, buf );
++    InitializeObjectAttributes( &attr, &section_str, 0, root, NULL );
++    status = NtOpenSection( &handles[0], SECTION_ALL_ACCESS, &attr );
++    if (status)
++    {
++        ERR( "failed to open the desktop section: %08x\n", status );
++        return NULL;
++    }
++
++    ptr = NULL;
++    size = sizeof(struct desktop_shared_memory);
++    status = NtMapViewOfSection( handles[0], GetCurrentProcess(), (void *)&ptr, 0, 0, NULL,
++                                 &size, ViewUnmap, 0, PAGE_READONLY );
++    if (status)
++    {
++        ERR( "failed to map view of the desktop section: %08x\n", status );
++        CloseHandle( handles[0] );
++        return NULL;
++    }
++
++    thread_info->desktop_shared_map = handles[0];
++    thread_info->shared_memory = (struct desktop_shared_memory *)ptr;
++    return thread_info->shared_memory;
++}
++
++
+ /***********************************************************************
+  *              CreateWindowStationA  (USER32.@)
+  */
+@@ -464,6 +518,12 @@ BOOL WINAPI SetThreadDesktop( HDESK handle )
+         thread_info->top_window = 0;
+         thread_info->msg_window = 0;
+         if (key_state_info) key_state_info->time = 0;
++        if (thread_info->desktop_shared_map)
++        {
++            CloseHandle( thread_info->desktop_shared_map );
++            thread_info->desktop_shared_map = NULL;
++            thread_info->shared_memory = NULL;
++        }
+     }
+     return ret;
+ }
+From 8456212d2e4e2c0f43bd0c1173f83e0bbe5114dc Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Tue, 30 Jun 2020 13:58:26 +0100
+Subject: [PATCH] server: Use the helper to reset the clip rect when the
+ desktop size changes.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ server/queue.c  | 2 +-
+ server/user.h   | 1 +
+ server/window.c | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index ae9b783ba8a..76b55dcf6ce 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -481,7 +481,7 @@ static void get_message_defaults( struct msg_queue *queue, int *x, int *y, unsig
+ }
+ 
+ /* set the cursor clip rectangle */
+-static void set_clip_rectangle( struct desktop *desktop, const rectangle_t *rect, int send_clip_msg )
++void set_clip_rectangle( struct desktop *desktop, const rectangle_t *rect, int send_clip_msg )
+ {
+     rectangle_t top_rect;
+     int x, y;
+diff --git a/server/user.h b/server/user.h
+index e525957c5bc..99d486f7fd2 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -119,6 +119,7 @@ extern void post_win_event( struct thread *thread, unsigned int event,
+                             const WCHAR *module, data_size_t module_size,
+                             user_handle_t handle );
+ extern void free_hotkeys( struct desktop *desktop, user_handle_t window );
++extern void set_clip_rectangle( struct desktop *desktop, const rectangle_t *rect, int send_clip_msg );
+ 
+ /* region functions */
+ 
+diff --git a/server/window.c b/server/window.c
+index 3a88b7f34fa..3d41ebbfad6 100644
+--- a/server/window.c
++++ b/server/window.c
+@@ -1720,7 +1720,7 @@ static void set_window_pos( struct window *win, struct window *previous,
+     }
+ 
+     /* reset cursor clip rectangle when the desktop changes size */
+-    if (win == win->desktop->top_window) win->desktop->cursor.clip = *window_rect;
++    if (win == win->desktop->top_window) set_clip_rectangle( win->desktop, NULL, 0 );
+ 
+     /* if the window is not visible, everything is easy */
+     if (!visible) return;
+From 827092ff024872ccc66c3e29b1bce8141738436b Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Tue, 30 Jun 2020 14:12:52 +0100
+Subject: [PATCH] server: Store the cursor clip rect in the shared data.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ include/wine/server_protocol.h |  3 ++-
+ server/protocol.def            |  1 +
+ server/queue.c                 | 21 ++++++++++++---------
+ server/user.h                  |  1 -
+ 4 files changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 170b643d7ea..6fb02232eac 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -805,6 +805,7 @@ struct shared_cursor
+     int                  x;
+     int                  y;
+     unsigned int         last_change;
++    rectangle_t          clip;
+ };
+ 
+ struct desktop_shared_memory
+@@ -6738,7 +6739,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 657
++#define SERVER_PROTOCOL_VERSION 658
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 273b7d33e91..adfc53097cd 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -821,6 +821,7 @@ struct shared_cursor
+     int                  x;                /* cursor position */
+     int                  y;
+     unsigned int         last_change;      /* time of last position change */
++    rectangle_t          clip;             /* cursor clip rectangle */
+ };
+ 
+ struct desktop_shared_memory
+diff --git a/server/queue.c b/server/queue.c
+index 76b55dcf6ce..5055ea58475 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -436,8 +436,8 @@ static int update_desktop_cursor_pos( struct desktop *desktop, int x, int y )
+     int updated;
+     unsigned int time = get_tick_count();
+ 
+-    x = max( min( x, desktop->cursor.clip.right - 1 ), desktop->cursor.clip.left );
+-    y = max( min( y, desktop->cursor.clip.bottom - 1 ), desktop->cursor.clip.top );
++    x = max( min( x, desktop->shared->cursor.clip.right - 1 ), desktop->shared->cursor.clip.left );
++    y = max( min( y, desktop->shared->cursor.clip.bottom - 1 ), desktop->shared->cursor.clip.top );
+     updated = (desktop->shared->cursor.x != x || desktop->shared->cursor.y != y);
+ 
+     SHARED_WRITE_BEGIN( &desktop->shared->seq );
+@@ -483,29 +483,32 @@ static void get_message_defaults( struct msg_queue *queue, int *x, int *y, unsig
+ /* set the cursor clip rectangle */
+ void set_clip_rectangle( struct desktop *desktop, const rectangle_t *rect, int send_clip_msg )
+ {
+-    rectangle_t top_rect;
++    rectangle_t top_rect, new_rect;
+     int x, y;
+ 
+     get_top_window_rectangle( desktop, &top_rect );
+     if (rect)
+     {
+-        rectangle_t new_rect = *rect;
++        new_rect = *rect;
+         if (new_rect.left   < top_rect.left)   new_rect.left   = top_rect.left;
+         if (new_rect.right  > top_rect.right)  new_rect.right  = top_rect.right;
+         if (new_rect.top    < top_rect.top)    new_rect.top    = top_rect.top;
+         if (new_rect.bottom > top_rect.bottom) new_rect.bottom = top_rect.bottom;
+         if (new_rect.left > new_rect.right || new_rect.top > new_rect.bottom) new_rect = top_rect;
+-        desktop->cursor.clip = new_rect;
+     }
+-    else desktop->cursor.clip = top_rect;
++    else new_rect = top_rect;
++
++    SHARED_WRITE_BEGIN( &desktop->shared->seq );
++    desktop->shared->cursor.clip = new_rect;
+ 
+     if (desktop->cursor.clip_msg && send_clip_msg)
+         post_desktop_message( desktop, desktop->cursor.clip_msg, rect != NULL, 0 );
+ 
+     /* warp the mouse to be inside the clip rect */
+-    x = max( min( desktop->shared->cursor.x, desktop->cursor.clip.right - 1 ), desktop->cursor.clip.left );
+-    y = max( min( desktop->shared->cursor.y, desktop->cursor.clip.bottom - 1 ), desktop->cursor.clip.top );
++    x = max( min( desktop->shared->cursor.x, desktop->shared->cursor.clip.right - 1 ), desktop->shared->cursor.clip.left );
++    y = max( min( desktop->shared->cursor.y, desktop->shared->cursor.clip.bottom - 1 ), desktop->shared->cursor.clip.top );
+     if (x != desktop->shared->cursor.x || y != desktop->shared->cursor.y) set_cursor_pos( desktop, x, y );
++    SHARED_WRITE_END( &desktop->shared->seq );
+ }
+ 
+ /* change the foreground input and reset the cursor clip rect */
+@@ -3403,7 +3406,7 @@ DECL_HANDLER(set_cursor)
+ 
+     reply->new_x       = input->desktop->shared->cursor.x;
+     reply->new_y       = input->desktop->shared->cursor.y;
+-    reply->new_clip    = input->desktop->cursor.clip;
++    reply->new_clip    = input->desktop->shared->cursor.clip;
+     reply->last_change = input->desktop->shared->cursor.last_change;
+ }
+ 
+diff --git a/server/user.h b/server/user.h
+index 99d486f7fd2..2ec1110cdef 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -54,7 +54,6 @@ struct winstation
+ 
+ struct global_cursor
+ {
+-    rectangle_t          clip;             /* cursor clip rectangle */
+     unsigned int         clip_msg;         /* message to post for cursor clip changes */
+     user_handle_t        win;              /* window that contains the cursor */
+ };
+From 26a0ac54fbba4fea8e1ee2875583906d6b554b82 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Tue, 30 Jun 2020 14:28:15 +0100
+Subject: [PATCH] user32: Use the desktop shared data for GetClipCursor().
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ dlls/user32/cursoricon.c | 24 ++++++++++--------------
+ 1 file changed, 10 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/user32/cursoricon.c b/dlls/user32/cursoricon.c
+index eca6dc58c3d..b7e68c02280 100644
+--- a/dlls/user32/cursoricon.c
++++ b/dlls/user32/cursoricon.c
+@@ -2166,32 +2166,28 @@ BOOL WINAPI DECLSPEC_HOTPATCH ClipCursor( const RECT *rect )
+  */
+ BOOL WINAPI DECLSPEC_HOTPATCH GetClipCursor( RECT *rect )
+ {
++    volatile struct desktop_shared_memory *shared = get_desktop_shared_memory();
+     DPI_AWARENESS_CONTEXT context;
+     UINT dpi;
+-    BOOL ret;
+ 
+-    if (!rect) return FALSE;
++    if (!rect || !shared) return FALSE;
+ 
+-    SERVER_START_REQ( set_cursor )
++    SHARED_READ_BEGIN( &shared->seq )
+     {
+-        req->flags = 0;
+-        if ((ret = !wine_server_call( req )))
+-        {
+-            rect->left   = reply->new_clip.left;
+-            rect->top    = reply->new_clip.top;
+-            rect->right  = reply->new_clip.right;
+-            rect->bottom = reply->new_clip.bottom;
+-        }
++        rect->left   = shared->cursor.clip.left;
++        rect->top    = shared->cursor.clip.top;
++        rect->right  = shared->cursor.clip.right;
++        rect->bottom = shared->cursor.clip.bottom;
+     }
+-    SERVER_END_REQ;
++    SHARED_READ_END( &shared->seq );
+ 
+-    if (ret && (dpi = get_thread_dpi()))
++    if ((dpi = get_thread_dpi()))
+     {
+         context = SetThreadDpiAwarenessContext( DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE );
+         *rect = map_dpi_rect( *rect, get_monitor_dpi( MonitorFromRect( rect, MONITOR_DEFAULTTOPRIMARY )), dpi );
+         SetThreadDpiAwarenessContext( context );
+     }
+-    return ret;
++    return TRUE;
+ }
+ 
+ 
+From 5981f5fb4696c74e6178e7f07c8b365b7a9e25e7 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Tue, 30 Jun 2020 14:41:57 +0100
+Subject: [PATCH] server: Get rid of the global cursor structure.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ server/queue.c      | 10 +++++-----
+ server/user.h       |  9 ++-------
+ server/winstation.c |  3 ++-
+ 3 files changed, 9 insertions(+), 13 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 5055ea58475..705994d5ef8 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -501,8 +501,8 @@ void set_clip_rectangle( struct desktop *desktop, const rectangle_t *rect, int s
+     SHARED_WRITE_BEGIN( &desktop->shared->seq );
+     desktop->shared->cursor.clip = new_rect;
+ 
+-    if (desktop->cursor.clip_msg && send_clip_msg)
+-        post_desktop_message( desktop, desktop->cursor.clip_msg, rect != NULL, 0 );
++    if (desktop->cursor_clip_msg && send_clip_msg)
++        post_desktop_message( desktop, desktop->cursor_clip_msg, rect != NULL, 0 );
+ 
+     /* warp the mouse to be inside the clip rect */
+     x = max( min( desktop->shared->cursor.x, desktop->shared->cursor.clip.right - 1 ), desktop->shared->cursor.clip.left );
+@@ -1681,8 +1681,8 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+     }
+     input = thread->queue->input;
+ 
+-    if (win != desktop->cursor.win) always_queue = 1;
+-    desktop->cursor.win = win;
++    if (win != desktop->cursor_win) always_queue = 1;
++    desktop->cursor_win = win;
+ 
+     if (!always_queue || merge_message( input, msg )) free_message( msg );
+     else
+@@ -3399,7 +3399,7 @@ DECL_HANDLER(set_cursor)
+ 
+         /* only the desktop owner can set the message */
+         if (req->clip_msg && get_top_window_owner(desktop) == current->process)
+-            desktop->cursor.clip_msg = req->clip_msg;
++            desktop->cursor_clip_msg = req->clip_msg;
+ 
+         set_clip_rectangle( desktop, (req->flags & SET_CURSOR_NOCLIP) ? NULL : &req->clip, 0 );
+     }
+diff --git a/server/user.h b/server/user.h
+index 2ec1110cdef..7e9c53b47a9 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -52,12 +52,6 @@ struct winstation
+     struct namespace  *desktop_names;      /* namespace for desktops of this winstation */
+ };
+ 
+-struct global_cursor
+-{
+-    unsigned int         clip_msg;         /* message to post for cursor clip changes */
+-    user_handle_t        win;              /* window that contains the cursor */
+-};
+-
+ struct desktop
+ {
+     struct object                          obj;              /* object header */
+@@ -71,7 +65,8 @@ struct desktop
+     struct timeout_user                   *close_timeout;    /* timeout before closing the desktop */
+     struct thread_input                   *foreground_input; /* thread input of foreground thread */
+     unsigned int                           users;            /* processes and threads using this desktop */
+-    struct global_cursor                   cursor;           /* global cursor information */
++    unsigned int                           cursor_clip_msg;  /* message to post for cursor clip changes */
++    user_handle_t                          cursor_win;       /* window that contains the cursor */
+     struct object                         *shared_mapping;   /* desktop shared memory mapping */
+     volatile struct desktop_shared_memory *shared;           /* desktop shared memory ptr */
+     unsigned char                          keystate[256];    /* asynchronous key state */
+diff --git a/server/winstation.c b/server/winstation.c
+index a3f6cfbfdf3..c1aeb850ab2 100644
+--- a/server/winstation.c
++++ b/server/winstation.c
+@@ -247,7 +247,8 @@ static struct desktop *create_desktop( const struct unicode_str *name, unsigned
+             desktop->close_timeout = NULL;
+             desktop->foreground_input = NULL;
+             desktop->users = 0;
+-            memset( &desktop->cursor, 0, sizeof(desktop->cursor) );
++            desktop->cursor_clip_msg = 0;
++            desktop->cursor_win = 0;
+             memset( desktop->keystate, 0, sizeof(desktop->keystate) );
+             list_add_tail( &winstation->desktops, &desktop->entry );
+             list_init( &desktop->hotkeys );
+From 4ad31c88ec1401d6d9982209a8fb42002419e431 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Tue, 30 Jun 2020 15:42:25 +0100
+Subject: [PATCH] server: Use a separate variable to determine the message on
+ Alt release.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ server/queue.c      | 11 +++++------
+ server/user.h       |  1 +
+ server/winstation.c |  1 +
+ 3 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 705994d5ef8..b96c8f6b9cf 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1983,17 +1983,16 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
+         if (input->kbd.flags & KEYEVENTF_KEYUP)
+         {
+             /* send WM_SYSKEYUP if Alt still pressed and no other key in between */
+-            /* we use 0x02 as a flag to track if some other SYSKEYUP was sent already */
+-            if ((desktop->keystate[VK_MENU] & 0x82) != 0x82) break;
++            if (!(desktop->keystate[VK_MENU] & 0x80) || !desktop->last_press_alt) break;
+             message_code = WM_SYSKEYUP;
+-            desktop->keystate[VK_MENU] &= ~0x02;
++            desktop->last_press_alt = 0;
+         }
+         else
+         {
+             /* send WM_SYSKEYDOWN for Alt except with Ctrl */
+             if (desktop->keystate[VK_CONTROL] & 0x80) break;
+             message_code = WM_SYSKEYDOWN;
+-            desktop->keystate[VK_MENU] |= 0x02;
++            desktop->last_press_alt = 1;
+         }
+         break;
+ 
+@@ -2003,7 +2002,7 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
+         if (!(input->kbd.flags & KEYEVENTF_KEYUP)) break;
+         if (!(desktop->keystate[VK_MENU] & 0x80)) break;
+         message_code = WM_SYSKEYUP;
+-        desktop->keystate[VK_MENU] &= ~0x02;
++        desktop->last_press_alt = 0;
+         break;
+ 
+     default:
+@@ -2013,7 +2012,7 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
+         /* fall through */
+     case VK_F10:
+         message_code = (input->kbd.flags & KEYEVENTF_KEYUP) ? WM_SYSKEYUP : WM_SYSKEYDOWN;
+-        desktop->keystate[VK_MENU] &= ~0x02;
++        desktop->last_press_alt = 0;
+         break;
+     }
+ 
+diff --git a/server/user.h b/server/user.h
+index 7e9c53b47a9..59b6a741df0 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -69,6 +69,7 @@ struct desktop
+     user_handle_t                          cursor_win;       /* window that contains the cursor */
+     struct object                         *shared_mapping;   /* desktop shared memory mapping */
+     volatile struct desktop_shared_memory *shared;           /* desktop shared memory ptr */
++    unsigned int                           last_press_alt:1; /* last key press was Alt (used to determine msg on Alt release) */
+     unsigned char                          keystate[256];    /* asynchronous key state */
+ };
+ 
+diff --git a/server/winstation.c b/server/winstation.c
+index c1aeb850ab2..e3249322adc 100644
+--- a/server/winstation.c
++++ b/server/winstation.c
+@@ -249,6 +249,7 @@ static struct desktop *create_desktop( const struct unicode_str *name, unsigned
+             desktop->users = 0;
+             desktop->cursor_clip_msg = 0;
+             desktop->cursor_win = 0;
++            desktop->last_press_alt = 0;
+             memset( desktop->keystate, 0, sizeof(desktop->keystate) );
+             list_add_tail( &winstation->desktops, &desktop->entry );
+             list_init( &desktop->hotkeys );
+From 3dd2091e8445ad56e6ea3e7913156bb5b034abfe Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Tue, 7 Jul 2020 13:35:21 +0100
+Subject: [PATCH] server: Simplify update_input_key_state().
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ server/queue.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index b96c8f6b9cf..032308a5220 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1384,7 +1384,7 @@ static struct timer *set_timer( struct msg_queue *queue, unsigned int rate )
+ }
+ 
+ /* change the input key state for a given key */
+-static void set_input_key_state( unsigned char *keystate, unsigned char key, int down )
++static void set_input_key_state( unsigned char *keystate, unsigned char key, unsigned char down )
+ {
+     if (down)
+     {
+@@ -1398,31 +1398,30 @@ static void set_input_key_state( unsigned char *keystate, unsigned char key, int
+ static void update_input_key_state( struct desktop *desktop, unsigned char *keystate,
+                                     unsigned int msg, lparam_t wparam )
+ {
+-    unsigned char key;
+-    int down = 0;
++    unsigned char key, down = 0, down_val = (keystate == desktop->keystate) ? 0xc0 : 0x80;
+ 
+     switch (msg)
+     {
+     case WM_LBUTTONDOWN:
+-        down = (keystate == desktop->keystate) ? 0xc0 : 0x80;
++        down = down_val;
+         /* fall through */
+     case WM_LBUTTONUP:
+         set_input_key_state( keystate, VK_LBUTTON, down );
+         break;
+     case WM_MBUTTONDOWN:
+-        down = (keystate == desktop->keystate) ? 0xc0 : 0x80;
++        down = down_val;
+         /* fall through */
+     case WM_MBUTTONUP:
+         set_input_key_state( keystate, VK_MBUTTON, down );
+         break;
+     case WM_RBUTTONDOWN:
+-        down = (keystate == desktop->keystate) ? 0xc0 : 0x80;
++        down = down_val;
+         /* fall through */
+     case WM_RBUTTONUP:
+         set_input_key_state( keystate, VK_RBUTTON, down );
+         break;
+     case WM_XBUTTONDOWN:
+-        down = (keystate == desktop->keystate) ? 0xc0 : 0x80;
++        down = down_val;
+         /* fall through */
+     case WM_XBUTTONUP:
+         if (wparam >> 16 == XBUTTON1) set_input_key_state( keystate, VK_XBUTTON1, down );
+@@ -1430,7 +1429,7 @@ static void update_input_key_state( struct desktop *desktop, unsigned char *keys
+         break;
+     case WM_KEYDOWN:
+     case WM_SYSKEYDOWN:
+-        down = (keystate == desktop->keystate) ? 0xc0 : 0x80;
++        down = down_val;
+         /* fall through */
+     case WM_KEYUP:
+     case WM_SYSKEYUP:
+From 04edab3523e2cb6fe3bae42c69d432c6ee8ba1e8 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Wed, 8 Jul 2020 13:39:49 +0100
+Subject: [PATCH] server: Use separate functions to update the desktop and
+ input keystates.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ server/queue.c | 44 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 17 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 032308a5220..129d731f7fd 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1395,10 +1395,10 @@ static void set_input_key_state( unsigned char *keystate, unsigned char key, uns
+ }
+ 
+ /* update the input key state for a keyboard message */
+-static void update_input_key_state( struct desktop *desktop, unsigned char *keystate,
+-                                    unsigned int msg, lparam_t wparam )
++static void update_key_state( unsigned char *keystate, unsigned int msg,
++                              lparam_t wparam, int desktop )
+ {
+-    unsigned char key, down = 0, down_val = (keystate == desktop->keystate) ? 0xc0 : 0x80;
++    unsigned char key, down = 0, down_val = desktop ? 0xc0 : 0x80;
+ 
+     switch (msg)
+     {
+@@ -1457,6 +1457,16 @@ static void update_input_key_state( struct desktop *desktop, unsigned char *keys
+     }
+ }
+ 
++static void update_input_key_state( struct thread_input *input, unsigned int msg, lparam_t wparam )
++{
++    update_key_state( input->keystate, msg, wparam, 0 );
++}
++
++static void update_desktop_key_state( struct desktop *desktop, unsigned int msg, lparam_t wparam )
++{
++    update_key_state( desktop->keystate, msg, wparam, 1 );
++}
++
+ /* update the desktop key state according to a mouse message flags */
+ static void update_desktop_mouse_state( struct desktop *desktop, unsigned int flags,
+                                         int x, int y, lparam_t wparam )
+@@ -1464,21 +1474,21 @@ static void update_desktop_mouse_state( struct desktop *desktop, unsigned int fl
+     if (flags & MOUSEEVENTF_MOVE)
+         update_desktop_cursor_pos( desktop, x, y );
+     if (flags & MOUSEEVENTF_LEFTDOWN)
+-        update_input_key_state( desktop, desktop->keystate, WM_LBUTTONDOWN, wparam );
++        update_desktop_key_state( desktop, WM_LBUTTONDOWN, wparam );
+     if (flags & MOUSEEVENTF_LEFTUP)
+-        update_input_key_state( desktop, desktop->keystate, WM_LBUTTONUP, wparam );
++        update_desktop_key_state( desktop, WM_LBUTTONUP, wparam );
+     if (flags & MOUSEEVENTF_RIGHTDOWN)
+-        update_input_key_state( desktop, desktop->keystate, WM_RBUTTONDOWN, wparam );
++        update_desktop_key_state( desktop, WM_RBUTTONDOWN, wparam );
+     if (flags & MOUSEEVENTF_RIGHTUP)
+-        update_input_key_state( desktop, desktop->keystate, WM_RBUTTONUP, wparam );
++        update_desktop_key_state( desktop, WM_RBUTTONUP, wparam );
+     if (flags & MOUSEEVENTF_MIDDLEDOWN)
+-        update_input_key_state( desktop, desktop->keystate, WM_MBUTTONDOWN, wparam );
++        update_desktop_key_state( desktop, WM_MBUTTONDOWN, wparam );
+     if (flags & MOUSEEVENTF_MIDDLEUP)
+-        update_input_key_state( desktop, desktop->keystate, WM_MBUTTONUP, wparam );
++        update_desktop_key_state( desktop, WM_MBUTTONUP, wparam );
+     if (flags & MOUSEEVENTF_XDOWN)
+-        update_input_key_state( desktop, desktop->keystate, WM_XBUTTONDOWN, wparam );
++        update_desktop_key_state( desktop, WM_XBUTTONDOWN, wparam );
+     if (flags & MOUSEEVENTF_XUP)
+-        update_input_key_state( desktop, desktop->keystate, WM_XBUTTONUP, wparam );
++        update_desktop_key_state( desktop, WM_XBUTTONUP, wparam );
+ }
+ 
+ /* release the hardware message currently being processed by the given thread */
+@@ -1506,7 +1516,7 @@ static void release_hardware_message( struct msg_queue *queue, unsigned int hw_i
+     }
+     if (clr_bit) clear_queue_bits( queue, clr_bit );
+ 
+-    update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
++    update_input_key_state( input, msg->msg, msg->wparam );
+     list_remove( &msg->entry );
+     free_message( msg );
+ }
+@@ -1635,7 +1645,7 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+     struct hardware_msg_data *msg_data = msg->data;
+     unsigned int msg_code;
+ 
+-    update_input_key_state( desktop, desktop->keystate, msg->msg, msg->wparam );
++    update_desktop_key_state( desktop, msg->msg, msg->wparam );
+     last_input_time = get_tick_count();
+     if (msg->msg != WM_MOUSEMOVE) always_queue = 1;
+ 
+@@ -1674,7 +1684,7 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+     win = find_hardware_message_window( desktop, input, msg, &msg_code, &thread );
+     if (!win || !thread)
+     {
+-        if (input) update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
++        if (input) update_input_key_state( input, msg->msg, msg->wparam );
+         free_message( msg );
+         return;
+     }
+@@ -2039,7 +2049,7 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
+ 
+     if ((device = current->process->rawinput_kbd) && (device->flags & RIDEV_NOLEGACY))
+     {
+-        update_input_key_state( desktop, desktop->keystate, message_code, vkey );
++        update_desktop_key_state( desktop, message_code, vkey );
+         return 0;
+     }
+ 
+@@ -2199,7 +2209,7 @@ static int get_hardware_message( struct thread *thread, unsigned int hw_id, user
+         if (!win || !win_thread)
+         {
+             /* no window at all, remove it */
+-            update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
++            update_input_key_state( input, msg->msg, msg->wparam );
+             list_remove( &msg->entry );
+             free_message( msg );
+             continue;
+@@ -2215,7 +2225,7 @@ static int get_hardware_message( struct thread *thread, unsigned int hw_id, user
+             else
+             {
+                 /* for another thread input, drop it */
+-                update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
++                update_input_key_state( input, msg->msg, msg->wparam );
+                 list_remove( &msg->entry );
+                 free_message( msg );
+             }
+From e95e4d1c95a2e0b7abb5bda64f897efddd7dc24c Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Wed, 8 Jul 2020 08:26:21 +0100
+Subject: [PATCH] server: Move the desktop keystate to shared memory.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ include/wine/server_protocol.h |  3 +-
+ server/protocol.def            |  1 +
+ server/queue.c                 | 66 +++++++++++++++++++---------------
+ server/user.h                  |  1 -
+ server/winstation.c            |  1 -
+ 5 files changed, 40 insertions(+), 32 deletions(-)
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 6fb02232eac..2fb345a7f77 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -812,6 +812,7 @@ struct desktop_shared_memory
+ {
+     unsigned int         seq;
+     struct shared_cursor cursor;
++    unsigned char        keystate[256];
+ };
+ 
+ 
+@@ -6739,7 +6740,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 658
++#define SERVER_PROTOCOL_VERSION 659
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index adfc53097cd..329fb9e2ad8 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -828,6 +828,7 @@ struct desktop_shared_memory
+ {
+     unsigned int         seq;              /* sequence number - server updating if (seq_no & SEQUENCE_MASK) != 0 */
+     struct shared_cursor cursor;           /* global cursor information */
++    unsigned char        keystate[256];    /* asynchronous key state */
+ };
+ 
+ /* Bits that must be clear for client to read */
+diff --git a/server/queue.c b/server/queue.c
+index 129d731f7fd..81703e0aaf7 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1384,7 +1384,7 @@ static struct timer *set_timer( struct msg_queue *queue, unsigned int rate )
+ }
+ 
+ /* change the input key state for a given key */
+-static void set_input_key_state( unsigned char *keystate, unsigned char key, unsigned char down )
++static void set_input_key_state( volatile unsigned char *keystate, unsigned char key, unsigned char down )
+ {
+     if (down)
+     {
+@@ -1395,7 +1395,7 @@ static void set_input_key_state( unsigned char *keystate, unsigned char key, uns
+ }
+ 
+ /* update the input key state for a keyboard message */
+-static void update_key_state( unsigned char *keystate, unsigned int msg,
++static void update_key_state( volatile unsigned char *keystate, unsigned int msg,
+                               lparam_t wparam, int desktop )
+ {
+     unsigned char key, down = 0, down_val = desktop ? 0xc0 : 0x80;
+@@ -1464,7 +1464,9 @@ static void update_input_key_state( struct thread_input *input, unsigned int msg
+ 
+ static void update_desktop_key_state( struct desktop *desktop, unsigned int msg, lparam_t wparam )
+ {
+-    update_key_state( desktop->keystate, msg, wparam, 1 );
++    SHARED_WRITE_BEGIN( &desktop->shared->seq );
++    update_key_state( desktop->shared->keystate, msg, wparam, 1 );
++    SHARED_WRITE_END( &desktop->shared->seq );
+ }
+ 
+ /* update the desktop key state according to a mouse message flags */
+@@ -1528,10 +1530,10 @@ static int queue_hotkey_message( struct desktop *desktop, struct message *msg )
+ 
+     if (msg->msg != WM_KEYDOWN) return 0;
+ 
+-    if (desktop->keystate[VK_MENU] & 0x80) modifiers |= MOD_ALT;
+-    if (desktop->keystate[VK_CONTROL] & 0x80) modifiers |= MOD_CONTROL;
+-    if (desktop->keystate[VK_SHIFT] & 0x80) modifiers |= MOD_SHIFT;
+-    if ((desktop->keystate[VK_LWIN] & 0x80) || (desktop->keystate[VK_RWIN] & 0x80)) modifiers |= MOD_WIN;
++    if (desktop->shared->keystate[VK_MENU] & 0x80) modifiers |= MOD_ALT;
++    if (desktop->shared->keystate[VK_CONTROL] & 0x80) modifiers |= MOD_CONTROL;
++    if (desktop->shared->keystate[VK_SHIFT] & 0x80) modifiers |= MOD_SHIFT;
++    if ((desktop->shared->keystate[VK_LWIN] & 0x80) || (desktop->shared->keystate[VK_RWIN] & 0x80)) modifiers |= MOD_WIN;
+ 
+     LIST_FOR_EACH_ENTRY( hotkey, &desktop->hotkeys, struct hotkey, entry )
+     {
+@@ -1652,7 +1654,7 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+     if (is_keyboard_msg( msg ))
+     {
+         if (queue_hotkey_message( desktop, msg )) return;
+-        if (desktop->keystate[VK_MENU] & 0x80) msg->lparam |= KF_ALTDOWN << 16;
++        if (desktop->shared->keystate[VK_MENU] & 0x80) msg->lparam |= KF_ALTDOWN << 16;
+         if (msg->wparam == VK_SHIFT || msg->wparam == VK_LSHIFT || msg->wparam == VK_RSHIFT)
+             msg->lparam &= ~(KF_EXTENDED << 16);
+     }
+@@ -1663,13 +1665,13 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+             prepend_cursor_history( msg->x, msg->y, msg->time, msg_data->info );
+             if (update_desktop_cursor_pos( desktop, msg->x, msg->y )) always_queue = 1;
+         }
+-        if (desktop->keystate[VK_LBUTTON] & 0x80)  msg->wparam |= MK_LBUTTON;
+-        if (desktop->keystate[VK_MBUTTON] & 0x80)  msg->wparam |= MK_MBUTTON;
+-        if (desktop->keystate[VK_RBUTTON] & 0x80)  msg->wparam |= MK_RBUTTON;
+-        if (desktop->keystate[VK_SHIFT] & 0x80)    msg->wparam |= MK_SHIFT;
+-        if (desktop->keystate[VK_CONTROL] & 0x80)  msg->wparam |= MK_CONTROL;
+-        if (desktop->keystate[VK_XBUTTON1] & 0x80) msg->wparam |= MK_XBUTTON1;
+-        if (desktop->keystate[VK_XBUTTON2] & 0x80) msg->wparam |= MK_XBUTTON2;
++        if (desktop->shared->keystate[VK_LBUTTON] & 0x80)  msg->wparam |= MK_LBUTTON;
++        if (desktop->shared->keystate[VK_MBUTTON] & 0x80)  msg->wparam |= MK_MBUTTON;
++        if (desktop->shared->keystate[VK_RBUTTON] & 0x80)  msg->wparam |= MK_RBUTTON;
++        if (desktop->shared->keystate[VK_SHIFT] & 0x80)    msg->wparam |= MK_SHIFT;
++        if (desktop->shared->keystate[VK_CONTROL] & 0x80)  msg->wparam |= MK_CONTROL;
++        if (desktop->shared->keystate[VK_XBUTTON1] & 0x80) msg->wparam |= MK_XBUTTON1;
++        if (desktop->shared->keystate[VK_XBUTTON2] & 0x80) msg->wparam |= MK_XBUTTON2;
+     }
+     msg->x = desktop->shared->cursor.x;
+     msg->y = desktop->shared->cursor.y;
+@@ -1992,14 +1994,14 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
+         if (input->kbd.flags & KEYEVENTF_KEYUP)
+         {
+             /* send WM_SYSKEYUP if Alt still pressed and no other key in between */
+-            if (!(desktop->keystate[VK_MENU] & 0x80) || !desktop->last_press_alt) break;
++            if (!(desktop->shared->keystate[VK_MENU] & 0x80) || !desktop->last_press_alt) break;
+             message_code = WM_SYSKEYUP;
+             desktop->last_press_alt = 0;
+         }
+         else
+         {
+             /* send WM_SYSKEYDOWN for Alt except with Ctrl */
+-            if (desktop->keystate[VK_CONTROL] & 0x80) break;
++            if (desktop->shared->keystate[VK_CONTROL] & 0x80) break;
+             message_code = WM_SYSKEYDOWN;
+             desktop->last_press_alt = 1;
+         }
+@@ -2009,15 +2011,15 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
+     case VK_RCONTROL:
+         /* send WM_SYSKEYUP on release if Alt still pressed */
+         if (!(input->kbd.flags & KEYEVENTF_KEYUP)) break;
+-        if (!(desktop->keystate[VK_MENU] & 0x80)) break;
++        if (!(desktop->shared->keystate[VK_MENU] & 0x80)) break;
+         message_code = WM_SYSKEYUP;
+         desktop->last_press_alt = 0;
+         break;
+ 
+     default:
+         /* send WM_SYSKEY for Alt-anykey and for F10 */
+-        if (desktop->keystate[VK_CONTROL] & 0x80) break;
+-        if (!(desktop->keystate[VK_MENU] & 0x80)) break;
++        if (desktop->shared->keystate[VK_CONTROL] & 0x80) break;
++        if (!(desktop->shared->keystate[VK_MENU] & 0x80)) break;
+         /* fall through */
+     case VK_F10:
+         message_code = (input->kbd.flags & KEYEVENTF_KEYUP) ? WM_SYSKEYUP : WM_SYSKEYDOWN;
+@@ -2074,7 +2076,7 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
+         if (input->kbd.flags & KEYEVENTF_EXTENDEDKEY) flags |= KF_EXTENDED;
+         /* FIXME: set KF_DLGMODE and KF_MENUMODE when needed */
+         if (input->kbd.flags & KEYEVENTF_KEYUP) flags |= KF_REPEAT | KF_UP;
+-        else if (desktop->keystate[vkey] & 0x80) flags |= KF_REPEAT;
++        else if (desktop->shared->keystate[vkey] & 0x80) flags |= KF_REPEAT;
+ 
+         msg->wparam = vkey;
+         msg->lparam |= flags << 16;
+@@ -2671,7 +2673,7 @@ DECL_HANDLER(send_hardware_message)
+ 
+     reply->new_x = desktop->shared->cursor.x;
+     reply->new_y = desktop->shared->cursor.y;
+-    set_reply_data( desktop->keystate, size );
++    set_reply_data( (void *)desktop->shared->keystate, size );
+     release_object( desktop );
+ }
+ 
+@@ -3154,10 +3156,12 @@ DECL_HANDLER(get_key_state)
+         if (!(desktop = get_thread_desktop( current, 0 ))) return;
+         if (req->key >= 0)
+         {
+-            reply->state = desktop->keystate[req->key & 0xff];
+-            desktop->keystate[req->key & 0xff] &= ~0x40;
++            reply->state = desktop->shared->keystate[req->key & 0xff];
++            SHARED_WRITE_BEGIN( &desktop->shared->seq );
++            desktop->shared->keystate[req->key & 0xff] &= ~0x40;
++            SHARED_WRITE_END( &desktop->shared->seq );
+         }
+-        set_reply_data( desktop->keystate, size );
++        set_reply_data( (void *)desktop->shared->keystate, size );
+         release_object( desktop );
+     }
+     else
+@@ -3175,11 +3179,11 @@ DECL_HANDLER(get_key_state)
+ 
+         /* fallback to desktop keystate */
+         if (!(desktop = get_thread_desktop( current, 0 ))) return;
+-        if (req->key >= 0) reply->state = desktop->keystate[req->key & 0xff] & ~0x40;
++        if (req->key >= 0) reply->state = desktop->shared->keystate[req->key & 0xff] & ~0x40;
+         if ((keystate = set_reply_data_size( size )))
+         {
+             unsigned int i;
+-            for (i = 0; i < size; i++) keystate[i] = desktop->keystate[i] & ~0x40;
++            for (i = 0; i < size; i++) keystate[i] = desktop->shared->keystate[i] & ~0x40;
+         }
+         release_object( desktop );
+     }
+@@ -3196,7 +3200,9 @@ DECL_HANDLER(set_key_state)
+     if (!req->tid)  /* set global async key state */
+     {
+         if (!(desktop = get_thread_desktop( current, 0 ))) return;
+-        memcpy( desktop->keystate, get_req_data(), size );
++        SHARED_WRITE_BEGIN( &desktop->shared->seq );
++        memcpy( (void *)desktop->shared->keystate, get_req_data(), size );
++        SHARED_WRITE_END( &desktop->shared->seq );
+         release_object( desktop );
+     }
+     else
+@@ -3205,7 +3211,9 @@ DECL_HANDLER(set_key_state)
+         if (thread->queue) memcpy( thread->queue->input->keystate, get_req_data(), size );
+         if (req->async && (desktop = get_thread_desktop( thread, 0 )))
+         {
+-            memcpy( desktop->keystate, get_req_data(), size );
++            SHARED_WRITE_BEGIN( &desktop->shared->seq );
++            memcpy( (void *)desktop->shared->keystate, get_req_data(), size );
++            SHARED_WRITE_END( &desktop->shared->seq );
+             release_object( desktop );
+         }
+         release_object( thread );
+diff --git a/server/user.h b/server/user.h
+index 59b6a741df0..2806e06832c 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -70,7 +70,6 @@ struct desktop
+     struct object                         *shared_mapping;   /* desktop shared memory mapping */
+     volatile struct desktop_shared_memory *shared;           /* desktop shared memory ptr */
+     unsigned int                           last_press_alt:1; /* last key press was Alt (used to determine msg on Alt release) */
+-    unsigned char                          keystate[256];    /* asynchronous key state */
+ };
+ 
+ /* user handles functions */
+diff --git a/server/winstation.c b/server/winstation.c
+index e3249322adc..62e31e8942b 100644
+--- a/server/winstation.c
++++ b/server/winstation.c
+@@ -250,7 +250,6 @@ static struct desktop *create_desktop( const struct unicode_str *name, unsigned
+             desktop->cursor_clip_msg = 0;
+             desktop->cursor_win = 0;
+             desktop->last_press_alt = 0;
+-            memset( desktop->keystate, 0, sizeof(desktop->keystate) );
+             list_add_tail( &winstation->desktops, &desktop->entry );
+             list_init( &desktop->hotkeys );
+             if (!init_desktop_mapping( desktop, name ))
+From b12ce47087d6cec75bad52669105eed06b4be017 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Wed, 8 Jul 2020 15:45:24 +0100
+Subject: [PATCH] user32: Use the shared data if possible for
+ GetAsyncKeyState().
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ dlls/user32/hook.c         |  3 ---
+ dlls/user32/input.c        | 40 +++++++++-----------------------------
+ dlls/user32/message.c      | 16 ++-------------
+ dlls/user32/user_main.c    |  1 -
+ dlls/user32/user_private.h |  9 ---------
+ dlls/user32/winstation.c   |  2 --
+ 6 files changed, 11 insertions(+), 60 deletions(-)
+
+diff --git a/dlls/user32/hook.c b/dlls/user32/hook.c
+index aff8cae262f..c6e363a5336 100644
+--- a/dlls/user32/hook.c
++++ b/dlls/user32/hook.c
+@@ -453,9 +453,6 @@ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARA
+         }
+     }
+ 
+-    if (info->id == WH_KEYBOARD_LL || info->id == WH_MOUSE_LL)
+-        InterlockedIncrement( &global_key_state_counter );  /* force refreshing the key state cache */
+-
+     return ret;
+ }
+ 
+diff --git a/dlls/user32/input.c b/dlls/user32/input.c
+index 6bfd91cf710..88cec6d74bd 100644
+--- a/dlls/user32/input.c
++++ b/dlls/user32/input.c
+@@ -53,8 +53,6 @@
+ WINE_DEFAULT_DEBUG_CHANNEL(win);
+ WINE_DECLARE_DEBUG_CHANNEL(keyboard);
+ 
+-INT global_key_state_counter = 0;
+-
+ /***********************************************************************
+  *           get_key_state
+  */
+@@ -391,52 +389,32 @@ static void check_for_events( UINT flags )
+  */
+ SHORT WINAPI DECLSPEC_HOTPATCH GetAsyncKeyState( INT key )
+ {
+-    struct user_key_state_info *key_state_info = get_user_thread_info()->key_state;
+-    INT counter = global_key_state_counter;
+-    BYTE prev_key_state;
++    volatile struct desktop_shared_memory *shared = get_desktop_shared_memory();
++    BYTE state;
+     SHORT ret;
+ 
+-    if (key < 0 || key >= 256) return 0;
++    if (key < 0 || key >= 256 || !shared) return 0;
+ 
+     check_for_events( QS_INPUT );
+ 
+-    if (key_state_info && !(key_state_info->state[key] & 0xc0) &&
+-        key_state_info->counter == counter && GetTickCount() - key_state_info->time < 50)
+-    {
+-        /* use cached value */
+-        return 0;
+-    }
+-    else if (!key_state_info)
++    SHARED_READ_BEGIN( &shared->seq )
+     {
+-        key_state_info = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*key_state_info) );
+-        get_user_thread_info()->key_state = key_state_info;
++        state = shared->keystate[key];
+     }
++    SHARED_READ_END( &shared->seq );
++
++    if (!(state & 0x40)) return (state & 0x80) << 8;
+ 
++    /* Need to make a server call to reset the last pressed bit */
+     ret = 0;
+     SERVER_START_REQ( get_key_state )
+     {
+         req->tid = 0;
+         req->key = key;
+-        if (key_state_info)
+-        {
+-            prev_key_state = key_state_info->state[key];
+-            wine_server_set_reply( req, key_state_info->state, sizeof(key_state_info->state) );
+-        }
+         if (!wine_server_call( req ))
+         {
+             if (reply->state & 0x40) ret |= 0x0001;
+             if (reply->state & 0x80) ret |= 0x8000;
+-            if (key_state_info)
+-            {
+-                /* force refreshing the key state cache - some multithreaded programs
+-                 * (like Adobe Photoshop CS5) expect that changes to the async key state
+-                 * are also immediately available in other threads. */
+-                if (prev_key_state != key_state_info->state[key])
+-                    counter = InterlockedIncrement( &global_key_state_counter );
+-
+-                key_state_info->time    = GetTickCount();
+-                key_state_info->counter = counter;
+-            }
+         }
+     }
+     SERVER_END_REQ;
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index a6e0b3cf94d..cf9c941ece2 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -3227,10 +3227,8 @@ static BOOL send_message( struct send_message_info *info, DWORD_PTR *res_ptr, BO
+  */
+ NTSTATUS send_hardware_message( HWND hwnd, const INPUT *input, UINT flags )
+ {
+-    struct user_key_state_info *key_state_info = get_user_thread_info()->key_state;
+     struct send_message_info info;
+     int prev_x, prev_y, new_x, new_y;
+-    INT counter = global_key_state_counter;
+     NTSTATUS ret;
+     BOOL wait;
+ 
+@@ -3269,8 +3267,6 @@ NTSTATUS send_hardware_message( HWND hwnd, const INPUT *input, UINT flags )
+             req->input.hw.lparam = MAKELONG( input->u.hi.wParamL, input->u.hi.wParamH );
+             break;
+         }
+-        if (key_state_info) wine_server_set_reply( req, key_state_info->state,
+-                                                   sizeof(key_state_info->state) );
+         ret = wine_server_call( req );
+         wait = reply->wait;
+         prev_x = reply->prev_x;
+@@ -3280,16 +3276,8 @@ NTSTATUS send_hardware_message( HWND hwnd, const INPUT *input, UINT flags )
+     }
+     SERVER_END_REQ;
+ 
+-    if (!ret)
+-    {
+-        if (key_state_info)
+-        {
+-            key_state_info->time    = GetTickCount();
+-            key_state_info->counter = counter;
+-        }
+-        if ((flags & SEND_HWMSG_INJECTED) && (prev_x != new_x || prev_y != new_y))
+-            USER_Driver->pSetCursorPos( new_x, new_y );
+-    }
++    if (!ret && (flags & SEND_HWMSG_INJECTED) && (prev_x != new_x || prev_y != new_y))
++        USER_Driver->pSetCursorPos( new_x, new_y );
+ 
+     if (wait)
+     {
+diff --git a/dlls/user32/user_main.c b/dlls/user32/user_main.c
+index 6b70db4978c..ad50b150f06 100644
+--- a/dlls/user32/user_main.c
++++ b/dlls/user32/user_main.c
+@@ -382,7 +382,6 @@ static void thread_detach(void)
+     destroy_thread_windows();
+     CloseHandle( thread_info->server_queue );
+     HeapFree( GetProcessHeap(), 0, thread_info->wmchar_data );
+-    HeapFree( GetProcessHeap(), 0, thread_info->key_state );
+     HeapFree( GetProcessHeap(), 0, thread_info->rawinput );
+ 
+     exiting_thread_id = 0;
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 6a5c2fd1e46..bab8a131a60 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -199,7 +199,6 @@ struct user_thread_info
+     DWORD                         GetMessageTimeVal;      /* Value for GetMessageTime */
+     DWORD                         GetMessagePosVal;       /* Value for GetMessagePos */
+     ULONG_PTR                     GetMessageExtraInfoVal; /* Value for GetMessageExtraInfo */
+-    struct user_key_state_info   *key_state;              /* Cache of global key state */
+     HWND                          top_window;             /* Desktop window */
+     HWND                          msg_window;             /* HWND_MESSAGE parent window */
+     struct rawinput_thread_data  *rawinput;               /* RawInput thread local data / buffer */
+@@ -209,18 +208,10 @@ struct user_thread_info
+ 
+ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo) );
+ 
+-extern INT global_key_state_counter DECLSPEC_HIDDEN;
+ extern BOOL (WINAPI *imm_register_window)(HWND) DECLSPEC_HIDDEN;
+ extern void (WINAPI *imm_unregister_window)(HWND) DECLSPEC_HIDDEN;
+ extern void (WINAPI *imm_activate_window)(HWND) DECLSPEC_HIDDEN;
+ 
+-struct user_key_state_info
+-{
+-    UINT                          time;                   /* Time of last key state refresh */
+-    INT                           counter;                /* Counter to invalidate the key state */
+-    BYTE                          state[256];             /* State for each key */
+-};
+-
+ struct hook_extra_info
+ {
+     HHOOK handle;
+diff --git a/dlls/user32/winstation.c b/dlls/user32/winstation.c
+index 71a97e585e8..54f9bc42090 100644
+--- a/dlls/user32/winstation.c
++++ b/dlls/user32/winstation.c
+@@ -514,10 +514,8 @@ BOOL WINAPI SetThreadDesktop( HDESK handle )
+     if (ret)  /* reset the desktop windows */
+     {
+         struct user_thread_info *thread_info = get_user_thread_info();
+-        struct user_key_state_info *key_state_info = thread_info->key_state;
+         thread_info->top_window = 0;
+         thread_info->msg_window = 0;
+-        if (key_state_info) key_state_info->time = 0;
+         if (thread_info->desktop_shared_map)
+         {
+             CloseHandle( thread_info->desktop_shared_map );
+From 6a335a9357dedf19e14d859e41e92847e62b6f80 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Wed, 8 Jul 2020 16:07:08 +0100
+Subject: [PATCH] server: Don't return the desktop keystate from the
+ send_hardware_message request.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ include/wine/server_protocol.h | 3 +--
+ server/protocol.def            | 1 -
+ server/queue.c                 | 2 --
+ server/trace.c                 | 1 -
+ 4 files changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 2fb345a7f77..f38442be88e 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -3013,7 +3013,6 @@ struct send_hardware_message_reply
+     int             prev_y;
+     int             new_x;
+     int             new_y;
+-    /* VARARG(keystate,bytes); */
+     char __pad_28[4];
+ };
+ #define SEND_HWMSG_INJECTED    0x01
+@@ -6740,7 +6739,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 659
++#define SERVER_PROTOCOL_VERSION 660
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 329fb9e2ad8..3af55b00344 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -2220,7 +2220,6 @@ enum message_type
+     int             prev_y;
+     int             new_x;     /* new cursor position */
+     int             new_y;
+-    VARARG(keystate,bytes);    /* global state array for all the keys */
+ @END
+ #define SEND_HWMSG_INJECTED    0x01
+ #define SEND_HWMSG_RAWINPUT    0x02
+diff --git a/server/queue.c b/server/queue.c
+index 81703e0aaf7..6a9b239e7f8 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -2627,7 +2627,6 @@ DECL_HANDLER(send_hardware_message)
+     struct desktop *desktop = get_thread_desktop( current, 0 );
+     unsigned int origin = (req->flags & SEND_HWMSG_INJECTED ? IMO_INJECTED : IMO_HARDWARE);
+     struct msg_queue *sender = get_current_queue();
+-    data_size_t size = min( 256, get_reply_max_size() );
+ 
+     if (req->win)
+     {
+@@ -2673,7 +2672,6 @@ DECL_HANDLER(send_hardware_message)
+ 
+     reply->new_x = desktop->shared->cursor.x;
+     reply->new_y = desktop->shared->cursor.y;
+-    set_reply_data( (void *)desktop->shared->keystate, size );
+     release_object( desktop );
+ }
+ 
+diff --git a/server/trace.c b/server/trace.c
+index 7df5681357b..981b2377abf 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -2779,7 +2779,6 @@ static void dump_send_hardware_message_reply( const struct send_hardware_message
+     fprintf( stderr, ", prev_y=%d", req->prev_y );
+     fprintf( stderr, ", new_x=%d", req->new_x );
+     fprintf( stderr, ", new_y=%d", req->new_y );
+-    dump_varargs_bytes( ", keystate=", cur_size );
+ }
+ 
+ static void dump_get_message_request( const struct get_message_request *req )
