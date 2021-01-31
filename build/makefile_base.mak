@@ -825,6 +825,9 @@ GST_GOOD_MESON_ARGS := \
 	-Dmonoscope=disabled \
 	-Dmultifile=disabled \
 	-Dmultipart=disabled \
+	-Disomp4=enabled \
+	-Dmatroska=enabled \
+	-Ddirectsound=enabled \
 	-Doss=disabled \
 	-Doss4=disabled \
 	-Dpng=disabled \
@@ -1173,6 +1176,8 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) nasm64 | $(FFMP
 			--disable-vaapi \
 			--disable-vdpau \
 			--disable-everything \
+			--enable-demuxer=matroska \
+			--enable-demuxer=mov \
 			--enable-parser=h264 \
 			--enable-decoder=h264 \
 			--enable-decoder=mpeg4 \
@@ -1226,6 +1231,8 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) nasm32 | $(FFMP
 			--disable-vaapi \
 			--disable-vdpau \
 			--disable-everything \
+			--enable-demuxer=matroska \
+			--enable-demuxer=mov \
 			--enable-parser=h264 \
 			--enable-decoder=h264 \
 			--enable-decoder=mpeg4 \
