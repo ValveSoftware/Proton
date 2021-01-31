@@ -1,4 +1,11 @@
 # proton-ge-custom
+# Please note, this is a custom build of proton, and is -not- affiliated with Valve's proton. 
+
+# If you have an issue that happens with this proton that does -not- happen on Valve's proton, please DO NOT open a bug report on Valve's bug tracker. 
+
+# Instead, contact me on Discord about the issue:
+
+https://discord.gg/6y3BdzC
 
 ## Table of contents
 
