@@ -41,7 +41,6 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../patches/wine-hotfixes/mfplat_rebase_staging_6.1.patch
     cd ..
 
     #WINE
@@ -82,8 +81,7 @@
     -W dinput-remap-joystick \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
-    -W imm32-com-initialization \
-    -W kernel32-SetProcessDEPPolicy
+    -W imm32-com-initialization
 
     patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
 
@@ -198,6 +196,9 @@
     
     echo "mouse focus fixes"
     patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
+
+    echo "proton wmpphoto support"
+    patch -Np1 < ../patches/proton/39-proton_wmpphoto_support.patch
 
     ### END PROTON PATCH SECTION ###
 
