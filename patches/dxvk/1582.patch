@@ -1,4 +1,4 @@
-From 012c311fec2462dd62c3a2e05c01fe426f9d7b16 Mon Sep 17 00:00:00 2001
+From b22c8cecaffdfddc890c65481dc62bed5ed8c417 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 16 Apr 2020 15:46:24 +0200
 Subject: [PATCH 01/15] [spirv] Cache basic types instead of looking them up
@@ -9,7 +9,7 @@ Subject: [PATCH 01/15] [spirv] Cache basic types instead of looking them up
  2 files changed, 141 insertions(+), 29 deletions(-)
 
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index efd520ad..c2f97890 100644
+index efd520adc..c2f97890b 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -705,12 +705,14 @@ namespace dxvk {
@@ -233,7 +233,7 @@ index efd520ad..c2f97890 100644
    
    
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index 007da72a..c0d5e4d1 100644
+index 007da72a8..c0d5e4d1e 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1250,8 +1250,34 @@ namespace dxvk {
@@ -271,10 +271,8 @@ index 007da72a..c0d5e4d1 100644
      uint32_t defType(
              spv::Op                 op, 
              uint32_t                argCount,
--- 
-2.30.0
 
-From 4937cdd2604a5ecd785e23f5bd3088f30f0085d3 Mon Sep 17 00:00:00 2001
+From 8387df2191c8a8f0f1a49bd8504149cb9d4bbf5d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 16 Apr 2020 16:44:23 +0200
 Subject: [PATCH 02/15] [spirv] Cache basic constants intead of looking them up
@@ -285,7 +283,7 @@ Subject: [PATCH 02/15] [spirv] Cache basic constants intead of looking them up
  2 files changed, 103 insertions(+), 20 deletions(-)
 
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index c2f97890..bc846d43 100644
+index c2f97890b..bc846d43e 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -199,89 +199,123 @@ namespace dxvk {
@@ -491,7 +489,7 @@ index c2f97890..bc846d43 100644
    
    
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index c0d5e4d1..9b887f5c 100644
+index c0d5e4d1e..9b887f5c9 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1265,6 +1265,15 @@ namespace dxvk {
@@ -530,10 +528,8 @@ index c0d5e4d1..9b887f5c 100644
      uint32_t defConst(
              spv::Op                 op,
              uint32_t                typeId,
--- 
-2.30.0
 
-From 819f5a664b422cdf65c7a82805ad17647a6183ba Mon Sep 17 00:00:00 2001
+From 4ad5b178b8d1e024e01891650a7ffce6455b1a0a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 6 May 2020 20:11:05 +0200
 Subject: [PATCH 03/15] [spirv] Track type locations instead of checking the
@@ -545,7 +541,7 @@ Subject: [PATCH 03/15] [spirv] Track type locations instead of checking the
  2 files changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index bc846d43..d2504817 100644
+index bc846d43e..d25048178 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -883,6 +883,7 @@ namespace dxvk {
@@ -599,7 +595,7 @@ index bc846d43..d2504817 100644
    }
    
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index 9b887f5c..19341e1e 100644
+index 9b887f5c9..19341e1e4 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1250,6 +1250,8 @@ namespace dxvk {
@@ -611,10 +607,8 @@ index 9b887f5c..19341e1e 100644
      std::optional<uint32_t> m_typeVoid;
      std::optional<uint32_t> m_typeSampler;
      std::optional<uint32_t> m_typeBool[4];
--- 
-2.30.0
 
-From 4b78624d9fc405b61201408fdaf6cb0f5c92add4 Mon Sep 17 00:00:00 2001
+From 105b078bf91b612b47b09c846d551e30aea2df5e Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 16 Apr 2020 16:44:23 +0200
 Subject: [PATCH 04/15] [spirv] Track const locations instead of checking the
@@ -626,7 +620,7 @@ Subject: [PATCH 04/15] [spirv] Track const locations instead of checking the
  2 files changed, 10 insertions(+), 15 deletions(-)
 
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index d2504817..f9f635e8 100644
+index d25048178..f9f635e8a 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -3790,24 +3790,18 @@ namespace dxvk {
@@ -664,7 +658,7 @@ index d2504817..f9f635e8 100644
    }
    
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index 19341e1e..d124dd75 100644
+index 19341e1e4..d124dd75e 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1251,6 +1251,7 @@ namespace dxvk {
@@ -675,10 +669,8 @@ index 19341e1e..d124dd75 100644
  
      std::optional<uint32_t> m_typeVoid;
      std::optional<uint32_t> m_typeSampler;
--- 
-2.30.0
 
-From a04816658e959431511d021f1f9d1103a25f88e1 Mon Sep 17 00:00:00 2001
+From ec2284bed9d988c66a0370de0cbb67fb940a61a2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 16 Apr 2020 17:53:58 +0200
 Subject: [PATCH 05/15] [spirv] Track late const locations instead of looking
@@ -690,7 +682,7 @@ Subject: [PATCH 05/15] [spirv] Track late const locations instead of looking
  2 files changed, 7 insertions(+), 14 deletions(-)
 
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index f9f635e8..14b8fdc1 100644
+index f9f635e8a..14b8fdc11 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -514,7 +514,7 @@ namespace dxvk {
@@ -728,7 +720,7 @@ index f9f635e8..14b8fdc1 100644
  
  
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index d124dd75..ab0de2b7 100644
+index d124dd75e..ab0de2b7e 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1277,7 +1277,7 @@ namespace dxvk {
@@ -740,10 +732,8 @@ index d124dd75..ab0de2b7 100644
  
      uint32_t defTypeCached(
              std::optional<uint32_t>&cache,
--- 
-2.30.0
 
-From 57e7f020f04671e8fcd3b2c78cd9809995631b4e Mon Sep 17 00:00:00 2001
+From 935bd23fae75931309b4a75e62dc6df0f66c64a9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 14 Apr 2020 23:44:10 +0200
 Subject: [PATCH 06/15] [spirv] Use simpler and faster compression method
@@ -756,7 +746,7 @@ byte.
  2 files changed, 32 insertions(+), 85 deletions(-)
 
 diff --git a/src/spirv/spirv_compression.cpp b/src/spirv/spirv_compression.cpp
-index 6c3f6875..27dc8b9a 100644
+index 6c3f68753..27dc8b9ab 100644
 --- a/src/spirv/spirv_compression.cpp
 +++ b/src/spirv/spirv_compression.cpp
 @@ -3,62 +3,27 @@
@@ -894,7 +884,7 @@ index 6c3f6875..27dc8b9a 100644
      return code;
    }
 diff --git a/src/spirv/spirv_compression.h b/src/spirv/spirv_compression.h
-index 7a1276c8..72f5e837 100644
+index 7a1276c8e..72f5e8373 100644
 --- a/src/spirv/spirv_compression.h
 +++ b/src/spirv/spirv_compression.h
 @@ -13,7 +13,6 @@ namespace dxvk {
@@ -917,10 +907,8 @@ index 7a1276c8..72f5e837 100644
  
    };
  
--- 
-2.30.0
 
-From eb120d5a92bab3fbf23d32b3eabe1f6c620b0720 Mon Sep 17 00:00:00 2001
+From ed87f2a28808b126d61dab1c710d6e607030d1be Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 15 May 2020 18:04:15 +0200
 Subject: [PATCH 07/15] [spirv] Introduce SpirvWriter class to factor common
@@ -935,7 +923,7 @@ This prepares ground for writing compressed data directly.
  create mode 100644 src/spirv/spirv_writer.h
 
 diff --git a/src/spirv/spirv_code_buffer.cpp b/src/spirv/spirv_code_buffer.cpp
-index 74d8dd97..b43a61b6 100644
+index 74d8dd970..b43a61b65 100644
 --- a/src/spirv/spirv_code_buffer.cpp
 +++ b/src/spirv/spirv_code_buffer.cpp
 @@ -70,68 +70,6 @@ namespace dxvk {
@@ -1021,7 +1009,7 @@ index 74d8dd97..b43a61b6 100644
      stream.write(
        reinterpret_cast<const char*>(m_code.data()),
 diff --git a/src/spirv/spirv_code_buffer.h b/src/spirv/spirv_code_buffer.h
-index a06b594c..aa642381 100644
+index a06b594c1..aa6423815 100644
 --- a/src/spirv/spirv_code_buffer.h
 +++ b/src/spirv/spirv_code_buffer.h
 @@ -6,6 +6,7 @@
@@ -1115,7 +1103,7 @@ index a06b594c..aa642381 100644
       * 
 diff --git a/src/spirv/spirv_writer.h b/src/spirv/spirv_writer.h
 new file mode 100644
-index 00000000..fd43a7ec
+index 000000000..fd43a7ec6
 --- /dev/null
 +++ b/src/spirv/spirv_writer.h
 @@ -0,0 +1,127 @@
@@ -1246,22 +1234,20 @@ index 00000000..fd43a7ec
 +  };
 +  
 +}
--- 
-2.30.0
 
-From f58c0f68d154754100ef543d0fcaf7ace01daaf1 Mon Sep 17 00:00:00 2001
+From 54fe696f8521cdfb69f3ae512e23f61f70b7c60d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 16 Apr 2020 17:55:37 +0200
 Subject: [PATCH 08/15] [spirv] Track enabled capabilities instead of looking
  them up
 
 ---
- src/spirv/spirv_module.cpp | 10 +++-------
- src/spirv/spirv_module.h   |  1 +
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ src/spirv/spirv_module.cpp | 8 ++------
+ src/spirv/spirv_module.h   | 1 +
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index 14b8fdc1..356f1c17 100644
+index 14b8fdc11..0bda02c0e 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -40,12 +40,7 @@ namespace dxvk {
@@ -1286,15 +1272,8 @@ index 14b8fdc1..356f1c17 100644
      }
    }
    
-@@ -3858,4 +3854,4 @@ namespace dxvk {
-     }
-   }
-   
--}
-\ No newline at end of file
-+}
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index ab0de2b7..a7918547 100644
+index ab0de2b7e..a79185477 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1250,6 +1250,7 @@ namespace dxvk {
@@ -1305,10 +1284,8 @@ index ab0de2b7..a7918547 100644
      std::vector<size_t> m_typeLocs;
      std::vector<size_t> m_constLocs;
  
--- 
-2.30.0
 
-From 7f1cb6231cbd383391cf9911541550a6edd2405d Mon Sep 17 00:00:00 2001
+From f02da4ed7e8cd4f651ac1b81c8e1de24c997873e Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 15 May 2020 18:59:25 +0200
 Subject: [PATCH 09/15] [spirv] Track enabled execution modes
@@ -1319,7 +1296,7 @@ Subject: [PATCH 09/15] [spirv] Track enabled execution modes
  2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index 356f1c17..4030614b 100644
+index 0bda02c0e..fc3e8fc20 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -93,6 +93,7 @@ namespace dxvk {
@@ -1331,7 +1308,7 @@ index 356f1c17..4030614b 100644
    
    
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index a7918547..9836d7f2 100644
+index a79185477..9836d7f23 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1250,7 +1250,9 @@ namespace dxvk {
@@ -1345,10 +1322,8 @@ index a7918547..9836d7f2 100644
      std::vector<size_t> m_typeLocs;
      std::vector<size_t> m_constLocs;
  
--- 
-2.30.0
 
-From e2030881e984aefa8f9c410305c43dcb1602a42d Mon Sep 17 00:00:00 2001
+From ae81e047c2ffe939ed093324df2da05694aed59c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 16 Apr 2020 18:13:39 +0200
 Subject: [PATCH 10/15] [spirv] Return compressed buffer from
@@ -1366,7 +1341,7 @@ Subject: [PATCH 10/15] [spirv] Return compressed buffer from
  8 files changed, 91 insertions(+), 34 deletions(-)
 
 diff --git a/src/d3d9/d3d9_fixed_function.cpp b/src/d3d9/d3d9_fixed_function.cpp
-index f6ee747d..9d20a68d 100644
+index f6ee747d1..9d20a68d8 100644
 --- a/src/d3d9/d3d9_fixed_function.cpp
 +++ b/src/d3d9/d3d9_fixed_function.cpp
 @@ -716,7 +716,7 @@ namespace dxvk {
@@ -1379,7 +1354,7 @@ index f6ee747d..9d20a68d 100644
        std::move(constData));
    }
 diff --git a/src/d3d9/d3d9_swvp_emu.cpp b/src/d3d9/d3d9_swvp_emu.cpp
-index cd45a1c0..141fc7d8 100644
+index cd45a1c0c..141fc7d8f 100644
 --- a/src/d3d9/d3d9_swvp_emu.cpp
 +++ b/src/d3d9/d3d9_swvp_emu.cpp
 @@ -290,7 +290,7 @@ namespace dxvk {
@@ -1392,7 +1367,7 @@ index cd45a1c0..141fc7d8 100644
          std::move(constData));
      }
 diff --git a/src/dxbc/dxbc_compiler.cpp b/src/dxbc/dxbc_compiler.cpp
-index ba3e48f2..62b550ff 100644
+index ba3e48f2d..62b550ff5 100644
 --- a/src/dxbc/dxbc_compiler.cpp
 +++ b/src/dxbc/dxbc_compiler.cpp
 @@ -262,7 +262,7 @@ namespace dxvk {
@@ -1405,7 +1380,7 @@ index ba3e48f2..62b550ff 100644
        std::move(m_immConstData));
    }
 diff --git a/src/dxso/dxso_compiler.cpp b/src/dxso/dxso_compiler.cpp
-index f15efd44..7cfddd1a 100644
+index f15efd443..7cfddd1a5 100644
 --- a/src/dxso/dxso_compiler.cpp
 +++ b/src/dxso/dxso_compiler.cpp
 @@ -250,7 +250,7 @@ namespace dxvk {
@@ -1418,7 +1393,7 @@ index f15efd44..7cfddd1a 100644
        std::move(constData));
    }
 diff --git a/src/dxvk/dxvk_shader.cpp b/src/dxvk/dxvk_shader.cpp
-index cfe822af..d901e8ba 100644
+index cfe822af1..d901e8bad 100644
 --- a/src/dxvk/dxvk_shader.cpp
 +++ b/src/dxvk/dxvk_shader.cpp
 @@ -110,25 +110,7 @@ namespace dxvk {
@@ -1525,7 +1500,7 @@ index cfe822af..d901e8ba 100644
      // Replace undefined input variables with zero
      for (uint32_t u = info.undefinedInputs; u; u &= u - 1)
 diff --git a/src/dxvk/dxvk_shader.h b/src/dxvk/dxvk_shader.h
-index 17967cff..8c9b74d1 100644
+index 17967cfff..8c9b74d1a 100644
 --- a/src/dxvk/dxvk_shader.h
 +++ b/src/dxvk/dxvk_shader.h
 @@ -7,8 +7,7 @@
@@ -1573,7 +1548,7 @@ index 17967cff..8c9b74d1 100644
  
    };
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index 4030614b..7f2a4b91 100644
+index fc3e8fc20..6a78b8291 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -15,7 +15,7 @@ namespace dxvk {
@@ -1595,7 +1570,7 @@ index 4030614b..7f2a4b91 100644
    
    
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index 9836d7f2..abc7fe27 100644
+index 9836d7f23..abc7fe27d 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -3,6 +3,7 @@
@@ -1642,10 +1617,8 @@ index 9836d7f2..abc7fe27 100644
    private:
      
      uint32_t m_version;
--- 
-2.30.0
 
-From 5171bb0aa2923900057be3c8b7fa1738ffa26544 Mon Sep 17 00:00:00 2001
+From 6664acd9652d99b38a0649f823656f6912d020da Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 15 May 2020 18:50:26 +0200
 Subject: [PATCH 11/15] [spirv] Write compressed data directly if possible
@@ -1657,7 +1630,7 @@ Subject: [PATCH 11/15] [spirv] Write compressed data directly if possible
  3 files changed, 55 insertions(+), 14 deletions(-)
 
 diff --git a/src/spirv/spirv_compression.h b/src/spirv/spirv_compression.h
-index 72f5e837..1d572707 100644
+index 72f5e8373..1d5727074 100644
 --- a/src/spirv/spirv_compression.h
 +++ b/src/spirv/spirv_compression.h
 @@ -12,7 +12,7 @@ namespace dxvk {
@@ -1717,7 +1690,7 @@ index 72f5e837..1d572707 100644
  
    private:
 diff --git a/src/spirv/spirv_module.cpp b/src/spirv/spirv_module.cpp
-index 7f2a4b91..59ced723 100644
+index 6a78b8291..347e01a02 100644
 --- a/src/spirv/spirv_module.cpp
 +++ b/src/spirv/spirv_module.cpp
 @@ -16,7 +16,7 @@ namespace dxvk {
@@ -1740,7 +1713,7 @@ index 7f2a4b91..59ced723 100644
    
    
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index abc7fe27..3dc382b3 100644
+index abc7fe27d..3dc382b3d 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1259,17 +1259,17 @@ namespace dxvk {
@@ -1772,10 +1745,8 @@ index abc7fe27..3dc382b3 100644
  
      std::unordered_set<spv::Capability>    m_enabledCaps;
      std::unordered_set<spv::ExecutionMode> m_enabledModes;
--- 
-2.30.0
 
-From 3896ff1314ab03953a07df67dd404f409bbac0bc Mon Sep 17 00:00:00 2001
+From f1ea4fd208ae14506769ee7bd96dd3cda951f4e4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 15 May 2020 16:20:58 +0200
 Subject: [PATCH 12/15] [spirv] Optimize SpirvCodeBuffer insertion
@@ -1789,7 +1760,7 @@ and insert buffers during insertion mode to save a branch in putWord.
  2 files changed, 33 insertions(+), 26 deletions(-)
 
 diff --git a/src/spirv/spirv_code_buffer.cpp b/src/spirv/spirv_code_buffer.cpp
-index b43a61b6..9d5e2aed 100644
+index b43a61b65..9d5e2aed7 100644
 --- a/src/spirv/spirv_code_buffer.cpp
 +++ b/src/spirv/spirv_code_buffer.cpp
 @@ -9,14 +9,12 @@ namespace dxvk {
@@ -1864,7 +1835,7 @@ index b43a61b6..9d5e2aed 100644
  
  
 diff --git a/src/spirv/spirv_code_buffer.h b/src/spirv/spirv_code_buffer.h
-index aa642381..53e93018 100644
+index aa6423815..53e930184 100644
 --- a/src/spirv/spirv_code_buffer.h
 +++ b/src/spirv/spirv_code_buffer.h
 @@ -18,7 +18,8 @@ namespace dxvk {
@@ -1948,10 +1919,8 @@ index aa642381..53e93018 100644
 -}
 \ No newline at end of file
 +}
--- 
-2.30.0
 
-From bc2e29cd93bef255672d3694d3f2bf198d50d7d4 Mon Sep 17 00:00:00 2001
+From de1367f5dc04fd606873acb292695f09a89771e0 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 15 May 2020 19:04:55 +0200
 Subject: [PATCH 13/15] [spirv] Implement SpirvCompressedBuffer insertion
@@ -1962,7 +1931,7 @@ Subject: [PATCH 13/15] [spirv] Implement SpirvCompressedBuffer insertion
  2 files changed, 49 insertions(+), 3 deletions(-)
 
 diff --git a/src/spirv/spirv_compression.h b/src/spirv/spirv_compression.h
-index 1d572707..f6b4aa8b 100644
+index 1d5727074..f6b4aa8b2 100644
 --- a/src/spirv/spirv_compression.h
 +++ b/src/spirv/spirv_compression.h
 @@ -13,6 +13,8 @@ namespace dxvk {
@@ -2041,7 +2010,7 @@ index 1d572707..f6b4aa8b 100644
    };
  
 diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
-index 3dc382b3..a1bd5871 100644
+index 3dc382b3d..a1bd58719 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
 @@ -1268,8 +1268,8 @@ namespace dxvk {
@@ -2055,10 +2024,8 @@ index 3dc382b3..a1bd5871 100644
  
      std::unordered_set<spv::Capability>    m_enabledCaps;
      std::unordered_set<spv::ExecutionMode> m_enabledModes;
--- 
-2.30.0
 
-From 6ff223f19a44d29e3a64c9e1685a735a7c171e8c Mon Sep 17 00:00:00 2001
+From c4a15f13f7634eb70f86623e27cdfb09467eb25f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 17 Apr 2020 10:38:17 +0200
 Subject: [PATCH 14/15] [util] Introduce raw_vector with uninitialized storage
@@ -2070,7 +2037,7 @@ Subject: [PATCH 14/15] [util] Introduce raw_vector with uninitialized storage
 
 diff --git a/src/util/util_raw_vector.h b/src/util/util_raw_vector.h
 new file mode 100644
-index 00000000..a54270c8
+index 000000000..a54270c84
 --- /dev/null
 +++ b/src/util/util_raw_vector.h
 @@ -0,0 +1,137 @@
@@ -2211,20 +2178,18 @@ index 00000000..a54270c8
 +  };
 +
 +}
--- 
-2.30.0
 
-From 5083c3526b0d49fa69a632d119b27e7f7cba8f16 Mon Sep 17 00:00:00 2001
+From 6d60a10e2258a6b7995442a1cf4a9c2f87191eb5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 17 Apr 2020 23:55:13 +0200
 Subject: [PATCH 15/15] [spirv] Use raw_vector in SpirvCompressedBuffer
 
 ---
- src/spirv/spirv_compression.h | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+ src/spirv/spirv_compression.h | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
 diff --git a/src/spirv/spirv_compression.h b/src/spirv/spirv_compression.h
-index f6b4aa8b..b4bf82bf 100644
+index f6b4aa8b2..a0bd328e7 100644
 --- a/src/spirv/spirv_compression.h
 +++ b/src/spirv/spirv_compression.h
 @@ -4,6 +4,8 @@
@@ -2264,7 +2229,7 @@ index f6b4aa8b..b4bf82bf 100644
        m_dwords += 1;
      }
  
-@@ -110,11 +120,11 @@ namespace dxvk {
+@@ -110,9 +120,9 @@ namespace dxvk {
  
    private:
  
@@ -2277,10 +2242,3 @@ index f6b4aa8b..b4bf82bf 100644
      size_t m_ptr = not_inserting;
  
    };
- 
--}
-\ No newline at end of file
-+}
--- 
-2.30.0
-
