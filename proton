@@ -24,6 +24,14 @@ CURRENT_PREFIX_VERSION="6.1-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
+STEAM_DATA_DIRS = (
+    "~/.steam",
+    "~/.local/share/steam",
+    "~/.steam/steam",
+    "~/.var/app/com.valvesoftware.Steam/data/steam",
+    "/usr/share/steam",
+    "/usr/local/share/steam",
+)
 
 def nonzero(s):
     return len(s) > 0 and s != "0"
@@ -752,6 +760,164 @@ def comma_escaped(s):
     return escaped
 
 class Session:
+    def vdf_parse(self,steam_config_file, config):
+        """Parse a Steam config file and return the contents as a dict."""
+        line = " "
+        while line:
+            try:
+                line = steam_config_file.readline()
+            except UnicodeDecodeError:
+                logger.error(
+                    "Error while reading Steam VDF file %s. Returning %s",
+                    steam_config_file,
+                    config,
+                )
+                return config
+            if not line or line.strip() == "}":
+                return config
+            while not line.strip().endswith('"'):
+                nextline = steam_config_file.readline()
+                if not nextline:
+                    break
+                line = line[:-1] + nextline
+
+            line_elements = line.strip().split('"')
+            if len(line_elements) == 3:
+                key = line_elements[1]
+                steam_config_file.readline()  # skip '{'
+                config[key] = self.vdf_parse(steam_config_file, {})
+            else:
+                try:
+                    config[line_elements[1]] = line_elements[3]
+                except IndexError:
+                    logger.error("Malformed config file: %s", line)
+        return 
+
+    def read_config(self,steam_data_dir):
+        """Read the Steam configuration and return it as an object"""
+
+        def get_entry_case_insensitive(config_dict, path):
+            for key, _value in config_dict.items():
+                if key.lower() == path[0].lower():
+                    if len(path) <= 1:
+                        return config_dict[key]
+
+                    return get_entry_case_insensitive(config_dict[key], path[1:])
+            raise KeyError(path[0])
+        if not steam_data_dir:
+            return None
+        
+        config_filename = os.path.join(steam_data_dir, "config/config.vdf")
+        if not self.path_exists(config_filename):
+            return None
+        with open(config_filename, "r") as steam_config_file:
+            config = self.vdf_parse(steam_config_file, {})
+        try:
+            return get_entry_case_insensitive(config, ["InstallConfigStore", "Software", "Valve", "Steam"])
+        except KeyError as ex:
+            logger.error("Steam config %s is empty: %s", config_filename, ex)
+
+    def fix_path_case(self,path):
+        """Do a case insensitive check, return the real path with correct case."""
+        if not path or os.path.exists(path):
+            # If a path isn't provided or it exists as is, return it.
+            return path
+        parts = path.strip("/").split("/")
+        current_path = "/"
+        for part in parts:
+            if not os.path.exists(current_path):
+                return
+            tested_path = os.path.join(current_path, part)
+            if os.path.exists(tested_path):
+                current_path = tested_path
+                continue
+            try:
+                path_contents = os.listdir(current_path)
+            except OSError:
+                logger.error("Can't read contents of %s", current_path)
+                path_contents = []
+            for filename in path_contents:
+                if filename.lower() == part.lower():
+                    current_path = os.path.join(current_path, filename)
+                    continue
+
+        # Only return the path if we got the same number of elements
+        if len(parts) == len(current_path.strip("/").split("/")):
+            return current_path
+
+    def path_exists(self, path, check_symlinks=False, exclude_empty=False):
+        """Wrapper around path_exists that doesn't crash with empty values
+        Params:
+            path (str): File to the file to check
+            check_symlinks (bool): If the path is a broken symlink, return False
+            exclude_empty (bool): If true, consider 0 bytes files as non existing
+        """
+        if not path:
+            return False
+        if os.path.exists(path):
+            if exclude_empty:
+                return os.stat(path).st_size > 0
+            return True
+        if os.path.islink(path):
+            logger.warning("%s is a broken link", path)
+            return not check_symlinks
+        return False
+
+    def get_steam_dir(self):
+        """Main installation directory for Steam"""
+        for candidate in STEAM_DATA_DIRS:
+            path = self.fix_path_case(
+                os.path.join(os.path.expanduser(candidate), "steamapps")
+            )
+            if path:
+                return path[: -len("steamapps")]
+
+    @property
+    def steam_data_dir(self):
+        """Main installation directory for Steam"""
+        return self.get_steam_dir()
+
+    def get_steam_config(self):
+        """Return the "Steam" part of Steam's config.vdf as a dict."""
+        return self.read_config(self.steam_data_dir)
+
+    def get_steamapps_dirs(self):
+        """Return a list of the Steam library main + custom folders."""
+        dirs = []
+        # Main steamapps dir
+        for data_dir in STEAM_DATA_DIRS:
+            for _dir in ["steamapps"]:
+                abs_dir = os.path.join(os.path.expanduser(data_dir), _dir)
+                abs_dir = self.fix_path_case(abs_dir)
+                if abs_dir and os.path.isdir(abs_dir):
+                    dirs.append(abs_dir)
+
+        # Custom dirs
+        steam_config = self.get_steam_config()
+        if steam_config:
+            i = 1
+            while "BaseInstallFolder_%s" % i in steam_config:
+                path = steam_config["BaseInstallFolder_%s" % i] + "/steamapps"
+                path = self.fix_path_case(path)
+                if path and os.path.isdir(path):
+                    dirs.append(path)
+                i += 1
+
+        # Deduplicate directories with the same Device.Inode
+        unique_dirs = {}
+        for _dir in dirs:
+            stat = os.stat(_dir)
+            identifier = "{device}.{inode}".format(device=stat.st_dev, inode=stat.st_ino)
+            if identifier not in unique_dirs:
+                unique_dirs[identifier] = _dir
+        return unique_dirs.values()
+
+    def get_common_redist_path(self):
+        """Iterate through all existing steamapps/common locations"""
+        for path in [os.path.join(p, "common", "Steamworks Shared", "_CommonRedist") for p in self.get_steamapps_dirs()]:
+            if os.path.isdir(path):
+                return str(path)
+
     def __init__(self):
         self.log_file = None
         self.env = dict(os.environ)
@@ -762,6 +928,7 @@ class Session:
 
         self.compat_config = set()
         self.cmdlineappend = []
+        self.env["STEAM_COMMON_REDIST_PATH"] = self.get_common_redist_path()
 
         if "STEAM_COMPAT_CONFIG" in os.environ:
             config = os.environ["STEAM_COMPAT_CONFIG"]
