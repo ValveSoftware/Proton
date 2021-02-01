@@ -170,28 +170,6 @@ This unofficial build isn't supported by GloriousEggroll nor Valve and wasn't te
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
 
-#### Using Proton-GE with Lutris
-
-Lutris auto-detects proton versions installed using the native method listed above, however there are additional environment variables needed for it to work properly and for media foundation.
-
-1. If you want to allow your save games to work when using proton within lutris, you need to set `WINEUSERNAME` environment variable.
-2. If you want proton's media foundation to work in lutris, you need to set `GST_PLUGIN_SYSTEM_PATH_1_0` environment variable to the full gstreamer 64 and 32 bit library paths within the Proton-GE folder.
-3. If you want proton's media foundation to work in lutris, you also need to set `WINE_GST_REGISTRY_DIR` to the gstreamer-1.0 registration folder within the game's prefix.
-
-So for example if I wanted to play the epic version of borderlands3, and my borderlands3 WINE prefix is located at `/home/gloriouseggroll/Games/borderlands3/`, we would do the following:
-
-1. Set our `WINEUSERNAME` for saves:
-```
-WINEUSERNAME=gloriouseggroll
-```
-2. Set our `GST_PLUGIN_SYSTEM_PATH_1_0` path to the one located inside the Proton-GE version we're using:
-```
-GST_PLUGIN_SYSTEM_PATH_1_0=/home/gloriouseggroll/.steam/steam/compatibilitytools.d/Proton-5.11-GE-2-MF/dist/lib64/gstreamer-1.0:/home/gloriouseggroll/.steam/steam/compatibilitytools.d/Proton-5.11-GE-2-MF/dist/lib/gstreamer-1.0
-```
-3. Set our `WINE_GST_REGISTRY_DIR` to the gstreamer registry inside our prefix:
-```
-WINE_GST_REGISTRY_DIR=/home/gloriouseggroll/Games/origin/gstreamer-1.0/
-```
 
 ## Building
 
