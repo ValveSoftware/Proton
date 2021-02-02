@@ -15,6 +15,9 @@
 
 #include "initguid.h"
 
+#define COBJMACROS
+#include "d3d11_4.h"
+
 #ifdef VRCLIENT_HAVE_DXVK
 #include "dxvk-interop.h"
 #endif
@@ -55,6 +58,8 @@ static struct
     IDXGIVkInteropDevice *dxvk_device;
 #endif
     BOOL d3d11_explicit_handoff, handoff_called;
+    ID3D11Texture2D *staging_texture;
+    D3D11_TEXTURE2D_DESC staging_texture_desc;
 }
 compositor_data;
 
@@ -443,6 +448,11 @@ static void destroy_compositor_data(void)
         TRACE("Waiting for device %p\n", wined3d_device);
 
         wined3d_device->lpVtbl->wait_idle(wined3d_device);
+    }
+    if (compositor_data.staging_texture)
+    {
+        TRACE("Release staging texture %p.\n", compositor_data.staging_texture);
+        ID3D11Texture2D_Release(compositor_data.staging_texture);
     }
     memset(&compositor_data, 0, sizeof(compositor_data));
 }
@@ -1064,6 +1074,55 @@ EVROverlayError ivroverlay_001_set_overlay_texture(
     return VROverlayError_InvalidHandle;
 }
 
+static ID3D11Texture2D *get_staging_texture_d3d11(ID3D11Texture2D *t, unsigned int eye)
+{
+    ID3D11DeviceContext *context;
+    D3D11_TEXTURE2D_DESC desc;
+    ID3D11Device *device;
+    HRESULT hr;
+
+    memset(&desc, 0, sizeof(desc));
+    ID3D11Texture2D_GetDesc(t, &desc);
+
+    if (desc.ArraySize <= 1)
+        return t;
+
+    ID3D11Texture2D_GetDevice(t, &device);
+
+    TRACE("width %u, height %u, mips %u, array_size %u, usage %u, bindflags %#x, CPUAccessFlags %#x, "
+            "desc.MiscFlags %#x.\n", desc.Width, desc.Height, desc.MipLevels, desc.ArraySize, desc.Usage,
+            desc.BindFlags, desc.CPUAccessFlags, desc.MiscFlags);
+
+    desc.ArraySize = 1;
+    if (compositor_data.staging_texture && memcmp(&desc, &compositor_data.staging_texture_desc, sizeof(desc)))
+    {
+        TRACE("Recreating staging texture.\n");
+        ID3D11Texture2D_Release(compositor_data.staging_texture);
+        memset(&compositor_data.staging_texture_desc, 0, sizeof(compositor_data.staging_texture_desc));
+        compositor_data.staging_texture = NULL;
+    }
+    if (!compositor_data.staging_texture)
+    {
+        if (FAILED(hr = ID3D11Device_CreateTexture2D(device, &desc, NULL, &compositor_data.staging_texture)))
+        {
+            ERR("ID3D11Device_CreateTexture2D failed, hr %#x.\n", hr);
+            ID3D11Device_Release(device);
+            return t;
+        }
+        TRACE("Created staging texture %p.\n", compositor_data.staging_texture);
+        compositor_data.staging_texture_desc = desc;
+    }
+
+    ID3D11Device_GetImmediateContext(device, &context);
+    ID3D11DeviceContext_CopySubresourceRegion(context, (ID3D11Resource *)compositor_data.staging_texture,
+            0, 0, 0, 0, (ID3D11Resource *)t, eye * desc.MipLevels, NULL);
+    ID3D11DeviceContext_Release(context);
+
+    ID3D11Device_Release(device);
+
+    return compositor_data.staging_texture;
+}
+
 EVRCompositorError ivrcompositor_submit(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
@@ -1089,6 +1148,9 @@ EVRCompositorError ivrcompositor_submit(
             }
 
             texture_iface = texture->handle;
+
+            if (eye)
+                texture_iface = (IUnknown *)get_staging_texture_d3d11((ID3D11Texture2D *)texture_iface, eye);
 
             if (SUCCEEDED(hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
                     &IID_IWineD3D11Texture2D, (void **)&wine_texture)))
