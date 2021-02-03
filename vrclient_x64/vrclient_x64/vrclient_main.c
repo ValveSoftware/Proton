@@ -55,6 +55,7 @@ static struct
 #ifdef VRCLIENT_HAVE_DXVK
     IDXGIVkInteropDevice *dxvk_device;
 #endif
+    BOOL d3d11_explicit_handoff, handoff_called;
 }
 compositor_data;
 
@@ -1075,6 +1076,8 @@ EVRCompositorError ivrcompositor_submit(
 
     TRACE("%p, %#x, %p, %p, %#x\n", linux_side, eye, texture, bounds, flags);
 
+    compositor_data.handoff_called = FALSE;
+
     switch (texture->eType)
     {
         case TextureType_DirectX:
@@ -1269,11 +1272,24 @@ void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
 
 #ifdef VRCLIENT_HAVE_DXVK
     if (compositor_data.dxvk_device)
+    {
         compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue(compositor_data.dxvk_device);
+
+        if (!compositor_data.d3d11_explicit_handoff && version >= 21)
+        {
+            /* PostPresentHandoff can be used with d3d11 without SetExplicitTimingMode
+             * (which is Vulkan / d3d12 only), but doing the same with Vulkan results
+             * in lockups and crashes. */
+            cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
+                    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
+            compositor_data.d3d11_explicit_handoff = TRUE;
+        }
+    }
 #endif
 
     cpp_func(linux_side);
 
+    compositor_data.handoff_called = TRUE;
 #ifdef VRCLIENT_HAVE_DXVK
     if (compositor_data.dxvk_device)
         compositor_data.dxvk_device->lpVtbl->ReleaseSubmissionQueue(compositor_data.dxvk_device);
@@ -1324,14 +1340,27 @@ EVRCompositorError ivrcompositor_wait_get_poses(
 
 #ifdef VRCLIENT_HAVE_DXVK
     if (compositor_data.dxvk_device)
+    {
         compositor_data.dxvk_device->lpVtbl->LockSubmissionQueue(compositor_data.dxvk_device);
+        if (compositor_data.d3d11_explicit_handoff && !compositor_data.handoff_called)
+        {
+            /* Calling handoff after submit is optional for d3d11 but mandatory for Vulkan
+             * if explicit timing mode is set. */
+            cppIVRCompositor_IVRCompositor_022_PostPresentHandoff(linux_side);
+        }
+    }
 #endif
 
     r = cpp_func(linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
 
 #ifdef VRCLIENT_HAVE_DXVK
     if (compositor_data.dxvk_device)
+    {
+        if (compositor_data.d3d11_explicit_handoff)
+            cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(linux_side);
+
         compositor_data.dxvk_device->lpVtbl->ReleaseSubmissionQueue(compositor_data.dxvk_device);
+    }
 #endif
 
     if ((wined3d_device = compositor_data.wined3d_device))
