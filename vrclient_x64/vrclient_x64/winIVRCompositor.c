@@ -23,7 +23,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 typedef struct __winIVRCompositor_IVRCompositor_026 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_026;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_SetTrackingSpace, 8)
@@ -44,7 +43,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_WaitGetPoses(winIVRCompositor_IVRCompositor_026 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_026_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 26, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_026_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 26);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetLastPoses, 20)
@@ -65,7 +64,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_Submit(winIVRCompositor_IVRCompositor_026 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_026_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 26, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_026_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 26);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_ClearLastSubmittedFrame, 4)
@@ -79,7 +78,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_026_PostPresentHandoff(winIVRCompositor_IVRCompositor_026 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_026_PostPresentHandoff, _this->linux_side, 26, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_026_PostPresentHandoff, _this->linux_side, 26);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetFrameTiming, 12)
@@ -143,7 +142,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(winIVRCompositor_IVRCompositor_026 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 26, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_026_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 26);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_ClearSkyboxOverride, 4)
@@ -311,7 +310,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_026 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 26, &_this->user_data);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 26);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_SetExplicitTimingMode, 8)
@@ -460,8 +459,6 @@ winIVRCompositor_IVRCompositor_026 *create_winIVRCompositor_IVRCompositor_026(vo
 void destroy_winIVRCompositor_IVRCompositor_026(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_026 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -535,7 +532,6 @@ void destroy_winIVRCompositor_IVRCompositor_026_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_026 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -546,7 +542,6 @@ void destroy_winIVRCompositor_IVRCompositor_026_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_024 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_024;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_SetTrackingSpace, 8)
@@ -567,7 +562,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_WaitGetPoses(winIVRCompositor_IVRCompositor_024 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_024_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 24, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_024_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 24);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_GetLastPoses, 20)
@@ -588,7 +583,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_Submit(winIVRCompositor_IVRCompositor_024 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_024_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 24, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_024_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 24);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_ClearLastSubmittedFrame, 4)
@@ -602,7 +597,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_024_PostPresentHandoff(winIVRCompositor_IVRCompositor_024 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_024_PostPresentHandoff, _this->linux_side, 24, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_024_PostPresentHandoff, _this->linux_side, 24);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_GetFrameTiming, 12)
@@ -666,7 +661,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(winIVRCompositor_IVRCompositor_024 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 24, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 24);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_ClearSkyboxOverride, 4)
@@ -834,7 +829,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_024 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 24, &_this->user_data);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 24);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_SetExplicitTimingMode, 8)
@@ -959,8 +954,6 @@ winIVRCompositor_IVRCompositor_024 *create_winIVRCompositor_IVRCompositor_024(vo
 void destroy_winIVRCompositor_IVRCompositor_024(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_024 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -1031,7 +1024,6 @@ void destroy_winIVRCompositor_IVRCompositor_024_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_024 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -1042,7 +1034,6 @@ void destroy_winIVRCompositor_IVRCompositor_024_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_022 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_022;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_SetTrackingSpace, 8)
@@ -1063,7 +1054,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_WaitGetPoses(winIVRCompositor_IVRCompositor_022 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_022_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 22, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_022_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 22);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_GetLastPoses, 20)
@@ -1084,7 +1075,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit(winIVRCompositor_IVRCompositor_022 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_022_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 22, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_022_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 22);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_ClearLastSubmittedFrame, 4)
@@ -1098,7 +1089,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_022_PostPresentHandoff(winIVRCompositor_IVRCompositor_022 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_022_PostPresentHandoff, _this->linux_side, 22, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_022_PostPresentHandoff, _this->linux_side, 22);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_GetFrameTiming, 12)
@@ -1162,7 +1153,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(winIVRCompositor_IVRCompositor_022 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 22, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_022_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 22);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_ClearSkyboxOverride, 4)
@@ -1330,7 +1321,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_022 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 22, &_this->user_data);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 22);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode, 8)
@@ -1437,8 +1428,6 @@ winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022(vo
 void destroy_winIVRCompositor_IVRCompositor_022(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_022 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -1507,7 +1496,6 @@ void destroy_winIVRCompositor_IVRCompositor_022_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_022 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -1518,7 +1506,6 @@ void destroy_winIVRCompositor_IVRCompositor_022_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_021 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_021;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SetTrackingSpace, 8)
@@ -1539,7 +1526,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_WaitGetPoses(winIVRCompositor_IVRCompositor_021 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_021_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 21, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_021_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 21);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_GetLastPoses, 20)
@@ -1560,7 +1547,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit(winIVRCompositor_IVRCompositor_021 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_021_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 21, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_021_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 21);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_ClearLastSubmittedFrame, 4)
@@ -1574,7 +1561,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_021_PostPresentHandoff(winIVRCompositor_IVRCompositor_021 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_021_PostPresentHandoff, _this->linux_side, 21, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_021_PostPresentHandoff, _this->linux_side, 21);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_GetFrameTiming, 12)
@@ -1638,7 +1625,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(winIVRCompositor_IVRCompositor_021 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 21, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_021_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 21);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_ClearSkyboxOverride, 4)
@@ -1806,7 +1793,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_021 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 21, &_this->user_data);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 21);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode, 5)
@@ -1889,8 +1876,6 @@ winIVRCompositor_IVRCompositor_021 *create_winIVRCompositor_IVRCompositor_021(vo
 void destroy_winIVRCompositor_IVRCompositor_021(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_021 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -1956,7 +1941,6 @@ void destroy_winIVRCompositor_IVRCompositor_021_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_021 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -1967,7 +1951,6 @@ void destroy_winIVRCompositor_IVRCompositor_021_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_020 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_020;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_SetTrackingSpace, 8)
@@ -1988,7 +1971,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_WaitGetPoses(winIVRCompositor_IVRCompositor_020 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_020_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 20, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_020_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 20);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetLastPoses, 20)
@@ -2009,7 +1992,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit(winIVRCompositor_IVRCompositor_020 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_020_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 20, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_020_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 20);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_ClearLastSubmittedFrame, 4)
@@ -2023,7 +2006,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_020_PostPresentHandoff(winIVRCompositor_IVRCompositor_020 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_020_PostPresentHandoff, _this->linux_side, 20, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_020_PostPresentHandoff, _this->linux_side, 20);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetFrameTiming, 12)
@@ -2087,7 +2070,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(winIVRCompositor_IVRCompositor_020 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 20, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_020_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 20);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_ClearSkyboxOverride, 4)
@@ -2255,7 +2238,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_020 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 20, &_this->user_data);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 20);
 }
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_020_vtable;
@@ -2322,8 +2305,6 @@ winIVRCompositor_IVRCompositor_020 *create_winIVRCompositor_IVRCompositor_020(vo
 void destroy_winIVRCompositor_IVRCompositor_020(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_020 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -2387,7 +2368,6 @@ void destroy_winIVRCompositor_IVRCompositor_020_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_020 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -2398,7 +2378,6 @@ void destroy_winIVRCompositor_IVRCompositor_020_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_019 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_019;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_SetTrackingSpace, 8)
@@ -2419,7 +2398,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_WaitGetPoses(winIVRCompositor_IVRCompositor_019 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_019_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 19, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_019_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 19);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetLastPoses, 20)
@@ -2440,7 +2419,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit(winIVRCompositor_IVRCompositor_019 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_019_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 19, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_019_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 19);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_ClearLastSubmittedFrame, 4)
@@ -2454,7 +2433,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_019_PostPresentHandoff(winIVRCompositor_IVRCompositor_019 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_019_PostPresentHandoff, _this->linux_side, 19, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_019_PostPresentHandoff, _this->linux_side, 19);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetFrameTiming, 12)
@@ -2518,7 +2497,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(winIVRCompositor_IVRCompositor_019 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 19, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_019_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 19);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_ClearSkyboxOverride, 4)
@@ -2679,7 +2658,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_019 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 19, &_this->user_data);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 19);
 }
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_019_vtable;
@@ -2745,8 +2724,6 @@ winIVRCompositor_IVRCompositor_019 *create_winIVRCompositor_IVRCompositor_019(vo
 void destroy_winIVRCompositor_IVRCompositor_019(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_019 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -2809,7 +2786,6 @@ void destroy_winIVRCompositor_IVRCompositor_019_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_019 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -2820,7 +2796,6 @@ void destroy_winIVRCompositor_IVRCompositor_019_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_018 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_018;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_SetTrackingSpace, 8)
@@ -2841,7 +2816,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_WaitGetPoses(winIVRCompositor_IVRCompositor_018 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_018_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 18, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_018_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 18);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_GetLastPoses, 20)
@@ -2862,7 +2837,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit(winIVRCompositor_IVRCompositor_018 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_018_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 18, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_018_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 18);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame, 4)
@@ -2876,7 +2851,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_018_PostPresentHandoff(winIVRCompositor_IVRCompositor_018 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_018_PostPresentHandoff, _this->linux_side, 18, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_018_PostPresentHandoff, _this->linux_side, 18);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_GetFrameTiming, 12)
@@ -2940,7 +2915,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(winIVRCompositor_IVRCompositor_018 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 18, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_018_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 18);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_ClearSkyboxOverride, 4)
@@ -3151,8 +3126,6 @@ winIVRCompositor_IVRCompositor_018 *create_winIVRCompositor_IVRCompositor_018(vo
 void destroy_winIVRCompositor_IVRCompositor_018(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_018 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -3213,7 +3186,6 @@ void destroy_winIVRCompositor_IVRCompositor_018_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_018 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -3224,7 +3196,6 @@ void destroy_winIVRCompositor_IVRCompositor_018_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_017 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_017;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_SetTrackingSpace, 8)
@@ -3245,7 +3216,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_WaitGetPoses(winIVRCompositor_IVRCompositor_017 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_017_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 17, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_017_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 17);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_GetLastPoses, 20)
@@ -3266,7 +3237,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_Submit(winIVRCompositor_IVRCompositor_017 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_017_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 17, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_017_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 17);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_ClearLastSubmittedFrame, 4)
@@ -3280,7 +3251,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_017_PostPresentHandoff(winIVRCompositor_IVRCompositor_017 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_017_PostPresentHandoff, _this->linux_side, 17, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_017_PostPresentHandoff, _this->linux_side, 17);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_GetFrameTiming, 12)
@@ -3329,7 +3300,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(winIVRCompositor_IVRCompositor_017 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 17, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 17);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_ClearSkyboxOverride, 4)
@@ -3538,8 +3509,6 @@ winIVRCompositor_IVRCompositor_017 *create_winIVRCompositor_IVRCompositor_017(vo
 void destroy_winIVRCompositor_IVRCompositor_017(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_017 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -3598,7 +3567,6 @@ void destroy_winIVRCompositor_IVRCompositor_017_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_017 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -3609,7 +3577,6 @@ void destroy_winIVRCompositor_IVRCompositor_017_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_016 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_016;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_SetTrackingSpace, 8)
@@ -3630,7 +3597,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_WaitGetPoses, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_WaitGetPoses(winIVRCompositor_IVRCompositor_016 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_016_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 16, &_this->user_data);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_016_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 16);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_GetLastPoses, 20)
@@ -3651,7 +3618,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit(winIVRCompositor_IVRCompositor_016 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_016_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 16, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_016_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 16);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_ClearLastSubmittedFrame, 4)
@@ -3665,7 +3632,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_016_PostPresentHandoff(winIVRCompositor_IVRCompositor_016 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_016_PostPresentHandoff, _this->linux_side, 16, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_016_PostPresentHandoff, _this->linux_side, 16);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_GetFrameTiming, 12)
@@ -3707,7 +3674,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(winIVRCompositor_IVRCompositor_016 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 16, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_016_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 16);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_ClearSkyboxOverride, 4)
@@ -3915,8 +3882,6 @@ winIVRCompositor_IVRCompositor_016 *create_winIVRCompositor_IVRCompositor_016(vo
 void destroy_winIVRCompositor_IVRCompositor_016(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_016 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -3974,7 +3939,6 @@ void destroy_winIVRCompositor_IVRCompositor_016_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_016 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -3985,7 +3949,6 @@ void destroy_winIVRCompositor_IVRCompositor_016_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_015 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_015;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_SetTrackingSpace, 8)
@@ -4027,7 +3990,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit(winIVRCompositor_IVRCompositor_015 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_015_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 15, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_015_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 15);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_ClearLastSubmittedFrame, 4)
@@ -4041,7 +4004,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_015_PostPresentHandoff(winIVRCompositor_IVRCompositor_015 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_015_PostPresentHandoff, _this->linux_side, 15, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_015_PostPresentHandoff, _this->linux_side, 15);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_GetFrameTiming, 12)
@@ -4083,7 +4046,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(winIVRCompositor_IVRCompositor_015 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 15, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_015_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 15);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_ClearSkyboxOverride, 4)
@@ -4307,8 +4270,6 @@ winIVRCompositor_IVRCompositor_015 *create_winIVRCompositor_IVRCompositor_015(vo
 void destroy_winIVRCompositor_IVRCompositor_015(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_015 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -4368,7 +4329,6 @@ void destroy_winIVRCompositor_IVRCompositor_015_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_015 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -4379,7 +4339,6 @@ void destroy_winIVRCompositor_IVRCompositor_015_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_014 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_014;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_SetTrackingSpace, 8)
@@ -4421,7 +4380,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit(winIVRCompositor_IVRCompositor_014 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_014_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 14, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_014_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 14);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_ClearLastSubmittedFrame, 4)
@@ -4435,7 +4394,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_014_PostPresentHandoff(winIVRCompositor_IVRCompositor_014 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_014_PostPresentHandoff, _this->linux_side, 14, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_014_PostPresentHandoff, _this->linux_side, 14);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_GetFrameTiming, 12)
@@ -4470,7 +4429,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(winIVRCompositor_IVRCompositor_014 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 14, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_014_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 14);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_ClearSkyboxOverride, 4)
@@ -4637,8 +4596,6 @@ winIVRCompositor_IVRCompositor_014 *create_winIVRCompositor_IVRCompositor_014(vo
 void destroy_winIVRCompositor_IVRCompositor_014(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_014 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -4690,7 +4647,6 @@ void destroy_winIVRCompositor_IVRCompositor_014_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_014 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -4701,7 +4657,6 @@ void destroy_winIVRCompositor_IVRCompositor_014_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_013 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_013;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_SetTrackingSpace, 8)
@@ -4743,7 +4698,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit(winIVRCompositor_IVRCompositor_013 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_013_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 13, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_013_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 13);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame, 4)
@@ -4757,7 +4712,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_013_PostPresentHandoff(winIVRCompositor_IVRCompositor_013 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_013_PostPresentHandoff, _this->linux_side, 13, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_013_PostPresentHandoff, _this->linux_side, 13);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_GetFrameTiming, 12)
@@ -4792,7 +4747,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(winIVRCompositor_IVRCompositor_013 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 13, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_013_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 13);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_ClearSkyboxOverride, 4)
@@ -4943,8 +4898,6 @@ winIVRCompositor_IVRCompositor_013 *create_winIVRCompositor_IVRCompositor_013(vo
 void destroy_winIVRCompositor_IVRCompositor_013(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_013 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -4994,7 +4947,6 @@ void destroy_winIVRCompositor_IVRCompositor_013_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_013 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -5005,7 +4957,6 @@ void destroy_winIVRCompositor_IVRCompositor_013_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_012 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_012;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_SetTrackingSpace, 8)
@@ -5047,7 +4998,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit(winIVRCompositor_IVRCompositor_012 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_012_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 12, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_012_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 12);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_ClearLastSubmittedFrame, 4)
@@ -5061,7 +5012,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_012_PostPresentHandoff(winIVRCompositor_IVRCompositor_012 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_012_PostPresentHandoff, _this->linux_side, 12, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_012_PostPresentHandoff, _this->linux_side, 12);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_GetFrameTiming, 12)
@@ -5096,7 +5047,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(winIVRCompositor_IVRCompositor_012 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 12, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_012_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 12);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_ClearSkyboxOverride, 4)
@@ -5239,8 +5190,6 @@ winIVRCompositor_IVRCompositor_012 *create_winIVRCompositor_IVRCompositor_012(vo
 void destroy_winIVRCompositor_IVRCompositor_012(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_012 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -5289,7 +5238,6 @@ void destroy_winIVRCompositor_IVRCompositor_012_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_012 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -5300,7 +5248,6 @@ void destroy_winIVRCompositor_IVRCompositor_012_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_011 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_011;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_SetTrackingSpace, 8)
@@ -5335,7 +5282,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit(winIVRCompositor_IVRCompositor_011 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_011_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 11, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_011_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 11);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame, 4)
@@ -5349,7 +5296,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_011_PostPresentHandoff(winIVRCompositor_IVRCompositor_011 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_011_PostPresentHandoff, _this->linux_side, 11, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_011_PostPresentHandoff, _this->linux_side, 11);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_GetFrameTiming, 12)
@@ -5384,7 +5331,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(winIVRCompositor_IVRCompositor_011 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 11, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_011_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 11);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_ClearSkyboxOverride, 4)
@@ -5518,8 +5465,6 @@ winIVRCompositor_IVRCompositor_011 *create_winIVRCompositor_IVRCompositor_011(vo
 void destroy_winIVRCompositor_IVRCompositor_011(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_011 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -5566,7 +5511,6 @@ void destroy_winIVRCompositor_IVRCompositor_011_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_011 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -5577,7 +5521,6 @@ void destroy_winIVRCompositor_IVRCompositor_011_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_010 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_010;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_SetTrackingSpace, 8)
@@ -5612,7 +5555,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit(winIVRCompositor_IVRCompositor_010 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_010_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 10, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_010_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 10);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame, 4)
@@ -5626,7 +5569,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_010_PostPresentHandoff(winIVRCompositor_IVRCompositor_010 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_010_PostPresentHandoff, _this->linux_side, 10, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_010_PostPresentHandoff, _this->linux_side, 10);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_GetFrameTiming, 12)
@@ -5661,7 +5604,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(winIVRCompositor_IVRCompositor_010 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 10, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_010_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 10);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_ClearSkyboxOverride, 4)
@@ -5795,8 +5738,6 @@ winIVRCompositor_IVRCompositor_010 *create_winIVRCompositor_IVRCompositor_010(vo
 void destroy_winIVRCompositor_IVRCompositor_010(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_010 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -5843,7 +5784,6 @@ void destroy_winIVRCompositor_IVRCompositor_010_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_010 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -5854,7 +5794,6 @@ void destroy_winIVRCompositor_IVRCompositor_010_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_009 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_009;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_SetTrackingSpace, 8)
@@ -5889,7 +5828,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_Submit, 20)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_Submit(winIVRCompositor_IVRCompositor_009 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_009_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 9, &_this->user_data);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_009_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, 9);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_ClearLastSubmittedFrame, 4)
@@ -5903,7 +5842,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_009_PostPresentHandoff(winIVRCompositor_IVRCompositor_009 *_this)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_009_PostPresentHandoff, _this->linux_side, 9, &_this->user_data);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_009_PostPresentHandoff, _this->linux_side, 9);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_GetFrameTiming, 12)
@@ -5938,7 +5877,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_SetSkyboxOverride, 12
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(winIVRCompositor_IVRCompositor_009 *_this, Texture_t * pTextures, uint32_t unTextureCount)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 9, &_this->user_data);
+    return ivrcompositor_set_skybox_override(cppIVRCompositor_IVRCompositor_009_SetSkyboxOverride, _this->linux_side, pTextures, unTextureCount, 9);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_ClearSkyboxOverride, 4)
@@ -6072,8 +6011,6 @@ winIVRCompositor_IVRCompositor_009 *create_winIVRCompositor_IVRCompositor_009(vo
 void destroy_winIVRCompositor_IVRCompositor_009(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_009 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -6120,7 +6057,6 @@ void destroy_winIVRCompositor_IVRCompositor_009_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_009 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -6131,7 +6067,6 @@ void destroy_winIVRCompositor_IVRCompositor_009_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_008 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_008;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_GetLastError, 12)
@@ -6180,7 +6115,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_Submit, 24)
 VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_Submit(winIVRCompositor_IVRCompositor_008 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds, VRSubmitFlags_t nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_008_submit(cppIVRCompositor_IVRCompositor_008_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds, nSubmitFlags, 8, &_this->user_data);
+    return ivrcompositor_008_submit(cppIVRCompositor_IVRCompositor_008_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds, nSubmitFlags, 8);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame, 4)
@@ -6215,7 +6150,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_SetSkyboxOverride, 32
 void __thiscall winIVRCompositor_IVRCompositor_008_SetSkyboxOverride(winIVRCompositor_IVRCompositor_008 *_this, GraphicsAPIConvention eTextureType, void * pFront, void * pBack, void * pLeft, void * pRight, void * pTop, void * pBottom)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_008_set_skybox_override(cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride, _this->linux_side, eTextureType, pFront, pBack, pLeft, pRight, pTop, pBottom, 8, &_this->user_data);
+    ivrcompositor_008_set_skybox_override(cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride, _this->linux_side, eTextureType, pFront, pBack, pLeft, pRight, pTop, pBottom, 8);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_ClearSkyboxOverride, 4)
@@ -6365,8 +6300,6 @@ winIVRCompositor_IVRCompositor_008 *create_winIVRCompositor_IVRCompositor_008(vo
 void destroy_winIVRCompositor_IVRCompositor_008(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_008 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -6415,7 +6348,6 @@ void destroy_winIVRCompositor_IVRCompositor_008_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_008 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -6426,7 +6358,6 @@ void destroy_winIVRCompositor_IVRCompositor_008_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_007 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_007;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_007_GetLastError, 12)
@@ -6475,7 +6406,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_007_Submit, 20)
 VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_Submit(winIVRCompositor_IVRCompositor_007 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_007_submit(cppIVRCompositor_IVRCompositor_007_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds, 7, &_this->user_data);
+    return ivrcompositor_007_submit(cppIVRCompositor_IVRCompositor_007_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds, 7);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame, 4)
@@ -6604,8 +6535,6 @@ winIVRCompositor_IVRCompositor_007 *create_winIVRCompositor_IVRCompositor_007(vo
 void destroy_winIVRCompositor_IVRCompositor_007(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_007 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -6647,7 +6576,6 @@ void destroy_winIVRCompositor_IVRCompositor_007_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_007 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -6658,7 +6586,6 @@ void destroy_winIVRCompositor_IVRCompositor_007_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_006 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_006;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_006_GetLastError, 12)
@@ -6714,7 +6641,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_006_Submit, 16)
 VRCompositorError __thiscall winIVRCompositor_IVRCompositor_006_Submit(winIVRCompositor_IVRCompositor_006 *_this, Hmd_Eye eEye, void * pTexture, VRTextureBounds_t * pBounds)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_006_submit(cppIVRCompositor_IVRCompositor_006_Submit, _this->linux_side, eEye, pTexture, pBounds, 6, &_this->user_data);
+    return ivrcompositor_006_submit(cppIVRCompositor_IVRCompositor_006_Submit, _this->linux_side, eEye, pTexture, pBounds, 6);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame, 4)
@@ -6844,8 +6771,6 @@ winIVRCompositor_IVRCompositor_006 *create_winIVRCompositor_IVRCompositor_006(vo
 void destroy_winIVRCompositor_IVRCompositor_006(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_006 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -6888,7 +6813,6 @@ void destroy_winIVRCompositor_IVRCompositor_006_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_006 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
@@ -6899,7 +6823,6 @@ void destroy_winIVRCompositor_IVRCompositor_006_FnTable(void *object)
 typedef struct __winIVRCompositor_IVRCompositor_005 {
     vtable_ptr *vtable;
     void *linux_side;
-    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_005;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_GetLastError, 12)
@@ -6955,7 +6878,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_Submit, 16)
 void __thiscall winIVRCompositor_IVRCompositor_005_Submit(winIVRCompositor_IVRCompositor_005 *_this, Hmd_Eye eEye, void * pTexture, Compositor_TextureBounds * pBounds)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_005_submit(cppIVRCompositor_IVRCompositor_005_Submit, _this->linux_side, eEye, pTexture, pBounds, 5, &_this->user_data);
+    ivrcompositor_005_submit(cppIVRCompositor_IVRCompositor_005_Submit, _this->linux_side, eEye, pTexture, pBounds, 5);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_ClearLastSubmittedFrame, 4)
@@ -7119,8 +7042,6 @@ winIVRCompositor_IVRCompositor_005 *create_winIVRCompositor_IVRCompositor_005(vo
 void destroy_winIVRCompositor_IVRCompositor_005(void *object)
 {
     TRACE("%p\n", object);
-    struct __winIVRCompositor_IVRCompositor_005 *win_object = object;
-    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -7167,7 +7088,6 @@ void destroy_winIVRCompositor_IVRCompositor_005_FnTable(void *object)
 {
     winIVRCompositor_IVRCompositor_005 *win_object = object;
     TRACE("%p\n", win_object);
-    destroy_compositor_data(&win_object->user_data);
     VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
     HeapFree(GetProcessHeap(), 0, win_object->vtable);
     HeapFree(GetProcessHeap(), 0, win_object);
