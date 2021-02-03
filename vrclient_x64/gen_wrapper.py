@@ -399,7 +399,6 @@ method_overrides = [
 
 method_overrides_data = [
     ("IVRClientCore", "struct client_core_data", None),
-    ("IVRCompositor", "struct compositor_data", "destroy_compositor_data"),
 ]
 
 def display_sdkver(s):
