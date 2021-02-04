@@ -11,6 +11,9 @@ extern "C" {
 #endif
 
 char *json_convert_paths(const char *input);
+char *json_convert_startup_info(const char *startup_info);
+
+bool vrclient_dos_path_to_unix_path(const char *src, char *dst);
 
 #if __cplusplus
 }
@@ -48,7 +51,6 @@ typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);
 unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32_t dst_bytes);
-bool vrclient_dos_path_to_unix_path(const char *src, char *dst);
 void *create_LinuxMatchmakingServerListResponse(void *win);
 
 #ifndef __cplusplus

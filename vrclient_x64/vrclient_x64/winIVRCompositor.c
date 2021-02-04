@@ -302,8 +302,12 @@ void __thiscall winIVRCompositor_IVRCompositor_026_UnlockGLSharedTextureForAcces
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetVulkanInstanceExtensionsRequired, 12)
 uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanInstanceExtensionsRequired(winIVRCompositor_IVRCompositor_026 *_this, char * pchValue, uint32_t unBufferSize)
 {
+    uint32_t ret;
+
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_026_GetVulkanInstanceExtensionsRequired(_this->linux_side, pchValue, unBufferSize);
+    ret = cppIVRCompositor_IVRCompositor_026_GetVulkanInstanceExtensionsRequired(_this->linux_side, pchValue, unBufferSize);
+    TRACE("ret %u, value %s.\n", ret, pchValue);
+    return ret;
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired, 16)
@@ -1314,7 +1318,12 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_GetVulkanInstanceExte
 uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanInstanceExtensionsRequired(winIVRCompositor_IVRCompositor_022 *_this, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_022_GetVulkanInstanceExtensionsRequired(_this->linux_side, pchValue, unBufferSize);
+    uint32_t ret;
+
+    TRACE("%p\n", _this);
+    ret = cppIVRCompositor_IVRCompositor_022_GetVulkanInstanceExtensionsRequired(_this->linux_side, pchValue, unBufferSize);
+    TRACE("ret %u, value %s.\n", ret, pchValue);
+    return ret;
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired, 16)
