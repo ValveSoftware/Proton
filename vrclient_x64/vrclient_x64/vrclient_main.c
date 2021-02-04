@@ -374,13 +374,19 @@ EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationT
         void *linux_side, EVRApplicationType application_type, const char *startup_info,
         unsigned int version, struct client_core_data *user_data)
 {
+    char *startup_info_converted;
     EVRInitError error;
 
     TRACE("%p, %#x, %p\n", linux_side, application_type, startup_info);
 
+    startup_info_converted = json_convert_startup_info(startup_info);
     InitializeCriticalSection(&user_data->critical_section);
 
-    error = cpp_func(linux_side, application_type, startup_info);
+    error = cpp_func(linux_side, application_type, startup_info_converted
+            ? startup_info_converted : startup_info);
+
+    free(startup_info_converted);
+
     if (error)
         WARN("error %#x\n", error);
     return error;
@@ -1453,11 +1459,15 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
         void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
         unsigned int version)
 {
+    uint32_t ret;
+
     load_vk_unwrappers();
 
     phys_dev = get_native_VkPhysicalDevice(phys_dev);
 
-    return cpp_func(linux_side, phys_dev, value, bufsize);
+    ret = cpp_func(linux_side, phys_dev, value, bufsize);
+    TRACE("ret %u, value %s.\n", ret, value);
+    return ret;
 }
 
 #pragma pack( push, 8 )

@@ -106,4 +106,41 @@ char *json_convert_paths(const char *input)
     return NULL;
 }
 
+char *json_convert_startup_info(const char *startup_info)
+{
+    char dst_path[PATH_MAX];
+    std::string src_path;
+    Json::Reader reader;
+    Json::Value root;
+    size_t len;
+    char *ret;
+
+    if(!startup_info || !reader.parse(startup_info, root))
+        return NULL;
+
+    if (!root.isMember("action_manifest_path") || !root["action_manifest_path"].isString())
+        return NULL;
+
+    src_path = root["action_manifest_path"].asString();
+    WINE_TRACE("action_manifest_path %s.\n", src_path.c_str());
+
+    if (!vrclient_dos_path_to_unix_path(src_path.c_str(), dst_path))
+    {
+        WINE_ERR("error converting path %s.\n", src_path.c_str());
+        return NULL;
+    }
+    WINE_TRACE("converted path %s.\n", dst_path);
+
+    root["action_manifest_path"] = dst_path;
+
+    Json::FastWriter writer;
+
+    std::string contents(writer.write(root));
+    ret = (char *)malloc(contents.length() + 1);
+    len = contents.copy(ret, contents.length());
+    ret[len] = 0;
+
+    return ret;
+}
+
 }
