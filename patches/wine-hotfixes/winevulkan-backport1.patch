@@ -1,0 +1,26 @@
+From ffd58f6275101bcf7bc5ef5bd433123460ad0f4f Mon Sep 17 00:00:00 2001
+From: Georg Lehmann <dadschoorse@gmail.com>
+Date: Wed, 3 Feb 2021 21:13:34 +0100
+Subject: [PATCH] winevulkan: Fix vkDestroyDebugUtilsMessengerEXT with NULL
+ object.
+
+Signed-off-by: Georg Lehmann <dadschoorse@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winevulkan/vulkan.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 2a503a7430d..640b3ee7b67 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1940,6 +1940,9 @@ void WINAPI wine_vkDestroyDebugUtilsMessengerEXT(
+ 
+     object = wine_debug_utils_messenger_from_handle(messenger);
+ 
++    if (!object)
++        return;
++
+     instance->funcs.p_vkDestroyDebugUtilsMessengerEXT(instance->instance, object->debug_messenger, NULL);
+     WINE_VK_REMOVE_HANDLE_MAPPING(instance, object);
+ 
