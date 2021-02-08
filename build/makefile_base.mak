@@ -520,7 +520,7 @@ dist_prefix: wine gst_good
 
 dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64) $(DIST_WINEOPENXR64)
 
-dist: $(DIST_TARGETS) wine gst_good gst_bad gst_ugly ffmpeg gst_libav lsteamclient steam dxvk vkd3d-proton vrclient dist_wineopenxr | $(DST_DIR)
+dist: $(DIST_TARGETS) wine gst_good gst_bad gst_ugly ffmpeg gst_libav lsteamclient wineopenxr steam dxvk vkd3d-proton vrclient dist_wineopenxr | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 
