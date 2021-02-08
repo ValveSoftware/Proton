@@ -29,10 +29,13 @@
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
+
+    echo "add dxvk PR patches"
     patch -Np1 < ../patches/dxvk/1582.patch
     patch -Np1 < ../patches/dxvk/1673.patch
     patch -Np1 < ../patches/dxvk/1759.patch
     patch -Np1 < ../patches/dxvk/1805.patch
+
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
@@ -212,17 +215,19 @@
     
     echo "https://bugs.winehq.org/show_bug.cgi?id=50581 fix"
     patch -Np1 < ../patches/wine-hotfixes/198992.patch
-    
 
     # more pending experimental work. disabled for now.
-#    echo "Cyberpunk proton shared memory patches"
-#    patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory.patch
+    echo "Cyberpunk proton shared memory patches"
+    patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-1.patch
+    patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-2.patch
+    patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-3.patch
 
-#    echo "Cyberpunk proton thread priority patches"
-#    patch -Np1 < ../patches/proton/proton-cyberpunk-thread-priority.patch
+    echo "Cyberpunk proton futex2 patches"
+    patch -Np1 < ../patches/proton/proton-cyberpunk-futex2.patch
 
-#    echo "Cyberpunk proton futex2 patches"
-#    patch -Np1 < ../patches/proton/proton-cyberpunk-futex2.patch
+    echo "winevulkan backports"
+    patch -Np1 < ../patches/wine-hotfixes/winevulkan-backport1.patch
+    patch -Np1 < ../patches/wine-hotfixes/winevulkan-backport2.patch
 
     ### END WINEPATCH SECTION ###
 
