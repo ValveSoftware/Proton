@@ -222,8 +222,8 @@
     patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-2.patch
     patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-3.patch
 
-    echo "Cyberpunk proton futex2 patches"
-    patch -Np1 < ../patches/proton/proton-cyberpunk-futex2.patch
+#    echo "Cyberpunk proton futex2 patches"
+#    patch -Np1 < ../patches/proton/proton-cyberpunk-futex2.patch
 
     echo "winevulkan backports"
     patch -Np1 < ../patches/wine-hotfixes/winevulkan-backport1.patch
