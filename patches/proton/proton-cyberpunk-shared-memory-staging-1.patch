@@ -34,8 +34,8 @@ index aed7090572b..0b956894110 100644
  
  /* ### protocol_version begin ### */
  
--#define SERVER_PROTOCOL_VERSION 654
-+#define SERVER_PROTOCOL_VERSION 655
+-#define SERVER_PROTOCOL_VERSION 658
++#define SERVER_PROTOCOL_VERSION 660
  
  /* ### protocol_version end ### */
  
@@ -296,15 +296,6 @@ index 0b956894110..ba6d198f95d 100644
  };
  
  
-@@ -6726,7 +6733,7 @@ union generic_reply
- 
- /* ### protocol_version begin ### */
- 
--#define SERVER_PROTOCOL_VERSION 655
-+#define SERVER_PROTOCOL_VERSION 656
- 
- /* ### protocol_version end ### */
- 
 diff --git a/server/protocol.def b/server/protocol.def
 index 7a561ee45c1..3ea38463f80 100644
 --- a/server/protocol.def
@@ -538,15 +529,6 @@ index ba6d198f95d..170b643d7ea 100644
 +
  
  
- 
-@@ -6733,7 +6738,7 @@ union generic_reply
- 
- /* ### protocol_version begin ### */
- 
--#define SERVER_PROTOCOL_VERSION 656
-+#define SERVER_PROTOCOL_VERSION 657
- 
- /* ### protocol_version end ### */
  
 diff --git a/server/protocol.def b/server/protocol.def
 index 3ea38463f80..273b7d33e91 100644
@@ -884,15 +866,6 @@ index 170b643d7ea..6fb02232eac 100644
  };
  
  struct desktop_shared_memory
-@@ -6738,7 +6739,7 @@ union generic_reply
- 
- /* ### protocol_version begin ### */
- 
--#define SERVER_PROTOCOL_VERSION 657
-+#define SERVER_PROTOCOL_VERSION 658
- 
- /* ### protocol_version end ### */
- 
 diff --git a/server/protocol.def b/server/protocol.def
 index 273b7d33e91..adfc53097cd 100644
 --- a/server/protocol.def
@@ -1292,9 +1265,9 @@ index 032308a5220..129d731f7fd 100644
 @@ -1395,10 +1395,10 @@ static void set_input_key_state( unsigned char *keystate, unsigned char key, uns
  }
  
- /* update the input key state for a keyboard message */
--static void update_input_key_state( struct desktop *desktop, unsigned char *keystate,
--                                    unsigned int msg, lparam_t wparam )
+ /* update the key state for a keyboard message */
+-static void update_key_state( struct desktop *desktop, unsigned char *keystate,
+-                              unsigned int msg, lparam_t wparam )
 +static void update_key_state( unsigned char *keystate, unsigned int msg,
 +                              lparam_t wparam, int desktop )
  {
@@ -1303,7 +1276,7 @@ index 032308a5220..129d731f7fd 100644
  
      switch (msg)
      {
-@@ -1457,6 +1457,16 @@ static void update_input_key_state( struct desktop *desktop, unsigned char *keys
+@@ -1457,6 +1457,16 @@ static void update_key_state( struct desktop *desktop, unsigned char *keys
      }
  }
  
@@ -1324,86 +1297,50 @@ index 032308a5220..129d731f7fd 100644
      if (flags & MOUSEEVENTF_MOVE)
          update_desktop_cursor_pos( desktop, x, y );
      if (flags & MOUSEEVENTF_LEFTDOWN)
--        update_input_key_state( desktop, desktop->keystate, WM_LBUTTONDOWN, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_LBUTTONDOWN, wparam );
 +        update_desktop_key_state( desktop, WM_LBUTTONDOWN, wparam );
      if (flags & MOUSEEVENTF_LEFTUP)
--        update_input_key_state( desktop, desktop->keystate, WM_LBUTTONUP, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_LBUTTONUP, wparam );
 +        update_desktop_key_state( desktop, WM_LBUTTONUP, wparam );
      if (flags & MOUSEEVENTF_RIGHTDOWN)
--        update_input_key_state( desktop, desktop->keystate, WM_RBUTTONDOWN, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_RBUTTONDOWN, wparam );
 +        update_desktop_key_state( desktop, WM_RBUTTONDOWN, wparam );
      if (flags & MOUSEEVENTF_RIGHTUP)
--        update_input_key_state( desktop, desktop->keystate, WM_RBUTTONUP, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_RBUTTONUP, wparam );
 +        update_desktop_key_state( desktop, WM_RBUTTONUP, wparam );
      if (flags & MOUSEEVENTF_MIDDLEDOWN)
--        update_input_key_state( desktop, desktop->keystate, WM_MBUTTONDOWN, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_MBUTTONDOWN, wparam );
 +        update_desktop_key_state( desktop, WM_MBUTTONDOWN, wparam );
      if (flags & MOUSEEVENTF_MIDDLEUP)
--        update_input_key_state( desktop, desktop->keystate, WM_MBUTTONUP, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_MBUTTONUP, wparam );
 +        update_desktop_key_state( desktop, WM_MBUTTONUP, wparam );
      if (flags & MOUSEEVENTF_XDOWN)
--        update_input_key_state( desktop, desktop->keystate, WM_XBUTTONDOWN, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_XBUTTONDOWN, wparam );
 +        update_desktop_key_state( desktop, WM_XBUTTONDOWN, wparam );
      if (flags & MOUSEEVENTF_XUP)
--        update_input_key_state( desktop, desktop->keystate, WM_XBUTTONUP, wparam );
+-        update_key_state( desktop, desktop->keystate, WM_XBUTTONUP, wparam );
 +        update_desktop_key_state( desktop, WM_XBUTTONUP, wparam );
  }
  
  /* release the hardware message currently being processed by the given thread */
-@@ -1506,7 +1516,7 @@ static void release_hardware_message( struct msg_queue *queue, unsigned int hw_i
-     }
-     if (clr_bit) clear_queue_bits( queue, clr_bit );
- 
--    update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
-+    update_input_key_state( input, msg->msg, msg->wparam );
-     list_remove( &msg->entry );
-     free_message( msg );
- }
 @@ -1635,7 +1645,7 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
      struct hardware_msg_data *msg_data = msg->data;
      unsigned int msg_code;
  
--    update_input_key_state( desktop, desktop->keystate, msg->msg, msg->wparam );
+-    update_key_state( desktop, desktop->keystate, msg->msg, msg->wparam );
 +    update_desktop_key_state( desktop, msg->msg, msg->wparam );
      last_input_time = get_tick_count();
      if (msg->msg != WM_MOUSEMOVE) always_queue = 1;
  
-@@ -1674,7 +1684,7 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
-     win = find_hardware_message_window( desktop, input, msg, &msg_code, &thread );
-     if (!win || !thread)
-     {
--        if (input) update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
-+        if (input) update_input_key_state( input, msg->msg, msg->wparam );
-         free_message( msg );
-         return;
-     }
 @@ -2039,7 +2049,7 @@ static int queue_keyboard_message( struct desktop *desktop, user_handle_t win, c
  
      if ((device = current->process->rawinput_kbd) && (device->flags & RIDEV_NOLEGACY))
      {
--        update_input_key_state( desktop, desktop->keystate, message_code, vkey );
+-        update_key_state( desktop, desktop->keystate, message_code, vkey );
 +        update_desktop_key_state( desktop, message_code, vkey );
          return 0;
      }
  
-@@ -2199,7 +2209,7 @@ static int get_hardware_message( struct thread *thread, unsigned int hw_id, user
-         if (!win || !win_thread)
-         {
-             /* no window at all, remove it */
--            update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
-+            update_input_key_state( input, msg->msg, msg->wparam );
-             list_remove( &msg->entry );
-             free_message( msg );
-             continue;
-@@ -2215,7 +2225,7 @@ static int get_hardware_message( struct thread *thread, unsigned int hw_id, user
-             else
-             {
-                 /* for another thread input, drop it */
--                update_input_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
-+                update_input_key_state( input, msg->msg, msg->wparam );
-                 list_remove( &msg->entry );
-                 free_message( msg );
-             }
 From e95e4d1c95a2e0b7abb5bda64f897efddd7dc24c Mon Sep 17 00:00:00 2001
 From: Huw Davies <huw@codeweavers.com>
 Date: Wed, 8 Jul 2020 08:26:21 +0100
@@ -1429,15 +1366,6 @@ index 6fb02232eac..2fb345a7f77 100644
 +    unsigned char        keystate[256];
  };
  
- 
-@@ -6739,7 +6740,7 @@ union generic_reply
- 
- /* ### protocol_version begin ### */
- 
--#define SERVER_PROTOCOL_VERSION 658
-+#define SERVER_PROTOCOL_VERSION 659
- 
- /* ### protocol_version end ### */
  
 diff --git a/server/protocol.def b/server/protocol.def
 index adfc53097cd..329fb9e2ad8 100644
@@ -1467,7 +1395,7 @@ index 129d731f7fd..81703e0aaf7 100644
 @@ -1395,7 +1395,7 @@ static void set_input_key_state( unsigned char *keystate, unsigned char key, uns
  }
  
- /* update the input key state for a keyboard message */
+ /* update the key state for a keyboard message */
 -static void update_key_state( unsigned char *keystate, unsigned int msg,
 +static void update_key_state( volatile unsigned char *keystate, unsigned int msg,
                                lparam_t wparam, int desktop )
@@ -1891,15 +1819,6 @@ index 2fb345a7f77..f38442be88e 100644
      char __pad_28[4];
  };
  #define SEND_HWMSG_INJECTED    0x01
-@@ -6740,7 +6739,7 @@ union generic_reply
- 
- /* ### protocol_version begin ### */
- 
--#define SERVER_PROTOCOL_VERSION 659
-+#define SERVER_PROTOCOL_VERSION 660
- 
- /* ### protocol_version end ### */
- 
 diff --git a/server/protocol.def b/server/protocol.def
 index 329fb9e2ad8..3af55b00344 100644
 --- a/server/protocol.def
@@ -1944,3 +1863,46 @@ index 7df5681357b..981b2377abf 100644
  }
  
  static void dump_get_message_request( const struct get_message_request *req )
+diff --git a/server/queue.c b/server/queue.c
+index 74e25e823c6..7b7bce18030 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1530,10 +1530,10 @@ static void synchronize_input_key_state( struct thread_input *input )
+ 
+         for (i = 0; i < 256; i++)
+         {
+-            if (input->desktop->keystate[i] != shadow_keystate[i])
++            if (input->desktop->shared->keystate[i] != shadow_keystate[i])
+             {
+-                keystate[i] = input->desktop->keystate[i] & ~0x40;
+-                shadow_keystate[i] = input->desktop->keystate[i];
++                keystate[i] = input->desktop->shared->keystate[i] & ~0x40;
++                shadow_keystate[i] = input->desktop->shared->keystate[i];
+             }
+         }
+     }
+diff --git a/server/queue.c b/server/queue.c
+index 6029a3c8137..e8949b2b83e 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1483,11 +1483,6 @@ static void update_key_state( volatile unsigned char *keystate, unsigned int msg
+     }
+ }
+ 
+-static void update_input_key_state( struct thread_input *input, unsigned int msg, lparam_t wparam )
+-{
+-    update_key_state( input->keystate, msg, wparam, 0 );
+-}
+-
+ static void update_desktop_key_state( struct desktop *desktop, unsigned int msg, lparam_t wparam )
+ {
+     SHARED_WRITE_BEGIN( &desktop->shared->seq );
+@@ -1543,7 +1538,7 @@ static void synchronize_input_key_state( struct thread_input *input )
+ static void update_input_key_state( struct thread_input *input, unsigned int msg, lparam_t wparam )
+ {
+     synchronize_input_key_state( input );
+-    update_key_state( input->desktop, input->keystate, msg, wparam );
++    update_key_state( input->keystate, msg, wparam, 0 );
+ }
+ 
+ /* release the hardware message currently being processed by the given thread */

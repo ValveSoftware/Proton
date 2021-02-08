@@ -4204,3 +4204,57 @@ index de80a94cf40..fcde9a64ff9 100644
  #endif
  }
  
+From 9ba15293882d2b4d94263b45042043c3174b78a2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 8 Jan 2021 12:19:33 +0100
+Subject: [PATCH] user32: Cleanup desktop shared mapping on thread detach.
+
+---
+ dlls/user32/user_main.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/user32/user_main.c b/dlls/user32/user_main.c
+index ad50b150f06..15632d558c1 100644
+--- a/dlls/user32/user_main.c
++++ b/dlls/user32/user_main.c
+@@ -384,6 +384,13 @@ static void thread_detach(void)
+     HeapFree( GetProcessHeap(), 0, thread_info->wmchar_data );
+     HeapFree( GetProcessHeap(), 0, thread_info->rawinput );
+ 
++    if (thread_info->desktop_shared_map)
++    {
++        CloseHandle( thread_info->desktop_shared_map );
++        thread_info->desktop_shared_map = NULL;
++        thread_info->desktop_shared_memory = NULL;
++    }
++
+     exiting_thread_id = 0;
+ }
+ 
+From 9ba15293882d2b4d94263b45042043c3174b78a2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 8 Jan 2021 12:19:33 +0100
+Subject: [PATCH] user32: Cleanup desktop shared mapping on thread detach.
+
+---
+ dlls/user32/user_main.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/user32/user_main.c b/dlls/user32/user_main.c
+index ad50b150f06..15632d558c1 100644
+--- a/dlls/user32/user_main.c
++++ b/dlls/user32/user_main.c
+@@ -384,6 +384,13 @@ static void thread_detach(void)
+     HeapFree( GetProcessHeap(), 0, thread_info->wmchar_data );
+     HeapFree( GetProcessHeap(), 0, thread_info->rawinput );
+ 
++    if (thread_info->desktop_shared_map)
++    {
++        CloseHandle( thread_info->desktop_shared_map );
++        thread_info->desktop_shared_map = NULL;
++        thread_info->desktop_shared_memory = NULL;
++    }
++
+     exiting_thread_id = 0;
+ }
+ 
