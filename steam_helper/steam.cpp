@@ -36,6 +36,8 @@
 #include <shlobj.h>
 #include <string.h>
 #include <stdio.h>
+#include <limits.h>
+#include <dlfcn.h>
 
 #pragma push_macro("_WIN32")
 #pragma push_macro("__cdecl")
@@ -49,9 +51,16 @@
 
 #include "json/json.h"
 
+#include "wine/heap.h"
+#include "wine/vulkan.h"
+#include "openvr.h"
+#include "../src/ivrclientcore.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(steam);
 
 EXTERN_C HANDLE CDECL __wine_make_process_system(void);
+
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 
 static void set_active_process_pid(void)
 {
@@ -417,6 +426,356 @@ static void setup_vrpaths(void)
     }
 }
 
+static BOOL set_vr_status(HKEY key, DWORD value)
+{
+    LSTATUS status;
+
+    if ((status = RegSetValueExA(key, "state", 0, REG_DWORD, (BYTE *)&value, sizeof(value))))
+    {
+        WINE_ERR("Could not set state value, status %#x.\n", status);
+        return FALSE;
+    }
+    return TRUE;
+}
+
+void* load_vrclient(void)
+{
+    WCHAR pathW[PATH_MAX];
+    char *pathU;
+    DWORD sz;
+
+#ifdef _WIN64
+    static const char append_path[] = "/bin/linux64/vrclient.so";
+#else
+    static const char append_path[] = "/bin/vrclient.so";
+#endif
+
+    /* PROTON_VR_RUNTIME is provided by the proton setup script */
+    if(!GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
+    {
+        WINE_TRACE("Linux OpenVR runtime is not available\n");
+        return 0;
+    }
+
+    sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, NULL, 0, NULL, NULL);
+    if(!sz)
+    {
+        WINE_ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
+        return NULL;
+    }
+
+    pathU = (char *)HeapAlloc(GetProcessHeap(), 0, sz + sizeof(append_path));
+
+    sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, pathU, sz, NULL, NULL);
+    if(!sz)
+    {
+        WINE_ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
+        return NULL;
+    }
+
+    strcat(pathU, append_path);
+
+    WINE_TRACE("got openvr runtime path: %s\n", pathU);
+
+    return dlopen(pathU, RTLD_NOW);
+}
+
+static char *strdupA(const char *s)
+{
+    size_t l = strlen(s) + 1;
+    char *r = (char *)heap_alloc(l);
+    memcpy(r, s, l);
+    return r;
+}
+
+static void parse_extensions(const char *in, uint32_t *out_count,
+        char ***out_strs)
+{
+    char *iter, *start;
+    char **list, *str = strdupA(in);
+    uint32_t extension_count = 0, o = 0;
+
+    iter = str;
+    while(*iter){
+        if(*iter++ == ' ')
+            extension_count++;
+    }
+    /* count the one ending in NUL */
+    if(iter != str)
+        extension_count++;
+    if(!extension_count){
+        *out_count = 0;
+        *out_strs = NULL;
+        return;
+    }
+
+    list = (char **)heap_alloc(extension_count * sizeof(*list));
+
+    start = iter = str;
+    do{
+        if(*iter == ' '){
+            *iter = 0;
+            list[o++] = start;
+            WINE_TRACE("added %s to list\n", list[o-1]);
+            iter++;
+            start = iter;
+        }else if(*iter == 0){
+            list[o++] = start;
+            WINE_TRACE("added %s to list\n", list[o-1]);
+            break;
+        }else{
+            iter++;
+        }
+    }while(1);
+
+    *out_count = extension_count;
+    *out_strs = list;
+}
+
+extern "C"
+{
+    VkPhysicalDevice WINAPI __wine_get_native_VkPhysicalDevice(VkPhysicalDevice phys_dev);
+};
+
+static DWORD WINAPI initialize_vr_data(void *arg)
+{
+    vr::IVRClientCore* (*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
+    uint32_t instance_extensions_count, device_count;
+    VkPhysicalDevice *phys_devices = NULL;
+    VkPhysicalDeviceProperties prop = {};
+    VkInstanceCreateInfo inst_info = {};
+    char **instance_extensions = NULL;
+    VkApplicationInfo app_info = {};
+    char *buffer = NULL, *new_buffer;
+    vr::IVRClientCore* client_core;
+    vr::IVRCompositor* compositor;
+    VkInstance vk_instance = NULL;
+    BOOL vr_initialized = FALSE;
+    HKEY vr_key = (HKEY)arg;
+    vr::EVRInitError error;
+    HMODULE hvulkan = NULL;
+    DWORD vr_status = ~0u;
+    const char *env_str;
+    unsigned int app_id;
+    unsigned int length;
+    void *lib_vrclient;
+    int return_code;
+    LSTATUS status;
+    unsigned int i;
+    char str[256];
+    VkResult res;
+
+    WINE_TRACE("Starting VR info initialization.\n");
+
+    if (!(lib_vrclient = load_vrclient()))
+    {
+        WINE_ERR("Could not load libopenvr_api.so.\n");
+        set_vr_status(vr_key, ~0u);
+        RegCloseKey(vr_key);
+        return 0;
+    }
+
+    if (!(vrclient_VRClientCoreFactory = reinterpret_cast<decltype(vrclient_VRClientCoreFactory)>
+            (dlsym(lib_vrclient, "VRClientCoreFactory"))))
+    {
+        WINE_ERR("Could not find function %s.\n", vrclient_VRClientCoreFactory);
+        goto done;
+    }
+    if (!(client_core = vrclient_VRClientCoreFactory(vr::IVRClientCore_Version, &return_code)))
+    {
+        WINE_ERR("Could not get IVRClientCore, error %d.\n", return_code);
+    }
+
+    if ((env_str = getenv("SteamGameId")))
+        app_id = atoi(env_str);
+    else
+        app_id = 1245040; /* Proton 5.0 */
+
+    /* Without overriding the app_key vrclient waits 2 seconds for a valid appkey before returning. */
+    sprintf(str, "{ \"app_key\" : \"steam.app.%u\" }", app_id);
+    error = client_core->Init(vr::VRApplication_Background, str);
+    if (error != vr::VRInitError_None)
+    {
+        if (error == vr::VRInitError_Init_NoServerForBackgroundApp)
+            WINE_TRACE("VR server is not available.\n");
+        else
+            WINE_ERR("VR init failed, error %u.\n", error);
+        goto done;
+    }
+    vr_initialized = TRUE;
+
+    compositor = reinterpret_cast<vr::IVRCompositor*>(client_core->GetGenericInterface(vr::IVRCompositor_Version, &error));
+    if (!compositor)
+    {
+        WINE_ERR("Could not get compositor, error %u.\n", error);
+        goto done;
+    }
+
+    length = compositor->GetVulkanInstanceExtensionsRequired(nullptr, 0);
+    if (!(buffer = (char *)heap_alloc(length)))
+    {
+        WINE_ERR("No memory.\n");
+        goto done;
+    }
+    *buffer = 0;
+    compositor->GetVulkanInstanceExtensionsRequired(buffer, length);
+    WINE_TRACE("Instance extensions %s.\n", buffer);
+
+    if ((status = RegSetValueExA(vr_key, "openvr_vulkan_instance_extensions", 0, REG_SZ, (BYTE *)buffer, length)))
+    {
+        WINE_ERR("Could not set openvr_vulkan_instance_extensions value, status %#x.\n", status);
+        return FALSE;
+    }
+
+    if (!(hvulkan = LoadLibraryA("winevulkan.dll")))
+    {
+        WINE_ERR("Could not load winevulkan.\n");
+        goto done;
+    }
+
+#define USE_VULKAN_PROC(name) decltype(name) *p##name;\
+    if (!(p##name = reinterpret_cast<decltype(name) *>(GetProcAddress(hvulkan, "wine_"#name)))\
+            && !(p##name = reinterpret_cast<decltype(name) *>(GetProcAddress(hvulkan, #name))))\
+    {\
+        WINE_ERR("Could not find function %s.\n", #name);\
+        goto done;\
+    }
+    USE_VULKAN_PROC(vkCreateInstance)
+    USE_VULKAN_PROC(vkDestroyInstance)
+    USE_VULKAN_PROC(vkEnumeratePhysicalDevices)
+    USE_VULKAN_PROC(vkGetPhysicalDeviceProperties)
+    USE_VULKAN_PROC(__wine_get_native_VkPhysicalDevice)
+#undef USE_OPENVR_PROC
+
+    parse_extensions(buffer, &instance_extensions_count, &instance_extensions);
+
+    app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    app_info.pApplicationName = "proton_vrhelper";
+    app_info.applicationVersion = 1;
+    app_info.pEngineName = "proton_vrhelper";
+    app_info.engineVersion = 1;
+    app_info.apiVersion = VK_MAKE_VERSION(1, 1, 0);
+
+    inst_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    inst_info.pApplicationInfo = &app_info;
+    inst_info.enabledExtensionCount = instance_extensions_count;
+    inst_info.ppEnabledExtensionNames = instance_extensions;
+
+    if ((res = pvkCreateInstance(&inst_info, NULL, &vk_instance)) != VK_SUCCESS)
+    {
+        WINE_ERR("Could not create VK instance, res %d.\n", res);
+        goto done;
+    }
+
+    if ((res = pvkEnumeratePhysicalDevices(vk_instance, &device_count, NULL)) != VK_SUCCESS)
+    {
+        WINE_ERR("Could not enumerate physical devices, res %d.\n", res);
+        goto done;
+    }
+    if (!(phys_devices = (VkPhysicalDevice *)heap_alloc(device_count * sizeof(*phys_devices))))
+    {
+        WINE_ERR("No memory.\n");
+        goto done;
+    }
+    if ((res = pvkEnumeratePhysicalDevices(vk_instance, &device_count, phys_devices)) != VK_SUCCESS)
+    {
+        WINE_ERR("Could not enumerate physical devices, res %d.\n", res);
+        goto done;
+    }
+
+    for (i = 0; i < device_count; ++i)
+    {
+        char name[256];
+        LUID luid;
+
+        pvkGetPhysicalDeviceProperties(phys_devices[i], &prop);
+        if (prop.apiVersion < VK_MAKE_VERSION(1, 1, 0))
+        {
+            WINE_TRACE("Skipping Vulkan 1.0 adapter %s.\n", prop.deviceName);
+            continue;
+        }
+
+        length = compositor->GetVulkanDeviceExtensionsRequired(p__wine_get_native_VkPhysicalDevice(phys_devices[i]), nullptr, 0);
+        if (!(new_buffer = (char *)heap_realloc(buffer, length)))
+        {
+            WINE_ERR("No memory.\n");
+            goto done;
+        }
+        buffer = new_buffer;
+        compositor->GetVulkanDeviceExtensionsRequired(p__wine_get_native_VkPhysicalDevice(phys_devices[i]), buffer, length);
+        sprintf(name, "PCIID:%04x:%04x", prop.vendorID, prop.deviceID);
+        WINE_TRACE("%s: %s.\n", name, buffer);
+
+        if ((status = RegSetValueExA(vr_key, name, 0, REG_SZ, (BYTE *)buffer, length)))
+        {
+            WINE_ERR("Could not set %s value, status %#x.\n", name, status);
+            return FALSE;
+        }
+    }
+
+    vr_status = 1;
+
+done:
+    set_vr_status(vr_key, vr_status);
+
+    heap_free(phys_devices);
+
+    if (vk_instance)
+        pvkDestroyInstance(vk_instance, NULL);
+
+    if (instance_extensions)
+    {
+        heap_free(instance_extensions[0]);
+        heap_free(instance_extensions);
+    }
+    if (hvulkan)
+        FreeLibrary(hvulkan);
+    heap_free(buffer);
+    if (vr_initialized)
+        client_core->Cleanup();
+    WINE_TRACE("Completed VR info initialization.\n");
+    dlclose(lib_vrclient);
+    RegCloseKey(vr_key);
+    return 0;
+}
+
+static void setup_vr_registry(void)
+{
+    LSTATUS status;
+    HANDLE thread;
+    HKEY vr_key;
+    DWORD disp;
+
+    if ((status = RegCreateKeyExA(HKEY_CURRENT_USER, "Software\\Wine\\VR", 0, NULL, REG_OPTION_VOLATILE,
+            KEY_ALL_ACCESS, NULL, &vr_key, &disp)))
+    {
+        WINE_ERR("Could not create key, status %#x.\n", status);
+        return;
+    }
+    if (disp != REG_CREATED_NEW_KEY)
+    {
+        WINE_ERR("VR key already exists, disp %#x.\n", disp);
+        RegCloseKey(vr_key);
+        return;
+    }
+
+    if (!set_vr_status(vr_key, 0))
+    {
+        RegCloseKey(vr_key);
+        return;
+    }
+
+    if (!(thread = CreateThread(NULL, 0, initialize_vr_data, (void *)vr_key, 0, NULL)))
+    {
+        WINE_ERR("Could not create thread, error %u.\n", GetLastError());
+        RegCloseKey(vr_key);
+        return;
+    }
+    CloseHandle(thread);
+
+    WINE_TRACE("Queued VR info initialization.\n");
+}
+
 static WCHAR *strchrW(WCHAR *h, WCHAR n)
 {
     do
@@ -656,6 +1015,7 @@ int main(int argc, char *argv[])
 {
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
     HANDLE event = INVALID_HANDLE_VALUE;
+    BOOL game_process = FALSE;
 
     WINE_TRACE("\n");
 
@@ -670,6 +1030,7 @@ int main(int argc, char *argv[])
         setup_steam_registry();
 
         wait_handle = __wine_make_process_system();
+        game_process = TRUE;
     }
 
     if (argc > 1)
@@ -678,6 +1039,9 @@ int main(int argc, char *argv[])
         BOOL should_await;
 
         setup_vrpaths();
+
+        if (game_process)
+            setup_vr_registry();
 
         child = run_process(&should_await);
 

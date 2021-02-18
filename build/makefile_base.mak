@@ -589,10 +589,11 @@ $(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json
 
 STEAMEXE_CFLAGS = -Wno-attributes
 STEAMEXE_CXXFLAGS = -Wno-attributes
-STEAMEXE_LDFLAGS = -lsteam_api -lole32 -static-libgcc -static-libstdc++
+STEAMEXE_LDFLAGS = -lsteam_api -lole32 -ldl -static-libgcc -static-libstdc++
 
 STEAMEXE_WINEMAKER_ARGS = \
 	"-I$(SRC)/lsteamclient/steamworks_sdk_142/" \
+	"-I$(SRC)/openvr/headers/" \
 	"-L$(SRC)/steam_helper/"
 
 STEAMEXE_DEPENDS = wine
