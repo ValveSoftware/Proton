@@ -232,55 +232,67 @@ static BOOL HACK_does_openvr_work(void)
      * functioning before calling xrCreateInstance.
      *
      * This should be removed when SteamVR's bug is fixed. */
+    DWORD type, value, wait_status, size;
+    LSTATUS status;
+    HANDLE event;
+    HKEY vr_key;
 
-    static void *(CDECL *InitInternal)(int *err, int type);
-    static void (CDECL *ShutdownInternal)(void);
-    static void *(CDECL *GetGenericInterface)(const char *, int *err);
-
-    int error;
-    HANDLE openvr_api;
-    void *compositor;
-    BOOL need_unload = FALSE;
-
-    openvr_api = GetModuleHandleW(L"openvr_api.dll");
-    if(!openvr_api){
-        openvr_api = LoadLibraryW(L"openvr_api_dxvk.dll");
-        if(!openvr_api){
-            WINE_TRACE("no openvr_api_dxvk\n");
-            return FALSE;
-        }
-        need_unload = TRUE;
-    }
-
-    InitInternal = (void *)GetProcAddress(openvr_api, "VR_InitInternal");
-    ShutdownInternal = (void *)GetProcAddress(openvr_api, "VR_ShutdownInternal");
-    GetGenericInterface = (void *)GetProcAddress(openvr_api, "VR_GetGenericInterface");
-
-    if(!InitInternal || !ShutdownInternal || !GetGenericInterface){
-        WINE_TRACE("missing openvr function\n");
-        if(need_unload)
-            FreeLibrary(openvr_api);
+    if ((status = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Wine\\VR", 0, KEY_READ, &vr_key)))
+    {
+        WINE_ERR("Could not create key, status %#x.\n", status);
         return FALSE;
     }
 
-    error = 1;
-    compositor = GetGenericInterface("IVRCompositor_022", &error);
-    if(!compositor || error != 0){
-        InitInternal(&error, 3 /* VRApplication_Background */);
-
-        if(error == 0 /* VRInitError_None */){
-            WINE_TRACE("openvr init succeeded\n");
-            ShutdownInternal();
-        }else
-            WINE_TRACE("openvr init failed\n");
-    }else{
-        WINE_TRACE("got openvr compositor\n");
+    size = sizeof(value);
+    if ((status = RegQueryValueExA(vr_key, "state", NULL, &type, (BYTE *)&value, &size)))
+    {
+        WINE_ERR("Could not query value, status %#x.\n", status);
+        RegCloseKey(vr_key);
+        return FALSE;
+    }
+    if (type != REG_DWORD)
+    {
+        WINE_ERR("Unexpected value type %#x.\n", type);
+        RegCloseKey(vr_key);
+        return FALSE;
     }
 
-    if(need_unload)
-        FreeLibrary(openvr_api);
+    if (value)
+    {
+        RegCloseKey(vr_key);
+        return value == 1;
+    }
 
-    return error == 0 /* VRInitError_None */;
+    event = CreateEventA( NULL, FALSE, FALSE, NULL );
+    while (1)
+    {
+        if (RegNotifyChangeKeyValue(vr_key, FALSE, REG_NOTIFY_CHANGE_LAST_SET, event, TRUE))
+        {
+            WINE_ERR("Error registering registry change notification.\n");
+            goto done;
+        }
+        size = sizeof(value);
+        if ((status = RegQueryValueExA(vr_key, "state", NULL, &type, (BYTE *)&value, &size)))
+        {
+            WINE_ERR("Could not query value, status %#x.\n", status);
+            goto done;
+        }
+        if (value)
+            break;
+        while ((wait_status = WaitForSingleObject(event, 1000)) == WAIT_TIMEOUT)
+            WINE_ERR("VR state wait timeout.\n");
+
+        if (wait_status != WAIT_OBJECT_0)
+        {
+            WINE_ERR("Got unexpected wait status %#x.\n", wait_status);
+            break;
+        }
+    }
+
+done:
+    CloseHandle(event);
+    RegCloseKey(vr_key);
+    return value == 1;
 }
 
 XrResult load_host_openxr_loader(void)
