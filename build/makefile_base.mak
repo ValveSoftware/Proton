@@ -1168,6 +1168,8 @@ $(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $
 			-I"../$(TOOLS_DIR32)"/include/wine/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
 			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
+			-I"../$(WINE)"/include/ \
+			-I"../$(SRCDIR)"/openvr/headers/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
 			-L"../$(SRCDIR)"/steam_helper/ \
@@ -1175,7 +1177,7 @@ $(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $
 		cp ../$(STEAMEXE_SYN)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -lsteam_api -lole32 $$(steam_exe_LDFLAGS)'
+		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -lsteam_api -lole32 -ldl $$(steam_exe_LDFLAGS)'
 
 ## steam goals
 STEAMEXE_TARGETS = steam steam_configure
