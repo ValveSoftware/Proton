@@ -63,6 +63,11 @@ ifeq ($(ENABLE_CCACHE),1)
 else
 endif
 
+ifneq ($(which mkdir),'/bin/mkdir')
+	export PATH := $(PATH):/bin
+else
+endif
+
 CC32 := $(CC) -m32 -mstackrealign
 CXX32 := $(CXX) -m32 -mstackrealign
 PKG_CONFIG32 := i686-linux-gnu-pkg-config
