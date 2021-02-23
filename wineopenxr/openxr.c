@@ -453,6 +453,7 @@ XrResult load_host_openxr_loader(void)
     res = pxrGetVulkanGraphicsDeviceKHR(instance, system, vk_instance, &vk_physdev);
     if(res != XR_SUCCESS){
         WINE_WARN("xrGetVulkanGraphicsDeviceKHR failed: %d\n", res);
+        vkDestroyInstance(vk_instance, NULL);
         xrDestroyInstance(instance);
         heap_free(g_instance_extensions);
         g_instance_extensions = NULL;
@@ -466,6 +467,7 @@ XrResult load_host_openxr_loader(void)
     res = pxrGetVulkanDeviceExtensionsKHR(instance, system, 0, &len, NULL);
     if(res != XR_SUCCESS){
         WINE_WARN("pxrGetVulkanDeviceExtensionsKHR fail: %d\n", res);
+        vkDestroyInstance(vk_instance, NULL);
         xrDestroyInstance(instance);
         heap_free(g_instance_extensions);
         g_instance_extensions = NULL;
@@ -475,6 +477,7 @@ XrResult load_host_openxr_loader(void)
     res = pxrGetVulkanDeviceExtensionsKHR(instance, system, len, &len, g_device_extensions);
     if(res != XR_SUCCESS){
         WINE_WARN("pxrGetVulkanDeviceExtensionsKHR fail: %d\n", res);
+        vkDestroyInstance(vk_instance, NULL);
         xrDestroyInstance(instance);
         heap_free(g_instance_extensions);
         g_instance_extensions = NULL;
@@ -738,6 +741,68 @@ XrResult WINAPI wine_xrDestroyInstance(XrInstance instance)
     return XR_SUCCESS;
 }
 
+/* SteamVR does some internal init during these functions. */
+static XrResult do_vulkan_init(wine_XrInstance *wine_instance, VkInstance vk_instance)
+{
+    char *instance_extensions, *device_extensions;
+    XrGraphicsRequirementsVulkanKHR vk_reqs;
+    XrResult res;
+    uint32_t len;
+
+    vk_reqs.type = XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR;
+    vk_reqs.next = NULL;
+    res = wine_instance->funcs.p_xrGetVulkanGraphicsRequirementsKHR(wine_instance->instance,
+            wine_instance->systemId, &vk_reqs);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("xrGetVulkanGraphicsRequirementsKHR failed: %d\n", res);
+        return res;
+    }
+
+    res = wine_instance->funcs.p_xrGetVulkanInstanceExtensionsKHR(wine_instance->instance,
+            wine_instance->systemId, 0, &len, NULL);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("xrGetVulkanInstanceExtensionsKHR failed: %d\n", res);
+        return res;
+    }
+    instance_extensions = heap_alloc(len);
+    res = wine_instance->funcs.p_xrGetVulkanInstanceExtensionsKHR(wine_instance->instance, wine_instance->systemId,
+            len, &len, instance_extensions);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("xrGetVulkanInstanceExtensionsKHR failed: %d\n", res);
+        heap_free(instance_extensions);
+        return res;
+    }
+
+    res = wine_instance->funcs.p_xrGetVulkanGraphicsDeviceKHR(wine_instance->instance, wine_instance->systemId,
+            vk_instance, &wine_instance->vk_phys_dev);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("xrGetVulkanGraphicsDeviceKHR failed: %d\n", res);
+        return res;
+    }
+
+    res = wine_instance->funcs.p_xrGetVulkanDeviceExtensionsKHR(wine_instance->instance, wine_instance->systemId, 0, &len, NULL);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("pxrGetVulkanDeviceExtensionsKHR fail: %d\n", res);
+        return res;
+    }
+    device_extensions = heap_alloc(len);
+    res = wine_instance->funcs.p_xrGetVulkanDeviceExtensionsKHR(wine_instance->instance, wine_instance->systemId, len, &len, device_extensions);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("pxrGetVulkanDeviceExtensionsKHR fail: %d\n", res);
+        heap_free(device_extensions);
+        return res;
+    }
+    heap_free(device_extensions);
+
+    return XR_SUCCESS;
+}
+
 XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateInfo *createInfo, XrSession *session)
 {
     wine_XrInstance *wine_instance = (wine_XrInstance *)instance;
@@ -786,7 +851,14 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
                         NULL, &our_vk_binding.queueIndex, &our_vk_binding.queueFamilyIndex);
 
                 our_vk_binding.instance = get_native_VkInstance(our_vk_binding.instance);
-                our_vk_binding.physicalDevice = get_native_VkPhysicalDevice(our_vk_binding.physicalDevice);
+
+                if ((res = do_vulkan_init(wine_instance, our_vk_binding.instance)) != XR_SUCCESS)
+                    return res;
+
+                if (wine_instance->vk_phys_dev != our_vk_binding.physicalDevice)
+                    WINE_WARN("VK physical device does not match that from xrGetVulkanGraphicsDeviceKHR.\n");
+
+                our_vk_binding.physicalDevice = wine_instance->vk_phys_dev;
                 our_vk_binding.device = get_native_VkDevice(our_vk_binding.device);
 
                 our_create_info = *createInfo;
@@ -1124,20 +1196,10 @@ XrResult WINAPI wine_xrGetSystem(XrInstance instance, const XrSystemGetInfo *get
     WINE_TRACE("%p, %p, %p\n", instance, getInfo, systemId);
 
     res = wine_instance->funcs.p_xrGetSystem(wine_instance->instance, getInfo, systemId);
-    if(res == XR_SUCCESS){
-        XrGraphicsRequirementsVulkanKHR vk_reqs;
+    if(res != XR_SUCCESS)
+        return res;
 
-        wine_instance->systemId = *systemId;
-
-        /* required to call before graphics init stuff happens, so i stuck it here. */
-        vk_reqs.type = XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR;
-        res = wine_instance->funcs.p_xrGetVulkanGraphicsRequirementsKHR(wine_instance->instance, *systemId, &vk_reqs);
-        if(res != XR_SUCCESS){
-            WINE_WARN("xrGetVulkanGraphicsRequirementsKHR failed: %d\n", res);
-            return res;
-        }
-    }
-
+    wine_instance->systemId = *systemId;
     return res;
 }
 
