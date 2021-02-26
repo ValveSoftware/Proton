@@ -92,6 +92,9 @@ UNSUPPORTED_EXTENSIONS = [
     "XR_EXT_validation_flags",
     "XR_KHR_display", # Needs WSI work.
     "XR_KHR_surface_protected_capabilities",
+    "XR_KHR_loader_init",
+    "XR_KHR_vulkan_enable2",
+    "XR_MSFT_perception_anchor_interop",
 
     # Device extensions
     "XR_AMD_display_native_hdr",
@@ -1296,7 +1299,7 @@ class XrParam(object):
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type == "HANDLE":
                 self.format_str = "%p"
-            elif self.type in ["XrSystemId", "XrPath", "XrTime"]:
+            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrControllerModelKeyMSFT"]:
                 self.format_str = "0x%s"
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type in ["XrVector2f"]:
