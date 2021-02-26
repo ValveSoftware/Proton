@@ -42,7 +42,6 @@ union CompositionLayer {
     XrCompositionLayerDepthInfoKHR depth_info;
     XrCompositionLayerCylinderKHR cylinder;
     XrCompositionLayerEquirectKHR equirect;
-    XrCompositionLayerColorScaleBiasKHR color_scale_bias;
     XrCompositionLayerEquirect2KHR equirect2;
 };
 
@@ -1488,10 +1487,6 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
         out_layer->quad = *(const XrCompositionLayerQuad *)in_layer;
         out_layer->quad.subImage.swapchain = ((wine_XrSwapchain *)out_layer->quad.subImage.swapchain)->swapchain;
         break;
-
-    case XR_TYPE_COMPOSITION_LAYER_COLOR_SCALE_BIAS_KHR:
-        /* no conversion needed */
-        return (XrCompositionLayerBaseHeader *)in_layer;
 
     default:
         WINE_WARN("Unknown composition in_layer type: %d\n", in_layer->type);
