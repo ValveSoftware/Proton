@@ -15,7 +15,7 @@
  * language incorporated into the Specification and reference pages, and other
  * material which is registered by Khronos, such as tags used by extension and
  * layer authors. The only authoritative version of xr.xml is the one
- * maintained in the master branch of the Khronos OpenXR GitHub project.
+ * maintained in the default branch of the Khronos OpenXR GitHub project.
  *
  */
 
@@ -86,6 +86,8 @@ struct openxr_instance_funcs
     XrResult (*p_xrEndSession)(XrSession);
     XrResult (*p_xrEnumerateApiLayerProperties)(uint32_t, uint32_t *, XrApiLayerProperties *);
     XrResult (*p_xrEnumerateBoundSourcesForAction)(XrSession, const XrBoundSourcesForActionEnumerateInfo *, uint32_t, uint32_t *, XrPath *);
+    XrResult (*p_xrEnumerateColorSpacesFB)(XrSession, uint32_t, uint32_t *, XrColorSpaceFB *);
+    XrResult (*p_xrEnumerateDisplayRefreshRatesFB)(XrSession, uint32_t, uint32_t *, float *);
     XrResult (*p_xrEnumerateEnvironmentBlendModes)(XrInstance, XrSystemId, XrViewConfigurationType, uint32_t, uint32_t *, XrEnvironmentBlendMode *);
     XrResult (*p_xrEnumerateReferenceSpaces)(XrSession, uint32_t, uint32_t *, XrReferenceSpaceType *);
     XrResult (*p_xrEnumerateSwapchainFormats)(XrSession, uint32_t, uint32_t *, int64_t *);
@@ -96,7 +98,11 @@ struct openxr_instance_funcs
     XrResult (*p_xrGetActionStateFloat)(XrSession, const XrActionStateGetInfo *, XrActionStateFloat *);
     XrResult (*p_xrGetActionStatePose)(XrSession, const XrActionStateGetInfo *, XrActionStatePose *);
     XrResult (*p_xrGetActionStateVector2f)(XrSession, const XrActionStateGetInfo *, XrActionStateVector2f *);
+    XrResult (*p_xrGetControllerModelKeyMSFT)(XrSession, XrPath, XrControllerModelKeyStateMSFT *);
+    XrResult (*p_xrGetControllerModelPropertiesMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelPropertiesMSFT *);
+    XrResult (*p_xrGetControllerModelStateMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelStateMSFT *);
     XrResult (*p_xrGetCurrentInteractionProfile)(XrSession, XrPath, XrInteractionProfileState *);
+    XrResult (*p_xrGetDisplayRefreshRateFB)(XrSession, float *);
     XrResult (*p_xrGetInputSourceLocalizedName)(XrSession, const XrInputSourceLocalizedNameGetInfo *, uint32_t, uint32_t *, char *);
     XrResult (*p_xrGetInstanceProperties)(XrInstance, XrInstanceProperties *);
     XrResult (*p_xrGetOpenGLGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsOpenGLKHR *);
@@ -109,6 +115,7 @@ struct openxr_instance_funcs
     XrResult (*p_xrGetVulkanGraphicsDeviceKHR)(XrInstance, XrSystemId, VkInstance, VkPhysicalDevice *);
     XrResult (*p_xrGetVulkanGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
     XrResult (*p_xrGetVulkanInstanceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
+    XrResult (*p_xrLoadControllerModelMSFT)(XrSession, XrControllerModelKeyMSFT, uint32_t, uint32_t *, uint8_t *);
     XrResult (*p_xrLocateHandJointsEXT)(XrHandTrackerEXT, const XrHandJointsLocateInfoEXT *, XrHandJointLocationsEXT *);
     XrResult (*p_xrLocateSpace)(XrSpace, XrSpace, XrTime, XrSpaceLocation *);
     XrResult (*p_xrLocateViews)(XrSession, const XrViewLocateInfo *, XrViewState *, uint32_t, uint32_t *, XrView *);
@@ -116,8 +123,10 @@ struct openxr_instance_funcs
     XrResult (*p_xrPerfSettingsSetPerformanceLevelEXT)(XrSession, XrPerfSettingsDomainEXT, XrPerfSettingsLevelEXT);
     XrResult (*p_xrPollEvent)(XrInstance, XrEventDataBuffer *);
     XrResult (*p_xrReleaseSwapchainImage)(XrSwapchain, const XrSwapchainImageReleaseInfo *);
+    XrResult (*p_xrRequestDisplayRefreshRateFB)(XrSession, float);
     XrResult (*p_xrRequestExitSession)(XrSession);
     XrResult (*p_xrResultToString)(XrInstance, XrResult, char[]);
+    XrResult (*p_xrSetColorSpaceFB)(XrSession, const XrColorSpaceFB);
     XrResult (*p_xrSetInputDeviceActiveEXT)(XrSession, XrPath, XrPath, XrBool32);
     XrResult (*p_xrSetInputDeviceLocationEXT)(XrSession, XrPath, XrPath, XrSpace, XrPosef);
     XrResult (*p_xrSetInputDeviceStateBoolEXT)(XrSession, XrPath, XrPath, XrBool32);
@@ -162,6 +171,8 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrEndSession) \
     USE_XR_FUNC(xrEnumerateApiLayerProperties) \
     USE_XR_FUNC(xrEnumerateBoundSourcesForAction) \
+    USE_XR_FUNC(xrEnumerateColorSpacesFB) \
+    USE_XR_FUNC(xrEnumerateDisplayRefreshRatesFB) \
     USE_XR_FUNC(xrEnumerateEnvironmentBlendModes) \
     USE_XR_FUNC(xrEnumerateReferenceSpaces) \
     USE_XR_FUNC(xrEnumerateSwapchainFormats) \
@@ -172,7 +183,11 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrGetActionStateFloat) \
     USE_XR_FUNC(xrGetActionStatePose) \
     USE_XR_FUNC(xrGetActionStateVector2f) \
+    USE_XR_FUNC(xrGetControllerModelKeyMSFT) \
+    USE_XR_FUNC(xrGetControllerModelPropertiesMSFT) \
+    USE_XR_FUNC(xrGetControllerModelStateMSFT) \
     USE_XR_FUNC(xrGetCurrentInteractionProfile) \
+    USE_XR_FUNC(xrGetDisplayRefreshRateFB) \
     USE_XR_FUNC(xrGetInputSourceLocalizedName) \
     USE_XR_FUNC(xrGetInstanceProperties) \
     USE_XR_FUNC(xrGetOpenGLGraphicsRequirementsKHR) \
@@ -185,6 +200,7 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrGetVulkanGraphicsDeviceKHR) \
     USE_XR_FUNC(xrGetVulkanGraphicsRequirementsKHR) \
     USE_XR_FUNC(xrGetVulkanInstanceExtensionsKHR) \
+    USE_XR_FUNC(xrLoadControllerModelMSFT) \
     USE_XR_FUNC(xrLocateHandJointsEXT) \
     USE_XR_FUNC(xrLocateSpace) \
     USE_XR_FUNC(xrLocateViews) \
@@ -192,8 +208,10 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrPerfSettingsSetPerformanceLevelEXT) \
     USE_XR_FUNC(xrPollEvent) \
     USE_XR_FUNC(xrReleaseSwapchainImage) \
+    USE_XR_FUNC(xrRequestDisplayRefreshRateFB) \
     USE_XR_FUNC(xrRequestExitSession) \
     USE_XR_FUNC(xrResultToString) \
+    USE_XR_FUNC(xrSetColorSpaceFB) \
     USE_XR_FUNC(xrSetInputDeviceActiveEXT) \
     USE_XR_FUNC(xrSetInputDeviceLocationEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateBoolEXT) \
