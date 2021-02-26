@@ -93,7 +93,6 @@ UNSUPPORTED_EXTENSIONS = [
     "XR_KHR_display", # Needs WSI work.
     "XR_KHR_surface_protected_capabilities",
     "XR_KHR_loader_init",
-    "XR_KHR_vulkan_enable2",
     "XR_MSFT_perception_anchor_interop",
 
     # Device extensions
@@ -166,8 +165,11 @@ FUNCTION_OVERRIDES = {
     "xrGetD3D12GraphicsRequirementsKHR" : {"dispatch" : False, "driver" : True, "thunk" : False},
 
     "xrGetVulkanGraphicsDeviceKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrGetVulkanGraphicsDevice2KHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrGetVulkanDeviceExtensionsKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrGetVulkanInstanceExtensionsKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateVulkanInstanceKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateVulkanDeviceKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
 
     "xrPollEvent" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrEnumerateSwapchainImages" : {"dispatch" : True, "driver" : True, "thunk" : False},
