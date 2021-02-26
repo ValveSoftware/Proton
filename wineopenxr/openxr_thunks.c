@@ -308,6 +308,12 @@ static XrResult WINAPI wine_xrGetVisibilityMaskKHR(XrSession session, XrViewConf
     return ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetVisibilityMaskKHR(((wine_XrSession *)session)->session, viewConfigurationType, viewIndex, visibilityMaskType, visibilityMask);
 }
 
+static XrResult WINAPI wine_xrGetVulkanGraphicsRequirements2KHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements)
+{
+    WINE_TRACE("%p, 0x%s, %p\n", instance, wine_dbgstr_longlong(systemId), graphicsRequirements);
+    return ((wine_XrInstance *)instance)->funcs.p_xrGetVulkanGraphicsRequirements2KHR(((wine_XrInstance *)instance)->instance, systemId, graphicsRequirements);
+}
+
 static XrResult WINAPI wine_xrGetVulkanGraphicsRequirementsKHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements)
 {
     WINE_TRACE("%p, 0x%s, %p\n", instance, wine_dbgstr_longlong(systemId), graphicsRequirements);
@@ -485,6 +491,8 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrCreateSpatialAnchorSpaceMSFT", &wine_xrCreateSpatialAnchorSpaceMSFT},
     {"xrCreateSpatialGraphNodeSpaceMSFT", &wine_xrCreateSpatialGraphNodeSpaceMSFT},
     {"xrCreateSwapchain", &wine_xrCreateSwapchain},
+    {"xrCreateVulkanDeviceKHR", &wine_xrCreateVulkanDeviceKHR},
+    {"xrCreateVulkanInstanceKHR", &wine_xrCreateVulkanInstanceKHR},
     {"xrDestroyAction", &wine_xrDestroyAction},
     {"xrDestroyActionSet", &wine_xrDestroyActionSet},
     {"xrDestroyHandTrackerEXT", &wine_xrDestroyHandTrackerEXT},
@@ -527,7 +535,9 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetViewConfigurationProperties", &wine_xrGetViewConfigurationProperties},
     {"xrGetVisibilityMaskKHR", &wine_xrGetVisibilityMaskKHR},
     {"xrGetVulkanDeviceExtensionsKHR", &wine_xrGetVulkanDeviceExtensionsKHR},
+    {"xrGetVulkanGraphicsDevice2KHR", &wine_xrGetVulkanGraphicsDevice2KHR},
     {"xrGetVulkanGraphicsDeviceKHR", &wine_xrGetVulkanGraphicsDeviceKHR},
+    {"xrGetVulkanGraphicsRequirements2KHR", &wine_xrGetVulkanGraphicsRequirements2KHR},
     {"xrGetVulkanGraphicsRequirementsKHR", &wine_xrGetVulkanGraphicsRequirementsKHR},
     {"xrGetVulkanInstanceExtensionsKHR", &wine_xrGetVulkanInstanceExtensionsKHR},
     {"xrLoadControllerModelMSFT", &wine_xrLoadControllerModelMSFT},
@@ -601,6 +611,7 @@ static const char * const xr_extensions[] =
     "XR_KHR_opengl_enable",
     "XR_KHR_visibility_mask",
     "XR_KHR_vulkan_enable",
+    "XR_KHR_vulkan_enable2",
     "XR_KHR_vulkan_swapchain_format_list",
     "XR_KHR_win32_convert_performance_counter_time",
     "XR_MND_headless",

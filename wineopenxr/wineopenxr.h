@@ -132,6 +132,8 @@
 #define XR_HUAWEI_CONTROLLER_INTERACTION_EXTENSION_NAME "XR_HUAWEI_controller_interaction"
 #define XR_VALVE_analog_threshold_SPEC_VERSION 1
 #define XR_VALVE_ANALOG_THRESHOLD_EXTENSION_NAME "XR_VALVE_analog_threshold"
+#define XR_KHR_vulkan_enable2_SPEC_VERSION 1
+#define XR_KHR_VULKAN_ENABLE2_EXTENSION_NAME "XR_KHR_vulkan_enable2"
 #define XR_KHR_composition_layer_equirect2_SPEC_VERSION 1
 #define XR_KHR_COMPOSITION_LAYER_EQUIRECT2_EXTENSION_NAME "XR_KHR_composition_layer_equirect2"
 #define XR_EXT_samsung_odyssey_controller_SPEC_VERSION 1
@@ -611,10 +613,16 @@ typedef enum XrStructureType
     XR_TYPE_VIEW_CONFIGURATION_VIEW_FOV_EPIC = 1000059000,
     XR_TYPE_HOLOGRAPHIC_WINDOW_ATTACHMENT_MSFT = 1000063000,
     XR_TYPE_INTERACTION_PROFILE_ANALOG_THRESHOLD_VALVE = 1000079000,
+    XR_TYPE_VULKAN_INSTANCE_CREATE_INFO_KHR = 1000090000,
+    XR_TYPE_VULKAN_DEVICE_CREATE_INFO_KHR = 1000090001,
+    XR_TYPE_VULKAN_GRAPHICS_DEVICE_GET_INFO_KHR = 1000090003,
     XR_TYPE_COMPOSITION_LAYER_EQUIRECT2_KHR = 1000091000,
     XR_TYPE_EVENT_DATA_DISPLAY_REFRESH_RATE_CHANGED_FB = 1000101000,
     XR_TYPE_SYSTEM_COLOR_SPACE_PROPERTIES_FB = 1000108000,
     XR_TYPE_BINDING_MODIFICATIONS_KHR = 1000120000,
+    XR_TYPE_GRAPHICS_BINDING_VULKAN2_KHR = XR_TYPE_GRAPHICS_BINDING_VULKAN_KHR,
+    XR_TYPE_SWAPCHAIN_IMAGE_VULKAN2_KHR = XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR,
+    XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN2_KHR = XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR,
     XR_STRUCTURE_TYPE_MAX_ENUM = 0x7fffffff,
 } XrStructureType;
 
@@ -690,6 +698,8 @@ typedef struct XrVector3f XrVector3f;
 typedef struct XrViewConfigurationDepthRangeEXT XrViewConfigurationDepthRangeEXT;
 typedef struct XrViewConfigurationView XrViewConfigurationView;
 typedef struct XrViewLocateInfo XrViewLocateInfo;
+typedef struct XrVulkanDeviceCreateInfoKHR XrVulkanDeviceCreateInfoKHR;
+typedef struct XrVulkanInstanceCreateInfoKHR XrVulkanInstanceCreateInfoKHR;
 typedef struct XrActionSetCreateInfo XrActionSetCreateInfo;
 typedef struct XrActionStateFloat XrActionStateFloat;
 typedef struct XrActionsSyncInfo XrActionsSyncInfo;
@@ -769,6 +779,7 @@ typedef struct XrHandJointLocationEXT XrHandJointLocationEXT;
 typedef struct XrHandMeshMSFT XrHandMeshMSFT;
 typedef struct XrRect2Df XrRect2Df;
 typedef struct XrSwapchainImageD3D11KHR XrSwapchainImageD3D11KHR;
+typedef struct XrVulkanGraphicsDeviceGetInfoKHR XrVulkanGraphicsDeviceGetInfoKHR;
 typedef struct XrCompositionLayerCylinderKHR XrCompositionLayerCylinderKHR;
 typedef struct XrCompositionLayerProjection XrCompositionLayerProjection;
 typedef struct XrFrameBeginInfo XrFrameBeginInfo;
@@ -1208,6 +1219,29 @@ struct XrViewLocateInfo
     XrViewConfigurationType viewConfigurationType;
     XrTime displayTime;
     XrSpace space;
+};
+
+struct XrVulkanDeviceCreateInfoKHR
+{
+    XrStructureType type;
+    const void *next;
+    XrSystemId systemId;
+    XrVulkanDeviceCreateFlagsKHR createFlags;
+    PFN_vkGetInstanceProcAddr pfnGetInstanceProcAddr;
+    VkPhysicalDevice vulkanPhysicalDevice;
+    const VkDeviceCreateInfo *vulkanCreateInfo;
+    const VkAllocationCallbacks *vulkanAllocator;
+};
+
+struct XrVulkanInstanceCreateInfoKHR
+{
+    XrStructureType type;
+    const void *next;
+    XrSystemId systemId;
+    XrVulkanInstanceCreateFlagsKHR createFlags;
+    PFN_vkGetInstanceProcAddr pfnGetInstanceProcAddr;
+    const VkInstanceCreateInfo *vulkanCreateInfo;
+    const VkAllocationCallbacks *vulkanAllocator;
 };
 
 struct XrActionSetCreateInfo
@@ -1849,6 +1883,14 @@ struct XrSwapchainImageD3D11KHR
     ID3D11Texture2D *texture;
 };
 
+struct XrVulkanGraphicsDeviceGetInfoKHR
+{
+    XrStructureType type;
+    const void *next;
+    XrSystemId systemId;
+    VkInstance vulkanInstance;
+};
+
 struct XrCompositionLayerCylinderKHR
 {
     XrStructureType type;
@@ -1960,6 +2002,8 @@ typedef XrResult (XRAPI_PTR *PFN_xrCreateSpatialAnchorMSFT)(XrSession, const XrS
 typedef XrResult (XRAPI_PTR *PFN_xrCreateSpatialAnchorSpaceMSFT)(XrSession, const XrSpatialAnchorSpaceCreateInfoMSFT *, XrSpace *);
 typedef XrResult (XRAPI_PTR *PFN_xrCreateSpatialGraphNodeSpaceMSFT)(XrSession, const XrSpatialGraphNodeSpaceCreateInfoMSFT *, XrSpace *);
 typedef XrResult (XRAPI_PTR *PFN_xrCreateSwapchain)(XrSession, const XrSwapchainCreateInfo *, XrSwapchain *);
+typedef XrResult (XRAPI_PTR *PFN_xrCreateVulkanDeviceKHR)(XrInstance, const XrVulkanDeviceCreateInfoKHR *, VkDevice *, VkResult *);
+typedef XrResult (XRAPI_PTR *PFN_xrCreateVulkanInstanceKHR)(XrInstance, const XrVulkanInstanceCreateInfoKHR *, VkInstance *, VkResult *);
 typedef XrResult (XRAPI_PTR *PFN_xrDestroyAction)(XrAction);
 typedef XrResult (XRAPI_PTR *PFN_xrDestroyActionSet)(XrActionSet);
 typedef XrResult (XRAPI_PTR *PFN_xrDestroyHandTrackerEXT)(XrHandTrackerEXT);
@@ -2002,7 +2046,9 @@ typedef XrResult (XRAPI_PTR *PFN_xrGetSystemProperties)(XrInstance, XrSystemId, 
 typedef XrResult (XRAPI_PTR *PFN_xrGetViewConfigurationProperties)(XrInstance, XrSystemId, XrViewConfigurationType, XrViewConfigurationProperties *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVisibilityMaskKHR)(XrSession, XrViewConfigurationType, uint32_t, XrVisibilityMaskTypeKHR, XrVisibilityMaskKHR *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanDeviceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsDevice2KHR)(XrInstance, const XrVulkanGraphicsDeviceGetInfoKHR *, VkPhysicalDevice *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsDeviceKHR)(XrInstance, XrSystemId, VkInstance, VkPhysicalDevice *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsRequirements2KHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanInstanceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
 typedef XrResult (XRAPI_PTR *PFN_xrLoadControllerModelMSFT)(XrSession, XrControllerModelKeyMSFT, uint32_t, uint32_t *, uint8_t *);
@@ -2052,6 +2098,8 @@ XrResult XRAPI_CALL xrCreateSpatialAnchorMSFT(XrSession session, const XrSpatial
 XrResult XRAPI_CALL xrCreateSpatialAnchorSpaceMSFT(XrSession session, const XrSpatialAnchorSpaceCreateInfoMSFT *createInfo, XrSpace *space);
 XrResult XRAPI_CALL xrCreateSpatialGraphNodeSpaceMSFT(XrSession session, const XrSpatialGraphNodeSpaceCreateInfoMSFT *createInfo, XrSpace *space);
 XrResult XRAPI_CALL xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo *createInfo, XrSwapchain *swapchain);
+XrResult XRAPI_CALL xrCreateVulkanDeviceKHR(XrInstance instance, const XrVulkanDeviceCreateInfoKHR *createInfo, VkDevice *vulkanDevice, VkResult *vulkanResult);
+XrResult XRAPI_CALL xrCreateVulkanInstanceKHR(XrInstance instance, const XrVulkanInstanceCreateInfoKHR *createInfo, VkInstance *vulkanInstance, VkResult *vulkanResult);
 XrResult XRAPI_CALL xrDestroyAction(XrAction action);
 XrResult XRAPI_CALL xrDestroyActionSet(XrActionSet actionSet);
 XrResult XRAPI_CALL xrDestroyHandTrackerEXT(XrHandTrackerEXT handTracker);
@@ -2094,7 +2142,9 @@ XrResult XRAPI_CALL xrGetSystemProperties(XrInstance instance, XrSystemId system
 XrResult XRAPI_CALL xrGetViewConfigurationProperties(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, XrViewConfigurationProperties *configurationProperties);
 XrResult XRAPI_CALL xrGetVisibilityMaskKHR(XrSession session, XrViewConfigurationType viewConfigurationType, uint32_t viewIndex, XrVisibilityMaskTypeKHR visibilityMaskType, XrVisibilityMaskKHR *visibilityMask);
 XrResult XRAPI_CALL xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer);
+XrResult XRAPI_CALL xrGetVulkanGraphicsDevice2KHR(XrInstance instance, const XrVulkanGraphicsDeviceGetInfoKHR *getInfo, VkPhysicalDevice *vulkanPhysicalDevice);
 XrResult XRAPI_CALL xrGetVulkanGraphicsDeviceKHR(XrInstance instance, XrSystemId systemId, VkInstance vkInstance, VkPhysicalDevice *vkPhysicalDevice);
+XrResult XRAPI_CALL xrGetVulkanGraphicsRequirements2KHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements);
 XrResult XRAPI_CALL xrGetVulkanGraphicsRequirementsKHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements);
 XrResult XRAPI_CALL xrGetVulkanInstanceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer);
 XrResult XRAPI_CALL xrLoadControllerModelMSFT(XrSession session, XrControllerModelKeyMSFT modelKey, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, uint8_t *buffer);
