@@ -554,6 +554,13 @@ bool __thiscall winISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowse
     return cppISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(_this->linux_side, pchProtocol);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString, 8)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString(winISteamFriends_SteamFriends017 *_this, const char * pchConnectString)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString(_this->linux_side, pchConnectString);
+}
+
 extern vtable_ptr winISteamFriends_SteamFriends017_vtable;
 
 #ifndef __GNUC__
@@ -635,6 +642,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInviteDialog)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString)
     );
 #ifndef __GNUC__
 }

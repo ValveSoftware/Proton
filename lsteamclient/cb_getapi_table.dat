@@ -44,6 +44,7 @@ case 1112:
 case 1221:
     switch(callback_len){
     default:
+    case 584: cb_SteamNetConnectionStatusChangedCallback_t_584(lin_callback, callback); break;
     case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
     }
     break;
@@ -440,6 +441,7 @@ case 1112:
 case 1221:
     switch(callback_len){
     default:
+    case 584: cb_SteamNetConnectionStatusChangedCallback_t_584(lin_callback, callback); break;
     case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
     }
     break;

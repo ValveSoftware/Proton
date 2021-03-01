@@ -73,3 +73,4 @@ extern bool cppISteamFriends_SteamFriends017_IsClanOfficialGameGroup(void *, CSt
 extern int cppISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages(void *);
 extern void cppISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInviteDialog(void *, CSteamID);
 extern bool cppISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(void *, const char *);
+extern void cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString(void *, const char *);

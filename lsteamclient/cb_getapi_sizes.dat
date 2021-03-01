@@ -13,8 +13,8 @@ case 1111: /* LeaderboardUGCSet_t_16 */
     return 12;
 case 1112: /* PS3TrophiesInstalled_t_24 */
     return 20;
-case 1221: /* SteamNetConnectionStatusChangedCallback_t_712 */
-    return 704;
+case 1221: /* SteamNetConnectionStatusChangedCallback_t_584 */
+    return 576;
 case 1303: /* RemoteStorageAppSyncProgress_t_288 */
     return 280;
 case 1307: /* RemoteStorageFileShareResult_t_280 */
@@ -143,8 +143,8 @@ case 1111: /* LeaderboardUGCSet_t_16 */
     return 12;
 case 1112: /* PS3TrophiesInstalled_t_24 */
     return 20;
-case 1221: /* SteamNetConnectionStatusChangedCallback_t_712 */
-    return 704;
+case 1221: /* SteamNetConnectionStatusChangedCallback_t_584 */
+    return 576;
 case 1303: /* RemoteStorageAppSyncProgress_t_288 */
     return 280;
 case 1307: /* RemoteStorageFileShareResult_t_280 */
