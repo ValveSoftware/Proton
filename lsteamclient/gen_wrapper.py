@@ -747,7 +747,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     for param in list(method.get_children()):
         if param.kind == CursorKind.PARM_DECL:
             if param.type.kind == TypeKind.POINTER and \
-                    param.type.get_pointee().kind == TypeKind.FUNCTIONPROTO:
+                (param.type.get_pointee().kind == TypeKind.UNEXPOSED or param.type.get_pointee().kind == TypeKind.FUNCTIONPROTO):
                 #unspecified function pointer
                 typename = "void *"
             else:
@@ -1076,7 +1076,7 @@ def handle_struct(sdkver, struct):
                     to_file.write(f"    win{m.type.spelling}_{sdkver} {m.displayname};\n")
                 else:
                     if m.type.kind == TypeKind.POINTER and \
-                            m.type.get_pointee().kind == TypeKind.FUNCTIONPROTO:
+                            (m.type.get_pointee().kind == TypeKind.UNEXPOSED or m.type.get_pointee().kind == TypeKind.FUNCTIONPROTO):
                         to_file.write(f"    void *{m.displayname}; /*fn pointer*/\n")
                     else:
                         to_file.write(f"    {m.type.spelling} {m.displayname}{get_field_attribute_str(m)};\n")
