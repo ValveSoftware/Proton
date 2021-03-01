@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/10.0.1'
+CLANG_PATH='/usr/lib/clang/11.1.0'
 
 import pprint
 import sys
@@ -15,6 +15,7 @@ import re
 import math
 
 sdk_versions = [
+    "151",
     "150",
     "149",
     "148a",
@@ -866,14 +867,15 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
 
 def get_iface_version(classname):
     # ISteamClient -> STEAMCLIENT_INTERFACE_VERSION
-    if "SteamNetworkingMessages" in classname:
-        defname = "%s_VERSION" % classname[1:].upper()
-    else:
-        defname = "%s_INTERFACE_VERSION" % classname[1:].upper()
+    defname = "%s_INTERFACE_VERSION" % classname[1:].upper()
     if defname in iface_versions.keys():
         ver = iface_versions[defname]
     else:
-        ver = "UNVERSIONED"
+        defname = "%s_VERSION" % classname[1:].upper()
+        if defname in iface_versions.keys():
+            ver = iface_versions[defname]
+        else:
+            ver = "UNVERSIONED"
     if classname in class_versions.keys() and ver in class_versions[classname]:
         return (ver, True)
     if not classname in class_versions.keys():

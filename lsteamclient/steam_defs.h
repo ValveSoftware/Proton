@@ -105,6 +105,8 @@ typedef uint32_t EUserUGCList,
 /* XXX NO */
 typedef struct ISteamNetworkingCustomSignalingRecvContext ISteamNetworkingCustomSignalingRecvContext;
 typedef struct ISteamNetworkingConnectionCustomSignaling ISteamNetworkingConnectionCustomSignaling;
+typedef struct ISteamNetworkingSignalingRecvContext ISteamNetworkingSignalingRecvContext;
+typedef struct ISteamNetworkingConnectionSignaling ISteamNetworkingConnectionSignaling;
 
 /* structs below are PODs with identical size & layout across platforms */
 

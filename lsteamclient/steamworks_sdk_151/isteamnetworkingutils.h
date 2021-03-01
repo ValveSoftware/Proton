@@ -6,7 +6,6 @@
 
 #ifndef ISTEAMNETWORKINGUTILS
 #define ISTEAMNETWORKINGUTILS
-#pragma once
 
 #include "steamnetworkingtypes.h"
 #include "steam_api_common.h"
@@ -107,7 +106,7 @@ public:
 	///
 	/// This always return the most up-to-date information we have available
 	/// right now, even if we are in the middle of re-calculating ping times.
-	virtual float GetLocalPingLocation( SteamNetworkPingLocation_t &result ) = 0;
+	virtual float GetLocalPingLocation( SteamNetworkPingLocation_t *result ) = 0;
 
 	/// Estimate the round-trip latency between two arbitrary locations, in
 	/// milliseconds.  This is a conservative estimate, based on routing through
@@ -131,7 +130,7 @@ public:
 	///
 	/// Do you need to be able to do this from a backend/matchmaking server?
 	/// You are looking for the "ticketgen" library.
-	virtual int EstimatePingTimeBetweenTwoLocations( const SteamNetworkPingLocation_t &location1, const SteamNetworkPingLocation_t &location2 ) = 0;
+	virtual int EstimatePingTimeBetweenTwoLocations( const SteamNetworkPingLocation_t *location1, const SteamNetworkPingLocation_t *location2 ) = 0;
 
 	/// Same as EstimatePingTime, but assumes that one location is the local host.
 	/// This is a bit faster, especially if you need to calculate a bunch of
@@ -141,17 +140,17 @@ public:
 	/// GetLocalPingLocation with EstimatePingTimeBetweenTwoLocations.  That's because
 	/// this function uses a slightly more complete set of information about what
 	/// route would be taken.
-	virtual int EstimatePingTimeFromLocalHost( const SteamNetworkPingLocation_t &remoteLocation ) = 0;
+	virtual int EstimatePingTimeFromLocalHost( const SteamNetworkPingLocation_t *remoteLocation ) = 0;
 
 	/// Convert a ping location into a text format suitable for sending over the wire.
 	/// The format is a compact and human readable.  However, it is subject to change
 	/// so please do not parse it yourself.  Your buffer must be at least
 	/// k_cchMaxSteamNetworkingPingLocationString bytes.
-	virtual void ConvertPingLocationToString( const SteamNetworkPingLocation_t &location, char *pszBuf, int cchBufSize ) = 0;
+	virtual void ConvertPingLocationToString( const SteamNetworkPingLocation_t *location, char *pszBuf, int cchBufSize ) = 0;
 
 	/// Parse back SteamNetworkPingLocation_t string.  Returns false if we couldn't understand
 	/// the string.
-	virtual bool ParsePingLocationString( const char *pszString, SteamNetworkPingLocation_t &result ) = 0;
+	virtual bool ParsePingLocationString( const char *pszString, SteamNetworkPingLocation_t *result ) = 0;
 
 	/// Check if the ping data of sufficient recency is available, and if
 	/// it's too old, start refreshing it.
@@ -283,7 +282,7 @@ public:
 	/// (This is just a convenience shortcut; see below for the implementation and
 	/// a little insight into how SteamNetworkingConfigValue_t is used when
 	/// setting config options during listen socket and connection creation.)
-	bool SetConfigValueStruct( const SteamNetworkingConfigValue_t &opt, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj );
+	bool SetConfigValueStruct( const SteamNetworkingConfigValue_t *opt, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj );
 
 	/// Get a configuration value.
 	/// - eValue: which value to fetch
@@ -309,9 +308,9 @@ public:
 
 	// String conversions.  You'll usually access these using the respective
 	// inline methods.
-	virtual void SteamNetworkingIPAddr_ToString( const SteamNetworkingIPAddr &addr, char *buf, size_t cbBuf, bool bWithPort ) = 0;
+	virtual void SteamNetworkingIPAddr_ToString( const SteamNetworkingIPAddr *addr, char *buf, size_t cbBuf, bool bWithPort ) = 0;
 	virtual bool SteamNetworkingIPAddr_ParseString( SteamNetworkingIPAddr *pAddr, const char *pszStr ) = 0;
-	virtual void SteamNetworkingIdentity_ToString( const SteamNetworkingIdentity &identity, char *buf, size_t cbBuf ) = 0;
+	virtual void SteamNetworkingIdentity_ToString( const SteamNetworkingIdentity *identity, char *buf, size_t cbBuf ) = 0;
 	virtual bool SteamNetworkingIdentity_ParseString( SteamNetworkingIdentity *pIdentity, const char *pszStr ) = 0;
 
 protected:
@@ -385,6 +384,7 @@ struct SteamRelayNetworkStatus_t
 	char m_debugMsg[ 256 ];
 };
 
+#if 0
 /// Utility class for printing a SteamNetworkingIdentity.
 /// E.g. printf( "Identity is '%s'\n", SteamNetworkingIdentityRender( identity ).c_str() );
 struct SteamNetworkingIdentityRender
@@ -431,6 +431,7 @@ inline bool ISteamNetworkingUtils::SetConfigValueStruct( const SteamNetworkingCo
 	const void *pVal = ( opt.m_eDataType == k_ESteamNetworkingConfig_String ) ? (const void *)opt.m_val.m_string : (const void *)&opt.m_val;
 	return SetConfigValue( opt.m_eValue, eScopeType, scopeObj, opt.m_eDataType, pVal );
 }
+#endif
 
 // How to get helper functions.
 #if defined( STEAMNETWORKINGSOCKETS_STATIC_LINK ) || defined( STEAMNETWORKINGSOCKETS_STANDALONELIB )
@@ -447,10 +448,12 @@ inline bool ISteamNetworkingUtils::SetConfigValueStruct( const SteamNetworkingCo
 
 #elif defined( STEAMNETWORKINGSOCKETS_STEAMAPI )
 	// Using steamworks SDK - go through SteamNetworkingUtils()
+#if 0
 	inline void SteamNetworkingIPAddr::ToString( char *buf, size_t cbBuf, bool bWithPort ) const { SteamNetworkingUtils()->SteamNetworkingIPAddr_ToString( *this, buf, cbBuf, bWithPort ); }
 	inline bool SteamNetworkingIPAddr::ParseString( const char *pszStr ) { return SteamNetworkingUtils()->SteamNetworkingIPAddr_ParseString( this, pszStr ); }
 	inline void SteamNetworkingIdentity::ToString( char *buf, size_t cbBuf ) const { SteamNetworkingUtils()->SteamNetworkingIdentity_ToString( *this, buf, cbBuf ); }
 	inline bool SteamNetworkingIdentity::ParseString( const char *pszStr ) { return SteamNetworkingUtils()->SteamNetworkingIdentity_ParseString( this, pszStr ); }
+#endif
 #else
 	#error "Invalid config"
 #endif
