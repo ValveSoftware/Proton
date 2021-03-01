@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_150/steam_api.h"
-#include "steamworks_sdk_150/steamnetworkingtypes.h"
+#include "steamworks_sdk_151/steam_api.h"
+#include "steamworks_sdk_151/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_150
+#define SDKVER_151
 #include "struct_converters.h"
 #include "cppISteamFriends_SteamFriends017.h"
 const char * cppISteamFriends_SteamFriends017_GetPersonaName(void *linux_side)
@@ -384,6 +384,11 @@ void cppISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInvit
 bool cppISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(void *linux_side, const char * pchProtocol)
 {
     return ((ISteamFriends*)linux_side)->RegisterProtocolInOverlayBrowser((const char *)pchProtocol);
+}
+
+void cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString(void *linux_side, const char * pchConnectString)
+{
+    ((ISteamFriends*)linux_side)->ActivateGameOverlayInviteDialogConnectString((const char *)pchConnectString);
 }
 
 #ifdef __cplusplus

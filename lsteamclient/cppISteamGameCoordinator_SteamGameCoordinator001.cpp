@@ -1,15 +1,15 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_150/steam_api.h"
-#include "steamworks_sdk_150/steamnetworkingtypes.h"
-#include "steamworks_sdk_150/isteamgamecoordinator.h"
+#include "steamworks_sdk_151/steam_api.h"
+#include "steamworks_sdk_151/steamnetworkingtypes.h"
+#include "steamworks_sdk_151/isteamgamecoordinator.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_150
+#define SDKVER_151
 #include "struct_converters.h"
 #include "cppISteamGameCoordinator_SteamGameCoordinator001.h"
 EGCResults cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage(void *linux_side, uint32 unMsgType, const void * pubData, uint32 cubData)
