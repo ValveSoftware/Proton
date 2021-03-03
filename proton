@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.13-1"
+CURRENT_PREFIX_VERSION="6.3-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -606,7 +606,6 @@ class Session:
         self.dlloverrides = {
                 "steam.exe": "b", #always use our special built-in steam.exe
                 "dotnetfx35.exe": "b", #replace the broken installer, as does Windows
-                "mfplay": "n" #disable built-in mfplay
         }
 
         self.compat_config = set()

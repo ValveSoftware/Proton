@@ -9,7 +9,6 @@
 #include "winbase.h"
 #include "winnls.h"
 #include "wine/debug.h"
-#include "wine/library.h"
 
 #include "vrclient_defs.h"
 #include "vrclient_private.h"
