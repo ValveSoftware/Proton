@@ -1654,8 +1654,10 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
 XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo)
 {
     wine_XrSession *wine_session = (wine_XrSession *)session;
+    IDXGIVkInteropDevice2 *dxvk_device;
     XrFrameEndInfo our_frameEndInfo;
     uint32_t i, view_idx = 0;
+    XrResult res;
 
     WINE_TRACE("%p, %p\n", session, frameEndInfo);
 
@@ -1677,7 +1679,17 @@ XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEn
     our_frameEndInfo = *frameEndInfo;
     our_frameEndInfo.layers = (const XrCompositionLayerBaseHeader *const *)wine_session->composition_layer_ptrs;
 
-    return xrEndFrame(((wine_XrSession *)session)->session, &our_frameEndInfo);
+    if ((dxvk_device = wine_session->wine_instance->dxvk_device))
+    {
+        WINE_TRACE("Locking submission queue.\n");
+        dxvk_device->lpVtbl->FlushRenderingCommands(dxvk_device);
+        dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+    }
+    res = xrEndFrame(((wine_XrSession *)session)->session, &our_frameEndInfo);
+    if (dxvk_device)
+        dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+
+    return res;
 }
 
 /* wineopenxr API */
