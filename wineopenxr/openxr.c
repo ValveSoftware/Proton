@@ -1524,6 +1524,27 @@ XrResult WINAPI wine_xrDestroySwapchain(XrSwapchain swapchain)
     return XR_SUCCESS;
 }
 
+static D3D11_USAGE d3d11usage_from_XrSwapchainUsageFlags(XrSwapchainUsageFlags flags)
+{
+    static const D3D11_USAGE supported_flags = XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT | XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+            | XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT | XR_SWAPCHAIN_USAGE_SAMPLED_BIT;
+    D3D11_USAGE ret = 0;
+
+    if (flags & ~supported_flags)
+        WINE_FIXME("Unhandled flags %#x.\n", flags);
+
+    if (flags & XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT)
+        ret |= D3D11_BIND_RENDER_TARGET;
+    if (flags & XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
+        ret |= D3D11_BIND_DEPTH_STENCIL;
+    if (flags & XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT)
+        ret |= D3D11_BIND_UNORDERED_ACCESS;
+    if (flags & XR_SWAPCHAIN_USAGE_SAMPLED_BIT)
+        ret |= D3D11_BIND_SHADER_RESOURCE;
+
+    return ret;
+}
+
 XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t imageCapacityInput, uint32_t *imageCountOutput, XrSwapchainImageBaseHeader *images)
 {
     wine_XrSwapchain *wine_swapchain = (wine_XrSwapchain *)swapchain;
@@ -1554,15 +1575,15 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
 
             desc.Width = wine_swapchain->create_info.width;
             desc.Height = wine_swapchain->create_info.height;
-            desc.MipLevels = 1;
-            desc.ArraySize = 1;
+            desc.MipLevels = wine_swapchain->create_info.mipCount;
+            desc.ArraySize = wine_swapchain->create_info.arraySize;
             desc.Format = wine_swapchain->create_info.format;
             WINE_TRACE("creating dxvk texture with dxgi format %d (%x)\n",
                     desc.Format, desc.Format);
-            desc.SampleDesc.Count = 1;
+            desc.SampleDesc.Count = wine_swapchain->create_info.sampleCount;
             desc.SampleDesc.Quality = 0;
             desc.Usage = D3D11_USAGE_DEFAULT;
-            desc.BindFlags = D3D11_BIND_RENDER_TARGET;
+            desc.BindFlags = d3d11usage_from_XrSwapchainUsageFlags(wine_swapchain->create_info.usageFlags);
             desc.CPUAccessFlags = 0;
             desc.MiscFlags = 0;
             desc.TextureLayout = D3D11_TEXTURE_LAYOUT_UNDEFINED;
