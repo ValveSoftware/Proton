@@ -1550,7 +1550,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
     wine_XrSwapchain *wine_swapchain = (wine_XrSwapchain *)swapchain;
     wine_XrInstance *wine_instance = wine_swapchain->wine_session->wine_instance;
     XrResult res;
-    XrSwapchainImageVulkanKHR *our_images;
+    XrSwapchainImageVulkanKHR *our_images = NULL;
     XrSwapchainImageBaseHeader *their_images = images;
     HRESULT hr;
     uint32_t i;
@@ -1598,10 +1598,9 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
                 }
                 WINE_TRACE("Successfully allocated texture %p\n", their_d3d11[i].texture);
             }
-
-            heap_free(our_images);
         }
     }
+    heap_free(our_images);
 
     return res;
 }
