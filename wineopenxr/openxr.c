@@ -867,7 +867,7 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
                 if ((res = do_vulkan_init(wine_instance, our_vk_binding.instance)) != XR_SUCCESS)
                     return res;
 
-                if (wine_instance->vk_phys_dev != our_vk_binding.physicalDevice)
+                if (wine_instance->vk_phys_dev != get_native_VkPhysicalDevice(our_vk_binding.physicalDevice))
                     WINE_WARN("VK physical device does not match that from xrGetVulkanGraphicsDeviceKHR.\n");
 
                 our_vk_binding.physicalDevice = wine_instance->vk_phys_dev;
