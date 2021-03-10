@@ -77,15 +77,7 @@ Vagrant.configure(2) do |config|
       #install host build-time dependencies
       apt-get update
       apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
-          fontforge-nox python-debian python-pip meson libmpc-dev libmpc-dev:i386 \
-          gcc g++ gcc-i686-linux-gnu g++-i686-linux-gnu binutils-i686-linux-gnu \
-          gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 \
-          g++-mingw-w64-i686 g++-mingw-w64-x86-64
-
-      update-alternatives --set x86_64-w64-mingw32-gcc `which x86_64-w64-mingw32-gcc-posix`
-      update-alternatives --set x86_64-w64-mingw32-g++ `which x86_64-w64-mingw32-g++-posix`
-      update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
-      update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
+          fontforge-nox python-debian python-pip
 
       #install adobe font devkit to build source san hans
       pip install afdko
@@ -93,17 +85,10 @@ Vagrant.configure(2) do |config|
       #allow vagrant user to run docker
       adduser vagrant docker
 
-      #add steamrt docker
-      docker pull registry.gitlab.steamos.cloud/steamrt/soldier/sdk
-      docker image tag registry.gitlab.steamos.cloud/steamrt/soldier/sdk steam-proton-dev
-
       #allow user to run stuff in steamrt
       sysctl kernel.unprivileged_userns_clone=1
       mkdir -p /etc/sysctl.d/
       echo kernel.unprivileged_userns_clone=1 > /etc/sysctl.d/docker_user.conf
-
-      # the script below will set up the steam-runtime docker containers
-      sudo -u vagrant /home/vagrant/proton/vagrant-user-setup.sh
 
       #ensure we use only the mingw-w64 that we built
       apt-get remove -y '*mingw-w64*'

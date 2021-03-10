@@ -2,7 +2,7 @@ STEAMRT_VERSION = 0.20210126.1
 STEAMRT_URLBASE = registry.gitlab.steamos.cloud
 
 PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/soldier/sdk
-PROTONSDK_VERSION = $(STEAMRT_VERSION)-0
+PROTONSDK_VERSION = $(STEAMRT_VERSION)-0-dev
 
 # this is just for building toolchain, as we do static builds it should
 # not have any impact on the end result, but changing it will invalidate
