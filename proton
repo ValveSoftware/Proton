@@ -730,6 +730,7 @@ class Session:
         self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
         self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
+        self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -755,6 +756,9 @@ class Session:
 
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
+
+        if "heapdelayfree" in self.compat_config:
+            self.env["WINE_HEAP_DELAY_FREE"] = "1"
 
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
