@@ -14,7 +14,7 @@ a particular title.
 Getting Started with Proton from Steam Play
 ---
 * As the new Steam Play is still in Beta, it is recommended that you opt into the [Steam Client Beta](https://steamcommunity.com/sharedfiles/filedetails/?id=182912431) for the latest features and fixes.
-* Proton requires graphics drivers that are more recent than what is typically packaged in most distributions; please read the [list of requirements and quickstart for Ubuntu 18.04 users](https://github.com/ValveSoftware/Proton/wiki/Requirements)
+* Proton works best with the latest graphics drivers. For some cutting edge games and graphical features, you may need drivers newer than what your distribution ships.
 * Install and play games! Please refer to [this post](https://steamcommunity.com/games/221410/announcements/detail/1696055855739350561) for more information.
 * Visit the [changelog](https://github.com/ValveSoftware/Proton/wiki/Changelog) for information about recent updates.
 
@@ -31,7 +31,7 @@ We strongly recommend that most users use the production build of Proton.
 
 Acquire Proton's source by cloning <https://github.com/ValveSoftware/Proton>
 and checking out the branch you desire. Be sure to update submodules when
-switching branches.
+switching between or updating branches.
 
 You can clone the latest Proton to your system with this command:
 
@@ -52,10 +52,11 @@ use this Makefile for simple Proton builds.
 
 This Makefile uses a virtual machine to create a consistent build environment.
 The VM is managed with [Vagrant](https://www.vagrantup.com/), which you will
-need to install before invoking these commands. Proton's build system is most
-well tested with Vagrant's VirtualBox and libvirt/qemu backends. It also
-requires the vagrant-sshfs plugin. You may run into problems with the shared
-folder (`vagrant_share`) and/or CPU and memory usage with other backends.
+need to install and configure before invoking these commands. Proton's build
+system is most well tested with Vagrant's VirtualBox and libvirt/qemu backends.
+It also requires the vagrant-sshfs plugin. You may run into problems with the
+shared folder (`vagrant_share`) and/or CPU and memory usage with other
+backends.
 
 If your build VM gets cluttered, or falls out of date, you can use `vagrant
 destroy` to wipe the VM clean, then invoke one of the below commands to start
@@ -64,23 +65,26 @@ over.
 After checking out Proton and updating its submodules, you can use these
 targets to build Proton:
 
-`make install` - This will install Proton into your user's Steam directory.
-You may need to restart the Steam client to see it. The tool's name in the
-Steam client will be based on the currently checked out branch of Proton. You
-can override this name using the `build_name` variable.
+`make install` - This will build and install Proton into your user's Steam
+directory.  You may need to restart the Steam client to see the new Proton
+tool. The tool's name in the Steam client will be based on the currently
+checked out branch of Proton. You can override this name using the `build_name`
+variable.
 
 `make redist` - This will create a build which you can easily redistribute to
 other users.  The package will be dropped into a new directory in
 `vagrant_share/`, named after the nearest Git tag (see `git describe`). Copying
 this directory into `~/.steam/root/compatibilitytools.d/` will make the build
-available after restarting the Steam client.
+available after restarting the Steam client. If you distribute your build to
+other users, be sure to understand and follow your obligations to make your
+source code modifications available to your users, see <tt>LICENSE</tt>.
 
 `make deploy` - This will create a deployment tarball and set of files which
 can be distributed as a Proton package. This is what we use to deploy Proton to
 Steam users. The package will be dropped into a new directory in
 `vagrant_share/`, named after the nearest Git tag (see `git describe`).
 
-`make clean` - This will completely erase the build tree in the VM.
+`make clean` - This will completely erase the Proton build tree within the VM.
 
 `make help` - View the Makefile documentation and examples.
 
@@ -94,6 +98,9 @@ This allows rapid iteration on one module. This target is only useful after
 building Proton.
 
 `make dxvk` - This will rebuild DXVK and copy it into `vagrant_share`.
+
+`make vkd3d-proton` - This will rebuild vkd3d-proton and copy it into
+`vagrant_share`.
 
 If you are doing significant Wine development or want to control the build with
 more fine detail, see the full documentation below.
@@ -153,34 +160,26 @@ When you are done with the VM, you can shut it down from the host machine:
 Please read the Vagrant documentation for more information about how to use
 Vagrant VMs.
 
-If you do not wish to use Vagrant, you can read through both Vagrantfile and
-`vagrant-user-setup.sh` for the list of dependencies and instructions on how to
-set up your own machine or another VM of your choosing. It is aimed at Debian
-10, but you should be able to adapt them for other distributions.
-
----
-Alternative: Building without the Steam Runtime
----
-The Steam Runtime provides a clean and consistent set of libraries. Software
-distributed through Steam should depend only on libraries available through the
-runtime, and so we build in that environment for production Proton builds. The
-Vagrantfile described above will set this up for you.  However, if you are
-simply making a build for yourself, you may want to skip setting up the Steam
-runtime, as it takes a very long time to set up. To do this, edit the
-`vagrant-user-setup.sh` script appropriately before running `vagrant up`.
+If you do not wish to use Vagrant, you can read through the Vagrantfile for the
+list of dependencies and instructions on how to set up your own machine or
+another VM of your choosing. It is aimed at Debian 10, but you should be able
+to adapt them for other distributions.
 
 ---
 Configure the build
 ---
-After setting up the build system, it is time to run the configure script which
-will generate the Makefile to build your project. Run these steps. You may of
-course use whatever paths you like.
+After setting up the build machine, it is time to run the configure script
+which will generate the Makefile to build your project. Run these steps. You
+may of course use whatever paths you like.
+
+To build Proton within the Steam Runtime (see `Makefile` for the correct
+protonsdk_version value to use):
 
         mkdir build/
         cd build
-        ../proton/configure.sh --steam-runtime-image=steam-proton-dev
+        ../proton/configure.sh --steam-runtime-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version)
 
-If you are building without the Steam runtime, then instead use:
+Or, if you are building without the Steam runtime, then instead use:
 
         ../proton/configure.sh --no-steam-runtime
 
@@ -190,6 +189,8 @@ If you are building without the Steam runtime, then instead use:
 Search for `won't be supported`. A couple of missing packages are normal:
 `opencv`, `oss`. More than that may indicate a problem.  Please see your
 distro's documentation to acquire the considerable build dependencies for Wine.
+Be aware that the build you make may not run correctly on other machines and
+distributions.
 
 ---
 Build Proton
@@ -205,7 +206,7 @@ manually (see below), or automatically with `make install`.
 Install Proton locally
 ---
 Steam ships with several versions of Proton, which games will use by default or
-that you can select in Steam Settings's SteamPlay page. Steam also supports
+that you can select in Steam Settings's Steam Play page. Steam also supports
 running games with local builds of Proton, which you can install on your
 machine. The `install` target will perform the below steps for you.
 
