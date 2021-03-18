@@ -489,7 +489,6 @@ GST_GOOD_MESON_ARGS := \
 	-Dtaglib=disabled \
 	-Dudp=disabled \
 	-Dv4l2=disabled \
-	-Dvideobox=disabled \
 	-Dvideocrop=disabled \
 	-Dvideomixer=disabled \
 	-Dwavenc=disabled \
