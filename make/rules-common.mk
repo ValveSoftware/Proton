@@ -82,6 +82,14 @@ endif
 $(1)-dist$(3): $$(OBJ)/.$(1)-dist$(3)
 .INTERMEDIATE: $(1)-dist$(3)
 
+ifeq ($(CONTAINER),)
+$(1)-dist$(3): $$(OBJ)/.$(1)-fixup$(3)
+$$(OBJ)/.$(1)-fixup$(3): $$(OBJ)/.$(1)-dist$(3)
+	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.dll' -printf '$$(DST_LIBDIR$(3))/%p\0' | xargs --verbose -0 -r -P8 -n3 $$(SRC)/make/pefixup.py
+	touch $$@
+endif
+
+
 all-dist$(3) $(1)-dist: $(1)-dist$(3)
 .PHONY: all-dist$(3) $(1)-dist
 
