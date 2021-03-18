@@ -145,6 +145,7 @@ module: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
 		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
 		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
+		find /vagrant/$(module)/ -type f -name "*.dll" -printf "%p\0" | xargs --verbose -0 -r -P8 -n3 proton/make/pefixup.py && \
 		if [ -e $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so ]; then \
 			cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
 			cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/; \
@@ -156,14 +157,16 @@ dxvk: configure
 	mkdir -p vagrant_share/dxvk/lib64/wine/dxvk/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk && \
 		cp -f $(BUILD_DIR)/dist/files/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
-		cp -f $(BUILD_DIR)/dist/files/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
+		cp -f $(BUILD_DIR)/dist/files/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/ && \
+		find /vagrant/dxvk/ -type f -name "*.dll" -printf "%p\0" | xargs --verbose -0 -r -P8 -n3 proton/make/pefixup.py'
 
 vkd3d-proton: configure
 	mkdir -p vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton/
 	mkdir -p vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vkd3d-proton && \
 		cp -f $(BUILD_DIR)/dist/files/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
-		cp -f $(BUILD_DIR)/dist/files/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/'
+		cp -f $(BUILD_DIR)/dist/files/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/ && \
+		find /vagrant/vkd3d-proton/ -type f -name "*.dll" -printf "%p\0" | xargs --verbose -0 -r -P8 -n3 proton/make/pefixup.py'
 
 lsteamclient: configure
 	mkdir -p vagrant_share/lsteamclient/lib/wine
