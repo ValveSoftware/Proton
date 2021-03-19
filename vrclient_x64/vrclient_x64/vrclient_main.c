@@ -41,8 +41,8 @@ typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015
 
 /* this is cast to 1015 during load_linux_texture_map, so ensure they're
  * binary compatible before updating this number */
-typedef struct winRenderModel_t_11415 winRenderModel_t_11415;
-typedef struct winRenderModel_TextureMap_t_11415 winRenderModel_TextureMap_t_11415;
+typedef struct winRenderModel_t_1168 winRenderModel_t_1168;
+typedef struct winRenderModel_TextureMap_t_1168 winRenderModel_TextureMap_t_1168;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
@@ -881,6 +881,7 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version, IDXGIVkInteropSurface *dxvk_surface)
 {
+    static const EVRSubmitFlags supported_flags = Submit_LensDistortionAlreadyApplied | Submit_FrameDiscontinuty;
     struct VRVulkanTextureData_t vkdata;
     IDXGIVkInteropDevice *dxvk_device;
     struct Texture_t vktexture;
@@ -895,8 +896,8 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
 
     compositor_data.dxvk_device = dxvk_device;
 
-    if (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
-        FIXME("Unhandled flags %#x.\n", flags & (Submit_TextureWithPose | Submit_TextureWithDepth));
+    if (flags & ~supported_flags)
+        FIXME("Unhandled flags %#x.\n", flags);
 
     subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     subresources.baseMipLevel = 0;
@@ -950,7 +951,8 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version)
 {
-    struct VRVulkanTextureData_t our_vkdata, our_depth_vkdata, *their_vkdata;
+    struct VRVulkanTextureData_t our_depth_vkdata, *their_vkdata;
+    struct VRVulkanTextureArrayData_t our_vkdata;
     VRTextureWithPoseAndDepth_t our_both;
     VRTextureWithDepth_t our_depth;
     VRTextureWithPose_t our_pose;
@@ -961,11 +963,13 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
 
     their_vkdata = texture->handle;
 
-    our_vkdata = *their_vkdata;
-    our_vkdata.m_pDevice = get_native_VkDevice(our_vkdata.m_pDevice);
-    our_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_vkdata.m_pPhysicalDevice);
-    our_vkdata.m_pInstance = get_native_VkInstance(our_vkdata.m_pInstance);
-    our_vkdata.m_pQueue = get_native_VkQueue(our_vkdata.m_pQueue);
+    memcpy(&our_vkdata, their_vkdata, flags & Submit_VulkanTextureWithArrayData
+            ? sizeof(struct VRVulkanTextureArrayData_t) : sizeof(struct VRVulkanTextureData_t));
+
+    our_vkdata.t.m_pDevice = get_native_VkDevice(our_vkdata.t.m_pDevice);
+    our_vkdata.t.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_vkdata.t.m_pPhysicalDevice);
+    our_vkdata.t.m_pInstance = get_native_VkInstance(our_vkdata.t.m_pInstance);
+    our_vkdata.t.m_pQueue = get_native_VkQueue(our_vkdata.t.m_pQueue);
 
     switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
     {
@@ -1527,7 +1531,7 @@ static EVRRenderModelError load_linux_texture_map(void *linux_side, TextureID_t 
     case 5:
         return cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, texture_map);
     case 6:
-        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_11415 **)texture_map);
+        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1168 **)texture_map);
     }
     FIXME("Unsupported IVRRenderModels version! %u\n", version);
     return VRRenderModelError_NotSupported;
@@ -1544,7 +1548,7 @@ static void free_linux_texture_map(void *linux_side,
         cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_11415 *)texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1168 *)texture_map);
         break;
     default:
         FIXME("Unsupported IVRRenderModels version! %u\n", version);

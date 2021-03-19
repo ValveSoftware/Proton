@@ -132,6 +132,7 @@ typedef struct VRSkeletalSummaryData_t VRSkeletalSummaryData_t;
 typedef struct InputBindingInfo_t InputBindingInfo_t;
 typedef struct VRNativeDevice_t VRNativeDevice_t;
 typedef struct VROverlayView_t VROverlayView_t;
+typedef struct VROverlayProjection_t VROverlayProjection_t;
 
 /* dereferenced structs */
 typedef struct HmdMatrix34_t
@@ -234,6 +235,13 @@ struct VRVulkanTextureData_t
     uint32_t m_nWidth, m_nHeight, m_nFormat, m_nSampleCount;
 };
 
+struct VRVulkanTextureArrayData_t
+{
+    struct VRVulkanTextureData_t t;
+    uint32_t m_unArrayIndex;
+    uint32_t m_unArraySize;
+};
+
 typedef struct Texture_t
 {
     void *handle;
@@ -269,30 +277,40 @@ typedef struct VRTextureWithPoseAndDepth_t
 
 typedef enum EVRSubmitFlags
 {
-    // Simple render path. App submits rendered left and right eye images with no lens distortion correction applied.
-    Submit_Default = 0x00,
+	// Simple render path. App submits rendered left and right eye images with no lens distortion correction applied.
+	Submit_Default = 0x00,
 
-    // App submits final left and right eye images with lens distortion already applied (lens distortion makes the images appear
-    // barrel distorted with chromatic aberration correction applied). The app would have used the data returned by
-    // vr::IVRSystem::ComputeDistortion() to apply the correct distortion to the rendered images before calling Submit().
-    Submit_LensDistortionAlreadyApplied = 0x01,
+	// App submits final left and right eye images with lens distortion already applied (lens distortion makes the images appear
+	// barrel distorted with chromatic aberration correction applied). The app would have used the data returned by
+	// vr::IVRSystem::ComputeDistortion() to apply the correct distortion to the rendered images before calling Submit().
+	Submit_LensDistortionAlreadyApplied = 0x01,
 
-    // If the texture pointer passed in is actually a renderbuffer (e.g. for MSAA in OpenGL) then set this flag.
-    Submit_GlRenderBuffer = 0x02,
+	// If the texture pointer passed in is actually a renderbuffer (e.g. for MSAA in OpenGL) then set this flag.
+	Submit_GlRenderBuffer = 0x02,
 
-    // Do not use
-    Submit_Reserved = 0x04,
+	// Do not use
+	Submit_Reserved = 0x04,
 
-    Submit_Screenshot = 0x04,
-    Submit_VulkanTexture = 0x04,
+	// Set to indicate that pTexture is a pointer to a VRTextureWithPose_t.
+	// This flag can be combined with Submit_TextureWithDepth to pass a VRTextureWithPoseAndDepth_t.
+	Submit_TextureWithPose = 0x08,
 
-    // Set to indicate that pTexture is a pointer to a VRTextureWithPose_t.
-    // This flag can be combined with Submit_TextureWithDepth to pass a VRTextureWithPoseAndDepth_t.
-    Submit_TextureWithPose = 0x08,
+	// Set to indicate that pTexture is a pointer to a VRTextureWithDepth_t.
+	// This flag can be combined with Submit_TextureWithPose to pass a VRTextureWithPoseAndDepth_t.
+	Submit_TextureWithDepth = 0x10,
 
-    // Set to indicate that pTexture is a pointer to a VRTextureWithDepth_t.
-    // This flag can be combined with Submit_TextureWithPose to pass a VRTextureWithPoseAndDepth_t.
-    Submit_TextureWithDepth = 0x10,
+	// Set to indicate a discontinuity between this and the last frame.
+	// This will prevent motion smoothing from attempting to extrapolate using the pair.
+	Submit_FrameDiscontinuty = 0x20,
+
+	// Set to indicate that pTexture->handle is a contains VRVulkanTextureArrayData_t
+	Submit_VulkanTextureWithArrayData = 0x40,
+
+	// If the texture pointer passed in is an OpenGL Array texture, set this flag
+	Submit_GlArrayTexture = 0x80,
+
+	// Do not use
+	Submit_Reserved2 = 0x8000,
 } EVRSubmitFlags;
 
 typedef enum EVRCompositorTimingMode

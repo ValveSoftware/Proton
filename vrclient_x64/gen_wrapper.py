@@ -14,6 +14,7 @@ import os
 import re
 
 sdk_versions = [
+    "v1.16.8",
     "v1.14.15",
     "v1.13.10",
     "v1.12.5",
@@ -376,7 +377,8 @@ def ivroverlay_set_overlay_texture(cppname, method):
             "020" in cppname or \
             "021" in cppname or \
             "022" in cppname or \
-            "024" in cppname
+            "024" in cppname or \
+            "025" in cppname
     return "ivroverlay_set_overlay_texture"
 
 method_overrides = [
