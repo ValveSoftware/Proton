@@ -19,12 +19,15 @@ diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
 index 955bd186b56..fe9e9fd2315 100644
 --- a/dlls/ntdll/loader.c
 +++ b/dlls/ntdll/loader.c
-@@ -1913,10 +1913,14 @@ static NTSTATUS build_module( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+@@ -1913,13 +1913,17 @@ static NTSTATUS build_module( LPCWSTR load_path, const UNICODE_STRING *nt_name,
                                const pe_image_info_t *image_info, const struct file_id *id,
                                DWORD flags, WINE_MODREF **pwm )
  {
 +    static HMODULE lsteamclient = NULL;
 +    UNICODE_STRING lsteamclient_us;
+     static const char builtin_signature[] = "Wine builtin DLL";
+     char *signature = (char *)((IMAGE_DOS_HEADER *)*module + 1);
+     BOOL is_builtin;
      IMAGE_NT_HEADERS *nt;
      WINE_MODREF *wm;
      NTSTATUS status;

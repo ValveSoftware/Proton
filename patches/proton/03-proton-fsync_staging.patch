@@ -3409,7 +3409,7 @@ index c2dfa8fb8ce..080efc98942 100644
 +++ b/server/sock.c
 @@ -173,6 +173,7 @@ static const struct object_ops sock_ops =
      remove_queue,                 /* remove_queue */
-     sock_signaled,                /* signaled */
+     default_fd_signaled,          /* signaled */
      NULL,                         /* get_esync_fd */
 +    NULL,                         /* get_fsync_idx */
      no_satisfied,                 /* satisfied */
@@ -3682,78 +3682,3 @@ index 1a031248a7c..388b116bc67 100644
      NULL,                         /* satisfied */
      no_signal,                    /* signal */
      no_get_fd,                    /* get_fd */
-From c53da471172674d955b554c885bead0608c13377 Mon Sep 17 00:00:00 2001
-From: Alexey Prokhin <alexey@prokhin.ru>
-Date: Thu, 23 Apr 2020 12:19:55 +0300
-Subject: [PATCH] server: Abort waiting on a completion port when closing it.
-
----
- server/completion.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
-
-diff --git a/server/completion.c b/server/completion.c
-index fce92b5ad2b..35d60d49760 100644
---- a/server/completion.c
-+++ b/server/completion.c
-@@ -49,10 +49,12 @@ struct completion
-     struct object  obj;
-     struct list    queue;
-     unsigned int   depth;
-+    int            abandoned;
- };
- 
- static void completion_dump( struct object*, int );
- static int completion_signaled( struct object *obj, struct wait_queue_entry *entry );
-+static int completion_close( struct object *obj, struct process *process, obj_handle_t handle );
- static void completion_destroy( struct object * );
- 
- static const struct object_ops completion_ops =
-@@ -78,7 +80,7 @@ static const struct object_ops completion_ops =
-     default_unlink_name,       /* unlink_name */
-     no_open_file,              /* open_file */
-     no_kernel_obj_list,        /* get_kernel_obj_list */
--    no_close_handle,           /* close_handle */
-+    completion_close,          /* close_handle */
-     completion_destroy         /* destroy */
- };
- 
-@@ -91,6 +93,22 @@ struct comp_msg
-     unsigned int  status;
- };
- 
-+static int completion_close( struct object *obj, struct process *process, obj_handle_t handle )
-+{
-+    struct completion *completion = (struct completion *) obj;
-+    struct wait_queue_entry *entry;
-+
-+    LIST_FOR_EACH_ENTRY( entry, &obj->wait_queue, struct wait_queue_entry, entry )
-+    {
-+        make_wait_abandoned( entry );
-+    }
-+
-+    completion->abandoned = 1;
-+    wake_up( &completion->obj, 0 );
-+
-+    return 1;
-+}
-+
- static void completion_destroy( struct object *obj)
- {
-     struct completion *completion = (struct completion *) obj;
-@@ -121,7 +139,7 @@ static int completion_signaled( struct object *obj, struct wait_queue_entry *ent
- {
-     struct completion *completion = (struct completion *)obj;
- 
--    return !list_empty( &completion->queue );
-+    return !list_empty( &completion->queue ) || completion->abandoned;
- }
- 
- static unsigned int completion_map_access( struct object *obj, unsigned int access )
-@@ -144,6 +162,7 @@ static struct completion *create_completion( struct object *root, const struct u
-         if (get_error() != STATUS_OBJECT_NAME_EXISTS)
-         {
-             list_init( &completion->queue );
-+            completion->abandoned = 0;
-             completion->depth = 0;
-         }
-     } 
