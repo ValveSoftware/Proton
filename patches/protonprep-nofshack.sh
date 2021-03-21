@@ -25,6 +25,10 @@
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
+    
+    # FarCry5 hotfix
+    git revert --no-commit c98c5f5d1720df09d584b8353bf6739e06e8ffcc
+    patch -Np1 < ../patches/dxvk/farcry5-hotfix.patch
 
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
@@ -32,9 +36,6 @@
 
     echo "add dxvk PR patches"
     patch -Np1 < ../patches/dxvk/1582.patch
-    patch -Np1 < ../patches/dxvk/1673.patch
-    patch -Np1 < ../patches/dxvk/1759.patch
-    patch -Np1 < ../patches/dxvk/1805.patch
 
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
@@ -54,10 +55,6 @@
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
-
-    # revert this in favor of the staging hack, as this breaks dmc and some other games
-    echo "revert 1fceb1213992b79aa7f1a5dc0a72ab3756ee524d part 1 (fixes dmc 5 and some others)"
-    git revert --no-commit 1fceb1213992b79aa7f1a5dc0a72ab3756ee524d
     
     # revert this because it breaks controllers on some platforms
     # https://github.com/Frogging-Family/wine-tkg-git/issues/248#issuecomment-760471607
@@ -184,7 +181,7 @@
     #this is needed specifically for proton, not needed for normal wine
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/proton/30-proton-mediafoundation_dllreg.patch
-    
+
 #    echo "proton-specific winegstreamer patches"
 #    patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
 
@@ -199,9 +196,12 @@
     
     echo "mouse focus fixes"
     patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
+    
+    echo "CPU topology overrides"
+    patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
 
-    echo "proton wmpphoto support"
-    patch -Np1 < ../patches/proton/39-proton_wmpphoto_support.patch
+#    echo "proton futex2 patches"
+#    patch -Np1 < ../patches/proton/40-proton-futex2.patch
 
     ### END PROTON PATCH SECTION ###
 
@@ -209,25 +209,12 @@
 
     echo "applying winevulkan childwindow"
     patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
-
-    echo "revert 1fceb1213992b79aa7f1a5dc0a72ab3756ee524d part 2 (fixes dmc 5 and some others)"
-    patch -Np1 < ../patches/wine-hotfixes/0033-HACK-Switch-between-all-selection-streams-on-MF_SOUR.patch
     
-    echo "https://bugs.winehq.org/show_bug.cgi?id=50581 fix"
-    patch -Np1 < ../patches/wine-hotfixes/198992.patch
+    echo "mfplat rebase"
+    patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
+#    patch -Np1 < ../patches/wine-hotfixes/0001-winegstreamer-Introduce-and-register-Mpeg4-Section-2.patch
+    patch -Np1 < ../patches/wine-hotfixes/0033-HACK-Switch-between-all-selection-streams-on-MF_SOUR.patch
 
-    # more pending experimental work. disabled for now.
-    echo "Cyberpunk proton shared memory patches"
-    patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-1.patch
-    patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-2.patch
-    patch -Np1 < ../patches/proton/proton-cyberpunk-shared-memory-staging-3.patch
-
-#    echo "Cyberpunk proton futex2 patches"
-#    patch -Np1 < ../patches/proton/proton-cyberpunk-futex2.patch
-
-    echo "winevulkan backports"
-    patch -Np1 < ../patches/wine-hotfixes/winevulkan-backport1.patch
-    patch -Np1 < ../patches/wine-hotfixes/winevulkan-backport2.patch
 
     ### END WINEPATCH SECTION ###
 
