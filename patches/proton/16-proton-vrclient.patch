@@ -49,7 +49,7 @@ index b87003c53b8..aebd3078096 100644
 +    const struct wined3d_gl_info *gl_info;
 +    struct wined3d_context *context;
 +
-+    context = context_acquire(cs->device, NULL, 0);
++    context = context_acquire(cs->c.device, NULL, 0);
 +    gl_info = wined3d_context_gl(context)->gl_info;
 +
 +    wined3d_texture_load_location(&texture->t, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
@@ -71,7 +71,7 @@ index b87003c53b8..aebd3078096 100644
 +{
 +    struct wined3d_cs_gl_texture_callback *op;
 +
-+    op = cs->ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
++    op = cs->c.ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
 +    op->opcode = WINED3D_CS_OP_GL_TEXTURE_CALLBACK;
 +    op->texture = texture;
 +    op->callback = callback;
@@ -80,7 +80,7 @@ index b87003c53b8..aebd3078096 100644
 +
 +    wined3d_resource_acquire(&texture->resource);
 +
-+    cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
++    cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
 +}
 +
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
@@ -120,7 +120,7 @@ index ceb6794db0b..5a02539edfb 100644
 --- a/dlls/wined3d/wined3d_private.h
 +++ b/dlls/wined3d/wined3d_private.h
 @@ -4663,6 +4663,9 @@ static inline void wined3d_cs_finish(struct wined3d_cs *cs, enum wined3d_cs_queu
-     cs->ops->finish(cs, queue_id);
+     cs->c.ops->finish(cs, queue_id);
  }
  
 +void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_texture *texture,
@@ -186,7 +186,7 @@ index aebd3078096..cf4ecc3232d 100644
  {
      enum wined3d_cs_op opcode;
 @@ -2618,6 +2627,36 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
-     cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+     cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
  
 +static void wined3d_cs_exec_user_callback(struct wined3d_cs *cs, const void *data)
@@ -195,7 +195,7 @@ index aebd3078096..cf4ecc3232d 100644
 +    const struct wined3d_gl_info *gl_info;
 +    struct wined3d_context *context;
 +
-+    context = context_acquire(cs->device, NULL, 0);
++    context = context_acquire(cs->c.device, NULL, 0);
 +    gl_info = wined3d_context_gl(context)->gl_info;
 +
 +    op->callback(op->data, op->data_size);
@@ -210,13 +210,13 @@ index aebd3078096..cf4ecc3232d 100644
 +{
 +    struct wined3d_cs_user_callback *op;
 +
-+    op = cs->ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
++    op = cs->c.ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
 +    op->opcode = WINED3D_CS_OP_USER_CALLBACK;
 +    op->callback = callback;
 +    op->data_size = size;
 +    memcpy(op->data, data, size);
 +
-+    cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
++    cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
 +}
 +
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
@@ -750,7 +750,7 @@ index cf4ecc3232d..547261fa8b4 100644
  {
      enum wined3d_cs_op opcode;
 @@ -2657,6 +2663,19 @@ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
-     cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+     cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
  
 +static void wined3d_cs_exec_wait_idle(struct wined3d_cs *cs, const void *data) {}
@@ -759,11 +759,11 @@ index cf4ecc3232d..547261fa8b4 100644
 +{
 +    struct wined3d_cs_wait_idle *op;
 +
-+    op = cs->ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
++    op = cs->c.ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
 +    op->opcode = WINED3D_CS_OP_WAIT_IDLE;
 +
-+    cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
-+    cs->ops->finish(cs, WINED3D_CS_QUEUE_DEFAULT);
++    cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
++    cs->c.ops->finish(cs, WINED3D_CS_QUEUE_DEFAULT);
 +}
 +
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
@@ -929,7 +929,7 @@ index 547261fa8b4..2e6abb41eba 100644
  {
      struct wined3d_cs_gl_texture_callback *op;
  
-     op = cs->ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
+     op = cs->c.ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
      op->opcode = WINED3D_CS_OP_GL_TEXTURE_CALLBACK;
      op->texture = texture;
 +    op->depth_texture = depth_texture;
@@ -1036,7 +1036,7 @@ index 2e6abb41eba..b1511a4c144 100644
  };
  
 @@ -2673,19 +2672,6 @@ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
-     cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+     cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
  
 -static void wined3d_cs_exec_wait_idle(struct wined3d_cs *cs, const void *data) {}
@@ -1045,11 +1045,11 @@ index 2e6abb41eba..b1511a4c144 100644
 -{
 -    struct wined3d_cs_wait_idle *op;
 -
--    op = cs->ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
+-    op = cs->c.ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
 -    op->opcode = WINED3D_CS_OP_WAIT_IDLE;
 -
--    cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
--    cs->ops->finish(cs, WINED3D_CS_QUEUE_DEFAULT);
+-    cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+-    cs->c.ops->finish(cs, WINED3D_CS_QUEUE_DEFAULT);
 -}
 -
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
@@ -1072,7 +1072,7 @@ index a11fc0d7c66..b34a517a725 100644
      TRACE("device %p.\n", device);
  
 -    wined3d_cs_emit_wait_idle(device->cs);
-+    device->cs->ops->finish(device->cs, WINED3D_CS_QUEUE_DEFAULT);
++    device->cs->c.ops->finish(device->cs, WINED3D_CS_QUEUE_DEFAULT);
  }
 diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
 index a6a68057f3a..6a182cac853 100644
@@ -1162,7 +1162,7 @@ index b1511a4c144..2f593727279 100644
  {
      enum wined3d_cs_op opcode;
 @@ -2672,6 +2679,46 @@ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
-     cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+     cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
  
 +static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
@@ -1172,7 +1172,7 @@ index b1511a4c144..2f593727279 100644
 +    struct wined3d_context *context;
 +    GLsync fence;
 +
-+    context = context_acquire(cs->device, NULL, 0);
++    context = context_acquire(cs->c.device, NULL, 0);
 +    gl_info = wined3d_context_gl(context)->gl_info;
 +
 +    fence = GL_EXTCALL(glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
@@ -1190,12 +1190,12 @@ index b1511a4c144..2f593727279 100644
 +    struct wined3d_cs_fence *op;
 +    GLsync fence;
 +
-+    op = cs->ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
++    op = cs->c.ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
 +    op->opcode = WINED3D_CS_OP_FENCE;
 +    op->fence = &fence;
 +
-+    cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
-+    cs->ops->finish(cs, WINED3D_CS_QUEUE_DEFAULT);
++    cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
++    cs->c.ops->finish(cs, WINED3D_CS_QUEUE_DEFAULT);
 +
 +    return fence;
 +}
@@ -1454,7 +1454,7 @@ index 2f593727279..1932d2f3a62 100644
  };
  
 @@ -2689,6 +2690,8 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
-     context = context_acquire(cs->device, NULL, 0);
+     context = context_acquire(cs->c.device, NULL, 0);
      gl_info = wined3d_context_gl(context)->gl_info;
  
 +    wined3d_texture_load_location(op->texture, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
@@ -1472,12 +1472,12 @@ index 2f593727279..1932d2f3a62 100644
      struct wined3d_cs_fence *op;
      GLsync fence;
  
-     op = cs->ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
+     op = cs->c.ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
      op->opcode = WINED3D_CS_OP_FENCE;
 +    op->texture = texture;
      op->fence = &fence;
  
-     cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+     cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
 @@ -2714,9 +2718,9 @@ static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs)
      return fence;
  }

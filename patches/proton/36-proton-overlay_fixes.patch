@@ -25,7 +25,7 @@ index 89a9974529b..baec41d0296 100644
 +
 +    if (WaitForSingleObject(steam_overlay_event, 0) == WAIT_OBJECT_0)
 +        overlay_enabled = TRUE;
- 
+
      prev_event.type = 0;
      while (XCheckIfEvent( display, &event, filter, (char *)arg ))
      {
@@ -43,9 +43,9 @@ index 147087e3220..e4164eba5d2 100644
  extern char *process_name DECLSPEC_HIDDEN;
  extern Display *clipboard_display DECLSPEC_HIDDEN;
 +extern HANDLE steam_overlay_event DECLSPEC_HIDDEN;
- 
+
  /* atoms */
- 
+
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
 index f23ce260a7f..17d80458c54 100644
 --- a/dlls/winex11.drv/x11drv_main.c
@@ -55,7 +55,7 @@ index f23ce260a7f..17d80458c54 100644
  HMODULE x11drv_module = 0;
  char *process_name = NULL;
 +HANDLE steam_overlay_event;
- 
+
  static x11drv_error_callback err_callback;   /* current callback for error */
  static Display *err_callback_display;        /* display callback is set for */
 @@ -738,6 +739,10 @@ BOOL WINAPI DllMain( HINSTANCE hinst, DWORD reason, LPVOID reserved )

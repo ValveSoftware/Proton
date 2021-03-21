@@ -55,7 +55,7 @@ index 00000000000..78af7168c20
 +++ b/dlls/atiadlxx/Makefile.in
 @@ -0,0 +1,5 @@
 +MODULE = atiadlxx.dll
-+EXTRADLLFLAGS = -mno-cygwin
++EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
 +
 +C_SRCS = \
 +	atiadlxx_main.c
@@ -1223,8 +1223,8 @@ index 00000000000..3518761b7f6
 +
 +    switch (reason)
 +    {
-+    case DLL_WINE_PREATTACH:
-+        return FALSE;    /* prefer native version */
++ 
++ 
 +    case DLL_PROCESS_ATTACH:
 +        DisableThreadLibraryCalls(instance);
 +        break;
@@ -1364,7 +1364,7 @@ index 78af7168c20..7708c714213 100644
  MODULE = atiadlxx.dll
 +IMPORTS = wined3d
 +
- EXTRADLLFLAGS = -mno-cygwin
+ EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
  
  C_SRCS = \
 diff --git a/dlls/atiadlxx/atiadlxx.spec b/dlls/atiadlxx/atiadlxx.spec

@@ -115,32 +115,67 @@ index cc7bf6900b..28bbb26f79 100644
  
  static BOOL imports_fixup_done = FALSE;  /* set once the imports have been fixed up, before attaching them */
  static BOOL process_detaching = FALSE;  /* set on process detach to avoid deadlocks with thread detach */
-From f319dc029be11156c22429c8e0892b4c0e3d0657 Mon Sep 17 00:00:00 2001
-From: Tk-Glitch <ti3nou@gmail.com>
-Date: Sat, 18 Apr 2020 5:53:14 +0200
-Subject: [PATCH] HACK: ntdll: Use steamuser as Wine username
-
-This replaces Andrew's previous patch:
-https://github.com/ValveSoftware/wine/commit/2e2a874cb3a44b2856561c0630037ea587177350
+From 207d17259d8aed05d3b69d242c2bc68b02aec378 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 19 Jan 2018 14:01:07 -0600
+Subject: [PATCH] HACK: advapi32: Use steamuser as Wine username
 
 ---
- dlls/dlls/ntdll/unix/env.c | 2 +
- 1 file changed, 2 insertion(+)
+ dlls/advapi32/advapi.c | 35 ++++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
 
-diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
-index d90990c092..a16e152086 100644
---- a/dlls/ntdll/unix/env.c
-+++ b/dlls/ntdll/unix/env.c
-@@ -939,6 +940,9 @@ NTSTATUS CDECL get_dynamic_environment( WCHAR *env, SIZE_T *size )
-     }
-     sprintf( dlldir, "WINEDLLDIR%u", i );
-     append_envW( buffer, &pos, dlldir, NULL );
-+    user_name = "steamuser";
-+    const char *sgi = getenv("WINEUSERNAME");
-+    if ((sgi)) user_name = sgi /*set user to steamuser if running steam game*/;
-     append_envA( buffer, &pos, "WINEUSERNAME", user_name );
-     append_envA( buffer, &pos, "WINEDLLOVERRIDES", overrides );
-     assert( pos <= alloc );
+diff --git a/dlls/advapi32/advapi.c b/dlls/advapi32/advapi.c
+index 589405b59e6..a31a05f0250 100644
+--- a/dlls/advapi32/advapi.c
++++ b/dlls/advapi32/advapi.c
+@@ -44,14 +44,15 @@ WINE_DEFAULT_DEBUG_CHANNEL(advapi);
+  */
+ BOOL WINAPI GetUserNameA( LPSTR name, LPDWORD size )
+ {
+-    DWORD len = GetEnvironmentVariableA( "WINEUSERNAME", name, *size );
+-    BOOL ret;
+-
+-    if (!len) return FALSE;
+-    if ((ret = (len < *size))) len++;
+-    else SetLastError( ERROR_INSUFFICIENT_BUFFER );
+-    *size = len;
+-    return ret;
++    static const char steamuserA[] = {'s','t','e','a','m','u','s','e','r',0};
++    if(*size < ARRAY_SIZE(steamuserA)){
++        SetLastError( ERROR_INSUFFICIENT_BUFFER );
++        *size = ARRAY_SIZE(steamuserA);
++        return FALSE;
++    }
++    memcpy(name, steamuserA, sizeof(steamuserA));
++    *size = ARRAY_SIZE(steamuserA);
++    return TRUE;
+ }
+ 
+ /******************************************************************************
+@@ -59,14 +60,15 @@ BOOL WINAPI GetUserNameA( LPSTR name, LPDWORD size )
+  */
+ BOOL WINAPI GetUserNameW( LPWSTR name, LPDWORD size )
+ {
+-    DWORD len = GetEnvironmentVariableW( L"WINEUSERNAME", name, *size );
+-    BOOL ret;
+-
+-    if (!len) return FALSE;
+-    if ((ret = (len < *size))) len++;
+-    else SetLastError( ERROR_INSUFFICIENT_BUFFER );
+-    *size = len;
+-    return ret;
++    static const WCHAR steamuserW[] = {'s','t','e','a','m','u','s','e','r',0};
++    if(*size < ARRAY_SIZE(steamuserW)){
++        SetLastError( ERROR_INSUFFICIENT_BUFFER );
++        *size = ARRAY_SIZE(steamuserW);
++        return FALSE;
++    }
++    memcpy(name, steamuserW, sizeof(steamuserW));
++    *size = ARRAY_SIZE(steamuserW);
++    return TRUE;
+ }
+ 
+ /******************************************************************************
 From ec9e7190ea7045012b6e33e5ee64cd678bec68c9 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 22 Jan 2018 14:32:40 -0600
@@ -291,30 +326,6 @@ index df2b43d9106..44ce3cd6639 100644
  [MCI]
  HKLM,%Mci32Str%,"AVIVideo",,"mciavi32.dll"
 
-From 059a15a1d521a6ba79273b2ade923822b1532205 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Fri, 13 Jul 2018 10:40:27 -0500
-Subject: [PATCH] HACK: mshtml: Don't install wine-gecko on prefix creation
-
-We only want to install this on demand.
----
- dlls/mshtml/main.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/dlls/mshtml/main.c b/dlls/mshtml/main.c
-index 6ce8198aee5..f84d92cc860 100644
---- a/dlls/mshtml/main.c
-+++ b/dlls/mshtml/main.c
-@@ -530,8 +530,6 @@ HRESULT WINAPI DllRegisterServer(void)
-     hres = __wine_register_resources( hInst );
-     if(SUCCEEDED(hres))
-         hres = register_server(TRUE);
--    if(SUCCEEDED(hres))
--        load_gecko();
- 
-     return hres;
- }
-
 From 12b7edaf69d1f9c94c18bd4cd8ae0e1d5ae97972 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 15 Jan 2019 10:10:47 -0600
@@ -328,12 +339,12 @@ diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
 index 74cea11be5f..50bc2321eaa 100644
 --- a/dlls/ntdll/unix/env.c
 +++ b/dlls/ntdll/unix/env.c
-@@ -437,6 +437,7 @@ static inline BOOL is_special_env_var( const char *var )
-             !strncmp( var, "TEMP=", sizeof("TEMP=")-1 ) ||
-             !strncmp( var, "TMP=", sizeof("TMP=")-1 ) ||
-             !strncmp( var, "QT_", sizeof("QT_")-1 ) ||
-+            !strncmp( var, "SDL_AUDIODRIVER=", sizeof("SDL_AUDIODRIVER=")-1 ) ||
-             !strncmp( var, "VK_", sizeof("VK_")-1 ));
+@@ -527,6 +527,7 @@ static BOOL is_special_env_var( const char *var )
+             STARTS_WITH( var, "TEMP=" ) ||
+             STARTS_WITH( var, "TMP=" ) ||
+             STARTS_WITH( var, "QT_" ) ||
++            STARTS_WITH( var, "SDL_AUDIODRIVER=" ) ||
+             STARTS_WITH( var, "VK_" ));
  }
  
 From 17d19e1b23bce6fc6ff5b4e61131c9c58fd57ae5 Mon Sep 17 00:00:00 2001

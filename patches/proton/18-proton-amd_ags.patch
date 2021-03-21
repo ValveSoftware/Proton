@@ -1562,8 +1562,8 @@ index 00000000000..382447089bc
 +
 +    switch (reason)
 +    {
-+        case DLL_WINE_PREATTACH:
-+            return FALSE; /* Prefer native. */
++ 
++ 
 +        case DLL_PROCESS_ATTACH:
 +            DisableThreadLibraryCalls(instance);
 +            break;
@@ -1590,7 +1590,7 @@ index 7545260d1de..aa7127e2ede 100644
  IMPORTS   = vulkan-1
  IMPORTLIB = amd_ags_x64
  
-+EXTRADLLFLAGS = -mno-cygwin
++EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
 +
  C_SRCS = \
  	amd_ags_x64_main.c
@@ -3652,7 +3652,7 @@ index aa7127e2ede..ec13c055a26 100644
 +IMPORTS   = version vulkan-1
  IMPORTLIB = amd_ags_x64
  
- EXTRADLLFLAGS = -mno-cygwin
+ EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
 diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
 index e8420acd4d1..49fc7ab7403 100644
 --- a/dlls/amd_ags_x64/amd_ags_x64_main.c

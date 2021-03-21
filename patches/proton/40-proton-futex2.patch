@@ -1,0 +1,737 @@
+From 777150363a96762a02fb95b27935b78261ea4986 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 17 Nov 2020 11:09:11 -0600
+Subject: [PATCH] ntdll, server: Add support for the experimental futex2
+ interface.
+
+---
+ dlls/ntdll/unix/fsync.c | 151 ++++++++++++++++++++++++++++------------
+ server/fsync.c          |  39 +++++++++--
+ 2 files changed, 139 insertions(+), 51 deletions(-)
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index 049f287d1de..f588da84619 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -77,23 +77,74 @@ static inline void small_pause(void)
+ #endif
+ }
+ 
+-static inline int futex_wait_multiple( const struct futex_wait_block *futexes,
+-        int count, const struct timespec *timeout )
++/* futex2 experimental interface */
++
++static long nr_futex2_wait, nr_futex2_waitv, nr_futex2_wake;
++
++#define FUTEX_32 2
++#define FUTEX_SHARED_FLAG 8
++
++struct futex_waitv
+ {
+-    return syscall( __NR_futex, futexes, 31, count, timeout, 0, 0 );
+-}
++    void *uaddr;
++#if __SIZEOF_POINTER__ == 4
++    int pad;
++#endif
++    unsigned int val;
++    unsigned int flags;
++};
++
++static unsigned int spincount = 100;
+ 
+-static inline int futex_wake( int *addr, int val )
++static inline int futex_wake( int *addr, int count )
+ {
+-    return syscall( __NR_futex, addr, 1, val, NULL, 0, 0 );
++    if (nr_futex2_wake)
++        return syscall( nr_futex2_wake, addr, count, FUTEX_32 | FUTEX_SHARED_FLAG );
++    return syscall( __NR_futex, addr, 1, count, NULL, 0, 0 );
+ }
+ 
+ static inline int futex_wait( int *addr, int val, struct timespec *timeout )
+ {
++    if (nr_futex2_wait)
++        return syscall( nr_futex2_wait, addr, val, FUTEX_32 | FUTEX_SHARED_FLAG, timeout );
+     return syscall( __NR_futex, addr, 0, val, timeout, 0, 0 );
+ }
+ 
+-static unsigned int spincount = 100;
++union futex_vector
++{
++    struct futex_wait_block futex[MAXIMUM_WAIT_OBJECTS + 1];
++    struct futex_waitv futex2[MAXIMUM_WAIT_OBJECTS + 1];
++};
++
++static inline void futex_vector_set( union futex_vector *vector, unsigned int index, int *addr, int val )
++{
++    if (nr_futex2_waitv)
++    {
++        vector->futex2[index].uaddr = addr;
++        vector->futex2[index].val = val;
++#if __SIZEOF_POINTER__ == 4
++        vector->futex2[index].pad = 0;
++#endif
++        vector->futex2[index].flags = FUTEX_32 | FUTEX_SHARED_FLAG;
++    }
++    else
++    {
++        vector->futex[index].addr = addr;
++        vector->futex[index].val = val;
++#if __SIZEOF_POINTER__ == 4
++        vector->futex[index].pad = 0;
++#endif
++        vector->futex[index].bitset = ~0;
++    }
++}
++
++static inline int futex_wait_multiple( union futex_vector *vector,
++        unsigned int count, const struct timespec *timeout )
++{
++    if (nr_futex2_waitv)
++        return syscall( nr_futex2_waitv, &vector->futex2, count, 0, timeout );
++    return syscall( __NR_futex, &vector->futex, 31, count, timeout, 0, 0 );
++}
+ 
+ int do_fsync(void)
+ {
+@@ -102,9 +153,39 @@ int do_fsync(void)
+ 
+     if (do_fsync_cached == -1)
+     {
+-        static const struct timespec zero;
+-        futex_wait_multiple( NULL, 0, &zero );
+-        do_fsync_cached = getenv("WINEFSYNC") && atoi(getenv("WINEFSYNC")) && errno != ENOSYS;
++        int use_futex2 = 1;
++        FILE *f;
++
++        if (getenv( "WINEFSYNC_FUTEX2" ))
++            use_futex2 = atoi( getenv( "WINEFSYNC_FUTEX2" ) );
++
++        if (use_futex2 && (f = fopen( "/sys/kernel/futex2/wait", "r" )))
++        {
++            char buffer[13];
++
++            fgets( buffer, sizeof(buffer), f );
++            nr_futex2_wait = atoi( buffer );
++            fclose(f);
++
++            f = fopen( "/sys/kernel/futex2/waitv", "r" );
++            fgets( buffer, sizeof(buffer), f );
++            nr_futex2_waitv = atoi( buffer );
++            fclose(f);
++
++            f = fopen( "/sys/kernel/futex2/wake", "r" );
++            fgets( buffer, sizeof(buffer), f );
++            nr_futex2_wake = atoi( buffer );
++            fclose(f);
++
++            do_fsync_cached = 1;
++        }
++        else
++        {
++            static const struct timespec zero;
++            futex_wait_multiple( NULL, 0, &zero );
++            do_fsync_cached = (errno != ENOSYS);
++        }
++        do_fsync_cached = getenv("WINEFSYNC") && atoi(getenv("WINEFSYNC")) && do_fsync_cached;
+         if (getenv("WINEFSYNC_SPINCOUNT"))
+             spincount = atoi(getenv("WINEFSYNC_SPINCOUNT"));
+     }
+@@ -664,19 +745,13 @@ static NTSTATUS do_single_wait( int *addr, int val, ULONGLONG *end, BOOLEAN aler
+     if (alertable)
+     {
+         int *apc_futex = ntdll_get_thread_data()->fsync_apc_futex;
+-        struct futex_wait_block futexes[2];
++        union futex_vector futexes;
+ 
+         if (__atomic_load_n( apc_futex, __ATOMIC_SEQ_CST ))
+             return STATUS_USER_APC;
+ 
+-        futexes[0].addr = addr;
+-        futexes[0].val = val;
+-        futexes[1].addr = apc_futex;
+-        futexes[1].val = 0;
+-#if __SIZEOF_POINTER__ == 4
+-        futexes[0].pad = futexes[1].pad = 0;
+-#endif
+-        futexes[0].bitset = futexes[1].bitset = ~0;
++        futex_vector_set( &futexes, 0, addr, val );
++        futex_vector_set( &futexes, 1, apc_futex, 0 );
+ 
+         if (end)
+         {
+@@ -684,10 +759,10 @@ static NTSTATUS do_single_wait( int *addr, int val, ULONGLONG *end, BOOLEAN aler
+             struct timespec tmo_p;
+             tmo_p.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
+             tmo_p.tv_nsec = (timeleft % TICKSPERSEC) * 100;
+-            ret = futex_wait_multiple( futexes, 2, &tmo_p );
++            ret = futex_wait_multiple( &futexes, 2, &tmo_p );
+         }
+         else
+-            ret = futex_wait_multiple( futexes, 2, NULL );
++            ret = futex_wait_multiple( &futexes, 2, NULL );
+ 
+         if (__atomic_load_n( apc_futex, __ATOMIC_SEQ_CST ))
+             return STATUS_USER_APC;
+@@ -719,9 +794,9 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+ {
+     static const LARGE_INTEGER zero = {0};
+ 
+-    struct futex_wait_block futexes[MAXIMUM_WAIT_OBJECTS + 1];
+     struct fsync *objs[MAXIMUM_WAIT_OBJECTS];
+     int has_fsync = 0, has_server = 0;
++    union futex_vector futexes;
+     BOOL msgwait = FALSE;
+     int dummy_futex = 0;
+     unsigned int spin;
+@@ -849,8 +924,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             small_pause();
+                         }
+ 
+-                        futexes[i].addr = &semaphore->count;
+-                        futexes[i].val = 0;
++                        futex_vector_set( &futexes, i, &semaphore->count, 0 );
+                         break;
+                     }
+                     case FSYNC_MUTEX:
+@@ -882,8 +956,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             small_pause();
+                         }
+ 
+-                        futexes[i].addr = &mutex->tid;
+-                        futexes[i].val  = tid;
++                        futex_vector_set( &futexes, i, &mutex->tid, tid );
+                         break;
+                     }
+                     case FSYNC_AUTO_EVENT:
+@@ -901,8 +974,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             small_pause();
+                         }
+ 
+-                        futexes[i].addr = &event->signaled;
+-                        futexes[i].val = 0;
++                        futex_vector_set( &futexes, i, &event->signaled, 0 );
+                         break;
+                     }
+                     case FSYNC_MANUAL_EVENT:
+@@ -921,8 +993,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             small_pause();
+                         }
+ 
+-                        futexes[i].addr = &event->signaled;
+-                        futexes[i].val = 0;
++                        futex_vector_set( &futexes, i, &event->signaled, 0 );
+                         break;
+                     }
+                     default:
+@@ -933,26 +1004,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 else
+                 {
+                     /* Avoid breaking things entirely. */
+-                    futexes[i].addr = &dummy_futex;
+-                    futexes[i].val = dummy_futex;
++                    futex_vector_set( &futexes, i, &dummy_futex, dummy_futex );
+                 }
+-
+-#if __SIZEOF_POINTER__ == 4
+-                futexes[i].pad = 0;
+-#endif
+-                futexes[i].bitset = ~0;
+             }
+ 
+             if (alertable)
+             {
+                 /* We already checked if it was signaled; don't bother doing it again. */
+-                futexes[i].addr = ntdll_get_thread_data()->fsync_apc_futex;
+-                futexes[i].val = 0;
+-#if __SIZEOF_POINTER__ == 4
+-                futexes[i].pad = 0;
+-#endif
+-                futexes[i].bitset = ~0;
+-                i++;
++                futex_vector_set( &futexes, i++, ntdll_get_thread_data()->fsync_apc_futex, 0 );
+             }
+             waitcount = i;
+ 
+@@ -972,10 +1031,10 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 tmo_p.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
+                 tmo_p.tv_nsec = (timeleft % TICKSPERSEC) * 100;
+ 
+-                ret = futex_wait_multiple( futexes, waitcount, &tmo_p );
++                ret = futex_wait_multiple( &futexes, waitcount, &tmo_p );
+             }
+             else
+-                ret = futex_wait_multiple( futexes, waitcount, NULL );
++                ret = futex_wait_multiple( &futexes, waitcount, NULL );
+ 
+             /* FUTEX_WAIT_MULTIPLE can succeed or return -EINTR, -EAGAIN,
+              * -EFAULT/-EACCES, -ETIMEDOUT. In the first three cases we need to
+diff --git a/server/fsync.c b/server/fsync.c
+index 39a4e7a1d1b..1572bc8cdb6 100644
+--- a/server/fsync.c
++++ b/server/fsync.c
+@@ -63,6 +63,13 @@ static inline int futex_wait_multiple( const struct futex_wait_block *futexes,
+     return syscall( __NR_futex, futexes, 31, count, timeout, 0, 0 );
+ }
+ 
++/* futex2 experimental interface */
++
++static long nr_futex2_wake;
++
++#define FUTEX_32 2
++#define FUTEX_SHARED_FLAG 8
++
+ int do_fsync(void)
+ {
+ #ifdef __linux__
+@@ -70,9 +77,29 @@ int do_fsync(void)
+ 
+     if (do_fsync_cached == -1)
+     {
+-        static const struct timespec zero;
+-        futex_wait_multiple( NULL, 0, &zero );
+-        do_fsync_cached = getenv("WINEFSYNC") && atoi(getenv("WINEFSYNC")) && errno != ENOSYS;
++        int use_futex2 = 1;
++        FILE *f;
++
++        if (getenv( "WINEFSYNC_FUTEX2" ))
++            use_futex2 = atoi( getenv( "WINEFSYNC_FUTEX2" ) );
++
++        if (use_futex2 && (f = fopen( "/sys/kernel/futex2/wait", "r" )))
++        {
++            char buffer[13];
++
++            fgets( buffer, sizeof(buffer), f );
++            nr_futex2_wake = atoi( buffer );
++            fclose(f);
++
++            do_fsync_cached = 1;
++        }
++        else
++        {
++            static const struct timespec zero;
++            futex_wait_multiple( NULL, 0, &zero );
++            do_fsync_cached = (errno != ENOSYS);
++        }
++        do_fsync_cached = getenv("WINEFSYNC") && atoi(getenv("WINEFSYNC")) && do_fsync_cached;
+     }
+ 
+     return do_fsync_cached;
+@@ -327,9 +354,11 @@ struct fsync *create_fsync( struct object *root, const struct unicode_str *name,
+ #endif
+ }
+ 
+-static inline int futex_wake( int *addr, int val )
++static inline int futex_wake( int *addr, int count )
+ {
+-    return syscall( __NR_futex, addr, 1, val, NULL, 0, 0 );
++    if (nr_futex2_wake)
++        return syscall( nr_futex2_wake, addr, count, FUTEX_32 | FUTEX_SHARED_FLAG );
++    return syscall( __NR_futex, addr, 1, count, NULL, 0, 0 );
+ }
+ 
+ /* shm layout for events or event-like objects. */
+From 661e343409661d94f41884f252f4aa5a20fd0827 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Date: Fri, 27 Nov 2020 14:05:14 -0300
+Subject: [PATCH] ntdll: Call waitv just when nr_futexes > 1
+
+---
+ dlls/ntdll/unix/fsync.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index f588da84619..8fc33f0c2fe 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -1031,10 +1031,18 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 tmo_p.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
+                 tmo_p.tv_nsec = (timeleft % TICKSPERSEC) * 100;
+ 
+-                ret = futex_wait_multiple( &futexes, waitcount, &tmo_p );
++                if (waitcount == 1)
++                    ret = futex_wait( futexes.futex2[0].uaddr, futexes.futex2[0].val, &tmo_p );
++                else
++                    ret = futex_wait_multiple( &futexes, waitcount, &tmo_p );
+             }
+             else
+-                ret = futex_wait_multiple( &futexes, waitcount, NULL );
++            {
++                if (waitcount == 1)
++                    ret = futex_wait( futexes.futex2[0].uaddr, futexes.futex2[0].val, NULL );
++                else
++                    ret = futex_wait_multiple( &futexes, waitcount, NULL );
++            }
+ 
+             /* FUTEX_WAIT_MULTIPLE can succeed or return -EINTR, -EAGAIN,
+              * -EFAULT/-EACCES, -ETIMEDOUT. In the first three cases we need to
+From f68a5045d31aa9b7beff588f3ecf11310841a605 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jan 2021 11:29:16 -0600
+Subject: [PATCH] ntdll: Use a 64-bit absolute timeout in futex2 operations.
+
+---
+ dlls/ntdll/unix/fsync.c | 128 +++++++++++++++++++++++++---------------
+ 1 file changed, 81 insertions(+), 47 deletions(-)
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index 8fc33f0c2fe..c4f43d1cc6b 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -77,6 +77,17 @@ static inline void small_pause(void)
+ #endif
+ }
+ 
++static LONGLONG update_timeout( ULONGLONG end )
++{
++    LARGE_INTEGER now;
++    LONGLONG timeleft;
++
++    NtQuerySystemTime( &now );
++    timeleft = end - now.QuadPart;
++    if (timeleft < 0) timeleft = 0;
++    return timeleft;
++}
++
+ /* futex2 experimental interface */
+ 
+ static long nr_futex2_wait, nr_futex2_waitv, nr_futex2_wake;
+@@ -103,11 +114,43 @@ static inline int futex_wake( int *addr, int count )
+     return syscall( __NR_futex, addr, 1, count, NULL, 0, 0 );
+ }
+ 
+-static inline int futex_wait( int *addr, int val, struct timespec *timeout )
++struct timespec64
++{
++    long long tv_sec;
++    long long tv_nsec;
++};
++
++static inline int futex_wait( int *addr, int val, const ULONGLONG *end )
+ {
+     if (nr_futex2_wait)
+-        return syscall( nr_futex2_wait, addr, val, FUTEX_32 | FUTEX_SHARED_FLAG, timeout );
+-    return syscall( __NR_futex, addr, 0, val, timeout, 0, 0 );
++    {
++        if (end)
++        {
++            struct timespec64 timespec;
++            timespec.tv_sec = *end / (ULONGLONG)TICKSPERSEC;
++            timespec.tv_nsec = (*end % TICKSPERSEC) * 100;
++            return syscall( nr_futex2_wait, addr, val, FUTEX_32 | FUTEX_SHARED_FLAG, &timespec );
++        }
++        else
++        {
++            return syscall( nr_futex2_wait, addr, val, FUTEX_32 | FUTEX_SHARED_FLAG, NULL );
++        }
++    }
++    else
++    {
++        if (end)
++        {
++            LONGLONG timeleft = update_timeout( *end );
++            struct timespec timespec;
++            timespec.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
++            timespec.tv_nsec = (timeleft % TICKSPERSEC) * 100;
++            return syscall( __NR_futex, addr, 0, val, &timespec, 0, 0 );
++        }
++        else
++        {
++            return syscall( __NR_futex, addr, 0, val, NULL, 0, 0 );
++        }
++    }
+ }
+ 
+ union futex_vector
+@@ -138,12 +181,37 @@ static inline void futex_vector_set( union futex_vector *vector, unsigned int in
+     }
+ }
+ 
+-static inline int futex_wait_multiple( union futex_vector *vector,
+-        unsigned int count, const struct timespec *timeout )
++static inline int futex_wait_multiple( union futex_vector *vector, unsigned int count, const ULONGLONG *end )
+ {
+     if (nr_futex2_waitv)
+-        return syscall( nr_futex2_waitv, &vector->futex2, count, 0, timeout );
+-    return syscall( __NR_futex, &vector->futex, 31, count, timeout, 0, 0 );
++    {
++        if (end)
++        {
++            struct timespec64 timespec;
++            timespec.tv_sec = *end / (ULONGLONG)TICKSPERSEC;
++            timespec.tv_nsec = (*end % TICKSPERSEC) * 100;
++            return syscall( nr_futex2_waitv, &vector->futex2, count, 0, &timespec );
++        }
++        else
++        {
++            return syscall( nr_futex2_waitv, &vector->futex2, count, 0, NULL );
++        }
++    }
++    else
++    {
++        if (end)
++        {
++            LONGLONG timeleft = update_timeout( *end );
++            struct timespec timespec;
++            timespec.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
++            timespec.tv_nsec = (timeleft % TICKSPERSEC) * 100;
++            return syscall( __NR_futex, &vector->futex, 31, count, &timespec, 0, 0 );
++        }
++        else
++        {
++            return syscall( __NR_futex, &vector->futex, 31, count, NULL, 0, 0 );
++        }
++    }
+ }
+ 
+ int do_fsync(void)
+@@ -182,7 +250,7 @@ int do_fsync(void)
+         else
+         {
+             static const struct timespec zero;
+-            futex_wait_multiple( NULL, 0, &zero );
++            syscall( __NR_futex, NULL, 31, 0, &zero, 0, 0 );
+             do_fsync_cached = (errno != ENOSYS);
+         }
+         do_fsync_cached = getenv("WINEFSYNC") && atoi(getenv("WINEFSYNC")) && do_fsync_cached;
+@@ -727,18 +795,7 @@ NTSTATUS fsync_query_mutex( HANDLE handle, void *info, ULONG *ret_len )
+     return STATUS_SUCCESS;
+ }
+ 
+-static LONGLONG update_timeout( ULONGLONG end )
+-{
+-    LARGE_INTEGER now;
+-    LONGLONG timeleft;
+-
+-    NtQuerySystemTime( &now );
+-    timeleft = end - now.QuadPart;
+-    if (timeleft < 0) timeleft = 0;
+-    return timeleft;
+-}
+-
+-static NTSTATUS do_single_wait( int *addr, int val, ULONGLONG *end, BOOLEAN alertable )
++static NTSTATUS do_single_wait( int *addr, int val, const ULONGLONG *end, BOOLEAN alertable )
+ {
+     int ret;
+ 
+@@ -753,32 +810,14 @@ static NTSTATUS do_single_wait( int *addr, int val, ULONGLONG *end, BOOLEAN aler
+         futex_vector_set( &futexes, 0, addr, val );
+         futex_vector_set( &futexes, 1, apc_futex, 0 );
+ 
+-        if (end)
+-        {
+-            LONGLONG timeleft = update_timeout( *end );
+-            struct timespec tmo_p;
+-            tmo_p.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
+-            tmo_p.tv_nsec = (timeleft % TICKSPERSEC) * 100;
+-            ret = futex_wait_multiple( &futexes, 2, &tmo_p );
+-        }
+-        else
+-            ret = futex_wait_multiple( &futexes, 2, NULL );
++        ret = futex_wait_multiple( &futexes, 2, end );
+ 
+         if (__atomic_load_n( apc_futex, __ATOMIC_SEQ_CST ))
+             return STATUS_USER_APC;
+     }
+     else
+     {
+-        if (end)
+-        {
+-            LONGLONG timeleft = update_timeout( *end );
+-            struct timespec tmo_p;
+-            tmo_p.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
+-            tmo_p.tv_nsec = (timeleft % TICKSPERSEC) * 100;
+-            ret = futex_wait( addr, val, &tmo_p );
+-        }
+-        else
+-            ret = futex_wait( addr, val, NULL );
++        ret = futex_wait( addr, val, end );
+     }
+ 
+     if (!ret)
+@@ -1026,15 +1065,10 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+             }
+             else if (timeout)
+             {
+-                LONGLONG timeleft = update_timeout( end );
+-                struct timespec tmo_p;
+-                tmo_p.tv_sec = timeleft / (ULONGLONG)TICKSPERSEC;
+-                tmo_p.tv_nsec = (timeleft % TICKSPERSEC) * 100;
+-
+                 if (waitcount == 1)
+-                    ret = futex_wait( futexes.futex2[0].uaddr, futexes.futex2[0].val, &tmo_p );
++                    ret = futex_wait( futexes.futex2[0].uaddr, futexes.futex2[0].val, &end );
+                 else
+-                    ret = futex_wait_multiple( &futexes, waitcount, &tmo_p );
++                    ret = futex_wait_multiple( &futexes, waitcount, &end );
+             }
+             else
+             {
+From dcf927c36a05efba6936e43c40deb5a12a9b6028 Mon Sep 17 00:00:00 2001
+From: Piyush Kumar <piyushkumg@gmail.com>
+Date: Sat, 23 Jan 2021 21:06:29 +0530
+Subject: [PATCH] Fix-up: "ntdll, server: Add support for the experimental
+ futex2 interface."
+
+---
+ server/fsync.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/fsync.c b/server/fsync.c
+index 1572bc8cdb6..335548f5c20 100644
+--- a/server/fsync.c
++++ b/server/fsync.c
+@@ -83,7 +83,7 @@ int do_fsync(void)
+         if (getenv( "WINEFSYNC_FUTEX2" ))
+             use_futex2 = atoi( getenv( "WINEFSYNC_FUTEX2" ) );
+ 
+-        if (use_futex2 && (f = fopen( "/sys/kernel/futex2/wait", "r" )))
++        if (use_futex2 && (f = fopen( "/sys/kernel/futex2/wake", "r" )))
+         {
+             char buffer[13];
+ 
+From 2086664d210f1dc5be68619380fadba0e6e84f3d Mon Sep 17 00:00:00 2001
+From: Kyle De'Vir <kyle.devir@mykolab.com>
+Date: Mon, 1 Feb 2021 03:19:44 +1000
+Subject: [PATCH] wine-tkg-git: when using futex2, let the user know
+
+---
+ server/fsync.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/server/fsync.c b/server/fsync.c
+index 174d837e879..db926fcef7c 100644
+--- a/server/fsync.c
++++ b/server/fsync.c
+@@ -154,7 +154,10 @@ void fsync_init(void)
+ 
+     is_fsync_initialized = 1;
+ 
+-    fprintf( stderr, "fsync: up and running.\n" );
++    if (nr_futex2_wake)
++        fprintf( stderr, "futex2: up and running.\n" );
++    else
++        fprintf( stderr, "fsync: up and running.\n" );
+ 
+     atexit( shm_cleanup );
+ }
+-- 
+2.30.0
+
+From 220ab327f6cff3c6b6f387aa4851ddeb569fa9f3 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Wed, 17 Feb 2021 14:30:43 +0200
+Subject: Define TICKS_1601_TO_1970 inside fsync.c
+
+The Nt system time functions have moved since, so this fixes
+compatibility of the next patch with current Wine trees.
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -49,6 +49,9 @@ 
+ #include "unix_private.h"
+ #include "fsync.h"
+ 
++
++#define TICKS_1601_TO_1970 (SECS_1601_TO_1970 * TICKSPERSEC)
++
+ WINE_DEFAULT_DEBUG_CHANNEL(fsync);
+ 
+ #include "pshpack4.h"
+
+From 27392149b58cdccd7ac4cf2447df707e51b5796c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Date: Tue, 16 Feb 2021 13:53:56 -0300
+Subject: [PATCH] ntdll: Convert Windows Epoch to UNIX Epoch
+
+Some games are hanging on startup, with futexes waiting forever (even
+with timeout values). This is because the timeout values are been passed
+as Windows Epoch, instead of UNIX one. Convert the values so timeouts
+work again. Also, use realtime clock instead of monotonic one, so we
+don't need to issue another syscall do to this conversion.
+---
+ dlls/ntdll/unix/fsync.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index c4f43d1cc6..72ee6646fa 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -94,6 +94,7 @@ static long nr_futex2_wait, nr_futex2_waitv, nr_futex2_wake;
+ 
+ #define FUTEX_32 2
+ #define FUTEX_SHARED_FLAG 8
++#define FUTEX_CLOCK_REALTIME 256
+ 
+ struct futex_waitv
+ {
+@@ -127,9 +128,12 @@ static inline int futex_wait( int *addr, int val, const ULONGLONG *end )
+         if (end)
+         {
+             struct timespec64 timespec;
+-            timespec.tv_sec = *end / (ULONGLONG)TICKSPERSEC;
+-            timespec.tv_nsec = (*end % TICKSPERSEC) * 100;
+-            return syscall( nr_futex2_wait, addr, val, FUTEX_32 | FUTEX_SHARED_FLAG, &timespec );
++            ULONGLONG tmp = *end - TICKS_1601_TO_1970;
++            timespec.tv_sec = tmp / (ULONGLONG)TICKSPERSEC;
++            timespec.tv_nsec = (tmp % TICKSPERSEC) * 100;
++
++            return syscall( nr_futex2_wait, addr, val, FUTEX_32 |
++			    FUTEX_SHARED_FLAG | FUTEX_CLOCK_REALTIME, &timespec );
+         }
+         else
+         {
+@@ -188,9 +192,11 @@ static inline int futex_wait_multiple( union futex_vector *vector, unsigned int
+         if (end)
+         {
+             struct timespec64 timespec;
+-            timespec.tv_sec = *end / (ULONGLONG)TICKSPERSEC;
+-            timespec.tv_nsec = (*end % TICKSPERSEC) * 100;
+-            return syscall( nr_futex2_waitv, &vector->futex2, count, 0, &timespec );
++            ULONGLONG tmp = *end - TICKS_1601_TO_1970;
++            timespec.tv_sec = tmp / (ULONGLONG)TICKSPERSEC;
++            timespec.tv_nsec = (tmp % TICKSPERSEC) * 100;
++
++            return syscall( nr_futex2_waitv, &vector->futex2, count, FUTEX_CLOCK_REALTIME, &timespec );
+         }
+         else
+         {
+
+From a7e7b3e5b5b69438dbf8ea0d38809c13cadf831d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Date: Tue, 16 Feb 2021 13:58:35 -0300
+Subject: [PATCH] ntdll: Remove padding for 32bit archs
+
+In the current version of futex2 patchset, there's a proper entry point
+for 32bit apps that correctly parse 32bit pointers. Remove the padding
+hack used to make 32bit apps use the 64bit entry point.
+---
+ dlls/ntdll/unix/fsync.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index 72ee6646fa..f413dfde24 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -99,9 +99,6 @@ static long nr_futex2_wait, nr_futex2_waitv, nr_futex2_wake;
+ struct futex_waitv
+ {
+     void *uaddr;
+-#if __SIZEOF_POINTER__ == 4
+-    int pad;
+-#endif
+     unsigned int val;
+     unsigned int flags;
+ };
+@@ -169,9 +166,6 @@ static inline void futex_vector_set( union futex_vector *vector, unsigned int in
+     {
+         vector->futex2[index].uaddr = addr;
+         vector->futex2[index].val = val;
+-#if __SIZEOF_POINTER__ == 4
+-        vector->futex2[index].pad = 0;
+-#endif
+         vector->futex2[index].flags = FUTEX_32 | FUTEX_SHARED_FLAG;
+     }
+     else

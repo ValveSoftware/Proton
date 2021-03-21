@@ -1398,9 +1398,9 @@ index 19b73256ef2..d0d979248f8 100644
  #include "wine/debug.h"
  
 @@ -1565,6 +1566,7 @@ static void start_main_thread(void)
+     signal_init_thread( teb );
      dbg_init();
-     server_init_process();
-     startup_info_size = server_init_thread( teb->Peb, &suspend );
+     startup_info_size = server_init_process();
 +    fsync_init();
      esync_init();
      virtual_map_user_shared_data();
@@ -2058,8 +2058,8 @@ index 8607b494b6d..28a52e61d00 100644
  #include "esync.h"
 +#include "fsync.h"
  
- struct event
- {
+ static const WCHAR event_name[] = {'E','v','e','n','t'};
+ 
 @@ -44,6 +45,7 @@ struct event
      int            manual_reset;    /* is it a manual reset event? */
      int            signaled;        /* event has been signaled */
@@ -2068,14 +2068,14 @@ index 8607b494b6d..28a52e61d00 100644
  };
  
  static void event_dump( struct object *obj, int verbose );
-@@ -51,6 +53,7 @@ static struct object_type *event_get_type( struct object *obj );
+@@ -51,6 +53,7 @@ static void event_dump( struct object *obj, int verbose );
  static int event_signaled( struct object *obj, struct wait_queue_entry *entry );
  static void event_satisfied( struct object *obj, struct wait_queue_entry *entry );
  static int event_get_esync_fd( struct object *obj, enum esync_type *type );
 +static unsigned int event_get_fsync_idx( struct object *obj, enum fsync_type *type );
- static unsigned int event_map_access( struct object *obj, unsigned int access );
  static int event_signal( struct object *obj, unsigned int access);
  static struct list *event_get_kernel_obj_list( struct object *obj );
+ static void event_destroy( struct object *obj );
 @@ -65,6 +68,7 @@ static const struct object_ops event_ops =
      remove_queue,              /* remove_queue */
      event_signaled,            /* signaled */
@@ -2283,9 +2283,9 @@ index bbc2462163d..c558229c3c8 100644
 +    return ret;
 +}
 +
- /* default map_access() routine for objects that behave like an fd */
- unsigned int default_fd_map_access( struct object *obj, unsigned int access )
+ int default_fd_get_poll_events( struct fd *fd )
  {
+     int events = 0;
 diff --git a/server/file.c b/server/file.c
 index 49c4ba32b42..829c8685d63 100644
 --- a/server/file.c
@@ -2307,9 +2307,9 @@ index cae0ac1e395..ed030af8d8f 100644
  extern int default_fd_signaled( struct object *obj, struct wait_queue_entry *entry );
  extern int default_fd_get_esync_fd( struct object *obj, enum esync_type *type );
 +extern unsigned int default_fd_get_fsync_idx( struct object *obj, enum fsync_type *type );
- extern unsigned int default_fd_map_access( struct object *obj, unsigned int access );
  extern int default_fd_get_poll_events( struct fd *fd );
  extern void default_poll_event( struct fd *fd, int event );
+ extern void fd_queue_async( struct fd *fd, struct async *async, int type );
 diff --git a/server/fsync.c b/server/fsync.c
 new file mode 100644
 index 00000000000..0a88ecdd3f6
@@ -2468,8 +2468,8 @@ index 00000000000..0a88ecdd3f6
 +const struct object_ops fsync_ops =
 +{
 +    sizeof(struct fsync),      /* size */
++    &no_type,                  /* type */
 +    fsync_dump,                /* dump */
-+    no_get_type,               /* get_type */
 +    no_add_queue,              /* add_queue */
 +    NULL,                      /* remove_queue */
 +    NULL,                      /* signaled */
@@ -3077,7 +3077,7 @@ index df50955f621..c4f51dcad30 100644
  #include "esync.h"
 +#include "fsync.h"
  
- /* process structure */
+ /* process object */
  
 @@ -70,6 +71,7 @@ static void process_poll_event( struct fd *fd, int event );
  static struct list *process_get_kernel_obj_list( struct object *obj );
@@ -3142,7 +3142,7 @@ index df50955f621..c4f51dcad30 100644
 +
  static unsigned int process_map_access( struct object *obj, unsigned int access )
  {
-     if (access & GENERIC_READ)    access |= STANDARD_RIGHTS_READ | PROCESS_QUERY_INFORMATION | PROCESS_VM_READ;
+     access = default_map_access( obj, access );
 diff --git a/server/process.h b/server/process.h
 index eec69ddbcaf..abb4ed31b48 100644
 --- a/server/process.h
@@ -3471,8 +3471,8 @@ index 1a245c58396..1fb3603f2a7 100644
      no_satisfied,               /* satisfied */
      no_signal,                  /* signal */
      no_get_fd,                  /* get_fd */
-@@ -173,6 +176,7 @@ static void dump_thread( struct object *obj, int verbose );
- static struct object_type *thread_get_type( struct object *obj );
+@@ -173,6 +176,7 @@  
+ static void dump_thread( struct object *obj, int verbose );
  static int thread_signaled( struct object *obj, struct wait_queue_entry *entry );
  static int thread_get_esync_fd( struct object *obj, enum esync_type *type );
 +static unsigned int thread_get_fsync_idx( struct object *obj, enum fsync_type *type );
@@ -3492,9 +3492,9 @@ index 1a245c58396..1fb3603f2a7 100644
      thread->esync_fd        = -1;
      thread->esync_apc_fd    = -1;
 +    thread->fsync_idx       = 0;
-     thread->debug_obj       = NULL;
      thread->system_regs     = 0;
      thread->queue           = NULL;
+     thread->wait            = NULL;
 @@ -364,6 +370,12 @@ struct thread *create_thread( int fd, struct process *process, const struct secu
          return NULL;
      }
@@ -3521,7 +3521,7 @@ index 1a245c58396..1fb3603f2a7 100644
 +
  static unsigned int thread_map_access( struct object *obj, unsigned int access )
  {
-     if (access & GENERIC_READ)    access |= STANDARD_RIGHTS_READ | THREAD_QUERY_INFORMATION | THREAD_GET_CONTEXT;
+     access = default_map_access( obj, access );
 @@ -533,6 +552,7 @@ static struct thread_apc *create_apc( struct object *owner, const apc_call_t *ca
          apc->result.type = APC_NONE;
          if (owner) grab_object( owner );
@@ -3561,8 +3561,8 @@ index 1a245c58396..1fb3603f2a7 100644
          esync_clear( thread->esync_apc_fd );
  
 @@ -1327,6 +1356,8 @@ void kill_thread( struct thread *thread, int violent_death )
+     }
      kill_console_processes( thread, 0 );
-     debug_exit_thread( thread );
      abandon_mutexes( thread );
 +    if (do_fsync())
 +        fsync_abandon_mutexes( thread );
@@ -3579,9 +3579,9 @@ index 0f6108b684a..53627631343 100644
      int                    esync_apc_fd;  /* esync apc fd (signalled when APCs are present) */
 +    unsigned int           fsync_idx;
 +    unsigned int           fsync_apc_idx;
-     struct debug_obj      *debug_obj;     /* debugger context if this thread is a debugger */
      unsigned int           system_regs;   /* which system regs have been set */
      struct msg_queue      *queue;         /* message queue */
+     struct thread_wait    *wait;          /* current wait condition if sleeping */
 diff --git a/server/timer.c b/server/timer.c
 index dcbc9e2ece5..9d9d7b8b40c 100644
 --- a/server/timer.c
@@ -3592,9 +3592,9 @@ index dcbc9e2ece5..9d9d7b8b40c 100644
  #include "esync.h"
 +#include "fsync.h"
  
- struct timer
- {
-@@ -50,12 +51,14 @@ struct timer
+ static const WCHAR timer_name[] = {'T','i','m','e','r'};
+ 
+@@ -50,11 +51,13 @@ struct timer
      client_ptr_t         callback;  /* callback APC function */
      client_ptr_t         arg;       /* callback argument */
      int                  esync_fd;  /* esync file descriptor */
@@ -3602,13 +3602,12 @@ index dcbc9e2ece5..9d9d7b8b40c 100644
  };
  
  static void timer_dump( struct object *obj, int verbose );
- static struct object_type *timer_get_type( struct object *obj );
  static int timer_signaled( struct object *obj, struct wait_queue_entry *entry );
  static int timer_get_esync_fd( struct object *obj, enum esync_type *type );
 +static unsigned int timer_get_fsync_idx( struct object *obj, enum fsync_type *type );
  static void timer_satisfied( struct object *obj, struct wait_queue_entry *entry );
- static unsigned int timer_map_access( struct object *obj, unsigned int access );
  static void timer_destroy( struct object *obj );
+ 
 @@ -69,6 +72,7 @@ static const struct object_ops timer_ops =
      remove_queue,              /* remove_queue */
      timer_signaled,            /* signaled */
@@ -3683,3 +3682,78 @@ index 1a031248a7c..388b116bc67 100644
      NULL,                         /* satisfied */
      no_signal,                    /* signal */
      no_get_fd,                    /* get_fd */
+From c53da471172674d955b554c885bead0608c13377 Mon Sep 17 00:00:00 2001
+From: Alexey Prokhin <alexey@prokhin.ru>
+Date: Thu, 23 Apr 2020 12:19:55 +0300
+Subject: [PATCH] server: Abort waiting on a completion port when closing it.
+
+---
+ server/completion.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/server/completion.c b/server/completion.c
+index fce92b5ad2b..35d60d49760 100644
+--- a/server/completion.c
++++ b/server/completion.c
+@@ -49,10 +49,12 @@ struct completion
+     struct object  obj;
+     struct list    queue;
+     unsigned int   depth;
++    int            abandoned;
+ };
+ 
+ static void completion_dump( struct object*, int );
+ static int completion_signaled( struct object *obj, struct wait_queue_entry *entry );
++static int completion_close( struct object *obj, struct process *process, obj_handle_t handle );
+ static void completion_destroy( struct object * );
+ 
+ static const struct object_ops completion_ops =
+@@ -78,7 +80,7 @@ static const struct object_ops completion_ops =
+     default_unlink_name,       /* unlink_name */
+     no_open_file,              /* open_file */
+     no_kernel_obj_list,        /* get_kernel_obj_list */
+-    no_close_handle,           /* close_handle */
++    completion_close,          /* close_handle */
+     completion_destroy         /* destroy */
+ };
+ 
+@@ -91,6 +93,22 @@ struct comp_msg
+     unsigned int  status;
+ };
+ 
++static int completion_close( struct object *obj, struct process *process, obj_handle_t handle )
++{
++    struct completion *completion = (struct completion *) obj;
++    struct wait_queue_entry *entry;
++
++    LIST_FOR_EACH_ENTRY( entry, &obj->wait_queue, struct wait_queue_entry, entry )
++    {
++        make_wait_abandoned( entry );
++    }
++
++    completion->abandoned = 1;
++    wake_up( &completion->obj, 0 );
++
++    return 1;
++}
++
+ static void completion_destroy( struct object *obj)
+ {
+     struct completion *completion = (struct completion *) obj;
+@@ -121,7 +139,7 @@ static int completion_signaled( struct object *obj, struct wait_queue_entry *ent
+ {
+     struct completion *completion = (struct completion *)obj;
+ 
+-    return !list_empty( &completion->queue );
++    return !list_empty( &completion->queue ) || completion->abandoned;
+ }
+ 
+ static unsigned int completion_map_access( struct object *obj, unsigned int access )
+@@ -144,6 +162,7 @@ static struct completion *create_completion( struct object *root, const struct u
+         if (get_error() != STATUS_OBJECT_NAME_EXISTS)
+         {
+             list_init( &completion->queue );
++            completion->abandoned = 0;
+             completion->depth = 0;
+         }
+     } 
