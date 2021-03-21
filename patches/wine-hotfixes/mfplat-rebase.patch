@@ -1456,12 +1456,13 @@ index 9e8754390a1..3a691589e53 100644
  };
  
  struct wg_parser_stream
-@@ -78,8 +80,9 @@ struct wg_parser_stream
+@@ -80,9 +80,10 @@ struct wg_parser_stream
      struct wg_parser *parser;
  
      GstPad *their_src, *post_sink, *post_src, *my_sink;
 -    GstElement *flip;
 +    GstElement *flip, *box;
+     GstSegment segment;
      struct wg_format preferred_format, current_format;
 +    struct wg_rect aperture;
  
