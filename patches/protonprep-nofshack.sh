@@ -200,8 +200,8 @@
     echo "CPU topology overrides"
     patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
 
-#    echo "proton futex2 patches"
-#    patch -Np1 < ../patches/proton/40-proton-futex2.patch
+    echo "proton futex2 patches"
+    patch -Np1 < ../patches/proton/40-proton-futex2.patch
 
     ### END PROTON PATCH SECTION ###
 
@@ -212,7 +212,6 @@
     
     echo "mfplat rebase"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
-#    patch -Np1 < ../patches/wine-hotfixes/0001-winegstreamer-Introduce-and-register-Mpeg4-Section-2.patch
     patch -Np1 < ../patches/wine-hotfixes/0033-HACK-Switch-between-all-selection-streams-on-MF_SOUR.patch
 
 
