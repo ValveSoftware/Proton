@@ -92,6 +92,8 @@ UNSUPPORTED_EXTENSIONS = [
     "XR_EXT_validation_flags",
     "XR_KHR_display", # Needs WSI work.
     "XR_KHR_surface_protected_capabilities",
+    "XR_KHR_loader_init",
+    "XR_MSFT_perception_anchor_interop",
 
     # Device extensions
     "XR_AMD_display_native_hdr",
@@ -163,8 +165,11 @@ FUNCTION_OVERRIDES = {
     "xrGetD3D12GraphicsRequirementsKHR" : {"dispatch" : False, "driver" : True, "thunk" : False},
 
     "xrGetVulkanGraphicsDeviceKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrGetVulkanGraphicsDevice2KHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrGetVulkanDeviceExtensionsKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrGetVulkanInstanceExtensionsKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateVulkanInstanceKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateVulkanDeviceKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
 
     "xrPollEvent" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrEnumerateSwapchainImages" : {"dispatch" : True, "driver" : True, "thunk" : False},
@@ -1296,7 +1301,7 @@ class XrParam(object):
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type == "HANDLE":
                 self.format_str = "%p"
-            elif self.type in ["XrSystemId", "XrPath", "XrTime"]:
+            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrControllerModelKeyMSFT"]:
                 self.format_str = "0x%s"
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type in ["XrVector2f"]:

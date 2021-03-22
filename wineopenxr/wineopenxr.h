@@ -15,7 +15,7 @@
  * language incorporated into the Specification and reference pages, and other
  * material which is registered by Khronos, such as tags used by extension and
  * layer authors. The only authoritative version of xr.xml is the one
- * maintained in the master branch of the Khronos OpenXR GitHub project.
+ * maintained in the default branch of the Khronos OpenXR GitHub project.
  *
  */
 
@@ -65,7 +65,7 @@
 #define XR_KHR_COMPOSITION_LAYER_CUBE_EXTENSION_NAME "XR_KHR_composition_layer_cube"
 #define XR_KHR_composition_layer_depth_SPEC_VERSION 5
 #define XR_KHR_COMPOSITION_LAYER_DEPTH_EXTENSION_NAME "XR_KHR_composition_layer_depth"
-#define XR_KHR_vulkan_swapchain_format_list_SPEC_VERSION 2
+#define XR_KHR_vulkan_swapchain_format_list_SPEC_VERSION 3
 #define XR_KHR_VULKAN_SWAPCHAIN_FORMAT_LIST_EXTENSION_NAME "XR_KHR_vulkan_swapchain_format_list"
 #define XR_EXT_performance_settings_SPEC_VERSION 1
 #define XR_EXT_PERFORMANCE_SETTINGS_EXTENSION_NAME "XR_EXT_performance_settings"
@@ -89,6 +89,8 @@
 #define XR_KHR_VISIBILITY_MASK_EXTENSION_NAME "XR_KHR_visibility_mask"
 #define XR_EXTX_overlay_SPEC_VERSION 4
 #define XR_EXTX_OVERLAY_EXTENSION_NAME "XR_EXTX_overlay"
+#define XR_KHR_composition_layer_color_scale_bias_SPEC_VERSION 5
+#define XR_KHR_COMPOSITION_LAYER_COLOR_SCALE_BIAS_EXTENSION_NAME "XR_KHR_composition_layer_color_scale_bias"
 #define XR_KHR_win32_convert_performance_counter_time_SPEC_VERSION 1
 #define XR_KHR_WIN32_CONVERT_PERFORMANCE_COUNTER_TIME_EXTENSION_NAME "XR_KHR_win32_convert_performance_counter_time"
 #define XR_VARJO_quad_views_SPEC_VERSION 1
@@ -117,6 +119,9 @@
 #define XR_MSFT_SECONDARY_VIEW_CONFIGURATION_EXTENSION_NAME "XR_MSFT_secondary_view_configuration"
 #define XR_MSFT_first_person_observer_SPEC_VERSION 1
 #define XR_MSFT_FIRST_PERSON_OBSERVER_EXTENSION_NAME "XR_MSFT_first_person_observer"
+#define XR_MSFT_controller_model_SPEC_VERSION 2
+#define XR_MSFT_CONTROLLER_MODEL_EXTENSION_NAME "XR_MSFT_controller_model"
+#define XR_MAX_CONTROLLER_MODEL_NODE_NAME_SIZE_MSFT 64
 #define XR_EXT_win32_appcontainer_compatible_SPEC_VERSION 1
 #define XR_EXT_WIN32_APPCONTAINER_COMPATIBLE_EXTENSION_NAME "XR_EXT_win32_appcontainer_compatible"
 #define XR_EPIC_view_configuration_fov_SPEC_VERSION 2
@@ -127,12 +132,24 @@
 #define XR_HUAWEI_CONTROLLER_INTERACTION_EXTENSION_NAME "XR_HUAWEI_controller_interaction"
 #define XR_VALVE_analog_threshold_SPEC_VERSION 1
 #define XR_VALVE_ANALOG_THRESHOLD_EXTENSION_NAME "XR_VALVE_analog_threshold"
+#define XR_KHR_vulkan_enable2_SPEC_VERSION 1
+#define XR_KHR_VULKAN_ENABLE2_EXTENSION_NAME "XR_KHR_vulkan_enable2"
+#define XR_KHR_composition_layer_equirect2_SPEC_VERSION 1
+#define XR_KHR_COMPOSITION_LAYER_EQUIRECT2_EXTENSION_NAME "XR_KHR_composition_layer_equirect2"
 #define XR_EXT_samsung_odyssey_controller_SPEC_VERSION 1
 #define XR_EXT_SAMSUNG_ODYSSEY_CONTROLLER_EXTENSION_NAME "XR_EXT_samsung_odyssey_controller"
 #define XR_EXT_hp_mixed_reality_controller_SPEC_VERSION 1
 #define XR_EXT_HP_MIXED_REALITY_CONTROLLER_EXTENSION_NAME "XR_EXT_hp_mixed_reality_controller"
 #define XR_MND_swapchain_usage_input_attachment_bit_SPEC_VERSION 2
 #define XR_MND_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_EXTENSION_NAME "XR_MND_swapchain_usage_input_attachment_bit"
+#define XR_FB_display_refresh_rate_SPEC_VERSION 1
+#define XR_FB_DISPLAY_REFRESH_RATE_EXTENSION_NAME "XR_FB_display_refresh_rate"
+#define XR_HTC_vive_cosmos_controller_interaction_SPEC_VERSION 1
+#define XR_HTC_VIVE_COSMOS_CONTROLLER_INTERACTION_EXTENSION_NAME "XR_HTC_vive_cosmos_controller_interaction"
+#define XR_FB_color_space_SPEC_VERSION 1
+#define XR_FB_COLOR_SPACE_EXTENSION_NAME "XR_FB_color_space"
+#define XR_KHR_binding_modification_SPEC_VERSION 1
+#define XR_KHR_BINDING_MODIFICATION_EXTENSION_NAME "XR_KHR_binding_modification"
 
 
 #define XR_MAKE_VERSION(major, minor, patch) \
@@ -145,7 +162,7 @@
 #define XR_VERSION_PATCH(version) (uint32_t)((uint64_t)(version) & 0xffffffffULL)
 
 
-#define XR_CURRENT_API_VERSION XR_MAKE_VERSION(1, 0, 11)
+#define XR_CURRENT_API_VERSION XR_MAKE_VERSION(1, 0, 13)
 
 
 #if !defined(XR_MAY_ALIAS)
@@ -214,6 +231,9 @@
 
 
 #define XR_HAND_JOINT_COUNT_EXT 26
+
+
+#define XR_NULL_CONTROLLER_MODEL_KEY_MSFT 0
 XR_DEFINE_HANDLE(XrAction)
 XR_DEFINE_HANDLE(XrActionSet)
 XR_DEFINE_HANDLE(XrHandTrackerEXT)
@@ -224,6 +244,7 @@ XR_DEFINE_HANDLE(XrSpatialAnchorMSFT)
 XR_DEFINE_HANDLE(XrSwapchain)
 
 typedef uint32_t XrBool32;
+XR_DEFINE_ATOM(XrControllerModelKeyMSFT)
 typedef int64_t XrDuration;
 typedef uint64_t XrFlags64;
 XR_DEFINE_ATOM(XrPath)
@@ -244,6 +265,8 @@ typedef XrFlags64 XrSpaceVelocityFlags;
 typedef XrFlags64 XrSwapchainCreateFlags;
 typedef XrFlags64 XrSwapchainUsageFlags;
 typedef XrFlags64 XrViewStateFlags;
+typedef XrFlags64 XrVulkanDeviceCreateFlagsKHR;
+typedef XrFlags64 XrVulkanInstanceCreateFlagsKHR;
 
 typedef enum XrActionType
 {
@@ -254,6 +277,19 @@ typedef enum XrActionType
     XR_ACTION_TYPE_VIBRATION_OUTPUT = 100,
     XR_ACTION_TYPE_MAX_ENUM = 0x7fffffff,
 } XrActionType;
+
+typedef enum XrColorSpaceFB
+{
+    XR_COLOR_SPACE_UNMANAGED_FB = 0,
+    XR_COLOR_SPACE_REC2020_FB = 1,
+    XR_COLOR_SPACE_REC709_FB = 2,
+    XR_COLOR_SPACE_RIFT_CV1_FB = 3,
+    XR_COLOR_SPACE_RIFT_S_FB = 4,
+    XR_COLOR_SPACE_QUEST_FB = 5,
+    XR_COLOR_SPACE_P3_FB = 6,
+    XR_COLOR_SPACE_ADOBE_RGB_FB = 7,
+    XR_COLOR_SPACE_FB_MAX_ENUM = 0x7fffffff,
+} XrColorSpaceFB;
 
 typedef enum XrEnvironmentBlendMode
 {
@@ -386,6 +422,9 @@ typedef enum XrReferenceSpaceType
 
 typedef enum XrResult
 {
+    XR_ERROR_COLOR_SPACE_UNSUPPORTED_FB = -1000108000,
+    XR_ERROR_DISPLAY_REFRESH_RATE_UNSUPPORTED_FB = -1000101000,
+    XR_ERROR_CONTROLLER_MODEL_KEY_INVALID_MSFT = -1000055000,
     XR_ERROR_SECONDARY_VIEW_CONFIGURATION_TYPE_NOT_ENABLED_MSFT = -1000053000,
     XR_ERROR_CREATE_SPATIAL_ANCHOR_FAILED_MSFT = -1000039001,
     XR_ERROR_GRAPHICS_REQUIREMENTS_CALL_MISSING = -50,
@@ -545,6 +584,7 @@ typedef enum XrStructureType
     XR_TYPE_EVENT_DATA_VISIBILITY_MASK_CHANGED_KHR = 1000031001,
     XR_TYPE_SESSION_CREATE_INFO_OVERLAY_EXTX = 1000033000,
     XR_TYPE_EVENT_DATA_MAIN_SESSION_VISIBILITY_CHANGED_EXTX = 1000033003,
+    XR_TYPE_COMPOSITION_LAYER_COLOR_SCALE_BIAS_KHR = 1000034000,
     XR_TYPE_SPATIAL_ANCHOR_CREATE_INFO_MSFT = 1000039000,
     XR_TYPE_SPATIAL_ANCHOR_SPACE_CREATE_INFO_MSFT = 1000039001,
     XR_TYPE_VIEW_CONFIGURATION_DEPTH_RANGE_EXT = 1000046000,
@@ -565,9 +605,24 @@ typedef enum XrStructureType
     XR_TYPE_SECONDARY_VIEW_CONFIGURATION_FRAME_END_INFO_MSFT = 1000053003,
     XR_TYPE_SECONDARY_VIEW_CONFIGURATION_LAYER_INFO_MSFT = 1000053004,
     XR_TYPE_SECONDARY_VIEW_CONFIGURATION_SWAPCHAIN_CREATE_INFO_MSFT = 1000053005,
+    XR_TYPE_CONTROLLER_MODEL_KEY_STATE_MSFT = 1000055000,
+    XR_TYPE_CONTROLLER_MODEL_NODE_PROPERTIES_MSFT = 1000055001,
+    XR_TYPE_CONTROLLER_MODEL_PROPERTIES_MSFT = 1000055002,
+    XR_TYPE_CONTROLLER_MODEL_NODE_STATE_MSFT = 1000055003,
+    XR_TYPE_CONTROLLER_MODEL_STATE_MSFT = 1000055004,
     XR_TYPE_VIEW_CONFIGURATION_VIEW_FOV_EPIC = 1000059000,
     XR_TYPE_HOLOGRAPHIC_WINDOW_ATTACHMENT_MSFT = 1000063000,
     XR_TYPE_INTERACTION_PROFILE_ANALOG_THRESHOLD_VALVE = 1000079000,
+    XR_TYPE_VULKAN_INSTANCE_CREATE_INFO_KHR = 1000090000,
+    XR_TYPE_VULKAN_DEVICE_CREATE_INFO_KHR = 1000090001,
+    XR_TYPE_VULKAN_GRAPHICS_DEVICE_GET_INFO_KHR = 1000090003,
+    XR_TYPE_COMPOSITION_LAYER_EQUIRECT2_KHR = 1000091000,
+    XR_TYPE_EVENT_DATA_DISPLAY_REFRESH_RATE_CHANGED_FB = 1000101000,
+    XR_TYPE_SYSTEM_COLOR_SPACE_PROPERTIES_FB = 1000108000,
+    XR_TYPE_BINDING_MODIFICATIONS_KHR = 1000120000,
+    XR_TYPE_GRAPHICS_BINDING_VULKAN2_KHR = XR_TYPE_GRAPHICS_BINDING_VULKAN_KHR,
+    XR_TYPE_SWAPCHAIN_IMAGE_VULKAN2_KHR = XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR,
+    XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN2_KHR = XR_TYPE_GRAPHICS_REQUIREMENTS_VULKAN_KHR,
     XR_STRUCTURE_TYPE_MAX_ENUM = 0x7fffffff,
 } XrStructureType;
 
@@ -595,21 +650,28 @@ typedef struct XrActionSuggestedBinding XrActionSuggestedBinding;
 typedef struct XrActiveActionSet XrActiveActionSet;
 typedef struct XrApplicationInfo XrApplicationInfo;
 typedef struct XrBaseOutStructure XrBaseOutStructure;
-typedef struct XrColor4f XrColor4f;
+typedef struct XrBoundSourcesForActionEnumerateInfo XrBoundSourcesForActionEnumerateInfo;
+typedef struct XrCompositionLayerBaseHeader XrCompositionLayerBaseHeader;
+typedef struct XrControllerModelKeyStateMSFT XrControllerModelKeyStateMSFT;
 typedef struct XrDebugUtilsLabelEXT XrDebugUtilsLabelEXT;
 typedef struct XrEventDataBaseHeader XrEventDataBaseHeader;
-typedef struct XrEventDataEventsLost XrEventDataEventsLost;
-typedef struct XrEventDataInteractionProfileChanged XrEventDataInteractionProfileChanged;
-typedef struct XrEventDataPerfSettingsEXT XrEventDataPerfSettingsEXT;
+typedef struct XrEventDataDisplayRefreshRateChangedFB XrEventDataDisplayRefreshRateChangedFB;
+typedef struct XrEventDataInstanceLossPending XrEventDataInstanceLossPending;
+typedef struct XrEventDataMainSessionVisibilityChangedEXTX XrEventDataMainSessionVisibilityChangedEXTX;
 typedef struct XrEventDataSessionStateChanged XrEventDataSessionStateChanged;
 typedef struct XrExtensionProperties XrExtensionProperties;
 typedef struct XrExtent2Di XrExtent2Di;
 typedef struct XrFovf XrFovf;
-typedef struct XrFrameState XrFrameState;
-typedef struct XrGraphicsBindingD3D11KHR XrGraphicsBindingD3D11KHR;
+typedef struct XrFrameEndInfo XrFrameEndInfo;
+typedef struct XrFrameWaitInfo XrFrameWaitInfo;
+typedef struct XrGraphicsBindingD3D12KHR XrGraphicsBindingD3D12KHR;
+typedef struct XrGraphicsBindingOpenGLWin32KHR XrGraphicsBindingOpenGLWin32KHR;
 typedef struct XrGraphicsBindingVulkanKHR XrGraphicsBindingVulkanKHR;
+typedef XrGraphicsBindingVulkanKHR XrGraphicsBindingVulkan2KHR;
 typedef struct XrGraphicsRequirementsD3D12KHR XrGraphicsRequirementsD3D12KHR;
 typedef struct XrGraphicsRequirementsOpenGLKHR XrGraphicsRequirementsOpenGLKHR;
+typedef struct XrGraphicsRequirementsVulkanKHR XrGraphicsRequirementsVulkanKHR;
+typedef XrGraphicsRequirementsVulkanKHR XrGraphicsRequirementsVulkan2KHR;
 typedef struct XrHandJointsLocateInfoEXT XrHandJointsLocateInfoEXT;
 typedef struct XrHandMeshUpdateInfoMSFT XrHandMeshUpdateInfoMSFT;
 typedef struct XrHandPoseTypeInfoMSFT XrHandPoseTypeInfoMSFT;
@@ -619,104 +681,114 @@ typedef struct XrInputSourceLocalizedNameGetInfo XrInputSourceLocalizedNameGetIn
 typedef struct XrInteractionProfileState XrInteractionProfileState;
 typedef struct XrOffset2Df XrOffset2Df;
 typedef struct XrQuaternionf XrQuaternionf;
-typedef struct XrSecondaryViewConfigurationSessionBeginInfoMSFT XrSecondaryViewConfigurationSessionBeginInfoMSFT;
-typedef struct XrSecondaryViewConfigurationSwapchainCreateInfoMSFT XrSecondaryViewConfigurationSwapchainCreateInfoMSFT;
-typedef struct XrSessionBeginInfo XrSessionBeginInfo;
-typedef struct XrSessionCreateInfoOverlayEXTX XrSessionCreateInfoOverlayEXTX;
+typedef struct XrSecondaryViewConfigurationLayerInfoMSFT XrSecondaryViewConfigurationLayerInfoMSFT;
+typedef struct XrSecondaryViewConfigurationStateMSFT XrSecondaryViewConfigurationStateMSFT;
+typedef struct XrSessionActionSetsAttachInfo XrSessionActionSetsAttachInfo;
+typedef struct XrSessionCreateInfo XrSessionCreateInfo;
 typedef struct XrSwapchainCreateInfo XrSwapchainCreateInfo;
 typedef struct XrSwapchainImageBaseHeader XrSwapchainImageBaseHeader;
 typedef struct XrSwapchainImageD3D12KHR XrSwapchainImageD3D12KHR;
 typedef struct XrSwapchainImageOpenGLKHR XrSwapchainImageOpenGLKHR;
-typedef struct XrSwapchainImageVulkanKHR XrSwapchainImageVulkanKHR;
-typedef struct XrSystemEyeGazeInteractionPropertiesEXT XrSystemEyeGazeInteractionPropertiesEXT;
-typedef struct XrSystemGraphicsProperties XrSystemGraphicsProperties;
-typedef struct XrSystemHandTrackingPropertiesEXT XrSystemHandTrackingPropertiesEXT;
+typedef struct XrSwapchainImageWaitInfo XrSwapchainImageWaitInfo;
+typedef struct XrSystemColorSpacePropertiesFB XrSystemColorSpacePropertiesFB;
+typedef struct XrSystemGetInfo XrSystemGetInfo;
+typedef struct XrSystemHandTrackingMeshPropertiesMSFT XrSystemHandTrackingMeshPropertiesMSFT;
 typedef struct XrSystemTrackingProperties XrSystemTrackingProperties;
 typedef struct XrVector3f XrVector3f;
 typedef struct XrViewConfigurationDepthRangeEXT XrViewConfigurationDepthRangeEXT;
 typedef struct XrViewConfigurationView XrViewConfigurationView;
 typedef struct XrViewLocateInfo XrViewLocateInfo;
-typedef struct XrVulkanSwapchainFormatListCreateInfoKHR XrVulkanSwapchainFormatListCreateInfoKHR;
+typedef struct XrVulkanDeviceCreateInfoKHR XrVulkanDeviceCreateInfoKHR;
+typedef struct XrVulkanInstanceCreateInfoKHR XrVulkanInstanceCreateInfoKHR;
 typedef struct XrActionSetCreateInfo XrActionSetCreateInfo;
 typedef struct XrActionStateFloat XrActionStateFloat;
 typedef struct XrActionsSyncInfo XrActionsSyncInfo;
 typedef struct XrBaseInStructure XrBaseInStructure;
-typedef struct XrCompositionLayerBaseHeader XrCompositionLayerBaseHeader;
+typedef struct XrColor4f XrColor4f;
+typedef struct XrCompositionLayerCubeKHR XrCompositionLayerCubeKHR;
+typedef struct XrControllerModelNodePropertiesMSFT XrControllerModelNodePropertiesMSFT;
+typedef struct XrControllerModelPropertiesMSFT XrControllerModelPropertiesMSFT;
 typedef struct XrDebugUtilsObjectNameInfoEXT XrDebugUtilsObjectNameInfoEXT;
-typedef struct XrEventDataInstanceLossPending XrEventDataInstanceLossPending;
+typedef struct XrEventDataEventsLost XrEventDataEventsLost;
+typedef struct XrEventDataPerfSettingsEXT XrEventDataPerfSettingsEXT;
 typedef struct XrEventDataVisibilityMaskChangedKHR XrEventDataVisibilityMaskChangedKHR;
 typedef struct XrEyeGazeSampleTimeEXT XrEyeGazeSampleTimeEXT;
-typedef struct XrFrameEndInfo XrFrameEndInfo;
-typedef struct XrGraphicsBindingD3D12KHR XrGraphicsBindingD3D12KHR;
+typedef struct XrFrameState XrFrameState;
 typedef struct XrGraphicsRequirementsD3D11KHR XrGraphicsRequirementsD3D11KHR;
-typedef struct XrGraphicsRequirementsVulkanKHR XrGraphicsRequirementsVulkanKHR;
 typedef struct XrHandJointVelocityEXT XrHandJointVelocityEXT;
 typedef struct XrHandMeshVertexMSFT XrHandMeshVertexMSFT;
 typedef struct XrHapticBaseHeader XrHapticBaseHeader;
 typedef struct XrInstanceCreateInfo XrInstanceCreateInfo;
 typedef struct XrInteractionProfileAnalogThresholdVALVE XrInteractionProfileAnalogThresholdVALVE;
+typedef struct XrPosef XrPosef;
+typedef struct XrReferenceSpaceCreateInfo XrReferenceSpaceCreateInfo;
+typedef struct XrSecondaryViewConfigurationFrameStateMSFT XrSecondaryViewConfigurationFrameStateMSFT;
+typedef struct XrSecondaryViewConfigurationSwapchainCreateInfoMSFT XrSecondaryViewConfigurationSwapchainCreateInfoMSFT;
+typedef struct XrSessionCreateInfoOverlayEXTX XrSessionCreateInfoOverlayEXTX;
+typedef struct XrSpaceVelocity XrSpaceVelocity;
+typedef struct XrSpatialAnchorSpaceCreateInfoMSFT XrSpatialAnchorSpaceCreateInfoMSFT;
+typedef struct XrSwapchainImageAcquireInfo XrSwapchainImageAcquireInfo;
+typedef struct XrSwapchainImageVulkanKHR XrSwapchainImageVulkanKHR;
+typedef XrSwapchainImageVulkanKHR XrSwapchainImageVulkan2KHR;
+typedef struct XrSystemEyeGazeInteractionPropertiesEXT XrSystemEyeGazeInteractionPropertiesEXT;
+typedef struct XrSystemHandTrackingPropertiesEXT XrSystemHandTrackingPropertiesEXT;
+typedef struct XrVector2f XrVector2f;
+typedef struct XrView XrView;
+typedef struct XrViewConfigurationViewFovEPIC XrViewConfigurationViewFovEPIC;
+typedef struct XrVisibilityMaskKHR XrVisibilityMaskKHR;
+typedef struct XrVulkanSwapchainFormatListCreateInfoKHR XrVulkanSwapchainFormatListCreateInfoKHR;
+typedef struct XrActionSpaceCreateInfo XrActionSpaceCreateInfo;
+typedef struct XrActionStateVector2f XrActionStateVector2f;
+typedef struct XrBindingModificationBaseHeaderKHR XrBindingModificationBaseHeaderKHR;
+typedef struct XrCompositionLayerColorScaleBiasKHR XrCompositionLayerColorScaleBiasKHR;
+typedef struct XrControllerModelNodeStateMSFT XrControllerModelNodeStateMSFT;
+typedef struct XrDebugUtilsMessengerCallbackDataEXT XrDebugUtilsMessengerCallbackDataEXT;
+typedef struct XrEventDataInteractionProfileChanged XrEventDataInteractionProfileChanged;
+typedef struct XrExtent2Df XrExtent2Df;
+typedef struct XrGraphicsBindingD3D11KHR XrGraphicsBindingD3D11KHR;
+typedef struct XrHandJointVelocitiesEXT XrHandJointVelocitiesEXT;
+typedef struct XrHandMeshSpaceCreateInfoMSFT XrHandMeshSpaceCreateInfoMSFT;
+typedef struct XrHandTrackerCreateInfoEXT XrHandTrackerCreateInfoEXT;
+typedef struct XrInstanceProperties XrInstanceProperties;
 typedef struct XrOffset2Di XrOffset2Di;
 typedef struct XrRect2Di XrRect2Di;
-typedef struct XrSecondaryViewConfigurationLayerInfoMSFT XrSecondaryViewConfigurationLayerInfoMSFT;
-typedef struct XrSessionActionSetsAttachInfo XrSessionActionSetsAttachInfo;
-typedef struct XrSpaceVelocity XrSpaceVelocity;
-typedef struct XrSwapchainImageAcquireInfo XrSwapchainImageAcquireInfo;
-typedef struct XrSwapchainImageWaitInfo XrSwapchainImageWaitInfo;
-typedef struct XrSystemGetInfo XrSystemGetInfo;
-typedef struct XrSystemProperties XrSystemProperties;
+typedef struct XrSecondaryViewConfigurationSessionBeginInfoMSFT XrSecondaryViewConfigurationSessionBeginInfoMSFT;
+typedef struct XrSpaceLocation XrSpaceLocation;
+typedef struct XrSpatialGraphNodeSpaceCreateInfoMSFT XrSpatialGraphNodeSpaceCreateInfoMSFT;
+typedef struct XrSwapchainImageReleaseInfo XrSwapchainImageReleaseInfo;
+typedef struct XrSystemGraphicsProperties XrSystemGraphicsProperties;
 typedef struct XrVector4f XrVector4f;
-typedef struct XrViewConfigurationProperties XrViewConfigurationProperties;
 typedef struct XrViewState XrViewState;
 typedef struct XrActionStatePose XrActionStatePose;
-typedef struct XrApiLayerProperties XrApiLayerProperties;
-typedef struct XrCompositionLayerCubeKHR XrCompositionLayerCubeKHR;
-typedef struct XrDebugUtilsMessengerCallbackDataEXT XrDebugUtilsMessengerCallbackDataEXT;
-typedef struct XrEventDataMainSessionVisibilityChangedEXTX XrEventDataMainSessionVisibilityChangedEXTX;
-typedef struct XrExtent2Df XrExtent2Df;
-typedef struct XrFrameWaitInfo XrFrameWaitInfo;
-typedef struct XrHandJointVelocitiesEXT XrHandJointVelocitiesEXT;
-typedef struct XrHandMeshVertexBufferMSFT XrHandMeshVertexBufferMSFT;
-typedef struct XrHolographicWindowAttachmentMSFT XrHolographicWindowAttachmentMSFT;
-typedef struct XrInteractionProfileSuggestedBinding XrInteractionProfileSuggestedBinding;
-typedef struct XrRect2Df XrRect2Df;
-typedef struct XrSecondaryViewConfigurationFrameEndInfoMSFT XrSecondaryViewConfigurationFrameEndInfoMSFT;
-typedef struct XrSecondaryViewConfigurationStateMSFT XrSecondaryViewConfigurationStateMSFT;
-typedef struct XrSwapchainImageD3D11KHR XrSwapchainImageD3D11KHR;
-typedef struct XrSwapchainSubImage XrSwapchainSubImage;
-typedef struct XrVector2f XrVector2f;
-typedef struct XrViewConfigurationViewFovEPIC XrViewConfigurationViewFovEPIC;
-typedef struct XrActionStateVector2f XrActionStateVector2f;
-typedef struct XrCompositionLayerDepthInfoKHR XrCompositionLayerDepthInfoKHR;
-typedef struct XrEventDataBuffer XrEventDataBuffer;
-typedef struct XrFrameBeginInfo XrFrameBeginInfo;
-typedef struct XrHandMeshIndexBufferMSFT XrHandMeshIndexBufferMSFT;
-typedef struct XrHandTrackerCreateInfoEXT XrHandTrackerCreateInfoEXT;
-typedef struct XrPosef XrPosef;
-typedef struct XrSecondaryViewConfigurationFrameStateMSFT XrSecondaryViewConfigurationFrameStateMSFT;
-typedef struct XrSpaceLocation XrSpaceLocation;
-typedef struct XrSpatialAnchorSpaceCreateInfoMSFT XrSpatialAnchorSpaceCreateInfoMSFT;
-typedef struct XrSwapchainImageReleaseInfo XrSwapchainImageReleaseInfo;
-typedef struct XrView XrView;
-typedef struct XrActionSpaceCreateInfo XrActionSpaceCreateInfo;
-typedef struct XrCompositionLayerCylinderKHR XrCompositionLayerCylinderKHR;
-typedef struct XrCompositionLayerProjectionView XrCompositionLayerProjectionView;
+typedef struct XrBindingModificationsKHR XrBindingModificationsKHR;
+typedef struct XrControllerModelStateMSFT XrControllerModelStateMSFT;
 typedef struct XrEventDataReferenceSpaceChangePending XrEventDataReferenceSpaceChangePending;
+typedef struct XrHandMeshIndexBufferMSFT XrHandMeshIndexBufferMSFT;
+typedef struct XrHandMeshVertexBufferMSFT XrHandMeshVertexBufferMSFT;
+typedef struct XrInteractionProfileSuggestedBinding XrInteractionProfileSuggestedBinding;
+typedef struct XrSecondaryViewConfigurationFrameEndInfoMSFT XrSecondaryViewConfigurationFrameEndInfoMSFT;
+typedef struct XrSpatialAnchorCreateInfoMSFT XrSpatialAnchorCreateInfoMSFT;
+typedef struct XrSwapchainSubImage XrSwapchainSubImage;
+typedef struct XrViewConfigurationProperties XrViewConfigurationProperties;
+typedef struct XrApiLayerProperties XrApiLayerProperties;
+typedef struct XrCompositionLayerDepthInfoKHR XrCompositionLayerDepthInfoKHR;
+typedef struct XrCompositionLayerEquirectKHR XrCompositionLayerEquirectKHR;
+typedef struct XrCompositionLayerProjectionView XrCompositionLayerProjectionView;
+typedef struct XrEventDataBuffer XrEventDataBuffer;
 typedef struct XrHandJointLocationEXT XrHandJointLocationEXT;
 typedef struct XrHandMeshMSFT XrHandMeshMSFT;
-typedef struct XrInstanceProperties XrInstanceProperties;
-typedef struct XrSessionCreateInfo XrSessionCreateInfo;
-typedef struct XrSpatialGraphNodeSpaceCreateInfoMSFT XrSpatialGraphNodeSpaceCreateInfoMSFT;
-typedef struct XrVisibilityMaskKHR XrVisibilityMaskKHR;
-typedef struct XrBoundSourcesForActionEnumerateInfo XrBoundSourcesForActionEnumerateInfo;
+typedef struct XrRect2Df XrRect2Df;
+typedef struct XrSwapchainImageD3D11KHR XrSwapchainImageD3D11KHR;
+typedef struct XrVulkanGraphicsDeviceGetInfoKHR XrVulkanGraphicsDeviceGetInfoKHR;
+typedef struct XrCompositionLayerCylinderKHR XrCompositionLayerCylinderKHR;
 typedef struct XrCompositionLayerProjection XrCompositionLayerProjection;
-typedef struct XrGraphicsBindingOpenGLWin32KHR XrGraphicsBindingOpenGLWin32KHR;
-typedef struct XrHandMeshSpaceCreateInfoMSFT XrHandMeshSpaceCreateInfoMSFT;
-typedef struct XrSpatialAnchorCreateInfoMSFT XrSpatialAnchorCreateInfoMSFT;
-typedef struct XrCompositionLayerEquirectKHR XrCompositionLayerEquirectKHR;
+typedef struct XrFrameBeginInfo XrFrameBeginInfo;
+typedef struct XrHolographicWindowAttachmentMSFT XrHolographicWindowAttachmentMSFT;
+typedef struct XrSystemProperties XrSystemProperties;
+typedef struct XrCompositionLayerEquirect2KHR XrCompositionLayerEquirect2KHR;
 typedef struct XrHandJointLocationsEXT XrHandJointLocationsEXT;
-typedef struct XrSystemHandTrackingMeshPropertiesMSFT XrSystemHandTrackingMeshPropertiesMSFT;
 typedef struct XrCompositionLayerQuad XrCompositionLayerQuad;
-typedef struct XrReferenceSpaceCreateInfo XrReferenceSpaceCreateInfo;
+typedef struct XrSessionBeginInfo XrSessionBeginInfo;
 typedef XrBool32 (XRAPI_PTR * PFN_xrDebugUtilsMessengerCallbackEXT)(
     XrDebugUtilsMessageSeverityFlagsEXT messageSeverity,
     XrDebugUtilsMessageTypeFlagsEXT messageTypes,
@@ -781,12 +853,26 @@ struct XrBaseOutStructure
     struct XrBaseOutStructure *next;
 };
 
-struct XrColor4f
+struct XrBoundSourcesForActionEnumerateInfo
 {
-    float r;
-    float g;
-    float b;
-    float a;
+    XrStructureType type;
+    const void *next;
+    XrAction action;
+};
+
+struct XrCompositionLayerBaseHeader
+{
+    XrStructureType type;
+    const void *next;
+    XrCompositionLayerFlags layerFlags;
+    XrSpace space;
+};
+
+struct XrControllerModelKeyStateMSFT
+{
+    XrStructureType type;
+    void *next;
+    XrControllerModelKeyMSFT modelKey;
 };
 
 struct XrDebugUtilsLabelEXT
@@ -802,28 +888,27 @@ struct XrEventDataBaseHeader
     const void *next;
 };
 
-struct XrEventDataEventsLost
+struct XrEventDataDisplayRefreshRateChangedFB
 {
     XrStructureType type;
     const void *next;
-    uint32_t lostEventCount;
+    float fromDisplayRefreshRate;
+    float toDisplayRefreshRate;
 };
 
-struct XrEventDataInteractionProfileChanged
+struct XrEventDataInstanceLossPending
 {
     XrStructureType type;
     const void *next;
-    XrSession session;
+    XrTime lossTime;
 };
 
-struct XrEventDataPerfSettingsEXT
+struct XrEventDataMainSessionVisibilityChangedEXTX
 {
     XrStructureType type;
     const void *next;
-    XrPerfSettingsDomainEXT domain;
-    XrPerfSettingsSubDomainEXT subDomain;
-    XrPerfSettingsNotificationLevelEXT fromLevel;
-    XrPerfSettingsNotificationLevelEXT toLevel;
+    XrBool32 visible;
+    XrOverlayMainSessionFlagsEXTX flags;
 };
 
 struct XrEventDataSessionStateChanged
@@ -857,20 +942,36 @@ struct XrFovf
     float angleDown;
 };
 
-struct XrFrameState
-{
-    XrStructureType type;
-    void *next;
-    XrTime predictedDisplayTime;
-    XrDuration predictedDisplayPeriod;
-    XrBool32 shouldRender;
-};
-
-struct XrGraphicsBindingD3D11KHR
+struct XrFrameEndInfo
 {
     XrStructureType type;
     const void *next;
-    ID3D11Device *device;
+    XrTime displayTime;
+    XrEnvironmentBlendMode environmentBlendMode;
+    uint32_t layerCount;
+    const XrCompositionLayerBaseHeader * const*layers;
+};
+
+struct XrFrameWaitInfo
+{
+    XrStructureType type;
+    const void *next;
+};
+
+struct XrGraphicsBindingD3D12KHR
+{
+    XrStructureType type;
+    const void *next;
+    ID3D12Device *device;
+    ID3D12CommandQueue *queue;
+};
+
+struct XrGraphicsBindingOpenGLWin32KHR
+{
+    XrStructureType type;
+    const void *next;
+    HDC hDC;
+    HGLRC hGLRC;
 };
 
 struct XrGraphicsBindingVulkanKHR
@@ -893,6 +994,14 @@ struct XrGraphicsRequirementsD3D12KHR
 };
 
 struct XrGraphicsRequirementsOpenGLKHR
+{
+    XrStructureType type;
+    void *next;
+    XrVersion minApiVersionSupported;
+    XrVersion maxApiVersionSupported;
+};
+
+struct XrGraphicsRequirementsVulkanKHR
 {
     XrStructureType type;
     void *next;
@@ -969,34 +1078,38 @@ struct XrQuaternionf
     float w;
 };
 
-struct XrSecondaryViewConfigurationSessionBeginInfoMSFT
-{
-    XrStructureType type;
-    const void *next;
-    uint32_t viewConfigurationCount;
-    const XrViewConfigurationType *enabledViewConfigurationTypes;
-};
-
-struct XrSecondaryViewConfigurationSwapchainCreateInfoMSFT
+struct XrSecondaryViewConfigurationLayerInfoMSFT
 {
     XrStructureType type;
     const void *next;
     XrViewConfigurationType viewConfigurationType;
+    XrEnvironmentBlendMode environmentBlendMode;
+    uint32_t layerCount;
+    const XrCompositionLayerBaseHeader * const*layers;
 };
 
-struct XrSessionBeginInfo
+struct XrSecondaryViewConfigurationStateMSFT
+{
+    XrStructureType type;
+    void *next;
+    XrViewConfigurationType viewConfigurationType;
+    XrBool32 active;
+};
+
+struct XrSessionActionSetsAttachInfo
 {
     XrStructureType type;
     const void *next;
-    XrViewConfigurationType primaryViewConfigurationType;
+    uint32_t countActionSets;
+    const XrActionSet *actionSets;
 };
 
-struct XrSessionCreateInfoOverlayEXTX
+struct XrSessionCreateInfo
 {
     XrStructureType type;
     const void *next;
-    XrOverlaySessionCreateFlagsEXTX createFlags;
-    uint32_t sessionLayersPlacement;
+    XrSessionCreateFlags createFlags;
+    XrSystemId systemId;
 };
 
 struct XrSwapchainCreateInfo
@@ -1034,32 +1147,34 @@ struct XrSwapchainImageOpenGLKHR
     uint32_t image;
 };
 
-struct XrSwapchainImageVulkanKHR
+struct XrSwapchainImageWaitInfo
+{
+    XrStructureType type;
+    const void *next;
+    XrDuration timeout;
+};
+
+struct XrSystemColorSpacePropertiesFB
 {
     XrStructureType type;
     void *next;
-    VkImage image;
+    XrColorSpaceFB colorSpace;
 };
 
-struct XrSystemEyeGazeInteractionPropertiesEXT
+struct XrSystemGetInfo
+{
+    XrStructureType type;
+    const void *next;
+    XrFormFactor formFactor;
+};
+
+struct XrSystemHandTrackingMeshPropertiesMSFT
 {
     XrStructureType type;
     void *next;
-    XrBool32 supportsEyeGazeInteraction;
-};
-
-struct XrSystemGraphicsProperties
-{
-    uint32_t maxSwapchainImageHeight;
-    uint32_t maxSwapchainImageWidth;
-    uint32_t maxLayerCount;
-};
-
-struct XrSystemHandTrackingPropertiesEXT
-{
-    XrStructureType type;
-    void *next;
-    XrBool32 supportsHandTracking;
+    XrBool32 supportsHandTrackingMesh;
+    uint32_t maxHandMeshIndexCount;
+    uint32_t maxHandMeshVertexCount;
 };
 
 struct XrSystemTrackingProperties
@@ -1106,12 +1221,27 @@ struct XrViewLocateInfo
     XrSpace space;
 };
 
-struct XrVulkanSwapchainFormatListCreateInfoKHR
+struct XrVulkanDeviceCreateInfoKHR
 {
     XrStructureType type;
     const void *next;
-    uint32_t viewFormatCount;
-    const VkFormat *viewFormats;
+    XrSystemId systemId;
+    XrVulkanDeviceCreateFlagsKHR createFlags;
+    PFN_vkGetInstanceProcAddr pfnGetInstanceProcAddr;
+    VkPhysicalDevice vulkanPhysicalDevice;
+    const VkDeviceCreateInfo *vulkanCreateInfo;
+    const VkAllocationCallbacks *vulkanAllocator;
+};
+
+struct XrVulkanInstanceCreateInfoKHR
+{
+    XrStructureType type;
+    const void *next;
+    XrSystemId systemId;
+    XrVulkanInstanceCreateFlagsKHR createFlags;
+    PFN_vkGetInstanceProcAddr pfnGetInstanceProcAddr;
+    const VkInstanceCreateInfo *vulkanCreateInfo;
+    const VkAllocationCallbacks *vulkanAllocator;
 };
 
 struct XrActionSetCreateInfo
@@ -1147,12 +1277,41 @@ struct XrBaseInStructure
     const struct XrBaseInStructure *next;
 };
 
-struct XrCompositionLayerBaseHeader
+struct XrColor4f
+{
+    float r;
+    float g;
+    float b;
+    float a;
+};
+
+struct XrCompositionLayerCubeKHR
 {
     XrStructureType type;
     const void *next;
     XrCompositionLayerFlags layerFlags;
     XrSpace space;
+    XrEyeVisibility eyeVisibility;
+    XrSwapchain swapchain;
+    uint32_t imageArrayIndex;
+    XrQuaternionf orientation;
+};
+
+struct XrControllerModelNodePropertiesMSFT
+{
+    XrStructureType type;
+    void *next;
+    char parentNodeName[XR_MAX_CONTROLLER_MODEL_NODE_NAME_SIZE_MSFT];
+    char nodeName[XR_MAX_CONTROLLER_MODEL_NODE_NAME_SIZE_MSFT];
+};
+
+struct XrControllerModelPropertiesMSFT
+{
+    XrStructureType type;
+    void *next;
+    uint32_t nodeCapacityInput;
+    uint32_t nodeCountOutput;
+    XrControllerModelNodePropertiesMSFT *nodeProperties;
 };
 
 struct XrDebugUtilsObjectNameInfoEXT
@@ -1164,11 +1323,21 @@ struct XrDebugUtilsObjectNameInfoEXT
     const char *objectName;
 };
 
-struct XrEventDataInstanceLossPending
+struct XrEventDataEventsLost
 {
     XrStructureType type;
     const void *next;
-    XrTime lossTime;
+    uint32_t lostEventCount;
+};
+
+struct XrEventDataPerfSettingsEXT
+{
+    XrStructureType type;
+    const void *next;
+    XrPerfSettingsDomainEXT domain;
+    XrPerfSettingsSubDomainEXT subDomain;
+    XrPerfSettingsNotificationLevelEXT fromLevel;
+    XrPerfSettingsNotificationLevelEXT toLevel;
 };
 
 struct XrEventDataVisibilityMaskChangedKHR
@@ -1187,22 +1356,13 @@ struct XrEyeGazeSampleTimeEXT
     XrTime time;
 };
 
-struct XrFrameEndInfo
+struct XrFrameState
 {
     XrStructureType type;
-    const void *next;
-    XrTime displayTime;
-    XrEnvironmentBlendMode environmentBlendMode;
-    uint32_t layerCount;
-    const XrCompositionLayerBaseHeader * const*layers;
-};
-
-struct XrGraphicsBindingD3D12KHR
-{
-    XrStructureType type;
-    const void *next;
-    ID3D12Device *device;
-    ID3D12CommandQueue *queue;
+    void *next;
+    XrTime predictedDisplayTime;
+    XrDuration predictedDisplayPeriod;
+    XrBool32 shouldRender;
 };
 
 struct XrGraphicsRequirementsD3D11KHR
@@ -1211,14 +1371,6 @@ struct XrGraphicsRequirementsD3D11KHR
     void *next;
     LUID adapterLuid;
     D3D_FEATURE_LEVEL minFeatureLevel;
-};
-
-struct XrGraphicsRequirementsVulkanKHR
-{
-    XrStructureType type;
-    void *next;
-    XrVersion minApiVersionSupported;
-    XrVersion maxApiVersionSupported;
 };
 
 struct XrHandJointVelocityEXT
@@ -1264,6 +1416,234 @@ struct XrInteractionProfileAnalogThresholdVALVE
     const XrHapticBaseHeader *offHaptic;
 };
 
+struct XrPosef
+{
+    XrQuaternionf orientation;
+    XrVector3f position;
+};
+
+struct XrReferenceSpaceCreateInfo
+{
+    XrStructureType type;
+    const void *next;
+    XrReferenceSpaceType referenceSpaceType;
+    XrPosef poseInReferenceSpace;
+};
+
+struct XrSecondaryViewConfigurationFrameStateMSFT
+{
+    XrStructureType type;
+    void *next;
+    uint32_t viewConfigurationCount;
+    XrSecondaryViewConfigurationStateMSFT *viewConfigurationStates;
+};
+
+struct XrSecondaryViewConfigurationSwapchainCreateInfoMSFT
+{
+    XrStructureType type;
+    const void *next;
+    XrViewConfigurationType viewConfigurationType;
+};
+
+struct XrSessionCreateInfoOverlayEXTX
+{
+    XrStructureType type;
+    const void *next;
+    XrOverlaySessionCreateFlagsEXTX createFlags;
+    uint32_t sessionLayersPlacement;
+};
+
+struct XrSpaceVelocity
+{
+    XrStructureType type;
+    void *next;
+    XrSpaceVelocityFlags velocityFlags;
+    XrVector3f linearVelocity;
+    XrVector3f angularVelocity;
+};
+
+struct XrSpatialAnchorSpaceCreateInfoMSFT
+{
+    XrStructureType type;
+    const void *next;
+    XrSpatialAnchorMSFT anchor;
+    XrPosef poseInAnchorSpace;
+};
+
+struct XrSwapchainImageAcquireInfo
+{
+    XrStructureType type;
+    const void *next;
+};
+
+struct XrSwapchainImageVulkanKHR
+{
+    XrStructureType type;
+    void *next;
+    VkImage image;
+};
+
+struct XrSystemEyeGazeInteractionPropertiesEXT
+{
+    XrStructureType type;
+    void *next;
+    XrBool32 supportsEyeGazeInteraction;
+};
+
+struct XrSystemHandTrackingPropertiesEXT
+{
+    XrStructureType type;
+    void *next;
+    XrBool32 supportsHandTracking;
+};
+
+struct XrVector2f
+{
+    float x;
+    float y;
+};
+
+struct XrView
+{
+    XrStructureType type;
+    void *next;
+    XrPosef pose;
+    XrFovf fov;
+};
+
+struct XrViewConfigurationViewFovEPIC
+{
+    XrStructureType type;
+    const void *next;
+    XrFovf recommendedFov;
+    XrFovf maxMutableFov;
+};
+
+struct XrVisibilityMaskKHR
+{
+    XrStructureType type;
+    void *next;
+    uint32_t vertexCapacityInput;
+    uint32_t vertexCountOutput;
+    XrVector2f *vertices;
+    uint32_t indexCapacityInput;
+    uint32_t indexCountOutput;
+    uint32_t *indices;
+};
+
+struct XrVulkanSwapchainFormatListCreateInfoKHR
+{
+    XrStructureType type;
+    const void *next;
+    uint32_t viewFormatCount;
+    const VkFormat *viewFormats;
+};
+
+struct XrActionSpaceCreateInfo
+{
+    XrStructureType type;
+    const void *next;
+    XrAction action;
+    XrPath subactionPath;
+    XrPosef poseInActionSpace;
+};
+
+struct XrActionStateVector2f
+{
+    XrStructureType type;
+    void *next;
+    XrVector2f currentState;
+    XrBool32 changedSinceLastSync;
+    XrTime lastChangeTime;
+    XrBool32 isActive;
+};
+
+struct XrBindingModificationBaseHeaderKHR
+{
+    XrStructureType type;
+    const void *next;
+};
+
+struct XrCompositionLayerColorScaleBiasKHR
+{
+    XrStructureType type;
+    const void *next;
+    XrColor4f colorScale;
+    XrColor4f colorBias;
+};
+
+struct XrControllerModelNodeStateMSFT
+{
+    XrStructureType type;
+    void *next;
+    XrPosef nodePose;
+};
+
+struct XrDebugUtilsMessengerCallbackDataEXT
+{
+    XrStructureType type;
+    const void *next;
+    const char *messageId;
+    const char *functionName;
+    const char *message;
+    uint32_t objectCount;
+    XrDebugUtilsObjectNameInfoEXT *objects;
+    uint32_t sessionLabelCount;
+    XrDebugUtilsLabelEXT *sessionLabels;
+};
+
+struct XrEventDataInteractionProfileChanged
+{
+    XrStructureType type;
+    const void *next;
+    XrSession session;
+};
+
+struct XrExtent2Df
+{
+    float width;
+    float height;
+};
+
+struct XrGraphicsBindingD3D11KHR
+{
+    XrStructureType type;
+    const void *next;
+    ID3D11Device *device;
+};
+
+struct XrHandJointVelocitiesEXT
+{
+    XrStructureType type;
+    void *next;
+    uint32_t jointCount;
+    XrHandJointVelocityEXT *jointVelocities;
+};
+
+struct XrHandMeshSpaceCreateInfoMSFT
+{
+    XrStructureType type;
+    const void *next;
+    XrHandPoseTypeMSFT handPoseType;
+    XrPosef poseInHandMeshSpace;
+};
+
+struct XrHandTrackerCreateInfoEXT
+{
+    XrStructureType type;
+    const void *next;
+    XrHandEXT hand;
+    XrHandJointSetEXT handJointSet;
+};
+
+struct XrInstanceProperties
+{
+    XrStructureType type;
+    void *next;
+    XrVersion runtimeVersion;
+    char runtimeName[XR_MAX_RUNTIME_NAME_SIZE];
+};
+
 struct XrOffset2Di
 {
     int32_t x;
@@ -1276,62 +1656,42 @@ struct XrRect2Di
     XrExtent2Di extent;
 };
 
-struct XrSecondaryViewConfigurationLayerInfoMSFT
+struct XrSecondaryViewConfigurationSessionBeginInfoMSFT
 {
     XrStructureType type;
     const void *next;
-    XrViewConfigurationType viewConfigurationType;
-    XrEnvironmentBlendMode environmentBlendMode;
-    uint32_t layerCount;
-    const XrCompositionLayerBaseHeader * const*layers;
+    uint32_t viewConfigurationCount;
+    const XrViewConfigurationType *enabledViewConfigurationTypes;
 };
 
-struct XrSessionActionSetsAttachInfo
-{
-    XrStructureType type;
-    const void *next;
-    uint32_t countActionSets;
-    const XrActionSet *actionSets;
-};
-
-struct XrSpaceVelocity
+struct XrSpaceLocation
 {
     XrStructureType type;
     void *next;
-    XrSpaceVelocityFlags velocityFlags;
-    XrVector3f linearVelocity;
-    XrVector3f angularVelocity;
+    XrSpaceLocationFlags locationFlags;
+    XrPosef pose;
 };
 
-struct XrSwapchainImageAcquireInfo
+struct XrSpatialGraphNodeSpaceCreateInfoMSFT
+{
+    XrStructureType type;
+    const void *next;
+    XrSpatialGraphNodeTypeMSFT nodeType;
+    uint8_t nodeId[16];
+    XrPosef pose;
+};
+
+struct XrSwapchainImageReleaseInfo
 {
     XrStructureType type;
     const void *next;
 };
 
-struct XrSwapchainImageWaitInfo
+struct XrSystemGraphicsProperties
 {
-    XrStructureType type;
-    const void *next;
-    XrDuration timeout;
-};
-
-struct XrSystemGetInfo
-{
-    XrStructureType type;
-    const void *next;
-    XrFormFactor formFactor;
-};
-
-struct XrSystemProperties
-{
-    XrStructureType type;
-    void *next;
-    XrSystemId systemId;
-    uint32_t vendorId;
-    char systemName[XR_MAX_SYSTEM_NAME_SIZE];
-    XrSystemGraphicsProperties graphicsProperties;
-    XrSystemTrackingProperties trackingProperties;
+    uint32_t maxSwapchainImageHeight;
+    uint32_t maxSwapchainImageWidth;
+    uint32_t maxLayerCount;
 };
 
 struct XrVector4f
@@ -1340,14 +1700,6 @@ struct XrVector4f
     float y;
     float z;
     float w;
-};
-
-struct XrViewConfigurationProperties
-{
-    XrStructureType type;
-    void *next;
-    XrViewConfigurationType viewConfigurationType;
-    XrBool32 fovMutable;
 };
 
 struct XrViewState
@@ -1364,67 +1716,40 @@ struct XrActionStatePose
     XrBool32 isActive;
 };
 
-struct XrApiLayerProperties
+struct XrBindingModificationsKHR
+{
+    XrStructureType type;
+    const void *next;
+    uint32_t bindingModificationCount;
+    const XrBindingModificationBaseHeaderKHR * const*bindingModifications;
+};
+
+struct XrControllerModelStateMSFT
 {
     XrStructureType type;
     void *next;
-    char layerName[XR_MAX_API_LAYER_NAME_SIZE];
-    XrVersion specVersion;
-    uint32_t layerVersion;
-    char description[XR_MAX_API_LAYER_DESCRIPTION_SIZE];
+    uint32_t nodeCapacityInput;
+    uint32_t nodeCountOutput;
+    XrControllerModelNodeStateMSFT *nodeStates;
 };
 
-struct XrCompositionLayerCubeKHR
+struct XrEventDataReferenceSpaceChangePending
 {
     XrStructureType type;
     const void *next;
-    XrCompositionLayerFlags layerFlags;
-    XrSpace space;
-    XrEyeVisibility eyeVisibility;
-    XrSwapchain swapchain;
-    uint32_t imageArrayIndex;
-    XrQuaternionf orientation;
+    XrSession session;
+    XrReferenceSpaceType referenceSpaceType;
+    XrTime changeTime;
+    XrBool32 poseValid;
+    XrPosef poseInPreviousSpace;
 };
 
-struct XrDebugUtilsMessengerCallbackDataEXT
+struct XrHandMeshIndexBufferMSFT
 {
-    XrStructureType type;
-    const void *next;
-    const char *messageId;
-    const char *functionName;
-    const char *message;
-    uint32_t objectCount;
-    XrDebugUtilsObjectNameInfoEXT *objects;
-    uint32_t sessionLabelCount;
-    XrDebugUtilsLabelEXT *sessionLabels;
-};
-
-struct XrEventDataMainSessionVisibilityChangedEXTX
-{
-    XrStructureType type;
-    const void *next;
-    XrBool32 visible;
-    XrOverlayMainSessionFlagsEXTX flags;
-};
-
-struct XrExtent2Df
-{
-    float width;
-    float height;
-};
-
-struct XrFrameWaitInfo
-{
-    XrStructureType type;
-    const void *next;
-};
-
-struct XrHandJointVelocitiesEXT
-{
-    XrStructureType type;
-    void *next;
-    uint32_t jointCount;
-    XrHandJointVelocityEXT *jointVelocities;
+    uint32_t indexBufferKey;
+    uint32_t indexCapacityInput;
+    uint32_t indexCountOutput;
+    uint32_t *indices;
 };
 
 struct XrHandMeshVertexBufferMSFT
@@ -1433,14 +1758,6 @@ struct XrHandMeshVertexBufferMSFT
     uint32_t vertexCapacityInput;
     uint32_t vertexCountOutput;
     XrHandMeshVertexMSFT *vertices;
-};
-
-struct XrHolographicWindowAttachmentMSFT
-{
-    XrStructureType type;
-    const void *next;
-    IUnknown *holographicSpace;
-    IUnknown *coreWindow;
 };
 
 struct XrInteractionProfileSuggestedBinding
@@ -1452,12 +1769,6 @@ struct XrInteractionProfileSuggestedBinding
     const XrActionSuggestedBinding *suggestedBindings;
 };
 
-struct XrRect2Df
-{
-    XrOffset2Df offset;
-    XrExtent2Df extent;
-};
-
 struct XrSecondaryViewConfigurationFrameEndInfoMSFT
 {
     XrStructureType type;
@@ -1466,19 +1777,13 @@ struct XrSecondaryViewConfigurationFrameEndInfoMSFT
     const XrSecondaryViewConfigurationLayerInfoMSFT *viewConfigurationLayersInfo;
 };
 
-struct XrSecondaryViewConfigurationStateMSFT
+struct XrSpatialAnchorCreateInfoMSFT
 {
     XrStructureType type;
-    void *next;
-    XrViewConfigurationType viewConfigurationType;
-    XrBool32 active;
-};
-
-struct XrSwapchainImageD3D11KHR
-{
-    XrStructureType type;
-    void *next;
-    ID3D11Texture2D *texture;
+    const void *next;
+    XrSpace space;
+    XrPosef pose;
+    XrTime time;
 };
 
 struct XrSwapchainSubImage
@@ -1488,28 +1793,22 @@ struct XrSwapchainSubImage
     uint32_t imageArrayIndex;
 };
 
-struct XrVector2f
-{
-    float x;
-    float y;
-};
-
-struct XrViewConfigurationViewFovEPIC
-{
-    XrStructureType type;
-    const void *next;
-    XrFovf recommendedFov;
-    XrFovf maxMutableFov;
-};
-
-struct XrActionStateVector2f
+struct XrViewConfigurationProperties
 {
     XrStructureType type;
     void *next;
-    XrVector2f currentState;
-    XrBool32 changedSinceLastSync;
-    XrTime lastChangeTime;
-    XrBool32 isActive;
+    XrViewConfigurationType viewConfigurationType;
+    XrBool32 fovMutable;
+};
+
+struct XrApiLayerProperties
+{
+    XrStructureType type;
+    void *next;
+    char layerName[XR_MAX_API_LAYER_NAME_SIZE];
+    XrVersion specVersion;
+    uint32_t layerVersion;
+    char description[XR_MAX_API_LAYER_DESCRIPTION_SIZE];
 };
 
 struct XrCompositionLayerDepthInfoKHR
@@ -1523,89 +1822,7 @@ struct XrCompositionLayerDepthInfoKHR
     float farZ;
 };
 
-struct XrEventDataBuffer
-{
-    XrStructureType type;
-    const void *next;
-    uint8_t varying[4000];
-};
-
-struct XrFrameBeginInfo
-{
-    XrStructureType type;
-    const void *next;
-};
-
-struct XrHandMeshIndexBufferMSFT
-{
-    uint32_t indexBufferKey;
-    uint32_t indexCapacityInput;
-    uint32_t indexCountOutput;
-    uint32_t *indices;
-};
-
-struct XrHandTrackerCreateInfoEXT
-{
-    XrStructureType type;
-    const void *next;
-    XrHandEXT hand;
-    XrHandJointSetEXT handJointSet;
-};
-
-struct XrPosef
-{
-    XrQuaternionf orientation;
-    XrVector3f position;
-};
-
-struct XrSecondaryViewConfigurationFrameStateMSFT
-{
-    XrStructureType type;
-    void *next;
-    uint32_t viewConfigurationCount;
-    XrSecondaryViewConfigurationStateMSFT *viewConfigurationStates;
-};
-
-struct XrSpaceLocation
-{
-    XrStructureType type;
-    void *next;
-    XrSpaceLocationFlags locationFlags;
-    XrPosef pose;
-};
-
-struct XrSpatialAnchorSpaceCreateInfoMSFT
-{
-    XrStructureType type;
-    const void *next;
-    XrSpatialAnchorMSFT anchor;
-    XrPosef poseInAnchorSpace;
-};
-
-struct XrSwapchainImageReleaseInfo
-{
-    XrStructureType type;
-    const void *next;
-};
-
-struct XrView
-{
-    XrStructureType type;
-    void *next;
-    XrPosef pose;
-    XrFovf fov;
-};
-
-struct XrActionSpaceCreateInfo
-{
-    XrStructureType type;
-    const void *next;
-    XrAction action;
-    XrPath subactionPath;
-    XrPosef poseInActionSpace;
-};
-
-struct XrCompositionLayerCylinderKHR
+struct XrCompositionLayerEquirectKHR
 {
     XrStructureType type;
     const void *next;
@@ -1615,8 +1832,8 @@ struct XrCompositionLayerCylinderKHR
     XrSwapchainSubImage subImage;
     XrPosef pose;
     float radius;
-    float centralAngle;
-    float aspectRatio;
+    XrVector2f scale;
+    XrVector2f bias;
 };
 
 struct XrCompositionLayerProjectionView
@@ -1628,15 +1845,11 @@ struct XrCompositionLayerProjectionView
     XrSwapchainSubImage subImage;
 };
 
-struct XrEventDataReferenceSpaceChangePending
+struct XrEventDataBuffer
 {
     XrStructureType type;
     const void *next;
-    XrSession session;
-    XrReferenceSpaceType referenceSpaceType;
-    XrTime changeTime;
-    XrBool32 poseValid;
-    XrPosef poseInPreviousSpace;
+    uint8_t varying[4000];
 };
 
 struct XrHandJointLocationEXT
@@ -1657,48 +1870,39 @@ struct XrHandMeshMSFT
     XrHandMeshVertexBufferMSFT vertexBuffer;
 };
 
-struct XrInstanceProperties
+struct XrRect2Df
+{
+    XrOffset2Df offset;
+    XrExtent2Df extent;
+};
+
+struct XrSwapchainImageD3D11KHR
 {
     XrStructureType type;
     void *next;
-    XrVersion runtimeVersion;
-    char runtimeName[XR_MAX_RUNTIME_NAME_SIZE];
+    ID3D11Texture2D *texture;
 };
 
-struct XrSessionCreateInfo
+struct XrVulkanGraphicsDeviceGetInfoKHR
 {
     XrStructureType type;
     const void *next;
-    XrSessionCreateFlags createFlags;
     XrSystemId systemId;
+    VkInstance vulkanInstance;
 };
 
-struct XrSpatialGraphNodeSpaceCreateInfoMSFT
+struct XrCompositionLayerCylinderKHR
 {
     XrStructureType type;
     const void *next;
-    XrSpatialGraphNodeTypeMSFT nodeType;
-    uint8_t nodeId[16];
+    XrCompositionLayerFlags layerFlags;
+    XrSpace space;
+    XrEyeVisibility eyeVisibility;
+    XrSwapchainSubImage subImage;
     XrPosef pose;
-};
-
-struct XrVisibilityMaskKHR
-{
-    XrStructureType type;
-    void *next;
-    uint32_t vertexCapacityInput;
-    uint32_t vertexCountOutput;
-    XrVector2f *vertices;
-    uint32_t indexCapacityInput;
-    uint32_t indexCountOutput;
-    uint32_t *indices;
-};
-
-struct XrBoundSourcesForActionEnumerateInfo
-{
-    XrStructureType type;
-    const void *next;
-    XrAction action;
+    float radius;
+    float centralAngle;
+    float aspectRatio;
 };
 
 struct XrCompositionLayerProjection
@@ -1711,32 +1915,32 @@ struct XrCompositionLayerProjection
     const XrCompositionLayerProjectionView *views;
 };
 
-struct XrGraphicsBindingOpenGLWin32KHR
+struct XrFrameBeginInfo
 {
     XrStructureType type;
     const void *next;
-    HDC hDC;
-    HGLRC hGLRC;
 };
 
-struct XrHandMeshSpaceCreateInfoMSFT
+struct XrHolographicWindowAttachmentMSFT
 {
     XrStructureType type;
     const void *next;
-    XrHandPoseTypeMSFT handPoseType;
-    XrPosef poseInHandMeshSpace;
+    IUnknown *holographicSpace;
+    IUnknown *coreWindow;
 };
 
-struct XrSpatialAnchorCreateInfoMSFT
+struct XrSystemProperties
 {
     XrStructureType type;
-    const void *next;
-    XrSpace space;
-    XrPosef pose;
-    XrTime time;
+    void *next;
+    XrSystemId systemId;
+    uint32_t vendorId;
+    char systemName[XR_MAX_SYSTEM_NAME_SIZE];
+    XrSystemGraphicsProperties graphicsProperties;
+    XrSystemTrackingProperties trackingProperties;
 };
 
-struct XrCompositionLayerEquirectKHR
+struct XrCompositionLayerEquirect2KHR
 {
     XrStructureType type;
     const void *next;
@@ -1746,8 +1950,9 @@ struct XrCompositionLayerEquirectKHR
     XrSwapchainSubImage subImage;
     XrPosef pose;
     float radius;
-    XrVector2f scale;
-    XrVector2f bias;
+    float centralHorizontalAngle;
+    float upperVerticalAngle;
+    float lowerVerticalAngle;
 };
 
 struct XrHandJointLocationsEXT
@@ -1757,15 +1962,6 @@ struct XrHandJointLocationsEXT
     XrBool32 isActive;
     uint32_t jointCount;
     XrHandJointLocationEXT *jointLocations;
-};
-
-struct XrSystemHandTrackingMeshPropertiesMSFT
-{
-    XrStructureType type;
-    void *next;
-    XrBool32 supportsHandTrackingMesh;
-    uint32_t maxHandMeshIndexCount;
-    uint32_t maxHandMeshVertexCount;
 };
 
 struct XrCompositionLayerQuad
@@ -1780,12 +1976,11 @@ struct XrCompositionLayerQuad
     XrExtent2Df size;
 };
 
-struct XrReferenceSpaceCreateInfo
+struct XrSessionBeginInfo
 {
     XrStructureType type;
     const void *next;
-    XrReferenceSpaceType referenceSpaceType;
-    XrPosef poseInReferenceSpace;
+    XrViewConfigurationType primaryViewConfigurationType;
 };
 
 typedef XrResult (XRAPI_PTR *PFN_xrAcquireSwapchainImage)(XrSwapchain, const XrSwapchainImageAcquireInfo *, uint32_t *);
@@ -1807,6 +2002,8 @@ typedef XrResult (XRAPI_PTR *PFN_xrCreateSpatialAnchorMSFT)(XrSession, const XrS
 typedef XrResult (XRAPI_PTR *PFN_xrCreateSpatialAnchorSpaceMSFT)(XrSession, const XrSpatialAnchorSpaceCreateInfoMSFT *, XrSpace *);
 typedef XrResult (XRAPI_PTR *PFN_xrCreateSpatialGraphNodeSpaceMSFT)(XrSession, const XrSpatialGraphNodeSpaceCreateInfoMSFT *, XrSpace *);
 typedef XrResult (XRAPI_PTR *PFN_xrCreateSwapchain)(XrSession, const XrSwapchainCreateInfo *, XrSwapchain *);
+typedef XrResult (XRAPI_PTR *PFN_xrCreateVulkanDeviceKHR)(XrInstance, const XrVulkanDeviceCreateInfoKHR *, VkDevice *, VkResult *);
+typedef XrResult (XRAPI_PTR *PFN_xrCreateVulkanInstanceKHR)(XrInstance, const XrVulkanInstanceCreateInfoKHR *, VkInstance *, VkResult *);
 typedef XrResult (XRAPI_PTR *PFN_xrDestroyAction)(XrAction);
 typedef XrResult (XRAPI_PTR *PFN_xrDestroyActionSet)(XrActionSet);
 typedef XrResult (XRAPI_PTR *PFN_xrDestroyHandTrackerEXT)(XrHandTrackerEXT);
@@ -1819,6 +2016,8 @@ typedef XrResult (XRAPI_PTR *PFN_xrEndFrame)(XrSession, const XrFrameEndInfo *);
 typedef XrResult (XRAPI_PTR *PFN_xrEndSession)(XrSession);
 typedef XrResult (XRAPI_PTR *PFN_xrEnumerateApiLayerProperties)(uint32_t, uint32_t *, XrApiLayerProperties *);
 typedef XrResult (XRAPI_PTR *PFN_xrEnumerateBoundSourcesForAction)(XrSession, const XrBoundSourcesForActionEnumerateInfo *, uint32_t, uint32_t *, XrPath *);
+typedef XrResult (XRAPI_PTR *PFN_xrEnumerateColorSpacesFB)(XrSession, uint32_t, uint32_t *, XrColorSpaceFB *);
+typedef XrResult (XRAPI_PTR *PFN_xrEnumerateDisplayRefreshRatesFB)(XrSession, uint32_t, uint32_t *, float *);
 typedef XrResult (XRAPI_PTR *PFN_xrEnumerateEnvironmentBlendModes)(XrInstance, XrSystemId, XrViewConfigurationType, uint32_t, uint32_t *, XrEnvironmentBlendMode *);
 typedef XrResult (XRAPI_PTR *PFN_xrEnumerateInstanceExtensionProperties)(const char *, uint32_t, uint32_t *, XrExtensionProperties *);
 typedef XrResult (XRAPI_PTR *PFN_xrEnumerateReferenceSpaces)(XrSession, uint32_t, uint32_t *, XrReferenceSpaceType *);
@@ -1830,9 +2029,13 @@ typedef XrResult (XRAPI_PTR *PFN_xrGetActionStateBoolean)(XrSession, const XrAct
 typedef XrResult (XRAPI_PTR *PFN_xrGetActionStateFloat)(XrSession, const XrActionStateGetInfo *, XrActionStateFloat *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetActionStatePose)(XrSession, const XrActionStateGetInfo *, XrActionStatePose *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetActionStateVector2f)(XrSession, const XrActionStateGetInfo *, XrActionStateVector2f *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetControllerModelKeyMSFT)(XrSession, XrPath, XrControllerModelKeyStateMSFT *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetControllerModelPropertiesMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelPropertiesMSFT *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetControllerModelStateMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelStateMSFT *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetCurrentInteractionProfile)(XrSession, XrPath, XrInteractionProfileState *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetD3D11GraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsD3D11KHR *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetD3D12GraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsD3D12KHR *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetDisplayRefreshRateFB)(XrSession, float *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetInputSourceLocalizedName)(XrSession, const XrInputSourceLocalizedNameGetInfo *, uint32_t, uint32_t *, char *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetInstanceProcAddr)(XrInstance, const char *, PFN_xrVoidFunction *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetInstanceProperties)(XrInstance, XrInstanceProperties *);
@@ -1843,9 +2046,12 @@ typedef XrResult (XRAPI_PTR *PFN_xrGetSystemProperties)(XrInstance, XrSystemId, 
 typedef XrResult (XRAPI_PTR *PFN_xrGetViewConfigurationProperties)(XrInstance, XrSystemId, XrViewConfigurationType, XrViewConfigurationProperties *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVisibilityMaskKHR)(XrSession, XrViewConfigurationType, uint32_t, XrVisibilityMaskTypeKHR, XrVisibilityMaskKHR *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanDeviceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsDevice2KHR)(XrInstance, const XrVulkanGraphicsDeviceGetInfoKHR *, VkPhysicalDevice *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsDeviceKHR)(XrInstance, XrSystemId, VkInstance, VkPhysicalDevice *);
+typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsRequirements2KHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
 typedef XrResult (XRAPI_PTR *PFN_xrGetVulkanInstanceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
+typedef XrResult (XRAPI_PTR *PFN_xrLoadControllerModelMSFT)(XrSession, XrControllerModelKeyMSFT, uint32_t, uint32_t *, uint8_t *);
 typedef XrResult (XRAPI_PTR *PFN_xrLocateHandJointsEXT)(XrHandTrackerEXT, const XrHandJointsLocateInfoEXT *, XrHandJointLocationsEXT *);
 typedef XrResult (XRAPI_PTR *PFN_xrLocateSpace)(XrSpace, XrSpace, XrTime, XrSpaceLocation *);
 typedef XrResult (XRAPI_PTR *PFN_xrLocateViews)(XrSession, const XrViewLocateInfo *, XrViewState *, uint32_t, uint32_t *, XrView *);
@@ -1853,8 +2059,10 @@ typedef XrResult (XRAPI_PTR *PFN_xrPathToString)(XrInstance, XrPath, uint32_t, u
 typedef XrResult (XRAPI_PTR *PFN_xrPerfSettingsSetPerformanceLevelEXT)(XrSession, XrPerfSettingsDomainEXT, XrPerfSettingsLevelEXT);
 typedef XrResult (XRAPI_PTR *PFN_xrPollEvent)(XrInstance, XrEventDataBuffer *);
 typedef XrResult (XRAPI_PTR *PFN_xrReleaseSwapchainImage)(XrSwapchain, const XrSwapchainImageReleaseInfo *);
+typedef XrResult (XRAPI_PTR *PFN_xrRequestDisplayRefreshRateFB)(XrSession, float);
 typedef XrResult (XRAPI_PTR *PFN_xrRequestExitSession)(XrSession);
 typedef XrResult (XRAPI_PTR *PFN_xrResultToString)(XrInstance, XrResult, char[]);
+typedef XrResult (XRAPI_PTR *PFN_xrSetColorSpaceFB)(XrSession, const XrColorSpaceFB);
 typedef XrResult (XRAPI_PTR *PFN_xrSetInputDeviceActiveEXT)(XrSession, XrPath, XrPath, XrBool32);
 typedef XrResult (XRAPI_PTR *PFN_xrSetInputDeviceLocationEXT)(XrSession, XrPath, XrPath, XrSpace, XrPosef);
 typedef XrResult (XRAPI_PTR *PFN_xrSetInputDeviceStateBoolEXT)(XrSession, XrPath, XrPath, XrBool32);
@@ -1890,6 +2098,8 @@ XrResult XRAPI_CALL xrCreateSpatialAnchorMSFT(XrSession session, const XrSpatial
 XrResult XRAPI_CALL xrCreateSpatialAnchorSpaceMSFT(XrSession session, const XrSpatialAnchorSpaceCreateInfoMSFT *createInfo, XrSpace *space);
 XrResult XRAPI_CALL xrCreateSpatialGraphNodeSpaceMSFT(XrSession session, const XrSpatialGraphNodeSpaceCreateInfoMSFT *createInfo, XrSpace *space);
 XrResult XRAPI_CALL xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo *createInfo, XrSwapchain *swapchain);
+XrResult XRAPI_CALL xrCreateVulkanDeviceKHR(XrInstance instance, const XrVulkanDeviceCreateInfoKHR *createInfo, VkDevice *vulkanDevice, VkResult *vulkanResult);
+XrResult XRAPI_CALL xrCreateVulkanInstanceKHR(XrInstance instance, const XrVulkanInstanceCreateInfoKHR *createInfo, VkInstance *vulkanInstance, VkResult *vulkanResult);
 XrResult XRAPI_CALL xrDestroyAction(XrAction action);
 XrResult XRAPI_CALL xrDestroyActionSet(XrActionSet actionSet);
 XrResult XRAPI_CALL xrDestroyHandTrackerEXT(XrHandTrackerEXT handTracker);
@@ -1902,6 +2112,8 @@ XrResult XRAPI_CALL xrEndFrame(XrSession session, const XrFrameEndInfo *frameEnd
 XrResult XRAPI_CALL xrEndSession(XrSession session);
 XrResult XRAPI_CALL xrEnumerateApiLayerProperties(uint32_t propertyCapacityInput, uint32_t *propertyCountOutput, XrApiLayerProperties *properties);
 XrResult XRAPI_CALL xrEnumerateBoundSourcesForAction(XrSession session, const XrBoundSourcesForActionEnumerateInfo *enumerateInfo, uint32_t sourceCapacityInput, uint32_t *sourceCountOutput, XrPath *sources);
+XrResult XRAPI_CALL xrEnumerateColorSpacesFB(XrSession session, uint32_t colorSpaceCapacityInput, uint32_t *colorSpaceCountOutput, XrColorSpaceFB *colorSpaces);
+XrResult XRAPI_CALL xrEnumerateDisplayRefreshRatesFB(XrSession session, uint32_t displayRefreshRateCapacityInput, uint32_t *displayRefreshRateCountOutput, float *displayRefreshRates);
 XrResult XRAPI_CALL xrEnumerateEnvironmentBlendModes(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, uint32_t environmentBlendModeCapacityInput, uint32_t *environmentBlendModeCountOutput, XrEnvironmentBlendMode *environmentBlendModes);
 XrResult XRAPI_CALL xrEnumerateInstanceExtensionProperties(const char *layerName, uint32_t propertyCapacityInput, uint32_t *propertyCountOutput, XrExtensionProperties *properties);
 XrResult XRAPI_CALL xrEnumerateReferenceSpaces(XrSession session, uint32_t spaceCapacityInput, uint32_t *spaceCountOutput, XrReferenceSpaceType *spaces);
@@ -1913,9 +2125,13 @@ XrResult XRAPI_CALL xrGetActionStateBoolean(XrSession session, const XrActionSta
 XrResult XRAPI_CALL xrGetActionStateFloat(XrSession session, const XrActionStateGetInfo *getInfo, XrActionStateFloat *state);
 XrResult XRAPI_CALL xrGetActionStatePose(XrSession session, const XrActionStateGetInfo *getInfo, XrActionStatePose *state);
 XrResult XRAPI_CALL xrGetActionStateVector2f(XrSession session, const XrActionStateGetInfo *getInfo, XrActionStateVector2f *state);
+XrResult XRAPI_CALL xrGetControllerModelKeyMSFT(XrSession session, XrPath topLevelUserPath, XrControllerModelKeyStateMSFT *controllerModelKeyState);
+XrResult XRAPI_CALL xrGetControllerModelPropertiesMSFT(XrSession session, XrControllerModelKeyMSFT modelKey, XrControllerModelPropertiesMSFT *properties);
+XrResult XRAPI_CALL xrGetControllerModelStateMSFT(XrSession session, XrControllerModelKeyMSFT modelKey, XrControllerModelStateMSFT *state);
 XrResult XRAPI_CALL xrGetCurrentInteractionProfile(XrSession session, XrPath topLevelUserPath, XrInteractionProfileState *interactionProfile);
 XrResult XRAPI_CALL xrGetD3D11GraphicsRequirementsKHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsD3D11KHR *graphicsRequirements);
 XrResult XRAPI_CALL xrGetD3D12GraphicsRequirementsKHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsD3D12KHR *graphicsRequirements);
+XrResult XRAPI_CALL xrGetDisplayRefreshRateFB(XrSession session, float *displayRefreshRate);
 XrResult XRAPI_CALL xrGetInputSourceLocalizedName(XrSession session, const XrInputSourceLocalizedNameGetInfo *getInfo, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer);
 XrResult XRAPI_CALL xrGetInstanceProcAddr(XrInstance instance, const char *name, PFN_xrVoidFunction *function);
 XrResult XRAPI_CALL xrGetInstanceProperties(XrInstance instance, XrInstanceProperties *instanceProperties);
@@ -1926,9 +2142,12 @@ XrResult XRAPI_CALL xrGetSystemProperties(XrInstance instance, XrSystemId system
 XrResult XRAPI_CALL xrGetViewConfigurationProperties(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, XrViewConfigurationProperties *configurationProperties);
 XrResult XRAPI_CALL xrGetVisibilityMaskKHR(XrSession session, XrViewConfigurationType viewConfigurationType, uint32_t viewIndex, XrVisibilityMaskTypeKHR visibilityMaskType, XrVisibilityMaskKHR *visibilityMask);
 XrResult XRAPI_CALL xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer);
+XrResult XRAPI_CALL xrGetVulkanGraphicsDevice2KHR(XrInstance instance, const XrVulkanGraphicsDeviceGetInfoKHR *getInfo, VkPhysicalDevice *vulkanPhysicalDevice);
 XrResult XRAPI_CALL xrGetVulkanGraphicsDeviceKHR(XrInstance instance, XrSystemId systemId, VkInstance vkInstance, VkPhysicalDevice *vkPhysicalDevice);
+XrResult XRAPI_CALL xrGetVulkanGraphicsRequirements2KHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements);
 XrResult XRAPI_CALL xrGetVulkanGraphicsRequirementsKHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements);
 XrResult XRAPI_CALL xrGetVulkanInstanceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer);
+XrResult XRAPI_CALL xrLoadControllerModelMSFT(XrSession session, XrControllerModelKeyMSFT modelKey, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, uint8_t *buffer);
 XrResult XRAPI_CALL xrLocateHandJointsEXT(XrHandTrackerEXT handTracker, const XrHandJointsLocateInfoEXT *locateInfo, XrHandJointLocationsEXT *locations);
 XrResult XRAPI_CALL xrLocateSpace(XrSpace space, XrSpace baseSpace, XrTime time, XrSpaceLocation *location);
 XrResult XRAPI_CALL xrLocateViews(XrSession session, const XrViewLocateInfo *viewLocateInfo, XrViewState *viewState, uint32_t viewCapacityInput, uint32_t *viewCountOutput, XrView *views);
@@ -1936,8 +2155,10 @@ XrResult XRAPI_CALL xrPathToString(XrInstance instance, XrPath path, uint32_t bu
 XrResult XRAPI_CALL xrPerfSettingsSetPerformanceLevelEXT(XrSession session, XrPerfSettingsDomainEXT domain, XrPerfSettingsLevelEXT level);
 XrResult XRAPI_CALL xrPollEvent(XrInstance instance, XrEventDataBuffer *eventData);
 XrResult XRAPI_CALL xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageReleaseInfo *releaseInfo);
+XrResult XRAPI_CALL xrRequestDisplayRefreshRateFB(XrSession session, float displayRefreshRate);
 XrResult XRAPI_CALL xrRequestExitSession(XrSession session);
 XrResult XRAPI_CALL xrResultToString(XrInstance instance, XrResult value, char buffer[]);
+XrResult XRAPI_CALL xrSetColorSpaceFB(XrSession session, const XrColorSpaceFB colorspace);
 XrResult XRAPI_CALL xrSetInputDeviceActiveEXT(XrSession session, XrPath interactionProfile, XrPath topLevelPath, XrBool32 isActive);
 XrResult XRAPI_CALL xrSetInputDeviceLocationEXT(XrSession session, XrPath topLevelPath, XrPath inputSourcePath, XrSpace space, XrPosef pose);
 XrResult XRAPI_CALL xrSetInputDeviceStateBoolEXT(XrSession session, XrPath topLevelPath, XrPath inputSourcePath, XrBool32 state);

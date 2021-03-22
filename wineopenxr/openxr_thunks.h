@@ -15,7 +15,7 @@
  * language incorporated into the Specification and reference pages, and other
  * material which is registered by Khronos, such as tags used by extension and
  * layer authors. The only authoritative version of xr.xml is the one
- * maintained in the master branch of the Khronos OpenXR GitHub project.
+ * maintained in the default branch of the Khronos OpenXR GitHub project.
  *
  */
 
@@ -32,6 +32,8 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
 XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateInfo *createInfo, XrSession *session);
 XrResult WINAPI wine_xrCreateSpatialAnchorMSFT(XrSession session, const XrSpatialAnchorCreateInfoMSFT *createInfo, XrSpatialAnchorMSFT *anchor) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo *createInfo, XrSwapchain *swapchain);
+XrResult WINAPI wine_xrCreateVulkanDeviceKHR(XrInstance instance, const XrVulkanDeviceCreateInfoKHR *createInfo, VkDevice *vulkanDevice, VkResult *vulkanResult) DECLSPEC_HIDDEN;
+XrResult WINAPI wine_xrCreateVulkanInstanceKHR(XrInstance instance, const XrVulkanInstanceCreateInfoKHR *createInfo, VkInstance *vulkanInstance, VkResult *vulkanResult) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroyHandTrackerEXT(XrHandTrackerEXT handTracker) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroyInstance(XrInstance instance);
 XrResult WINAPI wine_xrDestroySession(XrSession session);
@@ -46,6 +48,7 @@ XrResult WINAPI wine_xrGetD3D12GraphicsRequirementsKHR(XrInstance instance, XrSy
 XrResult WINAPI wine_xrGetInstanceProcAddr(XrInstance instance, const char *name, PFN_xrVoidFunction *function);
 XrResult WINAPI wine_xrGetSystem(XrInstance instance, const XrSystemGetInfo *getInfo, XrSystemId *systemId);
 XrResult WINAPI wine_xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer) DECLSPEC_HIDDEN;
+XrResult WINAPI wine_xrGetVulkanGraphicsDevice2KHR(XrInstance instance, const XrVulkanGraphicsDeviceGetInfoKHR *getInfo, VkPhysicalDevice *vulkanPhysicalDevice) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrGetVulkanGraphicsDeviceKHR(XrInstance instance, XrSystemId systemId, VkInstance vkInstance, VkPhysicalDevice *vkPhysicalDevice) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrGetVulkanInstanceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrPollEvent(XrInstance instance, XrEventDataBuffer *eventData);
@@ -75,6 +78,8 @@ struct openxr_instance_funcs
     XrResult (*p_xrCreateSpatialAnchorSpaceMSFT)(XrSession, const XrSpatialAnchorSpaceCreateInfoMSFT *, XrSpace *);
     XrResult (*p_xrCreateSpatialGraphNodeSpaceMSFT)(XrSession, const XrSpatialGraphNodeSpaceCreateInfoMSFT *, XrSpace *);
     XrResult (*p_xrCreateSwapchain)(XrSession, const XrSwapchainCreateInfo *, XrSwapchain *);
+    XrResult (*p_xrCreateVulkanDeviceKHR)(XrInstance, const XrVulkanDeviceCreateInfoKHR *, VkDevice *, VkResult *);
+    XrResult (*p_xrCreateVulkanInstanceKHR)(XrInstance, const XrVulkanInstanceCreateInfoKHR *, VkInstance *, VkResult *);
     XrResult (*p_xrDestroyAction)(XrAction);
     XrResult (*p_xrDestroyActionSet)(XrActionSet);
     XrResult (*p_xrDestroyHandTrackerEXT)(XrHandTrackerEXT);
@@ -86,6 +91,8 @@ struct openxr_instance_funcs
     XrResult (*p_xrEndSession)(XrSession);
     XrResult (*p_xrEnumerateApiLayerProperties)(uint32_t, uint32_t *, XrApiLayerProperties *);
     XrResult (*p_xrEnumerateBoundSourcesForAction)(XrSession, const XrBoundSourcesForActionEnumerateInfo *, uint32_t, uint32_t *, XrPath *);
+    XrResult (*p_xrEnumerateColorSpacesFB)(XrSession, uint32_t, uint32_t *, XrColorSpaceFB *);
+    XrResult (*p_xrEnumerateDisplayRefreshRatesFB)(XrSession, uint32_t, uint32_t *, float *);
     XrResult (*p_xrEnumerateEnvironmentBlendModes)(XrInstance, XrSystemId, XrViewConfigurationType, uint32_t, uint32_t *, XrEnvironmentBlendMode *);
     XrResult (*p_xrEnumerateReferenceSpaces)(XrSession, uint32_t, uint32_t *, XrReferenceSpaceType *);
     XrResult (*p_xrEnumerateSwapchainFormats)(XrSession, uint32_t, uint32_t *, int64_t *);
@@ -96,7 +103,11 @@ struct openxr_instance_funcs
     XrResult (*p_xrGetActionStateFloat)(XrSession, const XrActionStateGetInfo *, XrActionStateFloat *);
     XrResult (*p_xrGetActionStatePose)(XrSession, const XrActionStateGetInfo *, XrActionStatePose *);
     XrResult (*p_xrGetActionStateVector2f)(XrSession, const XrActionStateGetInfo *, XrActionStateVector2f *);
+    XrResult (*p_xrGetControllerModelKeyMSFT)(XrSession, XrPath, XrControllerModelKeyStateMSFT *);
+    XrResult (*p_xrGetControllerModelPropertiesMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelPropertiesMSFT *);
+    XrResult (*p_xrGetControllerModelStateMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelStateMSFT *);
     XrResult (*p_xrGetCurrentInteractionProfile)(XrSession, XrPath, XrInteractionProfileState *);
+    XrResult (*p_xrGetDisplayRefreshRateFB)(XrSession, float *);
     XrResult (*p_xrGetInputSourceLocalizedName)(XrSession, const XrInputSourceLocalizedNameGetInfo *, uint32_t, uint32_t *, char *);
     XrResult (*p_xrGetInstanceProperties)(XrInstance, XrInstanceProperties *);
     XrResult (*p_xrGetOpenGLGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsOpenGLKHR *);
@@ -106,9 +117,12 @@ struct openxr_instance_funcs
     XrResult (*p_xrGetViewConfigurationProperties)(XrInstance, XrSystemId, XrViewConfigurationType, XrViewConfigurationProperties *);
     XrResult (*p_xrGetVisibilityMaskKHR)(XrSession, XrViewConfigurationType, uint32_t, XrVisibilityMaskTypeKHR, XrVisibilityMaskKHR *);
     XrResult (*p_xrGetVulkanDeviceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
+    XrResult (*p_xrGetVulkanGraphicsDevice2KHR)(XrInstance, const XrVulkanGraphicsDeviceGetInfoKHR *, VkPhysicalDevice *);
     XrResult (*p_xrGetVulkanGraphicsDeviceKHR)(XrInstance, XrSystemId, VkInstance, VkPhysicalDevice *);
+    XrResult (*p_xrGetVulkanGraphicsRequirements2KHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
     XrResult (*p_xrGetVulkanGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
     XrResult (*p_xrGetVulkanInstanceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
+    XrResult (*p_xrLoadControllerModelMSFT)(XrSession, XrControllerModelKeyMSFT, uint32_t, uint32_t *, uint8_t *);
     XrResult (*p_xrLocateHandJointsEXT)(XrHandTrackerEXT, const XrHandJointsLocateInfoEXT *, XrHandJointLocationsEXT *);
     XrResult (*p_xrLocateSpace)(XrSpace, XrSpace, XrTime, XrSpaceLocation *);
     XrResult (*p_xrLocateViews)(XrSession, const XrViewLocateInfo *, XrViewState *, uint32_t, uint32_t *, XrView *);
@@ -116,8 +130,10 @@ struct openxr_instance_funcs
     XrResult (*p_xrPerfSettingsSetPerformanceLevelEXT)(XrSession, XrPerfSettingsDomainEXT, XrPerfSettingsLevelEXT);
     XrResult (*p_xrPollEvent)(XrInstance, XrEventDataBuffer *);
     XrResult (*p_xrReleaseSwapchainImage)(XrSwapchain, const XrSwapchainImageReleaseInfo *);
+    XrResult (*p_xrRequestDisplayRefreshRateFB)(XrSession, float);
     XrResult (*p_xrRequestExitSession)(XrSession);
     XrResult (*p_xrResultToString)(XrInstance, XrResult, char[]);
+    XrResult (*p_xrSetColorSpaceFB)(XrSession, const XrColorSpaceFB);
     XrResult (*p_xrSetInputDeviceActiveEXT)(XrSession, XrPath, XrPath, XrBool32);
     XrResult (*p_xrSetInputDeviceLocationEXT)(XrSession, XrPath, XrPath, XrSpace, XrPosef);
     XrResult (*p_xrSetInputDeviceStateBoolEXT)(XrSession, XrPath, XrPath, XrBool32);
@@ -151,6 +167,8 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrCreateSpatialAnchorSpaceMSFT) \
     USE_XR_FUNC(xrCreateSpatialGraphNodeSpaceMSFT) \
     USE_XR_FUNC(xrCreateSwapchain) \
+    USE_XR_FUNC(xrCreateVulkanDeviceKHR) \
+    USE_XR_FUNC(xrCreateVulkanInstanceKHR) \
     USE_XR_FUNC(xrDestroyAction) \
     USE_XR_FUNC(xrDestroyActionSet) \
     USE_XR_FUNC(xrDestroyHandTrackerEXT) \
@@ -162,6 +180,8 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrEndSession) \
     USE_XR_FUNC(xrEnumerateApiLayerProperties) \
     USE_XR_FUNC(xrEnumerateBoundSourcesForAction) \
+    USE_XR_FUNC(xrEnumerateColorSpacesFB) \
+    USE_XR_FUNC(xrEnumerateDisplayRefreshRatesFB) \
     USE_XR_FUNC(xrEnumerateEnvironmentBlendModes) \
     USE_XR_FUNC(xrEnumerateReferenceSpaces) \
     USE_XR_FUNC(xrEnumerateSwapchainFormats) \
@@ -172,7 +192,11 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrGetActionStateFloat) \
     USE_XR_FUNC(xrGetActionStatePose) \
     USE_XR_FUNC(xrGetActionStateVector2f) \
+    USE_XR_FUNC(xrGetControllerModelKeyMSFT) \
+    USE_XR_FUNC(xrGetControllerModelPropertiesMSFT) \
+    USE_XR_FUNC(xrGetControllerModelStateMSFT) \
     USE_XR_FUNC(xrGetCurrentInteractionProfile) \
+    USE_XR_FUNC(xrGetDisplayRefreshRateFB) \
     USE_XR_FUNC(xrGetInputSourceLocalizedName) \
     USE_XR_FUNC(xrGetInstanceProperties) \
     USE_XR_FUNC(xrGetOpenGLGraphicsRequirementsKHR) \
@@ -182,9 +206,12 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrGetViewConfigurationProperties) \
     USE_XR_FUNC(xrGetVisibilityMaskKHR) \
     USE_XR_FUNC(xrGetVulkanDeviceExtensionsKHR) \
+    USE_XR_FUNC(xrGetVulkanGraphicsDevice2KHR) \
     USE_XR_FUNC(xrGetVulkanGraphicsDeviceKHR) \
+    USE_XR_FUNC(xrGetVulkanGraphicsRequirements2KHR) \
     USE_XR_FUNC(xrGetVulkanGraphicsRequirementsKHR) \
     USE_XR_FUNC(xrGetVulkanInstanceExtensionsKHR) \
+    USE_XR_FUNC(xrLoadControllerModelMSFT) \
     USE_XR_FUNC(xrLocateHandJointsEXT) \
     USE_XR_FUNC(xrLocateSpace) \
     USE_XR_FUNC(xrLocateViews) \
@@ -192,8 +219,10 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrPerfSettingsSetPerformanceLevelEXT) \
     USE_XR_FUNC(xrPollEvent) \
     USE_XR_FUNC(xrReleaseSwapchainImage) \
+    USE_XR_FUNC(xrRequestDisplayRefreshRateFB) \
     USE_XR_FUNC(xrRequestExitSession) \
     USE_XR_FUNC(xrResultToString) \
+    USE_XR_FUNC(xrSetColorSpaceFB) \
     USE_XR_FUNC(xrSetInputDeviceActiveEXT) \
     USE_XR_FUNC(xrSetInputDeviceLocationEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateBoolEXT) \

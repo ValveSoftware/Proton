@@ -15,7 +15,7 @@
  * language incorporated into the Specification and reference pages, and other
  * material which is registered by Khronos, such as tags used by extension and
  * layer authors. The only authoritative version of xr.xml is the one
- * maintained in the master branch of the Khronos OpenXR GitHub project.
+ * maintained in the default branch of the Khronos OpenXR GitHub project.
  *
  */
 
@@ -176,6 +176,18 @@ XrResult WINAPI wine_xrEnumerateBoundSourcesForAction(XrSession session, const X
     return xrEnumerateBoundSourcesForAction(((wine_XrSession *)session)->session, enumerateInfo, sourceCapacityInput, sourceCountOutput, sources);
 }
 
+static XrResult WINAPI wine_xrEnumerateColorSpacesFB(XrSession session, uint32_t colorSpaceCapacityInput, uint32_t *colorSpaceCountOutput, XrColorSpaceFB *colorSpaces)
+{
+    WINE_TRACE("%p, %u, %p, %p\n", session, colorSpaceCapacityInput, colorSpaceCountOutput, colorSpaces);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrEnumerateColorSpacesFB(((wine_XrSession *)session)->session, colorSpaceCapacityInput, colorSpaceCountOutput, colorSpaces);
+}
+
+static XrResult WINAPI wine_xrEnumerateDisplayRefreshRatesFB(XrSession session, uint32_t displayRefreshRateCapacityInput, uint32_t *displayRefreshRateCountOutput, float *displayRefreshRates)
+{
+    WINE_TRACE("%p, %u, %p, %p\n", session, displayRefreshRateCapacityInput, displayRefreshRateCountOutput, displayRefreshRates);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrEnumerateDisplayRefreshRatesFB(((wine_XrSession *)session)->session, displayRefreshRateCapacityInput, displayRefreshRateCountOutput, displayRefreshRates);
+}
+
 XrResult WINAPI wine_xrEnumerateEnvironmentBlendModes(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, uint32_t environmentBlendModeCapacityInput, uint32_t *environmentBlendModeCountOutput, XrEnvironmentBlendMode *environmentBlendModes)
 {
     WINE_TRACE("%p, 0x%s, %#x, %u, %p, %p\n", instance, wine_dbgstr_longlong(systemId), viewConfigurationType, environmentBlendModeCapacityInput, environmentBlendModeCountOutput, environmentBlendModes);
@@ -224,10 +236,34 @@ XrResult WINAPI wine_xrGetActionStateVector2f(XrSession session, const XrActionS
     return xrGetActionStateVector2f(((wine_XrSession *)session)->session, getInfo, state);
 }
 
+static XrResult WINAPI wine_xrGetControllerModelKeyMSFT(XrSession session, XrPath topLevelUserPath, XrControllerModelKeyStateMSFT *controllerModelKeyState)
+{
+    WINE_TRACE("%p, 0x%s, %p\n", session, wine_dbgstr_longlong(topLevelUserPath), controllerModelKeyState);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetControllerModelKeyMSFT(((wine_XrSession *)session)->session, topLevelUserPath, controllerModelKeyState);
+}
+
+static XrResult WINAPI wine_xrGetControllerModelPropertiesMSFT(XrSession session, XrControllerModelKeyMSFT modelKey, XrControllerModelPropertiesMSFT *properties)
+{
+    WINE_TRACE("%p, 0x%s, %p\n", session, wine_dbgstr_longlong(modelKey), properties);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetControllerModelPropertiesMSFT(((wine_XrSession *)session)->session, modelKey, properties);
+}
+
+static XrResult WINAPI wine_xrGetControllerModelStateMSFT(XrSession session, XrControllerModelKeyMSFT modelKey, XrControllerModelStateMSFT *state)
+{
+    WINE_TRACE("%p, 0x%s, %p\n", session, wine_dbgstr_longlong(modelKey), state);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetControllerModelStateMSFT(((wine_XrSession *)session)->session, modelKey, state);
+}
+
 XrResult WINAPI wine_xrGetCurrentInteractionProfile(XrSession session, XrPath topLevelUserPath, XrInteractionProfileState *interactionProfile)
 {
     WINE_TRACE("%p, 0x%s, %p\n", session, wine_dbgstr_longlong(topLevelUserPath), interactionProfile);
     return xrGetCurrentInteractionProfile(((wine_XrSession *)session)->session, topLevelUserPath, interactionProfile);
+}
+
+static XrResult WINAPI wine_xrGetDisplayRefreshRateFB(XrSession session, float *displayRefreshRate)
+{
+    WINE_TRACE("%p, %p\n", session, displayRefreshRate);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetDisplayRefreshRateFB(((wine_XrSession *)session)->session, displayRefreshRate);
 }
 
 XrResult WINAPI wine_xrGetInputSourceLocalizedName(XrSession session, const XrInputSourceLocalizedNameGetInfo *getInfo, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer)
@@ -272,10 +308,22 @@ static XrResult WINAPI wine_xrGetVisibilityMaskKHR(XrSession session, XrViewConf
     return ((wine_XrSession *)session)->wine_instance->funcs.p_xrGetVisibilityMaskKHR(((wine_XrSession *)session)->session, viewConfigurationType, viewIndex, visibilityMaskType, visibilityMask);
 }
 
+static XrResult WINAPI wine_xrGetVulkanGraphicsRequirements2KHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements)
+{
+    WINE_TRACE("%p, 0x%s, %p\n", instance, wine_dbgstr_longlong(systemId), graphicsRequirements);
+    return ((wine_XrInstance *)instance)->funcs.p_xrGetVulkanGraphicsRequirements2KHR(((wine_XrInstance *)instance)->instance, systemId, graphicsRequirements);
+}
+
 static XrResult WINAPI wine_xrGetVulkanGraphicsRequirementsKHR(XrInstance instance, XrSystemId systemId, XrGraphicsRequirementsVulkanKHR *graphicsRequirements)
 {
     WINE_TRACE("%p, 0x%s, %p\n", instance, wine_dbgstr_longlong(systemId), graphicsRequirements);
     return ((wine_XrInstance *)instance)->funcs.p_xrGetVulkanGraphicsRequirementsKHR(((wine_XrInstance *)instance)->instance, systemId, graphicsRequirements);
+}
+
+static XrResult WINAPI wine_xrLoadControllerModelMSFT(XrSession session, XrControllerModelKeyMSFT modelKey, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, uint8_t *buffer)
+{
+    WINE_TRACE("%p, 0x%s, %u, %p, %p\n", session, wine_dbgstr_longlong(modelKey), bufferCapacityInput, bufferCountOutput, buffer);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrLoadControllerModelMSFT(((wine_XrSession *)session)->session, modelKey, bufferCapacityInput, bufferCountOutput, buffer);
 }
 
 static XrResult WINAPI wine_xrLocateHandJointsEXT(XrHandTrackerEXT handTracker, const XrHandJointsLocateInfoEXT *locateInfo, XrHandJointLocationsEXT *locations)
@@ -314,6 +362,12 @@ XrResult WINAPI wine_xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwap
     return xrReleaseSwapchainImage(((wine_XrSwapchain *)swapchain)->swapchain, releaseInfo);
 }
 
+static XrResult WINAPI wine_xrRequestDisplayRefreshRateFB(XrSession session, float displayRefreshRate)
+{
+    WINE_TRACE("%p, %f\n", session, displayRefreshRate);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrRequestDisplayRefreshRateFB(((wine_XrSession *)session)->session, displayRefreshRate);
+}
+
 XrResult WINAPI wine_xrRequestExitSession(XrSession session)
 {
     WINE_TRACE("%p\n", session);
@@ -324,6 +378,12 @@ XrResult WINAPI wine_xrResultToString(XrInstance instance, XrResult value, char 
 {
     WINE_TRACE("%p, %#x, %p\n", instance, value, buffer);
     return xrResultToString(((wine_XrInstance *)instance)->instance, value, buffer);
+}
+
+static XrResult WINAPI wine_xrSetColorSpaceFB(XrSession session, const XrColorSpaceFB colorspace)
+{
+    WINE_TRACE("%p, %#x\n", session, colorspace);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetColorSpaceFB(((wine_XrSession *)session)->session, colorspace);
 }
 
 static XrResult WINAPI wine_xrSetInputDeviceActiveEXT(XrSession session, XrPath interactionProfile, XrPath topLevelPath, XrBool32 isActive)
@@ -431,6 +491,8 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrCreateSpatialAnchorSpaceMSFT", &wine_xrCreateSpatialAnchorSpaceMSFT},
     {"xrCreateSpatialGraphNodeSpaceMSFT", &wine_xrCreateSpatialGraphNodeSpaceMSFT},
     {"xrCreateSwapchain", &wine_xrCreateSwapchain},
+    {"xrCreateVulkanDeviceKHR", &wine_xrCreateVulkanDeviceKHR},
+    {"xrCreateVulkanInstanceKHR", &wine_xrCreateVulkanInstanceKHR},
     {"xrDestroyAction", &wine_xrDestroyAction},
     {"xrDestroyActionSet", &wine_xrDestroyActionSet},
     {"xrDestroyHandTrackerEXT", &wine_xrDestroyHandTrackerEXT},
@@ -443,6 +505,8 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrEndSession", &wine_xrEndSession},
     {"xrEnumerateApiLayerProperties", &wine_xrEnumerateApiLayerProperties},
     {"xrEnumerateBoundSourcesForAction", &wine_xrEnumerateBoundSourcesForAction},
+    {"xrEnumerateColorSpacesFB", &wine_xrEnumerateColorSpacesFB},
+    {"xrEnumerateDisplayRefreshRatesFB", &wine_xrEnumerateDisplayRefreshRatesFB},
     {"xrEnumerateEnvironmentBlendModes", &wine_xrEnumerateEnvironmentBlendModes},
     {"xrEnumerateInstanceExtensionProperties", &wine_xrEnumerateInstanceExtensionProperties},
     {"xrEnumerateReferenceSpaces", &wine_xrEnumerateReferenceSpaces},
@@ -454,9 +518,13 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetActionStateFloat", &wine_xrGetActionStateFloat},
     {"xrGetActionStatePose", &wine_xrGetActionStatePose},
     {"xrGetActionStateVector2f", &wine_xrGetActionStateVector2f},
+    {"xrGetControllerModelKeyMSFT", &wine_xrGetControllerModelKeyMSFT},
+    {"xrGetControllerModelPropertiesMSFT", &wine_xrGetControllerModelPropertiesMSFT},
+    {"xrGetControllerModelStateMSFT", &wine_xrGetControllerModelStateMSFT},
     {"xrGetCurrentInteractionProfile", &wine_xrGetCurrentInteractionProfile},
     {"xrGetD3D11GraphicsRequirementsKHR", &wine_xrGetD3D11GraphicsRequirementsKHR},
     {"xrGetD3D12GraphicsRequirementsKHR", &wine_xrGetD3D12GraphicsRequirementsKHR},
+    {"xrGetDisplayRefreshRateFB", &wine_xrGetDisplayRefreshRateFB},
     {"xrGetInputSourceLocalizedName", &wine_xrGetInputSourceLocalizedName},
     {"xrGetInstanceProcAddr", &wine_xrGetInstanceProcAddr},
     {"xrGetInstanceProperties", &wine_xrGetInstanceProperties},
@@ -467,9 +535,12 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetViewConfigurationProperties", &wine_xrGetViewConfigurationProperties},
     {"xrGetVisibilityMaskKHR", &wine_xrGetVisibilityMaskKHR},
     {"xrGetVulkanDeviceExtensionsKHR", &wine_xrGetVulkanDeviceExtensionsKHR},
+    {"xrGetVulkanGraphicsDevice2KHR", &wine_xrGetVulkanGraphicsDevice2KHR},
     {"xrGetVulkanGraphicsDeviceKHR", &wine_xrGetVulkanGraphicsDeviceKHR},
+    {"xrGetVulkanGraphicsRequirements2KHR", &wine_xrGetVulkanGraphicsRequirements2KHR},
     {"xrGetVulkanGraphicsRequirementsKHR", &wine_xrGetVulkanGraphicsRequirementsKHR},
     {"xrGetVulkanInstanceExtensionsKHR", &wine_xrGetVulkanInstanceExtensionsKHR},
+    {"xrLoadControllerModelMSFT", &wine_xrLoadControllerModelMSFT},
     {"xrLocateHandJointsEXT", &wine_xrLocateHandJointsEXT},
     {"xrLocateSpace", &wine_xrLocateSpace},
     {"xrLocateViews", &wine_xrLocateViews},
@@ -477,8 +548,10 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrPerfSettingsSetPerformanceLevelEXT", &wine_xrPerfSettingsSetPerformanceLevelEXT},
     {"xrPollEvent", &wine_xrPollEvent},
     {"xrReleaseSwapchainImage", &wine_xrReleaseSwapchainImage},
+    {"xrRequestDisplayRefreshRateFB", &wine_xrRequestDisplayRefreshRateFB},
     {"xrRequestExitSession", &wine_xrRequestExitSession},
     {"xrResultToString", &wine_xrResultToString},
+    {"xrSetColorSpaceFB", &wine_xrSetColorSpaceFB},
     {"xrSetInputDeviceActiveEXT", &wine_xrSetInputDeviceActiveEXT},
     {"xrSetInputDeviceLocationEXT", &wine_xrSetInputDeviceLocationEXT},
     {"xrSetInputDeviceStateBoolEXT", &wine_xrSetInputDeviceStateBoolEXT},
@@ -522,20 +595,28 @@ static const char * const xr_extensions[] =
     "XR_EXT_thermal_query",
     "XR_EXT_view_configuration_depth_range",
     "XR_EXT_win32_appcontainer_compatible",
+    "XR_FB_color_space",
+    "XR_FB_display_refresh_rate",
+    "XR_HTC_vive_cosmos_controller_interaction",
     "XR_HUAWEI_controller_interaction",
     "XR_KHR_D3D11_enable",
     "XR_KHR_D3D12_enable",
+    "XR_KHR_binding_modification",
+    "XR_KHR_composition_layer_color_scale_bias",
     "XR_KHR_composition_layer_cube",
     "XR_KHR_composition_layer_cylinder",
     "XR_KHR_composition_layer_depth",
     "XR_KHR_composition_layer_equirect",
+    "XR_KHR_composition_layer_equirect2",
     "XR_KHR_opengl_enable",
     "XR_KHR_visibility_mask",
     "XR_KHR_vulkan_enable",
+    "XR_KHR_vulkan_enable2",
     "XR_KHR_vulkan_swapchain_format_list",
     "XR_KHR_win32_convert_performance_counter_time",
     "XR_MND_headless",
     "XR_MND_swapchain_usage_input_attachment_bit",
+    "XR_MSFT_controller_model",
     "XR_MSFT_first_person_observer",
     "XR_MSFT_hand_interaction",
     "XR_MSFT_hand_tracking_mesh",
