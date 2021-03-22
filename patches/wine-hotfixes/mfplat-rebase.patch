@@ -2631,7 +2631,7 @@ index dadd161bcc9..ddee03cf300 100644
 +    if (unix_funcs->wg_parser_stream_drain(decoder->wg_stream))
 +    {
 +        /* this would be unexpected, as we should get the EOS-event when a drain command completes. */
-+        assert (!decoder->draining);
++        //assert (!decoder->draining);
 +
 +        LeaveCriticalSection(&decoder->cs);
 +        return MF_E_TRANSFORM_NEED_MORE_INPUT;
