@@ -1,7 +1,7 @@
 From a52b4686050becac47da71b266a1f7017738e3a7 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 9 Mar 2021 16:53:09 -0500
-Subject: [PATCH 01/38] winegstreamer: Activate source pad in push mode if it
+Subject: [PATCH 01/40] winegstreamer: Activate source pad in push mode if it
  isn't activated in pull mode.
 
 Since our source pad is not part of any element, gstreamer won't end up activating it
@@ -86,12 +86,12 @@ index f76ca903b80..ac9a399234a 100644
      if (ret == GST_STATE_CHANGE_FAILURE)
      {
 -- 
-2.29.2
+2.30.2
 
 From 07b959ae60e8d404a25754b31c5aec0230c9ebb2 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 10 Mar 2021 10:43:03 -0500
-Subject: [PATCH 02/38] winegstreamer: Push stream-start and segment events in
+Subject: [PATCH 02/40] winegstreamer: Push stream-start and segment events in
  push mode.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -146,12 +146,12 @@ index ac9a399234a..4bc4246a9e3 100644
  
      return TRUE;
 -- 
-2.29.2
+2.30.2
 
 From 17be033828ca1edb3e4275a9a9fbf26027db8b9b Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 10 Mar 2021 13:09:51 -0500
-Subject: [PATCH 03/38] winegstreamer: Introduce H.264 decoder transform.
+Subject: [PATCH 03/40] winegstreamer: Introduce H.264 decoder transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -545,12 +545,12 @@ index 46c715a3752..63b2ab84c92 100644
  cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2, 0xe7, 0xc, 0x44, 0x5c, 0x78, 0xc9, 0x82);")
 +cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
 -- 
-2.29.2
+2.30.2
 
 From e0872c463225f58e145bf4c2e57023f879dd11e2 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 10 Mar 2021 14:14:21 -0500
-Subject: [PATCH 04/38] winegstreamer: Implement ::GetInputAvailableType for
+Subject: [PATCH 04/40] winegstreamer: Implement ::GetInputAvailableType for
  decode transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -702,12 +702,12 @@ index d03953ba7e4..d3d5c3582d2 100644
  
  HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
 -- 
-2.29.2
+2.30.2
 
 From 30fa73cd863d1ab90070727535247f251ee26638 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 10 Mar 2021 14:23:09 -0500
-Subject: [PATCH 05/38] winegstreamer: Implement ::GetOutputAvailableType for
+Subject: [PATCH 05/40] winegstreamer: Implement ::GetOutputAvailableType for
  decode transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -759,12 +759,12 @@ index 55a0c1c6c9b..3c71fddd67c 100644
  
  static HRESULT WINAPI mf_decoder_SetInputType(IMFTransform *iface, DWORD id, IMFMediaType *type, DWORD flags)
 -- 
-2.29.2
+2.30.2
 
 From d613594fa7d0d2172614ff722641aeaf55c700b2 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 11 Mar 2021 12:33:02 -0500
-Subject: [PATCH 06/38] winegstreamer: Implement ::SetInputType for decode
+Subject: [PATCH 06/40] winegstreamer: Implement ::SetInputType for decode
  transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -1064,12 +1064,12 @@ index 4bc4246a9e3..9e8754390a1 100644
                  break;
          }
 -- 
-2.29.2
+2.30.2
 
 From d7bb5e8c56fff6cf45c0697e53c840f19bc5759b Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 11 Mar 2021 12:58:32 -0500
-Subject: [PATCH 07/38] winegstreamer: Implement ::SetOutputType for decode
+Subject: [PATCH 07/40] winegstreamer: Implement ::SetOutputType for decode
  transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -1180,12 +1180,12 @@ index f709ef32fc1..0848cb47c9d 100644
  
  static HRESULT WINAPI mf_decoder_GetInputCurrentType(IMFTransform *iface, DWORD id, IMFMediaType **type)
 -- 
-2.29.2
+2.30.2
 
 From 055b053f721f2f7fd711d00d4e6d7d4c2eb9bd0c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 11 Mar 2021 14:40:32 -0500
-Subject: [PATCH 08/38] winegstreamer: Implement ::Get(Input/Output)StreamInfo
+Subject: [PATCH 08/40] winegstreamer: Implement ::Get(Input/Output)StreamInfo
  for decode transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -1286,12 +1286,12 @@ index 0848cb47c9d..dadd161bcc9 100644
      InitializeCriticalSection(&object->cs);
  
 -- 
-2.29.2
+2.30.2
 
 From 53b2efd9f7031339020e64168e6250903734060e Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 16:40:46 -0400
-Subject: [PATCH 09/38] winegstreamer: Add push-mode path for wg_parser.
+Subject: [PATCH 09/40] winegstreamer: Add push-mode path for wg_parser.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2155,12 +2155,12 @@ index 9e8754390a1..3a691589e53 100644
  
  NTSTATUS CDECL __wine_init_unix_lib(HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out)
 -- 
-2.29.2
+2.30.2
 
 From 450f8fbc17d7b9bac5428ef4db8da53a446b9ee8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 16:53:02 -0400
-Subject: [PATCH 10/38] winegstreamer: Implement ::Process(Input/Output) for
+Subject: [PATCH 10/40] winegstreamer: Implement ::Process(Input/Output) for
  decoder transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -2631,7 +2631,7 @@ index dadd161bcc9..ddee03cf300 100644
 +    if (unix_funcs->wg_parser_stream_drain(decoder->wg_stream))
 +    {
 +        /* this would be unexpected, as we should get the EOS-event when a drain command completes. */
-+        //assert (!decoder->draining);
++        assert (!decoder->draining);
 +
 +        LeaveCriticalSection(&decoder->cs);
 +        return MF_E_TRANSFORM_NEED_MORE_INPUT;
@@ -2803,12 +2803,12 @@ index dadd161bcc9..ddee03cf300 100644
      *obj = &object->IMFTransform_iface;
      return S_OK;
 -- 
-2.29.2
+2.30.2
 
 From e0ef75676850eed550fca3b3aa4b28263a279c5a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 16:54:03 -0400
-Subject: [PATCH 11/38] winestreamer: Implement ::ProcessMessage for decoder
+Subject: [PATCH 11/40] winestreamer: Implement ::ProcessMessage for decoder
  transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -2925,12 +2925,12 @@ index ddee03cf300..48293249e7d 100644
  
  static HRESULT WINAPI mf_decoder_ProcessInput(IMFTransform *iface, DWORD id, IMFSample *sample, DWORD flags)
 -- 
-2.29.2
+2.30.2
 
 From 73df9b71d7802bdd96598f5cda43f789bfff8d2c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 16:55:15 -0400
-Subject: [PATCH 12/38] winegstreamer: Semi-stub ::GetAttributes for decoder
+Subject: [PATCH 12/40] winegstreamer: Semi-stub ::GetAttributes for decoder
  transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -2955,12 +2955,12 @@ index 48293249e7d..5b039e62de0 100644
  
  static HRESULT WINAPI mf_decoder_GetInputStreamAttributes(IMFTransform *iface, DWORD id,
 -- 
-2.29.2
+2.30.2
 
 From 40eabc6961483a0e26f47344118efd34897575a4 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 16:57:11 -0400
-Subject: [PATCH 13/38] winegstreamer: Register the H.264 decoder transform.
+Subject: [PATCH 13/40] winegstreamer: Register the H.264 decoder transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3011,12 +3011,12 @@ index 48733d8e205..61e93aa4874 100644
  
  HRESULT mfplat_DllRegisterServer(void)
 -- 
-2.29.2
+2.30.2
 
 From 4ed1f355e5abc75fe04d6e97038280124d36be01 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 16:59:29 -0400
-Subject: [PATCH 14/38] winegstreamer: Introduce AAC decoder transform.
+Subject: [PATCH 14/40] winegstreamer: Introduce AAC decoder transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3323,12 +3323,12 @@ index 63b2ab84c92..d6f18eb8661 100644
  cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
 +cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
 -- 
-2.29.2
+2.30.2
 
 From 607508fdc494a72ce8f49d8c0852d3be4528a829 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 17:00:27 -0400
-Subject: [PATCH 15/38] winegstreamer: Register the AAC decoder transform.
+Subject: [PATCH 15/40] winegstreamer: Register the AAC decoder transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3376,12 +3376,12 @@ index 7442e1133db..6449b38f5f1 100644
  
  HRESULT mfplat_DllRegisterServer(void)
 -- 
-2.29.2
+2.30.2
 
 From 4801e1c1abf8d0a9d1d1712d0432b985a903ab9d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 17:00:51 -0400
-Subject: [PATCH 16/38] winegstreamer: Rename GStreamer objects to be more
+Subject: [PATCH 16/40] winegstreamer: Rename GStreamer objects to be more
  generic.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3421,12 +3421,12 @@ index 54fc5b69da7..87ce7e11871 100644
      gst_pad_set_query_function(parser->my_src, src_query_cb);
      gst_pad_set_activatemode_function(parser->my_src, src_activate_mode_cb);
 -- 
-2.29.2
+2.30.2
 
 From 762775b751a0c4c94fce757846298d5e95fa2ea3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 17:01:54 -0400
-Subject: [PATCH 17/38] winegstreamer: Report streams backwards in media
+Subject: [PATCH 17/40] winegstreamer: Report streams backwards in media
  source.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3448,12 +3448,12 @@ index 331c87dc371..14fcac235b0 100644
  
      if (FAILED(hr = MFCreatePresentationDescriptor(object->stream_count, descriptors, &object->pres_desc)))
 -- 
-2.29.2
+2.30.2
 
 From a1581a7606a40b97ec9f38005df1f9ee1def743d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 14:07:52 -0400
-Subject: [PATCH 18/38] winegstreamer: Implement ::Process(Input/Output) for
+Subject: [PATCH 18/40] winegstreamer: Implement ::Process(Input/Output) for
  audio conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3976,12 +3976,12 @@ index 87ce7e11871..394a0d65aeb 100644
  
      wg_parser_connect,
 -- 
-2.29.2
+2.30.2
 
 From 61a914b8a2d6c1104c216acb0ced7c46530b7c60 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 15:12:20 -0400
-Subject: [PATCH 19/38] winegstreamer: Implement ::Get(Input/Output)StreamInfo
+Subject: [PATCH 19/40] winegstreamer: Implement ::Get(Input/Output)StreamInfo
  for audio conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4049,12 +4049,12 @@ index 8405f3bedc5..4ad64d58e47 100644
  
  static HRESULT WINAPI audio_converter_GetAttributes(IMFTransform *iface, IMFAttributes **attributes)
 -- 
-2.29.2
+2.30.2
 
 From 26a0ebd578930bca265ddac7d0516901335e2e55 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 15:19:32 -0400
-Subject: [PATCH 20/38] winegstreamer: Semi-stub Get*Attributes functions for
+Subject: [PATCH 20/40] winegstreamer: Semi-stub Get*Attributes functions for
  audio converter transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4150,12 +4150,12 @@ index 4ad64d58e47..43fe8b04e64 100644
      {
          ERR("Failed to create audio converter due to GStreamer error.\n");
 -- 
-2.29.2
+2.30.2
 
 From 001b02e5d818d4b7bec14aba180613a63225388e Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 15:35:20 -0400
-Subject: [PATCH 21/38] winegstreamer: Introduce color conversion transform.
+Subject: [PATCH 21/40] winegstreamer: Introduce color conversion transform.
 
 Serves as a wrapper of videoconvert, and exposes the CColorConverterDMO MFT interface.
 
@@ -4546,12 +4546,12 @@ index 61381bee6d4..87305422332 100644
 +]
 +coclass CColorConvertDMO {}
 -- 
-2.29.2
+2.30.2
 
 From 38a76e0e7e0700e94fb382500ab0ef3e9d50af03 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 15:37:17 -0400
-Subject: [PATCH 22/38] winegstreamer: Register the color conversion transform.
+Subject: [PATCH 22/40] winegstreamer: Register the color conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -4617,12 +4617,12 @@ index d31d87b2d1d..4db431d839d 100644
      for (i = 0; i < ARRAY_SIZE(mfts); i++)
      {
 -- 
-2.29.2
+2.30.2
 
 From 77fa91c34ccb9701b674427832aba024264af258 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 15:41:33 -0400
-Subject: [PATCH 23/38] winegstreamer: Implement ::GetInputAvailableType for
+Subject: [PATCH 23/40] winegstreamer: Implement ::GetInputAvailableType for
  color conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4698,12 +4698,12 @@ index 1f0d061a30c..078782daaed 100644
  
  static HRESULT WINAPI color_converter_GetOutputAvailableType(IMFTransform *iface, DWORD id, DWORD index,
 -- 
-2.29.2
+2.30.2
 
 From 042f02feb85a9b41263961b14019cb4ed987857c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 16:01:18 -0400
-Subject: [PATCH 24/38] winegstreamer: Implement ::SetInputType for color
+Subject: [PATCH 24/40] winegstreamer: Implement ::SetInputType for color
  conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4820,12 +4820,12 @@ index 078782daaed..06186ed7846 100644
      return S_OK;
  }
 -- 
-2.29.2
+2.30.2
 
 From 1520936a557f0e76ff39c1dbfec3104a843227e9 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 16:04:31 -0400
-Subject: [PATCH 25/38] winegstreamer: Implement ::GetOutputAvailableType for
+Subject: [PATCH 25/40] winegstreamer: Implement ::GetOutputAvailableType for
  color conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4884,12 +4884,12 @@ index 06186ed7846..6d7064a4482 100644
  
  static HRESULT WINAPI color_converter_SetInputType(IMFTransform *iface, DWORD id, IMFMediaType *type, DWORD flags)
 -- 
-2.29.2
+2.30.2
 
 From 27268115ba374107f890ecc24c763d1dc78e8d70 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 16:26:28 -0400
-Subject: [PATCH 26/38] winegstreamer: Implement ::SetOutputType for color
+Subject: [PATCH 26/40] winegstreamer: Implement ::SetOutputType for color
  conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5037,12 +5037,12 @@ index 6d7064a4482..e001c6c827e 100644
  
  static HRESULT WINAPI color_converter_GetInputCurrentType(IMFTransform *iface, DWORD id, IMFMediaType **type)
 -- 
-2.29.2
+2.30.2
 
 From 227ba551bdf8ca8d64f9a7c900121bb7203b1fee Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 16:49:13 -0400
-Subject: [PATCH 27/38] winegstreamer: Implement ::Process(Input/Output) for
+Subject: [PATCH 27/40] winegstreamer: Implement ::Process(Input/Output) for
  color conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5427,12 +5427,12 @@ index e001c6c827e..a543b9d77af 100644
      return S_OK;
  }
 -- 
-2.29.2
+2.30.2
 
 From ff86a0db8bfa392206785f7bad239496d743774f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 16:50:47 -0400
-Subject: [PATCH 28/38] winegstreamer: Implement ::ProcessMessage for color
+Subject: [PATCH 28/40] winegstreamer: Implement ::ProcessMessage for color
  conversion MFT.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5465,12 +5465,12 @@ index a543b9d77af..8d2f7a7d643 100644
  
  static HRESULT WINAPI color_converter_ProcessInput(IMFTransform *iface, DWORD id, IMFSample *sample, DWORD flags)
 -- 
-2.29.2
+2.30.2
 
 From 60bb6fb7a36b0e6c8383223ca9c3377ef6b34c05 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 17 Mar 2021 17:01:11 -0400
-Subject: [PATCH 29/38] winegstreamer: Implement ::Get(Input/Output)StreamInfo
+Subject: [PATCH 29/40] winegstreamer: Implement ::Get(Input/Output)StreamInfo
  for color conversion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5560,12 +5560,12 @@ index 8d2f7a7d643..6f3723b2b1e 100644
  
  static HRESULT WINAPI color_converter_GetAttributes(IMFTransform *iface, IMFAttributes **attributes)
 -- 
-2.29.2
+2.30.2
 
 From a058563897065a8603c81e277cd583a373c530af Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 13:53:05 -0400
-Subject: [PATCH 30/38] mf/session: Prefer transform-provided sample path.
+Subject: [PATCH 30/40] mf/session: Prefer transform-provided sample path.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -5586,12 +5586,12 @@ index 942212d5bf2..a91373b89cd 100644
              if (FAILED(hr = transform_get_external_output_sample(session, node, i, &stream_info, &buffers[i].pSample)))
                  break;
 -- 
-2.29.2
+2.30.2
 
 From 9c12ed68dd94908c537be13a5fca309fc5472fd6 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 13:53:42 -0400
-Subject: [PATCH 31/38] mf/topology: Forward failure from ::SetOutputType when
+Subject: [PATCH 31/40] mf/topology: Forward failure from ::SetOutputType when
  resolving topology.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5614,12 +5614,12 @@ index 58639a67bdb..60f5f7196b6 100644
  
  static HRESULT connect_to_converter(struct transform_output_type *output_type, struct connect_context *context)
 -- 
-2.29.2
+2.30.2
 
 From 53a282863094c02b7c033455638058641afcbfd5 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 14:53:49 -0400
-Subject: [PATCH 32/38] winegstreamer: Handle flush command in audio
+Subject: [PATCH 32/40] winegstreamer: Handle flush command in audio
  converstion transform.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5640,12 +5640,12 @@ index 43fe8b04e64..1584fefe577 100644
              return S_OK;
          default:
 -- 
-2.29.2
+2.30.2
 
 From e3b827cfed8773cb10d49fb690bfa6f3e1f3d02f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 4 Dec 2020 16:17:11 -0500
-Subject: [PATCH 33/38] winegstreamer: In the default configuration, select one
+Subject: [PATCH 33/40] winegstreamer: In the default configuration, select one
  stream of each major type.
 
 ---
@@ -5695,12 +5695,12 @@ index 14fcac235b0..5398ec469b5 100644
      }
      free(descriptors);
 -- 
-2.29.2
+2.30.2
 
 From b6678515d5860bea8f99ef5bd0f0f929bc780c6a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 15:25:17 -0400
-Subject: [PATCH 34/38] winegstreamer: Implement MF_SD_LANGUAGE.
+Subject: [PATCH 34/40] winegstreamer: Implement MF_SD_LANGUAGE.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -5826,12 +5826,12 @@ index 394a0d65aeb..dd32b3877af 100644
      wg_parser_stream_drain,
  };
 -- 
-2.29.2
+2.30.2
 
 From 46673f7cca6ceb462cb74ab2ea0194edcf9f8e7d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 15:29:21 -0400
-Subject: [PATCH 35/38] winegstreamer: Ensure that the source reports both PCM
+Subject: [PATCH 35/40] winegstreamer: Ensure that the source reports both PCM
  and floating point audio formats.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5889,12 +5889,12 @@ index c494b5d9c08..e1c89adcb92 100644
      {
          stream_type = mf_media_type_from_wg_format(&format);
 -- 
-2.29.2
+2.30.2
 
 From 825307a3c7dbf751fc280458fb9e6a2a7961e054 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 16:20:50 -0400
-Subject: [PATCH 36/38] winegstreamer: Only require videobox element for parser
+Subject: [PATCH 36/40] winegstreamer: Only require videobox element for parser
  when needed.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -5982,12 +5982,12 @@ index dd32b3877af..b40193005d1 100644
          stream->post_sink = gst_element_get_static_pad(deinterlace, "sink");
          stream->post_src = gst_element_get_static_pad(vconv2, "src");
 -- 
-2.29.2
+2.30.2
 
 From e3590fcb5bd8ceb73977ea450fceefe922ecd1b0 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 16:54:44 -0400
-Subject: [PATCH 37/38] mfplat: Stub out MFCreateDXGIDeviceManager, to avoid
+Subject: [PATCH 37/40] mfplat: Stub out MFCreateDXGIDeviceManager, to avoid
  the d3d path.
 
 ---
@@ -6008,12 +6008,12 @@ index 999d8a86147..70745466593 100644
          return E_POINTER;
  
 -- 
-2.29.2
+2.30.2
 
 From 74f743abaf29d774edc3b1285f0f1988b7c0ca0d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 19 Mar 2021 16:30:01 -0400
-Subject: [PATCH 38/38] Revert "mfreadwrite/reader: Alternate between selected
+Subject: [PATCH 38/40] Revert "mfreadwrite/reader: Alternate between selected
  streams for MF_SOURCE_READER_ANY_STREAM requests."
 
 This reverts commit 1fceb1213992b79aa7f1a5dc0a72ab3756ee524d.
@@ -6227,5 +6227,133 @@ index c6191767164..353868b6af1 100644
          ok(timestamp == 123, "Unexpected timestamp.\n");
          ok(!!sample, "Expected sample object.\n");
 -- 
-2.29.2
+2.30.2
+
+From 7a4416fff1b39d627cf31a17d3e3297ff8b3fd4b Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 22 Mar 2021 15:50:29 -0400
+Subject: [PATCH 39/40] winegstreamer: Don't rely on max_size in unseekable
+ parser.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/wg_parser.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index b40193005d1..5f95b12dc6e 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -1643,9 +1643,9 @@ static void *push_data(void *arg)
+         ULONG size;
+         int ret;
+ 
+-        if (parser->next_offset >= max_size)
++        if (parser->seekable && parser->next_offset >= max_size)
+             break;
+-        size = min(alloc_size, max_size - parser->next_offset);
++        size = parser->seekable ? min(alloc_size, max_size - parser->next_offset) : alloc_size;
+ 
+         ret = pull_data(parser, parser->next_offset, size, &size, &buffer);
+ 
+-- 
+2.30.2
+
+From e8bfab097802af8acafc7cb1dec7aebe9db7eeac Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 22 Mar 2021 15:50:51 -0400
+Subject: [PATCH 40/40] winegstreamer: Implement MFT_MESSAGE_COMMAND_FLUSH for
+ media converters.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/audioconvert.c | 20 ++++++++++++++++++++
+ dlls/winegstreamer/colorconvert.c | 23 +++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
+
+diff --git a/dlls/winegstreamer/audioconvert.c b/dlls/winegstreamer/audioconvert.c
+index 1584fefe577..df471122b9e 100644
+--- a/dlls/winegstreamer/audioconvert.c
++++ b/dlls/winegstreamer/audioconvert.c
+@@ -614,11 +614,31 @@ static HRESULT WINAPI audio_converter_ProcessEvent(IMFTransform *iface, DWORD id
+ 
+ static HRESULT WINAPI audio_converter_ProcessMessage(IMFTransform *iface, MFT_MESSAGE_TYPE message, ULONG_PTR param)
+ {
++    struct audio_converter *converter = impl_audio_converter_from_IMFTransform(iface);
++    struct wg_parser_event event;
++
+     TRACE("%p, %u %lu.\n", iface, message, param);
+ 
+     switch(message)
+     {
+         case MFT_MESSAGE_COMMAND_FLUSH:
++        {
++            EnterCriticalSection(&converter->cs);
++            if (!converter->buffer_inflight)
++            {
++                LeaveCriticalSection(&converter->cs);
++                return S_OK;
++            }
++
++            while (event.type != WG_PARSER_EVENT_BUFFER)
++                unix_funcs->wg_parser_stream_get_event(converter->stream, &event);
++
++            unix_funcs->wg_parser_stream_release_buffer(converter->stream);
++            converter->buffer_inflight = FALSE;
++
++            LeaveCriticalSection(&converter->cs);
++            return S_OK;
++        }
+         case MFT_MESSAGE_NOTIFY_BEGIN_STREAMING:
+             return S_OK;
+         default:
+diff --git a/dlls/winegstreamer/colorconvert.c b/dlls/winegstreamer/colorconvert.c
+index 6f3723b2b1e..947ef9adacb 100644
+--- a/dlls/winegstreamer/colorconvert.c
++++ b/dlls/winegstreamer/colorconvert.c
+@@ -586,11 +586,31 @@ static HRESULT WINAPI color_converter_ProcessEvent(IMFTransform *iface, DWORD id
+ 
+ static HRESULT WINAPI color_converter_ProcessMessage(IMFTransform *iface, MFT_MESSAGE_TYPE message, ULONG_PTR param)
+ {
++    struct color_converter *converter = impl_color_converter_from_IMFTransform(iface);
++    struct wg_parser_event event;
++
+     TRACE("%p, %u %lu.\n", iface, message, param);
+ 
+     switch(message)
+     {
+         case MFT_MESSAGE_COMMAND_FLUSH:
++        {
++            EnterCriticalSection(&converter->cs);
++            if (!converter->buffer_inflight)
++            {
++                LeaveCriticalSection(&converter->cs);
++                return S_OK;
++            }
++
++            while (event.type != WG_PARSER_EVENT_BUFFER)
++                unix_funcs->wg_parser_stream_get_event(converter->stream, &event);
++
++            unix_funcs->wg_parser_stream_release_buffer(converter->stream);
++            converter->buffer_inflight = FALSE;
++
++            LeaveCriticalSection(&converter->cs);
++            return S_OK;
++        }
+         case MFT_MESSAGE_NOTIFY_BEGIN_STREAMING:
+             return S_OK;
+         default:
+@@ -641,7 +661,10 @@ static HRESULT WINAPI color_converter_ProcessInput(IMFTransform *iface, DWORD id
+     for (;;)
+     {
+         if (!unix_funcs->wg_parser_get_read_request(converter->parser, &data, &offset, &size))
++        {
++            TRACE("sink unconnected\n");
+             continue;
++        }
+ 
+         memcpy(data, buffer_data, min(buffer_size, size));
+ 
+-- 
+2.30.2
 
