@@ -164,6 +164,7 @@
     patch -Np1 < ../patches/proton/24-proton-04_cod_registry.patch
     patch -Np1 < ../patches/proton/32-proton-05_spellforce_registry.patch
     patch -Np1 < ../patches/proton/33-proton-06_shadow_of_war_registry.patch
+    patch -Np1 < ../patches/proton/41-proton-07_nfs_registry.patch
 
 #    # -- pending work -- still broken
 #    echo "staging disabled bcrypt patches"
