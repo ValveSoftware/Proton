@@ -216,3 +216,219 @@ index 009dd58600d..928c6883372 100644
  HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
  HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
  HKCU,Software\Wine\AppDefaults\DarkSoulsIII.exe\X11 Driver,"LimitNumberOfResolutions",0x2,"32"
+From e319e326a26b069fe946d9b5c54efb241cd675e8 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 26 Feb 2021 20:22:34 +0300
+Subject: [PATCH] winevulkan: Add functions for creating VK instance and device
+ through OpenXR.
+
+---
+ dlls/winevulkan/make_vulkan     |  6 +++++
+ dlls/winevulkan/vulkan.c        | 47 +++++++++++++++++++++++++++------
+ dlls/winevulkan/winevulkan.spec |  2 ++
+ dlls/winex11.drv/vulkan.c       | 22 ++++++++++++---
+ include/wine/vulkan_driver.h    |  4 +++
+ 5 files changed, 69 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 8c2c8892e7f..925c2288b9e 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -2650,6 +2650,10 @@ class VkGenerator(object):
+         f.write("\n")
+         f.write("    /* winevulkan specific functions */\n")
+         f.write("    VkSurfaceKHR (*p_wine_get_native_surface)(VkSurfaceKHR);\n")
++        f.write("    VkResult (*create_vk_instance_with_callback)(const VkInstanceCreateInfo *create_info,\n")
++        f.write("            const VkAllocationCallbacks *allocator, VkInstance *instance,\n")
++        f.write("            VkResult (WINAPI *native_vkCreateInstance)(const VkInstanceCreateInfo *, const VkAllocationCallbacks *,\n")
++        f.write("            VkInstance *, void * (*)(VkInstance, const char *), void *), void *native_vkCreateInstance_context);\n")
+         f.write("};\n\n")
+ 
+         f.write("extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver(HDC hdc, UINT version);\n\n")
+@@ -2690,6 +2694,8 @@ class VkGenerator(object):
+         f.write("@ stdcall -private vk_icdGetInstanceProcAddr(ptr str) wine_vk_icdGetInstanceProcAddr\n")
+         f.write("@ stdcall -private vk_icdNegotiateLoaderICDInterfaceVersion(ptr) wine_vk_icdNegotiateLoaderICDInterfaceVersion\n")
+         f.write("@ cdecl -norelay native_vkGetInstanceProcAddrWINE(ptr str)\n")
++        f.write("@ stdcall __wine_create_vk_instance_with_callback(ptr ptr ptr ptr ptr)\n")
++        f.write("@ stdcall __wine_create_vk_device_with_callback(ptr ptr ptr ptr ptr ptr)\n")
+ 
+         # Export symbols for all Vulkan Core functions.
+         for func in self.registry.funcs.values():
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index c0554504ee9..fad6310d672 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -877,9 +877,11 @@ void WINAPI wine_vkCmdExecuteCommands(VkCommandBuffer buffer, uint32_t count,
+     heap_free(tmp_buffers);
+ }
+ 
+-VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
++VkResult WINAPI __wine_create_vk_device_with_callback(VkPhysicalDevice phys_dev,
+         const VkDeviceCreateInfo *create_info,
+-        const VkAllocationCallbacks *allocator, VkDevice *device)
++        const VkAllocationCallbacks *allocator, VkDevice *device,
++        VkResult (WINAPI *native_vkCreateDevice)(VkPhysicalDevice, const VkDeviceCreateInfo *, const VkAllocationCallbacks *,
++        VkDevice *, void * (*)(VkInstance, const char *), void *), void *native_vkCreateDevice_context)
+ {
+     VkDeviceCreateInfo create_info_host;
+     uint32_t max_queue_families;
+@@ -914,8 +916,14 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
+     if (res != VK_SUCCESS)
+         goto fail;
+ 
+-    res = phys_dev->instance->funcs.p_vkCreateDevice(phys_dev->phys_dev,
+-            &create_info_host, NULL /* allocator */, &object->device);
++    if (native_vkCreateDevice)
++        res = native_vkCreateDevice(phys_dev->phys_dev,
++                &create_info_host, NULL /* allocator */, &object->device,
++                vk_funcs->p_vkGetInstanceProcAddr, native_vkCreateDevice_context);
++    else
++        res = phys_dev->instance->funcs.p_vkCreateDevice(phys_dev->phys_dev,
++                &create_info_host, NULL /* allocator */, &object->device);
++
+     wine_vk_device_free_create_info(&create_info_host);
+     if(create_info_free_extensions)
+         wine_vk_device_free_create_info_extensions(&create_info_host);
+@@ -1027,8 +1027,17 @@ fail:
+     return res;
+ }
+ 
+-VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+-        const VkAllocationCallbacks *allocator, VkInstance *instance)
++VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
++        const VkDeviceCreateInfo *create_info,
++        const VkAllocationCallbacks *allocator, VkDevice *device)
++{
++    return __wine_create_vk_device_with_callback(phys_dev, create_info, allocator, device, NULL, NULL);
++}
++
++VkResult WINAPI __wine_create_vk_instance_with_callback(const VkInstanceCreateInfo *create_info,
++        const VkAllocationCallbacks *allocator, VkInstance *instance,
++        VkResult (WINAPI *native_vkCreateInstance)(const VkInstanceCreateInfo *, const VkAllocationCallbacks *,
++        VkInstance *, void * (*)(VkInstance, const char *), void *), void *native_vkCreateInstance_context)
+ {
+     VkInstanceCreateInfo create_info_host;
+     const VkApplicationInfo *app_info;
+@@ -1036,7 +1045,8 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+     struct VkInstance_T *object;
+     VkResult res;
+ 
+-    TRACE("create_info %p, allocator %p, instance %p\n", create_info, allocator, instance);
++    TRACE("create_info %p, allocator %p, instance %p, native_vkCreateInstance %p, context %p.\n",
++            create_info, allocator, instance, native_vkCreateInstance, native_vkCreateInstance_context);
+ 
+     wine_vk_init_once();
+     if (!vk_funcs)
+@@ -1011,7 +1029,14 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+         return res;
+     }
+ 
+-    res = vk_funcs->p_vkCreateInstance(&create_info_host, NULL /* allocator */, &object->instance);
++    if (native_vkCreateInstance && !vk_funcs->create_vk_instance_with_callback)
++        ERR("Driver create_vk_instance_with_callback is not available.\n");
++
++    if (native_vkCreateInstance && vk_funcs->create_vk_instance_with_callback)
++        res = vk_funcs->create_vk_instance_with_callback(&create_info_host, NULL /* allocator */, &object->instance,
++                native_vkCreateInstance, native_vkCreateInstance_context);
++    else
++        res = vk_funcs->p_vkCreateInstance(&create_info_host, NULL /* allocator */, &object->instance);
+     free_VkInstanceCreateInfo_struct_chain(&create_info_host);
+     if (res != VK_SUCCESS)
+     {
+@@ -1063,6 +1088,12 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+     return VK_SUCCESS;
+ }
+ 
++VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
++        const VkAllocationCallbacks *allocator, VkInstance *instance)
++{
++    return __wine_create_vk_instance_with_callback(create_info, allocator, instance, NULL, NULL);
++}
++
+ void WINAPI wine_vkDestroyDevice(VkDevice device, const VkAllocationCallbacks *allocator)
+ {
+     TRACE("%p %p\n", device, allocator);
+diff --git a/dlls/winevulkan/winevulkan.spec b/dlls/winevulkan/winevulkan.spec
+index 0bd1eaefc78..8499df71e85 100644
+--- a/dlls/winevulkan/winevulkan.spec
++++ b/dlls/winevulkan/winevulkan.spec
+@@ -11,6 +11,8 @@
+ @ stdcall -private vk_icdGetInstanceProcAddr(ptr str) wine_vk_icdGetInstanceProcAddr
+ @ stdcall -private vk_icdNegotiateLoaderICDInterfaceVersion(ptr) wine_vk_icdNegotiateLoaderICDInterfaceVersion
+ @ cdecl -norelay native_vkGetInstanceProcAddrWINE(ptr str)
++@ stdcall __wine_create_vk_instance_with_callback(ptr ptr ptr ptr ptr)
++@ stdcall __wine_create_vk_device_with_callback(ptr ptr ptr ptr ptr ptr)
+ @ stdcall -private wine_vkAcquireNextImage2KHR(ptr ptr ptr)
+ @ stdcall -private wine_vkAcquireNextImageKHR(ptr int64 int64 int64 int64 ptr)
+ @ stdcall -private wine_vkAllocateCommandBuffers(ptr ptr ptr)
+diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
+index 70a3e4d2819..219dad99595 100644
+--- a/dlls/winex11.drv/vulkan.c
++++ b/dlls/winex11.drv/vulkan.c
+@@ -224,12 +224,15 @@ void wine_vk_surface_destroy(HWND hwnd)
+     LeaveCriticalSection(&context_section);
+ }
+ 
+-static VkResult X11DRV_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+-        const VkAllocationCallbacks *allocator, VkInstance *instance)
++static VkResult X11DRV_create_vk_instance_with_callback(const VkInstanceCreateInfo *create_info,
++        const VkAllocationCallbacks *allocator, VkInstance *instance,
++        VkResult (WINAPI *native_vkCreateInstance)(const VkInstanceCreateInfo *, const VkAllocationCallbacks *,
++        VkInstance *, void * (*)(VkInstance, const char *), void *), void *native_vkCreateInstance_context)
+ {
+     VkInstanceCreateInfo create_info_host;
+     VkResult res;
+-    TRACE("create_info %p, allocator %p, instance %p\n", create_info, allocator, instance);
++    TRACE("create_info %p, allocator %p, instance %p, native_vkCreateInstance %p, context %p.\n",
++            create_info, allocator, instance, native_vkCreateInstance, native_vkCreateInstance_context);
+ 
+     if (allocator)
+         FIXME("Support for allocation callbacks not implemented yet\n");
+@@ -245,12 +248,22 @@ static VkResult X11DRV_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+         return res;
+     }
+ 
+-    res = pvkCreateInstance(&create_info_host, NULL /* allocator */, instance);
++    if (native_vkCreateInstance)
++        res = native_vkCreateInstance(&create_info_host, NULL /* allocator */, instance,
++                pvkGetInstanceProcAddr, native_vkCreateInstance_context);
++    else
++        res = pvkCreateInstance(&create_info_host, NULL /* allocator */, instance);
+ 
+     heap_free((void *)create_info_host.ppEnabledExtensionNames);
+     return res;
+ }
+ 
++static VkResult X11DRV_vkCreateInstance(const VkInstanceCreateInfo *create_info,
++        const VkAllocationCallbacks *allocator, VkInstance *instance)
++{
++    return X11DRV_create_vk_instance_with_callback(create_info, allocator, instance, NULL, NULL);
++}
++
+ static VkResult X11DRV_vkCreateSwapchainKHR(VkDevice device,
+         const VkSwapchainCreateInfoKHR *create_info,
+         const VkAllocationCallbacks *allocator, VkSwapchainKHR *swapchain)
+@@ -694,6 +707,7 @@ static const struct vulkan_funcs vulkan_funcs =
+     X11DRV_vkQueuePresentKHR,
+ 
+     X11DRV_wine_get_native_surface,
++    X11DRV_create_vk_instance_with_callback,
+ };
+ 
+ static void *X11DRV_get_vk_device_proc_addr(const char *name)
+diff --git a/include/wine/vulkan_driver.h b/include/wine/vulkan_driver.h
+index e8ff5051164..672565c43b4 100644
+--- a/include/wine/vulkan_driver.h
++++ b/include/wine/vulkan_driver.h
+@@ -50,6 +50,10 @@ struct vulkan_funcs
+     VkResult (*p_vkQueuePresentKHR)(VkQueue, const VkPresentInfoKHR *);
+ 
+     /* winevulkan specific functions */
+     VkSurfaceKHR (*p_wine_get_native_surface)(VkSurfaceKHR);
++    VkResult (*create_vk_instance_with_callback)(const VkInstanceCreateInfo *create_info,
++            const VkAllocationCallbacks *allocator, VkInstance *instance,
++            VkResult (WINAPI *native_vkCreateInstance)(const VkInstanceCreateInfo *, const VkAllocationCallbacks *,
++            VkInstance *, void * (*)(VkInstance, const char *), void *), void *native_vkCreateInstance_context);
+ };
+ 
+ extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver(HDC hdc, UINT version);
