@@ -40,8 +40,9 @@ ifneq ($(unstripped),)
     DEPLOY_DIR := $(DEPLOY_DIR)_unstripped
 endif
 
+protonsdk_version := 0.20210126.1-0
 CONFIGURE_CMD := ../proton/configure.sh \
-	--steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev \
+	--steam-runtime-image=steam-proton-dev \
 	--build-name="$(_build_name)"
 
 # make doesn't handle spaces well... replace them with underscores in paths
@@ -49,7 +50,7 @@ BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"
 
 all: help
 
-.PHONY: help vagrant clean configure proton install deploy module
+.PHONY: help vagrant clean configure proton install deploy module protonsdk
 
 help:
 	@echo "Proton Makefile instructions"
@@ -70,6 +71,8 @@ help:
 	@echo "               Current build name: $(_build_name)"
 	@echo "  unstripped - Set to non-empty to avoid stripping installed library files."
 	@echo "  enable_ccache - Enabled by default, set to 0 to disable ccache."
+	@echo "  protonsdk_version - Version of the proton sdk image to use for building,"
+	@echo "                      use protonsdk_version=local to build it locally."
 	@echo ""
 	@echo "Development targets:"
 	@echo "  vagrant - Start Vagrant VM"
@@ -104,8 +107,15 @@ vagrant:
 clean: vagrant
 	vagrant ssh -c 'rm -rf $(BUILD_DIR)/'
 
+protonsdk: vagrant
+	vagrant ssh -c 'make -C proton/docker $(UNSTRIPPED) $(CCACHE_FLAG) PROTONSDK_VERSION=$(protonsdk_version) proton'
+
 configure: vagrant
 	@vagrant ssh -c 'if [ ! -e $(BUILD_DIR)/Makefile ]; then mkdir -p $(BUILD_DIR); (cd $(BUILD_DIR) && $(CONFIGURE_CMD)); fi && make -C $(BUILD_DIR) downloads'
+
+ifeq ($(protonsdk_version),local)
+configure: protonsdk
+endif
 
 proton: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dist'
