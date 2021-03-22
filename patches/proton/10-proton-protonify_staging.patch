@@ -173,32 +173,6 @@ index 3b451a22577..ca5dac43bb0 100644
      SERVER_START_REQ( queue_exception_event )
      {
          req->first   = first_chance;
-From 7e91b897e69854cb3afe761f48ef7c9b496ecf95 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
-Date: Wed, 1 May 2019 12:28:12 +0200
-Subject: [PATCH] vulkan-1: Prefer built-in DLL.
-
-Games may ship with their own Vulkan loader.
----
- dlls/vulkan-1/vulkan.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/dlls/vulkan-1/vulkan.c b/dlls/vulkan-1/vulkan.c
-index d3b35603a17..4926cf9bf4f 100644
---- a/dlls/vulkan-1/vulkan.c
-+++ b/dlls/vulkan-1/vulkan.c
-@@ -32,10 +32,6 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
- 
-     switch (reason)
-     {
--        case DLL_WINE_PREATTACH:
--            /* Prefer native as it provides more functionality. */
--            return FALSE;
--
-         case DLL_PROCESS_ATTACH:
-             DisableThreadLibraryCalls(hinst);
-             return TRUE;
-
 From 90e3616c89ef7ed38763a3e3af3e9f0cd59697da Mon Sep 17 00:00:00 2001
 From: Nikolay Sivov <nsivov@codeweavers.com>
 Date: Wed, 8 Mar 2017 20:15:40 +0300
