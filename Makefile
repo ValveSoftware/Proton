@@ -225,5 +225,13 @@ wineopenxr: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) wineopenxr && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine
 
+battleye: | vagrant_share/battleye/v1/lib/wine
+battleye: | vagrant_share/battleye/v1/lib64/wine
+battleye: private SHELL := $(VAGRANT_SHELL)
+battleye: downloads
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) battleye && \
+	cp -f $(BUILD_DIR)/dist-battleye/v1/lib/wine/beclient.dll.so /vagrant/battleye/v1/lib/wine && \
+	cp -f $(BUILD_DIR)/dist-battleye/v1/lib64/wine/beclient_x64.dll.so /vagrant/battleye/v1/lib64/wine
+
 vagrant_share/%:
 	mkdir -p $@
