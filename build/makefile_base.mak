@@ -905,6 +905,39 @@ $(OBJ)/.mediaconv-post-build32:
 	touch $@
 
 
+##
+## BattlEye Bridge
+##
+
+ifneq ($(wildcard $(SRCDIR)/battleye-bridge/.*),)
+
+BATTLEYE_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
+
+BATTLEYE_DEPENDS = wine
+
+$(eval $(call rules-source,battleye,$(SRCDIR)/battleye-bridge))
+$(eval $(call rules-winemaker,battleye,32,beclient.dll))
+$(eval $(call rules-winemaker,battleye,64,beclient_x64.dll))
+
+$(OBJ)/.battleye-post-source:
+	mkdir -p $(BATTLEYE_OBJ32) && cp -a $(BATTLEYE_SRC)/beclient.spec $(BATTLEYE_OBJ32)/beclient.spec
+	mkdir -p $(BATTLEYE_OBJ64) && cp -a $(BATTLEYE_SRC)/beclient.spec $(BATTLEYE_OBJ64)/beclient_x64.spec
+	touch $@
+
+$(OBJ)/.battleye-post-build64:
+	mkdir -p $(OBJ)/dist-battleye/v1
+	cp -r $(BATTLEYE_DST64)/* $(OBJ)/dist-battleye/v1/
+	rm -rf $(BATTLEYE_DST64)/*
+	touch $@
+
+$(OBJ)/.battleye-post-build32:
+	mkdir -p $(OBJ)/dist-battleye/v1
+	cp -r $(BATTLEYE_DST32)/* $(OBJ)/dist-battleye/v1/
+	rm -rf $(BATTLEYE_DST32)/*
+	touch $@
+
+endif
+
 ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts
 GOAL_TARGETS += fonts
