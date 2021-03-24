@@ -100,6 +100,7 @@ static DWORD WINAPI create_steam_window(void *arg)
     return 0;
 }
 
+/* requires steam API to be initialized */
 static void setup_steam_registry(void)
 {
     const char *ui_lang;
@@ -107,12 +108,6 @@ static void setup_steam_registry(void)
     char buf[256];
     HKEY key;
     LSTATUS status;
-
-    if (!SteamAPI_Init())
-    {
-        WINE_ERR("SteamAPI_Init failed\n");
-        return;
-    }
 
     ui_lang = SteamUtils()->GetSteamUILanguage();
     WINE_TRACE("UI language: %s\n", wine_dbgstr_a(ui_lang));
@@ -134,8 +129,35 @@ static void setup_steam_registry(void)
         RegCloseKey(key);
     }
     else WINE_ERR("Could not create key: %u\n", status);
+}
 
-    SteamAPI_Shutdown();
+static void copy_to_win(const char *unix_path, const WCHAR *win_path)
+{
+    WCHAR *src_path = wine_get_dos_file_name(unix_path);
+    if (!src_path)
+        return;
+
+    CopyFileW(src_path, win_path, FALSE);
+
+    HeapFree(GetProcessHeap(), 0, src_path);
+}
+
+/* requires steam API to be initialized */
+static void setup_battleye_bridge(void)
+{
+    const unsigned int be_runtime_appid = 1161040;
+    char path[2048];
+    char *path_end;
+
+    if (!SteamApps()->BIsAppInstalled(be_runtime_appid))
+        return;
+
+    if (!SteamApps()->GetAppInstallDir(be_runtime_appid, path, sizeof(path)))
+        return;
+
+    WINE_TRACE("Found battleye runtime at %s\n", path);
+
+    setenv("PROTON_BATTLEYE_RUNTIME", path, 1);
 }
 
 static std::string get_linux_vr_path(void)
@@ -1325,7 +1347,17 @@ int main(int argc, char *argv[])
         CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
 
         set_active_process_pid();
-        setup_steam_registry();
+
+        if (SteamAPI_Init())
+        {
+            setup_steam_registry();
+            setup_battleye_bridge();
+        }
+        else
+        {
+            WINE_ERR("SteamAPI_Init failed\n");
+        }
+
         setup_steam_files();
 
         if (env_nonzero("PROTON_WAIT_ATTACH"))
@@ -1343,6 +1375,8 @@ int main(int argc, char *argv[])
                 }
             }
         }
+
+        SteamAPI_Shutdown();
 
         wait_handle = __wine_make_process_system();
         game_process = TRUE;
