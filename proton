@@ -703,6 +703,12 @@ class CompatData:
 
             self.migrate_user_paths()
 
+            if not os.path.lexists(self.prefix_dir + "/dosdevices/c:"):
+                os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
+
+            if not os.path.lexists(self.prefix_dir + "/dosdevices/z:"):
+                os.symlink("/", self.prefix_dir + "/dosdevices/z:")
+
             # collect configuration info
             steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
 
