@@ -143,7 +143,8 @@ endif
 CROSSLDFLAGS   += -Wl,--file-alignment,4096
 OPTIMIZE_FLAGS := -O2 -march=nocona -mtune=core-avx2 -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
-COMMON_FLAGS    = $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
+DEBUG_FLAGS    := -gdwarf-2 -gstrict-dwarf
+COMMON_FLAGS    = $(DEBUG_FLAGS) $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
 COMMON_FLAGS32 := -mstackrealign
 CARGO_BUILD_ARG := --release
 
