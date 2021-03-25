@@ -71,6 +71,14 @@ def setup_dll_symlinks(default_pfx_dir, dist_dir):
                 os.unlink(filename)
                 make_relative_symlink(target, filename)
 
+#steampipe can't handle filenames with colons, so we remove them here
+#and restore them in the proton script
+def fixup_drive_links(default_pfx_dir):
+    for walk_dir, dirs, files in os.walk(os.path.join(default_pfx_dir, "dosdevices")):
+        for dir_ in dirs:
+            if ":" in dir_:
+                os.remove(os.path.join(walk_dir, dir_))
+
 def make_default_pfx(default_pfx_dir, dist_dir, runtime):
     local_env = dict(os.environ)
 
@@ -94,6 +102,7 @@ def make_default_pfx(default_pfx_dir, dist_dir, runtime):
 
         env=local_env, check=True)
     setup_dll_symlinks(default_pfx_dir, dist_dir)
+    fixup_drive_links(default_pfx_dir)
 
 if __name__ == '__main__':
     import sys
