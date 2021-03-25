@@ -124,17 +124,20 @@ proton: configure
 install: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) STEAM_DIR=/vagrant/ install'
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
+	rm -rf $(STEAM_DIR)/compatibilitytools.d/files/ #remove proton's internal files, but preserve user_settings etc from top-level
 	cp -Rf --no-dereference --preserve=mode,links vagrant_share/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
 	echo "Proton installed to your local Steam installation"
 
 redist: configure
 	mkdir -p vagrant_share/$(DEPLOY_DIR)
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && cp $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR)'
+	rm -rf vagrant_share/$(DEPLOY_DIR)/*
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && cp -Rf $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR)'
 	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
 
 deploy: configure
 	mkdir -p vagrant_share/$(DEPLOY_DIR)-deploy
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy'
+	rm -rf vagrant_share/$(DEPLOY_DIR)-deploy/*
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && cp -Rf $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy'
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
 module: configure
