@@ -463,6 +463,12 @@ class CompatData:
             if not os.path.exists(self.prefix_dir + "/user.reg"):
                 self.copy_pfx()
 
+            if not os.path.lexists(self.prefix_dir + "/dosdevices/c:"):
+                os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
+
+            if not os.path.lexists(self.prefix_dir + "/dosdevices/z:"):
+                os.symlink("/", self.prefix_dir + "/dosdevices/z:")
+
             # collect configuration info
             steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
 
