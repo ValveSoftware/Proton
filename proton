@@ -429,6 +429,28 @@ class Proton:
                 if file_exists(old_dist_dir, follow_symlinks=True):
                     shutil.rmtree(old_dist_dir)
 
+    def do_steampipe_fixups(self):
+        fixups_json = self.path("steampipe_fixups.json")
+        fixups_mtime = self.path("files/steampipe_fixups_mtime")
+
+        if file_exists(fixups_json, follow_symlinks=True):
+            with self.dist_lock:
+                import steampipe_fixups
+
+                current_fixup_mtime = None
+                if file_exists(fixups_mtime, follow_symlinks=True):
+                    with open(fixups_mtime, "r") as f:
+                        current_fixup_mtime = f.readline().strip()
+
+                new_fixup_mtime = getmtimestr(fixups_json)
+
+                if current_fixup_mtime != new_fixup_mtime:
+                    result_code = steampipe_fixups.do_restore(self.base_dir, fixups_json)
+
+                    if result_code == 0:
+                        with open(fixups_mtime, "w") as f:
+                            f.write(new_fixup_mtime + "\n")
+
     def missing_default_prefix(self):
         '''Check if the default prefix dir is missing. Returns true if missing, false if present'''
         return not os.path.isdir(self.default_pfx_dir)
@@ -764,10 +786,10 @@ class CompatData:
 
             self.migrate_user_paths()
 
-            if not os.path.lexists(self.prefix_dir + "/dosdevices/c:"):
+            if not file_exists(self.prefix_dir + "/dosdevices/c:", follow_symlinks=False):
                 os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
 
-            if not os.path.lexists(self.prefix_dir + "/dosdevices/z:"):
+            if not file_exists(self.prefix_dir + "/dosdevices/z:", follow_symlinks=False):
                 os.symlink("/", self.prefix_dir + "/dosdevices/z:")
 
             # collect configuration info
@@ -1450,6 +1472,7 @@ if __name__ == "__main__":
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
     g_proton.cleanup_legacy_dist()
+    g_proton.do_steampipe_fixups()
 
     g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
