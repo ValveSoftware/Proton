@@ -178,6 +178,7 @@ CARGO_BUILD_ARG := --release
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 LICENSE := $(SRCDIR)/dist.LICENSE
 OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
+STEAMPIPE_FIXUPS_PY := $(SRCDIR)/steampipe_fixups.py
 
 GECKO_VER := 2.47.2
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
@@ -264,8 +265,9 @@ DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
                 $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_FONTS)
 
-DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DST_DIR)
-REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
+BASE_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DST_DIR)
+DEPLOY_COPY_TARGETS := $(BASE_COPY_TARGETS) $(STEAMPIPE_FIXUPS_PY)
+REDIST_COPY_TARGETS := $(BASE_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
 	cp -a $< $@
@@ -356,6 +358,7 @@ dist: $(DIST_TARGETS) all-dist dist_wineopenxr | $(DST_DIR)
 deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR)
 	cp -af --no-dereference --preserve=mode,links $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR)
+	python3 $(STEAMPIPE_FIXUPS_PY) process $(DEPLOY_DIR)
 
 install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
