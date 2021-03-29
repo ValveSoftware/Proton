@@ -8,13 +8,14 @@ edition = "2018"
 description = "Proton media converter"
 
 [dependencies]
-glib = "0.10.1"
+glib = "0.10"
 gstreamer = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
 gstreamer-base = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
 gstreamer-video = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
 gstreamer-audio = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
-once_cell = "1.7.2"
-crc32fast = "1.2.1"
+once_cell = "1.7"
+crc32fast = "1.2"
+array-init = "1.0.*" # >=1.1 requires rust >= 1.51
 
 [lib]
 name = "protonmediaconverter"
