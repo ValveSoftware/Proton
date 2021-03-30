@@ -1,0 +1,64 @@
+From: Georg Lehmann <dadschoorse@gmail.com>
+Subject: [PATCH v2 2/2] winevulkan: Implement vk_icdGetPhysicalDeviceProcAddr.
+Message-Id: <20210323174247.136246-2-dadschoorse@gmail.com>
+Date: Tue, 23 Mar 2021 18:42:47 +0100
+In-Reply-To: <20210323174247.136246-1-dadschoorse@gmail.com>
+References: <20210323174247.136246-1-dadschoorse@gmail.com>
+
+When using the windows vulkan loader vk_icdGetPhysicalDeviceProcAddr
+is used for unknown physical device functions.
+Fixes Red Dead Redemption 2 with vkd3d-proton. The game replaces wine's
+vulkan-1.dll with a windows version that doesn't know functions used by
+vkd3d-proton.
+
+Signed-off-by: Georg Lehmann <dadschoorse@gmail.com>
+---
+ dlls/winevulkan/make_vulkan |  1 +
+ dlls/winevulkan/vulkan.c    | 11 ++++++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index a4c4d16eaaa..d0b21c9b559 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -2675,6 +2675,7 @@ class VkGenerator(object):
+     def generate_vulkan_spec(self, f):
+         self._generate_copyright(f, spec_file=True)
+         f.write("@ stdcall -private vk_icdGetInstanceProcAddr(ptr str) wine_vk_icdGetInstanceProcAddr\n")
++        f.write("@ stdcall -private vk_icdGetPhysicalDeviceProcAddr(ptr str) wine_vk_icdGetPhysicalDeviceProcAddr\n")
+         f.write("@ stdcall -private vk_icdNegotiateLoaderICDInterfaceVersion(ptr) wine_vk_icdNegotiateLoaderICDInterfaceVersion\n")
+         f.write("@ cdecl -norelay native_vkGetInstanceProcAddrWINE(ptr str)\n")
+ 
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 87cbc3b0e4c..803e40da047 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -37,9 +37,7 @@ DEFINE_DEVPROPKEY(DEVPROPKEY_GPU_LUID, 0x60b193cb, 0x5276, 0x4d0f, 0x96, 0xfc, 0
+ DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_GPU_VULKAN_UUID, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5c, 2);
+ 
+ /* For now default to 4 as it felt like a reasonable version feature wise to support.
+- * Don't support the optional vk_icdGetPhysicalDeviceProcAddr introduced in this version
+- * as it is unlikely we will implement physical device extensions, which the loader is not
+- * aware of. Version 5 adds more extensive version checks. Something to tackle later.
++ * Version 5 adds more extensive version checks. Something to tackle later.
+  */
+ #define WINE_VULKAN_ICD_VERSION 4
+ 
+@@ -1231,6 +1229,13 @@ PFN_vkVoidFunction WINAPI wine_vkGetInstanceProcAddr(VkInstance instance, const
+     return NULL;
+ }
+ 
++void * WINAPI wine_vk_icdGetPhysicalDeviceProcAddr(VkInstance instance, const char *name)
++{
++    TRACE("%p, %s\n", instance, debugstr_a(name));
++
++    return wine_vk_get_phys_dev_proc_addr(name);
++}
++
+ void * WINAPI wine_vk_icdGetInstanceProcAddr(VkInstance instance, const char *name)
+ {
+     TRACE("%p, %s\n", instance, debugstr_a(name));
+
+-- 
+2.31.0
+
