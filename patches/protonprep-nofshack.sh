@@ -167,7 +167,7 @@
     patch -Np1 < ../patches/proton/41-proton-07_nfs_registry.patch
 
 #    # -- pending work -- still broken
-#    echo "staging disabled bcrypt patches"
+#    echo "bcrypt rdr2"
 #    patch -Np1 < ../wine-staging/patches/bcrypt-ECDHSecretAgreement/0001-bcrypt-Allow-multiple-backends-to-coexist.patch
 #    patch -Np1 < ../wine-staging/patches/bcrypt-ECDHSecretAgreement/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 #    echo "valve rdr2 fixes"
@@ -212,10 +212,16 @@
     patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
     
     echo "mfplat rebase"
+    # these break seven:days long gone
+    git revert --no-commit 767c200f47b15aec7fe7eb95f76ee034c5bba95f
+    git revert --no-commit 6e4c7d4dba3d83b2c62d8059c0531322370c4006
+    git revert --no-commit 0a0bf3cf21c5d08d9aa1873cd20da71e224c6aba
+
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
-    patch -Np1 < ../patches/wine-hotfixes/0033-HACK-Switch-between-all-selection-streams-on-MF_SOUR.patch
-
-
+    
+    patch -Np1 < ../patches/wine-hotfixes/rdr2-vulkan1.patch
+    patch -Np1 < ../patches/wine-hotfixes/rdr2-vulkan2.patch
+        
     ### END WINEPATCH SECTION ###
 
     #WINE CUSTOM PATCHES
