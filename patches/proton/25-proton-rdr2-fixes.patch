@@ -1479,14 +1479,14 @@ index e47e492a93e..54dfbca334a 100755
  SANE_CFLAGS
  SANE_LIBS
  USB_CFLAGS
-@@ -2676,6 +2680,8 @@ Some influential environment variables:
+@@ -2718,6 +2718,8 @@ Some influential environment variables:
    GNUTLS_CFLAGS
                C compiler flags for gnutls, overriding pkg-config
    GNUTLS_LIBS Linker flags for gnutls, overriding pkg-config
 +  GMP_CFLAGS  C compiler flags for gmp, overriding pkg-config
 +  GMP_LIBS    Linker flags for gmp, overriding pkg-config
-   SANE_CFLAGS C compiler flags for libsane, overriding pkg-config
-   SANE_LIBS   Linker flags for libsane, overriding pkg-config
+   SANE_CFLAGS C compiler flags for sane-backends, overriding pkg-config
+   SANE_LIBS   Linker flags for sane-backends, overriding pkg-config
    USB_CFLAGS  C compiler flags for libusb-1.0, overriding pkg-config
 @@ -13837,6 +13843,97 @@ esac
  
