@@ -58,6 +58,7 @@ static struct
     IDXGIVkInteropDevice *dxvk_device;
 #endif
     BOOL d3d11_explicit_handoff, handoff_called;
+    void *client_core_linux_side;
 }
 compositor_data;
 
@@ -74,6 +75,11 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
         case DLL_PROCESS_DETACH:
             if (vrclient_lib)
             {
+                if (compositor_data.client_core_linux_side)
+                {
+                    cppIVRClientCore_IVRClientCore_003_Cleanup(compositor_data.client_core_linux_side);
+                    compositor_data.client_core_linux_side = NULL;
+                }
                 dlclose(vrclient_lib);
                 vrclient_lib = NULL;
             }
@@ -386,6 +392,9 @@ EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationT
 
     if (error)
         WARN("error %#x\n", error);
+    else
+        compositor_data.client_core_linux_side = linux_side;
+
     return error;
 }
 
