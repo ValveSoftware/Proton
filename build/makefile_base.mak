@@ -352,13 +352,17 @@ redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 .PHONY: module32 module64 module
 
 module32: private SHELL := $(CONTAINER_SHELL)
-module32: all-source
+module32: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure32
+module32: | all-source wine-configure32
 	+$(MAKE) -C $(WINE_OBJ32)/dlls/$(module)
 
 module64: private SHELL := $(CONTAINER_SHELL)
-module64: all-source
+module64: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure64
+module64: | all-source wine-configure64
 	+$(MAKE) -C $(WINE_OBJ64)/dlls/$(module)
 
+module: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure
+module: | all-source wine-configure
 module: module32 module64
 
 endif # ifeq ($(CONTAINER),)
