@@ -119,21 +119,24 @@ configure: vagrant
 	if [ ! -e $(BUILD_DIR)/Makefile ]; \
 		then mkdir -p $(BUILD_DIR); \
 		(cd $(BUILD_DIR) && $(CONFIGURE_CMD)); \
-	fi && \
-	make -C $(BUILD_DIR) downloads
+	fi
 
 ifeq ($(protonsdk_version),local)
 configure: protonsdk
 endif
 
+downloads: private SHELL := $(VAGRANT_SHELL)
+downloads: configure
+	make -C $(BUILD_DIR) downloads
+
 proton: private SHELL := $(VAGRANT_SHELL)
-proton: configure
+proton: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dist && \
 	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
 
 install-internal: | vagrant_share/compatibilitytools.d/$(_build_name)
 install-internal: private SHELL := $(VAGRANT_SHELL)
-install-internal: configure
+install-internal: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) STEAM_DIR=/vagrant/ install
 
 install: install-internal
@@ -143,20 +146,20 @@ install: install-internal
 
 redist: | vagrant_share/$(DEPLOY_DIR)
 redist: private SHELL := $(VAGRANT_SHELL)
-redist: configure
+redist: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && cp $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR) && \
 	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
 
 deploy: | vagrant_share/$(DEPLOY_DIR)-deploy
 deploy: private SHELL := $(VAGRANT_SHELL)
-deploy: configure
+deploy: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy && \
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
 module: | vagrant_share/$(module)/lib/wine/
 module: | vagrant_share/$(module)/lib64/wine/
 module: private SHELL := $(VAGRANT_SHELL)
-module: configure
+module: downloads
     make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
 	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
 	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
@@ -167,7 +170,7 @@ module: configure
 dxvk: | vagrant_share/dxvk/lib/wine/dxvk
 dxvk: | vagrant_share/dxvk/lib64/wine/dxvk
 dxvk: private SHELL := $(VAGRANT_SHELL)
-dxvk: configure
+dxvk: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/
@@ -175,7 +178,7 @@ dxvk: configure
 vkd3d-proton: | vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton
 vkd3d-proton: | vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton
 vkd3d-proton: private SHELL := $(VAGRANT_SHELL)
-vkd3d-proton: configure
+vkd3d-proton: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vkd3d-proton && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/
@@ -183,7 +186,7 @@ vkd3d-proton: configure
 lsteamclient: | vagrant_share/lsteamclient/lib/wine
 lsteamclient: | vagrant_share/lsteamclient/lib64/wine
 lsteamclient: private SHELL := $(VAGRANT_SHELL)
-lsteamclient: configure
+lsteamclient: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) lsteamclient && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine
@@ -191,7 +194,7 @@ lsteamclient: configure
 vrclient: | vagrant_share/vrclient/lib/wine
 vrclient: | vagrant_share/vrclient/lib64/wine
 vrclient: private SHELL := $(VAGRANT_SHELL)
-vrclient: configure
+vrclient: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vrclient && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine
@@ -199,7 +202,7 @@ vrclient: configure
 wineopenxr: | vagrant_share/wineopenxr/lib/wine
 wineopenxr: | vagrant_share/wineopenxr/lib64/wine
 wineopenxr: private SHELL := $(VAGRANT_SHELL)
-wineopenxr: configure
+wineopenxr: downloads
 	make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) wineopenxr && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine
 
