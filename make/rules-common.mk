@@ -98,6 +98,8 @@ all$(3) $(1): $(1)$(3)
 all: $(1)
 .PHONY: all
 
+CONTAINERGOALS := $(CONTAINERGOALS) $(filter $(1),$(MAKECMDGOALS))
+
 
 $(2)_ENV$(3) = \
     CARGO_HOME=$$(OBJ)/.cargo \
