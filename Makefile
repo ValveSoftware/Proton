@@ -120,9 +120,11 @@ proton: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dist'
 	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
 
-install: | vagrant_share/compatibilitytools.d/$(_build_name)
-install: configure
+install-internal: | vagrant_share/compatibilitytools.d/$(_build_name)
+install-internal: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) STEAM_DIR=/vagrant/ install'
+
+install: install-internal
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
 	rm -rf $(STEAM_DIR)/compatibilitytools.d/$(_build_name)/files/ #remove proton's internal files, but preserve user_settings etc from top-level
 	cp -Rf --no-dereference --preserve=mode,links vagrant_share/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
