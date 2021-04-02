@@ -125,7 +125,9 @@ Proton has a lot of build-time dependencies. The following instructions
 describe how we create the build environment for the production builds of
 Proton. For reproducibility and security reasons, we will be setting up a
 Debian virtual machine. However, you should be able to follow these
-instructions on other distributions as well.
+instructions on other distributions as well. If you are building outside of the
+default Vagrant VM, you may find the `disable_vagrant` variable in the
+top-level Makefile helpful. See `make help`.
 
 Proton provides a Vagrantfile, which will automatically set up the Debian VM
 for you. After installing [Vagrant](https://www.vagrantup.com/), initialize the
