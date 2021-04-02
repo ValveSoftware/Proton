@@ -73,6 +73,7 @@ endif
 
 MAKECMDGOALS32 := $(filter-out all32,$(filter %32,$(MAKECMDGOALS)))
 MAKECMDGOALS64 := $(filter-out all64,$(filter %64,$(MAKECMDGOALS)))
+CONTAINERGOALS := $(MAKECMDGOALS32) $(MAKECMDGOALS64)
 
 all: all32 all64
 .PHONY: all
@@ -87,7 +88,7 @@ ifeq ($(CONTAINER),)
 J := $(shell nproc)
 container-build: private SHELL := $(CONTAINER_SHELL)
 container-build:
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(MAKECMDGOALS32) $(MAKECMDGOALS64)
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(CONTAINERGOALS)
 .PHONY: container-build
 
 all32 $(MAKECMDGOALS32): container-build
