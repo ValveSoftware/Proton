@@ -120,6 +120,7 @@ proton: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dist'
 	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
 
+install: | vagrant_share/compatibilitytools.d/$(_build_name)
 install: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) STEAM_DIR=/vagrant/ install'
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
@@ -127,20 +128,21 @@ install: configure
 	cp -Rf --no-dereference --preserve=mode,links vagrant_share/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
 	echo "Proton installed to your local Steam installation"
 
+redist: | vagrant_share/$(DEPLOY_DIR)
 redist: configure
-	mkdir -p vagrant_share/$(DEPLOY_DIR)
 	rm -rf vagrant_share/$(DEPLOY_DIR)/*
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && cp -Rf $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR)'
 	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
 
+deploy: | vagrant_share/$(DEPLOY_DIR)-deploy
 deploy: configure
-	mkdir -p vagrant_share/$(DEPLOY_DIR)-deploy
 	rm -rf vagrant_share/$(DEPLOY_DIR)-deploy/*
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && cp -Rf $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy'
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
+module: | vagrant_share/$(module)/lib/wine/
+module: | vagrant_share/$(module)/lib64/wine/
 module: configure
-	mkdir -p vagrant_share/$(module)/lib/wine/ vagrant_share/$(module)/lib64/wine/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
 		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
 		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
@@ -150,35 +152,39 @@ module: configure
 		fi'
 	rm -f vagrant_share/$(module)/lib*/wine/*.fake
 
+dxvk: | vagrant_share/dxvk/lib/wine/dxvk
+dxvk: | vagrant_share/dxvk/lib64/wine/dxvk
 dxvk: configure
-	mkdir -p vagrant_share/dxvk/lib/wine/dxvk/
-	mkdir -p vagrant_share/dxvk/lib64/wine/dxvk/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk && \
 		cp -f $(BUILD_DIR)/dist/files/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
 		cp -f $(BUILD_DIR)/dist/files/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
 
+vkd3d-proton: | vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton
+vkd3d-proton: | vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton
 vkd3d-proton: configure
-	mkdir -p vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton/
-	mkdir -p vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vkd3d-proton && \
 		cp -f $(BUILD_DIR)/dist/files/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
 		cp -f $(BUILD_DIR)/dist/files/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/'
 
+lsteamclient: | vagrant_share/lsteamclient/lib/wine
+lsteamclient: | vagrant_share/lsteamclient/lib64/wine
 lsteamclient: configure
-	mkdir -p vagrant_share/lsteamclient/lib/wine
-	mkdir -p vagrant_share/lsteamclient/lib64/wine
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) lsteamclient && \
 		cp -f $(BUILD_DIR)/dist/files/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
 		cp -f $(BUILD_DIR)/dist/files/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
 
+vrclient: | vagrant_share/vrclient/lib/wine
+vrclient: | vagrant_share/vrclient/lib64/wine
 vrclient: configure
-	mkdir -p vagrant_share/vrclient/lib/wine
-	mkdir -p vagrant_share/vrclient/lib64/wine
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vrclient && \
 		cp -f $(BUILD_DIR)/dist/files/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
 		cp -f $(BUILD_DIR)/dist/files/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine'
 
+wineopenxr: | vagrant_share/wineopenxr/lib/wine
+wineopenxr: | vagrant_share/wineopenxr/lib64/wine
 wineopenxr: configure
-	mkdir -p vagrant_share/wineopenxr/lib64/wine
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) wineopenxr && \
 		cp -f $(BUILD_DIR)/dist/files/lib64/wine/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine'
+
+vagrant_share/%:
+	mkdir -p $@
