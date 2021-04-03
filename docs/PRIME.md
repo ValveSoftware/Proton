@@ -34,9 +34,16 @@ That's it. This should be enough to have everything working.
 
 ## Nvidia -> Integrated Intel (Nvidia's Proprietary Driver -> Mesa)
 
+Official Nvidia documentation:
+
+* http://us.download.nvidia.com/XFree86/Linux-x86_64/460.67/README/primerenderoffload.html
+
 In Steam set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
-    __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia %command%
+    __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only %command%
+    
+Methods explained below are not necessary when `__VK_LAYER_NV_optimus=NVIDIA_only` being used but they're useful for documentation purposes
+and for manually handling device selection in cases where such mechanism (layer) is not available.
 
 For most games, Nvidia GPUs are reported as AMD GPUs to workaround issues with
 NVAPI. This means that DXGI will report your GPU as RX480.  Because of that
