@@ -431,12 +431,12 @@ impl ElementImpl for VideoConv {
 }
 
 struct StreamSerializer<'a> {
-    stream: &'a Vec<u128>,
+    stream: &'a [u128],
     cur_idx: usize,
 }
 
 impl<'a> StreamSerializer<'a> {
-    fn new(stream: &'a Vec<u128>) -> Self {
+    fn new(stream: &'a [u128]) -> Self {
         StreamSerializer {
             stream,
             cur_idx: 0,
@@ -540,9 +540,6 @@ impl VideoConv {
         let mut query = gst::query::Duration::new(gst::Format::Bytes);
 
         if self.sinkpad.peer_query(&mut query) {
-            /* XXX: what? */
-            let res = query.get_result();
-            drop(res);
             state.upstream_duration = match query.get_result() {
                 gst::format::GenericFormattedValue::Bytes(b) =>
                     *b,
@@ -592,7 +589,7 @@ impl VideoConv {
                     None => { return false; }
                 };
 
-                if let None = state.upstream_duration {
+                if state.upstream_duration.is_none() {
                     self.query_upstream_duration(&mut state);
                 }
 

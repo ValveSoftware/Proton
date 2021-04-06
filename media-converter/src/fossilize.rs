@@ -234,7 +234,7 @@ impl StreamArchive {
         self.write_pos = self.file.seek(io::SeekFrom::Start(0))?;
 
         if self.file.metadata().unwrap().len() > 0 {
-            let mut magic_and_version = [0 as u8; MAGIC_LEN_BYTES];
+            let mut magic_and_version = [0_u8; MAGIC_LEN_BYTES];
             self.file.read_exact(&mut magic_and_version)?;
 
             let version = magic_and_version[15];
@@ -334,7 +334,7 @@ impl StreamArchive {
         let to_copy = std::cmp::min(entry.payload_info.full_size as usize - offset as usize, buf.len());
 
         self.file.read_exact(&mut buf[0..to_copy])
-            .map_err(|e| Error::IOError(e))?;
+            .map_err(Error::IOError)?;
 
         if entry.payload_info.crc != 0 {
             if let CRCCheck::WithCRC = crc_opt {
