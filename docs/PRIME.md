@@ -34,21 +34,15 @@ That's it. This should be enough to have everything working.
 
 ## Nvidia -> Integrated Intel (Nvidia's Proprietary Driver -> Mesa)
 
-Official Nvidia documentation:
-
-* http://us.download.nvidia.com/XFree86/Linux-x86_64/460.67/README/primerenderoffload.html
-
 In Steam set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
     __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only %command%
     
-Methods explained below are not necessary when `__VK_LAYER_NV_optimus=NVIDIA_only` being used but they're useful for documentation purposes
-and for manually handling device selection in cases where such mechanism (layer) is not available.
+You can find more details in [the official Nvidia documentation][nvidia-doc].
 
-For most games, Nvidia GPUs are reported as AMD GPUs to workaround issues with
-NVAPI. This means that DXGI will report your GPU as RX480.  Because of that
-DXVK/VKD3D won't recognize the vendor/product ids and will pick a GPU on their
-own, so you have to add other options to force the correct choice.
+`__VK_LAYER_NV_optimus=NVIDIA_only` makes it so that only Nvidia GPUs are
+reported by Vulkan. If you have more GPUs from the same vendor or face other
+GPU selection issues a more fine grained approach may be necessary.
 
 DXVK (used for DirectX 9-11 games) takes GPU name so you might have to
 prepend the following to 'LAUNCH OPTIONS': `DXVK_FILTER_DEVICE_NAME="GeForce"`.
@@ -59,6 +53,7 @@ VKD3D-Proton (used for DirectX 12 games) takes GPU id as reported by the
 have to prepend the following to 'LAUNCH OPTIONS': `VKD3D_VULKAN_DEVICE=0`.
 Replace `0` with the appropriate GPU id.
 
+[nvidia-doc]: http://us.download.nvidia.com/XFree86/Linux-x86_64/460.67/README/primerenderoffload.html
 
 # Troubleshooting
 
