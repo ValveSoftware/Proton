@@ -195,21 +195,3 @@ index 569db5ee94d..a0a72040843 100644
  
          WINE_MESSAGE( "wine: configuration in %s has been updated.\n", debugstr_w(prettyprint_configdir()) );
      }
-diff --git a/dlls/kernel32/version.rc b/dlls/kernel32/version.rc
-index 82287e5da79..19bbeda07cc 100644
---- a/dlls/kernel32/version.rc
-+++ b/dlls/kernel32/version.rc
-@@ -26,9 +26,9 @@ LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
- #define WINE_FILENAME_STR "kernel32.dll"
- 
- /* these values come from Windows 7 SP1 */
--#define WINE_FILEVERSION 6,1,7601,17514
--#define WINE_FILEVERSION_STR "6.1.7601.17514"
--#define WINE_PRODUCTVERSION 6,1,7601,17514
--#define WINE_PRODUCTVERSION_STR "6.1.7601.17514"
-+#define WINE_FILEVERSION 10,0,17763,1
-+#define WINE_FILEVERSION_STR "10.0.17763.1"
-+#define WINE_PRODUCTVERSION 10,0,17763,1
-+#define WINE_PRODUCTVERSION_STR "10.0.17763.1"
- 
- #include "wine/wine_common_ver.rc"
