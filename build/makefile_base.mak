@@ -581,7 +581,7 @@ $(eval $(call rules-source,wineopenxr,$(SRCDIR)/wineopenxr))
 # $(eval $(call rules-winemaker,wineopenxr,32,wineopenxr.dll))
 $(eval $(call rules-winemaker,wineopenxr,64,wineopenxr.dll))
 
-$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json
+$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json | dist_prefix
 	mkdir -p $(dir $@)
 	cp -a $< $@
 
