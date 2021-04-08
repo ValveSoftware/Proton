@@ -186,7 +186,7 @@ This unofficial build isn't supported by GloriousEggroll nor Valve and wasn't te
 5. Apply all of the patches in patches/ by running:
 
 ```sh
-	./patches/protonprep-nofshack.sh &> patchlog.txt
+	./patches/protonprep.sh &> patchlog.txt
 ```
 
 in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured. An easy way to do this is like so:
