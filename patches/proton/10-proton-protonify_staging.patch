@@ -26,32 +26,6 @@ index 164a48ce751..b9248c9bd5e 100644
                  if (bind(fd, &uaddr.addr, uaddrlen) < 0)
                  {
                      int loc_errno = errno;
-
-From 134fa05a0e39b63bfec75d0823ebe49e4c9cae64 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Thu, 7 Jun 2018 14:37:03 -0500
-Subject: [PATCH] HACK: winex11.drv: Disable XIM by default
-
-libx11 has a race condition that causes XIM to crash with "double free
-or corruption" errors, see winehq bug 35041. Disabling XIM works around
-this, though special input methods (CJK, etc.) will no longer work.
----
- dlls/winex11.drv/x11drv_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index db87d188236..81a63a20689 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -93,7 +93,7 @@ static void *err_callback_arg;               /* error callback argument */
- static int err_callback_result;              /* error callback result */
- static unsigned long err_serial;             /* serial number of first request */
- static int (*old_error_handler)( Display *, XErrorEvent * );
--static BOOL use_xim = TRUE;
-+static BOOL use_xim = FALSE;
- static char input_style[20];
- 
- #define IS_OPTION_TRUE(ch) \
 From 1091eaf13692b16ed66328ceeebfc587075fec6c Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 25 Oct 2018 12:50:45 -0500
@@ -1571,182 +1545,6 @@ index c7881fe4516..bb4be45da5d 100644
      }
  
      blacklist_filename_count = 0;
-From 027ff0c658ac00a7b5c1df014043265c83e74dbc Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 18 Dec 2019 13:49:00 +0100
-Subject: [PATCH] HACK: user32: Strip gameoverlayrenderer.so from LD_PRELOAD
- before executing explorer.exe.
-
-Work around a bug in gameoverlayrenderer which introduces 50ms hangs
-during XCheckIfEvent after approx 40 minutes of gameplay.
----
- dlls/user32/win.c | 55 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
-
-diff --git a/dlls/user32/cursoricon.c b/dlls/user32/cursoricon.c
-index e772d541235..9d0cf716fd7 100644
---- a/dlls/user32/cursoricon.c
-+++ b/dlls/user32/cursoricon.c
-@@ -113,7 +113,7 @@ static int get_display_bpp(void)
- 
- static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
- 
--static const struct png_funcs *png_funcs;
-+const struct png_funcs *png_funcs;
- 
- static BOOL WINAPI load_libpng( INIT_ONCE *once, void *param, void **context )
- {
-@@ -121,7 +121,7 @@ static BOOL WINAPI load_libpng( INIT_ONCE *once, void *param, void **context )
-     return TRUE;
- }
- 
--static BOOL have_libpng(void)
-+BOOL have_libpng(void)
- {
-     return InitOnceExecuteOnce( &init_once, load_libpng, NULL, NULL ) && png_funcs;
- }
-diff --git a/dlls/user32/png.c b/dlls/user32/png.c
-index a994c6de5c2..3054fd901a8 100644
---- a/dlls/user32/png.c
-+++ b/dlls/user32/png.c
-@@ -293,10 +293,16 @@ static BITMAPINFO * CDECL load_png(const char *png_data, DWORD *size)
-     return info;
- }
- 
--static const struct png_funcs png_funcs =
-+int CDECL hack_unix_setenv(const char *name, const char *value, int overwrite)
-+{
-+    return setenv(name, value, overwrite);
-+}
-+
-+static const struct png_funcs png_funcs_unix =
- {
-     get_png_info,
--    load_png
-+    load_png,
-+    hack_unix_setenv,
- };
- 
- NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out )
-@@ -335,7 +341,7 @@ NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *p
-     LOAD_FUNCPTR(png_set_read_fn);
- #undef LOAD_FUNCPTR
- 
--    *(const struct png_funcs **)ptr_out = &png_funcs;
-+    *(const struct png_funcs **)ptr_out = &png_funcs_unix;
-     return STATUS_SUCCESS;
- }
- 
-diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
-index 7761a1ceb4f..5e42027b3c7 100644
---- a/dlls/user32/user_private.h
-+++ b/dlls/user32/user_private.h
-@@ -373,8 +373,12 @@ struct png_funcs
- {
-     BOOL (CDECL *get_png_info)(const void *png_data, DWORD size, int *width, int *height, int *bpp);
-     BITMAPINFO * (CDECL *load_png)(const char *png_data, DWORD *size);
-+    int (CDECL *hack_unix_setenv)(const char *name, const char *value, int overwrite);
- };
- 
-+extern BOOL have_libpng(void);
-+extern const struct png_funcs *png_funcs;
-+
- /* Mingw's assert() imports MessageBoxA and gets confused by user32 exporting it */
- #ifdef __MINGW32__
- #undef assert
-diff --git a/dlls/user32/win.c b/dlls/user32/win.c
-index 680defc2071..0ced1a5cd91 100644
---- a/dlls/user32/win.c
-+++ b/dlls/user32/win.c
-@@ -45,6 +45,15 @@ static DWORD process_layout = ~0u;
- 
- static struct list window_surfaces = LIST_INIT( window_surfaces );
- 
-+static CRITICAL_SECTION desktop_section;
-+static CRITICAL_SECTION_DEBUG desktop_critsect_debug =
-+{
-+    0, 0, &desktop_section,
-+    { &desktop_critsect_debug.ProcessLocksList, &desktop_critsect_debug.ProcessLocksList },
-+      0, 0, { (DWORD_PTR)(__FILE__ ": desktop_section") }
-+};
-+static CRITICAL_SECTION desktop_section = { &desktop_critsect_debug, -1, 0, 0, 0, 0 };
-+
- static CRITICAL_SECTION surfaces_section;
- static CRITICAL_SECTION_DEBUG critsect_debug =
- {
-@@ -2088,6 +2097,7 @@ HWND WINAPI GetDesktopWindow(void)
-         WCHAR app[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe" )];
-         WCHAR cmdline[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe /desktop" )];
-         WCHAR desktop[MAX_PATH];
-+        char *ld_preload;
-         void *redir;
- 
-         SERVER_START_REQ( set_user_object_info )
-@@ -2120,6 +2130,49 @@ HWND WINAPI GetDesktopWindow(void)
-         lstrcpyW( cmdline, app );
-         lstrcatW( cmdline, L" /desktop" );
- 
-+        /* HACK: Unset LD_PRELOAD before executing explorer.exe to disable buggy gameoverlayrenderer.so
-+        * It's not going to work through the CreateProcessW env parameter, as it will not be used for the loader execv.
-+        */
-+        if (have_libpng())
-+        {
-+            EnterCriticalSection( &desktop_section);
-+
-+            if ((ld_preload = getenv("LD_PRELOAD")))
-+            {
-+                static char const gorso[] = "gameoverlayrenderer.so";
-+                static unsigned int gorso_len = ARRAY_SIZE(gorso) - 1;
-+                char *env, *next, *tmp;
-+
-+                env = HeapAlloc(GetProcessHeap(), 0, strlen(ld_preload) + 1);
-+                strcpy(env, ld_preload);
-+
-+                tmp = env;
-+                do
-+                {
-+                    if (!(next = strchr(tmp, ':')))
-+                        next = tmp + strlen(tmp);
-+
-+                    if (next - tmp >= gorso_len &&
-+                        strncmp(next - gorso_len, gorso, gorso_len) == 0)
-+                    {
-+                        if (*next)
-+                            memmove(tmp, next + 1, strlen(next));
-+                        else
-+                            *tmp = 0;
-+                        next = tmp;
-+                    }
-+                    else
-+                    {
-+                        tmp = next + 1;
-+                    }
-+                }
-+                while (*next);
-+
-+                png_funcs->hack_unix_setenv("LD_PRELOAD", env, 1);
-+                HeapFree(GetProcessHeap(), 0, env);
-+            }
-+        }
-+
-         Wow64DisableWow64FsRedirection( &redir );
-         if (CreateProcessW( app, cmdline, NULL, NULL, FALSE, DETACHED_PROCESS,
-                             NULL, windir, &si, &pi ))
-@@ -2132,6 +2185,14 @@ HWND WINAPI GetDesktopWindow(void)
-         else WARN( "failed to start explorer, err %d\n", GetLastError() );
-         Wow64RevertWow64FsRedirection( redir );
- 
-+        /* HACK: Restore the previous value, just in case */
-+        if (have_libpng())
-+        {
-+            if (ld_preload) png_funcs->hack_unix_setenv("LD_PRELOAD", ld_preload, 1);
-+
-+            LeaveCriticalSection( &desktop_section );
-+        }
-+
-         SERVER_START_REQ( get_desktop_window )
-         {
-             req->force = 1;
 From ff790e8d99f2026af9b8569355fc1df5e6f0c639 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Sat, 5 Sep 2020 01:09:37 +0300
@@ -2131,3 +1929,295 @@ index 59af860708b..c7b7b92e279 100644
  NTSTATUS  WINAPI IoWMIRegistrationControl(PDEVICE_OBJECT,ULONG);
  
  void    FASTCALL KeAcquireInStackQueuedSpinLockAtDpcLevel(KSPIN_LOCK*,KLOCK_QUEUE_HANDLE*);
+From 7b01f0cba5b370d3e861eb00fe381f4015d9294f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 3 Dec 2020 11:06:11 +0100
+Subject: [PATCH] winhttp: Move connect end checks out of the loop.
+
+This is only done when InitializeSecurityContextW returns SEC_E_OK,
+which will break out of the loop, and the checks forcefully break out
+of the loop if any failed.
+---
+ dlls/winhttp/net.c | 66 ++++++++++++++++++++++------------------------
+ 1 file changed, 32 insertions(+), 34 deletions(-)
+
+diff --git a/dlls/winhttp/net.c b/dlls/winhttp/net.c
+index 0cc2bb2bef7..46dc6bd21f0 100644
+--- a/dlls/winhttp/net.c
++++ b/dlls/winhttp/net.c
+@@ -341,53 +341,51 @@ DWORD netconn_secure_connect( struct netconn *conn, WCHAR *hostname, DWORD secur
+         status = InitializeSecurityContextW(cred_handle, &ctx, hostname,  isc_req_flags, 0, 0, &in_desc,
+                 0, NULL, &out_desc, &attrs, NULL);
+         TRACE("InitializeSecurityContext ret %08x\n", status);
++        if(status == SEC_E_OK && in_bufs[1].BufferType == SECBUFFER_EXTRA)
++            FIXME("SECBUFFER_EXTRA not supported\n");
++    }
+ 
+-        if(status == SEC_E_OK) {
+-            if(in_bufs[1].BufferType == SECBUFFER_EXTRA)
+-                FIXME("SECBUFFER_EXTRA not supported\n");
+-
+-            status = QueryContextAttributesW(&ctx, SECPKG_ATTR_STREAM_SIZES, &conn->ssl_sizes);
+-            if(status != SEC_E_OK) {
+-                WARN("Could not get sizes\n");
+-                break;
+-            }
++    heap_free(read_buf);
+ 
+-            status = QueryContextAttributesW(&ctx, SECPKG_ATTR_REMOTE_CERT_CONTEXT, (void*)&cert);
+-            if(status == SEC_E_OK) {
+-                res = netconn_verify_cert(cert, hostname, security_flags, check_revocation);
+-                CertFreeCertificateContext(cert);
+-                if(res != ERROR_SUCCESS) {
+-                    WARN("cert verify failed: %u\n", res);
+-                    break;
+-                }
+-            }else {
+-                WARN("Could not get cert\n");
+-                break;
+-            }
++    if(status != SEC_E_OK)
++        goto failed;
+ 
+-            conn->ssl_buf = heap_alloc(conn->ssl_sizes.cbHeader + conn->ssl_sizes.cbMaximumMessage + conn->ssl_sizes.cbTrailer);
+-            if(!conn->ssl_buf) {
+-                res = ERROR_OUTOFMEMORY;
+-                break;
+-            }
+-        }
++    status = QueryContextAttributesW(&ctx, SECPKG_ATTR_STREAM_SIZES, &conn->ssl_sizes);
++    if(status != SEC_E_OK) {
++        WARN("Could not get sizes\n");
++        goto failed;
+     }
+ 
+-    heap_free(read_buf);
++    status = QueryContextAttributesW(&ctx, SECPKG_ATTR_REMOTE_CERT_CONTEXT, (void*)&cert);
++    if(status != SEC_E_OK) {
++        WARN("Could not get cert\n");
++        goto failed;
++    }
+ 
+-    if(status != SEC_E_OK || res != ERROR_SUCCESS) {
+-        WARN("Failed to initialize security context: %08x\n", status);
+-        heap_free(conn->ssl_buf);
+-        conn->ssl_buf = NULL;
+-        DeleteSecurityContext(&ctx);
+-        return ERROR_WINHTTP_SECURE_CHANNEL_ERROR;
++    res = netconn_verify_cert(cert, hostname, security_flags, check_revocation);
++    CertFreeCertificateContext(cert);
++    if(res != ERROR_SUCCESS) {
++        WARN("cert verify failed: %u\n", res);
++        goto failed;
+     }
+ 
++    conn->ssl_buf = heap_alloc(conn->ssl_sizes.cbHeader + conn->ssl_sizes.cbMaximumMessage + conn->ssl_sizes.cbTrailer);
++    if(!conn->ssl_buf) {
++        res = ERROR_OUTOFMEMORY;
++        goto failed;
++    }
+ 
+     TRACE("established SSL connection\n");
+     conn->secure = TRUE;
+     conn->ssl_ctx = ctx;
+     return ERROR_SUCCESS;
++
++failed:
++    WARN("Failed to initialize security context: %08x\n", status);
++    heap_free(conn->ssl_buf);
++    conn->ssl_buf = NULL;
++    DeleteSecurityContext(&ctx);
++    return ERROR_WINHTTP_SECURE_CHANNEL_ERROR;
+ }
+ 
+ static DWORD send_ssl_chunk( struct netconn *conn, const void *msg, size_t size )
+From 6923ac116ac5ed441a9bb7ca0c95e1639e1039ac Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 3 Dec 2020 11:14:07 +0100
+Subject: [PATCH] winhttp: Introduce new netconn_negotiate helper.
+
+---
+ dlls/winhttp/net.c | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/winhttp/net.c b/dlls/winhttp/net.c
+index 46dc6bd21f0..2ba9b2dc65a 100644
+--- a/dlls/winhttp/net.c
++++ b/dlls/winhttp/net.c
+@@ -259,27 +259,22 @@ void netconn_close( struct netconn *conn )
+     heap_free(conn);
+ }
+ 
+-DWORD netconn_secure_connect( struct netconn *conn, WCHAR *hostname, DWORD security_flags, CredHandle *cred_handle,
+-                              BOOL check_revocation )
++static DWORD netconn_negotiate(struct netconn *conn, CredHandle *cred_handle, CtxtHandle *ctx_handle, WCHAR *hostname,
++                               DWORD isc_req_flags, SecBufferDesc *init_desc, CtxtHandle *new_ctx_handle)
+ {
+     SecBuffer out_buf = {0, SECBUFFER_TOKEN, NULL}, in_bufs[2] = {{0, SECBUFFER_TOKEN}, {0, SECBUFFER_EMPTY}};
+     SecBufferDesc out_desc = {SECBUFFER_VERSION, 1, &out_buf}, in_desc = {SECBUFFER_VERSION, 2, in_bufs};
+     BYTE *read_buf;
+     SIZE_T read_buf_size = 2048;
+     ULONG attrs = 0;
+-    CtxtHandle ctx;
+     SSIZE_T size;
+-    const CERT_CONTEXT *cert;
+     SECURITY_STATUS status;
+-    DWORD res = ERROR_SUCCESS;
+-
+-    const DWORD isc_req_flags = ISC_REQ_ALLOCATE_MEMORY|ISC_REQ_USE_SESSION_KEY|ISC_REQ_CONFIDENTIALITY
+-        |ISC_REQ_SEQUENCE_DETECT|ISC_REQ_REPLAY_DETECT|ISC_REQ_MANUAL_CRED_VALIDATION;
+ 
+     if (!(read_buf = heap_alloc( read_buf_size ))) return ERROR_OUTOFMEMORY;
+ 
+-    status = InitializeSecurityContextW(cred_handle, NULL, hostname, isc_req_flags, 0, 0, NULL, 0,
+-            &ctx, &out_desc, &attrs, NULL);
++    status = InitializeSecurityContextW(cred_handle, ctx_handle, hostname, isc_req_flags, 0, 0, init_desc,
++            0, new_ctx_handle, &out_desc, &attrs, NULL);
++    if (!ctx_handle) ctx_handle = new_ctx_handle;
+ 
+     assert(status != SEC_E_OK);
+ 
+@@ -292,7 +287,7 @@ DWORD netconn_secure_connect( struct netconn *conn, WCHAR *hostname, DWORD secur
+             size = sock_send(conn->socket, out_buf.pvBuffer, out_buf.cbBuffer, 0);
+             if(size != out_buf.cbBuffer) {
+                 ERR("send failed\n");
+-                res = ERROR_WINHTTP_SECURE_CHANNEL_ERROR;
++                status = ERROR_WINHTTP_SECURE_CHANNEL_ERROR;
+                 break;
+             }
+ 
+@@ -338,7 +333,7 @@ DWORD netconn_secure_connect( struct netconn *conn, WCHAR *hostname, DWORD secur
+ 
+         in_bufs[0].cbBuffer += size;
+         in_bufs[0].pvBuffer = read_buf;
+-        status = InitializeSecurityContextW(cred_handle, &ctx, hostname,  isc_req_flags, 0, 0, &in_desc,
++        status = InitializeSecurityContextW(cred_handle, ctx_handle, hostname, isc_req_flags, 0, 0, &in_desc,
+                 0, NULL, &out_desc, &attrs, NULL);
+         TRACE("InitializeSecurityContext ret %08x\n", status);
+         if(status == SEC_E_OK && in_bufs[1].BufferType == SECBUFFER_EXTRA)
+@@ -347,6 +342,21 @@ DWORD netconn_secure_connect( struct netconn *conn, WCHAR *hostname, DWORD secur
+ 
+     heap_free(read_buf);
+ 
++    return status;
++}
++
++DWORD netconn_secure_connect( struct netconn *conn, WCHAR *hostname, DWORD security_flags, CredHandle *cred_handle,
++                              BOOL check_revocation )
++{
++    CtxtHandle ctx;
++    const CERT_CONTEXT *cert;
++    SECURITY_STATUS status;
++    DWORD res = ERROR_SUCCESS;
++
++    const DWORD isc_req_flags = ISC_REQ_ALLOCATE_MEMORY|ISC_REQ_USE_SESSION_KEY|ISC_REQ_CONFIDENTIALITY
++        |ISC_REQ_SEQUENCE_DETECT|ISC_REQ_REPLAY_DETECT|ISC_REQ_MANUAL_CRED_VALIDATION;
++
++    status = netconn_negotiate(conn, cred_handle, NULL, hostname, isc_req_flags, NULL, &ctx);
+     if(status != SEC_E_OK)
+         goto failed;
+ 
+From 665a158b387c53c821607fcaa9bfe36c0c0d1c2a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 3 Dec 2020 11:52:27 +0100
+Subject: [PATCH] winhttp: Handle SEC_I_RENEGOTIATE after DecryptMessage.
+
+By performing renegotiation as we should, instead of incorrectly
+returning ERROR_WINHTTP_CLIENT_AUTH_CERT_NEEDED.
+
+MSDN says we should pass returned SECBUFFER_EXTRA as SECBUFFER_TOKEN,
+so we also do that, although it's usually empty.
+---
+ dlls/winhttp/net.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winhttp/net.c b/dlls/winhttp/net.c
+index 2ba9b2dc65a..ba262a83391 100644
+--- a/dlls/winhttp/net.c
++++ b/dlls/winhttp/net.c
+@@ -454,8 +454,10 @@ DWORD netconn_send( struct netconn *conn, const void *msg, size_t len, int *sent
+ 
+ static DWORD read_ssl_chunk( struct netconn *conn, void *buf, SIZE_T buf_size, SIZE_T *ret_size, BOOL *eof )
+ {
++    const DWORD isc_req_flags = ISC_REQ_ALLOCATE_MEMORY|ISC_REQ_USE_SESSION_KEY|ISC_REQ_CONFIDENTIALITY
++        |ISC_REQ_SEQUENCE_DETECT|ISC_REQ_REPLAY_DETECT|ISC_REQ_USE_SUPPLIED_CREDS;
+     const SIZE_T ssl_buf_size = conn->ssl_sizes.cbHeader+conn->ssl_sizes.cbMaximumMessage+conn->ssl_sizes.cbTrailer;
+-    SecBuffer bufs[4];
++    SecBuffer bufs[4], tmp;
+     SecBufferDesc buf_desc = {SECBUFFER_VERSION, ARRAY_SIZE(bufs), bufs};
+     SSIZE_T size, buf_len;
+     unsigned int i;
+@@ -496,7 +498,16 @@ static DWORD read_ssl_chunk( struct netconn *conn, void *buf, SIZE_T buf_size, S
+ 
+         case SEC_I_RENEGOTIATE:
+             TRACE("renegotiate\n");
+-            return ERROR_WINHTTP_CLIENT_AUTH_CERT_NEEDED;
++            memset(&tmp, 0, sizeof(tmp));
++            for(i = 0; i < ARRAY_SIZE(bufs); i++) {
++                if(bufs[i].BufferType == SECBUFFER_EXTRA) tmp = bufs[i];
++            }
++            memset(bufs, 0, sizeof(bufs));
++            bufs[0] = tmp;
++            bufs[0].BufferType = SECBUFFER_TOKEN;
++            res = netconn_negotiate(conn, NULL, &conn->ssl_ctx, conn->host->hostname, isc_req_flags, &buf_desc, NULL);
++            if (res != SEC_E_OK) return res;
++            break;
+ 
+         case SEC_I_CONTEXT_EXPIRED:
+             TRACE("context expired\n");
+From 2788cf38e71e5e5fbccc0358cb51cdd607f9169f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 3 Dec 2020 11:26:56 +0100
+Subject: [PATCH] secur32: Perform TLS handshake even if input is empty.
+
+Instead of immediately returning even if we don't know how much.
+
+This may be the case if we received SEC_I_RENEGOTIATE status, and in any
+case the handshake will tell us if more data is needed.
+---
+ dlls/secur32/schannel.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/secur32/schannel.c b/dlls/secur32/schannel.c
+index d47c4d79258..272cb6dabd6 100644
+--- a/dlls/secur32/schannel.c
++++ b/dlls/secur32/schannel.c
+@@ -881,7 +881,7 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+             ptr += record_size;
+         }
+ 
+-        if (!expected_size)
++        if (!expected_size && record_size)
+         {
+             TRACE("Expected at least %lu bytes, but buffer only contains %u bytes.\n",
+                     max(6, record_size), buffer->cbBuffer);
+@@ -912,6 +912,8 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+     {
+         SecBuffer *buffer = &out_buffers->desc->pBuffers[0];
+         buffer->cbBuffer = 0;
++        /* Nothing to read or to send, but we got SEC_I_CONTINUE_NEEDED, it means missing input */
++        if (!expected_size && ret == SEC_I_CONTINUE_NEEDED) ret = SEC_E_INCOMPLETE_MESSAGE;
+     }
+ 
+     if(ctx->transport.in.offset && ctx->transport.in.offset != pInput->pBuffers[0].cbBuffer) {
+From e6c7aa8bc42fea042c3d504009ad8a0fb70a6c0c Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 21 Jan 2021 11:54:10 -0600
+Subject: [PATCH] vulkan-1: Prefer builtin
+
+Games that ship their own vulkan-1 will be broken with your VR wrappers.
+---
+ dlls/vulkan-1/Makefile.in | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/vulkan-1/Makefile.in b/dlls/vulkan-1/Makefile.in
+index a4a10bc8e93..551ef146cd7 100644
+--- a/dlls/vulkan-1/Makefile.in
++++ b/dlls/vulkan-1/Makefile.in
+@@ -2,6 +2,4 @@ MODULE    = vulkan-1.dll
+ IMPORTS   = winevulkan
+ IMPORTLIB = vulkan-1
+ 
+-EXTRADLLFLAGS = -Wb,--prefer-native
+-
+ RC_SRCS = version.rc

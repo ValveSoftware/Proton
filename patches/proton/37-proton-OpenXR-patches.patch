@@ -11,7 +11,7 @@ diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
 index a0009ae85f5..c10a53e4acf 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -402,14 +402,84 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
+@@ -382,13 +382,83 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
      free_VkDeviceCreateInfo_struct_chain(create_info);
  }
  
@@ -91,7 +91,6 @@ index a0009ae85f5..c10a53e4acf 100644
 -    unsigned int i;
 +    unsigned int i, append_xr = 0, wine_extension_count;
      VkResult res;
-     const char** extensions;
  
 +    static const char *wine_xr_extension_name = "VK_WINE_openxr_device_extensions";
 +

@@ -3682,3 +3682,138 @@ index 1a031248a7c..388b116bc67 100644
      NULL,                         /* satisfied */
      no_signal,                    /* signal */
      no_get_fd,                    /* get_fd */
+From 53b9dab1826d746c874da1f7fec9d5e72498d18f Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 1 Apr 2021 20:19:35 +0300
+Subject: [PATCH] esync, fsync: Yield execution before alertable wait for AC
+ Odyssey.
+
+---
+ dlls/ntdll/unix/esync.c        | 11 +++++++++++
+ dlls/ntdll/unix/fsync.c        |  9 +++++++++
+ dlls/ntdll/unix/loader.c       | 21 +++++++++++++++++++++
+ dlls/ntdll/unix/unix_private.h |  2 ++
+ 4 files changed, 43 insertions(+)
+
+diff --git a/dlls/ntdll/unix/esync.c b/dlls/ntdll/unix/esync.c
+index ac0326b1aba..9a615fb277c 100644
+--- a/dlls/ntdll/unix/esync.c
++++ b/dlls/ntdll/unix/esync.c
+@@ -957,6 +957,8 @@ static NTSTATUS __esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEA
+
+                     if (event->signaled)
+                     {
++                        if (ac_odyssey && alertable)
++                            usleep( 0 );
+                         if ((size = read( obj->fd, &value, sizeof(value) )) == sizeof(value))
+                         {
+                             TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+@@ -972,6 +974,12 @@ static NTSTATUS __esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEA
+
+                     if (event->signaled)
+                     {
++                        if (ac_odyssey && alertable)
++                        {
++                            usleep( 0 );
++                            if (!event->signaled)
++                                break;
++                        }
+                         TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                         return i;
+                     }
+@@ -1000,6 +1008,9 @@ static NTSTATUS __esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEA
+
+         while (1)
+         {
++            if (ac_odyssey && alertable)
++                usleep( 0 );
++
+             ret = do_poll( fds, pollcount, timeout ? &end : NULL );
+             if (ret > 0)
+             {
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index 21792dc3a78..c816b036238 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -1006,6 +1006,9 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         {
+                             if (__sync_val_compare_and_swap( &event->signaled, 1, 0 ))
+                             {
++                                if (ac_odyssey && alertable)
++                                    usleep( 0 );
++
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                                 return i;
+                             }
+@@ -1025,6 +1028,9 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         {
+                             if (__atomic_load_n( &event->signaled, __ATOMIC_SEQ_CST ))
+                             {
++                                if (ac_odyssey && alertable)
++                                    usleep( 0 );
++
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                                 return i;
+                             }
+@@ -1055,6 +1061,9 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+
+             /* Looks like everything is contended, so wait. */
+
++            if (ac_odyssey && alertable)
++                usleep( 0 );
++
+             if (timeout && !timeout->QuadPart)
+             {
+                 /* Unlike esync, we already know that we've timed out, so we
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index e565c324eef..999eb3e23e1 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1820,6 +1820,26 @@ static struct unix_funcs unix_funcs =
+     steamclient_setup_trampolines,
+ };
+
++BOOL ac_odyssey;
++
++static void hacks_init(void)
++{
++    static const char ac_odyssey_exe[] = "ACOdyssey.exe";
++    char cur_exe[MAX_PATH];
++    DWORD cur_exe_len;
++    int fd;
++
++    fd = open("/proc/self/comm", O_RDONLY);
++    cur_exe_len = read(fd, cur_exe, sizeof(cur_exe));
++    close(fd);
++    cur_exe[cur_exe_len - 1] = 0;
++
++    if (!strcasecmp(cur_exe, ac_odyssey_exe))
++    {
++        ERR("HACK: AC Odyssey sync tweak on.\n");
++        ac_odyssey = TRUE;
++    }
++}
+
+ /***********************************************************************
+  *           start_main_thread
+@@ -1834,6 +1854,7 @@ static void start_main_thread(void)
+     signal_init_thread( teb );
+     dbg_init();
+     startup_info_size = server_init_process();
++    hacks_init();
+     fsync_init();
+     esync_init();
+     virtual_map_user_shared_data();
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index 65801df3a61..d8499efa00d 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -137,6 +137,8 @@ extern SYSTEM_CPU_INFORMATION cpu_info DECLSPEC_HIDDEN;
+ extern struct ldt_copy __wine_ldt_copy DECLSPEC_HIDDEN;
+ #endif
+
++extern BOOL ac_odyssey DECLSPEC_HIDDEN;
++
+ extern void init_environment( int argc, char *argv[], char *envp[] ) DECLSPEC_HIDDEN;
+ extern void init_startup_info(void) DECLSPEC_HIDDEN;
+ extern DWORD ntdll_umbstowcs( const char *src, DWORD srclen, WCHAR *dst, DWORD dstlen ) DECLSPEC_HIDDEN;

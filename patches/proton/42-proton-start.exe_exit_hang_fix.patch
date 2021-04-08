@@ -1,0 +1,20 @@
+From 25f084e4f59a1ec00394c07f5f37c36226746180 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Sun, 4 Apr 2021 16:48:21 +0200
+Subject: We do not want start.exe to stay around when using Proton as it prevents graceful exits.
+So let's strip its invincibility shield so Death can come and take what it has to.
+
+
+diff --git a/programs/start/start.c b/programs/start/start.c
+index 3efad69b090..a5e420f9158 100644
+--- a/programs/start/start.c
++++ b/programs/start/start.c
+@@ -463,7 +463,7 @@ int __cdecl wmain (int argc, WCHAR *argv[])
+ 		}
+                 else if (is_option(argv[i], L"/exec")) {
+ 			creation_flags = 0;
+-			sei.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_NO_CONSOLE | SEE_MASK_FLAG_NO_UI;
++			sei.fMask = SEE_MASK_NO_CONSOLE | SEE_MASK_FLAG_NO_UI;
+                         i++;
+                         break;
+ 		}
