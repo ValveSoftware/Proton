@@ -139,6 +139,7 @@ redist: configure
 	rm cabextract_1.9-1.debian.tar.xz libmspack_0.10.1-1.debian.tar.xz && \
 	cd /vagrant/ && \
 	tar -cvzf $(DEPLOY_DIR).tar.gz $(DEPLOY_DIR)'
+	sha512sum vagrant_share/$(DEPLOY_DIR).tar.gz > vagrant_share/$(DEPLOY_DIR).sha512sum
 	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
 
 deploy: configure
