@@ -213,11 +213,6 @@
     echo "mfplat backports"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-upstream-backports-6.5+.patch
 
-    # these break seven:days long gone
-    #git revert --no-commit 767c200f47b15aec7fe7eb95f76ee034c5bba95f
-    #git revert --no-commit 6e4c7d4dba3d83b2c62d8059c0531322370c4006
-    #git revert --no-commit 0a0bf3cf21c5d08d9aa1873cd20da71e224c6aba
-
     echo "mfplat rebase"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
     
