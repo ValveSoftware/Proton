@@ -6375,3 +6375,21 @@ index 4772c958f8e..266c5dc1140 100644
      }
      return TRUE;
  }
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index eb5b9e366ec..3ce8ff40f9b 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -864,6 +902,13 @@ static HRESULT WINAPI media_source_get_service_GetService(IMFGetService *iface,
+     struct media_source *source = impl_from_IMFGetService(iface);
+ 
+     TRACE("%p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
++    
++    const char *sgi = getenv("SteamGameId");
++    if (sgi && !strcmp(sgi, "471010"))
++    {
++        FIXME("stub %p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
++        return E_NOINTERFACE;
++    }
+ 
+     *obj = NULL;
+ 
