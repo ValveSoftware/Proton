@@ -1,0 +1,2794 @@
+From 4634fd4ccb8dc3069b12b712abaf1585ba864431 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 29 Mar 2021 10:11:24 +0300
+Subject: [PATCH] mf/session: Handle MF_TOPONODE_DISABLE_PREROLL on sink nodes.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mf/session.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index aa96ffd33caf..c2334f82d628 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -1232,6 +1232,7 @@ static DWORD session_get_object_rate_caps(IUnknown *object)
+ static HRESULT session_add_media_sink(struct media_session *session, IMFTopologyNode *node, IMFMediaSink *sink)
+ {
+     struct media_sink *media_sink;
++    unsigned int disable_preroll = 0;
+     DWORD flags;
+ 
+     LIST_FOR_EACH_ENTRY(media_sink, &session->presentation.sinks, struct media_sink, entry)
+@@ -1248,7 +1249,8 @@ static HRESULT session_add_media_sink(struct media_session *session, IMFTopology
+ 
+     IMFMediaSink_QueryInterface(media_sink->sink, &IID_IMFMediaEventGenerator, (void **)&media_sink->event_generator);
+ 
+-    if (SUCCEEDED(IMFMediaSink_GetCharacteristics(sink, &flags)) && flags & MEDIASINK_CAN_PREROLL)
++    IMFTopologyNode_GetUINT32(node, &MF_TOPONODE_DISABLE_PREROLL, &disable_preroll);
++    if (SUCCEEDED(IMFMediaSink_GetCharacteristics(sink, &flags)) && flags & MEDIASINK_CAN_PREROLL && !disable_preroll)
+     {
+         if (SUCCEEDED(IMFMediaSink_QueryInterface(media_sink->sink, &IID_IMFMediaSinkPreroll, (void **)&media_sink->preroll)))
+             session->presentation.flags |= SESSION_FLAG_NEEDS_PREROLL;
+From 0d383fe182d11576e2580f6e1f48c4bd6ce72a6b Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 30 Mar 2021 11:28:06 +0300
+Subject: [PATCH] mfplat: Add Lock()/Unlock() for d3d11 buffers.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplat/buffer.c       | 65 +++++++++++++++++++++++++++++++++++---
+ dlls/mfplat/tests/mfplat.c | 12 +------
+ 2 files changed, 62 insertions(+), 15 deletions(-)
+
+diff --git a/dlls/mfplat/buffer.c b/dlls/mfplat/buffer.c
+index 77767c27d948..f428630ea019 100644
+--- a/dlls/mfplat/buffer.c
++++ b/dlls/mfplat/buffer.c
+@@ -914,16 +914,73 @@ static void dxgi_surface_buffer_unmap(struct buffer *buffer)
+ static HRESULT WINAPI dxgi_surface_buffer_Lock(IMFMediaBuffer *iface, BYTE **data, DWORD *max_length,
+         DWORD *current_length)
+ {
+-    FIXME("%p, %p, %p, %p.\n", iface, data, max_length, current_length);
++    struct buffer *buffer = impl_from_IMFMediaBuffer(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p, %p, %p.\n", iface, data, max_length, current_length);
++
++    if (!data)
++        return E_POINTER;
++
++    EnterCriticalSection(&buffer->cs);
++
++    if (!buffer->_2d.linear_buffer && buffer->_2d.locks)
++        hr = MF_E_INVALIDREQUEST;
++    else if (!buffer->_2d.linear_buffer)
++    {
++        if (!(buffer->_2d.linear_buffer = heap_alloc(ALIGN_SIZE(buffer->_2d.plane_size, MF_64_BYTE_ALIGNMENT))))
++            hr = E_OUTOFMEMORY;
++
++        if (SUCCEEDED(hr))
++        {
++            hr = dxgi_surface_buffer_map(buffer);
++            if (SUCCEEDED(hr))
++            {
++                MFCopyImage(buffer->_2d.linear_buffer, buffer->_2d.width, buffer->dxgi_surface.map_desc.pData,
++                        buffer->dxgi_surface.map_desc.RowPitch, buffer->_2d.width, buffer->_2d.height);
++            }
++        }
++    }
++
++    if (SUCCEEDED(hr))
++    {
++        ++buffer->_2d.locks;
++        *data = buffer->_2d.linear_buffer;
++        if (max_length)
++            *max_length = buffer->_2d.plane_size;
++        if (current_length)
++            *current_length = buffer->_2d.plane_size;
++    }
++
++    LeaveCriticalSection(&buffer->cs);
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI dxgi_surface_buffer_Unlock(IMFMediaBuffer *iface)
+ {
+-    FIXME("%p.\n", iface);
++    struct buffer *buffer = impl_from_IMFMediaBuffer(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&buffer->cs);
++
++    if (!buffer->_2d.linear_buffer)
++        hr = HRESULT_FROM_WIN32(ERROR_WAS_UNLOCKED);
++    else if (!--buffer->_2d.locks)
++    {
++        MFCopyImage(buffer->dxgi_surface.map_desc.pData, buffer->dxgi_surface.map_desc.RowPitch,
++                buffer->_2d.linear_buffer, buffer->_2d.width, buffer->_2d.width, buffer->_2d.height);
++        dxgi_surface_buffer_unmap(buffer);
++
++        heap_free(buffer->_2d.linear_buffer);
++        buffer->_2d.linear_buffer = NULL;
++    }
++
++    LeaveCriticalSection(&buffer->cs);
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI dxgi_surface_buffer_SetCurrentLength(IMFMediaBuffer *iface, DWORD current_length)
+diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
+index 1e84acd08faa..c21a57be27fe 100644
+--- a/dlls/mfplat/tests/mfplat.c
++++ b/dlls/mfplat/tests/mfplat.c
+@@ -6479,31 +6479,24 @@ static void test_dxgi_surface_buffer(void)
+     max_length = cur_length = 0;
+     data = NULL;
+     hr = IMFMediaBuffer_Lock(buffer, &data, &max_length, &cur_length);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(max_length && max_length == cur_length, "Unexpected length %u.\n", max_length);
+-}
+     if (data) *(DWORD *)data = ~0u;
+ 
+     color = get_d3d11_texture_color(texture, 0, 0);
+     ok(!color, "Unexpected texture color %#x.\n", color);
+ 
+     hr = IMFMediaBuffer_Unlock(buffer);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     color = get_d3d11_texture_color(texture, 0, 0);
+-todo_wine
+     ok(color == ~0u, "Unexpected texture color %#x.\n", color);
+ 
+     hr = IMFMediaBuffer_Lock(buffer, &data, &max_length, &cur_length);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    if (SUCCEEDED(hr))
+-        ok(*(DWORD *)data == ~0u, "Unexpected buffer %#x.\n", *(DWORD *)data);
++    ok(*(DWORD *)data == ~0u, "Unexpected buffer %#x.\n", *(DWORD *)data);
+ 
+     hr = IMFMediaBuffer_Unlock(buffer);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     /* Lock2D()/Unlock2D() */
+@@ -6526,7 +6519,6 @@ todo_wine
+     ok(data2 == data && pitch2 == pitch, "Unexpected data/pitch.\n");
+ 
+     hr = IMFMediaBuffer_Lock(buffer, &data, &max_length, &cur_length);
+-todo_wine
+     ok(hr == MF_E_INVALIDREQUEST, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMF2DBuffer_Unlock2D(_2d_buffer);
+@@ -6906,11 +6898,9 @@ todo_wine
+     IMFDXGIBuffer_Release(dxgi_buffer);
+ 
+     hr = IMFMediaBuffer_Lock(buffer, &data, NULL, NULL);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFMediaBuffer_Unlock(buffer);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     IMFSample_Release(sample);
+From 706fd3dcce52c0deec7c98143d715a1d9016d3ad Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Thu, 1 Apr 2021 19:26:57 +0300
+Subject: [PATCH] mf/session: Prefer transform-provided sample path.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mf/session.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index c2334f82d62..20ccdd0535e 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -2750,7 +2750,7 @@ static HRESULT transform_node_pull_samples(const struct media_session *session,
+         if (FAILED(hr = IMFTransform_GetOutputStreamInfo(node->object.transform, buffers[i].dwStreamID, &stream_info)))
+             break;
+ 
+-        if (!(stream_info.dwFlags & MFT_OUTPUT_STREAM_PROVIDES_SAMPLES))
++        if (!(stream_info.dwFlags & (MFT_OUTPUT_STREAM_PROVIDES_SAMPLES | MFT_OUTPUT_STREAM_CAN_PROVIDE_SAMPLES)))
+         {
+             if (FAILED(hr = transform_get_external_output_sample(session, node, i, &stream_info, &buffers[i].pSample)))
+                 break;
+From 8c4695231fa967b845a5135cef0492024c64c8a6 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 1 Apr 2021 23:22:56 +0300
+Subject: [PATCH] mfuuid: Add mfplay GUIDs.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfuuid/Makefile.in |  1 +
+ dlls/mfuuid/mfplay.c    | 21 +++++++++++++++++++++
+ 2 files changed, 22 insertions(+)
+ create mode 100644 dlls/mfuuid/mfplay.c
+
+diff --git a/dlls/mfuuid/Makefile.in b/dlls/mfuuid/Makefile.in
+index 5fbb522782c2..b42583bbb73f 100644
+--- a/dlls/mfuuid/Makefile.in
++++ b/dlls/mfuuid/Makefile.in
+@@ -1,4 +1,5 @@
+ MODULE    = libmfuuid.a
+ 
+ C_SRCS = \
++	mfplay.c \
+ 	mfuuid.c
+diff --git a/dlls/mfuuid/mfplay.c b/dlls/mfuuid/mfplay.c
+new file mode 100644
+index 000000000000..1d28306fe4f6
+--- /dev/null
++++ b/dlls/mfuuid/mfplay.c
+@@ -0,0 +1,21 @@
++/*
++ * Copyright 2021 Nikolay Sivov for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include "evr.h"
++#include "initguid.h"
++#include "mfplay.h"
+From 615cabf69ae73b232de93a85cf14e8f6f27e6291 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 1 Apr 2021 23:22:57 +0300
+Subject: [PATCH] mfplay: Add IMFPMediaPlayer stub.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/Makefile.in |   1 +
+ dlls/mfplay/player.c    | 372 +++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 371 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfplay/Makefile.in b/dlls/mfplay/Makefile.in
+index 539240ceadcd..0a8645fe840f 100644
+--- a/dlls/mfplay/Makefile.in
++++ b/dlls/mfplay/Makefile.in
+@@ -1,4 +1,5 @@
+ MODULE    = mfplay.dll
++IMPORTS   = uuid mfuuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
+ 
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index 1e4f1f561f46..1e2a3a8f1893 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -16,6 +16,8 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#define COBJMACROS
++
+ #include <stdarg.h>
+ 
+ #include "windef.h"
+@@ -23,13 +25,379 @@
+ #include "mfplay.h"
+ 
+ #include "wine/debug.h"
++#include "wine/heap.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
++struct media_player
++{
++    IMFPMediaPlayer IMFPMediaPlayer_iface;
++    LONG refcount;
++};
++
++static struct media_player *impl_from_IMFPMediaPlayer(IMFPMediaPlayer *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_player, IMFPMediaPlayer_iface);
++}
++
++static HRESULT WINAPI media_player_QueryInterface(IMFPMediaPlayer *iface, REFIID riid, void **obj)
++{
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
++
++    if (IsEqualIID(riid, &IID_IMFPMediaPlayer) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFPMediaPlayer_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported interface %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI media_player_AddRef(IMFPMediaPlayer *iface)
++{
++    struct media_player *player = impl_from_IMFPMediaPlayer(iface);
++    ULONG refcount = InterlockedIncrement(&player->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI media_player_Release(IMFPMediaPlayer *iface)
++{
++    struct media_player *player = impl_from_IMFPMediaPlayer(iface);
++    ULONG refcount = InterlockedDecrement(&player->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++        heap_free(player);
++
++    return refcount;
++}
++
++static HRESULT WINAPI media_player_Play(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_Pause(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_Stop(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_FrameStep(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetPosition(IMFPMediaPlayer *iface, REFGUID postype, const PROPVARIANT *position)
++{
++    FIXME("%p, %s, %p.\n", iface, debugstr_guid(postype), position);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetPosition(IMFPMediaPlayer *iface, REFGUID postype, PROPVARIANT *position)
++{
++    FIXME("%p, %s, %p.\n", iface, debugstr_guid(postype), position);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetDuration(IMFPMediaPlayer *iface, REFGUID postype, PROPVARIANT *position)
++{
++    FIXME("%p, %s, %p.\n", iface, debugstr_guid(postype), position);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetRate(IMFPMediaPlayer *iface, float rate)
++{
++    FIXME("%p, %f.\n", iface, rate);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetRate(IMFPMediaPlayer *iface, float *rate)
++{
++    FIXME("%p, %p.\n", iface, rate);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetSupportedRates(IMFPMediaPlayer *iface, BOOL forward, float *slowest_rate, float *fastest_rate)
++{
++    FIXME("%p, %d, %p, %p.\n", iface, forward, slowest_rate, fastest_rate);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetState(IMFPMediaPlayer *iface, MFP_MEDIAPLAYER_STATE *state)
++{
++    FIXME("%p, %p.\n", iface, state);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_CreateMediaItemFromURL(IMFPMediaPlayer *iface,
++        const WCHAR *url, BOOL sync, DWORD_PTR user_data, IMFPMediaItem **item)
++{
++    FIXME("%p, %s, %d, %lx, %p.\n", iface, debugstr_w(url), sync, user_data, item);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_CreateMediaItemFromObject(IMFPMediaPlayer *iface,
++        IUnknown *object, BOOL sync, DWORD_PTR user_data, IMFPMediaItem **item)
++{
++    FIXME("%p, %p, %d, %lx, %p.\n", iface, object, sync, user_data, item);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetMediaItem(IMFPMediaPlayer *iface, IMFPMediaItem *item)
++{
++    FIXME("%p, %p.\n", iface, item);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_ClearMediaItem(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetMediaItem(IMFPMediaPlayer *iface, IMFPMediaItem **item)
++{
++    FIXME("%p, %p.\n", iface, item);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetVolume(IMFPMediaPlayer *iface, float *volume)
++{
++    FIXME("%p, %p.\n", iface, volume);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetVolume(IMFPMediaPlayer *iface, float volume)
++{
++    FIXME("%p, %.8e.\n", iface, volume);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetBalance(IMFPMediaPlayer *iface, float *balance)
++{
++    FIXME("%p, %p.\n", iface, balance);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetBalance(IMFPMediaPlayer *iface, float balance)
++{
++    FIXME("%p, %.8e.\n", iface, balance);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetMute(IMFPMediaPlayer *iface, BOOL *mute)
++{
++    FIXME("%p, %p.\n", iface, mute);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetMute(IMFPMediaPlayer *iface, BOOL mute)
++{
++    FIXME("%p, %d.\n", iface, mute);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetNativeVideoSize(IMFPMediaPlayer *iface,
++        SIZE *video, SIZE *arvideo)
++{
++    FIXME("%p, %p, %p.\n", iface, video, arvideo);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetIdealVideoSize(IMFPMediaPlayer *iface,
++        SIZE *min_size, SIZE *max_size)
++{
++    FIXME("%p, %p, %p.\n", iface, min_size, max_size);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetVideoSourceRect(IMFPMediaPlayer *iface,
++        MFVideoNormalizedRect const *rect)
++{
++    FIXME("%p, %p.\n", iface, rect);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetVideoSourceRect(IMFPMediaPlayer *iface,
++        MFVideoNormalizedRect *rect)
++{
++    FIXME("%p, %p.\n", iface, rect);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetAspectRatioMode(IMFPMediaPlayer *iface, DWORD mode)
++{
++    FIXME("%p, %u.\n", iface, mode);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetAspectRatioMode(IMFPMediaPlayer *iface,
++        DWORD *mode)
++{
++    FIXME("%p, %p.\n", iface, mode);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetVideoWindow(IMFPMediaPlayer *iface, HWND *hwnd)
++{
++    FIXME("%p, %p.\n", iface, hwnd);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_UpdateVideo(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_SetBorderColor(IMFPMediaPlayer *iface, COLORREF color)
++{
++    FIXME("%p, %#x.\n", iface, color);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_GetBorderColor(IMFPMediaPlayer *iface, COLORREF *color)
++{
++    FIXME("%p, %p.\n", iface, color);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_InsertEffect(IMFPMediaPlayer *iface, IUnknown *effect,
++        BOOL optional)
++{
++    FIXME("%p, %p, %d.\n", iface, effect, optional);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_RemoveEffect(IMFPMediaPlayer *iface, IUnknown *effect)
++{
++    FIXME("%p, %p.\n", iface, effect);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_RemoveAllEffects(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_Shutdown(IMFPMediaPlayer *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static const IMFPMediaPlayerVtbl media_player_vtbl =
++{
++    media_player_QueryInterface,
++    media_player_AddRef,
++    media_player_Release,
++    media_player_Play,
++    media_player_Pause,
++    media_player_Stop,
++    media_player_FrameStep,
++    media_player_SetPosition,
++    media_player_GetPosition,
++    media_player_GetDuration,
++    media_player_SetRate,
++    media_player_GetRate,
++    media_player_GetSupportedRates,
++    media_player_GetState,
++    media_player_CreateMediaItemFromURL,
++    media_player_CreateMediaItemFromObject,
++    media_player_SetMediaItem,
++    media_player_ClearMediaItem,
++    media_player_GetMediaItem,
++    media_player_GetVolume,
++    media_player_SetVolume,
++    media_player_GetBalance,
++    media_player_SetBalance,
++    media_player_GetMute,
++    media_player_SetMute,
++    media_player_GetNativeVideoSize,
++    media_player_GetIdealVideoSize,
++    media_player_SetVideoSourceRect,
++    media_player_GetVideoSourceRect,
++    media_player_SetAspectRatioMode,
++    media_player_GetAspectRatioMode,
++    media_player_GetVideoWindow,
++    media_player_UpdateVideo,
++    media_player_SetBorderColor,
++    media_player_GetBorderColor,
++    media_player_InsertEffect,
++    media_player_RemoveEffect,
++    media_player_RemoveAllEffects,
++    media_player_Shutdown,
++};
++
+ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_CREATION_OPTIONS options,
+         IMFPMediaPlayerCallback *callback, HWND hwnd, IMFPMediaPlayer **player)
+ {
+-    FIXME("%s, %d, %#x, %p, %p, %p.\n", debugstr_w(url), start_playback, options, callback, hwnd, player);
++    struct media_player *object;
+ 
+-    return E_NOTIMPL;
++    TRACE("%s, %d, %#x, %p, %p, %p.\n", debugstr_w(url), start_playback, options, callback, hwnd, player);
++
++    if (!(object = heap_alloc_zero(sizeof(*object))))
++        return E_OUTOFMEMORY;
++
++    object->IMFPMediaPlayer_iface.lpVtbl = &media_player_vtbl;
++    object->refcount = 1;
++
++    *player = &object->IMFPMediaPlayer_iface;
++
++    return S_OK;
+ }
+From dc57a265f136c6a95f227072078c6236eabdbad5 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 1 Apr 2021 23:22:58 +0300
+Subject: [PATCH] mfplay/tests: Add a basic test for player creation.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ configure                     |  1 +
+ configure.ac                  |  1 +
+ dlls/mfplay/Makefile.in       |  1 +
+ dlls/mfplay/tests/Makefile.in |  5 +++++
+ dlls/mfplay/tests/mfplay.c    | 42 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 dlls/mfplay/tests/Makefile.in
+ create mode 100644 dlls/mfplay/tests/mfplay.c
+
+diff --git a/configure b/configure
+index a19bb0b9581..cf34fa3ada5 100755
+--- a/configure
++++ b/configure
+@@ -20739,6 +20739,7 @@ wine_fn_config_makefile dlls/mfmediaengine/tests enable_tests
+ wine_fn_config_makefile dlls/mfplat enable_mfplat
+ wine_fn_config_makefile dlls/mfplat/tests enable_tests
+ wine_fn_config_makefile dlls/mfplay enable_mfplay
++wine_fn_config_makefile dlls/mfplay/tests enable_tests
+ wine_fn_config_makefile dlls/mfreadwrite enable_mfreadwrite
+ wine_fn_config_makefile dlls/mfreadwrite/tests enable_tests
+ wine_fn_config_makefile dlls/mfuuid enable_mfuuid
+diff --git a/configure.ac b/configure.ac
+index eb08e8b0f17..95eb04d6d49 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3414,6 +3414,7 @@ WINE_CONFIG_MAKEFILE(dlls/mfmediaengine/tests)
+ WINE_CONFIG_MAKEFILE(dlls/mfplat)
+ WINE_CONFIG_MAKEFILE(dlls/mfplat/tests)
+ WINE_CONFIG_MAKEFILE(dlls/mfplay)
++WINE_CONFIG_MAKEFILE(dlls/mfplay/tests)
+ WINE_CONFIG_MAKEFILE(dlls/mfreadwrite)
+ WINE_CONFIG_MAKEFILE(dlls/mfreadwrite/tests)
+ WINE_CONFIG_MAKEFILE(dlls/mfuuid)
+diff --git a/dlls/mfplay/Makefile.in b/dlls/mfplay/Makefile.in
+index 0a8645fe840..b21ce0e2161 100644
+--- a/dlls/mfplay/Makefile.in
++++ b/dlls/mfplay/Makefile.in
+@@ -1,4 +1,5 @@
+ MODULE    = mfplay.dll
++IMPORTLIB = mfplay
+ IMPORTS   = uuid mfuuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
+diff --git a/dlls/mfplay/tests/Makefile.in b/dlls/mfplay/tests/Makefile.in
+new file mode 100644
+index 00000000000..ca08c65ce24
+--- /dev/null
++++ b/dlls/mfplay/tests/Makefile.in
+@@ -0,0 +1,5 @@
++TESTDLL   = mfplay.dll
++IMPORTS   = mfplay
++
++C_SRCS = \
++	mfplay.c
+diff --git a/dlls/mfplay/tests/mfplay.c b/dlls/mfplay/tests/mfplay.c
+new file mode 100644
+index 00000000000..e9b5df95039
+--- /dev/null
++++ b/dlls/mfplay/tests/mfplay.c
+@@ -0,0 +1,42 @@
++/*
++ * Copyright 2021 Nikolay Sivov for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include <stdarg.h>
++
++#define COBJMACROS
++
++#include "windef.h"
++#include "winbase.h"
++#include "mfplay.h"
++
++#include "wine/test.h"
++
++static void test_create_player(void)
++{
++    IMFPMediaPlayer *player;
++    HRESULT hr;
++
++    hr = MFPCreateMediaPlayer(NULL, FALSE, 0, NULL, NULL, &player);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IMFPMediaPlayer_Release(player);
++}
++
++START_TEST(mfplay)
++{
++    test_create_player();
++}
+From b50b65ab9360c9bd17d51425b93ac84559a43841 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Apr 2021 21:35:00 +0300
+Subject: [PATCH] mfreadwrite/reader: Improve decoder output samples handling.
+
+Equivalent of 706fd3dcce52c0deec7c98143d715a1d9016d3ad, but for the reader.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfreadwrite/reader.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
+index d3df7abd9fcc..ffe91f5d2650 100644
+--- a/dlls/mfreadwrite/reader.c
++++ b/dlls/mfreadwrite/reader.c
+@@ -667,7 +667,7 @@ static HRESULT source_reader_pull_stream_samples(struct source_reader *reader, s
+     {
+         memset(&out_buffer, 0, sizeof(out_buffer));
+ 
+-        if (!(stream_info.dwFlags & MFT_OUTPUT_STREAM_PROVIDES_SAMPLES))
++        if (!(stream_info.dwFlags & (MFT_OUTPUT_STREAM_PROVIDES_SAMPLES | MFT_OUTPUT_STREAM_CAN_PROVIDE_SAMPLES)))
+         {
+             if (FAILED(hr = MFCreateSample(&out_buffer.pSample)))
+                 break;
+From c3c0e2a440fab099a81461b24fc19f2b223e525a Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 5 Apr 2021 09:10:56 +0300
+Subject: [PATCH] mf: Add MFRequireProtectedEnvironment().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mf/main.c     | 19 +++++++++++++++++++
+ dlls/mf/mf.spec    |  2 +-
+ dlls/mf/tests/mf.c | 39 +++++++++++++++++++++++++++++++++++++++
+ include/mfidl.idl  |  1 +
+ 4 files changed, 60 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mf/main.c b/dlls/mf/main.c
+index bf7066ad0329..b59ad466c73e 100644
+--- a/dlls/mf/main.c
++++ b/dlls/mf/main.c
+@@ -1460,3 +1460,22 @@ HRESULT WINAPI MFCreateSimpleTypeHandler(IMFMediaTypeHandler **handler)
+ 
+     return S_OK;
+ }
++
++HRESULT WINAPI MFRequireProtectedEnvironment(IMFPresentationDescriptor *pd)
++{
++    BOOL selected, protected = FALSE;
++    unsigned int i = 0, value;
++    IMFStreamDescriptor *sd;
++
++    TRACE("%p.\n", pd);
++
++    while (SUCCEEDED(IMFPresentationDescriptor_GetStreamDescriptorByIndex(pd, i++, &selected, &sd)))
++    {
++        value = 0;
++        protected = SUCCEEDED(IMFStreamDescriptor_GetUINT32(sd, &MF_SD_PROTECTED, &value)) && value;
++        IMFStreamDescriptor_Release(sd);
++        if (protected) break;
++    }
++
++    return protected ? S_OK : S_FALSE;
++}
+diff --git a/dlls/mf/mf.spec b/dlls/mf/mf.spec
+index 2927d9f8a88b..8f340243fc29 100644
+--- a/dlls/mf/mf.spec
++++ b/dlls/mf/mf.spec
+@@ -77,7 +77,7 @@
+ @ stdcall MFGetSupportedSchemes(ptr)
+ @ stdcall MFGetTopoNodeCurrentType(ptr long long ptr)
+ @ stub MFReadSequencerSegmentOffset
+-@ stub MFRequireProtectedEnvironment
++@ stdcall MFRequireProtectedEnvironment(ptr)
+ @ stdcall MFShutdownObject(ptr)
+ @ stub MFTranscodeGetAudioOutputAvailableTypes
+ @ stub MergePropertyStore
+diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
+index 40d8561bb060..df286db63851 100644
+--- a/dlls/mf/tests/mf.c
++++ b/dlls/mf/tests/mf.c
+@@ -5185,6 +5185,44 @@ static void init_functions(void)
+ #undef X
+ }
+ 
++static void test_MFRequireProtectedEnvironment(void)
++{
++    IMFPresentationDescriptor *pd;
++    IMFMediaType *mediatype;
++    IMFStreamDescriptor *sd;
++    HRESULT hr;
++
++    hr = MFCreateMediaType(&mediatype);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = MFCreateStreamDescriptor(0, 1, &mediatype, &sd);
++    ok(hr == S_OK, "Failed to create stream descriptor, hr %#x.\n", hr);
++
++    hr = MFCreatePresentationDescriptor(1, &sd, &pd);
++    ok(hr == S_OK, "Failed to create presentation descriptor, hr %#x.\n", hr);
++
++    hr = IMFPresentationDescriptor_SelectStream(pd, 0);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = MFRequireProtectedEnvironment(pd);
++    ok(hr == S_FALSE, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFStreamDescriptor_SetUINT32(sd, &MF_SD_PROTECTED, 1);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = MFRequireProtectedEnvironment(pd);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFPresentationDescriptor_DeselectStream(pd, 0);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = MFRequireProtectedEnvironment(pd);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    IMFStreamDescriptor_Release(sd);
++    IMFPresentationDescriptor_Release(pd);
++}
++
+ START_TEST(mf)
+ {
+     init_functions();
+@@ -5216,4 +5254,5 @@ START_TEST(mf)
+     test_sample_copier();
+     test_sample_copier_output_processing();
+     test_MFGetTopoNodeCurrentType();
++    test_MFRequireProtectedEnvironment();
+ }
+diff --git a/include/mfidl.idl b/include/mfidl.idl
+index 46c715a37529..138b899ffdbd 100644
+--- a/include/mfidl.idl
++++ b/include/mfidl.idl
+@@ -698,6 +698,7 @@ cpp_quote("MFTIME  WINAPI MFGetSystemTime(void);")
+ cpp_quote("HRESULT WINAPI MFGetTopoNodeCurrentType(IMFTopologyNode *node, DWORD stream, BOOL output, IMFMediaType **type);")
+ cpp_quote("HRESULT WINAPI MFShutdownObject(IUnknown *object);")
+ cpp_quote("HRESULT WINAPI MFCreateTrackedSample(IMFTrackedSample **sample);")
++cpp_quote("HRESULT WINAPI MFRequireProtectedEnvironment(IMFPresentationDescriptor *pd);")
+ 
+ typedef enum _MFMEDIASOURCE_CHARACTERISTICS
+ {
+From 97ed08cb523632b487cd3cdb8141333cebf059e5 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 5 Apr 2021 09:10:57 +0300
+Subject: [PATCH] mfplay: Keep user callback reference.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/player.c          |  8 +++++++
+ dlls/mfplay/tests/Makefile.in |  2 +-
+ dlls/mfplay/tests/mfplay.c    | 41 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index 1e2a3a8f189..6905812835a 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -33,6 +33,7 @@ struct media_player
+ {
+     IMFPMediaPlayer IMFPMediaPlayer_iface;
+     LONG refcount;
++    IMFPMediaPlayerCallback *callback;
+ };
+ 
+ static struct media_player *impl_from_IMFPMediaPlayer(IMFPMediaPlayer *iface)
+@@ -76,7 +77,11 @@ static ULONG WINAPI media_player_Release(IMFPMediaPlayer *iface)
+     TRACE("%p, refcount %u.\n", iface, refcount);
+ 
+     if (!refcount)
++    {
++        if (player->callback)
++            IMFPMediaPlayerCallback_Release(player->callback);
+         heap_free(player);
++    }
+ 
+     return refcount;
+ }
+@@ -396,6 +401,9 @@ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_C
+ 
+     object->IMFPMediaPlayer_iface.lpVtbl = &media_player_vtbl;
+     object->refcount = 1;
++    object->callback = callback;
++    if (object->callback)
++        IMFPMediaPlayerCallback_AddRef(object->callback);
+ 
+     *player = &object->IMFPMediaPlayer_iface;
+ 
+diff --git a/dlls/mfplay/tests/Makefile.in b/dlls/mfplay/tests/Makefile.in
+index ca08c65ce24..43c7ec26240 100644
+--- a/dlls/mfplay/tests/Makefile.in
++++ b/dlls/mfplay/tests/Makefile.in
+@@ -1,5 +1,5 @@
+ TESTDLL   = mfplay.dll
+-IMPORTS   = mfplay
++IMPORTS   = mfplay uuid mfuuid
+ 
+ C_SRCS = \
+ 	mfplay.c
+diff --git a/dlls/mfplay/tests/mfplay.c b/dlls/mfplay/tests/mfplay.c
+index e9b5df95039..ef8aaddc76f 100644
+--- a/dlls/mfplay/tests/mfplay.c
++++ b/dlls/mfplay/tests/mfplay.c
+@@ -26,14 +26,55 @@
+ 
+ #include "wine/test.h"
+ 
++static HRESULT WINAPI test_callback_QueryInterface(IMFPMediaPlayerCallback *iface, REFIID riid, void **obj)
++{
++    if (IsEqualIID(riid, &IID_IMFPMediaPlayerCallback) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFPMediaPlayerCallback_AddRef(iface);
++        return S_OK;
++    }
++
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI test_callback_AddRef(IMFPMediaPlayerCallback *iface)
++{
++    return 2;
++}
++
++static ULONG WINAPI test_callback_Release(IMFPMediaPlayerCallback *iface)
++{
++    return 1;
++}
++
++static void WINAPI test_callback_OnMediaPlayerEvent(IMFPMediaPlayerCallback *iface, MFP_EVENT_HEADER *event_header)
++{
++}
++
++static const IMFPMediaPlayerCallbackVtbl test_callback_vtbl =
++{
++    test_callback_QueryInterface,
++    test_callback_AddRef,
++    test_callback_Release,
++    test_callback_OnMediaPlayerEvent,
++};
++
+ static void test_create_player(void)
+ {
++    IMFPMediaPlayerCallback callback = { &test_callback_vtbl };
+     IMFPMediaPlayer *player;
+     HRESULT hr;
+ 
+     hr = MFPCreateMediaPlayer(NULL, FALSE, 0, NULL, NULL, &player);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IMFPMediaPlayer_Release(player);
++
++    hr = MFPCreateMediaPlayer(NULL, FALSE, 0, &callback, NULL, &player);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IMFPMediaPlayer_Release(player);
+ }
+ 
+ START_TEST(mfplay)
+From 2efb464bab2752bf63453244a63c4243e66d154f Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 5 Apr 2021 09:10:58 +0300
+Subject: [PATCH] mfplay: Automatically initialize Media Foundation.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/Makefile.in |  2 +-
+ dlls/mfplay/player.c    | 19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfplay/Makefile.in b/dlls/mfplay/Makefile.in
+index b21ce0e2161..91a8e5cc5a6 100644
+--- a/dlls/mfplay/Makefile.in
++++ b/dlls/mfplay/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = mfplay.dll
+ IMPORTLIB = mfplay
+-IMPORTS   = uuid mfuuid
++IMPORTS   = mfplat uuid mfuuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
+ 
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index 6905812835a..0305f663924 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -22,6 +22,7 @@
+ 
+ #include "windef.h"
+ #include "winbase.h"
++#include "mfapi.h"
+ #include "mfplay.h"
+ 
+ #include "wine/debug.h"
+@@ -29,6 +30,20 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
++static LONG startup_refcount;
++
++static void platform_startup(void)
++{
++    if (InterlockedIncrement(&startup_refcount) == 1)
++        MFStartup(MF_VERSION, MFSTARTUP_FULL);
++}
++
++static void platform_shutdown(void)
++{
++    if (InterlockedDecrement(&startup_refcount) == 0)
++        MFShutdown();
++}
++
+ struct media_player
+ {
+     IMFPMediaPlayer IMFPMediaPlayer_iface;
+@@ -81,6 +96,8 @@ static ULONG WINAPI media_player_Release(IMFPMediaPlayer *iface)
+         if (player->callback)
+             IMFPMediaPlayerCallback_Release(player->callback);
+         heap_free(player);
++
++        platform_shutdown();
+     }
+ 
+     return refcount;
+@@ -405,6 +422,8 @@ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_C
+     if (object->callback)
+         IMFPMediaPlayerCallback_AddRef(object->callback);
+ 
++    platform_startup();
++
+     *player = &object->IMFPMediaPlayer_iface;
+ 
+     return S_OK;
+From 6a389d14a6732c58183c9a82add7707d2e5bfce3 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 5 Apr 2021 09:10:59 +0300
+Subject: [PATCH] mfplay: Add IPropertyStore support to media player object.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/player.c       | 120 ++++++++++++++++++++++++++++++++++---
+ dlls/mfplay/tests/mfplay.c |  36 +++++++++++
+ 2 files changed, 148 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index 0305f663924..e729a863da9 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -47,8 +47,10 @@ static void platform_shutdown(void)
+ struct media_player
+ {
+     IMFPMediaPlayer IMFPMediaPlayer_iface;
++    IPropertyStore IPropertyStore_iface;
+     LONG refcount;
+     IMFPMediaPlayerCallback *callback;
++    IPropertyStore *propstore;
+ };
+ 
+ static struct media_player *impl_from_IMFPMediaPlayer(IMFPMediaPlayer *iface)
+@@ -56,22 +58,36 @@ static struct media_player *impl_from_IMFPMediaPlayer(IMFPMediaPlayer *iface)
+     return CONTAINING_RECORD(iface, struct media_player, IMFPMediaPlayer_iface);
+ }
+ 
++static struct media_player *impl_from_IPropertyStore(IPropertyStore *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_player, IPropertyStore_iface);
++}
++
+ static HRESULT WINAPI media_player_QueryInterface(IMFPMediaPlayer *iface, REFIID riid, void **obj)
+ {
++    struct media_player *player = impl_from_IMFPMediaPlayer(iface);
++
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
+ 
+     if (IsEqualIID(riid, &IID_IMFPMediaPlayer) ||
+             IsEqualIID(riid, &IID_IUnknown))
+     {
+-        *obj = iface;
+-        IMFPMediaPlayer_AddRef(iface);
+-        return S_OK;
++        *obj = &player->IMFPMediaPlayer_iface;
++    }
++    else if (IsEqualIID(riid, &IID_IPropertyStore))
++    {
++        *obj = &player->IPropertyStore_iface;
+     }
++    else
++    {
++        WARN("Unsupported interface %s.\n", debugstr_guid(riid));
++        *obj = NULL;
+ 
+-    WARN("Unsupported interface %s.\n", debugstr_guid(riid));
+-    *obj = NULL;
++        return E_NOINTERFACE;
++    }
+ 
+-    return E_NOINTERFACE;
++    IUnknown_AddRef((IUnknown *)*obj);
++    return S_OK;
+ }
+ 
+ static ULONG WINAPI media_player_AddRef(IMFPMediaPlayer *iface)
+@@ -95,6 +111,8 @@ static ULONG WINAPI media_player_Release(IMFPMediaPlayer *iface)
+     {
+         if (player->callback)
+             IMFPMediaPlayerCallback_Release(player->callback);
++        if (player->propstore)
++            IPropertyStore_Release(player->propstore);
+         heap_free(player);
+ 
+         platform_shutdown();
+@@ -406,25 +424,111 @@ static const IMFPMediaPlayerVtbl media_player_vtbl =
+     media_player_Shutdown,
+ };
+ 
++static HRESULT WINAPI media_player_propstore_QueryInterface(IPropertyStore *iface,
++        REFIID riid, void **obj)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++    return IMFPMediaPlayer_QueryInterface(&player->IMFPMediaPlayer_iface, riid, obj);
++}
++
++static ULONG WINAPI media_player_propstore_AddRef(IPropertyStore *iface)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++    return IMFPMediaPlayer_AddRef(&player->IMFPMediaPlayer_iface);
++}
++
++static ULONG WINAPI media_player_propstore_Release(IPropertyStore *iface)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++    return IMFPMediaPlayer_Release(&player->IMFPMediaPlayer_iface);
++}
++
++static HRESULT WINAPI media_player_propstore_GetCount(IPropertyStore *iface, DWORD *count)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++
++    TRACE("%p, %p.\n", iface, count);
++
++    return IPropertyStore_GetCount(player->propstore, count);
++}
++
++static HRESULT WINAPI media_player_propstore_GetAt(IPropertyStore *iface, DWORD prop, PROPERTYKEY *key)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++
++    TRACE("%p, %u, %p.\n", iface, prop, key);
++
++    return IPropertyStore_GetAt(player->propstore, prop, key);
++}
++
++static HRESULT WINAPI media_player_propstore_GetValue(IPropertyStore *iface, REFPROPERTYKEY key, PROPVARIANT *value)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++
++    TRACE("%p, %p, %p.\n", iface, key, value);
++
++    return IPropertyStore_GetValue(player->propstore, key, value);
++}
++
++static HRESULT WINAPI media_player_propstore_SetValue(IPropertyStore *iface, REFPROPERTYKEY key, REFPROPVARIANT value)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++
++    TRACE("%p, %p, %p.\n", iface, key, value);
++
++    return IPropertyStore_SetValue(player->propstore, key, value);
++}
++
++static HRESULT WINAPI media_player_propstore_Commit(IPropertyStore *iface)
++{
++    struct media_player *player = impl_from_IPropertyStore(iface);
++
++    TRACE("%p.\n", iface);
++
++    return IPropertyStore_Commit(player->propstore);
++}
++
++static const IPropertyStoreVtbl media_player_propstore_vtbl =
++{
++    media_player_propstore_QueryInterface,
++    media_player_propstore_AddRef,
++    media_player_propstore_Release,
++    media_player_propstore_GetCount,
++    media_player_propstore_GetAt,
++    media_player_propstore_GetValue,
++    media_player_propstore_SetValue,
++    media_player_propstore_Commit,
++};
++
+ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_CREATION_OPTIONS options,
+         IMFPMediaPlayerCallback *callback, HWND hwnd, IMFPMediaPlayer **player)
+ {
+     struct media_player *object;
++    HRESULT hr;
+ 
+     TRACE("%s, %d, %#x, %p, %p, %p.\n", debugstr_w(url), start_playback, options, callback, hwnd, player);
+ 
+     if (!(object = heap_alloc_zero(sizeof(*object))))
+         return E_OUTOFMEMORY;
+ 
++    platform_startup();
++
+     object->IMFPMediaPlayer_iface.lpVtbl = &media_player_vtbl;
++    object->IPropertyStore_iface.lpVtbl = &media_player_propstore_vtbl;
+     object->refcount = 1;
+     object->callback = callback;
+     if (object->callback)
+         IMFPMediaPlayerCallback_AddRef(object->callback);
+-
+-    platform_startup();
++    if (FAILED(hr = CreatePropertyStore(&object->propstore)))
++        goto failed;
+ 
+     *player = &object->IMFPMediaPlayer_iface;
+ 
+     return S_OK;
++
++failed:
++
++    IMFPMediaPlayer_Release(&object->IMFPMediaPlayer_iface);
++
++    return hr;
+ }
+diff --git a/dlls/mfplay/tests/mfplay.c b/dlls/mfplay/tests/mfplay.c
+index ef8aaddc76f..64347265c40 100644
+--- a/dlls/mfplay/tests/mfplay.c
++++ b/dlls/mfplay/tests/mfplay.c
+@@ -26,6 +26,21 @@
+ 
+ #include "wine/test.h"
+ 
++#define check_interface(a, b, c) check_interface_(__LINE__, a, b, c)
++static void check_interface_(unsigned int line, void *iface_ptr, REFIID iid, BOOL supported)
++{
++    IUnknown *iface = iface_ptr;
++    HRESULT hr, expected_hr;
++    IUnknown *unk;
++
++    expected_hr = supported ? S_OK : E_NOINTERFACE;
++
++    hr = IUnknown_QueryInterface(iface, iid, (void **)&unk);
++    ok_(__FILE__, line)(hr == expected_hr, "Got hr %#x, expected %#x.\n", hr, expected_hr);
++    if (SUCCEEDED(hr))
++        IUnknown_Release(unk);
++}
++
+ static HRESULT WINAPI test_callback_QueryInterface(IMFPMediaPlayerCallback *iface, REFIID riid, void **obj)
+ {
+     if (IsEqualIID(riid, &IID_IMFPMediaPlayerCallback) ||
+@@ -65,11 +80,32 @@ static const IMFPMediaPlayerCallbackVtbl test_callback_vtbl =
+ static void test_create_player(void)
+ {
+     IMFPMediaPlayerCallback callback = { &test_callback_vtbl };
++    IPropertyStore *propstore;
+     IMFPMediaPlayer *player;
++    IUnknown *unk, *unk2;
+     HRESULT hr;
+ 
+     hr = MFPCreateMediaPlayer(NULL, FALSE, 0, NULL, NULL, &player);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    check_interface(player, &IID_IMFPMediaPlayer, TRUE);
++    check_interface(player, &IID_IPropertyStore, TRUE);
++
++    hr = IMFPMediaPlayer_QueryInterface(player, &IID_IPropertyStore, (void **)&propstore);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    check_interface(propstore, &IID_IMFPMediaPlayer, TRUE);
++
++    hr = IPropertyStore_QueryInterface(propstore, &IID_IUnknown, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    hr = IMFPMediaPlayer_QueryInterface(player, &IID_IUnknown, (void **)&unk2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk == unk2, "Unexpected interface.\n");
++    IUnknown_Release(unk);
++    IUnknown_Release(unk2);
++
++    IPropertyStore_Release(propstore);
++
+     IMFPMediaPlayer_Release(player);
+ 
+     hr = MFPCreateMediaPlayer(NULL, FALSE, 0, &callback, NULL, &player);
+From bd8b4baf1dd9330afc9791b585fe441c69a4d093 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 5 Apr 2021 09:11:00 +0300
+Subject: [PATCH] mfplay: Implement creating media items from URLs.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/player.c | 383 ++++++++++++++++++++++++++++++++++++++++++-
+ include/mfplay.idl   |  90 ++++++++++
+ 2 files changed, 470 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index e729a863da92..0a953dde10f2 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -44,13 +44,24 @@ static void platform_shutdown(void)
+         MFShutdown();
+ }
+ 
++struct media_item
++{
++    IMFPMediaItem IMFPMediaItem_iface;
++    LONG refcount;
++    IMFPMediaPlayer *player;
++    IMFMediaSource *source;
++    DWORD_PTR user_data;
++};
++
+ struct media_player
+ {
+     IMFPMediaPlayer IMFPMediaPlayer_iface;
+     IPropertyStore IPropertyStore_iface;
++    IMFAsyncCallback resolver_callback;
+     LONG refcount;
+     IMFPMediaPlayerCallback *callback;
+     IPropertyStore *propstore;
++    IMFSourceResolver *resolver;
+ };
+ 
+ static struct media_player *impl_from_IMFPMediaPlayer(IMFPMediaPlayer *iface)
+@@ -63,6 +74,263 @@ static struct media_player *impl_from_IPropertyStore(IPropertyStore *iface)
+     return CONTAINING_RECORD(iface, struct media_player, IPropertyStore_iface);
+ }
+ 
++static struct media_player *impl_from_resolver_IMFAsyncCallback(IMFAsyncCallback *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_player, resolver_callback);
++}
++
++static struct media_item *impl_from_IMFPMediaItem(IMFPMediaItem *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_item, IMFPMediaItem_iface);
++}
++
++static HRESULT WINAPI media_item_QueryInterface(IMFPMediaItem *iface, REFIID riid, void **obj)
++{
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
++
++    if (IsEqualIID(riid, &IID_IMFPMediaItem) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFPMediaItem_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported interface %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI media_item_AddRef(IMFPMediaItem *iface)
++{
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++    ULONG refcount = InterlockedIncrement(&item->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI media_item_Release(IMFPMediaItem *iface)
++{
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++    ULONG refcount = InterlockedDecrement(&item->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++    {
++        if (item->player)
++            IMFPMediaPlayer_Release(item->player);
++        if (item->source)
++            IMFMediaSource_Release(item->source);
++        heap_free(item);
++    }
++
++    return refcount;
++}
++
++static HRESULT WINAPI media_item_GetMediaPlayer(IMFPMediaItem *iface,
++        IMFPMediaPlayer **player)
++{
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++
++    TRACE("%p, %p.\n", iface, player);
++
++    *player = item->player;
++    IMFPMediaPlayer_AddRef(*player);
++
++    return S_OK;
++}
++
++static HRESULT WINAPI media_item_GetURL(IMFPMediaItem *iface, LPWSTR *url)
++{
++    FIXME("%p, %p.\n", iface, url);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetObject(IMFPMediaItem *iface, IUnknown **obj)
++{
++    FIXME("%p, %p.\n", iface, obj);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetUserData(IMFPMediaItem *iface, DWORD_PTR *user_data)
++{
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++
++    TRACE("%p, %p.\n", iface, user_data);
++
++    *user_data = item->user_data;
++
++    return S_OK;
++}
++
++static HRESULT WINAPI media_item_SetUserData(IMFPMediaItem *iface, DWORD_PTR user_data)
++{
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++
++    TRACE("%p, %lx.\n", iface, user_data);
++
++    item->user_data = user_data;
++
++    return S_OK;
++}
++
++static HRESULT WINAPI media_item_GetStartStopPosition(IMFPMediaItem *iface, GUID *start_format,
++        PROPVARIANT *start_position, GUID *stop_format, PROPVARIANT *stop_position)
++{
++    FIXME("%p, %p, %p, %p, %p.\n", iface, start_format, start_position, stop_format, stop_position);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_SetStartStopPosition(IMFPMediaItem *iface, const GUID *start_format,
++        const PROPVARIANT *start_position, const GUID *stop_format, const PROPVARIANT *stop_position)
++{
++    FIXME("%p, %s, %p, %s, %p.\n", iface, debugstr_guid(start_format), start_position,
++            debugstr_guid(stop_format), stop_position);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_HasVideo(IMFPMediaItem *iface, BOOL *has_video, BOOL *selected)
++{
++    FIXME("%p, %p, %p.\n", iface, has_video, selected);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_HasAudio(IMFPMediaItem *iface, BOOL *has_audio, BOOL *selected)
++{
++    FIXME("%p, %p, %p.\n", iface, has_audio, selected);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_IsProtected(IMFPMediaItem *iface, BOOL *protected)
++{
++    FIXME("%p, %p.\n", iface, protected);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetDuration(IMFPMediaItem *iface, REFGUID format, PROPVARIANT *value)
++{
++    FIXME("%p, %s, %p.\n", iface, debugstr_guid(format), value);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetNumberOfStreams(IMFPMediaItem *iface, DWORD *count)
++{
++    FIXME("%p, %p.\n", iface, count);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetStreamSelection(IMFPMediaItem *iface, DWORD index, BOOL *enabled)
++{
++    FIXME("%p, %u, %p.\n", iface, index, enabled);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_SetStreamSelection(IMFPMediaItem *iface, DWORD index, BOOL enabled)
++{
++    FIXME("%p, %u, %d.\n", iface, index, enabled);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetStreamAttribute(IMFPMediaItem *iface, DWORD index, REFGUID key,
++        PROPVARIANT *value)
++{
++    FIXME("%p, %u, %s, %p.\n", iface, index, debugstr_guid(key), value);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetPresentationAttribute(IMFPMediaItem *iface, REFGUID key,
++        PROPVARIANT *value)
++{
++    FIXME("%p, %s, %p.\n", iface, debugstr_guid(key), value);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetCharacteristics(IMFPMediaItem *iface, MFP_MEDIAITEM_CHARACTERISTICS *flags)
++{
++    FIXME("%p, %p.\n", iface, flags);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_SetStreamSink(IMFPMediaItem *iface, DWORD index, IUnknown *sink)
++{
++    FIXME("%p, %u, %p.\n", iface, index, sink);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_item_GetMetadata(IMFPMediaItem *iface, IPropertyStore **metadata)
++{
++    FIXME("%p, %p.\n", iface, metadata);
++
++    return E_NOTIMPL;
++}
++
++static const IMFPMediaItemVtbl media_item_vtbl =
++{
++    media_item_QueryInterface,
++    media_item_AddRef,
++    media_item_Release,
++    media_item_GetMediaPlayer,
++    media_item_GetURL,
++    media_item_GetObject,
++    media_item_GetUserData,
++    media_item_SetUserData,
++    media_item_GetStartStopPosition,
++    media_item_SetStartStopPosition,
++    media_item_HasVideo,
++    media_item_HasAudio,
++    media_item_IsProtected,
++    media_item_GetDuration,
++    media_item_GetNumberOfStreams,
++    media_item_GetStreamSelection,
++    media_item_SetStreamSelection,
++    media_item_GetStreamAttribute,
++    media_item_GetPresentationAttribute,
++    media_item_GetCharacteristics,
++    media_item_SetStreamSink,
++    media_item_GetMetadata,
++};
++
++static HRESULT create_media_item(IMFPMediaPlayer *player, DWORD_PTR user_data, struct media_item **item)
++{
++    struct media_item *object;
++
++    if (!(object = heap_alloc_zero(sizeof(*object))))
++        return E_OUTOFMEMORY;
++
++    object->IMFPMediaItem_iface.lpVtbl = &media_item_vtbl;
++    object->refcount = 1;
++    object->user_data = user_data;
++    object->player = player;
++    IMFPMediaPlayer_AddRef(object->player);
++
++    *item = object;
++
++    return S_OK;
++}
++
++static HRESULT media_item_set_source(struct media_item *item, IUnknown *object)
++{
++    return IUnknown_QueryInterface(object, &IID_IMFMediaSource, (void **)&item->source);
++}
++
+ static HRESULT WINAPI media_player_QueryInterface(IMFPMediaPlayer *iface, REFIID riid, void **obj)
+ {
+     struct media_player *player = impl_from_IMFPMediaPlayer(iface);
+@@ -113,6 +381,8 @@ static ULONG WINAPI media_player_Release(IMFPMediaPlayer *iface)
+             IMFPMediaPlayerCallback_Release(player->callback);
+         if (player->propstore)
+             IPropertyStore_Release(player->propstore);
++        if (player->resolver)
++            IMFSourceResolver_Release(player->resolver);
+         heap_free(player);
+ 
+         platform_shutdown();
+@@ -199,11 +469,44 @@ static HRESULT WINAPI media_player_GetState(IMFPMediaPlayer *iface, MFP_MEDIAPLA
+ }
+ 
+ static HRESULT WINAPI media_player_CreateMediaItemFromURL(IMFPMediaPlayer *iface,
+-        const WCHAR *url, BOOL sync, DWORD_PTR user_data, IMFPMediaItem **item)
++        const WCHAR *url, BOOL sync, DWORD_PTR user_data, IMFPMediaItem **ret)
+ {
+-    FIXME("%p, %s, %d, %lx, %p.\n", iface, debugstr_w(url), sync, user_data, item);
++    struct media_player *player = impl_from_IMFPMediaPlayer(iface);
++    struct media_item *item;
++    MF_OBJECT_TYPE obj_type;
++    IUnknown *object;
++    HRESULT hr;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %s, %d, %lx, %p.\n", iface, debugstr_w(url), sync, user_data, ret);
++
++    if (FAILED(hr = create_media_item(iface, user_data, &item)))
++        return hr;
++
++    if (sync)
++    {
++        *ret = NULL;
++
++        if (SUCCEEDED(hr = IMFSourceResolver_CreateObjectFromURL(player->resolver, url, MF_RESOLUTION_MEDIASOURCE,
++                player->propstore, &obj_type, &object)))
++        {
++            hr = media_item_set_source(item, object);
++            IUnknown_Release(object);
++        }
++
++        if (SUCCEEDED(hr))
++            *ret = &item->IMFPMediaItem_iface;
++
++        return hr;
++    }
++    else
++    {
++        hr = IMFSourceResolver_BeginCreateObjectFromURL(player->resolver, url, MF_RESOLUTION_MEDIASOURCE,
++            player->propstore, NULL, &player->resolver_callback, (IUnknown *)&item->IMFPMediaItem_iface);
++
++        IMFPMediaItem_Release(&item->IMFPMediaItem_iface);
++    }
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_player_CreateMediaItemFromObject(IMFPMediaPlayer *iface,
+@@ -500,6 +803,77 @@ static const IPropertyStoreVtbl media_player_propstore_vtbl =
+     media_player_propstore_Commit,
+ };
+ 
++static HRESULT WINAPI media_player_resolver_callback_QueryInterface(IMFAsyncCallback *iface,
++        REFIID riid, void **obj)
++{
++    if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFAsyncCallback_AddRef(iface);
++        return S_OK;
++    }
++
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI media_player_resolver_callback_AddRef(IMFAsyncCallback *iface)
++{
++    struct media_player *player = impl_from_resolver_IMFAsyncCallback(iface);
++    return IMFPMediaPlayer_AddRef(&player->IMFPMediaPlayer_iface);
++}
++
++static ULONG WINAPI media_player_resolver_callback_Release(IMFAsyncCallback *iface)
++{
++    struct media_player *player = impl_from_resolver_IMFAsyncCallback(iface);
++    return IMFPMediaPlayer_Release(&player->IMFPMediaPlayer_iface);
++}
++
++static HRESULT WINAPI media_player_resolver_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags,
++        DWORD *queue)
++{
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_player_resolver_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
++{
++    struct media_player *player = impl_from_resolver_IMFAsyncCallback(iface);
++    struct media_item *item;
++    IUnknown *object, *state;
++    MF_OBJECT_TYPE obj_type;
++    HRESULT hr;
++
++    if (FAILED(IMFAsyncResult_GetState(result, &state)))
++        return S_OK;
++
++    item = impl_from_IMFPMediaItem((IMFPMediaItem *)state);
++
++    if (SUCCEEDED(hr = IMFSourceResolver_EndCreateObjectFromURL(player->resolver, result, &obj_type, &object)))
++    {
++        hr = media_item_set_source(item, object);
++        IUnknown_Release(object);
++    }
++
++    if (FAILED(hr))
++        WARN("Failed to set media source, hr %#x.\n", hr);
++
++    /* FIXME: callback notification */
++
++    IUnknown_Release(state);
++
++    return S_OK;
++}
++
++static const IMFAsyncCallbackVtbl media_player_resolver_callback_vtbl =
++{
++    media_player_resolver_callback_QueryInterface,
++    media_player_resolver_callback_AddRef,
++    media_player_resolver_callback_Release,
++    media_player_resolver_callback_GetParameters,
++    media_player_resolver_callback_Invoke,
++};
++
+ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_CREATION_OPTIONS options,
+         IMFPMediaPlayerCallback *callback, HWND hwnd, IMFPMediaPlayer **player)
+ {
+@@ -515,12 +889,15 @@ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_C
+ 
+     object->IMFPMediaPlayer_iface.lpVtbl = &media_player_vtbl;
+     object->IPropertyStore_iface.lpVtbl = &media_player_propstore_vtbl;
++    object->resolver_callback.lpVtbl = &media_player_resolver_callback_vtbl;
+     object->refcount = 1;
+     object->callback = callback;
+     if (object->callback)
+         IMFPMediaPlayerCallback_AddRef(object->callback);
+     if (FAILED(hr = CreatePropertyStore(&object->propstore)))
+         goto failed;
++    if (FAILED(hr = MFCreateSourceResolver(&object->resolver)))
++        goto failed;
+ 
+     *player = &object->IMFPMediaPlayer_iface;
+ 
+diff --git a/include/mfplay.idl b/include/mfplay.idl
+index 415a6f52414b..1a20a6b89009 100644
+--- a/include/mfplay.idl
++++ b/include/mfplay.idl
+@@ -54,6 +54,16 @@ typedef enum MFP_EVENT_TYPE
+     MFP_EVENT_TYPE_ACQUIRE_USER_CREDENTIAL,
+ } MFP_EVENT_TYPE;
+ 
++typedef UINT32 MFP_MEDIAITEM_CHARACTERISTICS;
++
++typedef [v1_enum] enum _MFP_MEDIAITEM_CHARACTERISTICS
++{
++    MFP_MEDIAITEM_IS_LIVE       = 0x00000001,
++    MFP_MEDIAITEM_CAN_SEEK      = 0x00000002,
++    MFP_MEDIAITEM_CAN_PAUSE     = 0x00000004,
++    MFP_MEDIAITEM_HAS_SLOW_SEEK = 0x00000008,
++} _MFP_MEDIAITEM_CHARACTERISTICS;
++
+ interface IMFPMediaPlayer;
+ interface IMFPMediaItem;
+ 
+@@ -198,5 +208,85 @@ interface IMFPMediaPlayer : IUnknown
+     HRESULT Shutdown();
+ }
+ 
++[
++    object,
++    uuid(90eb3e6b-ecbf-45cc-b1da-c6fe3ea70d57),
++    local,
++]
++interface IMFPMediaItem : IUnknown
++{
++    HRESULT GetMediaPlayer(
++        [out] IMFPMediaPlayer **player);
++
++    HRESULT GetURL(
++        [out] LPWSTR *url);
++
++    HRESULT GetObject(
++        [out] IUnknown **obj);
++
++    HRESULT GetUserData(
++        [out] DWORD_PTR *user_data);
++
++    HRESULT SetUserData(
++        [in] DWORD_PTR user_data);
++
++    HRESULT GetStartStopPosition(
++        [out] GUID *start_format,
++        [out] PROPVARIANT *start_position,
++        [out] GUID *stop_format,
++        [out] PROPVARIANT *stop_position);
++
++    HRESULT SetStartStopPosition(
++        [in] const GUID *start_format,
++        [in] const PROPVARIANT *start_position,
++        [in] const GUID *stop_format,
++        [in] const PROPVARIANT *stop_position);
++
++    HRESULT HasVideo(
++        [out] BOOL *has_video,
++        [out] BOOL *selected);
++
++    HRESULT HasAudio(
++        [out] BOOL *has_audio,
++        [out] BOOL *selected);
++
++    HRESULT IsProtected(
++        [out] BOOL *protected);
++
++    HRESULT GetDuration(
++        [in] REFGUID format,
++        [out] PROPVARIANT *value);
++
++    HRESULT GetNumberOfStreams(
++        [out] DWORD *count);
++
++    HRESULT GetStreamSelection(
++        [in] DWORD index,
++        [out] BOOL *enabled);
++
++    HRESULT SetStreamSelection(
++        [in] DWORD index,
++        [in] BOOL enabled);
++
++    HRESULT GetStreamAttribute(
++        [in] DWORD index,
++        [in] REFGUID key,
++        [out] PROPVARIANT *value);
++
++    HRESULT GetPresentationAttribute(
++        [in] REFGUID key,
++        [out] PROPVARIANT *value);
++
++    HRESULT GetCharacteristics(
++        [out] MFP_MEDIAITEM_CHARACTERISTICS *flags);
++
++    HRESULT SetStreamSink(
++        [in] DWORD index,
++        [in] IUnknown *sink);
++
++    HRESULT GetMetadata(
++        [out] IPropertyStore **metadata);
++}
++
+ cpp_quote("HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_CREATION_OPTIONS options, ")
+ cpp_quote("        IMFPMediaPlayerCallback *callback, HWND hwnd, IMFPMediaPlayer **player);")
+From aa20f3c084b964b28ecfe0d5fd3468edb29d318f Mon Sep 17 00:00:00 2001
+From: Connor McAdams <cmcadams@codeweavers.com>
+Date: Fri, 2 Apr 2021 21:00:24 -0400
+Subject: [PATCH] winegstreamer: Add corresponding 'IYUV' type alongside
+ 'I420'.
+
+Add references the 'IYUV' mediatype wherever 'I420' is referenced, as
+they are identical.
+
+Signed-off-by: Connor McAdams <cmcadams@codeweavers.com>
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/mfplat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index 682788384583..821657f8dd8d 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -521,6 +521,7 @@ video_formats[] =
+     {&MFVideoFormat_RGB565, WG_VIDEO_FORMAT_RGB16},
+     {&MFVideoFormat_AYUV,   WG_VIDEO_FORMAT_AYUV},
+     {&MFVideoFormat_I420,   WG_VIDEO_FORMAT_I420},
++    {&MFVideoFormat_IYUV,   WG_VIDEO_FORMAT_I420},
+     {&MFVideoFormat_NV12,   WG_VIDEO_FORMAT_NV12},
+     {&MFVideoFormat_UYVY,   WG_VIDEO_FORMAT_UYVY},
+     {&MFVideoFormat_YUY2,   WG_VIDEO_FORMAT_YUY2},
+From e36a6166e28250e5cd2453d0602e2722bbaa67df Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 6 Apr 2021 10:25:26 +0300
+Subject: [PATCH] mfplay: Create presentation descriptor for the item.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/player.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index 0a953dde10f..cef44c8b7ce 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -50,6 +50,7 @@ struct media_item
+     LONG refcount;
+     IMFPMediaPlayer *player;
+     IMFMediaSource *source;
++    IMFPresentationDescriptor *pd;
+     DWORD_PTR user_data;
+ };
+ 
+@@ -124,6 +125,8 @@ static ULONG WINAPI media_item_Release(IMFPMediaItem *iface)
+             IMFPMediaPlayer_Release(item->player);
+         if (item->source)
+             IMFMediaSource_Release(item->source);
++        if (item->pd)
++            IMFPresentationDescriptor_Release(item->pd);
+         heap_free(item);
+     }
+ 
+@@ -328,7 +331,24 @@ static HRESULT create_media_item(IMFPMediaPlayer *player, DWORD_PTR user_data, s
+ 
+ static HRESULT media_item_set_source(struct media_item *item, IUnknown *object)
+ {
+-    return IUnknown_QueryInterface(object, &IID_IMFMediaSource, (void **)&item->source);
++    IMFPresentationDescriptor *pd;
++    IMFMediaSource *source;
++    HRESULT hr;
++
++    if (FAILED(hr = IUnknown_QueryInterface(object, &IID_IMFMediaSource, (void **)&source)))
++        return hr;
++
++    if (FAILED(hr = IMFMediaSource_CreatePresentationDescriptor(source, &pd)))
++    {
++        WARN("Failed to get presentation descriptor, hr %#x.\n", hr);
++        IMFMediaSource_Release(source);
++        return hr;
++    }
++
++    item->source = source;
++    item->pd = pd;
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_player_QueryInterface(IMFPMediaPlayer *iface, REFIID riid, void **obj)
+From 4e7f95220a1e47929e2f7d8e5373c2599bce366a Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 6 Apr 2021 10:25:27 +0300
+Subject: [PATCH] mfplay: Forward some methods to descriptor API.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/player.c | 49 +++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 37 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index cef44c8b7ce..bc9e04c91b7 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -229,39 +229,64 @@ static HRESULT WINAPI media_item_GetDuration(IMFPMediaItem *iface, REFGUID forma
+ 
+ static HRESULT WINAPI media_item_GetNumberOfStreams(IMFPMediaItem *iface, DWORD *count)
+ {
+-    FIXME("%p, %p.\n", iface, count);
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, count);
++
++    return IMFPresentationDescriptor_GetStreamDescriptorCount(item->pd, count);
+ }
+ 
+-static HRESULT WINAPI media_item_GetStreamSelection(IMFPMediaItem *iface, DWORD index, BOOL *enabled)
++static HRESULT WINAPI media_item_GetStreamSelection(IMFPMediaItem *iface, DWORD index, BOOL *selected)
+ {
+-    FIXME("%p, %u, %p.\n", iface, index, enabled);
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++    IMFStreamDescriptor *sd;
++    HRESULT hr;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %u, %p.\n", iface, index, selected);
++
++    if (SUCCEEDED(hr = IMFPresentationDescriptor_GetStreamDescriptorByIndex(item->pd, index, selected, &sd)))
++        IMFStreamDescriptor_Release(sd);
++
++    return hr;
+ }
+ 
+-static HRESULT WINAPI media_item_SetStreamSelection(IMFPMediaItem *iface, DWORD index, BOOL enabled)
++static HRESULT WINAPI media_item_SetStreamSelection(IMFPMediaItem *iface, DWORD index, BOOL select)
+ {
+-    FIXME("%p, %u, %d.\n", iface, index, enabled);
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %u, %d.\n", iface, index, select);
++
++    return select ? IMFPresentationDescriptor_SelectStream(item->pd, index) :
++            IMFPresentationDescriptor_DeselectStream(item->pd, index);
+ }
+ 
+ static HRESULT WINAPI media_item_GetStreamAttribute(IMFPMediaItem *iface, DWORD index, REFGUID key,
+         PROPVARIANT *value)
+ {
+-    FIXME("%p, %u, %s, %p.\n", iface, index, debugstr_guid(key), value);
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++    IMFStreamDescriptor *sd;
++    BOOL selected;
++    HRESULT hr;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %u, %s, %p.\n", iface, index, debugstr_guid(key), value);
++
++    if (SUCCEEDED(hr = IMFPresentationDescriptor_GetStreamDescriptorByIndex(item->pd, index, &selected, &sd)))
++    {
++        hr = IMFStreamDescriptor_GetItem(sd, key, value);
++        IMFStreamDescriptor_Release(sd);
++    }
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_item_GetPresentationAttribute(IMFPMediaItem *iface, REFGUID key,
+         PROPVARIANT *value)
+ {
+-    FIXME("%p, %s, %p.\n", iface, debugstr_guid(key), value);
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(key), value);
++
++    return IMFPresentationDescriptor_GetItem(item->pd, key, value);
+ }
+ 
+ static HRESULT WINAPI media_item_GetCharacteristics(IMFPMediaItem *iface, MFP_MEDIAITEM_CHARACTERISTICS *flags)
+From 7bbf8e53fc86b5a7b93b999687c85fcd03b5d859 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 6 Apr 2021 10:25:28 +0300
+Subject: [PATCH] mfplay: Implement IsProtected().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/Makefile.in | 2 +-
+ dlls/mfplay/player.c    | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/mfplay/Makefile.in b/dlls/mfplay/Makefile.in
+index 91a8e5cc5a6..8f0fb61fe6f 100644
+--- a/dlls/mfplay/Makefile.in
++++ b/dlls/mfplay/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = mfplay.dll
+ IMPORTLIB = mfplay
+-IMPORTS   = mfplat uuid mfuuid
++IMPORTS   = mfplat mf uuid mfuuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
+ 
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index bc9e04c91b7..854698774a6 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -215,9 +215,13 @@ static HRESULT WINAPI media_item_HasAudio(IMFPMediaItem *iface, BOOL *has_audio,
+ 
+ static HRESULT WINAPI media_item_IsProtected(IMFPMediaItem *iface, BOOL *protected)
+ {
+-    FIXME("%p, %p.\n", iface, protected);
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, protected);
++
++    *protected = MFRequireProtectedEnvironment(item->pd) == S_OK;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_item_GetDuration(IMFPMediaItem *iface, REFGUID format, PROPVARIANT *value)
+From 527723bb6dcf7c4c0c4d7ae9fddb4c26d18d5000 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 6 Apr 2021 10:25:29 +0300
+Subject: [PATCH] mfplay: Implement GetCharacteristics().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/player.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index 854698774a6..5a85d9f0505 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -295,9 +295,20 @@ static HRESULT WINAPI media_item_GetPresentationAttribute(IMFPMediaItem *iface,
+ 
+ static HRESULT WINAPI media_item_GetCharacteristics(IMFPMediaItem *iface, MFP_MEDIAITEM_CHARACTERISTICS *flags)
+ {
+-    FIXME("%p, %p.\n", iface, flags);
++    struct media_item *item = impl_from_IMFPMediaItem(iface);
++    HRESULT hr;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, flags);
++
++    *flags = 0;
++
++    if (SUCCEEDED(hr = IMFMediaSource_GetCharacteristics(item->source, flags)))
++    {
++        *flags &= (MFP_MEDIAITEM_IS_LIVE | MFP_MEDIAITEM_CAN_SEEK |
++                MFP_MEDIAITEM_CAN_PAUSE | MFP_MEDIAITEM_HAS_SLOW_SEEK);
++    }
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_item_SetStreamSink(IMFPMediaItem *iface, DWORD index, IUnknown *sink)
+From 1f5095f331f0934f9ee18c2c33919e7c34df6d3c Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 6 Apr 2021 10:25:30 +0300
+Subject: [PATCH] include: Add event types for mfplay.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ include/mfplay.idl | 104 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+
+diff --git a/include/mfplay.idl b/include/mfplay.idl
+index 1a20a6b8900..f130ce12287 100644
+--- a/include/mfplay.idl
++++ b/include/mfplay.idl
+@@ -20,6 +20,8 @@ import "unknwn.idl";
+ import "propsys.idl";
+ import "evr.idl";
+ 
++interface IMFNetCredential;
++
+ typedef [v1_enum] enum _MFP_CREATION_OPTIONS
+ {
+     MFP_OPTION_NONE = 0,
+@@ -64,6 +66,18 @@ typedef [v1_enum] enum _MFP_MEDIAITEM_CHARACTERISTICS
+     MFP_MEDIAITEM_HAS_SLOW_SEEK = 0x00000008,
+ } _MFP_MEDIAITEM_CHARACTERISTICS;
+ 
++typedef UINT32 MFP_CREDENTIAL_FLAGS;
++
++typedef [v1_enum] enum _MFP_CREDENTIAL_FLAGS
++{
++    MFP_CREDENTIAL_PROMPT         = 0x00000001,
++    MFP_CREDENTIAL_SAVE           = 0x00000002,
++    MFP_CREDENTIAL_DO_NOT_CACHE   = 0x00000004,
++    MFP_CREDENTIAL_CLEAR_TEXT     = 0x00000008,
++    MFP_CREDENTIAL_PROXY          = 0x00000010,
++    MFP_CREDENTIAL_LOGGED_ON_USER = 0x00000020,
++} _MFP_CREDENTIAL_FLAGS;
++
+ interface IMFPMediaPlayer;
+ interface IMFPMediaItem;
+ 
+@@ -76,6 +90,96 @@ typedef struct MFP_EVENT_HEADER
+     IPropertyStore *pPropertyStore;
+ } MFP_EVENT_HEADER;
+ 
++typedef struct MFP_PLAY_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_PLAY_EVENT;
++
++typedef struct MFP_PAUSE_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_PAUSE_EVENT;
++
++typedef struct MFP_STOP_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_STOP_EVENT;
++
++typedef struct MFP_POSITION_SET_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_POSITION_SET_EVENT;
++
++typedef struct MFP_RATE_SET_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++    float flRate;
++} MFP_RATE_SET_EVENT;
++
++typedef struct MFP_MEDIAITEM_CREATED_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++    DWORD_PTR dwUserData;
++} MFP_MEDIAITEM_CREATED_EVENT;
++
++typedef struct MFP_MEDIAITEM_SET_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_MEDIAITEM_SET_EVENT;
++
++typedef struct MFP_FRAME_STEP_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_FRAME_STEP_EVENT;
++
++typedef struct MFP_MEDIAITEM_CLEARED_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_MEDIAITEM_CLEARED_EVENT;
++
++typedef struct MFP_MF_EVENT
++{
++    MFP_EVENT_HEADER header;
++    MediaEventType MFEventType;
++    IMFMediaEvent *pMFMediaEvent;
++    IMFPMediaItem *pMediaItem;
++} MFP_MF_EVENT;
++
++typedef struct MFP_ERROR_EVENT
++{
++    MFP_EVENT_HEADER header;
++} MFP_ERROR_EVENT;
++
++typedef struct MFP_PLAYBACK_ENDED_EVENT
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *pMediaItem;
++} MFP_PLAYBACK_ENDED_EVENT;
++
++typedef struct MFP_ACQUIRE_USER_CREDENTIAL_EVENT
++{
++    MFP_EVENT_HEADER header;
++    DWORD_PTR dwUserData;
++    BOOL fProceedWithAuthentication;
++    HRESULT hrAuthenticationStatus;
++    LPCWSTR pwszURL;
++    LPCWSTR pwszSite;
++    LPCWSTR pwszRealm;
++    LPCWSTR pwszPackage;
++    LONG nRetries;
++    MFP_CREDENTIAL_FLAGS flags;
++    IMFNetCredential *pCredential;
++} MFP_ACQUIRE_USER_CREDENTIAL_EVENT;
++
+ [
+     object,
+     uuid(766c8ffb-5fdb-4fea-a28d-b912996f51bd),
+From ef908ef248237a0b8aee68cbe74d35581bd1f666 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 6 Apr 2021 10:25:31 +0300
+Subject: [PATCH] mfplay: Add support for async user callback.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/player.c | 222 +++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 216 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index 5a85d9f0505..c08f496b508 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -59,10 +59,41 @@ struct media_player
+     IMFPMediaPlayer IMFPMediaPlayer_iface;
+     IPropertyStore IPropertyStore_iface;
+     IMFAsyncCallback resolver_callback;
++    IMFAsyncCallback events_callback;
+     LONG refcount;
+     IMFPMediaPlayerCallback *callback;
+     IPropertyStore *propstore;
+     IMFSourceResolver *resolver;
++    MFP_CREATION_OPTIONS options;
++};
++
++struct generic_event
++{
++    MFP_EVENT_HEADER header;
++    IMFPMediaItem *item;
++};
++
++struct media_event
++{
++    IUnknown IUnknown_iface;
++    LONG refcount;
++    union
++    {
++        MFP_EVENT_HEADER header;
++        struct generic_event generic;
++        MFP_PLAY_EVENT play;
++        MFP_PAUSE_EVENT pause;
++        MFP_STOP_EVENT stop;
++        MFP_POSITION_SET_EVENT position_set;
++        MFP_RATE_SET_EVENT rate_set;
++        MFP_MEDIAITEM_CREATED_EVENT item_created;
++        MFP_MEDIAITEM_SET_EVENT item_set;
++        MFP_MEDIAITEM_CLEARED_EVENT item_cleared;
++        MFP_MF_EVENT event;
++        MFP_ERROR_EVENT error;
++        MFP_PLAYBACK_ENDED_EVENT ended;
++        MFP_ACQUIRE_USER_CREDENTIAL_EVENT acquire_creds;
++    } u;
+ };
+ 
+ static struct media_player *impl_from_IMFPMediaPlayer(IMFPMediaPlayer *iface)
+@@ -80,11 +111,120 @@ static struct media_player *impl_from_resolver_IMFAsyncCallback(IMFAsyncCallback
+     return CONTAINING_RECORD(iface, struct media_player, resolver_callback);
+ }
+ 
++static struct media_player *impl_from_events_IMFAsyncCallback(IMFAsyncCallback *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_player, events_callback);
++}
++
+ static struct media_item *impl_from_IMFPMediaItem(IMFPMediaItem *iface)
+ {
+     return CONTAINING_RECORD(iface, struct media_item, IMFPMediaItem_iface);
+ }
+ 
++static struct media_event *impl_event_from_IUnknown(IUnknown *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_event, IUnknown_iface);
++}
++
++static HRESULT WINAPI media_event_QueryInterface(IUnknown *iface, REFIID riid, void **obj)
++{
++    if (IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IUnknown_AddRef(iface);
++        return S_OK;
++    }
++
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI media_event_AddRef(IUnknown *iface)
++{
++    struct media_event *event = impl_event_from_IUnknown(iface);
++    ULONG refcount = InterlockedIncrement(&event->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI media_event_Release(IUnknown *iface)
++{
++    struct media_event *event = impl_event_from_IUnknown(iface);
++    ULONG refcount = InterlockedDecrement(&event->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++    {
++        if (event->u.header.pMediaPlayer)
++            IMFPMediaPlayer_Release(event->u.header.pMediaPlayer);
++        if (event->u.header.pPropertyStore)
++            IPropertyStore_Release(event->u.header.pPropertyStore);
++
++        switch (event->u.header.eEventType)
++        {
++            /* Most types share same layout. */
++            case MFP_EVENT_TYPE_PLAY:
++            case MFP_EVENT_TYPE_PAUSE:
++            case MFP_EVENT_TYPE_STOP:
++            case MFP_EVENT_TYPE_POSITION_SET:
++            case MFP_EVENT_TYPE_RATE_SET:
++            case MFP_EVENT_TYPE_MEDIAITEM_CREATED:
++            case MFP_EVENT_TYPE_MEDIAITEM_SET:
++            case MFP_EVENT_TYPE_FRAME_STEP:
++            case MFP_EVENT_TYPE_MEDIAITEM_CLEARED:
++            case MFP_EVENT_TYPE_PLAYBACK_ENDED:
++                if (event->u.generic.item)
++                    IMFPMediaItem_Release(event->u.generic.item);
++                break;
++            case MFP_EVENT_TYPE_MF:
++                if (event->u.event.pMFMediaEvent)
++                    IMFMediaEvent_Release(event->u.event.pMFMediaEvent);
++                if (event->u.event.pMediaItem)
++                    IMFPMediaItem_Release(event->u.event.pMediaItem);
++                break;
++            default:
++                FIXME("Unsupported event %u.\n", event->u.header.eEventType);
++                break;
++        }
++
++        heap_free(event);
++    }
++
++    return refcount;
++}
++
++static const IUnknownVtbl media_event_vtbl =
++{
++    media_event_QueryInterface,
++    media_event_AddRef,
++    media_event_Release,
++};
++
++static HRESULT media_event_create(MFP_EVENT_TYPE event_type, HRESULT hr,
++        IMFPMediaPlayer *player, struct media_event **event)
++{
++    struct media_event *object;
++
++    if (!(object = heap_alloc_zero(sizeof(*object))))
++        return E_OUTOFMEMORY;
++
++    object->IUnknown_iface.lpVtbl = &media_event_vtbl;
++    object->refcount = 1;
++    object->u.header.eEventType = event_type;
++    object->u.header.hrEvent = hr;
++    object->u.header.pMediaPlayer = player;
++    IMFPMediaPlayer_AddRef(object->u.header.pMediaPlayer);
++    /* FIXME: set player state field */
++    /* FIXME: set properties for some events? */
++
++    *event = object;
++
++    return S_OK;
++}
++
+ static HRESULT WINAPI media_item_QueryInterface(IMFPMediaItem *iface, REFIID riid, void **obj)
+ {
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
+@@ -391,6 +531,18 @@ static HRESULT media_item_set_source(struct media_item *item, IUnknown *object)
+     return hr;
+ }
+ 
++static void media_player_queue_event(struct media_player *player, struct media_event *event)
++{
++    if (player->options & MFP_OPTION_FREE_THREADED_CALLBACK)
++    {
++        MFPutWorkItem(MFASYNC_CALLBACK_QUEUE_MULTITHREADED, &player->events_callback, &event->IUnknown_iface);
++    }
++    else
++    {
++        /* FIXME: same-thread callback notification */
++    }
++}
++
+ static HRESULT WINAPI media_player_QueryInterface(IMFPMediaPlayer *iface, REFIID riid, void **obj)
+ {
+     struct media_player *player = impl_from_IMFPMediaPlayer(iface);
+@@ -863,7 +1015,7 @@ static const IPropertyStoreVtbl media_player_propstore_vtbl =
+     media_player_propstore_Commit,
+ };
+ 
+-static HRESULT WINAPI media_player_resolver_callback_QueryInterface(IMFAsyncCallback *iface,
++static HRESULT WINAPI media_player_callback_QueryInterface(IMFAsyncCallback *iface,
+         REFIID riid, void **obj)
+ {
+     if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
+@@ -890,7 +1042,7 @@ static ULONG WINAPI media_player_resolver_callback_Release(IMFAsyncCallback *ifa
+     return IMFPMediaPlayer_Release(&player->IMFPMediaPlayer_iface);
+ }
+ 
+-static HRESULT WINAPI media_player_resolver_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags,
++static HRESULT WINAPI media_player_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags,
+         DWORD *queue)
+ {
+     return E_NOTIMPL;
+@@ -899,9 +1051,10 @@ static HRESULT WINAPI media_player_resolver_callback_GetParameters(IMFAsyncCallb
+ static HRESULT WINAPI media_player_resolver_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
+ {
+     struct media_player *player = impl_from_resolver_IMFAsyncCallback(iface);
+-    struct media_item *item;
++    struct media_event *event;
+     IUnknown *object, *state;
+     MF_OBJECT_TYPE obj_type;
++    struct media_item *item;
+     HRESULT hr;
+ 
+     if (FAILED(IMFAsyncResult_GetState(result, &state)))
+@@ -918,8 +1071,23 @@ static HRESULT WINAPI media_player_resolver_callback_Invoke(IMFAsyncCallback *if
+     if (FAILED(hr))
+         WARN("Failed to set media source, hr %#x.\n", hr);
+ 
+-    /* FIXME: callback notification */
++    if (FAILED(media_event_create(MFP_EVENT_TYPE_MEDIAITEM_CREATED, hr, &player->IMFPMediaPlayer_iface, &event)))
++    {
++        WARN("Failed to create event object.\n");
++        IUnknown_Release(state);
++        return S_OK;
++    }
++
++    if (SUCCEEDED(hr))
++    {
++        event->u.item_created.pMediaItem = &item->IMFPMediaItem_iface;
++        IMFPMediaItem_AddRef(event->u.item_created.pMediaItem);
++    }
++    event->u.item_created.dwUserData = item->user_data;
++
++    media_player_queue_event(player, event);
+ 
++    IUnknown_Release(&event->IUnknown_iface);
+     IUnknown_Release(state);
+ 
+     return S_OK;
+@@ -927,13 +1095,53 @@ static HRESULT WINAPI media_player_resolver_callback_Invoke(IMFAsyncCallback *if
+ 
+ static const IMFAsyncCallbackVtbl media_player_resolver_callback_vtbl =
+ {
+-    media_player_resolver_callback_QueryInterface,
++    media_player_callback_QueryInterface,
+     media_player_resolver_callback_AddRef,
+     media_player_resolver_callback_Release,
+-    media_player_resolver_callback_GetParameters,
++    media_player_callback_GetParameters,
+     media_player_resolver_callback_Invoke,
+ };
+ 
++static ULONG WINAPI media_player_events_callback_AddRef(IMFAsyncCallback *iface)
++{
++    struct media_player *player = impl_from_events_IMFAsyncCallback(iface);
++    return IMFPMediaPlayer_AddRef(&player->IMFPMediaPlayer_iface);
++}
++
++static ULONG WINAPI media_player_events_callback_Release(IMFAsyncCallback *iface)
++{
++    struct media_player *player = impl_from_events_IMFAsyncCallback(iface);
++    return IMFPMediaPlayer_Release(&player->IMFPMediaPlayer_iface);
++}
++
++static HRESULT WINAPI media_player_events_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
++{
++    struct media_player *player = impl_from_events_IMFAsyncCallback(iface);
++    struct media_event *event;
++    IUnknown *state;
++
++    if (FAILED(IMFAsyncResult_GetState(result, &state)))
++        return S_OK;
++
++    event = impl_event_from_IUnknown(state);
++
++    if (player->callback)
++        IMFPMediaPlayerCallback_OnMediaPlayerEvent(player->callback, &event->u.header);
++
++    IUnknown_Release(state);
++
++    return S_OK;
++}
++
++static const IMFAsyncCallbackVtbl media_player_events_callback_vtbl =
++{
++    media_player_callback_QueryInterface,
++    media_player_events_callback_AddRef,
++    media_player_events_callback_Release,
++    media_player_callback_GetParameters,
++    media_player_events_callback_Invoke,
++};
++
+ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_CREATION_OPTIONS options,
+         IMFPMediaPlayerCallback *callback, HWND hwnd, IMFPMediaPlayer **player)
+ {
+@@ -950,8 +1158,10 @@ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_C
+     object->IMFPMediaPlayer_iface.lpVtbl = &media_player_vtbl;
+     object->IPropertyStore_iface.lpVtbl = &media_player_propstore_vtbl;
+     object->resolver_callback.lpVtbl = &media_player_resolver_callback_vtbl;
++    object->events_callback.lpVtbl = &media_player_events_callback_vtbl;
+     object->refcount = 1;
+     object->callback = callback;
++    object->options = options;
+     if (object->callback)
+         IMFPMediaPlayerCallback_AddRef(object->callback);
+     if (FAILED(hr = CreatePropertyStore(&object->propstore)))
+From 826be590c00e22adb60b6aabe98c3a9400ad464d Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 6 Apr 2021 10:25:32 +0300
+Subject: [PATCH] mfplay: Add support for same-thread event callback.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplay/Makefile.in |  2 +-
+ dlls/mfplay/player.c    | 59 ++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 59 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfplay/Makefile.in b/dlls/mfplay/Makefile.in
+index 8f0fb61fe6f..c353fa33cc1 100644
+--- a/dlls/mfplay/Makefile.in
++++ b/dlls/mfplay/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = mfplay.dll
+ IMPORTLIB = mfplay
+-IMPORTS   = mfplat mf uuid mfuuid
++IMPORTS   = mfplat mf user32 uuid mfuuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
+ 
+diff --git a/dlls/mfplay/player.c b/dlls/mfplay/player.c
+index c08f496b508..246704c2799 100644
+--- a/dlls/mfplay/player.c
++++ b/dlls/mfplay/player.c
+@@ -30,7 +30,10 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
++static const WCHAR eventclassW[] = L"MediaPlayerEventCallbackClass";
++
+ static LONG startup_refcount;
++static HINSTANCE mfplay_instance;
+ 
+ static void platform_startup(void)
+ {
+@@ -65,6 +68,7 @@ struct media_player
+     IPropertyStore *propstore;
+     IMFSourceResolver *resolver;
+     MFP_CREATION_OPTIONS options;
++    HWND event_window;
+ };
+ 
+ struct generic_event
+@@ -225,6 +229,23 @@ static HRESULT media_event_create(MFP_EVENT_TYPE event_type, HRESULT hr,
+     return S_OK;
+ }
+ 
++static LRESULT WINAPI media_player_event_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
++{
++    struct media_event *event = (void *)lparam;
++    struct media_player *player;
++
++    if (msg == WM_USER)
++    {
++        player = impl_from_IMFPMediaPlayer(event->u.header.pMediaPlayer);
++        if (player->callback)
++            IMFPMediaPlayerCallback_OnMediaPlayerEvent(player->callback, &event->u.header);
++        IUnknown_Release(&event->IUnknown_iface);
++        return 0;
++    }
++
++    return DefWindowProcW(hwnd, msg, wparam, lparam);
++}
++
+ static HRESULT WINAPI media_item_QueryInterface(IMFPMediaItem *iface, REFIID riid, void **obj)
+ {
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
+@@ -539,7 +560,8 @@ static void media_player_queue_event(struct media_player *player, struct media_e
+     }
+     else
+     {
+-        /* FIXME: same-thread callback notification */
++        IUnknown_AddRef(&event->IUnknown_iface);
++        PostMessageW(player->event_window, WM_USER, 0, (LPARAM)event);
+     }
+ }
+ 
+@@ -595,6 +617,7 @@ static ULONG WINAPI media_player_Release(IMFPMediaPlayer *iface)
+             IPropertyStore_Release(player->propstore);
+         if (player->resolver)
+             IMFSourceResolver_Release(player->resolver);
++        DestroyWindow(player->event_window);
+         heap_free(player);
+ 
+         platform_shutdown();
+@@ -1168,6 +1191,11 @@ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_C
+         goto failed;
+     if (FAILED(hr = MFCreateSourceResolver(&object->resolver)))
+         goto failed;
++    if (!(object->options & MFP_OPTION_FREE_THREADED_CALLBACK))
++    {
++        object->event_window = CreateWindowW(eventclassW, NULL, 0, 0, 0, 0, 0, HWND_MESSAGE,
++                0, mfplay_instance, NULL);
++    }
+ 
+     *player = &object->IMFPMediaPlayer_iface;
+ 
+@@ -1179,3 +1207,32 @@ HRESULT WINAPI MFPCreateMediaPlayer(const WCHAR *url, BOOL start_playback, MFP_C
+ 
+     return hr;
+ }
++
++static void media_player_register_window_class(void)
++{
++    WNDCLASSW cls = { 0 };
++
++    cls.lpfnWndProc = media_player_event_proc;
++    cls.hInstance = mfplay_instance;
++    cls.lpszClassName = eventclassW;
++
++    RegisterClassW(&cls);
++}
++
++BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
++{
++    switch (reason)
++    {
++        case DLL_PROCESS_ATTACH:
++            mfplay_instance = instance;
++            DisableThreadLibraryCalls(instance);
++            media_player_register_window_class();
++            break;
++        case DLL_PROCESS_DETACH:
++            if (reserved) break;
++            UnregisterClassW(eventclassW, instance);
++            break;
++    }
++
++    return TRUE;
++}
