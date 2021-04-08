@@ -87,12 +87,11 @@ Vagrant.configure(2) do |config|
       update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
       update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
 
-      # use python 3 to avoid python2 afdko breakage
-      apt-get install -y python3-pip
-      update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-
       #install adobe font devkit to build source san hans
       pip install afdko
+
+      #work around an afdko dependency bug
+      pip install singledispatch==3.4.0.4
 
       #allow vagrant user to run docker
       adduser vagrant docker
