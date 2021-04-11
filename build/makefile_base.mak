@@ -143,7 +143,8 @@ endif
 
 OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
-COMMON_FLAGS   := $(OPTIMIZE_FLAGS) $(SANITY_FLAGS)
+DEBUG_FLAGS    := -gdwarf-2 -gstrict-dwarf
+COMMON_FLAGS    = $(DEBUG_FLAGS) $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
 CARGO_BUILD_ARG := --release
 
 # Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
@@ -173,11 +174,11 @@ COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 LICENSE := $(SRCDIR)/dist.LICENSE
 OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
 
-GECKO_VER := 2.47.1
-GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.bz2
-GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.bz2
+GECKO_VER := 2.47.2
+GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
+GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 
-WINEMONO_VER := 5.1.1
+WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
 FFMPEG := $(SRCDIR)/ffmpeg
@@ -1642,7 +1643,6 @@ $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 jxrlib64 gst_base64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
-			--without-curses \
 			--enable-win64 \
 			--disable-tests \
 			--prefix=$(abspath $(DST_DIR)) \
@@ -1663,7 +1663,6 @@ $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 jxrlib32 gst_base32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
-			--without-curses \
 			--disable-tests \
 			--prefix=$(abspath $(WINE_DST32)) \
 			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
