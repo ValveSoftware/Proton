@@ -61,7 +61,7 @@
     # https://github.com/Frogging-Family/wine-tkg-git/issues/248#issuecomment-760471607
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
-    
+
     # these break sea of thieves
     git revert --no-commit ed06d64bf41cc3eb6258a3576e845a544855b0be
     git revert --no-commit a114ce67db2357740eb58fbda0102e582e79c11c
@@ -90,8 +90,11 @@
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W imm32-com-initialization
-
+    
     patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
+
+    #revert this, it breaks lsteamclient
+    patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
@@ -227,9 +230,5 @@
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
-
-    ./dlls/winevulkan/make_vulkan
-    ./tools/make_requests
-    autoreconf -f
 
     #end

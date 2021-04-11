@@ -1,3 +1,6 @@
+SRC := $(abspath $(SRCDIR))
+OBJ := $(abspath $(CURDIR))
+
 ##
 ## Nested make
 ##
@@ -32,44 +35,25 @@ ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
 endif
 
+include $(SRC)/make/utility.mk
+include $(SRC)/make/rules-source.mk
+include $(SRC)/make/rules-common.mk
+include $(SRC)/make/rules-meson.mk
+include $(SRC)/make/rules-cmake.mk
+include $(SRC)/make/rules-autoconf.mk
+include $(SRC)/make/rules-winemaker.mk
+include $(SRC)/make/rules-cargo.mk
+
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifeq ($(ENABLE_CCACHE),1)
 	CCACHE_BIN := ccache
 else
 	export CCACHE_DISABLE = 1
-	DOCKER_CCACHE_FLAG = -e CCACHE_DISABLE=1
 endif
 
-CC := $(CCACHE_BIN) x86_64-linux-gnu-gcc
-CXX := $(CCACHE_BIN) x86_64-linux-gnu-g++
-CROSSCC32 := $(CCACHE_BIN) i686-w64-mingw32-gcc
-CROSSCC64 := $(CCACHE_BIN) x86_64-w64-mingw32-gcc
-CROSSCXX32 := $(CCACHE_BIN) i686-w64-mingw32-g++
-CROSSCXX64 := $(CCACHE_BIN) x86_64-w64-mingw32-g++
-
-export CC
-export CXX
-
-ifeq ($(ENABLE_CCACHE),1)
-	export PATH := /usr/lib/ccache:$(PATH)
-else
-endif
-
-CC32 := $(CCACHE_BIN) i686-linux-gnu-gcc -mstackrealign
-CXX32 := $(CCACHE_BIN) i686-linux-gnu-g++ -mstackrealign
-PKG_CONFIG32 := i686-linux-gnu-pkg-config
-
-cc-option = $(shell if test -z "`echo 'void*p=1;' | \
-              $(1) $(2) -S -o /dev/null -xc - 2>&1 | grep -- $(2) -`"; \
-              then echo "$(2)"; else echo "$(3)"; fi ;)
-
-# Selected container mode shell
-DOCKER_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security-opt apparmor:unconfined \
-                                    -v $(HOME):$(HOME) -v /tmp:/tmp \
-                                    -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro  -v /etc/shadow:/etc/shadow:ro \
-                                    -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) $(DOCKER_CCACHE_FLAG) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
-                                    $(DOCKER_OPTS) \
-                                    $(STEAMRT_IMAGE) /sbin/docker-init -sg --
+DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
+                -v $(HOME):$(HOME) -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) -e MAKEFLAGS \
+                $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
 STEAMRT_NAME ?= soldier
 ifeq ($(STEAMRT_NAME),soldier)
@@ -79,14 +63,37 @@ TOOLMANIFEST_VDF_SRC := toolmanifest_noruntime.vdf
 endif
 
 ifneq ($(STEAMRT_IMAGE),)
-SUBMAKE_JOBS ?= 36
-MAKE := make -j$(SUBMAKE_JOBS)
 CONTAINER_SHELL := $(DOCKER_BASE) /bin/bash
 STEAM_RUNTIME_RUNSH := $(DOCKER_BASE)
 else
 CONTAINER_SHELL := $(SHELL)
 STEAM_RUNTIME_RUNSH :=
 endif
+
+
+MAKECMDGOALS32 := $(filter-out all32,$(filter %32,$(MAKECMDGOALS)))
+MAKECMDGOALS64 := $(filter-out all64,$(filter %64,$(MAKECMDGOALS)))
+
+all: all32 all64
+.PHONY: all
+
+all32 $(MAKECMDGOALS32):
+.PHONY: all32 $(MAKECMDGOALS32)
+
+all32 $(MAKECMDGOALS64):
+.PHONY: all64 $(MAKECMDGOALS64)
+
+ifeq ($(CONTAINER),)
+J := $(shell nproc)
+container-build: private SHELL := $(CONTAINER_SHELL)
+container-build:
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(MAKECMDGOALS32) $(MAKECMDGOALS64)
+.PHONY: container-build
+
+all32 $(MAKECMDGOALS32): container-build
+all64 $(MAKECMDGOALS64): container-build
+endif
+
 
 .PHONY: test-container
 test-container:
@@ -105,10 +112,10 @@ endif
 ## Global config
 ##
 
-TOOLS_DIR32 := ./obj-tools32
-TOOLS_DIR64 := ./obj-tools64
-DST_BASE := ./dist
+DST_BASE := $(OBJ)/dist
 DST_DIR := $(DST_BASE)/dist
+DST_LIBDIR32 := $(DST_DIR)/lib
+DST_LIBDIR64 := $(DST_DIR)/lib64
 DEPLOY_DIR := ./deploy
 REDIST_DIR := ./redist
 
@@ -133,30 +140,13 @@ else
     MESON_STRIP_ARG := --strip
 endif
 
-OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
+CROSSLDFLAGS   += -Wl,--file-alignment,4096
+OPTIMIZE_FLAGS := -O2 -march=nocona -mtune=core-avx2 -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
 DEBUG_FLAGS    := -gdwarf-2 -gstrict-dwarf
 COMMON_FLAGS    = $(DEBUG_FLAGS) $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
+COMMON_FLAGS32 := -mstackrealign
 CARGO_BUILD_ARG := --release
-
-# Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
-
-# v-- This flattens a list when called. Don't look directly into it.
-QUOTE = $(subst $(eval) ,\ ,$(1))
-QUOTE_VARIABLE = $(eval $(1) := $$(call QUOTE,$$($(1))))
-QUOTE_VARIABLE_LIST = $(foreach a,$(1),$(call QUOTE_VARIABLE,$(a)))
-
-# These variables might need to be quoted, but might not
-#
-#   That is, $(STRIP) is how you invoke strip, STRIP=$(STRIP_QUOTED) is how you pass it to a shell script properly
-#   quoted
-STRIP_QUOTED = $(call QUOTE,$(STRIP))
-CC_QUOTED    = $(call QUOTE,$(CC))
-CC32_QUOTED  = $(call QUOTE,$(CC32))
-CXX_QUOTED   = $(call QUOTE,$(CXX))
-CXX32_QUOTED = $(call QUOTE,$(CXX32))
-CROSSCC32_QUOTED = $(call QUOTE,$(CROSSCC32))
-CROSSCC64_QUOTED = $(call QUOTE,$(CROSSCC64))
 
 ##
 ## Target configs
@@ -173,139 +163,10 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-FFMPEG := $(SRCDIR)/ffmpeg
-FFMPEG_OBJ32 := ./obj-ffmpeg32
-FFMPEG_OBJ64 := ./obj-ffmpeg64
-FFMPEG_CROSS_CFLAGS :=
-FFMPEG_CROSS_LDFLAGS :=
-
-GST_ORC := $(SRCDIR)/gst-orc
-GST_ORC_OBJ32 := ./obj-gst-orc32
-GST_ORC_OBJ64 := ./obj-gst-orc64
-
-GSTREAMER := $(SRCDIR)/gstreamer
-GSTREAMER_OBJ32 := ./obj-gstreamer32
-GSTREAMER_OBJ64 := ./obj-gstreamer64
-
-GST_BASE := $(SRCDIR)/gst-plugins-base
-GST_BASE_OBJ32 := ./obj-gst-base32
-GST_BASE_OBJ64 := ./obj-gst-base64
-
-GST_GOOD := $(SRCDIR)/gst-plugins-good
-GST_GOOD_OBJ32 := ./obj-gst-good32
-GST_GOOD_OBJ64 := ./obj-gst-good64
-
-GST_BAD := $(SRCDIR)/gst-plugins-bad
-GST_BAD_OBJ32 := ./obj-gst-bad32
-GST_BAD_OBJ64 := ./obj-gst-bad64
-
-GST_UGLY := $(SRCDIR)/gst-plugins-ugly
-GST_UGLY_OBJ32 := ./obj-gst-ugly32
-GST_UGLY_OBJ64 := ./obj-gst-ugly64
-
-GST_LIBAV := $(SRCDIR)/gst-libav
-GST_LIBAV_OBJ32 := ./obj-gst-libav32
-GST_LIBAV_OBJ64 := ./obj-gst-libav64
-
-FAUDIO := $(SRCDIR)/FAudio
-FAUDIO_OBJ32 := ./obj-faudio32
-FAUDIO_OBJ64 := ./obj-faudio64
-
-JXRLIB := $(SRCDIR)/jxrlib
-JXRLIB_OBJ32 := ./obj-jxrlib32
-JXRLIB_OBJ64 := ./obj-jxrlib64
-
-LSTEAMCLIENT := $(SRCDIR)/lsteamclient
-LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
-LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
-LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
-LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
-
-WINEOPENXR := $(SRCDIR)/wineopenxr
-WINEOPENXR64 := ./syn-wineopenxr64/wineopenxr
-WINEOPENXR_OBJ64 := ./obj-wineopenxr64
-WINEOPENXR_JSON64 := $(SRCDIR)/wineopenxr/wineopenxr64.json
-WINEOPENXR_FAKEDLL64 := $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake
-
-OPENXR := $(SRCDIR)/OpenXR-SDK
-OPENXR_OBJ64 := ./obj-openxr64
-
-STEAMEXE_SRC := $(SRCDIR)/steam_helper
-STEAMEXE_OBJ := ./obj-steam
-STEAMEXE_SYN := ./syn-steam/steam
-
-WINE := $(SRCDIR)/wine
-WINE_DST32 := ./dist-wine32
-WINE_OBJ32 := ./obj-wine32
-WINE_OBJ64 := ./obj-wine64
-WINEMAKER := $(abspath $(WINE)/tools/winemaker/winemaker)
-
-# Wine outputs that need to exist for other steps (dist)
-WINE_OUT_BIN := $(DST_DIR)/bin/wine64
-WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
-WINE_OUT := $(WINE_OUT_BIN) $(WINE_OUT_SERVER)
-# Tool-only build outputs needed for other projects
-WINEGCC32 := $(TOOLS_DIR32)/bin/winegcc
-WINEBUILD32 := $(TOOLS_DIR32)/bin/winebuild
-WINE_BUILDTOOLS32 := $(WINEGCC32) $(WINEBUILD32)
-WINEGCC64 := $(TOOLS_DIR64)/bin/winegcc
-WINEBUILD64 := $(TOOLS_DIR64)/bin/winebuild
-WINE_BUILDTOOLS64 := $(WINEGCC64) $(WINEBUILD64)
-
-VRCLIENT := $(SRCDIR)/vrclient_x64
-VRCLIENT32 := ./syn-vrclient32
-VRCLIENT_OBJ64 := ./obj-vrclient64
-VRCLIENT_OBJ32 := ./obj-vrclient32
-
-DXVK := $(SRCDIR)/dxvk
-DXVK_OBJ32 := ./obj-dxvk32
-DXVK_OBJ64 := ./obj-dxvk64
-
-VKD3D := $(SRCDIR)/vkd3d-proton
-VKD3D_OBJ32 := ./obj-vkd3d32
-VKD3D_OBJ64 := ./obj-vkd3d64
-
-NASM_VER = 2.14.02
-NASM_TARBALL := nasm-$(NASM_VER).tar.xz
-NASM := $(SRCDIR)/contrib/nasm-$(NASM_VER)
-NASM_OBJ32 := ./obj-nasm32
-NASM_OBJ64 := ./obj-nasm64
-NASM_BIN32 := $(TOOLS_DIR32)/bin/nasm
-NASM_BIN64 := $(TOOLS_DIR64)/bin/nasm
-
-MEDIACONV := $(SRCDIR)/media-converter
-MEDIACONV_OBJ32 := ./obj-media-converter32
-MEDIACONV_OBJ64 := ./obj-media-converter64
-
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
-## Object directories
-OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
-            $(GST_ORC_OBJ32)      $(GST_ORC_OBJ64)      \
-            $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
-            $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
-            $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
-            $(GST_BAD_OBJ32)      $(GST_BAD_OBJ64)      \
-            $(GST_UGLY_OBJ32)     $(GST_UGLY_OBJ64)     \
-            $(GST_LIBAV_OBJ32)    $(GST_LIBAV_OBJ64)    \
-            $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
-            $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
-            $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
-            $(WINEOPENXR_OBJ64) \
-            $(OPENXR_OBJ64) \
-            $(STEAMEXE_OBJ)                             \
-            $(WINE_OBJ32)         $(WINE_OBJ64)         \
-            $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
-            $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
-            $(NASM_OBJ32)        $(NASM_OBJ64)          \
-            $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)    \
-            $(VKD3D_OBJ32)        $(VKD3D_OBJ64)
-
-$(OBJ_DIRS):
-	mkdir -p $@
-
+ifeq ($(CONTAINER),)
 
 ## downloads -- Convenience target to download packages used during the build
 ## process. Places them in subdirs one up from the Proton source dir, so
@@ -313,19 +174,13 @@ $(OBJ_DIRS):
 
 .PHONY: downloads
 
-NASM_TARBALL_URL := https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VER)/$(NASM_TARBALL)
 GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
 GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
 
-SHARED_NASM_TARBALL := $(SRCDIR)/../nasm/$(NASM_TARBALL)
 SHARED_GECKO64_TARBALL := $(SRCDIR)/../gecko/$(GECKO64_TARBALL)
 SHARED_GECKO32_TARBALL := $(SRCDIR)/../gecko/$(GECKO32_TARBALL)
 SHARED_MONO_TARBALL := $(SRCDIR)/../mono/$(WINEMONO_TARBALL)
-
-$(SHARED_NASM_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O "$@" "$(NASM_TARBALL_URL)"
 
 $(SHARED_GECKO64_TARBALL):
 	mkdir -p $(dir $@)
@@ -339,7 +194,7 @@ $(SHARED_MONO_TARBALL):
 	mkdir -p $(dir $@)
 	wget -O "$@" "$(MONO_TARBALL_URL)"
 
-downloads: $(SHARED_NASM_TARBALL) $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
+downloads: $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
 
 ##
 ## dist/install -- steps to finalize the install
@@ -369,9 +224,9 @@ DIST_COPY_TARGETS := $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
                      $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET) \
                      $(PROTONFIXES_TARGET)
 
-DIST_VERSION := $(DST_DIR)/version
-DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
-DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
+DIST_VERSION := $(DST_BASE)/version
+DIST_OVR32 := $(DST_LIBDIR32)/wine/dxvk/openvr_api_dxvk.dll
+DIST_OVR64 := $(DST_LIBDIR64)/wine/dxvk/openvr_api_dxvk.dll
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
@@ -403,11 +258,11 @@ $(DIST_OFL_LICENSE): $(OFL_LICENSE)
 	cp -a $< $@
 
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
-	mkdir -p $(DST_DIR)/lib/wine/dxvk
+	mkdir -p $(DST_LIBDIR32)/wine/dxvk
 	cp -a $< $@
 
 $(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
-	mkdir -p $(DST_DIR)/lib64/wine/dxvk
+	mkdir -p $(DST_LIBDIR64)/wine/dxvk
 	cp -a $< $@
 
 $(DIST_COPY_TARGETS): | $(DST_DIR)
@@ -463,30 +318,21 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/*.ttf "$@"
 	cp $(FONTS_OBJ)/*.otf "$@"
 
-$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_JSON64)
-	mkdir -p $(dir $@)
-	cp -a $< $@
-
-$(DIST_WINEOPENXR64): wineopenxr64
-	mkdir -p $(dir $@)
-	cp -a $(WINEOPENXR_FAKEDLL64) $@
-
 .PHONY: dist
 
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
 dist_prefix: wine gst_good
-	find $(DST_DIR)/lib/wine -type f -execdir chmod a-w '{}' '+'
-	find $(DST_DIR)/lib64/wine -type f -execdir chmod a-w '{}' '+'
+	find $(DST_LIBDIR32)/wine -type f -execdir chmod a-w '{}' '+'
+	find $(DST_LIBDIR64)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
 	python3 $(SRCDIR)/default_pfx.py $(abspath $(DIST_PREFIX)) $(abspath $(DST_DIR)) $(STEAM_RUNTIME_RUNSH)
 
-dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64) $(DIST_WINEOPENXR64)
+dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64)
 
-dist: $(DIST_TARGETS) wine gst_good gst_bad gst_ugly ffmpeg gst_libav lsteamclient wineopenxr steam dxvk vkd3d-proton vrclient dist_wineopenxr | $(DST_DIR)
+dist: $(DIST_TARGETS) all-dist dist_wineopenxr | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
-	cp $(DIST_VERSION) $(DST_BASE)/
 
 deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
@@ -498,6 +344,7 @@ install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	cp -rf --no-dereference --preserve=mode,links $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	cp -f $(DIST_VERSION) $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/dist/
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
@@ -505,19 +352,26 @@ redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(REDIST_DIR)
 	cp -a $(REDIST_COPY_TARGETS) $(REDIST_DIR)
 	cp -a $(DST_BASE)/dist $(REDIST_DIR)
+	cp -a $(DST_BASE)/version $(REDIST_DIR)/dist/
 	@echo "Created redistribution at "$(REDIST_DIR)
 
 .PHONY: module32 module64 module
 
-module32: SHELL = $(CONTAINER_SHELL)
-module32:
+module32: private SHELL := $(CONTAINER_SHELL)
+module32: all-source
 	+$(MAKE) -C $(WINE_OBJ32)/dlls/$(module)
 
-module64: SHELL = $(CONTAINER_SHELL)
-module64:
+module64: private SHELL := $(CONTAINER_SHELL)
+module64: all-source
 	+$(MAKE) -C $(WINE_OBJ64)/dlls/$(module)
 
 module: module32 module64
+
+endif # ifeq ($(CONTAINER),)
+
+##
+## gst-orc
+##
 
 GST_COMMON_MESON_ARGS := \
 	-Dexamples=disabled \
@@ -530,72 +384,14 @@ GST_COMMON_MESON_ARGS := \
 	-Dnls=disabled \
 	-Dbenchmarks=disabled
 
-##
-## gst-orc
-##
-
 GST_ORC_MESON_ARGS := \
-	$(GST_COMMON_MESON_ARGS) \
-	-Dorc-test=disabled
+	-Dorc-test=disabled \
+	$(GST_COMMON_MESON_ARGS)
 
+$(eval $(call rules-source,gst_orc,$(SRCDIR)/gst-orc))
+$(eval $(call rules-meson,gst_orc,32))
+$(eval $(call rules-meson,gst_orc,64))
 
-GST_ORC_CONFIGURE_FILES32 := $(GST_ORC_OBJ32)/build.ninja
-GST_ORC_CONFIGURE_FILES64 := $(GST_ORC_OBJ64)/build.ninja
-
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_ORC_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_ORC_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(GST_ORC_OBJ64)
-	if [ -e "$(abspath $(GST_ORC_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_ORC_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_ORC))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_ORC_MESON_ARGS) $(MESON_STRIP_ARG) "$(abspath $(GST_ORC_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_ORC_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_ORC_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(GST_ORC_OBJ32)
-	if [ -e "$(abspath $(GST_ORC_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_ORC_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_ORC))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_ORC_MESON_ARGS) $(MESON_STRIP_ARG) "$(abspath $(GST_ORC_OBJ32))"
-
-## gst-orc goals
-GST_ORC_TARGETS = gst_orc gst_orc_configure gst_orc32 gst_orc64 gst_orc_configure32 gst_orc_configure64
-
-ALL_TARGETS += $(GST_ORC_TARGETS)
-GOAL_TARGETS_LIBS += gst_orc
-
-.PHONY: $(GST_ORC_TARGETS)
-
-gst_orc_configure: $(GST_ORC_CONFIGURE_FILES32) $(GST_ORC_CONFIGURE_FILES64)
-
-gst_orc_configure64: $(GST_ORC_CONFIGURE_FILES64)
-
-gst_orc_configure32: $(GST_ORC_CONFIGURE_FILES32)
-
-gst_orc: gst_orc32 gst_orc64
-
-gst_orc64: SHELL = $(CONTAINER_SHELL)
-gst_orc64: $(GST_ORC_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_ORC_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/liborc* $(DST_DIR)/lib64/
-
-gst_orc32: SHELL = $(CONTAINER_SHELL)
-gst_orc32: $(GST_ORC_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_ORC_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/liborc* $(DST_DIR)/lib/
 
 ##
 ## gstreamer
@@ -608,65 +404,11 @@ GSTREAMER_MESON_ARGS := \
 	-Dbash-completion=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GSTREAMER_CONFIGURE_FILES32 := $(GSTREAMER_OBJ32)/build.ninja
-GSTREAMER_CONFIGURE_FILES64 := $(GSTREAMER_OBJ64)/build.ninja
+GSTREAMER_DEPENDS = gst_orc
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GSTREAMER_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GSTREAMER_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_orc64 | $(GSTREAMER_OBJ64)
-	if [ -e "$(abspath $(GSTREAMER_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GSTREAMER_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GSTREAMER))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GSTREAMER_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GSTREAMER_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GSTREAMER_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GSTREAMER_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_orc32 | $(GSTREAMER_OBJ32)
-	if [ -e "$(abspath $(GSTREAMER_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GSTREAMER_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GSTREAMER))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GSTREAMER_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GSTREAMER_OBJ32))"
-
-## gstreamer goals
-GSTREAMER_TARGETS = gstreamer gstreamer_configure gstreamer32 gstreamer64 gstreamer_configure32 gstreamer_configure64
-
-ALL_TARGETS += $(GSTREAMER_TARGETS)
-GOAL_TARGETS_LIBS += gstreamer
-
-.PHONY: $(GSTREAMER_TARGETS)
-
-gstreamer_configure: $(GSTREAMER_CONFIGURE_FILES32) $(GSTREAMER_CONFIGURE_FILES64)
-
-gstreamer_configure64: $(GSTREAMER_CONFIGURE_FILES64)
-
-gstreamer_configure32: $(GSTREAMER_CONFIGURE_FILES32)
-
-gstreamer: gstreamer32 gstreamer64
-
-gstreamer64: SHELL = $(CONTAINER_SHELL)
-gstreamer64: $(GSTREAMER_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GSTREAMER_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gstreamer32: SHELL = $(CONTAINER_SHELL)
-gstreamer32: $(GSTREAMER_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GSTREAMER_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+$(eval $(call rules-source,gstreamer,$(SRCDIR)/gstreamer))
+$(eval $(call rules-meson,gstreamer,32))
+$(eval $(call rules-meson,gstreamer,64))
 
 
 ##
@@ -699,65 +441,11 @@ GST_BASE_MESON_ARGS := \
 	-Dxvideo=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GST_BASE_CONFIGURE_FILES32 := $(GST_BASE_OBJ32)/build.ninja
-GST_BASE_CONFIGURE_FILES64 := $(GST_BASE_OBJ64)/build.ninja
+GST_BASE_DEPENDS = gst_orc gstreamer
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_BASE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_BASE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gstreamer64 | $(GST_BASE_OBJ64)
-	if [ -e "$(abspath $(GST_BASE_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_BASE_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_BASE))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_BASE_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BASE_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_BASE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_BASE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gstreamer32 | $(GST_BASE_OBJ32)
-	if [ -e "$(abspath $(GST_BASE_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_BASE_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_BASE))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_BASE_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BASE_OBJ32))"
-
-## gst_base goals
-GST_BASE_TARGETS = gst_base gst_base_configure gst_base32 gst_base64 gst_base_configure32 gst_base_configure64
-
-ALL_TARGETS += $(GST_BASE_TARGETS)
-GOAL_TARGETS_LIBS += gst_base
-
-.PHONY: $(GST_BASE_TARGETS)
-
-gst_base_configure: $(GST_BASE_CONFIGURE_FILES32) $(GST_BASE_CONFIGURE_FILES64)
-
-gst_base_configure64: $(GST_BASE_CONFIGURE_FILES64)
-
-gst_base_configure32: $(GST_BASE_CONFIGURE_FILES32)
-
-gst_base: gst_base32 gst_base64
-
-gst_base64: SHELL = $(CONTAINER_SHELL)
-gst_base64: $(GST_BASE_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_BASE_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gst_base32: SHELL = $(CONTAINER_SHELL)
-gst_base32: $(GST_BASE_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_BASE_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+$(eval $(call rules-source,gst_base,$(SRCDIR)/gst-plugins-base))
+$(eval $(call rules-meson,gst_base,32))
+$(eval $(call rules-meson,gst_base,64))
 
 
 ##
@@ -816,65 +504,11 @@ GST_GOOD_MESON_ARGS := \
 	-Dy4m=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GST_GOOD_CONFIGURE_FILES32 := $(GST_GOOD_OBJ32)/build.ninja
-GST_GOOD_CONFIGURE_FILES64 := $(GST_GOOD_OBJ64)/build.ninja
+GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_GOOD_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_GOOD_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | $(GST_GOOD_OBJ64)
-	if [ -e "$(abspath $(GST_GOOD_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_GOOD_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_GOOD))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_GOOD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_GOOD_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_GOOD_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_GOOD_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_GOOD_OBJ32)
-	if [ -e "$(abspath $(GST_GOOD_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_GOOD_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_GOOD))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_GOOD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_GOOD_OBJ32))"
-
-## gst_good goals
-GST_GOOD_TARGETS = gst_good gst_good_configure gst_good32 gst_good64 gst_good_configure32 gst_good_configure64
-
-ALL_TARGETS += $(GST_GOOD_TARGETS)
-GOAL_TARGETS_LIBS += gst_good
-
-.PHONY: $(GST_GOOD_TARGETS)
-
-gst_good_configure: $(GST_GOOD_CONFIGURE_FILES32) $(GST_GOOD_CONFIGURE_FILES64)
-
-gst_good_configure64: $(GST_GOOD_CONFIGURE_FILES64)
-
-gst_good_configure32: $(GST_GOOD_CONFIGURE_FILES32)
-
-gst_good: gst_good32 gst_good64
-
-gst_good64: SHELL = $(CONTAINER_SHELL)
-gst_good64: $(GST_GOOD_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_GOOD_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gst_good32: SHELL = $(CONTAINER_SHELL)
-gst_good32: $(GST_GOOD_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_GOOD_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+$(eval $(call rules-source,gst_good,$(SRCDIR)/gst-plugins-good))
+$(eval $(call rules-meson,gst_good,32))
+$(eval $(call rules-meson,gst_good,64))
 
 
 ##
@@ -902,65 +536,12 @@ GST_BAD_MESON_ARGS := \
 	-Dx265=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GST_BAD_CONFIGURE_FILES32 := $(GST_BAD_OBJ32)/build.ninja
-GST_BAD_CONFIGURE_FILES64 := $(GST_BAD_OBJ64)/build.ninja
+GST_BAD_DEPENDS = gst_orc gstreamer gst_base
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_BAD_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_BAD_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | $(GST_BAD_OBJ64)
-	if [ -e "$(abspath $(GST_BAD_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_BAD_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_BAD))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_BAD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BAD_OBJ64))"
+$(eval $(call rules-source,gst_bad,$(SRCDIR)/gst-plugins-bad))
+$(eval $(call rules-meson,gst_bad,32))
+$(eval $(call rules-meson,gst_bad,64))
 
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_BAD_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_BAD_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_BAD_OBJ32)
-	if [ -e "$(abspath $(GST_BAD_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_BAD_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_BAD))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_BAD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BAD_OBJ32))"
-
-## gst_bad goals
-GST_BAD_TARGETS = gst_bad gst_bad_configure gst_bad32 gst_bad64 gst_bad_configure32 gst_bad_configure64
-
-ALL_TARGETS += $(GST_BAD_TARGETS)
-GOAL_TARGETS_LIBS += gst_bad
-
-.PHONY: $(GST_BAD_TARGETS)
-
-gst_bad_configure: $(GST_BAD_CONFIGURE_FILES32) $(GST_BAD_CONFIGURE_FILES64)
-
-gst_bad_configure64: $(GST_BAD_CONFIGURE_FILES64)
-
-gst_bad_configure32: $(GST_BAD_CONFIGURE_FILES32)
-
-gst_bad: gst_bad32 gst_bad64
-
-gst_bad64: SHELL = $(CONTAINER_SHELL)
-gst_bad64: $(GST_BAD_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_BAD_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gst_bad32: SHELL = $(CONTAINER_SHELL)
-gst_bad32: $(GST_BAD_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_BAD_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 
 ##
 ## gst-plugins-ugly
@@ -974,65 +555,12 @@ GST_UGLY_MESON_ARGS := \
         -Ddoc='disabled' \
 	$(GST_COMMON_MESON_ARGS)
 
-GST_UGLY_CONFIGURE_FILES32 := $(GST_UGLY_OBJ32)/build.ninja
-GST_UGLY_CONFIGURE_FILES64 := $(GST_UGLY_OBJ64)/build.ninja
+GST_UGLY_DEPENDS = gst_orc gstreamer gst_base
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_UGLY_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_UGLY_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | $(GST_UGLY_OBJ64)
-	if [ -e "$(abspath $(GST_UGLY_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_UGLY_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_UGLY))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_UGLY_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_UGLY_OBJ64))"
+$(eval $(call rules-source,gst_ugly,$(SRCDIR)/gst-plugins-ugly))
+$(eval $(call rules-meson,gst_ugly,32))
+$(eval $(call rules-meson,gst_ugly,64))
 
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_UGLY_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_UGLY_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_UGLY_OBJ32)
-	if [ -e "$(abspath $(GST_UGLY_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_UGLY_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_UGLY))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_UGLY_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_UGLY_OBJ32))"
-
-## gst_ugly goals
-GST_UGLY_TARGETS = gst_ugly gst_ugly_configure gst_ugly32 gst_ugly64 gst_ugly_configure32 gst_ugly_configure64
-
-ALL_TARGETS += $(GST_UGLY_TARGETS)
-GOAL_TARGETS_LIBS += gst_ugly
-
-.PHONY: $(GST_UGLY_TARGETS)
-
-gst_ugly_configure: $(GST_UGLY_CONFIGURE_FILES32) $(GST_UGLY_CONFIGURE_FILES64)
-
-gst_ugly_configure64: $(GST_UGLY_CONFIGURE_FILES64)
-
-gst_ugly_configure32: $(GST_UGLY_CONFIGURE_FILES32)
-
-gst_ugly: gst_ugly32 gst_ugly64
-
-gst_ugly64: SHELL = $(CONTAINER_SHELL)
-gst_ugly64: $(GST_UGLY_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_UGLY_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gst_ugly32: SHELL = $(CONTAINER_SHELL)
-gst_ugly32: $(GST_UGLY_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_UGLY_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 
 ##
 ## gst-libav
@@ -1042,418 +570,56 @@ GST_LIBAV_MESON_ARGS := \
         -Ddoc=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GST_LIBAV_CONFIGURE_FILES32 := $(GST_LIBAV_OBJ32)/build.ninja
-GST_LIBAV_CONFIGURE_FILES64 := $(GST_LIBAV_OBJ64)/build.ninja
+GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_LIBAV_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_LIBAV_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | $(GST_LIBAV_OBJ64)
-	if [ -e "$(abspath $(GST_LIBAV_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_LIBAV_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_LIBAV))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_LIBAV_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_LIBAV_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_LIBAV_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_LIBAV_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_LIBAV_OBJ32)
-	if [ -e "$(abspath $(GST_LIBAV_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_LIBAV_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_LIBAV))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_LIBAV_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_LIBAV_OBJ32))"
-
-## gst_bad goals
-GST_LIBAV_TARGETS = gst_libav gst_libav_configure gst_libav32 gst_libav64 gst_libav_configure32 gst_libav_configure64
-
-ALL_TARGETS += $(GST_LIBAV_TARGETS)
-GOAL_TARGETS_LIBS += gst_libav
-
-.PHONY: $(GST_LIBAV_TARGETS)
-
-gst_libav_configure: $(GST_LIBAV_CONFIGURE_FILES32) $(GST_LIBAV_CONFIGURE_FILES64)
-
-gst_libav_configure64: $(GST_LIBAV_CONFIGURE_FILES64)
-
-gst_libav_configure32: $(GST_LIBAV_CONFIGURE_FILES32)
-
-gst_libav: gst_libav32 gst_libav64
-
-gst_libav64: SHELL = $(CONTAINER_SHELL)
-gst_libav64: $(GST_LIBAV_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_LIBAV_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gst_libav32: SHELL = $(CONTAINER_SHELL)
-gst_libav32: $(GST_LIBAV_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_LIBAV_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
-
-
-##
-## ffmpeg
-##
-
-FFMPEG_CONFIGURE_FILES32 := $(FFMPEG_OBJ32)/Makefile
-FFMPEG_CONFIGURE_FILES64 := $(FFMPEG_OBJ64)/Makefile
-
-# 64bit-configure
-$(FFMPEG_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) nasm64 | $(FFMPEG_OBJ64)
-	cd $(dir $@) && \
-		PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG="$(PKG_CONFIG64)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		$(abspath $(FFMPEG))/configure \
-			--cc=$(CC_QUOTED) --cxx=$(CXX_QUOTED) \
-			--prefix=$(abspath $(TOOLS_DIR64)) \
-			--disable-static \
-			--enable-shared \
-			--disable-programs \
-			--disable-doc \
-			--disable-avdevice \
-			--disable-swscale \
-			--disable-postproc \
-			--disable-alsa \
-			--disable-iconv \
-			--disable-libxcb_shape \
-			--disable-libxcb_shm \
-			--disable-libxcb_xfixes \
-			--disable-sdl2 \
-			--disable-xlib \
-			--disable-zlib \
-			--disable-bzlib \
-			--disable-libxcb \
-			--disable-vaapi \
-			--disable-vdpau \
-			--disable-everything \
-			--enable-demuxer=matroska \
-			--enable-demuxer=mov \
-			--enable-parser=h264 \
-			--enable-decoder=h264 \
-			--enable-decoder=mpeg4 \
-			--enable-parser=mpegvideo \
-			--enable-parser=mpeg4video \
-			--enable-parser=mpegaudio \
-			--enable-decoder=mpegvideo \
-			--enable-decoder=h263 \
-			--enable-decoder=wmv1 \
-			--enable-decoder=wmv2 \
-			--enable-decoder=wmv3 \
-			--enable-decoder=wmv3image \
-			--enable-decoder=aac \
-			--enable-decoder=wmalossless \
-			--enable-decoder=wmapro \
-			--enable-decoder=wmav1 \
-			--enable-decoder=wmav2 \
-			--enable-decoder=wmavoice \
-			--enable-decoder=adpcm_ms && \
-		[ ! -f ./Makefile ] || touch ./Makefile
-# ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
-
-# 32-bit configure
-$(FFMPEG_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) nasm32 | $(FFMPEG_OBJ32)
-	cd $(dir $@) && \
-		PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		$(abspath $(FFMPEG))/configure \
-			--cc="$(CC32)" --cxx="$(CXX32)" \
-			--prefix=$(abspath $(TOOLS_DIR32)) \
-			--extra-cflags=$(FFMPEG_CROSS_CFLAGS) --extra-ldflags=$(FFMPEG_CROSS_LDFLAGS) \
-			--disable-static \
-			--enable-shared \
-			--disable-programs \
-			--disable-doc \
-			--disable-avdevice \
-			--disable-swscale \
-			--disable-postproc \
-			--disable-alsa \
-			--disable-iconv \
-			--disable-libxcb_shape \
-			--disable-libxcb_shm \
-			--disable-libxcb_xfixes \
-			--disable-sdl2 \
-			--disable-xlib \
-			--disable-zlib \
-			--disable-bzlib \
-			--disable-libxcb \
-			--disable-vaapi \
-			--disable-vdpau \
-			--disable-everything \
-			--enable-demuxer=matroska \
-			--enable-demuxer=mov \
-			--enable-parser=h264 \
-			--enable-decoder=h264 \
-			--enable-decoder=mpeg4 \
-			--enable-parser=mpegvideo \
-			--enable-parser=mpeg4video \
-			--enable-parser=mpegaudio \
-			--enable-decoder=mpegvideo \
-			--enable-decoder=h263 \
-			--enable-decoder=wmv1 \
-			--enable-decoder=wmv2 \
-			--enable-decoder=wmv3 \
-			--enable-decoder=wmv3image \
-			--enable-decoder=aac \
-			--enable-decoder=wmalossless \
-			--enable-decoder=wmapro \
-			--enable-decoder=wmav1 \
-			--enable-decoder=wmav2 \
-			--enable-decoder=wmavoice \
-			--enable-decoder=adpcm_ms && \
-		[ ! -f ./Makefile ] || touch ./Makefile
-# ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
-
-## ffmpeg goals
-FFMPEG_TARGETS = ffmpeg ffmpeg_configure ffmpeg32 ffmpeg64 ffmpeg_configure32 ffmpeg_configure64
-
-ALL_TARGETS += $(FFMPEG_TARGETS)
-GOAL_TARGETS_LIBS += ffmpeg
-
-.PHONY: $(FFMPEG_TARGETS)
-
-ffmpeg_configure: $(FFMPEG_CONFIGURE_FILES32) $(FFMPEG_CONFIGURE_FILES64)
-
-ffmpeg_configure64: $(FFMPEG_CONFIGURE_FILES64)
-
-ffmpeg_configure32: $(FFMPEG_CONFIGURE_FILES32)
-
-ffmpeg: ffmpeg32 ffmpeg64
-
-ffmpeg64: SHELL = $(CONTAINER_SHELL)
-ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
-	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" $(MAKE) -C $(FFMPEG_OBJ64)
-	+$(MAKE) -C $(FFMPEG_OBJ64) install
-	mkdir -pv $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib64
-
-ffmpeg32: SHELL = $(CONTAINER_SHELL)
-ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
-	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" $(MAKE) -C $(FFMPEG_OBJ32)
-	+$(MAKE) -C $(FFMPEG_OBJ32) install
-	mkdir -pv $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib
+$(eval $(call rules-source,gst_libav,$(SRCDIR)/gst-libav))
+$(eval $(call rules-meson,gst_libav,32))
+$(eval $(call rules-meson,gst_libav,64))
 
 ##
 ## FAudio
 ##
 
-FAUDIO_CMAKE_FLAGS = -DGSTREAMER=ON -DCMAKE_BUILD_TYPE=Release -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF
+FAUDIO_CMAKE_ARGS = -DGSTREAMER=ON -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DXNASONG=OFF
+FAUDIO_DEPENDS = gst_orc gstreamer gst_base
 
-FAUDIO_TARGETS = faudio faudio32 faudio64
+$(eval $(call rules-source,faudio,$(SRCDIR)/FAudio))
+$(eval $(call rules-cmake,faudio,32))
+$(eval $(call rules-cmake,faudio,64))
 
-ALL_TARGETS += $(FAUDIO_TARGETS)
-GOAL_TARGETS_LIBS += faudio
-
-.PHONY: faudio faudio32 faudio64
-
-faudio: faudio32 faudio64
-
-FAUDIO_CONFIGURE_FILES32 := $(FAUDIO_OBJ32)/Makefile
-FAUDIO_CONFIGURE_FILES64 := $(FAUDIO_OBJ64)/Makefile
-
-$(FAUDIO_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) gst_base32 | $(FAUDIO_OBJ32)
-	cd $(dir $@) && \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		cmake $(abspath $(FAUDIO)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			$(FAUDIO_CMAKE_FLAGS)
-
-$(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) gst_base64 | $(FAUDIO_OBJ64)
-	cd $(dir $@) && \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(FAUDIO)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(FAUDIO_CMAKE_FLAGS)
-
-faudio32: SHELL = $(CONTAINER_SHELL)
-faudio32: $(FAUDIO_CONFIGURE_FILES32)
-	+$(MAKE) -C $(FAUDIO_OBJ32) VERBOSE=1
-	+$(MAKE) -C $(FAUDIO_OBJ32) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
-
-faudio64: SHELL = $(CONTAINER_SHELL)
-faudio64: $(FAUDIO_CONFIGURE_FILES64)
-	+$(MAKE) -C $(FAUDIO_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(FAUDIO_OBJ64) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
 
 ##
 ## jxrlib
 ##
 
-JXRLIB_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DJXRLIB_INSTALL_LIB_DIR=lib
+JXRLIB_CMAKE_ARGS64 = -DJXRLIB_INSTALL_LIB_DIR=lib64
 
-JXRLIB_TARGETS = jxrlib jxrlib32 jxrlib64
+JXRLIB_INCDIR32 = $(JXRLIB_DST32)/include/jxrlib
+JXRLIB_INCDIR64 = $(JXRLIB_DST64)/include/jxrlib
 
-ALL_TARGETS += $(JXRLIB_TARGETS)
-GOAL_TARGETS_LIBS += jxrlib
+$(eval $(call rules-source,jxrlib,$(SRCDIR)/jxrlib))
+$(eval $(call rules-cmake,jxrlib,32))
+$(eval $(call rules-cmake,jxrlib,64))
 
-.PHONY: jxrlib jxrlib32 jxrlib64
-
-jxrlib: jxrlib32 jxrlib64
-
-JXRLIB_CONFIGURE_FILES32 := $(JXRLIB_OBJ32)/Makefile
-JXRLIB_CONFIGURE_FILES64 := $(JXRLIB_OBJ64)/Makefile
-
-$(JXRLIB_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(JXRLIB_CONFIGURE_FILES32): $(JXRLIB)/CMakeLists.txt $(MAKEFILE_DEP) | $(JXRLIB_OBJ32)
-	cd $(dir $@) && \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(JXRLIB)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			$(JXRLIB_CMAKE_FLAGS)
-
-$(JXRLIB_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(JXRLIB_CONFIGURE_FILES64): $(JXRLIB)/CMakeLists.txt $(MAKEFILE_DEP) | $(JXRLIB_OBJ64)
-	cd $(dir $@) && \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(JXRLIB)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(JXRLIB_CMAKE_FLAGS)
-
-jxrlib32: SHELL = $(CONTAINER_SHELL)
-jxrlib32: $(JXRLIB_CONFIGURE_FILES32)
-	+$(MAKE) -C $(JXRLIB_OBJ32) VERBOSE=1
-	+$(MAKE) -C $(JXRLIB_OBJ32) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/libjpegxr* $(DST_DIR)/lib/
-	cp -a $(TOOLS_DIR32)/lib/libjxrglue* $(DST_DIR)/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjpegxr.so
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjxrglue.so
-
-jxrlib64: SHELL = $(CONTAINER_SHELL)
-jxrlib64: $(JXRLIB_CONFIGURE_FILES64)
-	+$(MAKE) -C $(JXRLIB_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(JXRLIB_OBJ64) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/libjpegxr* $(DST_DIR)/lib64/
-	cp -a $(TOOLS_DIR64)/lib/libjxrglue* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjpegxr.so
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjxrglue.so
 
 ##
 ## lsteamclient
 ##
 
-# The source directory for lsteamclient is a synthetic symlink clone of the source directory, because we need to run
-# winemaker in tree and it can stomp itself in parallel builds.
-$(LSTEAMCLIENT64)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
-	rm -rf ./$(LSTEAMCLIENT64)
-	mkdir -p $(LSTEAMCLIENT64)/
-	cd $(LSTEAMCLIENT64)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
-	touch $@
+LSTEAMCLIENT_CFLAGS = -Wno-attributes
+LSTEAMCLIENT_CXXFLAGS = -Wno-attributes
+LSTEAMCLIENT_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
 
-$(LSTEAMCLIENT32)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
-	rm -rf ./$(LSTEAMCLIENT32)
-	mkdir -p $(LSTEAMCLIENT32)/
-	cd $(LSTEAMCLIENT32)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
-	touch $@
+LSTEAMCLIENT_WINEMAKER_ARGS = \
+	-DSTEAM_API_EXPORTS \
+	-Dprivate=public \
+	-Dprotected=public
 
-$(LSTEAMCLIENT64): $(LSTEAMCLIENT64)/.created
-$(LSTEAMCLIENT32): $(LSTEAMCLIENT32)/.created
+LSTEAMCLIENT_DEPENDS = wine
 
-## Create & configure object directory for lsteamclient
-
-LSTEAMCLIENT_CONFIGURE_FILES32 := $(LSTEAMCLIENT_OBJ32)/Makefile
-LSTEAMCLIENT_CONFIGURE_FILES64 := $(LSTEAMCLIENT_OBJ64)/Makefile
-
-# 64bit-configure
-$(LSTEAMCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64) $(WINEMAKER)
-	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
-			-DSTEAM_API_EXPORTS \
-			-Dprivate=public -Dprotected=public \
-			-I"../$(TOOLS_DIR64)"/include/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
-			-I"../$(WINE)"/include/ \
-			-L"../$(TOOLS_DIR64)"/lib64/ \
-			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
-			--dll ../$(LSTEAMCLIENT64) && \
-		cp ../$(LSTEAMCLIENT64)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT64)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
-
-# 32-bit configure
-$(LSTEAMCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32) $(WINEMAKER)
-	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
-			-DSTEAM_API_EXPORTS \
-			-Dprivate=public -Dprotected=public \
-			-I"../$(TOOLS_DIR32)"/include/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
-			-I"../$(WINE)"/include/ \
-			-L"../$(TOOLS_DIR32)"/lib/ \
-			-L"../$(TOOLS_DIR32)"/lib/wine/ \
-			--dll ../$(LSTEAMCLIENT32) && \
-		cp ../$(LSTEAMCLIENT32)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT32)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -ldl -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
-
-## lsteamclient goals
-LSTEAMCLIENT_TARGETS = lsteamclient lsteamclient_configure lsteamclient32 lsteamclient64 lsteamclient_configure32 lsteamclient_configure64
-
-ALL_TARGETS += $(LSTEAMCLIENT_TARGETS)
-GOAL_TARGETS_LIBS += lsteamclient
-
-.PHONY: $(LSTEAMCLIENT_TARGETS)
-
-lsteamclient_configure: $(LSTEAMCLIENT_CONFIGURE_FILES32) $(LSTEAMCLIENT_CONFIGURE_FILES64)
-
-lsteamclient_configure64: $(LSTEAMCLIENT_CONFIGURE_FILES64)
-
-lsteamclient_configure32: $(LSTEAMCLIENT_CONFIGURE_FILES32)
-
-lsteamclient: lsteamclient32 lsteamclient64
-
-lsteamclient64: SHELL = $(CONTAINER_SHELL)
-lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CXXFLAGS="-Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="$(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(LSTEAMCLIENT_OBJ64)
-	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so
-	mkdir -pv $(DST_DIR)/lib64/wine/
-	cp -af $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so $(DST_DIR)/lib64/wine/
-
-lsteamclient32: SHELL = $(CONTAINER_SHELL)
-lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(LSTEAMCLIENT_OBJ32)
-	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
-	mkdir -pv $(DST_DIR)/lib/wine/
-	cp -af $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
+$(eval $(call rules-source,lsteamclient,$(SRCDIR)/lsteamclient))
+$(eval $(call rules-winemaker,lsteamclient,32,lsteamclient.dll))
+$(eval $(call rules-winemaker,lsteamclient,64,lsteamclient.dll))
 
 
 ##
@@ -1461,563 +627,189 @@ lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filte
 ## Note 32-bit is not supported by SteamVR, so we don't build it.
 ##
 
-OPENXR_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR="lib"
+OPENXR_CMAKE_ARGS = -DHAVE_FILESYSTEM_WITHOUT_LIB=0
 
-OPENXR_TARGETS = openxr openxr64
+$(eval $(call rules-source,openxr,$(SRCDIR)/OpenXR-SDK))
+# $(eval $(call rules-cmake,openxr,32))
+$(eval $(call rules-cmake,openxr,64))
 
-ALL_TARGETS += $(OPENXR_TARGETS)
-GOAL_TARGETS_LIBS += openxr
-
-.PHONY: openxr openxr64
-
-openxr: openxr64
-
-OPENXR_CONFIGURE_FILES64 := $(OPENXR_OBJ64)/Makefile
-
-$(OPENXR_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(OPENXR_CONFIGURE_FILES64): $(OPENXR)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENXR_OBJ64)
-	cd $(dir $@) && \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(OPENXR)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(OPENXR_CMAKE_FLAGS)
-
-openxr64: SHELL = $(CONTAINER_SHELL)
-openxr64: $(OPENXR_CONFIGURE_FILES64)
-	+$(MAKE) -C $(OPENXR_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(OPENXR_OBJ64) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/libopenxr_loader* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libopenxr_loader.so
 
 ##
 ## wineopenxr
 ## Note 32-bit is not supported by SteamVR, so we don't build it.
 ##
 
-# The source directory for wineopenxr is a synthetic symlink clone of the source directory, because we need to run
-# winemaker in tree and it can stomp itself in parallel builds.
-$(WINEOPENXR64)/.created: $(WINEOPENXR) $(MAKEFILE_DEP)
-	rm -rf ./$(WINEOPENXR64)
-	mkdir -p $(WINEOPENXR64)/
-	cd $(WINEOPENXR64)/ && ln -sfv ../../$(WINEOPENXR)/* .
-	touch $@
+WINEOPENXR_LDFLAGS = -lopenxr_loader -ldxgi -lvulkan
 
-$(WINEOPENXR64): $(WINEOPENXR64)/.created
+WINEOPENXR_DEPENDS = wine openxr
 
-## Create & configure object directory for wineopenxr
+$(eval $(call rules-source,wineopenxr,$(SRCDIR)/wineopenxr))
+# $(eval $(call rules-winemaker,wineopenxr,32,wineopenxr.dll))
+$(eval $(call rules-winemaker,wineopenxr,64,wineopenxr.dll))
 
-WINEOPENXR_CONFIGURE_FILES64 := $(WINEOPENXR_OBJ64)/Makefile
+$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json
+	mkdir -p $(dir $@)
+	cp -a $< $@
 
-# 64bit-configure
-$(WINEOPENXR_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(WINEOPENXR_CONFIGURE_FILES64): $(WINEOPENXR64) $(MAKEFILE_DEP) | $(WINEOPENXR_OBJ64) $(WINEMAKER)
-	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
-			-I"../$(TOOLS_DIR64)"/include/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
-			-I"../$(WINE)"/include/ \
-			-I"$(abspath $(OPENXR))"/include/ \
-			-L"../$(TOOLS_DIR64)"/lib/ \
-			-l"openxr_loader" \
-			-l"dxgi" \
-			-l"vulkan" \
-			--dll ../$(WINEOPENXR64) && \
-		cp ../$(WINEOPENXR64)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(WINEOPENXR64)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'wineopenxr_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(wineopenxr_dll_LDFLAGS))'
 
-#			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
-## wineopenxr goals
-WINEOPENXR_TARGETS = wineopenxr wineopenxr_configure wineopenxr64 wineopenxr_configure64
-
-ALL_TARGETS += $(WINEOPENXR_TARGETS)
-GOAL_TARGETS_LIBS += wineopenxr
-
-.PHONY: $(WINEOPENXR_TARGETS)
-
-wineopenxr_configure: $(WINEOPENXR_CONFIGURE_FILES64)
-
-wineopenxr_configure64: $(WINEOPENXR_CONFIGURE_FILES64)
-
-wineopenxr: wineopenxr64
-
-wineopenxr64: SHELL = $(CONTAINER_SHELL)
-wineopenxr64: $(WINEOPENXR_CONFIGURE_FILES64) openxr64 | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CFLAGS="$(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(WINEOPENXR_OBJ64)
-	$(TOOLS_DIR64)/bin/winebuild -m64 --dll --fake-module -E $(abspath $(WINEOPENXR))/wineopenxr.spec -o $(WINEOPENXR_OBJ64)/wineopenxr.dll.fake
-	[ x"$(STRIP)" = x ] || $(STRIP) $(WINEOPENXR_OBJ64)/wineopenxr.dll.so
-	mkdir -pv $(DST_DIR)/lib64/wine/
-	cp -af $(WINEOPENXR_OBJ64)/wineopenxr.dll.so $(DST_DIR)/lib64/wine/
-
+##
 ## steam.exe
+##
 
-$(STEAMEXE_SYN)/.created: $(STEAMEXE_SRC) $(MAKEFILE_DEP)
-	rm -rf $(STEAMEXE_SYN)
-	mkdir -p $(STEAMEXE_SYN)/
-	cd $(STEAMEXE_SYN)/ && ln -sfv ../../$(STEAMEXE_SRC)/* .
+STEAMEXE_CFLAGS = -Wno-attributes
+STEAMEXE_CXXFLAGS = -Wno-attributes
+STEAMEXE_LDFLAGS = -lsteam_api -lole32 -ldl -static-libgcc -static-libstdc++
+
+STEAMEXE_WINEMAKER_ARGS = \
+	"-I$(SRC)/lsteamclient/steamworks_sdk_142/" \
+	"-I$(SRC)/openvr/headers/" \
+	"-L$(SRC)/steam_helper/"
+
+STEAMEXE_DEPENDS = wine
+
+$(eval $(call rules-source,steamexe,$(SRCDIR)/steam_helper))
+$(eval $(call rules-winemaker,steamexe,32,steam.exe))
+
+$(OBJ)/.steamexe-post-build32:
+	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_LIBDIR32)/
 	touch $@
-
-$(STEAMEXE_SYN): $(STEAMEXE_SYN)/.created
-
-STEAMEXE_CONFIGURE_FILES := $(STEAMEXE_OBJ)/Makefile
-
-# 32-bit configure
-$(STEAMEXE_CONFIGURE_FILES): SHELL = $(CONTAINER_SHELL)
-$(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $(WINEMAKER)
-	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --wine32 \
-			-I"../$(TOOLS_DIR32)"/include/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
-			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
-			-I"../$(WINE)"/include/ \
-			-I"../$(SRCDIR)"/openvr/headers/ \
-			-L"../$(TOOLS_DIR32)"/lib/ \
-			-L"../$(TOOLS_DIR32)"/lib/wine/ \
-			-L"../$(SRCDIR)"/steam_helper/ \
-			--guiexe --nomsvcrt ../$(STEAMEXE_SYN) && \
-		cp ../$(STEAMEXE_SYN)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -lsteam_api -lole32 -ldl $$(steam_exe_LDFLAGS)'
-
-## steam goals
-STEAMEXE_TARGETS = steam steam_configure
-
-ALL_TARGETS += $(STEAMEXE_TARGETS)
-GOAL_TARGETS_LIBS += steam
-
-.PHONY: $(STEAMEXE_TARGETS)
-
-steam_configure: $(STEAMEXE_CONFIGURE_FILES)
-
-steam: SHELL = $(CONTAINER_SHELL)
-steam: $(STEAMEXE_CONFIGURE_FILES) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-std=gnu++11 -m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(STEAMEXE_OBJ)
-	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
-	mkdir -pv $(DST_DIR)/lib/wine/
-	cp -af $(STEAMEXE_OBJ)/steam.exe.so $(DST_DIR)/lib/wine/
-	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_DIR)/lib/
 
 
 ##
 ## wine
 ##
 
-## Create & configure object directory for wine
+WINE_SOURCE_ARGS = \
+  --exclude configure \
+  --exclude autom4te.cache \
+  --exclude include/config.h.in \
 
-WINE_CONFIGURE_FILES32 := $(WINE_OBJ32)/Makefile
-WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
+WINE_CONFIGURE_ARGS = \
+  --with-mingw \
+  --disable-tests
 
-WINE_COMMON_MAKE_ARGS := \
-	STRIP="$(STRIP_QUOTED)" \
-	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)"
+WINE_CONFIGURE_ARGS64 = --enable-win64
 
-WINE64_MAKE_ARGS := \
-	$(WINE_COMMON_MAKE_ARGS) \
-	prefix="$(abspath $(TOOLS_DIR64))" \
-	libdir="$(abspath $(TOOLS_DIR64))/lib64" \
-	dlldir="$(abspath $(TOOLS_DIR64))/lib64/wine"
+WINE_DEPENDS = gst_orc gstreamer gst_base faudio jxrlib
 
-WINE32_MAKE_ARGS := \
-	$(WINE_COMMON_MAKE_ARGS) \
-	prefix="$(abspath $(TOOLS_DIR32))" \
-	libdir="$(abspath $(TOOLS_DIR32))/lib" \
-	dlldir="$(abspath $(TOOLS_DIR32))/lib/wine"
+$(eval $(call rules-source,wine,$(SRCDIR)/wine))
+$(eval $(call rules-autoconf,wine,32))
+$(eval $(call rules-autoconf,wine,64))
 
-# 64bit-configure
-$(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 jxrlib64 gst_base64 $(WINE_OBJ64)
-	cd $(dir $@) && \
-		../$(WINE)/configure \
-			--enable-win64 \
-			--disable-tests \
-			--prefix=$(abspath $(DST_DIR)) \
-			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR64))/lib \
-			STRIP=$(STRIP_QUOTED) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
-			CROSSCFLAGS="-g $(COMMON_FLAGS)" \
-			LDFLAGS="-L$(abspath $(TOOLS_DIR64))/lib" \
-			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR64))/include/jxrlib \
-			CC=$(CC_QUOTED) \
-			CXX=$(CXX_QUOTED) \
-			CROSSCC=$(CROSSCC64_QUOTED) \
-			CROSSDEBUG=split-dwarf
+$(WINE_SRC)/configure: $(SRCDIR)/wine/configure.ac | $(OBJ)/.wine-source
+	cd $(WINE_SRC) && autoreconf -fi
+	touch $@
 
-# 32-bit configure
-$(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 jxrlib32 gst_base32 $(WINE_OBJ32)
-	cd $(dir $@) && \
-		../$(WINE)/configure \
-			--disable-tests \
-			--prefix=$(abspath $(WINE_DST32)) \
-			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
-			STRIP=$(STRIP_QUOTED) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
-			CROSSCFLAGS="-g $(COMMON_FLAGS)" \
-			LDFLAGS="-L$(abspath $(TOOLS_DIR32))/lib" \
-			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR32))/include/jxrlib \
-			CC=$(CC32_QUOTED) \
-			CXX=$(CXX32_QUOTED) \
-			CROSSCC=$(CROSSCC32_QUOTED) \
-			PKG_CONFIG="$(PKG_CONFIG32)" \
-			CROSSDEBUG=split-dwarf
+$(OBJ)/.wine-post-source: $(WINE_SRC)/configure
+	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan
+	cd $(WINE_SRC) && tools/make_requests
+	touch $@
 
-## wine goals
-WINE_TARGETS = wine wine_configure wine32 wine64 wine_configure32 wine_configure64
+$(OBJ)/.wine-post-build64:
+	mkdir -p $(DST_DIR)/{bin,share}
+	$(call install-strip,$(WINE_DST64)/bin/wine64,$(DST_DIR)/bin)
+	$(call install-strip,$(WINE_DST64)/bin/wine64-preloader,$(DST_DIR)/bin)
+	$(call install-strip,$(WINE_DST64)/bin/wineserver,$(DST_DIR)/bin)
+	cp -a $(WINE_DST64)/share/wine $(DST_DIR)/share
+	cp -a $(WINE_DST64)/bin/msidb $(DST_DIR)/bin
+	touch $@
 
-ALL_TARGETS += $(WINE_TARGETS)
-GOAL_TARGETS += wine
+$(OBJ)/.wine-post-build32:
+	mkdir -p $(DST_DIR)/bin
+	$(call install-strip,$(WINE_DST32)/bin/wine,$(DST_DIR)/bin)
+	$(call install-strip,$(WINE_DST32)/bin/wine-preloader,$(DST_DIR)/bin)
+	touch $@
 
-.PHONY: $(WINE_TARGETS)
-
-wine_configure: $(WINE_CONFIGURE_FILES32) $(WINE_CONFIGURE_FILES64)
-
-wine_configure64: $(WINE_CONFIGURE_FILES64)
-
-wine_configure32: $(WINE_CONFIGURE_FILES32)
-
-wine: wine32 wine64
-
-# WINE_OUT and WINE_BUILDTOOLS are outputs needed by other rules, though we don't explicitly track all state here --
-# make all or make wine are needed to ensure all deps are up to date, this just ensures 'make dist' or 'make vrclient'
-# will drag in wine if you've never built wine.
-.INTERMEDIATE: wine64-intermediate wine32-intermediate
-
-$(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: wine64-intermediate
-
-wine64-intermediate: SHELL = $(CONTAINER_SHELL)
-wine64-intermediate: $(WINE_CONFIGURE_FILES64)
-	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS)
-	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS) install-lib
-	+$(MAKE) -C $(WINE_OBJ64) $(WINE64_MAKE_ARGS) install-lib install-dev
-	if [ "$(UNSTRIPPED_BUILD)" == "" ]; then rm -rf $(DST_DIR)/lib64/wine/.debug; fi
-	if [ "$(UNSTRIPPED_BUILD)" != "" ]; then make -C $(WINE_OBJ64) $(WINE64_MAKE_ARGS) install-cross-debug; cp -af $(TOOLS_DIR64)/lib64/wine/.debug $(DST_DIR)/lib64/wine/; fi
-	rm -f $(DST_DIR)/bin/{notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
-	rm -rf $(DST_DIR)/share/man/
-
-## This installs 32-bit stuff manually, see
-##   https://wiki.winehq.org/Packaging#WoW64_Workarounds
-$(WINE_BUILDTOOLS32) wine32: wine32-intermediate
-
-wine32-intermediate: SHELL = $(CONTAINER_SHELL)
-wine32-intermediate: $(WINE_CONFIGURE_FILES32)
-	+$(MAKE) -C $(WINE_OBJ32) $(WINE_COMMON_MAKE_ARGS)
-	+$(MAKE) -C $(WINE_OBJ32) $(WINE_COMMON_MAKE_ARGS) install-lib
-	+$(MAKE) -C $(WINE_OBJ32) $(WINE32_MAKE_ARGS) install-lib install-dev
-	mkdir -p $(DST_DIR)/{lib,bin}
-	cp -af $(WINE_DST32)/lib $(DST_DIR)/
-	cp -a $(WINE_DST32)/bin/wine $(DST_DIR)/bin/
-	cp -a $(WINE_DST32)/bin/wine-preloader $(DST_DIR)/bin/
-	if [ "$(UNSTRIPPED_BUILD)" == "" ]; then rm -rf $(DST_DIR)/lib/wine/.debug; fi
-	if [ "$(UNSTRIPPED_BUILD)" != "" ]; then make -C $(WINE_OBJ32) $(WINE32_MAKE_ARGS) install-cross-debug; cp -af $(TOOLS_DIR32)/lib/wine/.debug $(DST_DIR)/lib/wine/; fi
 
 ##
 ## vrclient
 ##
 
-## Create & configure object directory for vrclient
+VRCLIENT_CFLAGS = -Wno-attributes
+VRCLIENT_CXXFLAGS = -Wno-attributes
+VRCLIENT_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
 
-VRCLIENT_CONFIGURE_FILES32 := $(VRCLIENT_OBJ32)/Makefile
-VRCLIENT_CONFIGURE_FILES64 := $(VRCLIENT_OBJ64)/Makefile
+VRCLIENT_WINEMAKER_ARGS = \
+	"-I$(VRCLIENT_SRC)/" \
+	"-I$(VRCLIENT_SRC)/vrclient_x64/"
 
-# The source directory for vrclient32 is a synthetic symlink clone of the oddly named vrclient_x64 with the spec files
-# renamed.
-$(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
-	rm -rf ./$(VRCLIENT32)
-	mkdir -p $(VRCLIENT32)/vrclient
-	cd $(VRCLIENT32)/vrclient && \
-		ln -sfv ../../$(VRCLIENT)/vrclient_x64/* .
-	mv $(VRCLIENT32)/vrclient/vrclient_x64.spec $(VRCLIENT32)/vrclient/vrclient.spec
+VRCLIENT_DEPENDS = wine
 
-# 64bit-configure
-$(VRCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 | $(VRCLIENT_OBJ64) $(WINEMAKER)
-	cd $(VRCLIENT) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
-			-I"$(abspath $(TOOLS_DIR64))"/include/ \
-			-I"$(abspath $(TOOLS_DIR64))"/include/wine/ \
-			-I"$(abspath $(TOOLS_DIR64))"/include/wine/windows/ \
-			-I"$(abspath $(VRCLIENT))" \
-			-L"$(abspath $(TOOLS_DIR64))"/lib64/ \
-			-L"$(abspath $(TOOLS_DIR64))"/lib64/wine/ \
-			--dll vrclient_x64 && \
-		cp ./vrclient_x64/Makefile $(abspath $(dir $@)) && \
-		echo >> $(abspath $(dir $@))/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64' && \
-		echo >> $(abspath $(dir $@))/Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> $(abspath $(dir $@))/Makefile 'vrclient_x64_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
+$(eval $(call rules-source,vrclient,$(SRCDIR)/vrclient_x64))
+$(eval $(call rules-winemaker,vrclient,32,vrclient.dll))
+$(eval $(call rules-winemaker,vrclient,64,vrclient_x64.dll))
 
-# 32-bit configure
-$(VRCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32) $(WINEMAKER)
-	$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
-		--wine32 \
-		-I"$(abspath $(TOOLS_DIR32))"/include/ \
-		-I"$(abspath $(TOOLS_DIR32))"/include/wine/ \
-		-I"$(abspath $(TOOLS_DIR32))"/include/wine/windows/ \
-		-I"$(abspath $(VRCLIENT))" \
-		-L"$(abspath $(TOOLS_DIR32))"/lib/ \
-		-L"$(abspath $(TOOLS_DIR32))"/lib/wine/ \
-		--dll $(VRCLIENT32)/vrclient && \
-	cp $(VRCLIENT32)/vrclient/Makefile $(dir $@) && \
-	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT32)/vrclient' && \
-	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)' && \
-	echo >> $(dir $@)/Makefile 'vrclient_dll_LDFLAGS := -ldl -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_dll_LDFLAGS))'
+$(OBJ)/.vrclient-post-source:
+	mkdir -p $(VRCLIENT_OBJ32) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ32)/vrclient.spec
+	mkdir -p $(VRCLIENT_OBJ64) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ64)/vrclient_x64.spec
+	touch $@
 
-
-## vrclient goals
-VRCLIENT_TARGETS = vrclient vrclient_configure vrclient32 vrclient64 vrclient_configure32 vrclient_configure64
-
-ALL_TARGETS += $(VRCLIENT_TARGETS)
-GOAL_TARGETS_LIBS += vrclient
-
-.PHONY: $(VRCLIENT_TARGETS)
-
-vrclient_configure: $(VRCLIENT_CONFIGURE_FILES32) $(VRCLIENT_CONFIGURE_FILES64)
-
-vrclient_configure32: $(VRCLIENT_CONFIGURE_FILES32)
-
-vrclient_configure64: $(VRCLIENT_CONFIGURE_FILES64)
-
-vrclient: vrclient32 vrclient64
-
-vrclient64: SHELL = $(CONTAINER_SHELL)
-vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CXXFLAGS="-Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="$(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		$(MAKE) -C $(VRCLIENT_OBJ64)
-	cd $(VRCLIENT_OBJ64) && \
-		PATH=$(abspath $(TOOLS_DIR64))/bin:$(PATH) \
-			winebuild --dll --fake-module -E ../$(VRCLIENT)/vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
-		mkdir -pv ../$(DST_DIR)/lib64/wine/fakedlls && \
-		cp -af ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so ../$(DST_DIR)/lib64/wine/ && \
-		cp -af ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.fake ../$(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
-
-vrclient32: SHELL = $(CONTAINER_SHELL)
-vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CC="$(CC32)" CXX="$(CXX32)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		$(MAKE) -C $(VRCLIENT_OBJ32)
-	cd $(VRCLIENT_OBJ32) && \
-		PATH=$(abspath $(TOOLS_DIR32))/bin:$(PATH) \
-			winebuild --dll --fake-module -E ../$(VRCLIENT32)/vrclient/vrclient.spec -o vrclient.dll.fake && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ32)/vrclient.dll.so && \
-		mkdir -pv ../$(DST_DIR)/lib/wine/fakedlls && \
-		cp -af ../$(VRCLIENT_OBJ32)/vrclient.dll.so ../$(DST_DIR)/lib/wine/ && \
-		cp -af ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
 ##
 ## dxvk
 ##
 
-## Create & configure object directory for dxvk
+DXVK_MESON_ARGS32 = \
+    --bindir=$(DXVK_DST32)/lib/wine/dxvk \
+    --cross-file=$(DXVK_OBJ32)/build-win32.txt
+DXVK_MESON_ARGS64 = \
+    --bindir=$(DXVK_DST64)/lib64/wine/dxvk \
+    --cross-file=$(DXVK_OBJ64)/build-win64.txt
 
-DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
-DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
+$(eval $(call rules-source,dxvk,$(SRCDIR)/dxvk))
+$(eval $(call rules-meson,dxvk,32))
+$(eval $(call rules-meson,dxvk,64))
 
-# 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(DXVK_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt wineopenxr64 | $(DXVK_OBJ64)
-	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(DXVK))" && \
-	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK))/build-win64.txt" $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(DXVK_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(DXVK_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
-	if [ -e "$(abspath $(DXVK_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(DXVK_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(DXVK))" && \
-	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK))/build-win32.txt" $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(DXVK_OBJ32))"
-
-## dxvk goals
-DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
-
-ALL_TARGETS += $(DXVK_TARGETS)
-GOAL_TARGETS_LIBS += dxvk
-
-.PHONY: $(DXVK_TARGETS)
-
-dxvk_configure: $(DXVK_CONFIGURE_FILES32) $(DXVK_CONFIGURE_FILES64)
-
-dxvk_configure64: $(DXVK_CONFIGURE_FILES64)
-
-dxvk_configure32: $(DXVK_CONFIGURE_FILES32)
-
-dxvk: dxvk32 dxvk64
-
-dxvk64: SHELL = $(CONTAINER_SHELL)
-dxvk64: $(DXVK_CONFIGURE_FILES64)
-	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ64)" install
-	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
-	cp -f "$(DXVK_OBJ64)"/bin/dxgi.dll "$(DST_DIR)"/lib64/wine/dxvk/
-	cp -f "$(DXVK_OBJ64)"/bin/d3d11.dll "$(DST_DIR)"/lib64/wine/dxvk/
-	cp -f "$(DXVK_OBJ64)"/bin/d3d10.dll "$(DST_DIR)"/lib64/wine/dxvk/
-	cp -f "$(DXVK_OBJ64)"/bin/d3d10_1.dll "$(DST_DIR)"/lib64/wine/dxvk/
-	cp -f "$(DXVK_OBJ64)"/bin/d3d10core.dll "$(DST_DIR)"/lib64/wine/dxvk/
-	cp -f "$(DXVK_OBJ64)"/bin/d3d9.dll "$(DST_DIR)"/lib64/wine/dxvk/
-	cp -f "$(DXVK_OBJ64)"/bin/dxvk_config.dll "$(DST_DIR)"/lib64/wine/dxvk/
+$(OBJ)/.dxvk-post-build64:
+	mkdir -p "$(DST_DIR)"/lib64/wine/dxvk
 	rm -f "$(DST_DIR)"/lib64/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version; fi
+	touch $@
 
-
-dxvk32: SHELL = $(CONTAINER_SHELL)
-dxvk32: $(DXVK_CONFIGURE_FILES32)
-	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ32)" install
+$(OBJ)/.dxvk-post-build32:
 	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
-	cp -f "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d10.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d10_1.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d10core.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp -f "$(DXVK_OBJ32)"/bin/dxvk_config.dll "$(DST_DIR)"/lib/wine/dxvk/
 	rm -f "$(DST_DIR)"/lib/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
+	touch $@
 
-# VKD3D
 
-VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/build.ninja
-VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/build.ninja
+##
+## vkd3d-proton
+##
 
-$(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(VKD3D_CONFIGURE_FILES32): $(VKD3D)/meson.build $(VKD3D)/build-win32.txt | $(VKD3D_OBJ32)
-	cd $(abspath $(VKD3D_OBJ32)) && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(VKD3D_OBJ32))" \
-				--cross-file "$(abspath $(VKD3D))/build-win32.txt" \
-				$(MESON_STRIP_ARG) \
-				--buildtype=release -Denable_standalone_d3d12=true \
-				"$(abspath $(VKD3D))"
+VKD3D_PROTON_SOURCE_ARGS = \
+  --exclude vkd3d_build.h.in \
+  --exclude vkd3d_version.h.in \
 
-vkd3d32: SHELL = $(CONTAINER_SHELL)
-vkd3d32: $(VKD3D_CONFIGURE_FILES32)
-	ninja -C "$(VKD3D_OBJ32)" install
+VKD3D_PROTON_MESON_ARGS = -Denable_standalone_d3d12=true
+VKD3D_PROTON_MESON_ARGS32 = \
+    --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton \
+    --cross-file=$(VKD3D_PROTON_OBJ32)/build-win32.txt
+VKD3D_PROTON_MESON_ARGS64 = \
+    --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton \
+    --cross-file=$(VKD3D_PROTON_OBJ64)/build-win64.txt
+
+$(eval $(call rules-source,vkd3d-proton,$(SRCDIR)/vkd3d-proton))
+$(eval $(call rules-meson,vkd3d-proton,32))
+$(eval $(call rules-meson,vkd3d-proton,64))
+
+$(OBJ)/.vkd3d-proton-post-source:
+	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/vkd3d-proton describe --always --exclude=* --abbrev=15 --dirty=0)#' \
+	    $(SRCDIR)/vkd3d-proton/vkd3d_build.h.in > $(VKD3D_PROTON_SRC)/vkd3d_build.h.in
+	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/vkd3d-proton describe --always --tags --dirty=+)#' \
+	    $(SRCDIR)/vkd3d-proton/vkd3d_version.h.in > $(VKD3D_PROTON_SRC)/vkd3d_version.h.in
+	touch $@
+
+$(OBJ)/.vkd3d-proton-post-build32:
 	mkdir -p "$(DST_DIR)"/lib/wine/vkd3d-proton
-	cp -af "$(VKD3D_OBJ32)/bin/d3d12.dll" "$(DST_DIR)"/lib/wine/vkd3d-proton/
 	rm -f "$(DST_DIR)"/lib/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib/wine/vkd3d-proton/version; fi
+	touch $@
 
-$(VKD3D_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(VKD3D_CONFIGURE_FILES64): $(VKD3D)/meson.build $(VKD3D)/build-win64.txt | $(VKD3D_OBJ64)
-	cd $(abspath $(VKD3D_OBJ64)) && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(VKD3D_OBJ64))" \
-				--cross-file "$(abspath $(VKD3D))/build-win64.txt" \
-				$(MESON_STRIP_ARG) \
-				--buildtype=release -Denable_standalone_d3d12=true \
-				"$(abspath $(VKD3D))"
-
-vkd3d64: SHELL = $(CONTAINER_SHELL)
-vkd3d64: $(VKD3D_CONFIGURE_FILES64)
-	ninja -C "$(VKD3D_OBJ64)" install
+$(OBJ)/.vkd3d-proton-post-build64:
 	mkdir -p "$(DST_DIR)"/lib64/wine/vkd3d-proton
-	cp -af "$(VKD3D_OBJ64)/bin/d3d12.dll" "$(DST_DIR)"/lib64/wine/vkd3d-proton/
 	rm -f "$(DST_DIR)"/lib64/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib64/wine/vkd3d-proton/version; fi
-
-vkd3d: vkd3d-proton
-
-vkd3d-proton: vkd3d32 vkd3d64
-
-# TODO Tests
-#  build_vrclient64_tests
-#  build_vrclient32_tests
-
-mediaconv32: SHELL = $(CONTAINER_SHELL)
-mediaconv32: $(MAKEFILE_DEP) gstreamer32 | $(MEDIACONV_OBJ32)
-	cd $(abspath $(MEDIACONV)) && \
-		CARGO_TARGET_I686_UNKNOWN_LINUX_GNU_LINKER="i686-linux-gnu-gcc" \
-		PKG_CONFIG_ALLOW_CROSS=1 \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		cargo build --target i686-unknown-linux-gnu --target-dir $(abspath $(MEDIACONV_OBJ32)) $(CARGO_BUILD_ARG)
-	cp -a $(abspath $(MEDIACONV_OBJ32))/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(abspath $(DST_DIR))/lib/gstreamer-1.0/
-
-mediaconv64: SHELL = $(CONTAINER_SHELL)
-mediaconv64: $(MAKEFILE_DEP) gstreamer64 | $(MEDIACONV_OBJ64)
-	cd $(abspath $(MEDIACONV)) && \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		cargo build --target x86_64-unknown-linux-gnu --target-dir $(abspath $(MEDIACONV_OBJ64)) $(CARGO_BUILD_ARG)
-	cp -a $(abspath $(MEDIACONV_OBJ64))/x86_64-unknown-linux-gnu/release/libprotonmediaconverter.so $(abspath $(DST_DIR))/lib64/gstreamer-1.0/
-
-mediaconv: mediaconv32 mediaconv64
+	touch $@
 
 
-##
-## nasm -- necessary for ffmpeg, steam runtime does not have
-##
-
-$(NASM):
-	if [ -e "$(SRCDIR)/../nasm/$(NASM_TARBALL)" ]; then \
-		mkdir -p $(dir $@); \
-		tar -xf "$(SRCDIR)/../nasm/$(NASM_TARBALL)" -C "$(dir $@)"; \
-	else \
-		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(NASM_TARBALL)" ]; then \
-			echo ">>>> Downloading nasm. To avoid this in future, put it here: $(SRCDIR)/../nasm/$(NASM_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(NASM_TARBALL)" "$(NASM_TARBALL_URL)"; \
-		fi; \
-		tar -xf "$(SRCDIR)/contrib/$(NASM_TARBALL)" -C "$(dir $@)"; \
-	fi
-
-NASM_CONFIGURE_FILES32 := $(NASM_OBJ32)/Makefile
-NASM_CONFIGURE_FILES64 := $(NASM_OBJ64)/Makefile
-
-# 64-bit configure
-$(NASM_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(NASM_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(NASM) | $(NASM_OBJ64)
-	cd "$(NASM_OBJ64)" && \
-		../$(NASM)/configure --prefix=$(abspath $(TOOLS_DIR64)) LIBS='-lrt'
-
-# 32-bit configure
-$(NASM_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(NASM_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(NASM) | $(NASM_OBJ32)
-	cd "$(NASM_OBJ32)" && \
-		../$(NASM)/configure --prefix=$(abspath $(TOOLS_DIR32)) LIBS='-lrt'
-
-
-## nasm goals
-NASM_TARGETS = nasm nasm_configure nasm32 nasm64 nasm_configure32 nasm_configure64
-
-ALL_TARGETS += $(NASM_TARGETS)
-
-.PHONY: $(NASM_TARGETS)
-
-nasm_configure: $(NASM_CONFIGURE_FILES32) $(NASM_CONFIGURE_FILES64)
-
-nasm_configure32: $(NASM_CONFIGURE_FILES32)
-
-nasm_configure64: $(NASM_CONFIGURE_FILES64)
-
-nasm: nasm32 nasm64
-
-# These have multiple targets that come from one invocation.  The way to do that is to have both targets on a single
-# intermediate.
-.INTERMEDIATE: nasm64-intermediate nasm32-intermediate
-
-$(NASM_BIN64) nasm64: nasm64-intermediate
-
-nasm64-intermediate: SHELL = $(CONTAINER_SHELL)
-nasm64-intermediate: $(NASM_CONFIGURE_FILES64) $(filter $(MAKECMDGOALS),nasm64)
-	+$(MAKE) -C $(NASM_OBJ64)
-	+$(MAKE) -C $(NASM_OBJ64) install
-	touch $(NASM_BIN64)
-
-$(NASM_BIN32) nasm32: nasm32-intermediate
-
-nasm32-intermediate: SHELL = $(CONTAINER_SHELL)
-nasm32-intermediate: $(NASM_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),nasm32)
-	+$(MAKE) -C $(NASM_OBJ32)
-	+$(MAKE) -C $(NASM_OBJ32) install
-	touch $(NASM_BIN32)
-
+ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts
 GOAL_TARGETS += fonts
 
@@ -2158,4 +950,5 @@ all32_configure: $(GOAL_TARGETS_CONFIGURE32)
 all64_configure: $(GOAL_TARGETS_CONFIGURE64)
 	@echo ":: make $@ succeeded"
 
+endif # ifeq ($(CONTAINER),)
 endif # End of NESTED_MAKE from beginning
