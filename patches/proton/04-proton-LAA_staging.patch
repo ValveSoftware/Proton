@@ -63,12 +63,13 @@ diff --git a/dlls/ntdll/unix/server.c b/dlls/ntdll/unix/server.c
 index 7236f0acb83..e34abd88093 100644
 --- a/dlls/ntdll/unix/server.c
 +++ b/dlls/ntdll/unix/server.c
-@@ -1471,7 +1471,8 @@ void server_init_process_done(void)
+@@ -1471,8 +1471,8 @@ void server_init_process_done(void)
  #ifdef __APPLE__
      send_server_task_port();
  #endif
--    if (nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) virtual_set_large_address_space();
-+    if (nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE
+-    if (main_image_info.ImageCharacteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE)
+-        virtual_set_large_address_space();
++    if (main_image_info.ImageCharacteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE
 +            || __wine_needs_override_large_address_aware()) virtual_set_large_address_space();
  
      /* Install signal handlers; this cannot be done earlier, since we cannot
@@ -110,4 +111,3 @@ index 1337e2de861..200a777eb5c 100644
   *           virtual_set_large_address_space
 -- 
 2.26.2
-

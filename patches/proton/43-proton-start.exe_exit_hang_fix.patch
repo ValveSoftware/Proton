@@ -18,26 +18,3 @@ index 3efad69b090..a5e420f9158 100644
                          i++;
                          break;
  		}
-From fcb37c9c123cd841debb17b6821493b8b2f83473 Mon Sep 17 00:00:00 2001
-From: Alexandre Julliard <julliard@winehq.org>
-Date: Mon, 29 Mar 2021 12:22:55 +0200
-Subject: [PATCH] wine.inf: Always install start.exe in system32.
-
-Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=50867
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- loader/wine.inf.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 52c2297fb2f7..de39c6223af2 100644
---- a/loader/wine.inf.in
-+++ b/loader/wine.inf.in
-@@ -2674,6 +2674,7 @@ HKLM,%CurrentVersion%\Telephony\Country List\998,"SameAreaRule",,"G"
- 11,,explorer.exe
- 11,,iexplore.exe
- 11,,notepad.exe
-+11,,start.exe
- 11,,winetest.exe,-
- ; skip .NET fake dlls in Wine Mono package
- 11,,aspnet_regiis.exe,-

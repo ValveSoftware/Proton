@@ -68,6 +68,9 @@
     git revert --no-commit f93284dfa44b060436c6a0617b51280abb3f24fc
     git revert --no-commit 37b29862b36364c6fee143de5eb816bcae514279
 
+    echo "proton steam client reverts"
+    git revert --no-commit 4f787812999b3b26f04b322fa0d78724596878c0
+
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
     # -W dinput-axis-recalc \
@@ -186,7 +189,7 @@
 
     echo "proton udev container patches"
     patch -Np1 < ../patches/proton/35-proton-udev_container_patches.patch
-    
+
     echo "proton overlay patches"
     patch -Np1 < ../patches/proton/36-proton-overlay_fixes.patch
 
@@ -210,21 +213,18 @@
 
     echo "proton start.exe exit hang fix"
     patch -Np1 < ../patches/proton/43-proton-start.exe_exit_hang_fix.patch
-    
+
+    echo "proton steam client reverts (part 2)"
+    patch -RNp1 < ../patches/proton/revert_steamclient_breaker4.patch
+
     ### END PROTON PATCH SECTION ###
 
     ### WINE PATCH SECTION ###
     echo "vulkan childwindow hack"
     patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
-    echo "6.6 mfplat backports"
-    patch -Np1 < ../patches/wine-hotfixes/mfplat-upstream-backports-6.5+.patch
-
-    echo "mfplat rebase"
+    echo "mfplat additions"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
-    
-    patch -Np1 < ../patches/wine-hotfixes/rdr2-vulkan1.patch
-    patch -Np1 < ../patches/wine-hotfixes/rdr2-vulkan2.patch
 
     ### END WINEPATCH SECTION ###
 

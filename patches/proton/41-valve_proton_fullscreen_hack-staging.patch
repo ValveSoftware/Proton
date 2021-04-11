@@ -3594,18 +3594,18 @@ index 2c9aff7e777..d5799690509 100644
      XMapWindow( data->display, clip_window );
  
      /* if the rectangle is shrinking we may get a pointer warp */
-@@ -680,7 +693,10 @@ static POINT map_event_coords(const XButtonEvent *event, HWND hwnd)
- 
-     if ((data = get_win_data(hwnd)))
-     {
--        if (event->window == data->whole_window)
-+        if(data->fs_hack)
-+            fs_hack_point_real_to_user(&pt);
-+
-+        if (event->window == data->whole_window && !data->fs_hack)
+@@ -615,7 +755,10 @@ static void map_event_coords( HWND hwnd, Window window, Window event_root, int x
+         else if (event_root == root_window) pt = root_to_virtual_screen( x_root, y_root );
+         else
          {
-             pt.x += data->whole_rect.left - data->client_rect.left;
-             pt.y += data->whole_rect.top  - data->client_rect.top;
+-            if (window == data->whole_window)
++            if(data->fs_hack)
++                fs_hack_point_real_to_user(&pt);
++
++            if (window == data->whole_window && !data->fs_hack)
+             {
+                 pt.x += data->whole_rect.left - data->client_rect.left;
+                 pt.y += data->whole_rect.top - data->client_rect.top;
 @@ -720,6 +736,7 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
      {
          struct x11drv_thread_data *thread_data = x11drv_thread_data();
@@ -3614,12 +3614,10 @@ index 2c9aff7e777..d5799690509 100644
  
          if (!clip_hwnd) return;
          if (thread_data->clip_window != window) return;
-@@ -729,8 +746,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+@@ -775,6 +778,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
              sync_window_cursor( window );
              last_cursor_change = input->u.mi.time;
          }
--        input->u.mi.dx += clip_rect.left;
--        input->u.mi.dy += clip_rect.top;
 +
 +        pt.x = clip_rect.left;
 +        pt.y = clip_rect.top;
@@ -3632,7 +3630,7 @@ index 2c9aff7e777..d5799690509 100644
 +        input->u.mi.dx = pt.x;
 +        input->u.mi.dy = pt.y;
 +
-         __wine_send_input( hwnd, input, SEND_HWMSG_WINDOW );
+         __wine_send_input( hwnd, input, NULL );
          return;
      }
 @@ -1574,6 +1601,9 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
@@ -3664,7 +3662,7 @@ index 2c9aff7e777..d5799690509 100644
  
      if (thread_data->x_rel_valuator.number < 0 || thread_data->y_rel_valuator.number < 0) return FALSE;
      if (!event->valuators.mask_len) return FALSE;
-@@ -1960,6 +1993,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -2023,6 +2038,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
      x_pos->value = x_accum - input.u.mi.dx;
      y_pos->value = y_accum - input.u.mi.dy;
  
@@ -3674,9 +3672,9 @@ index 2c9aff7e777..d5799690509 100644
 +    input.u.mi.dx = lround((double)input.u.mi.dx / user_to_real_scale);
 +    input.u.mi.dy = lround((double)input.u.mi.dy / user_to_real_scale);
 +
-     if (x_pos->mode == XIModeAbsolute)
+     if (!thread_data->xi2_rawinput_only)
      {
-         TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
+         if ((dy || dy) && !(input.u.mi.dx || input.u.mi.dy))
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 4a3ab31273a..97463882355 100644
 --- a/dlls/winex11.drv/opengl.c
