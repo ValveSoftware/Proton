@@ -40,20 +40,12 @@ else
 	DOCKER_CCACHE_FLAG = -e CCACHE_DISABLE=1
 endif
 
-ifneq ($(filter default undefined,$(origin CC)),)
-	CC = $(CCACHE_BIN) gcc
-endif
-ifneq ($(filter default undefined,$(origin CXX)),)
-	CXX = $(CCACHE_BIN) g++
-endif
-ifneq ($(filter default undefined,$(origin CROSSCC)),)
-	CROSSCC32 = $(CCACHE_BIN) i686-w64-mingw32-gcc
-	CROSSCC64 = $(CCACHE_BIN) x86_64-w64-mingw32-gcc
-endif
-ifneq ($(filter default undefined,$(origin CROSSCXX)),)
-	CROSSCXX32 = $(CCACHE_BIN) i686-w64-mingw32-g++
-	CROSSCXX64 = $(CCACHE_BIN) x86_64-w64-mingw32-g++
-endif
+CC := $(CCACHE_BIN) x86_64-linux-gnu-gcc
+CXX := $(CCACHE_BIN) x86_64-linux-gnu-g++
+CROSSCC32 := $(CCACHE_BIN) i686-w64-mingw32-gcc
+CROSSCC64 := $(CCACHE_BIN) x86_64-w64-mingw32-gcc
+CROSSCXX32 := $(CCACHE_BIN) i686-w64-mingw32-g++
+CROSSCXX64 := $(CCACHE_BIN) x86_64-w64-mingw32-g++
 
 export CC
 export CXX
@@ -63,8 +55,8 @@ ifeq ($(ENABLE_CCACHE),1)
 else
 endif
 
-CC32 := $(CC) -m32 -mstackrealign
-CXX32 := $(CXX) -m32 -mstackrealign
+CC32 := $(CCACHE_BIN) i686-linux-gnu-gcc -mstackrealign
+CXX32 := $(CCACHE_BIN) i686-linux-gnu-g++ -mstackrealign
 PKG_CONFIG32 := i686-linux-gnu-pkg-config
 
 cc-option = $(shell if test -z "`echo 'void*p=1;' | \
@@ -1942,6 +1934,7 @@ vkd3d-proton: vkd3d32 vkd3d64
 mediaconv32: SHELL = $(CONTAINER_SHELL)
 mediaconv32: $(MAKEFILE_DEP) gstreamer32 | $(MEDIACONV_OBJ32)
 	cd $(abspath $(MEDIACONV)) && \
+		CARGO_TARGET_I686_UNKNOWN_LINUX_GNU_LINKER="i686-linux-gnu-gcc" \
 		PKG_CONFIG_ALLOW_CROSS=1 \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		cargo build --target i686-unknown-linux-gnu --target-dir $(abspath $(MEDIACONV_OBJ32)) $(CARGO_BUILD_ARG)
