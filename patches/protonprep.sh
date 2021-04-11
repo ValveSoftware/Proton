@@ -62,6 +62,7 @@
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
     
+    # these break sea of thieves
     git revert --no-commit ed06d64bf41cc3eb6258a3576e845a544855b0be
     git revert --no-commit a114ce67db2357740eb58fbda0102e582e79c11c
     git revert --no-commit f93284dfa44b060436c6a0617b51280abb3f24fc
@@ -75,7 +76,6 @@
     # -W dinput-remap-joystick \
 
     # these cause window freezes/hangs with origin
-    # they also cause window focus issues in DmC5
     # -W winex11-_NET_ACTIVE_WINDOW \
     # -W winex11-WM_WINDOWPOSCHANGING
 
@@ -86,13 +86,12 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick \
-    -W ntdll-NtAlertThreadByThreadId \
-    -W bcrypt-ECDHSecretAgreement
-#    -W winex11-_NET_ACTIVE_WINDOW \
-#    -W winex11-WM_WINDOWPOSCHANGING \
-#    -W imm32-com-initialization
+    -W bcrypt-ECDHSecretAgreement \
+    -W winex11-_NET_ACTIVE_WINDOW \
+    -W winex11-WM_WINDOWPOSCHANGING \
+    -W imm32-com-initialization
 
-#    patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
+    patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
@@ -203,14 +202,19 @@
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
 
-    echo "proton start.exe exit hang fix"
-    patch -Np1 < ../patches/proton/42-proton-start.exe_exit_hang_fix.patch
+    echo "fullscreen hack wined3d additions"
+    patch -Np1 < ../patches/proton/42-valve_proton_fullscreen_hack-staging-wined3d.patch
 
+    echo "proton start.exe exit hang fix"
+    patch -Np1 < ../patches/proton/43-proton-start.exe_exit_hang_fix.patch
+    
     ### END PROTON PATCH SECTION ###
 
     ### WINE PATCH SECTION ###
+    echo "vulkan childwindow hack"
+    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
-    echo "mfplat backports"
+    echo "6.6 mfplat backports"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-upstream-backports-6.5+.patch
 
     echo "mfplat rebase"
