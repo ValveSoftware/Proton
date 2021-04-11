@@ -572,9 +572,15 @@ GST_LIBAV_MESON_ARGS := \
 
 GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base
 
+$(OBJ)/.gst_libav-post-source:
+	mkdir -p $(GST_LIBAV_SRC)/subprojects
+	ln -s ../../$(SRCDIR)/ffmpeg $(GST_LIBAV_SRC)/subprojects/FFmpeg
+	sed -i 's/0.54/0.47/g' $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson.build
+
 $(eval $(call rules-source,gst_libav,$(SRCDIR)/gst-libav))
 $(eval $(call rules-meson,gst_libav,32))
 $(eval $(call rules-meson,gst_libav,64))
+
 
 ##
 ## FAudio
