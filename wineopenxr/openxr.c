@@ -867,7 +867,7 @@ XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateI
                 if ((res = do_vulkan_init(wine_instance, our_vk_binding.instance)) != XR_SUCCESS)
                     return res;
 
-                if (wine_instance->vk_phys_dev != our_vk_binding.physicalDevice)
+                if (wine_instance->vk_phys_dev != get_native_VkPhysicalDevice(our_vk_binding.physicalDevice))
                     WINE_WARN("VK physical device does not match that from xrGetVulkanGraphicsDeviceKHR.\n");
 
                 our_vk_binding.physicalDevice = wine_instance->vk_phys_dev;
@@ -1524,12 +1524,33 @@ XrResult WINAPI wine_xrDestroySwapchain(XrSwapchain swapchain)
     return XR_SUCCESS;
 }
 
+static D3D11_USAGE d3d11usage_from_XrSwapchainUsageFlags(XrSwapchainUsageFlags flags)
+{
+    static const D3D11_USAGE supported_flags = XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT | XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+            | XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT | XR_SWAPCHAIN_USAGE_SAMPLED_BIT;
+    D3D11_USAGE ret = 0;
+
+    if (flags & ~supported_flags)
+        WINE_FIXME("Unhandled flags %#x.\n", flags);
+
+    if (flags & XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT)
+        ret |= D3D11_BIND_RENDER_TARGET;
+    if (flags & XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
+        ret |= D3D11_BIND_DEPTH_STENCIL;
+    if (flags & XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT)
+        ret |= D3D11_BIND_UNORDERED_ACCESS;
+    if (flags & XR_SWAPCHAIN_USAGE_SAMPLED_BIT)
+        ret |= D3D11_BIND_SHADER_RESOURCE;
+
+    return ret;
+}
+
 XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t imageCapacityInput, uint32_t *imageCountOutput, XrSwapchainImageBaseHeader *images)
 {
     wine_XrSwapchain *wine_swapchain = (wine_XrSwapchain *)swapchain;
     wine_XrInstance *wine_instance = wine_swapchain->wine_session->wine_instance;
     XrResult res;
-    XrSwapchainImageVulkanKHR *our_images;
+    XrSwapchainImageVulkanKHR *our_images = NULL;
     XrSwapchainImageBaseHeader *their_images = images;
     HRESULT hr;
     uint32_t i;
@@ -1554,15 +1575,15 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
 
             desc.Width = wine_swapchain->create_info.width;
             desc.Height = wine_swapchain->create_info.height;
-            desc.MipLevels = 1;
-            desc.ArraySize = 1;
+            desc.MipLevels = wine_swapchain->create_info.mipCount;
+            desc.ArraySize = wine_swapchain->create_info.arraySize;
             desc.Format = wine_swapchain->create_info.format;
             WINE_TRACE("creating dxvk texture with dxgi format %d (%x)\n",
                     desc.Format, desc.Format);
-            desc.SampleDesc.Count = 1;
+            desc.SampleDesc.Count = wine_swapchain->create_info.sampleCount;
             desc.SampleDesc.Quality = 0;
             desc.Usage = D3D11_USAGE_DEFAULT;
-            desc.BindFlags = D3D11_BIND_RENDER_TARGET;
+            desc.BindFlags = d3d11usage_from_XrSwapchainUsageFlags(wine_swapchain->create_info.usageFlags);
             desc.CPUAccessFlags = 0;
             desc.MiscFlags = 0;
             desc.TextureLayout = D3D11_TEXTURE_LAYOUT_UNDEFINED;
@@ -1577,10 +1598,9 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
                 }
                 WINE_TRACE("Successfully allocated texture %p\n", their_d3d11[i].texture);
             }
-
-            heap_free(our_images);
         }
     }
+    heap_free(our_images);
 
     return res;
 }
@@ -1654,8 +1674,10 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
 XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo)
 {
     wine_XrSession *wine_session = (wine_XrSession *)session;
+    IDXGIVkInteropDevice2 *dxvk_device;
     XrFrameEndInfo our_frameEndInfo;
     uint32_t i, view_idx = 0;
+    XrResult res;
 
     WINE_TRACE("%p, %p\n", session, frameEndInfo);
 
@@ -1677,7 +1699,17 @@ XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEn
     our_frameEndInfo = *frameEndInfo;
     our_frameEndInfo.layers = (const XrCompositionLayerBaseHeader *const *)wine_session->composition_layer_ptrs;
 
-    return xrEndFrame(((wine_XrSession *)session)->session, &our_frameEndInfo);
+    if ((dxvk_device = wine_session->wine_instance->dxvk_device))
+    {
+        WINE_TRACE("Locking submission queue.\n");
+        dxvk_device->lpVtbl->FlushRenderingCommands(dxvk_device);
+        dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+    }
+    res = xrEndFrame(((wine_XrSession *)session)->session, &our_frameEndInfo);
+    if (dxvk_device)
+        dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+
+    return res;
 }
 
 /* wineopenxr API */
