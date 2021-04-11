@@ -1059,6 +1059,7 @@ int main(int argc, char *argv[])
 
     if(wait_handle != INVALID_HANDLE_VALUE)
     {
+        FreeConsole();
         WaitForSingleObject(wait_handle, INFINITE);
     }
 
