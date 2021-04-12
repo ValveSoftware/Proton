@@ -1,0 +1,249 @@
+diff --git a/patches/shell32-Progress_Dialog/0003-shell32-Implement-file-operation-progress-dialog.patch b/patches/shell32-Progress_Dialog/0003-shell32-Implement-file-operation-progress-dialog.patch
+index cd1479ea0..af6e65717 100644
+--- a/patches/shell32-Progress_Dialog/0003-shell32-Implement-file-operation-progress-dialog.patch
++++ b/patches/shell32-Progress_Dialog/0003-shell32-Implement-file-operation-progress-dialog.patch
+@@ -1,4 +1,4 @@
+-From 4120d27b52861617c27c668c73d334ed4d32c302 Mon Sep 17 00:00:00 2001
++From 0cc42072f1b4585c2c0b11faf5a33282ce603853 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+ Date: Fri, 27 Feb 2015 01:04:33 +0100
+ Subject: [PATCH] shell32: Implement file operation progress dialog.
+@@ -11,7 +11,7 @@ Based on a patch by Huw Campbell.
+  3 files changed, 285 insertions(+), 7 deletions(-)
+ 
+ diff --git a/dlls/shell32/shell32.rc b/dlls/shell32/shell32.rc
+-index 46f0b6f12dd..8739718f715 100644
++index f19b09f8c21..f9b75df1f05 100644
+ --- a/dlls/shell32/shell32.rc
+ +++ b/dlls/shell32/shell32.rc
+ @@ -184,6 +184,13 @@ If the files in the destination folder have the same names as files in the\n\
+@@ -29,10 +29,10 @@ index 46f0b6f12dd..8739718f715 100644
+          IDS_RESTART_TITLE       "Restart"
+          IDS_RESTART_PROMPT      "Do you want to simulate a Windows reboot?"
+ diff --git a/dlls/shell32/shlfileop.c b/dlls/shell32/shlfileop.c
+-index 23c1f41f907..1f29c484458 100644
++index 91354d4c2ad..2263b20de8a 100644
+ --- a/dlls/shell32/shlfileop.c
+ +++ b/dlls/shell32/shlfileop.c
+-@@ -65,6 +65,10 @@ typedef struct
++@@ -67,6 +67,10 @@ typedef struct
+      DWORD dwYesToAllMask;
+      BOOL bManyItems;
+      BOOL bCancelled;
+@@ -43,7 +43,7 @@ index 23c1f41f907..1f29c484458 100644
+  } FILE_OPERATION;
+  
+  typedef struct
+-@@ -103,6 +107,12 @@ static DWORD SHFindAttrW(LPCWSTR pName, BOOL fileOnly);
++@@ -105,6 +109,12 @@ static DWORD SHFindAttrW(LPCWSTR pName, BOOL fileOnly);
+  static int copy_files(FILE_OPERATION *op, BOOL multidest, const FILE_LIST *flFrom, FILE_LIST *flTo);
+  static int move_files(FILE_OPERATION *op, BOOL multidest, const FILE_LIST *flFrom, const FILE_LIST *flTo);
+  
+@@ -56,7 +56,7 @@ index 23c1f41f907..1f29c484458 100644
+  /* Confirm dialogs with an optional "Yes To All" as used in file operations confirmations
+   */
+  static const WCHAR CONFIRM_MSG_PROP[] = {'W','I','N','E','_','C','O','N','F','I','R','M',0};
+-@@ -391,6 +401,13 @@ static DWORD SHELL_DeleteDirectoryW(FILE_OPERATION *op, LPCWSTR pszDir, BOOL bSh
++@@ -393,6 +403,13 @@ static DWORD SHELL_DeleteDirectoryW(FILE_OPERATION *op, LPCWSTR pszDir, BOOL bSh
+                      ret = SHELL_DeleteDirectoryW(op, szTemp, FALSE);
+                  else
+                      ret = SHNotifyDeleteFileW(op, szTemp);
+@@ -70,7 +70,7 @@ index 23c1f41f907..1f29c484458 100644
+              } while (!ret && FindNextFileW(hFind, &wfd));
+          }
+          FindClose(hFind);
+-@@ -544,10 +561,22 @@ static DWORD SHNotifyDeleteFileA(FILE_OPERATION *op, LPCSTR path)
++@@ -546,10 +563,22 @@ static DWORD SHNotifyDeleteFileA(FILE_OPERATION *op, LPCSTR path)
+  static DWORD SHNotifyDeleteFileW(FILE_OPERATION *op, LPCWSTR path)
+  {
+      BOOL ret;
+@@ -94,7 +94,7 @@ index 23c1f41f907..1f29c484458 100644
+  
+      ret = DeleteFileW(path);
+      if (!ret)
+-@@ -560,6 +589,14 @@ static DWORD SHNotifyDeleteFileW(FILE_OPERATION *op, LPCWSTR path)
++@@ -562,6 +591,14 @@ static DWORD SHNotifyDeleteFileW(FILE_OPERATION *op, LPCWSTR path)
+      }
+      if (ret)
+      {
+@@ -109,7 +109,7 @@ index 23c1f41f907..1f29c484458 100644
+          SHChangeNotify(SHCNE_DELETE, SHCNF_PATHW, path, NULL);
+          return ERROR_SUCCESS;
+      }
+-@@ -594,9 +631,10 @@ static DWORD SHNotifyMoveFileW(FILE_OPERATION *op, LPCWSTR src, LPCWSTR dest)
++@@ -596,9 +633,10 @@ static DWORD SHNotifyMoveFileW(FILE_OPERATION *op, LPCWSTR src, LPCWSTR dest)
+  
+      TRACE("(%s %s)\n", debugstr_w(src), debugstr_w(dest));
+  
+@@ -122,7 +122,7 @@ index 23c1f41f907..1f29c484458 100644
+  
+      /* MOVEFILE_REPLACE_EXISTING fails with dirs, so try MoveFile */
+      if (!ret)
+-@@ -646,14 +684,15 @@ static DWORD SHNotifyCopyFileW(FILE_OPERATION *op, LPCWSTR src, LPCWSTR dest, BO
++@@ -648,14 +686,15 @@ static DWORD SHNotifyCopyFileW(FILE_OPERATION *op, LPCWSTR src, LPCWSTR dest, BO
+  
+      TRACE("(%s %s %s)\n", debugstr_w(src), debugstr_w(dest), bFailIfExists ? "failIfExists" : "");
+  
+@@ -140,7 +140,7 @@ index 23c1f41f907..1f29c484458 100644
+      if (ret)
+      {
+          SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, dest, NULL);
+-@@ -1295,6 +1334,8 @@ static int copy_files(FILE_OPERATION *op, BOOL multidest, const FILE_LIST *flFro
++@@ -1297,6 +1336,8 @@ static int copy_files(FILE_OPERATION *op, BOOL multidest, const FILE_LIST *flFro
+          }
+  
+          /* Vista return code. XP would return e.g. ERROR_FILE_NOT_FOUND, ERROR_ALREADY_EXISTS */
+@@ -149,7 +149,7 @@ index 23c1f41f907..1f29c484458 100644
+          if (op->bCancelled)
+              return ERROR_CANCELLED;
+      }
+-@@ -1377,13 +1418,17 @@ static int delete_files(FILE_OPERATION *op, const FILE_LIST *flFrom)
++@@ -1379,13 +1420,17 @@ static int delete_files(FILE_OPERATION *op, const FILE_LIST *flFrom)
+  
+          /* delete the file or directory */
+          if (IsAttribFile(fileEntry->attributes))
+@@ -169,7 +169,7 @@ index 23c1f41f907..1f29c484458 100644
+      }
+  
+      return ERROR_SUCCESS;
+-@@ -1458,6 +1503,11 @@ static int move_files(FILE_OPERATION *op, BOOL multidest, const FILE_LIST *flFro
++@@ -1460,6 +1505,11 @@ static int move_files(FILE_OPERATION *op, BOOL multidest, const FILE_LIST *flFro
+              move_to_dir(op, entryToMove, fileDest);
+          else
+              SHNotifyMoveFileW(op, entryToMove->szFullPath, fileDest->szFullPath);
+@@ -181,7 +181,7 @@ index 23c1f41f907..1f29c484458 100644
+      }
+  
+      if (mismatched > 0)
+-@@ -1517,6 +1567,7 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
++@@ -1519,6 +1569,7 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
+  {
+      FILE_OPERATION op;
+      FILE_LIST flFrom, flTo;
+@@ -189,7 +189,7 @@ index 23c1f41f907..1f29c484458 100644
+      int ret = 0;
+  
+      if (!lpFileOp)
+-@@ -1535,9 +1586,31 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
++@@ -1537,9 +1588,31 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
+  
+      ZeroMemory(&op, sizeof(op));
+      op.req = lpFileOp;
+@@ -221,7 +221,7 @@ index 23c1f41f907..1f29c484458 100644
+      switch (lpFileOp->wFunc)
+      {
+          case FO_COPY:
+-@@ -1557,6 +1630,12 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
++@@ -1559,6 +1632,12 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
+              break;
+      }
+  
+@@ -234,7 +234,7 @@ index 23c1f41f907..1f29c484458 100644
+      destroy_file_list(&flFrom);
+  
+      if (lpFileOp->wFunc != FO_DELETE)
+-@@ -1565,6 +1644,9 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
++@@ -1567,6 +1646,9 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
+      if (ret == ERROR_CANCELLED)
+          lpFileOp->fAnyOperationsAborted = TRUE;
+  
+@@ -244,9 +244,9 @@ index 23c1f41f907..1f29c484458 100644
+      SetLastError(ERROR_SUCCESS);
+      return ret;
+  }
+-@@ -1806,3 +1888,184 @@ HRESULT WINAPI SHMultiFileProperties(IDataObject *pdtobj, DWORD flags)
+-     FIXME("stub: %p %u\n", pdtobj, flags);
+-     return E_NOTIMPL;
++@@ -2055,3 +2137,184 @@ HRESULT WINAPI IFileOperation_Constructor(IUnknown *outer, REFIID riid, void **o
++ 
++     return hr;
+  }
+ +
+ +static BOOL progressbar_calc_size(FILE_OPERATION *op, LPWSTR buf, BOOL is_folder, DWORD *ticks)
+
+diff --git a/patches/shell32-NewMenu_Interface/0001-shell32-Implement-NewMenu-with-new-folder-item.patch b/patches/shell32-NewMenu_Interface/0001-shell32-Implement-NewMenu-with-new-folder-item.patch
+index cba591034..cf3a3843e 100644
+--- a/patches/shell32-NewMenu_Interface/0001-shell32-Implement-NewMenu-with-new-folder-item.patch
++++ b/patches/shell32-NewMenu_Interface/0001-shell32-Implement-NewMenu-with-new-folder-item.patch
+@@ -1,4 +1,4 @@
+-From 7ea5a3f6c925a51a19ba51726d82dac1ffd76f55 Mon Sep 17 00:00:00 2001
++From 74edb4f4f73468f132872cc96841894220e2b7a0 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+ Date: Sun, 16 Aug 2015 17:34:22 +0200
+ Subject: [PATCH] shell32: Implement NewMenu with new folder item.
+@@ -21,10 +21,10 @@ Correct header issue when compiling i386 (var_arg)
+  create mode 100644 dlls/shell32/shellnew.c
+ 
+ diff --git a/dlls/shell32/Makefile.in b/dlls/shell32/Makefile.in
+-index 970ecba4f6..25d9ebd541 100644
++index fe49bf09f98..41b2ec2d607 100644
+ --- a/dlls/shell32/Makefile.in
+ +++ b/dlls/shell32/Makefile.in
+-@@ -32,6 +32,7 @@ C_SRCS = \
++@@ -31,6 +31,7 @@ C_SRCS = \
+  	shelldispatch.c \
+  	shellitem.c \
+  	shelllink.c \
+@@ -33,7 +33,7 @@ index 970ecba4f6..25d9ebd541 100644
+  	shellord.c \
+  	shellpath.c \
+ diff --git a/dlls/shell32/shell32_classes.idl b/dlls/shell32/shell32_classes.idl
+-index 6ed497fea5..60de627be3 100644
++index f2c5ed4a766..c9ecb9aa2a2 100644
+ --- a/dlls/shell32/shell32_classes.idl
+ +++ b/dlls/shell32/shell32_classes.idl
+ @@ -80,6 +80,11 @@ coclass KnownFolderManager { interface IKnownFolderManager; }
+@@ -49,20 +49,20 @@ index 6ed497fea5..60de627be3 100644
+      threading(apartment),
+      uuid(00bb2763-6a77-11d0-a535-00c04fd7d062)
+ diff --git a/dlls/shell32/shell32_main.h b/dlls/shell32/shell32_main.h
+-index d1b0e01cf1..fd5d207f37 100644
++index da50e19de46..23cf30acfa9 100644
+ --- a/dlls/shell32/shell32_main.h
+ +++ b/dlls/shell32/shell32_main.h
+-@@ -105,6 +105,7 @@ HRESULT WINAPI RecycleBin_Constructor(IUnknown * pUnkOuter, REFIID riif, LPVOID
++@@ -103,6 +103,7 @@ HRESULT WINAPI RecycleBin_Constructor(IUnknown * pUnkOuter, REFIID riif, LPVOID
+  HRESULT WINAPI QueryAssociations_Constructor(IUnknown *pUnkOuter, REFIID riid, LPVOID *ppOutput) DECLSPEC_HIDDEN;
+  HRESULT WINAPI ExplorerBrowser_Constructor(IUnknown *pUnkOuter, REFIID riid, LPVOID *ppv) DECLSPEC_HIDDEN;
+  HRESULT WINAPI KnownFolderManager_Constructor(IUnknown *pUnkOuter, REFIID riid, LPVOID *ppv) DECLSPEC_HIDDEN;
+ +HRESULT WINAPI NewMenu_Constructor(IUnknown *outer, REFIID riid, LPVOID *ppv) DECLSPEC_HIDDEN;
++ HRESULT WINAPI IFileOperation_Constructor(IUnknown *outer, REFIID riid, void **out) DECLSPEC_HIDDEN;
+  extern HRESULT CPanel_GetIconLocationW(LPCITEMIDLIST, LPWSTR, UINT, int*) DECLSPEC_HIDDEN;
+  HRESULT WINAPI CPanel_ExtractIconA(LPITEMIDLIST pidl, LPCSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize) DECLSPEC_HIDDEN;
+- HRESULT WINAPI CPanel_ExtractIconW(LPITEMIDLIST pidl, LPCWSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize) DECLSPEC_HIDDEN;
+ diff --git a/dlls/shell32/shellnew.c b/dlls/shell32/shellnew.c
+ new file mode 100644
+-index 0000000000..89be091e03
++index 00000000000..89be091e031
+ --- /dev/null
+ +++ b/dlls/shell32/shellnew.c
+ @@ -0,0 +1,498 @@
+@@ -565,19 +565,19 @@ index 0000000000..89be091e03
+ +    return hr;
+ +}
+ diff --git a/dlls/shell32/shellole.c b/dlls/shell32/shellole.c
+-index 3fe96801aa..649e6460cf 100644
++index 3c88642512e..d062cc8476b 100644
+ --- a/dlls/shell32/shellole.c
+ +++ b/dlls/shell32/shellole.c
+-@@ -89,6 +89,7 @@ static const struct {
+- 	{&CLSID_Shell,          IShellDispatch_Constructor},
+- 	{&CLSID_DestinationList, CustomDestinationList_Constructor},
+- 	{&CLSID_ShellImageDataFactory, ShellImageDataFactory_Constructor},
++@@ -75,6 +75,7 @@ static const struct {
++ 	{&CLSID_MyComputer,	ISF_MyComputer_Constructor},
++ 	{&CLSID_MyDocuments,    MyDocuments_Constructor},
++ 	{&CLSID_NetworkPlaces,  ISF_NetworkPlaces_Constructor},
+ +	{&CLSID_NewMenu,        NewMenu_Constructor},
+- 	{NULL, NULL}
+- };
+- 
++ 	{&CLSID_Printers,       Printers_Constructor},
++ 	{&CLSID_QueryAssociations, QueryAssociations_Constructor},
++ 	{&CLSID_RecycleBin,     RecycleBin_Constructor},
+ diff --git a/dlls/shell32/tests/shlview.c b/dlls/shell32/tests/shlview.c
+-index f5d96c8d44..dbb24d9356 100644
++index f5d96c8d441..dbb24d93564 100644
+ --- a/dlls/shell32/tests/shlview.c
+ +++ b/dlls/shell32/tests/shlview.c
+ @@ -1479,7 +1479,6 @@ static void test_newmenu(void)

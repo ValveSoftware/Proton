@@ -1,0 +1,126 @@
+diff --git a/include/shobjidl.idl b/include/shobjidl.idl
+index 52e0c5c9db1..42ef264ed86 100644
+--- a/include/shobjidl.idl
++++ b/include/shobjidl.idl
+@@ -3871,121 +3871,4 @@ library ShellObjects
+     {
+         interface IApplicationActivationManager;
+     }
+-
+-    [
+-        uuid(3ad05575-8857-4850-9277-11b85bdb8e09)
+-    ]
+-    coclass FileOperation
+-    {
+-        interface IFileOperation;
+-    }
+-}
+-
+-[v1_enum] enum _OPPROGDLGF
+-{
+-    OPPROGDLG_DEFAULT               = 0x00000000,
+-    OPPROGDLG_ENABLEPAUSE           = 0x00000080,
+-    OPPROGDLG_ALLOWUNDO             = 0x00000100,
+-    OPPROGDLG_DONTDISPLAYSOURCEPATH = 0x00000200,
+-    OPPROGDLG_DONTDISPLAYDESTPATH   = 0x00000400,
+-    OPPROGDLG_NOMULTIDAYESTIMATES   = 0x00000800,
+-    OPPROGDLG_DONTDISPLAYLOCATIONS  = 0x00001000,
+-};
+-typedef DWORD OPPROGDLGF;
+-
+-typedef [v1_enum] enum _SPACTION {
+-    SPACTION_NONE,
+-    SPACTION_MOVING,
+-    SPACTION_COPYING,
+-    SPACTION_RECYCLING,
+-    SPACTION_APPLYINGATTRIBS,
+-    SPACTION_DOWNLOADING,
+-    SPACTION_SEARCHING_INTERNET,
+-    SPACTION_CALCULATING,
+-    SPACTION_UPLOADING,
+-    SPACTION_SEARCHING_FILES,
+-    SPACTION_DELETING,
+-    SPACTION_RENAMING,
+-    SPACTION_FORMATTING,
+-    SPACTION_COPY_MOVING,
+-} SPACTION;
+-
+-[
+-    object,
+-    uuid(0c9fb851-e5c9-43eb-a370-f0677b13874c),
+-    pointer_default(unique)
+-]
+-interface IOperationsProgressDialog : IUnknown
+-{
+-    [v1_enum] enum _PDMODE
+-    {
+-        PDM_DEFAULT        = 0x00000000,
+-        PDM_RUN            = 0x00000001,
+-        PDM_PREFLIGHT      = 0x00000002,
+-        PDM_UNDOING        = 0x00000004,
+-        PDM_ERRORSBLOCKING = 0x00000008,
+-        PDM_INDETERMINATE  = 0x00000010,
+-    };
+-    typedef DWORD PDMODE;
+-
+-    typedef [v1_enum] enum PDOPSTATUS
+-    {
+-        PDOPS_RUNNING = 1,
+-        PDOPS_PAUSED,
+-        PDOPS_CANCELLED,
+-        PDOPS_STOPPED,
+-        PDOPS_ERRORS
+-    } PDOPSTATUS;
+-
+-    HRESULT StartProgressDialog([in, unique] HWND owner, [in] OPPROGDLGF flags);
+-    HRESULT StopProgressDialog();
+-    HRESULT SetOperation([in] SPACTION action);
+-    HRESULT SetMode([in] PDMODE mode);
+-    HRESULT UpdateProgress([in] ULONGLONG current_points, [in] ULONGLONG total_points,
+-                           [in] ULONGLONG current_size, [in] ULONGLONG total_size,
+-                           [in] ULONGLONG current_item, [in] ULONGLONG total_item);
+-    HRESULT UpdateLocations([in, unique] IShellItem *source, [in, unique] IShellItem *target,
+-                            [in, unique] IShellItem *item);
+-    HRESULT ResetTimer();
+-    HRESULT PauseTimer();
+-    HRESULT ResumeTimer();
+-    HRESULT GetMilliseconds([out] ULONGLONG *elapsed, [out] ULONGLONG *remaining);
+-    HRESULT GetOperationStatus([out] PDOPSTATUS *status);
+-}
+-
+-[
+-    object,
+-    uuid(947aab5f-0a5c-4c13-b4d6-4bf7836fc9f8),
+-    pointer_default(unique)
+-]
+-interface IFileOperation : IUnknown
+-{
+-    HRESULT Advise([in] IFileOperationProgressSink *sink, [out] DWORD *cookie);
+-    HRESULT Unadvise([in] DWORD cookie);
+-    HRESULT SetOperationFlags([in] DWORD flags);
+-    HRESULT SetProgressMessage([in, string] LPCWSTR message);
+-    HRESULT SetProgressDialog([in] IOperationsProgressDialog *dialog);
+-    HRESULT SetProperties([in] IPropertyChangeArray *array);
+-    HRESULT SetOwnerWindow([in] HWND owner);
+-    HRESULT ApplyPropertiesToItem([in] IShellItem *item);
+-    HRESULT ApplyPropertiesToItems([in] IUnknown *items);
+-    HRESULT RenameItem([in] IShellItem *item, [in, string] LPCWSTR name,
+-                       [in, unique] IFileOperationProgressSink *sink);
+-    HRESULT RenameItems([in] IUnknown *items, [in, string] LPCWSTR name);
+-    HRESULT MoveItem([in] IShellItem *item, [in] IShellItem *folder,
+-                     [in, unique, string] LPCWSTR name,
+-                     [in, unique] IFileOperationProgressSink *sink);
+-    HRESULT MoveItems([in] IUnknown *items, [in] IShellItem *folder);
+-    HRESULT CopyItem([in] IShellItem *item, [in] IShellItem *folder,
+-                     [in, unique, string] LPCWSTR name,
+-                     [in, unique] IFileOperationProgressSink *sink);
+-    HRESULT CopyItems([in] IUnknown *items, [in] IShellItem *folder);
+-    HRESULT DeleteItem([in] IShellItem *item,
+-                       [in, unique] IFileOperationProgressSink *sink);
+-    HRESULT DeleteItems([in] IUnknown *items);
+-    HRESULT NewItem([in] IShellItem *folder, [in] DWORD attributes,
+-                    [in, unique, string] LPCWSTR name, [in, unique, string] LPCWSTR template_name,
+-                    [in, unique] IFileOperationProgressSink *sink);
+-    HRESULT PerformOperations();
+-    HRESULT GetAnyOperationsAborted([out] BOOL *aborted);
+ }

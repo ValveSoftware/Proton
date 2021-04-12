@@ -3,16 +3,16 @@
     cd gst-plugins-base
     git reset --hard HEAD
     git clean -xdf
-    echo "add Guy's patch for gstreamer preroll buffer for media converter"
-    patch -Np1 < ../patches/gstreamer/mediaconvert-gstdecodebin2.patch
+#    echo "add Guy's patch for gstreamer preroll buffer for media converter"
+#    patch -Np1 < ../patches/gstreamer/mediaconvert-gstdecodebin2.patch
     cd ..
 
     cd gst-plugins-ugly
     git reset --hard HEAD
     git clean -xdf
-    echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
-    patch -Np1 < ../patches/gstreamer/asfdemux-Re-initialize_demux-adapter_in_gst_asf_demux_reset.patch
-    patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
+#    echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
+#    patch -Np1 < ../patches/gstreamer/asfdemux-Re-initialize_demux-adapter_in_gst_asf_demux_reset.patch
+#    patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
     cd ..
 
     cd lsteamclient
@@ -45,7 +45,12 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
+    
+    # protonify syscall emulation
     patch -Np1 < ../patches/wine-hotfixes/protonify_stg_syscall_emu.patch
+    
+    # fix steam helper
+    patch -RNp1 < ../patches/wine-hotfixes/shell32-Progress_Dialog-staging-41e1551.patch
     cd ..
 
     #WINE
@@ -68,8 +73,10 @@
     git revert --no-commit f93284dfa44b060436c6a0617b51280abb3f24fc
     git revert --no-commit 37b29862b36364c6fee143de5eb816bcae514279
 
-    echo "proton steam client reverts"
+    echo "proton steamhelper reverts"
     git revert --no-commit 4f787812999b3b26f04b322fa0d78724596878c0
+    git revert --no-commit 4a1bd593f39b0852ca8fccbf0e54f7c00b3783ec
+    patch -Np1 < ../patches/wine-hotfixes/revert-0c19e2e487d36a89531daf4897c0b6390d82a843.patch
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -96,7 +103,7 @@
     
     patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
 
-    #revert this, it breaks lsteamclient
+    #revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
 
     ### GAME PATCH SECTION ###    
@@ -214,9 +221,6 @@
     echo "proton start.exe exit hang fix"
     patch -Np1 < ../patches/proton/43-proton-start.exe_exit_hang_fix.patch
 
-    echo "proton steam client reverts (part 2)"
-    patch -RNp1 < ../patches/proton/revert_steamclient_breaker4.patch
-
     ### END PROTON PATCH SECTION ###
 
     ### WINE PATCH SECTION ###
@@ -225,6 +229,12 @@
 
     echo "mfplat additions"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
+
+    echo "proton steam client reverts"
+    patch -RNp1 < ../patches/wine-hotfixes/revert_steamclient_breaker4.patch
+    patch -RNp1 < ../patches/wine-hotfixes/revert-7512c53b89308c16a512cb8f0c1d0fd6ff02b17b.patch
+    patch -RNp1 < ../patches/wine-hotfixes/revert-89db25afda90d1d5d57787398ba80fcf4f5abb5f.patch
+
 
     ### END WINEPATCH SECTION ###
 
