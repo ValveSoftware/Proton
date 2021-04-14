@@ -1,0 +1,130 @@
+From 437bc14ac352df8b34819f7df6aab0b0fb04dddd Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 8 Apr 2021 12:18:30 +0300
+Subject: [PATCH] mfreadwrite: Use CRT functions for heap allocations.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfreadwrite/reader.c | 17 ++++++++---------
+ dlls/mfreadwrite/writer.c |  7 +++----
+ 2 files changed, 11 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
+index ffe91f5d2650..2edc83b86852 100644
+--- a/dlls/mfreadwrite/reader.c
++++ b/dlls/mfreadwrite/reader.c
+@@ -38,7 +38,6 @@
+ #include "dxva2api.h"
+ 
+ #include "wine/debug.h"
+-#include "wine/heap.h"
+ #include "wine/list.h"
+ 
+ #include "mf_private.h"
+@@ -263,7 +262,7 @@ static ULONG WINAPI source_reader_async_command_Release(IUnknown *iface)
+     {
+         if (command->op == SOURCE_READER_ASYNC_SEEK)
+             PropVariantClear(&command->u.seek.position);
+-        heap_free(command);
++        free(command);
+     }
+ 
+     return refcount;
+@@ -280,7 +279,7 @@ static HRESULT source_reader_create_async_op(enum source_reader_async_op op, str
+ {
+     struct source_reader_async_command *command;
+ 
+-    if (!(command = heap_alloc_zero(sizeof(*command))))
++    if (!(command = calloc(1, sizeof(*command))))
+         return E_OUTOFMEMORY;
+ 
+     command->IUnknown_iface.lpVtbl = &source_reader_async_command_vtbl;
+@@ -448,7 +447,7 @@ static void source_reader_queue_response(struct source_reader *reader, struct me
+ {
+     struct stream_response *response;
+ 
+-    if (!(response = heap_alloc_zero(sizeof(*response))))
++    if (!(response = calloc(1, sizeof(*response))))
+         return E_OUTOFMEMORY;
+ 
+     response->stream_index = stream->index;
+@@ -973,7 +972,7 @@ static void source_reader_release_response(struct stream_response *response)
+ {
+     if (response->sample)
+         IMFSample_Release(response->sample);
+-    heap_free(response);
++    free(response);
+ }
+ 
+ static HRESULT source_reader_get_stream_selection(const struct source_reader *reader, DWORD index, BOOL *selected)
+@@ -1395,10 +1394,10 @@ static ULONG WINAPI src_reader_Release(IMFSourceReader *iface)
+                 IMFVideoSampleAllocatorEx_Release(stream->allocator);
+         }
+         source_reader_release_responses(reader, NULL);
+-        heap_free(reader->streams);
++        free(reader->streams);
+         MFUnlockWorkQueue(reader->queue);
+         DeleteCriticalSection(&reader->cs);
+-        heap_free(reader);
++        free(reader);
+     }
+ 
+     return refcount;
+@@ -2287,7 +2286,7 @@ static HRESULT create_source_reader_from_source(IMFMediaSource *source, IMFAttri
+     unsigned int i;
+     HRESULT hr;
+ 
+-    object = heap_alloc_zero(sizeof(*object));
++    object = calloc(1, sizeof(*object));
+     if (!object)
+         return E_OUTOFMEMORY;
+ 
+@@ -2311,7 +2310,7 @@ static HRESULT create_source_reader_from_source(IMFMediaSource *source, IMFAttri
+     if (FAILED(hr = IMFPresentationDescriptor_GetStreamDescriptorCount(object->descriptor, &object->stream_count)))
+         goto failed;
+ 
+-    if (!(object->streams = heap_alloc_zero(object->stream_count * sizeof(*object->streams))))
++    if (!(object->streams = calloc(object->stream_count, sizeof(*object->streams))))
+     {
+         hr = E_OUTOFMEMORY;
+         goto failed;
+diff --git a/dlls/mfreadwrite/writer.c b/dlls/mfreadwrite/writer.c
+index 413186266577..6807ee26fbec 100644
+--- a/dlls/mfreadwrite/writer.c
++++ b/dlls/mfreadwrite/writer.c
+@@ -25,7 +25,6 @@
+ #include "mf_private.h"
+ 
+ #include "wine/debug.h"
+-#include "wine/heap.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
+@@ -76,7 +75,7 @@ static ULONG WINAPI sink_writer_Release(IMFSinkWriter *iface)
+ 
+     if (!refcount)
+     {
+-        heap_free(writer);
++        free(writer);
+     }
+ 
+     return refcount;
+@@ -185,7 +184,7 @@ HRESULT create_sink_writer_from_sink(IMFMediaSink *sink, IMFAttributes *attribut
+     struct sink_writer *object;
+     HRESULT hr;
+ 
+-    object = heap_alloc(sizeof(*object));
++    object = malloc(sizeof(*object));
+     if (!object)
+         return E_OUTOFMEMORY;
+ 
+@@ -203,7 +202,7 @@ HRESULT create_sink_writer_from_stream(IMFByteStream *stream, IMFAttributes *att
+     struct sink_writer *object;
+     HRESULT hr;
+ 
+-    object = heap_alloc(sizeof(*object));
++    object = malloc(sizeof(*object));
+     if (!object)
+         return E_OUTOFMEMORY;
+ 

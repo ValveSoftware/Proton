@@ -403,7 +403,7 @@ index 2b049eb91f8..e6948a73427 100644
  HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
  HKLM,"System\CurrentControlSet\Services\Tcpip\Parameters","DataBasePath",2,"%11%\drivers"
 
-From aef0f1638ce13db03a4d3c0fe53972f44443c854 Mon Sep 17 00:00:00 2001
+From 80b9333ff296062b4b0c34f7e3509530dd331993 Mon Sep 17 00:00:00 2001
 From: Patryk Obara <dreamer.tan@gmail.com>
 Date: Fri, 26 Apr 2019 20:40:31 +0200
 Subject: [PATCH] winex11: Fill WM_CLASS based on Steam appid
@@ -411,13 +411,13 @@ Subject: [PATCH] winex11: Fill WM_CLASS based on Steam appid
 Some desktop environments (Gnome 3, Cinnamon) decide on an application
 icon in the following order:
 
- - If the first string in WM_CLASS property can be correlated to
+- If the first string in WM_CLASS property can be correlated to
   a name or StartupWMClass key in a .desktop entry file, then
   the associated icon will be used.
- - If the second string in WM_CLASS property can be correlated to
+- If the second string in WM_CLASS property can be correlated to
   a name or StartupWMClass key in a .desktop entry file, then
   the associated icon will be used.
- - If the application has indicated an icon resource through WM_HINTS
+- If the application has indicated an icon resource through WM_HINTS
   property, then the associated X window or pixmaps will be used.
 
 Upstream Wine usually deals with this by placing a .desktop file with
@@ -434,25 +434,32 @@ Steam can override this behaviour by installing properly crafted
 .desktop entry file.  If SteamAppId environment variable is missing,
 then generic "steam_proton" name is used instead.
 ---
- dlls/winex11.drv/window.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ dlls/winex11.drv/window.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index 1ec7c706511..9ae3da3d4a2 100644
+index cee4230e1bb..46d46052796 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
-@@ -870,8 +870,13 @@ static void set_initial_wm_hints( Display *display, Window window )
+@@ -941,8 +941,19 @@ static void set_initial_wm_hints( Display *display, Window window )
      /* class hints */
      if ((class_hints = XAllocClassHint()))
      {
-+        static char steam_proton[] = "steam_proton";
-+        char proton_app_class[128];
-+        const char *app_id = getenv("SteamAppId");
-+
-+        snprintf(proton_app_class, sizeof(proton_app_class), "steam_app_%s", app_id);
-         class_hints->res_name = process_name;
+-        class_hints->res_name = process_name;
 -        class_hints->res_class = process_name;
-+        class_hints->res_class = app_id ? proton_app_class : steam_proton;
++        static char steam_proton[] = "steam_proton";
++        const char *app_id = getenv("SteamAppId");
++        char proton_app_class[128];
++
++        if(app_id && *app_id){
++            snprintf(proton_app_class, sizeof(proton_app_class), "steam_app_%s", app_id);
++            class_hints->res_name = proton_app_class;
++            class_hints->res_class = proton_app_class;
++        }else{
++            class_hints->res_name = steam_proton;
++            class_hints->res_class = steam_proton;
++        }
++
          XSetClassHint( display, window, class_hints );
          XFree( class_hints );
      }

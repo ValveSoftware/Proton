@@ -89,29 +89,28 @@ index 3d613425b689..e362f5eb4dbd 100644
  {
      UNICODE_STRING nt_name;
      WCHAR *tmp = NULL;
-@@ -1487,7 +1488,7 @@ NTSTATUS load_main_exe( const WCHAR *dos_name, const char *unix_name, const WCHA
-     if (unix_name && unix_name[0] == '/' && !stat( unix_name, &st ))
+@@ -1509,7 +1509,7 @@ NTSTATUS load_main_exe( const WCHAR *dos_name, const char *unix_name, const WCHA
      {
          if ((status = unix_to_nt_file_name( unix_name, image ))) goto failed;
--        status = open_main_image( *image, module, image_info );
-+        status = open_main_image( *image, module, &main_image_info );
+         loadorder = get_load_order( &nt_name );
++        status = open_main_image( *image, module, &main_image_info, loadorder );
+-        status = open_main_image( *image, module, image_info, loadorder );
          if (status != STATUS_DLL_NOT_FOUND) return status;
          free( *image );
      }
-@@ -1504,14 +1505,14 @@ NTSTATUS load_main_exe( const WCHAR *dos_name, const char *unix_name, const WCHA
-     if ((status = get_full_path( dos_name, curdir, image ))) goto failed;
-     free( tmp );
+@@ -1529,13 +1529,13 @@ NTSTATUS load_main_exe( const WCHAR *dos_name, const char *unix_name, const WCHA
+     init_unicode_string( &nt_name, *image );
+     if (loadorder == LO_INVALID) loadorder = get_load_order( &nt_name );
  
--    status = open_main_image( *image, module, image_info );
-+    status = open_main_image( *image, module, &main_image_info );
++    status = open_main_image( *image, module, &main_image_info, loadorder );
+-    status = open_main_image( *image, module, image_info, loadorder );
      if (status != STATUS_DLL_NOT_FOUND) return status;
  
      /* if path is in system dir, we can load the builtin even if the file itself doesn't exist */
-     init_unicode_string( &nt_name, *image );
-     if (is_builtin_path( &nt_name, &machine ))
+     if (loadorder != LO_NATIVE && is_builtin_path( &nt_name, &machine ))
      {
--        status = find_builtin_dll( &nt_name, module, &size, image_info, machine, FALSE );
 +        status = find_builtin_dll( &nt_name, module, &size, &main_image_info, machine, FALSE );
+-        status = find_builtin_dll( &nt_name, module, &size, image_info, machine, FALSE );
          if (status != STATUS_DLL_NOT_FOUND) return status;
      }
      if (!contains_path) return STATUS_DLL_NOT_FOUND;
