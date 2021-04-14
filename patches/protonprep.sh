@@ -68,6 +68,7 @@
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
 
     # these break sea of thieves
+    echo "sea of thieves reverts"
     git revert --no-commit ed06d64bf41cc3eb6258a3576e845a544855b0be
     git revert --no-commit a114ce67db2357740eb58fbda0102e582e79c11c
     git revert --no-commit f93284dfa44b060436c6a0617b51280abb3f24fc
