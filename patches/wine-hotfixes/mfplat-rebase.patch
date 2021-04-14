@@ -6207,9 +6207,9 @@ index eb5b9e366ec..3ce8ff40f9b 100644
      struct media_source *source = impl_from_IMFGetService(iface);
  
      TRACE("%p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
-+    
++    /* Hack to skip this to fix UE games other than Deeprock Galactic since they choke here*/
 +    const char *sgi = getenv("SteamGameId");
-+    if (sgi && !strcmp(sgi, "471010"))
++    if (sgi && strcmp(sgi, "548430"))
 +    {
 +        FIXME("stub %p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
 +        return E_NOINTERFACE;
