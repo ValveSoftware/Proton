@@ -49,14 +49,14 @@ CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
 ifeq ($(ENABLE_CCACHE),1)
 	CCACHE_BIN := ccache
 	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
-	DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
+	DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
 else
 	export CCACHE_DISABLE := 1
 	DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
 DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
-                -v $(HOME):$(HOME) -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) -e MAKEFLAGS \
+                -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
 STEAMRT_NAME ?= soldier
@@ -90,6 +90,9 @@ all32 $(MAKECMDGOALS64):
 
 ifeq ($(CONTAINER),)
 J := $(shell nproc)
+ifeq ($(ENABLE_CCACHE),1)
+container-build: $(shell mkdir -p $(CCACHE_DIR))
+endif
 container-build: private SHELL := $(CONTAINER_SHELL)
 container-build:
 	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(CONTAINERGOALS)
