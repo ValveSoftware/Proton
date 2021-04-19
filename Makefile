@@ -43,7 +43,7 @@ endif
 
 protonsdk_version := 0.20210126.1-1
 CONFIGURE_CMD := ../proton/configure.sh \
-	--steam-runtime-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version) \
+	--proton-sdk-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version) \
 	--build-name="$(_build_name)"
 
 

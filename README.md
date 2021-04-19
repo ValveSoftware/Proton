@@ -177,7 +177,7 @@ protonsdk_version value to use):
 
         mkdir build/
         cd build
-        ../proton/configure.sh --steam-runtime-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version)
+        ../proton/configure.sh --proton-sdk-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version)
 
 Or, if you are building without the Steam runtime, then instead use:
 
