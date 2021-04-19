@@ -45,10 +45,14 @@ include $(SRC)/make/rules-winemaker.mk
 include $(SRC)/make/rules-cargo.mk
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
+CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
 ifeq ($(ENABLE_CCACHE),1)
 	CCACHE_BIN := ccache
+	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
+	DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
 else
-	export CCACHE_DISABLE = 1
+	export CCACHE_DISABLE := 1
+	DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
 DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
