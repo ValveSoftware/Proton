@@ -181,7 +181,7 @@ protonsdk_version value to use):
 
 Or, if you are building without the Steam runtime, then instead use:
 
-        ../proton/configure.sh --no-steam-runtime
+        ../proton/configure.sh --no-proton-sdk
 
 **Tip**: If you are building without the Steam runtime, you should now run
 `make obj-wine64/Makefile obj-wine32/Makefile` and check the files
