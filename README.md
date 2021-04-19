@@ -172,19 +172,22 @@ After setting up the build machine, it is time to run the configure script
 which will generate the Makefile to build your project. Run these steps. You
 may of course use whatever paths you like.
 
-To build Proton within the Steam Runtime (see `Makefile` for the correct
-protonsdk_version value to use):
+To build Proton using the official Proton SDK images:
 
         mkdir build/
         cd build
-        ../proton/configure.sh --proton-sdk-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version)
+        ../proton/configure.sh
 
-Or, if you are building without the Steam runtime, then instead use:
+If you want to build with a custom version of the Proton SDK images, then instead use:
+
+        ../proton/configure.sh --proton-sdk-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:<version>
+
+Or, if you want to build without the Proton SDK, then instead use:
 
         ../proton/configure.sh --no-proton-sdk
 
 **Tip**: If you are building without the Steam runtime, you should now run
-`make obj-wine64/Makefile obj-wine32/Makefile` and check the files
+`make wine-configure64 wine-configure32` and check the files
 `obj-wine64/config.log` and `obj-wine32/config.log` for missing packages.
 Search for `won't be supported`. A couple of missing packages are normal:
 `opencv`, `oss`. More than that may indicate a problem.  Please see your

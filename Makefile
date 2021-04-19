@@ -41,10 +41,14 @@ ifneq ($(unstripped),)
     DEPLOY_DIR := $(DEPLOY_DIR)_unstripped
 endif
 
-protonsdk_version := 0.20210126.1-1
 CONFIGURE_CMD := ../proton/configure.sh \
-	--proton-sdk-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version) \
 	--build-name="$(_build_name)"
+
+ifneq ($(protonsdk_version),)
+CONFIGURE_CMD += --proton-sdk-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version)
+else
+protonsdk_version := $(shell grep '^arg_protonsdk_image=' configure.sh|xargs echo|cut -d: -f2)
+endif
 
 
 all: help

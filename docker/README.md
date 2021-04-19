@@ -40,8 +40,8 @@ To update the official Proton SDK images:
    images and version them with the same tag as the Git tag.
 
 4) Once the images have been published, update the default
-   `protonsdk_version` version number in `Makefile` to use the newly
-   built images by default.
+   `arg_protonsdk_image` version number in `configure.sh` to use the
+   newly built images by default.
 
 Any change or addition to GPL-ed source first requires to update or add
 the corresponding source to <https://repo.steampowered.com/proton-sdk>.
