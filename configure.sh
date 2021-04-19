@@ -97,7 +97,7 @@ function configure() {
 #
 
 arg_steamrt="soldier"
-arg_steamrt_image=""
+arg_protonsdk_image=""
 arg_no_steamrt=""
 arg_build_name=""
 arg_docker_opts=""
@@ -140,9 +140,9 @@ function parse_args() {
     elif [[ $arg = --docker-opts ]]; then
       arg_docker_opts="$val"
       val_used=1
-    elif [[ $arg = --steam-runtime-image ]]; then
+    elif [[ $arg = --proton-sdk-image ]]; then
       val_used=1
-      arg_steamrt_image="$val"
+      arg_protonsdk_image="$val"
     elif [[ $arg = --steam-runtime ]]; then
       val_used=1
       arg_steamrt="$val"
@@ -182,7 +182,7 @@ function parse_args() {
 }
 
 usage() {
-  "$1" "Usage: $0 { --no-steam-runtime | --steam-runtime-image=<image> --steam-runtime=<name> }"
+  "$1" "Usage: $0 { --no-steam-runtime | --proton-sdk-image=<image> --steam-runtime=<name> }"
   "$1" "  Generate a Makefile for building Proton.  May be run from another directory to create"
   "$1" "  out-of-tree build directories (e.g. mkdir mybuild && cd mybuild && ../configure.sh)"
   "$1" ""
@@ -197,10 +197,10 @@ usage() {
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
   "$1" "    the Steam Runtime SDK to ensure compatibility.  See README.md for more information."
   "$1" ""
-  "$1" "    --steam-runtime-image=<image>  Automatically invoke the Steam Runtime SDK in <image>"
-  "$1" "                                   for build steps that must be run in an SDK"
-  "$1" "                                   environment.  See README.md for instructions to"
-  "$1" "                                   create this image."
+  "$1" "    --proton-sdk-image=<image>  Automatically invoke the Steam Runtime SDK in <image>"
+  "$1" "                                for build steps that must be run in an SDK"
+  "$1" "                                environment.  See README.md for instructions to"
+  "$1" "                                create this image."
   "$1" "    --steam-runtime=soldier  Name of the steam runtime release to build for (soldier, scout)."
   "$1" ""
   "$1" "    --no-steam-runtime  Do not automatically invoke any runtime SDK as part of the build."
@@ -213,10 +213,10 @@ parse_args "$@" || usage err
 [[ -z $arg_help ]] || usage info
 
 # Sanity check arguments
-if [[ -n $arg_no_steamrt && -n $arg_steamrt_image ]]; then
-    die "Cannot specify --steam-runtime-image as well as --no-steam-runtime"
-elif [[ -z $arg_no_steamrt && -z $arg_steamrt_image ]]; then
-    die "Must specify either --no-steam-runtime or --steam-runtime-image"
+if [[ -n $arg_no_steamrt && -n $arg_protonsdk_image ]]; then
+    die "Cannot specify --proton-sdk-image as well as --no-steam-runtime"
+elif [[ -z $arg_no_steamrt && -z $arg_protonsdk_image ]]; then
+    die "Must specify either --no-steam-runtime or --proton-sdk-image"
 fi
 
-configure "$arg_steamrt_image" "$arg_steamrt"
+configure "$arg_protonsdk_image" "$arg_steamrt"
