@@ -133,9 +133,9 @@ redist: configure
 	cp -Rf $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR) && \
 	cd /vagrant/$(DEPLOY_DIR) && \
 	cd protonfixes && \
-	mv cabextract ../dist/bin/ && \
-	mv libmspack.so.0 ../dist/lib64/ && \
-	mv libmspack.so.0.1.0 ../dist/lib64/ && \
+	mv cabextract ../files/bin/ && \
+	mv libmspack.so.0 ../files/lib64/ && \
+	mv libmspack.so.0.1.0 ../files/lib64/ && \
 	rm cabextract_1.9-1.debian.tar.xz libmspack_0.10.1-1.debian.tar.xz && \
 	cd /vagrant/ && \
 	tar -cvzf $(DEPLOY_DIR).tar.gz $(DEPLOY_DIR)'

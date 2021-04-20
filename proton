@@ -149,13 +149,13 @@ def set_dir_casefold_bit(dir_path):
 class Proton:
     def __init__(self, base_dir):
         self.base_dir = base_dir + "/"
-        self.dist_dir = self.path("dist/")
-        self.bin_dir = self.path("dist/bin/")
-        self.lib_dir = self.path("dist/lib/")
-        self.lib64_dir = self.path("dist/lib64/")
-        self.fonts_dir = self.path("dist/share/fonts/")
+        self.dist_dir = self.path("files/")
+        self.bin_dir = self.path("files/bin/")
+        self.lib_dir = self.path("files/lib/")
+        self.lib64_dir = self.path("files/lib64/")
+        self.fonts_dir = self.path("files/share/fonts/")
         self.version_file = self.path("version")
-        self.default_pfx_dir = self.path("dist/share/default_pfx/")
+        self.default_pfx_dir = self.path("files/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
         self.wine_bin = self.bin_dir + "wine"
         self.wineserver_bin = self.bin_dir + "wineserver"
@@ -164,28 +164,34 @@ class Proton:
     def path(self, d):
         return self.base_dir + d
 
-    def need_tarball_extraction(self):
-        '''Checks if the proton_dist tarball archive must be extracted. Returns true if extraction is needed, false otherwise'''
-        return not os.path.exists(self.dist_dir) or \
-            not os.path.exists(self.path("dist/version")) or \
-            not filecmp.cmp(self.version_file, self.path("dist/version"))
+    def cleanup_legacy_dist(self):
+        old_dist_dir = self.path("dist/")
+        if os.path.exists(old_dist_dir):
+            with self.dist_lock:
+                if os.path.exists(old_dist_dir):
+                    shutil.rmtree(old_dist_dir)
 
-    def extract_tarball(self):
-        with self.dist_lock:
-            if self.need_tarball_extraction():
-                if os.path.exists(self.dist_dir):
-                    shutil.rmtree(self.dist_dir)
-                tar = None
-                for sf in ["", ".xz", ".bz2", ".gz"]:
-                    if os.path.exists(self.path("proton_dist.tar" + sf)):
-                        tar = tarfile.open(self.path("proton_dist.tar" + sf), mode="r:*")
-                        break
-                if not tar:
-                    log("No proton_dist tarball??")
-                    sys.exit(1)
-                tar.extractall(path=self.dist_dir)
-                tar.close()
-                try_copy(self.version_file, self.dist_dir)
+    def do_steampipe_fixups(self):
+        fixups_json = self.path("steampipe_fixups.json")
+        fixups_mtime = self.path("files/steampipe_fixups_mtime")
+
+        if os.path.exists(fixups_json):
+            with self.dist_lock:
+                import steampipe_fixups
+
+                current_fixup_mtime = None
+                if os.path.exists(fixups_mtime):
+                    with open(fixups_mtime, "r") as f:
+                        current_fixup_mtime = f.readline().strip()
+
+                new_fixup_mtime = getmtimestr(fixups_json)
+
+                if current_fixup_mtime != new_fixup_mtime:
+                    result_code = steampipe_fixups.do_restore(self.base_dir, fixups_json)
+
+                    if result_code == 0:
+                        with open(fixups_mtime, "w") as f:
+                            f.write(new_fixup_mtime + "\n")
 
     def missing_default_prefix(self):
         '''Check if the default prefix dir is missing. Returns true if missing, false if present'''
@@ -420,6 +426,12 @@ class CompatData:
 
             if not os.path.exists(self.prefix_dir + "/user.reg"):
                 self.copy_pfx()
+
+            if not os.path.lexists(self.prefix_dir + "/dosdevices/c:"):
+                os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
+
+            if not os.path.lexists(self.prefix_dir + "/dosdevices/z:"):
+                os.symlink("/", self.prefix_dir + "/dosdevices/z:")
 
             # collect configuration info
             if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
@@ -757,7 +769,7 @@ class Session:
         self.env = dict(os.environ)
         self.dlloverrides = {
                 "steam.exe": "b", #always use our special built-in steam.exe
-                "dotnetfx35.exe": "b" #replace the broken installer, as does Windows
+                "dotnetfx35.exe": "b", #replace the broken installer, as does Windows
         }
 
         self.compat_config = set()
@@ -1102,6 +1114,8 @@ class Session:
                 self.dump_dbg_scripts()
             except OSError:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
+        commandstring = str([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
+        log("Running: " + commandstring)
         self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
 
 
@@ -1112,8 +1126,8 @@ if __name__ == "__main__":
 
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
-    if g_proton.need_tarball_extraction():
-        g_proton.extract_tarball()
+    g_proton.cleanup_legacy_dist()
+    g_proton.do_steampipe_fixups()
 
     g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 

@@ -351,8 +351,8 @@ install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(REDIST_DIR)
 	cp -a $(REDIST_COPY_TARGETS) $(REDIST_DIR)
-	cp -a $(DST_BASE)/dist $(REDIST_DIR)
-	cp -a $(DST_BASE)/version $(REDIST_DIR)/dist/
+	cp -a $(DST_BASE)/dist $(REDIST_DIR)/files
+	cp -a $(DST_BASE)/version $(REDIST_DIR)/files/
 	@echo "Created redistribution at "$(REDIST_DIR)
 
 .PHONY: module32 module64 module
