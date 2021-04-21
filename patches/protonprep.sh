@@ -45,12 +45,12 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
-    
+
     # protonify syscall emulation
     patch -Np1 < ../patches/wine-hotfixes/protonify_stg_syscall_emu.patch
     
-    # fix steam helper
-    patch -RNp1 < ../patches/wine-hotfixes/shell32-Progress_Dialog-staging-41e1551.patch
+    # proton sdl patch reverts
+    patch -Np1 < ../patches/wine-hotfixes/0001-proton-sdl-reverts.patch
     cd ..
 
     #WINE
@@ -66,6 +66,23 @@
     # https://github.com/Frogging-Family/wine-tkg-git/issues/248#issuecomment-760471607
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
+    
+    # more controller reverts
+    git revert --no-commit c5565a74c3441645d0e1da3fe6d6d5acc38c47a1
+    git revert --no-commit 06ab0677587fbbb83ef73efa7ed22bf85dcb6836
+    git revert --no-commit a17367291104e46c573b7213ee94a0f537563ace
+    git revert --no-commit aff72f225305b24b83c779271e8081632fd565d7
+    git revert --no-commit f34b735eba04ee1deeba1e9bbf151956a23b81f2
+    git revert --no-commit 902696de93b2da37b4d43daaf887460657018a45
+    git revert --no-commit a85d0f576a18be9a661b5c9dcf52b74199900c20
+    git revert --no-commit e30a14525e3b791037c2228d018be9dc18ac0ef7
+    git revert --no-commit 5cc9c5ab5107a1aff2c1694f4dd2903672fe725a
+    git revert --no-commit 1fdcf1f18390fa83649d95ca1bfcc29fd4b15b1d
+    git revert --no-commit bbdc0cc924b46a4970a44f12aee21208600a0f86
+    git revert --no-commit 27f40156baa7f1e09c6e420f6c278606557a505a
+    git revert --no-commit b0f25d7e1bd3654f7e028ef4a557ce9528173297
+    git revert --no-commit f8ec3fdcdbdc6a0d3a062cbbb61b47229fd177cb
+    git revert --no-commit b6409950d95e59201c914dd801388c1938b3dca5
 
     # these break sea of thieves
     echo "sea of thieves reverts"
@@ -74,11 +91,16 @@
     git revert --no-commit f93284dfa44b060436c6a0617b51280abb3f24fc
     git revert --no-commit 37b29862b36364c6fee143de5eb816bcae514279
 
+    echo "fshack reverts"
+    git revert --no-commit 9c1d52dff463109cd91d5f1d0048bb9eb54efbb4
+    git revert --no-commit da5248bcfad07bb2ff092b0086ff690558ac649d
+    git revert --no-commit 48bcb133932a7888a039dd43fdccf9b45b4d09b7
+    git revert --no-commit bd5408493a642623455c3146064880f475a2150d
+    git revert --no-commit 171fe51b794f51b8d2b3811b7327aa2e730cd07e
+    patch -RNp1 < ../patches/wine-hotfixes/winevulkan_Use_standard_CRT_memory_allocators2.patch
+
     echo "proton steamhelper reverts"
     git revert --no-commit 4f787812999b3b26f04b322fa0d78724596878c0
-    git revert --no-commit 4a1bd593f39b0852ca8fccbf0e54f7c00b3783ec
-    # note: don't reverse this one, it had to be modified by hand
-    patch -Np1 < ../patches/wine-hotfixes/revert-0c19e2e487d36a89531daf4897c0b6390d82a843.patch
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -129,10 +151,6 @@
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
 
-    # Disabled for now -- non-steam game, needs double check, may be fixed already
-    # echo "Paul's Diablo 1 menu fix"
-    # patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
-
     ### END GAME PATCH SECTION ###
     
     ### PROTON PATCH SECTION ###
@@ -163,7 +181,7 @@
     patch -Np1 < ../patches/proton/15-proton-gamepad-additions.patch
 
     echo "Valve VR patches"
-    patch -Np1 < ../patches/proton/16-proton-vrclient.patch
+    patch -Np1 < ../patches/proton/16-proton-vrclient-wined3d.patch
 
     echo "amd ags"
     patch -Np1 < ../patches/proton/18-proton-amd_ags.patch
@@ -202,9 +220,6 @@
     echo "proton overlay patches"
     patch -Np1 < ../patches/proton/36-proton-overlay_fixes.patch
 
-    echo "proton openxr patches"
-    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
-
     echo "mouse focus fixes"
     patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
 
@@ -214,20 +229,31 @@
     echo "proton futex2 patches"
     patch -Np1 < ../patches/proton/40-proton-futex2.patch
 
+    ## VULKAN-CENTRIC PATCHES
+
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
+
+    echo "vulkan childwindow hack"
+    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
+
+    echo "proton openxr patches"
+     patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
+
+#    echo "proton nvidia hacks"
+#    patch -Np1 < ../patches/proton/26-proton-nvidia-hacks.patch
+
+    ## END VULKAN-CENTRIC PATCHES
 
     echo "fullscreen hack wined3d additions"
     patch -Np1 < ../patches/proton/42-valve_proton_fullscreen_hack-staging-wined3d.patch
 
-    echo "proton start.exe exit hang fix"
-    patch -Np1 < ../patches/proton/43-proton-start.exe_exit_hang_fix.patch
-
     ### END PROTON PATCH SECTION ###
 
     ### WINE PATCH SECTION ###
-    echo "vulkan childwindow hack"
-    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
+
+#    echo "proton start.exe exit hang fix"
+#    patch -Np1 < ../patches/proton/43-proton-start.exe_exit_hang_fix.patch
 
     echo "mfplat additions"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch

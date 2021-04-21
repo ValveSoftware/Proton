@@ -126,7 +126,7 @@ index 3d613425b689..e362f5eb4dbd 100644
 @@ -1538,7 +1539,7 @@ NTSTATUS load_start_exe( WCHAR **image, void **module, SECTION_IMAGE_INFORMATION
      SIZE_T size;
  
-     init_unicode_string( &nt_name, startW );
+     init_unicode_string( &nt_name, is_wow64 ? startwow64W : startW );
 -    status = find_builtin_dll( &nt_name, module, &size, image_info, current_machine, FALSE );
 +    status = find_builtin_dll( &nt_name, module, &size, &main_image_info, current_machine, FALSE );
      if (status)

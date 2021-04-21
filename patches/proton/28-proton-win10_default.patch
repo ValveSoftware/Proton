@@ -188,9 +188,9 @@ index 569db5ee94d..a0a72040843 100644
  static void update_wineprefix( BOOL force )
  {
 @@ -1496,6 +1533,7 @@ static void update_wineprefix( BOOL force )
+         }
          install_root_pnp_devices();
          update_user_profile();
-         create_etc_stub_files();
 +        update_win_version();
  
          WINE_MESSAGE( "wine: configuration in %s has been updated.\n", debugstr_w(prettyprint_configdir()) );

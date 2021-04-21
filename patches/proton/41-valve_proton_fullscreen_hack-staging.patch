@@ -19,22 +19,22 @@ index 922b8f3805d..48e6d7af7d9 100755
 --- a/dlls/winevulkan/make_vulkan
 +++ b/dlls/winevulkan/make_vulkan
 @@ -191,10 +191,12 @@ FUNCTION_OVERRIDES = {
-     "vkGetPhysicalDeviceWin32PresentationSupportKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
+     "vkGetPhysicalDeviceWin32PresentationSupportKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
  
      # VK_KHR_swapchain
--    "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : False, "private_thunk" : True},
--    "vkDestroySwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
--    "vkGetSwapchainImagesKHR": {"dispatch" : True, "driver" : True, "thunk" : True},
--    "vkQueuePresentKHR": {"dispatch" : True, "driver" : True, "thunk" : True},
-+    "vkAcquireNextImageKHR" : {"dispatch" : True, "driver" : False, "thunk" : True},
-+    "vkAcquireNextImage2KHR": {"dispatch" : True, "driver" : False, "thunk" : False},
-+    "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
-+    "vkDestroySwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
-+    "vkGetSwapchainImagesKHR": {"dispatch" : True, "driver" : True, "thunk" : False},
-+    "vkQueuePresentKHR": {"dispatch" : True, "driver" : True, "thunk" : False},
+-    "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PRIVATE},
+-    "vkDestroySwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
+-    "vkGetSwapchainImagesKHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
+-    "vkQueuePresentKHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
++    "vkAcquireNextImageKHR" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC},
++    "vkAcquireNextImage2KHR": {"dispatch" : True, "driver" : False, "thunk" : ThunkType.NONE},
++    "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
++    "vkDestroySwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
++    "vkGetSwapchainImagesKHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
++    "vkQueuePresentKHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
  
      # VK_KHR_external_fence_capabilities
-     "vkGetPhysicalDeviceExternalFencePropertiesKHR" : {"dispatch" : False, "driver" : False, "thunk" : False},
+     "vkGetPhysicalDeviceExternalFencePropertiesKHR" : {"dispatch" : False, "driver" : False, "thunk" : ThunkType.NONE},
 @@ -243,6 +245,8 @@ STRUCT_CHAIN_CONVERSIONS = [
      "VkInstanceCreateInfo",
  ]
@@ -260,7 +260,7 @@ index 922b8f3805d..48e6d7af7d9 100755
          f.write("/* For use by vkDevice and children */\n")
          f.write("struct vulkan_device_funcs\n{\n")
          for vk_func in self.registry.device_funcs:
-@@ -2717,6 +2717,12 @@ class VkGenerator(object):
+@@ -2580,6 +2658,12 @@ class VkGenerator(object):
          f.write("\n")
          f.write("    /* winevulkan specific functions */\n")
          f.write("    VkSurfaceKHR (*p_wine_get_native_surface)(VkSurfaceKHR);\n")
@@ -270,9 +270,9 @@ index 922b8f3805d..48e6d7af7d9 100755
 +        f.write("     * will contain the area to blit the user image to in real coordinates.\n")
 +        f.write("     * All parameters are optional. */\n")
 +        f.write("    VkBool32 (*query_fs_hack)(VkSurfaceKHR surface, VkExtent2D *real_sz, VkExtent2D *user_sz, VkRect2D *dst_blit, VkFilter *filter);\n")
-         f.write("    VkResult (*create_vk_instance_with_callback)(const VkInstanceCreateInfo *create_info,\n")
-         f.write("            const VkAllocationCallbacks *allocator, VkInstance *instance,\n")
-         f.write("            VkResult (WINAPI *native_vkCreateInstance)(const VkInstanceCreateInfo *, const VkAllocationCallbacks *,\n")
+         f.write("};\n\n")
+ 
+         f.write("extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver(HDC hdc, UINT version);\n\n")
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
 index 6c27c6f9894..659a813cefa 100644
 --- a/dlls/winevulkan/vulkan.c
@@ -749,7 +749,7 @@ index 6c27c6f9894..659a813cefa 100644
 +    }
 +
 +    real_images = heap_alloc(count * sizeof(VkImage));
-+    swapchain->cmd_pools = heap_alloc_zero(sizeof(VkCommandPool) * device->max_queue_families);
++    swapchain->cmd_pools = heap_alloc_zero(sizeof(VkCommandPool) * device->queue_count);
 +    swapchain->fs_hack_images = heap_alloc_zero(sizeof(struct fs_hack_image) * count);
 +    if(!real_images || !swapchain->cmd_pools || !swapchain->fs_hack_images)
 +        goto fail;
@@ -1056,7 +1056,7 @@ index 6c27c6f9894..659a813cefa 100644
      return res;
  }
  
-@@ -3042,3 +3042,632 @@ HRESULT WINAPI DllUnregisterServer(void)
+@@ -3042,3 +3042,621 @@ HRESULT WINAPI DllUnregisterServer(void)
  
      return S_OK;
  }
@@ -1096,7 +1096,7 @@ index 6c27c6f9894..659a813cefa 100644
 +        for(i = 0; i < object->n_images; ++i)
 +            destroy_fs_hack_image(device, object, &object->fs_hack_images[i]);
 +
-+        for(i = 0; i < device->max_queue_families; ++i)
++        for(i = 0; i < device->queue_count; ++i)
 +            if(object->cmd_pools[i])
 +                device->funcs.p_vkDestroyCommandPool(device->device, object->cmd_pools[i], NULL);
 +
@@ -1133,17 +1133,6 @@ index 6c27c6f9894..659a813cefa 100644
 +    }
 +
 +    return device->funcs.p_vkGetSwapchainImagesKHR(device->device, object->swapchain, pSwapchainImageCount, pSwapchainImages);
-+}
-+
-+static uint32_t get_queue_index(VkQueue queue)
-+{
-+    uint32_t i;
-+    for(i = 0; i < queue->device->max_queue_families; ++i){
-+        if(queue->device->queues[i] == queue)
-+            return i;
-+    }
-+    WARN("couldn't find queue\n");
-+    return -1;
 +}
 +
 +static VkCommandBuffer create_hack_cmd(VkQueue queue, struct VkSwapchainKHR_T *swapchain, uint32_t queue_idx)
@@ -1593,7 +1582,7 @@ index 6c27c6f9894..659a813cefa 100644
 +            struct fs_hack_image *hack = &swapchain->fs_hack_images[our_presentInfo.pImageIndices[i]];
 +
 +            if(!blit_cmds){
-+                queue_idx = get_queue_index(queue);
++                queue_idx = queue->family_index;
 +                blit_cmds = heap_alloc(our_presentInfo.swapchainCount * sizeof(VkCommandBuffer));
 +                blit_sema = hack->blit_finished;
 +            }
@@ -1724,7 +1713,7 @@ index 4a41a15461e..e0b47b32bc3 100644
 +    VkExtent2D real_extent;
 +    VkImageUsageFlags surface_usage;
 +    VkRect2D blit_dst;
-+    VkCommandPool *cmd_pools; /* VkCommandPool[device->max_queue_families] */
++    VkCommandPool *cmd_pools; /* VkCommandPool[device->queue_count] */
 +    VkDeviceMemory user_image_memory, blit_image_memory;
 +    uint32_t n_images;
 +    struct fs_hack_image *fs_hack_images; /* struct fs_hack_image[n_images] */
@@ -1833,7 +1822,7 @@ index cc2866e7883..2970c688231 100644
  {
      VkBufferMemoryBarrier2KHR_host *out;
 @@ -1277,30 +1201,6 @@ static inline void free_VkRayTracingPipelineCreateInfoNV_array(VkRayTracingPipel
-     heap_free(in);
+     free(in);
  }
  
 -static inline void convert_VkSwapchainCreateInfoKHR_win_to_host(const VkSwapchainCreateInfoKHR *in, VkSwapchainCreateInfoKHR_host *out)
@@ -2081,7 +2070,7 @@ diff --git a/include/wine/vulkan_driver.h b/include/wine/vulkan_driver.h
 index c2a2acfc282..4cd984e5a68 100644
 --- a/include/wine/vulkan_driver.h
 +++ b/include/wine/vulkan_driver.h
-@@ -46,6 +46,13 @@ struct vulkan_funcs
+@@ -44,6 +44,13 @@ struct vulkan_funcs
  
      /* winevulkan specific functions */
      VkSurfaceKHR (*p_wine_get_native_surface)(VkSurfaceKHR);
@@ -2092,9 +2081,10 @@ index c2a2acfc282..4cd984e5a68 100644
 +     * will contain the area to blit the user image to in real coordinates.
 +     * All parameters are optional. */
 +    VkBool32 (*query_fs_hack)(VkSurfaceKHR surface, VkExtent2D *real_sz, VkExtent2D *user_sz, VkRect2D *dst_blit, VkFilter *filter);
-     VkResult (*create_vk_instance_with_callback)(const VkInstanceCreateInfo *create_info,
-             const VkAllocationCallbacks *allocator, VkInstance *instance,
-             VkResult (WINAPI *native_vkCreateInstance)(const VkInstanceCreateInfo *, const VkAllocationCallbacks *,
+ };
+ 
+ extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver(HDC hdc, UINT version);
+ 
 From b73eb11f39f498bc04785f81d56e47813a251593 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 12 Feb 2018 09:15:07 -0600
@@ -3594,7 +3584,7 @@ index 2c9aff7e777..d5799690509 100644
      XMapWindow( data->display, clip_window );
  
      /* if the rectangle is shrinking we may get a pointer warp */
-@@ -615,7 +755,10 @@ static void map_event_coords( HWND hwnd, Window window, Window event_root, int x
+@@ -680,7 +693,10 @@ static POINT map_event_coords(const XButtonEvent *event, HWND hwnd)
          else if (event_root == root_window) pt = root_to_virtual_screen( x_root, y_root );
          else
          {
@@ -3614,7 +3604,7 @@ index 2c9aff7e777..d5799690509 100644
  
          if (!clip_hwnd) return;
          if (thread_data->clip_window != window) return;
-@@ -775,6 +778,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+@@ -729,6 +746,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
              sync_window_cursor( window );
              last_cursor_change = input->u.mi.time;
          }
@@ -3662,7 +3652,7 @@ index 2c9aff7e777..d5799690509 100644
  
      if (thread_data->x_rel_valuator.number < 0 || thread_data->y_rel_valuator.number < 0) return FALSE;
      if (!event->valuators.mask_len) return FALSE;
-@@ -2023,6 +2038,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1960,6 +1993,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
      x_pos->value = x_accum - input.u.mi.dx;
      y_pos->value = y_accum - input.u.mi.dy;
  
@@ -4543,14 +4533,14 @@ index 139faf6b407..d21e478ea46 100644
  static const struct vulkan_funcs vulkan_funcs =
  {
      X11DRV_vkCreateInstance,
-@@ -919,6 +919,7 @@ static const struct vulkan_funcs vulkan_funcs =
+@@ -634,6 +692,7 @@ static const struct vulkan_funcs vulkan_funcs =
      X11DRV_vkQueuePresentKHR,
  
      X11DRV_wine_get_native_surface,
 +    X11DRV_query_fs_hack,
-     X11DRV_create_vk_instance_with_callback,
  };
  
+ static void *X11DRV_get_vk_device_proc_addr(const char *name)
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
 index 5230439ecb5..837a136f35c 100644
 --- a/dlls/winex11.drv/window.c
@@ -5576,73 +5566,6 @@ index 338cdca4853..0812d1b5f63 100644
      int         wm_state;       /* current value of the WM_STATE property */
      DWORD       net_wm_state;   /* bit mask of active x11drv_net_wm_state values */
      Window      embedder;       /* window id of embedder */
-From fbc9f076a9175090363739514910eea77bd9426b Mon Sep 17 00:00:00 2001
-From: Kai Krakow <kai@kaishome.de>
-Date: Thu, 4 Oct 2018 05:51:20 +0200
-Subject: [PATCH] winex11.drv: Bypass compositor in fullscreen mode.
-
-Bypass the compositor in fullscreen mode. This reduces stutter
-introduced by window updates in the background and also allows for maybe
-a few more FPS. To not change the visual appearance of the desktop for
-windowed games, this hack only enables itself when the game was switched
-to fullscreen mode, and returns to default WM setting when the game
-leaves fullscreen mode.
-
-Compositors tend to cause severe stutter if the game is GPU-bound.
----
- dlls/winex11.drv/window.c      | 4 ++++
- dlls/winex11.drv/x11drv.h      | 1 +
- dlls/winex11.drv/x11drv_main.c | 1 +
- 3 files changed, 6 insertions(+)
-
-diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index 123e89a4f81..141446d3b25 100644
---- a/dlls/winex11.drv/window.c
-+++ b/dlls/winex11.drv/window.c
-@@ -1069,6 +1069,7 @@ void update_net_wm_states( struct x11drv_win_data *data )
- {
-     DWORD i, style, ex_style, new_state = 0;
-     HMONITOR monitor;
-+    unsigned long net_wm_bypass_compositor = 0;
- 
-     if (!data->managed) return;
-     if (data->whole_window == root_window) return;
-@@ -1084,8 +1085,11 @@ void update_net_wm_states( struct x11drv_win_data *data )
-         else if (!(style & WS_MINIMIZE))
-         {
-             if (!wm_is_steamcompmgr(data->display) || !fs_hack_enabled(monitor))
-+            {
-                 /* when fs hack is enabled, we don't want steamcompmgr to resize the window to be fullscreened */
-+                net_wm_bypass_compositor = 1;
-                 new_state |= (1 << NET_WM_STATE_FULLSCREEN);
-+            }
-         }
-     }
-     else if (style & WS_MAXIMIZE)
-diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index 4c938d9d1c0..4028329de9f 100644
---- a/dlls/winex11.drv/x11drv.h
-+++ b/dlls/winex11.drv/x11drv.h
-@@ -447,6 +447,7 @@ enum x11drv_atoms
-     XATOM__NET_SYSTEM_TRAY_OPCODE,
-     XATOM__NET_SYSTEM_TRAY_S0,
-     XATOM__NET_SYSTEM_TRAY_VISUAL,
-+    XATOM__NET_WM_BYPASS_COMPOSITOR,
-     XATOM__NET_WM_ICON,
-     XATOM__NET_WM_MOVERESIZE,
-     XATOM__NET_WM_NAME,
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 828f7630897..0f5bb11da57 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -160,6 +160,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
-     "_NET_SYSTEM_TRAY_OPCODE",
-     "_NET_SYSTEM_TRAY_S0",
-     "_NET_SYSTEM_TRAY_VISUAL",
-+    "_NET_WM_BYPASS_COMPOSITOR",
-     "_NET_WM_ICON",
-     "_NET_WM_MOVERESIZE",
-     "_NET_WM_NAME",
 From ad8ec5900d2afee6bebf3c053b04fec0584bf061 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 14 Jan 2019 10:47:12 -0600
@@ -6404,6 +6327,73 @@ index 852506194b1..b0a28be895f 100644
      XNoOp( data->display );
      XFlush( data->display ); /* avoids bad mouse lag in games that do their own mouse warping */
      TRACE( "warped to (fake) %d,%d serial %lu\n", x, y, data->warp_serial );
+From fbc9f076a9175090363739514910eea77bd9426b Mon Sep 17 00:00:00 2001
+From: Kai Krakow <kai@kaishome.de>
+Date: Thu, 4 Oct 2018 05:51:20 +0200
+Subject: [PATCH] winex11.drv: Bypass compositor in fullscreen mode.
+
+Bypass the compositor in fullscreen mode. This reduces stutter
+introduced by window updates in the background and also allows for maybe
+a few more FPS. To not change the visual appearance of the desktop for
+windowed games, this hack only enables itself when the game was switched
+to fullscreen mode, and returns to default WM setting when the game
+leaves fullscreen mode.
+
+Compositors tend to cause severe stutter if the game is GPU-bound.
+---
+ dlls/winex11.drv/window.c      | 4 ++++
+ dlls/winex11.drv/x11drv.h      | 1 +
+ dlls/winex11.drv/x11drv_main.c | 1 +
+ 3 files changed, 6 insertions(+)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 123e89a4f81..141446d3b25 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -1069,6 +1069,7 @@ void update_net_wm_states( struct x11drv_win_data *data )
+ {
+     DWORD i, style, ex_style, new_state = 0;
+     HMONITOR monitor;
++    unsigned long net_wm_bypass_compositor = 0;
+ 
+     if (!data->managed) return;
+     if (data->whole_window == root_window) return;
+@@ -1084,8 +1085,11 @@ void update_net_wm_states( struct x11drv_win_data *data )
+         else if (!(style & WS_MINIMIZE))
+         {
+             if (!wm_is_steamcompmgr(data->display) || !fs_hack_enabled(monitor))
++            {
+                 /* when fs hack is enabled, we don't want steamcompmgr to resize the window to be fullscreened */
++                net_wm_bypass_compositor = 1;
+                 new_state |= (1 << NET_WM_STATE_FULLSCREEN);
++            }
+         }
+     }
+     else if (style & WS_MAXIMIZE)
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index 4c938d9d1c0..4028329de9f 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -447,6 +447,7 @@ enum x11drv_atoms
+     XATOM__NET_SYSTEM_TRAY_OPCODE,
+     XATOM__NET_SYSTEM_TRAY_S0,
+     XATOM__NET_SYSTEM_TRAY_VISUAL,
++    XATOM__NET_WM_BYPASS_COMPOSITOR,
+     XATOM__NET_WM_ICON,
+     XATOM__NET_WM_MOVERESIZE,
+     XATOM__NET_WM_NAME,
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index 828f7630897..0f5bb11da57 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -160,6 +160,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
+     "_NET_SYSTEM_TRAY_OPCODE",
+     "_NET_SYSTEM_TRAY_S0",
+     "_NET_SYSTEM_TRAY_VISUAL",
++    "_NET_WM_BYPASS_COMPOSITOR",
+     "_NET_WM_ICON",
+     "_NET_WM_MOVERESIZE",
+     "_NET_WM_NAME",
 From 849c75dff991d90456cf8cfa7b5bfbad67d48484 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 26 Jun 2019 18:42:37 +0200
@@ -7220,3 +7210,4 @@ index 0299c5b1876..06a5e64599f 100644
      clipping_cursor = FALSE;
      SendNotifyMessageW( GetDesktopWindow(), WM_X11DRV_CLIP_CURSOR_NOTIFY, 0, 0 );
  }
+
