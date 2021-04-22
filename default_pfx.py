@@ -50,9 +50,12 @@ def make_relative_symlink(target, linkname):
     os.symlink(rel, linkname)
 
 def setup_dll_symlinks(default_pfx_dir, dist_dir):
+    skip_dlls = [ 'amd_ags_x64.dll' ]
     for walk_dir, dirs, files in os.walk(default_pfx_dir):
         for file_ in files:
             filename = os.path.join(walk_dir, file_)
+            if file_ in skip_dlls:
+                continue
             if os.path.isfile(filename) and file_is_wine_builtin_dll(filename):
                 bitness = dll_bitness(filename)
                 if bitness == 32:

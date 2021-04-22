@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.3-1"
+CURRENT_PREFIX_VERSION="6.3-2"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -307,6 +307,13 @@ class CompatData:
                 except OSError:
                     log("Unable to write new registry file to " + self.prefix_dir + "system.reg")
                     pass
+
+            stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
+                              self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll" ]
+            for builtin in stale_builtins:
+                if os.path.lexists(builtin) and file_is_wine_builtin_dll(builtin):
+                    log("Removing stale builtin " + builtin)
+                    os.remove(builtin)
 
         except ValueError:
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
