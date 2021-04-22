@@ -687,11 +687,14 @@ class Session:
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
         #load environment overrides
+        used_user_settings = {}
         if os.path.exists(g_proton.user_settings_file):
             try:
                 import user_settings
                 for key, value in user_settings.user_settings.items():
-                    self.env.setdefault(key, value)
+                    if not key in self.env:
+                        self.env[key] = value
+                        used_user_settings[key] = value
             except:
                 log("************************************************")
                 log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
@@ -785,6 +788,14 @@ class Session:
                 self.log_file.write("Command: " + str(sys.argv[2:] + self.cmdlineappend) + "\n")
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
                 self.try_log_slr_versions()
+
+                #dump some important variables into the log header
+                for var in ["WINEDLLOVERRIDES", "WINEDEBUG"]:
+                    if var in os.environ:
+                        self.log_file.write("System " + var + ": " + os.environ[var] + "\n")
+                    if var in used_user_settings:
+                        self.log_file.write("User settings " + var + ": " + used_user_settings[var] + "\n")
+
                 self.log_file.write("======================\n")
                 self.log_file.flush()
         else:
