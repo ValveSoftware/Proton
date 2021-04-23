@@ -154,6 +154,7 @@ class Proton:
         self.lib_dir = self.path("dist/lib/")
         self.lib64_dir = self.path("dist/lib64/")
         self.fonts_dir = self.path("dist/share/fonts/")
+        self.wine_fonts_dir = self.path("dist/share/wine/fonts/")
         self.version_file = self.path("version")
         self.default_pfx_dir = self.path("dist/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
@@ -392,19 +393,21 @@ class CompatData:
 
     def create_fonts_symlinks(self):
         fontsmap = [
-            ( "LiberationSans-Regular.ttf", "arial.ttf" ),
-            ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
-            ( "LiberationSerif-Regular.ttf", "times.ttf" ),
-            ( "LiberationMono-Regular.ttf", "cour.ttf" ),
-            ( "LiberationMono-Bold.ttf", "courbd.ttf" ),
-            ( "SourceHanSansSCRegular.otf", "msyh.ttf" ),
+            ( g_proton.fonts_dir, "LiberationSans-Regular.ttf", "arial.ttf" ),
+            ( g_proton.fonts_dir, "LiberationSans-Bold.ttf", "arialbd.ttf" ),
+            ( g_proton.fonts_dir, "LiberationSerif-Regular.ttf", "times.ttf" ),
+            ( g_proton.fonts_dir, "LiberationMono-Regular.ttf", "cour.ttf" ),
+            ( g_proton.fonts_dir, "LiberationMono-Bold.ttf", "courbd.ttf" ),
+            ( g_proton.fonts_dir, "SourceHanSansSCRegular.otf", "msyh.ttf" ),
+
+            ( g_proton.wine_fonts_dir, "tahoma.ttf", "tahoma.ttf" ),
         ]
 
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
         for p in fontsmap:
-            lname = os.path.join(windowsfonts, p[1])
-            fname = os.path.join(g_proton.fonts_dir, p[0])
+            lname = os.path.join(windowsfonts, p[2])
+            fname = os.path.join(p[0], p[1])
             if os.path.lexists(lname):
                 if os.path.islink(lname):
                     os.remove(lname)
