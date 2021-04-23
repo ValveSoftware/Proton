@@ -396,6 +396,7 @@ class CompatData:
             ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
             ( "LiberationSerif-Regular.ttf", "times.ttf" ),
             ( "LiberationMono-Regular.ttf", "cour.ttf" ),
+            ( "LiberationMono-Bold.ttf", "courbd.ttf" ),
             ( "SourceHanSansSCRegular.otf", "msyh.ttf" ),
         ]
 
