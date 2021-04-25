@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.6-GE-1"
+CURRENT_PREFIX_VERSION="6.7-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -926,9 +926,7 @@ class Session:
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
-        if "vkd3dfl12" in self.compat_config:
-            if not "VKD3D_FEATURE_LEVEL" in self.env:
-                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
+        self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         if not "noxim" in self.compat_config:
             self.env.pop("WINE_ALLOW_XIM")
@@ -1114,16 +1112,32 @@ class Session:
                 self.dump_dbg_scripts()
             except OSError:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
-        commandstring = str([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
-        log("Running: " + commandstring)
-        self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
+
+        commandstring = str(sys.argv[2:] + self.cmdlineappend)
+        
+        # use a string check instead of single string in case we need to check for more in the future
+        check_args = [
+            'iscriptevaluator.exe' in commandstring,
+            'link2ea' in commandstring,
+            'getcompatpath' in  str(sys.argv[1]),
+            'getnativepath' in  str(sys.argv[1]),
+        ]
+
+        if any(check_args):
+            self.run_proc([g_proton.wine_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            #commandstring = str([g_proton.wine_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
+        else:
+            self.run_proc([g_proton.wine_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            #commandstring = str([g_proton.wine_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
+
+        #log("Running: " + commandstring)
 
 
 if __name__ == "__main__":
     if not "STEAM_COMPAT_DATA_PATH" in os.environ:
         log("No compat data path?")
         sys.exit(1)
-
+    
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
     g_proton.cleanup_legacy_dist()
@@ -1132,6 +1146,10 @@ if __name__ == "__main__":
     g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
     g_session = Session()
+    
+    #install stupid EA Origin if need.
+    if "link2ea" in str(sys.argv[2]):
+        os.environ["ORIGIN"] = "1"
 
     g_session.init_wine()
 
