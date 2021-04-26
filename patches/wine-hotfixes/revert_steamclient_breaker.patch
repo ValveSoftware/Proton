@@ -1,0 +1,1497 @@
+From 126a14ac9ade799f9cb88fb0c509b964c5d98e76 Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Fri, 23 Apr 2021 12:14:35 +0200
+Subject: [PATCH] ntdll: Implement
+ NtQuerySystemInformationEx(SystemSupportedProcessorArchitectures).
+
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/tests/info.c  | 114 +++++++++++++++++++++++++++++++++++++++
+ dlls/ntdll/unix/system.c |  38 +++++++++++++
+ 2 files changed, 152 insertions(+)
+
+diff --git a/dlls/ntdll/tests/info.c b/dlls/ntdll/tests/info.c
+index 56b6687467b..3a71a9f245c 100644
+--- a/dlls/ntdll/tests/info.c
++++ b/dlls/ntdll/tests/info.c
+@@ -2884,6 +2884,119 @@ static void test_query_data_alignment(void)
+ #endif
+ }
+ 
++static void test_process_architecture( HANDLE process, USHORT expect_machine, USHORT expect_native )
++{
++    NTSTATUS status;
++    ULONG i, len, buffer[8];
++
++    len = 0xdead;
++    status = pNtQuerySystemInformationEx( SystemSupportedProcessorArchitectures, &process, sizeof(process),
++                                          &buffer, sizeof(buffer), &len );
++    ok( !status, "failed %x\n", status );
++    ok( !(len & 3), "wrong len %x\n", len );
++    len /= sizeof(DWORD);
++    for (i = 0; i < len - 1; i++)
++    {
++        USHORT flags = HIWORD(buffer[i]);
++        USHORT machine = LOWORD(buffer[i]);
++
++        if (flags & 8)
++            ok( machine == expect_machine, "wrong current machine %x\n", buffer[i]);
++        else
++            ok( machine != expect_machine, "wrong machine %x\n", buffer[i]);
++
++        /* FIXME: not quite sure what the other flags mean,
++         * observed on amd64 Windows: (flags & 7) == 7 for MACHINE_AMD64 and 2 for MACHINE_I386
++         */
++        if (flags & 4)
++            ok( machine == expect_native, "wrong native machine %x\n", buffer[i]);
++        else
++            ok( machine != expect_native, "wrong machine %x\n", buffer[i]);
++    }
++    ok( !buffer[i], "missing terminating null\n" );
++
++    len = i * sizeof(DWORD);
++    status = pNtQuerySystemInformationEx( SystemSupportedProcessorArchitectures, &process, sizeof(process),
++                                          &buffer, len, &len );
++    ok( status == STATUS_BUFFER_TOO_SMALL, "failed %x\n", status );
++    ok( len == (i + 1) * sizeof(DWORD), "wrong len %u\n", len );
++}
++
++static void test_query_architectures(void)
++{
++#ifdef __i386__
++    USHORT current_machine = IMAGE_FILE_MACHINE_I386;
++    USHORT native_machine = is_wow64 ? IMAGE_FILE_MACHINE_AMD64 : IMAGE_FILE_MACHINE_I386;
++#elif defined __x86_64__
++    USHORT current_machine = IMAGE_FILE_MACHINE_AMD64;
++    USHORT native_machine = IMAGE_FILE_MACHINE_AMD64;
++#elif defined __arm__
++    USHORT current_machine = IMAGE_FILE_MACHINE_ARMNT;
++    USHORT native_machine = is_wow64 ? IMAGE_FILE_MACHINE_ARM64 : IMAGE_FILE_MACHINE_ARMNT;
++#elif defined __aarch64__
++    USHORT current_machine = IMAGE_FILE_MACHINE_ARM64;
++    USHORT native_machine = IMAGE_FILE_MACHINE_ARM64;
++#else
++    USHORT current_machine = 0;
++    USHORT native_machine = 0;
++#endif
++    PROCESS_INFORMATION pi;
++    STARTUPINFOA si = { sizeof(si) };
++    NTSTATUS status;
++    HANDLE process;
++    ULONG len, buffer[8];
++
++    if (!pNtQuerySystemInformationEx) return;
++
++    process = GetCurrentProcess();
++    status = pNtQuerySystemInformationEx( SystemSupportedProcessorArchitectures, &process, sizeof(process),
++                                          &buffer, sizeof(buffer), &len );
++    if (status == STATUS_INVALID_INFO_CLASS)
++    {
++        win_skip( "SystemSupportedProcessorArchitectures not supported\n" );
++        return;
++    }
++    ok( !status, "failed %x\n", status );
++
++    process = (HANDLE)0xdeadbeef;
++    status = pNtQuerySystemInformationEx( SystemSupportedProcessorArchitectures, &process, sizeof(process),
++                                          &buffer, sizeof(buffer), &len );
++    ok( status == STATUS_INVALID_HANDLE, "failed %x\n", status );
++    process = (HANDLE)0xdeadbeef;
++    status = pNtQuerySystemInformationEx( SystemSupportedProcessorArchitectures, &process, 3,
++                                          &buffer, sizeof(buffer), &len );
++    ok( status == STATUS_INVALID_PARAMETER || broken(status == STATUS_INVALID_HANDLE),
++        "failed %x\n", status );
++    process = GetCurrentProcess();
++    status = pNtQuerySystemInformationEx( SystemSupportedProcessorArchitectures, &process, 3,
++                                          &buffer, sizeof(buffer), &len );
++    ok( status == STATUS_INVALID_PARAMETER || broken( status == STATUS_SUCCESS),
++        "failed %x\n", status );
++    status = pNtQuerySystemInformationEx( SystemSupportedProcessorArchitectures, NULL, 0,
++                                          &buffer, sizeof(buffer), &len );
++    ok( status == STATUS_INVALID_PARAMETER, "failed %x\n", status );
++
++    test_process_architecture( GetCurrentProcess(), current_machine, native_machine );
++    test_process_architecture( 0, 0, native_machine );
++
++    if (CreateProcessA( "C:\\Program Files\\Internet Explorer\\iexplore.exe", NULL, NULL, NULL,
++                        FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi ))
++    {
++        test_process_architecture( pi.hProcess, native_machine, native_machine );
++        TerminateProcess( pi.hProcess, 0 );
++        CloseHandle( pi.hProcess );
++        CloseHandle( pi.hThread );
++    }
++    if (CreateProcessA( "C:\\Program Files (x86)\\Internet Explorer\\iexplore.exe", NULL, NULL, NULL,
++                        FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi ))
++    {
++        test_process_architecture( pi.hProcess, IMAGE_FILE_MACHINE_I386, native_machine );
++        TerminateProcess( pi.hProcess, 0 );
++        CloseHandle( pi.hProcess );
++        CloseHandle( pi.hThread );
++    }
++}
++
+ static void test_thread_lookup(void)
+ {
+     OBJECT_BASIC_INFORMATION obj_info;
+@@ -3145,6 +3258,7 @@ START_TEST(info)
+     test_query_cpusetinfo();
+     test_query_firmware();
+     test_query_data_alignment();
++    test_query_architectures();
+ 
+     /* NtPowerInformation */
+     test_query_battery();
+diff --git a/dlls/ntdll/unix/system.c b/dlls/ntdll/unix/system.c
+index d3e380b8c32..491cdb37b8f 100644
+--- a/dlls/ntdll/unix/system.c
++++ b/dlls/ntdll/unix/system.c
+@@ -2926,6 +2926,44 @@ NTSTATUS WINAPI NtQuerySystemInformationEx( SYSTEM_INFORMATION_CLASS class,
+             return ret;
+         break;
+     }
++
++    case SystemSupportedProcessorArchitectures:
++    {
++        HANDLE process;
++        ULONG i;
++        USHORT machine = 0;
++
++        if (!query || query_len < sizeof(HANDLE)) return STATUS_INVALID_PARAMETER;
++        process = *(HANDLE *)query;
++        if (process)
++        {
++            SERVER_START_REQ( get_process_info )
++            {
++                req->handle = wine_server_obj_handle( process );
++                if (!(ret = wine_server_call( req ))) machine = reply->machine;
++            }
++            SERVER_END_REQ;
++            if (ret) return ret;
++        }
++
++        len = (supported_machines_count + 1) * sizeof(ULONG);
++        if (size < len)
++        {
++            ret = STATUS_BUFFER_TOO_SMALL;
++            break;
++        }
++        for (i = 0; i < supported_machines_count; i++)
++        {
++            USHORT flags = 2;  /* supported (?) */
++            if (!i) flags |= 5;  /* native machine (?) */
++            if (supported_machines[i] == machine) flags |= 8;  /* current machine */
++            ((DWORD *)info)[i] = MAKELONG( supported_machines[i], flags );
++        }
++        ((DWORD *)info)[i] = 0;
++        ret = STATUS_SUCCESS;
++        break;
++    }
++
+     default:
+         FIXME( "(0x%08x,%p,%u,%p,%u,%p) stub\n", class, query, query_len, info, size, ret_size );
+         break;
+From a51f26badfe6b3c23dd569b0540801a622e3bde5 Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Fri, 23 Apr 2021 12:14:04 +0200
+Subject: [PATCH] server: Return the process machine from the main exe instead
+ of a CPU flag.
+
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/process.c      | 3 ++-
+ include/wine/server_protocol.h | 6 +++---
+ server/mapping.c               | 1 +
+ server/process.c               | 2 +-
+ server/process.h               | 3 ++-
+ server/protocol.def            | 2 +-
+ server/request.h               | 2 +-
+ server/trace.c                 | 2 +-
+ 8 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/ntdll/unix/process.c b/dlls/ntdll/unix/process.c
+index 6112dd74c4a..6347d9d7c27 100644
+--- a/dlls/ntdll/unix/process.c
++++ b/dlls/ntdll/unix/process.c
+@@ -1259,7 +1259,8 @@ NTSTATUS WINAPI NtQueryInformationProcess( HANDLE handle, PROCESSINFOCLASS class
+                 {
+                     req->handle = wine_server_obj_handle( handle );
+                     if (!(ret = wine_server_call( req )))
+-                        val = (reply->cpu != CPU_x86_64 && reply->cpu != CPU_ARM64);
++                        val = (reply->machine != IMAGE_FILE_MACHINE_AMD64 &&
++                               reply->machine != IMAGE_FILE_MACHINE_ARM64);
+                 }
+                 SERVER_END_REQ;
+             }
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index a0300dc0d31..e9fbc2cca24 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -1010,9 +1010,9 @@ struct get_process_info_reply
+     timeout_t    end_time;
+     int          exit_code;
+     int          priority;
+-    client_cpu_t cpu;
++    unsigned short machine;
+     /* VARARG(image,pe_image_info); */
+-    char __pad_60[4];
++    char __pad_58[6];
+ };
+ 
+ 
+diff --git a/server/mapping.c b/server/mapping.c
+index 8ac3189f9a4..3c4b707f282 100644
+--- a/server/mapping.c
++++ b/server/mapping.c
+@@ -362,6 +362,7 @@ static void add_process_view( struct thread *thread, struct memory_view *view )
+         else if (!(view->image.image_charact & IMAGE_FILE_DLL))
+         {
+             /* main exe */
++            process->machine = view->image.machine;
+             list_add_head( &process->views, &view->entry );
+             if (get_view_nt_name( view, &name ) && (process->image = memdup( name.str, name.len )))
+                 process->imagelen = name.len;
+diff --git a/server/process.c b/server/process.c
+index d819f03a615..780a2076a71 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -1317,7 +1317,7 @@ DECL_HANDLER(get_process_info)
+         reply->peb              = process->peb;
+         reply->start_time       = process->start_time;
+         reply->end_time         = process->end_time;
+-        reply->cpu              = process->cpu;
++        reply->machine          = process->machine;
+         if (get_reply_max_size())
+         {
+             client_ptr_t base;
+diff --git a/server/process.h b/server/process.h
+index 58a211f2d0c..b49b8c9b919 100644
+--- a/server/process.h
++++ b/server/process.h
+@@ -53,6 +53,7 @@ struct process
+     process_id_t         group_id;        /* group id of the process */
+     struct timeout_user *sigkill_timeout; /* timeout for final SIGKILL */
+     enum cpu_type        cpu;             /* client CPU type */
++    unsigned short       machine;         /* client machine type */
+     int                  unix_pid;        /* Unix pid for final SIGKILL */
+     int                  exit_code;       /* process exit code */
+     int                  running_threads; /* number of threads running in this process */
+@@ -66,7 +67,7 @@ struct process
+     unsigned int         is_terminating:1;/* is process terminating? */
+     data_size_t          imagelen;        /* length of image path in bytes */
+     WCHAR               *image;           /* main exe image full path */
+-    struct job          *job;             /* job object ascoicated with this process */
++    struct job          *job;             /* job object associated with this process */
+     struct list          job_entry;       /* list entry for job object */
+     struct list          asyncs;          /* list of async object owned by the process */
+     struct list          locks;           /* list of file locks owned by the process */
+diff --git a/server/protocol.def b/server/protocol.def
+index e9d7d1b0b5e..7c22faef794 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -963,7 +963,7 @@ typedef struct
+     timeout_t    end_time;         /* process end time */
+     int          exit_code;        /* process exit code */
+     int          priority;         /* priority class */
+-    client_cpu_t cpu;              /* CPU that this process is running on */
++    unsigned short machine;        /* process architecture */
+     VARARG(image,pe_image_info);   /* image info for main exe */
+ @END
+ 
+diff --git a/server/request.h b/server/request.h
+index 063065a49c2..b8424b675c7 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -783,7 +783,7 @@ C_ASSERT( FIELD_OFFSET(struct get_process_info_reply, start_time) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct get_process_info_reply, end_time) == 40 );
+ C_ASSERT( FIELD_OFFSET(struct get_process_info_reply, exit_code) == 48 );
+ C_ASSERT( FIELD_OFFSET(struct get_process_info_reply, priority) == 52 );
+-C_ASSERT( FIELD_OFFSET(struct get_process_info_reply, cpu) == 56 );
++C_ASSERT( FIELD_OFFSET(struct get_process_info_reply, machine) == 56 );
+ C_ASSERT( sizeof(struct get_process_info_reply) == 64 );
+ C_ASSERT( FIELD_OFFSET(struct get_process_debug_info_request, handle) == 12 );
+ C_ASSERT( sizeof(struct get_process_debug_info_request) == 16 );
+diff --git a/server/trace.c b/server/trace.c
+index 6feacc48af1..96747333971 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -1503,7 +1503,7 @@ static void dump_get_process_info_reply( const struct get_process_info_reply *re
+     dump_timeout( ", end_time=", &req->end_time );
+     fprintf( stderr, ", exit_code=%d", req->exit_code );
+     fprintf( stderr, ", priority=%d", req->priority );
+-    dump_client_cpu( ", cpu=", &req->cpu );
++    fprintf( stderr, ", machine=%04x", req->machine );
+     dump_varargs_pe_image_info( ", image=", cur_size );
+ }
+ 
+From 96865eb7e73fb4e5a1a566c1b15c4b6c807eaffc Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Fri, 23 Apr 2021 11:58:32 +0200
+Subject: [PATCH] server: Return a list of supported machines instead of a CPU
+ bitmask.
+
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/process.c      |  2 +-
+ dlls/ntdll/unix/server.c       | 51 +++++++++++++++++++---------------
+ dlls/ntdll/unix/unix_private.h |  3 +-
+ include/wine/server_protocol.h |  5 ++--
+ server/object.h                |  2 ++
+ server/protocol.def            |  2 +-
+ server/registry.c              | 27 ++++++++++++++++++
+ server/request.h               |  1 -
+ server/thread.c                |  5 ++--
+ server/trace.c                 | 17 +++++++++++-
+ 10 files changed, 83 insertions(+), 32 deletions(-)
+
+diff --git a/dlls/ntdll/unix/process.c b/dlls/ntdll/unix/process.c
+index 7100b46f1ef3..6112dd74c4a0 100644
+--- a/dlls/ntdll/unix/process.c
++++ b/dlls/ntdll/unix/process.c
+@@ -1253,7 +1253,7 @@ NTSTATUS WINAPI NtQueryInformationProcess( HANDLE handle, PROCESSINFOCLASS class
+             ULONG_PTR val = 0;
+ 
+             if (handle == GetCurrentProcess()) val = is_wow64;
+-            else if (server_cpus & ((1 << CPU_x86_64) | (1 << CPU_ARM64)))
++            else if (is_win64 || is_wow64)
+             {
+                 SERVER_START_REQ( get_process_info )
+                 {
+diff --git a/dlls/ntdll/unix/server.c b/dlls/ntdll/unix/server.c
+index e775c22ae168..7849fe927f56 100644
+--- a/dlls/ntdll/unix/server.c
++++ b/dlls/ntdll/unix/server.c
+@@ -101,7 +101,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(server);
+ 
+ static const char *server_dir;
+ 
+-unsigned int server_cpus = 0;
++unsigned int supported_machines_count = 0;
++USHORT supported_machines[8] = { 0 };
+ BOOL is_wow64 = FALSE;
+ BOOL process_exiting = FALSE;
+ 
+@@ -1480,10 +1481,10 @@ void process_exit_wrapper( int status )
+  */
+ size_t server_init_process(void)
+ {
+-    static const char *cpu_names[] = { "x86", "x86_64", "ARM", "ARM64" };
+     const char *arch = getenv( "WINEARCH" );
+     const char *env_socket = getenv( "WINESERVERSOCKET" );
+     obj_handle_t version;
++    unsigned int i;
+     int ret, reply_pipe;
+     struct sigaction sig_act;
+     size_t info_size;
+@@ -1561,41 +1562,47 @@ size_t server_init_process(void)
+         req->wait_fd     = ntdll_get_thread_data()->wait_fd[1];
+         req->debug_level = (TRACE_ON(server) != 0);
+         req->cpu         = client_cpu;
++        wine_server_set_reply( req, supported_machines, sizeof(supported_machines) );
+         ret = wine_server_call( req );
+         NtCurrentTeb()->ClientId.UniqueProcess = ULongToHandle(reply->pid);
+         NtCurrentTeb()->ClientId.UniqueThread  = ULongToHandle(reply->tid);
+         info_size         = reply->info_size;
+         server_start_time = reply->server_start;
+-        server_cpus       = reply->all_cpus;
++        supported_machines_count = wine_server_reply_size( reply ) / sizeof(*supported_machines);
+     }
+     SERVER_END_REQ;
+     close( reply_pipe );
+ 
+-#ifndef _WIN64
+-    is_wow64 = (server_cpus & ((1 << CPU_x86_64) | (1 << CPU_ARM64))) != 0;
+-    init_teb64( NtCurrentTeb() );
+-#endif
++    if (ret) server_protocol_error( "init_first_thread failed with status %x\n", ret );
++
++    if (!supported_machines_count)
++        fatal_error( "'%s' is a 64-bit installation, it cannot be used with a 32-bit wineserver.\n",
++                     config_dir );
+ 
+-    switch (ret)
++    switch (supported_machines[0])
+     {
+-    case STATUS_SUCCESS:
+-        if (arch)
++    case IMAGE_FILE_MACHINE_AMD64:
++    case IMAGE_FILE_MACHINE_ARM64:
++        if (arch && !strcmp( arch, "win32" ))
++            fatal_error( "WINEARCH set to win32 but '%s' is a 64-bit installation.\n", config_dir );
++        if (!is_win64)
+         {
+-            if (!strcmp( arch, "win32" ) && (is_win64 || is_wow64))
+-                fatal_error( "WINEARCH set to win32 but '%s' is a 64-bit installation.\n", config_dir );
+-            if (!strcmp( arch, "win64" ) && !is_win64 && !is_wow64)
+-                fatal_error( "WINEARCH set to win64 but '%s' is a 32-bit installation.\n", config_dir );
++            is_wow64 = TRUE;
++            init_teb64( NtCurrentTeb() );
+         }
+-        return info_size;
+-    case STATUS_INVALID_IMAGE_WIN_64:
+-        fatal_error( "'%s' is a 32-bit installation, it cannot support 64-bit applications.\n", config_dir );
+-    case STATUS_NOT_SUPPORTED:
+-        fatal_error( "'%s' is a 64-bit installation, it cannot be used with a 32-bit wineserver.\n", config_dir );
+-    case STATUS_INVALID_IMAGE_FORMAT:
+-        fatal_error( "wineserver doesn't support the %s architecture\n", cpu_names[client_cpu] );
++        break;
+     default:
+-        server_protocol_error( "init_first_thread failed with status %x\n", ret );
++        if (is_win64)
++            fatal_error( "'%s' is a 32-bit installation, it cannot support 64-bit applications.\n", config_dir );
++        if (arch && !strcmp( arch, "win64" ))
++            fatal_error( "WINEARCH set to win64 but '%s' is a 32-bit installation.\n", config_dir );
++        break;
+     }
++
++    for (i = 0; i < supported_machines_count; i++)
++        if (supported_machines[i] == current_machine) return info_size;
++
++    fatal_error( "wineserver doesn't support the %04x architecture\n", current_machine );
+ }
+ 
+ 
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index a9dfe7ceaafb..c75d5b6e7010 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -127,7 +127,8 @@ extern char **main_argv DECLSPEC_HIDDEN;
+ extern char **main_envp DECLSPEC_HIDDEN;
+ extern WCHAR **main_wargv DECLSPEC_HIDDEN;
+ extern const WCHAR system_dir[] DECLSPEC_HIDDEN;
+-extern unsigned int server_cpus DECLSPEC_HIDDEN;
++extern unsigned int supported_machines_count DECLSPEC_HIDDEN;
++extern USHORT supported_machines[8] DECLSPEC_HIDDEN;
+ extern BOOL is_wow64 DECLSPEC_HIDDEN;
+ extern BOOL process_exiting DECLSPEC_HIDDEN;
+ extern HANDLE keyed_event DECLSPEC_HIDDEN;
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 2b5fe25cb67a..a0300dc0d31c 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -936,7 +936,8 @@ struct init_first_thread_reply
+     thread_id_t  tid;
+     timeout_t    server_start;
+     data_size_t  info_size;
+-    unsigned int all_cpus;
++    /* VARARG(machines,ushorts); */
++    char __pad_28[4];
+ };
+ 
+ 
+diff --git a/server/object.h b/server/object.h
+index 1aef43018b22..604362d6e2cf 100644
+--- a/server/object.h
++++ b/server/object.h
+@@ -239,6 +239,8 @@ extern void generate_startup_debug_events( struct process *process );
+ /* registry functions */
+ 
+ extern unsigned int get_prefix_cpu_mask(void);
++extern unsigned int supported_machines_count;
++extern unsigned short supported_machines[8];
+ extern void init_registry(void);
+ extern void flush_registry(void);
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 73d5eaf261e2..e9d7d1b0b5e7 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -915,7 +915,7 @@ typedef struct
+     thread_id_t  tid;          /* thread id of the new thread */
+     timeout_t    server_start; /* server start time */
+     data_size_t  info_size;    /* total size of startup info */
+-    unsigned int all_cpus;     /* bitset of supported CPUs */
++    VARARG(machines,ushorts);  /* array of supported machines */
+ @END
+ 
+ 
+diff --git a/server/registry.c b/server/registry.c
+index 74da4d1d9a41..086297379e43 100644
+--- a/server/registry.c
++++ b/server/registry.c
+@@ -145,6 +145,8 @@ struct save_branch_info
+ static int save_branch_count;
+ static struct save_branch_info save_branch_info[MAX_SAVE_BRANCH_INFO];
+ 
++unsigned int supported_machines_count = 0;
++unsigned short supported_machines[8];
+ 
+ /* information about a file being loaded */
+ struct file_load_info
+@@ -1795,6 +1797,29 @@ unsigned int get_prefix_cpu_mask(void)
+     }
+ }
+ 
++static void init_supported_machines(void)
++{
++    unsigned int count = 0;
++#ifdef __i386__
++    if (prefix_type == PREFIX_32BIT) supported_machines[count++] = IMAGE_FILE_MACHINE_I386;
++#elif defined(__x86_64__)
++    if (prefix_type == PREFIX_64BIT) supported_machines[count++] = IMAGE_FILE_MACHINE_AMD64;
++    supported_machines[count++] = IMAGE_FILE_MACHINE_I386;
++#elif defined(__arm__)
++    if (prefix_type == PREFIX_32BIT) supported_machines[count++] = IMAGE_FILE_MACHINE_ARMNT;
++#elif defined(__aarch64__)
++    if (prefix_type == PREFIX_64BIT)
++    {
++        supported_machines[count++] = IMAGE_FILE_MACHINE_ARM64;
++        supported_machines[count++] = IMAGE_FILE_MACHINE_I386;
++    }
++    supported_machines[count++] = IMAGE_FILE_MACHINE_ARMNT;
++#else
++#error Unsupported machine
++#endif
++    supported_machines_count = count;
++}
++
+ /* registry initialisation */
+ void init_registry(void)
+ {
+@@ -1837,6 +1862,8 @@ void init_registry(void)
+     else if (prefix_type == PREFIX_UNKNOWN)
+         prefix_type = PREFIX_32BIT;
+ 
++    init_supported_machines();
++
+     /* load userdef.reg into Registry\User\.Default */
+ 
+     if (!(key = create_key_recursive( root_key, &HKU_name, current_time )))
+diff --git a/server/request.h b/server/request.h
+index a1e80a88da2f..063065a49c2a 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -752,7 +752,6 @@ C_ASSERT( FIELD_OFFSET(struct init_first_thread_reply, pid) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct init_first_thread_reply, tid) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct init_first_thread_reply, server_start) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct init_first_thread_reply, info_size) == 24 );
+-C_ASSERT( FIELD_OFFSET(struct init_first_thread_reply, all_cpus) == 28 );
+ C_ASSERT( sizeof(struct init_first_thread_reply) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct init_thread_request, unix_tid) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct init_thread_request, reply_fd) == 16 );
+diff --git a/server/thread.c b/server/thread.c
+index 5cfa790af72c..a649dc432f6e 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -1445,8 +1445,6 @@ DECL_HANDLER(init_first_thread)
+         return;
+     }
+ 
+-    if (!is_cpu_supported( req->cpu )) return;
+-
+     current->unix_pid = process->unix_pid = req->unix_pid;
+     current->unix_tid = req->unix_tid;
+     current->teb      = req->teb;
+@@ -1465,7 +1463,8 @@ DECL_HANDLER(init_first_thread)
+     reply->tid          = get_thread_id( current );
+     reply->info_size    = get_process_startup_info_size( process );
+     reply->server_start = server_start_time;
+-    reply->all_cpus     = supported_cpus & get_prefix_cpu_mask();
++    set_reply_data( supported_machines,
++                    min( supported_machines_count * sizeof(unsigned short), get_reply_max_size() ));
+ }
+ 
+ /* initialize a new thread */
+diff --git a/server/trace.c b/server/trace.c
+index 2c50495d52c3..6feacc48af14 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -485,6 +485,21 @@ static void dump_varargs_uints64( const char *prefix, data_size_t size )
+     remove_data( size );
+ }
+ 
++static void dump_varargs_ushorts( const char *prefix, data_size_t size )
++{
++    const unsigned short *data = cur_data;
++    data_size_t len = size / sizeof(*data);
++
++    fprintf( stderr, "%s{", prefix );
++    while (len > 0)
++    {
++        fprintf( stderr, "%04x", *data++ );
++        if (--len) fputc( ',', stderr );
++    }
++    fputc( '}', stderr );
++    remove_data( size );
++}
++
+ static void dump_varargs_apc_result( const char *prefix, data_size_t size )
+ {
+     const apc_result_t *result = cur_data;
+@@ -1432,7 +1447,7 @@ static void dump_init_first_thread_reply( const struct init_first_thread_reply *
+     fprintf( stderr, ", tid=%04x", req->tid );
+     dump_timeout( ", server_start=", &req->server_start );
+     fprintf( stderr, ", info_size=%u", req->info_size );
+-    fprintf( stderr, ", all_cpus=%08x", req->all_cpus );
++    dump_varargs_ushorts( ", machines=", cur_size );
+ }
+ 
+ static void dump_init_thread_request( const struct init_thread_request *req )
+From 191fd47e386b89089d45dee1a554231c32913802 Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Fri, 23 Apr 2021 12:39:48 +0200
+Subject: [PATCH] server: Get rid of the remaining PowerPC support.
+
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/kernel32/module.c         |  3 ---
+ dlls/ntdll/unix/process.c      |  2 +-
+ dlls/ntdll/unix/server.c       |  2 +-
+ include/wine/server_protocol.h |  8 ++------
+ server/mapping.c               |  3 ---
+ server/protocol.def            |  6 +-----
+ server/thread.c                |  3 ---
+ server/trace.c                 | 21 ---------------------
+ 8 files changed, 5 insertions(+), 43 deletions(-)
+
+diff --git a/dlls/kernel32/module.c b/dlls/kernel32/module.c
+index 2f47423e74b..adf6b3c9a60 100644
+--- a/dlls/kernel32/module.c
++++ b/dlls/kernel32/module.c
+@@ -194,10 +194,7 @@ BOOL WINAPI GetBinaryTypeW( LPCWSTR name, LPDWORD type )
+             switch (info.Machine)
+             {
+             case IMAGE_FILE_MACHINE_I386:
+-            case IMAGE_FILE_MACHINE_ARM:
+-            case IMAGE_FILE_MACHINE_THUMB:
+             case IMAGE_FILE_MACHINE_ARMNT:
+-            case IMAGE_FILE_MACHINE_POWERPC:
+                 *type = SCS_32BIT_BINARY;
+                 return TRUE;
+             case IMAGE_FILE_MACHINE_AMD64:
+diff --git a/dlls/ntdll/unix/process.c b/dlls/ntdll/unix/process.c
+index 6782ceb647d..7100b46f1ef 100644
+--- a/dlls/ntdll/unix/process.c
++++ b/dlls/ntdll/unix/process.c
+@@ -70,7 +70,7 @@ static ULONG execute_flags = MEM_EXECUTE_OPTION_DISABLE | (sizeof(void *) > size
+                                                            MEM_EXECUTE_OPTION_DISABLE_THUNK_EMULATION |
+                                                            MEM_EXECUTE_OPTION_PERMANENT : 0);
+ 
+-static const char * const cpu_names[] = { "x86", "x86_64", "PowerPC", "ARM", "ARM64" };
++static const char * const cpu_names[] = { "x86", "x86_64", "ARM", "ARM64" };
+ 
+ static UINT process_error_mode;
+ 
+diff --git a/dlls/ntdll/unix/server.c b/dlls/ntdll/unix/server.c
+index 52e390e75ce..e775c22ae16 100644
+--- a/dlls/ntdll/unix/server.c
++++ b/dlls/ntdll/unix/server.c
+@@ -1480,7 +1480,7 @@ void process_exit_wrapper( int status )
+  */
+ size_t server_init_process(void)
+ {
+-    static const char *cpu_names[] = { "x86", "x86_64", "PowerPC", "ARM", "ARM64" };
++    static const char *cpu_names[] = { "x86", "x86_64", "ARM", "ARM64" };
+     const char *arch = getenv( "WINEARCH" );
+     const char *env_socket = getenv( "WINESERVERSOCKET" );
+     obj_handle_t version;
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 5a372699e75..2b5fe25cb67 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -112,7 +112,7 @@ typedef union
+ 
+ enum cpu_type
+ {
+-    CPU_x86, CPU_x86_64, CPU_POWERPC, CPU_ARM, CPU_ARM64
++    CPU_x86, CPU_x86_64, CPU_ARM, CPU_ARM64
+ };
+ typedef int client_cpu_t;
+ 
+@@ -126,7 +126,6 @@ typedef struct
+         struct { unsigned int eip, ebp, esp, eflags, cs, ss; } i386_regs;
+         struct { unsigned __int64 rip, rbp, rsp;
+                  unsigned int cs, ss, flags, __pad; } x86_64_regs;
+-        struct { unsigned int iar, msr, ctr, lr, dar, dsisr, trap, __pad; } powerpc_regs;
+         struct { unsigned int sp, lr, pc, cpsr; } arm_regs;
+         struct { unsigned __int64 sp, pc, pstate; } arm64_regs;
+     } ctl;
+@@ -135,7 +134,6 @@ typedef struct
+         struct { unsigned int eax, ebx, ecx, edx, esi, edi; } i386_regs;
+         struct { unsigned __int64 rax,rbx, rcx, rdx, rsi, rdi,
+                                   r8, r9, r10, r11, r12, r13, r14, r15; } x86_64_regs;
+-        struct { unsigned int gpr[32], cr, xer; } powerpc_regs;
+         struct { unsigned int r[13]; } arm_regs;
+         struct { unsigned __int64 x[31]; } arm64_regs;
+     } integer;
+@@ -149,7 +147,6 @@ typedef struct
+         struct { unsigned int ctrl, status, tag, err_off, err_sel, data_off, data_sel, cr0npx;
+                  unsigned char regs[80]; } i386_regs;
+         struct { struct { unsigned __int64 low, high; } fpregs[32]; } x86_64_regs;
+-        struct { double fpr[32], fpscr; } powerpc_regs;
+         struct { unsigned __int64 d[32]; unsigned int fpscr; } arm_regs;
+         struct { struct { unsigned __int64 low, high; } q[32]; unsigned int fpcr, fpsr; } arm64_regs;
+     } fp;
+@@ -157,7 +154,6 @@ typedef struct
+     {
+         struct { unsigned int dr0, dr1, dr2, dr3, dr6, dr7; } i386_regs;
+         struct { unsigned __int64 dr0, dr1, dr2, dr3, dr6, dr7; } x86_64_regs;
+-        struct { unsigned int dr[8]; } powerpc_regs;
+         struct { unsigned int bvr[8], bcr[8], wvr[1], wcr[1]; } arm_regs;
+         struct { unsigned __int64 bvr[8], wvr[2]; unsigned int bcr[8], wcr[2]; } arm64_regs;
+     } debug;
+diff --git a/server/mapping.c b/server/mapping.c
+index 0dcaa13e91d..8ac3189f9a4 100644
+--- a/server/mapping.c
++++ b/server/mapping.c
+@@ -678,9 +678,6 @@ static unsigned int get_image_params( struct mapping *mapping, file_pos_t file_s
+         case IMAGE_FILE_MACHINE_ARMNT:
+             if (cpu_mask & (CPU_FLAG(CPU_ARM) | CPU_FLAG(CPU_ARM64))) break;
+             return STATUS_INVALID_IMAGE_FORMAT;
+-        case IMAGE_FILE_MACHINE_POWERPC:
+-            if (cpu_mask & CPU_FLAG(CPU_POWERPC)) break;
+-            return STATUS_INVALID_IMAGE_FORMAT;
+         default:
+             return STATUS_INVALID_IMAGE_FORMAT;
+         }
+diff --git a/server/protocol.def b/server/protocol.def
+index 9ea6967acdd..73d5eaf261e 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -128,7 +128,7 @@ typedef union
+ /* supported CPU types */
+ enum cpu_type
+ {
+-    CPU_x86, CPU_x86_64, CPU_POWERPC, CPU_ARM, CPU_ARM64
++    CPU_x86, CPU_x86_64, CPU_ARM, CPU_ARM64
+ };
+ typedef int client_cpu_t;
+ 
+@@ -142,7 +142,6 @@ typedef struct
+         struct { unsigned int eip, ebp, esp, eflags, cs, ss; } i386_regs;
+         struct { unsigned __int64 rip, rbp, rsp;
+                  unsigned int cs, ss, flags, __pad; } x86_64_regs;
+-        struct { unsigned int iar, msr, ctr, lr, dar, dsisr, trap, __pad; } powerpc_regs;
+         struct { unsigned int sp, lr, pc, cpsr; } arm_regs;
+         struct { unsigned __int64 sp, pc, pstate; } arm64_regs;
+     } ctl;  /* selected by SERVER_CTX_CONTROL */
+@@ -151,7 +150,6 @@ typedef struct
+         struct { unsigned int eax, ebx, ecx, edx, esi, edi; } i386_regs;
+         struct { unsigned __int64 rax,rbx, rcx, rdx, rsi, rdi,
+                                   r8, r9, r10, r11, r12, r13, r14, r15; } x86_64_regs;
+-        struct { unsigned int gpr[32], cr, xer; } powerpc_regs;
+         struct { unsigned int r[13]; } arm_regs;
+         struct { unsigned __int64 x[31]; } arm64_regs;
+     } integer;  /* selected by SERVER_CTX_INTEGER */
+@@ -165,7 +163,6 @@ typedef struct
+         struct { unsigned int ctrl, status, tag, err_off, err_sel, data_off, data_sel, cr0npx;
+                  unsigned char regs[80]; } i386_regs;
+         struct { struct { unsigned __int64 low, high; } fpregs[32]; } x86_64_regs;
+-        struct { double fpr[32], fpscr; } powerpc_regs;
+         struct { unsigned __int64 d[32]; unsigned int fpscr; } arm_regs;
+         struct { struct { unsigned __int64 low, high; } q[32]; unsigned int fpcr, fpsr; } arm64_regs;
+     } fp;  /* selected by SERVER_CTX_FLOATING_POINT */
+@@ -173,7 +170,6 @@ typedef struct
+     {
+         struct { unsigned int dr0, dr1, dr2, dr3, dr6, dr7; } i386_regs;
+         struct { unsigned __int64 dr0, dr1, dr2, dr3, dr6, dr7; } x86_64_regs;
+-        struct { unsigned int dr[8]; } powerpc_regs;
+         struct { unsigned int bvr[8], bcr[8], wvr[1], wcr[1]; } arm_regs;
+         struct { unsigned __int64 bvr[8], wvr[2]; unsigned int bcr[8], wcr[2]; } arm64_regs;
+     } debug;  /* selected by SERVER_CTX_DEBUG_REGISTERS */
+diff --git a/server/thread.c b/server/thread.c
+index 66f1057d1db..5cfa790af72 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -57,8 +57,6 @@
+ static const unsigned int supported_cpus = CPU_FLAG(CPU_x86);
+ #elif defined(__x86_64__)
+ static const unsigned int supported_cpus = CPU_FLAG(CPU_x86_64) | CPU_FLAG(CPU_x86);
+-#elif defined(__powerpc__)
+-static const unsigned int supported_cpus = CPU_FLAG(CPU_POWERPC);
+ #elif defined(__arm__)
+ static const unsigned int supported_cpus = CPU_FLAG(CPU_ARM);
+ #elif defined(__aarch64__)
+@@ -1313,7 +1311,6 @@ static unsigned int get_context_system_regs( enum cpu_type cpu )
+     {
+     case CPU_x86:     return SERVER_CTX_DEBUG_REGISTERS;
+     case CPU_x86_64:  return SERVER_CTX_DEBUG_REGISTERS;
+-    case CPU_POWERPC: return 0;
+     case CPU_ARM:     return SERVER_CTX_DEBUG_REGISTERS;
+     case CPU_ARM64:   return SERVER_CTX_DEBUG_REGISTERS;
+     }
+diff --git a/server/trace.c b/server/trace.c
+index 67b2d0c8ec9..2c50495d52c 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -154,7 +154,6 @@ static void dump_client_cpu( const char *prefix, const client_cpu_t *code )
+ #define CASE(c) case CPU_##c: fprintf( stderr, "%s%s", prefix, #c ); break
+         CASE(x86);
+         CASE(x86_64);
+-        CASE(POWERPC);
+         CASE(ARM);
+         CASE(ARM64);
+         default: fprintf( stderr, "%s%u", prefix, *code ); break;
+@@ -696,26 +695,6 @@ static void dump_varargs_context( const char *prefix, data_size_t size )
+             dump_uints( ",ymm_high=", (const unsigned int *)ctx.ymm.ymm_high_regs.ymm_high,
+                         sizeof(ctx.ymm.ymm_high_regs) / sizeof(int) );
+         break;
+-    case CPU_POWERPC:
+-        if (ctx.flags & SERVER_CTX_CONTROL)
+-            fprintf( stderr, ",iar=%08x,msr=%08x,ctr=%08x,lr=%08x,dar=%08x,dsisr=%08x,trap=%08x",
+-                     ctx.ctl.powerpc_regs.iar, ctx.ctl.powerpc_regs.msr, ctx.ctl.powerpc_regs.ctr,
+-                     ctx.ctl.powerpc_regs.lr, ctx.ctl.powerpc_regs.dar, ctx.ctl.powerpc_regs.dsisr,
+-                     ctx.ctl.powerpc_regs.trap );
+-        if (ctx.flags & SERVER_CTX_INTEGER)
+-        {
+-            for (i = 0; i < 32; i++) fprintf( stderr, ",gpr%u=%08x", i, ctx.integer.powerpc_regs.gpr[i] );
+-            fprintf( stderr, ",cr=%08x,xer=%08x",
+-                     ctx.integer.powerpc_regs.cr, ctx.integer.powerpc_regs.xer );
+-        }
+-        if (ctx.flags & SERVER_CTX_DEBUG_REGISTERS)
+-            for (i = 0; i < 8; i++) fprintf( stderr, ",dr%u=%08x", i, ctx.debug.powerpc_regs.dr[i] );
+-        if (ctx.flags & SERVER_CTX_FLOATING_POINT)
+-        {
+-            for (i = 0; i < 32; i++) fprintf( stderr, ",fpr%u=%g", i, ctx.fp.powerpc_regs.fpr[i] );
+-            fprintf( stderr, ",fpscr=%g", ctx.fp.powerpc_regs.fpscr );
+-        }
+-        break;
+     case CPU_ARM:
+         if (ctx.flags & SERVER_CTX_CONTROL)
+             fprintf( stderr, ",sp=%08x,lr=%08x,pc=%08x,cpsr=%08x",
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index e919d7e2671..160a16daff8 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -2730,6 +2730,12 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname, con
+                 status = STATUS_SUCCESS;
+                 goto done;
+             }
++            /* 16-bit files can't be loaded from the prefix */
++            if (libname[0] && libname[1] && !wcscmp( libname + wcslen(libname) - 2, L"16" ))
++            {
++                status = find_builtin_without_file( libname, nt_name, pwm, mapping, image_info, id );
++                goto done;
++            }
+         }
+     }
+ 
+diff --git a/programs/services/services.c b/programs/services/services.c
+index d9c4e484e425..39cd9ee4ffa8 100644
+--- a/programs/services/services.c
++++ b/programs/services/services.c
+@@ -25,6 +25,7 @@
+ #include <assert.h>
+ #include <windows.h>
+ #include <winsvc.h>
++#include <winternl.h>
+ #include <rpc.h>
+ #include <userenv.h>
+ #include <setupapi.h>
+@@ -1069,7 +1070,16 @@ static DWORD service_start_process(struct service_entry *service_entry, struct p
+ 
+     if (!environment && OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY | TOKEN_DUPLICATE, &token))
+     {
++        WCHAR val[16];
+         CreateEnvironmentBlock(&environment, token, FALSE);
++        if (GetEnvironmentVariableW( L"WINEBOOTSTRAPMODE", val, ARRAY_SIZE(val) ))
++        {
++            UNICODE_STRING name, value;
++
++            RtlInitUnicodeString( &name, L"WINEBOOTSTRAPMODE" );
++            RtlInitUnicodeString( &value, val );
++            RtlSetEnvironmentVariable( (WCHAR **)&environment, &name, &value );
++        }
+         CloseHandle(token);
+     }
+ 
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index e1810bc5ab9..e919d7e2671 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -1926,14 +1926,10 @@ static NTSTATUS build_module( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+ static void build_ntdll_module(void)
+ {
+     MEMORY_BASIC_INFORMATION meminfo;
+-    FILE_BASIC_INFORMATION basic_info;
+     UNICODE_STRING nt_name;
+-    OBJECT_ATTRIBUTES attr;
+     WINE_MODREF *wm;
+ 
+     RtlInitUnicodeString( &nt_name, L"\\??\\C:\\windows\\system32\\ntdll.dll" );
+-    InitializeObjectAttributes( &attr, &nt_name, OBJ_CASE_INSENSITIVE, 0, NULL );
+-    is_prefix_bootstrap = NtQueryAttributesFile( &attr, &basic_info) != STATUS_SUCCESS;
+     NtQueryVirtualMemory( GetCurrentProcess(), build_ntdll_module, MemoryBasicInformation,
+                           &meminfo, sizeof(meminfo), NULL );
+     wm = alloc_module( meminfo.AllocationBase, &nt_name, TRUE );
+@@ -2672,7 +2668,7 @@ static NTSTATUS search_dll_file( LPCWSTR paths, LPCWSTR search, UNICODE_STRING *
+ 
+     if (found_image)
+         status = STATUS_IMAGE_MACHINE_TYPE_MISMATCH;
+-    else if (is_prefix_bootstrap && !wcspbrk( search, L":/\\" ))
++    else if (is_prefix_bootstrap && !contains_path( search ))
+         status = find_builtin_without_file( search, nt_name, pwm, mapping, image_info, id );
+ 
+ done:
+@@ -3498,10 +3494,14 @@ static void process_breakpoint(void)
+ static void load_global_options(void)
+ {
+     OBJECT_ATTRIBUTES attr;
+-    UNICODE_STRING name_str;
++    UNICODE_STRING name_str, val_str;
+     HANDLE hkey;
+     ULONG value;
+ 
++    RtlInitUnicodeString( &name_str, L"WINEBOOTSTRAPMODE" );
++    val_str.MaximumLength = 0;
++    is_prefix_bootstrap = RtlQueryEnvironmentVariable_U( NULL, &name_str, &val_str ) != STATUS_VARIABLE_NOT_FOUND;
++
+     attr.Length = sizeof(attr);
+     attr.RootDirectory = 0;
+     attr.ObjectName = &name_str;
+diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
+index 10089a740c2..01d4f3ea418 100644
+--- a/dlls/ntdll/unix/env.c
++++ b/dlls/ntdll/unix/env.c
+@@ -64,6 +64,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(environ);
+ 
+ USHORT *uctable = NULL, *lctable = NULL;
+ SIZE_T startup_info_size = 0;
++BOOL is_prefix_bootstrap = FALSE;
++
++static const WCHAR bootstrapW[] = {'W','I','N','E','B','O','O','T','S','T','R','A','P','M','O','D','E'};
+ 
+ int main_argc = 0;
+ char **main_argv = NULL;
+@@ -1211,6 +1214,18 @@ static WCHAR *find_env_var( WCHAR *env, SIZE_T size, const WCHAR *name, SIZE_T n
+     return NULL;
+ }
+ 
++static WCHAR *get_env_var( WCHAR *env, SIZE_T size, const WCHAR *name, SIZE_T namelen )
++{
++    WCHAR *ret = NULL, *var = find_env_var( env, size, name, namelen );
++
++    if (var)
++    {
++        var += namelen + 1;  /* skip name */
++        if ((ret = malloc( (wcslen(var) + 1) * sizeof(WCHAR) ))) wcscpy( ret, var );
++    }
++    return ret;
++}
++
+ /* set an environment variable, replacing it if it exists */
+ static void set_env_var( WCHAR **env, SIZE_T *pos, SIZE_T *size,
+                          const WCHAR *name, SIZE_T namelen, const WCHAR *value )
+@@ -1889,29 +1904,32 @@ static inline WCHAR *get_dos_path( WCHAR *nt_path )
+  */
+ static RTL_USER_PROCESS_PARAMETERS *build_initial_params(void)
+ {
++    static const WCHAR valueW[] = {'1',0};
+     static const WCHAR pathW[] = {'P','A','T','H'};
+     RTL_USER_PROCESS_PARAMETERS *params = NULL;
+     SIZE_T size, env_pos, env_size;
+-    WCHAR *dst, *image, *cmdline, *p, *path = NULL;
++    WCHAR *dst, *image, *cmdline, *path, *bootstrap;
+     WCHAR *env = get_initial_environment( &env_pos, &env_size );
+     WCHAR *curdir = get_initial_directory();
+     void *module = NULL;
+     NTSTATUS status;
+ 
+     /* store the initial PATH value */
+-    if ((p = find_env_var( env, env_pos, pathW, 4 )))
+-    {
+-        path = malloc( (wcslen(p + 5) + 1) * sizeof(WCHAR) );
+-        wcscpy( path, p + 5 );
+-    }
++    path = get_env_var( env, env_pos, pathW, 4 );
+     add_dynamic_environment( &env, &env_pos, &env_size );
+     add_registry_environment( &env, &env_pos, &env_size );
++    bootstrap = get_env_var( env, env_pos, bootstrapW, ARRAY_SIZE(bootstrapW) );
++    set_env_var( &env, &env_pos, &env_size, bootstrapW, ARRAY_SIZE(bootstrapW), valueW );
++    is_prefix_bootstrap = TRUE;
+     env[env_pos] = 0;
+     run_wineboot( env, env_pos );
+ 
+     /* reload environment now that wineboot has run */
+     set_env_var( &env, &env_pos, &env_size, pathW, 4, path );  /* reset PATH */
+     free( path );
++    set_env_var( &env, &env_pos, &env_size, bootstrapW, ARRAY_SIZE(bootstrapW), bootstrap );
++    is_prefix_bootstrap = !!bootstrap;
++    free( bootstrap );
+     add_registry_environment( &env, &env_pos, &env_size );
+     env[env_pos++] = 0;
+ 
+@@ -2012,6 +2030,7 @@ void init_startup_info(void)
+     memcpy( env, (char *)info + info_size, env_size * sizeof(WCHAR) );
+     env_pos = env_size - 1;
+     add_dynamic_environment( &env, &env_pos, &env_size );
++    is_prefix_bootstrap = !!find_env_var( env, env_pos, bootstrapW, ARRAY_SIZE(bootstrapW) );
+     env[env_pos++] = 0;
+ 
+     size = (sizeof(*params)
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index e362f5eb4db..cbafa0d8882 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1387,10 +1387,10 @@ BOOL is_builtin_path( const UNICODE_STRING *path, WORD *machine )
+ {
+     static const WCHAR wow64W[] = {'\\','?','?','\\','c',':','\\','w','i','n','d','o','w','s','\\',
+                                    's','y','s','w','o','w','6','4'};
+-    BOOL is_prefix_bootstrap;
+     unsigned int len;
+-    struct stat st;
+-    char *ntdll;
++
++    /* only fake builtin existence during prefix bootstrap */
++    if (!is_prefix_bootstrap) return FALSE;
+ 
+     *machine = current_machine;
+     if (path->Length > wcslen(system_dir) * sizeof(WCHAR) &&
+@@ -1413,15 +1413,7 @@ BOOL is_builtin_path( const UNICODE_STRING *path, WORD *machine )
+     len = wcslen(system_dir);
+     while (len < path->Length / sizeof(WCHAR) && path->Buffer[len] == '\\') len++;
+     while (len < path->Length / sizeof(WCHAR) && path->Buffer[len] != '\\') len++;
+-    if (len != path->Length / sizeof(WCHAR)) return FALSE;
+-
+-    /* if the corresponding ntdll exists, don't fake the existence of the builtin */
+-    ntdll = build_path( config_dir, *machine == IMAGE_FILE_MACHINE_I386 ?
+-                        "dosdevices/c:/windows/syswow64/ntdll.dll" :
+-                        "dosdevices/c:/windows/system32/ntdll.dll" );
+-    is_prefix_bootstrap = stat( ntdll, &st ) == -1;
+-    free( ntdll );
+-    return is_prefix_bootstrap;
++    return (len == path->Length / sizeof(WCHAR));
+ }
+ 
+ 
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index d0fa7a54f49..0f14e69f2be 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -120,6 +120,7 @@ extern const char **dll_paths DECLSPEC_HIDDEN;
+ extern USHORT *uctable DECLSPEC_HIDDEN;
+ extern USHORT *lctable DECLSPEC_HIDDEN;
+ extern SIZE_T startup_info_size DECLSPEC_HIDDEN;
++extern BOOL is_prefix_bootstrap DECLSPEC_HIDDEN;
+ extern SECTION_IMAGE_INFORMATION main_image_info DECLSPEC_HIDDEN;
+ extern int main_argc DECLSPEC_HIDDEN;
+ extern char **main_argv DECLSPEC_HIDDEN;
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 964a3e0eaa4..5edccd6a29e 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -2577,10 +2577,10 @@ static NTSTATUS find_builtin_without_file( const WCHAR *name, UNICODE_STRING *ne
+         RtlAppendUnicodeToString( new_name, L"\\" );
+         RtlAppendUnicodeToString( new_name, name );
+         status = open_dll_file( new_name, pwm, mapping, image_info, id );
+-        if (status != STATUS_DLL_NOT_FOUND) return status;
++        if (status != STATUS_DLL_NOT_FOUND) goto done;
+         RtlAppendUnicodeToString( new_name, L".fake" );
+         status = open_dll_file( new_name, pwm, mapping, image_info, id );
+-        if (status != STATUS_DLL_NOT_FOUND) return status;
++        if (status != STATUS_DLL_NOT_FOUND) goto done;
+         RtlFreeUnicodeString( new_name );
+     }
+     for (i = 0; ; i++)
+@@ -2592,16 +2592,27 @@ static NTSTATUS find_builtin_without_file( const WCHAR *name, UNICODE_STRING *ne
+         RtlAppendUnicodeToString( new_name, name );
+         status = open_dll_file( new_name, pwm, mapping, image_info, id );
+         if (status == STATUS_IMAGE_MACHINE_TYPE_MISMATCH) found_image = TRUE;
+-        else if (status != STATUS_DLL_NOT_FOUND) return status;
++        else if (status != STATUS_DLL_NOT_FOUND) goto done;
+         new_name->Length = len;
+         RtlAppendUnicodeToString( new_name, L"\\fakedlls\\" );
+         RtlAppendUnicodeToString( new_name, name );
+         status = open_dll_file( new_name, pwm, mapping, image_info, id );
+         if (status == STATUS_IMAGE_MACHINE_TYPE_MISMATCH) found_image = TRUE;
+-        else if (status != STATUS_DLL_NOT_FOUND) return status;
++        else if (status != STATUS_DLL_NOT_FOUND) goto done;
+         RtlFreeUnicodeString( new_name );
+     }
+     if (found_image) status = STATUS_IMAGE_MACHINE_TYPE_MISMATCH;
++
++done:
++    RtlFreeUnicodeString( new_name );
++    if (!status)
++    {
++        new_name->Length = (4 + wcslen(system_dir) + wcslen(name)) * sizeof(WCHAR);
++        new_name->Buffer = RtlAllocateHeap( GetProcessHeap(), 0, new_name->Length + sizeof(WCHAR) );
++        wcscpy( new_name->Buffer, L"\\??\\" );
++        wcscat( new_name->Buffer, system_dir );
++        wcscat( new_name->Buffer, name );
++    }
+     return status;
+ }
+ 
+diff --git a/dlls/kernel32/tests/module.c b/dlls/kernel32/tests/module.c
+index 96577989431..0066f7de5a8 100644
+--- a/dlls/kernel32/tests/module.c
++++ b/dlls/kernel32/tests/module.c
+@@ -1093,7 +1093,7 @@ static void test_SetDefaultDllDirectories(void)
+     ret = pSetDefaultDllDirectories( LOAD_LIBRARY_SEARCH_USER_DIRS );
+     ok( ret, "SetDefaultDllDirectories failed err %u\n", GetLastError() );
+     mod = LoadLibraryA( "authz.dll" );
+-    todo_wine ok( !mod, "loading authz succeeded\n" );
++    ok( !mod, "loading authz succeeded\n" );
+     FreeLibrary( mod );
+     ret = pSetDefaultDllDirectories( LOAD_LIBRARY_SEARCH_SYSTEM32 );
+     ok( ret, "SetDefaultDllDirectories failed err %u\n", GetLastError() );
+@@ -1101,12 +1101,12 @@ static void test_SetDefaultDllDirectories(void)
+     ok( mod != NULL, "loading authz failed\n" );
+     FreeLibrary( mod );
+     mod = LoadLibraryExA( "authz.dll", 0, LOAD_LIBRARY_SEARCH_APPLICATION_DIR );
+-    todo_wine ok( !mod, "loading authz succeeded\n" );
++    ok( !mod, "loading authz succeeded\n" );
+     FreeLibrary( mod );
+     ret = pSetDefaultDllDirectories( LOAD_LIBRARY_SEARCH_APPLICATION_DIR );
+     ok( ret, "SetDefaultDllDirectories failed err %u\n", GetLastError() );
+     mod = LoadLibraryA( "authz.dll" );
+-    todo_wine ok( !mod, "loading authz succeeded\n" );
++    ok( !mod, "loading authz succeeded\n" );
+     FreeLibrary( mod );
+     ret = pSetDefaultDllDirectories( LOAD_LIBRARY_SEARCH_DEFAULT_DIRS );
+     ok( ret, "SetDefaultDllDirectories failed err %u\n", GetLastError() );
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index e8b53778284..964a3e0eaa4 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -73,6 +73,7 @@ BOOL is_wow64 = FALSE;
+ /* system search path */
+ static const WCHAR system_path[] = L"C:\\windows\\system32;C:\\windows\\system;C:\\windows";
+ 
++static BOOL is_prefix_bootstrap;  /* are we bootstrapping the prefix? */
+ static BOOL imports_fixup_done = FALSE;  /* set once the imports have been fixed up, before attaching them */
+ static BOOL process_detaching = FALSE;  /* set on process detach to avoid deadlocks with thread detach */
+ static int free_lib_count;   /* recursion depth of LdrUnloadDll calls */
+@@ -1918,10 +1919,14 @@ static NTSTATUS build_module( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+ static void build_ntdll_module(void)
+ {
+     MEMORY_BASIC_INFORMATION meminfo;
++    FILE_BASIC_INFORMATION basic_info;
+     UNICODE_STRING nt_name;
++    OBJECT_ATTRIBUTES attr;
+     WINE_MODREF *wm;
+ 
+     RtlInitUnicodeString( &nt_name, L"\\??\\C:\\windows\\system32\\ntdll.dll" );
++    InitializeObjectAttributes( &attr, &nt_name, OBJ_CASE_INSENSITIVE, 0, NULL );
++    is_prefix_bootstrap = NtQueryAttributesFile( &attr, &basic_info) != STATUS_SUCCESS;
+     NtQueryVirtualMemory( GetCurrentProcess(), build_ntdll_module, MemoryBasicInformation,
+                           &meminfo, sizeof(meminfo), NULL );
+     wm = alloc_module( meminfo.AllocationBase, &nt_name, TRUE );
+@@ -2647,7 +2652,7 @@ static NTSTATUS search_dll_file( LPCWSTR paths, LPCWSTR search, UNICODE_STRING *
+ 
+     if (found_image)
+         status = STATUS_IMAGE_MACHINE_TYPE_MISMATCH;
+-    else if (!wcspbrk( search, L":/\\" ))
++    else if (is_prefix_bootstrap && !wcspbrk( search, L":/\\" ))
+         status = find_builtin_without_file( search, nt_name, pwm, mapping, image_info, id );
+ 
+ done:
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 7c4572e6b0e..4c76865019b 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1374,21 +1374,6 @@ static NTSTATUS find_builtin_dll( UNICODE_STRING *nt_name, void **module, SIZE_T
+ }
+ 
+ 
+-/***********************************************************************
+- *           load_builtin_dll
+- */
+-static NTSTATUS CDECL load_builtin_dll( UNICODE_STRING *nt_name, void **module,
+-                                        SECTION_IMAGE_INFORMATION *image_info, BOOL prefer_native )
+-{
+-    SIZE_T size;
+-    NTSTATUS status;
+-
+-    status = find_builtin_dll( nt_name, module, &size, image_info, current_machine, prefer_native );
+-    if (status == STATUS_IMAGE_NOT_AT_BASE) status = STATUS_SUCCESS;
+-    return status;
+-}
+-
+-
+ /***********************************************************************
+  *           load_builtin
+  *
+@@ -1794,11 +1779,9 @@ static struct unix_funcs unix_funcs =
+     ntdll_tan,
+     virtual_release_address_space,
+     load_so_dll,
+-    load_builtin_dll,
+     init_builtin_dll,
+     init_unix_lib,
+     unwind_builtin_dll,
+-    get_load_order,
+     __wine_dbg_get_channel_flags,
+     __wine_dbg_strdup,
+     __wine_dbg_output,
+diff --git a/dlls/ntdll/unix/loadorder.c b/dlls/ntdll/unix/loadorder.c
+index 67a7473dc7f..49af8eb6adb 100644
+--- a/dlls/ntdll/unix/loadorder.c
++++ b/dlls/ntdll/unix/loadorder.c
+@@ -378,7 +378,7 @@ static enum loadorder get_load_order_value( HANDLE std_key, HANDLE app_key, WCHA
+  * Return the loadorder of a module.
+  * The system directory and '.dll' extension is stripped from the path.
+  */
+-enum loadorder CDECL get_load_order( const UNICODE_STRING *nt_name )
++enum loadorder get_load_order( const UNICODE_STRING *nt_name )
+ {
+     static const WCHAR prefixW[] = {'\\','?','?','\\'};
+     enum loadorder ret = LO_INVALID;
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index 05ba8202ee7..3987cc6c4d0 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -400,7 +400,18 @@ static inline void context_init_xstate( CONTEXT *context, void *xstate_buffer )
+ }
+ #endif
+ 
+-extern enum loadorder CDECL get_load_order( const UNICODE_STRING *nt_name ) DECLSPEC_HIDDEN;
++enum loadorder
++{
++    LO_INVALID,
++    LO_DISABLED,
++    LO_NATIVE,
++    LO_BUILTIN,
++    LO_NATIVE_BUILTIN,  /* native then builtin */
++    LO_BUILTIN_NATIVE,  /* builtin then native */
++    LO_DEFAULT          /* nothing specified, use default strategy */
++};
++
++extern enum loadorder get_load_order( const UNICODE_STRING *nt_name ) DECLSPEC_HIDDEN;
+ 
+ static inline size_t ntdll_wcslen( const WCHAR *str )
+ {
+diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
+index 80e4eaefc75..04ae8230b1a 100644
+--- a/dlls/ntdll/unixlib.h
++++ b/dlls/ntdll/unixlib.h
+@@ -25,19 +25,8 @@
+ 
+ struct _DISPATCHER_CONTEXT;
+ 
+-enum loadorder
+-{
+-    LO_INVALID,
+-    LO_DISABLED,
+-    LO_NATIVE,
+-    LO_BUILTIN,
+-    LO_NATIVE_BUILTIN,  /* native then builtin */
+-    LO_BUILTIN_NATIVE,  /* builtin then native */
+-    LO_DEFAULT          /* nothing specified, use default strategy */
+-};
+-
+ /* increment this when you change the function table */
+-#define NTDLL_UNIXLIB_VERSION 125
++#define NTDLL_UNIXLIB_VERSION 124
+ 
+ struct unix_funcs
+ {
+@@ -85,13 +74,10 @@ struct unix_funcs
+ 
+     /* loader functions */
+     NTSTATUS      (CDECL *load_so_dll)( UNICODE_STRING *nt_name, void **module );
+-    NTSTATUS      (CDECL *load_builtin_dll)( UNICODE_STRING *name, void **module,
+-                                             SECTION_IMAGE_INFORMATION *image_info, BOOL prefer_native );
+     void          (CDECL *init_builtin_dll)( void *module );
+     NTSTATUS      (CDECL *init_unix_lib)( void *module, DWORD reason, const void *ptr_in, void *ptr_out );
+     NTSTATUS      (CDECL *unwind_builtin_dll)( ULONG type, struct _DISPATCHER_CONTEXT *dispatch,
+                                                CONTEXT *context );
+-    enum loadorder (CDECL *get_load_order)( const UNICODE_STRING *nt_name );
+ 
+     /* debugging functions */
+     unsigned char (CDECL *dbg_get_channel_flags)( struct __wine_debug_channel *channel );
+diff --git a/dlls/mscoree/tests/mscoree.c b/dlls/mscoree/tests/mscoree.c
+index 9974eff63354..92126339ef08 100644
+--- a/dlls/mscoree/tests/mscoree.c
++++ b/dlls/mscoree/tests/mscoree.c
+@@ -368,7 +368,7 @@ static void test_loadlibraryshim(void)
+     }
+ 
+     hr = pLoadLibraryShim(fusion, vbogus, NULL, &hdll);
+-    todo_wine ok(hr == E_HANDLE, "LoadLibraryShim failed, hr=%x\n", hr);
++    ok(hr == E_HANDLE, "LoadLibraryShim failed, hr=%x\n", hr);
+     if (SUCCEEDED(hr))
+         FreeLibrary(hdll);
+ 
+@@ -406,7 +406,7 @@ static void test_loadlibraryshim(void)
+         FreeLibrary(hdll);
+ 
+     hr = pLoadLibraryShim(gdidll, latest, NULL, &hdll);
+-    todo_wine ok(hr == E_HANDLE, "LoadLibraryShim failed, hr=%x\n", hr);
++    ok(hr == E_HANDLE, "LoadLibraryShim failed, hr=%x\n", hr);
+     if (SUCCEEDED(hr))
+         FreeLibrary(hdll);
+ }
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 7dada146044b..e8b537782847 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -2378,38 +2378,6 @@ static NTSTATUS load_so_dll( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+ }
+ 
+ 
+-/***********************************************************************
+- *           load_builtin_dll
+- */
+-static NTSTATUS load_builtin_dll( LPCWSTR load_path, UNICODE_STRING *nt_name,
+-                                  DWORD flags, WINE_MODREF** pwm, BOOL prefer_native )
+-{
+-    NTSTATUS status;
+-    void *module;
+-    SECTION_IMAGE_INFORMATION image_info;
+-
+-    TRACE("Trying built-in %s\n", debugstr_us(nt_name));
+-
+-    status = unix_funcs->load_builtin_dll( nt_name, &module, &image_info, prefer_native );
+-    if (status) return status;
+-
+-    if ((*pwm = find_existing_module( module )))  /* already loaded */
+-    {
+-        if ((*pwm)->ldr.LoadCount != -1) (*pwm)->ldr.LoadCount++;
+-        TRACE( "Found %s for %s at %p, count=%d\n",
+-               debugstr_us(&(*pwm)->ldr.FullDllName), debugstr_us(nt_name),
+-               (*pwm)->ldr.DllBase, (*pwm)->ldr.LoadCount);
+-        if (module != (*pwm)->ldr.DllBase) NtUnmapViewOfSection( NtCurrentProcess(), module );
+-        return STATUS_SUCCESS;
+-    }
+-
+-    TRACE( "loading %s\n", debugstr_us(nt_name) );
+-    status = build_module( load_path, nt_name, &module, &image_info, NULL, flags, pwm );
+-    if (status && module) NtUnmapViewOfSection( NtCurrentProcess(), module );
+-    return status;
+-}
+-
+-
+ /*************************************************************************
+  *		build_main_module
+  *
+@@ -2553,6 +2521,86 @@ static NTSTATUS find_actctx_dll( LPCWSTR libname, LPWSTR *fullname )
+ }
+ 
+ 
++/***********************************************************************
++ *	get_env_var
++ */
++static NTSTATUS get_env_var( const WCHAR *name, SIZE_T extra, UNICODE_STRING *ret )
++{
++    NTSTATUS status;
++    SIZE_T len, size = 1024 + extra;
++
++    for (;;)
++    {
++        ret->Buffer = RtlAllocateHeap( GetProcessHeap(), 0, size * sizeof(WCHAR) );
++        status = RtlQueryEnvironmentVariable( NULL, name, wcslen(name),
++                                              ret->Buffer, size - extra - 1, &len );
++        if (!status)
++        {
++            ret->Buffer[len] = 0;
++            ret->Length = len * sizeof(WCHAR);
++            ret->MaximumLength = size * sizeof(WCHAR);
++            return status;
++        }
++        RtlFreeHeap( GetProcessHeap(), 0, ret->Buffer );
++        if (status != STATUS_BUFFER_TOO_SMALL) return status;
++        size = len + 1 + extra;
++    }
++}
++
++
++/***********************************************************************
++ *	find_builtin_without_file
++ *
++ * Find a builtin dll when the corresponding file cannot be found in the prefix.
++ * This is used during prefix bootstrap.
++ */
++static NTSTATUS find_builtin_without_file( const WCHAR *name, UNICODE_STRING *new_name,
++                                           WINE_MODREF **pwm, HANDLE *mapping,
++                                           SECTION_IMAGE_INFORMATION *image_info, struct file_id *id )
++{
++    const WCHAR *ext;
++    WCHAR dllpath[32];
++    DWORD i, len;
++    NTSTATUS status = STATUS_DLL_NOT_FOUND;
++    BOOL found_image = FALSE;
++
++    if (!get_env_var( L"WINEBUILDDIR", 20 + 2 * wcslen(name), new_name ))
++    {
++        RtlAppendUnicodeToString( new_name, L"\\dlls\\" );
++        RtlAppendUnicodeToString( new_name, name );
++        if ((ext = wcsrchr( name, '.' )) && !wcscmp( ext, L".dll" )) new_name->Length -= 4 * sizeof(WCHAR);
++        RtlAppendUnicodeToString( new_name, L"\\" );
++        RtlAppendUnicodeToString( new_name, name );
++        status = open_dll_file( new_name, pwm, mapping, image_info, id );
++        if (status != STATUS_DLL_NOT_FOUND) return status;
++        RtlAppendUnicodeToString( new_name, L".fake" );
++        status = open_dll_file( new_name, pwm, mapping, image_info, id );
++        if (status != STATUS_DLL_NOT_FOUND) return status;
++        RtlFreeUnicodeString( new_name );
++    }
++    for (i = 0; ; i++)
++    {
++        swprintf( dllpath, ARRAY_SIZE(dllpath), L"WINEDLLDIR%u", i );
++        if (get_env_var( dllpath, 20 + wcslen(name), new_name )) break;
++        len = new_name->Length;
++        RtlAppendUnicodeToString( new_name, L"\\" );
++        RtlAppendUnicodeToString( new_name, name );
++        status = open_dll_file( new_name, pwm, mapping, image_info, id );
++        if (status == STATUS_IMAGE_MACHINE_TYPE_MISMATCH) found_image = TRUE;
++        else if (status != STATUS_DLL_NOT_FOUND) return status;
++        new_name->Length = len;
++        RtlAppendUnicodeToString( new_name, L"\\fakedlls\\" );
++        RtlAppendUnicodeToString( new_name, name );
++        status = open_dll_file( new_name, pwm, mapping, image_info, id );
++        if (status == STATUS_IMAGE_MACHINE_TYPE_MISMATCH) found_image = TRUE;
++        else if (status != STATUS_DLL_NOT_FOUND) return status;
++        RtlFreeUnicodeString( new_name );
++    }
++    if (found_image) status = STATUS_IMAGE_MACHINE_TYPE_MISMATCH;
++    return status;
++}
++
++
+ /***********************************************************************
+  *	search_dll_file
+  *
+@@ -2597,14 +2645,10 @@ static NTSTATUS search_dll_file( LPCWSTR paths, LPCWSTR search, UNICODE_STRING *
+         paths = ptr;
+     }
+ 
+-    if (!found_image)
+-    {
+-        /* not found, return file in the system dir to be loaded as builtin */
+-        wcscpy( name, system_dir );
+-        wcscat( name, search );
+-        if (!RtlDosPathNameToNtPathName_U( name, nt_name, NULL, NULL )) status = STATUS_NO_MEMORY;
+-    }
+-    else status = STATUS_IMAGE_MACHINE_TYPE_MISMATCH;
++    if (found_image)
++        status = STATUS_IMAGE_MACHINE_TYPE_MISMATCH;
++    else if (!wcspbrk( search, L":/\\" ))
++        status = find_builtin_without_file( search, nt_name, pwm, mapping, image_info, id );
+ 
+ done:
+     RtlFreeHeap( GetProcessHeap(), 0, name );
+@@ -2713,7 +2757,7 @@ static NTSTATUS load_dll( const WCHAR *load_path, const WCHAR *libname, const WC
+         return STATUS_SUCCESS;
+     }
+ 
+-    if (nts && nts != STATUS_DLL_NOT_FOUND && nts != STATUS_INVALID_IMAGE_NOT_MZ) goto done;
++    if (nts && nts != STATUS_INVALID_IMAGE_NOT_MZ) goto done;
+ 
+     prev = NtCurrentTeb()->Tib.ArbitraryUserPointer;
+     NtCurrentTeb()->Tib.ArbitraryUserPointer = nt_name.Buffer + 4;
+@@ -2727,21 +2771,6 @@ static NTSTATUS load_dll( const WCHAR *load_path, const WCHAR *libname, const WC
+     case STATUS_SUCCESS:  /* valid PE file */
+         nts = load_native_dll( load_path, &nt_name, mapping, &image_info, &id, flags, pwm );
+         break;
+-
+-    case STATUS_DLL_NOT_FOUND:  /* no file found, try builtin */
+-        switch (unix_funcs->get_load_order( &nt_name ))
+-        {
+-        case LO_NATIVE_BUILTIN:
+-        case LO_BUILTIN:
+-        case LO_BUILTIN_NATIVE:
+-        case LO_DEFAULT:
+-            nts = load_builtin_dll( load_path, &nt_name, flags, pwm, FALSE );
+-            break;
+-        default:
+-            nts = STATUS_DLL_NOT_FOUND;
+-            break;
+-        }
+-        break;
+     }
+     NtCurrentTeb()->Tib.ArbitraryUserPointer = prev;
+ 
