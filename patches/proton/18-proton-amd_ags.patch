@@ -1377,7 +1377,7 @@ new file mode 100644
 index 00000000000..382447089bc
 --- /dev/null
 +++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
-@@ -0,0 +1,193 @@
+@@ -0,0 +1,191 @@
 +#include "config.h"
 +
 +#include <stdarg.h>
@@ -1562,8 +1562,6 @@ index 00000000000..382447089bc
 +
 +    switch (reason)
 +    {
-+ 
-+ 
 +        case DLL_PROCESS_ATTACH:
 +            DisableThreadLibraryCalls(instance);
 +            break;
@@ -1571,6 +1569,51 @@ index 00000000000..382447089bc
 +
 +    return TRUE;
 +}
+From 6c1f7e489f1cf1726e9e818e24a1d45398acf81c Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Tue, 1 Oct 2019 09:28:29 +0800
+Subject: [PATCH] amd_args_x64: Add agsGetCrossfireGPUCount stub.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+---
+ dlls/amd_ags_x64/amd_ags_x64.spec   |  2 +-
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index b4da6136a64..a302d2fc657 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -24,6 +24,6 @@
+ 24 stub agsDriverExtensionsDX11_SetViewBroadcastMasks
+ 25 stub agsDriverExtensionsDX12_DeInit
+ 26 stub agsDriverExtensionsDX12_Init
+-27 stub agsGetCrossfireGPUCount
++27 stdcall agsGetCrossfireGPUCount(ptr ptr)
+ 28 stdcall agsInit(ptr ptr ptr)
+ 29 stub agsSetDisplayMode
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 382447089bc..26b39991525 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -176,6 +176,17 @@ AGSReturnCode WINAPI agsDeInit(AGSContext *context)
+     return AGS_SUCCESS;
+ }
+ 
++AGSReturnCode WINAPI agsGetCrossfireGPUCount(AGSContext *context, int *gpu_count)
++{
++    TRACE("context %p gpu_count %p stub!\n", context, gpu_count);
++
++    if (!context || !gpu_count)
++        return AGS_INVALID_ARGS;
++
++    *gpu_count = 1;
++    return AGS_SUCCESS;
++}
++
+ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
+ {
+     TRACE("%p, %u, %p.\n", instance, reason, reserved);
 From 64bebf345ed6bb4620938753f7668a85c6bf1410 Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Thu, 11 Jun 2020 15:39:32 -0700
@@ -3652,7 +3695,7 @@ index aa7127e2ede..ec13c055a26 100644
 +IMPORTS   = version vulkan-1
  IMPORTLIB = amd_ags_x64
  
- EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
+ EXTRADLLFLAGS = -mno-cygwin
 diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
 index e8420acd4d1..49fc7ab7403 100644
 --- a/dlls/amd_ags_x64/amd_ags_x64_main.c
@@ -3739,3 +3782,736 @@ index e8420acd4d1..49fc7ab7403 100644
      context->device_count = 0;
      context->devices = NULL;
      context->properties = NULL;
+From 3980ab91bb5cf975eacbba60f68c0d96af2da74b Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 16 Apr 2021 20:21:29 +0300
+Subject: [PATCH] amd_ags_x64: Don't use ordinals in spec file.
+
+For FH4.
+---
+ dlls/amd_ags_x64/amd_ags_x64.spec | 58 +++++++++++++++----------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index a302d2fc657..c571dac2184 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -1,29 +1,29 @@
+-1 stdcall agsDeInit(ptr)
+-2 stub agsDriverExtensionsDX11_BeginUAVOverlap
+-3 stub agsDriverExtensionsDX11_CreateBuffer
+-4 stub agsDriverExtensionsDX11_CreateTexture1D
+-5 stub agsDriverExtensionsDX11_CreateTexture2D
+-6 stub agsDriverExtensionsDX11_CreateTexture3D
+-7 stub agsDriverExtensionsDX11_DeInit
+-8 stub agsDriverExtensionsDX11_EndUAVOverlap
+-9 stub agsDriverExtensionsDX11_GetMaxClipRects
+-10 stub agsDriverExtensionsDX11_IASetPrimitiveTopology
+-11 stub agsDriverExtensionsDX11_Init
+-12 stub agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirect
+-13 stub agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirectCountIndirect
+-14 stub agsDriverExtensionsDX11_MultiDrawInstancedIndirect
+-15 stub agsDriverExtensionsDX11_MultiDrawInstancedIndirectCountIndirect
+-16 stub agsDriverExtensionsDX11_NotifyResourceBeginAllAccess
+-17 stub agsDriverExtensionsDX11_NotifyResourceEndAllAccess
+-18 stub agsDriverExtensionsDX11_NotifyResourceEndWrites
+-19 stub agsDriverExtensionsDX11_NumPendingAsyncCompileJobs
+-20 stub agsDriverExtensionsDX11_SetClipRects
+-21 stub agsDriverExtensionsDX11_SetDepthBounds
+-22 stub agsDriverExtensionsDX11_SetDiskShaderCacheEnabled
+-23 stub agsDriverExtensionsDX11_SetMaxAsyncCompileThreadCount
+-24 stub agsDriverExtensionsDX11_SetViewBroadcastMasks
+-25 stub agsDriverExtensionsDX12_DeInit
+-26 stub agsDriverExtensionsDX12_Init
+-27 stdcall agsGetCrossfireGPUCount(ptr ptr)
+-28 stdcall agsInit(ptr ptr ptr)
+-29 stub agsSetDisplayMode
++@ stdcall agsDeInit(ptr)
++@ stub agsDriverExtensionsDX11_BeginUAVOverlap
++@ stub agsDriverExtensionsDX11_CreateBuffer
++@ stub agsDriverExtensionsDX11_CreateTexture1D
++@ stub agsDriverExtensionsDX11_CreateTexture2D
++@ stub agsDriverExtensionsDX11_CreateTexture3D
++@ stub agsDriverExtensionsDX11_DeInit
++@ stub agsDriverExtensionsDX11_EndUAVOverlap
++@ stub agsDriverExtensionsDX11_GetMaxClipRects
++@ stub agsDriverExtensionsDX11_IASetPrimitiveTopology
++@ stub agsDriverExtensionsDX11_Init
++@ stub agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirect
++@ stub agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirectCountIndirect
++@ stub agsDriverExtensionsDX11_MultiDrawInstancedIndirect
++@ stub agsDriverExtensionsDX11_MultiDrawInstancedIndirectCountIndirect
++@ stub agsDriverExtensionsDX11_NotifyResourceBeginAllAccess
++@ stub agsDriverExtensionsDX11_NotifyResourceEndAllAccess
++@ stub agsDriverExtensionsDX11_NotifyResourceEndWrites
++@ stub agsDriverExtensionsDX11_NumPendingAsyncCompileJobs
++@ stub agsDriverExtensionsDX11_SetClipRects
++@ stub agsDriverExtensionsDX11_SetDepthBounds
++@ stub agsDriverExtensionsDX11_SetDiskShaderCacheEnabled
++@ stub agsDriverExtensionsDX11_SetMaxAsyncCompileThreadCount
++@ stub agsDriverExtensionsDX11_SetViewBroadcastMasks
++@ stub agsDriverExtensionsDX12_DeInit
++@ stub agsDriverExtensionsDX12_Init
++@ stdcall agsGetCrossfireGPUCount(ptr ptr)
++@ stdcall agsInit(ptr ptr ptr)
++@ stub agsSetDisplayMode
+From b4f2009bb93926cc8f4144c7da950fbd94b7d36b Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 16 Apr 2021 20:07:28 +0300
+Subject: [PATCH] amd_ags_x64: Add more stubs to spec file.
+
+For FH4.
+---
+ dlls/amd_ags_x64/amd_ags_x64.spec | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index c571dac2184..f483cc6380b 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -1,10 +1,15 @@
+ @ stdcall agsDeInit(ptr)
++@ stub agsCheckDriverVersion
+ @ stub agsDriverExtensionsDX11_BeginUAVOverlap
+ @ stub agsDriverExtensionsDX11_CreateBuffer
++@ stub agsDriverExtensionsDX11_CreateDevice
++@ stub agsDriverExtensionsDX11_CreateFromDevice
+ @ stub agsDriverExtensionsDX11_CreateTexture1D
+ @ stub agsDriverExtensionsDX11_CreateTexture2D
+ @ stub agsDriverExtensionsDX11_CreateTexture3D
+ @ stub agsDriverExtensionsDX11_DeInit
++@ stub agsDriverExtensionsDX11_Destroy
++@ stub agsDriverExtensionsDX11_DestroyDevice
+ @ stub agsDriverExtensionsDX11_EndUAVOverlap
+ @ stub agsDriverExtensionsDX11_GetMaxClipRects
+ @ stub agsDriverExtensionsDX11_IASetPrimitiveTopology
+@@ -22,8 +27,16 @@
+ @ stub agsDriverExtensionsDX11_SetDiskShaderCacheEnabled
+ @ stub agsDriverExtensionsDX11_SetMaxAsyncCompileThreadCount
+ @ stub agsDriverExtensionsDX11_SetViewBroadcastMasks
++@ stub agsDriverExtensionsDX11_WriteBreadcrumb
++@ stub agsDriverExtensionsDX12_CreateDevice
++@ stub agsDriverExtensionsDX12_CreateFromDevice
+ @ stub agsDriverExtensionsDX12_DeInit
++@ stub agsDriverExtensionsDX12_Destroy
++@ stub agsDriverExtensionsDX12_DestroyDevice
+ @ stub agsDriverExtensionsDX12_Init
++@ stub agsDriverExtensionsDX12_PopMarker
++@ stub agsDriverExtensionsDX12_PushMarker
++@ stub agsDriverExtensionsDX12_SetMarker
+ @ stdcall agsGetCrossfireGPUCount(ptr ptr)
+ @ stdcall agsInit(ptr ptr ptr)
+ @ stub agsSetDisplayMode
+From 51848a361897a35c6cd657b786f127883c294b9f Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 16 Apr 2021 20:30:22 +0300
+Subject: [PATCH] amd_ags_x64: Add partial stub for agsCheckDriverVersion().
+
+For FH4.
+---
+ dlls/amd_ags_x64/amd_ags_x64.spec   | 2 +-
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 7 +++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index f483cc6380b..6806b145751 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -1,5 +1,5 @@
+ @ stdcall agsDeInit(ptr)
+-@ stub agsCheckDriverVersion
++@ stdcall agsCheckDriverVersion(ptr long)
+ @ stub agsDriverExtensionsDX11_BeginUAVOverlap
+ @ stub agsDriverExtensionsDX11_CreateBuffer
+ @ stub agsDriverExtensionsDX11_CreateDevice
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 49fc7ab7403..6e2c22c80d9 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -356,6 +356,13 @@ AGSReturnCode WINAPI agsGetCrossfireGPUCount(AGSContext *context, int *gpu_count
+     return AGS_SUCCESS;
+ }
+ 
++AGSDriverVersionResult WINAPI agsCheckDriverVersion(const char* version_reported, unsigned int version_required)
++{
++    FIXME("version_reported %s, version_required %d semi-stub.\n", debugstr_a(version_reported), version_required);
++
++    return AGS_SOFTWAREVERSIONCHECK_OK;
++}
++
+ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
+ {
+     TRACE("%p, %u, %p.\n", instance, reason, reserved);
+From 9dff4b41f450f6182a0d567e6bd296cb8cef450c Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 16 Apr 2021 20:35:31 +0300
+Subject: [PATCH] amd_ags_x64: Implement
+ agsDriverExtensionsDX12_CreateDevice().
+
+For FH4.
+---
+ dlls/amd_ags_x64/amd_ags_x64.spec   |  2 +-
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 43 +++++++++++++++++++++++++++++
+ 2 files changed, 44 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index 6806b145751..7551a9346d8 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -28,7 +28,7 @@
+ @ stub agsDriverExtensionsDX11_SetMaxAsyncCompileThreadCount
+ @ stub agsDriverExtensionsDX11_SetViewBroadcastMasks
+ @ stub agsDriverExtensionsDX11_WriteBreadcrumb
+-@ stub agsDriverExtensionsDX12_CreateDevice
++@ stdcall agsDriverExtensionsDX12_CreateDevice(ptr ptr ptr ptr)
+ @ stub agsDriverExtensionsDX12_CreateFromDevice
+ @ stub agsDriverExtensionsDX12_DeInit
+ @ stub agsDriverExtensionsDX12_Destroy
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 6e2c22c80d9..6f40a4c509c 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -52,6 +52,21 @@ struct AGSContext
+     VkPhysicalDeviceMemoryProperties *memory_properties;
+ };
+ 
++static HMODULE hd3d12;
++static typeof(D3D12CreateDevice) *pD3D12CreateDevice;
++
++static BOOL load_d3d12_functions(void)
++{
++    if (hd3d12)
++        return TRUE;
++
++    if (!(hd3d12 = LoadLibraryA("d3d12.dll")))
++        return FALSE;
++
++    pD3D12CreateDevice = (void *)GetProcAddress(hd3d12, "D3D12CreateDevice");
++    return TRUE;
++}
++
+ static AGSReturnCode vk_get_physical_device_properties(unsigned int *out_count,
+         VkPhysicalDeviceProperties **out, VkPhysicalDeviceMemoryProperties **out_memory)
+ {
+@@ -356,6 +371,34 @@ AGSReturnCode WINAPI agsGetCrossfireGPUCount(AGSContext *context, int *gpu_count
+     return AGS_SUCCESS;
+ }
+ 
++AGSReturnCode WINAPI agsDriverExtensionsDX12_CreateDevice(AGSContext *context,
++        const AGSDX12DeviceCreationParams *creation_params, const AGSDX12ExtensionParams *extension_params,
++        AGSDX12ReturnedParams *returned_params)
++{
++    HRESULT hr;
++
++    TRACE("feature level %#x, app %s, engine %s %#x %#x.\n", creation_params->FeatureLevel, debugstr_w(extension_params->pAppName),
++            debugstr_w(extension_params->pEngineName), extension_params->appVersion, extension_params->engineVersion);
++
++    if (!load_d3d12_functions())
++    {
++        ERR("Could not load d3d12.dll.\n");
++        return AGS_MISSING_D3D_DLL;
++    }
++
++    memset(returned_params, 0, sizeof(*returned_params));
++    if (FAILED(hr = pD3D12CreateDevice((IUnknown *)creation_params->pAdapter, creation_params->FeatureLevel,
++            &creation_params->iid, (void **)&returned_params->pDevice)))
++    {
++        ERR("D3D12CreateDevice failed, hr %#x.\n", hr);
++        return AGS_DX_FAILURE;
++    }
++
++    TRACE("Created d3d12 device %p.\n", returned_params->pDevice);
++
++    return AGS_SUCCESS;
++}
++
+ AGSDriverVersionResult WINAPI agsCheckDriverVersion(const char* version_reported, unsigned int version_required)
+ {
+     FIXME("version_reported %s, version_required %d semi-stub.\n", debugstr_a(version_reported), version_required);
+From 5343e10e71b0e21d1510da31386692faf290cd0d Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 16 Apr 2021 17:29:31 +0300
+Subject: [PATCH] amd_ags_x64: Fix devices array layout.
+
+For FH4.
+
+And refactor multiple layout device structure handling on the way
+to avoid more switches in future patches.
+---
+ dlls/amd_ags_x64/amd_ags.h          |  10 +-
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 152 +++++++++++++++-------------
+ 2 files changed, 83 insertions(+), 79 deletions(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags.h b/dlls/amd_ags_x64/amd_ags.h
+index 30f3735915c..47ed5b91a14 100644
+--- a/dlls/amd_ags_x64/amd_ags.h
++++ b/dlls/amd_ags_x64/amd_ags.h
+@@ -498,13 +498,7 @@ typedef struct AGSDeviceInfo_541
+     int                             adlAdapterIndex;                ///< Internally used index into the ADL list of adapters
+ } AGSDeviceInfo_541;
+ 
+-typedef union AGSDeviceInfo
+-{
+-    AGSDeviceInfo_511 agsDeviceInfo511;
+-    AGSDeviceInfo_520 agsDeviceInfo520;
+-    AGSDeviceInfo_540 agsDeviceInfo540;
+-    AGSDeviceInfo_541 agsDeviceInfo541;
+-} AGSDeviceInfo;
++struct AGSDeviceInfo;
+ 
+ /// \defgroup general General API functions
+ /// API for initialization, cleanup, HDR display modes and Crossfire GPU count
+@@ -545,7 +539,7 @@ typedef struct AGSGPUInfo
+     const char*             radeonSoftwareVersion;          ///< The Radeon Software Version
+ 
+     int                     numDevices;                     ///< Number of GPUs in the system
+-    AGSDeviceInfo*          devices;                        ///< List of GPUs in the system
++    struct AGSDeviceInfo*   devices;                        ///< List of GPUs in the system
+ } AGSGPUInfo;
+ 
+ /// The struct to specify the display settings to the driver.
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 6f40a4c509c..6c71db021dc 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -1,5 +1,6 @@
+ #include <stdarg.h>
+ #include <stdbool.h>
++#include <assert.h>
+ 
+ #include "windef.h"
+ #include "winbase.h"
+@@ -27,27 +28,74 @@ enum amd_ags_version
+     AMD_AGS_VERSION_COUNT
+ };
+ 
+-struct
++static const struct
+ {
+     int major;
+     int minor;
+     int patch;
++    unsigned int device_size;
+ }
+-static const amd_ags_versions[AMD_AGS_VERSION_COUNT] =
++amd_ags_info[AMD_AGS_VERSION_COUNT] =
+ {
+-    {5, 1, 1},
+-    {5, 2, 0},
+-    {5, 2, 1},
+-    {5, 3, 0},
+-    {5, 4, 0},
+-    {5, 4, 1},
++    {5, 1, 1, sizeof(AGSDeviceInfo_511)},
++    {5, 2, 0, sizeof(AGSDeviceInfo_520)},
++    {5, 2, 1, sizeof(AGSDeviceInfo_520)},
++    {5, 3, 0, sizeof(AGSDeviceInfo_520)},
++    {5, 4, 0, sizeof(AGSDeviceInfo_540)},
++    {5, 4, 1, sizeof(AGSDeviceInfo_541)},
+ };
+ 
++#define DEF_FIELD(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
++        offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_540, name), \
++        offsetof(AGSDeviceInfo_541, name)}}
++#define DEF_FIELD_520_BELOW(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
++        offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), -1, \
++        -1}}
++#define DEF_FIELD_540_UP(name) {DEVICE_FIELD_##name, {-1, -1, \
++        -1, -1, offsetof(AGSDeviceInfo_540, name), \
++        offsetof(AGSDeviceInfo_541, name)}}
++
++#define DEVICE_FIELD_adapterString 0
++#define DEVICE_FIELD_architectureVersion 1
++#define DEVICE_FIELD_asicFamily 2
++#define DEVICE_FIELD_vendorId 3
++#define DEVICE_FIELD_deviceId 4
++#define DEVICE_FIELD_isPrimaryDevice 5
++#define DEVICE_FIELD_localMemoryInBytes 6
++
++static const struct
++{
++    unsigned int field_index;
++    int offset[AMD_AGS_VERSION_COUNT];
++}
++device_struct_fields[] =
++{
++    DEF_FIELD(adapterString),
++    DEF_FIELD_520_BELOW(architectureVersion),
++    DEF_FIELD_540_UP(asicFamily),
++    DEF_FIELD(vendorId),
++    DEF_FIELD(deviceId),
++    DEF_FIELD(isPrimaryDevice),
++    DEF_FIELD(localMemoryInBytes),
++};
++
++#undef DEF_FIELD
++
++#define GET_DEVICE_FIELD_ADDR(device, name, type, version) \
++        (device_struct_fields[DEVICE_FIELD_##name].offset[version] == -1 ? NULL \
++        : (type *)((BYTE *)device + device_struct_fields[DEVICE_FIELD_##name].offset[version]))
++
++#define SET_DEVICE_FIELD(device, name, type, version, value) { \
++        type *addr; \
++        if ((addr = GET_DEVICE_FIELD_ADDR(device, name, type, version))) \
++            *addr = value; \
++    }
++
+ struct AGSContext
+ {
+     enum amd_ags_version version;
+     unsigned int device_count;
+-    AGSDeviceInfo *devices;
++    struct AGSDeviceInfo *devices;
+     VkPhysicalDeviceProperties *properties;
+     VkPhysicalDeviceMemoryProperties *memory_properties;
+ };
+@@ -190,11 +238,11 @@ static enum amd_ags_version determine_ags_version(void)
+     patch = info->dwFileVersionLS >> 16;
+     TRACE("Found amd_ags_x64.dll v%d.%d.%d\n", major, minor, patch);
+ 
+-    for (i = 0; i < ARRAY_SIZE(amd_ags_versions); i++)
++    for (i = 0; i < ARRAY_SIZE(amd_ags_info); i++)
+     {
+-        if ((major == amd_ags_versions[i].major) &&
+-            (minor == amd_ags_versions[i].minor) &&
+-            (patch == amd_ags_versions[i].patch))
++        if ((major == amd_ags_info[i].major) &&
++            (minor == amd_ags_info[i].minor) &&
++            (patch == amd_ags_info[i].patch))
+         {
+             ret = i;
+             break;
+@@ -204,7 +252,7 @@ static enum amd_ags_version determine_ags_version(void)
+ done:
+     heap_free(infobuf);
+     TRACE("Using AGS v%d.%d.%d interface\n",
+-          amd_ags_versions[ret].major, amd_ags_versions[ret].minor, amd_ags_versions[ret].patch);
++          amd_ags_info[ret].major, amd_ags_info[ret].minor, amd_ags_info[ret].patch);
+     return ret;
+ }
+ 
+@@ -212,6 +260,7 @@ static AGSReturnCode init_ags_context(AGSContext *context)
+ {
+     AGSReturnCode ret;
+     unsigned int i, j;
++    BYTE *device;
+ 
+     context->version = determine_ags_version();
+     context->device_count = 0;
+@@ -223,7 +272,9 @@ static AGSReturnCode init_ags_context(AGSContext *context)
+     if (ret != AGS_SUCCESS || !context->device_count)
+         return ret;
+ 
+-    if (!(context->devices = heap_calloc(context->device_count, sizeof(*context->devices))))
++    assert(context->version < AMD_AGS_VERSION_COUNT);
++
++    if (!(context->devices = heap_calloc(context->device_count, amd_ags_info[context->version].device_size)))
+     {
+         WARN("Failed to allocate memory.\n");
+         heap_free(context->properties);
+@@ -231,11 +282,11 @@ static AGSReturnCode init_ags_context(AGSContext *context)
+         return AGS_OUT_OF_MEMORY;
+     }
+ 
++    device = (BYTE *)context->devices;
+     for (i = 0; i < context->device_count; ++i)
+     {
+         const VkPhysicalDeviceProperties *vk_properties = &context->properties[i];
+         const VkPhysicalDeviceMemoryProperties *vk_memory_properties = &context->memory_properties[i];
+-        AGSDeviceInfo *device = &context->devices[i];
+         VkDeviceSize local_memory_size = 0;
+ 
+         for (j = 0; j < vk_memory_properties->memoryHeapCount; j++)
+@@ -248,60 +299,19 @@ static AGSReturnCode init_ags_context(AGSContext *context)
+         }
+         TRACE("reporting local memory size 0x%s bytes\n", wine_dbgstr_longlong(local_memory_size));
+ 
+-        switch (context->version)
++        SET_DEVICE_FIELD(device, adapterString, const char *, context->version, vk_properties->deviceName);
++        SET_DEVICE_FIELD(device, vendorId, int, context->version, vk_properties->vendorID);
++        SET_DEVICE_FIELD(device, deviceId, int, context->version, vk_properties->deviceID);
++        if (vk_properties->vendorID == 0x1002)
+         {
+-        case AMD_AGS_VERSION_5_1_1:
+-            device->agsDeviceInfo511.adapterString = vk_properties->deviceName;
+-            device->agsDeviceInfo511.vendorId = vk_properties->vendorID;
+-            device->agsDeviceInfo511.deviceId = vk_properties->deviceID;
+-            device->agsDeviceInfo511.localMemoryInBytes = local_memory_size;
+-
+-            if (device->agsDeviceInfo511.vendorId == 0x1002)
+-                device->agsDeviceInfo511.architectureVersion = ArchitectureVersion_GCN;
+-
+-            if (!i)
+-                device->agsDeviceInfo511.isPrimaryDevice = 1;
+-            break;
+-        case AMD_AGS_VERSION_5_2_0:
+-        case AMD_AGS_VERSION_5_2_1:
+-        case AMD_AGS_VERSION_5_3_0:
+-            device->agsDeviceInfo520.adapterString = vk_properties->deviceName;
+-            device->agsDeviceInfo520.vendorId = vk_properties->vendorID;
+-            device->agsDeviceInfo520.deviceId = vk_properties->deviceID;
+-            device->agsDeviceInfo520.localMemoryInBytes = local_memory_size;
+-
+-            if (device->agsDeviceInfo520.vendorId == 0x1002)
+-                device->agsDeviceInfo520.architectureVersion = ArchitectureVersion_GCN;
+-
+-            if (!i)
+-                device->agsDeviceInfo520.isPrimaryDevice = 1;
+-            break;
+-        case AMD_AGS_VERSION_5_4_0:
+-            device->agsDeviceInfo540.adapterString = vk_properties->deviceName;
+-            device->agsDeviceInfo540.vendorId = vk_properties->vendorID;
+-            device->agsDeviceInfo540.deviceId = vk_properties->deviceID;
+-            device->agsDeviceInfo540.localMemoryInBytes = local_memory_size;
+-
+-            if (device->agsDeviceInfo540.vendorId == 0x1002)
+-                device->agsDeviceInfo540.asicFamily = AsicFamily_GCN4;
+-
+-            if (!i)
+-                device->agsDeviceInfo540.isPrimaryDevice = 1;
+-            break;
+-        case AMD_AGS_VERSION_5_4_1:
+-        default:
+-            device->agsDeviceInfo541.adapterString = vk_properties->deviceName;
+-            device->agsDeviceInfo541.vendorId = vk_properties->vendorID;
+-            device->agsDeviceInfo541.deviceId = vk_properties->deviceID;
+-            device->agsDeviceInfo541.localMemoryInBytes = local_memory_size;
+-
+-            if (device->agsDeviceInfo541.vendorId == 0x1002)
+-                device->agsDeviceInfo541.asicFamily = AsicFamily_GCN4;
+-
+-            if (!i)
+-                device->agsDeviceInfo541.isPrimaryDevice = 1;
+-            break;
++            SET_DEVICE_FIELD(device, architectureVersion, ArchitectureVersion, context->version, ArchitectureVersion_GCN);
++            SET_DEVICE_FIELD(device, asicFamily, AsicFamily, context->version, AsicFamily_GCN4);
+         }
++        SET_DEVICE_FIELD(device, localMemoryInBytes, ULONG64, context->version, local_memory_size);
++        if (!i)
++            SET_DEVICE_FIELD(device, isPrimaryDevice, int, context->version, 1);
++
++        device += amd_ags_info[context->version].device_size;
+     }
+ 
+     return AGS_SUCCESS;
+@@ -330,9 +340,9 @@ AGSReturnCode WINAPI agsInit(AGSContext **context, const AGSConfiguration *confi
+     }
+ 
+     memset(gpu_info, 0, sizeof(*gpu_info));
+-    gpu_info->agsVersionMajor = amd_ags_versions[object->version].major;
+-    gpu_info->agsVersionMinor = amd_ags_versions[object->version].minor;
+-    gpu_info->agsVersionPatch = amd_ags_versions[object->version].patch;
++    gpu_info->agsVersionMajor = amd_ags_info[object->version].major;
++    gpu_info->agsVersionMinor = amd_ags_info[object->version].minor;
++    gpu_info->agsVersionPatch = amd_ags_info[object->version].patch;
+     gpu_info->driverVersion = "20.20.2-180516a-328911C-RadeonSoftwareAdrenalin";
+     gpu_info->radeonSoftwareVersion  = "20.20.2";
+     gpu_info->numDevices = object->device_count;
+From a4082f0890971011e11102dcb424a68ca6e1f035 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 16 Apr 2021 19:33:36 +0300
+Subject: [PATCH] amd_ags_x64: Fill display info in AGS context.
+
+For FH4.
+---
+ dlls/amd_ags_x64/Makefile.in        |   2 +-
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 116 ++++++++++++++++++++++++++++
+ 2 files changed, 117 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/amd_ags_x64/Makefile.in b/dlls/amd_ags_x64/Makefile.in
+index ec13c055a26..4bc7505f509 100644
+--- a/dlls/amd_ags_x64/Makefile.in
++++ b/dlls/amd_ags_x64/Makefile.in
+@@ -1,5 +1,5 @@
+ MODULE    = amd_ags_x64.dll
+-IMPORTS   = version vulkan-1
++IMPORTS   = version vulkan-1 user32
+ IMPORTLIB = amd_ags_x64
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 6c71db021dc..c0a654939dd 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -62,6 +62,8 @@ amd_ags_info[AMD_AGS_VERSION_COUNT] =
+ #define DEVICE_FIELD_deviceId 4
+ #define DEVICE_FIELD_isPrimaryDevice 5
+ #define DEVICE_FIELD_localMemoryInBytes 6
++#define DEVICE_FIELD_numDisplays 7
++#define DEVICE_FIELD_displays 8
+ 
+ static const struct
+ {
+@@ -77,6 +79,8 @@ device_struct_fields[] =
+     DEF_FIELD(deviceId),
+     DEF_FIELD(isPrimaryDevice),
+     DEF_FIELD(localMemoryInBytes),
++    DEF_FIELD(numDisplays),
++    DEF_FIELD(displays),
+ };
+ 
+ #undef DEF_FIELD
+@@ -256,6 +260,105 @@ static enum amd_ags_version determine_ags_version(void)
+     return ret;
+ }
+ 
++struct monitor_enum_context
++{
++    const char *adapter_name;
++    AGSDisplayInfo **ret_displays;
++    int *ret_display_count;
++};
++
++static BOOL WINAPI monitor_enum_proc(HMONITOR hmonitor, HDC hdc, RECT *rect, LPARAM context)
++{
++    struct monitor_enum_context *c = (struct monitor_enum_context *)context;
++    MONITORINFOEXA monitor_info;
++    AGSDisplayInfo *new_alloc;
++    DISPLAY_DEVICEA device;
++    AGSDisplayInfo *info;
++    unsigned int i, mode;
++    DEVMODEA dev_mode;
++
++
++    monitor_info.cbSize = sizeof(monitor_info);
++    GetMonitorInfoA(hmonitor, (MONITORINFO *)&monitor_info);
++
++    device.cb = sizeof(device);
++    i = 0;
++    while (EnumDisplayDevicesA(NULL, i, &device, 0))
++    {
++        ++i;
++        if (strcmp(device.DeviceString, c->adapter_name) || strcmp(device.DeviceName, monitor_info.szDevice))
++            continue;
++
++        if (*c->ret_display_count)
++        {
++            if (!(new_alloc = heap_realloc(*c->ret_displays, sizeof(*new_alloc) * (*c->ret_display_count + 1))))
++            {
++                ERR("No memory.");
++                return FALSE;
++            }
++            *c->ret_displays = new_alloc;
++        }
++        else if (!(*c->ret_displays = heap_alloc(sizeof(**c->ret_displays))))
++        {
++            ERR("No memory.");
++            return FALSE;
++        }
++        info = &(*c->ret_displays)[*c->ret_display_count];
++        memset(info, 0, sizeof(*info));
++        strcpy(info->displayDeviceName, device.DeviceName);
++        if (EnumDisplayDevicesA(info->displayDeviceName, 0, &device, 0))
++        {
++            strcpy(info->name, device.DeviceString);
++        }
++        else
++        {
++            ERR("Could not get monitor name for device %s.\n", debugstr_a(info->displayDeviceName));
++            strcpy(info->name, "Unknown");
++        }
++        if (monitor_info.dwFlags & MONITORINFOF_PRIMARY)
++            info->displayFlags |= AGS_DISPLAYFLAG_PRIMARY_DISPLAY;
++
++        mode = 0;
++        while (EnumDisplaySettingsExA(monitor_info.szDevice, mode, &dev_mode, EDS_RAWMODE))
++        {
++            ++mode;
++            if (dev_mode.dmPelsWidth > info->maxResolutionX)
++                info->maxResolutionX = dev_mode.dmPelsWidth;
++            if (dev_mode.dmPelsHeight > info->maxResolutionY)
++                info->maxResolutionY = dev_mode.dmPelsHeight;
++            if (dev_mode.dmDisplayFrequency > info->maxRefreshRate)
++                info->maxRefreshRate = dev_mode.dmDisplayFrequency;
++        }
++
++        info->currentResolution.offsetX = monitor_info.rcMonitor.left;
++        info->currentResolution.offsetY = monitor_info.rcMonitor.top;
++        info->currentResolution.width = monitor_info.rcMonitor.right - monitor_info.rcMonitor.left;
++        info->currentResolution.height = monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top;
++        info->visibleResolution = info->currentResolution;
++
++        if (EnumDisplaySettingsExA(monitor_info.szDevice, ENUM_CURRENT_SETTINGS, &dev_mode, EDS_RAWMODE))
++            info->currentRefreshRate = dev_mode.dmDisplayFrequency;
++        else
++            ERR("Could not get current display settings.\n");
++        ++*c->ret_display_count;
++
++        TRACE("Added display %s for %s.\n", debugstr_a(monitor_info.szDevice), debugstr_a(c->adapter_name));
++    }
++
++    return TRUE;
++}
++
++static void init_device_displays(const char *adapter_name, AGSDisplayInfo **ret_displays, int *ret_display_count)
++{
++    struct monitor_enum_context context;
++
++    context.adapter_name = adapter_name;
++    context.ret_displays = ret_displays;
++    context.ret_display_count = ret_display_count;
++
++    EnumDisplayMonitors(NULL, NULL, monitor_enum_proc, (LPARAM)&context);
++}
++
+ static AGSReturnCode init_ags_context(AGSContext *context)
+ {
+     AGSReturnCode ret;
+@@ -311,6 +414,10 @@ static AGSReturnCode init_ags_context(AGSContext *context)
+         if (!i)
+             SET_DEVICE_FIELD(device, isPrimaryDevice, int, context->version, 1);
+ 
++        init_device_displays(vk_properties->deviceName,
++                GET_DEVICE_FIELD_ADDR(device, displays, AGSDisplayInfo *, context->version),
++                GET_DEVICE_FIELD_ADDR(device, numDisplays, int, context->version));
++
+         device += amd_ags_info[context->version].device_size;
+     }
+ 
+@@ -357,12 +464,21 @@ AGSReturnCode WINAPI agsInit(AGSContext **context, const AGSConfiguration *confi
+ 
+ AGSReturnCode WINAPI agsDeInit(AGSContext *context)
+ {
++    unsigned int i;
++    BYTE *device;
++
+     TRACE("context %p.\n", context);
+ 
+     if (context)
+     {
+         heap_free(context->memory_properties);
+         heap_free(context->properties);
++        device = (BYTE *)context->devices;
++        for (i = 0; i < context->device_count; ++i)
++        {
++            heap_free(GET_DEVICE_FIELD_ADDR(device, displays, AGSDisplayInfo *, context->version));
++            device += amd_ags_info[context->version].device_size;
++        }
+         heap_free(context->devices);
+         heap_free(context);
+     }
+From c175c21b2f0cd183a4d729a4fdcf67a403f4645f Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 16 Apr 2021 20:03:12 +0300
+Subject: [PATCH] amd_ags_x64: Bump driver version.
+
+For FH4.
+---
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index c0a654939dd..20bf4aa3434 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -450,8 +450,8 @@ AGSReturnCode WINAPI agsInit(AGSContext **context, const AGSConfiguration *confi
+     gpu_info->agsVersionMajor = amd_ags_info[object->version].major;
+     gpu_info->agsVersionMinor = amd_ags_info[object->version].minor;
+     gpu_info->agsVersionPatch = amd_ags_info[object->version].patch;
+-    gpu_info->driverVersion = "20.20.2-180516a-328911C-RadeonSoftwareAdrenalin";
+-    gpu_info->radeonSoftwareVersion  = "20.20.2";
++    gpu_info->driverVersion = "20.50.03.05-210326a-365573E-RadeonSoftwareAdrenalin2020";
++    gpu_info->radeonSoftwareVersion  = "21.3.2";
+     gpu_info->numDevices = object->device_count;
+     gpu_info->devices = object->devices;
+ 

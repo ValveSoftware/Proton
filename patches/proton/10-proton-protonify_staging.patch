@@ -1804,3 +1804,2798 @@ index a4a10bc8e93..551ef146cd7 100644
 -EXTRADLLFLAGS = -Wb,--prefer-native
 -
  RC_SRCS = version.rc
+From 2ec8739c7440157e189b762b486433697fee06e3 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Wed, 5 Aug 2020 14:26:23 -0700
+Subject: [PATCH] HACK: ntdll: Support x86_64 syscall emulation for Red Dead
+ Redemption 2.
+
+---
+ dlls/ntdll/unix/signal_x86_64.c | 125 +++++++++++++++++++++++++++++---
+ 1 file changed, 115 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 33ad0489006..66fadacf920 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -2368,6 +2368,63 @@ static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+ 
+     ctx->uc_mcontext.gregs[REG_RIP] = *dispatcher_address;
+ }
++
++unsigned int __wine_syscall_nr_NtClose;
++unsigned int __wine_syscall_nr_NtCreateFile;
++unsigned int __wine_syscall_nr_NtGetContextThread;
++unsigned int __wine_syscall_nr_NtQueryInformationProcess;
++unsigned int __wine_syscall_nr_NtQuerySystemInformation;
++unsigned int __wine_syscall_nr_NtQueryVirtualMemory;
++unsigned int __wine_syscall_nr_NtReadFile;
++unsigned int __wine_syscall_nr_NtWriteFile;
++
++static void sigsys_handler_rdr2( int signal, siginfo_t *siginfo, void *sigcontext )
++{
++    ULONG64 *dispatcher_address = (ULONG64 *)((char *)user_shared_data + page_size);
++    ucontext_t *ctx = sigcontext;
++    void ***rsp;
++
++    TRACE("SIGSYS, rax %#llx, rip %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX],
++            ctx->uc_mcontext.gregs[REG_RIP]);
++
++    rsp = (void ***)&ctx->uc_mcontext.gregs[REG_RSP];
++    *rsp -= 1;
++    **rsp = (void *)(ctx->uc_mcontext.gregs[REG_RIP] + 0xb);
++
++    ctx->uc_mcontext.gregs[REG_RIP] = *dispatcher_address;
++
++    /* syscall numbers are for Windows 10 1809 (build 17763) */
++    switch (ctx->uc_mcontext.gregs[REG_RAX])
++    {
++        case 0x19:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQueryInformationProcess;
++            break;
++        case 0x36:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQuerySystemInformation;
++            break;
++        case 0xec:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtGetContextThread;
++            break;
++        case 0x55:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtCreateFile;
++            break;
++        case 0x08:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtWriteFile;
++            break;
++        case 0x06:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtReadFile;
++            break;
++        case 0x0f:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtClose;
++            break;
++        case 0x23:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQueryVirtualMemory;
++            break;
++         default:
++            FIXME("Unhandled syscall %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX]);
++            break;
++    }
++}
+ #endif
+ 
+ #ifdef HAVE_SECCOMP
+@@ -2425,27 +2482,75 @@ static void install_bpf(struct sigaction *sig_act)
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+     };
++    static struct sock_filter filter_rdr2[] =
++    {
++        /* Trap anything called from RDR2 or the launcher (0x140000000 - 0x150000000)*/
++        /* > 0x140000000 */
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
++        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x40000000 /*lsb*/, 0, 7),
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
++        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 5),
++
++        /* < 0x150000000 */
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
++        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x50000000 /*lsb*/, 3, 0),
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
++        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 1),
++        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
++
++        /* Allow everything else */
++        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
++    };
+     struct sock_fprog prog;
++    BOOL rdr2 = FALSE;
+     NTSTATUS status;
+ 
+     sig_act->sa_sigaction = sigsys_handler;
++    memset(&prog, 0, sizeof(prog));
++
++    {
++        const char *sgi = getenv("SteamGameId");
++        if (sgi && (!strcmp(sgi, "1174180") || !strcmp(sgi, "1404210")))
++        {
++            /* Use specific filter and signal handler for Red Dead Redemption 2 */
++            prog.len = ARRAY_SIZE(filter_rdr2);
++            prog.filter = filter_rdr2;
++            sig_act->sa_sigaction = sigsys_handler_rdr2;
++            rdr2 = TRUE;
++        }
++    }
++
+     sigaction(SIGSYS, sig_act, NULL);
+ 
+-    if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
++    if (rdr2)
+     {
+-        TRACE("Seccomp filters already installed.\n");
+-        return;
++        int ret;
++
++        if ((ret = prctl(PR_GET_SECCOMP, 0, NULL, 0, 0)))
++        {
++            if (ret == 2)
++                TRACE("Seccomp filters already installed.\n");
++            else
++                ERR("Seccomp filters cannot be installed, ret %d, error %s.\n", ret, strerror(errno));
++            return;
++        }
+     }
+-    if (status != -ENOSYS && (status != -1 || errno != ENOSYS))
++    else
+     {
+-        ERR("Unexpected status %#x, errno %d.\n", status, errno);
+-        return;
++        if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
++        {
++            TRACE("Seccomp filters already installed.\n");
++            return;
++        }
++        if (status != -ENOSYS && (status != -1 || errno != ENOSYS))
++        {
++            ERR("Unexpected status %#x, errno %d.\n", status, errno);
++            return;
++        }
++        prog.len = ARRAY_SIZE(filter);
++        prog.filter = filter;
+     }
+ 
+-    memset(&prog, 0, sizeof(prog));
+-    prog.len = ARRAY_SIZE(filter);
+-    prog.filter = filter;
+-
+     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
+     {
+         ERR("prctl(PR_SET_NO_NEW_PRIVS, ...): %s.\n", strerror(errno));
+From 646c4b468b4add980861392a439e5184c239c54e Mon Sep 17 00:00:00 2001
+From: Myah Caron <qsniyg@protonmail.com>
+Date: Wed, 10 Mar 2021 12:58:01 +0300
+Subject: [PATCH] gamingtcui: Add dll.
+
+For FH4.
+
+Edits to the original patch:
+    - add missing WINAPI;
+    - change formatting;
+    - don't use output xuids in ShowPlayerPickerUI().
+---
+ configure                                     |  4 ++
+ configure.ac                                  |  2 +
+ .../api-ms-win-gaming-tcui-l1-1-0/Makefile.in |  1 +
+ .../api-ms-win-gaming-tcui-l1-1-0.spec        |  7 +++
+ dlls/gamingtcui/Makefile.in                   |  4 ++
+ dlls/gamingtcui/gamingtcui.spec               | 29 +++++++++
+ dlls/gamingtcui/gamingtcui_main.c             | 59 +++++++++++++++++++
+ 7 files changed, 106 insertions(+)
+ create mode 100644 dlls/api-ms-win-gaming-tcui-l1-1-0/Makefile.in
+ create mode 100644 dlls/api-ms-win-gaming-tcui-l1-1-0/api-ms-win-gaming-tcui-l1-1-0.spec
+ create mode 100644 dlls/gamingtcui/Makefile.in
+ create mode 100644 dlls/gamingtcui/gamingtcui.spec
+ create mode 100644 dlls/gamingtcui/gamingtcui_main.c
+
+diff --git a/configure b/configure
+index a60c97b4a5e..334b9aff797 100755
+--- a/configure
++++ b/configure
+@@ -1102,6 +1102,7 @@ enable_api_ms_win_eventing_controller_l1_1_0
+ enable_api_ms_win_eventing_legacy_l1_1_0
+ enable_api_ms_win_eventing_provider_l1_1_0
+ enable_api_ms_win_eventlog_legacy_l1_1_0
++enable_api_ms_win_gaming_tcui_l1_1_0
+ enable_api_ms_win_gdi_dpiinfo_l1_1_0
+ enable_api_ms_win_mm_joystick_l1_1_0
+ enable_api_ms_win_mm_misc_l1_1_1
+@@ -1365,6 +1366,7 @@ enable_fontsub
+ enable_fusion
+ enable_fwpuclnt
+ enable_gameux
++enable_gamingtcui
+ enable_gcdef
+ enable_gdi32
+ enable_gdiplus
+@@ -20448,6 +20450,7 @@ wine_fn_config_makefile dlls/api-ms-win-eventing-controller-l1-1-0 enable_api_ms
+ wine_fn_config_makefile dlls/api-ms-win-eventing-legacy-l1-1-0 enable_api_ms_win_eventing_legacy_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-eventing-provider-l1-1-0 enable_api_ms_win_eventing_provider_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-eventlog-legacy-l1-1-0 enable_api_ms_win_eventlog_legacy_l1_1_0
++wine_fn_config_makefile dlls/api-ms-win-gaming-tcui-l1-1-0 enable_api_ms_win_gaming_tcui_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-gdi-dpiinfo-l1-1-0 enable_api_ms_win_gdi_dpiinfo_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-mm-joystick-l1-1-0 enable_api_ms_win_mm_joystick_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-mm-misc-l1-1-1 enable_api_ms_win_mm_misc_l1_1_1
+@@ -20790,6 +20793,7 @@ wine_fn_config_makefile dlls/fusion/tests enable_tests
+ wine_fn_config_makefile dlls/fwpuclnt enable_fwpuclnt
+ wine_fn_config_makefile dlls/gameux enable_gameux
+ wine_fn_config_makefile dlls/gameux/tests enable_tests
++wine_fn_config_makefile dlls/gamingtcui enable_gamingtcui
+ wine_fn_config_makefile dlls/gcdef enable_gcdef
+ wine_fn_config_makefile dlls/gdi.exe16 enable_win16
+ wine_fn_config_makefile dlls/gdi32 enable_gdi32
+diff --git a/configure.ac b/configure.ac
+index 70181d410e0..3013217e411 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3014,6 +3014,7 @@ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-eventing-controller-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-eventing-legacy-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-eventing-provider-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-eventlog-legacy-l1-1-0)
++WINE_CONFIG_MAKEFILE(dlls/api-ms-win-gaming-tcui-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-gdi-dpiinfo-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-mm-joystick-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-mm-misc-l1-1-1)
+@@ -3356,6 +3357,7 @@ WINE_CONFIG_MAKEFILE(dlls/fusion/tests)
+ WINE_CONFIG_MAKEFILE(dlls/fwpuclnt)
+ WINE_CONFIG_MAKEFILE(dlls/gameux)
+ WINE_CONFIG_MAKEFILE(dlls/gameux/tests)
++WINE_CONFIG_MAKEFILE(dlls/gamingtcui)
+ WINE_CONFIG_MAKEFILE(dlls/gcdef)
+ WINE_CONFIG_MAKEFILE(dlls/gdi.exe16,enable_win16)
+ WINE_CONFIG_MAKEFILE(dlls/gdi32)
+diff --git a/dlls/api-ms-win-gaming-tcui-l1-1-0/Makefile.in b/dlls/api-ms-win-gaming-tcui-l1-1-0/Makefile.in
+new file mode 100644
+index 00000000000..5007bd06de2
+--- /dev/null
++++ b/dlls/api-ms-win-gaming-tcui-l1-1-0/Makefile.in
+@@ -0,0 +1 @@
++MODULE    = api-ms-win-gaming-tcui-l1-1-0.dll
+\ No newline at end of file
+diff --git a/dlls/api-ms-win-gaming-tcui-l1-1-0/api-ms-win-gaming-tcui-l1-1-0.spec b/dlls/api-ms-win-gaming-tcui-l1-1-0/api-ms-win-gaming-tcui-l1-1-0.spec
+new file mode 100644
+index 00000000000..d7fa8a12e75
+--- /dev/null
++++ b/dlls/api-ms-win-gaming-tcui-l1-1-0/api-ms-win-gaming-tcui-l1-1-0.spec
+@@ -0,0 +1,7 @@
++@ stdcall ProcessPendingGameUI(long) gamingtcui.ProcessPendingGameUI
++@ stub ShowChangeFriendRelationshipUI
++@ stub ShowGameInviteUI
++@ stdcall ShowPlayerPickerUI(ptr ptr long ptr long long long ptr ptr) gamingtcui.ShowPlayerPickerUI
++@ stdcall ShowProfileCardUI(ptr ptr ptr) gamingtcui.ShowProfileCardUI
++@ stub ShowTitleAchievementsUI
++@ stub TryCancelPendingGameUI
+diff --git a/dlls/gamingtcui/Makefile.in b/dlls/gamingtcui/Makefile.in
+new file mode 100644
+index 00000000000..0a88c98c539
+--- /dev/null
++++ b/dlls/gamingtcui/Makefile.in
+@@ -0,0 +1,4 @@
++MODULE    = gamingtcui.dll
++
++C_SRCS = \
++	gamingtcui_main.c
+diff --git a/dlls/gamingtcui/gamingtcui.spec b/dlls/gamingtcui/gamingtcui.spec
+new file mode 100644
+index 00000000000..998bf4edafd
+--- /dev/null
++++ b/dlls/gamingtcui/gamingtcui.spec
+@@ -0,0 +1,29 @@
++@ stub DllCanUnloadNow
++@ stub DllGetActivationFactory
++@ stub DllGetClassObject
++@ stub CheckGamingPrivilegeSilently
++@ stub CheckGamingPrivilegeSilentlyForUser
++@ stub CheckGamingPrivilegeWithUI
++@ stub CheckGamingPrivilegeWithUIForUser
++@ stdcall ProcessPendingGameUI(long)
++@ stub ShowChangeFriendRelationshipUI
++@ stub ShowChangeFriendRelationshipUIForUser
++@ stub ShowCustomizeUserProfileUI
++@ stub ShowCustomizeUserProfileUIForUser
++@ stub ShowFindFriendsUI
++@ stub ShowFindFriendsUIForUser
++@ stub ShowGameInfoUI
++@ stub ShowGameInfoUIForUser
++@ stub ShowGameInviteUI
++@ stub ShowGameInviteUIForUser
++@ stub ShowGameInviteUIWithContext
++@ stub ShowGameInviteUIWithContextForUser
++@ stdcall ShowPlayerPickerUI(ptr ptr long ptr long long long ptr ptr)
++@ stub ShowPlayerPickerUIForUser
++@ stdcall ShowProfileCardUI(ptr ptr ptr)
++@ stub ShowProfileCardUIForUser
++@ stub ShowTitleAchievementsUI
++@ stub ShowTitleAchievementsUIForUser
++@ stub ShowUserSettingsUI
++@ stub ShowUserSettingsUIForUser
++@ stub TryCancelPendingGameUI
+diff --git a/dlls/gamingtcui/gamingtcui_main.c b/dlls/gamingtcui/gamingtcui_main.c
+new file mode 100644
+index 00000000000..07afe30a6cc
+--- /dev/null
++++ b/dlls/gamingtcui/gamingtcui_main.c
+@@ -0,0 +1,59 @@
++#include "config.h"
++
++#include <stdarg.h>
++
++#include "windef.h"
++#include "winbase.h"
++#include "hstring.h"
++#include "wine/debug.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(gamingtcui);
++
++BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved)
++{
++    TRACE("(%p, %d, %p)\n", hInstDll, fdwReason, lpvReserved);
++
++    switch (fdwReason)
++    {
++        case DLL_PROCESS_ATTACH:
++            DisableThreadLibraryCalls(hInstDll);
++            break;
++    }
++
++    return TRUE;
++}
++
++typedef void (WINAPI *GameUICompletionRoutine)(HRESULT returnCode, void *context);
++
++HRESULT WINAPI ShowProfileCardUI(HSTRING targetUserXuid, GameUICompletionRoutine completionRoutine, void *context)
++{
++    FIXME("%p %p %p: stub\n", targetUserXuid, completionRoutine, context);
++
++    if (completionRoutine)
++        completionRoutine(S_OK, context);
++
++    return S_OK;
++}
++
++typedef void (WINAPI *PlayerPickerUICompletionRoutine)(HRESULT returnCode, void *context,
++        const HSTRING *selectedXuids, size_t selectedXuidsCount);
++
++HRESULT WINAPI ShowPlayerPickerUI(HSTRING promptDisplayText, const HSTRING *xuids, size_t xuidsCount,
++        const HSTRING *preSelectedXuids, size_t preSelectedXuidsCount, size_t minSelectionCount,
++        size_t maxSelectionCount, PlayerPickerUICompletionRoutine completionRoutine, void *context)
++{
++    FIXME("%p %p %lu %p %lu %lu %lu %p %p stub.\n", promptDisplayText, xuids, xuidsCount, preSelectedXuids,
++            preSelectedXuidsCount, minSelectionCount, maxSelectionCount, completionRoutine, context);
++
++    if (completionRoutine)
++        completionRoutine(S_OK, context, preSelectedXuids, preSelectedXuidsCount);
++
++    return S_OK;
++}
++
++HRESULT WINAPI ProcessPendingGameUI(BOOL waitForCompletion)
++{
++    FIXME("%d: stub\n", waitForCompletion);
++
++    return S_OK;
++}
+
+From 7526e49827642fea25b8b72c66afba6b7fc38b2b Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 10 Mar 2021 15:19:23 +0300
+Subject: [PATCH 03/16] ntdll: Implement NtGetNextProcess().
+
+---
+ dlls/ntdll/ntdll.spec          |  1 +
+ dlls/ntdll/tests/om.c          | 28 +++++++++++++++++++++++
+ dlls/ntdll/unix/process.c      | 20 +++++++++++++++++
+ include/wine/server_protocol.h | 21 +++++++++++++++++
+ server/process.c               | 41 ++++++++++++++++++++++++++++++++++
+ server/protocol.def            | 11 +++++++++
+ server/request.h               |  9 ++++++++
+ server/trace.c                 | 16 +++++++++++++
+ 8 files changed, 147 insertions(+)
+
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index 6c71032bd31..490314c6fce 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -223,6 +223,7 @@
+ @ stdcall -norelay -syscall NtGetContextThread(long ptr)
+ @ stdcall -syscall NtGetCurrentProcessorNumber()
+ # @ stub NtGetDevicePowerState
++@ stdcall -syscall NtGetNextProcess(long long long long ptr)
+ @ stdcall -syscall NtGetNlsSectionPtr(long long long ptr ptr)
+ @ stub NtGetPlugPlayEvent
+ @ stdcall NtGetTickCount()
+diff --git a/dlls/ntdll/tests/om.c b/dlls/ntdll/tests/om.c
+index e93f11e1126..6b865ce27ca 100644
+--- a/dlls/ntdll/tests/om.c
++++ b/dlls/ntdll/tests/om.c
+@@ -78,6 +78,7 @@ static void     (WINAPI *pRtlWakeAddressAll)( const void * );
+ static void     (WINAPI *pRtlWakeAddressSingle)( const void * );
+ static NTSTATUS (WINAPI *pNtOpenProcess)( HANDLE *, ACCESS_MASK, const OBJECT_ATTRIBUTES *, const CLIENT_ID * );
+ static NTSTATUS (WINAPI *pNtCreateDebugObject)( HANDLE *, ACCESS_MASK, OBJECT_ATTRIBUTES *, ULONG );
++static NTSTATUS (WINAPI *pNtGetNextProcess)(HANDLE process, ACCESS_MASK access, ULONG attributes, ULONG flags, HANDLE *handle);
+ 
+ #define KEYEDEVENT_WAIT       0x0001
+ #define KEYEDEVENT_WAKE       0x0002
+@@ -2549,6 +2550,31 @@ static void test_object_types(void)
+     }
+ }
+ 
++static void test_get_next_process(void)
++{
++    NTSTATUS status;
++    HANDLE handle;
++
++    if (!pNtGetNextProcess)
++    {
++        win_skip("NtGetNextProcess is not available.\n");
++        return;
++    }
++
++    status = pNtGetNextProcess(0, PROCESS_QUERY_LIMITED_INFORMATION, OBJ_INHERIT, 0, &handle);
++    ok(!status, "Unexpected status %#x.\n", status);
++    pNtClose(handle);
++
++    /* Reversed search only supported in recent enough Win10 */
++    status = pNtGetNextProcess(0, PROCESS_QUERY_LIMITED_INFORMATION, OBJ_INHERIT, 1, &handle);
++    ok(!status || broken(status == STATUS_INVALID_PARAMETER), "Unexpected status %#x.\n", status);
++    if (status)
++        pNtClose(handle);
++
++    status = pNtGetNextProcess(0, PROCESS_QUERY_LIMITED_INFORMATION, OBJ_INHERIT, 2, &handle);
++    ok(status == STATUS_INVALID_PARAMETER, "Unexpected status %#x.\n", status);
++}
++
+ START_TEST(om)
+ {
+     HMODULE hntdll = GetModuleHandleA("ntdll.dll");
+@@ -2600,6 +2626,7 @@ START_TEST(om)
+     pRtlWakeAddressSingle   =  (void *)GetProcAddress(hntdll, "RtlWakeAddressSingle");
+     pNtOpenProcess          =  (void *)GetProcAddress(hntdll, "NtOpenProcess");
+     pNtCreateDebugObject    =  (void *)GetProcAddress(hntdll, "NtCreateDebugObject");
++    pNtGetNextProcess       =  (void *)GetProcAddress(hntdll, "NtGetNextProcess");
+ 
+     test_case_sensitive();
+     test_namespace_pipe();
+@@ -2617,4 +2644,5 @@ START_TEST(om)
+     test_wait_on_address();
+     test_process();
+     test_object_types();
++    test_get_next_process();
+ }
+diff --git a/dlls/ntdll/unix/process.c b/dlls/ntdll/unix/process.c
+index 083a3a82a1d..8971ed8e5e2 100644
+--- a/dlls/ntdll/unix/process.c
++++ b/dlls/ntdll/unix/process.c
+@@ -1759,6 +1759,26 @@ NTSTATUS WINAPI NtResumeProcess( HANDLE handle )
+     return ret;
+ }
+ 
++/**********************************************************************
++ *           NtGetNextProcess  (NTDLL.@)
++ */
++NTSTATUS WINAPI NtGetNextProcess( HANDLE process, ACCESS_MASK access, ULONG attributes,
++                                  ULONG flags, HANDLE *handle )
++{
++    NTSTATUS ret;
++
++    SERVER_START_REQ( get_next_process )
++    {
++        req->last = wine_server_obj_handle( process );
++        req->access = access;
++        req->attributes = attributes;
++        req->flags = flags;
++        ret = wine_server_call( req );
++        if (!ret) *handle = wine_server_ptr_handle( reply->handle );
++    }
++    SERVER_END_REQ;
++    return ret;
++}
+ 
+ /**********************************************************************
+  *           NtDebugActiveProcess  (NTDLL.@)
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 0ff37b112a6..a33210f1475 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5589,6 +5589,24 @@ struct get_fsync_apc_idx_reply
+ };
+ 
+ 
++
++struct get_next_process_request
++{
++    struct request_header __header;
++    obj_handle_t last;
++    unsigned int access;
++    unsigned int attributes;
++    unsigned int flags;
++    char __pad_28[4];
++};
++struct get_next_process_reply
++{
++    struct reply_header __header;
++    obj_handle_t handle;
++    char __pad_12[4];
++};
++
++
+ enum request
+ {
+     REQ_new_process,
+@@ -5875,6 +5893,7 @@ enum request
+     REQ_get_esync_fd,
+     REQ_esync_msgwait,
+     REQ_get_esync_apc_fd,
++    REQ_get_next_process,
+     REQ_NB_REQUESTS
+ };
+ 
+@@ -6166,6 +6185,7 @@ union generic_request
+     struct get_esync_fd_request get_esync_fd_request;
+     struct esync_msgwait_request esync_msgwait_request;
+     struct get_esync_apc_fd_request get_esync_apc_fd_request;
++    struct get_next_process_request get_next_process_request;
+ };
+ union generic_reply
+ {
+@@ -6455,6 +6475,7 @@ union generic_reply
+     struct get_esync_fd_reply get_esync_fd_reply;
+     struct esync_msgwait_reply esync_msgwait_reply;
+     struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
++    struct get_next_process_reply get_next_process_reply;
+ };
+ 
+ /* ### protocol_version begin ### */
+diff --git a/server/process.c b/server/process.c
+index 08cd261f445..307317f37e6 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -1782,6 +1782,47 @@ DECL_HANDLER(resume_process)
+     }
+ }
+ 
++/* Iterate process list */
++DECL_HANDLER(get_next_process)
++{
++    struct process *process = NULL, *next;
++    struct list *ptr;
++
++    reply->handle = 0;
++
++    if ( req->flags > 1 )
++    {
++        set_error( STATUS_INVALID_PARAMETER );
++        return;
++    }
++
++    if (!req->last)
++    {
++        ptr = req->flags ? list_tail( &process_list ) : list_head( &process_list );
++    }
++    else if ((process = get_process_from_handle( req->last, 0 )))
++    {
++        ptr = req->flags ? list_prev( &process_list, &process->entry ) :
++                list_next( &process_list, &process->entry );
++    }
++    else
++        return;
++
++    while (ptr)
++    {
++        next = LIST_ENTRY( ptr, struct process, entry );
++        if ((reply->handle = alloc_handle( current->process, next, req->access, req->attributes )))
++            break;
++        ptr = req->flags ? list_prev( &process_list, &next->entry ) : list_next( &process_list, &next->entry );
++    }
++
++    if (!reply->handle)
++        set_error( STATUS_NO_MORE_ENTRIES );
++
++    if (process)
++        release_object( process );
++}
++
+ /* Get a list of processes and threads currently running */
+ DECL_HANDLER(list_processes)
+ {
+diff --git a/server/protocol.def b/server/protocol.def
+index ebb3b762347..e1d7f0ee3ab 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3880,3 +3880,14 @@ enum fsync_type
+ @REPLY
+     unsigned int shm_idx;
+ @END
++
++
++/* Iterate process list */
++@REQ(get_next_process)
++    obj_handle_t last;         /* process handle to start with */
++    unsigned int access;       /* desired access for returned handle */
++    unsigned int attributes;   /* returned handle attributes */
++    unsigned int flags;        /* controls iteration direction */
++@REPLY
++    obj_handle_t handle;       /* next process handle */
++@END
+diff --git a/server/request.h b/server/request.h
+index cb95831ab84..a9b5a478c27 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -403,6 +403,7 @@ DECL_HANDLER(open_fsync);
+ DECL_HANDLER(get_esync_fd);
+ DECL_HANDLER(esync_msgwait);
+ DECL_HANDLER(get_esync_apc_fd);
++DECL_HANDLER(get_next_process);
+ 
+ #ifdef WANT_REQUEST_HANDLERS
+ 
+@@ -693,6 +694,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_get_esync_fd,
+     (req_handler)req_esync_msgwait,
+     (req_handler)req_get_esync_apc_fd,
++    (req_handler)req_get_next_process,
+ };
+ 
+ C_ASSERT( sizeof(abstime_t) == 8 );
+@@ -2311,6 +2313,13 @@ C_ASSERT( sizeof(struct fsync_msgwait_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct esync_msgwait_request, in_msgwait) == 12 );
+ C_ASSERT( sizeof(struct esync_msgwait_request) == 16 );
+ C_ASSERT( sizeof(struct get_esync_apc_fd_request) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_next_process_request, last) == 12 );
++C_ASSERT( FIELD_OFFSET(struct get_next_process_request, access) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_next_process_request, attributes) == 20 );
++C_ASSERT( FIELD_OFFSET(struct get_next_process_request, flags) == 24 );
++C_ASSERT( sizeof(struct get_next_process_request) == 32 );
++C_ASSERT( FIELD_OFFSET(struct get_next_process_reply, handle) == 8 );
++C_ASSERT( sizeof(struct get_next_process_reply) == 16 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+ 
+diff --git a/server/trace.c b/server/trace.c
+index 7ae02418734..13affb37347 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4586,6 +4586,19 @@ static void dump_get_fsync_apc_idx_reply( const struct get_fsync_apc_idx_reply *
+     fprintf( stderr, " shm_idx=%08x", req->shm_idx );
+ }
+ 
++static void dump_get_next_process_request( const struct get_next_process_request *req )
++{
++    fprintf( stderr, " last=%04x", req->last );
++    fprintf( stderr, ", access=%08x", req->access );
++    fprintf( stderr, ", attributes=%08x", req->attributes );
++    fprintf( stderr, ", flags=%08x", req->flags );
++}
++
++static void dump_get_next_process_reply( const struct get_next_process_reply *req )
++{
++    fprintf( stderr, " handle=%04x", req->handle );
++}
++
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_new_process_request,
+     (dump_func)dump_exec_process_request,
+@@ -4871,6 +4884,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_get_esync_fd_request,
+     (dump_func)dump_esync_msgwait_request,
+     (dump_func)dump_get_esync_apc_fd_request,
++    (dump_func)dump_get_next_process_request,
+ };
+ 
+ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+@@ -5158,6 +5172,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_create_esync_reply,
+     (dump_func)dump_open_esync_reply,
+     (dump_func)dump_get_esync_fd_reply,
++    (dump_func)dump_get_next_process_reply,
+     NULL,
+     NULL,
+ };
+@@ -5445,6 +5460,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "get_esync_fd",
+     "esync_msgwait",
+     "get_esync_apc_fd",
++    "get_next_process",
+ };
+ 
+ static const struct
+-- 
+2.30.2
+
+From cc36ffea19a3fa16a7583e6bdd332fa36262fcb1 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 10 Mar 2021 16:20:44 +0300
+Subject: [PATCH 04/16] ntdll: Implement NtGetNextThread().
+
+---
+ dlls/ntdll/ntdll.spec          |  1 +
+ dlls/ntdll/tests/om.c          | 31 ++++++++++++++++++++
+ dlls/ntdll/unix/thread.c       | 26 +++++++++++++++++
+ include/wine/server_protocol.h | 21 ++++++++++++++
+ server/protocol.def            | 12 ++++++++
+ server/request.h               | 10 +++++++
+ server/thread.c                | 52 ++++++++++++++++++++++++++++++++++
+ server/trace.c                 | 17 +++++++++++
+ 8 files changed, 170 insertions(+)
+
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index 490314c6fce..157babba14d 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -224,6 +224,7 @@
+ @ stdcall -syscall NtGetCurrentProcessorNumber()
+ # @ stub NtGetDevicePowerState
+ @ stdcall -syscall NtGetNextProcess(long long long long ptr)
++@ stdcall -syscall NtGetNextThread(ptr ptr long long long ptr)
+ @ stdcall -syscall NtGetNlsSectionPtr(long long long ptr ptr)
+ @ stub NtGetPlugPlayEvent
+ @ stdcall NtGetTickCount()
+diff --git a/dlls/ntdll/tests/om.c b/dlls/ntdll/tests/om.c
+index 6b865ce27ca..67105ebae84 100644
+--- a/dlls/ntdll/tests/om.c
++++ b/dlls/ntdll/tests/om.c
+@@ -79,6 +79,7 @@ static void     (WINAPI *pRtlWakeAddressSingle)( const void * );
+ static NTSTATUS (WINAPI *pNtOpenProcess)( HANDLE *, ACCESS_MASK, const OBJECT_ATTRIBUTES *, const CLIENT_ID * );
+ static NTSTATUS (WINAPI *pNtCreateDebugObject)( HANDLE *, ACCESS_MASK, OBJECT_ATTRIBUTES *, ULONG );
+ static NTSTATUS (WINAPI *pNtGetNextProcess)(HANDLE process, ACCESS_MASK access, ULONG attributes, ULONG flags, HANDLE *handle);
++static NTSTATUS (WINAPI *pNtGetNextThread)(HANDLE process, HANDLE thread, ACCESS_MASK access, ULONG attributes, ULONG flags, HANDLE *handle);
+ 
+ #define KEYEDEVENT_WAIT       0x0001
+ #define KEYEDEVENT_WAKE       0x0002
+@@ -2575,6 +2576,34 @@ static void test_get_next_process(void)
+     ok(status == STATUS_INVALID_PARAMETER, "Unexpected status %#x.\n", status);
+ }
+ 
++static void test_get_next_thread(void)
++{
++    HANDLE hprocess = GetCurrentProcess();
++    NTSTATUS status;
++    HANDLE handle;
++
++    if (!pNtGetNextThread)
++    {
++        win_skip("NtGetNextThread is not available.\n");
++        return;
++    }
++    status = pNtGetNextThread(hprocess, 0, PROCESS_QUERY_LIMITED_INFORMATION, OBJ_INHERIT, 0, &handle);
++    ok(!status, "Unexpected status %#x.\n", status);
++    pNtClose(handle);
++
++    status = pNtGetNextThread((void *)0xdeadbeef, 0, PROCESS_QUERY_LIMITED_INFORMATION, OBJ_INHERIT, 0, &handle);
++    ok(status == STATUS_INVALID_HANDLE, "Unexpected status %#x.\n", status);
++
++    /* Reversed search only supported in recent enough Win10 */
++    status = pNtGetNextThread(hprocess, 0, PROCESS_QUERY_LIMITED_INFORMATION, OBJ_INHERIT, 1, &handle);
++    ok(!status || broken(status == STATUS_INVALID_PARAMETER), "Unexpected status %#x.\n", status);
++    if (status)
++        pNtClose(handle);
++
++    status = pNtGetNextThread(hprocess, 0, PROCESS_QUERY_LIMITED_INFORMATION, OBJ_INHERIT, 2, &handle);
++    ok(status == STATUS_INVALID_PARAMETER, "Unexpected status %#x.\n", status);
++}
++
+ START_TEST(om)
+ {
+     HMODULE hntdll = GetModuleHandleA("ntdll.dll");
+@@ -2627,6 +2656,7 @@ START_TEST(om)
+     pNtOpenProcess          =  (void *)GetProcAddress(hntdll, "NtOpenProcess");
+     pNtCreateDebugObject    =  (void *)GetProcAddress(hntdll, "NtCreateDebugObject");
+     pNtGetNextProcess       =  (void *)GetProcAddress(hntdll, "NtGetNextProcess");
++    pNtGetNextThread        =  (void *)GetProcAddress(hntdll, "NtGetNextThread");
+ 
+     test_case_sensitive();
+     test_namespace_pipe();
+@@ -2645,4 +2675,5 @@ START_TEST(om)
+     test_process();
+     test_object_types();
+     test_get_next_process();
++    test_get_next_thread();
+ }
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index 321e9f15360..fc5c3f501bc 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -1462,3 +1462,29 @@ ULONG WINAPI NtGetCurrentProcessorNumber(void)
+     /* fallback to the first processor */
+     return 0;
+ }
++
++
++/******************************************************************************
++ *                          NtGetNextThread  (NTDLL.@)
++ */
++NTSTATUS WINAPI NtGetNextThread(HANDLE hprocess, HANDLE hthread, ACCESS_MASK access, ULONG attributes,
++        ULONG flags, HANDLE *handle)
++{
++    NTSTATUS ret;
++
++    FIXME( "hprocess %p, hthread %p, access %#x, attributes %#x, flags %#x, handle %p stub.\n",
++            hprocess, hthread, access, attributes, flags, handle);
++
++    SERVER_START_REQ( get_next_thread )
++    {
++        req->process = wine_server_obj_handle( hprocess );
++        req->last = wine_server_obj_handle( hthread );
++        req->access = access;
++        req->attributes = attributes;
++        req->flags = flags;
++        ret = wine_server_call( req );
++        if (!ret) *handle = wine_server_ptr_handle( reply->handle );
++    }
++    SERVER_END_REQ;
++    return ret;
++}
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index a33210f1475..8e2455410b8 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5607,6 +5607,24 @@ struct get_next_process_reply
+ };
+ 
+ 
++
++struct get_next_thread_request
++{
++    struct request_header __header;
++    obj_handle_t process;
++    obj_handle_t last;
++    unsigned int access;
++    unsigned int attributes;
++    unsigned int flags;
++};
++struct get_next_thread_reply
++{
++    struct reply_header __header;
++    obj_handle_t handle;
++    char __pad_12[4];
++};
++
++
+ enum request
+ {
+     REQ_new_process,
+@@ -5894,6 +5912,7 @@ enum request
+     REQ_esync_msgwait,
+     REQ_get_esync_apc_fd,
+     REQ_get_next_process,
++    REQ_get_next_thread,
+     REQ_NB_REQUESTS
+ };
+ 
+@@ -6186,6 +6205,7 @@ union generic_request
+     struct esync_msgwait_request esync_msgwait_request;
+     struct get_esync_apc_fd_request get_esync_apc_fd_request;
+     struct get_next_process_request get_next_process_request;
++    struct get_next_thread_request get_next_thread_request;
+ };
+ union generic_reply
+ {
+@@ -6476,6 +6496,7 @@ union generic_reply
+     struct esync_msgwait_reply esync_msgwait_reply;
+     struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
+     struct get_next_process_reply get_next_process_reply;
++    struct get_next_thread_reply get_next_thread_reply;
+ };
+ 
+ /* ### protocol_version begin ### */
+diff --git a/server/protocol.def b/server/protocol.def
+index e1d7f0ee3ab..8c56b35a3dc 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3891,3 +3891,15 @@ enum fsync_type
+ @REPLY
+     obj_handle_t handle;       /* next process handle */
+ @END
++
++
++/* Iterate process list */
++@REQ(get_next_thread)
++    obj_handle_t process;      /* process handle */
++    obj_handle_t last;         /* thread handle to start with */
++    unsigned int access;       /* desired access for returned handle */
++    unsigned int attributes;   /* returned handle attributes */
++    unsigned int flags;        /* controls iteration direction */
++@REPLY
++    obj_handle_t handle;       /* next thread handle */
++@END
+diff --git a/server/request.h b/server/request.h
+index a9b5a478c27..d1186f1983d 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -404,6 +404,7 @@ DECL_HANDLER(get_fsync_idx);
+ DECL_HANDLER(esync_msgwait);
+ DECL_HANDLER(get_esync_apc_fd);
+ DECL_HANDLER(get_next_process);
++DECL_HANDLER(get_next_thread);
+ 
+ #ifdef WANT_REQUEST_HANDLERS
+ 
+@@ -695,6 +696,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_esync_msgwait,
+     (req_handler)req_get_esync_apc_fd,
+     (req_handler)req_get_next_process,
++    (req_handler)req_get_next_thread,
+ };
+ 
+ C_ASSERT( sizeof(abstime_t) == 8 );
+@@ -2320,6 +2322,14 @@ C_ASSERT( FIELD_OFFSET(struct get_next_process_request, flags) == 24 );
+ C_ASSERT( sizeof(struct esync_msgwait_request) == 16 );
+ C_ASSERT( sizeof(struct get_esync_apc_fd_request) == 16 );
+ C_ASSERT( sizeof(struct get_next_process_reply) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_next_thread_request, process) == 12 );
++C_ASSERT( FIELD_OFFSET(struct get_next_thread_request, last) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_next_thread_request, access) == 20 );
++C_ASSERT( FIELD_OFFSET(struct get_next_thread_request, attributes) == 24 );
++C_ASSERT( FIELD_OFFSET(struct get_next_thread_request, flags) == 28 );
++C_ASSERT( sizeof(struct get_next_thread_request) == 32 );
++C_ASSERT( FIELD_OFFSET(struct get_next_thread_reply, handle) == 8 );
++C_ASSERT( sizeof(struct get_next_thread_reply) == 16 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+ 
+diff --git a/server/thread.c b/server/thread.c
+index e8ac0ad329d..5ff2392ef37 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -2174,3 +2174,55 @@ DECL_HANDLER(get_selector_entry)
+         release_object( thread );
+     }
+ }
++
++/* Iterate process list */
++DECL_HANDLER(get_next_thread)
++{
++    struct thread *thread = NULL, *next;
++    struct process *process;
++    struct list *ptr;
++
++    reply->handle = 0;
++
++    if ( req->flags > 1 )
++    {
++        set_error( STATUS_INVALID_PARAMETER );
++        return;
++    }
++
++    if (!(process = get_process_from_handle( req->process, PROCESS_QUERY_INFORMATION )))
++    {
++        set_error( STATUS_INVALID_HANDLE );
++        return;
++    }
++
++    if (!req->last)
++    {
++        ptr = req->flags ? list_tail( &process->thread_list ) : list_head( &process->thread_list );
++    }
++    else if ((thread = get_thread_from_handle( req->last, 0 )))
++    {
++        ptr = req->flags ? list_prev( &process->thread_list, &thread->proc_entry ) :
++                list_next( &process->thread_list, &thread->proc_entry );
++    }
++    else
++    {
++        release_object( process );
++        return;
++    }
++
++    while (ptr)
++    {
++        next = LIST_ENTRY( ptr, struct thread, proc_entry );
++        if ((reply->handle = alloc_handle( current->process, next, req->access, req->attributes )))
++            break;
++        ptr = req->flags ? list_prev( &process->thread_list, &next->proc_entry ) : list_next( &process->thread_list, &next->proc_entry );
++    }
++
++    if (!reply->handle)
++        set_error( STATUS_NO_MORE_ENTRIES );
++
++    if (thread)
++        release_object( thread );
++    release_object( process );
++}
+diff --git a/server/trace.c b/server/trace.c
+index 13affb37347..199d6fb6eb2 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4599,6 +4599,20 @@ static void dump_get_next_process_reply( const struct get_next_process_reply *re
+     fprintf( stderr, " handle=%04x", req->handle );
+ }
+ 
++static void dump_get_next_thread_request( const struct get_next_thread_request *req )
++{
++    fprintf( stderr, " process=%04x", req->process );
++    fprintf( stderr, ", last=%04x", req->last );
++    fprintf( stderr, ", access=%08x", req->access );
++    fprintf( stderr, ", attributes=%08x", req->attributes );
++    fprintf( stderr, ", flags=%08x", req->flags );
++}
++
++static void dump_get_next_thread_reply( const struct get_next_thread_reply *req )
++{
++    fprintf( stderr, " handle=%04x", req->handle );
++}
++
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_new_process_request,
+     (dump_func)dump_exec_process_request,
+@@ -4885,6 +4899,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_esync_msgwait_request,
+     (dump_func)dump_get_esync_apc_fd_request,
+     (dump_func)dump_get_next_process_request,
++    (dump_func)dump_get_next_thread_request,
+ };
+ 
+ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+@@ -5173,6 +5188,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_get_esync_fd_reply,
+     (dump_func)dump_get_next_process_request,
+     (dump_func)dump_get_next_process_reply,
++    (dump_func)dump_get_next_thread_reply,
+     NULL,
+     NULL,
+ };
+@@ -5461,6 +5477,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "esync_msgwait",
+     "get_esync_apc_fd",
+     "get_next_process",
++    "get_next_thread",
+ };
+ 
+ static const struct
+-- 
+2.30.2
+
+From 07461415f4399934a3c03c8dd6e146167bd67dfd Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 25 Mar 2021 17:53:37 +0300
+Subject: [PATCH 07/16] wine.inf: Create package repository for VCLibs.140.
+
+---
+ loader/wine.inf.in | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 4df88d1f386..1506a73573b 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -67,6 +67,7 @@ AddReg=\
+     Misc,\
+     Nls,\
+     OLE,\
++    Packages,\
+     Printing,\
+     Services, \
+     SessionMgr,\
+@@ -95,6 +96,7 @@ AddReg=\
+     Misc,\
+     Nls,\
+     OLE,\
++    Packages.ntamd64,\
+     Printing,\
+     Services, \
+     SessionMgr,\
+@@ -123,6 +125,7 @@ AddReg=\
+     Misc,\
+     Nls,\
+     OLE,\
++    Packages.ntarm64,\
+     Printing,\
+     Services, \
+     SessionMgr,\
+@@ -142,6 +145,7 @@ AddReg=\
+     DirectX,\
+     MCI,\
+     Misc,\
++    Packages.wow64,\
+     Tapi,\
+     VersionInfo.ntamd64,\
+     LicenseInformation, \
+@@ -234,6 +238,7 @@ CurrentVersionNT="Software\Microsoft\Windows NT\CurrentVersion"
+ CurrentVersionNT="Software\Microsoft\Windows NT\CurrentVersion"
+ FontSubStr="Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"
+ Control="System\CurrentControlSet\Control"
++Packages="Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\PackageRepository\Packages"
+ 
+ [Classes]
+ HKCR,.chm,,2,"chm.file"
+@@ -1129,6 +1134,18 @@ HKLM,System\CurrentControlSet\Control\Nls\Locale\Alternate Sorts,"00030404",,"9"
+ HKLM,"Software\Microsoft\OLE","EnableDCOM",,"Y"
+ HKLM,"Software\Microsoft\OLE","EnableRemoteConnect",,"N"
+ 
++[Packages]
++HKLM,"%Packages%\Microsoft.VCLibs.140.00_14.0.29231.0_x86__8wekyb3d8bbwe","Path",0x00020002,"%SystemRoot%\system32"
++
++[Packages.ntamd64]
++HKLM,"%Packages%\Microsoft.VCLibs.140.00_14.0.29231.0_x64__8wekyb3d8bbwe","Path",0x00020002,"%SystemRoot%\system32"
++
++[Packages.wow64]
++HKLM,"%Packages%\Microsoft.VCLibs.140.00_14.0.29231.0_x86__8wekyb3d8bbwe","Path",0x00020002,"%SystemRoot%\syswow64"
++
++[Packages.arm64]
++HKLM,"%Packages%\Microsoft.VCLibs.140.00_14.0.29231.0_arm64__8wekyb3d8bbwe","Path",0x00020002,"%SystemRoot%\system32"
++
+ [Printing]
+ HKLM,%Control%\Print\Monitors\Local Port,"Driver",2,"localspl.dll"
+ HKLM,%Control%\Print\Printers,"DefaultSpoolDirectory",2,"%11%\spool\printers"
+-- 
+2.30.2
+
+From 4a2ca2d4e87c84a57dde064296822860701fc877 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 15 Mar 2021 21:59:00 +0300
+Subject: [PATCH 08/16] kernel32: Implement GetPackagesByPackageFamily().
+
+---
+ .../api-ms-win-appmodel-runtime-l1-1-1.spec   |   2 +-
+ .../ext-ms-win-kernel32-package-l1-1-1.spec   |   2 +-
+ dlls/kernel32/kernel32.spec                   |   1 +
+ dlls/kernel32/tests/version.c                 | 131 ++++++++++++++++++
+ dlls/kernelbase/kernelbase.spec               |   2 +-
+ dlls/kernelbase/version.c                     | 115 +++++++++++++++
+ include/appmodel.h                            |   2 +
+ 7 files changed, 252 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec b/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+index 99d1d9f3835..696bb75be30 100644
+--- a/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
++++ b/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+@@ -15,7 +15,7 @@
+ @ stub GetPackageInfo
+ @ stub GetPackagePath
+ @ stub GetPackagePathByFullName
+-@ stub GetPackagesByPackageFamily
++@ stdcall GetPackagesByPackageFamily(wstr ptr ptr ptr ptr) kernel32.GetPackagesByPackageFamily
+ @ stub GetStagedPackageOrigin
+ @ stub GetStagedPackagePathByFullName
+ @ stub OpenPackageInfoByFullName
+diff --git a/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec b/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+index 61fd115cca7..ff5118049e2 100644
+--- a/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
++++ b/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+@@ -12,7 +12,7 @@
+ @ stub GetPackageId
+ @ stub GetPackageInfo
+ @ stub GetPackagePath
+-@ stub GetPackagesByPackageFamily
++@ stdcall GetPackagesByPackageFamily(wstr ptr ptr ptr ptr) kernel32.GetPackagesByPackageFamily
+ @ stub GetStagedPackageOrigin
+ @ stub OpenPackageInfoByFullName
+ @ stub PackageFamilyNameFromFullName
+diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
+index bcaf2512990..59785a6de24 100644
+--- a/dlls/kernel32/kernel32.spec
++++ b/dlls/kernel32/kernel32.spec
+@@ -765,6 +765,7 @@
+ @ stdcall -import GetOverlappedResultEx(long ptr ptr long long)
+ @ stdcall -import GetUserDefaultGeoName(ptr long)
+ @ stdcall -import GetUserPreferredUILanguages(long ptr ptr ptr)
++@ stdcall -import GetPackagesByPackageFamily(wstr ptr ptr ptr ptr)
+ @ stdcall GetPackageFamilyName(long ptr ptr) kernelbase.GetPackageFamilyName
+ @ stdcall GetPackageFullName(long ptr ptr) kernelbase.GetPackageFullName
+ @ stdcall -import GetPhysicallyInstalledSystemMemory(ptr)
+diff --git a/dlls/kernel32/tests/version.c b/dlls/kernel32/tests/version.c
+index 835c5398685..9a35d679323 100644
+--- a/dlls/kernel32/tests/version.c
++++ b/dlls/kernel32/tests/version.c
+@@ -23,6 +23,7 @@
+ #include "winternl.h"
+ #include "appmodel.h"
+ 
++static LONG (WINAPI * pGetPackagesByPackageFamily)(const WCHAR *, UINT32 *, WCHAR **, UINT32 *, WCHAR *);
+ static BOOL (WINAPI * pGetProductInfo)(DWORD, DWORD, DWORD, DWORD, DWORD *);
+ static UINT (WINAPI * pGetSystemFirmwareTable)(DWORD, DWORD, void *, DWORD);
+ static LONG (WINAPI * pPackageIdFromFullName)(const WCHAR *, UINT32, UINT32 *, BYTE *);
+@@ -43,6 +44,7 @@ static void init_function_pointers(void)
+ 
+     hmod = GetModuleHandleA("kernel32.dll");
+ 
++    GET_PROC(GetPackagesByPackageFamily);
+     GET_PROC(GetProductInfo);
+     GET_PROC(GetSystemFirmwareTable);
+     GET_PROC(PackageIdFromFullName);
+@@ -918,6 +920,134 @@ static void test_PackageIdFromFullName(void)
+     ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
+ }
+ 
++static void test_package_info(void)
++{
++    static const WCHAR package_family_msvc140[] = L"Microsoft.VCLibs.140.00_8wekyb3d8bbwe";
++    UINT32 count, length, curr_length, size;
++    WCHAR *full_names[32];
++    BYTE id_buffer[512];
++    WCHAR buffer[2048];
++    BOOL arch_found;
++    SYSTEM_INFO si;
++    unsigned int i;
++    PACKAGE_ID *id;
++    DWORD arch;
++    LONG ret;
++
++    if (!pGetPackagesByPackageFamily)
++    {
++        win_skip("GetPackagesByPackageFamily not available.\n");
++        return;
++    }
++
++    GetSystemInfo(&si);
++    arch = si.wProcessorArchitecture;
++
++    count = 0;
++    length = 0;
++    ret = pGetPackagesByPackageFamily(L"Unknown_8wekyb3d8bbwe", &count, NULL, &length, NULL);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++    ok(!count, "Got unexpected count %u.\n", count);
++    ok(!length, "Got unexpected length %u.\n", length);
++
++    count = 0;
++    length = 0;
++    ret = pGetPackagesByPackageFamily(L"Unknown_iekyb3d8bbwe", &count, NULL, &length, NULL);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++    ok(!count, "Got unexpected count %u.\n", count);
++    ok(!length, "Got unexpected length %u.\n", length);
++
++    count = 0xdeadbeef;
++    length = 0xdeadbeef;
++    ret = pGetPackagesByPackageFamily(L"Unknown", &count, NULL, &length, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++    ok(count == 0xdeadbeef, "Got unexpected count %u.\n", count);
++    ok(length == 0xdeadbeef, "Got unexpected length %u.\n", length);
++
++    count = 0;
++    length = 0;
++    ret = pGetPackagesByPackageFamily(L"Unknown", &count, NULL, &length, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++    ok(!count, "Got unexpected count %u.\n", count);
++    ok(!length, "Got unexpected length %u.\n", length);
++
++    count = 0;
++    length = 0;
++    ret = pGetPackagesByPackageFamily(L"Unknown_8wekyb3d8bbwe_b", &count, NULL, &length, NULL);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++    ok(!count, "Got unexpected count %u.\n", count);
++    ok(!length, "Got unexpected length %u.\n", length);
++
++    count = 0;
++    length = 0;
++    ret = pGetPackagesByPackageFamily(L"Unknown_", &count, NULL, &length, NULL);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++    ok(!count, "Got unexpected count %u.\n", count);
++    ok(!length, "Got unexpected length %u.\n", length);
++
++    length = 0;
++    ret = pGetPackagesByPackageFamily(package_family_msvc140, NULL, NULL, &length, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++    ok(!length, "Got unexpected length %u.\n", length);
++
++    count = 0;
++    ret = pGetPackagesByPackageFamily(package_family_msvc140, &count, NULL, NULL, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++    ok(!count, "Got unexpected count %u.\n", count);
++
++    count = ARRAY_SIZE(full_names);
++    length = ARRAY_SIZE(buffer);
++    ret = pGetPackagesByPackageFamily(package_family_msvc140, &count, NULL, &length, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++    ok(count == ARRAY_SIZE(full_names), "Got unexpected count %u.\n", count);
++    ok(length == ARRAY_SIZE(buffer), "Got unexpected length %u.\n", length);
++
++    ret = pGetPackagesByPackageFamily(package_family_msvc140, &count, full_names, &length, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++    ok(count == ARRAY_SIZE(full_names), "Got unexpected count %u.\n", count);
++    ok(length == ARRAY_SIZE(buffer), "Got unexpected length %u.\n", length);
++
++    ret = pGetPackagesByPackageFamily(package_family_msvc140, &count, NULL, &length, buffer);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++    ok(count == ARRAY_SIZE(full_names), "Got unexpected count %u.\n", count);
++    ok(length == ARRAY_SIZE(buffer), "Got unexpected length %u.\n", length);
++
++    count = 0;
++    length = 0;
++    ret = pGetPackagesByPackageFamily(package_family_msvc140, &count, NULL, &length, NULL);
++    if (!ret && !count && !length)
++    {
++        win_skip("Package VCLibs.140.00 is not installed.\n");
++        return;
++    }
++
++    ok(ret == ERROR_INSUFFICIENT_BUFFER, "Got unexpected ret %u.\n", ret);
++    ok(count >= 1, "Got unexpected count %u.\n", count);
++    ok(length > 1, "Got unexpected length %u.\n", length);
++
++    ret = pGetPackagesByPackageFamily(package_family_msvc140, &count, full_names, &length, buffer);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++    ok(count >= 1, "Got unexpected count %u.\n", count);
++    ok(length > 1, "Got unexpected length %u.\n", length);
++
++    id = (PACKAGE_ID *)id_buffer;
++    curr_length = 0;
++    arch_found = FALSE;
++    for (i = 0; i < count; ++i)
++    {
++        curr_length += lstrlenW(full_names[i]) + 1;
++
++        size = sizeof(id_buffer);
++        ret = pPackageIdFromFullName(full_names[i], 0, &size, id_buffer);
++        ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++
++        if (id->processorArchitecture == arch)
++            arch_found = TRUE;
++    }
++    ok(curr_length == length, "Got unexpected length %u.\n", length);
++    ok(arch_found, "Did not find package for current arch.\n");
++}
++
+ START_TEST(version)
+ {
+     init_function_pointers();
+@@ -927,4 +1057,5 @@ START_TEST(version)
+     test_VerifyVersionInfo();
+     test_GetSystemFirmwareTable();
+     test_PackageIdFromFullName();
++    test_package_info();
+ }
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index b42a9af8b8e..5d21680f512 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -614,7 +614,7 @@
+ # @ stub GetPackageStatusForUser
+ # @ stub GetPackageTargetPlatformProperty
+ # @ stub GetPackageVolumeSisPath
+-# @ stub GetPackagesByPackageFamily
++@ stdcall GetPackagesByPackageFamily(wstr ptr ptr ptr ptr)
+ @ stdcall GetPerformanceInfo(ptr long)
+ @ stdcall GetPhysicallyInstalledSystemMemory(ptr)
+ # @ stub GetPreviousFgPolicyRefreshInfoInternal
+diff --git a/dlls/kernelbase/version.c b/dlls/kernelbase/version.c
+index 66bd619e394..dca4ffb8647 100644
+--- a/dlls/kernelbase/version.c
++++ b/dlls/kernelbase/version.c
+@@ -39,10 +39,12 @@
+ #include "winnls.h"
+ #include "winternl.h"
+ #include "winerror.h"
++#include "winreg.h"
+ #include "appmodel.h"
+ 
+ #include "kernelbase.h"
+ #include "wine/debug.h"
++#include "wine/heap.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(ver);
+ 
+@@ -154,6 +156,8 @@ static const struct
+     }
+ };
+ 
++static const WCHAR packages_key_name[] = L"Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows"
++        L"\\CurrentVersion\\AppModel\\PackageRepository\\Packages";
+ 
+ /******************************************************************************
+  *  init_current_version
+@@ -1681,3 +1685,114 @@ LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *
+ 
+     return ERROR_SUCCESS;
+ }
++
++
++/***********************************************************************
++ *         GetPackagesByPackageFamily   (kernelbase.@)
++ */
++LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count, WCHAR **full_names,
++        UINT32 *buffer_length, WCHAR *buffer)
++{
++    UINT32 curr_count, curr_length, package_id_buf_size, size;
++    unsigned int i, name_len, publisher_id_len;
++    DWORD subkey_count, max_key_len, length;
++    const WCHAR *publisher_id;
++    WCHAR *package_name;
++    BOOL short_buffer;
++    PACKAGE_ID *id;
++    HKEY key;
++
++    TRACE("family_name %s, count %p, full_names %p, buffer_length %p, buffer %p.\n",
++            debugstr_w(family_name), count, full_names, buffer_length, buffer);
++
++    if (!buffer_length || !count || !family_name)
++        return ERROR_INVALID_PARAMETER;
++
++    if ((*buffer_length || *count) && (!full_names || !buffer))
++        return ERROR_INVALID_PARAMETER;
++
++    if (!(publisher_id = wcschr(family_name, L'_')))
++        return ERROR_INVALID_PARAMETER;
++
++    name_len = publisher_id - family_name;
++    ++publisher_id;
++    publisher_id_len = lstrlenW(publisher_id);
++
++    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, packages_key_name, 0, KEY_READ, &key))
++    {
++        ERR("Key open failed.\n");
++        *count = 0;
++        *buffer_length = 0;
++        return ERROR_SUCCESS;
++    }
++    if (RegQueryInfoKeyW(key, NULL, NULL, NULL, &subkey_count, &max_key_len, NULL, NULL, NULL, NULL, NULL, NULL))
++    {
++        ERR("Query key info failed.\n");
++        RegCloseKey(key);
++        *count = 0;
++        *buffer_length = 0;
++        return ERROR_SUCCESS;
++    }
++
++    if (!(package_name = heap_alloc((max_key_len + 1) * sizeof(*package_name))))
++    {
++        ERR("No memory.\n");
++        RegCloseKey(key);
++        return ERROR_OUTOFMEMORY;
++    }
++
++    package_id_buf_size = sizeof(*id) + (max_key_len + 1) * sizeof(WCHAR);
++    if (!(id = heap_alloc(package_id_buf_size)))
++    {
++        ERR("No memory.\n");
++        heap_free(package_name);
++        RegCloseKey(key);
++        return ERROR_OUTOFMEMORY;
++    }
++
++    curr_count = curr_length = 0;
++    for (i = 0; i < subkey_count; ++i)
++    {
++        length = max_key_len + 1;
++        if (RegEnumKeyExW(key, i, package_name, &length, NULL, NULL, NULL, NULL))
++        {
++            ERR("Error enumerating key %u.\n", i);
++            continue;
++        }
++
++        size = package_id_buf_size;
++        if (PackageIdFromFullName(package_name, 0, &size, (BYTE *)id))
++        {
++            ERR("Error getting package id from full name.\n");
++            continue;
++        }
++
++        if (lstrlenW(id->name) != name_len)
++            continue;
++        if (wcsnicmp(family_name, id->name, name_len))
++            continue;
++
++        if (lstrlenW(id->publisherId) != publisher_id_len)
++            continue;
++        if (wcsnicmp(publisher_id, id->publisherId, publisher_id_len))
++            continue;
++        if (curr_length + length < *buffer_length)
++        {
++            memcpy(buffer + curr_length, package_name, (length + 1) * sizeof(*package_name));
++            if (curr_count < *count)
++                full_names[curr_count] = buffer + curr_length;
++        }
++        curr_length += length + 1;
++        ++curr_count;
++    }
++
++    heap_free(id);
++    heap_free(package_name);
++    RegCloseKey(key);
++
++    short_buffer = curr_length > *buffer_length || curr_count > *count;
++    *count = curr_count;
++    *buffer_length = curr_length;
++
++    return short_buffer ? ERROR_INSUFFICIENT_BUFFER : ERROR_SUCCESS;
++}
+diff --git a/include/appmodel.h b/include/appmodel.h
+index e4288bbfbb0..27a0d0a8646 100644
+--- a/include/appmodel.h
++++ b/include/appmodel.h
+@@ -82,6 +82,8 @@ LONG WINAPI AppPolicyGetProcessTerminationMethod(HANDLE token, AppPolicyProcessT
+ LONG WINAPI AppPolicyGetShowDeveloperDiagnostic(HANDLE token, AppPolicyShowDeveloperDiagnostic *policy);
+ LONG WINAPI AppPolicyGetThreadInitializationType(HANDLE token, AppPolicyThreadInitializationType *policy);
+ LONG WINAPI AppPolicyGetWindowingModel(HANDLE processToken, AppPolicyWindowingModel *policy);
++LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count, WCHAR **full_names,
++        UINT32 *buffer_length, WCHAR *buffer);
+ LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *buffer_length, BYTE *buffer);
+ 
+ #if defined(__cplusplus)
+-- 
+2.30.2
+
+From 1bf233880b472769e5b560a3d50adbbecfeb5736 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 26 Mar 2021 01:10:08 +0300
+Subject: [PATCH 09/16] kernel32: Implement PackageFullNameFromId().
+
+---
+ .../api-ms-win-appmodel-runtime-l1-1-1.spec   |  2 +-
+ .../ext-ms-win-kernel32-package-l1-1-1.spec   |  2 +-
+ dlls/kernel32/kernel32.spec                   |  1 +
+ dlls/kernel32/tests/version.c                 | 22 +++++++++-
+ dlls/kernelbase/kernelbase.spec               |  2 +-
+ dlls/kernelbase/version.c                     | 43 +++++++++++++++++++
+ include/appmodel.h                            |  1 +
+ 7 files changed, 69 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec b/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+index 696bb75be30..72a0a33baf5 100644
+--- a/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
++++ b/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+@@ -21,7 +21,7 @@
+ @ stub OpenPackageInfoByFullName
+ @ stub PackageFamilyNameFromFullName
+ @ stub PackageFamilyNameFromId
+-@ stub PackageFullNameFromId
++@ stdcall PackageFullNameFromId(ptr ptr ptr) kernel32.PackageFullNameFromId
+ @ stdcall PackageIdFromFullName(wstr long ptr ptr) kernel32.PackageIdFromFullName
+ @ stub PackageNameAndPublisherIdFromFamilyName
+ @ stub ParseApplicationUserModelId
+diff --git a/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec b/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+index ff5118049e2..42566176b56 100644
+--- a/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
++++ b/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+@@ -17,5 +17,5 @@
+ @ stub OpenPackageInfoByFullName
+ @ stub PackageFamilyNameFromFullName
+ @ stub PackageFamilyNameFromId
+-@ stub PackageFullNameFromId
++@ stdcall PackageFullNameFromId(ptr ptr ptr) kernel32.PackageFullNameFromId
+ @ stdcall PackageIdFromFullName(wstr long ptr ptr) kernel32.PackageIdFromFullName
+diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
+index 59785a6de24..491f5ca0402 100644
+--- a/dlls/kernel32/kernel32.spec
++++ b/dlls/kernel32/kernel32.spec
+@@ -1152,6 +1152,7 @@
+ @ stdcall -import PeekConsoleInputW(ptr ptr long ptr)
+ @ stdcall -import PeekNamedPipe(long ptr long ptr ptr ptr)
+ @ stdcall -import PostQueuedCompletionStatus(long long ptr ptr)
++@ stdcall -import PackageFullNameFromId(ptr ptr ptr)
+ @ stdcall -import PackageIdFromFullName(wstr long ptr ptr)
+ @ stdcall PowerClearRequest(long long)
+ @ stdcall PowerCreateRequest(ptr)
+diff --git a/dlls/kernel32/tests/version.c b/dlls/kernel32/tests/version.c
+index 9a35d679323..ed1ef3e3bf7 100644
+--- a/dlls/kernel32/tests/version.c
++++ b/dlls/kernel32/tests/version.c
+@@ -26,6 +26,7 @@
+ static LONG (WINAPI * pGetPackagesByPackageFamily)(const WCHAR *, UINT32 *, WCHAR **, UINT32 *, WCHAR *);
+ static BOOL (WINAPI * pGetProductInfo)(DWORD, DWORD, DWORD, DWORD, DWORD *);
+ static UINT (WINAPI * pGetSystemFirmwareTable)(DWORD, DWORD, void *, DWORD);
++static LONG (WINAPI * pPackageFullNameFromId)(const PACKAGE_ID *, UINT32 *, WCHAR *);
+ static LONG (WINAPI * pPackageIdFromFullName)(const WCHAR *, UINT32, UINT32 *, BYTE *);
+ static NTSTATUS (WINAPI * pNtQuerySystemInformation)(SYSTEM_INFORMATION_CLASS, void *, ULONG, ULONG *);
+ static NTSTATUS (WINAPI * pRtlGetVersion)(RTL_OSVERSIONINFOEXW *);
+@@ -47,6 +48,7 @@ static void init_function_pointers(void)
+     GET_PROC(GetPackagesByPackageFamily);
+     GET_PROC(GetProductInfo);
+     GET_PROC(GetSystemFirmwareTable);
++    GET_PROC(PackageFullNameFromId);
+     GET_PROC(PackageIdFromFullName);
+ 
+     hmod = GetModuleHandleA("ntdll.dll");
+@@ -803,9 +805,11 @@ static void test_PackageIdFromFullName(void)
+     {
+         0, PROCESSOR_ARCHITECTURE_INTEL,
+                 {{.Major = 1, .Minor = 2, .Build = 3, .Revision = 4}},
+-                (WCHAR *)L"TestPackage", NULL,
++                (WCHAR *)L"TestPackage", (WCHAR *)L"TestResource",
+                 (WCHAR *)L"TestResourceId", (WCHAR *)L"0abcdefghjkme"
+     };
++    static const WCHAR test_package_fullname[] =
++            L"TestPackage_1.2.3.4_x86_TestResourceId_0abcdefghjkme";
+     UINT32 size, expected_size;
+     PACKAGE_ID test_id;
+     WCHAR fullname[512];
+@@ -918,6 +922,22 @@ static void test_PackageIdFromFullName(void)
+     size = sizeof(id_buffer);
+     ret = pPackageIdFromFullName(L"TestPackage_1.2.3.4_X86_0abcdefghjkme", 0, &size, id_buffer);
+     ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++
++    ret = pPackageFullNameFromId(&test_package_id, NULL, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++
++    size = sizeof(fullname);
++    ret = pPackageFullNameFromId(&test_package_id, &size, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++
++    size = 0;
++    ret = pPackageFullNameFromId(&test_package_id, &size, NULL);
++    ok(ret == ERROR_INSUFFICIENT_BUFFER, "Got unexpected ret %u.\n", ret);
++    ok(size == lstrlenW(test_package_fullname) + 1, "Got unexpected size %u.\n", size);
++
++    ret = pPackageFullNameFromId(&test_package_id, &size, fullname);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++    ok(!lstrcmpW(fullname, test_package_fullname), "Got unexpected fullname %s.\n", debugstr_w(fullname));
+ }
+ 
+ static void test_package_info(void)
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index 5d21680f512..81d88b1a33a 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -1012,7 +1012,7 @@
+ # @ stub PackageFamilyNameFromFullName
+ # @ stub PackageFamilyNameFromId
+ # @ stub PackageFamilyNameFromProductId
+-# @ stub PackageFullNameFromId
++@ stdcall PackageFullNameFromId(ptr ptr ptr)
+ # @ stub PackageFullNameFromProductId
+ @ stdcall PackageIdFromFullName(wstr long ptr ptr)
+ # @ stub PackageIdFromProductId
+diff --git a/dlls/kernelbase/version.c b/dlls/kernelbase/version.c
+index dca4ffb8647..560e45e965a 100644
+--- a/dlls/kernelbase/version.c
++++ b/dlls/kernelbase/version.c
+@@ -1597,6 +1597,16 @@ static UINT32 processor_arch_from_string(const WCHAR *str, unsigned int len)
+     return ~0u;
+ }
+ 
++const WCHAR *string_from_processor_arch(UINT32 code)
++{
++    unsigned int i;
++
++    for (i = 0; i < ARRAY_SIZE(arch_names); ++i)
++        if (code == arch_names[i].code)
++            return arch_names[i].name;
++    return NULL;
++}
++
+ /***********************************************************************
+  *         PackageIdFromFullName   (kernelbase.@)
+  */
+@@ -1687,6 +1697,39 @@ LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *
+ }
+ 
+ 
++/***********************************************************************
++ *         PackageFullNameFromId   (kernelbase.@)
++ */
++LONG WINAPI PackageFullNameFromId(const PACKAGE_ID *package_id, UINT32 *length, WCHAR *full_name)
++{
++    WCHAR ver_str[5 * 4 + 3 + 1];
++    const WCHAR *arch_str;
++    UINT32 have_length;
++
++    TRACE("package_id %p, length %p, full_name %p.\n", package_id, length, full_name);
++
++    if (!package_id || !length)
++        return ERROR_INVALID_PARAMETER;
++    if (!full_name && *length)
++        return ERROR_INVALID_PARAMETER;
++    if (!package_id->name || !package_id->resourceId || !package_id->publisherId
++            || !(arch_str = string_from_processor_arch(package_id->processorArchitecture)))
++        return ERROR_INVALID_PARAMETER;
++
++    swprintf(ver_str, ARRAY_SIZE(ver_str), L"%u.%u.%u.%u", package_id->version.u.s.Major,
++            package_id->version.u.s.Minor, package_id->version.u.s.Build, package_id->version.u.s.Revision);
++    have_length = *length;
++    *length = lstrlenW(package_id->name) + 1 + lstrlenW(ver_str) + 1 + lstrlenW(arch_str) + 1
++            + lstrlenW(package_id->resourceId) + 1 + lstrlenW(package_id->publisherId) + 1;
++
++    if (have_length < *length)
++        return ERROR_INSUFFICIENT_BUFFER;
++
++    swprintf(full_name, *length, L"%s_%s_%s_%s_%s", package_id->name, ver_str, arch_str, package_id->resourceId, package_id->publisherId);
++    return ERROR_SUCCESS;
++}
++
++
+ /***********************************************************************
+  *         GetPackagesByPackageFamily   (kernelbase.@)
+  */
+diff --git a/include/appmodel.h b/include/appmodel.h
+index 27a0d0a8646..be59bc70f5f 100644
+--- a/include/appmodel.h
++++ b/include/appmodel.h
+@@ -84,6 +84,7 @@ LONG WINAPI AppPolicyGetThreadInitializationType(HANDLE token, AppPolicyThreadIn
+ LONG WINAPI AppPolicyGetWindowingModel(HANDLE processToken, AppPolicyWindowingModel *policy);
+ LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count, WCHAR **full_names,
+         UINT32 *buffer_length, WCHAR *buffer);
++LONG WINAPI PackageFullNameFromId(const PACKAGE_ID *package_id, UINT32 *length, WCHAR *full_name);
+ LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *buffer_length, BYTE *buffer);
+ 
+ #if defined(__cplusplus)
+-- 
+2.30.2
+
+From fb64ea93325eb2d4aa9be77c3e2b07ca20052c3d Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 15 Mar 2021 22:05:19 +0300
+Subject: [PATCH 10/16] kernel32: Implement GetPackagePath().
+
+---
+ .../api-ms-win-appmodel-runtime-l1-1-1.spec   |  2 +-
+ .../ext-ms-win-kernel32-package-l1-1-1.spec   |  2 +-
+ dlls/kernel32/kernel32.spec                   |  1 +
+ dlls/kernel32/tests/version.c                 | 64 +++++++++++++--
+ dlls/kernelbase/kernelbase.spec               |  2 +-
+ dlls/kernelbase/version.c                     | 82 +++++++++++++++++++
+ include/appmodel.h                            |  1 +
+ 7 files changed, 146 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec b/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+index 72a0a33baf5..e77ac397b03 100644
+--- a/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
++++ b/dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+@@ -13,7 +13,7 @@
+ @ stdcall GetPackageFullName(long ptr ptr) kernel32.GetPackageFullName
+ @ stub GetPackageId
+ @ stub GetPackageInfo
+-@ stub GetPackagePath
++@ stdcall GetPackagePath(ptr long ptr ptr) kernel32.GetPackagePath
+ @ stub GetPackagePathByFullName
+ @ stdcall GetPackagesByPackageFamily(wstr ptr ptr ptr ptr) kernel32.GetPackagesByPackageFamily
+ @ stub GetStagedPackageOrigin
+diff --git a/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec b/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+index 42566176b56..58bf807b4be 100644
+--- a/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
++++ b/dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+@@ -11,7 +11,7 @@
+ @ stdcall GetPackageFullName(long ptr ptr) kernel32.GetPackageFullName
+ @ stub GetPackageId
+ @ stub GetPackageInfo
+-@ stub GetPackagePath
++@ stdcall GetPackagePath(ptr long ptr ptr) kernel32.GetPackagePath
+ @ stdcall GetPackagesByPackageFamily(wstr ptr ptr ptr ptr) kernel32.GetPackagesByPackageFamily
+ @ stub GetStagedPackageOrigin
+ @ stub OpenPackageInfoByFullName
+diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
+index 491f5ca0402..6b1030b00df 100644
+--- a/dlls/kernel32/kernel32.spec
++++ b/dlls/kernel32/kernel32.spec
+@@ -768,6 +768,7 @@
+ @ stdcall -import GetPackagesByPackageFamily(wstr ptr ptr ptr ptr)
+ @ stdcall GetPackageFamilyName(long ptr ptr) kernelbase.GetPackageFamilyName
+ @ stdcall GetPackageFullName(long ptr ptr) kernelbase.GetPackageFullName
++@ stdcall -import GetPackagePath(ptr long ptr ptr)
+ @ stdcall -import GetPhysicallyInstalledSystemMemory(ptr)
+ @ stdcall -import GetPriorityClass(long)
+ @ stdcall GetPrivateProfileIntA(str str long str)
+diff --git a/dlls/kernel32/tests/version.c b/dlls/kernel32/tests/version.c
+index ed1ef3e3bf7..1d5dc550d46 100644
+--- a/dlls/kernel32/tests/version.c
++++ b/dlls/kernel32/tests/version.c
+@@ -23,6 +23,7 @@
+ #include "winternl.h"
+ #include "appmodel.h"
+ 
++static LONG (WINAPI * pGetPackagePath)(const PACKAGE_ID *, const UINT32, UINT32 *, WCHAR *);
+ static LONG (WINAPI * pGetPackagesByPackageFamily)(const WCHAR *, UINT32 *, WCHAR **, UINT32 *, WCHAR *);
+ static BOOL (WINAPI * pGetProductInfo)(DWORD, DWORD, DWORD, DWORD, DWORD *);
+ static UINT (WINAPI * pGetSystemFirmwareTable)(DWORD, DWORD, void *, DWORD);
+@@ -45,6 +46,7 @@ static void init_function_pointers(void)
+ 
+     hmod = GetModuleHandleA("kernel32.dll");
+ 
++    GET_PROC(GetPackagePath);
+     GET_PROC(GetPackagesByPackageFamily);
+     GET_PROC(GetProductInfo);
+     GET_PROC(GetSystemFirmwareTable);
+@@ -943,15 +945,15 @@ static void test_PackageIdFromFullName(void)
+ static void test_package_info(void)
+ {
+     static const WCHAR package_family_msvc140[] = L"Microsoft.VCLibs.140.00_8wekyb3d8bbwe";
+-    UINT32 count, length, curr_length, size;
++    UINT32 count, length, curr_length, size, path_length, total_length;
++    WCHAR buffer[2048], path[MAX_PATH];
++    PACKAGE_ID *id, saved_id;
+     WCHAR *full_names[32];
+     BYTE id_buffer[512];
+-    WCHAR buffer[2048];
++    DWORD arch, attrib;
+     BOOL arch_found;
+     SYSTEM_INFO si;
+     unsigned int i;
+-    PACKAGE_ID *id;
+-    DWORD arch;
+     LONG ret;
+ 
+     if (!pGetPackagesByPackageFamily)
+@@ -1032,6 +1034,10 @@ static void test_package_info(void)
+     ok(count == ARRAY_SIZE(full_names), "Got unexpected count %u.\n", count);
+     ok(length == ARRAY_SIZE(buffer), "Got unexpected length %u.\n", length);
+ 
++    length = 0;
++    ret = pGetPackagePath(NULL, 0, &length, NULL);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++
+     count = 0;
+     length = 0;
+     ret = pGetPackagesByPackageFamily(package_family_msvc140, &count, NULL, &length, NULL);
+@@ -1050,6 +1056,7 @@ static void test_package_info(void)
+     ok(count >= 1, "Got unexpected count %u.\n", count);
+     ok(length > 1, "Got unexpected length %u.\n", length);
+ 
++    total_length = length;
+     id = (PACKAGE_ID *)id_buffer;
+     curr_length = 0;
+     arch_found = FALSE;
+@@ -1063,9 +1070,56 @@ static void test_package_info(void)
+ 
+         if (id->processorArchitecture == arch)
+             arch_found = TRUE;
++
++        path_length = 0;
++        ret = pGetPackagePath(id, 0, &path_length, NULL);
++        ok(ret == ERROR_INSUFFICIENT_BUFFER, "Got unexpected ret %u.\n", ret);
++        ok(path_length > 1, "Got unexpected path_length %u.\n", path_length);
++
++        length = path_length;
++        ret = pGetPackagePath(id, 0, &length, path);
++        ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++        ok(length == path_length, "Got unexpected length %u.\n", length);
++        attrib = GetFileAttributesW(path);
++        ok(attrib != INVALID_FILE_ATTRIBUTES && attrib & FILE_ATTRIBUTE_DIRECTORY,
++                "Got unexpected attrib %#x, GetLastError() %u.\n", attrib, GetLastError());
+     }
+-    ok(curr_length == length, "Got unexpected length %u.\n", length);
++    ok(curr_length == total_length, "Got unexpected length %u.\n", length);
+     ok(arch_found, "Did not find package for current arch.\n");
++
++    size = sizeof(id_buffer);
++    ret = pPackageIdFromFullName(full_names[0], 0, &size, id_buffer);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++    saved_id = *id;
++
++    id->publisherId = NULL;
++    length = ARRAY_SIZE(path);
++    ret = pGetPackagePath(id, 0, &length, path);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++
++    *id = saved_id;
++    id->name = NULL;
++    length = ARRAY_SIZE(path);
++    ret = pGetPackagePath(id, 0, &length, path);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++
++    *id = saved_id;
++    id->publisher = NULL;
++    length = ARRAY_SIZE(path);
++    ret = pGetPackagePath(id, 0, &length, path);
++    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
++
++    *id = saved_id;
++    id->processorArchitecture = ~0u;
++    length = ARRAY_SIZE(path);
++    ret = pGetPackagePath(id, 0, &length, path);
++    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
++
++    *id = saved_id;
++    id->name[0] = L'X';
++    length = ARRAY_SIZE(path);
++    ret = pGetPackagePath(id, 0, &length, path);
++    ok(ret == ERROR_NOT_FOUND, "Got unexpected ret %u.\n", ret);
+ }
+ 
+ START_TEST(version)
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index 81d88b1a33a..0b374a53b60 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -601,7 +601,7 @@
+ # @ stub GetPackageInfo
+ # @ stub GetPackageInstallTime
+ # @ stub GetPackageOSMaxVersionTested
+-# @ stub GetPackagePath
++@ stdcall GetPackagePath(ptr long ptr ptr)
+ # @ stub GetPackagePathByFullName
+ # @ stub GetPackagePathOnVolume
+ # @ stub GetPackageProperty
+diff --git a/dlls/kernelbase/version.c b/dlls/kernelbase/version.c
+index 560e45e965a..1f16194a565 100644
+--- a/dlls/kernelbase/version.c
++++ b/dlls/kernelbase/version.c
+@@ -1839,3 +1839,85 @@ LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count,
+ 
+     return short_buffer ? ERROR_INSUFFICIENT_BUFFER : ERROR_SUCCESS;
+ }
++
++
++/***********************************************************************
++ *         GetPackagePath   (kernelbase.@)
++ */
++LONG WINAPI GetPackagePath(const PACKAGE_ID *package_id, const UINT32 reserved, UINT32 *length, WCHAR *path)
++{
++    WCHAR *key_name = NULL, *expanded_path = NULL;
++    UINT32 required_length, have_length;
++    unsigned int offset;
++    HKEY key = NULL;
++    DWORD size;
++    LONG ret;
++
++    TRACE("package_id %p, reserved %u, length %p, path %p.\n", package_id, reserved, length, path);
++
++    if (!length)
++        return ERROR_INVALID_PARAMETER;
++    if (!path && *length)
++        return ERROR_INVALID_PARAMETER;
++
++    required_length = 0;
++    if ((ret = PackageFullNameFromId(package_id, &required_length, NULL)) != ERROR_INSUFFICIENT_BUFFER)
++        return ret;
++
++    offset = lstrlenW(packages_key_name) + 1;
++    if (!(key_name = heap_alloc((offset + required_length) * sizeof(WCHAR))))
++    {
++        ERR("No memory.");
++        return ERROR_OUTOFMEMORY;
++    }
++
++    if ((ret = PackageFullNameFromId(package_id, &required_length, key_name + offset)))
++        goto done;
++
++    memcpy(key_name, packages_key_name, (offset - 1) * sizeof(WCHAR));
++    key_name[offset - 1] = L'\\';
++
++    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, key_name, 0, KEY_READ, &key))
++    {
++        WARN("Key %s not found.\n", debugstr_w(key_name));
++        ret = ERROR_NOT_FOUND;
++        goto done;
++    }
++    if (RegGetValueW(key, NULL, L"Path", RRF_RT_REG_SZ, NULL, NULL, &size))
++    {
++        WARN("Path value not found in %s.\n", debugstr_w(key_name));
++        ret = ERROR_NOT_FOUND;
++        goto done;
++    }
++    if (!(expanded_path = heap_alloc(size)))
++    {
++        ERR("No memory.");
++        ret = ERROR_OUTOFMEMORY;
++        goto done;
++    }
++    if (RegGetValueW(key, NULL, L"Path", RRF_RT_REG_SZ, NULL, expanded_path, &size))
++    {
++        WARN("Could not get Path value from %s.\n", debugstr_w(key_name));
++        ret = ERROR_NOT_FOUND;
++        goto done;
++    }
++
++    have_length = *length;
++    *length = lstrlenW(expanded_path) + 1;
++    if (have_length >= *length)
++    {
++        memcpy(path, expanded_path, *length * sizeof(*path));
++        ret = ERROR_SUCCESS;
++    }
++    else
++    {
++        ret = ERROR_INSUFFICIENT_BUFFER;
++    }
++
++done:
++    if (key)
++        RegCloseKey(key);
++    heap_free(expanded_path);
++    heap_free(key_name);
++    return ret;
++}
+diff --git a/include/appmodel.h b/include/appmodel.h
+index be59bc70f5f..c73cb8d26ef 100644
+--- a/include/appmodel.h
++++ b/include/appmodel.h
+@@ -82,6 +82,7 @@ LONG WINAPI AppPolicyGetProcessTerminationMethod(HANDLE token, AppPolicyProcessT
+ LONG WINAPI AppPolicyGetShowDeveloperDiagnostic(HANDLE token, AppPolicyShowDeveloperDiagnostic *policy);
+ LONG WINAPI AppPolicyGetThreadInitializationType(HANDLE token, AppPolicyThreadInitializationType *policy);
+ LONG WINAPI AppPolicyGetWindowingModel(HANDLE processToken, AppPolicyWindowingModel *policy);
++LONG WINAPI GetPackagePath(const PACKAGE_ID *package_id, const UINT32 reserved, UINT32 *length, WCHAR *path);
+ LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count, WCHAR **full_names,
+         UINT32 *buffer_length, WCHAR *buffer);
+ LONG WINAPI PackageFullNameFromId(const PACKAGE_ID *package_id, UINT32 *length, WCHAR *full_name);
+-- 
+2.30.2
+
+From 7bf768371b66942814f8c416960e1c5c7bf21dc8 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 10 Mar 2021 00:39:40 +0300
+Subject: [PATCH 13/16] kernel32: Add stub for SetThreadSelectedCpuSets().
+
+---
+ .../api-ms-win-core-processthreads-l1-1-3.spec        |  2 +-
+ dlls/kernel32/kernel32.spec                           |  1 +
+ dlls/kernelbase/kernelbase.spec                       |  2 +-
+ dlls/kernelbase/memory.c                              | 11 +++++++++++
+ 4 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/api-ms-win-core-processthreads-l1-1-3/api-ms-win-core-processthreads-l1-1-3.spec b/dlls/api-ms-win-core-processthreads-l1-1-3/api-ms-win-core-processthreads-l1-1-3.spec
+index 8f2daaefe74..77893f24225 100644
+--- a/dlls/api-ms-win-core-processthreads-l1-1-3/api-ms-win-core-processthreads-l1-1-3.spec
++++ b/dlls/api-ms-win-core-processthreads-l1-1-3/api-ms-win-core-processthreads-l1-1-3.spec
+@@ -7,4 +7,4 @@
+ @ stub SetProcessInformation
+ @ stdcall SetThreadDescription(ptr wstr) kernel32.SetThreadDescription
+ @ stdcall SetThreadIdealProcessor(long long) kernel32.SetThreadIdealProcessor
+-@ stub SetThreadSelectedCpuSets
++@ stdcall SetThreadSelectedCpuSets(ptr ptr long) kernel32.SetThreadSelectedCpuSets
+diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
+index 8c0a22a652e..c6fb3ae807e 100644
+--- a/dlls/kernel32/kernel32.spec
++++ b/dlls/kernel32/kernel32.spec
+@@ -1474,6 +1474,7 @@
+ @ stdcall -import SetThreadPreferredUILanguages(long ptr ptr)
+ @ stdcall -import SetThreadPriority(long long)
+ @ stdcall -import SetThreadPriorityBoost(long long)
++@ stdcall -import SetThreadSelectedCpuSets(ptr ptr long)
+ @ stdcall -import SetThreadStackGuarantee(ptr)
+ # @ stub SetThreadToken
+ @ stdcall -import SetThreadUILanguage(long)
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index 4b8047d758b..48c92b3d21d 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -1494,7 +1494,7 @@
+ @ stdcall SetThreadPreferredUILanguages(long ptr ptr)
+ @ stdcall SetThreadPriority(long long)
+ @ stdcall SetThreadPriorityBoost(long long)
+-# @ stub SetThreadSelectedCpuSets
++@ stdcall SetThreadSelectedCpuSets(ptr ptr long)
+ @ stdcall SetThreadStackGuarantee(ptr)
+ @ stdcall SetThreadToken(ptr ptr)
+ @ stdcall SetThreadUILanguage(long)
+diff --git a/dlls/kernelbase/memory.c b/dlls/kernelbase/memory.c
+index d172cc4573a..42f22d70e2c 100644
+--- a/dlls/kernelbase/memory.c
++++ b/dlls/kernelbase/memory.c
+@@ -1170,6 +1170,17 @@ BOOL WINAPI GetSystemCpuSetInformation(SYSTEM_CPU_SET_INFORMATION *info, ULONG b
+ }
+ 
+ 
++/***********************************************************************
++ *           SetThreadSelectedCpuSets   (kernelbase.@)
++ */
++BOOL WINAPI SetThreadSelectedCpuSets(HANDLE thread, const ULONG *cpu_set_ids, ULONG count)
++{
++    FIXME("thread %p, cpu_set_ids %p, count %u stub.\n", thread, cpu_set_ids, count);
++
++    return TRUE;
++}
++
++
+ /**********************************************************************
+  *             GetNumaHighestNodeNumber   (kernelbase.@)
+  */
+-- 
+2.30.2
+
+From 995fdfb8cdb0a8eed82e16640034dc9673ded681 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 12 Mar 2021 23:58:39 +0300
+Subject: [PATCH 14/16] esync: Fix restoring the objects state on wait all
+ objects retry.
+
+---
+ dlls/ntdll/unix/esync.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/unix/esync.c b/dlls/ntdll/unix/esync.c
+index 9a615fb277c..810477d02a0 100644
+--- a/dlls/ntdll/unix/esync.c
++++ b/dlls/ntdll/unix/esync.c
+@@ -1168,10 +1168,22 @@ tryagain:
+                         {
+                             /* We were too slow. Put everything back. */
+                             value = 1;
+-                            for (j = i; j >= 0; j--)
++                            for (j = i - 1; j >= 0; j--)
+                             {
+-                                if (write( obj->fd, &value, sizeof(value) ) == -1)
++                                struct esync *obj = objs[j];
++
++                                if (obj->type == ESYNC_MUTEX)
++                                {
++                                    struct mutex *mutex = obj->shm;
++
++                                    if (mutex->tid == GetCurrentThreadId())
++                                        continue;
++                                }
++                                if (write( fds[j].fd, &value, sizeof(value) ) == -1)
++                                {
++                                    ERR("write failed.\n");
+                                     return errno_to_status( errno );
++                                }
+                             }
+ 
+                             goto tryagain;  /* break out of two loops and a switch */
+-- 
+2.30.2
+
+From 47be204baf902d876fc5e5b0240b6167500ec0dd Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 29 Mar 2021 21:54:30 +0300
+Subject: [PATCH] dxgi: Use proxy IDXGISwapChain interface when importing that
+ from d3d implementation.
+
+For Origin overlay.
+
+Required for Origin overlay to work (which expects IDXGISwapChain
+implementation methods to reside in dxgi.dll).
+---
+ dlls/dxgi/factory.c   | 511 +++++++++++++++++++++++++++++++++++++++++-
+ dlls/dxgi/swapchain.c |   6 +-
+ 2 files changed, 509 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/dxgi/factory.c b/dlls/dxgi/factory.c
+index af18bdd2c32..020faa26a11 100644
+--- a/dlls/dxgi/factory.c
++++ b/dlls/dxgi/factory.c
+@@ -29,7 +29,7 @@ static inline struct dxgi_factory *impl_from_IWineDXGIFactory(IWineDXGIFactory *
+     return CONTAINING_RECORD(iface, struct dxgi_factory, IWineDXGIFactory_iface);
+ }
+ 
+-static HRESULT STDMETHODCALLTYPE dxgi_factory_QueryInterface(IWineDXGIFactory *iface, REFIID iid, void **out)
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH dxgi_factory_QueryInterface(IWineDXGIFactory *iface, REFIID iid, void **out)
+ {
+     struct dxgi_factory *factory = impl_from_IWineDXGIFactory(iface);
+ 
+@@ -58,7 +58,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_QueryInterface(IWineDXGIFactory *i
+     return E_NOINTERFACE;
+ }
+ 
+-static ULONG STDMETHODCALLTYPE dxgi_factory_AddRef(IWineDXGIFactory *iface)
++static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH dxgi_factory_AddRef(IWineDXGIFactory *iface)
+ {
+     struct dxgi_factory *factory = impl_from_IWineDXGIFactory(iface);
+     ULONG refcount = InterlockedIncrement(&factory->refcount);
+@@ -68,7 +68,7 @@ static ULONG STDMETHODCALLTYPE dxgi_factory_AddRef(IWineDXGIFactory *iface)
+     return refcount;
+ }
+ 
+-static ULONG STDMETHODCALLTYPE dxgi_factory_Release(IWineDXGIFactory *iface)
++static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH dxgi_factory_Release(IWineDXGIFactory *iface)
+ {
+     struct dxgi_factory *factory = impl_from_IWineDXGIFactory(iface);
+     ULONG refcount = InterlockedDecrement(&factory->refcount);
+@@ -267,7 +267,494 @@ static BOOL STDMETHODCALLTYPE dxgi_factory_IsWindowedStereoEnabled(IWineDXGIFact
+     return FALSE;
+ }
+ 
+-static HRESULT STDMETHODCALLTYPE dxgi_factory_CreateSwapChainForHwnd(IWineDXGIFactory *iface,
++struct proxy_swapchain
++{
++    IDXGISwapChain4 IDXGISwapChain4_iface;
++    IDXGISwapChain4 *swapchain;
++};
++
++static inline struct proxy_swapchain *proxy_swapchain_from_IDXGISwapChain4(IDXGISwapChain4 *iface)
++{
++    return CONTAINING_RECORD(iface, struct proxy_swapchain, IDXGISwapChain4_iface);
++}
++
++/* IUnknown methods */
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_QueryInterface(IDXGISwapChain4 *iface, REFIID riid, void **object)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++    TRACE("iface %p, riid %s, object %p\n", iface, debugstr_guid(riid), object);
++
++    if (IsEqualGUID(riid, &IID_IUnknown)
++            || IsEqualGUID(riid, &IID_IDXGIObject)
++            || IsEqualGUID(riid, &IID_IDXGIDeviceSubObject)
++            || IsEqualGUID(riid, &IID_IDXGISwapChain)
++            || IsEqualGUID(riid, &IID_IDXGISwapChain1)
++            || IsEqualGUID(riid, &IID_IDXGISwapChain2)
++            || IsEqualGUID(riid, &IID_IDXGISwapChain3)
++            || IsEqualGUID(riid, &IID_IDXGISwapChain4))
++    {
++        IDXGISwapChain4_AddRef(swapchain->swapchain);
++        *object = iface;
++        return S_OK;
++    }
++
++    WARN("%s not implemented, returning E_NOINTERFACE\n", debugstr_guid(riid));
++
++    *object = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_AddRef(IDXGISwapChain4 *iface)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE("swapchain %p.\n", swapchain);
++
++    return IDXGISwapChain4_AddRef(swapchain->swapchain);
++}
++
++static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_Release(IDXGISwapChain4 *iface)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++    ULONG refcount = IDXGISwapChain4_Release(swapchain->swapchain);
++
++    TRACE("%p decreasing refcount to %u.\n", swapchain, refcount);
++
++    if (!refcount)
++        heap_free(swapchain);
++
++    return refcount;
++}
++
++/* IDXGIObject methods */
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetPrivateData(IDXGISwapChain4 *iface,
++        REFGUID guid, UINT data_size, const void *data)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE("iface %p, guid %s, data_size %u, data %p.\n", iface, debugstr_guid(guid), data_size, data);
++
++    return IDXGISwapChain4_SetPrivateData(swapchain->swapchain, guid, data_size, data);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetPrivateDataInterface(IDXGISwapChain4 *iface,
++        REFGUID guid, const IUnknown *object)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE("iface %p, guid %s, object %p.\n", iface, debugstr_guid(guid), object);
++
++    return IDXGISwapChain4_SetPrivateDataInterface(swapchain->swapchain, guid, object);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetPrivateData(IDXGISwapChain4 *iface,
++        REFGUID guid, UINT *data_size, void *data)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE("iface %p, guid %s, data_size %p, data %p.\n", iface, debugstr_guid(guid), data_size, data);
++
++    return IDXGISwapChain4_GetPrivateData(swapchain->swapchain, guid, data_size, data);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetParent(IDXGISwapChain4 *iface, REFIID riid, void **parent)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE("iface %p, riid %s, parent %p.\n", iface, debugstr_guid(riid), parent);
++
++    return IDXGISwapChain4_GetParent(swapchain->swapchain, riid, parent);
++}
++
++/* IDXGIDeviceSubObject methods */
++
++static HRESULT STDMETHODCALLTYPE proxy_swapchain_GetDevice(IDXGISwapChain4 *iface, REFIID riid, void **device)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE("iface %p, riid %s, device %p.\n", iface, debugstr_guid(riid), device);
++
++    return IDXGISwapChain4_GetDevice(swapchain->swapchain, riid, device);
++}
++
++/* IDXGISwapChain methods */
++
++HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_Present(IDXGISwapChain4 *iface, UINT sync_interval, UINT flags)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE("iface %p, sync_interval %u, flags %#x.\n", iface, sync_interval, flags);
++
++    return IDXGISwapChain4_Present(swapchain->swapchain, sync_interval, flags);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetBuffer(IDXGISwapChain4 *iface,
++        UINT buffer_idx, REFIID riid, void **surface)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetBuffer(swapchain->swapchain, buffer_idx, riid, surface);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetFullscreenState(IDXGISwapChain4 *iface,
++        BOOL fullscreen, IDXGIOutput *target)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetFullscreenState(swapchain->swapchain, fullscreen, target);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetFullscreenState(IDXGISwapChain4 *iface,
++        BOOL *fullscreen, IDXGIOutput **target)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetFullscreenState(swapchain->swapchain, fullscreen, target);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetDesc(IDXGISwapChain4 *iface, DXGI_SWAP_CHAIN_DESC *desc)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetDesc(swapchain->swapchain, desc);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_ResizeBuffers(IDXGISwapChain4 *iface,
++        UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_ResizeBuffers(swapchain->swapchain, buffer_count, width, height, format, flags);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_ResizeTarget(IDXGISwapChain4 *iface,
++        const DXGI_MODE_DESC *target_mode_desc)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_ResizeTarget(swapchain->swapchain, target_mode_desc);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetContainingOutput(IDXGISwapChain4 *iface, IDXGIOutput **output)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetContainingOutput(swapchain->swapchain, output);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetFrameStatistics(IDXGISwapChain4 *iface,
++        DXGI_FRAME_STATISTICS *stats)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetFrameStatistics(swapchain->swapchain, stats);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetLastPresentCount(IDXGISwapChain4 *iface,
++        UINT *last_present_count)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetLastPresentCount(swapchain->swapchain, last_present_count);
++}
++
++/* IDXGISwapChain1 methods */
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetDesc1(IDXGISwapChain4 *iface, DXGI_SWAP_CHAIN_DESC1 *desc)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetDesc1(swapchain->swapchain, desc);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetFullscreenDesc(IDXGISwapChain4 *iface,
++        DXGI_SWAP_CHAIN_FULLSCREEN_DESC *desc)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetFullscreenDesc(swapchain->swapchain, desc);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetHwnd(IDXGISwapChain4 *iface, HWND *hwnd)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetHwnd(swapchain->swapchain, hwnd);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetCoreWindow(IDXGISwapChain4 *iface,
++        REFIID iid, void **core_window)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetCoreWindow(swapchain->swapchain, iid, core_window);
++}
++
++HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_Present1(IDXGISwapChain4 *iface,
++        UINT sync_interval, UINT flags, const DXGI_PRESENT_PARAMETERS *present_parameters)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_Present1(swapchain->swapchain, sync_interval, flags, present_parameters);
++}
++
++static BOOL STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_IsTemporaryMonoSupported(IDXGISwapChain4 *iface)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_IsTemporaryMonoSupported(swapchain->swapchain);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetRestrictToOutput(IDXGISwapChain4 *iface, IDXGIOutput **output)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetRestrictToOutput(swapchain->swapchain, output);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetBackgroundColor(IDXGISwapChain4 *iface, const DXGI_RGBA *color)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetBackgroundColor(swapchain->swapchain, color);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetBackgroundColor(IDXGISwapChain4 *iface, DXGI_RGBA *color)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetBackgroundColor(swapchain->swapchain, color);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetRotation(IDXGISwapChain4 *iface, DXGI_MODE_ROTATION rotation)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetRotation(swapchain->swapchain, rotation);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetRotation(IDXGISwapChain4 *iface, DXGI_MODE_ROTATION *rotation)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetRotation(swapchain->swapchain, rotation);
++}
++
++/* IDXGISwapChain2 methods */
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetSourceSize(IDXGISwapChain4 *iface, UINT width, UINT height)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetSourceSize(swapchain->swapchain, width, height);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetSourceSize(IDXGISwapChain4 *iface, UINT *width, UINT *height)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetSourceSize(swapchain->swapchain, width, height);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetMaximumFrameLatency(IDXGISwapChain4 *iface, UINT max_latency)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetMaximumFrameLatency(swapchain->swapchain, max_latency);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetMaximumFrameLatency(IDXGISwapChain4 *iface, UINT *max_latency)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetMaximumFrameLatency(swapchain->swapchain, max_latency);
++}
++
++static HANDLE STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetFrameLatencyWaitableObject(IDXGISwapChain4 *iface)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetFrameLatencyWaitableObject(swapchain->swapchain);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetMatrixTransform(IDXGISwapChain4 *iface,
++        const DXGI_MATRIX_3X2_F *matrix)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetMatrixTransform(swapchain->swapchain, matrix);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetMatrixTransform(IDXGISwapChain4 *iface,
++        DXGI_MATRIX_3X2_F *matrix)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetMatrixTransform(swapchain->swapchain, matrix);
++}
++
++/* IDXGISwapChain3 methods */
++
++static UINT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_GetCurrentBackBufferIndex(IDXGISwapChain4 *iface)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_GetCurrentBackBufferIndex(swapchain->swapchain);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_CheckColorSpaceSupport(IDXGISwapChain4 *iface,
++        DXGI_COLOR_SPACE_TYPE colour_space, UINT *colour_space_support)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_CheckColorSpaceSupport(swapchain->swapchain, colour_space, colour_space_support);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetColorSpace1(IDXGISwapChain4 *iface,
++        DXGI_COLOR_SPACE_TYPE colour_space)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetColorSpace1(swapchain->swapchain, colour_space);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_ResizeBuffers1(IDXGISwapChain4 *iface,
++        UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags,
++        const UINT *node_mask, IUnknown * const *present_queue)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_ResizeBuffers1(swapchain->swapchain, buffer_count, width, height, format, flags, node_mask, present_queue);
++}
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH proxy_swapchain_SetHDRMetaData(IDXGISwapChain4 *iface,
++        DXGI_HDR_METADATA_TYPE type, UINT size, void *metadata)
++{
++    struct proxy_swapchain *swapchain = proxy_swapchain_from_IDXGISwapChain4(iface);
++
++    TRACE(".\n");
++
++    return IDXGISwapChain4_SetHDRMetaData(swapchain->swapchain, type, size, metadata);
++}
++
++static const struct IDXGISwapChain4Vtbl proxy_swapchain_vtbl =
++{
++    /* IUnknown methods */
++    proxy_swapchain_QueryInterface,
++    proxy_swapchain_AddRef,
++    proxy_swapchain_Release,
++    /* IDXGIObject methods */
++    proxy_swapchain_SetPrivateData,
++    proxy_swapchain_SetPrivateDataInterface,
++    proxy_swapchain_GetPrivateData,
++    proxy_swapchain_GetParent,
++    /* IDXGIDeviceSubObject methods */
++    proxy_swapchain_GetDevice,
++    /* IDXGISwapChain methods */
++    proxy_swapchain_Present,
++    proxy_swapchain_GetBuffer,
++    proxy_swapchain_SetFullscreenState,
++    proxy_swapchain_GetFullscreenState,
++    proxy_swapchain_GetDesc,
++    proxy_swapchain_ResizeBuffers,
++    proxy_swapchain_ResizeTarget,
++    proxy_swapchain_GetContainingOutput,
++    proxy_swapchain_GetFrameStatistics,
++    proxy_swapchain_GetLastPresentCount,
++    /* IDXGISwapChain1 methods */
++    proxy_swapchain_GetDesc1,
++    proxy_swapchain_GetFullscreenDesc,
++    proxy_swapchain_GetHwnd,
++    proxy_swapchain_GetCoreWindow,
++    proxy_swapchain_Present1,
++    proxy_swapchain_IsTemporaryMonoSupported,
++    proxy_swapchain_GetRestrictToOutput,
++    proxy_swapchain_SetBackgroundColor,
++    proxy_swapchain_GetBackgroundColor,
++    proxy_swapchain_SetRotation,
++    proxy_swapchain_GetRotation,
++    /* IDXGISwapChain2 methods */
++    proxy_swapchain_SetSourceSize,
++    proxy_swapchain_GetSourceSize,
++    proxy_swapchain_SetMaximumFrameLatency,
++    proxy_swapchain_GetMaximumFrameLatency,
++    proxy_swapchain_GetFrameLatencyWaitableObject,
++    proxy_swapchain_SetMatrixTransform,
++    proxy_swapchain_GetMatrixTransform,
++    /* IDXGISwapChain3 methods */
++    proxy_swapchain_GetCurrentBackBufferIndex,
++    proxy_swapchain_CheckColorSpaceSupport,
++    proxy_swapchain_SetColorSpace1,
++    proxy_swapchain_ResizeBuffers1,
++    /* IDXGISwapChain4 methods */
++    proxy_swapchain_SetHDRMetaData,
++};
++
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH dxgi_factory_CreateSwapChainForHwnd(IWineDXGIFactory *iface,
+         IUnknown *device, HWND window, const DXGI_SWAP_CHAIN_DESC1 *desc,
+         const DXGI_SWAP_CHAIN_FULLSCREEN_DESC *fullscreen_desc,
+         IDXGIOutput *output, IDXGISwapChain1 **swapchain)
+@@ -299,9 +786,23 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_CreateSwapChainForHwnd(IWineDXGIFa
+ 
+     if (SUCCEEDED(IUnknown_QueryInterface(device, &IID_IWineDXGISwapChainFactory, (void **)&swapchain_factory)))
+     {
++        IDXGISwapChain4 *swapchain_impl;
+         hr = IWineDXGISwapChainFactory_create_swapchain(swapchain_factory,
+-                (IDXGIFactory *)iface, window, desc, fullscreen_desc, output, swapchain);
++                (IDXGIFactory *)iface, window, desc, fullscreen_desc, output, (IDXGISwapChain1 **)&swapchain_impl);
+         IWineDXGISwapChainFactory_Release(swapchain_factory);
++        if (SUCCEEDED(hr))
++        {
++            struct proxy_swapchain *obj;
++
++            obj = heap_alloc_zero(sizeof(*obj));
++            obj->IDXGISwapChain4_iface.lpVtbl = &proxy_swapchain_vtbl;
++            obj->swapchain = swapchain_impl;
++            *swapchain = (IDXGISwapChain1 *)&obj->IDXGISwapChain4_iface;
++        }
++        else
++        {
++            *swapchain = NULL;
++        }
+         return hr;
+     }
+ 
+diff --git a/dlls/dxgi/swapchain.c b/dlls/dxgi/swapchain.c
+index 82e5fbf811d..b1153ac4927 100644
+--- a/dlls/dxgi/swapchain.c
++++ b/dlls/dxgi/swapchain.c
+@@ -232,7 +232,7 @@ static ULONG STDMETHODCALLTYPE d3d11_swapchain_AddRef(IDXGISwapChain1 *iface)
+     return refcount;
+ }
+ 
+-static ULONG STDMETHODCALLTYPE d3d11_swapchain_Release(IDXGISwapChain1 *iface)
++static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d11_swapchain_Release(IDXGISwapChain1 *iface)
+ {
+     struct d3d11_swapchain *swapchain = d3d11_swapchain_from_IDXGISwapChain1(iface);
+     ULONG refcount = InterlockedDecrement(&swapchain->refcount);
+@@ -325,7 +325,7 @@ static HRESULT STDMETHODCALLTYPE d3d11_swapchain_GetDevice(IDXGISwapChain1 *ifac
+ 
+ /* IDXGISwapChain1 methods */
+ 
+-static HRESULT d3d11_swapchain_present(struct d3d11_swapchain *swapchain,
++static HRESULT DECLSPEC_HOTPATCH d3d11_swapchain_present(struct d3d11_swapchain *swapchain,
+         unsigned int sync_interval, unsigned int flags)
+ {
+     if (sync_interval > 4)
+@@ -697,7 +697,7 @@ static HRESULT STDMETHODCALLTYPE d3d11_swapchain_GetCoreWindow(IDXGISwapChain1 *
+     return DXGI_ERROR_INVALID_CALL;
+ }
+ 
+-static HRESULT STDMETHODCALLTYPE d3d11_swapchain_Present1(IDXGISwapChain1 *iface,
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d11_swapchain_Present1(IDXGISwapChain1 *iface,
+         UINT sync_interval, UINT flags, const DXGI_PRESENT_PARAMETERS *present_parameters)
+ {
+     struct d3d11_swapchain *swapchain = d3d11_swapchain_from_IDXGISwapChain1(iface);
+From 2fb560afba703185617bef6e277aa0cad3fcf681 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 30 Mar 2021 00:38:36 +0300
+Subject: [PATCH] dxgi: Specify an image base.
+
+For Origin overlay.
+---
+ dlls/dxgi/Makefile.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/dxgi/Makefile.in b/dlls/dxgi/Makefile.in
+index c21cb18d8ff..1c626be213b 100644
+--- a/dlls/dxgi/Makefile.in
++++ b/dlls/dxgi/Makefile.in
+@@ -3,6 +3,8 @@ IMPORTLIB = dxgi
+ IMPORTS   = gdi32 dxguid uuid wined3d user32
+ EXTRAINCL = $(VKD3D_CFLAGS)
+ 
++EXTRADLLFLAGS = -Wl,--image-base,0x7bb00000
++
+ C_SRCS = \
+ 	adapter.c \
+ 	device.c \
+From fec2ecbd2dfd3c357f63c8f7bd9383b7a10d4553 Mon Sep 17 00:00:00 2001
+From: Esme Povirk <esme@codeweavers.com>
+Date: Thu, 22 Apr 2021 14:35:40 -0500
+Subject: [PATCH] HACK: mscoree: For M&B2:Bannerlord, redirect ManagedStarter
+ loads to Bannerlord.exe
+
+For M&B2:Bannerlord.
+---
+ dlls/mscoree/metahost.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/dlls/mscoree/metahost.c b/dlls/mscoree/metahost.c
+index d9b599fadc7..25acdced21e 100644
+--- a/dlls/mscoree/metahost.c
++++ b/dlls/mscoree/metahost.c
+@@ -1742,6 +1742,32 @@ static MonoAssembly* CDECL mono_assembly_preload_hook_fn(MonoAssemblyName *aname
+         }
+     }
+ 
++    if (!strcmp(assemblyname, "ManagedStarter"))
++    {
++        /* HACK for Mount & Blade II: Bannerlord
++         *
++         * The launcher executable uses an AssemblyResolve event handler
++         * to redirect loads of the "ManagedStarter" assembly to
++         * Bannerlord.exe. Due to Mono issue #11319, the runtime attempts
++         * to load ManagedStarter before executing the static constructor
++         * that adds this event handler. We work around this by doing the
++         * same thing in our own assembly load hook. */
++        const char* sgi = getenv("SteamGameId");
++        if (sgi && !strcmp(sgi, "261550"))
++        {
++            FIXME("hack, using Bannerlord.exe\n");
++
++            result = mono_assembly_open("Bannerlord.exe", &stat);
++
++            if (result)
++                goto done;
++            else
++            {
++                ERR("Bannerlord.exe failed to load\n");
++            }
++        }
++    }
++
+     /* FIXME: We should search the given paths before the GAC. */
+ 
+     if ((search_flags & ASSEMBLY_SEARCH_GAC) != 0)
+From 8fd758062036561d7a1fbdcf7d331de69a3a4ffd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 26 Mar 2021 13:12:44 +0100
+Subject: [PATCH] mscoree: Initialize parsed_config_file private_path.
+
+In case of error we may free uninitialized pointer otherwise.
+---
+ dlls/mscoree/config.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/mscoree/config.c b/dlls/mscoree/config.c
+index 38f304f3df8..b6aa647d876 100644
+--- a/dlls/mscoree/config.c
++++ b/dlls/mscoree/config.c
+@@ -617,6 +617,7 @@ static const struct ISAXErrorHandlerVtbl ConfigFileHandlerErrorVtbl =
+ static void init_config(parsed_config_file *config)
+ {
+     list_init(&config->supported_runtimes);
++    config->private_path = NULL;
+ }
+ 
+ static HRESULT parse_config(VARIANT input, parsed_config_file *result)

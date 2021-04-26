@@ -354,16 +354,16 @@ index 6d40eb05949..09ead823ac7 100755
 --- a/dlls/winevulkan/make_vulkan
 +++ b/dlls/winevulkan/make_vulkan
 @@ -191,8 +191,8 @@ FUNCTION_OVERRIDES = {
-     "vkGetPhysicalDeviceWin32PresentationSupportKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
+     "vkGetPhysicalDeviceWin32PresentationSupportKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
  
      # VK_KHR_swapchain
--    "vkAcquireNextImageKHR" : {"dispatch" : True, "driver" : False, "thunk" : True},
--    "vkAcquireNextImage2KHR": {"dispatch" : True, "driver" : False, "thunk" : False},
-+    "vkAcquireNextImageKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
-+    "vkAcquireNextImage2KHR": {"dispatch" : True, "driver" : True, "thunk" : False},
-     "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
-     "vkDestroySwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : False},
-     "vkGetSwapchainImagesKHR": {"dispatch" : True, "driver" : True, "thunk" : False},
+-    "vkAcquireNextImageKHR" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC},
+-    "vkAcquireNextImage2KHR": {"dispatch" : True, "driver" : False, "thunk" : ThunkType.NONE},
++    "vkAcquireNextImageKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
++    "vkAcquireNextImage2KHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
+     "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
+     "vkDestroySwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
+     "vkGetSwapchainImagesKHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
 diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
 index b4d674f78e8..1d7f47d1dc8 100644
 --- a/dlls/winex11.drv/vulkan.c

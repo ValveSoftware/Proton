@@ -284,9 +284,9 @@ index 1f94c38d0c6..df2b43d9106 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -181,6 +181,7 @@ CurrentVersion="Software\Microsoft\Windows\CurrentVersion"
- CurrentVersionNT="Software\Microsoft\Windows NT\CurrentVersion"
  FontSubStr="Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"
  Control="System\CurrentControlSet\Control"
+ Packages="Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\PackageRepository\Packages"
 +FontsNT="Software\Microsoft\Windows NT\CurrentVersion\Fonts"
  
  [Classes]

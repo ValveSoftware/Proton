@@ -308,3 +308,238 @@ index adaaa6acaf6..3f983244c42 100644
  }
  
  
+From 04ddf23b989096e232386f79e0b0031b6d37b72f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 18 Dec 2019 13:49:00 +0100
+Subject: [PATCH] HACK: user32: Strip gameoverlayrenderer.so from LD_PRELOAD
+ before executing explorer.exe.
+
+Work around a bug in gameoverlayrenderer which introduces 50ms hangs
+during XCheckIfEvent after approx 40 minutes of gameplay.
+---
+ dlls/user32/win.c | 55 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 610dc7857b4..cb5b0465f68 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -45,6 +45,15 @@ static DWORD process_layout = ~0u;
+ 
+ static struct list window_surfaces = LIST_INIT( window_surfaces );
+ 
++static CRITICAL_SECTION desktop_section;
++static CRITICAL_SECTION_DEBUG desktop_critsect_debug =
++{
++    0, 0, &desktop_section,
++    { &desktop_critsect_debug.ProcessLocksList, &desktop_critsect_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": desktop_section") }
++};
++static CRITICAL_SECTION desktop_section = { &desktop_critsect_debug, -1, 0, 0, 0, 0 };
++
+ static CRITICAL_SECTION surfaces_section;
+ static CRITICAL_SECTION_DEBUG critsect_debug =
+ {
+@@ -2098,6 +2107,7 @@ HWND WINAPI GetDesktopWindow(void)
+         WCHAR app[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe" )];
+         WCHAR cmdline[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe /desktop" )];
+         WCHAR desktop[MAX_PATH];
++        char *ld_preload;
+         void *redir;
+ 
+         SERVER_START_REQ( set_user_object_info )
+@@ -2130,6 +2140,46 @@ HWND WINAPI GetDesktopWindow(void)
+         lstrcpyW( cmdline, app );
+         lstrcatW( cmdline, L" /desktop" );
+ 
++        EnterCriticalSection( &desktop_section);
++
++        /* HACK: Unset LD_PRELOAD before executing explorer.exe to disable buggy gameoverlayrenderer.so
++         * It's not going to work through the CreateProcessW env parameter, as it will not be used for the loader execv.
++         */
++        if ((ld_preload = getenv("LD_PRELOAD")))
++        {
++            static char const gorso[] = "gameoverlayrenderer.so";
++            static unsigned int gorso_len = ARRAY_SIZE(gorso) - 1;
++            char *env, *next, *tmp;
++
++            env = HeapAlloc(GetProcessHeap(), 0, strlen(ld_preload) + 1);
++            strcpy(env, ld_preload);
++
++            tmp = env;
++            do
++            {
++                if (!(next = strchr(tmp, ':')))
++                    next = tmp + strlen(tmp);
++
++                if (next - tmp >= gorso_len &&
++                    strncmp(next - gorso_len, gorso, gorso_len) == 0)
++                {
++                    if (*next)
++                        memmove(tmp, next + 1, strlen(next));
++                    else
++                        *tmp = 0;
++                    next = tmp;
++                }
++                else
++                {
++                    tmp = next + 1;
++                }
++            }
++            while (*next);
++
++            SetEnvironmentVariableA("LD_PRELOAD", env);
++            HeapFree(GetProcessHeap(), 0, env);
++        }
++
+         Wow64DisableWow64FsRedirection( &redir );
+         if (CreateProcessW( app, cmdline, NULL, NULL, FALSE, DETACHED_PROCESS,
+                             NULL, windir, &si, &pi ))
+@@ -2142,6 +2192,11 @@ HWND WINAPI GetDesktopWindow(void)
+         else WARN( "failed to start explorer, err %d\n", GetLastError() );
+         Wow64RevertWow64FsRedirection( redir );
+ 
++        /* HACK: Restore the previous value, just in case */
++        if (ld_preload) SetEnvironmentVariableA("LD_PRELOAD", ld_preload);
++
++        LeaveCriticalSection( &desktop_section );
++
+         SERVER_START_REQ( get_desktop_window )
+         {
+             req->force = 1;
+
+From 12b4a3fb559cafd4b5fdb072dc4e2bb3aa1e95b1 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 5 Apr 2021 13:20:41 -0500
+Subject: [PATCH] ntdll: Export a function to set a Unix environment variable
+
+---
+ dlls/ntdll/env.c               | 5 +++++
+ dlls/ntdll/ntdll.spec          | 1 +
+ dlls/ntdll/unix/env.c          | 5 +++++
+ dlls/ntdll/unix/loader.c       | 1 +
+ dlls/ntdll/unix/unix_private.h | 2 ++
+ dlls/ntdll/unixlib.h           | 1 +
+ include/wine/debug.h           | 1 +
+ 7 files changed, 16 insertions(+)
+
+diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
+index 4931e407e57..bc5ed6648aa 100644
+--- a/dlls/ntdll/env.c
++++ b/dlls/ntdll/env.c
+@@ -1072,3 +1072,8 @@ void init_user_process_params(void)
+     set_wow64_environment( &params->Environment );
+     params->EnvironmentSize = RtlSizeHeap( GetProcessHeap(), 0, params->Environment );
+ }
++
++void __cdecl __wine_set_unix_env( const char *var, const char *val)
++{
++    unix_funcs->set_unix_env( var, val );
++}
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index 185dd6767eb..6c71032bd31 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -1610,6 +1610,7 @@
+ @ cdecl __wine_init_unix_lib(long long ptr ptr)
+ @ extern __wine_syscall_dispatcher
+ @ extern -arch=i386 __wine_ldt_copy
++@ cdecl __wine_set_unix_env(ptr ptr)
+ 
+ # Debugging
+ @ cdecl -norelay __wine_dbg_get_channel_flags(ptr)
+diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
+index 9308c7ed76c..f92e6c33846 100644
+--- a/dlls/ntdll/unix/env.c
++++ b/dlls/ntdll/unix/env.c
+@@ -1735,3 +1735,8 @@ NTSTATUS WINAPI NtQueryInstallUILanguage( LANGID *lang )
+     *lang = system_ui_language;
+     return STATUS_SUCCESS;
+ }
++
++void CDECL set_unix_env( const char *var, const char *val )
++{
++    setenv(var, val, 1);
++}
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index e565c324eef..7cdd8b89dfd 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1818,6 +1818,7 @@ static struct unix_funcs unix_funcs =
+     __wine_dbg_output,
+     __wine_dbg_header,
+     steamclient_setup_trampolines,
++    set_unix_env,
+ };
+ 
+ 
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index f4bd0b7876e..ab37830cb3c 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -258,6 +258,8 @@ extern void WINAPI call_raise_user_exception_dispatcher( NTSTATUS (WINAPI *dispa
+ extern void *get_syscall_frame(void) DECLSPEC_HIDDEN;
+ extern void set_syscall_frame(void *frame) DECLSPEC_HIDDEN;
+ 
++extern void CDECL set_unix_env(const char *var, const char *val) DECLSPEC_HIDDEN;
++
+ #define TICKSPERSEC 10000000
+ #define SECS_1601_TO_1970  ((369 * 365 + 89) * (ULONGLONG)86400)
+ 
+diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
+index 0f136508b54..b252ed9ae7e 100644
+--- a/dlls/ntdll/unixlib.h
++++ b/dlls/ntdll/unixlib.h
+@@ -94,6 +94,7 @@ struct unix_funcs
+ 
+     /* steamclient HACK */
+     void          (CDECL *steamclient_setup_trampolines)( HMODULE src_mod, HMODULE tgt_mod );
++    void          (CDECL *set_unix_env)( const char *var, const char *val );
+ };
+ 
+ #endif /* __NTDLL_UNIXLIB_H */
+diff --git a/include/wine/debug.h b/include/wine/debug.h
+index 2255f62e502..60bd9630202 100644
+--- a/include/wine/debug.h
++++ b/include/wine/debug.h
+@@ -148,6 +148,7 @@ extern const char * __cdecl __wine_dbg_strdup( const char *str );
+ extern int __cdecl __wine_dbg_output( const char *str );
+ extern int __cdecl __wine_dbg_header( enum __wine_debug_class cls, struct __wine_debug_channel *channel,
+                                       const char *function );
++extern void __cdecl __wine_set_unix_env( const char *var, const char *val );
+ 
+ /*
+  * Exported definitions and macros
+From 97f962cd469ee9b9b68d32e79849bf94cfe15581 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 5 Apr 2021 13:21:54 -0500
+Subject: [PATCH] fixup, user32: Use new export to set LD_PRELOAD
+
+Fixup for "HACK: user32: Strip gameoverlayrenderer.so from LD_PRELOAD
+before executing explorer.exe."
+---
+ dlls/user32/win.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index cb5b0465f68..847c689c1e0 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -2176,7 +2176,7 @@ HWND WINAPI GetDesktopWindow(void)
+             }
+             while (*next);
+ 
+-            SetEnvironmentVariableA("LD_PRELOAD", env);
++            __wine_set_unix_env("LD_PRELOAD", env);
+             HeapFree(GetProcessHeap(), 0, env);
+         }
+ 
+@@ -2193,7 +2193,7 @@ HWND WINAPI GetDesktopWindow(void)
+         Wow64RevertWow64FsRedirection( redir );
+ 
+         /* HACK: Restore the previous value, just in case */
+-        if (ld_preload) SetEnvironmentVariableA("LD_PRELOAD", ld_preload);
++        if (ld_preload) __wine_set_unix_env("LD_PRELOAD", ld_preload);
+ 
+         LeaveCriticalSection( &desktop_section );
+ 

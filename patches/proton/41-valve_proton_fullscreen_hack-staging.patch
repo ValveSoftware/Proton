@@ -3695,9 +3695,9 @@ index 4a3ab31273a..97463882355 100644
  };
  
 @@ -248,6 +259,10 @@ struct gl_drawable
-     SIZE                           pixmap_size;  /* pixmap size for GLXPixmap drawables */
      int                            swap_interval;
      BOOL                           refresh_swap_interval;
+     BOOL                           mutable_pf;
 +    BOOL                           fs_hack;
 +    BOOL                           fs_hack_did_swapbuf;
 +    BOOL                           fs_hack_context_set_up;
@@ -7210,4 +7210,5 @@ index 0299c5b1876..06a5e64599f 100644
      clipping_cursor = FALSE;
      SendNotifyMessageW( GetDesktopWindow(), WM_X11DRV_CLIP_CURSOR_NOTIFY, 0, 0 );
  }
+
 
