@@ -3,7 +3,7 @@
  * This file is generated from OpenXR xr.xml file covered
  * by the following copyright and permission notice:
  *
- * Copyright (c) 2017-2020 The Khronos Group Inc.
+ * Copyright (c) 2017-2021, The Khronos Group Inc.
  *
  * SPDX-License-Identifier: Apache-2.0 OR MIT
  *
@@ -386,6 +386,12 @@ static XrResult WINAPI wine_xrSetColorSpaceFB(XrSession session, const XrColorSp
     return ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetColorSpaceFB(((wine_XrSession *)session)->session, colorspace);
 }
 
+static XrResult WINAPI wine_xrSetEnvironmentDepthEstimationVARJO(XrSession session, XrBool32 enabled)
+{
+    WINE_TRACE("%p, %u\n", session, enabled);
+    return ((wine_XrSession *)session)->wine_instance->funcs.p_xrSetEnvironmentDepthEstimationVARJO(((wine_XrSession *)session)->session, enabled);
+}
+
 static XrResult WINAPI wine_xrSetInputDeviceActiveEXT(XrSession session, XrPath interactionProfile, XrPath topLevelPath, XrBool32 isActive)
 {
     WINE_TRACE("%p, 0x%s, 0x%s, %u\n", session, wine_dbgstr_longlong(interactionProfile), wine_dbgstr_longlong(topLevelPath), isActive);
@@ -552,6 +558,7 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrRequestExitSession", &wine_xrRequestExitSession},
     {"xrResultToString", &wine_xrResultToString},
     {"xrSetColorSpaceFB", &wine_xrSetColorSpaceFB},
+    {"xrSetEnvironmentDepthEstimationVARJO", &wine_xrSetEnvironmentDepthEstimationVARJO},
     {"xrSetInputDeviceActiveEXT", &wine_xrSetInputDeviceActiveEXT},
     {"xrSetInputDeviceLocationEXT", &wine_xrSetInputDeviceLocationEXT},
     {"xrSetInputDeviceStateBoolEXT", &wine_xrSetInputDeviceStateBoolEXT},
@@ -627,6 +634,9 @@ static const char * const xr_extensions[] =
     "XR_MSFT_unbounded_reference_space",
     "XR_OCULUS_android_session_state_enable",
     "XR_VALVE_analog_threshold",
+    "XR_VARJO_composition_layer_depth_test",
+    "XR_VARJO_environment_depth_estimation",
+    "XR_VARJO_foveated_rendering",
     "XR_VARJO_quad_views",
 };
 
