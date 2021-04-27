@@ -3,7 +3,7 @@
  * This file is generated from OpenXR xr.xml file covered
  * by the following copyright and permission notice:
  *
- * Copyright (c) 2017-2020 The Khronos Group Inc.
+ * Copyright (c) 2017-2021, The Khronos Group Inc.
  *
  * SPDX-License-Identifier: Apache-2.0 OR MIT
  *
@@ -134,6 +134,7 @@ struct openxr_instance_funcs
     XrResult (*p_xrRequestExitSession)(XrSession);
     XrResult (*p_xrResultToString)(XrInstance, XrResult, char[]);
     XrResult (*p_xrSetColorSpaceFB)(XrSession, const XrColorSpaceFB);
+    XrResult (*p_xrSetEnvironmentDepthEstimationVARJO)(XrSession, XrBool32);
     XrResult (*p_xrSetInputDeviceActiveEXT)(XrSession, XrPath, XrPath, XrBool32);
     XrResult (*p_xrSetInputDeviceLocationEXT)(XrSession, XrPath, XrPath, XrSpace, XrPosef);
     XrResult (*p_xrSetInputDeviceStateBoolEXT)(XrSession, XrPath, XrPath, XrBool32);
@@ -223,6 +224,7 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrRequestExitSession) \
     USE_XR_FUNC(xrResultToString) \
     USE_XR_FUNC(xrSetColorSpaceFB) \
+    USE_XR_FUNC(xrSetEnvironmentDepthEstimationVARJO) \
     USE_XR_FUNC(xrSetInputDeviceActiveEXT) \
     USE_XR_FUNC(xrSetInputDeviceLocationEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateBoolEXT) \
