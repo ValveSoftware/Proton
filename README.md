@@ -122,7 +122,7 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Warframe on Nvidia: you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine
 - Injustice 2 and MK11 are missing cutscene audio
 
-Full patches can be viewed in [protonprep.sh](patches/protonprep-nofshack.sh).
+Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
 
 ## Installation
 
