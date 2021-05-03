@@ -58,7 +58,7 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_BIsHmdPresent, 4)
 bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(winIVRClientCore_IVRClientCore_003 *_this)
 {
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_003_BIsHmdPresent(_this->linux_side);
+    return ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_003_BIsHmdPresent, _this->linux_side, 3, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError, 8)
@@ -179,7 +179,7 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_BIsHmdPresent, 4)
 bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(winIVRClientCore_IVRClientCore_002 *_this)
 {
     TRACE("%p\n", _this);
-    return cppIVRClientCore_IVRClientCore_002_BIsHmdPresent(_this->linux_side);
+    return ivrclientcore_is_hmd_present(cppIVRClientCore_IVRClientCore_002_BIsHmdPresent, _this->linux_side, 2, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError, 8)

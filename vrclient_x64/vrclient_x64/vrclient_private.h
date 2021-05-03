@@ -72,6 +72,8 @@ struct client_core_data
     SIZE_T created_interfaces_size;
 };
 
+bool ivrclientcore_is_hmd_present(bool (*cpp_func)(void *), void *linux_side, unsigned int version,
+        struct client_core_data *user_data);
 EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicationType),
         void *linux_side, EVRApplicationType application_type,
         unsigned int version, struct client_core_data *user_data);

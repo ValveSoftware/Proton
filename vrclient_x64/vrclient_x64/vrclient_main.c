@@ -357,6 +357,93 @@ static void load_vk_unwrappers(void)
     get_native_VkQueue = (void*)GetProcAddress(h, "__wine_get_native_VkQueue");
 }
 
+static bool is_hmd_present_reg(void)
+{
+    DWORD type, value, wait_status, size;
+    DWORD is_hmd_present = 0;
+    LSTATUS status;
+    HANDLE event;
+    HKEY vr_key;
+
+    if ((status = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Wine\\VR", 0, KEY_READ, &vr_key)))
+    {
+        WINE_ERR("Could not create key, status %#x.\n", status);
+        return FALSE;
+    }
+
+    size = sizeof(value);
+    if ((status = RegQueryValueExA(vr_key, "state", NULL, &type, (BYTE *)&value, &size)))
+    {
+        WINE_ERR("Could not query value, status %#x.\n", status);
+        RegCloseKey(vr_key);
+        return FALSE;
+    }
+    if (type != REG_DWORD)
+    {
+        WINE_ERR("Unexpected value type %#x.\n", type);
+        RegCloseKey(vr_key);
+        return FALSE;
+    }
+
+    if (value)
+    {
+        RegCloseKey(vr_key);
+        return value == 1;
+    }
+
+    event = CreateEventA( NULL, FALSE, FALSE, NULL );
+    while (1)
+    {
+        if (RegNotifyChangeKeyValue(vr_key, FALSE, REG_NOTIFY_CHANGE_LAST_SET, event, TRUE))
+        {
+            WINE_ERR("Error registering registry change notification.\n");
+            goto done;
+        }
+        size = sizeof(value);
+        if ((status = RegQueryValueExA(vr_key, "state", NULL, &type, (BYTE *)&value, &size)))
+        {
+            WINE_ERR("Could not query value, status %#x.\n", status);
+            goto done;
+        }
+        if (value)
+            break;
+        while ((wait_status = WaitForSingleObject(event, 1000)) == WAIT_TIMEOUT)
+            WINE_ERR("VR state wait timeout.\n");
+
+        if (wait_status != WAIT_OBJECT_0)
+        {
+            WINE_ERR("Got unexpected wait status %#x.\n", wait_status);
+            break;
+        }
+    }
+
+    if (value != 1)
+        goto done;
+
+    size = sizeof(is_hmd_present);
+    if ((status = RegQueryValueExA(vr_key, "is_hmd_present", NULL, &type, (BYTE *)&is_hmd_present, &size)))
+        WINE_ERR("Could not query is_hmd_present value, status %#x.\n", status);
+
+done:
+    CloseHandle(event);
+    RegCloseKey(vr_key);
+    return is_hmd_present;
+}
+
+bool ivrclientcore_is_hmd_present(bool (*cpp_func)(void *), void *linux_side, unsigned int version,
+        struct client_core_data *user_data)
+{
+    TRACE("linux_side %p, compositor_data.client_core_linux_side %p.\n",
+            linux_side, compositor_data.client_core_linux_side);
+
+    /* BIsHmdPresent() currently always returns FALSE on Linux if called before Init().
+     * Return true if the value stored by steam.exe helper in registry says the HMD is presnt. */
+    if (compositor_data.client_core_linux_side || !is_hmd_present_reg())
+        return cpp_func(linux_side);
+
+    return TRUE;
+}
+
 EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicationType),
         void *linux_side, EVRApplicationType application_type,
         unsigned int version, struct client_core_data *user_data)

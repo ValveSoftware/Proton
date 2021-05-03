@@ -288,6 +288,9 @@ class_versions = {}
 def get_params(f):
     return [p for p in f.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL]
 
+def ivrclientcore_is_hmd_present(cppname, method):
+    return "ivrclientcore_is_hmd_present"
+
 def ivrclientcore_init(cppname, method):
     if "002" in cppname:
         return "ivrclientcore_002_init"
@@ -382,6 +385,7 @@ def ivroverlay_set_overlay_texture(cppname, method):
     return "ivroverlay_set_overlay_texture"
 
 method_overrides = [
+    ("IVRClientCore", "BIsHmdPresent", ivrclientcore_is_hmd_present),
     ("IVRClientCore", "Init", ivrclientcore_init),
     ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
     ("IVRClientCore", "Cleanup", ivrclientcore_cleanup),
