@@ -1,0 +1,88 @@
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Subject: [PATCH 3/5] winegstreamer: Let the media source accept non-negative rates.
+Message-Id: <20210507085628.751316-3-gmascellani@codeweavers.com>
+Date: Fri,  7 May 2021 10:56:26 +0200
+In-Reply-To: <20210507085628.751316-1-gmascellani@codeweavers.com>
+References: <20210507085628.751316-1-gmascellani@codeweavers.com>
+
+Thinned rates are accepted too, though no actual thinning is performed.
+Since thinning behavior is expected to be implementation-dependent, this
+doesn't seem inappropriate.
+
+Signed-off-by: Giovanni Mascellani <gmascellani@codeweavers.com>
+---
+ dlls/winegstreamer/media_source.c | 28 +++++++++++++++++++++-------
+ 2 files changed, 21 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index eb5b9e366ec..f77a8dfe78a 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -104,6 +104,8 @@ struct media_source
+ 
+     HANDLE read_thread;
+     bool read_thread_shutdown;
++    float rate;
++    BOOL thinning;
+ };
+ 
+ static inline struct media_stream *impl_from_IMFMediaStream(IMFMediaStream *iface)
+@@ -989,28 +991,38 @@ static ULONG WINAPI media_source_rate_control_Release(IMFRateControl *iface)
+ 
+ static HRESULT WINAPI media_source_rate_control_SetRate(IMFRateControl *iface, BOOL thin, float rate)
+ {
++    struct media_source *source = impl_from_IMFRateControl(iface);
++    PROPVARIANT pv;
++
+     FIXME("%p, %d, %f.\n", iface, thin, rate);
+ 
+     if (rate < 0.0f)
+         return MF_E_REVERSE_UNSUPPORTED;
++    if (rate > 1e6)
++        return MF_E_UNSUPPORTED_RATE;
+ 
+-    if (thin)
+-        return MF_E_THINNING_UNSUPPORTED;
++    source->rate = rate;
++    source->thinning = thin;
+ 
+-    if (rate != 1.0f)
+-        return MF_E_UNSUPPORTED_RATE;
++    pv.vt = VT_R4;
++    pv.fltVal = rate;
++    IMFMediaEventQueue_QueueEventParamVar(source->event_queue, MESourceRateChanged, &GUID_NULL, S_OK, &pv);
+ 
+     return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_source_rate_control_GetRate(IMFRateControl *iface, BOOL *thin, float *rate)
+ {
++    struct media_source *source = impl_from_IMFRateControl(iface);
++
+     TRACE("%p, %p, %p.\n", iface, thin, rate);
+ 
+-    if (thin)
+-        *thin = FALSE;
++    if (!rate)
++        return E_INVALIDARG;
++    *rate = source->rate;
+ 
+-    *rate = 1.0f;
++    if (thin)
++        *thin = source->thinning;
+ 
+     return S_OK;
+ }
+@@ -1383,6 +1395,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+         IMFPresentationDescriptor_SetUINT64(object->pres_desc, &MF_PD_DURATION, total_pres_time);
+ 
+     object->state = SOURCE_STOPPED;
++    object->rate = 1.0f;
++    object->thinning = FALSE;
+ 
+     *out_media_source = object;
+     return S_OK;
+
+-- 
+2.31.1
+

@@ -1,0 +1,44 @@
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Subject: [PATCH 5/5] winegstreamer: Advertise forward media source rates more generously.
+Message-Id: <20210507085628.751316-5-gmascellani@codeweavers.com>
+Date: Fri,  7 May 2021 10:56:28 +0200
+In-Reply-To: <20210507085628.751316-1-gmascellani@codeweavers.com>
+References: <20210507085628.751316-1-gmascellani@codeweavers.com>
+
+Signed-off-by: Giovanni Mascellani <gmascellani@codeweavers.com>
+---
+ dlls/winegstreamer/media_source.c | 10 ++--------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index f77a8dfe78a..5ce759e9789 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -922,10 +922,7 @@ static HRESULT WINAPI media_source_rate_support_GetSlowestRate(IMFRateSupport *i
+     if (direction == MFRATE_REVERSE)
+         return MF_E_REVERSE_UNSUPPORTED;
+ 
+-    if (thin)
+-        return MF_E_THINNING_UNSUPPORTED;
+-
+-    *rate = 1.0f;
++    *rate = 0.0f;
+ 
+     return S_OK;
+ }
+@@ -937,10 +934,7 @@ static HRESULT WINAPI media_source_rate_support_GetFastestRate(IMFRateSupport *i
+     if (direction == MFRATE_REVERSE)
+         return MF_E_REVERSE_UNSUPPORTED;
+ 
+-    if (thin)
+-        return MF_E_THINNING_UNSUPPORTED;
+-
+-    *rate = 1.0f;
++    *rate = 1e6f;
+ 
+     return S_OK;
+ }
+
+-- 
+2.31.1
+

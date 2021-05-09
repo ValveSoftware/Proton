@@ -1,0 +1,80 @@
+From: Connor McAdams <cmcadams@codeweavers.com>
+Subject: [PATCH 1/2] winegstreamer: Store decoder caps for decodebin parser.
+Message-Id: <20210503125349.374940-1-cmcadams@codeweavers.com>
+Date: Mon,  3 May 2021 08:53:48 -0400
+
+Store the current decoder caps so that we know what the expected input
+format is.
+
+Signed-off-by: Connor McAdams <cmcadams@codeweavers.com>
+---
+ dlls/winegstreamer/wg_parser.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 0d59297a026..1653701506c 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -49,6 +49,7 @@ struct wg_parser
+     GstElement *container, *decodebin;
+     GstBus *bus;
+     GstPad *my_src, *their_sink;
++    GstCaps *decoder_caps;
+ 
+     guint64 file_size, start_offset, next_offset, stop_offset;
+     guint64 next_pull_offset;
+@@ -720,8 +721,12 @@ static GstAutoplugSelectResult autoplug_select_cb(GstElement *bin, GstPad *pad,
+         GstCaps *caps, GstElementFactory *fact, gpointer user)
+ {
+     const char *name = gst_element_factory_get_longname(fact);
++    struct wg_parser *parser = user;
+ 
+     GST_TRACE("Using \"%s\".", name);
++    if (parser->decoder_caps)
++        gst_caps_unref(parser->decoder_caps);
++    parser->decoder_caps = NULL;
+ 
+     if (strstr(name, "Player protection"))
+     {
+@@ -733,6 +738,9 @@ static GstAutoplugSelectResult autoplug_select_cb(GstElement *bin, GstPad *pad,
+         GST_WARNING("Disabled video acceleration since it breaks in wine.");
+         return GST_AUTOPLUG_SELECT_SKIP;
+     }
++    if (caps)
++        parser->decoder_caps = gst_caps_ref(caps);
++
+     return GST_AUTOPLUG_SELECT_TRY;
+ }
+ 
+@@ -1528,10 +1536,12 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+ 
+ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_size)
+ {
++    struct wg_format input_format;
+     unsigned int i;
+     HRESULT hr;
+ 
+     parser->seekable = true;
+     parser->file_size = file_size;
++    memset(&input_format, 0, sizeof(input_format));
+ 
+     if ((hr = wg_parser_connect_inner(parser)))
+         return hr;
+@@ -1547,6 +1557,13 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+     if (!parser->init_gst(parser))
+         return E_FAIL;
+ 
++    if (parser->decoder_caps)
++    {
++        wg_format_from_caps(&input_format, parser->decoder_caps);
++        gst_caps_unref(parser->decoder_caps);
++        parser->decoder_caps = NULL;
++    }
++
+     pthread_mutex_lock(&parser->mutex);
+ 
+     for (i = 0; i < parser->stream_count; ++i)
+
+-- 
+2.25.1
+

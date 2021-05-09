@@ -1,0 +1,76 @@
+From: Anton Baskanov <baskanov@gmail.com>
+Subject: [PATCH] winegstreamer: Avoid truncating the stream when duration is incorrect.
+Message-Id: <20210506154610.792947-1-baskanov@gmail.com>
+Date: Thu,  6 May 2021 22:46:10 +0700
+
+Signed-off-by: Anton Baskanov <baskanov@gmail.com>
+---
+This should fix the Fallout: New Vegas audio looping bug and probably some
+other games that use mp3 soundtracks.
+
+BTW, is it a good idea to submit such workarounds, or is it
+better to leave it broken until a proper fix is found? Another alternative
+would be to simply revert commit d7fecebe93938bf1ef2349ac74413e28d6b8e153.
+---
+ dlls/winegstreamer/quartz_parser.c | 10 +++++++++-
+ dlls/winegstreamer/wg_parser.c     |  6 +++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/quartz_parser.c b/dlls/winegstreamer/quartz_parser.c
+index e12a0c49eb3..f9260fd72a2 100644
+--- a/dlls/winegstreamer/quartz_parser.c
++++ b/dlls/winegstreamer/quartz_parser.c
+@@ -863,6 +863,7 @@ static HRESULT parser_init_stream(struct strmbase_filter *iface)
+     struct parser *filter = impl_from_strmbase_filter(iface);
+     DWORD stop_flags = AM_SEEKING_NoPositioning;
+     const SourceSeeking *seeking;
++    uint64_t stop_pos = ((uint64_t)0x80000000) << 32;
+     unsigned int i;
+ 
+     if (!filter->sink_connected)
+@@ -877,8 +878,15 @@ static HRESULT parser_init_stream(struct strmbase_filter *iface)
+     seeking = &filter->sources[0]->seek;
+     if (seeking->llStop)
+         stop_flags = AM_SEEKING_AbsolutePositioning;
++
++    /* Stream duration is determined incorrectly for some formats (e.g. mp3).
++     * Until this is fixed, setting stop position to infinity instead of
++     * seeking->llDuration helps avoid truncating the stream. */
++    if (seeking->llStop != seeking->llDuration)
++        stop_pos = seeking->llStop;
++
+     unix_funcs->wg_parser_stream_seek(filter->sources[0]->wg_stream, seeking->dRate,
+-            seeking->llCurrent, seeking->llStop, AM_SEEKING_AbsolutePositioning, stop_flags);
++            seeking->llCurrent, stop_pos, AM_SEEKING_AbsolutePositioning, stop_flags);
+ 
+     for (i = 0; i < filter->source_count; ++i)
+     {
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 5529321490e..096a20b4496 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -673,6 +673,7 @@ static bool CDECL wg_parser_stream_seek(struct wg_parser_stream *stream, double
+         uint64_t start_pos, uint64_t stop_pos, DWORD start_flags, DWORD stop_flags)
+ {
+     GstSeekType start_type = GST_SEEK_TYPE_SET, stop_type = GST_SEEK_TYPE_SET;
++    gint64 gst_stop_pos = -1;
+     GstSeekFlags flags = 0;
+ 
+     if (start_flags & AM_SEEKING_SeekToKeyFrame)
+@@ -687,8 +688,11 @@ static bool CDECL wg_parser_stream_seek(struct wg_parser_stream *stream, double
+     if ((stop_flags & AM_SEEKING_PositioningBitsMask) == AM_SEEKING_NoPositioning)
+         stop_type = GST_SEEK_TYPE_NONE;
+ 
++    if (stop_pos != (((uint64_t)0x80000000) << 32))
++        gst_stop_pos = stop_pos * 100;
++
+     return gst_pad_push_event(stream->my_sink, gst_event_new_seek(rate,
+-            GST_FORMAT_TIME, flags, start_type, start_pos * 100, stop_type, stop_pos * 100));
++            GST_FORMAT_TIME, flags, start_type, start_pos * 100, stop_type, gst_stop_pos));
+ }
+ 
+ static void CDECL wg_parser_stream_notify_qos(struct wg_parser_stream *stream,
+
+-- 
+2.25.1
+
