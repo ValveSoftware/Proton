@@ -27,9 +27,9 @@ index b7bd6f5f91d..fef060e9c22 100644
  /***********************************************************************
   *           HEAP_CreateSystemHeap
 @@ -544,6 +546,10 @@ VOID WINAPI GlobalMemoryStatus( LPMEMORYSTATUS lpBuffer )
-     MEMORYSTATUSEX memstatus;
-     OSVERSIONINFOW osver;
+ #ifndef _WIN64
      IMAGE_NT_HEADERS *nt = RtlImageNtHeader( GetModuleHandleW(0) );
+ #endif
 +    static int force_large_address_aware = -1;
 +
 +    if (force_large_address_aware == -1)

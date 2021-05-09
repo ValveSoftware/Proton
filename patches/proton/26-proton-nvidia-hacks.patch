@@ -1,52 +1,56 @@
-From d4bd4d88d9d0fcda827f6c5445b94d59e66743ef Mon Sep 17 00:00:00 2001
-From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Fri, 21 Feb 2020 12:08:56 -0800
+From 5226e1f9501e34a709c62fdf00e231c826096762 Mon Sep 17 00:00:00 2001
+From: GloriousEggroll <gloriouseggroll@gmail.com>
+Date: Wed, 28 Apr 2021 16:46:56 -0600
 Subject: [PATCH] HACK: winevulkan: Add vkGetPhysicalDeviceProperties thunks to
  fake NVIDIA PCI IDs as AMD
 
 Needed for RDR2 with NVIDIA cards, otherwise game crashes or gets stuck
 trying to load nvapi64.dll
 ---
+ dlls/winevulkan/loader.c        | 45 +++++++++++++++++++++++++++++++++
  dlls/winevulkan/make_vulkan     |  1 +
- dlls/winevulkan/vulkan.c        | 45 +++++++++++++++++++++++++++++++++
- dlls/winevulkan/vulkan_thunks.c |  5 +---
+ dlls/winevulkan/vulkan_thunks.c |  4 +--
  dlls/winevulkan/vulkan_thunks.h |  2 ++
- 4 files changed, 49 insertions(+), 4 deletions(-)
+ 4 files changed, 49 insertions(+), 3 deletions(-)
 
-diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index 10c2ca94bf5..69a5e5fd73e 100755
---- a/dlls/winevulkan/make_vulkan
-+++ b/dlls/winevulkan/make_vulkan
-@@ -165,6 +165,7 @@ FUNCTION_OVERRIDES = {
-     "vkGetPhysicalDeviceExternalFenceProperties" : {"dispatch" : False, "driver" : False, "thunk" : False},
-     "vkGetPhysicalDeviceExternalSemaphoreProperties" : {"dispatch" : False, "driver" : False, "thunk" : False},
-     "vkGetPhysicalDeviceImageFormatProperties2" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
-+    "vkGetPhysicalDeviceProperties" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
-     "vkGetPhysicalDeviceProperties2" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
-     "vkGetPhysicalDeviceProperties2KHR" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
+diff --git a/dlls/winevulkan/loader_thunks.c b/dlls/winevulkan/loader_thunks.c
+index 69fcd44160e..cb7b8b0e2b0 100644
+--- a/dlls/winevulkan/loader_thunks.c
++++ b/dlls/winevulkan/loader_thunks.c
+@@ -1568,11 +1568,6 @@ VkResult WINAPI vkGetPhysicalDevicePresentRectanglesKHR(VkPhysicalDevice physica
+     return unix_funcs->p_vkGetPhysicalDevicePresentRectanglesKHR(physicalDevice, surface, pRectCount, pRects);
+ }
  
-diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index f7abce74185..5fdc24d5870 100644
---- a/dlls/winevulkan/vulkan.c
-+++ b/dlls/winevulkan/vulkan.c
-@@ -20,6 +20,7 @@
- #include "config.h"
- #include <time.h>
+-void WINAPI vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
+-{
+-    unix_funcs->p_vkGetPhysicalDeviceProperties(physicalDevice, pProperties);
+-}
+-
+ void WINAPI vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR(VkPhysicalDevice physicalDevice, const VkQueryPoolPerformanceCreateInfoKHR *pPerformanceQueryCreateInfo, uint32_t *pNumPasses)
+ {
+     unix_funcs->p_vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR(physicalDevice, pPerformanceQueryCreateInfo, pNumPasses);
+diff --git a/dlls/winevulkan/loader.c b/dlls/winevulkan/loader.c
+index 746a25041d0..57d811a41c9 100644
+--- a/dlls/winevulkan/loader.c
++++ b/dlls/winevulkan/loader.c
+@@ -18,6 +18,7 @@
+  */
+ 
  #include <stdarg.h>
 +#include <stdlib.h>
  
  #include "windef.h"
  #include "winbase.h"
-@@ -1423,6 +1424,26 @@ static void release_display_device_init_mutex(HANDLE mutex)
-     CloseHandle(mutex);
+@@ -344,6 +344,26 @@ static void fill_luid_property(VkPhysicalDeviceProperties2 *properties2)
+             id->deviceNodeMask);
  }
  
-+void WINAPI wine_vkGetPhysicalDeviceProperties(VkPhysicalDevice physical_device,
++void WINAPI vkGetPhysicalDeviceProperties(VkPhysicalDevice phys_dev,
 +        VkPhysicalDeviceProperties *properties)
 +{
-+    TRACE("%p, %p\n", physical_device, properties);
++    TRACE("%p, %p\n", phys_dev, properties);
 +
-+    thunk_vkGetPhysicalDeviceProperties(physical_device, properties);
++    unix_funcs->p_vkGetPhysicalDeviceProperties(phys_dev, properties);
 +
 +    {
 +        const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
@@ -61,12 +65,12 @@ index f7abce74185..5fdc24d5870 100644
 +    }
 +}
 +
- /* Wait until graphics driver is loaded by explorer */
- static void wait_graphics_driver_ready(void)
+ void WINAPI vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
+         VkPhysicalDeviceProperties2 *properties2)
  {
-@@ -1486,6 +1507,18 @@ void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
+@@ -351,6 +372,18 @@ void WINAPI vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
  
-     thunk_vkGetPhysicalDeviceProperties2(phys_dev, properties2);
+     unix_funcs->p_vkGetPhysicalDeviceProperties2(phys_dev, properties2);
      fill_luid_property(properties2);
 +
 +    {
@@ -82,10 +86,10 @@ index f7abce74185..5fdc24d5870 100644
 +    }
  }
  
- void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
-@@ -1495,6 +1528,18 @@ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+ void WINAPI vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+@@ -360,6 +393,18 @@ void WINAPI vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
  
-     thunk_vkGetPhysicalDeviceProperties2KHR(phys_dev, properties2);
+     unix_funcs->p_vkGetPhysicalDeviceProperties2KHR(phys_dev, properties2);
      fill_luid_property(properties2);
 +
 +    {
@@ -101,87 +105,19 @@ index f7abce74185..5fdc24d5870 100644
 +    }
  }
  
- void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice phys_dev,
-diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
-index 50755dd472a..ffddbd6cd9e 100644
---- a/dlls/winevulkan/vulkan_thunks.c
-+++ b/dlls/winevulkan/vulkan_thunks.c
-@@ -4826,17 +4826,14 @@ VkResult WINAPI wine_vkGetPhysicalDevicePresentRectanglesKHR(VkPhysicalDevice ph
-     return physicalDevice->instance->funcs.p_vkGetPhysicalDevicePresentRectanglesKHR(physicalDevice->phys_dev, surface, pRectCount, pRects);
- }
+ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index f584330dc6e..3efdcb4c88c 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -169,6 +169,7 @@ FUNCTION_OVERRIDES = {
+     "vkGetPhysicalDeviceExternalFenceProperties" : {"dispatch" : False, "driver" : False, "thunk" : ThunkType.NONE},
+     "vkGetPhysicalDeviceExternalSemaphoreProperties" : {"dispatch" : False, "driver" : False, "thunk" : ThunkType.NONE},
+     "vkGetPhysicalDeviceImageFormatProperties2" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PRIVATE},
++    "vkGetPhysicalDeviceProperties" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
+     "vkGetPhysicalDeviceProperties2" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
+     "vkGetPhysicalDeviceProperties2KHR" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
  
--void WINAPI wine_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
-+void thunk_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
- {
- #if defined(USE_STRUCT_CONVERSION)
-     VkPhysicalDeviceProperties_host pProperties_host;
--    TRACE("%p, %p\n", physicalDevice, pProperties);
--
-     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties(physicalDevice->phys_dev, &pProperties_host);
- 
-     convert_VkPhysicalDeviceProperties_host_to_win(&pProperties_host, pProperties);
- #else
--    TRACE("%p, %p\n", physicalDevice, pProperties);
-     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties(physicalDevice->phys_dev, pProperties);
- #endif
- }
-diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
-index 120904809dc..a02590000c2 100644
---- a/dlls/winevulkan/vulkan_thunks.h
-+++ b/dlls/winevulkan/vulkan_thunks.h
-@@ -51,6 +51,7 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice
- void WINAPI wine_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceExternalSemaphoreInfo *pExternalSemaphoreInfo, VkExternalSemaphoreProperties *pExternalSemaphoreProperties) DECLSPEC_HIDDEN;
- VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties);
- VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
-+void WINAPI wine_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties);
- void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties);
- void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
- VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities);
-@@ -57,6 +58,7 @@ VkResult WINAPI wine_vkSetPrivateDataEXT(VkDevice device, VkObjectType objectTyp
- VkResult thunk_vkDebugMarkerSetObjectTagEXT(VkDevice device, const VkDebugMarkerObjectTagInfoEXT *pTagInfo) DECLSPEC_HIDDEN;
- VkResult thunk_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes) DECLSPEC_HIDDEN;
- VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
-+void thunk_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties) DECLSPEC_HIDDEN;
- VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
- VkResult thunk_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes) DECLSPEC_HIDDEN;
- void thunk_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
-From 4345670daf5beb4976023c1aec70dbb4148632b0 Mon Sep 17 00:00:00 2001
-From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Wed, 15 Jul 2020 11:25:13 -0700
-Subject: [PATCH] HACK: winex11: Support faking AMD PCI IDs for NVIDIA cards
+-- 
+2.30.2
 
----
- dlls/winex11.drv/display.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
-index 577d9a738dc..ea4d6e3e9b4 100644
---- a/dlls/winex11.drv/display.c
-+++ b/dlls/winex11.drv/display.c
-@@ -21,6 +21,7 @@
- #include "config.h"
- 
- #include <stdarg.h>
-+#include <stdlib.h>
- 
- #include "windef.h"
- #include "winbase.h"
-@@ -820,6 +821,18 @@ void X11DRV_DisplayDevices_Init(BOOL force)
- 
-     for (gpu = 0; gpu < gpu_count; gpu++)
-     {
-+        {
-+            const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
-+            if (sgi && *sgi != '0')
-+            {
-+                if (gpus[gpu].vendor_id == 0x10de /* NVIDIA */)
-+                {
-+                    gpus[gpu].vendor_id = 0x1002; /* AMD */
-+                    gpus[gpu].device_id = 0x67df; /* RX 480 */
-+                }
-+            }
-+        }
-+
-         if (!X11DRV_InitGpu(gpu_devinfo, &gpus[gpu], gpu, guidW, driverW, &gpu_luid))
-             goto done;
- 

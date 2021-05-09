@@ -216,3 +216,75 @@ index 236c9f862af..d1c15b1de94 100644
                  SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
                  return;
              }
+
+From f649de43236f67943a44ae89dfbbd3d4c7d9eeb4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 17 Dec 2020 18:47:44 +0100
+Subject: [PATCH] HACK: steam: winex11.drv: Check Steam overlay presence and
+ drop events when enabled.
+
+---
+ dlls/winex11.drv/event.c       | 7 ++++++-
+ dlls/winex11.drv/x11drv.h      | 1 +
+ dlls/winex11.drv/x11drv_main.c | 5 +++++
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
+index 89a9974529b..baec41d0296 100644
+--- a/dlls/winex11.drv/event.c
++++ b/dlls/winex11.drv/event.c
+@@ -433,13 +433,18 @@ static BOOL process_events( Display *display, Bool (*filter)(Display*, XEvent*,X
+ {
+     XEvent event, prev_event;
+     int count = 0;
+-    BOOL queued = FALSE;
++    BOOL queued = FALSE, overlay_enabled = FALSE;
+     enum event_merge_action action = MERGE_DISCARD;
++    ULONG_PTR overlay_filter = QS_KEY | QS_MOUSEBUTTON | QS_MOUSEMOVE;
++
++    if (WaitForSingleObject(steam_overlay_event, 0) == WAIT_OBJECT_0)
++        overlay_enabled = TRUE;
+ 
+     prev_event.type = 0;
+     while (XCheckIfEvent( display, &event, filter, (char *)arg ))
+     {
+         count++;
++        if (overlay_enabled && filter_event( display, &event, (char *)overlay_filter )) continue;
+         if (XFilterEvent( &event, None ))
+         {
+             /*
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index 147087e3220..e4164eba5d2 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -412,6 +412,7 @@ extern int xrender_error_base DECLSPEC_HIDDEN;
+ extern HMODULE x11drv_module DECLSPEC_HIDDEN;
+ extern char *process_name DECLSPEC_HIDDEN;
+ extern Display *clipboard_display DECLSPEC_HIDDEN;
++extern HANDLE steam_overlay_event DECLSPEC_HIDDEN;
+ 
+ /* atoms */
+ 
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index f23ce260a7f..17d80458c54 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -90,6 +90,7 @@ DWORD thread_data_tls_index = TLS_OUT_OF_INDEXES;
+ int xrender_error_base = 0;
+ HMODULE x11drv_module = 0;
+ char *process_name = NULL;
++HANDLE steam_overlay_event;
+ 
+ static x11drv_error_callback err_callback;   /* current callback for error */
+ static Display *err_callback_display;        /* display callback is set for */
+@@ -738,6 +739,10 @@ BOOL WINAPI DllMain( HINSTANCE hinst, DWORD reason, LPVOID reserved )
+         DisableThreadLibraryCalls( hinst );
+         x11drv_module = hinst;
+         ret = process_attach();
++        steam_overlay_event = CreateEventA(NULL, TRUE, FALSE, "__wine_steamclient_GameOverlayActivated");
++        break;
++    case DLL_PROCESS_DETACH:
++        CloseHandle(steam_overlay_event);
+         break;
+     }
+     return ret;

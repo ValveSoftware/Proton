@@ -40,13 +40,13 @@ diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
 index 12ca11fa6c..921768963e 100644
 --- a/dlls/winegstreamer/main.c
 +++ b/dlls/winegstreamer/main.c
-@@ -351,6 +351,9 @@ HRESULT WINAPI DllRegisterServer(void)
+@@ -319,6 +319,9 @@ HRESULT WINAPI DllRegisterServer(void)
  
      TRACE(".\n");
  
-+    if (FAILED(mfplat_DllRegisterServer()))
++    if (FAILED(hr = mfplat_DllRegisterServer()))
 +        return hr;
 +
-     if (FAILED(hr = __wine_register_resources(winegstreamer_instance)))
+     if (FAILED(hr = __wine_register_resources()))
          return hr;
  

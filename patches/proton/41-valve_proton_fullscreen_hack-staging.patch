@@ -748,9 +748,9 @@ index 6c27c6f9894..659a813cefa 100644
 +        return res;
 +    }
 +
-+    real_images = heap_alloc(count * sizeof(VkImage));
-+    swapchain->cmd_pools = heap_alloc_zero(sizeof(VkCommandPool) * device->queue_count);
-+    swapchain->fs_hack_images = heap_alloc_zero(sizeof(struct fs_hack_image) * count);
++    real_images = malloc(count * sizeof(VkImage));
++    swapchain->cmd_pools = calloc(1, sizeof(VkCommandPool) * device->queue_count);
++    swapchain->fs_hack_images = calloc(1, sizeof(struct fs_hack_image) * count);
 +    if(!real_images || !swapchain->cmd_pools || !swapchain->fs_hack_images)
 +        goto fail;
 +
@@ -869,16 +869,16 @@ index 6c27c6f9894..659a813cefa 100644
 +        }
 +    }
 +
-+    heap_free(real_images);
++    free(real_images);
 +
 +    return VK_SUCCESS;
 +
 +fail:
 +    for(i = 0; i < swapchain->n_images; ++i)
 +        destroy_fs_hack_image(device, swapchain, &swapchain->fs_hack_images[i]);
-+    heap_free(real_images);
-+    heap_free(swapchain->cmd_pools);
-+    heap_free(swapchain->fs_hack_images);
++    free(real_images);
++    free(swapchain->cmd_pools);
++    free(swapchain->fs_hack_images);
 +    return res;
 +}
 +
@@ -926,7 +926,7 @@ index 6c27c6f9894..659a813cefa 100644
  
 -    native_info = *create_info;
 -    native_info.surface = wine_surface_from_handle(create_info->surface)->driver_surface;
-+    if (!(object = heap_alloc_zero(sizeof(*object))))
++    if (!(object = calloc(1, sizeof(*object))))
 +    {
 +        ERR("Failed to allocate memory for swapchain\n");
 +        return VK_ERROR_OUT_OF_HOST_MEMORY;
@@ -947,7 +947,7 @@ index 6c27c6f9894..659a813cefa 100644
 +
 +        device->phys_dev->instance->funcs.p_vkGetPhysicalDeviceQueueFamilyProperties(device->phys_dev->phys_dev, &count, NULL);
 +
-+        device->queue_props = heap_alloc(sizeof(VkQueueFamilyProperties) * count);
++        device->queue_props = malloc(sizeof(VkQueueFamilyProperties) * count);
 +
 +        device->phys_dev->instance->funcs.p_vkGetPhysicalDeviceQueueFamilyProperties(device->phys_dev->phys_dev, &count, device->queue_props);
 +
@@ -955,7 +955,7 @@ index 6c27c6f9894..659a813cefa 100644
 +        if(result != VK_SUCCESS)
 +        {
 +            TRACE("vkGetPhysicalDeviceSurfaceCapabilities failed, res=%d\n", result);
-+            heap_free(object);
++            free(object);
 +            return result;
 +        }
 +
@@ -977,7 +977,7 @@ index 6c27c6f9894..659a813cefa 100644
 +    if(result != VK_SUCCESS)
 +    {
 +        TRACE("vkCreateSwapchainKHR failed, res=%d\n", result);
-+        heap_free(object);
++        free(object);
 +        return result;
 +    }
  
@@ -992,7 +992,7 @@ index 6c27c6f9894..659a813cefa 100644
 +            ERR("creating fs hack images failed: %d\n", result);
 +            device->funcs.p_vkDestroySwapchainKHR(device->device, object->swapchain, NULL);
 +            WINE_VK_REMOVE_HANDLE_MAPPING(device->phys_dev->instance, object);
-+            heap_free(object);
++            free(object);
 +            return result;
 +        }
 +
@@ -1107,14 +1107,14 @@ index 6c27c6f9894..659a813cefa 100644
 +        device->funcs.p_vkDestroySampler(device->device, object->sampler, NULL);
 +        device->funcs.p_vkFreeMemory(device->device, object->user_image_memory, NULL);
 +        device->funcs.p_vkFreeMemory(device->device, object->blit_image_memory, NULL);
-+        heap_free(object->cmd_pools);
-+        heap_free(object->fs_hack_images);
++        free(object->cmd_pools);
++        free(object->fs_hack_images);
 +    }
 +
 +    device->funcs.p_vkDestroySwapchainKHR(device->device, object->swapchain, NULL);
 +
 +    WINE_VK_REMOVE_HANDLE_MAPPING(device->phys_dev->instance, object);
-+    heap_free(object);
++    free(object);
 +}
 +
 +VkResult WINAPI wine_vkGetSwapchainImagesKHR(VkDevice device, VkSwapchainKHR swapchain, uint32_t *pSwapchainImageCount, VkImage *pSwapchainImages)
@@ -1583,7 +1583,7 @@ index 6c27c6f9894..659a813cefa 100644
 +
 +            if(!blit_cmds){
 +                queue_idx = queue->family_index;
-+                blit_cmds = heap_alloc(our_presentInfo.swapchainCount * sizeof(VkCommandBuffer));
++                blit_cmds = malloc(our_presentInfo.swapchainCount * sizeof(VkCommandBuffer));
 +                blit_sema = hack->blit_finished;
 +            }
 +
@@ -1597,7 +1597,7 @@ index 6c27c6f9894..659a813cefa 100644
 +                hack->cmd = create_hack_cmd(queue, swapchain, queue_idx);
 +
 +                if(!hack->cmd){
-+                    heap_free(blit_cmds);
++                    free(blit_cmds);
 +                    return VK_ERROR_DEVICE_LOST;
 +                }
 +
@@ -1615,7 +1615,7 @@ index 6c27c6f9894..659a813cefa 100644
 +                            swapchain->cmd_pools[hack->cmd_queue_idx],
 +                            1, &hack->cmd);
 +                    hack->cmd = NULL;
-+                    heap_free(blit_cmds);
++                    free(blit_cmds);
 +                    return res;
 +                }
 +            }
@@ -1630,7 +1630,7 @@ index 6c27c6f9894..659a813cefa 100644
 +        VkPipelineStageFlags waitStage, *waitStages, *waitStages_arr = NULL;
 +
 +        if(pPresentInfo->waitSemaphoreCount > 1){
-+            waitStages_arr = heap_alloc(sizeof(VkPipelineStageFlags) * pPresentInfo->waitSemaphoreCount);
++            waitStages_arr = malloc(sizeof(VkPipelineStageFlags) * pPresentInfo->waitSemaphoreCount);
 +            for(i = 0; i < pPresentInfo->waitSemaphoreCount; ++i)
 +                waitStages_arr[i] = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
 +            waitStages = waitStages_arr;
@@ -1653,14 +1653,14 @@ index 6c27c6f9894..659a813cefa 100644
 +        if(res != VK_SUCCESS)
 +            ERR("vkQueueSubmit: %d\n", res);
 +
-+        heap_free(waitStages_arr);
-+        heap_free(blit_cmds);
++        free(waitStages_arr);
++        free(blit_cmds);
 +
 +        our_presentInfo.waitSemaphoreCount = 1;
 +        our_presentInfo.pWaitSemaphores = &blit_sema;
 +    }
 +
-+    arr = heap_alloc(our_presentInfo.swapchainCount * sizeof(VkSwapchainKHR));
++    arr = malloc(our_presentInfo.swapchainCount * sizeof(VkSwapchainKHR));
 +    if(!arr){
 +        ERR("Failed to allocate memory for swapchain array\n");
 +        return VK_ERROR_OUT_OF_HOST_MEMORY;
@@ -1673,7 +1673,7 @@ index 6c27c6f9894..659a813cefa 100644
 +
 +    res = queue->device->funcs.p_vkQueuePresentKHR(queue->queue, &our_presentInfo);
 +
-+    heap_free(arr);
++    free(arr);
 +
 +    return res;
 +
@@ -1683,8 +1683,8 @@ index 4a41a15461e..e0b47b32bc3 100644
 --- a/dlls/winevulkan/vulkan_private.h
 +++ b/dlls/winevulkan/vulkan_private.h
 @@ -92,6 +92,44 @@ struct VkDevice_T
- 
-     unsigned int quirks;
+     struct VkQueue_T* queues;
+     uint32_t queue_count;
  
 +    VkQueueFamilyProperties *queue_props;
 +
@@ -1762,7 +1762,7 @@ index cc2866e7883..2970c688231 100644
 -
 -    if (!in) return NULL;
 -
--    out = heap_alloc(count * sizeof(*out));
+-    out = malloc(count * sizeof(*out));
 -    for (i = 0; i < count; i++)
 -    {
 -        out[i].sType = in[i].sType;
@@ -1783,7 +1783,7 @@ index cc2866e7883..2970c688231 100644
 -{
 -    if (!in) return;
 -
--    heap_free(in);
+-    free(in);
 -}
 -
 -static inline VkImageMemoryBarrier_host *convert_VkImageMemoryBarrier_array_win_to_host(const VkImageMemoryBarrier *in, uint32_t count)
@@ -1793,7 +1793,7 @@ index cc2866e7883..2970c688231 100644
 -
 -    if (!in) return NULL;
 -
--    out = heap_alloc(count * sizeof(*out));
+-    out = malloc(count * sizeof(*out));
 -    for (i = 0; i < count; i++)
 -    {
 -        out[i].sType = in[i].sType;
@@ -1815,7 +1815,7 @@ index cc2866e7883..2970c688231 100644
 -{
 -    if (!in) return;
 -
--    heap_free(in);
+-    free(in);
 -}
 -
  static inline VkBufferMemoryBarrier2KHR_host *convert_VkBufferMemoryBarrier2KHR_array_win_to_host(const VkBufferMemoryBarrier2KHR *in, uint32_t count)
@@ -1875,7 +1875,7 @@ index cc2866e7883..2970c688231 100644
 -    TRACE("%p, %p, %p\n", device, pAcquireInfo, pImageIndex);
 -    return device->funcs.p_vkAcquireNextImage2KHR(device->device, pAcquireInfo, pImageIndex);
 -#endif
-+    out = heap_alloc(count * sizeof(*out));
++    out = malloc(count * sizeof(*out));
 +    for (i = 0; i < count; i++)
 +    {
 +        out[i].sType = in[i].sType;
@@ -1896,7 +1896,7 @@ index cc2866e7883..2970c688231 100644
 +{
 +    if (!in) return;
 +
-+    heap_free(in);
++    free(in);
 +}
 +
 +VkImageMemoryBarrier_host *convert_VkImageMemoryBarrier_array_win_to_host(const VkImageMemoryBarrier *in, uint32_t count)
@@ -1906,7 +1906,7 @@ index cc2866e7883..2970c688231 100644
 +
 +    if (!in) return NULL;
 +
-+    out = heap_alloc(count * sizeof(*out));
++    out = malloc(count * sizeof(*out));
 +    for (i = 0; i < count; i++)
 +    {
 +        out[i].sType = in[i].sType;
@@ -1928,7 +1928,7 @@ index cc2866e7883..2970c688231 100644
 +{
 +    if (!in) return;
 +
-+    heap_free(in);
++    free(in);
  }
  
  VkResult WINAPI wine_vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t *pImageIndex)
@@ -2886,7 +2886,7 @@ index 00000000000..98b26a933e7
 +    if (!real_settings_handler.get_current_mode(real_id, &real_mode))
 +        return FALSE;
 +
-+    if (!(fs_monitor = heap_alloc(sizeof(*fs_monitor))))
++    if (!(fs_monitor = malloc(sizeof(*fs_monitor))))
 +        return FALSE;
 +
 +    fs_monitor->user_mode = real_mode;
@@ -2898,7 +2898,7 @@ index 00000000000..98b26a933e7
 +    if (!fs_monitor_add_modes(fs_monitor))
 +    {
 +        ERR("Failed to initialize display modes.\n");
-+        heap_free(fs_monitor);
++        free(fs_monitor);
 +        return FALSE;
 +    }
 +    list_add_tail(&fs_monitors, &fs_monitor->entry);
@@ -7210,5 +7210,244 @@ index 0299c5b1876..06a5e64599f 100644
      clipping_cursor = FALSE;
      SendNotifyMessageW( GetDesktopWindow(), WM_X11DRV_CLIP_CURSOR_NOTIFY, 0, 0 );
  }
+From f93228f1d6739ea9eaa2b4da58c5ad263600a1cb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 23 Feb 2021 11:28:28 +0100
+Subject: [PATCH] HACK: fshack: winex11.drv: Use gdi_display for client_window
+ requests.
 
+---
+ dlls/winex11.drv/window.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index f7a2679883f..bed9ff88784 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -2644,7 +2644,7 @@ void CDECL X11DRV_WindowPosChanging( HWND hwnd, HWND insert_after, UINT swp_flag
+         if(data->whole_window)
+             XMoveResizeWindow(data->display, data->whole_window, tl.x, tl.y, real_rect.right - real_rect.left, real_rect.bottom - real_rect.top);
+         if(data->client_window)
+-            XMoveResizeWindow(data->display, data->client_window, 0, 0, real_rect.right - real_rect.left, real_rect.bottom - real_rect.top);
++            XMoveResizeWindow(gdi_display, data->client_window, 0, 0, real_rect.right - real_rect.left, real_rect.bottom - real_rect.top);
+     }else if(data->fs_hack && (!fs_hack_enabled(monitor) ||
+             !fs_hack_matches_current_mode(monitor,
+                 window_rect->right - window_rect->left,
+@@ -2657,7 +2657,7 @@ void CDECL X11DRV_WindowPosChanging( HWND hwnd, HWND insert_after, UINT swp_flag
+                     window_rect->right - window_rect->left,
+                     window_rect->bottom - window_rect->top);
+         if(data->client_window){
+-            XMoveResizeWindow(data->display, data->client_window,
++            XMoveResizeWindow(gdi_display, data->client_window,
+                     data->client_rect.left - data->whole_rect.left,
+                     data->client_rect.top - data->whole_rect.top,
+                     data->client_rect.right - data->client_rect.left,
+From c9bf01c3436d6f7a77c3780e36c55c14c80301bf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 26 Feb 2021 17:34:56 +0100
+Subject: [PATCH] HACK: fshack: winex11.drv: Simply scale offscreen vulkan
+ surfaces.
+
+They will be copied manually onto the screen, so we don't need to scale
+them to the screen dimensions.
+---
+ dlls/winex11.drv/vulkan.c | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
+index 4a976a4a661..cb99d1a0eba 100644
+--- a/dlls/winex11.drv/vulkan.c
++++ b/dlls/winex11.drv/vulkan.c
+@@ -810,7 +810,7 @@ static VkBool32 X11DRV_query_fs_hack(VkSurfaceKHR surface, VkExtent2D *real_sz,
+     }
+ 
+     monitor = fs_hack_monitor_from_hwnd(hwnd);
+-    if(fs_hack_enabled(monitor)){
++    if(fs_hack_enabled(monitor) && !x11_surface->offscreen){
+         RECT real_rect = fs_hack_real_mode(monitor);
+         RECT user_rect = fs_hack_current_mode(monitor);
+         SIZE scaled = fs_hack_get_scaled_screen_size(monitor);
+@@ -842,6 +842,38 @@ static VkBool32 X11DRV_query_fs_hack(VkSurfaceKHR surface, VkExtent2D *real_sz,
+             dst_blit->extent.height = scaled.cy;
+         }
+ 
++        return VK_TRUE;
++    }
++    else if (fs_hack_enabled(monitor))
++    {
++        double scale = fs_hack_get_user_to_real_scale( monitor );
++        RECT client_rect;
++
++        GetClientRect( hwnd, &client_rect );
++
++        if (filter)
++            *filter = fs_hack_is_integer() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
++
++        if (real_sz)
++        {
++            real_sz->width = (client_rect.right - client_rect.left) * scale;
++            real_sz->height = (client_rect.bottom - client_rect.top) * scale;
++        }
++
++        if (user_sz)
++        {
++            user_sz->width = client_rect.right - client_rect.left;
++            user_sz->height = client_rect.bottom - client_rect.top;
++        }
++
++        if (dst_blit)
++        {
++            dst_blit->offset.x = client_rect.left * scale;
++            dst_blit->offset.y = client_rect.top * scale;
++            dst_blit->extent.width = (client_rect.right - client_rect.left) * scale;
++            dst_blit->extent.height = (client_rect.bottom - client_rect.top) * scale;
++        }
++
+         if(filter)
+             *filter = fs_hack_is_integer() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
+ 
+From b3dfc14d8793bd77f6411aba86aa67fd3ff783c4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Feb 2021 19:12:10 +0100
+Subject: [PATCH] HACK: fshack: winex11.drv: Resize child window client_windows
+ too.
+
+---
+ dlls/winex11.drv/display.c | 40 ++++++++++++++++++++++++++++++++++++++
+ dlls/winex11.drv/window.c  |  2 ++
+ dlls/winex11.drv/x11drv.h  |  1 +
+ 3 files changed, 43 insertions(+)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index c4562e9db06..dad26af349b 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -371,6 +371,44 @@ void X11DRV_DisplayDevices_RegisterEventHandlers(void)
+         handler->register_event_handlers();
+ }
+ 
++BOOL CALLBACK fs_hack_update_child_window_client_surface(HWND hwnd, LPARAM enable_fs_hack)
++{
++    struct x11drv_win_data *data;
++    RECT client_rect;
++
++    if (!(data = get_win_data( hwnd )))
++        return TRUE;
++
++    if (enable_fs_hack && data->client_window)
++    {
++        client_rect = data->client_rect;
++        ClientToScreen( hwnd, (POINT *)&client_rect.left );
++        ClientToScreen( hwnd, (POINT *)&client_rect.right );
++        fs_hack_rect_user_to_real( &client_rect );
++
++        FIXME( "Enabling child fshack, resizing window %p to %s.\n", hwnd, wine_dbgstr_rect( &client_rect ) );
++        XMoveResizeWindow( gdi_display, data->client_window,
++                           client_rect.left, client_rect.top,
++                           client_rect.right - client_rect.left,
++                           client_rect.bottom - client_rect.top );
++        data->fs_hack = TRUE;
++    }
++    else if (!enable_fs_hack && data->client_window)
++    {
++        FIXME( "Disabling child fshack, restoring window %p.\n", hwnd );
++        XMoveResizeWindow( gdi_display, data->client_window,
++                           data->client_rect.left - data->whole_rect.left,
++                           data->client_rect.top - data->whole_rect.top,
++                           data->client_rect.right - data->client_rect.left,
++                           data->client_rect.bottom - data->client_rect.top );
++        data->fs_hack = FALSE;
++    }
++
++    if (data->client_window) sync_gl_drawable( hwnd, TRUE );
++    release_win_data( data );
++    return TRUE;
++}
++
+ static BOOL CALLBACK update_windows_on_display_change(HWND hwnd, LPARAM lparam)
+ {
+     struct x11drv_win_data *data;
+@@ -405,6 +443,7 @@ static BOOL CALLBACK update_windows_on_display_change(HWND hwnd, LPARAM lparam)
+                 XMoveResizeWindow(gdi_display, data->client_window, 0, 0, width, height);
+             sync_gl_drawable(hwnd, FALSE);
+             update_net_wm_states( data );
++            EnumChildWindows( hwnd, fs_hack_update_child_window_client_surface, TRUE );
+         }
+     } else {
+         /* update the full screen state */
+@@ -436,6 +475,7 @@ static BOOL CALLBACK update_windows_on_display_change(HWND hwnd, LPARAM lparam)
+                         data->client_rect.bottom - data->client_rect.top);
+             }
+             sync_gl_drawable(hwnd, FALSE);
++            EnumChildWindows( hwnd, fs_hack_update_child_window_client_surface, FALSE );
+         }
+     }
+     release_win_data(data);
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index bed9ff88784..606baf9a964 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -2645,6 +2645,7 @@ void CDECL X11DRV_WindowPosChanging( HWND hwnd, HWND insert_after, UINT swp_flag
+             XMoveResizeWindow(data->display, data->whole_window, tl.x, tl.y, real_rect.right - real_rect.left, real_rect.bottom - real_rect.top);
+         if(data->client_window)
+             XMoveResizeWindow(gdi_display, data->client_window, 0, 0, real_rect.right - real_rect.left, real_rect.bottom - real_rect.top);
++        EnumChildWindows( hwnd, fs_hack_update_child_window_client_surface, TRUE );
+     }else if(data->fs_hack && (!fs_hack_enabled(monitor) ||
+             !fs_hack_matches_current_mode(monitor,
+                 window_rect->right - window_rect->left,
+@@ -2663,6 +2664,7 @@ void CDECL X11DRV_WindowPosChanging( HWND hwnd, HWND insert_after, UINT swp_flag
+                     data->client_rect.right - data->client_rect.left,
+                     data->client_rect.bottom - data->client_rect.top);
+         }
++        EnumChildWindows( hwnd, fs_hack_update_child_window_client_surface, FALSE );
+     }
+ 
+     /* check if we need to switch the window to managed */
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index e7d49fb44af..693dd7e5cfe 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -637,6 +637,7 @@ extern SIZE fs_hack_get_scaled_screen_size(HMONITOR monitor) DECLSPEC_HIDDEN;
+ extern RECT fs_hack_get_real_virtual_screen(void) DECLSPEC_HIDDEN;
+ extern void fs_hack_init(void) DECLSPEC_HIDDEN;
+ extern int mode_compare(const void *p1, const void *p2) DECLSPEC_HIDDEN;
++BOOL CALLBACK fs_hack_update_child_window_client_surface(HWND hwnd, LPARAM enable_fs_hack) DECLSPEC_HIDDEN;
+ 
+ static inline void mirror_rect( const RECT *window_rect, RECT *rect )
+ {
+From 8c87a9b7394b9cdf077a825e13cbfc9f78e794ab Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 12 Mar 2021 13:33:56 +0100
+Subject: [PATCH] HACK: fshack: winex11.drv: Transform X11DRV_FLUSH_VK_DRAWABLE
+ rects.
+
+---
+ dlls/winex11.drv/init.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/init.c b/dlls/winex11.drv/init.c
+index 1186194eaf1..e056f436b15 100644
+--- a/dlls/winex11.drv/init.c
++++ b/dlls/winex11.drv/init.c
+@@ -232,7 +232,9 @@ static INT CDECL X11DRV_ExtEscape( PHYSDEV dev, INT escape, INT in_count, LPCVOI
+                 {
+                     const struct x11drv_escape_present_drawable *data = in_data;
+                     RECT rect = physDev->dc_rect;
+-
++                    RECT real_rect = physDev->dc_rect;
++ 
++                    fs_hack_rect_user_to_real( &real_rect );
+                     OffsetRect( &rect, -physDev->dc_rect.left, -physDev->dc_rect.top );
+                     if (data->flush) XFlush( gdi_display );
+ 
+@@ -244,8 +244,8 @@ static INT CDECL X11DRV_ExtEscape( PHYSDEV dev, INT escape, INT in_count, LPCVOI
+                     if (data->flush) XFlush( gdi_display );
+                     XSetFunction( gdi_display, physDev->gc, GXcopy );
+                     XCopyArea( gdi_display, data->gl_drawable, physDev->drawable, physDev->gc,
+-                               0, 0, rect.right, rect.bottom,
+-                               physDev->dc_rect.left, physDev->dc_rect.top );
++                               0, 0, real_rect.right - real_rect.left, real_rect.bottom - real_rect.top,
++                               real_rect.left, real_rect.top );
+                     add_device_bounds( physDev, &rect );
+                     return TRUE;
+                 }

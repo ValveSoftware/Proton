@@ -543,3 +543,40 @@ index cb5b0465f68..847c689c1e0 100644
  
          LeaveCriticalSection( &desktop_section );
  
+From 36e637ec9c2e14836e316e30546c5f6936a7e249 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 31 Jul 2020 09:09:47 +0200
+Subject: [PATCH] ntdll: Use RTLD_NOLOAD to find already mapped modules.
+
+This makes it possible to detect modules that weren't unmapped from
+dlclose, and that we should not fixup again.
+---
+ dlls/ntdll/unix/loader.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 53ce649a5bf..e565c324eef 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1084,9 +1084,11 @@ static NTSTATUS dlopen_dll( const char *so_name, UNICODE_STRING *nt_name, void *
+     struct builtin_module *builtin;
+     void *module, *handle;
+     const IMAGE_NT_HEADERS *nt;
++    BOOL mapped = FALSE;
+ 
+     callback_module = (void *)1;
+-    handle = dlopen( so_name, RTLD_NOW );
++    if ((handle = dlopen( so_name, RTLD_NOW | RTLD_NOLOAD ))) mapped = TRUE;
++    else handle = dlopen( so_name, RTLD_NOW );
+     if (!handle)
+     {
+         WARN( "failed to load .so lib %s: %s\n", debugstr_a(so_name), dlerror() );
+@@ -1105,7 +1107,7 @@ static NTSTATUS dlopen_dll( const char *so_name, UNICODE_STRING *nt_name, void *
+     {
+         module = (HMODULE)((nt->OptionalHeader.ImageBase + 0xffff) & ~0xffff);
+         if (get_builtin_so_handle( module )) goto already_loaded;
+-        if (map_so_dll( nt, module ))
++        if (!mapped && map_so_dll( nt, module ))
+         {
+             dlclose( handle );
+             return STATUS_NO_MEMORY;
