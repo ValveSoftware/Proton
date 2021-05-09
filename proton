@@ -1118,7 +1118,6 @@ class Session:
         # use a string check instead of single string in case we need to check for more in the future
         check_args = [
             'iscriptevaluator.exe' in commandstring,
-            'link2ea' in commandstring,
             'getcompatpath' in  str(sys.argv[1]),
             'getnativepath' in  str(sys.argv[1]),
         ]
