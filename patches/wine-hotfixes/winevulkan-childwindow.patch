@@ -43,23 +43,18 @@ index 28ae1a9e0e..a482109408 100644
 
      return TRUE;
 
-@@ -252,16 +256,24 @@ static VkResult X11DRV_vkCreateSwapchainKHR(VkDevice device,
+@@ -272,6 +272,7 @@ static VkResult X11DRV_vkCreateSwapchainKHR(VkDevice device,
          const VkSwapchainCreateInfoKHR *create_info,
          const VkAllocationCallbacks *allocator, VkSwapchainKHR *swapchain)
  {
 +    VkResult res;
+     struct wine_vk_surface *x11_surface = surface_from_handle(create_info->surface);
      VkSwapchainCreateInfoKHR create_info_host;
-+    struct wine_vk_surface *x11_surface = surface_from_handle(create_info->surface);
-+
      TRACE("%p %p %p %p\n", device, create_info, allocator, swapchain);
-
-     if (allocator)
-         FIXME("Support for allocation callbacks not implemented yet\n");
-
+@@ -285,7 +286,12 @@ static VkResult X11DRV_vkCreateSwapchainKHR(VkDevice device,
      create_info_host = *create_info;
--    create_info_host.surface = surface_from_handle(create_info->surface)->surface;
-+    create_info_host.surface = x11_surface->surface;
-
+     create_info_host.surface = x11_surface->surface;
+ 
 -    return pvkCreateSwapchainKHR(device, &create_info_host, NULL /* allocator */, swapchain);
 +    res = pvkCreateSwapchainKHR(device, &create_info_host, NULL /* allocator */, swapchain);
 +    if (res == VK_SUCCESS)
@@ -68,14 +63,14 @@ index 28ae1a9e0e..a482109408 100644
 +    }
 +    return res;
  }
-
+ 
  static VkResult X11DRV_vkCreateWin32SurfaceKHR(VkInstance instance,
-@@ -277,13 +289,6 @@ static VkResult X11DRV_vkCreateWin32SurfaceKHR(VkInstance instance,
+@@ -301,13 +307,6 @@ static VkResult X11DRV_vkCreateWin32SurfaceKHR(VkInstance instance,
      if (allocator)
          FIXME("Support for allocation callbacks not implemented yet\n");
-
+ 
 -    /* TODO: support child window rendering. */
--    if (GetAncestor(create_info->hwnd, GA_PARENT) != GetDesktopWindow())
+-    if (create_info->hwnd && GetAncestor(create_info->hwnd, GA_PARENT) != GetDesktopWindow())
 -    {
 -        FIXME("Application requires child window rendering, which is not implemented yet!\n");
 -        return VK_ERROR_INCOMPATIBLE_DRIVER;
