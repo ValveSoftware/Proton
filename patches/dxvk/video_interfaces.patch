@@ -1,0 +1,1813 @@
+diff --git a/src/d3d11/d3d11_context.cpp b/src/d3d11/d3d11_context.cpp
+index cc942fe4..f9594890 100644
+--- a/src/d3d11/d3d11_context.cpp
++++ b/src/d3d11/d3d11_context.cpp
+@@ -16,6 +16,8 @@ namespace dxvk {
+   : D3D11DeviceChild<ID3D11DeviceContext4>(pParent),
+     m_contextExt(this),
+     m_annotation(this),
++    m_videoDevice(this),
++    m_videoContext(this),
+     m_multithread(this, false),
+     m_device    (Device),
+     m_csFlags   (CsFlags),
+@@ -61,6 +63,17 @@ namespace dxvk {
+       *ppvObject = ref(&m_multithread);
+       return S_OK;
+     }
++    
++    if (riid == __uuidof(ID3D11VideoDevice)) {
++      *ppvObject = ref(&m_videoDevice);
++      return S_OK;
++    }
++    
++    if (riid == __uuidof(ID3D11VideoContext)) {
++      Logger::warn("D3D11DeviceContext::QueryInterface: Using stubbed ID3D11VideoContext interface");
++      *ppvObject = ref(&m_videoContext);
++      return S_OK;
++    }
+   
+     Logger::warn("D3D11DeviceContext::QueryInterface: Unknown interface query");
+     Logger::warn(str::format(riid));
+diff --git a/src/d3d11/d3d11_context.h b/src/d3d11/d3d11_context.h
+index bb488768..e1df7efe 100644
+--- a/src/d3d11/d3d11_context.h
++++ b/src/d3d11/d3d11_context.h
+@@ -12,6 +12,7 @@
+ #include "d3d11_context_state.h"
+ #include "d3d11_device_child.h"
+ #include "d3d11_texture.h"
++#include "d3d11_video.h"
+ 
+ namespace dxvk {
+   
+@@ -708,6 +709,8 @@ namespace dxvk {
+     
+     D3D11DeviceContextExt       m_contextExt;
+     D3D11UserDefinedAnnotation  m_annotation;
++    D3D11VideoDevice            m_videoDevice;
++    D3D11VideoContext           m_videoContext;
+     D3D10Multithread            m_multithread;
+     
+     Rc<DxvkDevice>              m_device;
+diff --git a/src/d3d11/d3d11_device.cpp b/src/d3d11/d3d11_device.cpp
+index c3c66c72..d0051127 100644
+--- a/src/d3d11/d3d11_device.cpp
++++ b/src/d3d11/d3d11_device.cpp
+@@ -2592,6 +2592,13 @@ namespace dxvk {
+     // Undocumented interfaces that are queried by some games
+     if (riid == GUID{0xd56e2a4c,0x5127,0x8437,{0x65,0x8a,0x98,0xc5,0xbb,0x78,0x94,0x98}})
+       return E_NOINTERFACE;
++      
++    if (riid == __uuidof(ID3D11VideoDevice)) {
++      Logger::warn("D3D11DXGIDevice::QueryInterface: Using stubbed ID3D11VideoDevice interface");
++      Com<ID3D11DeviceContext> context;
++      m_d3d11Device.GetImmediateContext(&context);
++      return context->QueryInterface(riid, ppvObject);
++    }
+     
+     Logger::warn("D3D11DXGIDevice::QueryInterface: Unknown interface query");
+     Logger::warn(str::format(riid));
+diff --git a/src/d3d11/d3d11_device.h b/src/d3d11/d3d11_device.h
+index dc629ae0..2077a347 100644
+--- a/src/d3d11/d3d11_device.h
++++ b/src/d3d11/d3d11_device.h
+@@ -22,6 +22,7 @@
+ #include "d3d11_shader.h"
+ #include "d3d11_state.h"
+ #include "d3d11_util.h"
++#include "d3d11_video.h"
+ 
+ namespace dxvk {
+   class DxgiAdapter;
+diff --git a/src/d3d11/d3d11_video.cpp b/src/d3d11/d3d11_video.cpp
+new file mode 100644
+index 00000000..8980310c
+--- /dev/null
++++ b/src/d3d11/d3d11_video.cpp
+@@ -0,0 +1,1029 @@
++#include "d3d11_context.h"
++#include "d3d11_video.h"
++
++namespace dxvk {
++  
++  D3D11VideoDevice::D3D11VideoDevice(
++          D3D11DeviceContext*     pContext)
++  : m_ctx(pContext) {
++    
++  }
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoDevice::AddRef() {
++    return m_ctx->AddRef();
++  }
++  
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoDevice::Release() {
++    return m_ctx->Release();
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::QueryInterface(
++          REFIID                  riid,
++          void**                  ppvObject) {
++    return E_NOINTERFACE;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateVideoDecoder(
++            const D3D11_VIDEO_DECODER_DESC*               pVideoDesc,
++            const D3D11_VIDEO_DECODER_CONFIG*             pConfig,
++            ID3D11VideoDecoder**                          ppDecoder) {
++    Logger::warn("D3D11VideoDevice::CreateVideoDecoder: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateVideoProcessor(
++          ID3D11VideoProcessorEnumerator*               pEnum,
++          UINT                                          RateConversionIndex,
++          ID3D11VideoProcessor**                        ppVideoProcessor) {
++    Logger::warn(str::format("D3D11VideoDevice::CreateVideoProcessor: Semi-Stub",
++                             "\n pEnum:               ", pEnum,
++                             "\n RateConversionIndex: ", RateConversionIndex));
++    D3D11VideoProcessor* processor = new D3D11VideoProcessor(
++      m_ctx);
++    *ppVideoProcessor = ref(processor);
++    return S_OK;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateAuthenticatedChannel(
++          D3D11_AUTHENTICATED_CHANNEL_TYPE              ChannelType,
++          ID3D11AuthenticatedChannel**                  ppAuthenticatedChannel) {
++    Logger::warn("D3D11VideoDevice::CreateAuthenticatedChannel: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateCryptoSession(
++          const GUID*                                   pCryptoType,
++          const GUID*                                   pDecoderProfile,
++          const GUID*                                   pKeyExchangeType,
++          ID3D11CryptoSession**                         ppCryptoSession) {
++    Logger::warn("D3D11VideoDevice::CreateCryptoSession: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateVideoDecoderOutputView(
++          ID3D11Resource* pResource,
++          const D3D11_VIDEO_DECODER_OUTPUT_VIEW_DESC*   pDesc,
++          ID3D11VideoDecoderOutputView**                ppVDOVView) {
++    Logger::warn("D3D11VideoDevice::CreateVideoDecoderOutputView: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateVideoProcessorInputView(
++          ID3D11Resource*                               pResource,
++          ID3D11VideoProcessorEnumerator*               pEnum,
++          const D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC*  pDesc,
++          ID3D11VideoProcessorInputView**               ppVPIView) {
++    Logger::warn("D3D11VideoDevice::CreateVideoProcessorInputView: Semi-Stub");
++    if (ppVPIView != nullptr) {
++      D3D11VideoProcessorInputView* view = new D3D11VideoProcessorInputView(
++        m_ctx, pResource);
++      *ppVPIView = ref(view);
++    }
++    return S_OK;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateVideoProcessorOutputView(
++          ID3D11Resource*                               pResource,
++          ID3D11VideoProcessorEnumerator*               pEnum,
++          const D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC* pDesc,
++          ID3D11VideoProcessorOutputView**              ppVPOView) {
++    Logger::warn("D3D11VideoDevice::CreateVideoProcessorOutputView: Semi-Stub");
++    if (ppVPOView != nullptr) {
++      D3D11VideoProcessorOutputView* view = new D3D11VideoProcessorOutputView(
++        m_ctx, pResource);
++      *ppVPOView = ref(view);
++    }
++    return S_OK;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CreateVideoProcessorEnumerator(
++          const D3D11_VIDEO_PROCESSOR_CONTENT_DESC*     pDesc,
++          ID3D11VideoProcessorEnumerator**              ppEnum) {
++    Logger::warn(str::format("D3D11VideoDevice::CreateVideoProcessorEnumerator: Semi-Stub",
++                             "\n InputFrameFormat: ", pDesc->InputFrameFormat,
++                             "\n InputFrameRate:   ", pDesc->InputFrameRate.Numerator, "/", pDesc->InputFrameRate.Denominator,
++                             "\n InputWidth:       ", pDesc->InputWidth,
++                             "\n InputHeight:      ", pDesc->InputHeight,
++                             "\n OutputFrameRate:  ", pDesc->OutputFrameRate.Numerator, "/", pDesc->OutputFrameRate.Denominator,
++                             "\n OutputWidth:      ", pDesc->OutputWidth,
++                             "\n OutputHeight:     ", pDesc->OutputHeight,
++                             "\n Usage:            ", pDesc->Usage));
++    D3D11VideoProcessorEnumerator* enumerator = new D3D11VideoProcessorEnumerator(
++      m_ctx);
++    *ppEnum = ref(enumerator);
++    return S_OK;
++  }
++  
++  UINT STDMETHODCALLTYPE D3D11VideoDevice::GetVideoDecoderProfileCount() {
++    return 0;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::GetVideoDecoderProfile(
++          UINT                                          Index,
++          GUID*                                         pDecoderProfile) {
++    Logger::warn("D3D11VideoDevice::GetVideoDecoderProfile: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CheckVideoDecoderFormat(
++          const GUID*                                   pDecoderProfile,
++          DXGI_FORMAT                                   Format,
++          BOOL*                                         pSupported) {
++    Logger::warn("D3D11VideoDevice::CheckVideoDecoderFormat: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::GetVideoDecoderConfigCount(
++          const                                         D3D11_VIDEO_DECODER_DESC* pDesc,
++          UINT*                                         pCount) {
++    Logger::warn("D3D11VideoDevice::GetVideoDecoderConfigCount: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::GetVideoDecoderConfig(
++          const                                         D3D11_VIDEO_DECODER_DESC* pDesc,
++          UINT                                          Index,
++          D3D11_VIDEO_DECODER_CONFIG*                   pConfig) {
++    Logger::warn("D3D11VideoDevice::GetVideoDecoderConfig: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::GetContentProtectionCaps(
++          const GUID*                                   pCryptoType,
++          const GUID*                                   pDecoderProfile,
++          D3D11_VIDEO_CONTENT_PROTECTION_CAPS*          pCaps) {
++    Logger::warn("D3D11VideoDevice::GetContentProtectionCaps: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::CheckCryptoKeyExchange(
++          const GUID*                                   pCryptoType,
++          const GUID*                                   pDecoderProfile,
++          UINT                                          Index,
++          GUID*                                         pKeyExchangeType) {
++    Logger::warn("D3D11VideoDevice::CheckCryptoKeyExchange: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::SetPrivateData(
++          const GUID&                                   guid,
++          UINT                                          DataSize,
++          const void*                                   pData) {
++    Logger::warn("D3D11VideoDevice::SetPrivateData: Stub");
++    return E_NOTIMPL;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoDevice::SetPrivateDataInterface(
++          const GUID&                                   guid,
++          const IUnknown*                               pData) {
++    Logger::warn("D3D11VideoDevice::SetPrivateDataInterface: Stub");
++    return E_NOTIMPL;
++  }
++  
++  
++  D3D11VideoContext::D3D11VideoContext(
++          D3D11DeviceContext*     pContext)
++  : m_ctx(pContext) {
++    
++  }
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoContext::AddRef() {
++    return m_ctx->AddRef();
++  }
++  
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoContext::Release() {
++    return m_ctx->Release();
++  }
++  
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::QueryInterface(
++          REFIID                  riid,
++          void**                  ppvObject) {
++    return m_ctx->QueryInterface(riid, ppvObject);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::GetPrivateData(
++          REFGUID                 guid,
++          UINT                    *pDataSize,
++          void                    *pData) {
++    return m_ctx->GetPrivateData(guid, pDataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::SetPrivateData(
++          REFGUID                 guid,
++          UINT                    DataSize,
++    const void                    *pData) {
++    return m_ctx->SetPrivateData(guid, DataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::SetPrivateDataInterface(
++          REFGUID                 guid,
++    const IUnknown                *pUnknown) {
++    return m_ctx->SetPrivateDataInterface(guid, pUnknown);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoContext::GetDevice(
++            ID3D11Device**          ppDevice) {
++    return m_ctx->GetDevice(ppDevice);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::GetDecoderBuffer(
++          ID3D11VideoDecoder *decoder,
++          D3D11_VIDEO_DECODER_BUFFER_TYPE type,
++          UINT *buffer_size,
++          void **buffer) {
++    Logger::warn("D3D11VideoContext::GetDecoderBuffer: Stub");
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::ReleaseDecoderBuffer(
++          ID3D11VideoDecoder *decoder,
++          D3D11_VIDEO_DECODER_BUFFER_TYPE type) {
++    Logger::warn("D3D11VideoContext::ReleaseDecoderBuffer: Stub");
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::DecoderBeginFrame(
++          ID3D11VideoDecoder *decoder,
++          ID3D11VideoDecoderOutputView *view,
++        UINT key_size,
++        const void *key) {
++    Logger::warn("D3D11VideoContext::DecoderBeginFrame: Stub");
++    return E_NOTIMPL;
++  }
++
++   HRESULT STDMETHODCALLTYPE D3D11VideoContext::DecoderEndFrame(
++          ID3D11VideoDecoder *decoder) {
++    Logger::warn("D3D11VideoContext::DecoderEndFrame: Stub");
++    return E_NOTIMPL;
++  }
++
++   HRESULT STDMETHODCALLTYPE D3D11VideoContext::SubmitDecoderBuffers(
++          ID3D11VideoDecoder *decoder,
++          UINT buffers_count,
++          const D3D11_VIDEO_DECODER_BUFFER_DESC *buffer_desc) {
++    Logger::warn("D3D11VideoContext::SubmitDecoderBuffers: Stub");
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::DecoderExtension(
++          ID3D11VideoDecoder *decoder,
++          const D3D11_VIDEO_DECODER_EXTENSION *extension) {
++    Logger::warn("D3D11VideoContext::DecoderExtension: Stub");
++    return E_NOTIMPL;
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetOutputTargetRect(
++          ID3D11VideoProcessor *processor,
++          WINBOOL enable,
++          const RECT *rect) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetOutputTargetRect: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetOutputBackgroundColor(
++          ID3D11VideoProcessor *processor,
++          WINBOOL y_cb_cr,
++          const D3D11_VIDEO_COLOR *color) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetOutputBackgroundColor: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetOutputColorSpace(
++        ID3D11VideoProcessor *processor,
++        const D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetOutputColorSpace: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetOutputAlphaFillMode(
++        ID3D11VideoProcessor *processor,
++        D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE alpha_fill_mode,
++        UINT stream_idx) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetOutputAlphaFillMode: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetOutputConstriction(
++        ID3D11VideoProcessor *processor,
++        WINBOOL enable,
++        SIZE size) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetOutputConstriction: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetOutputStereoMode(
++        ID3D11VideoProcessor *processor,
++        WINBOOL enable) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetOutputStereoMode: Stub");
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetOutputExtension(
++        ID3D11VideoProcessor *processor,
++        const GUID *guid,
++        UINT data_size,
++        void *data) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetOutputExtension: Stub");
++    return E_NOTIMPL;
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetOutputTargetRect(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *enabled,
++        RECT *rect) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetOutputTargetRect: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetOutputBackgroundColor(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *y_cb_cr,
++        D3D11_VIDEO_COLOR *color) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetOutputBackgroundColor: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetOutputColorSpace(
++        ID3D11VideoProcessor *processor,
++        D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetOutputColorSpace: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetOutputAlphaFillMode(
++        ID3D11VideoProcessor *processor,
++        D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE *alpha_fill_mode,
++        UINT *stream_idx) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetOutputAlphaFillMode: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetOutputConstriction(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *enabled,
++        SIZE *size) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetOutputConstriction: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetOutputStereoMode(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *enabled) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetOutputStereoMode: Stub");
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetOutputExtension(
++        ID3D11VideoProcessor *processor,
++        const GUID *guid,
++        UINT data_size,
++        void *data) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetOutputExtension: Stub");
++    return E_NOTIMPL;
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamFrameFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_FRAME_FORMAT format) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamFrameFormat: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamColorSpace(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        const D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamColorSpace: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamOutputRate(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_OUTPUT_RATE rate,
++        WINBOOL repeat,
++        const DXGI_RATIONAL *custom_rate) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamOutputRate: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamSourceRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        const RECT *rect) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamSourceRect: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamDestRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        const RECT *rect) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamDestRect: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamAlpha(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        float alpha) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamAlpha: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamPalette(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        UINT entry_count,
++        const UINT *entries) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamPalette: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamPixelAspectRatio(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        const DXGI_RATIONAL *src_aspect_ratio,
++        const DXGI_RATIONAL *dst_aspect_ratio) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamPixelAspectRatio: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamLumaKey(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        float lower,
++        float upper) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamLumaKey: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamStereoFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        D3D11_VIDEO_PROCESSOR_STEREO_FORMAT format,
++        WINBOOL left_view_frame0,
++        WINBOOL base_view_frame0,
++        D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE flip_mode,
++        int mono_offset) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamStereoFormat: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamAutoProcessingMode(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamAutoProcessingMode: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamFilter(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_FILTER filter,
++        WINBOOL enable,
++        int level) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamFilter: Stub");
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamExtension(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        const GUID *guid,
++        UINT data_size,
++        void *data) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamExtension: Stub");
++    return E_NOTIMPL;
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamFrameFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_FRAME_FORMAT *format) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamFrameFormat: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamColorSpace(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamColorSpace: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamOutputRate(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_OUTPUT_RATE *rate,
++        WINBOOL *repeat,
++        DXGI_RATIONAL *custom_rate) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamOutputRate: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamSourceRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        RECT *rect) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamSourceRect: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamDestRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        RECT *rect) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamDestRect: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamAlpha(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        float *alpha) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamAlpha: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamPalette(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        UINT entry_count,
++        UINT *entries) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamPalette: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamPixelAspectRatio(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        DXGI_RATIONAL *src_aspect_ratio,
++        DXGI_RATIONAL *dst_aspect_ratio) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamPixelAspectRatio: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamLumaKey(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        float *lower,
++        float *upper) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamLumaKey: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamStereoFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        D3D11_VIDEO_PROCESSOR_STEREO_FORMAT *format,
++        WINBOOL *left_view_frame0,
++        WINBOOL *base_view_frame0,
++        D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE *flip_mode,
++        int *mono_offset) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamStereoFormat: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamAutoProcessingMode(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamAutoProcessingMode: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamFilter(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_FILTER filter,
++        WINBOOL *enabled,
++        int *level) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamFilter: Stub");
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamExtension(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        const GUID *guid,
++        UINT data_size,
++        void *data) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamExtension: Stub");
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorBlt(
++        ID3D11VideoProcessor *processor,
++        ID3D11VideoProcessorOutputView *view,
++        UINT frame_idx,
++        UINT stream_count,
++        const D3D11_VIDEO_PROCESSOR_STREAM *streams) {
++    Logger::warn("D3D11VideoContext::VideoProcessorBlt: Semi-Stub");
++    ID3D11Resource* output_resource;
++    ID3D11Resource* input_resource;
++    
++    view->GetResource(&output_resource);
++    
++    for (UINT i = 0; i < stream_count; i++) {
++      if (streams[i].Enable) {
++        streams[i].pInputSurface->GetResource(&input_resource);
++        m_ctx->CopyResource(output_resource, input_resource);
++        input_resource->Release();
++      }
++    }
++    
++    output_resource->Release();
++    
++    return S_OK;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::NegotiateCryptoSessionKeyExchange(
++        ID3D11CryptoSession *session,
++        UINT data_size,
++        void *data) {
++    Logger::warn("D3D11VideoContext::NegotiateCryptoSessionKeyExchange: Stub");
++    return E_NOTIMPL;
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::EncryptionBlt(
++        ID3D11CryptoSession *session,
++        ID3D11Texture2D *src_surface,
++        ID3D11Texture2D *dst_surface,
++        UINT iv_size,
++        void *iv) {
++    Logger::warn("D3D11VideoContext::EncryptionBlt: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::DecryptionBlt(
++        ID3D11CryptoSession *session,
++        ID3D11Texture2D *src_surface,
++        ID3D11Texture2D *dst_surface,
++        D3D11_ENCRYPTED_BLOCK_INFO *block_info,
++        UINT key_size,
++        const void *key,
++        UINT iv_size,
++        void *iv) {
++    Logger::warn("D3D11VideoContext::DecryptionBlt: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::StartSessionKeyRefresh(
++        ID3D11CryptoSession *session,
++        UINT random_number_size,
++        void *random_number) {
++    Logger::warn("D3D11VideoContext::StartSessionKeyRefresh: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::FinishSessionKeyRefresh(
++        ID3D11CryptoSession *session) {
++    Logger::warn("D3D11VideoContext::FinishSessionKeyRefresh: Stub");
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::GetEncryptionBltKey(
++        ID3D11CryptoSession *session,
++        UINT key_size,
++        void *key) {
++    Logger::warn("D3D11VideoContext::GetEncryptionBltKey: Stub");
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::NegotiateAuthenticatedChannelKeyExchange(
++        ID3D11AuthenticatedChannel *channel,
++        UINT data_size,
++        void *data) {
++    Logger::warn("D3D11VideoContext::NegotiateAuthenticatedChannelKeyExchange: Stub");
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::QueryAuthenticatedChannel(
++        ID3D11AuthenticatedChannel *channel,
++        UINT input_size,
++        const void *input,
++        UINT output_size,
++        void *output) {
++    Logger::warn("D3D11VideoContext::QueryAuthenticatedChannel: Stub");
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoContext::ConfigureAuthenticatedChannel(
++        ID3D11AuthenticatedChannel *channel,
++        UINT input_size,
++        const void *input,
++        D3D11_AUTHENTICATED_CONFIGURE_OUTPUT *output) {
++    Logger::warn("D3D11VideoContext::ConfigureAuthenticatedChannel: Stub");
++    return E_NOTIMPL;
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorSetStreamRotation(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        D3D11_VIDEO_PROCESSOR_ROTATION rotation) {
++    Logger::warn("D3D11VideoContext::VideoProcessorSetStreamRotation: Stub");
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoContext::VideoProcessorGetStreamRotation(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enable,
++        D3D11_VIDEO_PROCESSOR_ROTATION *rotation) {
++    Logger::warn("D3D11VideoContext::VideoProcessorGetStreamRotation: Stub");
++  }
++  
++  
++  
++  D3D11VideoProcessorEnumerator::D3D11VideoProcessorEnumerator(
++          D3D11DeviceContext*     pContext)
++  : m_ctx(pContext) {
++    
++  }
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::AddRef() {
++    uint32_t refCount = this->m_refCount++;
++    if (unlikely(!refCount)) {
++      this->AddRefPrivate();
++      m_ctx->AddRef();
++    }
++    return refCount + 1;
++  }
++  
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::Release() {
++    uint32_t refCount = --this->m_refCount;
++    if (unlikely(!refCount)) {
++      this->ReleasePrivate();
++      m_ctx->Release();
++    }
++    return refCount;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::QueryInterface(
++          REFIID                  riid,
++          void**                  ppvObject) {
++    return m_ctx->QueryInterface(riid, ppvObject);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::GetPrivateData(
++          REFGUID                 guid,
++          UINT                    *pDataSize,
++          void                    *pData) {
++    return m_ctx->GetPrivateData(guid, pDataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::SetPrivateData(
++          REFGUID                 guid,
++          UINT                    DataSize,
++    const void                    *pData) {
++    return m_ctx->SetPrivateData(guid, DataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::SetPrivateDataInterface(
++          REFGUID                 guid,
++    const IUnknown                *pUnknown) {
++    return m_ctx->SetPrivateDataInterface(guid, pUnknown);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::GetDevice(
++            ID3D11Device**          ppDevice) {
++    return m_ctx->GetDevice(ppDevice);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::GetVideoProcessorContentDesc(
++          D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pContentDesc) {
++    Logger::warn("D3D11VideoProcessorEnumerator::GetVideoProcessorContentDesc: Stub");
++    pContentDesc = nullptr;
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::CheckVideoProcessorFormat(
++          DXGI_FORMAT Format,
++          UINT *pFlags) {
++    Logger::warn("D3D11VideoProcessorEnumerator::CheckVideoProcessorFormat: Stub");
++    pFlags = nullptr;
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::GetVideoProcessorCaps(
++          D3D11_VIDEO_PROCESSOR_CAPS *pCaps) {
++    Logger::warn("D3D11VideoProcessorEnumerator::GetVideoProcessorCaps: Stub");
++    pCaps = nullptr;
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::GetVideoProcessorRateConversionCaps(
++          UINT TypeIndex,
++          D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps) {
++    Logger::warn("D3D11VideoProcessorEnumerator::GetVideoProcessorRateConversionCaps: Stub");
++    pCaps = nullptr;
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::GetVideoProcessorCustomRate(
++          UINT TypeIndex,
++          UINT CustomRateIndex,
++          D3D11_VIDEO_PROCESSOR_CUSTOM_RATE *pRate) {
++    Logger::warn("D3D11VideoProcessorEnumerator::GetVideoProcessorCustomRate: Stub");
++    pRate = nullptr;
++    return E_NOTIMPL;
++  }
++
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorEnumerator::GetVideoProcessorFilterRange(
++          D3D11_VIDEO_PROCESSOR_FILTER Filter,
++          D3D11_VIDEO_PROCESSOR_FILTER_RANGE *pRange) {
++    Logger::warn("D3D11VideoProcessorEnumerator::GetVideoProcessorFilterRange: Stub");
++    pRange = nullptr;
++    return E_NOTIMPL;
++  }
++  
++  
++  
++  D3D11VideoProcessor::D3D11VideoProcessor(
++          D3D11DeviceContext*     pContext)
++  : m_ctx(pContext) {
++    
++  }
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessor::AddRef() {
++    uint32_t refCount = this->m_refCount++;
++    if (unlikely(!refCount)) {
++      this->AddRefPrivate();
++      m_ctx->AddRef();
++    }
++    return refCount + 1;
++  }
++  
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessor::Release() {
++    uint32_t refCount = --this->m_refCount;
++    if (unlikely(!refCount)) {
++      this->ReleasePrivate();
++      m_ctx->Release();
++    }
++    return refCount;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessor::QueryInterface(
++          REFIID                  riid,
++          void**                  ppvObject) {
++    return m_ctx->QueryInterface(riid, ppvObject);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessor::GetPrivateData(
++          REFGUID                 guid,
++          UINT                    *pDataSize,
++          void                    *pData) {
++    return m_ctx->GetPrivateData(guid, pDataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessor::SetPrivateData(
++          REFGUID                 guid,
++          UINT                    DataSize,
++    const void                    *pData) {
++    return m_ctx->SetPrivateData(guid, DataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessor::SetPrivateDataInterface(
++          REFGUID                 guid,
++    const IUnknown                *pUnknown) {
++    return m_ctx->SetPrivateDataInterface(guid, pUnknown);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoProcessor::GetDevice(
++            ID3D11Device**          ppDevice) {
++    return m_ctx->GetDevice(ppDevice);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoProcessor::GetContentDesc(
++          D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pDesc) {
++    Logger::warn("D3D11VideoProcessor::GetContentDesc: Stub");
++    pDesc = nullptr;
++  }
++
++  void STDMETHODCALLTYPE D3D11VideoProcessor::GetRateConversionCaps(
++          D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps) {
++    Logger::warn("D3D11VideoProcessor::GetRateConversionCaps: Stub");
++    pCaps = nullptr;
++  }
++  
++  
++  
++  D3D11VideoProcessorInputView::D3D11VideoProcessorInputView(
++          D3D11DeviceContext*     pContext,
++          ID3D11Resource*         pResource)
++  : m_ctx(pContext), m_resource(pResource) {
++    
++  }
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessorInputView::AddRef() {
++    uint32_t refCount = this->m_refCount++;
++    if (unlikely(!refCount)) {
++      this->AddRefPrivate();
++      m_ctx->AddRef();
++    }
++    return refCount + 1;
++  }
++  
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessorInputView::Release() {
++    uint32_t refCount = --this->m_refCount;
++    if (unlikely(!refCount)) {
++      this->ReleasePrivate();
++      m_ctx->Release();
++    }
++    return refCount;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorInputView::QueryInterface(
++          REFIID                  riid,
++          void**                  ppvObject) {
++    return m_ctx->QueryInterface(riid, ppvObject);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorInputView::GetPrivateData(
++          REFGUID                 guid,
++          UINT                    *pDataSize,
++          void                    *pData) {
++    return m_ctx->GetPrivateData(guid, pDataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorInputView::SetPrivateData(
++          REFGUID                 guid,
++          UINT                    DataSize,
++    const void                    *pData) {
++    return m_ctx->SetPrivateData(guid, DataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorInputView::SetPrivateDataInterface(
++          REFGUID                 guid,
++    const IUnknown                *pUnknown) {
++    return m_ctx->SetPrivateDataInterface(guid, pUnknown);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoProcessorInputView::GetDevice(
++            ID3D11Device**          ppDevice) {
++    return m_ctx->GetDevice(ppDevice);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoProcessorInputView::GetResource(
++            ID3D11Resource**        ppResource) {
++    *ppResource = ref(m_resource);
++  }
++    
++  void STDMETHODCALLTYPE D3D11VideoProcessorInputView::GetDesc(
++            D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC* pDesc) {
++    Logger::warn("D3D11VideoProcessorInputView::GetDesc: Stub");
++    pDesc = nullptr;
++  }
++  
++  
++  
++  D3D11VideoProcessorOutputView::D3D11VideoProcessorOutputView(
++          D3D11DeviceContext*     pContext,
++          ID3D11Resource*         pResource)
++  : m_ctx(pContext), m_resource(pResource) {
++    
++  }
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessorOutputView::AddRef() {
++    uint32_t refCount = this->m_refCount++;
++    if (unlikely(!refCount)) {
++      this->AddRefPrivate();
++      m_ctx->AddRef();
++    }
++    return refCount + 1;
++  }
++  
++  
++  ULONG STDMETHODCALLTYPE D3D11VideoProcessorOutputView::Release() {
++    uint32_t refCount = --this->m_refCount;
++    if (unlikely(!refCount)) {
++      this->ReleasePrivate();
++      m_ctx->Release();
++    }
++    return refCount;
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorOutputView::QueryInterface(
++          REFIID                  riid,
++          void**                  ppvObject) {
++    return m_ctx->QueryInterface(riid, ppvObject);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorOutputView::GetPrivateData(
++          REFGUID                 guid,
++          UINT                    *pDataSize,
++          void                    *pData) {
++    return m_ctx->GetPrivateData(guid, pDataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorOutputView::SetPrivateData(
++          REFGUID                 guid,
++          UINT                    DataSize,
++    const void                    *pData) {
++    return m_ctx->SetPrivateData(guid, DataSize, pData);
++  }
++  
++  HRESULT STDMETHODCALLTYPE D3D11VideoProcessorOutputView::SetPrivateDataInterface(
++          REFGUID                 guid,
++    const IUnknown                *pUnknown) {
++    return m_ctx->SetPrivateDataInterface(guid, pUnknown);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoProcessorOutputView::GetDevice(
++            ID3D11Device**          ppDevice) {
++    return m_ctx->GetDevice(ppDevice);
++  }
++  
++  void STDMETHODCALLTYPE D3D11VideoProcessorOutputView::GetResource(
++            ID3D11Resource**        ppResource) {
++    *ppResource = ref(m_resource);
++  }
++    
++  void STDMETHODCALLTYPE D3D11VideoProcessorOutputView::GetDesc(
++            D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC* pDesc) {
++    Logger::warn("D3D11VideoProcessorOutputView::GetDesc: Stub");
++    pDesc = nullptr;
++  }
++}
+diff --git a/src/d3d11/d3d11_video.h b/src/d3d11/d3d11_video.h
+new file mode 100644
+index 00000000..860992ad
+--- /dev/null
++++ b/src/d3d11/d3d11_video.h
+@@ -0,0 +1,678 @@
++#pragma once
++
++#include "d3d11_include.h"
++
++namespace dxvk {
++  class D3D11VideoDevice : public ID3D11VideoDevice {
++  
++  public:
++    
++    D3D11VideoDevice(
++      D3D11DeviceContext*     pContext);
++    
++    ULONG STDMETHODCALLTYPE AddRef();
++    
++    ULONG STDMETHODCALLTYPE Release();
++    
++    HRESULT STDMETHODCALLTYPE QueryInterface(
++            REFIID                  riid,
++            void**                  ppvObject);
++    
++    HRESULT STDMETHODCALLTYPE CreateVideoDecoder(
++            const D3D11_VIDEO_DECODER_DESC*               pVideoDesc,
++            const D3D11_VIDEO_DECODER_CONFIG*             pConfig,
++            ID3D11VideoDecoder**                          ppDecoder);
++          
++    HRESULT STDMETHODCALLTYPE CreateVideoProcessor(
++            ID3D11VideoProcessorEnumerator*               pEnum,
++            UINT                                          RateConversionIndex,
++            ID3D11VideoProcessor**                        ppVideoProcessor);
++          
++    HRESULT STDMETHODCALLTYPE CreateAuthenticatedChannel(
++            D3D11_AUTHENTICATED_CHANNEL_TYPE              ChannelType,
++            ID3D11AuthenticatedChannel**                  ppAuthenticatedChannel);
++  
++    HRESULT STDMETHODCALLTYPE CreateCryptoSession(
++            const GUID*                                   pCryptoType,
++            const GUID*                                   pDecoderProfile,
++            const GUID*                                   pKeyExchangeType,
++            ID3D11CryptoSession**                         ppCryptoSession);
++          
++    HRESULT STDMETHODCALLTYPE CreateVideoDecoderOutputView(
++            ID3D11Resource* pResource,
++            const D3D11_VIDEO_DECODER_OUTPUT_VIEW_DESC*   pDesc,
++            ID3D11VideoDecoderOutputView**                ppVDOVView);
++        
++    HRESULT STDMETHODCALLTYPE CreateVideoProcessorInputView(
++            ID3D11Resource*                               pResource,
++            ID3D11VideoProcessorEnumerator*               pEnum,
++            const D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC*  pDesc,
++            ID3D11VideoProcessorInputView**               ppVPIView);
++        
++    HRESULT STDMETHODCALLTYPE CreateVideoProcessorOutputView(
++            ID3D11Resource*                               pResource,
++            ID3D11VideoProcessorEnumerator*               pEnum,
++            const D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC* pDesc,
++            ID3D11VideoProcessorOutputView**              ppVPOView);
++        
++    HRESULT STDMETHODCALLTYPE CreateVideoProcessorEnumerator(
++            const D3D11_VIDEO_PROCESSOR_CONTENT_DESC*     pDesc,
++            ID3D11VideoProcessorEnumerator**              ppEnum);
++        
++    UINT STDMETHODCALLTYPE GetVideoDecoderProfileCount();
++  
++    HRESULT STDMETHODCALLTYPE GetVideoDecoderProfile(
++            UINT                                          Index,
++            GUID*                                         pDecoderProfile);
++        
++    HRESULT STDMETHODCALLTYPE CheckVideoDecoderFormat(
++            const GUID*                                   pDecoderProfile,
++            DXGI_FORMAT                                   Format,
++            BOOL*                                         pSupported);
++        
++    HRESULT STDMETHODCALLTYPE GetVideoDecoderConfigCount(
++            const                                         D3D11_VIDEO_DECODER_DESC* pDesc,
++            UINT*                                         pCount);
++        
++    HRESULT STDMETHODCALLTYPE GetVideoDecoderConfig(
++            const                                         D3D11_VIDEO_DECODER_DESC* pDesc,
++            UINT                                          Index,
++            D3D11_VIDEO_DECODER_CONFIG*                   pConfig);
++        
++    HRESULT STDMETHODCALLTYPE GetContentProtectionCaps(
++            const GUID*                                   pCryptoType,
++            const GUID*                                   pDecoderProfile,
++            D3D11_VIDEO_CONTENT_PROTECTION_CAPS*          pCaps);
++        
++    HRESULT STDMETHODCALLTYPE CheckCryptoKeyExchange(
++            const GUID*                                   pCryptoType,
++            const GUID*                                   pDecoderProfile,
++            UINT                                          Index,
++            GUID*                                         pKeyExchangeType);
++        
++    HRESULT STDMETHODCALLTYPE SetPrivateData(
++            const GUID&                                   guid,
++            UINT                                          DataSize,
++            const void*                                   pData);
++        
++    HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
++            const GUID&                                   guid,
++            const IUnknown*                               pData);
++    
++  private:
++    
++      D3D11DeviceContext* m_ctx;
++  };
++  
++  class D3D11DeviceContext;
++  
++  class D3D11VideoContext : public ID3D11VideoContext {
++  
++  public:
++    
++    D3D11VideoContext(
++            D3D11DeviceContext*     pContext);
++    
++    ULONG STDMETHODCALLTYPE AddRef();
++    
++    ULONG STDMETHODCALLTYPE Release();
++    
++    HRESULT STDMETHODCALLTYPE QueryInterface(
++            REFIID                  riid,
++            void**                  ppvObject);
++    
++    HRESULT STDMETHODCALLTYPE GetPrivateData(
++            REFGUID                 guid,
++            UINT                    *pDataSize,
++            void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateData(
++            REFGUID                 guid,
++            UINT                    DataSize,
++      const void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
++            REFGUID                 guid,
++      const IUnknown                *pUnknown);
++    
++    void STDMETHODCALLTYPE GetDevice(
++            ID3D11Device**          ppDevice);
++    
++    HRESULT STDMETHODCALLTYPE GetDecoderBuffer(
++        ID3D11VideoDecoder *decoder,
++        D3D11_VIDEO_DECODER_BUFFER_TYPE type,
++        UINT *buffer_size,
++        void **buffer);
++
++    HRESULT STDMETHODCALLTYPE ReleaseDecoderBuffer(
++        ID3D11VideoDecoder *decoder,
++        D3D11_VIDEO_DECODER_BUFFER_TYPE type);
++
++    HRESULT STDMETHODCALLTYPE DecoderBeginFrame(
++        ID3D11VideoDecoder *decoder,
++        ID3D11VideoDecoderOutputView *view,
++        UINT key_size,
++        const void *key);
++
++    HRESULT STDMETHODCALLTYPE DecoderEndFrame(
++        ID3D11VideoDecoder *decoder);
++
++    HRESULT STDMETHODCALLTYPE SubmitDecoderBuffers(
++        ID3D11VideoDecoder *decoder,
++        UINT buffers_count,
++        const D3D11_VIDEO_DECODER_BUFFER_DESC *buffer_desc);
++
++    HRESULT STDMETHODCALLTYPE DecoderExtension(
++        ID3D11VideoDecoder *decoder,
++        const D3D11_VIDEO_DECODER_EXTENSION *extension);
++
++    void STDMETHODCALLTYPE VideoProcessorSetOutputTargetRect(
++        ID3D11VideoProcessor *processor,
++        WINBOOL enable,
++        const RECT *rect);
++
++    void STDMETHODCALLTYPE VideoProcessorSetOutputBackgroundColor(
++        ID3D11VideoProcessor *processor,
++        WINBOOL y_cb_cr,
++        const D3D11_VIDEO_COLOR *color);
++
++    void STDMETHODCALLTYPE VideoProcessorSetOutputColorSpace(
++        ID3D11VideoProcessor *processor,
++        const D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space);
++
++    void STDMETHODCALLTYPE VideoProcessorSetOutputAlphaFillMode(
++        ID3D11VideoProcessor *processor,
++        D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE alpha_fill_mode,
++        UINT stream_idx);
++
++    void STDMETHODCALLTYPE VideoProcessorSetOutputConstriction(
++        ID3D11VideoProcessor *processor,
++        WINBOOL enable,
++        SIZE size);
++
++    void STDMETHODCALLTYPE VideoProcessorSetOutputStereoMode(
++        ID3D11VideoProcessor *processor,
++        WINBOOL enable);
++
++    HRESULT STDMETHODCALLTYPE VideoProcessorSetOutputExtension(
++        ID3D11VideoProcessor *processor,
++        const GUID *guid,
++        UINT data_size,
++        void *data);
++
++    void STDMETHODCALLTYPE VideoProcessorGetOutputTargetRect(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *enabled,
++        RECT *rect);
++
++    void STDMETHODCALLTYPE VideoProcessorGetOutputBackgroundColor(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *y_cb_cr,
++        D3D11_VIDEO_COLOR *color);
++
++    void STDMETHODCALLTYPE VideoProcessorGetOutputColorSpace(
++        ID3D11VideoProcessor *processor,
++        D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space);
++
++    void STDMETHODCALLTYPE VideoProcessorGetOutputAlphaFillMode(
++        ID3D11VideoProcessor *processor,
++        D3D11_VIDEO_PROCESSOR_ALPHA_FILL_MODE *alpha_fill_mode,
++        UINT *stream_idx);
++
++    void STDMETHODCALLTYPE VideoProcessorGetOutputConstriction(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *enabled,
++        SIZE *size);
++
++    void STDMETHODCALLTYPE VideoProcessorGetOutputStereoMode(
++        ID3D11VideoProcessor *processor,
++        WINBOOL *enabled);
++
++    HRESULT STDMETHODCALLTYPE VideoProcessorGetOutputExtension(
++        ID3D11VideoProcessor *processor,
++        const GUID *guid,
++        UINT data_size,
++        void *data);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamFrameFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_FRAME_FORMAT format);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamColorSpace(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        const D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamOutputRate(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_OUTPUT_RATE rate,
++        WINBOOL repeat,
++        const DXGI_RATIONAL *custom_rate);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamSourceRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        const RECT *rect);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamDestRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        const RECT *rect);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamAlpha(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        float alpha);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamPalette(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        UINT entry_count,
++        const UINT *entries);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamPixelAspectRatio(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        const DXGI_RATIONAL *src_aspect_ratio,
++        const DXGI_RATIONAL *dst_aspect_ratio);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamLumaKey(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        float lower,
++        float upper);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamStereoFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        D3D11_VIDEO_PROCESSOR_STEREO_FORMAT format,
++        WINBOOL left_view_frame0,
++        WINBOOL base_view_frame0,
++        D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE flip_mode,
++        int mono_offset);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamAutoProcessingMode(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamFilter(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_FILTER filter,
++        WINBOOL enable,
++        int level);
++
++    HRESULT STDMETHODCALLTYPE VideoProcessorSetStreamExtension(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        const GUID *guid,
++        UINT data_size,
++        void *data);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamFrameFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_FRAME_FORMAT *format);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamColorSpace(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_COLOR_SPACE *color_space);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamOutputRate(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_OUTPUT_RATE *rate,
++        WINBOOL *repeat,
++        DXGI_RATIONAL *custom_rate);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamSourceRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        RECT *rect);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamDestRect(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        RECT *rect);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamAlpha(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        float *alpha);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamPalette(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        UINT entry_count,
++        UINT *entries);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamPixelAspectRatio(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        DXGI_RATIONAL *src_aspect_ratio,
++        DXGI_RATIONAL *dst_aspect_ratio);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamLumaKey(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        float *lower,
++        float *upper);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamStereoFormat(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled,
++        D3D11_VIDEO_PROCESSOR_STEREO_FORMAT *format,
++        WINBOOL *left_view_frame0,
++        WINBOOL *base_view_frame0,
++        D3D11_VIDEO_PROCESSOR_STEREO_FLIP_MODE *flip_mode,
++        int *mono_offset);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamAutoProcessingMode(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enabled);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamFilter(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        D3D11_VIDEO_PROCESSOR_FILTER filter,
++        WINBOOL *enabled,
++        int *level);
++
++    HRESULT STDMETHODCALLTYPE VideoProcessorGetStreamExtension(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        const GUID *guid,
++        UINT data_size,
++        void *data);
++
++    HRESULT STDMETHODCALLTYPE VideoProcessorBlt(
++        ID3D11VideoProcessor *processor,
++        ID3D11VideoProcessorOutputView *view,
++        UINT frame_idx,
++        UINT stream_count,
++        const D3D11_VIDEO_PROCESSOR_STREAM *streams);
++
++    HRESULT STDMETHODCALLTYPE NegotiateCryptoSessionKeyExchange(
++        ID3D11CryptoSession *session,
++        UINT data_size,
++        void *data);
++
++    void STDMETHODCALLTYPE EncryptionBlt(
++        ID3D11CryptoSession *session,
++        ID3D11Texture2D *src_surface,
++        ID3D11Texture2D *dst_surface,
++        UINT iv_size,
++        void *iv);
++
++    void STDMETHODCALLTYPE DecryptionBlt(
++        ID3D11CryptoSession *session,
++        ID3D11Texture2D *src_surface,
++        ID3D11Texture2D *dst_surface,
++        D3D11_ENCRYPTED_BLOCK_INFO *block_info,
++        UINT key_size,
++        const void *key,
++        UINT iv_size,
++        void *iv);
++
++    void STDMETHODCALLTYPE StartSessionKeyRefresh(
++        ID3D11CryptoSession *session,
++        UINT random_number_size,
++        void *random_number);
++
++    void STDMETHODCALLTYPE FinishSessionKeyRefresh(
++        ID3D11CryptoSession *session);
++
++    HRESULT STDMETHODCALLTYPE GetEncryptionBltKey(
++        ID3D11CryptoSession *session,
++        UINT key_size,
++        void *key);
++
++    HRESULT STDMETHODCALLTYPE NegotiateAuthenticatedChannelKeyExchange(
++        ID3D11AuthenticatedChannel *channel,
++        UINT data_size,
++        void *data);
++
++    HRESULT STDMETHODCALLTYPE QueryAuthenticatedChannel(
++        ID3D11AuthenticatedChannel *channel,
++        UINT input_size,
++        const void *input,
++        UINT output_size,
++        void *output);
++
++    HRESULT STDMETHODCALLTYPE ConfigureAuthenticatedChannel(
++        ID3D11AuthenticatedChannel *channel,
++        UINT input_size,
++        const void *input,
++        D3D11_AUTHENTICATED_CONFIGURE_OUTPUT *output);
++
++    void STDMETHODCALLTYPE VideoProcessorSetStreamRotation(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL enable,
++        D3D11_VIDEO_PROCESSOR_ROTATION rotation);
++
++    void STDMETHODCALLTYPE VideoProcessorGetStreamRotation(
++        ID3D11VideoProcessor *processor,
++        UINT stream_idx,
++        WINBOOL *enable,
++        D3D11_VIDEO_PROCESSOR_ROTATION *rotation);
++    
++    private:
++    
++      D3D11DeviceContext* m_ctx;
++  };
++  
++  
++  class D3D11VideoProcessorEnumerator : public ComObject<ID3D11VideoProcessorEnumerator> {
++    
++  public:
++    
++    D3D11VideoProcessorEnumerator(
++            D3D11DeviceContext*     pContext);
++    
++    ULONG STDMETHODCALLTYPE AddRef();
++    
++    ULONG STDMETHODCALLTYPE Release();
++    
++    HRESULT STDMETHODCALLTYPE QueryInterface(
++            REFIID                  riid,
++            void**                  ppvObject);
++    
++    HRESULT STDMETHODCALLTYPE GetPrivateData(
++            REFGUID                 guid,
++            UINT                    *pDataSize,
++            void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateData(
++            REFGUID                 guid,
++            UINT                    DataSize,
++      const void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
++            REFGUID                 guid,
++      const IUnknown                *pUnknown);
++    
++    void STDMETHODCALLTYPE GetDevice(
++            ID3D11Device**          ppDevice);
++    
++    HRESULT STDMETHODCALLTYPE GetVideoProcessorContentDesc(
++            D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pContentDesc);
++
++    HRESULT STDMETHODCALLTYPE CheckVideoProcessorFormat(
++            DXGI_FORMAT Format,
++            UINT *pFlags);
++
++    HRESULT STDMETHODCALLTYPE GetVideoProcessorCaps(
++            D3D11_VIDEO_PROCESSOR_CAPS *pCaps);
++
++    HRESULT STDMETHODCALLTYPE GetVideoProcessorRateConversionCaps(
++            UINT TypeIndex,
++            D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps);
++
++    HRESULT STDMETHODCALLTYPE GetVideoProcessorCustomRate(
++            UINT TypeIndex,
++            UINT CustomRateIndex,
++            D3D11_VIDEO_PROCESSOR_CUSTOM_RATE *pRate);
++
++    HRESULT STDMETHODCALLTYPE GetVideoProcessorFilterRange(
++            D3D11_VIDEO_PROCESSOR_FILTER Filter,
++            D3D11_VIDEO_PROCESSOR_FILTER_RANGE *pRange);
++    
++  private:
++    
++    D3D11DeviceContext* m_ctx;
++  };
++  
++  
++  class D3D11VideoProcessor : public ComObject<ID3D11VideoProcessor> {
++    
++  public:
++    
++    D3D11VideoProcessor(
++            D3D11DeviceContext*     pContext);
++    
++    ULONG STDMETHODCALLTYPE AddRef();
++    
++    ULONG STDMETHODCALLTYPE Release();
++    
++    HRESULT STDMETHODCALLTYPE QueryInterface(
++            REFIID                  riid,
++            void**                  ppvObject);
++    
++    HRESULT STDMETHODCALLTYPE GetPrivateData(
++            REFGUID                 guid,
++            UINT                    *pDataSize,
++            void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateData(
++            REFGUID                 guid,
++            UINT                    DataSize,
++      const void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
++            REFGUID                 guid,
++      const IUnknown                *pUnknown);
++    
++    void STDMETHODCALLTYPE GetDevice(
++            ID3D11Device**          ppDevice);
++    
++    void STDMETHODCALLTYPE GetContentDesc(
++            D3D11_VIDEO_PROCESSOR_CONTENT_DESC *pDesc);
++
++    void STDMETHODCALLTYPE GetRateConversionCaps(
++            D3D11_VIDEO_PROCESSOR_RATE_CONVERSION_CAPS *pCaps);
++    
++  private:
++    
++    D3D11DeviceContext* m_ctx;
++  };
++  
++  
++  class D3D11VideoProcessorInputView : public ComObject<ID3D11VideoProcessorInputView> {
++    
++  public:
++    D3D11VideoProcessorInputView(
++            D3D11DeviceContext*     pContext,
++            ID3D11Resource*         pResource);
++    
++    ULONG STDMETHODCALLTYPE AddRef();
++    
++    ULONG STDMETHODCALLTYPE Release();
++    
++    HRESULT STDMETHODCALLTYPE QueryInterface(
++            REFIID                  riid,
++            void**                  ppvObject);
++    
++    HRESULT STDMETHODCALLTYPE GetPrivateData(
++            REFGUID                 guid,
++            UINT                    *pDataSize,
++            void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateData(
++            REFGUID                 guid,
++            UINT                    DataSize,
++      const void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
++            REFGUID                 guid,
++      const IUnknown                *pUnknown);
++    
++    void STDMETHODCALLTYPE GetDevice(
++            ID3D11Device**          ppDevice);
++    
++    void STDMETHODCALLTYPE GetResource(
++            ID3D11Resource**        ppResource);
++    
++    void STDMETHODCALLTYPE GetDesc(
++            D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC* pDesc);
++    
++  private:
++    
++    D3D11DeviceContext* m_ctx;
++    
++    ID3D11Resource* m_resource;
++  };
++  
++  
++  class D3D11VideoProcessorOutputView : public ComObject<ID3D11VideoProcessorOutputView> {
++    
++  public:
++    D3D11VideoProcessorOutputView(
++            D3D11DeviceContext*     pContext,
++            ID3D11Resource*         pResource);
++    
++    ULONG STDMETHODCALLTYPE AddRef();
++    
++    ULONG STDMETHODCALLTYPE Release();
++    
++    HRESULT STDMETHODCALLTYPE QueryInterface(
++            REFIID                  riid,
++            void**                  ppvObject);
++    
++    HRESULT STDMETHODCALLTYPE GetPrivateData(
++            REFGUID                 guid,
++            UINT                    *pDataSize,
++            void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateData(
++            REFGUID                 guid,
++            UINT                    DataSize,
++      const void                    *pData);
++    
++    HRESULT STDMETHODCALLTYPE SetPrivateDataInterface(
++            REFGUID                 guid,
++      const IUnknown                *pUnknown);
++    
++    void STDMETHODCALLTYPE GetDevice(
++            ID3D11Device**          ppDevice);
++    
++    void STDMETHODCALLTYPE GetResource(
++            ID3D11Resource**        ppResource);
++    
++    void STDMETHODCALLTYPE GetDesc(
++            D3D11_VIDEO_PROCESSOR_OUTPUT_VIEW_DESC* pDesc);
++    
++  private:
++    
++    D3D11DeviceContext* m_ctx;
++    
++    ID3D11Resource* m_resource;
++  };
++}
+diff --git a/src/d3d11/meson.build b/src/d3d11/meson.build
+index 239a51cb..ffd1f206 100644
+--- a/src/d3d11/meson.build
++++ b/src/d3d11/meson.build
+@@ -52,6 +52,7 @@ d3d11_src = [
+   'd3d11_swapchain.cpp',
+   'd3d11_texture.cpp',
+   'd3d11_util.cpp',
++  'd3d11_video.cpp',
+   'd3d11_view_dsv.cpp',
+   'd3d11_view_rtv.cpp',
+   'd3d11_view_srv.cpp',

@@ -1,0 +1,42 @@
+diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
+index 5ca7ea00d4a..616a6f3dc1d 100644
+--- a/dlls/mfreadwrite/reader.c
++++ b/dlls/mfreadwrite/reader.c
+@@ -1747,9 +1748,15 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
+     if (FAILED(hr = IMFMediaType_GetMajorType(output_type, &out_type.guidMajorType)))
+         return hr;
+ 
++    if (FAILED(hr = IMFMediaType_GetGUID(output_type, &MF_MT_SUBTYPE, &out_type.guidSubtype)))
++        return hr;
++
+     if (IsEqualGUID(&out_type.guidMajorType, &MFMediaType_Video))
+     {
+-        category = MFT_CATEGORY_VIDEO_DECODER;
++        if (IsEqualGUID(&out_type.guidSubtype, &MFVideoFormat_RGB32))
++            category = MFT_CATEGORY_VIDEO_EFFECT;
++        else
++            category = MFT_CATEGORY_VIDEO_DECODER;
+     }
+     else if (IsEqualGUID(&out_type.guidMajorType, &MFMediaType_Audio))
+     {
+@@ -1761,9 +1768,6 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
+         return MF_E_TOPO_CODEC_NOT_FOUND;
+     }
+ 
+-    if (FAILED(hr = IMFMediaType_GetGUID(output_type, &MF_MT_SUBTYPE, &out_type.guidSubtype)))
+-        return hr;
+-
+     in_type.guidMajorType = out_type.guidMajorType;
+ 
+     while (source_reader_get_native_media_type(reader, index, i++, &input_type) == S_OK)
+@@ -1802,6 +1802,10 @@ static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWO
+ 
+     EnterCriticalSection(&reader->cs);
+ 
++    IMFMediaType_LockStore(type);
++    IMFMediaType_SetGUID(type, &MF_MT_SUBTYPE, &MFVideoFormat_RGB32);
++    IMFMediaType_UnlockStore(type);
++
+     hr = source_reader_set_compatible_media_type(reader, index, type);
+     if (hr == S_FALSE)
+         hr = source_reader_create_decoder_for_stream(reader, index, type);
