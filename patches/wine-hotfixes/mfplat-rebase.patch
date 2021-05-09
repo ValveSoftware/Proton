@@ -506,7 +506,7 @@ index d5c06bf3279..8ecd28e9f0e 100644
 +    if (FAILED(hr = mfplat_DllRegisterServer()))
 +        return hr;
 +
-     if (FAILED(hr = __wine_register_resources(winegstreamer_instance)))
+     if (FAILED(hr = __wine_register_resources()))
          return hr;
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
@@ -5791,10 +5791,10 @@ index 394a0d65aeb..dd32b3877af 100644
  static HRESULT wg_parser_connect_inner(struct wg_parser *parser)
  {
      GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("wine_src",
-@@ -1962,6 +1984,7 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+@@ -1984,6 +2006,7 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+     {
          struct wg_parser_stream *stream = parser->streams[i];
  
-         stream->duration = query_duration(stream->their_src);
 +        stream->language_code = query_language(stream->their_src);
          while (!stream->has_caps && !parser->error)
              pthread_cond_wait(&parser->init_cond, &parser->mutex);
@@ -6217,3 +6217,21 @@ index eb5b9e366ec..3ce8ff40f9b 100644
  
      *obj = NULL;
  
+diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
+index 42c89504163..8ea96b2f3ac 100644
+--- a/dlls/mfplat/main.c
++++ b/dlls/mfplat/main.c
+@@ -8940,7 +8940,12 @@ HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **man
+ 
+     TRACE("%p, %p.\n", token, manager);
+ 
+-    return E_NOTIMPL;
++    /* Hack to skip this to fix Nier Replicant*/
++    const char *sgi = getenv("SteamGameId");
++    if (sgi && strcmp(sgi, "1113560"))
++    {
++        return E_NOTIMPL;
++    }
+ 
+     if (!token || !manager)
+         return E_POINTER;
