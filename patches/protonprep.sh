@@ -241,6 +241,10 @@
     echo "mfplat additions"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
 
+    # these are applied out of order since guy's mfplat patches are based on vanilla wine
+    echo "proton-specific mfplat video conversion patches"
+    patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
+
     # additional pending fallout 4 fix
     patch -Np1 < ../patches/wine-hotfixes/205277
 

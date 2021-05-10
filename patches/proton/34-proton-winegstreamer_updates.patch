@@ -1,4 +1,30 @@
-From 62f1b0993d9647b239ddd31c7d5cbfcf157573ca Mon Sep 17 00:00:00 2001
+From eddbdd21c623bd041962fe4f91733c6696188d89 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Tue, 11 Aug 2020 14:03:20 -0500
+Subject: [PATCH] HACK: winegstreamer: Increase decodebin internal buffering
+
+This helps choppy audio due to OGG frame decoding seen in Worms
+Revolution and BlazBlue Centralfiction.
+---
+ dlls/winegstreamer/wg_parser.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 2d4d4f46327..2629df78ed1 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -1615,6 +1615,10 @@ static BOOL decodebin_parser_init_gst(struct wg_parser *parser)
+     g_signal_connect(element, "autoplug-select", G_CALLBACK(autoplug_select_cb), parser);
+     g_signal_connect(element, "no-more-pads", G_CALLBACK(no_more_pads_cb), parser);
+
++    g_object_set(G_OBJECT(element), "max-size-buffers", G_MAXUINT, NULL);
++    g_object_set(G_OBJECT(element), "max-size-time", G_MAXUINT64, NULL);
++    g_object_set(G_OBJECT(element), "max-size-bytes", G_MAXUINT, NULL);
++
+     parser->their_sink = gst_element_get_static_pad(element, "sink");
+
+     pthread_mutex_lock(&parser->mutex);
+From afc22791db23d52c13b7f7cbb3eeacde21b381ed Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <z.figura12@gmail.com>
 Date: Wed, 21 Oct 2020 16:03:21 -0500
 Subject: [PATCH] winegstreamer: Allow videoconvert to parallelize.
@@ -7,20 +33,80 @@ Not sure if this should be called a hack. It's not the *best* solution to the pr
 
 Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
 ---
- dlls/winegstreamer/gstdemux.c | 3 +++
+ dlls/winegstreamer/wg_parser.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
-index d079287678b..f3c55fe749f 100644
---- a/dlls/winegstreamer/gstdemux.c
-+++ b/dlls/winegstreamer/gstdemux.c
-@@ -1019,6 +1019,9 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-         /* Avoid expensive color matrix conversions. */
-         gst_util_set_object_arg(G_OBJECT(vconv), "matrix-mode", "none");
- 
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 2629df78ed1..a625f000254 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -1029,6 +1029,9 @@ static void pad_added_cb(GstElement *element, GstPad *pad, gpointer user)
+             goto out;
+         }
+
 +        /* Let GStreamer choose a default number of threads. */
 +        gst_util_set_object_arg(G_OBJECT(vconv), "n-threads", "0");
 +
          /* GStreamer outputs RGB video top-down, but DirectShow expects bottom-up. */
          if (!(flip = gst_element_factory_make("videoflip", NULL)))
          {
+From aa52473db040db290296cd65191f87c831bf2878 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 20 Oct 2020 17:03:24 -0500
+Subject: [PATCH] HACK: winegstreamer: Use capssetter to ignore non-default YUV
+ color spaces.
+
+---
+ dlls/winegstreamer/wg_parser.c | 53 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 51 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index a625f000254..be27b00cfd0 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -1293,7 +1293,17 @@ static void pad_added_cb(GstElement *element, GstPad *pad, gpointer user)
+ 
+     if (!strcmp(name, "video/x-raw"))
+     {
+-        GstElement *deinterlace, *vconv, *flip, *videobox, *vconv2;
++        GstElement *capssetter, *deinterlace, *vconv, *flip, *videobox, *vconv2;
++        /* Hack?: Flatten down the colorimetry to default values, without
++         * actually modifying the video at all.*/
++        if (!(capssetter = gst_element_factory_make("capssetter", NULL)))
++        {
++            ERR("Failed to create capssetter, are %u-bit GStreamer \"good\" plugins installed?\n",
++                    8 * (int)sizeof(void *));
++            goto out;
++        }
++        gst_util_set_object_arg(G_OBJECT(capssetter), "join", "true");
++        gst_util_set_object_arg(G_OBJECT(capssetter), "caps", "video/x-raw,colorimetry=0:0:0:0");
+ 
+         /* DirectShow can express interlaced video, but downstream filters can't
+          * necessarily consume it. In particular, the video renderer can't. */
+@@ -1050,6 +1096,8 @@ static void pad_added_cb(GstElement *element, GstPad *pad, gpointer user)
+         }
+
+         /* The bin takes ownership of these elements. */
++        gst_bin_add(GST_BIN(parser->container), capssetter);
++        gst_element_sync_state_with_parent(capssetter);
+         gst_bin_add(GST_BIN(parser->container), deinterlace);
+         gst_element_sync_state_with_parent(deinterlace);
+         gst_bin_add(GST_BIN(parser->container), vconv);
+@@ -1373,6 +1383,7 @@ static void pad_added_cb(GstElement *element, GstPad *pad, gpointer user)
+         gst_bin_add(GST_BIN(parser->container), vconv2);
+         gst_element_sync_state_with_parent(vconv2);
+ 
++        gst_element_link(capssetter, deinterlace);
+         gst_element_link(deinterlace, vconv);
+         gst_element_link(vconv, flip);
+         if (videobox)
+@@ -1385,7 +1396,7 @@ static void pad_added_cb(GstElement *element, GstPad *pad, gpointer user)
+             gst_element_link(flip, vconv2);
+         }
+ 
+-        stream->post_sink = gst_element_get_static_pad(deinterlace, "sink");
++        stream->post_sink = gst_element_get_static_pad(capssetter, "sink");
+         stream->post_src = gst_element_get_static_pad(vconv2, "src");
+         stream->flip = flip;
+         stream->box = videobox;
+
