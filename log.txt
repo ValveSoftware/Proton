@@ -1,0 +1,2503 @@
+HEAD is now at ce69d1068 Release 1.18.4
+add Guy's patch for gstreamer preroll buffer for media converter
+patching file gst/playback/gstdecodebin2.c
+HEAD is now at bb3f9de2 Release 1.18.4
+Removing gst/asfdemux/gstasfdemux.c.orig
+add Guy's patch to fix wmv playback in gst-plugins-ugly
+patching file gst/asfdemux/gstasfdemux.c
+Hunk #2 succeeded at 4851 (offset 31 lines).
+patching file gst/asfdemux/gstasfdemux.c
+HEAD is now at f5e6dde lsteamclient: update lsteamclient to latest from proton experimental
+add warframe 5 minute crash fix
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file steamclient_main.c
+HEAD is now at b84a03b4 [util] Enable d3d9.deferSurfaceCreation for Nights of Azure
+Removing meson.build.orig
+Removing src/d3d11/d3d11_texture.cpp.orig
+Removing src/d3d11/d3d11_video.cpp
+Removing src/d3d11/d3d11_video.h
+Removing src/dxso/dxso_compiler.cpp.orig
+Removing src/dxvk/dxvk_context.cpp.orig
+Removing src/dxvk/dxvk_context.h.orig
+Removing src/dxvk/dxvk_image.h.orig
+Removing src/dxvk/dxvk_options.cpp.orig
+Removing src/dxvk/dxvk_pipecompiler.cpp
+Removing src/dxvk/dxvk_pipecompiler.h
+Removing src/dxvk/meson.build.orig
+Removing src/dxvk_config/
+Removing src/spirv/spirv_writer.h
+Removing src/util/util_raw_vector.h
+add valve dxvk patches
+patching file src/d3d11/d3d11_texture.cpp
+Hunk #1 succeeded at 954 (offset 64 lines).
+patching file src/dxvk_config/dxvk_config.cpp
+patching file src/dxvk_config/dxvk_config.def
+patching file src/dxvk_config/dxvk_config.h
+patching file src/dxvk_config/dxvk_config.spec
+patching file src/dxvk_config/meson.build
+patching file src/dxvk_config/version.rc
+patching file src/meson.build
+proton re8 fixups
+patching file src/dxgi/dxgi_adapter.cpp
+patching file src/dxgi/dxgi_adapter.h
+add dxvk PR patches
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_compression.cpp
+patching file src/spirv/spirv_compression.h
+patching file src/spirv/spirv_code_buffer.cpp
+patching file src/spirv/spirv_code_buffer.h
+patching file src/spirv/spirv_writer.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/d3d9/d3d9_fixed_function.cpp
+patching file src/d3d9/d3d9_swvp_emu.cpp
+patching file src/dxbc/dxbc_compiler.cpp
+patching file src/dxso/dxso_compiler.cpp
+Hunk #1 succeeded at 251 (offset 1 line).
+patching file src/dxvk/dxvk_shader.cpp
+patching file src/dxvk/dxvk_shader.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_compression.h
+patching file src/spirv/spirv_module.cpp
+patching file src/spirv/spirv_module.h
+patching file src/spirv/spirv_code_buffer.cpp
+patching file src/spirv/spirv_code_buffer.h
+patching file src/spirv/spirv_compression.h
+patching file src/spirv/spirv_module.h
+patching file src/util/util_raw_vector.h
+patching file src/spirv/spirv_compression.h
+add dxvk nier replicant video interfaces patch
+patching file src/d3d11/d3d11_context.cpp
+patching file src/d3d11/d3d11_context.h
+patching file src/d3d11/d3d11_device.cpp
+patching file src/d3d11/d3d11_device.h
+patching file src/d3d11/d3d11_video.cpp
+patching file src/d3d11/d3d11_video.h
+patching file src/d3d11/meson.build
+add dxvk async patch
+patching file meson.build
+Hunk #2 succeeded at 126 (offset 23 lines).
+patching file src/dxvk/dxvk_context.cpp
+Hunk #1 succeeded at 3909 (offset 72 lines).
+Hunk #2 succeeded at 4143 (offset 48 lines).
+Hunk #3 succeeded at 4165 (offset 49 lines).
+Hunk #4 succeeded at 4578 (offset 228 lines).
+Hunk #5 succeeded at 5010 (offset 231 lines).
+patching file src/dxvk/dxvk_context.h
+Hunk #1 succeeded at 1177 with fuzz 2 (offset 18 lines).
+Hunk #2 succeeded at 1260 (offset 49 lines).
+patching file src/dxvk/dxvk_graphics.cpp
+patching file src/dxvk/dxvk_graphics.h
+patching file src/dxvk/dxvk_image.h
+Hunk #1 succeeded at 501 with fuzz 1 (offset 36 lines).
+Hunk #2 succeeded at 540 (offset 36 lines).
+patching file src/dxvk/dxvk_options.cpp
+Hunk #1 succeeded at 11 with fuzz 2 (offset 1 line).
+patching file src/dxvk/dxvk_options.h
+patching file src/dxvk/dxvk_pipecompiler.cpp
+patching file src/dxvk/dxvk_pipecompiler.h
+patching file src/dxvk/dxvk_pipemanager.cpp
+patching file src/dxvk/dxvk_pipemanager.h
+patching file src/dxvk/meson.build
+Hunk #1 succeeded at 90 with fuzz 1 (offset 7 lines).
+HEAD is now at 8e5c8cc6 ntdll-Junction_Points: Updates from Erich E. Hoover.
+Removing patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch.orig
+patching file patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
+Hunk #1 succeeded at 4 (offset 3 lines).
+HEAD is now at 99e47361a37 Release 6.8.
+Removing COPYING.arial
+Removing COPYING.cour
+Removing COPYING.msyh
+Removing COPYING.times
+Removing README.esync
+Removing autom4te.cache/
+Removing configure.ac.orig
+Removing configure.orig
+Removing dlls/advapi32/advapi.c.orig
+Removing dlls/amd_ags_x64/
+Removing dlls/atiadlxx/
+Removing dlls/bcrypt/bcrypt_internal.h.orig
+Removing dlls/bcrypt/bcrypt_main.c.orig
+Removing dlls/bcrypt/gnutls.c.orig
+Removing dlls/bcrypt/tests/bcrypt.c.orig
+Removing dlls/cryptext/tests/
+Removing dlls/d3d10core/d3d10core_main.c.orig
+Removing dlls/d3d11/device.c.orig
+Removing dlls/dbghelp/dwarf.c.orig
+Removing dlls/dsound/dsound.c.orig
+Removing dlls/dsound/dsound_eax.h
+Removing dlls/dsound/dsound_private.h.orig
+Removing dlls/dsound/eax.c
+Removing dlls/dsound/primary.c.orig
+Removing dlls/dwmapi/Makefile.in.orig
+Removing dlls/dwmapi/dwmapi_main.c.orig
+Removing dlls/dwrite/font.c.orig
+Removing dlls/dxgi/adapter.c.orig
+Removing dlls/dxgkrnl.sys/
+Removing dlls/dxgmms1.sys/
+Removing dlls/ext-ms-win-appmodel-usercontext-l1-1-0/
+Removing dlls/ext-ms-win-xaml-pal-l1-1-0/
+Removing dlls/iertutil/
+Removing dlls/imm32/imm.c.orig
+Removing dlls/inseng/icif.c
+Removing dlls/inseng/inf.c
+Removing dlls/inseng/inseng_private.h
+Removing dlls/kernel32/heap.c.orig
+Removing dlls/kernelbase/file.c.orig
+Removing dlls/kernelbase/process.c.orig
+Removing dlls/kernelbase/sync.c.orig
+Removing dlls/kernelbase/version.c.orig
+Removing dlls/mf/session.c.rej
+Removing dlls/mfplat/main.c.orig
+Removing dlls/mfreadwrite/reader.c.orig
+Removing dlls/mfreadwrite/reader.c.rej
+Removing dlls/mfreadwrite/tests/mfplat.c.orig
+Removing dlls/mscoree/metahost.c.orig
+Removing dlls/msctf/msctf.c.orig
+Removing dlls/msctf/msctf_internal.h.orig
+Removing dlls/msctf/threadmgr.c.orig
+Removing dlls/ntdll/Makefile.in.orig
+Removing dlls/ntdll/env.c.orig
+Removing dlls/ntdll/heap.c.orig
+Removing dlls/ntdll/loader.c.orig
+Removing dlls/ntdll/ntdll.spec.orig
+Removing dlls/ntdll/path.c.orig
+Removing dlls/ntdll/signal_x86_64.c.orig
+Removing dlls/ntdll/tests/sync.c
+Removing dlls/ntdll/unix/env.c.orig
+Removing dlls/ntdll/unix/esync.c
+Removing dlls/ntdll/unix/esync.h
+Removing dlls/ntdll/unix/file.c.orig
+Removing dlls/ntdll/unix/fsync.c
+Removing dlls/ntdll/unix/fsync.c.orig
+Removing dlls/ntdll/unix/fsync.h
+Removing dlls/ntdll/unix/loader.c.orig
+Removing dlls/ntdll/unix/loadorder.c.orig
+Removing dlls/ntdll/unix/process.c.orig
+Removing dlls/ntdll/unix/server.c.orig
+Removing dlls/ntdll/unix/signal_i386.c.orig
+Removing dlls/ntdll/unix/signal_x86_64.c.orig
+Removing dlls/ntdll/unix/sync.c.orig
+Removing dlls/ntdll/unix/system.c.orig
+Removing dlls/ntdll/unix/thread.c.orig
+Removing dlls/ntdll/unix/unix_private.h.orig
+Removing dlls/ntdll/unix/virtual.c.orig
+Removing dlls/ntdll/unixlib.h.orig
+Removing dlls/ntdll/version.c.orig
+Removing dlls/nvapi/
+Removing dlls/nvapi64/
+Removing dlls/nvcuda/
+Removing dlls/nvcuvid/
+Removing dlls/nvencodeapi/
+Removing dlls/nvencodeapi64/
+Removing dlls/quartz/filtergraph.c.orig
+Removing dlls/shell32/resources/ietoolbar.bmp
+Removing dlls/shell32/resources/ietoolbar.svg
+Removing dlls/shell32/resources/ietoolbar_small.bmp
+Removing dlls/shell32/resources/ietoolbar_small.svg
+Removing dlls/shell32/shellnew.c
+Removing dlls/user32/focus.c.orig
+Removing dlls/user32/hook.c.orig
+Removing dlls/user32/user_private.h.orig
+Removing dlls/user32/win.c.orig
+Removing dlls/wbemprox/builtin.c.orig
+Removing dlls/win32k.sys/
+Removing dlls/wined3d/adapter_gl.c.orig
+Removing dlls/wined3d/adapter_vk.c.orig
+Removing dlls/wined3d/cs.c.orig
+Removing dlls/wined3d/device.c.orig
+Removing dlls/wined3d/directx.c.orig
+Removing dlls/wined3d/texture.c.orig
+Removing dlls/wined3d/wined3d.spec.orig
+Removing dlls/wined3d/wined3d_main.c.orig
+Removing dlls/wined3d/wined3d_private.h.orig
+Removing dlls/winegstreamer/colorconvert.c
+Removing dlls/winegstreamer/decode_transform.c
+Removing dlls/winegstreamer/main.c.orig
+Removing dlls/winegstreamer/main.c.rej
+Removing dlls/winegstreamer/media_source.c.orig
+Removing dlls/winegstreamer/quartz_parser.c.orig
+Removing dlls/winegstreamer/wg_parser.c.orig
+Removing dlls/winemapi/winemapi_private.h
+Removing dlls/winemapi/xdg-email.c
+Removing dlls/winepulse.drv/mmdevdrv.c.orig
+Removing dlls/winevulkan/loader.c.orig
+Removing dlls/winevulkan/make_vulkan.orig
+Removing dlls/winevulkan/vulkan.c.orig
+Removing dlls/winevulkan/vulkan_private.h.orig
+Removing dlls/winevulkan/vulkan_thunks.c.orig
+Removing dlls/winevulkan/vulkan_thunks.h.orig
+Removing dlls/winex11.drv/bitblt.c.orig
+Removing dlls/winex11.drv/display.c.orig
+Removing dlls/winex11.drv/event.c.orig
+Removing dlls/winex11.drv/fs.c
+Removing dlls/winex11.drv/init.c.orig
+Removing dlls/winex11.drv/mouse.c.orig
+Removing dlls/winex11.drv/opengl.c.orig
+Removing dlls/winex11.drv/vulkan.c.orig
+Removing dlls/winex11.drv/window.c.orig
+Removing dlls/winex11.drv/x11drv.h.orig
+Removing dlls/winex11.drv/x11drv_main.c.orig
+Removing dlls/winex11.drv/xfixes.h
+Removing dlls/winex11.drv/xpresent.h
+Removing dlls/ws2_32/protocol.c.orig
+Removing dlls/ws2_32/socket.c.orig
+Removing dlls/xactengine3_7/tests/globals.xgs
+Removing dlls/xactengine3_7/tests/rsrc.rc
+Removing dlls/xaudio2_7/xaudio_dll.c.orig
+Removing fonts/arial.sfd
+Removing fonts/arial.ttf
+Removing fonts/cour.sfd
+Removing fonts/cour.ttf
+Removing fonts/msyh.sfd
+Removing fonts/msyh.ttf
+Removing fonts/times.sfd
+Removing fonts/times.ttf
+Removing include/Makefile.in.orig
+Removing include/apiset.h
+Removing include/config.h.in.orig
+Removing include/config.h.in~
+Removing include/cuda.h
+Removing include/cuviddec.h
+Removing include/mfidl.idl.orig
+Removing include/ntifs.h
+Removing include/nvapi.h
+Removing include/nvcuvid.h
+Removing include/nvencodeapi.h
+Removing include/stdole32.idl
+Removing include/wine/server_protocol.h.orig
+Removing include/wine/vulkan_driver.h.orig
+Removing include/wine/wined3d-interop.idl
+Removing include/wine/wined3d.h.orig
+Removing include/winnt.h.orig
+Removing loader/wine.inf.in.orig
+Removing programs/dotnetfx35/
+Removing programs/dxdiag/output.c.orig
+Removing programs/findstr/findstr.rc
+Removing programs/findstr/resources.h
+Removing programs/wineboot/wineboot.c.orig
+Removing programs/winecfg/appdefaults.c.orig
+Removing programs/winecfg/staging.c
+Removing programs/winedbg/tgt_active.c.orig
+Removing server/async.c.orig
+Removing server/change.c.orig
+Removing server/completion.c.orig
+Removing server/console.c.orig
+Removing server/debugger.c.orig
+Removing server/device.c.orig
+Removing server/directory.c.orig
+Removing server/esync.c
+Removing server/esync.h
+Removing server/event.c.orig
+Removing server/fd.c.orig
+Removing server/file.c.orig
+Removing server/file.h.orig
+Removing server/fsync.c
+Removing server/fsync.c.orig
+Removing server/fsync.h
+Removing server/handle.c.orig
+Removing server/mailslot.c.orig
+Removing server/main.c.orig
+Removing server/mapping.c.orig
+Removing server/mutex.c.orig
+Removing server/named_pipe.c.orig
+Removing server/object.h.orig
+Removing server/process.c.orig
+Removing server/process.h.orig
+Removing server/protocol.def.orig
+Removing server/queue.c.orig
+Removing server/registry.c.orig
+Removing server/request.c.orig
+Removing server/scheduler.c
+Removing server/semaphore.c.orig
+Removing server/sock.c.orig
+Removing server/symlink.c.orig
+Removing server/thread.c.orig
+Removing server/timer.c.orig
+Removing server/token.c.orig
+Removing server/trace.c.orig
+Removing server/winstation.c.orig
+Removing tools/makedep.c.orig
+Removing tools/widl/write_sltg.c
+revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers
+Auto-merging dlls/winex11.drv/display.c
+revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros
+Auto-merging include/config.h.in
+Auto-merging dlls/winebus.sys/bus_sdl.c
+Auto-merging configure.ac
+Auto-merging configure
+Auto-merging dlls/user32/rawinput.c
+applying staging patches
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0001-windowscodecs-Avoid-implicit-cast-of-interface-point.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0021-d2d1-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0022-d3d11-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0023-d3d8-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0024-d3d9-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0025-ddraw-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0026-dwrite-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0027-msxml3-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0028-oleaut32-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0029-rpcrt4-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0030-vbscript-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Compiler_Warnings/0032-wsdapi-Avoid-implicit-cast-of-interface-pointer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Pipelight/0001-winex11-Implement-X11DRV_FLUSH_GDI_DISPLAY-ExtEscape-c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Pipelight/0002-user32-Decrease-minimum-SetTimer-interval-to-5-ms.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Pipelight/0004-winex11.drv-Indicate-direct-rendering-through-OpenGL.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Staging/0001-kernel32-Add-winediag-message-to-show-warning-that-t.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/Staging/0002-winelib-Append-Staging-at-the-end-of-the-version-s.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/advapi32-LsaLookupPrivilegeName/0001-advapi32-Fix-error-code-when-calling-LsaOpenPolicy-f.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/advapi32-LsaLookupPrivilegeName/0002-advapi32-Use-TRACE-for-LsaOpenPolicy-LsaClose.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/api-ms-win-Stub_DLLs/0006-iertutil-Add-dll-and-add-stub-for-ordinal-811.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/api-ms-win-Stub_DLLs/0009-ext-ms-win-xaml-pal-l1-1-0-Add-dll-and-add-stub-for-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/api-ms-win-Stub_DLLs/0010-ext-ms-win-appmodel-usercontext-l1-1-0-Add-dll-and-a.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/api-ms-win-Stub_DLLs/0012-ext-ms-win-xaml-pal-l1-1-0-Add-stub-for-GetThemeServ.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/api-ms-win-Stub_DLLs/0027-uiautomationcore-Add-dll-and-stub-some-functions.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/cmd-launch-association/0001-cmd-Support-for-launching-programs-based-on-file-ass.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/cmd-launch-association/0002-cmd-ftype-failed-to-clear-file-associations.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/comctl32-rebar-capture/0001-comctl32-Fixed-rebar-behaviour-when-there-s-capture-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/comctl32-version_6/0001-comctl32-Bump-version-to-6.0.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/comdlg32-lpstrFileTitle/0001-comdlg32-Postpone-setting-ofn-lpstrFileTitle-to-work.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/crypt32-CMS_Certificates/0001-crypt32-Skip-unknown-item-when-decoding-a-CMS-certif.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/cryptext-CryptExtOpenCER/0001-cryptext-Implement-CryptExtOpenCER.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0001-include-Add-cuda.h.h.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0002-nvcuda-Add-stub-dll.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0003-nvcuda-First-implementation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0004-nvcuda-Implement-new-functions-added-in-CUDA-6.5.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0005-nvcuda-Properly-wrap-undocumented-ContextStorage-int.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0006-nvcuda-Emulate-two-d3d9-initialization-functions.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0007-nvcuda-Properly-wrap-stream-callbacks-by-forwarding-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0008-nvcuda-Add-support-for-CUDA-7.0.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0009-nvcuda-Implement-cuModuleLoad-wrapper-function.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0010-nvcuda-Search-for-dylib-library-on-Mac-OS-X.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuda-CUDA_Support/0011-nvcuda-Add-semi-stub-for-cuD3D10GetDevice.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0001-nvapi-First-implementation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0002-nvapi-Add-stubs-for-NvAPI_EnumLogicalGPUs-and-undocu.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0003-nvapi-Add-NvAPI_GetPhysicalGPUsFromLogicalGPU.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0004-nvapi-Add-stub-for-NvAPI_EnumPhysicalGPUs.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0005-nvapi-Add-stubs-for-NvAPI_GPU_GetFullName.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0006-nvapi-Explicity-return-NULL-for-0x33c7358c-and-0x593.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0007-nvapi-Add-stub-for-NvAPI_DISP_GetGDIPrimaryDisplayId.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0008-nvapi-Add-stub-for-EnumNvidiaDisplayHandle.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0009-nvapi-Add-stub-for-NvAPI_SYS_GetDriverAndBranchVersi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0010-nvapi-Add-stub-for-NvAPI_Unload.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0011-nvapi-Add-stub-for-NvAPI_D3D_GetCurrentSLIState.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0012-nvapi-tests-Use-structure-to-list-imports.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0013-nvapi-Add-stub-for-NvAPI_GetLogicalGPUFromDisplay.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0014-nvapi-Add-stub-for-NvAPI_D3D_GetObjectHandleForResou.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0015-nvapi-Add-stub-for-NvAPI_D3D9_RegisterResource.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0016-nvapi-Improve-NvAPI_D3D_GetCurrentSLIState.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0017-nvapi-Implement-NvAPI_GPU_Get-Physical-Virtual-Frame.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0018-nvapi-Add-stub-for-NvAPI_GPU_GetGpuCoreCount.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0019-nvapi-Implement-NvAPI_D3D11_SetDepthBoundsTest.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0020-nvapi-Implement-NvAPI_D3D11_CreateDevice-and-NvAPI_D.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvapi-Stub_DLL/0021-Revert-wined3d-No-longer-export-wined3d_device_set_r.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0001-d3d11-Add-stub-deferred-rendering-context.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0002-wined3d-Add-wined3d_resource_map_info-function.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0003-d3d11-Initial-implementation-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0004-d3d11-Implement-CSSetShader-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0005-d3d11-Implement-CSSetConstantBuffers-for-deferred-co.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0006-d3d11-Implement-Dispatch-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0007-d3d11-Implement-CSSetUnorderedAccessViews-for-deferr.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0008-d3d11-Implement-ClearRenderTargetView-for-deferred-c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0009-d3d11-Implement-Draw-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0010-d3d11-Implement-ClearDepthStencilView-for-deferred-c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0011-d3d11-Implement-GSSetShader-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0012-d3d11-Implement-GSSetConstantBuffers-for-deferred-co.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0013-d3d11-Implement-CSSetShaderResources-for-deferred-co.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0014-d3d11-Implement-GSSetShaderResources-for-deferred-co.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0015-d3d11-Implement-HSSetShaderResources-for-deferred-co.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0016-d3d11-Implement-VSSetShaderResources-for-deferred-co.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0017-d3d11-Implement-CSSetSamplers-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0018-d3d11-Implement-GSSetSamplers-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0019-d3d11-Implement-HSSetSamplers-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0020-d3d11-Implement-VSSetSamplers-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0021-d3d11-Implement-Begin-and-End-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0022-d3d11-Implement-CopyResource-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0023-d3d11-Implement-SetResourceMinLOD-for-deferred-conte.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0024-d3d11-Implement-CopySubresourceRegion-for-deferred-c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0025-d3d11-Implement-ResolveSubresource-for-deferred-cont.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0026-d3d11-Implement-CopyStructureCount-for-deferred-cont.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0027-d3d11-Implement-DrawAuto-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0028-d3d11-Implement-DrawInstanced-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0029-d3d11-Implement-DrawInstancedIndirect-for-deferred-c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0030-d3d11-Implement-DrawIndexedInstancedIndirect-for-def.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0031-d3d11-Implement-ClearUnorderedAccessViewUint-for-def.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0032-d3d11-Implement-ClearUnorderedAccessViewFloat-for-de.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0033-d3d11-Implement-RsSetScissorRects-for-deferred-conte.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0034-d3d11-Implement-OMSetRenderTargetsAndUnorderedAccess.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0035-d3d11-Implement-SOSetTargets-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0036-d3d11-Implement-GenerateMips-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0037-d3d11-Implement-DispatchIndirect-for-deferred-contex.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0038-d3d11-Implement-SetPredication-for-deferred-contexts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0039-d3d11-Implement-d3d11_deferred_context_UpdateSubreso.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0040-d3d11-Implement-restoring-of-state-after-executing-a.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0041-d3d11-Allow-NULL-pointer-for-initial-count-in-d3d11_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0042-d3d11-Correctly-align-map-info-buffer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0043-d3d11-tests-Add-a-basic-test-for-drawing-with-deferr.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0044-d3d11-Support-ID3D11DeviceContext1-for-deferred-cont.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3d11-Deferred_Context/0045-d3d11-Implement-ID3D11Device2-GetImmediateContext1.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3drm-IDirect3D3-support/0001-d3drm-Support-IDirect3D3-when-creating-device.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-BumpLuminance/0002-d3dx9_36-Add-format-description-for-X8L8V8U8-for-for.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-CloneEffect/0001-d3dx9_36-Improve-stub-for-ID3DXEffectImpl_CloneEffec.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-D3DXDisassembleShader/0004-d3dx9_36-Implement-D3DXDisassembleShader.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-D3DXDisassembleShader/0005-d3dx9_36-tests-Add-initial-tests-for-D3DXDisassemble.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-D3DXDisassembleShader/0006-d3dx9_36-tests-Add-additional-tests-for-special-case.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-D3DXOptimizeVertices/0002-d3dx9_36-Add-semi-stub-for-D3DXOptimizeVertices.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-D3DXSHProjectCubeMap/0001-d3dx9_-Add-D3DXSHProjectCubeMap-stub.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-D3DXStubs/0003-d3dx9-Implement-D3DXComputeTangent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-DDS/0001-d3dx9_36-Add-support-for-FOURCC-surface-to-save_dds_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-DDS/0002-d3dx9_36-Improve-D3DXSaveTextureToFile-to-save-simpl.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-Filter_Warnings/0001-d3dx9_36-Filter-out-D3DCompile-warning-messages-that.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/d3dx9_36-UpdateSkinnedMesh/0001-d3dx9_36-Implement-ID3DXSkinInfoImpl_UpdateSkinnedMe.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dbghelp-Debug_Symbols/0001-dbghelp-Always-check-for-debug-symbols-in-BINDIR.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ddraw-Device_Caps/0001-ddraw-Don-t-set-HWTRANSFORMANDLIGHT-flag-on-d3d7-RGB.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ddraw-Device_Caps/0002-ddraw-Set-dwZBufferBitDepth-in-ddraw7_GetCaps.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ddraw-IDirect3DTexture2_Load/0001-ddraw-Allow-size-and-format-conversions-in-IDirect3D.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ddraw-IDirect3DTexture2_Load/0002-ddraw-tests-Add-more-tests-for-IDirect3DTexture2-Loa.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ddraw-Silence_FIXMEs/0001-ddraw-Silence-noisy-FIXME-about-unimplemented-D3DPRO.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ddraw-version-check/0001-ddraw-Return-correct-devices-based-off-requested-Dir.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-joy-mappings/0001-dinput-Load-users-Joystick-mappings.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-joy-mappings/0002-dinput-Allow-empty-Joystick-mappings.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-joy-mappings/0003-dinput-Support-username-in-Config-dialog.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-joy-mappings/0004-dinput-Dont-allow-Fixed-actions-to-be-changed.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-SetActionMap-genre/0001-dinput-Allow-mapping-of-controls-based-of-Genre-type.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-SetActionMap-genre/0002-dinput-Improved-tracing-of-Semantic-value.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-axis-recalc/0001-dinput-Recalculated-Axis-after-deadzone-change.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-reconnect-joystick/0001-dinput-Allow-reconnecting-to-disconnected-joysticks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dinput-remap-joystick/0001-dinput-Allow-remapping-of-joystick-buttons.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-Fast_Mixer/0001-dsound-Add-a-linear-resampler-for-use-with-a-large-n.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0001-dsound-Apply-filters-before-sound-is-multiplied-to-s.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0002-dsound-Add-EAX-v1-constants-and-structs.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0003-dsound-Report-that-we-support-EAX-v1.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0004-dsound-Add-EAX-propset-stubs.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0005-dsound-Add-EAX-presets.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0006-dsound-Support-getting-and-setting-EAX-properties.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0007-dsound-Support-getting-and-setting-EAX-buffer-proper.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0008-dsound-Add-EAX-init-and-free-stubs.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0009-dsound-Feed-data-through-EAX-function.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0010-dsound-Allocate-EAX-delay-lines.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0011-dsound-Add-EAX-VerbPass-stub.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0012-dsound-Implement-EAX-lowpass-filter.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0013-dsound-Add-delay-line-EAX-functions.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0014-dsound-Implement-EAX-early-reflections.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0015-dsound-Implement-EAX-decorrelator.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0016-dsound-Implement-EAX-late-reverb.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0017-dsound-Implement-EAX-late-all-pass-filter.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0018-dsound-Various-improvements-to-EAX-support.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0019-dsound-Allow-disabling-of-EAX-support-in-the-registr.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0020-dsound-Add-stub-support-for-DSPROPSETID_EAX20_Listen.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0021-dsound-Add-stub-support-for-DSPROPSETID_EAX20_Buffer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0022-dsound-Enable-EAX-by-default.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dsound-EAX/0023-dsound-Fake-success-for-EAX-Set-Buffer-ListenerPrope.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dwrite-FontFallback/0001-dwrite-Test-IDWriteTextFormat-with-nonexistent-font.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dwrite-FontFallback/0002-dwrite-Test-GetMetrics-with-custom-fontcollection.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dwrite-FontFallback/0004-dwrite-Use-font-fallback-when-mapping-characters.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dwrite-FontFallback/0005-dwrite-Use-MapCharacters-for-non-visual-characters.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/dwrite-FontFallback/0006-dwrite-Use-MapCharacters-for-dummy-line-metrics.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-DOS_Attributes/0001-ntdll-Implement-retrieving-DOS-attributes-in-fd_-get.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-DOS_Attributes/0003-ntdll-Implement-storing-DOS-attributes-in-NtSetInfor.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-DOS_Attributes/0004-ntdll-Implement-storing-DOS-attributes-in-NtCreateFi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-DOS_Attributes/0005-libport-Add-support-for-Mac-OS-X-style-extended-attr.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-DOS_Attributes/0006-libport-Add-support-for-FreeBSD-style-extended-attri.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-DOS_Attributes/0007-ntdll-Perform-the-Unix-style-hidden-file-check-withi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-DOS_Attributes/0008-ntdll-Always-store-SAMBA_XATTR_DOS_ATTRIB-when-path-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtQueryEaFile/0001-ntdll-Improve-stub-of-NtQueryEaFile.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0001-ntdll-Add-support-for-junction-point-creation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0002-ntdll-Add-support-for-reading-junction-points.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0003-ntdll-Add-support-for-deleting-junction-points.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0004-ntdll-Add-a-test-for-junction-point-advertisement.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0005-server-Add-support-for-deleting-junction-points-with.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0006-kernel32-Advertise-junction-point-support.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0007-ntdll-Add-support-for-absolute-symlink-creation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0008-ntdll-Add-support-for-reading-absolute-symlinks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0009-ntdll-Add-support-for-deleting-symlinks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0010-ntdll-Add-support-for-relative-symlink-creation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0011-ntdll-Add-support-for-reading-relative-symlinks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0012-ntdll-Add-support-for-file-symlinks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0013-ntdll-Allow-creation-of-dangling-reparse-points-to-n.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0014-ntdll-Correctly-report-file-symbolic-links-as-files.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0015-kernelbase-Convert-FILE_FLAG_OPEN_REPARSE_POINT-for-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0016-server-Implement-FILE_OPEN_REPARSE_POINT-option.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0017-ntdll-Allow-set_file_times_precise-to-work-on-repars.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0018-server-Properly-handle-file-symlink-deletion.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0019-server-Properly-handle-deleting-dangling-symlinks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0020-kernelbase-Use-FILE_OPEN_REPARSE_POINT-in-RemoveDire.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0021-ntdll-Always-report-symbolic-links-as-containing-zer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0022-ntdll-Find-dangling-symlinks-quickly.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0023-server-Fix-obtaining-information-about-a-symlink.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0024-ntdll-Succeed-with-no-data-for-NtReadFile-on-reparse.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0025-ntdll-Support-reparse-point-properties-in-fd_get_fil.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0026-ntdll-Add-support-for-FileAttributeTagInformation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0027-kernel32-Implement-CreateSymbolicLink-A-W-with-ntdll.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0028-kernel32-Add-reparse-support-to-FindNextFile.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0029-wcmd-Display-reparse-point-type-in-directory-listing.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0030-wcmd-Show-reparse-point-target-in-directory-listing.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0031-wcmd-Add-junction-point-support-to-mklink.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0032-server-Properly-handle-renames-involving-symlinks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0033-kernelbase-Use-FILE_OPEN_REPARSE_POINT-in-MoveFileWi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0034-kernelbase-Use-FILE_OPEN_REPARSE_POINT-in-DeleteFile.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0035-ntdll-Treat-undecoded-unix-symlinks-as-WSL-Linux-Uni.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0036-ntdll-Add-support-for-creating-Unix-Linux-symlinks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0037-ntdll-Strip-the-wine-prefix-from-reparse-point-paths.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0038-ntdll-Add-a-marker-to-reparse-point-paths-to-indicat.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Junction_Points/0039-server-Rewrite-absolute-reparse-point-targets-if-the.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Key_State/0001-server-Create-message-queue-and-thread-input-in-set_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Key_State/0002-server-Lock-thread-input-keystate-whenever-it-is-mod.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Key_State/0003-server-Create-message-queue-and-thread-input-in-get_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-PeekMessage/0001-server-Fix-handling-of-GetMessage-after-previous-Pee.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Realtime_Priority/0001-wineserver-Draft-to-implement-priority-levels-throug.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Signal_Thread/0001-server-Do-not-signal-thread-until-it-is-really-gone.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0001-configure-Check-for-sys-eventfd.h-ppoll-and-shm_open.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0002-server-Create-server-objects-for-eventfd-based-synch.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0003-ntdll-Create-eventfd-based-objects-for-semaphores.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0004-ntdll-Implement-NtReleaseSemaphore.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0005-ntdll-Implement-NtClose.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0006-ntdll-Implement-NtWaitForMultipleObjects.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0007-ntdll-server-Implement-NtCreateEvent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0008-ntdll-Implement-NtSetEvent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0009-ntdll-Implement-NtResetEvent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0010-ntdll-Implement-waiting-on-manual-reset-events.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0011-server-Add-an-object-operation-to-grab-the-esync-fil.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0012-server-Add-a-request-to-get-the-eventfd-file-descrip.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0013-server-Create-eventfd-file-descriptors-for-process-o.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0014-ntdll-server-Implement-waiting-on-server-bound-objec.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0015-server-Create-eventfd-file-descriptors-for-event-obj.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0016-server-Allow-re-setting-esync-events-on-the-server-s.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0017-ntdll-Try-again-if-poll-returns-EINTR.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0018-server-Create-eventfd-file-descriptors-for-thread-ob.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0019-rpcrt4-Avoid-closing-the-server-thread-handle-while-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0020-server-Create-eventfd-file-descriptors-for-message-q.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0021-server-ntdll-Implement-message-waits.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0022-server-Create-eventfd-descriptors-for-device-manager.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0023-ntdll-server-Implement-NtCreateMutant.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0024-ntdll-Implement-NtReleaseMutant.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0025-ntdll-Implement-waiting-on-mutexes.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0026-ntdll-Implement-wait-all.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0027-esync-Add-a-README.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0028-ntdll-Implement-NtSignalAndWaitForSingleObject.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0029-ntdll-Implement-NtOpenSemaphore.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0030-ntdll-Implement-NtOpenEvent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0031-ntdll-Implement-NtOpenMutant.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0032-server-Implement-esync_map_access.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0033-server-Implement-NtDuplicateObject.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0034-server-Create-eventfd-descriptors-for-timers.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0035-ntdll-server-Implement-alertable-waits.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0036-esync-Update-README.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0037-kernel32-tests-Mark-some-existing-tests-as-failing-u.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0038-kernel32-tests-Add-some-semaphore-tests.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0039-kernel32-tests-Add-some-event-tests.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0040-kernel32-tests-Add-some-mutex-tests.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0041-kernel32-tests-Add-some-tests-for-wait-timeouts.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0042-kernel32-tests-Zigzag-test.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0043-ntdll-Implement-NtQuerySemaphore.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0044-ntdll-Implement-NtQueryEvent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0045-ntdll-Implement-NtQueryMutant.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0046-server-Create-eventfd-descriptors-for-pseudo-fd-obje.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0047-esync-Update-README.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0048-esync-Add-note-about-file-limits-not-being-raised-wh.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0049-ntdll-Try-to-avoid-poll-for-uncontended-objects.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0050-ntdll-server-Try-to-avoid-poll-for-signaled-events.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0051-esync-Update-README.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0052-ntdll-Implement-NtPulseEvent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0053-esync-Update-README.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0054-server-Create-esync-file-descriptors-for-true-file-o.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0055-ntdll-server-Abandon-esync-mutexes-on-thread-exit.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/eventfd_synchronization/0056-server-Create-esync-file-descriptors-for-console-ser.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/explorer-Video_Registry_Key/0001-explorer-Create-CurrentControlSet-Control-Video-regi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/fonts-Missing_Fonts/0001-fonts-Add-Liberation-Sans-as-an-Arial-replacement.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/fonts-Missing_Fonts/0002-fonts-Add-Liberation-Serif-as-an-Times-New-Roman-rep.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/fonts-Missing_Fonts/0003-fonts-Add-Liberation-Mono-as-an-Courier-New-replacem.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/fonts-Missing_Fonts/0004-fonts-Add-WenQuanYi-Micro-Hei-as-a-Microsoft-Yahei-r.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/fonts-Missing_Fonts/0005-Add-licenses-for-fonts-as-separate-files.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/gdi32-rotation/0001-gdi32-fix-for-rotated-Arc-ArcTo-Chord-and-Pie-drawin.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/gdi32-rotation/0002-gdi32-fix-for-rotated-ellipse.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/gdiplus-Performance-Improvements/0001-gdiplus-Change-the-order-of-x-y-loops-in-the-scaler.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/gdiplus-Performance-Improvements/0002-gdiplus-Change-multiplications-by-additions-in-the-x.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/gdiplus-Performance-Improvements/0003-gdiplus-Remove-ceilf-floorf-calls-from-bilinear-scal.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/gdiplus-Performance-Improvements/0004-gdiplus-Prefer-using-pre-multiplied-ARGB-data-in-the.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/imm32-message_on_focus/0001-imm32-Only-generate-WM_IME_SETCONTEXT-message-if-win.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/include-winsock/0001-include-Always-define-hton-ntoh-macros.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/inseng-Implementation/0001-inseng-Implement-CIF-reader-and-download-functions.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/iphlpapi-System_Ping/0001-iphlpapi-Fallback-to-system-ping-when-ICMP-permissio.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-FileDispositionInformation/0001-ntdll-tests-Added-tests-to-set-disposition-on-file-w.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-FileDispositionInformation/0002-server-Do-not-allow-to-set-disposition-on-file-which.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/kernel32-CopyFileEx/0001-kernel32-Add-support-for-progress-callback-in-CopyFi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/kernel32-Debugger/0001-kernel32-Always-start-debugger-on-WinSta0.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/kernel32-Job_Tests/0001-kernel32-tests-Add-tests-for-job-object-accounting.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/kernel32-Processor_Group/0002-kernel32-Add-stub-for-SetThreadIdealProcessorEx.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/krnl386.exe16-GDT_LDT_Emulation/0001-krnl386.exe16-Emulate-GDT-and-LDT-access.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/krnl386.exe16-Invalid_Console_Handles/0001-krnl386.exe16-Really-translate-all-invalid-console-h.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/libs-Unicode_Collation/0001-kernelbase-Implement-sortkey-generation-on-official-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/libs-Unicode_Collation/0002-kernelbase-Implement-sortkey-punctuation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/libs-Unicode_Collation/0003-kernelbase-Implement-sortkey-for-Japanese-characters.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/libs-Unicode_Collation/0004-kernelbase-Implement-sortkey-expansion.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/libs-Unicode_Collation/0005-kernelbase-Implement-sortkey-language-support.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/libs-Unicode_Collation/0006-kernelbase-Implement-CompareString-functions.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/loader-KeyboardLayouts/0001-loader-Add-Keyboard-Layouts-registry-enteries.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/mmsystem.dll16-MIDIHDR_Refcount/0001-mmsystem.dll16-Refcount-midihdr-to-work-around-buggy.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/mmsystem.dll16-MIDIHDR_Refcount/0002-mmsystem.dll16-Translate-MidiIn-messages.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/mountmgr-DosDevices/0001-mountmgr.sys-Write-usable-device-paths-into-HKLM-SYS.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/mscoree-CorValidateImage/0001-mscoree-Implement-_CorValidateImage.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/mshtml-HTMLLocation_put_hash/0001-mshtml-Add-IHTMLLocation-hash-property-s-getter-impl.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/mshtml-TranslateAccelerator/0001-mshtml-Improve-IOleInPlaceActiveObject-TranslateAcce.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/msi-msi_vcl_get_cost/0001-msi-Do-not-sign-extend-after-multiplying.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/msvcrt-Math_Precision/0001-msvcrt-Calculate-sinh-cosh-exp-pow-with-higher-preci.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/msxml3-FreeThreadedXMLHTTP60/0001-include-Remove-interfaces-already-define-in-msxml6.i.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/msxml3-FreeThreadedXMLHTTP60/0002-include-Add-IXMLHTTPRequest2-3-interfaces.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/msxml3-FreeThreadedXMLHTTP60/0003-msxml3-Implement-FreeThreadedXMLHTTP60.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-APC_Performance/0001-ntdll-Reuse-old-async-fileio-structures-if-possible.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-ApiSetMap/0001-ntdll-Add-dummy-apiset-to-PEB.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-ForceBottomUpAlloc/0001-ntdll-Increase-step-after-failed-map-attempt-in-try_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-ForceBottomUpAlloc/0002-ntdll-Increase-free-ranges-view-block-size-on-64-bit.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-ForceBottomUpAlloc/0003-ntdll-Force-virtual-memory-allocation-order.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-ForceBottomUpAlloc/0004-ntdll-Exclude-natively-mapped-areas-from-free-areas-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0001-ntdll-Trigger-write-watches-before-passing-userdata-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0003-ntdll-Setup-a-temporary-signal-handler-during-proces.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0004-ntdll-Properly-handle-PAGE_WRITECOPY-protection.-try.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0005-ntdll-Track-if-a-WRITECOPY-page-has-been-modified.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0006-ntdll-Support-WRITECOPY-on-x64.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0007-ntdll-Report-unmodified-WRITECOPY-pages-as-shared.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0008-ntdll-Fallback-to-copy-pages-for-WRITECOPY.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-WRITECOPY/0009-kernel32-tests-psapi-tests-Update-tests.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Builtin_Prot/0001-ntdll-Fix-holes-in-ELF-mappings.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-CriticalSection/0002-ntdll-Add-inline-versions-of-RtlEnterCriticalSection.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-CriticalSection/0003-ntdll-Use-fast-CS-functions-for-heap-locking.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-CriticalSection/0004-ntdll-Use-fast-CS-functions-for-threadpool-locking.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Dealloc_Thread_Stack/0001-ntdll-Do-not-allow-to-allocate-thread-stack-for-curr.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Exception/0002-ntdll-OutputDebugString-should-throw-the-exception-a.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-FileFsFullSizeInformation/0001-ntdll-Add-support-for-FileFsFullSizeInformation-clas.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-HashLinks/0001-ntdll-Implement-HashLinks-field-in-LDR-module-data.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-HashLinks/0002-ntdll-Use-HashLinks-when-searching-for-a-dll-using-t.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Heap_Improvements/0001-ntdll-Add-helper-function-to-delete-free-blocks.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Heap_Improvements/0002-ntdll-Improve-heap-allocation-performance.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Manifest_Range/0001-ntdll-Support-ISOLATIONAWARE_MANIFEST_RESOURCE_ID-ra.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0001-ntdll-tests-Move-some-tests-to-a-new-sync.c-file.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0002-ntdll-tests-Add-some-tests-for-Rtl-resources.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0003-ntdll-Implement-NtAlertThreadByThreadId-and-NtWaitFo.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0004-ntdll-tests-Add-basic-tests-for-thread-id-alert-func.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0005-ntdll-Implement-thread-ID-alerts-using-futexes-if-po.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0006-ntdll-Implement-thread-ID-alerts-using-Mach-semaphor.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0007-ntdll-Reimplement-Win32-futexes-on-top-of-thread-ID-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0008-ntdll-Merge-critsection.c-into-sync.c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0009-ntdll-Reimplement-the-critical-section-fast-path-on-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0010-ntdll-Get-rid-of-the-direct-futex-path-for-condition.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtAlertThreadByThreadId/0011-ntdll-Reimplement-SRW-locks-on-top-of-Win32-futexes.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtQuerySection/0002-kernel32-tests-Add-tests-for-NtQuerySection.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtSetLdtEntries/0001-ntdll-Implement-NtSetLdtEntries.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-NtSetLdtEntries/0002-libs-wine-Allow-to-modify-reserved-LDT-entries.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-ProcessQuotaLimits/0001-ntdll-Add-fake-data-implementation-for-ProcessQuotaL.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-RtlFirstFreeAce/0001-ntdll-Check-return-parameter-before-use.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-RtlFirstFreeAce/0002-ntdll-RtlFirstFreeAce-only-return-FALSE-on-error.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-RtlQueryPackageIdentity/0003-ntdll-tests-Add-basic-tests-for-RtlQueryPackageIdent.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-Zero_mod_name/0001-ntdll-Initialize-mod_name-to-zero.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-aarch-TEB/0001-configure-Avoid-clobbering-x18-on-arm64-within-wine.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-aarch-TEB/0002-ntdll-Always-restore-TEB-to-x18-on-aarch-64-on-retur.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntoskrnl-Stubs/0009-ntoskrnl.exe-Implement-MmMapLockedPages-and-MmUnmapL.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ntoskrnl-Stubs/0011-ntoskrnl.exe-Add-IoGetDeviceAttachmentBaseRef-stub.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvcuvid-CUDA_Video_Support/0001-nvcuvid-First-implementation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvencodeapi-Video_Encoder/0001-nvencodeapi-First-implementation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvencodeapi-Video_Encoder/0002-nvencodeapi-Add-debian-specific-paths-to-native-libr.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/nvencodeapi-Video_Encoder/0003-nvencodeapi-Add-support-for-version-6.0.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-CreateTypeLib/0001-oleaut32-Implement-semi-stub-for-CreateTypeLib.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-Load_Save_EMF/0001-oleaut32-tests-Add-some-tests-for-loading-and-saving.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-Load_Save_EMF/0002-oleaut32-Add-support-for-loading-and-saving-EMF-to-I.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-OLEPictureImpl_SaveAsFile/0002-oleaut32-Implement-a-better-stub-for-IPicture-SaveAs.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-OLEPictureImpl_SaveAsFile/0003-oleaut32-Implement-SaveAsFile-for-PICTYPE_ENHMETAFIL.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-OleLoadPicture/0001-oleaut32-OleLoadPicture-should-create-a-DIB-section-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-OleLoadPicture/0002-oleaut32-Make-OleLoadPicture-load-DIBs-using-WIC-dec.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-OleLoadPictureFile/0001-oleaut32-Do-not-reimplement-OleLoadPicture-in-OleLoa.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-OleLoadPictureFile/0002-oleaut32-Factor-out-stream-creation-from-OleLoadPict.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/oleaut32-OleLoadPictureFile/0003-oleaut32-Implement-OleLoadPictureFile.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/packager-DllMain/0001-packager-Prefer-native-version.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/programs-findstr/0001-findstr-add-basic-functionality-also-support-literal.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/programs-systeminfo/0001-systeminfo-add-basic-functionality.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/quartz-MediaSeeking_Positions/0001-strmbase-Fix-MediaSeekingPassThru_GetPositions-retur.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/riched20-Class_Tests/0001-riched20-tests-Add-a-test-to-see-what-richedit-class.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/riched20-IText_Interface/0003-riched20-Stub-for-ITextPara-interface-and-implement-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/riched20-IText_Interface/0010-riched20-Silence-repeated-FIXMEs-triggered-by-Adobe-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/secur32-InitializeSecurityContextW/0001-secur32-Input-Parameter-should-be-NULL-on-first-call.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-FileEndOfFileInformation/0001-ntdll-Set-EOF-on-file-which-has-a-memory-mapping-sho.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-FileEndOfFileInformation/0002-server-Growing-files-which-are-mapped-to-memory-shou.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-File_Permissions/0001-server-Improve-STATUS_CANNOT_DELETE-checks-for-direc.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-File_Permissions/0002-server-Allow-to-open-files-without-any-permission-bi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-File_Permissions/0003-server-When-creating-new-directories-temporarily-giv.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-File_Permissions/0004-advapi32-tests-Add-tests-for-ACL-inheritance-in-Crea.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-File_Permissions/0005-advapi32-tests-Add-ACL-inheritance-tests-for-creatin.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-File_Permissions/0006-ntdll-tests-Added-tests-for-open-behaviour-on-readon.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-File_Permissions/0007-server-FILE_WRITE_ATTRIBUTES-should-succeed-for-read.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Stored_ACLs/0001-server-Unify-the-storage-of-security-attributes-for-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Stored_ACLs/0002-server-Unify-the-retrieval-of-security-attributes-fo.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Stored_ACLs/0003-server-Add-a-helper-function-set_sd_from_token_inter.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Stored_ACLs/0004-server-Temporarily-store-the-full-security-descripto.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Stored_ACLs/0005-server-Store-file-security-attributes-with-extended-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Stored_ACLs/0006-server-Convert-return-of-file-security-masks-with-ge.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-Stored_ACLs/0007-server-Retrieve-file-security-attributes-with-extend.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-default_integrity/0001-server-Create-processes-using-a-limited-administrato.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-default_integrity/0002-shell32-Implement-the-runas-verb.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/server-default_integrity/0003-wine.inf-Set-the-EnableLUA-value-to-1.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/setupapi-DiskSpaceList/0001-setupapi-Rewrite-DiskSpaceList-logic-using-lists.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/setupapi-DiskSpaceList/0002-setupapi-Implement-SetupAddToDiskSpaceList.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/setupapi-DiskSpaceList/0003-setupapi-Implement-SetupQueryDrivesInDiskSpaceList.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/setupapi-DiskSpaceList/0004-setupapi-Ignore-deletion-of-added-files-in-SetupAddT.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/setupapi-DiskSpaceList/0005-setupapi-ImplementSetupAddSectionToDiskSpaceList.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/setupapi-DiskSpaceList/0006-setupapi-Implement-SetupAddInstallSectionToDiskSpace.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shdocvw-ParseURLFromOutsideSource_Tests/0001-shdocvw-Check-precisely-ParseURLFromOutsideSourceX-r.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-SHFileOperation_Move/0001-shell32-Fix-SHFileOperation-FO_MOVE-for-creating-sub.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Progress_Dialog/0001-shell32-Correct-indentation-in-shfileop.c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Progress_Dialog/0002-shell32-Pass-FILE_INFORMATION-into-SHNotify-function.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Progress_Dialog/0003-shell32-Implement-file-operation-progress-dialog.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Progress_Dialog/0004-shell32-Show-animation-during-SHFileOperation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-ACE_Viewer/0002-shell32-Add-security-property-tab.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Context_Menu/0001-shell32-Fix-copying-of-files-when-using-a-context-me.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Context_Menu/0003-shell32-Implement-insert-paste-for-item-context-menu.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Context_Menu/0005-shell32-Add-support-for-setting-getting-PREFERREDDRO.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Context_Menu/0006-shell32-Add-parameter-to-ISFHelper-DeleteItems-to-al.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Context_Menu/0007-shell32-Remove-source-files-when-using-cut-in-the-co.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Context_Menu/0008-shell32-Recognize-cut-copy-paste-string-verbs-in-ite.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-IconCache/0001-shell32-iconcache-Generate-icons-from-available-icons-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-NewMenu_Interface/0001-shell32-Implement-NewMenu-with-new-folder-item.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-SFGAO_HASSUBFOLDER/0001-shell32-Set-SFGAO_HASSUBFOLDER-correctly-for-unixfs.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-SFGAO_HASSUBFOLDER/0002-shell32-Set-SFGAO_HASSUBFOLDER-correctly-for-normal-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-SHGetStockIconInfo/0001-shell32-Improve-semi-stub-SHGetStockIconInfo-try-fin.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Toolbar_Bitmaps/0001-shell32-Add-toolbar-bitmaps-compatible-with-IE6.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-Toolbar_Bitmaps/0002-shell32-Add-more-Tango-icons-to-the-IE-toolbar.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shell32-UnixFS/0001-shell32-Do-not-use-unixfs-for-devices-without-mountp.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shlwapi-AssocGetPerceivedType/0001-shlwapi-tests-Add-tests-for-AssocGetPerceivedType.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shlwapi-AssocGetPerceivedType/0002-shlwapi-Implement-AssocGetPerceivedType.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shlwapi-SHAddDataBlock/0001-shlwapi-Fix-the-return-value-of-SHAddDataBlock.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shlwapi-UrlCanonicalize/0001-shlwapi-Support-.-in-UrlCanonicalize.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shlwapi-UrlCombine/0001-shlwapi-tests-Add-additional-tests-for-UrlCombine-and-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/shlwapi-UrlCombine/0002-shlwapi-UrlCombineW-workaround-for-relative-paths.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/stdole32.idl-Typelib/0001-include-Make-stdole32.idl-a-public-component.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0001-widl-Add-initial-implementation-of-SLTG-typelib-gene.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0002-widl-Add-support-for-structures.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0003-widl-Properly-align-name-table-entries.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0004-widl-More-accurately-report-variable-descriptions-da.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0005-widl-Calculate-size-of-instance-for-structures.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0006-widl-Write-correct-typekind-to-the-SLTG-typeinfo-blo.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0007-widl-Write-SLTG-blocks-according-to-the-index-order.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0008-widl-Write-correct-syskind-by-SLTG-typelib-generator.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0009-widl-Add-support-for-VT_VOID-and-VT_VARIANT-to-SLTG-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0010-widl-Add-support-for-VT_USERDEFINED-to-SLTG-typelib-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0011-widl-Factor-out-SLTG-tail-initialization.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0012-widl-Add-support-for-recursive-type-references-to-SL.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0013-widl-Add-support-for-interfaces-to-SLTG-typelib-gene.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0014-widl-Add-support-for-inherited-interfaces-to-SLTG-ty.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0015-widl-Make-automatic-dispid-generation-scheme-better-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0016-widl-Create-library-block-index-right-after-the-Comp.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0017-widl-Fix-generation-of-resources-containing-an-old-t.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0018-widl-Add-oldtlb-switch-in-usage-message.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0019-widl-Avoid-relying-on-side-effects-when-marking-func.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0020-widl-Set-the-lowest-bit-in-the-param-name-to-indicat.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0021-oleaut32-Fix-logic-for-deciding-whether-type-descrip.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0022-widl-Add-support-for-function-parameter-flags-to-SLT.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0023-oleaut32-Implement-decoding-of-SLTG-help-strings.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0024-oleaut32-Add-support-for-decoding-SLTG-function-help.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0025-oleaut32-Add-support-for-decoding-SLTG-variable-help.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/widl-SLTG_Typelib_Support/0026-widl-Minor-cosmetic-clean-up.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/stdole32.tlb-SLTG_Typelib/0020-stdole32.tlb-Compile-typelib-with-oldtlb.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/tasklist-basics/0001-tasklist.exe-add-minimal-functionality.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-DM_SETDEFID/0001-user32-Do-not-initialize-dialog-info-for-every-windo.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-DM_SETDEFID/0002-user32-Use-root-dialog-for-DM_SETDEFID-DM_GETDEFID-i.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-DM_SETDEFID/0003-user32-tests-Add-a-bunch-of-tests-for-DM_SETDEFID-DM.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Dialog_Paint_Event/0001-user32-Call-UpdateWindow-during-DIALOG_CreateIndirec.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-DrawTextExW/0001-user32-Fix-handling-of-invert_y-in-DrawTextExW.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-FlashWindowEx/0001-user32-Improve-FlashWindowEx-message-and-return-valu.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-GetSystemMetrics/0001-user32-Allow-changing-the-tablet-media-center-status.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Implement-CascadeWindows/0001-user32-Implement-CascadeWindows.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Implement-CascadeWindows/0002-user32-Implement-TileWindows.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-InternalGetWindowIcon/0001-user32-AddInternalGetWindowIcon-stub.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-LR_LOADFROMFILE/0001-user32-Add-a-workaround-for-Windows-3.1-apps-which-c.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-ListBox_Size/0001-user32-Fix-calculation-of-listbox-size-when-horizont.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-LoadKeyboardLayoutEx/0001-user32-Added-LoadKeyboardLayoutEx-stub.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-MessageBox_WS_EX_TOPMOST/0001-user32-tests-Add-some-tests-to-see-when-MessageBox-g.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-MessageBox_WS_EX_TOPMOST/0002-user32-MessageBox-should-be-topmost-when-MB_SYSTEMMO.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Mouse_Message_Hwnd/0001-user32-Try-harder-to-find-a-target-for-mouse-message.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Mouse_Message_Hwnd/0002-user32-tests-Add-tests-for-clicking-through-layered-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Mouse_Message_Hwnd/0003-user32-tests-Add-tests-for-window-region-of-layered-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Mouse_Message_Hwnd/0004-user32-tests-Add-tests-for-DC-region.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Mouse_Message_Hwnd/0005-server-Add-support-for-a-layered-window-region.-v2.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-QueryDisplayConfig/0001-user32-Implement-QueryDisplayConfig.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-Refresh_MDI_Menus/0001-user32-Refresh-MDI-menus-when-DefMDIChildProcW-WM_SE.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-ScrollWindowEx/0001-user32-Fix-return-value-of-ScrollWindowEx-for-invisi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-message-order/0001-user32-Fix-messages-sent-on-a-window-without-WS_CHIL.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-msgbox-Support-WM_COPY-mesg/0001-user32-msgbox-Support-WM_COPY-Message.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-msgbox-Support-WM_COPY-mesg/0002-user32-msgbox-Use-a-windows-hook-to-trap-Ctrl-C.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0005-hidclass.sys-Use-__wine_send_input-to-send-device-no.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0006-server-Implement-desktop-broadcast-in-queue_rawinput.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0007-server-Add-rawinput-union-to-hw_input_t-INPUT_HARDWA.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0008-server-Add-RIM_TYPEHID-type-hid-member-to-rawinput-u.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0009-user32-Send-WM_INPUT_DEVICE_CHANGE-RAWINPUT-to-the-s.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0010-server-Track-known-HID-rawinput-devices-on-addition-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0011-server-Add-process-argument-to-find_rawinput_device.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0012-server-Implement-WM_INPUT_DEVICE_CHANGE-message-disp.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0013-hidclass.sys-Send-rawinput-messages-with-HID-report.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0014-server-Add-extra-data-to-hardware_msg_data.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0015-server-Implement-WM_INPUT-RIM_TYPEHID-message-dispat.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-hid/0018-user32-Enumerate-mouse-rawinput-device-before-HID-de.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0001-winex11.drv-Split-XInput2-thread-initialization.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0002-winex11.drv-Support-XInput2-events-for-individual-wi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0003-winex11.drv-Advertise-XInput2-version-2.1-support.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0004-winex11.drv-Keep-track-of-pointer-and-device-button-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0005-server-Add-send_hardware_message-flags-for-rawinput-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0006-user32-Set-SEND_HWMSG_RAWINPUT-flags-only-when-RAWIN.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0007-user32-Support-sending-RIM_TYPEMOUSE-through-__wine_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse/0008-winex11.drv-Listen-to-RawMotion-and-RawButton-events.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse-experimental/0001-winex11.drv-Add-support-for-absolute-RawMotion-event.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse-experimental/0002-winex11.drv-Send-relative-RawMotion-events-unprocess.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-rawinput-mouse-experimental/0003-winex11.drv-Accumulate-mouse-movement-to-avoid-round.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-recursive-activation/0001-user32-focus-Prevent-a-recursive-loop-with-the-activ.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/user32-recursive-activation/0002-user32-tests-Test-a-recursive-activation-loop-on-WM_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/uxtheme-CloseThemeClass/0001-uxtheme-Protect-CloseThemeData-from-invalid-input.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/version-VerQueryValue/0001-version-Test-for-VerQueryValueA-try-2.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/windowscodecs-GIF_Encoder/0007-windowscodecs-tests-Add-IWICBitmapEncoderInfo-test.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/windowscodecs-TIFF_Support/0015-windowscodecs-Tolerate-partial-reads-in-the-IFD-meta.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/windowscodecs-TIFF_Support/0016-gdiplus-Add-support-for-more-image-color-formats.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/windowscodecs-TIFF_Support/0017-gdiplus-tests-Add-some-tests-for-loading-TIFF-images.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wine.inf-Directory_ContextMenuHandlers/0001-wine.inf-Add-New-context-menu-handler-entry-for-dire.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wine.inf-Dummy_CA_Certificate/0001-wine.inf.in-Add-invalid-dummy-certificate-to-CA-cert.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wine.inf-Performance/0001-wine.inf-Add-registry-keys-for-Windows-Performance-L.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wine.inf-Performance/0002-wine.inf-Add-Counters-to-the-perflib-key-as-an-alias.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wine.inf-Performance/0003-advapi32-tests-Add-test-for-perflib-registry-key.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wineboot-HKEY_DYN_DATA/0001-wineboot-Add-some-generic-hardware-in-HKEY_DYN_DATA-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wineboot-ProxySettings/0001-wineboot-Initialize-proxy-settings-registry-key.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winecfg-Libraries/0001-winecfg-Double-click-in-dlls-list-to-edit-item-s-ove.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winecfg-Staging/0001-winecfg-Add-staging-tab-for-CSMT.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winecfg-Staging/0002-winecfg-Add-checkbox-to-enable-disable-vaapi-GPU-dec.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winecfg-Staging/0003-winecfg-Add-checkbox-to-enable-disable-EAX-support.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winecfg-Staging/0004-winecfg-Add-checkbox-to-enable-disable-HideWineExpor.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winecfg-Staging/0005-winecfg-Add-option-to-enable-disable-GTK3-theming.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-Accounting/0001-wined3d-Use-real-values-for-memory-accounting-on-NVI.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-CSMT_Main/0045-wined3d-Improve-wined3d_cs_emit_update_sub_resource.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-SWVP-shaders/0001-wined3d-Use-UBO-for-vertex-shader-float-constants-if.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-SWVP-shaders/0002-d3d9-Support-SWVP-vertex-shader-float-constants-limi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-SWVP-shaders/0003-wined3d-Report-actual-vertex-shader-float-constants-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-SWVP-shaders/0004-wined3d-Support-SWVP-vertex-shader-constants-limit-i.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-SWVP-shaders/0005-wined3d-Support-SWVP-mode-vertex-shaders.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-Indexed_Vertex_Blending/0001-d3d9-tests-Add-test-for-indexed-vertex-blending.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-Indexed_Vertex_Blending/0002-d3d9-tests-Test-normal-calculation-when-indexed-vert.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-Indexed_Vertex_Blending/0003-d3d9-tests-Check-MaxVertexBlendMatrixIndex-capabilit.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-Indexed_Vertex_Blending/0004-wined3d-Allow-higher-world-matrix-states.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-Indexed_Vertex_Blending/0005-wined3d-Support-indexed-vertex-blending.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-Silence_FIXMEs/0004-wined3d-Print-FIXME-only-once-in-surface_cpu_blt.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-WINED3DFMT_B8G8R8X8_UNORM/0001-wined3d-Implement-WINED3DFMT_B8G8R8X8_UNORM-to-WINED.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-mesa_texture_download/0001-wined3d-Use-glReadPixels-for-RT-texture-download.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-unset-flip-gdi/0001-wined3d-Dont-set-DDSCAPS_FLIP-for-gdi-renderer.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-wined3d_guess_gl_vendor/0001-wined3d-Also-check-for-Brian-Paul-to-detect-Mesa-gl_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wined3d-zero-inf-shaders/0001-wined3d-Add-a-setting-to-workaround-0-inf-problem-in.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winedbg-Process_Arguments/0001-programs-winedbg-Print-process-arguments-in-info-thr.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winedevice-Default_Drivers/0001-win32k.sys-Add-stub-driver.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winedevice-Default_Drivers/0002-dxgkrnl.sys-Add-stub-driver.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winedevice-Default_Drivers/0003-dxgmms1.sys-Add-stub-driver.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winedevice-Default_Drivers/0004-programs-winedevice-Load-some-common-drivers-and-fix.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winemapi-user-xdg-mail/0001-winemapi-Directly-use-xdg-email-if-available-enablin.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winemenubuilder-Desktop_Icon_Path/0001-winemenubuilder-Create-desktop-shortcuts-with-absolu.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winemenubuilder-integration/0001-winemenubuilder-Blacklist-desktop-integration-for-ce.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wineps.drv-PostScript_Fixes/0004-wineps.drv-Add-support-for-GETFACENAME-and-DOWNLOADF.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winepulse-PulseAudio_Support/0001-winepulse.drv-Use-a-separate-mainloop-and-ctx-for-pu.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winepulse-PulseAudio_Support/0003-winepulse-expose-audio-devices-directly-to-programs.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winepulse-PulseAudio_Support/0005-winepulse-implement-GetPropValue.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winepulse-PulseAudio_Support/0006-winepulse-fetch-actual-program-name-if-possible.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winepulse-PulseAudio_Support/0007-winepulse-return-PKEY_AudioEndpoint_PhysicalSpeakers.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-CandidateWindowPos/0001-winex11.drv-Update-a-candidate-window-s-position-wit.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-MWM_Decorations/0001-winex11.drv-Don-t-use-MWM_DECOR_RESIZEH-window-resiz.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-MWM_Decorations/0002-winex11.drv-Don-t-add-MWM_DECOR_BORDER-to-windows-wi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-UpdateLayeredWindow/0001-winex11-Fix-alpha-blending-in-X11DRV_UpdateLayeredWi.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-Vulkan_support/0001-winex11-Specify-a-default-vulkan-driver-if-one-not-f.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-Window_Style/0001-winex11-Fix-handling-of-window-attributes-for-WS_EX_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-XEMBED/0001-winex11-Enable-disable-windows-when-they-are-un-mapped.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-ime-check-thread-data/0001-winex11.drv-handle-missing-thread-data-in-X11DRV_get_ic.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11-wglShareLists/0001-winex11.drv-Only-warn-about-used-contexts-in-wglShar.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winex11.drv-Query_server_position/0001-winex11.drv-window-Query-the-X-server-for-the-actual.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wininet-Cleanup/0001-wininet-tests-Add-more-tests-for-cookies.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wininet-Cleanup/0002-wininet-tests-Test-auth-credential-reusage-with-host.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wininet-Cleanup/0003-wininet-tests-Check-cookie-behaviour-when-overriding.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wininet-Cleanup/0004-wininet-Strip-filename-if-no-path-is-set-in-cookie.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wininet-Cleanup/0005-wininet-Replacing-header-fields-should-fail-if-they-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/winmm-mciSendCommandA/0001-winmm-Do-not-crash-in-Win-9X-mode-when-an-invalid-de.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wintab32-improvements/0002-wintab32-Set-lcSysExtX-Y-for-the-first-index-of-WTI_.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wintab32-improvements/0003-winex11-Handle-negative-orAltitude-values.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wintab32-improvements/0004-winex11.drv-Support-multiplex-categories-WTI_DSCTXS-.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wintab32-improvements/0005-winex11-Support-WTI_STATUS-in-WTInfo.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wintrust-WTHelperGetProvCertFromChain/0001-wintrust-Add-parameter-check-in-WTHelperGetProvCertF.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wpcap-Dynamic_Linking/0001-wpcap-Load-libpcap-dynamically.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ws2_32-APC_Performance/0001-ws2_32-Reuse-old-async-ws2_async_io-structures-if-po.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ws2_32-Connect_Time/0001-ws2_32-Implement-returning-the-proper-time-with-SO_C.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/ws2_32-getsockopt/0001-ws2_32-Divide-values-returned-by-SO_RCVBUF-and-SO_SN.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/wtsapi32-EnumerateProcesses/0001-wtsapi32-Partial-implementation-of-WTSEnumerateProce.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/xactengine-initial/0001-x3daudio1_7-Create-import-library.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/xactengine-initial/0003-xactengine3_7-tests-Add-Global-settings-test.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/xactengine3_7-Notification/0001-xactengine3.7-Delay-Notication-for-WAVEBANKPREPARED.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/xactengine3_7-Notification/0002-xactengine3_7-Record-context-for-each-notications.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/xactengine3_7-PrepareWave/0002-xactengine3_7-Implement-IXACT3Engine-PrepareStreamin.patch
+Applying /mnt/Storage/Projects/Development/proton-ge-custom/wine-staging/patches/xactengine3_7-PrepareWave/0003-xactengine3_7-Implement-IXACT3Engine-PrepareInMemory.patch
+include/wine/server_protocol.h updated
+include/wine/server_protocol.h updated
+server/trace.c updated
+server/request.h updated
+patching file include/wine/list.h
+patching file include/wine/rbtree.h
+patching file include/winnt.h
+Hunk #1 succeeded at 827 (offset 34 lines).
+patching file dlls/imm32/Makefile.in
+patching file dlls/imm32/imm.c
+Hunk #7 succeeded at 1735 (offset 3 lines).
+Hunk #8 succeeded at 1790 (offset 3 lines).
+Hunk #9 succeeded at 1833 (offset 3 lines).
+patching file dlls/imm32/imm32.spec
+patching file dlls/imm32/tests/imm32.c
+patching file dlls/user32/focus.c
+Hunk #1 succeeded at 165 (offset 9 lines).
+patching file dlls/user32/misc.c
+patching file dlls/user32/user_private.h
+Hunk #1 succeeded at 209 (offset -1 lines).
+mech warrior online
+patching file dlls/ntdll/path.c
+Hunk #1 succeeded at 438 (offset -5 lines).
+Hunk #2 succeeded at 468 (offset -5 lines).
+assetto corsa
+patching file dlls/dwrite/font.c
+Hunk #1 succeeded at 4490 with fuzz 1 (offset 142 lines).
+mk11 patch
+patching file dlls/ntdll/signal_x86_64.c
+Hunk #3 succeeded at 487 with fuzz 2 (offset -2004 lines).
+patching file dlls/ws2_32/Makefile.in
+patching file dlls/winex11.drv/display.c
+Hunk #1 succeeded at 606 (offset -128 lines).
+killer instinct vulkan fix
+patching file dlls/winevulkan/vulkan.c
+Hunk #1 succeeded at 839 (offset 189 lines).
+Hunk #2 succeeded at 887 (offset 192 lines).
+clock monotonic
+patching file dlls/ntdll/unix/sync.c
+Hunk #1 succeeded at 102 (offset 5 lines).
+patching file server/request.c
+Hunk #1 succeeded at 539 (offset 1 line).
+patching file dlls/ntdll/unix/sync.c
+Hunk #1 succeeded at 87 with fuzz 2 (offset 5 lines).
+Hunk #2 succeeded at 141 with fuzz 1 (offset 5 lines).
+patching file server/request.c
+Hunk #1 succeeded at 525 (offset 1 line).
+Hunk #2 succeeded at 578 (offset 1 line).
+applying fsync patches
+patching file dlls/ntdll/Makefile.in
+Hunk #1 succeeded at 46 with fuzz 2 (offset -2 lines).
+patching file dlls/ntdll/unix/esync.c
+patching file dlls/ntdll/unix/fsync.c
+patching file dlls/ntdll/unix/fsync.h
+patching file dlls/ntdll/unix/loader.c
+Hunk #2 succeeded at 1849 (offset 283 lines).
+patching file dlls/ntdll/unix/server.c
+Hunk #2 succeeded at 1826 with fuzz 2 (offset 127 lines).
+patching file dlls/ntdll/unix/sync.c
+Hunk #1 succeeded at 76 (offset 3 lines).
+Hunk #2 succeeded at 312 (offset 49 lines).
+Hunk #3 succeeded at 341 (offset 40 lines).
+Hunk #4 succeeded at 383 (offset 49 lines).
+Hunk #5 succeeded at 411 (offset 34 lines).
+Hunk #6 succeeded at 443 with fuzz 2 (offset 36 lines).
+Hunk #7 succeeded at 476 (offset 32 lines).
+Hunk #8 succeeded at 505 with fuzz 1 (offset 28 lines).
+Hunk #9 succeeded at 531 with fuzz 1 (offset 29 lines).
+Hunk #10 succeeded at 566 (offset 29 lines).
+Hunk #11 succeeded at 604 (offset 39 lines).
+Hunk #12 succeeded at 635 (offset 26 lines).
+Hunk #13 succeeded at 667 (offset 22 lines).
+Hunk #14 succeeded at 695 (offset 17 lines).
+Hunk #15 succeeded at 731 (offset 26 lines).
+Hunk #16 succeeded at 1504 (offset 175 lines).
+Hunk #17 succeeded at 1543 (offset 170 lines).
+Hunk #18 succeeded at 1579 (offset 178 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 60 (offset 1 line).
+patching file dlls/ntdll/unix/virtual.c
+Hunk #1 succeeded at 2989 with fuzz 2 (offset 306 lines).
+patching file server/Makefile.in
+patching file server/async.c
+Hunk #1 succeeded at 73 (offset 2 lines).
+Hunk #2 succeeded at 502 (offset 15 lines).
+patching file server/atom.c
+patching file server/change.c
+Hunk #1 succeeded at 115 (offset -1 lines).
+patching file server/clipboard.c
+patching file server/completion.c
+Hunk #1 succeeded at 77 (offset 12 lines).
+patching file server/console.c
+Hunk #2 succeeded at 84 with fuzz 2 (offset 1 line).
+Hunk #3 succeeded at 142 (offset 4 lines).
+Hunk #4 succeeded at 149 with fuzz 2.
+Hunk #5 succeeded at 165 (offset 5 lines).
+Hunk #6 succeeded at 235 (offset 6 lines).
+Hunk #7 succeeded at 285 (offset 7 lines).
+Hunk #8 succeeded at 324 with fuzz 1 (offset 20 lines).
+Hunk #9 succeeded at 382 with fuzz 1 (offset 47 lines).
+Hunk #10 succeeded at 441 (offset 67 lines).
+Hunk #11 succeeded at 587 (offset -10 lines).
+Hunk #12 succeeded at 901 (offset 112 lines).
+Hunk #13 succeeded at 940 with fuzz 2 (offset 112 lines).
+Hunk #14 succeeded at 1542 (offset -28 lines).
+Hunk #15 succeeded at 1646 (offset -28 lines).
+patching file server/debugger.c
+Hunk #1 succeeded at 88 (offset 14 lines).
+Hunk #2 succeeded at 118 (offset 14 lines).
+patching file server/device.c
+Hunk #5 succeeded at 176 (offset 13 lines).
+Hunk #6 succeeded at 230 (offset 14 lines).
+Hunk #7 succeeded at 785 (offset 24 lines).
+Hunk #8 succeeded at 833 (offset 24 lines).
+Hunk #9 succeeded at 890 (offset 24 lines).
+Hunk #10 succeeded at 1061 (offset 24 lines).
+patching file server/directory.c
+Hunk #1 succeeded at 71 (offset 12 lines).
+Hunk #2 succeeded at 123 (offset 23 lines).
+patching file server/esync.c
+patching file server/event.c
+Hunk #2 succeeded at 59 (offset 14 lines).
+Hunk #3 succeeded at 66 (offset 13 lines).
+Hunk #4 succeeded at 80 (offset 12 lines).
+Hunk #5 succeeded at 129 (offset 24 lines).
+Hunk #6 succeeded at 162 (offset 24 lines).
+Hunk #7 succeeded at 175 (offset 24 lines).
+Hunk #8 succeeded at 191 (offset 24 lines).
+Hunk #9 succeeded at 217 (offset 24 lines).
+Hunk #10 succeeded at 230 (offset 24 lines).
+Hunk #11 succeeded at 259 (offset 18 lines).
+patching file server/fd.c
+Hunk #2 succeeded at 208 (offset 2 lines).
+Hunk #3 succeeded at 223 (offset 2 lines).
+Hunk #4 succeeded at 266 (offset 2 lines).
+Hunk #5 succeeded at 308 (offset 2 lines).
+Hunk #6 succeeded at 352 (offset 2 lines).
+Hunk #7 succeeded at 1725 (offset 5 lines).
+Hunk #8 succeeded at 1735 (offset 5 lines).
+Hunk #9 succeeded at 1773 (offset 7 lines).
+Hunk #10 succeeded at 2320 (offset 115 lines).
+Hunk #11 succeeded at 2359 (offset 109 lines).
+patching file server/file.c
+Hunk #1 succeeded at 127 (offset 15 lines).
+patching file server/file.h
+Hunk #1 succeeded at 104 (offset 1 line).
+patching file server/fsync.c
+patching file server/fsync.h
+patching file server/handle.c
+Hunk #1 succeeded at 127 (offset 3 lines).
+patching file server/hook.c
+patching file server/mailslot.c
+Hunk #3 succeeded at 203 (offset -1 lines).
+Hunk #4 succeeded at 235 (offset -1 lines).
+patching file server/main.c
+Hunk #1 succeeded at 38 with fuzz 2 (offset 1 line).
+Hunk #2 succeeded at 143 (offset 1 line).
+patching file server/mapping.c
+Hunk #3 succeeded at 182 (offset 15 lines).
+patching file server/mutex.c
+Hunk #1 succeeded at 74 (offset 12 lines).
+patching file server/named_pipe.c
+Hunk #1 succeeded at 120 (offset 1 line).
+Hunk #2 succeeded at 170 (offset 5 lines).
+Hunk #3 succeeded at 215 (offset 5 lines).
+Hunk #4 succeeded at 263 (offset 4 lines).
+Hunk #5 succeeded at 296 (offset 4 lines).
+patching file server/object.h
+Hunk #1 succeeded at 83 (offset 13 lines).
+patching file server/process.c
+Hunk #2 succeeded at 84 (offset 13 lines).
+Hunk #3 succeeded at 96 (offset 13 lines).
+Hunk #4 succeeded at 149 (offset 13 lines).
+Hunk #5 succeeded at 209 (offset 25 lines).
+Hunk #6 succeeded at 563 (offset 11 lines).
+Hunk #7 succeeded at 620 (offset 11 lines).
+Hunk #8 succeeded at 697 (offset 3 lines).
+patching file server/process.h
+Hunk #1 succeeded at 88 with fuzz 1 (offset -11 lines).
+patching file server/protocol.def
+Hunk #1 succeeded at 3784 (offset 18 lines).
+patching file server/queue.c
+Hunk #7 succeeded at 555 (offset 35 lines).
+Hunk #8 succeeded at 1019 (offset 35 lines).
+Hunk #9 succeeded at 1087 (offset 35 lines).
+Hunk #10 succeeded at 2597 (offset 56 lines).
+Hunk #11 succeeded at 3598 (offset 35 lines).
+patching file server/registry.c
+Hunk #1 succeeded at 177 (offset 9 lines).
+patching file server/request.c
+Hunk #1 succeeded at 98 (offset 1 line).
+patching file server/semaphore.c
+Hunk #1 succeeded at 71 (offset 12 lines).
+patching file server/serial.c
+patching file server/signal.c
+patching file server/sock.c
+Hunk #1 succeeded at 164 (offset -9 lines).
+Hunk #2 succeeded at 1503 (offset 327 lines).
+Hunk #3 succeeded at 1725 (offset 327 lines).
+patching file server/symlink.c
+Hunk #1 succeeded at 73 (offset 12 lines).
+patching file server/thread.c
+Hunk #1 succeeded at 52 with fuzz 1.
+Hunk #2 succeeded at 99 (offset -14 lines).
+Hunk #3 succeeded at 138 (offset -14 lines).
+Hunk #7 succeeded at 380 with fuzz 1 (offset 10 lines).
+Hunk #8 succeeded at 499 (offset 3 lines).
+Hunk #9 succeeded at 557 (offset 5 lines).
+Hunk #10 succeeded at 1093 (offset 5 lines).
+Hunk #11 succeeded at 1187 (offset 6 lines).
+Hunk #12 succeeded at 1240 (offset 6 lines).
+Hunk #13 succeeded at 1361 (offset 5 lines).
+patching file server/thread.h
+patching file server/timer.c
+Hunk #2 succeeded at 65 (offset 14 lines).
+Hunk #3 succeeded at 84 (offset 12 lines).
+Hunk #4 succeeded at 121 (offset 12 lines).
+Hunk #5 succeeded at 197 (offset 9 lines).
+Hunk #6 succeeded at 236 (offset 3 lines).
+patching file server/token.c
+Hunk #1 succeeded at 162 (offset 14 lines).
+patching file server/winstation.c
+Hunk #1 succeeded at 76 (offset 11 lines).
+Hunk #2 succeeded at 118 (offset 26 lines).
+patching file dlls/ntdll/unix/esync.c
+patching file dlls/ntdll/unix/fsync.c
+Hunk #1 succeeded at 894 (offset -112 lines).
+Hunk #2 succeeded at 917 (offset -111 lines).
+Hunk #3 succeeded at 963 (offset -98 lines).
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 1834 with fuzz 1 (offset 14 lines).
+Hunk #2 succeeded at 1869 (offset 15 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 127 with fuzz 1 (offset -10 lines).
+LAA
+patching file dlls/kernel32/heap.c
+Hunk #2 succeeded at 548 (offset 2 lines).
+patching file dlls/ntdll/ntdll.spec
+Hunk #1 succeeded at 1627 with fuzz 1 (offset 10 lines).
+patching file dlls/ntdll/unix/server.c
+Hunk #1 succeeded at 1684 (offset 213 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 532 with fuzz 2 (offset 62 lines).
+patching file dlls/ntdll/unix/virtual.c
+Hunk #1 succeeded at 3779 (offset 359 lines).
+steamclient swap
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/loader.c
+Hunk #1 succeeded at 2038 with fuzz 1 (offset 125 lines).
+Hunk #2 succeeded at 2068 with fuzz 2 (offset 132 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 1790 (offset 405 lines).
+Hunk #2 succeeded at 1897 with fuzz 1 (offset 362 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/signal_i386.c
+Hunk #1 succeeded at 2023 (offset 422 lines).
+Hunk #2 succeeded at 2058 (offset 422 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/signal_x86_64.c
+Hunk #1 succeeded at 2650 (offset 482 lines).
+Hunk #2 succeeded at 2682 (offset 482 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 177 (offset -11 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unixlib.h
+Hunk #1 succeeded at 67 (offset -67 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 1809 (offset 405 lines).
+Hunk #2 succeeded at 1834 (offset 405 lines).
+Hunk #3 succeeded at 1849 (offset 405 lines).
+Hunk #4 succeeded at 1862 (offset 405 lines).
+Hunk #5 succeeded at 1871 (offset 405 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/user32/win.c
+Hunk #2 succeeded at 2097 (offset -10 lines).
+Hunk #3 succeeded at 2130 (offset -10 lines).
+Hunk #4 succeeded at 2182 (offset -10 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/env.c
+Hunk #1 succeeded at 683 (offset -389 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/ntdll.spec
+Hunk #1 succeeded at 1618 (offset 8 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/env.c
+Hunk #1 succeeded at 2277 (offset 542 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 1919 with fuzz 1 (offset 101 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 269 with fuzz 2 (offset 11 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unixlib.h
+Hunk #1 succeeded at 70 (offset -24 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file include/wine/debug.h
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/user32/win.c
+Hunk #1 succeeded at 2166 (offset -10 lines).
+Hunk #2 succeeded at 2183 (offset -10 lines).
+(Stripping trailing CRs from patch; use --binary to disable.)
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 1034 with fuzz 1 (offset -50 lines).
+Hunk #2 succeeded at 1055 (offset -52 lines).
+protonify
+patching file dlls/ws2_32/socket.c
+Hunk #1 succeeded at 2934 (offset -398 lines).
+patching file dlls/wined3d/adapter_gl.c
+Hunk #1 succeeded at 1037 with fuzz 2 (offset 28 lines).
+patching file server/main.c
+Hunk #1 succeeded at 43 (offset 1 line).
+patching file dlls/ntdll/unix/thread.c
+Hunk #1 succeeded at 58 with fuzz 2 (offset 15 lines).
+Hunk #2 succeeded at 366 (offset 19 lines).
+Hunk #3 succeeded at 397 (offset 18 lines).
+patching file dlls/dwrite/font.c
+Hunk #1 succeeded at 952 (offset 212 lines).
+patching file dlls/msctf/msctf.c
+Hunk #1 succeeded at 67 (offset -2 lines).
+Hunk #2 succeeded at 394 (offset -2 lines).
+Hunk #3 succeeded at 433 (offset -2 lines).
+Hunk #4 succeeded at 551 (offset -5 lines).
+Hunk #5 succeeded at 587 (offset -29 lines).
+patching file dlls/msctf/msctf_internal.h
+Hunk #1 succeeded at 36 with fuzz 2 (offset 1 line).
+patching file dlls/msctf/threadmgr.c
+Hunk #8 succeeded at 1400 (offset 8 lines).
+Hunk #9 succeeded at 1416 (offset 8 lines).
+Hunk #10 succeeded at 1432 (offset 8 lines).
+patching file programs/dxdiag/main.c
+patching file programs/dxdiag/output.c
+Hunk #1 succeeded at 149 (offset -20 lines).
+Hunk #2 succeeded at 211 (offset -20 lines).
+patching file dlls/ntdll/heap.c
+Hunk #1 succeeded at 111 (offset -7 lines).
+Hunk #2 succeeded at 781 (offset -18 lines).
+Hunk #3 succeeded at 1785 (offset -28 lines).
+Hunk #4 succeeded at 1939 with fuzz 2 (offset -28 lines).
+patching file tools/makedep.c
+Hunk #1 succeeded at 3349 with fuzz 1 (offset 104 lines).
+patching file dlls/dxgi/adapter.c
+Hunk #1 succeeded at 165 with fuzz 1 (offset 4 lines).
+patching file dlls/dsound/dsound.c
+Hunk #2 succeeded at 136 (offset -1 lines).
+Hunk #3 succeeded at 1128 (offset 2 lines).
+patching file dlls/dsound/dsound_private.h
+Hunk #1 succeeded at 209 (offset 7 lines).
+patching file dlls/dsound/primary.c
+Hunk #2 succeeded at 110 (offset -1 lines).
+Hunk #3 succeeded at 196 (offset -1 lines).
+patching file dlls/dwmapi/dwmapi_main.c
+Hunk #1 succeeded at 197 (offset -8 lines).
+patching file dlls/dwmapi/Makefile.in
+Hunk #1 succeeded at 1 with fuzz 2.
+patching file dlls/dwmapi/dwmapi_main.c
+Hunk #1 succeeded at 209 (offset -8 lines).
+patching file dlls/quartz/filtergraph.c
+Hunk #1 succeeded at 5567 with fuzz 1 (offset -114 lines).
+patching file dlls/bcrypt/gnutls.c
+Hunk #1 succeeded at 342 with fuzz 2 (offset 75 lines).
+patching file programs/winebrowser/main.c
+patching file dlls/dxgi/adapter.c
+Hunk #1 succeeded at 204 (offset 4 lines).
+patching file dlls/kernelbase/sync.c
+Hunk #1 succeeded at 1067 (offset 107 lines).
+Hunk #2 succeeded at 1089 (offset 107 lines).
+patching file dlls/ntdll/unix/file.c
+Hunk #1 succeeded at 3600 (offset 7 lines).
+patching file dlls/ntdll/unix/virtual.c
+Hunk #1 succeeded at 3828 (offset 403 lines).
+patching file dlls/d3d10core/d3d10core_main.c
+Hunk #1 succeeded at 29 with fuzz 2.
+patching file dlls/dxgi/dxgi_main.c
+patching file dlls/kernelbase/file.c
+Hunk #1 succeeded at 44 (offset 3 lines).
+Hunk #2 succeeded at 718 with fuzz 1 (offset 284 lines).
+Hunk #3 succeeded at 888 (offset 360 lines).
+Hunk #4 succeeded at 906 (offset 360 lines).
+patching file dlls/kernelbase/file.c
+Hunk #1 succeeded at 731 (offset 284 lines).
+patching file dlls/wbemprox/builtin.c
+Hunk #1 succeeded at 1257 (offset 76 lines).
+Hunk #2 succeeded at 1303 (offset 76 lines).
+Hunk #3 succeeded at 1383 (offset 76 lines).
+Hunk #4 succeeded at 1544 (offset 76 lines).
+Hunk #5 succeeded at 1581 (offset 76 lines).
+Hunk #6 succeeded at 1609 (offset 76 lines).
+Hunk #7 succeeded at 2748 (offset 96 lines).
+Hunk #8 succeeded at 3568 (offset 93 lines).
+Hunk #9 succeeded at 3834 (offset 94 lines).
+Hunk #10 succeeded at 4046 (offset 91 lines).
+patching file dlls/ws2_32/protocol.c
+Hunk #1 succeeded at 274 (offset 42 lines).
+patching file configure
+Hunk #1 succeeded at 1796 (offset 30 lines).
+Hunk #2 succeeded at 21490 (offset -90 lines).
+patching file configure.ac
+Hunk #1 succeeded at 4009 (offset 12 lines).
+patching file programs/dotnetfx35/Makefile.in
+patching file programs/dotnetfx35/main.c
+patching file dlls/kernelbase/file.c
+Hunk #1 succeeded at 757 (offset 16 lines).
+patching file dlls/vulkan-1/Makefile.in
+patching file dlls/ntdll/unix/signal_x86_64.c
+Hunk #1 succeeded at 2427 (offset 59 lines).
+Hunk #2 succeeded at 2541 (offset 59 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 69 (offset 2 lines).
+Hunk #2 succeeded at 98 (offset 2 lines).
+Hunk #3 succeeded at 126 (offset 1 line).
+Hunk #4 succeeded at 147 with fuzz 1 (offset 2 lines).
+Hunk #6 succeeded at 1391 (offset 257 lines).
+patching file dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+patching file dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+patching file dlls/kernel32/kernel32.spec
+patching file dlls/kernel32/tests/version.c
+patching file dlls/kernelbase/kernelbase.spec
+patching file dlls/kernelbase/version.c
+Hunk #3 succeeded at 1688 (offset 3 lines).
+patching file include/appmodel.h
+patching file dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+patching file dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+patching file dlls/kernel32/kernel32.spec
+Hunk #1 succeeded at 1153 (offset 1 line).
+patching file dlls/kernel32/tests/version.c
+patching file dlls/kernelbase/kernelbase.spec
+patching file dlls/kernelbase/version.c
+Hunk #1 succeeded at 1600 (offset 3 lines).
+Hunk #2 succeeded at 1700 (offset 3 lines).
+patching file include/appmodel.h
+patching file dlls/api-ms-win-appmodel-runtime-l1-1-1/api-ms-win-appmodel-runtime-l1-1-1.spec
+patching file dlls/ext-ms-win-kernel32-package-l1-1-1/ext-ms-win-kernel32-package-l1-1-1.spec
+patching file dlls/kernel32/kernel32.spec
+patching file dlls/kernel32/tests/version.c
+patching file dlls/kernelbase/kernelbase.spec
+patching file dlls/kernelbase/version.c
+Hunk #1 succeeded at 1842 (offset 3 lines).
+patching file include/appmodel.h
+patching file dlls/ntdll/unix/esync.c
+patching file dlls/dxgi/factory.c
+patching file dlls/dxgi/swapchain.c
+patching file dlls/dxgi/Makefile.in
+patching file dlls/mscoree/metahost.c
+Hunk #1 succeeded at 1770 (offset 28 lines).
+patching file dlls/dxgi/dxgi_main.c
+patching file dlls/dxgi/dxgi_private.h
+patching file dlls/dxgi/factory.c
+protonify-audio
+patching file dlls/winepulse.drv/mmdevdrv.c
+Hunk #1 succeeded at 701 with fuzz 1 (offset 130 lines).
+patching file dlls/xaudio2_7/xaudio_dll.c
+Hunk #2 succeeded at 1928 (offset -24 lines).
+patching file dlls/winepulse.drv/mmdevdrv.c
+Hunk #1 succeeded at 186 (offset 24 lines).
+Hunk #2 succeeded at 230 (offset 23 lines).
+Hunk #3 succeeded at 275 (offset 23 lines).
+Hunk #4 succeeded at 1610 (offset 369 lines).
+Hunk #5 succeeded at 1647 with fuzz 2 (offset 373 lines).
+Hunk #6 succeeded at 3200 (offset 472 lines).
+patching file dlls/winepulse.drv/mmdevdrv.c
+Hunk #1 succeeded at 516 (offset 23 lines).
+Hunk #2 succeeded at 1447 with fuzz 1 (offset 284 lines).
+Hunk #3 succeeded at 3219 (offset 462 lines).
+steam bits
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 76 (offset 3 lines).
+Hunk #2 succeeded at 106 (offset 5 lines).
+Hunk #3 succeeded at 152 with fuzz 1 (offset 8 lines).
+Hunk #4 succeeded at 4355 (offset 485 lines).
+patching file dlls/kernelbase/process.c
+Hunk #1 succeeded at 988 (offset 768 lines).
+patching file dlls/ntdll/loader.c
+Hunk #1 succeeded at 84 with fuzz 2 (offset 9 lines).
+patching file dlls/advapi32/advapi.c
+Hunk #1 succeeded at 43 (offset -1 lines).
+Hunk #2 succeeded at 59 (offset -1 lines).
+patching file dlls/shell32/shellpath.c
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 242 (offset 61 lines).
+Hunk #2 succeeded at 699 (offset 84 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 703 (offset 84 lines).
+patching file dlls/ntdll/unix/env.c
+Hunk #1 succeeded at 535 (offset 8 lines).
+patching file configure
+Hunk #1 succeeded at 1869 (offset 123 lines).
+Hunk #2 succeeded at 21569 (offset 1255 lines).
+patching file configure.ac
+Hunk #1 succeeded at 4089 (offset 91 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4226 with fuzz 1 (offset 628 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 870 (offset -71 lines).
+patching file dlls/dbghelp/dwarf.c
+Hunk #1 succeeded at 3497 (offset -19 lines).
+patching file programs/winedbg/tgt_active.c
+Hunk #1 succeeded at 880 (offset 6 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 628 (offset 88 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 335 (offset 18 lines).
+patching file programs/wineboot/wineboot.c
+Hunk #1 succeeded at 1427 with fuzz 1 (offset 392 lines).
+Hunk #2 succeeded at 1435 with fuzz 2 (offset 383 lines).
+Hunk #3 succeeded at 1592 with fuzz 2 (offset 463 lines).
+Hunk #4 succeeded at 1606 with fuzz 2 (offset 465 lines).
+Valve VR patches
+patching file dlls/wined3d/cs.c
+Hunk #1 succeeded at 77 (offset 3 lines).
+Hunk #2 succeeded at 459 (offset 18 lines).
+Hunk #3 succeeded at 2748 with fuzz 1 (offset 171 lines).
+Hunk #4 succeeded at 2856 with fuzz 1 (offset 178 lines).
+patching file dlls/wined3d/texture.c
+Hunk #1 succeeded at 4624 (offset 205 lines).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 4800 with fuzz 1 (offset 137 lines).
+patching file include/wine/wined3d.h
+Hunk #1 succeeded at 2986 (offset 150 lines).
+patching file dlls/wined3d/cs.c
+Hunk #1 succeeded at 78 (offset 3 lines).
+Hunk #2 succeeded at 469 (offset 18 lines).
+Hunk #3 succeeded at 2798 (offset 171 lines).
+Hunk #4 succeeded at 2896 with fuzz 1 (offset 178 lines).
+patching file dlls/wined3d/device.c
+Hunk #1 succeeded at 6368 (offset 637 lines).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 4802 (offset 137 lines).
+patching file include/wine/wined3d.h
+Hunk #1 succeeded at 2991 (offset 150 lines).
+patching file dlls/d3d11/d3d11_private.h
+patching file dlls/d3d11/device.c
+Hunk #1 succeeded at 6608 (offset 3716 lines).
+Hunk #2 succeeded at 10071 (offset 3887 lines).
+patching file dlls/d3d11/texture.c
+patching file include/Makefile.in
+Hunk #1 succeeded at 778 (offset 41 lines).
+patching file include/wine/wined3d-interop.idl
+patching file dlls/d3d11/d3d11_private.h
+Hunk #1 succeeded at 563 with fuzz 1 (offset 27 lines).
+patching file dlls/d3d11/device.c
+Hunk #1 succeeded at 6562 (offset 3716 lines).
+Hunk #2 succeeded at 7788 with fuzz 2 (offset 3840 lines).
+Hunk #3 succeeded at 10176 (offset 3887 lines).
+patching file include/wine/wined3d-interop.idl
+patching file dlls/d3d11/device.c
+Hunk #1 succeeded at 6599 (offset 3716 lines).
+Hunk #2 succeeded at 6618 (offset 3716 lines).
+patching file dlls/wined3d/cs.c
+Hunk #1 succeeded at 79 (offset 3 lines).
+Hunk #2 succeeded at 478 (offset 18 lines).
+Hunk #3 succeeded at 2834 (offset 171 lines).
+Hunk #4 succeeded at 2916 with fuzz 1 (offset 178 lines).
+patching file dlls/wined3d/device.c
+Hunk #1 succeeded at 6376 (offset 637 lines).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 4804 (offset 137 lines).
+patching file include/wine/wined3d-interop.idl
+patching file include/wine/wined3d.h
+Hunk #1 succeeded at 2995 (offset 150 lines).
+patching file dlls/d3d11/texture.c
+patching file dlls/wined3d/cs.c
+Hunk #1 succeeded at 465 (offset 18 lines).
+Hunk #2 succeeded at 2768 (offset 171 lines).
+Hunk #3 succeeded at 2776 (offset 171 lines).
+Hunk #4 succeeded at 2790 (offset 171 lines).
+patching file dlls/wined3d/texture.c
+Hunk #1 succeeded at 4625 (offset 205 lines).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 4801 (offset 137 lines).
+patching file include/wine/wined3d-interop.idl
+patching file include/wine/wined3d.h
+Hunk #1 succeeded at 2986 (offset 150 lines).
+patching file dlls/wined3d/cs.c
+Hunk #1 succeeded at 79 (offset 3 lines).
+Hunk #2 succeeded at 2843 (offset 171 lines).
+Hunk #3 succeeded at 2912 with fuzz 1 (offset 178 lines).
+patching file dlls/wined3d/device.c
+Hunk #1 succeeded at 6381 (offset 637 lines).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 4805 (offset 137 lines).
+patching file dlls/d3d11/texture.c
+patching file dlls/wined3d/cs.c
+Hunk #1 succeeded at 79 (offset 3 lines).
+Hunk #2 succeeded at 484 (offset 18 lines).
+Hunk #3 succeeded at 2850 (offset 171 lines).
+Hunk #4 succeeded at 2959 with fuzz 1 (offset 178 lines).
+patching file dlls/wined3d/device.c
+Hunk #1 succeeded at 218 (offset 14 lines).
+patching file dlls/wined3d/texture.c
+Hunk #1 succeeded at 4635 (offset 205 lines).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 3780 with fuzz 2 (offset 152 lines).
+Hunk #2 succeeded at 3856 (offset 149 lines).
+Hunk #3 succeeded at 4816 (offset 137 lines).
+patching file include/wine/wined3d-interop.idl
+patching file include/wine/wined3d.h
+Hunk #1 succeeded at 2991 (offset 150 lines).
+patching file dlls/wined3d/cs.c
+Hunk #1 succeeded at 487 (offset 18 lines).
+Hunk #2 succeeded at 2861 (offset 171 lines).
+Hunk #3 succeeded at 2873 (offset 171 lines).
+Hunk #4 succeeded at 2889 (offset 171 lines).
+patching file dlls/wined3d/texture.c
+Hunk #1 succeeded at 4748 (offset 205 lines).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 4816 (offset 137 lines).
+patching file dlls/d3d11/texture.c
+patching file include/wine/wined3d-interop.idl
+patching file dlls/d3d11/texture.c
+patching file dlls/wined3d/wined3d.spec
+Hunk #1 succeeded at 370 (offset 48 lines).
+amd ags
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file configure
+Hunk #1 succeeded at 918 (offset 14 lines).
+Hunk #2 succeeded at 20308 (offset 1036 lines).
+patching file configure.ac
+Hunk #1 succeeded at 2827 (offset -69 lines).
+patching file dlls/amd_ags_x64/Makefile.in
+patching file dlls/amd_ags_x64/amd_ags_x64.spec
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags_x64.spec
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/Makefile.in
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/Makefile.in
+Hunk #1 succeeded at 1 with fuzz 1.
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags_x64.spec
+patching file dlls/amd_ags_x64/amd_ags_x64.spec
+patching file dlls/amd_ags_x64/amd_ags_x64.spec
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags_x64.spec
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags.h
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/Makefile.in
+Hunk #1 succeeded at 1 with fuzz 1.
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+patching file dlls/amd_ags_x64/amd_ags_x64_main.c
+msvcrt overrides
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4369 (offset 492 lines).
+Hunk #2 succeeded at 4405 (offset 492 lines).
+atiadlxx needed for cod games
+patching file configure
+Hunk #1 succeeded at 1153 (offset 12 lines).
+Hunk #2 succeeded at 20546 (offset -2 lines).
+patching file configure.ac
+Hunk #1 succeeded at 3064 (offset -12 lines).
+patching file dlls/atiadlxx/Makefile.in
+patching file dlls/atiadlxx/atiadlxx.spec
+patching file dlls/atiadlxx/atiadlxx_main.c
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4396 (offset 396 lines).
+Hunk #2 succeeded at 4433 (offset 68 lines).
+patching file dlls/atiadlxx/Makefile.in
+patching file dlls/atiadlxx/atiadlxx.spec
+patching file dlls/atiadlxx/atiadlxx_main.c
+valve registry entries
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4406 (offset 9 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4408 (offset 401 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4409 (offset 399 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4412 (offset 8 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4412 (offset 395 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4419 with fuzz 1 (offset 398 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4419 (offset 389 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4406 with fuzz 2 (offset 172 lines).
+valve rdr2 fixes
+patching file include/bcrypt.h
+patching file dlls/bcrypt/bcrypt_internal.h
+Hunk #2 succeeded at 169 (offset 1 line).
+Hunk #3 succeeded at 178 (offset 1 line).
+Hunk #4 succeeded at 197 (offset 1 line).
+Hunk #5 succeeded at 223 (offset 1 line).
+patching file dlls/bcrypt/bcrypt_main.c
+Hunk #7 succeeded at 1316 (offset -18 lines).
+Hunk #8 succeeded at 1501 (offset -18 lines).
+Hunk #9 succeeded at 1606 (offset -17 lines).
+Hunk #10 succeeded at 1688 (offset -16 lines).
+Hunk #11 succeeded at 1714 (offset -15 lines).
+Hunk #12 succeeded at 1748 (offset -15 lines).
+Hunk #13 succeeded at 1761 (offset -15 lines).
+Hunk #14 succeeded at 1883 (offset -7 lines).
+Hunk #15 succeeded at 2065 (offset -7 lines).
+patching file dlls/bcrypt/gnutls.c
+Hunk #3 succeeded at 371 (offset 3 lines).
+Hunk #4 succeeded at 967 (offset 3 lines).
+Hunk #5 succeeded at 1077 (offset 3 lines).
+Hunk #6 succeeded at 1093 (offset 3 lines).
+Hunk #7 succeeded at 1411 (offset 3 lines).
+Hunk #8 succeeded at 2004 (offset -3 lines).
+Hunk #9 succeeded at 2107 (offset -3 lines).
+patching file dlls/bcrypt/macos.c
+patching file dlls/bcrypt/bcrypt_main.c
+Hunk #1 succeeded at 2108 (offset -7 lines).
+patching file dlls/bcrypt/bcrypt_main.c
+Hunk #1 succeeded at 2115 (offset -7 lines).
+patching file dlls/bcrypt/tests/bcrypt.c
+Hunk #1 succeeded at 2276 (offset 85 lines).
+Hunk #2 succeeded at 2801 (offset 85 lines).
+patching file dlls/bcrypt/tests/bcrypt.c
+Hunk #1 succeeded at 2825 (offset 85 lines).
+Hunk #2 succeeded at 3248 (offset 85 lines).
+patching file configure
+Hunk #2 succeeded at 1927 (offset 22 lines).
+Hunk #3 succeeded at 2706 (offset 12 lines).
+Hunk #4 succeeded at 7050 (offset 65 lines).
+Hunk #5 succeeded at 7096 (offset 65 lines).
+Hunk #6 succeeded at 7120 (offset 65 lines).
+Hunk #7 succeeded at 7165 (offset 65 lines).
+Hunk #8 succeeded at 7189 (offset 65 lines).
+Hunk #9 succeeded at 13855 (offset 163 lines).
+Hunk #10 succeeded at 20302 (offset 170 lines).
+patching file configure.ac
+Hunk #1 succeeded at 1464 (offset 32 lines).
+patching file dlls/bcrypt/Makefile.in
+patching file dlls/bcrypt/gnutls.c
+Hunk #6 succeeded at 441 (offset 3 lines).
+Hunk #7 succeeded at 460 (offset 3 lines).
+Hunk #8 succeeded at 476 (offset 3 lines).
+Hunk #9 succeeded at 1024 (offset 3 lines).
+Hunk #10 succeeded at 1087 (offset 3 lines).
+Hunk #11 succeeded at 1111 (offset 3 lines).
+Hunk #12 succeeded at 1123 (offset 3 lines).
+Hunk #13 succeeded at 2149 (offset -3 lines).
+Hunk #14 succeeded at 2163 (offset -3 lines).
+patching file include/config.h.in
+Hunk #1 succeeded at 234 (offset 3 lines).
+Hunk #2 succeeded at 1250 (offset -27 lines).
+set prefix win10
+patching file dlls/ntdll/version.c
+Hunk #1 succeeded at 467 with fuzz 2 (offset -12 lines).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4236 (offset 476 lines).
+Hunk #2 succeeded at 4250 (offset 476 lines).
+Hunk #3 succeeded at 4268 (offset 476 lines).
+patching file programs/winecfg/appdefaults.c
+Hunk #1 succeeded at 75 (offset 1 line).
+patching file loader/wine.inf.in
+Hunk #1 succeeded at 4240 (offset 475 lines).
+Hunk #2 succeeded at 4258 (offset 475 lines).
+patching file programs/wineboot/wineboot.c
+Hunk #1 succeeded at 1559 (offset 108 lines).
+Hunk #2 succeeded at 1647 (offset 114 lines).
+dxvk_config
+patching file dlls/wined3d/directx.c
+Hunk #1 succeeded at 1523 (offset 197 lines).
+Hunk #2 succeeded at 1570 (offset 178 lines).
+proton-specific manual mfplat dll register patch
+patching file dlls/mfplat/main.c
+Hunk #1 succeeded at 1447 (offset -26 lines).
+Hunk #2 succeeded at 1468 (offset -26 lines).
+patching file dlls/winegstreamer/main.c
+mouse focus fixes
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 1676 (offset 51 lines).
+patching file dlls/user32/hook.c
+Hunk #1 succeeded at 379 (offset -3 lines).
+Hunk #2 succeeded at 393 (offset -3 lines).
+patching file server/queue.c
+Hunk #1 succeeded at 1717 (offset 76 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 75 (offset -1 lines).
+patching file programs/winecfg/x11drvdlg.c
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 70 with fuzz 1 (offset -1 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 1348 (offset 6 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 428 (offset -5 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 415 (offset 3 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 89 (offset -1 lines).
+Hunk #2 succeeded at 729 (offset -10 lines).
+CPU topology overrides
+patching file dlls/ntdll/unix/system.c
+Hunk #1 succeeded at 808 (offset -22 lines).
+Hunk #2 succeeded at 881 (offset -22 lines).
+Hunk #3 succeeded at 889 (offset -22 lines).
+patching file dlls/ntdll/unix/server.c
+Hunk #1 succeeded at 1669 with fuzz 2 (offset 202 lines).
+Hunk #2 succeeded at 1696 (offset 207 lines).
+patching file dlls/ntdll/unix/system.c
+Hunk #1 succeeded at 30 (offset 1 line).
+Hunk #2 succeeded at 173 (offset 7 lines).
+Hunk #3 succeeded at 459 (offset -23 lines).
+Hunk #4 succeeded at 574 with fuzz 1 (offset -23 lines).
+Hunk #5 succeeded at 931 (offset -22 lines).
+Hunk #6 succeeded at 950 (offset -22 lines).
+Hunk #7 succeeded at 960 (offset -22 lines).
+Hunk #8 succeeded at 983 (offset -22 lines).
+Hunk #9 succeeded at 1024 (offset -22 lines).
+Hunk #10 succeeded at 1066 (offset -22 lines).
+Hunk #11 succeeded at 1078 (offset -22 lines).
+Hunk #12 succeeded at 1099 (offset -22 lines).
+patching file dlls/ntdll/unix/thread.c
+Hunk #1 succeeded at 1389 (offset 66 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 253 (offset 6 lines).
+patching file include/wine/server_protocol.h
+Hunk #1 succeeded at 827 (offset 33 lines).
+Hunk #2 succeeded at 963 with fuzz 2 (offset 62 lines).
+patching file server/process.c
+Hunk #1 succeeded at 86 (offset 13 lines).
+Hunk #2 succeeded at 565 (offset 14 lines).
+Hunk #3 succeeded at 1273 with fuzz 2 (offset -97 lines).
+Hunk #4 succeeded at 1303 with fuzz 2 (offset -98 lines).
+patching file server/process.h
+Hunk #1 succeeded at 89 with fuzz 1 (offset -11 lines).
+patching file server/protocol.def
+Hunk #1 succeeded at 843 (offset 33 lines).
+Hunk #2 succeeded at 907 with fuzz 2 (offset 24 lines).
+patching file server/thread.c
+Hunk #1 succeeded at 614 (offset 9 lines).
+Hunk #2 succeeded at 1529 (offset 18 lines).
+Hunk #3 succeeded at 1557 (offset 32 lines).
+patching file server/trace.c
+Hunk #1 succeeded at 1374 (offset 81 lines).
+Hunk #2 succeeded at 1496 with fuzz 2 (offset 109 lines).
+proton futex2 patches
+patching file dlls/ntdll/unix/fsync.c
+Hunk #1 succeeded at 76 (offset -1 lines).
+Hunk #2 succeeded at 152 (offset -1 lines).
+Hunk #3 succeeded at 744 (offset -1 lines).
+Hunk #4 succeeded at 758 (offset -1 lines).
+Hunk #5 succeeded at 793 (offset -1 lines).
+Hunk #6 succeeded at 923 (offset -1 lines).
+Hunk #7 succeeded at 955 (offset -1 lines).
+Hunk #8 succeeded at 976 (offset 2 lines).
+Hunk #9 succeeded at 998 (offset 5 lines).
+Hunk #10 succeeded at 1009 (offset 5 lines).
+Hunk #11 succeeded at 1039 (offset 8 lines).
+patching file server/fsync.c
+Hunk #3 succeeded at 355 (offset 1 line).
+patching file dlls/ntdll/unix/fsync.c
+Hunk #1 succeeded at 1039 (offset 8 lines).
+patching file dlls/ntdll/unix/fsync.c
+Hunk #1 succeeded at 76 (offset -1 lines).
+Hunk #2 succeeded at 113 (offset -1 lines).
+Hunk #3 succeeded at 180 (offset -1 lines).
+Hunk #4 succeeded at 249 (offset -1 lines).
+Hunk #5 succeeded at 794 (offset -1 lines).
+Hunk #6 succeeded at 809 (offset -1 lines).
+Hunk #7 succeeded at 1073 (offset 8 lines).
+patching file server/fsync.c
+patching file server/fsync.c
+patching file dlls/ntdll/unix/fsync.c
+Hunk #1 succeeded at 53 (offset 4 lines).
+patching file dlls/ntdll/unix/fsync.c
+Hunk #1 succeeded at 96 (offset 2 lines).
+Hunk #2 succeeded at 130 (offset 2 lines).
+Hunk #3 succeeded at 194 (offset 2 lines).
+patching file dlls/ntdll/unix/fsync.c
+Hunk #1 succeeded at 101 (offset 2 lines).
+Hunk #2 succeeded at 168 (offset 2 lines).
+fullscreen hack
+patching file dlls/winevulkan/make_vulkan
+Hunk #1 succeeded at 204 (offset 13 lines).
+Hunk #2 succeeded at 258 (offset 13 lines).
+Hunk #3 succeeded at 1020 (offset 65 lines).
+Hunk #4 succeeded at 1232 (offset 65 lines).
+Hunk #5 succeeded at 1396 (offset 65 lines).
+Hunk #6 succeeded at 1912 (offset 65 lines).
+Hunk #7 succeeded at 1936 (offset 65 lines).
+Hunk #8 succeeded at 1972 (offset 65 lines).
+Hunk #9 succeeded at 2009 (offset 65 lines).
+Hunk #10 succeeded at 2055 (offset 65 lines).
+Hunk #11 succeeded at 2110 (offset 65 lines).
+Hunk #12 succeeded at 2147 (offset 65 lines).
+Hunk #13 succeeded at 2173 (offset 65 lines).
+Hunk #14 succeeded at 2345 (offset 70 lines).
+Hunk #15 succeeded at 2494 (offset 37 lines).
+Hunk #16 succeeded at 2795 (offset 137 lines).
+patching file dlls/winevulkan/vulkan.c
+Hunk #1 succeeded at 22 with fuzz 1 (offset 4 lines).
+Hunk #2 succeeded at 1547 (offset -384 lines).
+Hunk #3 succeeded at 2346 (offset -384 lines).
+Hunk #4 succeeded at 2355 (offset -384 lines).
+Hunk #5 succeeded at 2370 (offset -384 lines).
+Hunk #6 succeeded at 2382 (offset -384 lines).
+Hunk #7 succeeded at 2589 with fuzz 2 (offset -1176 lines).
+patching file dlls/winevulkan/vulkan_private.h
+Hunk #1 succeeded at 63 (offset -29 lines).
+patching file dlls/winevulkan/vulkan_thunks.c
+Hunk #1 succeeded at 21 (offset 4 lines).
+Hunk #2 succeeded at 596 (offset 4 lines).
+Hunk #3 succeeded at 1205 (offset 4 lines).
+Hunk #4 succeeded at 3737 (offset 86 lines).
+Hunk #5 succeeded at 5550 (offset 128 lines).
+Hunk #6 succeeded at 5746 (offset 128 lines).
+Hunk #7 succeeded at 6667 (offset 131 lines).
+Hunk #8 succeeded at 6751 (offset 131 lines).
+Hunk #9 succeeded at 7221 (offset -283 lines).
+Hunk #10 succeeded at 7247 (offset -283 lines).
+patching file dlls/winevulkan/vulkan_thunks.h
+Hunk #2 succeeded at 34 with fuzz 2 (offset 1 line).
+Hunk #3 succeeded at 62 (offset 3 lines).
+Hunk #4 succeeded at 71 (offset 3 lines).
+patching file include/wine/vulkan_driver.h
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 307 (offset 3 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 307 (offset 3 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 579 (offset 3 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 107 (offset -1 lines).
+Hunk #2 succeeded at 1917 (offset 43 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 432 (offset 8 lines).
+Hunk #2 succeeded at 442 with fuzz 1 (offset 10 lines).
+Hunk #3 succeeded at 452 (offset 10 lines).
+Hunk #4 succeeded at 503 (offset 10 lines).
+Hunk #5 succeeded at 622 (offset 11 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 138 (offset 1 line).
+Hunk #2 succeeded at 148 with fuzz 1 (offset 3 lines).
+Hunk #3 succeeded at 158 (offset 3 lines).
+Hunk #4 succeeded at 209 (offset 3 lines).
+patching file include/wine/gdi_driver.h
+patching file dlls/winex11.drv/Makefile.in
+patching file dlls/winex11.drv/desktop.c
+patching file dlls/winex11.drv/display.c
+Hunk #1 succeeded at 198 (offset -2 lines).
+Hunk #2 succeeded at 354 (offset -2 lines).
+Hunk #3 succeeded at 371 (offset -2 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 1166 (offset 29 lines).
+Hunk #2 succeeded at 1186 (offset 29 lines).
+Hunk #3 succeeded at 1555 (offset 27 lines).
+patching file dlls/winex11.drv/fs.c
+patching file dlls/winex11.drv/graphics.c
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 509 (offset 49 lines).
+Hunk #2 succeeded at 548 (offset 49 lines).
+Hunk #3 succeeded at 755 (offset 62 lines).
+Hunk #4 succeeded at 793 (offset 57 lines).
+Hunk #5 succeeded at 803 (offset 57 lines).
+Hunk #6 succeeded at 1658 (offset 55 lines).
+Hunk #7 succeeded at 1669 (offset 55 lines).
+Hunk #8 succeeded at 2006 with fuzz 2 (offset 59 lines).
+Hunk #9 succeeded at 2082 (offset 87 lines).
+patching file dlls/winex11.drv/opengl.c
+Hunk #1 succeeded at 43 with fuzz 1 (offset 1 line).
+Hunk #2 succeeded at 210 (offset 1 line).
+Hunk #3 succeeded at 261 (offset 2 lines).
+Hunk #4 succeeded at 388 (offset 2 lines).
+Hunk #5 succeeded at 415 (offset 2 lines).
+Hunk #6 succeeded at 614 (offset 5 lines).
+Hunk #7 succeeded at 627 (offset 5 lines).
+Hunk #8 succeeded at 693 (offset 5 lines).
+Hunk #9 succeeded at 787 (offset 5 lines).
+Hunk #10 succeeded at 1404 (offset 7 lines).
+Hunk #11 succeeded at 1536 (offset 9 lines).
+Hunk #12 succeeded at 1557 (offset 9 lines).
+Hunk #13 succeeded at 1873 (offset 20 lines).
+Hunk #14 succeeded at 1896 (offset 20 lines).
+Hunk #15 succeeded at 2166 (offset 20 lines).
+Hunk #16 succeeded at 2195 (offset 20 lines).
+Hunk #17 succeeded at 2218 (offset 20 lines).
+Hunk #18 succeeded at 2286 (offset 18 lines).
+Hunk #19 succeeded at 2446 (offset 18 lines).
+Hunk #20 succeeded at 2471 (offset 18 lines).
+Hunk #21 succeeded at 2486 (offset 18 lines).
+Hunk #22 succeeded at 3876 (offset 71 lines).
+patching file dlls/winex11.drv/settings.c
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 642 (offset 32 lines).
+Hunk #2 succeeded at 724 (offset 32 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 484 (offset 16 lines).
+Hunk #2 succeeded at 1009 (offset 24 lines).
+Hunk #3 succeeded at 1078 (offset 24 lines).
+Hunk #4 succeeded at 1086 (offset 24 lines).
+Hunk #5 succeeded at 1158 (offset 24 lines).
+Hunk #6 succeeded at 1173 (offset 24 lines).
+Hunk #7 succeeded at 1410 (offset 24 lines).
+Hunk #8 succeeded at 1505 (offset 24 lines).
+Hunk #9 succeeded at 1690 (offset 42 lines).
+Hunk #10 succeeded at 1708 (offset 42 lines).
+Hunk #11 succeeded at 1754 (offset 42 lines).
+Hunk #12 succeeded at 2524 (offset 49 lines).
+Hunk #13 succeeded at 2697 (offset 49 lines).
+Hunk #14 succeeded at 2795 (offset 50 lines).
+Hunk #15 succeeded at 2826 (offset 50 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 411 (offset 7 lines).
+Hunk #2 succeeded at 589 (offset 10 lines).
+Hunk #3 succeeded at 627 (offset 11 lines).
+Hunk #4 succeeded at 694 (offset 11 lines).
+Hunk #5 succeeded at 747 (offset 11 lines).
+Hunk #6 succeeded at 853 (offset 11 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #3 succeeded at 447 (offset 3 lines).
+Hunk #4 succeeded at 640 (offset 3 lines).
+patching file dlls/winex11.drv/xrandr.c
+patching file dlls/winex11.drv/xrender.c
+patching file dlls/winex11.drv/xvidmode.c
+patching file dlls/winex11.drv/opengl.c
+Hunk #1 succeeded at 1956 (offset 20 lines).
+Hunk #2 succeeded at 2002 (offset 20 lines).
+Hunk #3 succeeded at 2089 (offset 20 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 2727 (offset 50 lines).
+Hunk #2 succeeded at 2761 (offset 50 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 847 (offset 13 lines).
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 695 (offset 45 lines).
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 1731 (offset 60 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 1145 (offset 29 lines).
+Hunk #2 succeeded at 1406 (offset 27 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 1297 (offset 21 lines).
+Hunk #2 succeeded at 1314 (offset 21 lines).
+Hunk #3 succeeded at 1849 (offset 40 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 590 (offset 9 lines).
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 1736 (offset 60 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 642 (offset 12 lines).
+Hunk #2 succeeded at 655 (offset 12 lines).
+Hunk #3 succeeded at 1780 (offset 27 lines).
+Hunk #4 succeeded at 1838 (offset 27 lines).
+Hunk #5 succeeded at 1859 (offset 27 lines).
+Hunk #6 succeeded at 1896 (offset 27 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 246 (offset 4 lines).
+patching file dlls/winex11.drv/xdnd.c
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 615 (offset 12 lines).
+Hunk #2 succeeded at 634 (offset 12 lines).
+Hunk #3 succeeded at 733 (offset 12 lines).
+Hunk #4 succeeded at 742 (offset 12 lines).
+Hunk #5 succeeded at 750 (offset 12 lines).
+Hunk #6 succeeded at 830 (offset 12 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 804 (offset 12 lines).
+Hunk #2 succeeded at 814 (offset 12 lines).
+Hunk #3 succeeded at 909 (offset 12 lines).
+Hunk #4 succeeded at 924 (offset 12 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 321 (offset 7 lines).
+Hunk #2 succeeded at 639 (offset 12 lines).
+Hunk #3 succeeded at 860 (offset 12 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 641 (offset 12 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 3071 (offset 38 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 554 (offset 9 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 962 (offset 12 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 841 (offset 12 lines).
+Hunk #2 succeeded at 955 (offset 12 lines).
+patching file dlls/winex11.drv/mouse.c
+Hunk #2 succeeded at 521 with fuzz 1 (offset 45 lines).
+Hunk #3 succeeded at 609 (offset 45 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 671 (offset 10 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #2 succeeded at 824 (offset 12 lines).
+Hunk #3 succeeded at 921 (offset 12 lines).
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 518 with fuzz 2 (offset 45 lines).
+Hunk #2 succeeded at 1614 (offset 53 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 392 (offset 6 lines).
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 1614 (offset 53 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 1079 (offset 10 lines).
+Hunk #2 succeeded at 1095 (offset 10 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 456 (offset 9 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #1 succeeded at 163 (offset 3 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 49 (offset -1 lines).
+Hunk #2 succeeded at 823 (offset 10 lines).
+Hunk #3 succeeded at 837 (offset 10 lines).
+Hunk #4 succeeded at 865 (offset 10 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 62 (offset 3 lines).
+Hunk #2 succeeded at 597 (offset 9 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 1446 (offset 27 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 839 (offset 10 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 824 (offset 12 lines).
+patching file dlls/winex11.drv/event.c
+Hunk #1 succeeded at 873 (offset 12 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 931 (offset 10 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 594 (offset 9 lines).
+patching file dlls/winex11.drv/xrandr.c
+patching file dlls/winex11.drv/display.c
+Hunk #2 succeeded at 469 (offset -2 lines).
+Hunk #3 succeeded at 557 (offset -3 lines).
+Hunk #4 succeeded at 711 (offset -8 lines).
+Hunk #5 succeeded at 723 (offset -8 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 400 (offset 18 lines).
+Hunk #2 succeeded at 1180 (offset 10 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 689 (offset 10 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 1492 (offset 10 lines).
+Hunk #2 succeeded at 1547 (offset 10 lines).
+patching file dlls/winex11.drv/settings.c
+patching file dlls/winex11.drv/bitblt.c
+Hunk #1 succeeded at 1780 (offset 44 lines).
+patching file dlls/winex11.drv/display.c
+Hunk #2 succeeded at 881 (offset -4 lines).
+patching file dlls/winex11.drv/mouse.c
+Hunk #1 succeeded at 587 (offset 45 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 2646 (offset 2 lines).
+Hunk #2 succeeded at 2659 (offset 2 lines).
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 659 (offset -151 lines).
+Hunk #2 succeeded at 691 (offset -151 lines).
+patching file dlls/winex11.drv/display.c
+Hunk #1 succeeded at 369 (offset -2 lines).
+Hunk #2 succeeded at 441 (offset -2 lines).
+Hunk #3 succeeded at 473 (offset -2 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 2647 (offset 2 lines).
+Hunk #2 succeeded at 2666 (offset 2 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 652 (offset 15 lines).
+patching file dlls/winex11.drv/init.c
+Hunk #1 succeeded at 237 with fuzz 2 (offset 5 lines).
+Hunk #2 succeeded at 244 (offset -2 lines).
+vulkan childwindow hack
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 56 (offset 2 lines).
+Hunk #2 succeeded at 150 (offset 11 lines).
+Hunk #3 succeeded at 268 (offset 11 lines).
+Hunk #4 succeeded at 396 (offset 20 lines).
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 62 (offset 2 lines).
+Hunk #2 succeeded at 220 (offset 11 lines).
+Hunk #3 succeeded at 231 (offset 11 lines).
+Hunk #4 succeeded at 315 (offset 13 lines).
+Hunk #5 succeeded at 338 (offset 16 lines).
+Hunk #6 succeeded at 365 (offset 17 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 1627 (offset 265 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 617 (offset 23 lines).
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 67 with fuzz 2 (offset 3 lines).
+Hunk #2 succeeded at 218 (offset 11 lines).
+Hunk #3 succeeded at 354 (offset 16 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 1732 with fuzz 2 (offset 265 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 627 with fuzz 2 (offset 24 lines).
+patching file dlls/winemac.drv/vulkan.c
+patching file dlls/winevulkan/make_vulkan
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 79 (offset 2 lines).
+Hunk #2 succeeded at 129 (offset 10 lines).
+Hunk #3 succeeded at 299 (offset 10 lines).
+Hunk #4 succeeded at 815 (offset 119 lines).
+patching file include/wine/vulkan_driver.h
+Hunk #2 succeeded at 64 (offset 7 lines).
+patching file dlls/winex11.drv/init.c
+Hunk #1 succeeded at 224 (offset -3 lines).
+patching file dlls/winex11.drv/opengl.c
+Hunk #1 succeeded at 2438 (offset 493 lines).
+Hunk #2 succeeded at 2473 (offset 507 lines).
+Hunk #3 succeeded at 2513 (offset 521 lines).
+Hunk #4 succeeded at 3828 (offset 521 lines).
+Hunk #5 succeeded at 3857 (offset 521 lines).
+Hunk #6 succeeded at 3878 (offset 521 lines).
+Hunk #7 succeeded at 3901 (offset 531 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 294 (offset 8 lines).
+Hunk #2 succeeded at 314 (offset 9 lines).
+patching file dlls/winex11.drv/vulkan.c
+Hunk #2 succeeded at 67 (offset 2 lines).
+Hunk #3 succeeded at 261 (offset 10 lines).
+Hunk #4 succeeded at 299 (offset 10 lines).
+Hunk #5 succeeded at 341 (offset 10 lines).
+Hunk #6 succeeded at 411 (offset 12 lines).
+Hunk #7 succeeded at 431 (offset 13 lines).
+patching file dlls/winex11.drv/window.c
+Hunk #1 succeeded at 2038 (offset 311 lines).
+Hunk #2 succeeded at 2073 (offset 311 lines).
+Hunk #3 succeeded at 2285 (offset 314 lines).
+Hunk #4 succeeded at 2629 (offset 319 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 618 (offset 23 lines).
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 67 (offset 2 lines).
+Hunk #2 succeeded at 103 (offset 2 lines).
+Hunk #3 succeeded at 156 (offset 10 lines).
+Hunk #4 succeeded at 348 (offset 10 lines).
+Hunk #5 succeeded at 417 (offset 12 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 291 (offset 8 lines).
+Hunk #2 succeeded at 305 (offset 9 lines).
+patching file dlls/winex11.drv/clipboard.c
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 397 (offset 8 lines).
+Hunk #2 succeeded at 406 with fuzz 2 (offset 9 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #2 succeeded at 70 with fuzz 2.
+Hunk #3 succeeded at 90 with fuzz 1 (offset 1 line).
+Hunk #4 succeeded at 519 (offset 15 lines).
+Hunk #5 succeeded at 689 (offset 22 lines).
+patching file dlls/winex11.drv/xfixes.h
+patching file configure.ac
+Hunk #1 succeeded at 103 (offset 1 line).
+Hunk #2 succeeded at 1171 (offset 31 lines).
+Hunk #3 succeeded at 1289 (offset 31 lines).
+patching file dlls/winex11.drv/init.c
+Hunk #2 succeeded at 237 (offset -3 lines).
+patching file dlls/winex11.drv/vulkan.c
+Hunk #1 succeeded at 361 (offset 10 lines).
+Hunk #2 succeeded at 385 (offset 10 lines).
+Hunk #3 succeeded at 419 (offset 12 lines).
+patching file dlls/winex11.drv/x11drv.h
+Hunk #1 succeeded at 398 (offset 8 lines).
+patching file dlls/winex11.drv/x11drv_main.c
+Hunk #2 succeeded at 72 with fuzz 2.
+Hunk #3 succeeded at 528 (offset 15 lines).
+Hunk #4 succeeded at 554 (offset 15 lines).
+Hunk #5 succeeded at 580 (offset 15 lines).
+Hunk #6 succeeded at 747 (offset 22 lines).
+patching file dlls/winex11.drv/xfixes.h
+patching file dlls/winex11.drv/xpresent.h
+proton nvidia hacks
+patching file dlls/winevulkan/loader_thunks.c
+patching file dlls/winevulkan/loader.c
+Hunk #2 succeeded at 344 (offset -1 lines).
+Hunk #3 succeeded at 371 (offset -1 lines).
+Hunk #4 succeeded at 392 (offset -1 lines).
+patching file dlls/winevulkan/make_vulkan
+Hunk #1 succeeded at 173 (offset 4 lines).
+fullscreen hack wined3d additions
+patching file dlls/wined3d/device.c
+Hunk #1 succeeded at 6365 (offset 192 lines).
+patching file dlls/wined3d/adapter_gl.c
+Hunk #1 succeeded at 5180 (offset 19 lines).
+patching file dlls/wined3d/adapter_vk.c
+Hunk #1 succeeded at 1994 (offset 4 lines).
+Hunk #2 succeeded at 2006 (offset 4 lines).
+Hunk #3 succeeded at 2311 (offset 4 lines).
+patching file dlls/wined3d/directx.c
+Hunk #3 succeeded at 3167 (offset 22 lines).
+Hunk #4 succeeded at 3243 (offset 22 lines).
+Hunk #5 succeeded at 3271 (offset 22 lines).
+Hunk #6 succeeded at 3328 (offset 22 lines).
+Hunk #7 succeeded at 3359 (offset 22 lines).
+patching file dlls/wined3d/wined3d_main.c
+Hunk #1 succeeded at 137 (offset 1 line).
+patching file dlls/wined3d/wined3d_private.h
+Hunk #1 succeeded at 3599 (offset 20 lines).
+wine mono update
+patching file dlls/appwiz.cpl/addons.c
+patching file dlls/mscoree/mscoree_private.h
+mfplat additions
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #2 succeeded at 1365 (offset 34 lines).
+Hunk #3 succeeded at 1615 (offset 39 lines).
+Hunk #4 succeeded at 1672 (offset 39 lines).
+Hunk #5 succeeded at 1725 (offset 39 lines).
+Hunk #6 succeeded at 1781 (offset 39 lines).
+Hunk #7 succeeded at 1837 (offset 39 lines).
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 1286 (offset 34 lines).
+Hunk #2 succeeded at 1299 (offset 34 lines).
+Hunk #3 succeeded at 1439 (offset 34 lines).
+Hunk #4 succeeded at 1473 (offset 34 lines).
+patching file dlls/winegstreamer/Makefile.in
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/main.c
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file dlls/winegstreamer/main.c.rej
+patching file dlls/winegstreamer/mfplat.c
+patching file dlls/winegstreamer/winegstreamer_classes.idl
+patching file include/mfidl.idl
+Hunk #1 succeeded at 1414 (offset 2 lines).
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/mfplat.c
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/mfplat.c
+Hunk #1 succeeded at 533 (offset 1 line).
+Hunk #2 succeeded at 718 (offset 2 lines).
+patching file dlls/winegstreamer/quartz_parser.c
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 384 (offset 3 lines).
+Hunk #2 succeeded at 441 (offset 3 lines).
+Hunk #3 succeeded at 659 (offset 3 lines).
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/media_source.c
+Hunk #1 succeeded at 300 (offset 18 lines).
+Hunk #2 succeeded at 545 (offset 18 lines).
+patching file dlls/winegstreamer/quartz_parser.c
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #4 succeeded at 80 (offset -2 lines).
+Hunk #5 succeeded at 574 (offset 3 lines).
+Hunk #6 succeeded at 590 (offset 3 lines).
+Hunk #7 succeeded at 603 (offset 3 lines).
+Hunk #8 succeeded at 620 (offset 3 lines).
+Hunk #9 succeeded at 650 (offset 3 lines).
+Hunk #10 succeeded at 687 (offset 3 lines).
+Hunk #11 succeeded at 727 (offset 3 lines).
+Hunk #12 succeeded at 792 (offset 3 lines).
+Hunk #13 succeeded at 811 (offset 3 lines).
+Hunk #14 succeeded at 1152 with fuzz 2 (offset 32 lines).
+Hunk #15 succeeded at 1212 (offset 34 lines).
+Hunk #16 succeeded at 1241 (offset 34 lines).
+Hunk #17 succeeded at 1257 (offset 34 lines).
+Hunk #18 succeeded at 1276 (offset 34 lines).
+Hunk #19 succeeded at 1377 (offset 34 lines).
+Hunk #20 succeeded at 1404 (offset 34 lines).
+Hunk #21 succeeded at 1423 (offset 34 lines).
+Hunk #22 succeeded at 1460 (offset 34 lines).
+Hunk #23 succeeded at 1501 (offset 34 lines).
+Hunk #24 succeeded at 1515 (offset 34 lines).
+Hunk #25 succeeded at 1560 (offset 34 lines).
+Hunk #26 succeeded at 1678 (offset 34 lines).
+Hunk #27 succeeded at 1693 (offset 34 lines).
+Hunk #28 succeeded at 1884 (offset 34 lines).
+Hunk #29 succeeded at 1910 (offset 34 lines).
+Hunk #30 succeeded at 1954 (offset 39 lines).
+Hunk #31 succeeded at 2065 (offset 39 lines).
+Hunk #32 succeeded at 2344 (offset 39 lines).
+Hunk #33 succeeded at 2369 (offset 39 lines).
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/mfplat.c
+patching file dlls/winegstreamer/decode_transform.c
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/mfplat.c
+Hunk #3 succeeded at 605 (offset 1 line).
+Hunk #4 succeeded at 693 (offset 2 lines).
+Hunk #5 succeeded at 707 (offset 2 lines).
+patching file dlls/winegstreamer/quartz_parser.c
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 398 (offset 3 lines).
+Hunk #2 succeeded at 416 (offset 3 lines).
+patching file dlls/winegstreamer/winegstreamer_classes.idl
+patching file include/mfidl.idl
+Hunk #1 succeeded at 1415 (offset 2 lines).
+patching file dlls/winegstreamer/mfplat.c
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 1242 (offset 34 lines).
+Hunk #2 succeeded at 1948 (offset 34 lines).
+Hunk #3 succeeded at 1962 (offset 34 lines).
+patching file dlls/winegstreamer/media_source.c
+Hunk #1 succeeded at 1361 (offset 208 lines).
+patching file dlls/winegstreamer/audioconvert.c
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 2328 (offset 39 lines).
+Hunk #2 succeeded at 2464 (offset 39 lines).
+Hunk #3 succeeded at 2495 (offset 39 lines).
+patching file dlls/winegstreamer/audioconvert.c
+patching file dlls/winegstreamer/audioconvert.c
+patching file dlls/winegstreamer/Makefile.in
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/mfplat.c
+patching file dlls/winegstreamer/winegstreamer_classes.idl
+patching file include/wmcodecdsp.idl
+patching file dlls/winegstreamer/mfplat.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/mf/session.c
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file dlls/mf/session.c.rej
+patching file dlls/mf/topology.c
+patching file dlls/winegstreamer/audioconvert.c
+patching file dlls/winegstreamer/media_source.c
+Hunk #1 succeeded at 1271 (offset 205 lines).
+Hunk #2 succeeded at 1368 (offset 208 lines).
+patching file dlls/winegstreamer/gst_private.h
+patching file dlls/winegstreamer/media_source.c
+Hunk #1 succeeded at 1362 (offset 208 lines).
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 93 (offset 1 line).
+Hunk #2 succeeded at 849 (offset 3 lines).
+Hunk #3 succeeded at 1952 (offset 34 lines).
+Hunk #4 succeeded at 2017 (offset 11 lines).
+Hunk #5 succeeded at 2097 (offset 39 lines).
+Hunk #6 succeeded at 2549 (offset 39 lines).
+patching file dlls/winegstreamer/media_source.c
+Hunk #1 succeeded at 806 (offset 18 lines).
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 753 (offset 3 lines).
+Hunk #2 succeeded at 1318 (offset 34 lines).
+Hunk #3 succeeded at 1331 (offset 34 lines).
+Hunk #4 succeeded at 1356 (offset 34 lines).
+patching file dlls/mfplat/main.c
+Hunk #1 succeeded at 8940 (offset 38 lines).
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 1677 (offset 34 lines).
+patching file dlls/winegstreamer/audioconvert.c
+patching file dlls/winegstreamer/colorconvert.c
+patching file dlls/mfreadwrite/reader.c
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file dlls/mfreadwrite/reader.c.rej
+patching file dlls/mfreadwrite/tests/mfplat.c
+Hunk #1 succeeded at 508 with fuzz 2 (offset -394 lines).
+Hunk #2 succeeded at 928 with fuzz 2 (offset 11 lines).
+patching file dlls/winegstreamer/main.c
+Hunk #1 succeeded at 39 with fuzz 1 (offset -2 lines).
+patching file dlls/winegstreamer/media_source.c
+Hunk #1 succeeded at 902 (offset 38 lines).
+patching file dlls/mfplat/main.c
+patching file dlls/winegstreamer/quartz_parser.c
+Hunk #1 succeeded at 865 (offset 2 lines).
+Hunk #2 succeeded at 880 (offset 2 lines).
+patching file dlls/winegstreamer/wg_parser.c
+Hunk #1 succeeded at 867 with fuzz 1 (offset 194 lines).
+Hunk #2 succeeded at 885 with fuzz 1 (offset 197 lines).
+patching file dlls/mfreadwrite/reader.c
+Hunk #1 succeeded at 1727 (offset -20 lines).
+Hunk #2 succeeded at 1747 (offset -20 lines).
+Hunk #3 succeeded at 1802 (offset -3 lines).
+proton steam client reverts
+patching file dlls/ntdll/unix/env.c
+Hunk #1 succeeded at 1955 (offset 1 line).
+patching file dlls/ntdll/loader.c
+Hunk #1 succeeded at 3013 (offset 283 lines).
+patching file programs/services/services.c
+patching file dlls/ntdll/loader.c
+Hunk #1 succeeded at 2150 (offset 224 lines).
+Hunk #2 succeeded at 2955 (offset 283 lines).
+Hunk #3 succeeded at 3783 (offset 285 lines).
+patching file dlls/ntdll/unix/env.c
+Hunk #2 succeeded at 1212 (offset 1 line).
+Hunk #3 succeeded at 1907 (offset 18 lines).
+Hunk #4 succeeded at 2030 (offset 18 lines).
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 1492 with fuzz 1 (offset 105 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 107 (offset -13 lines).
+patching file dlls/ntdll/unix/env.c
+Hunk #1 succeeded at 1909 (offset 18 lines).
+Hunk #2 succeeded at 1934 (offset 18 lines).
+Hunk #3 succeeded at 1946 (offset 18 lines).
+Hunk #4 succeeded at 2007 (offset 18 lines).
+Hunk #5 succeeded at 2100 (offset 18 lines).
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 140 (offset 18 lines).
+Hunk #2 succeeded at 1564 with fuzz 2 (offset 91 lines).
+Hunk #3 succeeded at 1581 with fuzz 2 (offset 73 lines).
+Hunk #4 succeeded at 1601 (offset 73 lines).
+Hunk #5 succeeded at 1625 with fuzz 2 (offset 96 lines).
+Hunk #6 succeeded at 1636 (offset 98 lines).
+patching file dlls/ntdll/unix/server.c
+Hunk #1 succeeded at 1668 with fuzz 2 (offset 63 lines).
+Hunk #2 succeeded at 1686 (offset 7 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 107 (offset -13 lines).
+Hunk #2 succeeded at 139 (offset -8 lines).
+Hunk #3 succeeded at 293 with fuzz 1 (offset -2 lines).
+patching file dlls/ntdll/unix/virtual.c
+Hunk #1 succeeded at 3166 (offset 160 lines).
+patching file dlls/ntdll/unix/env.c
+Hunk #1 succeeded at 1935 (offset 18 lines).
+patching file dlls/ntdll/unix/process.c
+Hunk #1 succeeded at 286 (offset -79 lines).
+patching file dlls/ntdll/loader.c
+Hunk #1 succeeded at 2868 with fuzz 1 (offset 291 lines).
+Hunk #2 succeeded at 2890 (offset 298 lines).
+patching file dlls/kernel32/tests/module.c
+patching file dlls/ntdll/loader.c
+Hunk #1 succeeded at 89 with fuzz 2 (offset 16 lines).
+Hunk #2 succeeded at 2149 (offset 231 lines).
+Hunk #3 succeeded at 2939 (offset 292 lines).
+patching file dlls/ntdll/unix/loader.c
+Hunk #1 succeeded at 1399 (offset 25 lines).
+Hunk #2 succeeded at 1927 (offset 133 lines).
+patching file dlls/ntdll/unix/loadorder.c
+Hunk #1 succeeded at 376 (offset -2 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 402 (offset 2 lines).
+patching file dlls/ntdll/unixlib.h
+Hunk #2 succeeded at 67 (offset -18 lines).
+patching file dlls/mscoree/tests/mscoree.c
+patching file dlls/ntdll/loader.c
+Hunk #1 succeeded at 2612 (offset 234 lines).
+Hunk #2 succeeded at 2840 (offset 287 lines).
+Hunk #3 succeeded at 2884 (offset 292 lines).
+Hunk #4 succeeded at 3000 (offset 292 lines).
+Hunk #5 succeeded at 3014 (offset 292 lines).
+patching file dlls/ntdll/unix/virtual.c
+Hunk #1 succeeded at 3165 with fuzz 2 (offset 114 lines).
+Hunk #2 succeeded at 3181 (offset 118 lines).
+patching file dlls/ntdll/unix/thread.c
+Hunk #1 succeeded at 248 (offset 3 lines).
+patching file dlls/ntdll/unix/unix_private.h
+Hunk #1 succeeded at 187 (offset -7 lines).
+patching file dlls/ntdll/unix/virtual.c
+Hunk #1 succeeded at 3040 (offset 121 lines).
+Hunk #2 succeeded at 3049 (offset 121 lines).
+Hunk #3 succeeded at 3061 (offset 121 lines).

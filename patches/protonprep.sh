@@ -29,13 +29,19 @@
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
+    
+    echo "proton re8 fixups"
+    patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
 
     echo "add dxvk PR patches"
     patch -Np1 < ../patches/dxvk/1582.patch
 
-#    broken, currently disabled. may be time to just let it die
-#    echo "add dxvk async patch"
-#    patch -Np1 < ../patches/dxvk/dxvk-async.patch
+    echo "add dxvk nier replicant video interfaces patch"
+    patch -Np1 < ../patches/dxvk/video_interfaces.patch
+
+    # this needs to be the last patch in the list.. because reasons?
+    echo "add dxvk async patch"
+    patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
     #WINE STAGING
@@ -61,8 +67,8 @@
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
     
-    echo "fshack reverts"
-    patch -RNp1 < ../patches/wine-hotfixes/winevulkan_Use_standard_CRT_memory_allocators.patch
+    # ubisoft controller regression hotfix
+    git revert --no-commit 0ac619ae7ab7dd90622371a5f58a1ff12d46eb8f
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -74,20 +80,29 @@
     # these cause window freezes/hangs with origin
     # -W winex11-_NET_ACTIVE_WINDOW \
     # -W winex11-WM_WINDOWPOSCHANGING \
+
+    # this needs to be disabled of disabling the winex11 patches above because staging has them set as a dependency.
     # -W imm32-com-initialization
+
+    # instead, we apply it manually:
     # patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
+
+    # disable these for vulkan childwindow support
+    #-W Pipelight \
+    #-W winex11-Vulkan_support \
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
-    -W bcrypt-ECDHSecretAgreement \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
-    -W imm32-com-initialization
+    -W imm32-com-initialization \
+    -W bcrypt-ECDHSecretAgreement
 
-    patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
-
-    #revert this, it breaks lsteamclient compilation
+    # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
+
+    # apply this manually since imm32-com-initialization is disabled in staging.
+    patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
@@ -105,8 +120,8 @@
     patch -Np1 < ../patches/game-patches/mk11.patch
 
     # BLOPS2 uses CEG which does not work in proton. Disabled for now
-    # echo "blackops 2 fix"
-    # patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
+#    echo "blackops 2 fix"
+#    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
@@ -199,19 +214,25 @@
     patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
 
     echo "vulkan childwindow hack"
-    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
+    patch -Np1 < ../patches/proton/44-proton-vulkan-childwindow-experimental.patch
 
-    echo "proton openxr patches"
-     patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
+#    old childwindow hack - keep just in case for now.
+#    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
-#    may not be needed any more. need double check to verify
-#    echo "proton nvidia hacks"
-#    patch -Np1 < ../patches/proton/26-proton-nvidia-hacks.patch
+    echo "proton nvidia hacks"
+    patch -Np1 < ../patches/proton/26-proton-nvidia-hacks.patch
+
+#    disabled for now, needs rebase. only used for vr anyway
+#    echo "proton openxr patches"
+#    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
 
     ## END VULKAN-CENTRIC PATCHES
 
     echo "fullscreen hack wined3d additions"
     patch -Np1 < ../patches/proton/42-valve_proton_fullscreen_hack-staging-wined3d.patch
+
+    echo "wine mono update"
+    patch -Np1 < ../patches/proton/46-proton_update_winemono_6.1.2.patch
 
     ### END PROTON PATCH SECTION ###
 
@@ -220,13 +241,17 @@
     echo "mfplat additions"
     patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
 
+    # additional pending fallout 4 fix
+    patch -Np1 < ../patches/wine-hotfixes/205277
+
+    # mfplat nier replicant fixes
+    patch -Np1 < ../patches/wine-hotfixes/mfreadwrite_hack.patch
+
     echo "proton steam client reverts"
     patch -RNp1 < ../patches/wine-hotfixes/revert_steamclient_breaker.patch
-    patch -RNp1 < ../patches/wine-hotfixes/revert-7512c53b89308c16a512cb8f0c1d0fd6ff02b17b.patch
-    patch -RNp1 < ../patches/wine-hotfixes/revert-89db25afda90d1d5d57787398ba80fcf4f5abb5f.patch
 
-    patch -Np1 < ../patches/wine-hotfixes/fh4_minimum_requirement_fix.patch
-
+    # witcher 3 + borderlands 3 breaker
+    patch -Np1 < ../patches/wine-hotfixes/205333
 
 
     ### END WINEPATCH SECTION ###
