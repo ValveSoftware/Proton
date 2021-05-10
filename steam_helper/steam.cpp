@@ -1063,6 +1063,7 @@ static BOOL steam_protocol_handler(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
+    HANDLE event2 = INVALID_HANDLE_VALUE;
     HANDLE event = INVALID_HANDLE_VALUE;
     BOOL game_process = FALSE;
 
@@ -1075,6 +1076,9 @@ int main(int argc, char *argv[])
     {
         /* do setup only for game process */
         event = CreateEventA(NULL, FALSE, FALSE, "Steam3Master_SharedMemLock");
+
+        /* For 2K Launcher. */
+        event2 = CreateEventA(NULL, FALSE, FALSE, "Global\\Valve_SteamIPC_Class");
 
         CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
 
@@ -1117,6 +1121,7 @@ int main(int argc, char *argv[])
 
     if (event != INVALID_HANDLE_VALUE)
         CloseHandle(event);
-
+    if (event2 != INVALID_HANDLE_VALUE)
+        CloseHandle(event2);
     return 0;
 }
