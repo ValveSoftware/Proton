@@ -2,6 +2,14 @@ diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
 index 5ca7ea00d4a..616a6f3dc1d 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <stdarg.h>
++#include <stdlib.h>
+ 
+ #define COBJMACROS
+ #define NONAMELESSUNION
 @@ -1747,9 +1748,15 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
      if (FAILED(hr = IMFMediaType_GetMajorType(output_type, &out_type.guidMajorType)))
          return hr;
@@ -29,13 +37,18 @@ index 5ca7ea00d4a..616a6f3dc1d 100644
      in_type.guidMajorType = out_type.guidMajorType;
  
      while (source_reader_get_native_media_type(reader, index, i++, &input_type) == S_OK)
-@@ -1802,6 +1802,10 @@ static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWO
+@@ -1799,6 +1803,15 @@ static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWO
  
      EnterCriticalSection(&reader->cs);
  
-+    IMFMediaType_LockStore(type);
-+    IMFMediaType_SetGUID(type, &MF_MT_SUBTYPE, &MFVideoFormat_RGB32);
-+    IMFMediaType_UnlockStore(type);
++    /* Hack to assign RGB32 to fix Nier Replicant*/
++    const char *sgi = getenv("SteamGameId");
++    if (sgi && !strcmp(sgi, "1113560"))
++    {
++        IMFMediaType_LockStore(type);
++        IMFMediaType_SetGUID(type, &MF_MT_SUBTYPE, &MFVideoFormat_RGB32);
++        IMFMediaType_UnlockStore(type);
++    }
 +
      hr = source_reader_set_compatible_media_type(reader, index, type);
      if (hr == S_FALSE)
