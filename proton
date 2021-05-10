@@ -449,6 +449,7 @@ class CompatData:
 
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
+            use_nvapi = 'enablenvapi' in g_session.compat_config
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
                     #dxsetup redist
@@ -493,6 +494,7 @@ class CompatData:
                 str(use_wined3d),
                 str(use_dxvk_dxgi),
                 builtin_dll_copy,
+                str(use_nvapi),
             ))
 
             if old_ver == CURRENT_PREFIX_VERSION:
@@ -585,6 +587,23 @@ class CompatData:
                 try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll",
                         self.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
                 g_session.dlloverrides[f] = "n"
+
+            # If the user requested the NVAPI be available, copy it into place.
+            # If they didn't, clean up any stray nvapi DLLs.
+            if use_nvapi:
+                try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll",
+                        self.prefix_dir + "drive_c/windows/system32/nvapi64.dll")
+                try_copy(g_proton.lib_dir + "wine/nvapi/nvapi.dll",
+                        self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll")
+                g_session.dlloverrides["nvapi64"] = "n"
+                g_session.dlloverrides["nvapi"] = "n"
+            else:
+                nvapi64_dll = self.prefix_dir + "drive_c/windows/system32/nvapi64.dll"
+                nvapi32_dll = self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll"
+                if os.path.exists(nvapi64_dll):
+                    os.unlink(nvapi64_dll)
+                if os.path.exists(nvapi32_dll):
+                    os.unlink(nvapi32_dll)
 
             try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll",
                     self.prefix_dir + "drive_c/windows/system32/d3d12.dll")
@@ -751,6 +770,7 @@ class Session:
         self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
+        self.check_environment("PROTON_ENABLE_NVAPI", "enablenvapi")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
