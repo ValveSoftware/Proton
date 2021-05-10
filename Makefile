@@ -181,6 +181,14 @@ dxvk: downloads
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/
 
+dxvk-nvapi: | vagrant_share/dxvk-nvapi/lib/wine/nvapi
+dxvk-nvapi: | vagrant_share/dxvk-nvapi/lib64/wine/nvapi
+dxvk-nvapi: private SHELL := $(VAGRANT_SHELL)
+dxvk-nvapi: downloads
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk-nvapi && \
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/nvapi/*.dll /vagrant/dxvk-nvapi/lib/wine/nvapi/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/nvapi/*.dll /vagrant/dxvk-nvapi/lib64/wine/nvapi/
+
 vkd3d-proton: | vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton
 vkd3d-proton: | vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton
 vkd3d-proton: private SHELL := $(VAGRANT_SHELL)
