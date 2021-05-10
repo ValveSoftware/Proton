@@ -1011,6 +1011,49 @@ run:
     }
 }
 
+static BOOL steam_protocol_handler(int argc, char *argv[])
+{
+    const char *steam_prefix = "steam://";
+    STARTUPINFOA si = { sizeof(si) };
+    PROCESS_INFORMATION pi;
+    char cmd[1024];
+    int size;
+    int i;
+
+    for (i = 1; i < argc; ++i)
+        if (!strcmp(argv[i], "--"))
+            break;
+
+    if (i >= argc - 1)
+        return FALSE;
+    ++i;
+
+    if (strlen(argv[i]) < ARRAY_SIZE(steam_prefix))
+        return FALSE;
+
+    if (strncasecmp(argv[i], steam_prefix, ARRAY_SIZE(steam_prefix) - 1))
+        return FALSE;
+
+    size = snprintf(cmd, sizeof(cmd), "winebrowser \"%s\"", argv[i]);
+    if (size >= sizeof(cmd))
+    {
+        WINE_ERR("Argument is too large, argv[%d] %s.\n", i, wine_dbgstr_a(argv[i]));
+        return TRUE;
+    }
+
+    WINE_TRACE("Executing %s.\n", wine_dbgstr_a(cmd));
+    if (!CreateProcessA(NULL, cmd, NULL, NULL, FALSE, CREATE_UNICODE_ENVIRONMENT, NULL, NULL, &si, &pi))
+    {
+        WINE_ERR("Failed to create process %s, error %u.\n", wine_dbgstr_a(cmd), GetLastError());
+        return TRUE;
+    }
+    FreeConsole();
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    CloseHandle(pi.hThread);
+    CloseHandle(pi.hProcess);
+    return TRUE;
+}
+
 int main(int argc, char *argv[])
 {
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
@@ -1018,6 +1061,9 @@ int main(int argc, char *argv[])
     BOOL game_process = FALSE;
 
     WINE_TRACE("\n");
+
+    if (steam_protocol_handler(argc, argv))
+        return 0;
 
     if (getenv("SteamGameId"))
     {
