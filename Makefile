@@ -160,6 +160,14 @@ dxvk: configure
 		cp -f $(BUILD_DIR)/dist/files/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/ && \
 		find /vagrant/dxvk/ -type f -name "*.dll" -printf "%p\0" | xargs --verbose -0 -r -P8 -n3 proton/make/pefixup.py'
 
+dxvk-nvapi: configure
+	mkdir -p vagrant_share/dxvk-nvapi/lib/wine/nvapi/
+	mkdir -p vagrant_share/dxvk-nvapi/lib64/wine/nvapi/
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk-nvapi && \
+		cp -f $(BUILD_DIR)/dist/files/lib/wine/nvapi/*.dll /vagrant/dxvk-nvapi/lib/wine/nvapi/ && \
+		cp -f $(BUILD_DIR)/dist/files/lib64/wine/nvapi/*.dll /vagrant/dxvk-nvapi/lib64/wine/nvapi/ && \
+		find /vagrant/dxvk-nvapi/ -type f -name "*.dll" -printf "%p\0" | xargs --verbose -0 -r -P8 -n3 proton/make/pefixup.py'
+
 vkd3d-proton: configure
 	mkdir -p vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton/
 	mkdir -p vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton/
