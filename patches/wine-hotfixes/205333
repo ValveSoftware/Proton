@@ -1,0 +1,116 @@
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH 2/2] ntdll: Retry creating thread stack in higher address space.
+Message-Id: <20210507100805.2250770-2-rbernon@codeweavers.com>
+Date: Fri,  7 May 2021 12:08:05 +0200
+In-Reply-To: <20210507100805.2250770-1-rbernon@codeweavers.com>
+References: <20210507100805.2250770-1-rbernon@codeweavers.com>
+
+When creating it in the lower 2G fails.
+
+This fixes a regression from 789c1db18a4e192425da3771cac4726cda77130b,
+which causes several apps to fail when the lower 2G are getting crowded,
+or when they have unusually large default thread stack sizes.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/ntdll/tests/virtual.c | 2 +-
+ dlls/ntdll/unix/virtual.c  | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
+index c3baa5f09c7..e036ebdec86 100644
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -3051,6 +3051,7 @@ NTSTATUS virtual_alloc_thread_stack( INITIAL_TEB *stack, SIZE_T reserve_size, SI
+     NTSTATUS status;
+     sigset_t sigset;
+     SIZE_T size, extra_size = 0;
++    unsigned int vprot = VPROT_READ | VPROT_WRITE | VPROT_COMMITTED;
+ 
+     if (!reserve_size) reserve_size = main_image_info.MaximumStackSize;
+     if (!commit_size) commit_size = main_image_info.CommittedStackSize;
+@@ -3062,9 +3063,9 @@ NTSTATUS virtual_alloc_thread_stack( INITIAL_TEB *stack, SIZE_T reserve_size, SI
+ 
+     server_enter_uninterrupted_section( &virtual_mutex, &sigset );
+ 
+-    if ((status = map_view( &view, NULL, size + extra_size, FALSE,
+-                            VPROT_READ | VPROT_WRITE | VPROT_COMMITTED, zero_bits )) != STATUS_SUCCESS)
+-        goto done;
++    status = map_view( &view, NULL, size + extra_size, FALSE, vprot, zero_bits );
++    if (status == STATUS_NO_MEMORY) status = map_view( &view, NULL, size + extra_size, FALSE, vprot, 0 );
++    if (status != STATUS_SUCCESS) goto done;
+ 
+ #ifdef VALGRIND_STACK_REGISTER
+     VALGRIND_STACK_REGISTER( view->base, (char *)view->base + view->size );
+
+-- 
+2.31.0
+
+From 0101fea201a968fd0ac21c6591c9db56f6a606a6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Sun, 9 May 2021 21:39:34 +0200
+Subject: [PATCH] ntdll: Use zero_bits in virtual_alloc_teb as well.
+
+---
+ dlls/ntdll/unix/thread.c       | 2 +-
+ dlls/ntdll/unix/unix_private.h | 2 +-
+ dlls/ntdll/unix/virtual.c      | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index b257bffd882..b98f23b1383 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -245,7 +245,7 @@ NTSTATUS WINAPI NtCreateThreadEx( HANDLE *handle, ACCESS_MASK access, OBJECT_ATT
+ 
+     pthread_sigmask( SIG_BLOCK, &server_block_set, &sigset );
+ 
+-    if ((status = virtual_alloc_teb( &teb ))) goto done;
++    if ((status = virtual_alloc_teb( &teb, zero_bits ))) goto done;
+ 
+     if ((status = virtual_alloc_thread_stack( &stack, zero_bits, stack_reserve, stack_commit, &extra_stack )))
+     {
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index ce34cea7fcf..e85a17ddc45 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -194,7 +194,7 @@ extern NTSTATUS virtual_map_builtin_module( HANDLE mapping, void **module, SIZE_
+ extern NTSTATUS virtual_create_builtin_view( void *module, const UNICODE_STRING *nt_name,
+                                              pe_image_info_t *info, void *so_handle ) DECLSPEC_HIDDEN;
+ extern TEB *virtual_alloc_first_teb(void) DECLSPEC_HIDDEN;
+-extern NTSTATUS virtual_alloc_teb( TEB **ret_teb ) DECLSPEC_HIDDEN;
++extern NTSTATUS virtual_alloc_teb( TEB **ret_teb, ULONG_PTR zero_bits ) DECLSPEC_HIDDEN;
+ extern void virtual_free_teb( TEB *teb ) DECLSPEC_HIDDEN;
+ extern NTSTATUS virtual_clear_tls_index( ULONG index ) DECLSPEC_HIDDEN;
+ extern NTSTATUS virtual_alloc_thread_stack( INITIAL_TEB *stack, ULONG_PTR zero_bits, SIZE_T reserve_size,
+diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
+index 176f47190f6..02b8bf80d20 100644
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -2919,7 +2919,7 @@ TEB *virtual_alloc_first_teb(void)
+ /***********************************************************************
+  *           virtual_alloc_teb
+  */
+-NTSTATUS virtual_alloc_teb( TEB **ret_teb )
++NTSTATUS virtual_alloc_teb( TEB **ret_teb, ULONG_PTR zero_bits )
+ {
+     sigset_t sigset;
+     TEB *teb;
+@@ -2928,7 +2928,7 @@ NTSTATUS virtual_alloc_teb( TEB **ret_teb )
+     SIZE_T block_size = signal_stack_mask + 1;
+ 
+     server_enter_uninterrupted_section( &virtual_mutex, &sigset );
+-    if (next_free_teb)
++    if (next_free_teb && !((UINT_PTR)next_free_teb & ~get_zero_bits_mask( zero_bits )))
+     {
+         ptr = next_free_teb;
+         next_free_teb = *(void **)ptr;
+@@ -2940,7 +2940,7 @@ NTSTATUS virtual_alloc_teb( TEB **ret_teb )
+         {
+             SIZE_T total = 32 * block_size;
+ 
+-            if ((status = NtAllocateVirtualMemory( NtCurrentProcess(), &ptr, is_win64 ? 0x7fffffff : 0,
++            if ((status = NtAllocateVirtualMemory( NtCurrentProcess(), &ptr, zero_bits,
+                                                    &total, MEM_RESERVE, PAGE_READWRITE )))
+             {
+                 server_leave_uninterrupted_section( &virtual_mutex, &sigset );

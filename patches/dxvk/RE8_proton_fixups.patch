@@ -1,0 +1,74 @@
+From da2c351df5504f605999c4b4dea69b94ab1a755b Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Fri, 7 May 2021 21:12:29 +0100
+Subject: [PATCH] [dxgi] Add output cache
+
+Caches DXGI outputs for a given adapter. Helps with RE8 performance.
+
+(cherry picked from commit a0fddf56a6e36440ff2a9e4b7e166834a4239031)
+---
+ src/dxgi/dxgi_adapter.cpp | 28 +++++++++++++++++-----------
+ src/dxgi/dxgi_adapter.h   |  2 ++
+ 2 files changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/src/dxgi/dxgi_adapter.cpp b/src/dxgi/dxgi_adapter.cpp
+index ac5463715..e2a3252b6 100644
+--- a/src/dxgi/dxgi_adapter.cpp
++++ b/src/dxgi/dxgi_adapter.cpp
+@@ -61,7 +61,20 @@ namespace dxvk {
+     m_adapter (adapter),
+     m_interop (this),
+     m_index   (index) {
+-    
++    for (uint32_t i = 0; ; i++) {
++      MonitorEnumInfo info;
++      info.iMonitorId = i;
++      info.oMonitor   = nullptr;
++      
++      ::EnumDisplayMonitors(
++        nullptr, nullptr, &MonitorEnumProc,
++        reinterpret_cast<LPARAM>(&info));
++      
++      if (info.oMonitor == nullptr)
++        break;
++      
++      m_outputCache.emplace_back(new DxgiOutput(m_factory, this, info.oMonitor));
++    }
+   }
+   
+   
+@@ -143,18 +156,11 @@ namespace dxvk {
+     if (ppOutput == nullptr)
+       return E_INVALIDARG;
+     
+-    MonitorEnumInfo info;
+-    info.iMonitorId = Output;
+-    info.oMonitor   = nullptr;
+-    
+-    ::EnumDisplayMonitors(
+-      nullptr, nullptr, &MonitorEnumProc,
+-      reinterpret_cast<LPARAM>(&info));
+-    
+-    if (info.oMonitor == nullptr)
++    if (Output >= m_outputCache.size())
+       return DXGI_ERROR_NOT_FOUND;
+     
+-    *ppOutput = ref(new DxgiOutput(m_factory, this, info.oMonitor));
++    *ppOutput = ref(m_outputCache[Output].ptr());
++
+     return S_OK;
+   }
+   
+diff --git a/src/dxgi/dxgi_adapter.h b/src/dxgi/dxgi_adapter.h
+index af3e47166..568a475be 100644
+--- a/src/dxgi/dxgi_adapter.h
++++ b/src/dxgi/dxgi_adapter.h
+@@ -122,6 +122,8 @@ namespace dxvk {
+     std::unordered_map<DWORD, HANDLE> m_eventMap;
+     dxvk::thread                      m_eventThread;
+ 
++    std::vector<Com<DxgiOutput, false>> m_outputCache;
++
+     void runEventThread();
+     
+     struct MonitorEnumInfo {
