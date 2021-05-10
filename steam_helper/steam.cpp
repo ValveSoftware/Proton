@@ -1054,6 +1054,104 @@ static BOOL steam_protocol_handler(int argc, char *argv[])
     return TRUE;
 }
 
+static void setup_steam_files(void)
+{
+    static const WCHAR libraryfolders_nameW[] = L"C:\\Program Files (x86)\\Steam\\steamapps\\libraryfolders.vdf";
+    static const WCHAR steamapps_pathW[] = L"C:\\Program Files (x86)\\Steam\\steamapps";
+    const char *steam_install_path = getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH");
+    const char *steam_library_paths = getenv("STEAM_COMPAT_LIBRARY_PATHS");
+    const char *start, *end, *next;
+    unsigned int i, index = 1;
+    std::string contents;
+    char idx_str[10];
+
+    if (!CreateDirectoryW(steamapps_pathW, NULL) && GetLastError() != ERROR_ALREADY_EXISTS)
+    {
+        WINE_ERR("Failed to create steamapps directory, GetLastError() %u.\n", GetLastError());
+        return;
+    }
+
+    contents += "\"LibraryFolders\"\n{\n";
+
+    WINE_TRACE("steam_install_path %s.\n", wine_dbgstr_a(steam_install_path));
+
+    if (steam_install_path)
+    {
+        std::string s = steam_install_path;
+
+        if (convert_path_to_win(s))
+        {
+            sprintf(idx_str, "%u", index);
+            ++index;
+
+            for (i = 0; i < s.length(); ++i)
+            {
+                if (s[i] == '\\')
+                {
+                    s.insert(i, 1, '\\');
+                    ++i;
+                }
+            }
+
+            contents += std::string("\t\"") + idx_str + "\" \t\"" + s + "\"\n";
+        }
+        else
+        {
+            WINE_ERR("Could not convert %s to win path.\n", wine_dbgstr_a(s.c_str()));
+        }
+    }
+
+    WINE_TRACE("steam_library_paths %s.\n", wine_dbgstr_a(steam_library_paths));
+
+    start = steam_library_paths;
+    while (start && *start)
+    {
+        std::string s;
+
+        if (!(next = strchr(start, ':')))
+            next = start + strlen(start);
+        end = next;
+
+        if (end != start && end[-1] == '/')
+            --end;
+
+        while (end != start && end[-1] != '/' )
+            --end;
+        if (end != start)
+            --end;
+
+        s.append(start, end - start);
+        if (convert_path_to_win(s))
+        {
+            sprintf(idx_str, "%u", index);
+            ++index;
+
+            for (i = 0; i < s.length(); ++i)
+            {
+                if (s[i] == '\\')
+                {
+                    s.insert(i, 1, '\\');
+                    ++i;
+                }
+            }
+
+            contents += std::string("\t\"") + idx_str + "\" \t\"" + s + "\"\n";
+        }
+        else
+        {
+            WINE_ERR("Could not convert %s to win path.\n", wine_dbgstr_a(s.c_str()));
+        }
+        if (*next == ':')
+            ++next;
+        start = next;
+    }
+
+    contents += "}\n";
+
+    if (!write_string_to_file(libraryfolders_nameW, contents))
+        WINE_ERR("Could not write %s.\n", wine_dbgstr_w(libraryfolders_nameW));
+}
+
 int main(int argc, char *argv[])
 {
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
@@ -1078,6 +1176,7 @@ int main(int argc, char *argv[])
 
         set_active_process_pid();
         setup_steam_registry();
+        setup_steam_files();
 
         wait_handle = __wine_make_process_system();
         game_process = TRUE;
