@@ -824,8 +824,6 @@ class Session:
         else:
             self.env["WINEDEBUG"] = "-all"
 
-        g_compatdata.setup_prefix()
-
         if "nod3d11" in self.compat_config:
             self.dlloverrides["d3d11"] = ""
             if "dxgi" in self.dlloverrides:
@@ -996,6 +994,8 @@ if __name__ == "__main__":
         g_proton.make_default_prefix()
 
     g_session.init_session()
+    if sys.argv[1] != "runinprefix":
+        g_compatdata.setup_prefix()
 
     #determine mode
     if sys.argv[1] == "run":
@@ -1006,6 +1006,8 @@ if __name__ == "__main__":
         g_session.run_proc([g_proton.wineserver_bin, "-w"])
         #then run
         g_session.run()
+    elif sys.argv[1] == "runinprefix":
+        g_session.run_proc([g_proton.wine_bin] + sys.argv[2:])
     elif sys.argv[1] == "getcompatpath":
         #linux -> windows path
         path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
