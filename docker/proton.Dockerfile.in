@@ -53,6 +53,8 @@ ENV PATH=/usr/lib/ccache:$PATH
 
 RUN apt-get install -y \
   tini \
+  libxpresent-dev \
+  libxpresent-dev:i386 \
 && rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
 && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/usr/bin/tini-static", "-s", "-g", "--"]
