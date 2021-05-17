@@ -1,0 +1,19 @@
+diff --git a/dlls/api-ms-win-core-psapi-l1-1-0/api-ms-win-core-psapi-l1-1-0.spec b/dlls/api-ms-win-core-psapi-l1-1-0/api-ms-win-core-psapi-l1-1-0.spec
+index c54c1077843..321fc3fe928 100644
+--- a/dlls/api-ms-win-core-psapi-l1-1-0/api-ms-win-core-psapi-l1-1-0.spec
++++ b/dlls/api-ms-win-core-psapi-l1-1-0/api-ms-win-core-psapi-l1-1-0.spec
+@@ -14,3 +14,5 @@
+ @ stdcall K32QueryWorkingSet(long ptr long) kernel32.K32QueryWorkingSet
+ @ stdcall K32QueryWorkingSetEx(long ptr long) kernel32.K32QueryWorkingSetEx
+ @ stdcall QueryFullProcessImageNameW(ptr long ptr ptr) kernel32.QueryFullProcessImageNameW
++@ stdcall K32GetModuleBaseNameW(long long ptr long) kernel32.K32GetModuleBaseNameW
++@ stdcall K32GetModuleInformation(long long ptr long) kernel32.K32GetModuleInformation
+diff --git a/dlls/api-ms-win-core-psapi-ansi-l1-1-0/api-ms-win-core-psapi-ansi-l1-1-0.spec b/dlls/api-ms-win-core-psapi-ansi-l1-1-0/api-ms-win-core-psapi-ansi-l1-1-0.spec
+index e4f758581f6..340198c6edf 100644
+--- a/dlls/api-ms-win-core-psapi-ansi-l1-1-0/api-ms-win-core-psapi-ansi-l1-1-0.spec
++++ b/dlls/api-ms-win-core-psapi-ansi-l1-1-0/api-ms-win-core-psapi-ansi-l1-1-0.spec
+@@ -4,3 +4,4 @@
+ @ stdcall K32GetMappedFileNameA(long ptr ptr long) kernel32.K32GetMappedFileNameA
+ @ stdcall K32GetProcessImageFileNameA(long ptr long) kernel32.K32GetProcessImageFileNameA
+ @ stdcall QueryFullProcessImageNameA(ptr long ptr ptr) kernel32.QueryFullProcessImageNameA
++@ stdcall K32GetModuleBaseNameA(long long ptr long) kernel32.K32GetModuleBaseNameA
