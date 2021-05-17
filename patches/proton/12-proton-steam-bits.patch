@@ -610,3 +610,28 @@ index b85a3b6b6ea..6dfc797313e 100644
          WINE_MESSAGE( "wine: configuration in '%s' has been updated.\n", config_dir );
      }
  
+From 1d06745fc4cc9353b5e8bdb48d4cb716b2a7ec85 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 7 May 2021 16:50:29 +0300
+Subject: [PATCH] wine.inf: Associate the steam protocol with steam.exe.
+
+For 2K Launcher.
+
+CW-Bug-Id: 18912
+---
+ loader/wine.inf.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index a2b45b3c28f..851a31b7d05 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -330,7 +330,7 @@ HKCR,https\shell\open\ddeexec,"NoActivateHandler",2,""
+ HKCR,https\shell\open\ddeexec\Application,,2,"IExplore"
+ HKCR,https\shell\open\ddeexec\Topic,,2,"WWW_OpenURL"
+ HKCR,mailto\shell\open\command,,2,"%11%\winebrowser %1"
+-HKCR,steam\shell\open\command,,2,"""%11%\winebrowser"" ""%1"""
++HKCR,steam\shell\open\command,,,"""%16426%\Steam\Steam.exe"" -- ""%1"""
+ 
+ HKCR,MIME\Database\Charset\_iso-2022-jp$ESC,"Codepage",0x10003,932
+ HKCR,MIME\Database\Charset\_iso-2022-jp$ESC,"InternetEncoding",0x10003,50221

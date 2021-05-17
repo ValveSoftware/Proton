@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.7-GE-1"
+CURRENT_PREFIX_VERSION="6.8-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -154,6 +154,7 @@ class Proton:
         self.lib_dir = self.path("files/lib/")
         self.lib64_dir = self.path("files/lib64/")
         self.fonts_dir = self.path("files/share/fonts/")
+        self.wine_fonts_dir = self.path("files/share/wine/fonts/")
         self.version_file = self.path("version")
         self.default_pfx_dir = self.path("files/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
@@ -314,6 +315,13 @@ class CompatData:
                     log("Unable to write new registry file to " + self.prefix_dir + "system.reg")
                     pass
 
+            stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
+                              self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll" ]
+            for builtin in stale_builtins:
+                if os.path.lexists(builtin) and file_is_wine_builtin_dll(builtin):
+                    log("Removing stale builtin " + builtin)
+                    os.remove(builtin)
+
         except ValueError:
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #Just let the Wine upgrade happen and hope it works...
@@ -391,18 +399,21 @@ class CompatData:
 
     def create_fonts_symlinks(self):
         fontsmap = [
-            ( "LiberationSans-Regular.ttf", "arial.ttf" ),
-            ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
-            ( "LiberationSerif-Regular.ttf", "times.ttf" ),
-            ( "LiberationMono-Regular.ttf", "cour.ttf" ),
-            ( "SourceHanSansSCRegular.otf", "msyh.ttf" ),
+            ( g_proton.fonts_dir, "LiberationSans-Regular.ttf", "arial.ttf" ),
+            ( g_proton.fonts_dir, "LiberationSans-Bold.ttf", "arialbd.ttf" ),
+            ( g_proton.fonts_dir, "LiberationSerif-Regular.ttf", "times.ttf" ),
+            ( g_proton.fonts_dir, "LiberationMono-Regular.ttf", "cour.ttf" ),
+            ( g_proton.fonts_dir, "LiberationMono-Bold.ttf", "courbd.ttf" ),
+            ( g_proton.fonts_dir, "SourceHanSansSCRegular.otf", "msyh.ttf" ),
+
+            ( g_proton.wine_fonts_dir, "tahoma.ttf", "tahoma.ttf" ),
         ]
 
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
         for p in fontsmap:
-            lname = os.path.join(windowsfonts, p[1])
-            fname = os.path.join(g_proton.fonts_dir, p[0])
+            lname = os.path.join(windowsfonts, p[2])
+            fname = os.path.join(p[0], p[1])
             if os.path.lexists(lname):
                 if os.path.islink(lname):
                     os.remove(lname)
@@ -851,11 +862,14 @@ class Session:
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
         #load environment overrides
+        used_user_settings = {}
         if os.path.exists(g_proton.user_settings_file):
             try:
                 import user_settings
                 for key, value in user_settings.user_settings.items():
-                    self.env.setdefault(key, value)
+                    if not key in self.env:
+                        self.env[key] = value
+                        used_user_settings[key] = value
             except:
                 log("************************************************")
                 log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
@@ -901,12 +915,15 @@ class Session:
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
         else:
-            self.env["WINEESYNC"] = "1" if "SteamGameId" in self.env else "0"
+            self.env["WINEESYNC"] = "1"
+
+        if not "noxim" in self.compat_config:
+            self.env.pop("WINE_ALLOW_XIM")
 
         if "nofsync" in self.compat_config:
             self.env.pop("WINEFSYNC", "")
         else:
-            self.env["WINEFSYNC"] = "1" if "SteamGameId" in self.env else "0"
+            self.env["WINEFSYNC"] = "1"
 
         if "nowritewatch" in self.compat_config:
             self.env["WINE_DISABLE_WRITE_WATCH"] = "1"
@@ -926,10 +943,9 @@ class Session:
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
-        self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
-
-        if not "noxim" in self.compat_config:
-            self.env.pop("WINE_ALLOW_XIM")
+        if "vkd3dfl12" in self.compat_config:
+            if not "VKD3D_FEATURE_LEVEL" in self.env:
+                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
@@ -949,6 +965,14 @@ class Session:
                 self.log_file.write("Command: " + str(sys.argv[2:] + self.cmdlineappend) + "\n")
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
                 self.try_log_slr_versions()
+
+                #dump some important variables into the log header
+                for var in ["WINEDLLOVERRIDES", "WINEDEBUG"]:
+                    if var in os.environ:
+                        self.log_file.write("System " + var + ": " + os.environ[var] + "\n")
+                    if var in used_user_settings:
+                        self.log_file.write("User settings " + var + ": " + used_user_settings[var] + "\n")
+
                 self.log_file.write("======================\n")
                 self.log_file.flush()
         else:
@@ -1136,7 +1160,7 @@ if __name__ == "__main__":
     if not "STEAM_COMPAT_DATA_PATH" in os.environ:
         log("No compat data path?")
         sys.exit(1)
-    
+
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
     g_proton.cleanup_legacy_dist()
