@@ -29,7 +29,7 @@
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
-    
+
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
 
@@ -66,7 +66,7 @@
     # https://github.com/Frogging-Family/wine-tkg-git/issues/248#issuecomment-760471607
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
-    
+
     # ubisoft controller regression hotfix
     git revert --no-commit 0ac619ae7ab7dd90622371a5f58a1ff12d46eb8f
 
@@ -87,9 +87,8 @@
     # instead, we apply it manually:
     # patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
 
-    # disable these for vulkan childwindow support
-    #-W Pipelight \
-    #-W winex11-Vulkan_support \
+    # disable these for vulkan experimental childwindow support
+    #-W Pipelight
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -103,6 +102,8 @@
 
     # apply this manually since imm32-com-initialization is disabled in staging.
     patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
+
+    patch -Np1 < ../patches/wine-hotfixes/upstream-vulkan-backports.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
@@ -211,13 +212,12 @@
     ## VULKAN-CENTRIC PATCHES
 
     echo "fullscreen hack"
+#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-childwindow-experimental.patch
     patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
 
-    echo "vulkan childwindow hack"
-    patch -Np1 < ../patches/proton/44-proton-vulkan-childwindow-experimental.patch
-
-#    old childwindow hack - keep just in case for now.
-#    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
+    # old childwindow hack
+    echo "vulkan childwindow fix"
+    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
     echo "proton nvidia hacks"
     patch -Np1 < ../patches/proton/26-proton-nvidia-hacks.patch
@@ -229,7 +229,7 @@
     ## END VULKAN-CENTRIC PATCHES
 
     echo "fullscreen hack wined3d additions"
-    patch -Np1 < ../patches/proton/42-valve_proton_fullscreen_hack-staging-wined3d.patch
+    patch -Np1 < ../patches/proton/43-valve_proton_fullscreen_hack-staging-wined3d.patch
 
     echo "wine mono update"
     patch -Np1 < ../patches/proton/46-proton_update_winemono_6.1.2.patch
@@ -245,9 +245,6 @@
     echo "proton-specific mfplat video conversion patches"
     patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
 
-    # additional pending fallout 4 fix
-    patch -Np1 < ../patches/wine-hotfixes/205277
-
     # mfplat nier replicant fixes
     patch -Np1 < ../patches/wine-hotfixes/mfreadwrite_hack.patch
 
@@ -257,6 +254,14 @@
     # witcher 3 + borderlands 3 breaker
     patch -Np1 < ../patches/wine-hotfixes/205333
 
+    # pending upstream wine fixes
+    
+    # more mfplat fixes
+    patch -Np1 < ../patches/wine-hotfixes/205277
+    patch -Np1 < ../patches/wine-hotfixes/204113
+
+    patch -Np1 < ../patches/wine-hotfixes/me_psapi.patch
+    patch -Np1 < ../patches/wine-hotfixes/gdi32_memory_leak_fix.patch
 
     ### END WINEPATCH SECTION ###
 
