@@ -55,8 +55,12 @@ else
 	DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
-DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
-                -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) -e MAKEFLAGS \
+ifneq ($(ROOTLESS_CONTAINER),1)
+	DOCKER_OPTS := -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) $(DOCKER_OPTS)
+endif
+
+DOCKER_BASE = docker run --rm -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) \
+                -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
 STEAMRT_NAME ?= soldier
