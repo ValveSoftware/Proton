@@ -1,0 +1,392 @@
+From 00f130b27e2b314c8d0503f75f803678f55ab9c5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 9 Mar 2020 13:33:57 +0100
+Subject: [PATCH] wined3d: Override WM_NCCALCSIZE for fullscreen windows.
+
+This still passes the message to the application window proc, but then
+overrides the result if the window is fullscreen.
+
+Some games restore window style after D3D has changed the window state
+to fullscreen. Overriding this message will make sure the client area
+always covers the full screen, regardless of window styles.
+---
+ dlls/wined3d/device.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/dlls/wined3d/device.c b/dlls/wined3d/device.c
+index dd9d8761b7b..60c889264f6 100644
+--- a/dlls/wined3d/device.c
++++ b/dlls/wined3d/device.c
+@@ -6173,6 +6173,32 @@ LRESULT device_process_message(struct wined3d_device *device, HWND window, BOOL
+         }
+     }
+ 
++    /* Testing shows we shouldn't hook that message, but doing it allows us
++     * to create fullscreen exclusive windows without altering window styles. */
++    if (message == WM_NCCALCSIZE && wparam == TRUE)
++    {
++        unsigned int i = device->swapchain_count;
++        NCCALCSIZE_PARAMS params = *(NCCALCSIZE_PARAMS*)lparam;
++        LRESULT res;
++
++        if (unicode)
++            res = CallWindowProcW(proc, window, message, wparam, lparam);
++        else
++            res = CallWindowProcA(proc, window, message, wparam, lparam);
++
++        while (i--)
++        {
++            if (device->swapchains[i]->state.device_window == window &&
++                !device->swapchains[i]->state.desc.windowed)
++            {
++                *(NCCALCSIZE_PARAMS*)lparam = params;
++                return 0;
++            }
++        }
++
++        return res;
++    }
++
+     if (unicode)
+         return CallWindowProcW(proc, window, message, wparam, lparam);
+     else
+From 8f7a2e5a826f04b72289a6b240cafd55827a1ac3 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Tue, 5 May 2020 10:42:47 +0800
+Subject: [PATCH] wined3d: Support multiple adapters.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+---
+ dlls/wined3d/adapter_gl.c      |   5 +-
+ dlls/wined3d/adapter_vk.c      |  25 +++---
+ dlls/wined3d/directx.c         | 146 +++++++++++++++++++++++++++++----
+ dlls/wined3d/wined3d_main.c    |   2 +-
+ dlls/wined3d/wined3d_private.h |   2 +-
+ 5 files changed, 153 insertions(+), 27 deletions(-)
+
+diff --git a/dlls/wined3d/adapter_gl.c b/dlls/wined3d/adapter_gl.c
+index 918c0e16738..d611f1da7d1 100644
+--- a/dlls/wined3d/adapter_gl.c
++++ b/dlls/wined3d/adapter_gl.c
+@@ -5161,7 +5161,10 @@ static BOOL wined3d_adapter_gl_init(struct wined3d_adapter_gl *adapter_gl,
+     TRACE("adapter_gl %p, ordinal %u, wined3d_creation_flags %#x.\n",
+             adapter_gl, ordinal, wined3d_creation_flags);
+ 
+-    if (ordinal == 0 && wined3d_get_primary_adapter_luid(&primary_luid))
++    if (ordinal > 0)
++        return FALSE;
++
++    if (wined3d_get_primary_adapter_luid(&primary_luid))
+         luid = &primary_luid;
+ 
+     if (!wined3d_adapter_init(&adapter_gl->a, ordinal, luid, &wined3d_adapter_gl_ops))
+diff --git a/dlls/wined3d/adapter_vk.c b/dlls/wined3d/adapter_vk.c
+index 8c79cc05058..847e26eaee8 100644
+--- a/dlls/wined3d/adapter_vk.c
++++ b/dlls/wined3d/adapter_vk.c
+@@ -1990,9 +1990,10 @@ static BOOL wined3d_init_vulkan(struct wined3d_vk_info *vk_info)
+     return FALSE;
+ }
+ 
+-static VkPhysicalDevice get_vulkan_physical_device(struct wined3d_vk_info *vk_info)
++static VkPhysicalDevice get_vulkan_physical_device(unsigned int ordinal,
++        struct wined3d_vk_info *vk_info)
+ {
+-    VkPhysicalDevice physical_devices[1];
++    VkPhysicalDevice *physical_devices, ret;
+     uint32_t count;
+     VkResult vr;
+ 
+@@ -2001,25 +2002,29 @@ static VkPhysicalDevice get_vulkan_physical_device(struct wined3d_vk_info *vk_in
+         WARN("Failed to enumerate physical devices, vr %s.\n", wined3d_debug_vkresult(vr));
+         return VK_NULL_HANDLE;
+     }
+-    if (!count)
++
++    if (ordinal >= count)
+     {
+-        WARN("No physical device.\n");
++        WARN("Device %u not found.\n", ordinal);
+         return VK_NULL_HANDLE;
+     }
+-    if (count > 1)
++
++    if (!(physical_devices = heap_calloc(count, sizeof(*physical_devices))))
+     {
+-        /* TODO: Create wined3d_adapter for each device. */
+-        FIXME("Multiple physical devices available.\n");
+-        count = 1;
++        WARN("Out of memory.\n");
++        return VK_NULL_HANDLE;
+     }
+ 
+     if ((vr = VK_CALL(vkEnumeratePhysicalDevices(vk_info->instance, &count, physical_devices))) < 0)
+     {
+         WARN("Failed to get physical devices, vr %s.\n", wined3d_debug_vkresult(vr));
++        heap_free(physical_devices);
+         return VK_NULL_HANDLE;
+     }
+ 
+-    return physical_devices[0];
++    ret = physical_devices[ordinal];
++    heap_free(physical_devices);
++    return ret;
+ }
+ 
+ static enum wined3d_display_driver guess_display_driver(enum wined3d_pci_vendor vendor)
+@@ -2302,7 +2307,7 @@ static BOOL wined3d_adapter_vk_init(struct wined3d_adapter_vk *adapter_vk,
+         return FALSE;
+     }
+ 
+-    if (!(adapter_vk->physical_device = get_vulkan_physical_device(vk_info)))
++    if (!(adapter_vk->physical_device = get_vulkan_physical_device(ordinal, vk_info)))
+         goto fail_vulkan;
+ 
+     if (!wined3d_adapter_vk_init_device_extensions(adapter_vk))
+diff --git a/dlls/wined3d/directx.c b/dlls/wined3d/directx.c
+index 0f0a7b63337..886d7e9c838 100644
+--- a/dlls/wined3d/directx.c
++++ b/dlls/wined3d/directx.c
+@@ -144,6 +144,7 @@ static HRESULT wined3d_output_init(struct wined3d_output *output, unsigned int o
+     output->kmt_adapter = open_adapter_desc.hAdapter;
+     output->kmt_device = create_device_desc.hDevice;
+     output->vidpn_source_id = open_adapter_desc.VidPnSourceId;
++    output->screen_format = WINED3DFMT_UNKNOWN;
+ 
+     return WINED3D_OK;
+ }
+@@ -193,6 +194,7 @@ ULONG CDECL wined3d_decref(struct wined3d *wined3d)
+ 
+             adapter->adapter_ops->adapter_destroy(adapter);
+         }
++        heap_free(wined3d->adapters);
+         heap_free(wined3d);
+     }
+ 
+@@ -3143,6 +3145,9 @@ static struct wined3d_adapter *wined3d_adapter_no3d_create(unsigned int ordinal,
+ 
+     TRACE("ordinal %u, wined3d_creation_flags %#x.\n", ordinal, wined3d_creation_flags);
+ 
++    if (ordinal > 0)
++        return FALSE;
++
+     if (!(adapter = heap_alloc_zero(sizeof(*adapter))))
+         return NULL;
+ 
+@@ -3216,10 +3221,15 @@ static BOOL wined3d_adapter_create_output(struct wined3d_adapter *adapter, const
+ BOOL wined3d_adapter_init(struct wined3d_adapter *adapter, unsigned int ordinal, const LUID *luid,
+         const struct wined3d_adapter_ops *adapter_ops)
+ {
+-    unsigned int output_idx = 0, primary_idx = 0;
++    unsigned int device_idx = 0, output_idx = 0, primary_idx = 0;
++    D3DKMT_OPENADAPTERFROMGDIDISPLAYNAME open_adapter_param;
++    D3DKMT_CLOSEADAPTER close_adapter_param;
+     DISPLAY_DEVICEW display_device;
++    BOOL luid_matched;
+     BOOL ret = FALSE;
++    NTSTATUS status;
+ 
++    adapter->adapter_ops = adapter_ops;
+     adapter->ordinal = ordinal;
+     adapter->output_count = 0;
+     adapter->outputs = NULL;
+@@ -3239,20 +3249,52 @@ BOOL wined3d_adapter_init(struct wined3d_adapter *adapter, unsigned int ordinal,
+     }
+     TRACE("adapter %p LUID %08x:%08x.\n", adapter, adapter->luid.HighPart, adapter->luid.LowPart);
+ 
++    /* Put all outputs under the primary adapter if the LUID is random */
++    if (!luid && ordinal)
++    {
++        ret = TRUE;
++        goto done;
++    }
++
+     display_device.cb = sizeof(display_device);
+-    while (EnumDisplayDevicesW(NULL, output_idx++, &display_device, 0))
++    while (EnumDisplayDevicesW(NULL, device_idx++, &display_device, 0))
+     {
+         /* Detached outputs are not enumerated */
+         if (!(display_device.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP))
+             continue;
+ 
++        luid_matched = FALSE;
++        if (luid)
++        {
++            lstrcpyW(open_adapter_param.DeviceName, display_device.DeviceName);
++            status = D3DKMTOpenAdapterFromGdiDisplayName(&open_adapter_param);
++            if (status != STATUS_SUCCESS)
++                continue;
++
++            close_adapter_param.hAdapter = open_adapter_param.hAdapter;
++            D3DKMTCloseAdapter(&close_adapter_param);
++            if (!memcmp(&adapter->luid, &open_adapter_param.AdapterLuid, sizeof(LUID)))
++                luid_matched = TRUE;
++        }
++
++        /* Only initialise outputs under this adapter if LUID is not a random one */
++        if (luid && !luid_matched)
++            continue;
++
+         if (display_device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
+-            primary_idx = adapter->output_count;
++            primary_idx = output_idx;
+ 
+         if (!wined3d_adapter_create_output(adapter, display_device.DeviceName))
+             goto done;
++
++        ++output_idx;
+     }
+-    TRACE("Initialised %d outputs for adapter %p.\n", adapter->output_count, adapter);
++
++    memset(&adapter->driver_uuid, 0, sizeof(adapter->driver_uuid));
++    memset(&adapter->device_uuid, 0, sizeof(adapter->device_uuid));
++
++    adapter->formats = NULL;
++    adapter->adapter_ops = adapter_ops;
+ 
+     /* Make the primary output first */
+     if (primary_idx)
+@@ -3264,11 +3306,8 @@ BOOL wined3d_adapter_init(struct wined3d_adapter *adapter, unsigned int ordinal,
+         adapter->outputs[primary_idx].ordinal = primary_idx;
+     }
+ 
+-    memset(&adapter->driver_uuid, 0, sizeof(adapter->driver_uuid));
+-    memset(&adapter->device_uuid, 0, sizeof(adapter->device_uuid));
+-
+-    adapter->formats = NULL;
+-    adapter->adapter_ops = adapter_ops;
++    TRACE("Initialised %d outputs for adapter %d %p.\n", adapter->output_count, adapter->ordinal,
++            adapter);
+     ret = TRUE;
+ done:
+     if (!ret)
+@@ -3298,19 +3337,98 @@ const struct wined3d_parent_ops wined3d_null_parent_ops =
+     wined3d_null_wined3d_object_destroyed,
+ };
+ 
++static BOOL get_primary_display(WCHAR *display)
++{
++    DISPLAY_DEVICEW display_device;
++    DWORD device_idx;
++
++    display_device.cb = sizeof(display_device);
++    for (device_idx = 0; EnumDisplayDevicesW(NULL, device_idx, &display_device, 0); ++device_idx)
++    {
++        if (display_device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
++        {
++            lstrcpyW(display, display_device.DeviceName);
++            return TRUE;
++        }
++    }
++
++    return FALSE;
++}
++
+ HRESULT wined3d_init(struct wined3d *wined3d, DWORD flags)
+ {
++    unsigned int adapter_idx = 0, output_idx, primary_index = 0;
++    WCHAR primary_display[CCHDEVICENAME];
++    struct wined3d_adapter *adapter;
++    HRESULT hr = E_FAIL;
++
+     wined3d->ref = 1;
+     wined3d->flags = flags;
++    wined3d->adapters = NULL;
++    wined3d->adapter_count = 0;
+ 
+     TRACE("Initialising adapters.\n");
+ 
+-    if (!(wined3d->adapters[0] = wined3d_adapter_create(0, flags)))
++    if (!get_primary_display(primary_display))
+     {
+-        WARN("Failed to create adapter.\n");
+-        return E_FAIL;
++        ERR("Failed to get primary display.\n");
++        return hr;
+     }
+-    wined3d->adapter_count = 1;
+ 
+-    return WINED3D_OK;
++    while ((adapter = wined3d_adapter_create(adapter_idx, flags)))
++    {
++        if (!adapter_idx)
++        {
++            wined3d->adapters = heap_calloc(1, sizeof(*wined3d->adapters));
++        }
++        else
++        {
++            struct wined3d_adapter **tmp;
++
++            tmp = heap_realloc(wined3d->adapters, sizeof(*wined3d->adapters) * (adapter_idx + 1));
++            if (!tmp)
++                goto done;
++            wined3d->adapters = tmp;
++        }
++        wined3d->adapters[adapter_idx] = adapter;
++        ++wined3d->adapter_count;
++        ++adapter_idx;
++    }
++
++    if (!wined3d->adapter_count)
++        goto done;
++
++    /* Make the adapter that contains the primary output the first */
++    for (adapter_idx = 0; adapter_idx < wined3d->adapter_count; ++adapter_idx)
++    {
++        adapter = wined3d->adapters[adapter_idx];
++        for (output_idx = 0; output_idx < adapter->output_count; ++output_idx)
++        {
++            if (!lstrcmpW(adapter->outputs[output_idx].device_name, primary_display))
++            {
++                primary_index = adapter_idx;
++                break;
++            }
++        }
++    }
++
++    if (primary_index)
++    {
++        adapter = wined3d->adapters[0];
++        wined3d->adapters[0] = wined3d->adapters[primary_index];
++        wined3d->adapters[0]->ordinal = 0;
++        wined3d->adapters[primary_index] = adapter;
++        wined3d->adapters[primary_index]->ordinal = primary_index;
++    }
++
++    hr = WINED3D_OK;
++    TRACE("Initialised %u adapters.\n", wined3d->adapter_count);
++done:
++    if (FAILED(hr))
++    {
++        for (adapter_idx = 0; adapter_idx < wined3d->adapter_count; ++adapter_idx)
++            wined3d_adapter_cleanup(wined3d->adapters[adapter_idx]);
++        heap_free(wined3d->adapters);
++    }
++    return hr;
+ }
+diff --git a/dlls/wined3d/wined3d_main.c b/dlls/wined3d/wined3d_main.c
+index 293359714c3..6417fffa9ce 100644
+--- a/dlls/wined3d/wined3d_main.c
++++ b/dlls/wined3d/wined3d_main.c
+@@ -136,7 +136,7 @@ struct wined3d * CDECL wined3d_create(DWORD flags)
+     struct wined3d *object;
+     HRESULT hr;
+ 
+-    if (!(object = heap_alloc_zero(FIELD_OFFSET(struct wined3d, adapters[1]))))
++    if (!(object = heap_alloc_zero(sizeof(*object))))
+     {
+         ERR("Failed to allocate wined3d object memory.\n");
+         return NULL;
+diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
+index 9f37398cd7e..38eaf5e3cbc 100644
+--- a/dlls/wined3d/wined3d_private.h
++++ b/dlls/wined3d/wined3d_private.h
+@@ -3579,7 +3579,7 @@ struct wined3d
+     LONG ref;
+     unsigned int flags;
+     unsigned int adapter_count;
+-    struct wined3d_adapter *adapters[1];
++    struct wined3d_adapter **adapters;
+ };
+ 
+ BOOL wined3d_filter_messages(HWND window, BOOL filter) DECLSPEC_HIDDEN;
