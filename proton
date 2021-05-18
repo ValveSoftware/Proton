@@ -47,7 +47,7 @@ def log(msg):
 def file_is_wine_builtin_dll(path):
     if os.path.islink(path):
         contents = os.readlink(path)
-        if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
+        if os.path.dirname(contents).endswith(('/lib/wine/i386-windows', '/lib/wine/fakedlls', '/lib64/wine/x86_64-windows', '/lib64/wine/fakedlls')):
             # This may be a broken link to a dll in a removed Proton install
             return True
     if not os.path.exists(path):
@@ -330,7 +330,7 @@ class CompatData:
     def pfx_copy(self, src, dst, dll_copy=False):
         if os.path.islink(src):
             contents = os.readlink(src)
-            if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
+            if os.path.dirname(contents).endswith(('/lib/wine/i386-windows', '/lib/wine/fakedlls', '/lib64/wine/x86_64-windows', '/lib64/wine/fakedlls')):
                 # wine builtin dll
                 # make the destination an absolute symlink
                 contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
@@ -915,15 +915,15 @@ class Session:
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
         else:
-            self.env["WINEESYNC"] = "1"
-
-        if not "noxim" in self.compat_config:
-            self.env.pop("WINE_ALLOW_XIM")
+            self.env["WINEESYNC"] = "1" if "SteamGameId" in self.env else "0"
 
         if "nofsync" in self.compat_config:
             self.env.pop("WINEFSYNC", "")
         else:
-            self.env["WINEFSYNC"] = "1"
+            self.env["WINEFSYNC"] = "1" if "SteamGameId" in self.env else "0"
+
+        if not "noxim" in self.compat_config:
+            self.env.pop("WINE_ALLOW_XIM")
 
         if "nowritewatch" in self.compat_config:
             self.env["WINE_DISABLE_WRITE_WATCH"] = "1"

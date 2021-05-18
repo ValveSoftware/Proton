@@ -57,12 +57,14 @@ def setup_dll_symlinks(default_pfx_dir, dist_dir):
                 bitness = dll_bitness(filename)
                 if bitness == 32:
                     libdir = os.path.join(dist_dir, 'lib/wine')
+                    dlldir = "i386-windows"
                 elif bitness == 64:
                     libdir = os.path.join(dist_dir, 'lib64/wine')
+                    dlldir = "x86_64-windows"
                 else:
                     continue
-                if os.path.exists(os.path.join(libdir, file_)):
-                    target = os.path.join(libdir, file_)
+                if os.path.exists(os.path.join(libdir, dlldir, file_)):
+                    target = os.path.join(libdir, dlldir, file_)
                 elif os.path.exists(os.path.join(libdir, 'fakedlls', file_)):
                     target = os.path.join(libdir, 'fakedlls', file_)
                 else:
