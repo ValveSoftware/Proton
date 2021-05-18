@@ -438,7 +438,7 @@ class CompatData:
                 steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
             else:
                 #linux-only fallback, really shouldn't get here
-                steamdir = os.environ["HOME"] + ".steam/root/"
+                steamdir = os.environ["HOME"] + "/.steam/root/"
 
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = "WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"]
