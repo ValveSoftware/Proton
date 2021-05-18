@@ -433,12 +433,8 @@ class CompatData:
                 self.copy_pfx()
 
             # collect configuration info
-            if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
-                #modern steam client sets this
-                steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
-            else:
-                #linux-only fallback, really shouldn't get here
-                steamdir = os.environ["HOME"] + "/.steam/root/"
+            # modern steam client is expected to set this
+            steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
 
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = "WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"]
