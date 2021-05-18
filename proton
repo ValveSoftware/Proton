@@ -779,6 +779,9 @@ class Session:
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
+        if "PROTON_CRASH_REPORT_DIR" in self.env:
+            self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
+
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
                 basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
