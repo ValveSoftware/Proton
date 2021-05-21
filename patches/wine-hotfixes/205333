@@ -1,51 +1,3 @@
-From: "Rémi Bernon" <rbernon@codeweavers.com>
-Subject: [PATCH 2/2] ntdll: Retry creating thread stack in higher address space.
-Message-Id: <20210507100805.2250770-2-rbernon@codeweavers.com>
-Date: Fri,  7 May 2021 12:08:05 +0200
-In-Reply-To: <20210507100805.2250770-1-rbernon@codeweavers.com>
-References: <20210507100805.2250770-1-rbernon@codeweavers.com>
-
-When creating it in the lower 2G fails.
-
-This fixes a regression from 789c1db18a4e192425da3771cac4726cda77130b,
-which causes several apps to fail when the lower 2G are getting crowded,
-or when they have unusually large default thread stack sizes.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- dlls/ntdll/tests/virtual.c | 2 +-
- dlls/ntdll/unix/virtual.c  | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index c3baa5f09c7..e036ebdec86 100644
---- a/dlls/ntdll/unix/virtual.c
-+++ b/dlls/ntdll/unix/virtual.c
-@@ -3051,6 +3051,7 @@ NTSTATUS virtual_alloc_thread_stack( INITIAL_TEB *stack, SIZE_T reserve_size, SI
-     NTSTATUS status;
-     sigset_t sigset;
-     SIZE_T size, extra_size = 0;
-+    unsigned int vprot = VPROT_READ | VPROT_WRITE | VPROT_COMMITTED;
- 
-     if (!reserve_size) reserve_size = main_image_info.MaximumStackSize;
-     if (!commit_size) commit_size = main_image_info.CommittedStackSize;
-@@ -3062,9 +3063,9 @@ NTSTATUS virtual_alloc_thread_stack( INITIAL_TEB *stack, SIZE_T reserve_size, SI
- 
-     server_enter_uninterrupted_section( &virtual_mutex, &sigset );
- 
--    if ((status = map_view( &view, NULL, size + extra_size, FALSE,
--                            VPROT_READ | VPROT_WRITE | VPROT_COMMITTED, zero_bits )) != STATUS_SUCCESS)
--        goto done;
-+    status = map_view( &view, NULL, size + extra_size, FALSE, vprot, zero_bits );
-+    if (status == STATUS_NO_MEMORY) status = map_view( &view, NULL, size + extra_size, FALSE, vprot, 0 );
-+    if (status != STATUS_SUCCESS) goto done;
- 
- #ifdef VALGRIND_STACK_REGISTER
-     VALGRIND_STACK_REGISTER( view->base, (char *)view->base + view->size );
-
--- 
-2.31.0
-
 From 0101fea201a968fd0ac21c6591c9db56f6a606a6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Sun, 9 May 2021 21:39:34 +0200
@@ -149,21 +101,4 @@ index 1a3f202dea7..2d3e4027ef7 100644
      }
      else
      {
-@@ -3181,6 +3189,17 @@ NTSTATUS virtual_alloc_thread_stack( INITIAL_TEB *stack, ULONG_PTR zero_bits, SI
- 
-     server_enter_uninterrupted_section( &virtual_mutex, &sigset );
- 
-+    /*More Nioh 2 being angry fixes*/
-+    {
-+        const char *sgi = getenv("SteamGameId");
-+        if (sgi && !strcmp(sgi, "1325200"))
-+        {
-+            if ((status = map_view( &view, NULL, size + extra_size, FALSE,
-+                                    VPROT_READ | VPROT_WRITE | VPROT_COMMITTED, zero_bits )) != STATUS_SUCCESS)
-+                goto done;
-+        }
-+    }
-+
-     status = map_view( &view, NULL, size + extra_size, FALSE, vprot, zero_bits );
-     if (status == STATUS_NO_MEMORY) status = map_view( &view, NULL, size + extra_size, FALSE, vprot, 0 );
-     if (status != STATUS_SUCCESS) goto done;
+
