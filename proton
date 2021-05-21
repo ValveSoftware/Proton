@@ -16,11 +16,12 @@ import sys
 import tarfile
 
 from filelock import FileLock
+from random import randrange
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.3-2"
+CURRENT_PREFIX_VERSION="6.3-3"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -307,6 +308,52 @@ class CompatData:
                     os.rename(self.prefix_dir + "system.reg.new", self.prefix_dir + "system.reg")
                 except OSError:
                     log("Unable to write new registry file to " + self.prefix_dir + "system.reg")
+                    pass
+
+            # Prior to prefix version 6.3-3, ShellExecute* APIs used DDE.
+            # Wipe out old registry entries.
+            if int(old_proton_maj) < 6 or (int(old_proton_maj) == 6 and int(old_proton_min) < 3) or \
+                    (int(old_proton_maj) == 6 and int(old_proton_min) == 3 and int(old_prefix_ver) < 3):
+                delete_keys = {
+                    "[Software\\\\Classes\\\\htmlfile\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\pdffile\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\xmlfile\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\ftp\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\http\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\https\\\\shell\\\\open\\\\ddeexec",
+                }
+                dde_wb = '@="\\"C:\\\\windows\\\\system32\\\\winebrowser.exe\\" -nohome"'
+
+                sysreg_fp = self.prefix_dir + "system.reg"
+                new_sysreg_fp = self.prefix_dir + "system.reg.new"
+
+                log("Removing ShellExecute DDE registry entries.")
+
+                with open(sysreg_fp, "r") as reg_in:
+                    with open(new_sysreg_fp, "w") as reg_out:
+                        for line in reg_in:
+                            if line[:line.find("ddeexec")+len("ddeexec")] in delete_keys:
+                                reg_out.write(line.replace("ddeexec", "ddeexec_old", 1))
+                            elif line.rstrip() == dde_wb:
+                                reg_out.write(line.replace("-nohome", "%1"))
+                            else:
+                                reg_out.write(line)
+
+                # Slightly randomize backup file name to avoid colliding with
+                # other backups.
+                backup_sysreg_fp = "{}system.reg.{:x}.old".format(self.prefix_dir, randrange(16 ** 8))
+
+                try:
+                    os.rename(sysreg_fp, backup_sysreg_fp)
+                except OSError:
+                    log("Failed to back up old system.reg. Simply deleting it.")
+                    os.remove(sysreg_fp)
+                    pass
+
+                try:
+                    os.rename(new_sysreg_fp, sysreg_fp)
+                except OSError:
+                    log("Unable to write new registry file to " + sysreg_fp)
                     pass
 
             stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
