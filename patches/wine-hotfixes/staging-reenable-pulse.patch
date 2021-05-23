@@ -1,0 +1,56 @@
+diff --git a/patches/patchinstall.sh b/patches/patchinstall.sh
+index a3f5756c..9119dba5 100755
+--- a/patches/patchinstall.sh
++++ b/patches/patchinstall.sh
+@@ -265,6 +265,7 @@ patch_enable_all ()
+ 	enable_winemenubuilder_Desktop_Icon_Path="$1"
+ 	enable_winemenubuilder_integration="$1"
+ 	enable_wineps_drv_PostScript_Fixes="$1"
++	enable_winepulse_PulseAudio_Support="$1"
+ 	enable_winex11_CandidateWindowPos="$1"
+ 	enable_winex11_MWM_Decorations="$1"
+ 	enable_winex11_UpdateLayeredWindow="$1"
+@@ -843,6 +844,9 @@ patch_enable ()
+ 		wineps.drv-PostScript_Fixes)
+ 			enable_wineps_drv_PostScript_Fixes="$2"
+ 			;;
++		winepulse-PulseAudio_Support)
++			enable_winepulse_PulseAudio_Support="$2"
++			;;
+ 		winex11-CandidateWindowPos)
+ 			enable_winex11_CandidateWindowPos="$2"
+ 			;;
+@@ -4058,6 +4062,22 @@ if test "$enable_wineps_drv_PostScript_Fixes" -eq 1; then
+ 	patch_apply wineps.drv-PostScript_Fixes/0004-wineps.drv-Add-support-for-GETFACENAME-and-DOWNLOADF.patch
+ fi
+ 
++# Patchset winepulse-PulseAudio_Support
++# |
++# | This patchset fixes the following Wine bugs:
++# |   *	[#37042] Implement exclusive mode in PulseAudio backend
++# |
++# | Modified files:
++# |   *	dlls/winepulse.drv/Makefile.in, dlls/winepulse.drv/mmdevdrv.c
++# |
++if test "$enable_winepulse_PulseAudio_Support" -eq 1; then
++	patch_apply winepulse-PulseAudio_Support/0001-winepulse.drv-Use-a-separate-mainloop-and-ctx-for-pu.patch
++	patch_apply winepulse-PulseAudio_Support/0003-winepulse-expose-audio-devices-directly-to-programs.patch
++	patch_apply winepulse-PulseAudio_Support/0005-winepulse-implement-GetPropValue.patch
++	patch_apply winepulse-PulseAudio_Support/0006-winepulse-fetch-actual-program-name-if-possible.patch
++	patch_apply winepulse-PulseAudio_Support/0007-winepulse-return-PKEY_AudioEndpoint_PhysicalSpeakers.patch
++fi
++
+ # Patchset winex11-CandidateWindowPos
+ # |
+ # | This patchset fixes the following Wine bugs:
+diff --git a/patches/winepulse-PulseAudio_Support/definition b/patches/winepulse-PulseAudio_Support/definition
+index b9b6a8ca..b9759921 100644
+--- a/patches/winepulse-PulseAudio_Support/definition
++++ b/patches/winepulse-PulseAudio_Support/definition
+@@ -3,6 +3,3 @@ Fixes: [37042] Implement exclusive mode in PulseAudio backend
+ Fixes: Add support for GetPropValue to PulseAudio backend
+ Fixes: Use actual program name if available to describe PulseAudio streams
+ Fixes: Expose PKEY_AudioEndpoint_PhysicalSpeakers device property in PulseAudio driver
+-Disabled: True
+-
+-# Non-Trival to rebase

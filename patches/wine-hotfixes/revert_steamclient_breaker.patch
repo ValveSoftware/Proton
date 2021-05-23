@@ -1,3 +1,164 @@
+diff --git a/dlls/ntdll/tests/exception.c b/dlls/ntdll/tests/exception.c
+index d784074394a..2c604408943 100644
+--- a/dlls/ntdll/tests/exception.c
++++ b/dlls/ntdll/tests/exception.c
+@@ -182,6 +182,7 @@ static VOID      (WINAPI *pRtlCaptureContext)(CONTEXT*);
+ static VOID      (CDECL *pRtlRestoreContext)(CONTEXT*, EXCEPTION_RECORD*);
+ static NTSTATUS  (WINAPI *pRtlWow64GetThreadContext)(HANDLE, WOW64_CONTEXT *);
+ static NTSTATUS  (WINAPI *pRtlWow64SetThreadContext)(HANDLE, const WOW64_CONTEXT *);
++static NTSTATUS  (WINAPI *pRtlWow64GetCpuAreaInfo)(WOW64_CPURESERVED*,ULONG,WOW64_CPU_AREA_INFO*);
+ static VOID      (WINAPI *pRtlUnwindEx)(VOID*, VOID*, EXCEPTION_RECORD*, VOID*, CONTEXT*, UNWIND_HISTORY_TABLE*);
+ static int       (CDECL *p_setjmp)(_JUMP_BUFFER*);
+ #endif
+@@ -3748,10 +3749,12 @@ static void test_wow64_context(void)
+     THREAD_BASIC_INFORMATION info;
+     PROCESS_INFORMATION pi;
+     STARTUPINFOA si = {0};
+-    WOW64_CONTEXT ctx;
++    WOW64_CONTEXT ctx, *ctx_ptr;
+     NTSTATUS ret;
+-    SIZE_T res;
+     TEB teb;
++    SIZE_T res, cpu_size;
++    WOW64_CPURESERVED *cpu = NULL;
++    WOW64_CPU_AREA_INFO cpu_info;
+ 
+     memset(&ctx, 0x55, sizeof(ctx));
+     ctx.ContextFlags = WOW64_CONTEXT_ALL;
+@@ -3796,6 +3799,37 @@ static void test_wow64_context(void)
+             teb.DeallocationStack, teb.Tib.StackBase );
+     }
+ 
++    if (pRtlWow64GetCpuAreaInfo)
++    {
++        ok( teb.TlsSlots[WOW64_TLS_CPURESERVED] == teb.Tib.StackBase, "wrong cpu reserved %p / %p\n",
++            teb.TlsSlots[WOW64_TLS_CPURESERVED], teb.Tib.StackBase );
++        cpu_size = 0x1000 - ((ULONG_PTR)teb.TlsSlots[WOW64_TLS_CPURESERVED] & 0xfff);
++        cpu = malloc( cpu_size );
++        if (!ReadProcessMemory( pi.hProcess, teb.TlsSlots[WOW64_TLS_CPURESERVED], cpu, cpu_size, &res )) res = 0;
++        ok( res == cpu_size, "wrong len %lx\n", res );
++        ok( cpu->Machine == IMAGE_FILE_MACHINE_I386, "wrong machine %04x\n", cpu->Machine );
++        ret = pRtlWow64GetCpuAreaInfo( cpu, 0, &cpu_info );
++        ok( !ret, "RtlWow64GetCpuAreaInfo failed %x\n", ret );
++        ctx_ptr = (WOW64_CONTEXT *)cpu_info.Context;
++        ok(!*(void **)cpu_info.ContextEx, "got context_ex %p\n", *(void **)cpu_info.ContextEx);
++        ok(ctx_ptr->ContextFlags == WOW64_CONTEXT_ALL, "got context flags %#x\n", ctx_ptr->ContextFlags);
++        ok(ctx_ptr->Eax == ctx.Eax, "got eax %08x / %08x\n", ctx_ptr->Eax, ctx.Eax);
++        ok(ctx_ptr->Ebx == ctx.Ebx, "got ebx %08x / %08x\n", ctx_ptr->Ebx, ctx.Ebx);
++        ok(ctx_ptr->Ecx == ctx.Ecx, "got ecx %08x / %08x\n", ctx_ptr->Ecx, ctx.Ecx);
++        ok(ctx_ptr->Edx == ctx.Edx, "got edx %08x / %08x\n", ctx_ptr->Edx, ctx.Edx);
++        ok(ctx_ptr->Ebp == ctx.Ebp, "got ebp %08x / %08x\n", ctx_ptr->Ebp, ctx.Ebp);
++        ok(ctx_ptr->Esi == ctx.Esi, "got esi %08x / %08x\n", ctx_ptr->Esi, ctx.Esi);
++        ok(ctx_ptr->Edi == ctx.Edi, "got edi %08x / %08x\n", ctx_ptr->Edi, ctx.Edi);
++        ok(ctx_ptr->SegCs == ctx.SegCs, "got cs %04x / %04x\n", ctx_ptr->SegCs, ctx.SegCs);
++        ok(ctx_ptr->SegDs == ctx.SegDs, "got cs %04x / %04x\n", ctx_ptr->SegDs, ctx.SegDs);
++        ok(ctx_ptr->SegSs == ctx.SegSs, "got cs %04x / %04x\n", ctx_ptr->SegSs, ctx.SegSs);
++        ok(ctx_ptr->EFlags == ctx.EFlags, "got eflags %08x / %08x\n", ctx_ptr->EFlags, ctx.EFlags);
++        ok((WORD)ctx_ptr->FloatSave.ControlWord == ctx.FloatSave.ControlWord,
++           "got control word %08x / %08x\n", ctx_ptr->FloatSave.ControlWord, ctx.FloatSave.ControlWord);
++        ok(*(WORD *)ctx_ptr->ExtendedRegisters == *(WORD *)ctx.ExtendedRegisters,
++           "got SSE control word %04x\n", *(WORD *)ctx_ptr->ExtendedRegisters,
++           *(WORD *)ctx.ExtendedRegisters);
++    }
+     pNtTerminateProcess(pi.hProcess, 0);
+ }
+ 
+diff --git a/dlls/ntdll/unix/signal_arm.c b/dlls/ntdll/unix/signal_arm.c
+index 56aa251c2c9..d8912d3714a 100644
+--- a/dlls/ntdll/unix/signal_arm.c
++++ b/dlls/ntdll/unix/signal_arm.c
+@@ -993,6 +993,11 @@ static void init_thread_context( CONTEXT *context, LPTHREAD_START_ROUTINE entry,
+     context->Sp = (DWORD)teb->Tib.StackBase;
+     context->Pc = (DWORD)pRtlUserThreadStart;
+     if (context->Pc & 1) context->Cpsr |= 0x20; /* thumb mode */
++    if (NtCurrentTeb64())
++    {
++        WOW64_CPURESERVED *cpu = ULongToPtr( NtCurrentTeb64()->TlsSlots[WOW64_TLS_CPURESERVED] );
++        memcpy( cpu + 1, context, sizeof(*context) );
++    }
+ }
+ 
+ 
+diff --git a/dlls/ntdll/unix/signal_i386.c b/dlls/ntdll/unix/signal_i386.c
+index 754d75a9e61..4ad91141055 100644
+--- a/dlls/ntdll/unix/signal_i386.c
++++ b/dlls/ntdll/unix/signal_i386.c
+@@ -2603,6 +2603,11 @@ static void init_thread_context( CONTEXT *context, LPTHREAD_START_ROUTINE entry,
+     context->FloatSave.ControlWord = 0x27f;
+     ((XSAVE_FORMAT *)context->ExtendedRegisters)->ControlWord = 0x27f;
+     ((XSAVE_FORMAT *)context->ExtendedRegisters)->MxCsr = 0x1f80;
++    if (NtCurrentTeb64())
++    {
++        WOW64_CPURESERVED *cpu = ULongToPtr( NtCurrentTeb64()->TlsSlots[WOW64_TLS_CPURESERVED] );
++        memcpy( cpu + 1, context, sizeof(*context) );
++    }
+ }
+ 
+ 
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index 6455b5a449e..a612c4b5648 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -119,6 +119,22 @@ static void start_thread( TEB *teb )
+ }
+ 
+ 
++/***********************************************************************
++ *           get_machine_context_size
++ */
++static SIZE_T get_machine_context_size( USHORT machine )
++{
++    switch (machine)
++    {
++    case IMAGE_FILE_MACHINE_I386:  return sizeof(I386_CONTEXT);
++    case IMAGE_FILE_MACHINE_ARMNT: return sizeof(ARM_CONTEXT);
++    case IMAGE_FILE_MACHINE_AMD64: return sizeof(AMD64_CONTEXT);
++    case IMAGE_FILE_MACHINE_ARM64: return sizeof(ARM64_NT_CONTEXT);
++    default: return 0;
++    }
++}
++
++
+ /***********************************************************************
+  *           set_thread_id
+  */
+@@ -155,18 +171,23 @@ NTSTATUS init_thread_stack( TEB *teb, ULONG_PTR zero_bits, SIZE_T reserve_size,
+ 
+     if (teb->WowTebOffset && !(status = virtual_alloc_thread_stack( &stack64, 0, 0x40000, 0x40000, NULL )))
+     {
++        SIZE_T cpusize = sizeof(WOW64_CPURESERVED) +
++            ((get_machine_context_size( main_image_info.Machine ) + 7) & ~7) + sizeof(ULONG64);
++        WOW64_CPURESERVED *cpu = (WOW64_CPURESERVED *)(((ULONG_PTR)stack64.StackBase - cpusize) & ~15);
+ #ifdef _WIN64
+         TEB32 *teb32 = (TEB32 *)((char *)teb + teb->WowTebOffset);
+         teb32->Tib.StackBase = PtrToUlong( stack.StackBase );
+         teb32->Tib.StackLimit = PtrToUlong( stack.StackLimit );
+         teb32->DeallocationStack = PtrToUlong( stack.DeallocationStack );
++        stack64.StackBase = teb->TlsSlots[WOW64_TLS_CPURESERVED] = cpu;
+         stack = stack64;
+ #else
+         TEB64 *teb64 = (TEB64 *)((char *)teb + teb->WowTebOffset);
+-        teb64->Tib.StackBase = PtrToUlong( stack64.StackBase );
++        teb64->Tib.StackBase = teb64->TlsSlots[WOW64_TLS_CPURESERVED] = PtrToUlong( cpu );
+         teb64->Tib.StackLimit = PtrToUlong( stack64.StackLimit );
+         teb64->DeallocationStack = PtrToUlong( stack64.DeallocationStack );
+ #endif
++        cpu->Machine = main_image_info.Machine;
+     }
+     teb->Tib.StackBase = stack.StackBase;
+     teb->Tib.StackLimit = stack.StackLimit;
+diff --git a/include/winternl.h b/include/winternl.h
+index c9868fb5e39..691638f359c 100644
+--- a/include/winternl.h
++++ b/include/winternl.h
+@@ -978,6 +978,7 @@ typedef struct _TEB64
+ } TEB64;
+ 
+ /* reserved TEB64 TLS slots for Wow64 */
++#define WOW64_TLS_CPURESERVED  1
+ #define WOW64_TLS_FILESYSREDIR 8
+ 
+ 
 diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
 index 3ac1ed9ab63..5d8c14625f9 100644
 --- a/dlls/ntdll/unix/env.c
@@ -371,7 +532,7 @@ index 65863f54c4b8..a108ce004825 100644
  {
      PEB *peb = NtCurrentTeb()->Peb;
 -    IMAGE_NT_HEADERS *nt = get_exe_nt_header();
-     void *entry;
+     void *entry, *teb;
      NTSTATUS status;
      int suspend, needs_close, unixdir;
 @@ -1678,7 +1678,7 @@ void server_init_process_done(void)

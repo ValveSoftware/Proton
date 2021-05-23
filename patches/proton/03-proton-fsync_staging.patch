@@ -2964,7 +2964,7 @@ index 3e02cbb3832..7a09436b637 100644
 +
      if (do_esync())
          esync_init();
-+ 
++
 +    if (!do_fsync() && !do_esync())
 +        fprintf( stderr, "wineserver: using server-side synchronization.\n" );
  

@@ -65,7 +65,7 @@ index b1d3e863240..7b0c7c32f58 100644
 @@ -1467,6 +1467,7 @@ void CDECL server_init_process_done( void *relay )
      PEB *peb = NtCurrentTeb()->Peb;
      IMAGE_NT_HEADERS *nt = get_exe_nt_header();
-     void *entry;
+     void *entry, *teb;
 +    struct cpu_topology_override *cpu_override = get_cpu_topology_override();
      NTSTATUS status;
      int suspend;
@@ -76,9 +76,9 @@ index b1d3e863240..7b0c7c32f58 100644
      {
 +        if (cpu_override)
 +            wine_server_add_data( req, cpu_override, sizeof(*cpu_override) );
-         status = wine_server_call( req );
-         suspend = reply->suspend;
-         entry = wine_server_get_ptr( reply->entry );
+         req->teb      = wine_server_client_ptr( teb );
+         req->peb      = NtCurrentTeb64() ? NtCurrentTeb64()->Peb : wine_server_client_ptr( peb );
+ #ifdef __i386__
 diff --git a/dlls/ntdll/unix/system.c b/dlls/ntdll/unix/system.c
 index bf3d6c34f14..fc8165f2828 100644
 --- a/dlls/ntdll/unix/system.c
@@ -503,9 +503,9 @@ index 48f9f4fae90..0f2fe077b80 100644
  /* Signal the end of the process initialization */
  @REQ(init_process_done)
 +    VARARG(cpu_override,cpu_topology_override); /* Overridden CPUs to host CPUs mapping. */
- @REPLY
-     int          suspend;      /* is process suspended? */
- @END
+     client_ptr_t teb;          /* TEB of new thread (in process address space) */
+     client_ptr_t peb;          /* PEB of new process (in process address space) */
+     client_ptr_t ldt_copy;     /* address of LDT copy (in process address space) */
 diff --git a/server/thread.c b/server/thread.c
 index 0fb3aa0e727..31043c3df33 100644
 --- a/server/thread.c

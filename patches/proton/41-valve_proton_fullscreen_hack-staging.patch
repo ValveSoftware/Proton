@@ -3642,7 +3642,7 @@ index 2c9aff7e777..d5799690509 100644
      return TRUE;
  }
  
-@@ -1915,6 +1945,9 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1947,6 +1977,9 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
      double x_accum = 0, y_accum = 0;
      struct x11drv_thread_data *thread_data = x11drv_thread_data();
      XIValuatorClassInfo *x_pos, *y_pos;
@@ -3650,11 +3650,11 @@ index 2c9aff7e777..d5799690509 100644
 +    HMONITOR monitor;
 +    double user_to_real_scale;
  
-     if (thread_data->x_rel_valuator.number < 0 || thread_data->y_rel_valuator.number < 0) return FALSE;
+     if (thread_data->x_pos_valuator.number < 0 || thread_data->y_pos_valuator.number < 0) return FALSE;
      if (!event->valuators.mask_len) return FALSE;
 @@ -1960,6 +1993,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
-     x_pos->value = x_accum - input.u.mi.dx;
-     y_pos->value = y_accum - input.u.mi.dy;
+     input.u.mi.dx          = 0;
+     input.u.mi.dy          = 0;
  
 +    GetCursorPos(&pt);
 +    monitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONULL);
@@ -3662,9 +3662,9 @@ index 2c9aff7e777..d5799690509 100644
 +    input.u.mi.dx = lround((double)input.u.mi.dx / user_to_real_scale);
 +    input.u.mi.dy = lround((double)input.u.mi.dy / user_to_real_scale);
 +
-     if (!thread_data->xi2_rawinput_only)
-     {
-         if ((dy || dy) && !(input.u.mi.dx || input.u.mi.dy))
+     virtual_rect = get_virtual_screen_rect();
+ 
+     for (i = 0; i <= max ( x_rel->number, y_rel->number ); i++)
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 4a3ab31273a..97463882355 100644
 --- a/dlls/winex11.drv/opengl.c
@@ -4393,9 +4393,9 @@ index 9a43231f34d..d93b6b67a0e 100644
 -    DEVMODEW desired_mode;
 -};
 -
- /* All Windows drivers seen so far either support 32 bit depths, or 24 bit depths, but never both. So if we have
-  * a 32 bit framebuffer, report 32 bit bpps, otherwise 24 bit ones.
-  */
+ struct x11drv_display_depth
+ {
+     struct list entry;
 @@ -78,6 +69,11 @@ void X11DRV_Settings_SetHandler(const struct x11drv_settings_handler *new_handle
      }
  }
@@ -4740,7 +4740,7 @@ index 5230439ecb5..837a136f35c 100644
      BOOL layered = GetWindowLongW( hwnd, GWL_EXSTYLE ) & WS_EX_LAYERED;
 +    HMONITOR monitor;
  
-     if (!data && !(data = X11DRV_create_win_data( hwnd, window_rect, client_rect ))) return;
+     if (!data && !(data = X11DRV_create_win_data( hwnd, window_rect, client_rect ))) return TRUE;
  
 +    monitor = fs_hack_monitor_from_rect(window_rect);
 +    if(!wm_is_steamcompmgr(data->display) && !data->fs_hack && fs_hack_enabled(monitor) &&
@@ -7444,3 +7444,4 @@ index 049566bd223..15c634247ca 100644
  
      /* Write HardwareID registry property, REG_MULTI_SZ */
      written = sprintfW(bufferW, gpu_hardware_id_fmtW, gpu->vendor_id, gpu->device_id);
+
