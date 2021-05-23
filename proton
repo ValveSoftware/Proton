@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.8-GE-2"
+CURRENT_PREFIX_VERSION="6.9-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -911,6 +911,7 @@ class Session:
         self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
+        self.check_environment("PROTON_VKD3D_BINDLESS", "vkd3dbindlesstb")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
