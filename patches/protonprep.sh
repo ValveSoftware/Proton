@@ -29,15 +29,15 @@
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
+    
+    echo "add upstream cpu adapter fix"
+    patch -Np1 < ../patches/dxvk/94674ac45e8a4618c00519e04b254de76aad35a2.patch
 
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
 
-#    echo "add dxvk PR patches"
-#    patch -Np1 < ../patches/dxvk/1582.patch
-
-#    echo "add dxvk nier replicant video interfaces patch"
-#    patch -Np1 < ../patches/dxvk/video_interfaces.patch
+    echo "add dxvk PR patches"
+    patch -Np1 < ../patches/dxvk/1582.patch
 
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
