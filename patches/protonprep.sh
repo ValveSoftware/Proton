@@ -33,11 +33,11 @@
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
 
-    echo "add dxvk PR patches"
-    patch -Np1 < ../patches/dxvk/1582.patch
+#    echo "add dxvk PR patches"
+#    patch -Np1 < ../patches/dxvk/1582.patch
 
-    echo "add dxvk nier replicant video interfaces patch"
-    patch -Np1 < ../patches/dxvk/video_interfaces.patch
+#    echo "add dxvk nier replicant video interfaces patch"
+#    patch -Np1 < ../patches/dxvk/video_interfaces.patch
 
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
@@ -48,6 +48,10 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
+    
+    # reenable pulseaudio patches
+    patch -Np1 < ../patches/wine-hotfixes/staging-reenable-pulse.patch
+    patch -RNp1 < ../patches/wine-hotfixes/staging-pulseaudio-reverts.patch
 
     # protonify syscall emulation
     patch -Np1 < ../patches/wine-hotfixes/protonify_stg_syscall_emu.patch
@@ -57,7 +61,8 @@
     cd wine
     git reset --hard HEAD
     git clean -xdf
-    
+
+
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
@@ -69,6 +74,43 @@
 
     # ubisoft controller regression hotfix
     git revert --no-commit 0ac619ae7ab7dd90622371a5f58a1ff12d46eb8f
+
+    # fshack reverts
+    git revert --no-commit a76fd1c312bfdff33774e361660f7fd29041099f
+    git revert --no-commit 961d611baf0bfe0dd087aebb1d7efad2e98a6f0b
+    git revert --no-commit 8f2f1f83c38c5792aac4105624ff60a313e95ef2
+    git revert --no-commit fb8ab5e9d079474e07d753341393c0c1bfe32ddd
+    
+    # temporary pulseaudio reverts
+    git revert --no-commit 44e4132489c28b429737be022f6d4044c5beab3e
+    git revert --no-commit a6131544e87c554f70c21a04fb4697d8e1f508d5
+    git revert --no-commit 80b996c53c767fef4614f097f14c310285d9c081
+    git revert --no-commit 459e911b653c7519a335661a6c0b0894e86d2f1a
+    git revert --no-commit 42d826bc8c1d625ed2985ff06c2cd047209a1916
+    git revert --no-commit 30c17619e5401618122ca330cf0909f49b170a59
+    git revert --no-commit af84907ccad3e28f364ecfaa75ccb5fedf7f5a42
+    git revert --no-commit a5997bece730beb8ab72d66b824ed2a1cb92c254
+    git revert --no-commit 24a7c33fc1ad6dbab489284cfb6dba4130297ddb
+    git revert --no-commit 8cb88173d87efedce8c345beea05641f5617d857
+    git revert --no-commit 505d4b8b14913f3abd362bf27272e6b239cb6ce4
+    git revert --no-commit 638455136b4d30b853b02b77a2f33dc61c60b267
+    git revert --no-commit 13cac6287c454146eff73aabc4b92b5c8f76d4df
+    git revert --no-commit d7b957654d4739b8dd07c91f051b7940f416ef42
+    git revert --no-commit 8ea23d0d44ced0ce7dadc9b2546cbc56f6bce364
+    git revert --no-commit 0b0ae164f4ccebf4b5bc1bb1529a90786d2d5941
+    git revert --no-commit 131b7fd5e16a3da17aed28e86933074c5d663d9f
+    git revert --no-commit 8060e56b26add8eafffb211119798569ea3188ff
+    git revert --no-commit bca0706f3a93fa0a57f4dbdc6ae541e8f25afb34
+    git revert --no-commit b1ddfca16e4696a52adf2bdd8333eeffb3c6170c
+    git revert --no-commit a5d4079c8285c10ab2019c9fd9d19a6b22babb76
+    git revert --no-commit ebd344f2922f4044117904e024a0a87576a3eff1
+    git revert --no-commit 0eeefec6c56084a0677403aee46493e2c03a1dca
+    git revert --no-commit 5477f2b0156d16952a286dd0df148c2f60b71fe6
+    git revert --no-commit fa097243e06b3855a240c866a028add722025ead
+    git revert --no-commit 8df72bade54d1ef7a6d9e79f20ee0a2697019c13
+    git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
+    git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
+    
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -89,12 +131,16 @@
 
     # disable these for vulkan experimental childwindow support
     #-W Pipelight
+    
+    # This isn't compatible with the steamclient reverts
+    # -W server-default_integrity
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W imm32-com-initialization \
+    -W server-default_integrity \
     -W bcrypt-ECDHSecretAgreement
 
     # revert this, it breaks lsteamclient compilation
@@ -102,8 +148,6 @@
 
     # apply this manually since imm32-com-initialization is disabled in staging.
     patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
-
-    patch -Np1 < ../patches/wine-hotfixes/upstream-vulkan-backports.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
@@ -261,7 +305,6 @@
     patch -Np1 < ../patches/wine-hotfixes/204113
 
     patch -Np1 < ../patches/wine-hotfixes/me_psapi.patch
-    patch -Np1 < ../patches/wine-hotfixes/gdi32_memory_leak_fix.patch
 
     ### END WINEPATCH SECTION ###
 
