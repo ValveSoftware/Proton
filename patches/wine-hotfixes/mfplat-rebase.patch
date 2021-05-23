@@ -1397,6 +1397,15 @@ index 3260175f45a..331c87dc371 100644
      }
  
      TRACE("Media source is shutting down; exiting.\n");
+@@ -832,7 +832,7 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
+             type_count = 1;
+     }
+ 
+-    assert(type_count < ARRAY_SIZE(stream_types));
++    //assert(type_count < ARRAY_SIZE(stream_types));
+ 
+     if (!type_count)
+     {
 diff --git a/dlls/winegstreamer/quartz_parser.c b/dlls/winegstreamer/quartz_parser.c
 index 656f465884b..ac6e76856ca 100644
 --- a/dlls/winegstreamer/quartz_parser.c
@@ -5820,76 +5829,6 @@ index 394a0d65aeb..dd32b3877af 100644
 -- 
 2.30.2
 
-From: Giovanni Mascellani <gmascellani@codeweavers.com>
-Subject: [PATCH v2] winegstreamer: Ensure that the source reports both PCM and floating point audio formats.
-Message-Id: <20210512153741.1744686-1-gmascellani@codeweavers.com>
-Date: Wed, 12 May 2021 17:37:41 +0200
-
-From: Derek Lesho <dlesho@codeweavers.com>
-
-The patch is originally by Derek Lesho, with some changes by
-Giovanni Mascellani and Nikolay Sivov.
-
-Signed-off-by: Giovanni Mascellani <gmascellani@codeweavers.com>
----
- dlls/mfreadwrite/tests/mfplat.c   |  3 ---
- dlls/winegstreamer/media_source.c | 25 +++++++++++++++++++++++++
- 2 files changed, 25 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/mfreadwrite/tests/mfplat.c b/dlls/mfreadwrite/tests/mfplat.c
-index ded45afe771..e3ff7f6e7aa 100644
---- a/dlls/mfreadwrite/tests/mfplat.c
-+++ b/dlls/mfreadwrite/tests/mfplat.c
-@@ -752,9 +752,6 @@ static void test_source_reader(void)
-     if (SUCCEEDED(hr))
-         IMFMediaType_Release(mediatype);
- 
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 1, &mediatype);
--    ok(hr == MF_E_NO_MORE_TYPES, "Unexpected hr %#x.\n", hr);
--
-     /* Current media type. */
-     hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
-diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index eb5b9e366ec..5249bc9c41d 100644
---- a/dlls/winegstreamer/media_source.c
-+++ b/dlls/winegstreamer/media_source.c
-@@ -806,6 +806,31 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
-                 goto done;
-         }
-     }
-+    else if (format.major_type == WG_MAJOR_TYPE_AUDIO)
-+    {
-+        /* Expose at least one PCM and one floating point type for the
-+           consumer to pick from. */
-+        static const enum wg_audio_format audio_types[] =
-+        {
-+            WG_AUDIO_FORMAT_S16LE,
-+            WG_AUDIO_FORMAT_F64LE,
-+        };
-+
-+        stream_types = malloc( sizeof(IMFMediaType *) * (ARRAY_SIZE(audio_types) + 1) );
-+
-+        stream_types[0] = mf_media_type_from_wg_format(&format);
-+        type_count = 1;
-+
-+        for (i = 0; i < ARRAY_SIZE(audio_types); i++)
-+        {
-+            struct wg_format new_format;
-+            if (format.u.audio.format == audio_types[i])
-+                continue;
-+            new_format = format;
-+            new_format.u.audio.format = audio_types[i];
-+            stream_types[type_count++] = mf_media_type_from_wg_format(&new_format);
-+        }
-+    }
-     else
-     {
-         stream_type = mf_media_type_from_wg_format(&format);
-
--- 
-2.31.1
-
 From 825307a3c7dbf751fc280458fb9e6a2a7961e054 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 18 Mar 2021 16:20:50 -0400
@@ -5997,15 +5936,53 @@ diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
 index 999d8a86147..70745466593 100644
 --- a/dlls/mfplat/main.c
 +++ b/dlls/mfplat/main.c
-@@ -8902,6 +8902,8 @@ HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **man
+@@ -8890,27 +8907,33 @@ static const IMFDXGIDeviceManagerVtbl dxgi_device_manager_vtbl =
+ HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **manager)
+ {
+     struct dxgi_device_manager *object;
++    const char *sgi = getenv("SteamGameId");
  
      TRACE("%p, %p.\n", token, manager);
  
-+    return E_NOTIMPL;
-+
-     if (!token || !manager)
-         return E_POINTER;
+-    if (!token || !manager)
+-        return E_POINTER;
++    if (sgi && (!strcmp(sgi,"1113560") || !strcmp(sgi,"1113560")))
++    {
++        if (!token || !manager)
++            return E_POINTER;
  
+-    if (!(object = calloc(1, sizeof(*object))))
+-        return E_OUTOFMEMORY;
++        if (!(object = calloc(1, sizeof(*object))))
++            return E_OUTOFMEMORY;
+ 
+-    object->IMFDXGIDeviceManager_iface.lpVtbl = &dxgi_device_manager_vtbl;
+-    object->refcount = 1;
+-    object->token = GetTickCount();
+-    InitializeCriticalSection(&object->cs);
+-    InitializeConditionVariable(&object->lock);
++        object->IMFDXGIDeviceManager_iface.lpVtbl = &dxgi_device_manager_vtbl;
++        object->refcount = 1;
++        object->token = GetTickCount();
++        InitializeCriticalSection(&object->cs);
++        InitializeConditionVariable(&object->lock);
+ 
+-    TRACE("Created device manager: %p, token: %u.\n", object, object->token);
++        TRACE("Created device manager: %p, token: %u.\n", object, object->token);
+ 
+-    *token = object->token;
+-    *manager = &object->IMFDXGIDeviceManager_iface;
++        *token = object->token;
++        *manager = &object->IMFDXGIDeviceManager_iface;
+ 
+-    return S_OK;
++        return S_OK;
++    } else {
++        return E_NOTIMPL;
++    }
+ }
+ 
+ /***********************************************************************
 -- 
 2.30.2
 
@@ -6216,7 +6193,7 @@ index eb5b9e366ec..3ce8ff40f9b 100644
      TRACE("%p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
 +    /* Hack to skip this to fix UE games other than Deeprock Galactic since they choke here*/
 +    const char *sgi = getenv("SteamGameId");
-+    if (sgi && strcmp(sgi, "548430"))
++    if (sgi && !strcmp(sgi, "548430"))
 +    {
 +        FIXME("stub %p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
 +        return E_NOINTERFACE;
@@ -6224,21 +6201,3 @@ index eb5b9e366ec..3ce8ff40f9b 100644
  
      *obj = NULL;
  
-diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
-index 42c89504163..8ea96b2f3ac 100644
---- a/dlls/mfplat/main.c
-+++ b/dlls/mfplat/main.c
-@@ -8940,7 +8940,12 @@ HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **man
- 
-     TRACE("%p, %p.\n", token, manager);
- 
--    return E_NOTIMPL;
-+    /* Hack to skip this to fix Nier Replicant*/
-+    const char *sgi = getenv("SteamGameId");
-+    if (sgi && strcmp(sgi, "1113560"))
-+    {
-+        return E_NOTIMPL;
-+    }
- 
-     if (!token || !manager)
-         return E_POINTER;
