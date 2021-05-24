@@ -65,8 +65,6 @@ def setup_dll_symlinks(default_pfx_dir, dist_dir):
                     continue
                 if os.path.exists(os.path.join(libdir, dlldir, file_)):
                     target = os.path.join(libdir, dlldir, file_)
-                elif os.path.exists(os.path.join(libdir, 'fakedlls', file_)):
-                    target = os.path.join(libdir, 'fakedlls', file_)
                 else:
                     continue
                 os.unlink(filename)

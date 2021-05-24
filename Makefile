@@ -151,14 +151,14 @@ deploy: configure
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
 module: configure
-	mkdir -p vagrant_share/$(module)/lib/wine/ vagrant_share/$(module)/lib64/wine/
+	mkdir -p vagrant_share/$(module)/lib/wine/i386-unix/ vagrant_share/$(module)/lib64/wine/x86_64-unix/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
-		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
-		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/i386-unix/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/x86_64-unix/ && \
 		find /vagrant/$(module)/ -type f -name "*.dll" -printf "%p\0" | xargs --verbose -0 -r -P8 -n3 proton/make/pefixup.py && \
 		if [ -e $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so ]; then \
-			cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
-			cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/; \
+			cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/i386-unix/ && \
+			cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/x86_64-unix; \
 		fi'
 	rm -f vagrant_share/$(module)/lib*/wine/*.fake
 
@@ -179,20 +179,20 @@ vkd3d-proton: configure
 		find /vagrant/vkd3d-proton/ -type f -name "*.dll" -printf "%p\0" | xargs --verbose -0 -r -P8 -n3 proton/make/pefixup.py'
 
 lsteamclient: configure
-	mkdir -p vagrant_share/lsteamclient/lib/wine
-	mkdir -p vagrant_share/lsteamclient/lib64/wine
+	mkdir -p vagrant_share/lsteamclient/lib/wine/i386-unix
+	mkdir -p vagrant_share/lsteamclient/lib64/wine/x86_64-unix
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) lsteamclient && \
-		cp -f $(BUILD_DIR)/dist/files/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
-		cp -f $(BUILD_DIR)/dist/files/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
+		cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-unix/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine/i386-unix && \
+		cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-unix/lsteamclient.dll.so /vagrant/lsteamclient/lib64/x86_64-unix'
 
 vrclient: configure
-	mkdir -p vagrant_share/vrclient/lib/wine
-	mkdir -p vagrant_share/vrclient/lib64/wine
+	mkdir -p vagrant_share/vrclient/lib/wine/i386-unix
+	mkdir -p vagrant_share/vrclient/lib64/wine/x86_64-unix
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vrclient && \
-		cp -f $(BUILD_DIR)/dist/files/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
-		cp -f $(BUILD_DIR)/dist/files/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine'
+		cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-unix/vrclient.dll.so /vagrant/vrclient/lib/wine/i386-unix && \
+		cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-unix/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine/x86_64-unix'
 
 wineopenxr: configure
-	mkdir -p vagrant_share/wineopenxr/lib64/wine
+	mkdir -p vagrant_share/wineopenxr/lib64/wine/x86_64-unix
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) wineopenxr && \
-		cp -f $(BUILD_DIR)/dist/files/lib64/wine/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine'
+		cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-unix/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine/x86_64-unix'
