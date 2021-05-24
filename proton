@@ -47,7 +47,7 @@ def log(msg):
 def file_is_wine_builtin_dll(path):
     if os.path.islink(path):
         contents = os.readlink(path)
-        if os.path.dirname(contents).endswith(('/lib/wine/i386-windows', '/lib/wine/fakedlls', '/lib64/wine/x86_64-windows', '/lib64/wine/fakedlls')):
+        if os.path.dirname(contents).endswith(('/lib/wine/i386-windows', '/lib64/wine/x86_64-windows')):
             # This may be a broken link to a dll in a removed Proton install
             return True
     if not os.path.exists(path):
@@ -158,7 +158,7 @@ class Proton:
         self.version_file = self.path("version")
         self.default_pfx_dir = self.path("files/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
-        self.wine_bin = self.bin_dir + "wine"
+        self.wine_bin = self.bin_dir + "wine64"
         self.wineserver_bin = self.bin_dir + "wineserver"
         self.dist_lock = FileLock(self.path("dist.lock"), timeout=-1)
 
@@ -330,7 +330,7 @@ class CompatData:
     def pfx_copy(self, src, dst, dll_copy=False):
         if os.path.islink(src):
             contents = os.readlink(src)
-            if os.path.dirname(contents).endswith(('/lib/wine/i386-windows', '/lib/wine/fakedlls', '/lib64/wine/x86_64-windows', '/lib64/wine/fakedlls')):
+            if os.path.dirname(contents).endswith(('/lib/wine/i386-windows', '/lib64/wine/x86_64-windows')):
                 # wine builtin dll
                 # make the destination an absolute symlink
                 contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
@@ -709,8 +709,8 @@ class CompatData:
             #copy openvr files into place
             dst = self.prefix_dir + "/drive_c/vrclient/bin/"
             makedirs(dst)
-            try_copy(g_proton.lib_dir + "wine/fakedlls/vrclient.dll", dst)
-            try_copy(g_proton.lib64_dir + "wine/fakedlls/vrclient_x64.dll", dst)
+            try_copy(g_proton.lib_dir + "wine/i386-windows/vrclient.dll", dst)
+            try_copy(g_proton.lib64_dir + "wine/x86_64-windows/vrclient_x64.dll", dst)
 
             try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/syswow64/")
             try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/system32/")
