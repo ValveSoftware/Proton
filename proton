@@ -791,7 +791,7 @@ class Session:
                 lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
                 if os.path.exists(lfile_path):
                     os.remove(lfile_path)
-                self.log_file = open(lfile_path, "w+")
+                self.log_file = open(lfile_path, "a")
                 self.log_file.write("======================\n")
                 with open(g_proton.version_file, "r") as f:
                     self.log_file.write("Proton: " + f.readline().strip() + "\n")
