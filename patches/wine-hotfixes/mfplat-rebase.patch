@@ -5946,7 +5946,7 @@ index 999d8a86147..70745466593 100644
  
 -    if (!token || !manager)
 -        return E_POINTER;
-+    if (sgi && (!strcmp(sgi,"1113560") || !strcmp(sgi,"1113560")))
++    if (sgi && (!strcmp(sgi,"1113560")))
 +    {
 +        if (!token || !manager)
 +            return E_POINTER;
