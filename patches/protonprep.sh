@@ -74,12 +74,6 @@
 
     # ubisoft controller regression hotfix
     git revert --no-commit 0ac619ae7ab7dd90622371a5f58a1ff12d46eb8f
-
-    # fshack reverts
-    git revert --no-commit a76fd1c312bfdff33774e361660f7fd29041099f
-    git revert --no-commit 961d611baf0bfe0dd087aebb1d7efad2e98a6f0b
-    git revert --no-commit 8f2f1f83c38c5792aac4105624ff60a313e95ef2
-    git revert --no-commit fb8ab5e9d079474e07d753341393c0c1bfe32ddd
     
     # temporary pulseaudio reverts
     git revert --no-commit 44e4132489c28b429737be022f6d4044c5beab3e
@@ -140,7 +134,6 @@
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W imm32-com-initialization \
-    -W server-default_integrity \
     -W bcrypt-ECDHSecretAgreement
 
     # revert this, it breaks lsteamclient compilation
@@ -291,9 +284,6 @@
 
     # mfplat nier replicant fixes
     patch -Np1 < ../patches/wine-hotfixes/mfreadwrite_hack.patch
-
-    echo "proton steam client reverts"
-    patch -RNp1 < ../patches/wine-hotfixes/revert_steamclient_breaker.patch
 
     # witcher 3 + borderlands 3 breaker
     patch -Np1 < ../patches/wine-hotfixes/205333
