@@ -633,6 +633,7 @@ WINE_SOURCE_ARGS = \
 
 WINE_CONFIGURE_ARGS = \
   --with-mingw \
+  --without-xpresent \
   --disable-tests
 
 WINE_CONFIGURE_ARGS64 = --enable-win64
