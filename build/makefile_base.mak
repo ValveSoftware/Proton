@@ -113,6 +113,8 @@ container-build:
 
 all32 $(MAKECMDGOALS32): container-build
 all64 $(MAKECMDGOALS64): container-build
+else
+J = $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
 endif
 
 
