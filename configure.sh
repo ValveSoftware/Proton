@@ -97,7 +97,7 @@ function configure() {
 #
 
 arg_steamrt="soldier"
-arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20210126.1-1"
+arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20210505.0-2"
 arg_no_protonsdk=""
 arg_build_name=""
 arg_docker_opts=""
