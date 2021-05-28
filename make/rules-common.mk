@@ -55,32 +55,32 @@ ifneq ($(UNSTRIPPED_BUILD),)
 $$(OBJ)/.$(1)-dist$(3):
 	@echo ":: installing $(3)bit $(1)..." >&2
 	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
-	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P8 mkdir -p
-	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P8 -n2 cp -a
+	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P$$(J) mkdir -p
+	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P$$(J) -n2 cp -a
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
 	    -printf '--only-keep-debug\0%p\0$$(DST_LIBDIR$(3))/%p.debug\0' | \
-	    xargs $(--verbose?) -0 -r -P8 -n3 objcopy --file-alignment=4096
+	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
 	    -printf '--add-gnu-debuglink=$$(DST_LIBDIR$(3))/%p.debug\0--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P8 -n4 objcopy --file-alignment=4096
+	    xargs $(--verbose?) -0 -r -P$$(J) -n4 objcopy --file-alignment=4096
 	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.dll' \
 	    -printf '$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P8 -n1 $$(SRC)/make/pefixup.py
+	    xargs $(--verbose?) -0 -r -P$$(J) -n1 $$(SRC)/make/pefixup.py
 	touch $$@
 else
 $$(OBJ)/.$(1)-dist$(3):
 	@echo ":: installing $(3)bit $(1)..." >&2
 	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
-	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P8 mkdir -p
-	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P8 -n2 cp -a
+	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P$$(J) mkdir -p
+	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P$$(J) -n2 cp -a
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
-	    -printf '$$(DST_LIBDIR$(3))/%p.debug\0' | xargs $(--verbose?) -0 -r -P8 rm -f
+	    -printf '$$(DST_LIBDIR$(3))/%p.debug\0' | xargs $(--verbose?) -0 -r -P$$(J) rm -f
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
 	    -printf '--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P8 -n3 objcopy --file-alignment=4096
+	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096
 	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.dll' \
 	    -printf '$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P8 -n1 $$(SRC)/make/pefixup.py
+	    xargs $(--verbose?) -0 -r -P$$(J) -n1 $$(SRC)/make/pefixup.py
 	touch $$@
 endif
 endif
