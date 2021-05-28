@@ -147,7 +147,7 @@ endif
 ##
 
 DST_BASE := $(OBJ)/dist
-DST_DIR := $(DST_BASE)/dist
+DST_DIR := $(DST_BASE)/files
 DST_LIBDIR32 := $(DST_DIR)/lib
 DST_LIBDIR64 := $(DST_DIR)/lib64
 DEPLOY_DIR := ./deploy
@@ -279,7 +279,7 @@ DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DIST_FONTS)
 
 DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
-                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
+                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DST_DIR)
 REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
@@ -375,24 +375,20 @@ dist: $(DIST_TARGETS) all-dist dist_wineopenxr | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 
 deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
-	mkdir -p $(DEPLOY_DIR) && \
-	cp -a $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
-	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
-	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
+	mkdir -p $(DEPLOY_DIR)
+	cp -af --no-dereference --preserve=mode,links $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR)
 
 install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	# Use -r instead of -a for sshfs
 	cp -rf --no-dereference --preserve=mode,links $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	cp -f $(DIST_VERSION) $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/dist/
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
 redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(REDIST_DIR)
-	cp -a $(REDIST_COPY_TARGETS) $(REDIST_DIR)
-	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
-	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
+	cp -af --no-dereference --preserve=mode,links $(REDIST_COPY_TARGETS) $(REDIST_DIR)
 
 .PHONY: module32 module64 module
 
