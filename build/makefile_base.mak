@@ -367,12 +367,16 @@ redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 module32: private SHELL := $(CONTAINER_SHELL)
 module32: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure32
 module32: | all-source wine-configure32
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ32)/dlls/$(module)
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ32)/dlls/$(module) && \
+	find $(WINE_OBJ32)/dlls/$(module) -type f -name '*.dll' -printf '%p\0' | \
+	    xargs --verbose -0 -r -P$(J) -n1 $(SRC)/make/pefixup.py
 
 module64: private SHELL := $(CONTAINER_SHELL)
 module64: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure64
 module64: | all-source wine-configure64
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ64)/dlls/$(module)
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ64)/dlls/$(module) && \
+	find $(WINE_OBJ64)/dlls/$(module) -type f -name '*.dll' -printf '%p\0' | \
+	    xargs --verbose -0 -r -P$(J) -n1 $(SRC)/make/pefixup.py
 
 module: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure
 module: | all-source wine-configure
