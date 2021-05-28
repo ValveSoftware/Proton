@@ -151,13 +151,17 @@ install: install-internal
 redist: | vagrant_share/$(DEPLOY_DIR)
 redist: private SHELL := $(VAGRANT_SHELL)
 redist: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && cp $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR) && \
+	rm -rf /vagrant/$(DEPLOY_DIR)/* && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && \
+	cp -Rf $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR) && \
 	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
 
 deploy: | vagrant_share/$(DEPLOY_DIR)-deploy
 deploy: private SHELL := $(VAGRANT_SHELL)
 deploy: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy && \
+	rm -rf /vagrant/$(DEPLOY_DIR)-deploy/* && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && \
+	cp -Rf $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy && \
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
 module: | vagrant_share/$(module)/lib/wine/
