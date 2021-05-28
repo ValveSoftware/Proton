@@ -31,7 +31,7 @@ ifeq ($(SRCDIR),)
 endif
 
 DST_BASE := $(OBJ)/dist
-DST_DIR := $(DST_BASE)/dist
+DST_DIR := $(DST_BASE)/files
 DST_LIBDIR32 := $(DST_DIR)/lib
 DST_LIBDIR64 := $(DST_DIR)/lib64
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
@@ -1054,9 +1054,7 @@ all-dist:
 .PHONY: deploy
 deploy: all
 	mkdir -p $(DEPLOY_DIR) && \
-	rsync --delete --exclude dist --exclude compatibilitytool.vdf -arx $(DST_BASE)/ $(DEPLOY_DIR)
-	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
-	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
+	rsync --delete --exclude compatibilitytool.vdf -arx $(DST_BASE)/ $(DEPLOY_DIR)
 
 
 ##
@@ -1066,9 +1064,7 @@ deploy: all
 .PHONY: redist
 redist: all
 	mkdir -p $(REDIST_DIR)
-	rsync --delete --exclude dist -arx $(DST_BASE)/ $(REDIST_DIR)
-	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
-	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
+	rsync --delete -arx $(DST_BASE)/ $(REDIST_DIR)
 
 
 ##
@@ -1136,7 +1132,6 @@ install: all
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	rsync --delete -arx $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	cp -f $(DIST_VERSION) $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/dist/
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
