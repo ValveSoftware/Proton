@@ -129,6 +129,7 @@ proton: downloads
 	echo "Proton built locally. Use 'install', 'deploy' or 'redist' targets."
 
 install: downloads
+	rm -rf $(STEAM_DIR)/compatibilitytools.d/$(_build_name)/files/ #remove proton's internal files, but preserve user_settings etc from top-level
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) install
 	echo "Proton installed to your local Steam installation"
 
@@ -167,8 +168,8 @@ dxvk: | $(BUILD_ROOT)/dxvk/lib/wine/dxvk
 dxvk: | $(BUILD_ROOT)/dxvk/lib64/wine/dxvk
 dxvk: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dxvk && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib/wine/dxvk/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib64/wine/dxvk/
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib/wine/dxvk/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib64/wine/dxvk/
 
 dxvk-nvapi: | $(BUILD_ROOT)/dxvk-nvapi/lib/wine/nvapi
 dxvk-nvapi: | $(BUILD_ROOT)/dxvk-nvapi/lib64/wine/nvapi
@@ -181,8 +182,8 @@ vkd3d-proton: | $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton
 vkd3d-proton: | $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton
 vkd3d-proton: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) vkd3d-proton && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton/
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton/
 
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine/i386-windows
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine/i386-unix
@@ -190,10 +191,10 @@ lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-windows
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-unix
 lsteamclient: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) lsteamclient && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib/wine/i386-windows/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-unix/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib/wine/i386-unix/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-windows/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-unix/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-unix/
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib/wine/i386-windows/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-unix/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib/wine/i386-unix/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-windows/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-unix/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-unix/
 
 vrclient: | $(BUILD_ROOT)/vrclient/lib/wine/i386-windows
 vrclient: | $(BUILD_ROOT)/vrclient/lib/wine/i386-unix
@@ -201,17 +202,17 @@ vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-windows
 vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-unix
 vrclient: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) vrclient && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-windows/vrclient.dll $(BUILD_ROOT)/vrclient/lib/wine/i386-windows/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-unix/vrclient.dll.so $(BUILD_ROOT)/vrclient/lib/wine/i386-unix/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-windows/vrclient_x64.dll $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-windows/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-unix/vrclient_x64.dll.so $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-unix/
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-windows/vrclient.dll $(BUILD_ROOT)/vrclient/lib/wine/i386-windows/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-unix/vrclient.dll.so $(BUILD_ROOT)/vrclient/lib/wine/i386-unix/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-windows/vrclient_x64.dll $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-windows/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-unix/vrclient_x64.dll.so $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-unix/
 
 wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-windows
 wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-unix
 wineopenxr: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) wineopenxr && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-windows/wineopenxr.dll $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-windows/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-unix/wineopenxr.dll.so $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-unix/
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-windows/wineopenxr.dll $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-windows/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-unix/wineopenxr.dll.so $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-unix/
 
 battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine/i386-windows
 battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine/i386-unix
