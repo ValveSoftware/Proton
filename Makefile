@@ -145,6 +145,7 @@ install-internal: downloads
 
 install: install-internal
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
+	rm -rf $(STEAM_DIR)/compatibilitytools.d/$(_build_name)/files/ #remove proton's internal files, but preserve user_settings etc from top-level
 	cp -Rf --no-dereference --preserve=mode,links vagrant_share/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
 	echo "Proton installed to your local Steam installation"
 
@@ -180,39 +181,39 @@ dxvk: | vagrant_share/dxvk/lib64/wine/dxvk
 dxvk: private SHELL := $(VAGRANT_SHELL)
 dxvk: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/
 
 vkd3d-proton: | vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton
 vkd3d-proton: | vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton
 vkd3d-proton: private SHELL := $(VAGRANT_SHELL)
 vkd3d-proton: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vkd3d-proton && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/
 
 lsteamclient: | vagrant_share/lsteamclient/lib/wine
 lsteamclient: | vagrant_share/lsteamclient/lib64/wine
 lsteamclient: private SHELL := $(VAGRANT_SHELL)
 lsteamclient: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) lsteamclient && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine
 
 vrclient: | vagrant_share/vrclient/lib/wine
 vrclient: | vagrant_share/vrclient/lib64/wine
 vrclient: private SHELL := $(VAGRANT_SHELL)
 vrclient: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vrclient && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine
+	cp -f $(BUILD_DIR)/dist/files/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine
 
 wineopenxr: | vagrant_share/wineopenxr/lib/wine
 wineopenxr: | vagrant_share/wineopenxr/lib64/wine
 wineopenxr: private SHELL := $(VAGRANT_SHELL)
 wineopenxr: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) wineopenxr && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine
+	cp -f $(BUILD_DIR)/dist/files/lib64/wine/wineopenxr.dll.so /vagrant/wineopenxr/lib64/wine
 
 vagrant_share/%:
 	mkdir -p $@
