@@ -410,15 +410,15 @@ def set_dir_casefold_bit(dir_path):
 class Proton:
     def __init__(self, base_dir):
         self.base_dir = base_dir + "/"
-        self.dist_dir = self.path("dist/")
-        self.bin_dir = self.path("dist/bin/")
-        self.lib_dir = self.path("dist/lib/")
-        self.lib64_dir = self.path("dist/lib64/")
-        self.fonts_dir = self.path("dist/share/fonts/")
-        self.wine_fonts_dir = self.path("dist/share/wine/fonts/")
-        self.wine_inf = self.path("dist/share/wine/wine.inf")
+        self.dist_dir = self.path("files/")
+        self.bin_dir = self.path("files/bin/")
+        self.lib_dir = self.path("files/lib/")
+        self.lib64_dir = self.path("files/lib64/")
+        self.fonts_dir = self.path("files/share/fonts/")
+        self.wine_fonts_dir = self.path("files/share/wine/fonts/")
+        self.wine_inf = self.path("files/share/wine/wine.inf")
         self.version_file = self.path("version")
-        self.default_pfx_dir = self.path("dist/share/default_pfx/")
+        self.default_pfx_dir = self.path("files/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
         self.wine_bin = self.bin_dir + "wine"
         self.wine64_bin = self.bin_dir + "wine64"
@@ -428,28 +428,12 @@ class Proton:
     def path(self, d):
         return self.base_dir + d
 
-    def need_tarball_extraction(self):
-        '''Checks if the proton_dist tarball archive must be extracted. Returns true if extraction is needed, false otherwise'''
-        return not file_exists(self.dist_dir, follow_symlinks=True) or \
-            not file_exists(self.path("dist/version"), follow_symlinks=True) or \
-            not filecmp.cmp(self.version_file, self.path("dist/version"))
-
-    def extract_tarball(self):
-        with self.dist_lock:
-            if self.need_tarball_extraction():
-                if file_exists(self.dist_dir, follow_symlinks=True):
-                    shutil.rmtree(self.dist_dir)
-                tar = None
-                for sf in ["", ".xz", ".bz2", ".gz"]:
-                    if file_exists(self.path("proton_dist.tar" + sf), follow_symlinks=True):
-                        tar = tarfile.open(self.path("proton_dist.tar" + sf), mode="r:*")
-                        break
-                if not tar:
-                    log("No proton_dist tarball??")
-                    sys.exit(1)
-                tar.extractall(path=self.dist_dir)
-                tar.close()
-                try_copy(self.version_file, self.dist_dir)
+    def cleanup_legacy_dist(self):
+        old_dist_dir = self.path("dist/")
+        if file_exists(old_dist_dir, follow_symlinks=True):
+            with self.dist_lock:
+                if file_exists(old_dist_dir, follow_symlinks=True):
+                    shutil.rmtree(old_dist_dir)
 
     def missing_default_prefix(self):
         '''Check if the default prefix dir is missing. Returns true if missing, false if present'''
@@ -1620,8 +1604,7 @@ if __name__ == "__main__":
 
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
-    if g_proton.need_tarball_extraction():
-        g_proton.extract_tarball()
+    g_proton.cleanup_legacy_dist()
 
     g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
