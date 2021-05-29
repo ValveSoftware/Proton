@@ -29,9 +29,6 @@
     echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
-    
-    echo "add upstream cpu adapter fix"
-    patch -Np1 < ../patches/dxvk/94674ac45e8a4618c00519e04b254de76aad35a2.patch
 
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
@@ -74,8 +71,20 @@
 
     # ubisoft controller regression hotfix
     git revert --no-commit 0ac619ae7ab7dd90622371a5f58a1ff12d46eb8f
-    
+
     # temporary pulseaudio reverts
+    git revert --no-commit ce151dd681fe5ee80daba96dce12e37d6846e152
+    git revert --no-commit 77813eb7586779df0fb3b700000a17e339fd5ce3
+    git revert --no-commit d8e9621cfad50596378283704dfb1e6926d77ed8
+    git revert --no-commit a4149d53f734bf898087e22170eab5bed9a423d1
+    git revert --no-commit b4c7823bbb6a792098131f5572506784c8ed0f35
+    git revert --no-commit 70f59eb179d6a1c1b4dbc9e0a45b5731cd260793
+    git revert --no-commit e19d97ff4e2f5a7800d6df77b8acce95130b84c3
+    git revert --no-commit 4432b66e372caf0096df56f45502d7dea1f1800c
+    git revert --no-commit 6a6296562f536ed10d221f0df43ef30bbd674cb2
+    git revert --no-commit aba40bd50a065b3ac913dbc1263c38535fb5d9e7
+    git revert --no-commit bf74f36350c92daae84623dc0bd0530c212bb908
+    git revert --no-commit 1518e73b23211af738ae448a80466c0199f24419
     git revert --no-commit 44e4132489c28b429737be022f6d4044c5beab3e
     git revert --no-commit a6131544e87c554f70c21a04fb4697d8e1f508d5
     git revert --no-commit 80b996c53c767fef4614f097f14c310285d9c081
@@ -104,7 +113,6 @@
     git revert --no-commit 8df72bade54d1ef7a6d9e79f20ee0a2697019c13
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
-    
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -134,13 +142,17 @@
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W imm32-com-initialization \
-    -W bcrypt-ECDHSecretAgreement
+    -W bcrypt-ECDHSecretAgreement \
+    -W ntdll-NtAlertThreadByThreadId
 
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
 
     # apply this manually since imm32-com-initialization is disabled in staging.
     patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
+
+    # revert this, it breaks lsteamclient compilation
+    patch -RNp1 < ../patches/wine-hotfixes/__wine_make_process_system_restore.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
