@@ -1,3 +1,88 @@
+From 0c531f7f52af5c3c1f85b67e49b94e6a8b4004ab Mon Sep 17 00:00:00 2001
+From: GloriousEggroll <gloriouseggroll@gmail.com>
+Date: Tue, 25 May 2021 00:59:48 -0600
+Subject: [PATCH] winevulkan: restore relevant vkCreateSwapchainKHR private
+ thunk code for fullscreen hack
+
+---
+ dlls/winevulkan/vulkan.c        | 13 +++++++++++++
+ dlls/winevulkan/vulkan_thunks.c | 14 ++------------
+ dlls/winevulkan/vulkan_thunks.h |  1 +
+ 3 files changed, 16 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 9f181d92bc5..be2191d7b97 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1430,6 +1430,19 @@ void WINAPI wine_vkGetPrivateDataEXT(VkDevice device, VkObjectType object_type,
+     device->funcs.p_vkGetPrivateDataEXT(device->device, object_type, object_handle, private_data_slot, data);
+ }
+ 
++VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *create_info,
++        const VkAllocationCallbacks *allocator, VkSwapchainKHR *swapchain)
++{
++    VkSwapchainCreateInfoKHR native_info;
++
++    TRACE("%p, %p, %p, %p\n", device, create_info, allocator, swapchain);
++
++    native_info = *create_info;
++    native_info.surface = wine_surface_from_handle(create_info->surface)->driver_surface;
++
++    return thunk_vkCreateSwapchainKHR(device, &create_info, allocator, swapchain);
++}
++
+ VkResult WINAPI wine_vkCreateWin32SurfaceKHR(VkInstance instance,
+         const VkWin32SurfaceCreateInfoKHR *createInfo, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface)
+ {
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index edb4bfd55da..80fa48c65b9 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -6188,27 +6188,17 @@ VkResult WINAPI wine_vkCreateShaderModule(VkDevice device, const VkShaderModuleC
+     return device->funcs.p_vkCreateShaderModule(device->device, pCreateInfo, NULL, pShaderModule);
+ }
+ 
+-VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
++VkResult thunk_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
+ {
+ #if defined(USE_STRUCT_CONVERSION)
+     VkResult result;
+     VkSwapchainCreateInfoKHR_host pCreateInfo_host;
+-    TRACE("%p, %p, %p, %p\n", device, pCreateInfo, pAllocator, pSwapchain);
+-
+     convert_VkSwapchainCreateInfoKHR_win_to_host(pCreateInfo, &pCreateInfo_host);
+     result = device->funcs.p_vkCreateSwapchainKHR(device->device, &pCreateInfo_host, NULL, pSwapchain);
+ 
+     return result;
+ #else
+-    VkResult result;
+-    VkSwapchainCreateInfoKHR pCreateInfo_host;
+-    TRACE("%p, %p, %p, %p\n", device, pCreateInfo, pAllocator, pSwapchain);
+-
+-    convert_VkSwapchainCreateInfoKHR_win_to_host(pCreateInfo, &pCreateInfo_host);
+-    result = device->funcs.p_vkCreateSwapchainKHR(device->device, &pCreateInfo_host, NULL, pSwapchain);
+-
+-    return result;
+-#endif
++    return device->funcs.p_vkCreateSwapchainKHR(device->device, pCreateInfo, NULL, pSwapchain);#endif
+ }
+ 
+ static VkResult WINAPI wine_vkCreateValidationCacheEXT(VkDevice device, const VkValidationCacheCreateInfoEXT *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkValidationCacheEXT *pValidationCache)
+diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
+index 34442762859..4c3aaa923de 100644
+--- a/dlls/winevulkan/vulkan_thunks.h
++++ b/dlls/winevulkan/vulkan_thunks.h
+@@ -21,6 +21,7 @@ VkResult WINAPI wine_vkCreateDebugReportCallbackEXT(VkInstance instance, const V
+ VkResult WINAPI wine_vkCreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkDebugUtilsMessengerEXT *pMessenger) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkDevice *pDevice);
+ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkInstance *pInstance);
++VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain);
+ VkResult WINAPI wine_vkCreateWin32SurfaceKHR(VkInstance instance, const VkWin32SurfaceCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface);
+ VkResult WINAPI wine_vkDebugMarkerSetObjectNameEXT(VkDevice device, const VkDebugMarkerObjectNameInfoEXT *pNameInfo) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkDebugMarkerSetObjectTagEXT(VkDevice device, const VkDebugMarkerObjectTagInfoEXT *pTagInfo) DECLSPEC_HIDDEN;
+-- 
+2.31.1
+
 From 3b4caa1dbdfe3dbe0d41ccca54f091313403f8d5 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 5 Mar 2021 09:25:50 -0600
@@ -22,7 +107,7 @@ index 922b8f3805d..48e6d7af7d9 100755
      "vkGetPhysicalDeviceWin32PresentationSupportKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
  
      # VK_KHR_swapchain
--    "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PRIVATE},
+-    "vkCreateSwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
 -    "vkDestroySwapchainKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
 -    "vkGetSwapchainImagesKHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
 -    "vkQueuePresentKHR": {"dispatch" : True, "driver" : True, "thunk" : ThunkType.PUBLIC},
@@ -35,15 +120,6 @@ index 922b8f3805d..48e6d7af7d9 100755
  
      # VK_KHR_external_fence_capabilities
      "vkGetPhysicalDeviceExternalFencePropertiesKHR" : {"dispatch" : False, "driver" : False, "thunk" : ThunkType.NONE},
-@@ -243,6 +245,8 @@ STRUCT_CHAIN_CONVERSIONS = [
-     "VkInstanceCreateInfo",
- ]
- 
-+shared_conversion_structs = ["VkBufferMemoryBarrier", "VkImageMemoryBarrier"]
-+
- 
- class Direction(Enum):
-     """ Parameter direction: input, output, input_output. """
 @@ -951,6 +955,8 @@ class VkHandle(object):
      def native_handle(self, name):
          """ Provide access to the native handle of a wrapped object. """
@@ -53,213 +129,6 @@ index 922b8f3805d..48e6d7af7d9 100755
          if self.name == "VkCommandPool":
              return "wine_cmd_pool_from_handle({0})->command_pool".format(name)
          if self.name == "VkDebugUtilsMessengerEXT":
-@@ -1161,14 +1167,14 @@ class VkMember(object):
-         struct = self.type_info["data"]
-         direction = Direction.OUTPUT if struct.returnedonly else Direction.INPUT
-         if self.is_dynamic_array():
--            conversions.append(ConversionFunction(False, True, direction, struct))
-+            conversions.append(ConversionFunction(False, True, struct.name in shared_conversion_structs, direction, struct))
-         elif self.is_static_array():
--            conversions.append(ConversionFunction(True, False, direction, struct))
-+            conversions.append(ConversionFunction(True, False, struct.name in shared_conversion_structs, direction, struct))
-         else:
--            conversions.append(ConversionFunction(False, False, direction, struct))
-+            conversions.append(ConversionFunction(False, False, struct.name in shared_conversion_structs, direction, struct))
- 
-         if self.needs_free():
--            conversions.append(FreeFunction(self.is_dynamic_array(), struct))
-+            conversions.append(FreeFunction(self.is_dynamic_array(), struct.name in shared_conversion_structs, struct))
- 
-         return conversions
- 
-@@ -1325,16 +1331,16 @@ class VkParam(object):
- 
-         # Input functions require win to host conversion.
-         if self._direction in [Direction.INPUT, Direction.INPUT_OUTPUT]:
--            self.input_conv = ConversionFunction(False, self.is_dynamic_array(), Direction.INPUT, self.struct)
-+            self.input_conv = ConversionFunction(False, self.is_dynamic_array(), self.struct.name in shared_conversion_structs, Direction.INPUT, self.struct)
- 
-         # Output functions require host to win conversion.
-         if self._direction in [Direction.INPUT_OUTPUT, Direction.OUTPUT]:
--            self.output_conv = ConversionFunction(False, self.is_dynamic_array(), Direction.OUTPUT, self.struct)
-+            self.output_conv = ConversionFunction(False, self.is_dynamic_array(), self.struct.name in shared_conversion_structs, Direction.OUTPUT, self.struct)
- 
-         # Dynamic arrays, but also some normal structs (e.g. VkCommandBufferBeginInfo) need memory
-         # allocation and thus some cleanup.
-         if self.is_dynamic_array() or self.struct.needs_free():
--            self.free_func = FreeFunction(self.is_dynamic_array(), self.struct)
-+            self.free_func = FreeFunction(self.is_dynamic_array(), self.struct.name in shared_conversion_structs, self.struct)
- 
-     def _set_direction(self):
-         """ Internal helper function to set parameter direction (input/output/input_output). """
-@@ -1841,9 +1847,10 @@ class VkStruct(Sequence):
- 
- 
- class ConversionFunction(object):
--    def __init__(self, array, dyn_array, direction, struct):
-+    def __init__(self, array, dyn_array, shared, direction, struct):
-         self.array = array
-         self.direction = direction
-+        self.shared = shared
-         self.dyn_array = dyn_array
-         self.struct = struct
-         self.type = struct.name
-@@ -1864,7 +1871,12 @@ class ConversionFunction(object):
-             return_type = "{0}_host".format(self.type)
- 
-         # Generate function prototype.
--        body = "static inline {0} *{1}(".format(return_type, self.name)
-+        if self.shared:
-+            body = ""
-+        else:
-+            body = "static inline "
-+        body += "{0} *{1}(".format(return_type, self.name)
-+
-         body += ", ".join(p for p in params)
-         body += ")\n{\n"
- 
-@@ -1895,7 +1907,11 @@ class ConversionFunction(object):
-         else:
-             params = ["const {0} *in".format(self.type), "{0}_host *out".format(self.type)]
- 
--        body = "static inline void {0}(".format(self.name)
-+        if self.shared:
-+            body = ""
-+        else:
-+            body = "static inline "
-+        body += "void {0}(".format(self.name)
- 
-         # Generate parameter list
-         body += ", ".join(p for p in params)
-@@ -1928,7 +1944,11 @@ class ConversionFunction(object):
-             params = ["const {0} *in".format(self.type), "{0} *out_host".format(self.type), "uint32_t count"]
- 
-         # Generate function prototype.
--        body = "static inline void {0}(".format(self.name)
-+        if self.shared:
-+            body = ""
-+        else:
-+            body = "static inline "
-+        body += "void {0}(".format(self.name)
-         body += ", ".join(p for p in params)
-         body += ")\n{\n"
-         body += "    unsigned int i;\n\n"
-@@ -1970,10 +1990,46 @@ class ConversionFunction(object):
-         else:
-             return self._generate_conversion_func()
- 
-+    def prototype(self):
-+        if self.array:
-+            if self.direction == Direction.OUTPUT:
-+                params = ["const {0}_host *in".format(self.type), "{0} *out".format(self.type), "uint32_t count"]
-+                return_type = self.type
-+            else:
-+                params = ["const {0} *in".format(self.type), "{0} *out_host".format(self.type), "uint32_t count"]
-+                return_type = "{0}_host".format(self.type)
-+
-+            body = "void {0}(".format(self.name)
-+            body += ", ".join(p for p in params)
-+            body += ");\n"
-+        elif self.dyn_array:
-+            if self.direction == Direction.OUTPUT:
-+                params = ["const {0}_host *in".format(self.type), "uint32_t count"]
-+                return_type = self.type
-+            else:
-+                params = ["const {0} *in".format(self.type), "uint32_t count"]
-+                return_type = "{0}_host".format(self.type)
-+
-+            body = "{0} *{1}(".format(return_type, self.name)
-+            body += ", ".join(p for p in params)
-+            body += ");\n"
-+        else:
-+            if self.direction == Direction.OUTPUT:
-+                params = ["const {0}_host *in".format(self.type), "{0} *out".format(self.type)]
-+            else:
-+                params = ["const {0} *in".format(self.type), "{0}_host *out".format(self.type)]
-+
-+            body = "void {0}(".format(self.name)
-+            body += ", ".join(p for p in params)
-+            body += ");\n"
-+
-+        return body
-+
- 
- class FreeFunction(object):
--    def __init__(self, dyn_array, struct):
-+    def __init__(self, dyn_array, shared, struct):
-         self.dyn_array = dyn_array
-+        self.shared = shared
-         self.struct = struct
-         self.type = struct.name
- 
-@@ -1989,7 +2045,11 @@ class FreeFunction(object):
-         """ Helper function for cleaning up temporary buffers required for array conversions. """
- 
-         # Generate function prototype.
--        body = "static inline void {0}({1}_host *in, uint32_t count)\n{{\n".format(self.name, self.type)
-+        if self.shared:
-+            body = ""
-+        else:
-+            body = "static inline "
-+        body += "void {0}({1}_host *in, uint32_t count)\n{{\n".format(self.name, self.type)
- 
-         # E.g. VkGraphicsPipelineCreateInfo_host needs freeing for pStages.
-         if self.struct.needs_free():
-@@ -2022,7 +2082,11 @@ class FreeFunction(object):
-             return ""
- 
-         # Generate function prototype.
--        body = "static inline void {0}({1}_host *in)\n{{\n".format(self.name, self.type)
-+        if self.shared:
-+            body = ""
-+        else:
-+            body = "static inline "
-+        body += "void {0}({1}_host *in)\n{{\n".format(self.name, self.type)
- 
-         for m in self.struct:
-             if m.needs_conversion() and m.is_dynamic_array():
-@@ -2044,6 +2108,11 @@ class FreeFunction(object):
-             # E.g. VkCommandBufferBeginInfo
-             return self._generate_free_func()
- 
-+    def prototype(self):
-+        if self.dyn_array:
-+            return "void {0}({1}_host *in, uint32_t count);\n".format(self.name, self.type)
-+        return "void {0}({1}_host *in);\n".format(self.name, self.type)
-+
- 
- class StructChainConversionFunction(object):
-     def __init__(self, direction, struct):
-@@ -2206,12 +2275,17 @@ class VkGenerator(object):
-         # Generate any conversion helper functions.
-         f.write("#if defined(USE_STRUCT_CONVERSION)\n")
-         for conv in self.conversions:
--            f.write(conv.definition())
-+            if not conv.shared:
-+                f.write(conv.definition())
-         f.write("#endif /* USE_STRUCT_CONVERSION */\n\n")
- 
-         for conv in self.struct_chain_conversions:
-             f.write(conv.definition())
- 
-+        for conv in self.conversions:
-+            if conv.shared:
-+                f.write(conv.definition())
-+
-         # Create thunks for instance and device functions.
-         # Global functions don't go through the thunks.
-         for vk_func in self.registry.funcs.values():
-@@ -2383,6 +2457,10 @@ class VkGenerator(object):
-             f.write(func.prototype(postfix="DECLSPEC_HIDDEN") + ";\n")
-         f.write("\n")
- 
-+        for conv in self.conversions:
-+            if conv.shared:
-+                f.write(conv.prototype())
-+
-         f.write("/* For use by vkDevice and children */\n")
-         f.write("struct vulkan_device_funcs\n{\n")
-         for vk_func in self.registry.device_funcs:
 @@ -2580,6 +2658,12 @@ class VkGenerator(object):
          f.write("\n")
          f.write("    /* winevulkan specific functions */\n")
@@ -277,15 +146,15 @@ diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
 index 6c27c6f9894..659a813cefa 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -18,6 +18,7 @@
-  */
+@@ -22,6 +22,7 @@
+ #endif
  
  #include "config.h"
 +#include <math.h>
  #include <time.h>
  #include <stdarg.h>
  #include <stdlib.h>
-@@ -1930,17 +1931,723 @@ void WINAPI wine_vkGetPrivateDataEXT(VkDevice device, VkObjectType object_type,
+@@ -1430,17 +1446,723 @@ void WINAPI wine_vkGetPrivateDataEXT(VkDevice device, VkObjectType object_type,
      device->funcs.p_vkGetPrivateDataEXT(device->device, object_type, object_handle, private_data_slot, data);
  }
  
@@ -980,8 +849,7 @@ index 6c27c6f9894..659a813cefa 100644
 +        free(object);
 +        return result;
 +    }
- 
--    return thunk_vkCreateSwapchainKHR(device, &native_info, allocator, swapchain);
++
 +    WINE_VK_ADD_NON_DISPATCHABLE_MAPPING(device->phys_dev->instance, object, object->swapchain);
 +
 +    if(object->fs_hack_enabled){
@@ -1007,12 +875,13 @@ index 6c27c6f9894..659a813cefa 100644
 +    }
 +
 +    *swapchain = (uint64_t)(UINT_PTR)object;
-+
+ 
+-    return thunk_vkCreateSwapchainKHR(device, &create_info, allocator, swapchain);
 +    return result;
  }
  
  VkResult WINAPI wine_vkCreateWin32SurfaceKHR(VkInstance instance,
-@@ -2023,6 +2730,7 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice
+@@ -1510,6 +2232,7 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice
          VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *capabilities)
  {
      VkResult res;
@@ -1020,7 +889,7 @@ index 6c27c6f9894..659a813cefa 100644
  
      TRACE("%p, 0x%s, %p\n", phys_dev, wine_dbgstr_longlong(surface), capabilities);
  
-@@ -2031,6 +2739,13 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice
+@@ -1518,6 +2241,13 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice
      if (res == VK_SUCCESS)
          adjust_max_image_count(phys_dev, capabilities);
  
@@ -1034,15 +903,15 @@ index 6c27c6f9894..659a813cefa 100644
      return res;
  }
  
-@@ -2039,6 +2754,7 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
+@@ -1525,6 +2255,7 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
+         const VkPhysicalDeviceSurfaceInfo2KHR *surface_info, VkSurfaceCapabilities2KHR *capabilities)
  {
-     VkPhysicalDeviceSurfaceInfo2KHR native_info;
      VkResult res;
 +    VkExtent2D user_res;
  
      TRACE("%p, %p, %p\n", phys_dev, surface_info, capabilities);
  
-@@ -2050,6 +2766,13 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
+@@ -1533,6 +2264,13 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
      if (res == VK_SUCCESS)
          adjust_max_image_count(phys_dev, &capabilities->surfaceCapabilities);
  
@@ -1056,9 +925,9 @@ index 6c27c6f9894..659a813cefa 100644
      return res;
  }
  
-@@ -3042,3 +3042,621 @@ HRESULT WINAPI DllUnregisterServer(void)
+@@ -1733,3 +2471,621 @@ VkResult WINAPI wine_vkDebugMarkerSetObjectNameEXT(VkDevice device, const VkDebu
  
-     return S_OK;
+     return thunk_vkDebugMarkerSetObjectNameEXT(device, &wine_name_info);
  }
 +
 +VkResult WINAPI wine_vkAcquireNextImage2KHR(VkDevice device, const VkAcquireNextImageInfoKHR *pAcquireInfo, uint32_t *pImageIndex)
@@ -2038,23 +1907,15 @@ index 781185998c1..109a25a7477 100644
  VkResult WINAPI wine_vkEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char *pLayerName, uint32_t *pPropertyCount, VkExtensionProperties *pProperties);
  VkResult WINAPI wine_vkEnumeratePhysicalDeviceGroups(VkInstance instance, uint32_t *pPhysicalDeviceGroupCount, VkPhysicalDeviceGroupProperties *pPhysicalDeviceGroupProperties);
  VkResult WINAPI wine_vkEnumeratePhysicalDeviceGroupsKHR(VkInstance instance, uint32_t *pPhysicalDeviceGroupCount, VkPhysicalDeviceGroupProperties *pPhysicalDeviceGroupProperties) DECLSPEC_HIDDEN;
-@@ -57,6 +59,8 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
+@@ -59,6 +61,8 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
+ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities);
  VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities);
- VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceFormats2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pSurfaceFormatCount, VkSurfaceFormat2KHR *pSurfaceFormats);
  void WINAPI wine_vkGetPrivateDataEXT(VkDevice device, VkObjectType objectType, uint64_t objectHandle, VkPrivateDataSlotEXT privateDataSlot, uint64_t *pData) DECLSPEC_HIDDEN;
 +VkResult WINAPI wine_vkGetSwapchainImagesKHR(VkDevice device, VkSwapchainKHR swapchain, uint32_t *pSwapchainImageCount, VkImage *pSwapchainImages);
 +VkResult WINAPI wine_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pPresentInfo);
- VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
  VkResult WINAPI wine_vkSetDebugUtilsObjectNameEXT(VkDevice device, const VkDebugUtilsObjectNameInfoEXT *pNameInfo) DECLSPEC_HIDDEN;
  VkResult WINAPI wine_vkSetDebugUtilsObjectTagEXT(VkDevice device, const VkDebugUtilsObjectTagInfoEXT *pTagInfo) DECLSPEC_HIDDEN;
-@@ -64,7 +68,6 @@ VkResult WINAPI wine_vkSetPrivateDataEXT(VkDevice device, VkObjectType objectTyp
- void WINAPI wine_vkSubmitDebugUtilsMessageEXT(VkInstance instance, VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData) DECLSPEC_HIDDEN;
- 
- /* Private thunks */
--VkResult thunk_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain) DECLSPEC_HIDDEN;
- VkResult thunk_vkDebugMarkerSetObjectNameEXT(VkDevice device, const VkDebugMarkerObjectNameInfoEXT *pNameInfo) DECLSPEC_HIDDEN;
- VkResult thunk_vkDebugMarkerSetObjectTagEXT(VkDevice device, const VkDebugMarkerObjectTagInfoEXT *pTagInfo) DECLSPEC_HIDDEN;
- VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkSetPrivateDataEXT(VkDevice device, VkObjectType objectType, uint64_t objectHandle, VkPrivateDataSlotEXT privateDataSlot, uint64_t data) DECLSPEC_HIDDEN;
 @@ -1327,6 +1330,10 @@ void free_VkDeviceCreateInfo_struct_chain(VkDeviceCreateInfo *s) DECLSPEC_HIDDEN
  VkResult convert_VkInstanceCreateInfo_struct_chain(const void *pNext, VkInstanceCreateInfo *out_struct) DECLSPEC_HIDDEN;
  void free_VkInstanceCreateInfo_struct_chain(VkInstanceCreateInfo *s) DECLSPEC_HIDDEN;
@@ -3642,7 +3503,7 @@ index 2c9aff7e777..d5799690509 100644
      return TRUE;
  }
  
-@@ -1915,6 +1945,9 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1947,6 +1977,9 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
      double x_accum = 0, y_accum = 0;
      struct x11drv_thread_data *thread_data = x11drv_thread_data();
      XIValuatorClassInfo *x_pos, *y_pos;
@@ -3650,11 +3511,11 @@ index 2c9aff7e777..d5799690509 100644
 +    HMONITOR monitor;
 +    double user_to_real_scale;
  
-     if (thread_data->x_rel_valuator.number < 0 || thread_data->y_rel_valuator.number < 0) return FALSE;
+     if (thread_data->x_pos_valuator.number < 0 || thread_data->y_pos_valuator.number < 0) return FALSE;
      if (!event->valuators.mask_len) return FALSE;
 @@ -1960,6 +1993,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
-     x_pos->value = x_accum - input.u.mi.dx;
-     y_pos->value = y_accum - input.u.mi.dy;
+     input.u.mi.dx          = 0;
+     input.u.mi.dy          = 0;
  
 +    GetCursorPos(&pt);
 +    monitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONULL);
@@ -3662,9 +3523,9 @@ index 2c9aff7e777..d5799690509 100644
 +    input.u.mi.dx = lround((double)input.u.mi.dx / user_to_real_scale);
 +    input.u.mi.dy = lround((double)input.u.mi.dy / user_to_real_scale);
 +
-     if (!thread_data->xi2_rawinput_only)
-     {
-         if ((dy || dy) && !(input.u.mi.dx || input.u.mi.dy))
+     virtual_rect = get_virtual_screen_rect();
+ 
+     for (i = 0; i <= max ( x_rel->number, y_rel->number ); i++)
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 4a3ab31273a..97463882355 100644
 --- a/dlls/winex11.drv/opengl.c
@@ -4393,9 +4254,9 @@ index 9a43231f34d..d93b6b67a0e 100644
 -    DEVMODEW desired_mode;
 -};
 -
- /* All Windows drivers seen so far either support 32 bit depths, or 24 bit depths, but never both. So if we have
-  * a 32 bit framebuffer, report 32 bit bpps, otherwise 24 bit ones.
-  */
+ struct x11drv_display_depth
+ {
+     struct list entry;
 @@ -78,6 +69,11 @@ void X11DRV_Settings_SetHandler(const struct x11drv_settings_handler *new_handle
      }
  }
@@ -4740,7 +4601,7 @@ index 5230439ecb5..837a136f35c 100644
      BOOL layered = GetWindowLongW( hwnd, GWL_EXSTYLE ) & WS_EX_LAYERED;
 +    HMONITOR monitor;
  
-     if (!data && !(data = X11DRV_create_win_data( hwnd, window_rect, client_rect ))) return;
+     if (!data && !(data = X11DRV_create_win_data( hwnd, window_rect, client_rect ))) return TRUE;
  
 +    monitor = fs_hack_monitor_from_rect(window_rect);
 +    if(!wm_is_steamcompmgr(data->display) && !data->fs_hack && fs_hack_enabled(monitor) &&
@@ -7924,7 +7785,7 @@ index 16e69240525..786ba8f8593 100644
  void resize_vk_surfaces(HWND hwnd, Window active, int mask, XWindowChanges *changes)
  {
      struct wine_vk_surface *surface;
-@@ -262,6 +289,17 @@ void resize_vk_surfaces(HWND hwnd, Window active, int mask, XWindowChanges *chan
+@@ -274,6 +305,17 @@ void resize_vk_surfaces(HWND hwnd, Window active, int mask, XWindowChanges *chan
      LeaveCriticalSection(&context_section);
  }
  
@@ -7939,13 +7800,13 @@ index 16e69240525..786ba8f8593 100644
 +    LeaveCriticalSection(&context_section);
 +}
 +
- static VkResult X11DRV_vkCreateInstance(const VkInstanceCreateInfo *create_info,
-         const VkAllocationCallbacks *allocator, VkInstance *instance)
+ static VkResult X11DRV_vkAcquireNextImageKHR(VkDevice device,
+         VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore,
+         VkFence fence, uint32_t *image_index)
+@@ -312,7 +354,24 @@ static VkResult X11DRV_vkAcquireNextImageKHR(VkDevice device,
+         VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore,
+         VkFence fence, uint32_t *image_index)
  {
-@@ -293,7 +331,24 @@ static VkResult X11DRV_vkAcquireNextImageKHR(VkDevice device,
-        VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore,
-        VkFence fence, uint32_t *image_index)
-{
 -    return pvkAcquireNextImageKHR(device, swapchain, timeout, semaphore, fence, image_index);
 +    struct x11drv_escape_present_drawable escape;
 +    struct wine_vk_surface *surface;
@@ -7961,7 +7822,7 @@ index 16e69240525..786ba8f8593 100644
 +        escape.code = X11DRV_PRESENT_DRAWABLE;
 +        escape.drawable = surface->window;
 +        escape.flush = TRUE;
-+        ExtEscape(surface->dc, X11DRV_ESCAPE, sizeof(escape), (char *)&escape, 0, NULL);
++        ExtEscape(surface->hdc, X11DRV_ESCAPE, sizeof(escape), (char *)&escape, 0, NULL);
 +    }
 +
 +    return result;
@@ -8734,3 +8595,5 @@ index 049566bd223..15c634247ca 100644
  
      /* Write HardwareID registry property, REG_MULTI_SZ */
      written = sprintfW(bufferW, gpu_hardware_id_fmtW, gpu->vendor_id, gpu->device_id);
+
+

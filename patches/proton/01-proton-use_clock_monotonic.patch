@@ -50,8 +50,8 @@ index 5d70ef577ad..f665f91342d 100644
 --- a/dlls/ntdll/unix/sync.c
 +++ b/dlls/ntdll/unix/sync.c
 @@ -82,6 +82,46 @@ static const LARGE_INTEGER zero_timeout;
- 
- static pthread_mutex_t addr_mutex = PTHREAD_MUTEX_INITIALIZER;
+     return wine_dbgstr_longlong( timeout->QuadPart );
+ }
  
 +#ifndef __NR_clock_gettime64
 +#define __NR_clock_gettime64 403

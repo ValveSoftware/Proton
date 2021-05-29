@@ -48,17 +48,19 @@ index b7bd6f5f91d..fef060e9c22 100644
          if (lpBuffer->dwTotalPhys > MAXLONG) lpBuffer->dwTotalPhys = MAXLONG;
          if (lpBuffer->dwAvailPhys > MAXLONG) lpBuffer->dwAvailPhys = MAXLONG;
 diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
-index ca427c46c04..10327373959 100644
+index 966e8a88be2..609b85bf4ce 100644
 --- a/dlls/ntdll/ntdll.spec
 +++ b/dlls/ntdll/ntdll.spec
-@@ -1617,6 +1617,7 @@
+@@ -1627,6 +1627,9 @@
+ @ cdecl -norelay __wine_dbg_output(str)
+ @ cdecl -norelay __wine_dbg_strdup(str)
  
- # Virtual memory
- @ cdecl -syscall __wine_locked_recvmsg(long ptr long)
++# Virtual memory
 +@ cdecl -syscall __wine_needs_override_large_address_aware()
- 
++
  # Version
- @ cdecl -syscall wine_get_version()
+ @ cdecl wine_get_version()
+ @ cdecl wine_get_build_id()
 diff --git a/dlls/ntdll/unix/server.c b/dlls/ntdll/unix/server.c
 index 7236f0acb83..e34abd88093 100644
 --- a/dlls/ntdll/unix/server.c
