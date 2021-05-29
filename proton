@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.9-GE-1"
+CURRENT_PREFIX_VERSION="6.9-GE-2"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
