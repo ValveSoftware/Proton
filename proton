@@ -158,7 +158,8 @@ class Proton:
         self.version_file = self.path("version")
         self.default_pfx_dir = self.path("files/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
-        self.wine_bin = self.bin_dir + "wine64"
+        self.wine_bin = self.bin_dir + "wine"
+        self.wine64_bin = self.bin_dir + "wine64"
         self.wineserver_bin = self.bin_dir + "wineserver"
         self.dist_lock = FileLock(self.path("dist.lock"), timeout=-1)
 
@@ -205,7 +206,7 @@ class Proton:
                 #make default prefix
                 local_env["WINEPREFIX"] = self.default_pfx_dir
                 local_env["WINEDEBUG"] = "-all"
-                g_session.run_proc([self.wine_bin, "wineboot"], local_env)
+                g_session.run_proc([self.wine64_bin, "wineboot"], local_env)
                 g_session.run_proc([self.wineserver_bin, "-w"], local_env)
 
 class CompatData:
@@ -1057,7 +1058,7 @@ class Session:
             f.write("#Run winedbg with args\n\n")
             f.write("cd \"" + os.getcwd() + "\"\n")
             self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"$@\"\n")
+            f.write("\t\"" + g_proton.wine64_bin + "\" winedbg \"$@\"\n")
         os.chmod(tmpdir + "winedbg", 0o755)
 
         with open(tmpdir + "winedbg_run", "w") as f:
@@ -1074,7 +1075,7 @@ class Session:
                     f.write(" \"" + arg + "\"")
             f.write(")\n")
             self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
+            f.write("\t\"" + g_proton.wine64_bin + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
         os.chmod(tmpdir + "winedbg_run", 0o755)
 
         with open(tmpdir + "gdb_attach", "w") as f:
@@ -1089,7 +1090,7 @@ class Session:
             f.write("fi\n")
             f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
             self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb $WPID_DEC\n")
+            f.write("\t\"" + g_proton.wine64_bin + "\" winedbg --gdb $WPID_DEC\n")
         os.chmod(tmpdir + "gdb_attach", 0o755)
 
         with open(tmpdir + "gdb_run", "w") as f:
@@ -1106,7 +1107,7 @@ class Session:
                     f.write(" \"" + arg + "\"")
             f.write(")\n")
             self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
+            f.write("\t\"" + g_proton.wine64_bin + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
         os.chmod(tmpdir + "gdb_run", 0o755)
 
         with open(tmpdir + "run", "w") as f:
@@ -1123,7 +1124,7 @@ class Session:
                     f.write(" \"" + arg + "\"")
             f.write(")\n")
             self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine_bin + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
+            f.write("\t\"" + g_proton.wine64_bin + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
         os.chmod(tmpdir + "run", 0o755)
 
     def run_proc(self, args, local_env=None):
@@ -1148,11 +1149,11 @@ class Session:
         ]
 
         if any(check_args):
-            self.run_proc([g_proton.wine_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
-            #commandstring = str([g_proton.wine_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            self.run_proc([g_proton.wine64_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            #commandstring = str([g_proton.wine64_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
         else:
-            self.run_proc([g_proton.wine_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
-            #commandstring = str([g_proton.wine_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            self.run_proc([g_proton.wine64_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            #commandstring = str([g_proton.wine64_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
 
         #log("Running: " + commandstring)
 
@@ -1195,11 +1196,11 @@ if __name__ == "__main__":
         g_session.run()
     elif sys.argv[1] == "getcompatpath":
         #linux -> windows path
-        path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
+        path = subprocess.check_output([g_proton.wine64_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
         sys.stdout.buffer.write(path)
     elif sys.argv[1] == "getnativepath":
         #windows -> linux path
-        path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
+        path = subprocess.check_output([g_proton.wine64_bin, "winepath", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
         sys.stdout.buffer.write(path)
     else:
         log("Need a verb.")
