@@ -113,6 +113,12 @@
     git revert --no-commit 8df72bade54d1ef7a6d9e79f20ee0a2697019c13
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
+    
+    # mfplat reverts
+    git revert --no-commit abd3e8f3ec755eb3f09ab5333781b0daebe8f123
+    git revert --no-commit 20a1eb3b252b404bd2ed9a11dc03312ea11fff0d
+    git revert --no-commit e4e319d032d74ce5be55a31ef3add629b257ea48
+    git revert --no-commit 626438a6be2df298c527870c8df9e6deb2f1c0fc
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -261,12 +267,12 @@
     ## VULKAN-CENTRIC PATCHES
 
     echo "fullscreen hack"
-#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-childwindow-experimental.patch
-    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
+    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-childwindow-experimental.patch
+#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
 
     # old childwindow hack
-    echo "vulkan childwindow fix"
-    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
+#    echo "vulkan childwindow fix"
+#    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
     echo "proton nvidia hacks"
     patch -Np1 < ../patches/proton/26-proton-nvidia-hacks.patch
@@ -293,9 +299,6 @@
     # these are applied out of order since guy's mfplat patches are based on vanilla wine
     echo "proton-specific mfplat video conversion patches"
     patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
-
-    # mfplat nier replicant fixes
-    patch -Np1 < ../patches/wine-hotfixes/mfreadwrite_hack.patch
 
     # witcher 3 + borderlands 3 breaker
     patch -Np1 < ../patches/wine-hotfixes/205333
