@@ -1,0 +1,223 @@
+From 4e8fcc41ca42f7e047e4a5cb708a75447a753143 Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Mon, 24 May 2021 15:56:26 +0200
+Subject: [PATCH] ntdll: Replace __wine_make_process_system by a Wine-specific
+ NtSetInformationProcess() class.
+
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/ntdll.spec          |  1 -
+ dlls/ntdll/unix/process.c      | 30 +++++++++++-------------------
+ dlls/sechost/service.c         |  5 ++---
+ include/wine/server_protocol.h |  4 ++--
+ include/winternl.h             |  5 ++++-
+ programs/services/rpc.c        |  5 ++---
+ server/process.c               |  8 +++++++-
+ server/protocol.def            |  1 +
+ server/request.h               |  1 +
+ server/trace.c                 |  1 +
+ 10 files changed, 31 insertions(+), 30 deletions(-)
+
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index f05e9c39a885..4eb7aec1aa5b 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -1610,7 +1610,6 @@
+ @ cdecl -syscall -norelay wine_server_call(ptr)
+ @ cdecl -syscall wine_server_fd_to_handle(long long long ptr)
+ @ cdecl -syscall wine_server_handle_to_fd(long long ptr ptr)
+-@ cdecl -syscall __wine_make_process_system()
+ 
+ # Unix interface
+ @ cdecl __wine_set_unix_funcs(long ptr)
+diff --git a/dlls/ntdll/unix/process.c b/dlls/ntdll/unix/process.c
+index 340fe9cc3046..c1ff0289cf2a 100644
+--- a/dlls/ntdll/unix/process.c
++++ b/dlls/ntdll/unix/process.c
+@@ -1485,6 +1485,17 @@ NTSTATUS WINAPI NtSetInformationProcess( HANDLE handle, PROCESSINFOCLASS class,
+         break;
+     }
+ 
++    case ProcessWineMakeProcessSystem:
++        if (size != sizeof(HANDLE *)) return STATUS_INFO_LENGTH_MISMATCH;
++        SERVER_START_REQ( make_process_system )
++        {
++            req->handle = wine_server_obj_handle( handle );
++            if (!(ret = wine_server_call( req )))
++                *(HANDLE *)info = wine_server_ptr_handle( reply->event );
++        }
++        SERVER_END_REQ;
++        return ret;
++
+     default:
+         FIXME( "(%p,0x%08x,%p,0x%08x) stub\n", handle, class, info, size );
+         ret = STATUS_NOT_IMPLEMENTED;
+@@ -1605,22 +1616,3 @@ NTSTATUS WINAPI NtDebugContinue( HANDLE handle, CLIENT_ID *client, NTSTATUS stat
+     SERVER_END_REQ;
+     return ret;
+ }
+-
+-
+-/***********************************************************************
+- *           __wine_make_process_system   (NTDLL.@)
+- *
+- * Mark the current process as a system process.
+- * Returns the event that is signaled when all non-system processes have exited.
+- */
+-HANDLE CDECL __wine_make_process_system(void)
+-{
+-    HANDLE ret = 0;
+-
+-    SERVER_START_REQ( make_process_system )
+-    {
+-        if (!wine_server_call( req )) ret = wine_server_ptr_handle( reply->event );
+-    }
+-    SERVER_END_REQ;
+-    return ret;
+-}
+diff --git a/dlls/sechost/service.c b/dlls/sechost/service.c
+index 305c1169bd42..e4e152b0824c 100644
+--- a/dlls/sechost/service.c
++++ b/dlls/sechost/service.c
+@@ -90,8 +90,6 @@ static unsigned int nb_services;
+ static HANDLE service_event;
+ static BOOL stop_service;
+ 
+-extern HANDLE CDECL __wine_make_process_system(void);
+-
+ static WCHAR *heap_strdupAtoW( const char *src )
+ {
+     WCHAR *dst = NULL;
+@@ -1845,7 +1843,8 @@ static BOOL service_run_main_thread(void)
+     stop_service  = FALSE;
+ 
+     /* FIXME: service_control_dispatcher should be merged into the main thread */
+-    wait_handles[0] = __wine_make_process_system();
++    NtSetInformationProcess( GetCurrentProcess(), ProcessWineMakeProcessSystem,
++                             &wait_handles[0], sizeof(HANDLE *) );
+     wait_handles[1] = CreateThread( NULL, 0, service_control_dispatcher, disp, 0, NULL );
+     wait_handles[2] = service_event;
+ 
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index e6775959a22a..b9d29c1d5600 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -4917,7 +4917,7 @@ struct get_kernel_object_handle_reply
+ struct make_process_system_request
+ {
+     struct request_header __header;
+-    char __pad_12[4];
++    obj_handle_t handle;
+ };
+ struct make_process_system_reply
+ {
+diff --git a/include/winternl.h b/include/winternl.h
+index 691638f359cf..aa8c76a536af 100644
+--- a/include/winternl.h
++++ b/include/winternl.h
+@@ -1455,7 +1455,10 @@ typedef enum _PROCESSINFOCLASS {
+     ProcessThreadStackAllocation = 41,
+     ProcessWorkingSetWatchEx = 42,
+     ProcessImageFileNameWin32 = 43,
+-    MaxProcessInfoClass
++    MaxProcessInfoClass,
++#ifdef __WINESRC__
++    ProcessWineMakeProcessSystem = 1000,
++#endif
+ } PROCESSINFOCLASS, PROCESS_INFORMATION_CLASS;
+ 
+ #define MEM_EXECUTE_OPTION_DISABLE   0x01
+diff --git a/programs/services/rpc.c b/programs/services/rpc.c
+index df69a741b513..8d688c2f904f 100644
+--- a/programs/services/rpc.c
++++ b/programs/services/rpc.c
+@@ -35,8 +35,6 @@
+ #include "services.h"
+ #include "svcctl.h"
+ 
+-extern HANDLE CDECL __wine_make_process_system(void);
+-
+ WINE_DEFAULT_DEBUG_CHANNEL(service);
+ 
+ static const GENERIC_MAPPING g_scm_generic =
+@@ -2135,7 +2133,8 @@ DWORD RPC_Init(void)
+         return err;
+     }
+ 
+-    exit_event = __wine_make_process_system();
++    NtSetInformationProcess( GetCurrentProcess(), ProcessWineMakeProcessSystem,
++                             &exit_event, sizeof(HANDLE *) );
+     return ERROR_SUCCESS;
+ }
+ 
+diff --git a/server/process.c b/server/process.c
+index e91a63bed082..87ff3186bb55 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -1635,7 +1635,7 @@ DECL_HANDLER(get_process_idle_event)
+ /* make the current process a system process */
+ DECL_HANDLER(make_process_system)
+ {
+-    struct process *process = current->process;
++    struct process *process;
+     struct thread *thread;
+ 
+     if (!shutdown_event)
+@@ -1644,8 +1644,13 @@ DECL_HANDLER(make_process_system)
+         release_object( shutdown_event );
+     }
+ 
++    if (!(process = get_process_from_handle( req->handle, PROCESS_SET_INFORMATION ))) return;
++
+     if (!(reply->event = alloc_handle( current->process, shutdown_event, SYNCHRONIZE, 0 )))
++    {
++        release_object( process );
+         return;
++    }
+ 
+     if (!process->is_system)
+     {
+@@ -1655,6 +1660,7 @@ DECL_HANDLER(make_process_system)
+         if (!--user_processes && !shutdown_stage && master_socket_timeout != TIMEOUT_INFINITE)
+             shutdown_timeout = add_timeout_user( master_socket_timeout, server_shutdown_timeout, NULL );
+     }
++    release_object( process );
+ }
+ 
+ /* create a new job object */
+diff --git a/server/protocol.def b/server/protocol.def
+index 1407a7b4a54a..62a584e4cc98 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3430,6 +3430,7 @@ struct handle_info
+ 
+ /* Make the current process a system process */
+ @REQ(make_process_system)
++    obj_handle_t handle;          /* handle to the process */
+ @REPLY
+     obj_handle_t event;           /* event signaled when all user processes have exited */
+ @END
+diff --git a/server/request.h b/server/request.h
+index 3261308265fa..ce1edb548b71 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -2091,6 +2091,7 @@ C_ASSERT( FIELD_OFFSET(struct get_kernel_object_handle_request, access) == 24 );
+ C_ASSERT( sizeof(struct get_kernel_object_handle_request) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct get_kernel_object_handle_reply, handle) == 8 );
+ C_ASSERT( sizeof(struct get_kernel_object_handle_reply) == 16 );
++C_ASSERT( FIELD_OFFSET(struct make_process_system_request, handle) == 12 );
+ C_ASSERT( sizeof(struct make_process_system_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct make_process_system_reply, event) == 8 );
+ C_ASSERT( sizeof(struct make_process_system_reply) == 16 );
+diff --git a/server/trace.c b/server/trace.c
+index 6084f8768754..ab805a05234b 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4181,6 +4181,7 @@ static void dump_get_kernel_object_handle_reply( const struct get_kernel_object_
+ 
+ static void dump_make_process_system_request( const struct make_process_system_request *req )
+ {
++    fprintf( stderr, " handle=%04x", req->handle );
+ }
+ 
+ static void dump_make_process_system_reply( const struct make_process_system_reply *req )
