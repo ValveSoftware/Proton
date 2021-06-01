@@ -138,7 +138,7 @@ def try_get_game_library_dir():
 
     return None
 
-# Function to find the installed location of DLL files for use by WINE/Proton
+# Function to find the installed location of DLL files for use by Wine/Proton
 # from the NVIDIA Linux driver
 #
 # See https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/issues/71 for
@@ -149,8 +149,6 @@ def try_get_game_library_dir():
 #
 # On failure, returns None
 def find_nvidia_wine_dll_dir():
-    # Load libdl and libGLX_nvidia off the bat, if this fails don't waste time on
-    # the later stuff
     libdl = CDLL(find_library("libdl"))
     libglx_nvidia = CDLL("libGLX_nvidia.so.0")
 
@@ -201,7 +199,7 @@ def find_nvidia_wine_dll_dir():
     if glx_nvidia_info.l_name is None:
         return None
     try:
-        libglx_nvidia_path = glx_nvidia_info.l_name.decode("utf-8")
+        libglx_nvidia_path = os.fsdecode(glx_nvidia_info.l_name)
     except UnicodeDecodeError:
         return None
 
@@ -680,9 +678,8 @@ class CompatData:
             # Try to detect known DLLs that ship with the NVIDIA Linux Driver
             # and add them into the prefix
             nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
-            nvidia_dlls = ["_nvngx.dll", "nvngx.dll"]
             if nvidia_wine_dll_dir:
-                for dll in nvidia_dlls:
+                for dll in ["_nvngx.dll", "nvngx.dll"]:
                     try_copy(nvidia_wine_dll_dir + "/" + dll,
                              self.prefix_dir + "drive_c/windows/system32/" + dll)
 
