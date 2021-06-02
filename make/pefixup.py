@@ -13,6 +13,8 @@ for path in sys.argv[1:]:
             section.Characteristics &= ~pefile.SECTION_CHARACTERISTICS['IMAGE_SCN_CNT_INITIALIZED_DATA']
         section.Characteristics &= ~pefile.SECTION_CHARACTERISTICS['IMAGE_SCN_ALIGN_MASK']
 
+    pe.FILE_HEADER.TimeDateStamp = 1622588288
+
     pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
 
     perm = stat.S_IMODE(os.stat(path).st_mode)
