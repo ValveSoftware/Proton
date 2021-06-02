@@ -18,7 +18,7 @@ BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"
 STEAM_DIR := $(HOME)/.steam/root
 
 ifeq ($(build_name),)
-    DEPLOY_DIR := $(shell git describe --tags --always)
+    DEPLOY_DIR := $(shell git describe --tags --always --exclude proton-sdk*)
 else
     DEPLOY_DIR := $(_build_name)
 endif
