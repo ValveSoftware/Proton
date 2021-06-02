@@ -148,10 +148,20 @@ def try_get_game_library_dir():
 #
 # On failure, returns None
 def find_nvidia_wine_dll_dir():
-    libdl = CDLL(find_library("libdl"))
-    libglx_nvidia = CDLL("libGLX_nvidia.so.0")
+    try:
+        libdl_soname = find_library("dl")
 
-    if libdl is None or libglx_nvidia is None:
+        # If we couldn't determine the proper soname for libdl, bail out.
+        if libdl_soname is None:
+            return None
+
+        libdl = CDLL(libdl_soname)
+    except (FileNotFoundError, OSError):
+        return None
+
+    try:
+        libglx_nvidia = CDLL("libGLX_nvidia.so.0")
+    except OSError:
         return None
 
     # from dlinfo(3)
