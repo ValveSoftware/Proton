@@ -451,7 +451,6 @@ class CompatData:
 
             # dxvk-nvapi requires use of DXVK's DXGI implementation
             use_nvapi = 'enablenvapi' in g_session.compat_config
-            no_nvapi_cleanup = 'donotcleanupnvapi' in g_session.compat_config
             use_dxvk_dxgi = use_nvapi or ("WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"])
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
@@ -498,7 +497,6 @@ class CompatData:
                 str(use_dxvk_dxgi),
                 builtin_dll_copy,
                 str(use_nvapi),
-                str(no_nvapi_cleanup),
             ))
 
             if old_ver == CURRENT_PREFIX_VERSION:
@@ -594,7 +592,7 @@ class CompatData:
                 g_session.dlloverrides[f] = "n"
 
             # If the user requested the NVAPI be available, copy it into place.
-            # If they didn't, clean up any stray nvapi DLLs (unless told otherwise)
+            # If they didn't, clean up any stray nvapi DLLs.
             if use_nvapi:
                 try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll",
                         self.prefix_dir + "drive_c/windows/system32/nvapi64.dll")
@@ -602,7 +600,7 @@ class CompatData:
                         self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll")
                 g_session.dlloverrides["nvapi64"] = "n"
                 g_session.dlloverrides["nvapi"] = "n"
-            elif not no_nvapi_cleanup:
+            else:
                 nvapi64_dll = self.prefix_dir + "drive_c/windows/system32/nvapi64.dll"
                 nvapi32_dll = self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll"
                 if os.path.exists(nvapi64_dll):
@@ -776,7 +774,6 @@ class Session:
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
         self.check_environment("PROTON_ENABLE_NVAPI", "enablenvapi")
-        self.check_environment("PROTON_NO_NVAPI_CLEANUP", "donotcleanupnvapi")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
