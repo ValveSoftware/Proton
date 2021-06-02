@@ -449,9 +449,8 @@ class CompatData:
 
             use_wined3d = "wined3d" in g_session.compat_config
 
-            # dxvk-nvapi requires use of DXVK's DXGI implementation
             use_nvapi = 'enablenvapi' in g_session.compat_config
-            use_dxvk_dxgi = use_nvapi or ("WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"])
+            use_dxvk_dxgi = not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
                     #dxsetup redist
@@ -572,7 +571,6 @@ class CompatData:
                 dxvkfiles = ["dxvk_config", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 wined3dfiles = []
 
-            #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
             if use_dxvk_dxgi:
                 dxvkfiles.append("dxgi")
             else:
