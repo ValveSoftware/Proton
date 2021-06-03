@@ -69,10 +69,10 @@
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
 
-    # ubisoft controller regression hotfix
+    echo "ubisoft controller regression hotfix"
     git revert --no-commit 0ac619ae7ab7dd90622371a5f58a1ff12d46eb8f
-
-    # temporary pulseaudio reverts
+    
+    echo "temporary pulseaudio reverts"
     git revert --no-commit ce151dd681fe5ee80daba96dce12e37d6846e152
     git revert --no-commit 77813eb7586779df0fb3b700000a17e339fd5ce3
     git revert --no-commit d8e9621cfad50596378283704dfb1e6926d77ed8
@@ -151,6 +151,7 @@
     -W bcrypt-ECDHSecretAgreement \
     -W ntdll-NtAlertThreadByThreadId
 
+    echo "reverts"
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
 
@@ -310,6 +311,15 @@
     patch -Np1 < ../patches/wine-hotfixes/204113
 
     patch -Np1 < ../patches/wine-hotfixes/me_psapi.patch
+
+    # unix_sockaddr compile error hotfix
+    patch -Np1 < ../patches/wine-hotfixes/c2351cd9b44910a9be03f0c84e7fbb992a783adf.patch
+    
+    echo "proton QPC performance patch"
+    patch -Np1 < ../patches/wine-hotfixes/proton_QPC.patch
+    
+    echo "proton LFH performance patch"
+    patch -Np1 < ../patches/wine-hotfixes/proton_LFH.patch
 
     ### END WINEPATCH SECTION ###
 
