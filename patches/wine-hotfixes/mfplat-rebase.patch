@@ -6183,6 +6183,24 @@ index 4772c958f8e..266c5dc1140 100644
      }
      return TRUE;
  }
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index eb5b9e366ec..3ce8ff40f9b 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -864,6 +902,13 @@ static HRESULT WINAPI media_source_get_service_GetService(IMFGetService *iface,
+     struct media_source *source = impl_from_IMFGetService(iface);
+ 
+     TRACE("%p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
++    /* Hack to skip this to fix UE games other than Deeprock Galactic since they choke here*/
++    const char *sgi = getenv("SteamGameId");
++    if (sgi && !strcmp(sgi, "548430"))
++    {
++        FIXME("stub %p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
++        return E_NOINTERFACE;
++    }
+ 
+     *obj = NULL;
+ 
 diff --git a/dlls/mfplat/buffer.c b/dlls/mfplat/buffer.c
 index e04cc1a9251..27c76ef988e 100644
 --- a/dlls/mfplat/buffer.c

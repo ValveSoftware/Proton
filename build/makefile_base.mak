@@ -426,7 +426,6 @@ GST_BASE_MESON_ARGS := \
 	-Dlibvisual=disabled \
 	-Doverlaycomposition=disabled \
 	-Dpango=disabled \
-	-Drawparse=disabled \
 	-Dsubparse=disabled \
 	-Dtcp=disabled \
 	-Dtremor=disabled \
@@ -498,7 +497,8 @@ GST_GOOD_MESON_ARGS := \
 	-Dvideomixer=disabled \
 	-Dwavenc=disabled \
 	-Dximagesrc=disabled \
-	-Dy4m=disabled \
+	-Dy4m=enabled \
+    -Ddoc='disabled' \
 	$(GST_COMMON_MESON_ARGS)
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
@@ -515,6 +515,8 @@ $(eval $(call rules-meson,gst_good,64))
 GST_BAD_MESON_ARGS := \
 	-Dfbdev=disabled \
 	-Ddecklink=disabled \
+	-Dcurl=disabled \
+	-Dcurl-ssh2=disabled \
 	-Dlinksys=disabled \
 	-Dstatic=disabled \
 	-Ddts=disabled \
@@ -545,10 +547,6 @@ $(eval $(call rules-meson,gst_bad,64))
 ##
 
 GST_UGLY_MESON_ARGS := \
-        -Dgobject-cast-checks='disabled' \
-        -Dglib-asserts='disabled' \
-        -Dglib-checks='disabled' \
-        -Dglib-checks='disabled' \
         -Ddoc='disabled' \
 	$(GST_COMMON_MESON_ARGS)
 
