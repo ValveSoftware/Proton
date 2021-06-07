@@ -17,7 +17,7 @@ STEAM_DIR := $(HOME)/.steam/root
 BUILD_DIR := $(_build_name)
 
 ifeq ($(build_name),)
-    DEPLOY_DIR := $(shell git describe --tags --always)
+    DEPLOY_DIR := $(shell git describe --tags --always --exclude proton-sdk*)
 else
     DEPLOY_DIR := $(_build_name)
 endif
