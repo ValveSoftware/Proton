@@ -1,0 +1,47 @@
+The current algorithm correctly only considers the absolute value of
+nodes' rates when computing maximum and minimum, but omits negating
+the result when in reverse direction.
+
+Also, when computing the minimum intializing with zero is wrong, as
+it would always give final result zero. We have to initialize with a
+number that is bigger than at least one operand, e.g. FLT_MAX.
+
+Signed-off-by: Giovanni Mascellani <gmascellani at codeweavers.com>
+---
+ dlls/mf/session.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index 925a8c93d20..275b1e3dd98 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -18,6 +18,7 @@
+ 
+ #include <stdarg.h>
+ #include <math.h>
++#include <float.h>
+ 
+ #define COBJMACROS
+ 
+@@ -3532,7 +3533,7 @@ static HRESULT session_get_presentation_rate(struct media_session *session, MFRA
+     struct media_sink *sink;
+     HRESULT hr = E_POINTER;
+ 
+-    *result = 0.0f;
++    *result = fastest ? FLT_MAX : 0.0f;
+ 
+     EnterCriticalSection(&session->cs);
+ 
+@@ -3556,6 +3557,9 @@ static HRESULT session_get_presentation_rate(struct media_session *session, MFRA
+ 
+     LeaveCriticalSection(&session->cs);
+ 
++    if (direction == MFRATE_REVERSE)
++        *result = -*result;
++
+     return hr;
+ }
+ 
+-- 
+2.32.0.rc2
+

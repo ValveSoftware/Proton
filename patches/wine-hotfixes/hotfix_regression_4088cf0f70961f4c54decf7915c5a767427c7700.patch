@@ -1,0 +1,28 @@
+From 4088cf0f70961f4c54decf7915c5a767427c7700 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 31 May 2021 16:12:07 +0200
+Subject: [PATCH] winebuild: Clear RFLAGS before entering syscall.
+
+We pushed the flags, but kept them set. Far Cry sets NT flags, which
+causes later iretd instruction to raise a GP fault exception.
+
+This fixes a regression from e341d1f695311725752c287057f6c6ab60fdf2a3.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=50793
+---
+ tools/winebuild/import.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/winebuild/import.c b/tools/winebuild/import.c
+index 3acf720e1c6..acab8da611b 100644
+--- a/tools/winebuild/import.c
++++ b/tools/winebuild/import.c
+@@ -1446,6 +1446,8 @@ static void output_syscall_dispatcher(void)
+         output( "\tmovl %%esi,-0x04(%%ebp)\n" );
+         output_cfi( ".cfi_rel_offset %%esi,-0x04\n" );
+         output( "\tpushfl\n" );
++        output( "\tpushl $0x202\n" );
++        output( "\tpopfl\n" );
+         output( "\tmovw %%gs,-0x1a(%%ebp)\n" );
+         output( "\tmovw %%fs,-0x1c(%%ebp)\n" );
+         output( "\tmovw %%es,-0x1e(%%ebp)\n" );
