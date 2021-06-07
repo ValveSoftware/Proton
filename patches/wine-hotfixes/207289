@@ -1,0 +1,59 @@
+From: Torge Matthies <openglfreak@googlemail.com>
+Subject: [PATCH] winex11.drv: Avoid race condition in X11 error handling.
+Message-Id: <20210606230516.357277-1-openglfreak@googlemail.com>
+Date: Mon,  7 Jun 2021 01:05:16 +0200
+
+The err_callback* globals need to be protected from being overwritten before X11DRV_check_error is called, otherwise no or the wrong error handler might be called.
+This problem was aready encountered when using some patches [1] that use this error handling in frequently executed code paths.
+
+[1] https://github.com/rbernon/wine/commits/bug/17123/v3
+
+Signed-off-by: Torge Matthies <openglfreak@googlemail.com>
+---
+ dlls/winex11.drv/x11drv_main.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index 9ec4c7a98f6..2fac560556b 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -108,6 +108,15 @@ static CRITICAL_SECTION_DEBUG critsect_debug =
+ };
+ static CRITICAL_SECTION x11drv_section = { &critsect_debug, -1, 0, 0, 0, 0 };
+ 
++static CRITICAL_SECTION x11drv_error_section;
++static CRITICAL_SECTION_DEBUG x11drv_error_section_debug =
++{
++    0, 0, &x11drv_error_section,
++    { &x11drv_error_section_debug.ProcessLocksList, &x11drv_error_section_debug.ProcessLocksList },
++    0, 0, { (DWORD_PTR)(__FILE__ ": x11drv_error_section") }
++};
++static CRITICAL_SECTION x11drv_error_section = { &x11drv_error_section_debug, -1, 0, 0, 0, 0 };
++
+ struct d3dkmt_vidpn_source
+ {
+     D3DKMT_VIDPNSOURCEOWNER_TYPE type;      /* VidPN source owner type */
+@@ -256,6 +265,7 @@ static inline BOOL ignore_error( Display *display, XErrorEvent *event )
+  */
+ void X11DRV_expect_error( Display *display, x11drv_error_callback callback, void *arg )
+ {
++    EnterCriticalSection( &x11drv_error_section );
+     err_callback         = callback;
+     err_callback_display = display;
+     err_callback_arg     = arg;
+@@ -272,8 +282,10 @@ void X11DRV_expect_error( Display *display, x11drv_error_callback callback, void
+  */
+ int X11DRV_check_error(void)
+ {
++    int res = err_callback_result;
+     err_callback = NULL;
+-    return err_callback_result;
++    LeaveCriticalSection( &x11drv_error_section );
++    return res;
+ }
+ 
+ 
+
+-- 
+2.32.0
+
