@@ -2445,9 +2445,9 @@ index dda3e424b3a..3cd99214c8c 100644
      PRTL_THREAD_START_ROUTINE start;  /* thread entry point */
      void              *param;         /* thread entry point parameter */
 +    void              *heap;          /* thread local heap data */
+     void              *jmp_buf;       /* setjmp buffer for exception handling */
  };
  
- C_ASSERT( sizeof(struct ntdll_thread_data) <= sizeof(((TEB *)0)->GdiTebBatch) );
 From 7df7fb6600608fba6552708e8ecd778ac1ff25b2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 5 May 2020 14:54:21 +0200
