@@ -771,6 +771,30 @@ $(OBJ)/.dxvk-post-build32:
 	rm -f "$(DST_DIR)"/lib/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
 	touch $@
 
+##
+## dxvk-nvapi
+##
+
+DXVK_NVAPI_MESON_ARGS32 = \
+    --bindir=$(DXVK_NVAPI_DST32)/lib/wine/nvapi \
+    --cross-file=$(DXVK_NVAPI_OBJ32)/build-win32.txt
+DXVK_NVAPI_MESON_ARGS64 = \
+    --bindir=$(DXVK_NVAPI_DST64)/lib64/wine/nvapi \
+    --cross-file=$(DXVK_NVAPI_OBJ64)/build-win64.txt
+
+$(eval $(call rules-source,dxvk-nvapi,$(SRCDIR)/dxvk-nvapi))
+$(eval $(call rules-meson,dxvk-nvapi,32))
+$(eval $(call rules-meson,dxvk-nvapi,64))
+
+$(OBJ)/.dxvk-nvapi-post-build64:
+	mkdir -p "$(DST_DIR)"/lib64/wine/nvapi
+	rm -f "$(DST_DIR)"/lib64/wine/nvapi/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk-nvapi ) > "$(DST_DIR)"/lib64/wine/nvapi/version; fi
+	touch $@
+
+$(OBJ)/.dxvk-nvapi-post-build32:
+	mkdir -p "$(DST_DIR)"/lib/wine/nvapi
+	rm -f "$(DST_DIR)"/lib/wine/nvapi/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk-nvapi ) > "$(DST_DIR)"/lib/wine/nvapi/version; fi
+	touch $@
 
 ##
 ## vkd3d-proton
