@@ -68,11 +68,10 @@
     # https://github.com/Frogging-Family/wine-tkg-git/issues/248#issuecomment-760471607
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
-
-    echo "ubisoft controller regression hotfix"
-    git revert --no-commit 0ac619ae7ab7dd90622371a5f58a1ff12d46eb8f
     
     echo "temporary pulseaudio reverts"
+    git revert --no-commit 2e64d91428757eaa88475b49bf50922cda603b59
+    git revert --no-commit f77af3dd6324fadaf153062d77b51f755f71faea
     git revert --no-commit ce151dd681fe5ee80daba96dce12e37d6846e152
     git revert --no-commit 77813eb7586779df0fb3b700000a17e339fd5ce3
     git revert --no-commit d8e9621cfad50596378283704dfb1e6926d77ed8
@@ -114,11 +113,19 @@
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
     
-    # mfplat reverts
-    git revert --no-commit abd3e8f3ec755eb3f09ab5333781b0daebe8f123
-    git revert --no-commit 20a1eb3b252b404bd2ed9a11dc03312ea11fff0d
-    git revert --no-commit e4e319d032d74ce5be55a31ef3add629b257ea48
-    git revert --no-commit 626438a6be2df298c527870c8df9e6deb2f1c0fc
+    
+    # 6.10 these break rendering in several games
+    # https://bugs.winehq.org/show_bug.cgi?id=51222
+    git revert --no-commit b634fa7ca7eb428252cbaf539dca5a2be3ef9e0c
+    git revert --no-commit 3171aa2b2d8db28e5bfde1cad92e0ef36ee7ccaa
+    git revert --no-commit 7e6756d0f4495f37ac520685e3baeec053f478ed
+    git revert --no-commit 301bde60d3335ec78aa4bb4622dc14c5ea1eec92
+    git revert --no-commit b29096cce1cbed40f539ed004aa82dbcf5fd8a1d
+    git revert --no-commit cef75b3b19d8c21e2d941de55f04f587d521a719
+    git revert --no-commit ff7faafda68f697b38270569031f71f151d2dc0f
+    git revert --no-commit 2e6fa0a49804da29e683c72826960a95651ef41e
+    git revert --no-commit 51a253d25a65be68f25d20844548d8272ee0a5c4
+    git revert --no-commit d1ef51df4236f19c721d12bd04fd244723721771
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -151,12 +158,12 @@
     -W bcrypt-ECDHSecretAgreement \
     -W ntdll-NtAlertThreadByThreadId
 
+    # apply this manually since imm32-com-initialization is disabled in staging.
+    patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
+
     echo "reverts"
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
-
-    # apply this manually since imm32-com-initialization is disabled in staging.
-    patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
 
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../patches/wine-hotfixes/__wine_make_process_system_restore.patch
@@ -234,9 +241,14 @@
     patch -Np1 < ../patches/proton/33-proton-06_shadow_of_war_registry.patch
     patch -Np1 < ../patches/proton/41-proton-07_nfs_registry.patch
     patch -Np1 < ../patches/proton/45-proton-08_FH4_registry.patch
+    patch -Np1 < ../patches/proton/46-proton-09_nvapi_registry.patch
 
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
+    
+    echo "apply staging bcrypt patches on top of rdr2 fixes"
+    patch -Np1 < ../patches/wine-hotfixes/0001-bcrypt-Allow-multiple-backends-to-coexist.patch
+    patch -Np1 < ../patches/wine-hotfixes/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
@@ -255,6 +267,7 @@
 #    only needed with proton's gamepad patches
 #    echo "proton overlay patches"
 #    patch -Np1 < ../patches/proton/36-proton-overlay_fixes.patch
+#    patch -Np1 < ../patches/proton/36-proton-overlay_fixes_no_sdl.patch
 
     echo "mouse focus fixes"
     patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
@@ -287,9 +300,6 @@
     echo "fullscreen hack wined3d additions"
     patch -Np1 < ../patches/proton/43-valve_proton_fullscreen_hack-staging-wined3d.patch
 
-    echo "wine mono update"
-    patch -Np1 < ../patches/proton/46-proton_update_winemono_6.1.2.patch
-
     ### END PROTON PATCH SECTION ###
 
     ### WINE PATCH SECTION ###
@@ -307,19 +317,35 @@
     # pending upstream wine fixes
     
     # more mfplat fixes
+
+    # mfplat reverts
+    
+    # 6.10 8a506ea9b2c44f9043048f8756848772bc75a598 breaks several UE4 games (Notably Soul Calibur VI)
+    patch -Np1 < ../patches/wine-hotfixes/hotfix_regression_8a506ea9b2c44f9043048f8756848772bc75a598.patch
+
+    # 6.10 626438a6be2df298c527870c8df9e6deb2f1c0fc breaks Catherine Classic intro logos. 
+    # New game still crashes, but reverting this allows 
+    # it to get to the main menu at least.
+    patch -Np1 < ../patches/wine-hotfixes/hotfix_regression_626438a6be2df298c527870c8df9e6deb2f1c0fc.patch
+
+    # additional pending mfplat fixes
     patch -Np1 < ../patches/wine-hotfixes/205277
     patch -Np1 < ../patches/wine-hotfixes/204113
-
-    patch -Np1 < ../patches/wine-hotfixes/me_psapi.patch
-
-    # unix_sockaddr compile error hotfix
-    patch -Np1 < ../patches/wine-hotfixes/c2351cd9b44910a9be03f0c84e7fbb992a783adf.patch
     
+    # openglfreak's pending X11 patch
+    patch -Np1 < ../patches/wine-hotfixes/207289
+
     echo "proton QPC performance patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_QPC.patch
-    
+
     echo "proton LFH performance patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_LFH.patch
+    
+    echo "Horizon Zero Dawn animations fix"
+    patch -Np1 < ../patches/wine-hotfixes/HZD_animations_pr112.patch
+    
+    echo "FarCry regression fix"
+    patch -Np1 < ../patches/wine-hotfixes/hotfix_regression_4088cf0f70961f4c54decf7915c5a767427c7700.patch
 
     ### END WINEPATCH SECTION ###
 
