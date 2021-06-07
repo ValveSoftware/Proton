@@ -236,7 +236,15 @@ diff --git a/src/spirv/spirv_module.h b/src/spirv/spirv_module.h
 index 007da72a8..c0d5e4d1e 100644
 --- a/src/spirv/spirv_module.h
 +++ b/src/spirv/spirv_module.h
-@@ -1250,8 +1250,34 @@ namespace dxvk {
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <unordered_set>
++#include <optional>
+ 
+ #include "spirv_code_buffer.h"
+ 
+@@ -1250,8 +1251,34 @@ namespace dxvk {
      SpirvCodeBuffer m_variables;
      SpirvCodeBuffer m_code;
  
