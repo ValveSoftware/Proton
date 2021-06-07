@@ -141,7 +141,7 @@ else
 endif
 
 CROSSLDFLAGS   += -Wl,--file-alignment,4096
-OPTIMIZE_FLAGS := -O2 -march=nocona -mtune=core-avx2 -mfpmath=sse
+OPTIMIZE_FLAGS := -O2 -march=native -mtune=core-avx2 -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
 DEBUG_FLAGS    := -gdwarf-2 -gstrict-dwarf
 COMMON_FLAGS    = $(DEBUG_FLAGS) $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
@@ -161,7 +161,7 @@ GECKO_VER := 2.47.2
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 
-WINEMONO_VER := 6.1.2
+WINEMONO_VER := 6.2.0
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
 FONTS := $(SRCDIR)/fonts
