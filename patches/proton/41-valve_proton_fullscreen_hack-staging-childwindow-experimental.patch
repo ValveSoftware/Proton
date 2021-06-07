@@ -42,8 +42,8 @@ index edb4bfd55da..80fa48c65b9 100644
      return device->funcs.p_vkCreateShaderModule(device->device, pCreateInfo, NULL, pShaderModule);
  }
  
--VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
-+VkResult thunk_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
+-static VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
++static VkResult thunk_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
  {
  #if defined(USE_STRUCT_CONVERSION)
      VkResult result;
@@ -1725,7 +1725,7 @@ index cc2866e7883..2970c688231 100644
      s->pNext = NULL;
  }
  
--VkResult WINAPI wine_vkAcquireNextImage2KHR(VkDevice device, const VkAcquireNextImageInfoKHR *pAcquireInfo, uint32_t *pImageIndex)
+-static VkResult WINAPI wine_vkAcquireNextImage2KHR(VkDevice device, const VkAcquireNextImageInfoKHR *pAcquireInfo, uint32_t *pImageIndex)
 +VkBufferMemoryBarrier_host *convert_VkBufferMemoryBarrier_array_win_to_host(const VkBufferMemoryBarrier *in, uint32_t count)
  {
 -#if defined(USE_STRUCT_CONVERSION)
@@ -1800,7 +1800,7 @@ index cc2866e7883..2970c688231 100644
 +    free(in);
  }
  
- VkResult WINAPI wine_vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t *pImageIndex)
+ static VkResult WINAPI wine_vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t *pImageIndex)
  {
      TRACE("%p, 0x%s, 0x%s, 0x%s, 0x%s, %p\n", device, wine_dbgstr_longlong(swapchain), wine_dbgstr_longlong(timeout), wine_dbgstr_longlong(semaphore), wine_dbgstr_longlong(fence), pImageIndex);
 -    return device->funcs.p_vkAcquireNextImageKHR(device->device, swapchain, timeout, semaphore, fence, pImageIndex);
@@ -1812,7 +1812,7 @@ index cc2866e7883..2970c688231 100644
      return device->funcs.p_vkCreateShaderModule(device->device, pCreateInfo, NULL, pShaderModule);
  }
  
--VkResult thunk_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
+-static VkResult thunk_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain)
 -{
 -#if defined(USE_STRUCT_CONVERSION)
 -    VkResult result;
@@ -1833,7 +1833,7 @@ index cc2866e7883..2970c688231 100644
      device->funcs.p_vkDestroyShaderModule(device->device, shaderModule, NULL);
  }
  
--void WINAPI wine_vkDestroySwapchainKHR(VkDevice device, VkSwapchainKHR swapchain, const VkAllocationCallbacks *pAllocator)
+-static void WINAPI wine_vkDestroySwapchainKHR(VkDevice device, VkSwapchainKHR swapchain, const VkAllocationCallbacks *pAllocator)
 -{
 -    TRACE("%p, 0x%s, %p\n", device, wine_dbgstr_longlong(swapchain), pAllocator);
 -    device->funcs.p_vkDestroySwapchainKHR(device->device, swapchain, NULL);
@@ -1846,7 +1846,7 @@ index cc2866e7883..2970c688231 100644
      return device->funcs.p_vkGetShaderInfoAMD(device->device, pipeline, shaderStage, infoType, pInfoSize, pInfo);
  }
  
--VkResult WINAPI wine_vkGetSwapchainImagesKHR(VkDevice device, VkSwapchainKHR swapchain, uint32_t *pSwapchainImageCount, VkImage *pSwapchainImages)
+-static VkResult WINAPI wine_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pPresentInfo)
 -{
 -    TRACE("%p, 0x%s, %p, %p\n", device, wine_dbgstr_longlong(swapchain), pSwapchainImageCount, pSwapchainImages);
 -    return device->funcs.p_vkGetSwapchainImagesKHR(device->device, swapchain, pSwapchainImageCount, pSwapchainImages);
@@ -5217,31 +5217,6 @@ index 837a136f35c..2a63a6b75cd 100644
          }
      }
  
-From 18638b6d1b3203799663e2c50d3728b0e6084507 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Mon, 24 Sep 2018 10:16:46 -0500
-Subject: [PATCH] winex11: Always show a close button
-
-Some WMs (gnome-shell) use this to decide whether the Alt-F4 shortcut
-will work. Better to have it when we shouldn't, than not have it when
-the user wants it.
----
- dlls/winex11.drv/window.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index 2a63a6b75cd..0f359d71f7b 100644
---- a/dlls/winex11.drv/window.c
-+++ b/dlls/winex11.drv/window.c
-@@ -834,7 +834,7 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
-         {
-             if (style & WS_MINIMIZEBOX) mwm_hints.functions |= MWM_FUNC_MINIMIZE;
-             if (style & WS_MAXIMIZEBOX) mwm_hints.functions |= MWM_FUNC_MAXIMIZE;
--            if (style & WS_SYSMENU)     mwm_hints.functions |= MWM_FUNC_CLOSE;
-+            /*if (style & WS_SYSMENU)*/     mwm_hints.functions |= MWM_FUNC_CLOSE;
- 
-             /* The window can be programmatically minimized even without
-                a minimize box button. Allow the WM to restore it. */
 From 8225fa010da67d83f945b104b90b6f23156a39b1 Mon Sep 17 00:00:00 2001
 From: Alexey Prokhin <alexey@prokhin.ru>
 Date: Wed, 17 Oct 2018 19:55:27 +0300

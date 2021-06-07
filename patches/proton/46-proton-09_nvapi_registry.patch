@@ -1,0 +1,59 @@
+From 0bff1b4fc6929694b706bd7e659ed0b58ff51f2d Mon Sep 17 00:00:00 2001
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Date: Tue, 11 May 2021 20:23:18 -0700
+Subject: [PATCH] loader: Set default regkey for NVIDIA NGX FullPath
+
+Sets the default location for the NVIDIA NGX SDK search-path to be
+C:\Windows\System32\
+
+This is required for supporting NVIDIA DLSS within Proton.
+
+Reviewed-by: Adam Moss <amoss@nvidia.com>
+---
+ loader/wine.inf.in | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 851a31b7d05..735a3899b3e 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -75,7 +75,8 @@ AddReg=\
+     Timezones,\
+     VersionInfo,\
+     LicenseInformation, \
+-    SteamClient
++    SteamClient, \
++    NVIDIANGX
+ 
+ [DefaultInstall.ntamd64]
+ RegisterDlls=RegisterDllsSection
+@@ -104,7 +105,8 @@ AddReg=\
+     Timezones,\
+     VersionInfo.ntamd64,\
+     LicenseInformation, \
+-    SteamClient.ntamd64
++    SteamClient.ntamd64, \
++    NVIDIANGX
+ 
+ [DefaultInstall.ntarm64]
+ RegisterDlls=RegisterDllsSection
+@@ -149,7 +151,8 @@ AddReg=\
+     Tapi,\
+     VersionInfo.ntamd64,\
+     LicenseInformation, \
+-    SteamClient.ntamd64
++    SteamClient.ntamd64, \
++    NVIDIANGX
+ 
+ [Wow64Install.ntarm64]
+ WineFakeDlls=FakeDllsWin32
+@@ -4431,6 +4431,9 @@ HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"atiadlxx",,"disabled"
+ 
++[NVIDIANGX]
++HKLM,Software\NVIDIA Corporation\Global\NGXCore,"FullPath",,"C:\Windows\System32"
++
+ [NlsFiles]
+ c_037.nls
+ c_10000.nls

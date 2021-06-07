@@ -3799,32 +3799,3 @@ index 020faa26a11..ba7d3e78905 100644
 +
 +    return hr;
 +}
-From c56598427c4bc89ea01cbb72ec551545c2bd6e3d Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 19 May 2021 18:49:10 +0200
-Subject: [PATCH] ntdll: Always add 16 bytes to heap block tail.
-
-To prevent crashing in buffer overflows, and as Windows default heap
-apparently does as well.
-
-Journey does some at the very end of the game, and it sometimes silently
-corrupts the heap until it crashes.
-
-CW-Bug-Id: 18894
----
- dlls/ntdll/heap_lfh.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
-index 8c982f91ea0..5411ea31847 100644
---- a/dlls/ntdll/heap_lfh.c
-+++ b/dlls/ntdll/heap_lfh.c
-@@ -238,7 +238,7 @@ static inline size_t LFH_block_get_alloc_size(const LFH_block *block, ULONG flag
- 
- static inline size_t LFH_get_class_size(ULONG flags, size_t size)
- {
--    size_t extra = sizeof(LFH_block) + ((flags & HEAP_TAIL_CHECKING_ENABLED) ? 16 : 0);
-+    size_t extra = sizeof(LFH_block) + 16;
-     if (size + extra < size) return ~(size_t)0;
-     return size + extra;
- }
