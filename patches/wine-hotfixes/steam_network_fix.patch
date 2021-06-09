@@ -1,0 +1,19 @@
+diff --git a/server/sock.c b/server/sock.c
+index 33dc21fa5ca..39cc6aa1420 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -1812,12 +1812,12 @@ static int sock_ioctl( struct fd *fd, ioctl_code_t code, struct async *async )
+ 
+         sock->state |= FD_CONNECT;
+ 
+-        if (params->synchronous && (sock->state & FD_WINE_NONBLOCKING))
++        /*if (params->synchronous && (sock->state & FD_WINE_NONBLOCKING))
+         {
+             sock_reselect( sock );
+             set_error( STATUS_DEVICE_NOT_READY );
+             return 0;
+-        }
++        }*/
+ 
+         req->async = (struct async *)grab_object( async );
+         req->iosb = async_get_iosb( async );
