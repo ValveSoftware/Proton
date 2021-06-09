@@ -984,6 +984,17 @@ class Session:
             pass
 
     def init_session(self):
+        # Hack to redirect the "My Documents" dir to the new "Documents" dir - https://github.com/wine-mirror/wine/commit/4111801ab317529c3e24c39a6a97e7043438231a
+        if not os.path.islink(g_compatdata.prefix_dir + "drive_c/users/steamuser/Documents"):
+            if os.path.exists(g_compatdata.prefix_dir + "drive_c/users/steamuser/My Documents"):
+                src = g_compatdata.prefix_dir + "drive_c/users/steamuser/My Documents"
+                dst = g_compatdata.prefix_dir + "drive_c/users/steamuser/Documents"
+                try:
+                    shutil.rmtree(dst, ignore_errors=True)
+                except OSError as e:
+                    print("Error: %s : %s" % (dir_path, e.strerror))
+                os.symlink(src, dst)
+
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
         #load environment overrides
