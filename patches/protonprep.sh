@@ -112,20 +112,6 @@
     git revert --no-commit 8df72bade54d1ef7a6d9e79f20ee0a2697019c13
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
-    
-    
-    # 6.10 these break rendering in several games
-    # https://bugs.winehq.org/show_bug.cgi?id=51222
-    git revert --no-commit b634fa7ca7eb428252cbaf539dca5a2be3ef9e0c
-    git revert --no-commit 3171aa2b2d8db28e5bfde1cad92e0ef36ee7ccaa
-    git revert --no-commit 7e6756d0f4495f37ac520685e3baeec053f478ed
-    git revert --no-commit 301bde60d3335ec78aa4bb4622dc14c5ea1eec92
-    git revert --no-commit b29096cce1cbed40f539ed004aa82dbcf5fd8a1d
-    git revert --no-commit cef75b3b19d8c21e2d941de55f04f587d521a719
-    git revert --no-commit ff7faafda68f697b38270569031f71f151d2dc0f
-    git revert --no-commit 2e6fa0a49804da29e683c72826960a95651ef41e
-    git revert --no-commit 51a253d25a65be68f25d20844548d8272ee0a5c4
-    git revert --no-commit d1ef51df4236f19c721d12bd04fd244723721771
 
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
@@ -143,12 +129,6 @@
 
     # instead, we apply it manually:
     # patch -Np1 < ../patches/wine-hotfixes/imm32-com-initialization_no_net_active_window.patch
-
-    # disable these for vulkan experimental childwindow support
-    #-W Pipelight
-    
-    # This isn't compatible with the steamclient reverts
-    # -W server-default_integrity
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -267,10 +247,9 @@
 #    only needed with proton's gamepad patches
 #    echo "proton overlay patches"
 #    patch -Np1 < ../patches/proton/36-proton-overlay_fixes.patch
-#    patch -Np1 < ../patches/proton/36-proton-overlay_fixes_no_sdl.patch
 
-    echo "mouse focus fixes"
-    patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
+#    echo "mouse focus fixes"
+#    patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
 
     echo "CPU topology overrides"
     patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
@@ -281,8 +260,9 @@
     ## VULKAN-CENTRIC PATCHES
 
     echo "fullscreen hack"
-    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-childwindow-experimental.patch
+#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-childwindow-experimental.patch
 #    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
+    patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging-tkg.patch
 
     # old childwindow hack
 #    echo "vulkan childwindow fix"
@@ -297,8 +277,8 @@
 
     ## END VULKAN-CENTRIC PATCHES
 
-    echo "fullscreen hack wined3d additions"
-    patch -Np1 < ../patches/proton/43-valve_proton_fullscreen_hack-staging-wined3d.patch
+#    echo "fullscreen hack wined3d additions"
+#    patch -Np1 < ../patches/proton/43-valve_proton_fullscreen_hack-staging-wined3d.patch
 
     ### END PROTON PATCH SECTION ###
 
@@ -330,6 +310,8 @@
 
     # additional pending mfplat fixes
     patch -Np1 < ../patches/wine-hotfixes/205277
+    
+    # FH4 performance frequency patch
     patch -Np1 < ../patches/wine-hotfixes/204113
     
     # openglfreak's pending X11 patch
@@ -346,6 +328,13 @@
     
     echo "FarCry regression fix"
     patch -Np1 < ../patches/wine-hotfixes/hotfix_regression_4088cf0f70961f4c54decf7915c5a767427c7700.patch
+    
+    echo "network regression fix"
+    # fixes network issues caused by a891713f48fbcdae05f27f7e73b1cec78cf42644 and a70c5172c6bb0e61ad24c202a9bf4e88b8c868b0
+    # notably in MK11 and possibly others
+    patch -Np1 < ../patches/wine-hotfixes/steam_network_fix.patch
+    
+    patch -Np1 < ../patches/wine-hotfixes/msvcrt_logf_fix.patch
 
     ### END WINEPATCH SECTION ###
 
