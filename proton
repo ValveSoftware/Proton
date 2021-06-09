@@ -23,7 +23,6 @@ from ctypes import cast
 from ctypes import c_int
 from ctypes import c_char_p
 from ctypes import c_void_p
-from ctypes.util import find_library
 
 from filelock import FileLock
 
@@ -155,14 +154,8 @@ def try_get_game_library_dir():
 # On failure, returns None
 def find_nvidia_wine_dll_dir():
     try:
-        libdl_soname = find_library("dl")
-
-        # If we couldn't determine the proper soname for libdl, bail out.
-        if libdl_soname is None:
-            return None
-
-        libdl = CDLL(libdl_soname)
-    except (FileNotFoundError, OSError):
+        libdl = CDLL("libdl.so.2")
+    except (OSError):
         return None
 
     try:
