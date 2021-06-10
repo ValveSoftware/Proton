@@ -32,6 +32,21 @@ finish()   { stat "$@"; exit 0; }
 cmd()      { showcmd "$@"; "$@"; }
 
 #
+# Dependency Checks
+#
+
+MISSING_DEPENDENCIES=0
+
+dependency_command() {
+    local COMMAND=$1
+    shift
+    if ! command -v "$COMMAND" &> /dev/null; then
+        err "Couldn't find command '$COMMAND'. Please install ${@:-$COMMAND}."
+        MISSING_DEPENDENCIES=1
+    fi
+}
+
+#
 # Configure
 #
 
@@ -62,6 +77,21 @@ function configure() {
   else
     build_name="$DEFAULT_BUILD_NAME"
     info "No build name specified, using default: $build_name"
+  fi
+
+  dependency_command fontforge
+  dependency_command find "findutils"
+  dependency_command make "GNU Make"
+  dependency_command rsync
+  dependency_command wget
+  dependency_command xz
+  dependency_command patch
+  dependency_command autoconf
+  dependency_command git
+  dependency_command python3
+
+  if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
+      die "Missing dependencies, cannot continue."
   fi
 
   ## Write out config
