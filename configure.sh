@@ -46,6 +46,17 @@ dependency_command() {
     fi
 }
 
+dependency_afdko() {
+    if command -v makeotf &> /dev/null; then
+        AFDKO_VERB=
+    elif command -v afdko &> /dev/null; then
+        AFDKO_VERB=afdko
+    else
+        err "Couldn't find 'afdko'. Install it and make sure that 'makeotf' is in your PATH or 'afdko makeotf' works."
+            MISSING_DEPENDENCIES=1
+    fi
+}
+
 #
 # Configure
 #
@@ -90,6 +101,8 @@ function configure() {
   dependency_command git
   dependency_command python3
 
+  dependency_afdko
+
   if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
       die "Missing dependencies, cannot continue."
   fi
@@ -112,6 +125,8 @@ function configure() {
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
     fi
+
+    echo "AFDKO_VERB := $AFDKO_VERB"
 
     # Include base
     echo ""
