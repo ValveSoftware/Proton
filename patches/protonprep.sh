@@ -251,8 +251,8 @@
 #    echo "proton overlay patches"
 #    patch -Np1 < ../patches/proton/36-proton-overlay_fixes.patch
 
-#    echo "mouse focus fixes"
-#    patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
+    echo "mouse focus fixes"
+    patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
 
     echo "CPU topology overrides"
     patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
