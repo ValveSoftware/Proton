@@ -1,0 +1,29 @@
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index a4d0e932eae..f4dd53e3835 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -2220,6 +2220,11 @@ int WINAPI WS_connect( SOCKET s, const struct WS_sockaddr *addr, int len )
+         if (WaitForSingleObject( sync_event, INFINITE ) == WAIT_FAILED) return -1;
+         status = io.u.Status;
+     }
++    if (status == STATUS_ADDRESS_ALREADY_ASSOCIATED)
++    {
++        SetLastError( WSAEALREADY );
++        return -1;
++    }
+     if (status)
+     {
+         SetLastError( NtStatusToWSAError( status ) );
+diff --git a/server/sock.c b/server/sock.c
+index f2450fcc541..35abe09160b 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -1561,7 +1561,7 @@ static int sock_get_ntstatus( int err )
+         case EMFILE:            return STATUS_TOO_MANY_OPENED_FILES;
+         case EINPROGRESS:
+         case EWOULDBLOCK:       return STATUS_DEVICE_NOT_READY;
+-        case EALREADY:          return STATUS_NETWORK_BUSY;
++        case EALREADY:          return STATUS_ADDRESS_ALREADY_ASSOCIATED;
+         case ENOTSOCK:          return STATUS_OBJECT_TYPE_MISMATCH;
+         case EDESTADDRREQ:      return STATUS_INVALID_PARAMETER;
+         case EMSGSIZE:          return STATUS_BUFFER_OVERFLOW;

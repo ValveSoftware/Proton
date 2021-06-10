@@ -35,6 +35,9 @@
 
     echo "add dxvk PR patches"
     patch -Np1 < ../patches/dxvk/1582.patch
+    
+    echo "ninja gaiden patch"
+    patch -Np1 < ../patches/dxvk/ninja_gaiden_hotfix.patch
 
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
@@ -332,7 +335,8 @@
     echo "network regression fix"
     # fixes network issues caused by a891713f48fbcdae05f27f7e73b1cec78cf42644 and a70c5172c6bb0e61ad24c202a9bf4e88b8c868b0
     # notably in MK11 and possibly others
-    patch -Np1 < ../patches/wine-hotfixes/steam_network_fix.patch
+    #patch -Np1 < ../patches/wine-hotfixes/steam_network_fix.patch
+    patch -Np1 < ../patches/wine-hotfixes/scratch.diff
     
     patch -Np1 < ../patches/wine-hotfixes/msvcrt_logf_fix.patch
 
