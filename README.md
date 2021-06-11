@@ -206,6 +206,29 @@ manually (see below), or automatically with `make install`.
 `make deploy` will package Proton up for distribution via Steamworks.
 
 ---
+Building without the VM
+---
+
+Since most of the build happens inside the Proton SDK container, building
+without a VM should be mostly safe. It requires a working container engine
+(Docker / Podman) and few command line tools.
+
+Running `configure.sh` will check if containers are functional and prompt you
+if any dependencies are missing.
+
+The build by default uses Docker, but you can switch to another, compatible
+engine with `--container-engine=<executable_name>`.
+
+You can enable ccache with `--enable-cache` flag. This will mount your
+`$CCACHE_DIR` or `$HOME/.ccache` inside the container.
+
+Example:
+
+    mkdir build && cd build
+    ../proton/configure.sh --container-engine=podman --enable-ccache
+    make dist
+
+---
 Install Proton locally
 ---
 Steam ships with several versions of Proton, which games will use by default or
