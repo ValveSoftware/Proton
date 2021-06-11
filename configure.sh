@@ -57,6 +57,13 @@ dependency_afdko() {
     fi
 }
 
+check_container_engine() {
+    info "Making sure that the container engine is working."
+    if ! cmd $arg_container_engine run --rm $arg_protonsdk_image; then
+        die "Broken container engine. Please fix your $arg_container_engine setup."
+    fi
+}
+
 #
 # Configure
 #
@@ -107,6 +114,10 @@ function configure() {
       die "Missing dependencies, cannot continue."
   fi
 
+  if [[ -n "$arg_container_engine" ]]; then
+    check_container_engine
+  fi
+
   ## Write out config
   # Don't die after this point or we'll have rather unhelpfully deleted the Makefile
   [[ ! -e "$MAKEFILE" ]] || rm "$MAKEFILE"
@@ -122,6 +133,7 @@ function configure() {
     echo "STEAMRT_NAME  := $(escape_for_make "$steamrt_name")"
     echo "STEAMRT_IMAGE := $(escape_for_make "$steamrt_image")"
 
+    echo "CONTAINER_ENGINE := $arg_container_engine"
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
     fi
@@ -145,6 +157,7 @@ arg_steamrt="soldier"
 arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20210505.0-2"
 arg_no_protonsdk=""
 arg_build_name=""
+arg_container_engine="docker"
 arg_docker_opts=""
 arg_help=""
 invalid_args=""
@@ -181,6 +194,9 @@ function parse_args() {
       arg_help=1
     elif [[ $arg = --build-name ]]; then
       arg_build_name="$val"
+      val_used=1
+    elif [[ $arg = --container-engine ]]; then
+      arg_container_engine="$val"
       val_used=1
     elif [[ $arg = --docker-opts ]]; then
       arg_docker_opts="$val"
@@ -235,6 +251,9 @@ usage() {
   "$1" "    --help / --usage     Show this help text and exit"
   "$1" ""
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
+  "$1" ""
+  "$1" "    --container-engine=<engine> Which container Docker-compatible container engine to use,"
+  "$1" "                                e.g. podman. Defaults to docker."
   "$1" ""
   "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
   "$1" ""
