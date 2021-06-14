@@ -62,6 +62,22 @@ check_container_engine() {
     if ! cmd $arg_container_engine run --rm $arg_protonsdk_image; then
         die "Broken container engine. Please fix your $arg_container_engine setup."
     fi
+
+    touch permission_check
+    local inner_uid="$($arg_container_engine run -v "$(pwd):/test" \
+                                            --rm $arg_protonsdk_image \
+                                            stat --format "%u" /test/permission_check)"
+    rm permission_check
+
+    if [ "$inner_uid" -eq 0 ]; then
+        # namespace maps the user as root or the build is performed as host's root
+        ROOTLESS_CONTAINER=1
+    elif [ "$inner_uid" -eq "$(id -u)" ]; then
+        ROOTLESS_CONTAINER=0
+    else
+        err "File owner's UID doesn't map to 0 or $(id -u) in the container."
+        die "Don't know how to map permissions. Please check your $arg_container_engine setup."
+    fi
 }
 
 #
@@ -133,6 +149,7 @@ function configure() {
     echo "STEAMRT_NAME  := $(escape_for_make "$steamrt_name")"
     echo "STEAMRT_IMAGE := $(escape_for_make "$steamrt_image")"
 
+    echo "ROOTLESS_CONTAINER := $ROOTLESS_CONTAINER"
     echo "CONTAINER_ENGINE := $arg_container_engine"
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
