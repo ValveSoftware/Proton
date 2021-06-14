@@ -154,6 +154,9 @@ function configure() {
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
     fi
+    if [[ -n "$arg_enable_ccache" ]]; then
+      echo "ENABLE_CCACHE := 1"
+    fi
 
     echo "AFDKO_VERB := $AFDKO_VERB"
 
@@ -176,6 +179,7 @@ arg_no_protonsdk=""
 arg_build_name=""
 arg_container_engine="docker"
 arg_docker_opts=""
+arg_enable_ccache=""
 arg_help=""
 invalid_args=""
 function parse_args() {
@@ -218,6 +222,8 @@ function parse_args() {
     elif [[ $arg = --docker-opts ]]; then
       arg_docker_opts="$val"
       val_used=1
+    elif [[ $arg = --enable-ccache ]]; then
+      arg_enable_ccache="1"
     elif [[ $arg = --proton-sdk-image ]]; then
       val_used=1
       arg_protonsdk_image="$val"
@@ -273,6 +279,8 @@ usage() {
   "$1" "                                e.g. podman. Defaults to docker."
   "$1" ""
   "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
+  "$1" ""
+  "$1" "    --enable-ccache Mount \$CCACHE_DIR or \$HOME/.ccache inside of the container and use ccache for the build."
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
