@@ -178,6 +178,11 @@ FUNCTION_OVERRIDES = {
     "xrCreateSwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrDestroySwapchain" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrEndFrame" : {"dispatch" : True, "driver" : True, "thunk" : False},
+
+    "xrCreateSceneObserverMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroySceneObserverMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateSceneMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroySceneMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
 }
 
 STRUCT_CHAIN_CONVERSIONS = [
@@ -831,6 +836,8 @@ class XrHandle(object):
             return "wine_session->wine_instance->funcs"
         if self.parent in ["XrActionSet"]:
             return "wine_action_set->wine_instance->funcs"
+        if self.parent in ["XrSceneObserverMSFT"]:
+            return "wine_scene_observer_msft->wine_session->wine_instance->funcs"
 
         LOGGER.error("Unhandled dispatchable parent: {0}".format(self.parent))
 
@@ -881,6 +888,10 @@ class XrHandle(object):
             return None
         if self.name == "XrSpace":
             return None
+        if self.name == "XrSceneObserverMSFT":
+            native_handle_name = "scene_observer_msft"
+        if self.name == "XrSceneMSFT":
+            native_handle_name = "scene_msft"
 
         if native_handle_name:
             return "((wine_{0} *){1})->{2}".format(self.name, name, native_handle_name)
@@ -1616,10 +1627,15 @@ class XrStruct(Sequence):
         if self.is_alias() and not conv:
             return ""
 
-        if self.union:
-            text = "union {0}".format(self.name)
+        if conv:
+            text = "typedef "
         else:
-            text = "struct {0}".format(self.name)
+            text = ""
+
+        if self.union:
+            text += "union {0}".format(self.name)
+        else:
+            text += "struct {0}".format(self.name)
 
         if postfix is not None:
             text += postfix
@@ -1635,7 +1651,10 @@ class XrStruct(Sequence):
                 text += "    {0};\n".format(m.definition())
 
         if postfix is not None:
-            text += "}} {1};\n\n".format(self.name, postfix)
+            if conv:
+                text += "}} {0}{1};\n\n".format(self.name, postfix)
+            else:
+                text += "}} {1};\n\n".format(self.name, postfix)
         else:
             text += "}};\n".format(self.name)
 

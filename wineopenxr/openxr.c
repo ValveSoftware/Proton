@@ -1022,11 +1022,107 @@ XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor)
     return XR_SUCCESS;
 }
 
+XrResult WINAPI wine_xrCreateSceneObserverMSFT(XrSession session,
+        const XrSceneObserverCreateInfoMSFT *createInfo, XrSceneObserverMSFT *observer)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrSceneObserverMSFT *wine_scene_observer_msft;
+    XrResult res;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, observer);
+
+    wine_scene_observer_msft = heap_alloc_zero(sizeof(*wine_scene_observer_msft));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateSceneObserverMSFT(wine_session->session,
+            createInfo, &wine_scene_observer_msft->scene_observer_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSceneObserverMSFT failed: %d\n", res);
+        heap_free(wine_scene_observer_msft);
+        return res;
+    }
+
+    wine_scene_observer_msft->wine_session = wine_session;
+
+    *observer = (XrSceneObserverMSFT)wine_scene_observer_msft;
+
+    WINE_TRACE("allocated wine sceneObserver %p for native sceneObserver %p\n",
+            wine_scene_observer_msft, wine_scene_observer_msft->scene_observer_msft);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroySceneObserverMSFT(XrSceneObserverMSFT observer)
+{
+    wine_XrSceneObserverMSFT *wine_observer = (wine_XrSceneObserverMSFT *)observer;
+    XrResult res;
+
+    WINE_TRACE("%p\n", observer);
+
+    res = wine_observer->wine_session->wine_instance->funcs.p_xrDestroySceneObserverMSFT(wine_observer->scene_observer_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrDestroySceneObserverMSFT failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_observer);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreateSceneMSFT(XrSceneObserverMSFT observer,
+        const XrSceneCreateInfoMSFT *createInfo, XrSceneMSFT *scene)
+{
+    wine_XrSceneObserverMSFT *wine_observer = (wine_XrSceneObserverMSFT *)observer;
+    wine_XrSceneMSFT *wine_scene_msft;
+    XrResult res;
+
+    WINE_TRACE("%p, %p, %p\n", observer, createInfo, scene);
+
+    wine_scene_msft = heap_alloc_zero(sizeof(*wine_scene_msft));
+
+    res = wine_observer->wine_session->wine_instance->funcs.p_xrCreateSceneMSFT(wine_observer->scene_observer_msft,
+            createInfo, &wine_scene_msft->scene_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSceneMSFT failed: %d\n", res);
+        heap_free(wine_scene_msft);
+        return res;
+    }
+
+    wine_scene_msft->wine_scene_observer_msft = wine_observer;
+
+    *scene = (XrSceneMSFT)wine_scene_msft;
+
+    WINE_TRACE("allocated wine sceneMSFT %p for native sceneMSFT %p\n",
+            wine_scene_msft, wine_scene_msft->scene_msft);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroySceneMSFT(XrSceneMSFT scene)
+{
+    wine_XrSceneMSFT *wine_scene = (wine_XrSceneMSFT *)scene;
+    XrResult res;
+
+    WINE_TRACE("%p\n", scene);
+
+    res = wine_scene->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrDestroySceneMSFT(wine_scene->scene_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrDestroySceneMSFT failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_scene);
+
+    return XR_SUCCESS;
+}
+
 XrResult WINAPI wine_xrNegotiateLoaderRuntimeInterface(
         const XrNegotiateLoaderInfo_win *loaderInfo,
         XrNegotiateRuntimeRequest_win *runtimeRequest)
 {
     XrResult res;
+
+    WINE_TRACE("%p %p\n", loaderInfo, runtimeRequest);
 
     if(!loaderInfo || !runtimeRequest)
         return XR_ERROR_INITIALIZATION_FAILED;
