@@ -30,6 +30,15 @@
 WINE_DEFAULT_DEBUG_CHANNEL(openxr);
 
 #if defined(USE_STRUCT_CONVERSION)
+static inline void convert_XrSceneMeshBuffersGetInfoMSFT_win_to_host(const XrSceneMeshBuffersGetInfoMSFT *in, XrSceneMeshBuffersGetInfoMSFT_host *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = in->next;
+    out->meshBufferId = in->meshBufferId;
+}
+
 #endif /* USE_STRUCT_CONVERSION */
 
 XrResult convert_XrInstanceCreateInfo_struct_chain(const void *next, XrInstanceCreateInfo *out_struct)
@@ -98,6 +107,12 @@ XrResult WINAPI wine_xrBeginSession(XrSession session, const XrSessionBeginInfo 
     return xrBeginSession(((wine_XrSession *)session)->session, beginInfo);
 }
 
+static XrResult WINAPI wine_xrComputeNewSceneMSFT(XrSceneObserverMSFT sceneObserver, const XrNewSceneComputeInfoMSFT *computeInfo)
+{
+    WINE_TRACE("%p, %p\n", sceneObserver, computeInfo);
+    return ((wine_XrSceneObserverMSFT *)sceneObserver)->wine_session->wine_instance->funcs.p_xrComputeNewSceneMSFT(((wine_XrSceneObserverMSFT *)sceneObserver)->scene_observer_msft, computeInfo);
+}
+
 XrResult WINAPI wine_xrCreateAction(XrActionSet actionSet, const XrActionCreateInfo *createInfo, XrAction *action)
 {
     WINE_TRACE("%p, %p, %p\n", actionSet, createInfo, action);
@@ -138,6 +153,12 @@ static XrResult WINAPI wine_xrCreateSpatialGraphNodeSpaceMSFT(XrSession session,
 {
     WINE_TRACE("%p, %p, %p\n", session, createInfo, space);
     return ((wine_XrSession *)session)->wine_instance->funcs.p_xrCreateSpatialGraphNodeSpaceMSFT(((wine_XrSession *)session)->session, createInfo, space);
+}
+
+static XrResult WINAPI wine_xrDeserializeSceneMSFT(XrSceneObserverMSFT sceneObserver, const XrSceneDeserializeInfoMSFT *deserializeInfo)
+{
+    WINE_TRACE("%p, %p\n", sceneObserver, deserializeInfo);
+    return ((wine_XrSceneObserverMSFT *)sceneObserver)->wine_session->wine_instance->funcs.p_xrDeserializeSceneMSFT(((wine_XrSceneObserverMSFT *)sceneObserver)->scene_observer_msft, deserializeInfo);
 }
 
 XrResult WINAPI wine_xrDestroyAction(XrAction action)
@@ -200,6 +221,18 @@ XrResult WINAPI wine_xrEnumerateReferenceSpaces(XrSession session, uint32_t spac
     return xrEnumerateReferenceSpaces(((wine_XrSession *)session)->session, spaceCapacityInput, spaceCountOutput, spaces);
 }
 
+static XrResult WINAPI wine_xrEnumerateReprojectionModesMSFT(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, uint32_t modeCapacityInput, uint32_t *modeCountOutput, XrReprojectionModeMSFT *modes)
+{
+    WINE_TRACE("%p, 0x%s, %#x, %u, %p, %p\n", instance, wine_dbgstr_longlong(systemId), viewConfigurationType, modeCapacityInput, modeCountOutput, modes);
+    return ((wine_XrInstance *)instance)->funcs.p_xrEnumerateReprojectionModesMSFT(((wine_XrInstance *)instance)->instance, systemId, viewConfigurationType, modeCapacityInput, modeCountOutput, modes);
+}
+
+static XrResult WINAPI wine_xrEnumerateSceneComputeFeaturesMSFT(XrInstance instance, XrSystemId systemId, uint32_t featureCapacityInput, uint32_t *featureCountOutput, XrSceneComputeFeatureMSFT *features)
+{
+    WINE_TRACE("%p, 0x%s, %u, %p, %p\n", instance, wine_dbgstr_longlong(systemId), featureCapacityInput, featureCountOutput, features);
+    return ((wine_XrInstance *)instance)->funcs.p_xrEnumerateSceneComputeFeaturesMSFT(((wine_XrInstance *)instance)->instance, systemId, featureCapacityInput, featureCountOutput, features);
+}
+
 XrResult WINAPI wine_xrEnumerateViewConfigurationViews(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, uint32_t viewCapacityInput, uint32_t *viewCountOutput, XrViewConfigurationView *views)
 {
     WINE_TRACE("%p, 0x%s, %#x, %u, %p, %p\n", instance, wine_dbgstr_longlong(systemId), viewConfigurationType, viewCapacityInput, viewCountOutput, views);
@@ -234,6 +267,18 @@ XrResult WINAPI wine_xrGetActionStateVector2f(XrSession session, const XrActionS
 {
     WINE_TRACE("%p, %p, %p\n", session, getInfo, state);
     return xrGetActionStateVector2f(((wine_XrSession *)session)->session, getInfo, state);
+}
+
+static XrResult WINAPI wine_xrGetAudioInputDeviceGuidOculus(XrInstance instance, wchar_t buffer[])
+{
+    WINE_TRACE("%p, %p\n", instance, buffer);
+    return ((wine_XrInstance *)instance)->funcs.p_xrGetAudioInputDeviceGuidOculus(((wine_XrInstance *)instance)->instance, buffer);
+}
+
+static XrResult WINAPI wine_xrGetAudioOutputDeviceGuidOculus(XrInstance instance, wchar_t buffer[])
+{
+    WINE_TRACE("%p, %p\n", instance, buffer);
+    return ((wine_XrInstance *)instance)->funcs.p_xrGetAudioOutputDeviceGuidOculus(((wine_XrInstance *)instance)->instance, buffer);
 }
 
 static XrResult WINAPI wine_xrGetControllerModelKeyMSFT(XrSession session, XrPath topLevelUserPath, XrControllerModelKeyStateMSFT *controllerModelKeyState)
@@ -290,6 +335,47 @@ XrResult WINAPI wine_xrGetReferenceSpaceBoundsRect(XrSession session, XrReferenc
     return xrGetReferenceSpaceBoundsRect(((wine_XrSession *)session)->session, referenceSpaceType, bounds);
 }
 
+static XrResult WINAPI wine_xrGetSceneComponentsMSFT(XrSceneMSFT scene, const XrSceneComponentsGetInfoMSFT *getInfo, XrSceneComponentsMSFT *components)
+{
+    WINE_TRACE("%p, %p, %p\n", scene, getInfo, components);
+    return ((wine_XrSceneMSFT *)scene)->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrGetSceneComponentsMSFT(((wine_XrSceneMSFT *)scene)->scene_msft, getInfo, components);
+}
+
+static XrResult WINAPI wine_xrGetSceneComputeStateMSFT(XrSceneObserverMSFT sceneObserver, XrSceneComputeStateMSFT *state)
+{
+    WINE_TRACE("%p, %p\n", sceneObserver, state);
+    return ((wine_XrSceneObserverMSFT *)sceneObserver)->wine_session->wine_instance->funcs.p_xrGetSceneComputeStateMSFT(((wine_XrSceneObserverMSFT *)sceneObserver)->scene_observer_msft, state);
+}
+
+static XrResult WINAPI wine_xrGetSceneMeshBuffersMSFT(XrSceneMSFT scene, const XrSceneMeshBuffersGetInfoMSFT *getInfo, XrSceneMeshBuffersMSFT *buffers)
+{
+#if defined(USE_STRUCT_CONVERSION)
+    XrResult result;
+    XrSceneMeshBuffersGetInfoMSFT_host getInfo_host;
+    WINE_TRACE("%p, %p, %p\n", scene, getInfo, buffers);
+
+    convert_XrSceneMeshBuffersGetInfoMSFT_win_to_host(getInfo, &getInfo_host);
+    result = ((wine_XrSceneMSFT *)scene)->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrGetSceneMeshBuffersMSFT(((wine_XrSceneMSFT *)scene)->scene_msft, &getInfo_host, buffers);
+
+    return result;
+#else
+    WINE_TRACE("%p, %p, %p\n", scene, getInfo, buffers);
+    return ((wine_XrSceneMSFT *)scene)->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrGetSceneMeshBuffersMSFT(((wine_XrSceneMSFT *)scene)->scene_msft, getInfo, buffers);
+#endif
+}
+
+static XrResult WINAPI wine_xrGetSerializedSceneFragmentDataMSFT(XrSceneMSFT scene, const XrSerializedSceneFragmentDataGetInfoMSFT *getInfo, uint32_t countInput, uint32_t *readOutput, uint8_t *buffer)
+{
+    WINE_TRACE("%p, %p, %u, %p, %p\n", scene, getInfo, countInput, readOutput, buffer);
+    return ((wine_XrSceneMSFT *)scene)->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrGetSerializedSceneFragmentDataMSFT(((wine_XrSceneMSFT *)scene)->scene_msft, getInfo, countInput, readOutput, buffer);
+}
+
+static XrResult WINAPI wine_xrGetSwapchainStateFB(XrSwapchain swapchain, XrSwapchainStateBaseHeaderFB *state)
+{
+    WINE_TRACE("%p, %p\n", swapchain, state);
+    return ((wine_XrSwapchain *)swapchain)->wine_session->wine_instance->funcs.p_xrGetSwapchainStateFB(((wine_XrSwapchain *)swapchain)->swapchain, state);
+}
+
 XrResult WINAPI wine_xrGetSystemProperties(XrInstance instance, XrSystemId systemId, XrSystemProperties *properties)
 {
     WINE_TRACE("%p, 0x%s, %p\n", instance, wine_dbgstr_longlong(systemId), properties);
@@ -330,6 +416,12 @@ static XrResult WINAPI wine_xrLocateHandJointsEXT(XrHandTrackerEXT handTracker, 
 {
     WINE_TRACE("%p, %p, %p\n", handTracker, locateInfo, locations);
     return ((wine_XrHandTrackerEXT *)handTracker)->wine_session->wine_instance->funcs.p_xrLocateHandJointsEXT(((wine_XrHandTrackerEXT *)handTracker)->hand_tracker, locateInfo, locations);
+}
+
+static XrResult WINAPI wine_xrLocateSceneComponentsMSFT(XrSceneMSFT scene, const XrSceneComponentsLocateInfoMSFT *locateInfo, XrSceneComponentLocationsMSFT *locations)
+{
+    WINE_TRACE("%p, %p, %p\n", scene, locateInfo, locations);
+    return ((wine_XrSceneMSFT *)scene)->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrLocateSceneComponentsMSFT(((wine_XrSceneMSFT *)scene)->scene_msft, locateInfo, locations);
 }
 
 XrResult WINAPI wine_xrLocateSpace(XrSpace space, XrSpace baseSpace, XrTime time, XrSpaceLocation *location)
@@ -464,6 +556,12 @@ static XrResult WINAPI wine_xrUpdateHandMeshMSFT(XrHandTrackerEXT handTracker, c
     return ((wine_XrHandTrackerEXT *)handTracker)->wine_session->wine_instance->funcs.p_xrUpdateHandMeshMSFT(((wine_XrHandTrackerEXT *)handTracker)->hand_tracker, updateInfo, handMesh);
 }
 
+static XrResult WINAPI wine_xrUpdateSwapchainFB(XrSwapchain swapchain, const XrSwapchainStateBaseHeaderFB *state)
+{
+    WINE_TRACE("%p, %p\n", swapchain, state);
+    return ((wine_XrSwapchain *)swapchain)->wine_session->wine_instance->funcs.p_xrUpdateSwapchainFB(((wine_XrSwapchain *)swapchain)->swapchain, state);
+}
+
 XrResult WINAPI wine_xrWaitFrame(XrSession session, const XrFrameWaitInfo *frameWaitInfo, XrFrameState *frameState)
 {
     WINE_TRACE("%p, %p, %p\n", session, frameWaitInfo, frameState);
@@ -483,6 +581,7 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrAttachSessionActionSets", &wine_xrAttachSessionActionSets},
     {"xrBeginFrame", &wine_xrBeginFrame},
     {"xrBeginSession", &wine_xrBeginSession},
+    {"xrComputeNewSceneMSFT", &wine_xrComputeNewSceneMSFT},
     {"xrConvertTimeToWin32PerformanceCounterKHR", &wine_xrConvertTimeToWin32PerformanceCounterKHR},
     {"xrConvertWin32PerformanceCounterToTimeKHR", &wine_xrConvertWin32PerformanceCounterToTimeKHR},
     {"xrCreateAction", &wine_xrCreateAction},
@@ -492,6 +591,8 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrCreateHandTrackerEXT", &wine_xrCreateHandTrackerEXT},
     {"xrCreateInstance", &wine_xrCreateInstance},
     {"xrCreateReferenceSpace", &wine_xrCreateReferenceSpace},
+    {"xrCreateSceneMSFT", &wine_xrCreateSceneMSFT},
+    {"xrCreateSceneObserverMSFT", &wine_xrCreateSceneObserverMSFT},
     {"xrCreateSession", &wine_xrCreateSession},
     {"xrCreateSpatialAnchorMSFT", &wine_xrCreateSpatialAnchorMSFT},
     {"xrCreateSpatialAnchorSpaceMSFT", &wine_xrCreateSpatialAnchorSpaceMSFT},
@@ -499,10 +600,13 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrCreateSwapchain", &wine_xrCreateSwapchain},
     {"xrCreateVulkanDeviceKHR", &wine_xrCreateVulkanDeviceKHR},
     {"xrCreateVulkanInstanceKHR", &wine_xrCreateVulkanInstanceKHR},
+    {"xrDeserializeSceneMSFT", &wine_xrDeserializeSceneMSFT},
     {"xrDestroyAction", &wine_xrDestroyAction},
     {"xrDestroyActionSet", &wine_xrDestroyActionSet},
     {"xrDestroyHandTrackerEXT", &wine_xrDestroyHandTrackerEXT},
     {"xrDestroyInstance", &wine_xrDestroyInstance},
+    {"xrDestroySceneMSFT", &wine_xrDestroySceneMSFT},
+    {"xrDestroySceneObserverMSFT", &wine_xrDestroySceneObserverMSFT},
     {"xrDestroySession", &wine_xrDestroySession},
     {"xrDestroySpace", &wine_xrDestroySpace},
     {"xrDestroySpatialAnchorMSFT", &wine_xrDestroySpatialAnchorMSFT},
@@ -516,6 +620,8 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrEnumerateEnvironmentBlendModes", &wine_xrEnumerateEnvironmentBlendModes},
     {"xrEnumerateInstanceExtensionProperties", &wine_xrEnumerateInstanceExtensionProperties},
     {"xrEnumerateReferenceSpaces", &wine_xrEnumerateReferenceSpaces},
+    {"xrEnumerateReprojectionModesMSFT", &wine_xrEnumerateReprojectionModesMSFT},
+    {"xrEnumerateSceneComputeFeaturesMSFT", &wine_xrEnumerateSceneComputeFeaturesMSFT},
     {"xrEnumerateSwapchainFormats", &wine_xrEnumerateSwapchainFormats},
     {"xrEnumerateSwapchainImages", &wine_xrEnumerateSwapchainImages},
     {"xrEnumerateViewConfigurationViews", &wine_xrEnumerateViewConfigurationViews},
@@ -524,6 +630,8 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetActionStateFloat", &wine_xrGetActionStateFloat},
     {"xrGetActionStatePose", &wine_xrGetActionStatePose},
     {"xrGetActionStateVector2f", &wine_xrGetActionStateVector2f},
+    {"xrGetAudioInputDeviceGuidOculus", &wine_xrGetAudioInputDeviceGuidOculus},
+    {"xrGetAudioOutputDeviceGuidOculus", &wine_xrGetAudioOutputDeviceGuidOculus},
     {"xrGetControllerModelKeyMSFT", &wine_xrGetControllerModelKeyMSFT},
     {"xrGetControllerModelPropertiesMSFT", &wine_xrGetControllerModelPropertiesMSFT},
     {"xrGetControllerModelStateMSFT", &wine_xrGetControllerModelStateMSFT},
@@ -536,6 +644,11 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetInstanceProperties", &wine_xrGetInstanceProperties},
     {"xrGetOpenGLGraphicsRequirementsKHR", &wine_xrGetOpenGLGraphicsRequirementsKHR},
     {"xrGetReferenceSpaceBoundsRect", &wine_xrGetReferenceSpaceBoundsRect},
+    {"xrGetSceneComponentsMSFT", &wine_xrGetSceneComponentsMSFT},
+    {"xrGetSceneComputeStateMSFT", &wine_xrGetSceneComputeStateMSFT},
+    {"xrGetSceneMeshBuffersMSFT", &wine_xrGetSceneMeshBuffersMSFT},
+    {"xrGetSerializedSceneFragmentDataMSFT", &wine_xrGetSerializedSceneFragmentDataMSFT},
+    {"xrGetSwapchainStateFB", &wine_xrGetSwapchainStateFB},
     {"xrGetSystem", &wine_xrGetSystem},
     {"xrGetSystemProperties", &wine_xrGetSystemProperties},
     {"xrGetViewConfigurationProperties", &wine_xrGetViewConfigurationProperties},
@@ -548,6 +661,7 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrGetVulkanInstanceExtensionsKHR", &wine_xrGetVulkanInstanceExtensionsKHR},
     {"xrLoadControllerModelMSFT", &wine_xrLoadControllerModelMSFT},
     {"xrLocateHandJointsEXT", &wine_xrLocateHandJointsEXT},
+    {"xrLocateSceneComponentsMSFT", &wine_xrLocateSceneComponentsMSFT},
     {"xrLocateSpace", &wine_xrLocateSpace},
     {"xrLocateViews", &wine_xrLocateViews},
     {"xrPathToString", &wine_xrPathToString},
@@ -571,6 +685,7 @@ static const struct openxr_func xr_dispatch_table[] =
     {"xrSyncActions", &wine_xrSyncActions},
     {"xrThermalGetTemperatureTrendEXT", &wine_xrThermalGetTemperatureTrendEXT},
     {"xrUpdateHandMeshMSFT", &wine_xrUpdateHandMeshMSFT},
+    {"xrUpdateSwapchainFB", &wine_xrUpdateSwapchainFB},
     {"xrWaitFrame", &wine_xrWaitFrame},
     {"xrWaitSwapchainImage", &wine_xrWaitSwapchainImage},
 };
@@ -595,6 +710,7 @@ static const char * const xr_extensions[] =
     "XR_EXTX_overlay",
     "XR_EXT_conformance_automation",
     "XR_EXT_eye_gaze_interaction",
+    "XR_EXT_hand_joints_motion_range",
     "XR_EXT_hand_tracking",
     "XR_EXT_hp_mixed_reality_controller",
     "XR_EXT_performance_settings",
@@ -604,6 +720,8 @@ static const char * const xr_extensions[] =
     "XR_EXT_win32_appcontainer_compatible",
     "XR_FB_color_space",
     "XR_FB_display_refresh_rate",
+    "XR_FB_swapchain_update_state",
+    "XR_FB_swapchain_update_state_vulkan",
     "XR_HTC_vive_cosmos_controller_interaction",
     "XR_HUAWEI_controller_interaction",
     "XR_KHR_D3D11_enable",
@@ -623,16 +741,20 @@ static const char * const xr_extensions[] =
     "XR_KHR_win32_convert_performance_counter_time",
     "XR_MND_headless",
     "XR_MND_swapchain_usage_input_attachment_bit",
+    "XR_MSFT_composition_layer_reprojection",
     "XR_MSFT_controller_model",
     "XR_MSFT_first_person_observer",
     "XR_MSFT_hand_interaction",
     "XR_MSFT_hand_tracking_mesh",
     "XR_MSFT_holographic_window_attachment",
+    "XR_MSFT_scene_understanding",
+    "XR_MSFT_scene_understanding_serialization",
     "XR_MSFT_secondary_view_configuration",
     "XR_MSFT_spatial_anchor",
     "XR_MSFT_spatial_graph_bridge",
     "XR_MSFT_unbounded_reference_space",
     "XR_OCULUS_android_session_state_enable",
+    "XR_OCULUS_audio_device_guid",
     "XR_VALVE_analog_threshold",
     "XR_VARJO_composition_layer_depth_test",
     "XR_VARJO_environment_depth_estimation",
