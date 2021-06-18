@@ -65,9 +65,15 @@ Vagrant.configure(2) do |config|
     debian10.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["vagrant_share"]
 
     debian10.vm.provision "shell", privileged: "true", inline: <<-SHELL
+      set -e
+      # Uncomment this is you have apt-cacher-ng running on your host machine
+      #export http_proxy="http://192.168.121.1:3142/"
       #install docker and steam-runtime dependencies
       dpkg --add-architecture i386
       apt-get update
+      apt-get install -y eatmydata
+      export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata
+      export LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so
       apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
       #add docker repo
