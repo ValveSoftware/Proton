@@ -19,38 +19,45 @@ following resources useful:
  * https://wiki.debian.org/NVIDIA%20Optimus
 
 
-Here, the two most common PRIME scenarios are covered, but the content should
-be enough to troubleshoot and make any other configuration work.
+## DirectX 9, 10, 11 and 12 (DXVK and VKD3D-Proton)
+
+The implementations of those graphics APIs are built on top of Vulkan and
+**most of the games should work out of the box.** Discrete GPUs are
+prioritized (i.e. enumerated first) and games should default to them.
+
+If you have multiple discrete GPUs or the wrong GPU is selected as the
+default one and the game doesn't have the means of selecting an adapter you
+can limit what gets enumerated.
+
+In Steam, set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
+
+    DXVK_FILTER_DEVICE_NAME="GTX 1650" %command%
+
+This should work for GeForce GTX 1650. A different name may be required for
+your particular graphics card (e.g. "VEGA10" for Vega 56/64). You can use
+`vulkaninfo` program (usually packaged as `vulkan-tools`) to check the names
+of your GPUs.
 
 
-## AMD -> Integrated Intel (Mesa -> Mesa)
+## DirectX 8 and OpenGL
+
+Those APIs are implemented on top of OpenGL and require a bit more
+configuration.
+
+The two most common PRIME scenarios are covered, but the content should be
+enough to troubleshoot and make any other configuration work.
+
+### AMD -> Integrated Intel (Mesa -> Mesa)
 
 In Steam, set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
     DRI_PRIME=1 %command%
 
-That's it. This should be enough to have everything working.
-
-
-## Nvidia -> Integrated Intel (Nvidia's Proprietary Driver -> Mesa)
+### Nvidia -> Integrated Intel (Nvidia's Proprietary Driver -> Mesa)
 
 In Steam set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
     __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia %command%
-
-For most games, Nvidia GPUs are reported as AMD GPUs to workaround issues with
-NVAPI. This means that DXGI will report your GPU as RX480.  Because of that
-DXVK/VKD3D won't recognize the vendor/product ids and will pick a GPU on their
-own, so you have to add other options to force the correct choice.
-
-DXVK (used for DirectX 9-11 games) takes GPU name so you might have to
-prepend the following to 'LAUNCH OPTIONS': `DXVK_FILTER_DEVICE_NAME="GeForce"`.
-A different or more specific name may be required (e.g. "Quadro").
-
-VKD3D-Proton (used for DirectX 12 games) takes GPU id as reported by the
-`vulkaninfo` program (usually packaged as `vulkan-tools`). In this case you
-have to prepend the following to 'LAUNCH OPTIONS': `VKD3D_VULKAN_DEVICE=0`.
-Replace `0` with the appropriate GPU id.
 
 
 # Troubleshooting
