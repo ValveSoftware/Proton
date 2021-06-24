@@ -996,6 +996,11 @@ class Session:
         else:
             self.env["WINEDEBUG"] = "-all"
 
+        if "PROTON_REMOTE_DEBUG_CMD" in self.env:
+            self.remote_debug_cmd = self.env.get("PROTON_REMOTE_DEBUG_CMD").split(" ")
+        else:
+            self.remote_debug_cmd = None
+
         if update_prefix_files:
             g_compatdata.setup_prefix()
 
@@ -1146,8 +1151,23 @@ class Session:
                 self.dump_dbg_scripts()
             except OSError:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
+
+        if self.remote_debug_cmd:
+            remote_debug_proc = subprocess.Popen([g_proton.wine_bin] + self.remote_debug_cmd,
+                                                 env=self.env, stderr=self.log_file, stdout=self.log_file)
+        else:
+            remote_debug_proc = None
+
         self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
 
+        if remote_debug_proc:
+            remote_debug_proc.kill()
+            try:
+                remote_debug_proc.communicate(2)
+            except subprocess.TimeoutExpired as e:
+                log("terminate remote debugger")
+                remote_debug_proc.terminate()
+                remote_debug_proc.communicate()
 
 if __name__ == "__main__":
     if not "STEAM_COMPAT_DATA_PATH" in os.environ:
