@@ -217,7 +217,7 @@ struct NeedTranscodeHead {
 
 impl NeedTranscodeHead {
     fn new_from_caps(caps: &gst::CapsRef) -> Result<Self, gst::LoggableError> {
-        let s = caps.get_structure(0).ok_or(gst_loggable_error!(CAT, "Caps have no WMA data!"))?;
+        let s = caps.get_structure(0).ok_or_else(|| gst_loggable_error!(CAT, "Caps have no WMA data!"))?;
 
         let wmaversion = s.get_some::<i32>("wmaversion").map_err(|_| gst_loggable_error!(CAT, "Caps have no wmaversion field"))?;
         let bitrate = s.get_some::<i32>("bitrate").map_err(|_| gst_loggable_error!(CAT, "Caps have no bitrate field"))?;
@@ -227,7 +227,7 @@ impl NeedTranscodeHead {
         let depth = s.get_some::<i32>("depth").map_err(|_| gst_loggable_error!(CAT, "Caps have no depth field"))?;
         let codec_data_buf = s.get::<gst::Buffer>("codec_data")
             .map_err(|_| gst_loggable_error!(CAT, "Caps have no codec_data field"))?
-            .ok_or(gst_loggable_error!(CAT, "Caps have NULL codec_data field"))?;
+            .ok_or_else(|| gst_loggable_error!(CAT, "Caps have NULL codec_data field"))?;
 
         let mapped = codec_data_buf.into_mapped_buffer_readable().unwrap();
         let mut codec_data = Vec::new();
@@ -311,7 +311,7 @@ impl StreamState {
 
             Ok(LoopState::Looping)
         }else{
-            if self.loop_buffers.len() > 0 {
+            if !self.loop_buffers.is_empty() {
                 /* partial loop, track them and then continue */
                 self.buffers.append(&mut self.loop_buffers);
             }
@@ -324,7 +324,7 @@ impl StreamState {
     }
 
     fn write_to_foz(&self) -> Result<(), gst::LoggableError> {
-        if self.needs_dump && self.buffers.len() > 0 {
+        if self.needs_dump && !self.buffers.is_empty() {
             let mut db = (*DUMP_FOZDB).lock().unwrap();
             let db = match &mut *db {
                 Some(d) => d,
@@ -337,13 +337,13 @@ impl StreamState {
                 /* are there any recorded streams of which this stream is a subset? */
                 let stream_ids = db.iter_tag(AUDIOCONV_FOZ_TAG_STREAM).cloned().collect::<Vec<u128>>();
 
-                found = stream_ids.iter().find(|stream_id| {
+                found = stream_ids.iter().any(|stream_id| {
                         let mut offs = 0;
 
                         for cur_buf_id in self.buffers.iter() {
                             let mut buf = [0u8; 16];
 
-                            let res = db.read_entry(AUDIOCONV_FOZ_TAG_STREAM, **stream_id, offs, &mut buf, fossilize::CRCCheck::WithCRC);
+                            let res = db.read_entry(AUDIOCONV_FOZ_TAG_STREAM, *stream_id, offs, &mut buf, fossilize::CRCCheck::WithCRC);
 
                             let buffer_id = match res {
                                 Err(_) => { return false; }
@@ -362,9 +362,9 @@ impl StreamState {
                             offs += 16;
                         }
 
-                        gst_trace!(CAT, "stream id {} is a subset of {}, so not recording stream", self.cur_hash, **stream_id);
+                        gst_trace!(CAT, "stream id {} is a subset of {}, so not recording stream", self.cur_hash, *stream_id);
                         return true;
-                    }).is_some();
+                    });
             }
 
             if !found {
@@ -510,7 +510,7 @@ impl AudioConvState {
             if let Ok(transcoded_size) = read_fozdb.entry_size(AUDIOCONV_FOZ_TAG_PTNADATA, hash) {
                 /* success */
                 let mut buf = vec![0u8; transcoded_size].into_boxed_slice();
-                if let Ok(_) = read_fozdb.read_entry(AUDIOCONV_FOZ_TAG_PTNADATA, hash, 0, &mut buf, fossilize::CRCCheck::WithoutCRC) {
+                if read_fozdb.read_entry(AUDIOCONV_FOZ_TAG_PTNADATA, hash, 0, &mut buf, fossilize::CRCCheck::WithoutCRC).is_ok() {
                     return Ok((buf, 0.0));
                 }
             }
@@ -518,7 +518,7 @@ impl AudioConvState {
                 if let Ok(transcoded_size) = read_fozdb.entry_size(AUDIOCONV_FOZ_TAG_PTNADATA, loop_hash) {
                     /* success */
                     let mut buf = vec![0u8; transcoded_size].into_boxed_slice();
-                    if let Ok(_) = read_fozdb.read_entry(AUDIOCONV_FOZ_TAG_PTNADATA, loop_hash, 0, &mut buf, fossilize::CRCCheck::WithoutCRC) {
+                    if read_fozdb.read_entry(AUDIOCONV_FOZ_TAG_PTNADATA, loop_hash, 0, &mut buf, fossilize::CRCCheck::WithoutCRC).is_ok() {
                         return Ok((buf, 0.0));
                     }
                 }
@@ -528,7 +528,7 @@ impl AudioConvState {
         /* if we can't, return the blank file */
         self.stream_state.needs_dump = true;
 
-        let buf = Box::new(include_bytes!("../blank.ptna").clone());
+        let buf = Box::new(*include_bytes!("../blank.ptna"));
 
         /* calculate average expected length of this buffer */
         let codec_data = self.codec_data.as_ref().unwrap();
