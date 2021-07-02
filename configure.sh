@@ -64,7 +64,8 @@ check_container_engine() {
     fi
 
     touch permission_check
-    local inner_uid="$($arg_container_engine run -v "$(pwd):/test" \
+    #set -o xtrace
+    local inner_uid="$($arg_container_engine run -v "$(pwd):/test:Z" \
                                             --rm $arg_protonsdk_image \
                                             stat --format "%u" /test/permission_check)"
     rm permission_check
