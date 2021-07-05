@@ -1,0 +1,229 @@
+From 4e81c81b9399a190bff1c624e4c5e3892b982fbe Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 31 Aug 2020 23:55:29 -0500
+Subject: [PATCH 10/11] ntdll: Get rid of the direct futex path for condition
+ variables.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/sync.c              | 24 ++++--------
+ dlls/ntdll/unix/loader.c       |  2 -
+ dlls/ntdll/unix/sync.c         | 71 ----------------------------------
+ dlls/ntdll/unix/unix_private.h |  3 --
+ dlls/ntdll/unixlib.h           |  5 +--
+ 5 files changed, 9 insertions(+), 96 deletions(-)
+
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index bacd13d7d83..55e80b5464b 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -450,11 +450,8 @@ void WINAPI RtlInitializeConditionVariable( RTL_CONDITION_VARIABLE *variable )
+  */
+ void WINAPI RtlWakeConditionVariable( RTL_CONDITION_VARIABLE *variable )
+ {
+-    if (unix_funcs->fast_RtlWakeConditionVariable( variable, 1 ) == STATUS_NOT_IMPLEMENTED)
+-    {
+-        InterlockedIncrement( (int *)&variable->Ptr );
+-        RtlWakeAddressSingle( variable );
+-    }
++    InterlockedIncrement( (int *)&variable->Ptr );
++    RtlWakeAddressSingle( variable );
+ }
+ 
+ /***********************************************************************
+@@ -464,11 +461,8 @@ void WINAPI RtlWakeConditionVariable( RTL_CONDITION_VARIABLE *variable )
+  */
+ void WINAPI RtlWakeAllConditionVariable( RTL_CONDITION_VARIABLE *variable )
+ {
+-    if (unix_funcs->fast_RtlWakeConditionVariable( variable, INT_MAX ) == STATUS_NOT_IMPLEMENTED)
+-    {
+-        InterlockedIncrement( (int *)&variable->Ptr );
+-        RtlWakeAddressAll( variable );
+-    }
++    InterlockedIncrement( (int *)&variable->Ptr );
++    RtlWakeAddressAll( variable );
+ }
+ 
+ /***********************************************************************
+@@ -489,12 +483,11 @@ void WINAPI RtlWakeAllConditionVariable( RTL_CONDITION_VARIABLE *variable )
+ NTSTATUS WINAPI RtlSleepConditionVariableCS( RTL_CONDITION_VARIABLE *variable, RTL_CRITICAL_SECTION *crit,
+                                              const LARGE_INTEGER *timeout )
+ {
+-    const void *value = variable->Ptr;
++    int value = *(int *)&variable->Ptr;
+     NTSTATUS status;
+ 
+     RtlLeaveCriticalSection( crit );
+-    if ((status = unix_funcs->fast_wait_cv( variable, value, timeout )) == STATUS_NOT_IMPLEMENTED)
+-        status = RtlWaitOnAddress( &variable->Ptr, &value, sizeof(value), timeout );
++    status = RtlWaitOnAddress( &variable->Ptr, &value, sizeof(value), timeout );
+     RtlEnterCriticalSection( crit );
+     return status;
+ }
+@@ -521,7 +514,7 @@ NTSTATUS WINAPI RtlSleepConditionVariableCS( RTL_CONDITION_VARIABLE *variable, R
+ NTSTATUS WINAPI RtlSleepConditionVariableSRW( RTL_CONDITION_VARIABLE *variable, RTL_SRWLOCK *lock,
+                                               const LARGE_INTEGER *timeout, ULONG flags )
+ {
+-    const void *value = variable->Ptr;
++    int value = *(int *)&variable->Ptr;
+     NTSTATUS status;
+ 
+     if (flags & RTL_CONDITION_VARIABLE_LOCKMODE_SHARED)
+@@ -529,8 +522,7 @@ NTSTATUS WINAPI RtlSleepConditionVariableSRW( RTL_CONDITION_VARIABLE *variable,
+     else
+         RtlReleaseSRWLockExclusive( lock );
+ 
+-    if ((status = unix_funcs->fast_wait_cv( variable, value, timeout )) == STATUS_NOT_IMPLEMENTED)
+-        status = RtlWaitOnAddress( variable, &value, sizeof(value), timeout );
++    status = RtlWaitOnAddress( &variable->Ptr, &value, sizeof(value), timeout );
+ 
+     if (flags & RTL_CONDITION_VARIABLE_LOCKMODE_SHARED)
+         RtlAcquireSRWLockShared( lock );
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index ee888f67fbc..d8ad0b6a151 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1825,8 +1825,6 @@ static struct unix_funcs unix_funcs =
+     fast_RtlAcquireSRWLockShared,
+     fast_RtlReleaseSRWLockExclusive,
+     fast_RtlReleaseSRWLockShared,
+-    fast_RtlWakeConditionVariable,
+-    fast_wait_cv,
+     ntdll_atan,
+     ntdll_ceil,
+     ntdll_cos,
+diff --git a/dlls/ntdll/unix/sync.c b/dlls/ntdll/unix/sync.c
+index 302698dc5b6..45472a72ed8 100644
+--- a/dlls/ntdll/unix/sync.c
++++ b/dlls/ntdll/unix/sync.c
+@@ -169,23 +169,6 @@ static int *get_futex(void **ptr)
+         return NULL;
+ }
+ 
+-static void timespec_from_timeout( struct timespec *timespec, const LARGE_INTEGER *timeout )
+-{
+-    LARGE_INTEGER now;
+-    timeout_t diff;
+-
+-    if (timeout->QuadPart > 0)
+-    {
+-        NtQuerySystemTime( &now );
+-        diff = timeout->QuadPart - now.QuadPart;
+-    }
+-    else
+-        diff = -timeout->QuadPart;
+-
+-    timespec->tv_sec  = diff / TICKSPERSEC;
+-    timespec->tv_nsec = (diff % TICKSPERSEC) * 100;
+-}
+-
+ #endif
+ 
+ 
+@@ -2749,50 +2732,6 @@ NTSTATUS CDECL fast_RtlReleaseSRWLockShared( RTL_SRWLOCK *lock )
+     return STATUS_SUCCESS;
+ }
+ 
+-NTSTATUS CDECL fast_wait_cv( RTL_CONDITION_VARIABLE *variable, const void *value, const LARGE_INTEGER *timeout )
+-{
+-    const char *value_ptr;
+-    int aligned_value, *futex;
+-    struct timespec timespec;
+-    int ret;
+-
+-    if (!use_futexes())
+-        return STATUS_NOT_IMPLEMENTED;
+-
+-    if (!(futex = get_futex( &variable->Ptr )))
+-        return STATUS_NOT_IMPLEMENTED;
+-
+-    value_ptr = (const char *)&value;
+-    value_ptr += ((ULONG_PTR)futex) - ((ULONG_PTR)&variable->Ptr);
+-    aligned_value = *(int *)value_ptr;
+-
+-    if (timeout && timeout->QuadPart != TIMEOUT_INFINITE)
+-    {
+-        timespec_from_timeout( &timespec, timeout );
+-        ret = futex_wait( futex, aligned_value, &timespec );
+-    }
+-    else
+-        ret = futex_wait( futex, aligned_value, NULL );
+-
+-    if (ret == -1 && errno == ETIMEDOUT)
+-        return STATUS_TIMEOUT;
+-    return STATUS_WAIT_0;
+-}
+-
+-NTSTATUS CDECL fast_RtlWakeConditionVariable( RTL_CONDITION_VARIABLE *variable, int count )
+-{
+-    int *futex;
+-
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
+-
+-    if (!(futex = get_futex( &variable->Ptr )))
+-        return STATUS_NOT_IMPLEMENTED;
+-
+-    InterlockedIncrement( futex );
+-    futex_wake( futex, count );
+-    return STATUS_SUCCESS;
+-}
+-
+ #else
+ 
+ NTSTATUS CDECL fast_RtlTryAcquireSRWLockExclusive( RTL_SRWLOCK *lock )
+@@ -2825,14 +2764,4 @@ NTSTATUS CDECL fast_RtlReleaseSRWLockShared( RTL_SRWLOCK *lock )
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
+-NTSTATUS CDECL fast_RtlWakeConditionVariable( RTL_CONDITION_VARIABLE *variable, int count )
+-{
+-    return STATUS_NOT_IMPLEMENTED;
+-}
+-
+-NTSTATUS CDECL fast_wait_cv( RTL_CONDITION_VARIABLE *variable, const void *value, const LARGE_INTEGER *timeout )
+-{
+-    return STATUS_NOT_IMPLEMENTED;
+-}
+-
+ #endif
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index 3ad34ccbc34..885526f533e 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -106,10 +106,7 @@ extern NTSTATUS CDECL fast_RtlTryAcquireSRWLockShared( RTL_SRWLOCK *lock ) DECLS
+ extern NTSTATUS CDECL fast_RtlAcquireSRWLockShared( RTL_SRWLOCK *lock ) DECLSPEC_HIDDEN;
+ extern NTSTATUS CDECL fast_RtlReleaseSRWLockExclusive( RTL_SRWLOCK *lock ) DECLSPEC_HIDDEN;
+ extern NTSTATUS CDECL fast_RtlReleaseSRWLockShared( RTL_SRWLOCK *lock ) DECLSPEC_HIDDEN;
+-extern NTSTATUS CDECL fast_RtlWakeConditionVariable( RTL_CONDITION_VARIABLE *variable, int count ) DECLSPEC_HIDDEN;
+ extern LONGLONG CDECL fast_RtlGetSystemTimePrecise(void) DECLSPEC_HIDDEN;
+-extern NTSTATUS CDECL fast_wait_cv( RTL_CONDITION_VARIABLE *variable, const void *value,
+-                                    const LARGE_INTEGER *timeout ) DECLSPEC_HIDDEN;
+ 
+ extern void CDECL virtual_release_address_space(void) DECLSPEC_HIDDEN;
+ 
+diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
+index 0a20c60044a..8c6bf6f47e3 100644
+--- a/dlls/ntdll/unixlib.h
++++ b/dlls/ntdll/unixlib.h
+@@ -26,7 +26,7 @@
+ struct _DISPATCHER_CONTEXT;
+ 
+ /* increment this when you change the function table */
+-#define NTDLL_UNIXLIB_VERSION 122
++#define NTDLL_UNIXLIB_VERSION 123
+ 
+ struct unix_funcs
+ {
+@@ -46,9 +46,6 @@ struct unix_funcs
+     NTSTATUS      (CDECL *fast_RtlAcquireSRWLockShared)( RTL_SRWLOCK *lock );
+     NTSTATUS      (CDECL *fast_RtlReleaseSRWLockExclusive)( RTL_SRWLOCK *lock );
+     NTSTATUS      (CDECL *fast_RtlReleaseSRWLockShared)( RTL_SRWLOCK *lock );
+-    NTSTATUS      (CDECL *fast_RtlWakeConditionVariable)( RTL_CONDITION_VARIABLE *variable, int count );
+-    NTSTATUS      (CDECL *fast_wait_cv)( RTL_CONDITION_VARIABLE *variable, const void *value,
+-                                         const LARGE_INTEGER *timeout );
+ 
+     /* math functions */
+     double        (CDECL *atan)( double d );
+-- 
+2.31.1
+

@@ -1,7 +1,7 @@
-From f5af7cbd70916feb5fddb82ea644be047049ed8e Mon Sep 17 00:00:00 2001
+From 41b214de987308a747193805de27358f7c89c662 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Sat, 25 Apr 2020 12:26:57 +0200
-Subject: [PATCH] kernel32: Catch page faults in GlobalSize.
+Subject: [PATCH 01/18] kernel32: Catch page faults in GlobalSize.
 
 In the same way GlobalFree does already.
 ---
@@ -9,7 +9,7 @@ In the same way GlobalFree does already.
  1 file changed, 10 insertions(+)
 
 diff --git a/dlls/kernel32/heap.c b/dlls/kernel32/heap.c
-index 636031334c8..47e78f6f2be 100644
+index 02f4587d43b..e68135e499d 100644
 --- a/dlls/kernel32/heap.c
 +++ b/dlls/kernel32/heap.c
 @@ -326,6 +326,8 @@ SIZE_T WINAPI GlobalSize(HGLOBAL hmem)
@@ -37,17 +37,17 @@ index 636031334c8..47e78f6f2be 100644
     return retval;
  }
 
-From 9310622318f69b027c735829742f119759d99a3b Mon Sep 17 00:00:00 2001
+From 6d07b74fd0737b154b4a98eb60cb3d89d794e1cd Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 5 May 2020 13:44:57 +0200
-Subject: [PATCH] kernel32/tests: Add HeapSetInformation and LFH tests.
+Subject: [PATCH 02/18] kernel32/tests: Add HeapSetInformation and LFH tests.
 
 ---
  dlls/kernel32/tests/heap.c | 68 ++++++++++++++++++++++++++++++++++++++
  1 file changed, 68 insertions(+)
 
 diff --git a/dlls/kernel32/tests/heap.c b/dlls/kernel32/tests/heap.c
-index fa372b14e21..a534ad039c8 100644
+index 8558bd7f1b3..db96fb010b4 100644
 --- a/dlls/kernel32/tests/heap.c
 +++ b/dlls/kernel32/tests/heap.c
 @@ -42,6 +42,7 @@
@@ -139,10 +139,11 @@ index fa372b14e21..a534ad039c8 100644
  }
  
  
-From 361fc8b0b3f38f3fe2ef04cd0aa923e5478a6b8e Mon Sep 17 00:00:00 2001
+
+From d0249a662c5930b8b5f3ea4c85414de0d10bf8aa Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 16 Mar 2021 19:20:28 +0100
-Subject: [PATCH] kernelbase: Allocate at least 1024 bytes in
+Subject: [PATCH 03/18] kernelbase: Allocate at least 1024 bytes in
  Local/GlobalAlloc.
 
 ---
@@ -150,10 +151,10 @@ Subject: [PATCH] kernelbase: Allocate at least 1024 bytes in
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/kernelbase/memory.c b/dlls/kernelbase/memory.c
-index 2bfd3893e8e..f6e5f300865 100644
+index 847005e8abe..2910d9617e1 100644
 --- a/dlls/kernelbase/memory.c
 +++ b/dlls/kernelbase/memory.c
-@@ -609,7 +609,12 @@ HLOCAL WINAPI DECLSPEC_HOTPATCH LocalAlloc( UINT flags, SIZE_T size )
+@@ -638,7 +638,12 @@ HLOCAL WINAPI DECLSPEC_HOTPATCH LocalAlloc( UINT flags, SIZE_T size )
  
      if (!(flags & LMEM_MOVEABLE)) /* pointer */
      {
@@ -168,11 +169,10 @@ index 2bfd3893e8e..f6e5f300865 100644
          return ptr;
      }
 
-
-From 33fe9c7ab3f2503d8f979870128db26fcb96808b Mon Sep 17 00:00:00 2001
+From 5752f2e959bb4a4a07a7a5cbc843bb3124d133bf Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 28 Aug 2019 22:24:42 +0200
-Subject: [PATCH] ntdll: Lock heap critical section outside of
+Subject: [PATCH 04/18] ntdll: Lock heap critical section outside of
  HEAP_IsRealArena.
 
 ---
@@ -180,10 +180,10 @@ Subject: [PATCH] ntdll: Lock heap critical section outside of
  1 file changed, 31 insertions(+), 27 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index 674eba4ce60..4f9038cf7a9 100644
+index cae41cba0d9..69a3de404fb 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -491,21 +491,26 @@ static HEAP *HEAP_GetPtr(
+@@ -451,21 +451,26 @@ static HEAP *HEAP_GetPtr(
               HANDLE heap /* [in] Handle to the heap */
  ) {
      HEAP *heapPtr = heap;
@@ -197,9 +197,9 @@ index 674eba4ce60..4f9038cf7a9 100644
 -    if ((heapPtr->flags & HEAP_VALIDATE_ALL) && !HEAP_IsRealArena( heapPtr, 0, NULL, NOISY ))
 +    if (!(heapPtr->flags & HEAP_VALIDATE_ALL)) return heapPtr;
 +
-+    if (!(heapPtr->flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
++    if (!(heapPtr->flags & HEAP_NO_SERIALIZE)) RtlEnterCriticalSection( &heapPtr->critSection );
 +    ret = HEAP_IsRealArena( heapPtr, heapPtr->flags, NULL, NOISY );
-+    if (!(heapPtr->flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
++    if (!(heapPtr->flags & HEAP_NO_SERIALIZE)) RtlLeaveCriticalSection( &heapPtr->critSection );
 +
 +    if (ret) return heapPtr;
 +    if (TRACE_ON(heap))
@@ -218,7 +218,7 @@ index 674eba4ce60..4f9038cf7a9 100644
  }
  
  
-@@ -1457,15 +1462,8 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
+@@ -1331,15 +1336,8 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
                                *             does not complain    */
  {
      SUBHEAP *subheap;
@@ -234,7 +234,7 @@ index 674eba4ce60..4f9038cf7a9 100644
      if (block)  /* only check this single memory block */
      {
          const ARENA_INUSE *arena = (const ARENA_INUSE *)block - 1;
-@@ -1479,11 +1477,11 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
+@@ -1353,11 +1351,11 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
                      ERR("Heap %p: block %p is not inside heap\n", heapPtr, block );
                  else if (WARN_ON(heap))
                      WARN("Heap %p: block %p is not inside heap\n", heapPtr, block );
@@ -249,7 +249,7 @@ index 674eba4ce60..4f9038cf7a9 100644
      }
  
      LIST_FOR_EACH_ENTRY( subheap, &heapPtr->subheap_list, SUBHEAP, entry )
-@@ -1493,25 +1491,21 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
+@@ -1367,25 +1365,21 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
          {
              if (*(DWORD *)ptr & ARENA_FLAG_FREE)
              {
@@ -279,7 +279,7 @@ index 674eba4ce60..4f9038cf7a9 100644
  }
  
  
-@@ -2188,9 +2182,19 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
+@@ -2062,9 +2056,19 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
   */
  BOOLEAN WINAPI RtlValidateHeap( HANDLE heap, ULONG flags, LPCVOID ptr )
  {
@@ -301,10 +301,10 @@ index 674eba4ce60..4f9038cf7a9 100644
  
  
 
-From f984bdca1a60f8fd0df81861029d78563e83bbe3 Mon Sep 17 00:00:00 2001
+From 32fcd770e6962851d0e3592520e9a85e37b8af59 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 16 Mar 2021 15:05:42 +0100
-Subject: [PATCH] ntdll: Split RtlSizeHeap standard implementation.
+Subject: [PATCH 05/18] ntdll: Split RtlSizeHeap standard implementation.
 
 ---
  dlls/ntdll/heap.c       | 43 +++++++++++++++++++++--------------------
@@ -312,10 +312,10 @@ Subject: [PATCH] ntdll: Split RtlSizeHeap standard implementation.
  2 files changed, 24 insertions(+), 21 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index 4f9038cf7a9..470945f6fc2 100644
+index 69a3de404fb..673223797bf 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -2130,39 +2130,40 @@ BOOLEAN WINAPI RtlUnlockHeap( HANDLE heap )
+@@ -2004,39 +2004,40 @@ BOOLEAN WINAPI RtlUnlockHeap( HANDLE heap )
   */
  SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
  {
@@ -378,10 +378,10 @@ index 4f9038cf7a9..470945f6fc2 100644
  
  
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
-index c0e0d99b02d..f4956eb7358 100644
+index 30640366f5b..81e1387e734 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
-@@ -115,6 +115,8 @@ extern enum loadorder get_load_order( const WCHAR *app_name, const UNICODE_STRIN
+@@ -105,6 +105,8 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
  
@@ -390,10 +390,11 @@ index c0e0d99b02d..f4956eb7358 100644
  #define HASH_STRING_ALGORITHM_DEFAULT  0
  #define HASH_STRING_ALGORITHM_X65599   1
  #define HASH_STRING_ALGORITHM_INVALID  0xffffffff
-From 2d9587ef0c325be574f26285e0bb1c27891759b4 Mon Sep 17 00:00:00 2001
+
+From 7e40660dca2e29c5a1ad406d6c33d06a37c98092 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 16 Mar 2021 15:09:12 +0100
-Subject: [PATCH] ntdll: Split RtlFreeHeap standard implementation.
+Subject: [PATCH 06/18] ntdll: Split RtlFreeHeap standard implementation.
 
 ---
  dlls/ntdll/heap.c       | 30 ++++++++++++++++++------------
@@ -401,10 +402,10 @@ Subject: [PATCH] ntdll: Split RtlFreeHeap standard implementation.
  2 files changed, 19 insertions(+), 12 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index 470945f6fc2..0fc0958ae90 100644
+index 673223797bf..f6e05cc3aa1 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -1855,8 +1855,7 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+@@ -1729,8 +1729,7 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
   */
  BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *ptr )
  {
@@ -414,7 +415,7 @@ index 470945f6fc2..0fc0958ae90 100644
      HEAP *heapPtr;
  
      /* Validate the parameters */
-@@ -1872,29 +1871,36 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
+@@ -1746,29 +1745,36 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
  
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
@@ -462,10 +463,10 @@ index 470945f6fc2..0fc0958ae90 100644
  
  
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
-index f4956eb7358..40f46167fa5 100644
+index 81e1387e734..d134000f949 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
-@@ -115,6 +115,7 @@ extern enum loadorder get_load_order( const WCHAR *app_name, const UNICODE_STRIN
+@@ -105,6 +105,7 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
  
@@ -473,10 +474,11 @@ index f4956eb7358..40f46167fa5 100644
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
  
  #define HASH_STRING_ALGORITHM_DEFAULT  0
-From 587e6f2b6c36ebbfad037fde0d5069638953034f Mon Sep 17 00:00:00 2001
+
+From c3d16d6c08ea66c3b53fb846017ab002ee98dd8a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 16 Mar 2021 15:13:43 +0100
-Subject: [PATCH] ntdll: Split RtlAllocateHeap standard implementation.
+Subject: [PATCH 07/18] ntdll: Split RtlAllocateHeap standard implementation.
 
 ---
  dlls/ntdll/heap.c       | 56 ++++++++++++++++++++---------------------
@@ -484,10 +486,10 @@ Subject: [PATCH] ntdll: Split RtlAllocateHeap standard implementation.
  2 files changed, 29 insertions(+), 28 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index 0fc0958ae90..f81df99557b 100644
+index f6e05cc3aa1..0d42dbaccea 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -1770,46 +1770,48 @@ HANDLE WINAPI RtlDestroyHeap( HANDLE heap )
+@@ -1644,46 +1644,48 @@ HANDLE WINAPI RtlDestroyHeap( HANDLE heap )
   */
  void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_T size )
  {
@@ -560,7 +562,7 @@ index 0fc0958ae90..f81df99557b 100644
  
      /* Remove the arena from the free list */
  
-@@ -1832,10 +1834,8 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+@@ -1706,10 +1708,8 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
      notify_alloc( pInUse + 1, size, flags & HEAP_ZERO_MEMORY );
      initialize_block( pInUse + 1, size, pInUse->unused_bytes, flags );
  
@@ -574,10 +576,10 @@ index 0fc0958ae90..f81df99557b 100644
  
  
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
-index 40f46167fa5..6fd2c728310 100644
+index d134000f949..0a629e09510 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
-@@ -115,6 +115,7 @@ extern enum loadorder get_load_order( const WCHAR *app_name, const UNICODE_STRIN
+@@ -105,6 +105,7 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
  
@@ -585,10 +587,11 @@ index 40f46167fa5..6fd2c728310 100644
  NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
  
-From 46268a1f5418a84521f73f0cd98ec0a9987849ac Mon Sep 17 00:00:00 2001
+
+From 0568b9fbef50d3487a4a24b5dd4172d7072d614b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 16 Mar 2021 15:19:29 +0100
-Subject: [PATCH] ntdll: Split RtlReAllocateHeap standard implementation.
+Subject: [PATCH 08/18] ntdll: Split RtlReAllocateHeap standard implementation.
 
 ---
  dlls/ntdll/heap.c       | 60 ++++++++++++++++++++---------------------
@@ -596,10 +599,10 @@ Subject: [PATCH] ntdll: Split RtlReAllocateHeap standard implementation.
  2 files changed, 30 insertions(+), 31 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index f81df99557b..3f6e5dd7ca5 100644
+index 0d42dbaccea..4a9b45856b7 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -1921,10 +1921,8 @@ NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr )
+@@ -1795,10 +1795,8 @@ NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr )
   */
  PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size )
  {
@@ -611,7 +614,7 @@ index f81df99557b..3f6e5dd7ca5 100644
      void *ret;
  
      if (!ptr) return NULL;
-@@ -1940,17 +1938,33 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+@@ -1814,17 +1812,33 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
               HEAP_REALLOC_IN_PLACE_ONLY;
      flags |= heapPtr->flags;
      if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
@@ -649,7 +652,7 @@ index f81df99557b..3f6e5dd7ca5 100644
      }
  
      /* Check if we need to grow the block */
-@@ -1963,12 +1977,12 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+@@ -1837,12 +1851,12 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
  
          if (rounded_size >= HEAP_MIN_LARGE_BLOCK_SIZE && (flags & HEAP_GROWABLE))
          {
@@ -666,16 +669,16 @@ index f81df99557b..3f6e5dd7ca5 100644
          }
          if ((pNext < (char *)subheap->base + subheap->size) &&
              (*(DWORD *)pNext & ARENA_FLAG_FREE) &&
-@@ -1978,7 +1992,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+@@ -1852,7 +1866,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
              ARENA_FREE *pFree = (ARENA_FREE *)pNext;
-             HEAP_DeleteFreeBlock( heapPtr, pFree );
+             list_remove( &pFree->entry );
              pArena->size += (pFree->size & ARENA_SIZE_MASK) + sizeof(*pFree);
 -            if (!HEAP_Commit( subheap, pArena, rounded_size )) goto oom;
 +            if (!HEAP_Commit( subheap, pArena, rounded_size )) return STATUS_NO_MEMORY;
              notify_realloc( pArena + 1, oldActualSize, size );
              HEAP_ShrinkBlock( subheap, pArena, rounded_size );
          }
-@@ -1990,7 +2004,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+@@ -1864,7 +1878,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
  
              if ((flags & HEAP_REALLOC_IN_PLACE_ONLY) ||
                  !(pNew = HEAP_FindFreeBlock( heapPtr, rounded_size, &newsubheap )))
@@ -684,7 +687,7 @@ index f81df99557b..3f6e5dd7ca5 100644
  
              /* Build the in-use arena */
  
-@@ -2031,24 +2045,8 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+@@ -1905,24 +1919,8 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
  
      /* Return the new arena */
  
@@ -712,10 +715,10 @@ index f81df99557b..3f6e5dd7ca5 100644
  
  
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
-index 6fd2c728310..b9a31d4f3f3 100644
+index 0a629e09510..468202d17eb 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
-@@ -117,6 +117,7 @@ static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiB
+@@ -107,6 +107,7 @@ static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiB
  
  NTSTATUS HEAP_std_allocate( HANDLE heap, ULONG flags, SIZE_T size, void **out );
  NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
@@ -723,10 +726,11 @@ index 6fd2c728310..b9a31d4f3f3 100644
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
  
  #define HASH_STRING_ALGORITHM_DEFAULT  0
-From 7ee8201a7d00ed1d65d21a5f1f706e9173f16704 Mon Sep 17 00:00:00 2001
+
+From 3dd5314d54770631bae800d5d9b83477a615411c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 28 Aug 2019 22:24:40 +0200
-Subject: [PATCH] ntdll: Add thread destroy notification function.
+Subject: [PATCH 09/18] ntdll: Add thread destroy notification function.
 
 This will be used in LFH to recycle the thread local data.
 ---
@@ -737,10 +741,10 @@ This will be used in LFH to recycle the thread local data.
  4 files changed, 8 insertions(+)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index 3f6e5dd7ca5..e3250f88bd9 100644
+index 4a9b45856b7..43543bdb304 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -2392,3 +2392,7 @@ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_
+@@ -2266,3 +2266,7 @@ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_
      FIXME("%p %d %p %ld stub\n", heap, info_class, info, size);
      return STATUS_SUCCESS;
  }
@@ -749,10 +753,10 @@ index 3f6e5dd7ca5..e3250f88bd9 100644
 +{
 +}
 diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
-index 00fcff27487..64cccf0b4f1 100644
+index 54806b0ab22..925742a81fd 100644
 --- a/dlls/ntdll/loader.c
 +++ b/dlls/ntdll/loader.c
-@@ -3255,6 +3255,7 @@ void WINAPI RtlExitUserProcess( DWORD status )
+@@ -3369,6 +3369,7 @@ void WINAPI RtlExitUserProcess( DWORD status )
      RtlAcquirePebLock();
      NtTerminateProcess( 0, status );
      LdrShutdownProcess();
@@ -761,10 +765,10 @@ index 00fcff27487..64cccf0b4f1 100644
  }
  
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
-index b9a31d4f3f3..50838900088 100644
+index 468202d17eb..6dadf3a74a5 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
-@@ -120,6 +120,8 @@ NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
+@@ -110,6 +110,8 @@ NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
  NTSTATUS HEAP_std_reallocate( HANDLE heap, ULONG flags, void *ptr, SIZE_T size, void **out );
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
  
@@ -774,10 +778,10 @@ index b9a31d4f3f3..50838900088 100644
  #define HASH_STRING_ALGORITHM_X65599   1
  #define HASH_STRING_ALGORITHM_INVALID  0xffffffff
 diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
-index 25496609f08..d3c3db7fd68 100644
+index d0c2a89d4bb..cdac28eb14d 100644
 --- a/dlls/ntdll/thread.c
 +++ b/dlls/ntdll/thread.c
-@@ -84,6 +84,7 @@ void WINAPI RtlExitUserThread( ULONG status )
+@@ -188,6 +188,7 @@ void WINAPI RtlExitUserThread( ULONG status )
      NtQueryInformationThread( GetCurrentThread(), ThreadAmILastThread, &last, sizeof(last), NULL );
      if (last) RtlExitUserProcess( status );
      LdrShutdownThread();
@@ -785,10 +789,11 @@ index 25496609f08..d3c3db7fd68 100644
      for (;;) NtTerminateThread( GetCurrentThread(), status );
  }
  
-From 3959d5da5d20d2114a9232e2b66403a910a54caa Mon Sep 17 00:00:00 2001
+
+From 3ad5427e10fc7c7b06617d1f529b5067000ee918 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 16 Mar 2021 18:40:11 +0100
-Subject: [PATCH] ntdll: Add extended heap type and LFH stubs.
+Subject: [PATCH 10/18] ntdll: Add extended heap type and LFH stubs.
 
 ---
  dlls/ntdll/Makefile.in  |  1 +
@@ -799,7 +804,7 @@ Subject: [PATCH] ntdll: Add extended heap type and LFH stubs.
  create mode 100644 dlls/ntdll/heap_lfh.c
 
 diff --git a/dlls/ntdll/Makefile.in b/dlls/ntdll/Makefile.in
-index 5159b81167f..14bee235b62 100644
+index 6dfe2eb12f9..f05d4cf831a 100644
 --- a/dlls/ntdll/Makefile.in
 +++ b/dlls/ntdll/Makefile.in
 @@ -18,6 +18,7 @@ C_SRCS = \
@@ -809,9 +814,9 @@ index 5159b81167f..14bee235b62 100644
 +	heap_lfh.c \
  	large_int.c \
  	loader.c \
- 	loadorder.c \
+ 	locale.c \
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index e3250f88bd9..b420c193f32 100644
+index 43543bdb304..e4ed51ef522 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
 @@ -163,6 +163,7 @@ typedef struct tagHEAP
@@ -821,8 +826,8 @@ index e3250f88bd9..b420c193f32 100644
 +    int              extended_type; /* Extended heap type */
  } HEAP;
  
- #define HEAP_FREEMASK_BLOCK    (8 * sizeof(DWORD))
-@@ -1632,6 +1633,8 @@ void heap_set_debug_flags( HANDLE handle )
+ #define HEAP_MAGIC       ((DWORD)('H' | ('E'<<8) | ('A'<<16) | ('P'<<24)))
+@@ -1506,6 +1507,8 @@ void heap_set_debug_flags( HANDLE handle )
                                                MAX_FREE_PENDING * sizeof(*heap->pending_free) );
          heap->pending_pos = 0;
      }
@@ -831,7 +836,7 @@ index e3250f88bd9..b420c193f32 100644
  }
  
  
-@@ -1675,11 +1678,13 @@ HANDLE WINAPI RtlCreateHeap( ULONG flags, PVOID addr, SIZE_T totalSize, SIZE_T c
+@@ -1549,11 +1552,13 @@ HANDLE WINAPI RtlCreateHeap( ULONG flags, PVOID addr, SIZE_T totalSize, SIZE_T c
          HEAP *heapPtr = subheap->heap;
          enter_critical_section( &processHeap->critSection );
          list_add_head( &processHeap->entry, &heapPtr->entry );
@@ -845,7 +850,7 @@ index e3250f88bd9..b420c193f32 100644
          list_init( &processHeap->entry );
      }
  
-@@ -1780,9 +1785,17 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+@@ -1654,9 +1659,17 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
      flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
      flags |= heapPtr->flags;
  
@@ -866,7 +871,7 @@ index e3250f88bd9..b420c193f32 100644
  
      TRACE("(%p,%08x,%08lx), status %#x, ptr %p\n", heapPtr, flags, size, status, ptr );
      if (!status) return ptr;
-@@ -1872,9 +1885,17 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
+@@ -1746,9 +1759,17 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
  
@@ -887,7 +892,7 @@ index e3250f88bd9..b420c193f32 100644
  
      TRACE("(%p,%08x,%p), status %#x\n", heapPtr, flags, ptr, status );
      if (!status) return TRUE;
-@@ -1937,9 +1958,18 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+@@ -1811,9 +1832,18 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
      flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY |
               HEAP_REALLOC_IN_PLACE_ONLY;
      flags |= heapPtr->flags;
@@ -909,7 +914,7 @@ index e3250f88bd9..b420c193f32 100644
  
      TRACE("(%p,%08x,%p,%08lx): returning %p, status %#x\n", heapPtr, flags, ptr, size, ret, status );
      if (!status) return ret;
-@@ -2147,9 +2177,17 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
+@@ -2021,9 +2051,17 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
  
@@ -930,7 +935,7 @@ index e3250f88bd9..b420c193f32 100644
  
      TRACE("(%p,%08x,%p): status %#x, size %08lx\n", heapPtr, flags, ptr, status, size );
      if (!status) return size;
-@@ -2187,19 +2225,27 @@ NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr,
+@@ -2061,19 +2099,27 @@ NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr,
   */
  BOOLEAN WINAPI RtlValidateHeap( HANDLE heap, ULONG flags, LPCVOID ptr )
  {
@@ -964,7 +969,7 @@ index e3250f88bd9..b420c193f32 100644
  }
  
  
-@@ -2367,6 +2413,13 @@ ULONG WINAPI RtlGetProcessHeaps( ULONG count, HANDLE *heaps )
+@@ -2241,6 +2287,13 @@ ULONG WINAPI RtlGetProcessHeaps( ULONG count, HANDLE *heaps )
  NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_class,
                                           PVOID info, SIZE_T size_in, PSIZE_T size_out)
  {
@@ -978,7 +983,7 @@ index e3250f88bd9..b420c193f32 100644
      switch (info_class)
      {
      case HeapCompatibilityInformation:
-@@ -2375,7 +2428,7 @@ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS inf
+@@ -2249,7 +2302,7 @@ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS inf
          if (size_in < sizeof(ULONG))
              return STATUS_BUFFER_TOO_SMALL;
  
@@ -987,7 +992,7 @@ index e3250f88bd9..b420c193f32 100644
          return STATUS_SUCCESS;
  
      default:
-@@ -2395,4 +2448,5 @@ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_
+@@ -2269,4 +2322,5 @@ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_
  
  void HEAP_notify_thread_destroy( BOOLEAN last )
  {
@@ -1057,10 +1062,10 @@ index 00000000000..0c324472e32
 +{
 +}
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
-index 50838900088..bf30cd54802 100644
+index 6dadf3a74a5..a6d42a1628e 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
-@@ -115,12 +115,24 @@ extern enum loadorder get_load_order( const WCHAR *app_name, const UNICODE_STRIN
+@@ -105,12 +105,24 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
  
@@ -1085,10 +1090,11 @@ index 50838900088..bf30cd54802 100644
  
  #define HASH_STRING_ALGORITHM_DEFAULT  0
  #define HASH_STRING_ALGORITHM_X65599   1
-From 25ec1ae92a695515b439ceb74fd40313d2feb6e9 Mon Sep 17 00:00:00 2001
+
+From a1c217d99a5de73999f9383ccebd567265eeb7b2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 5 May 2020 14:24:35 +0200
-Subject: [PATCH] ntdll: Better implement RtlSetHeapInformation.
+Subject: [PATCH 11/18] ntdll: Better implement RtlSetHeapInformation.
 
 And set extended_type heap field when HeapCompatibilityInformation is
 used.
@@ -1099,7 +1105,7 @@ used.
  3 files changed, 57 insertions(+), 5 deletions(-)
 
 diff --git a/dlls/kernel32/tests/heap.c b/dlls/kernel32/tests/heap.c
-index a534ad039c8..8e9d765a312 100644
+index db96fb010b4..9e613995e39 100644
 --- a/dlls/kernel32/tests/heap.c
 +++ b/dlls/kernel32/tests/heap.c
 @@ -644,7 +644,28 @@ static void test_HeapCreate(void)
@@ -1143,10 +1149,10 @@ index a534ad039c8..8e9d765a312 100644
             "expected ERROR_GEN_FAILURE, got %u\n", GetLastError());
  
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index b420c193f32..fb79fded98d 100644
+index e4ed51ef522..bb31f60b9d2 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -2442,8 +2442,40 @@ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS inf
+@@ -2316,8 +2316,40 @@ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS inf
   */
  NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_class, PVOID info, SIZE_T size)
  {
@@ -1190,10 +1196,10 @@ index b420c193f32..fb79fded98d 100644
  
  void HEAP_notify_thread_destroy( BOOLEAN last )
 diff --git a/include/winnt.h b/include/winnt.h
-index 6cefb8a2dec..06d5655ff46 100644
+index b83f588a16d..424651ea673 100644
 --- a/include/winnt.h
 +++ b/include/winnt.h
-@@ -924,7 +924,8 @@ NTSYSAPI WORD         WINAPI RtlQueryDepthSList(PSLIST_HEADER);
+@@ -921,7 +921,8 @@ NTSYSAPI WORD         WINAPI RtlQueryDepthSList(PSLIST_HEADER);
  #define HEAP_SHARED                     0x04000000
  
  typedef enum _HEAP_INFORMATION_CLASS {
@@ -1203,10 +1209,11 @@ index 6cefb8a2dec..06d5655ff46 100644
  } HEAP_INFORMATION_CLASS;
  
  /* Processor feature flags.  */
-From 6579a45ae079853f3686302b7ecf3e58eb4b1d9d Mon Sep 17 00:00:00 2001
+
+From a39b771c377b731568883a503ca7255f49c391e6 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Mon, 3 Feb 2020 13:25:59 +0100
-Subject: [PATCH] ntdll: Move undocumented flags to ntdll_misc.h.
+Subject: [PATCH 12/18] ntdll: Move undocumented flags to ntdll_misc.h.
 
 ---
  dlls/ntdll/heap.c       | 6 ------
@@ -1214,10 +1221,10 @@ Subject: [PATCH] ntdll: Move undocumented flags to ntdll_misc.h.
  2 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index fb79fded98d..d6e32e7c3fc 100644
+index bb31f60b9d2..1e0408c028c 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -178,12 +178,6 @@ C_ASSERT( HEAP_NB_FREE_LISTS % HEAP_FREEMASK_BLOCK == 0 );
+@@ -172,12 +172,6 @@ typedef struct tagHEAP
  #define COMMIT_MASK          0xffff  /* bitmask for commit/decommit granularity */
  #define MAX_FREE_PENDING     1024    /* max number of free requests to delay */
  
@@ -1231,10 +1238,10 @@ index fb79fded98d..d6e32e7c3fc 100644
  
  static BOOL HEAP_IsRealArena( HEAP *heapPtr, DWORD flags, LPCVOID block, BOOL quiet );
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
-index bf30cd54802..99031a0668e 100644
+index a6d42a1628e..15b102fb75e 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
-@@ -119,6 +119,12 @@ static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiB
+@@ -109,6 +109,12 @@ static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiB
  #define HEAP_LAL 1
  #define HEAP_LFH 2
  
@@ -1247,10 +1254,11 @@ index bf30cd54802..99031a0668e 100644
  NTSTATUS HEAP_std_allocate( HANDLE heap, ULONG flags, SIZE_T size, void **out );
  NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
  NTSTATUS HEAP_std_reallocate( HANDLE heap, ULONG flags, void *ptr, SIZE_T size, void **out );
-From 38194456c5f22ab357f8f197c0077612160d1fb9 Mon Sep 17 00:00:00 2001
+
+From 4ef6a513dbf9286f8e7b018c945e0bf5e74195b7 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 16 Mar 2021 18:41:16 +0100
-Subject: [PATCH] ntdll: Implement Low Fragmentation Heap.
+Subject: [PATCH 13/18] ntdll: Implement Low Fragmentation Heap.
 
 This is a high performance multithreaded heap implementation that tries
 to minimize memory fragmentation as well.
@@ -2437,31 +2445,32 @@ index 0c324472e32..8c982f91ea0 100644
 +    LFH_deallocated_cached_arenas(heap);
  }
 diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
-index dda3e424b3a..3cd99214c8c 100644
+index a864604377e..aa6c279bf9a 100644
 --- a/dlls/ntdll/unix/unix_private.h
 +++ b/dlls/ntdll/unix/unix_private.h
 @@ -60,6 +60,7 @@ struct ntdll_thread_data
-     struct list        entry;         /* entry in TEB list */
      PRTL_THREAD_START_ROUTINE start;  /* thread entry point */
      void              *param;         /* thread entry point parameter */
-+    void              *heap;          /* thread local heap data */
      void              *jmp_buf;       /* setjmp buffer for exception handling */
++    void              *heap;          /* thread local heap data */
  };
  
-From 7df7fb6600608fba6552708e8ecd778ac1ff25b2 Mon Sep 17 00:00:00 2001
+ C_ASSERT( sizeof(struct ntdll_thread_data) <= sizeof(((TEB *)0)->GdiTebBatch) );
+
+From 361dc9564a98d195ee8442d9f89acc5aa8e87c7b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 5 May 2020 14:54:21 +0200
-Subject: [PATCH] ntdll: Enable LFH for process heap.
+Date: Fri, 9 Apr 2021 23:09:17 +0200
+Subject: [PATCH 14/18] ntdll: Enable LFH for process heap.
 
 ---
  dlls/ntdll/loader.c | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
-index 64cccf0b4f1..e3d7427ac80 100644
+index 925742a81fd..29166e42ee1 100644
 --- a/dlls/ntdll/loader.c
 +++ b/dlls/ntdll/loader.c
-@@ -4031,6 +4031,7 @@ static NTSTATUS process_init(void)
+@@ -3750,6 +3750,7 @@ void WINAPI LdrInitializeThunk( CONTEXT *context, ULONG_PTR unknown2, ULONG_PTR
          ANSI_STRING func_name;
          WINE_MODREF *kernel32;
          PEB *peb = NtCurrentTeb()->Peb;
@@ -2469,18 +2478,19 @@ index 64cccf0b4f1..e3d7427ac80 100644
  
          peb->LdrData            = &ldr;
          peb->FastPebLock        = &peb_lock;
-@@ -4125,6 +4126,7 @@ static NTSTATUS process_init(void)
- #endif
-         wm = build_main_module();
+@@ -3773,6 +3774,7 @@ void WINAPI LdrInitializeThunk( CONTEXT *context, ULONG_PTR unknown2, ULONG_PTR
          wm->ldr.LoadCount = -1;
-+        RtlSetHeapInformation( GetProcessHeap(), HeapCompatibilityInformation, &hci, sizeof(hci) );
  
          build_ntdll_module();
++        RtlSetHeapInformation( GetProcessHeap(), HeapCompatibilityInformation, &hci, sizeof(hci) );
  
-From b54a6fae3134f057d4cdc1fb1ef5cf4403021db3 Mon Sep 17 00:00:00 2001
+         if ((status = load_dll( NULL, L"kernel32.dll", NULL, 0, &kernel32 )) != STATUS_SUCCESS)
+         {
+
+From 83c381834b0a5ef35cf1e9e81faebbbec7424172 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 5 May 2020 15:00:46 +0200
-Subject: [PATCH] msvcrt: Enable LFH for internal heaps.
+Subject: [PATCH 15/18] msvcrt: Enable LFH for internal heaps.
 
 ---
  dlls/msvcrt/heap.c | 4 ++++
@@ -2510,57 +2520,582 @@ index b74a759227a..5941d0a4934 100644
      return heap != NULL;
  }
  
-From: Paul Gofman <pgofman@codeweavers.com>
-Subject: [PATCH] winevulkan: Don't hardcode performance frequency.
-Message-Id: <20210419123508.152324-1-pgofman@codeweavers.com>
-Date: Mon, 19 Apr 2021 15:35:08 +0300
 
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+From 646422a2d45396c94c487aba54e1b98385ad2d6c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 16 Mar 2021 18:57:40 +0100
+Subject: [PATCH 16/18] ntdll: Force indirect branches for the error cases.
+
 ---
-    This only real problem that the hardcoded value currently causes is broken
-    convert_monotonic_timestamp in Proton Experimental where performance
-    frequency is currently different. While this is not an upstream issue and we may
-    even want to change that in Proton it doesn't seem right for winevulkan
-    to depend on this implementation detail.
+ dlls/ntdll/heap_lfh.c | 104 +++++++++++++++++++++++-------------------
+ 1 file changed, 56 insertions(+), 48 deletions(-)
 
- dlls/winevulkan/vulkan.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 1070ccec115..f793b907dad 100644
---- a/dlls/winevulkan/vulkan.c
-+++ b/dlls/winevulkan/vulkan.c
-@@ -1355,7 +1355,6 @@ VkResult WINAPI unix_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevi
+diff --git a/dlls/ntdll/heap_lfh.c b/dlls/ntdll/heap_lfh.c
+index 8c982f91ea0..1ec822c7de1 100644
+--- a/dlls/ntdll/heap_lfh.c
++++ b/dlls/ntdll/heap_lfh.c
+@@ -26,6 +26,14 @@
  
- /* From ntdll/unix/sync.c */
- #define NANOSECONDS_IN_A_SECOND 1000000000
--#define TICKSPERSEC             10000000
+ #include "ntdll_misc.h"
  
- static inline VkTimeDomainEXT get_performance_counter_time_domain(void)
- {
-@@ -1382,7 +1381,17 @@ static VkTimeDomainEXT map_to_host_time_domain(VkTimeDomainEXT domain)
++#if defined(__GNUC__) || defined(__clang__)
++#define likely(x) __builtin_expect(!!(x), 1)
++#define unlikely(x) __builtin_expect(!!(x), 0)
++#else
++#define likely(x) x
++#define unlikely(x) x
++#endif
++
+ WINE_DEFAULT_DEBUG_CHANNEL(heap);
  
- static inline uint64_t convert_monotonic_timestamp(uint64_t value)
- {
--    return value / (NANOSECONDS_IN_A_SECOND / TICKSPERSEC);
-+    static LARGE_INTEGER freq;
-+
-+    if (!freq.QuadPart)
-+    {
-+        LARGE_INTEGER temp;
-+
-+        RtlQueryPerformanceFrequency(&temp);
-+        InterlockedCompareExchange64(&freq.QuadPart, temp.QuadPart, 0);
-+    }
-+
-+    return value * freq.QuadPart / NANOSECONDS_IN_A_SECOND;
+ typedef struct LFH_ptr LFH_ptr;
+@@ -686,26 +694,26 @@ static inline BOOLEAN LFH_validate_block(ULONG flags, const LFH_block *block)
+     const LFH_arena *arena_arena = LFH_large_arena_from_block((LFH_block *)arena);
+     const char *err = NULL;
+ 
+-    if (flags & HEAP_VALIDATE)
++    if (unlikely(flags & HEAP_VALIDATE))
+         return LFH_validate_arena(flags, arena);
+ 
+-    if (!arena)
++    if (unlikely(!arena))
+         err = "invalid arena";
+-    else if (arena != arena_arena && arena != (arena_arena + 1))
++    else if (unlikely(arena != arena_arena && arena != (arena_arena + 1)))
+         err = "invalid arena alignment";
+-    else if (arena == block_arena)
++    else if (likely(arena == block_arena))
+     {
+-        if ((UINT_PTR)block < (UINT_PTR)block_arena + ARENA_HEADER_SIZE)
++        if (unlikely((UINT_PTR)block < (UINT_PTR)block_arena + ARENA_HEADER_SIZE))
+             err = "invalid block alignment";
+-        if (((UINT_PTR)block & (sizeof(*block) - 1)))
++        if (unlikely(((UINT_PTR)block & (sizeof(*block) - 1))))
+             err = "invalid block alignment";
+     }
+-    else if (arena != large_arena)
++    else if (unlikely(arena != large_arena))
+         err = "large/huge arena mismatch";
+-    else if ((UINT_PTR)block != (UINT_PTR)block_arena)
++    else if (unlikely((UINT_PTR)block != (UINT_PTR)block_arena))
+         err = "invalid block for large/huge arena";
+ 
+-    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
+     return err == NULL;
  }
  
- static inline uint64_t convert_timestamp(VkTimeDomainEXT host_domain, VkTimeDomainEXT target_domain, uint64_t value)
+@@ -713,12 +721,12 @@ static BOOLEAN LFH_validate_free_block(ULONG flags, const LFH_block *block)
+ {
+     const char *err = NULL;
+ 
+-    if (!LFH_validate_block(flags, block))
++    if (unlikely(!LFH_validate_block(flags, block)))
+         return FALSE;
+-    if (block->type != LFH_block_type_free)
++    if (unlikely(block->type != LFH_block_type_free))
+         err = "invalid free block type";
+ 
+-    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
+     return err == NULL;
+ }
+ 
+@@ -726,19 +734,19 @@ static BOOLEAN LFH_validate_defer_block(ULONG flags, const LFH_block *block)
+ {
+     const char *err = NULL;
+ 
+-    if (!LFH_validate_block(flags, block))
++    if (unlikely(!LFH_validate_block(flags, block)))
+         return FALSE;
+-    if (block->type != LFH_block_type_free)
++    if (unlikely(block->type != LFH_block_type_free))
+         err = "invalid defer block type";
+-    else if (flags & HEAP_FREE_CHECKING_ENABLED)
++    else if (unlikely(flags & HEAP_FREE_CHECKING_ENABLED))
+     {
+         const unsigned int *data = (const unsigned int *)LFH_ptr_from_block(block);
+         size_t class_size = LFH_block_get_class_size(block);
+         for (size_t i = 0; i < class_size / 4 - (data - (const unsigned int *)block) && !err; ++i)
+-            if (data[i] != 0xfeeefeee) err = "invalid free filler";
++            if (unlikely(data[i] != 0xfeeefeee)) err = "invalid free filler";
+     }
+ 
+-    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
+     return err == NULL;
+ }
+ 
+@@ -746,11 +754,11 @@ static inline BOOLEAN LFH_validate_used_block(ULONG flags, const LFH_block *bloc
+ {
+     const char *err = NULL;
+ 
+-    if (!LFH_validate_block(flags, block))
++    if (unlikely(!LFH_validate_block(flags, block)))
+         return FALSE;
+-    if (block->type != LFH_block_type_used)
++    if (unlikely(block->type != LFH_block_type_used))
+         err = "invalid used block type";
+-    else if (flags & HEAP_TAIL_CHECKING_ENABLED)
++    else if (unlikely(flags & HEAP_TAIL_CHECKING_ENABLED))
+     {
+         const unsigned char *data = (const unsigned char *)LFH_ptr_from_block(block);
+         size_t alloc_size = LFH_block_get_alloc_size(block, flags);
+@@ -759,7 +767,7 @@ static inline BOOLEAN LFH_validate_used_block(ULONG flags, const LFH_block *bloc
+             if (data[i] != 0xab) err = "invalid tail filler";
+     }
+ 
+-    if (err) WARN("%08x %p: %s\n", flags, block, err);
++    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
+     return err == NULL;
+ }
+ 
+@@ -784,35 +792,35 @@ static BOOLEAN LFH_validate_arena(ULONG flags, const LFH_arena *arena)
+     const LFH_arena *block_arena = LFH_block_arena_from_block((LFH_block *)arena);
+     const LFH_arena *large_arena = LFH_large_arena_from_block((LFH_block *)arena);
+ 
+-    if (flags & HEAP_VALIDATE)
++    if (unlikely(flags & HEAP_VALIDATE))
+         return LFH_validate_heap(flags, LFH_heap_from_arena(arena));
+ 
+-    if (arena != large_arena && arena != block_arena)
++    if (unlikely(arena != large_arena && arena != block_arena))
+         err = "invalid arena alignment";
+-    else if (arena == block_arena)
++    else if (unlikely(arena == block_arena))
+     {
+-        if (!LFH_validate_block(flags, (LFH_block *)arena))
++        if (unlikely(!LFH_validate_block(flags, (LFH_block *)arena)))
+             err = "invalid block arena";
+-        else if (!LFH_validate_arena_free_blocks(flags, arena))
++        else if (unlikely(!LFH_validate_arena_free_blocks(flags, arena)))
+             err = "invalid block arena free list";
+     }
+-    else if (arena == large_arena && !LFH_class_from_arena(arena))
++    else if (unlikely(arena == large_arena && !LFH_class_from_arena(arena)))
+     {
+-        if (arena->huge_size <= LARGE_CLASS_MAX_SIZE)
++        if (unlikely(arena->huge_size <= LARGE_CLASS_MAX_SIZE))
+             err = "invalid huge arena size";
+     }
+-    else if (arena == large_arena && (parent = LFH_parent_from_arena(arena)) != arena)
++    else if (unlikely(arena == large_arena && (parent = LFH_parent_from_arena(arena)) != arena))
+     {
+-        if (arena > parent || LFH_large_arena_from_block((LFH_block *)parent) != parent)
++        if (unlikely(arena > parent || LFH_large_arena_from_block((LFH_block *)parent) != parent))
+             err = "invalid child arena parent";
+     }
+     else
+     {
+-        if (!LFH_validate_arena_free_blocks(flags, arena))
++        if (unlikely(!LFH_validate_arena_free_blocks(flags, arena)))
+             err = "invalid large arena free list";
+     }
+ 
+-    if (err) WARN("%08x %p: %s\n", flags, arena, err);
++    if (unlikely(err)) WARN("%08x %p: %s\n", flags, arena, err);
+     return err == NULL;
+ }
+ 
+@@ -871,7 +879,7 @@ static BOOLEAN LFH_validate_heap(ULONG flags, const LFH_heap *heap)
+         }
+     }
+ 
+-    if (err) WARN("%08x %p: %s\n", flags, heap, err);
++    if (unlikely(err)) WARN("%08x %p: %s\n", flags, heap, err);
+     return err == NULL;
+ }
+ 
+@@ -1009,7 +1017,7 @@ static inline BOOLEAN LFH_validate(ULONG flags, const LFH_ptr *ptr)
+     const LFH_heap *heap;
+ 
+     /* clear HEAP_VALIDATE so we only validate block */
+-    if (ptr)
++    if (likely(ptr))
+         return LFH_validate_used_block(flags & ~HEAP_VALIDATE, block);
+ 
+     if (!(heap = LFH_thread_heap(FALSE)))
+@@ -1020,10 +1028,10 @@ static inline BOOLEAN LFH_validate(ULONG flags, const LFH_ptr *ptr)
+ 
+ static inline BOOLEAN LFH_try_validate_all(ULONG flags)
+ {
+-    if (!(flags & HEAP_VALIDATE_ALL))
++    if (likely(!(flags & HEAP_VALIDATE_ALL)))
+         return TRUE;
+ 
+-    if (LFH_validate(flags, NULL))
++    if (likely(LFH_validate(flags, NULL)))
+         return TRUE;
+ 
+     LFH_dump_heap(LFH_thread_heap(FALSE));
+@@ -1034,10 +1042,10 @@ NTSTATUS HEAP_lfh_allocate(HANDLE heap, ULONG flags, SIZE_T size, void **out)
+ {
+     TRACE("heap %p, flags %08x, size %lx, out %p.\n", heap, flags, size, out);
+ 
+-    if (!LFH_try_validate_all(flags))
++    if (unlikely(!LFH_try_validate_all(flags)))
+         return STATUS_INVALID_PARAMETER;
+ 
+-    if (!(*out = LFH_allocate(flags, size)))
++    if (unlikely(!(*out = LFH_allocate(flags, size))))
+         return STATUS_NO_MEMORY;
+ 
+     return STATUS_SUCCESS;
+@@ -1047,13 +1055,13 @@ NTSTATUS HEAP_lfh_free(HANDLE heap, ULONG flags, void *ptr)
+ {
+     TRACE("heap %p, flags %08x, ptr %p.\n", heap, flags, ptr);
+ 
+-    if (!LFH_try_validate_all(flags))
++    if (unlikely(!LFH_try_validate_all(flags)))
+         return STATUS_INVALID_PARAMETER;
+ 
+-    if (!LFH_validate(flags, ptr))
++    if (unlikely(!LFH_validate(flags, ptr)))
+         return STATUS_INVALID_PARAMETER;
+ 
+-    if (!LFH_free(flags, ptr))
++    if (unlikely(!LFH_free(flags, ptr)))
+         return STATUS_INVALID_PARAMETER;
+ 
+     return STATUS_SUCCESS;
+@@ -1063,13 +1071,13 @@ NTSTATUS HEAP_lfh_reallocate(HANDLE heap, ULONG flags, void *ptr, SIZE_T size, v
+ {
+     TRACE("heap %p, flags %08x, ptr %p, size %lx, out %p.\n", heap, flags, ptr, size, out);
+ 
+-    if (!LFH_try_validate_all(flags))
++    if (unlikely(!LFH_try_validate_all(flags)))
+         return STATUS_INVALID_PARAMETER;
+ 
+-    if (!LFH_validate(flags, ptr))
++    if (unlikely(!LFH_validate(flags, ptr)))
+         return STATUS_INVALID_PARAMETER;
+ 
+-    if (!(*out = LFH_reallocate(flags, ptr, size)))
++    if (unlikely(!(*out = LFH_reallocate(flags, ptr, size))))
+         return STATUS_NO_MEMORY;
+ 
+     return STATUS_SUCCESS;
+@@ -1079,10 +1087,10 @@ NTSTATUS HEAP_lfh_get_allocated_size(HANDLE heap, ULONG flags, const void *ptr,
+ {
+     TRACE("heap %p, flags %08x, ptr %p, out %p.\n", heap, flags, ptr, out);
+ 
+-    if (!LFH_try_validate_all(flags))
++    if (unlikely(!LFH_try_validate_all(flags)))
+         return STATUS_INVALID_PARAMETER;
+ 
+-    if (!LFH_validate(flags, ptr))
++    if (unlikely(!LFH_validate(flags, ptr)))
+         return STATUS_INVALID_PARAMETER;
+ 
+     *out = LFH_get_allocated_size(flags, ptr);
+@@ -1093,10 +1101,10 @@ NTSTATUS HEAP_lfh_validate(HANDLE heap, ULONG flags, const void *ptr)
+ {
+     TRACE("heap %p, flags %08x, ptr %p.\n", heap, flags, ptr);
+ 
+-    if (!LFH_try_validate_all(flags))
++    if (unlikely(!LFH_try_validate_all(flags)))
+         return STATUS_INVALID_PARAMETER;
+ 
+-    if (!LFH_validate(flags, ptr))
++    if (unlikely(!LFH_validate(flags, ptr)))
+         return STATUS_INVALID_PARAMETER;
+ 
+     return STATUS_SUCCESS;
 
--- 
-2.30.2
+From a9ed408a396e49e346b7b9f8dd213016fa98ef67 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Sat, 17 Apr 2021 16:10:08 +0200
+Subject: [PATCH 17/18] ntdll: Unroll memset instead of preventing
+ optimisations.
 
+---
+ dlls/ntdll/string.c | 72 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 69 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/string.c b/dlls/ntdll/string.c
+index f1cea6caa83..bd7bc287201 100644
+--- a/dlls/ntdll/string.c
++++ b/dlls/ntdll/string.c
+@@ -24,6 +24,7 @@
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <stdio.h>
++#include <stdint.h>
+ #include <string.h>
+ 
+ #include "windef.h"
+@@ -140,13 +141,78 @@ void * __cdecl memmove( void *dst, const void *src, size_t n )
+ }
+ 
+ 
++static FORCEINLINE void memset_c_unaligned_32( char *d, uint64_t v, size_t n )
++{
++    if (n >= 24)
++    {
++        *(uint64_t *)d = v;
++        *(uint64_t *)(d + 8) = v;
++        *(uint64_t *)(d + 16) = v;
++        *(uint64_t *)(d + n - 8) = v;
++    }
++    else if (n >= 16)
++    {
++        *(uint64_t *)d = v;
++        *(uint64_t *)(d + 8) = v;
++        *(uint64_t *)(d + n - 8) = v;
++    }
++    else if (n >= 8)
++    {
++        *(uint64_t *)d = v;
++        *(uint64_t *)(d + n - 8) = v;
++    }
++    else if (n >= 4)
++    {
++        *(uint32_t *)d = v;
++        *(uint32_t *)(d + n - 4) = v;
++    }
++    else if (n >= 2)
++    {
++        *(uint16_t *)d = v;
++        *(uint16_t *)(d + n - 2) = v;
++    }
++    else if (n >= 1)
++    {
++        *(uint8_t *)d = v;
++    }
++}
++
++
+ /*********************************************************************
+  *                  memset   (NTDLL.@)
+  */
+-void * __cdecl memset( void *dst, int c, size_t n )
++void *__cdecl memset(void *dst, int c, size_t n)
+ {
+-    volatile unsigned char *d = dst;  /* avoid gcc optimizations */
+-    while (n--) *d++ = c;
++    uint16_t tmp16 = ((uint16_t)c << 8) | c;
++    uint32_t tmp32 = ((uint32_t)tmp16 << 16) | tmp16;
++    uint64_t v = ((uint64_t)tmp32 << 32) | tmp32;
++
++    if (n <= 32)
++    {
++        memset_c_unaligned_32( dst, v, n );
++        return dst;
++    }
++
++    while (n >= 48)
++    {
++        *(uint64_t*)((char *)dst + n -  8) = v;
++        *(uint64_t*)((char *)dst + n - 16) = v;
++        *(uint64_t*)((char *)dst + n - 24) = v;
++        *(uint64_t*)((char *)dst + n - 32) = v;
++        *(uint64_t*)((char *)dst + n - 40) = v;
++        *(uint64_t*)((char *)dst + n - 48) = v;
++        n -= 48;
++    }
++
++    while (n >= 24)
++    {
++        *(uint64_t*)((char *)dst + n -  8) = v;
++        *(uint64_t*)((char *)dst + n - 16) = v;
++        *(uint64_t*)((char *)dst + n - 24) = v;
++        n -= 24;
++    }
++
++    memset_c_unaligned_32( dst, v, n );
+     return dst;
+ }
+ 
+
+From e716aa2bfdbf18acbf372345b318efe50645b38c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 24 May 2021 19:21:13 +0200
+Subject: [PATCH 18/18] ntdll: Unroll memcpy instead of preventing
+ optimisations.
+
+---
+ dlls/ntdll/string.c | 154 ++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 126 insertions(+), 28 deletions(-)
+
+diff --git a/dlls/ntdll/string.c b/dlls/ntdll/string.c
+index bd7bc287201..badc6707988 100644
+--- a/dlls/ntdll/string.c
++++ b/dlls/ntdll/string.c
+@@ -94,6 +94,130 @@ int __cdecl memcmp( const void *ptr1, const void *ptr2, size_t n )
+ }
+ 
+ 
++static FORCEINLINE void memmove_c_unaligned_32( char *d, const char *s, size_t n )
++{
++    uint64_t tmp0, tmp1, tmp2, tmpn;
++
++    if (n >= 24)
++    {
++        tmp0 = *(uint64_t *)s;
++        tmp1 = *(uint64_t *)(s + 8);
++        tmp2 = *(uint64_t *)(s + 16);
++        tmpn = *(uint64_t *)(s + n - 8);
++        *(uint64_t *)d = tmp0;
++        *(uint64_t *)(d + 8) = tmp1;
++        *(uint64_t *)(d + 16) = tmp2;
++        *(uint64_t *)(d + n - 8) = tmpn;
++    }
++    else if (n >= 16)
++    {
++        tmp0 = *(uint64_t *)s;
++        tmp1 = *(uint64_t *)(s + 8);
++        tmpn = *(uint64_t *)(s + n - 8);
++        *(uint64_t *)d = tmp0;
++        *(uint64_t *)(d + 8) = tmp1;
++        *(uint64_t *)(d + n - 8) = tmpn;
++    }
++    else if (n >= 8)
++    {
++        tmp0 = *(uint64_t *)s;
++        tmpn = *(uint64_t *)(s + n - 8);
++        *(uint64_t *)d = tmp0;
++        *(uint64_t *)(d + n - 8) = tmpn;
++    }
++    else if (n >= 4)
++    {
++        tmp0 = *(uint32_t *)s;
++        tmpn = *(uint32_t *)(s + n - 4);
++        *(uint32_t *)d = tmp0;
++        *(uint32_t *)(d + n - 4) = tmpn;
++    }
++    else if (n >= 2)
++    {
++        tmp0 = *(uint16_t *)s;
++        tmpn = *(uint16_t *)(s + n - 2);
++        *(uint16_t *)d = tmp0;
++        *(uint16_t *)(d + n - 2) = tmpn;
++    }
++    else if (n >= 1)
++    {
++        *(uint8_t *)d = *(uint8_t *)s;
++    }
++}
++
++
++static FORCEINLINE void *memmove_c( char *d, const char *s, size_t n )
++{
++    if (n <= 32) memmove_c_unaligned_32( d, s, n );
++    else if (d <= s)
++    {
++        uint64_t tmp0, tmp1, tmp2;
++        size_t k = 0;
++        while (n >= 48)
++        {
++            tmp0 = *(uint64_t *)(s +  0);
++            tmp1 = *(uint64_t *)(s +  8);
++            tmp2 = *(uint64_t *)(s + 16);
++            *(uint64_t*)(d +  0) = tmp0;
++            *(uint64_t*)(d +  8) = tmp1;
++            *(uint64_t*)(d + 16) = tmp2;
++            tmp0 = *(uint64_t *)(s + 24);
++            tmp1 = *(uint64_t *)(s + 32);
++            tmp2 = *(uint64_t *)(s + 40);
++            *(uint64_t*)(d + 24) = tmp0;
++            *(uint64_t*)(d + 32) = tmp1;
++            *(uint64_t*)(d + 40) = tmp2;
++            d += 48; s += 48; n -= 48; k += 48;
++        }
++        while (n >= 24)
++        {
++            tmp0 = *(uint64_t *)(s +  0);
++            tmp1 = *(uint64_t *)(s +  8);
++            tmp2 = *(uint64_t *)(s + 16);
++            *(uint64_t*)(d +  0) = tmp0;
++            *(uint64_t*)(d +  8) = tmp1;
++            *(uint64_t*)(d + 16) = tmp2;
++            d += 24; s += 24; n -= 24; k += 24;
++        }
++        memmove_c_unaligned_32( d, s, n );
++        return d - k;
++    }
++    else
++    {
++        uint64_t tmp0, tmp1, tmp2;
++        size_t k = n;
++        while (k >= 48)
++        {
++            tmp0 = *(uint64_t *)(s + k -  8);
++            tmp1 = *(uint64_t *)(s + k - 16);
++            tmp2 = *(uint64_t *)(s + k - 24);
++            *(uint64_t*)(d + k -  8) = tmp0;
++            *(uint64_t*)(d + k - 16) = tmp1;
++            *(uint64_t*)(d + k - 24) = tmp2;
++            tmp0 = *(uint64_t *)(s + k - 32);
++            tmp1 = *(uint64_t *)(s + k - 40);
++            tmp2 = *(uint64_t *)(s + k - 48);
++            *(uint64_t*)(d + k - 32) = tmp0;
++            *(uint64_t*)(d + k - 40) = tmp1;
++            *(uint64_t*)(d + k - 48) = tmp2;
++            k -= 48;
++        }
++        while (k >= 24)
++        {
++            tmp0 = *(uint64_t *)(s + k -  8);
++            tmp1 = *(uint64_t *)(s + k - 16);
++            tmp2 = *(uint64_t *)(s + k - 24);
++            *(uint64_t*)(d + k -  8) = tmp0;
++            *(uint64_t*)(d + k - 16) = tmp1;
++            *(uint64_t*)(d + k - 24) = tmp2;
++            k -= 24;
++        }
++        memmove_c_unaligned_32( d, s, k );
++    }
++    return d;
++}
++
++
+ /*********************************************************************
+  *                  memcpy   (NTDLL.@)
+  *
+@@ -102,20 +226,7 @@ int __cdecl memcmp( const void *ptr1, const void *ptr2, size_t n )
+  */
+ void * __cdecl memcpy( void *dst, const void *src, size_t n )
+ {
+-    volatile unsigned char *d = dst;  /* avoid gcc optimizations */
+-    const unsigned char *s = src;
+-
+-    if ((size_t)dst - (size_t)src >= n)
+-    {
+-        while (n--) *d++ = *s++;
+-    }
+-    else
+-    {
+-        d += n - 1;
+-        s += n - 1;
+-        while (n--) *d-- = *s--;
+-    }
+-    return dst;
++    return memmove_c( dst, src, n );
+ }
+ 
+ 
+@@ -124,20 +235,7 @@ void * __cdecl memcpy( void *dst, const void *src, size_t n )
+  */
+ void * __cdecl memmove( void *dst, const void *src, size_t n )
+ {
+-    volatile unsigned char *d = dst;  /* avoid gcc optimizations */
+-    const unsigned char *s = src;
+-
+-    if ((size_t)dst - (size_t)src >= n)
+-    {
+-        while (n--) *d++ = *s++;
+-    }
+-    else
+-    {
+-        d += n - 1;
+-        s += n - 1;
+-        while (n--) *d-- = *s--;
+-    }
+-    return dst;
++    return memmove_c( dst, src, n );
+ }
+ 
+ 
 From c56598427c4bc89ea01cbb72ec551545c2bd6e3d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 19 May 2021 18:49:10 +0200

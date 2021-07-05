@@ -50,3 +50,15 @@ index 12ca11fa6c..921768963e 100644
      if (FAILED(hr = __wine_register_resources()))
          return hr;
  
+diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
+index 4772c958f8e..266c5dc1140 100644
+--- a/dlls/winegstreamer/main.c
++++ b/dlls/winegstreamer/main.c
+@@ -41,6 +41,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
+         winegstreamer_instance = instance;
+         DisableThreadLibraryCalls(instance);
+         __wine_init_unix_lib(instance, reason, NULL, &unix_funcs);
++        init_gstreamer();
+     }
+     return TRUE;
+ }

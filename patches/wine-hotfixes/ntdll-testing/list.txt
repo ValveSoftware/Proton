@@ -1,0 +1,11 @@
+0001-ntdll-tests-Move-some-tests-to-a-new-sync.c-file.patch
+0002-ntdll-tests-Add-some-tests-for-Rtl-resources.patch
+0003-ntdll-Implement-NtAlertThreadByThreadId-and-NtWaitFo.patch
+0004-ntdll-tests-Add-basic-tests-for-thread-id-alert-func.patch
+0005-ntdll-Implement-thread-ID-alerts-using-futexes-if-po.patch
+0006-ntdll-Implement-thread-ID-alerts-using-Mach-semaphor.patch
+0007-ntdll-Reimplement-Win32-futexes-on-top-of-thread-ID-.patch
+0008-ntdll-Merge-critsection.c-into-sync.c.patch
+0009-ntdll-Reimplement-the-critical-section-fast-path-on-.patch
+0010-ntdll-Get-rid-of-the-direct-futex-path-for-condition.patch
+0011-ntdll-Reimplement-SRW-locks-on-top-of-Win32-futexes.patch

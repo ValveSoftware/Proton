@@ -1,31 +1,3 @@
-From 7bd039f34f5fc1123524ddb22769f6e16e7d9c88 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Thu, 11 May 2017 10:01:16 -0500
-Subject: [PATCH] HACK: ws2_32: Fake success when trying to bind to an IPX
- address
-
----
- dlls/ws2_32/socket.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
-index 164a48ce751..b9248c9bd5e 100644
---- a/dlls/ws2_32/socket.c
-+++ b/dlls/ws2_32/socket.c
-@@ -3332,6 +3332,13 @@ int WINAPI WS_bind(SOCKET s, const struct WS_sockaddr* name, int namelen)
-                     else if (interface_bind(s, fd, &uaddr.addr))
-                         in4->sin_addr.s_addr = htonl(INADDR_ANY);
-                 }
-+
-+                if(name->sa_family ==  WS_AF_IPX){
-+                    /* Quake (and similar family) fails if we can't bind to an IPX address. This often
-+                     * doesn't work on Linux, so just fake success. */
-+                    return 0;
-+                }
-+
-                 if (bind(fd, &uaddr.addr, uaddrlen) < 0)
-                 {
-                     int loc_errno = errno;
 From 1091eaf13692b16ed66328ceeebfc587075fec6c Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 25 Oct 2018 12:50:45 -0500
@@ -970,51 +942,6 @@ index e976fda77f2..212c88c5a02 100644
      case DWMWA_CLOAKED:
          if (size < sizeof(DWORD)) return E_INVALIDARG;
  
-From c099ae745b3a63edee1677a2da01cab5aa5b8562 Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Tue, 28 Jan 2020 14:30:43 -0600
-Subject: [PATCH] winegstreamer: HACK: Try harder to register winegstreamer
- filters.
-
-The IDL declarations should actually be unnecessary with the quartz part, but there's a chance that an application will try to create filters before it creates the graph.
----
- dlls/quartz/filtergraph.c     | 17 +++++++++++++++++
- dlls/winegstreamer/winegstreamer_classes.idl | 21 +++++++++++++++++++++
- 2 files changed, 38 insertions(+)
-
-diff --git a/dlls/quartz/filtergraph.c b/dlls/quartz/filtergraph.c
-index 1ed41bdcec5..0af6e1ded5f 100644
---- a/dlls/quartz/filtergraph.c
-+++ b/dlls/quartz/filtergraph.c
-@@ -5681,11 +5681,28 @@ static const IUnknownVtbl IInner_VTable =
-     FilterGraphInner_Release
- };
- 
-+static BOOL CALLBACK register_winegstreamer_proc(INIT_ONCE *once, void *param, void **ctx)
-+{
-+    HMODULE mod = LoadLibraryW(L"winegstreamer.dll");
-+    if (mod)
-+    {
-+        HRESULT (WINAPI *proc)(void) = (void *)GetProcAddress(mod, "DllRegisterServer");
-+        proc();
-+        FreeLibrary(mod);
-+    }
-+    return TRUE;
-+}
-+
- static HRESULT filter_graph_common_create(IUnknown *outer, IUnknown **out, BOOL threaded)
- {
-+    static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
-     struct filter_graph *object;
-     HRESULT hr;
- 
-+    /* HACK: our build system makes it difficult to load gstreamer on prefix
-+     * creation, so it won't get registered. Do that here instead. */
-+    InitOnceExecuteOnce(&once, register_winegstreamer_proc, NULL, NULL);
-+
-     *out = NULL;
- 
-     fimpl = CoTaskMemAlloc(sizeof(*fimpl));
 From 52c36274080a6edc1f1420b08df1ecf0defa9ca3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 5 Dec 2019 12:41:57 -0600
@@ -3799,7 +3726,130 @@ index 020faa26a11..ba7d3e78905 100644
 +
 +    return hr;
 +}
-From 834d7c5599877b805cfc84d11ac1e9a276652b4a Mon Sep 17 00:00:00 2001
+From f48f52a2b6d96e8dcc0ea9eeadd895bfe397b3a0 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Fri, 21 Feb 2020 12:08:56 -0800
+Subject: [PATCH] HACK: winevulkan: Add vkGetPhysicalDeviceProperties thunks to
+ fake NVIDIA PCI IDs as AMD
+
+Needed for RDR2 with NVIDIA cards, otherwise game crashes or gets stuck
+trying to load nvapi64.dll
+---
+ dlls/winevulkan/loader.c        | 45 +++++++++++++++++++++++++++++++++
+ dlls/winevulkan/make_vulkan     |  1 +
+ dlls/winevulkan/vulkan_thunks.c |  4 +--
+ dlls/winevulkan/vulkan_thunks.h |  2 ++
+ 4 files changed, 49 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winevulkan/loader_thunks.c b/dlls/winevulkan/loader_thunks.c
+index 69fcd44160e..cb7b8b0e2b0 100644
+--- a/dlls/winevulkan/loader_thunks.c
++++ b/dlls/winevulkan/loader_thunks.c
+@@ -1568,11 +1568,6 @@ VkResult WINAPI vkGetPhysicalDevicePresentRectanglesKHR(VkPhysicalDevice physica
+     return unix_funcs->p_vkGetPhysicalDevicePresentRectanglesKHR(physicalDevice, surface, pRectCount, pRects);
+ }
+ 
+-void WINAPI vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
+-{
+-    unix_funcs->p_vkGetPhysicalDeviceProperties(physicalDevice, pProperties);
+-}
+-
+ void WINAPI vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR(VkPhysicalDevice physicalDevice, const VkQueryPoolPerformanceCreateInfoKHR *pPerformanceQueryCreateInfo, uint32_t *pNumPasses)
+ {
+     unix_funcs->p_vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR(physicalDevice, pPerformanceQueryCreateInfo, pNumPasses);
+diff --git a/dlls/winevulkan/loader.c b/dlls/winevulkan/loader.c
+index 746a25041d0..57d811a41c9 100644
+--- a/dlls/winevulkan/loader.c
++++ b/dlls/winevulkan/loader.c
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <stdarg.h>
++#include <stdlib.h>
+ 
+ #include "windef.h"
+ #include "winbase.h"
+@@ -344,6 +344,26 @@ static void fill_luid_property(VkPhysicalDeviceProperties2 *properties2)
+             id->deviceNodeMask);
+ }
+ 
++void WINAPI vkGetPhysicalDeviceProperties(VkPhysicalDevice phys_dev,
++        VkPhysicalDeviceProperties *properties)
++{
++    TRACE("%p, %p\n", phys_dev, properties);
++
++    unix_funcs->p_vkGetPhysicalDeviceProperties(phys_dev, properties);
++
++    {
++        const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
++        if (sgi && *sgi != '0')
++        {
++            if (properties->vendorID == 0x10de /* NVIDIA */)
++            {
++                properties->vendorID = 0x1002; /* AMD */
++                properties->deviceID = 0x67df; /* RX 480 */
++            }
++        }
++    }
++}
++
+ void WINAPI vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
+         VkPhysicalDeviceProperties2 *properties2)
+ {
+@@ -351,6 +372,18 @@ void WINAPI vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
+ 
+     unix_funcs->p_vkGetPhysicalDeviceProperties2(phys_dev, properties2);
+     fill_luid_property(properties2);
++
++    {
++        const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
++        if (sgi && *sgi != '0')
++        {
++            if (properties2->properties.vendorID == 0x10de /* NVIDIA */)
++            {
++                properties2->properties.vendorID = 0x1002; /* AMD */
++                properties2->properties.deviceID = 0x67df; /* RX 480 */
++            }
++        }
++    }
+ }
+ 
+ void WINAPI vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+@@ -360,6 +393,18 @@ void WINAPI vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+ 
+     unix_funcs->p_vkGetPhysicalDeviceProperties2KHR(phys_dev, properties2);
+     fill_luid_property(properties2);
++
++    {
++        const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
++        if (sgi && *sgi != '0')
++        {
++            if (properties2->properties.vendorID == 0x10de /* NVIDIA */)
++            {
++                properties2->properties.vendorID = 0x1002; /* AMD */
++                properties2->properties.deviceID = 0x67df; /* RX 480 */
++            }
++        }
++    }
+ }
+ 
+ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index f584330dc6e..3efdcb4c88c 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -169,6 +169,7 @@ FUNCTION_OVERRIDES = {
+     "vkGetPhysicalDeviceExternalFenceProperties" : {"dispatch" : False, "driver" : False, "thunk" : ThunkType.NONE},
+     "vkGetPhysicalDeviceExternalSemaphoreProperties" : {"dispatch" : False, "driver" : False, "thunk" : ThunkType.NONE},
+     "vkGetPhysicalDeviceImageFormatProperties2" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PRIVATE},
++    "vkGetPhysicalDeviceProperties" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
+     "vkGetPhysicalDeviceProperties2" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
+     "vkGetPhysicalDeviceProperties2KHR" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
+ 
+-- 
+2.30.2
+
+From ecfae7775fc3149e55058cd9d969d0d0aa24b9b9 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Tue, 11 May 2021 21:00:45 +0300
 Subject: [PATCH] gdi32: Implement D3DKMTOpenAdapterFromDeviceName().
@@ -3963,40 +4013,3 @@ index b21f22c3629..2e34568ea17 100644
  @ stdcall D3DKMTOpenAdapterFromGdiDisplayName(ptr)
  @ stdcall D3DKMTOpenAdapterFromHdc(ptr)
  @ stdcall D3DKMTQueryStatistics(ptr)
-From 743c266e6496345d0a55c83b0cfc741b0f381d4e Mon Sep 17 00:00:00 2001
-From: Arkadiusz Hiler <ahiler@codeweavers.com>
-Date: Wed, 25 Nov 2020 17:04:15 +0200
-Subject: [PATCH] plugplay: Send WM_DEVICECHANGE with DBT_DEVNODES_CHANGED with
- each event.
-
-Windows sends *a lot* of those messages whenever there's a device / drive /
-etc. appearing or disappearing.
-
-This fixes controller hotplug in Doom (2016).
-
-Signed-off-by: Arkadiusz Hiler <ahiler@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- programs/plugplay/main.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/programs/plugplay/main.c b/programs/plugplay/main.c
-index 2c4054de3e4..19e02286312 100644
---- a/programs/plugplay/main.c
-+++ b/programs/plugplay/main.c
-@@ -19,6 +19,7 @@
- #define WIN32_LEAN_AND_MEAN
- 
- #include <windows.h>
-+#include <dbt.h>
- #include "winsvc.h"
- #include "wine/debug.h"
- #include "wine/list.h"
-@@ -142,6 +143,7 @@ void __cdecl plugplay_send_event( DWORD code, const BYTE *data, unsigned int siz
-     struct event *event;
- 
-     BroadcastSystemMessageW( BSF_FORCEIFHUNG | BSF_QUERY, NULL, WM_DEVICECHANGE, code, (LPARAM)data );
-+    BroadcastSystemMessageW( BSF_FORCEIFHUNG | BSF_QUERY, NULL, WM_DEVICECHANGE, DBT_DEVNODES_CHANGED, 0 );
- 
-     EnterCriticalSection( &plugplay_cs );
- 

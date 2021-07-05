@@ -1,3 +1,49 @@
+From c099ae745b3a63edee1677a2da01cab5aa5b8562 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 28 Jan 2020 14:30:43 -0600
+Subject: [PATCH] winegstreamer: HACK: Try harder to register winegstreamer
+ filters.
+
+The IDL declarations should actually be unnecessary with the quartz part, but there's a chance that an application will try to create filters before it creates the graph.
+---
+ dlls/quartz/filtergraph.c     | 17 +++++++++++++++++
+ dlls/winegstreamer/winegstreamer_classes.idl | 21 +++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+
+diff --git a/dlls/quartz/filtergraph.c b/dlls/quartz/filtergraph.c
+index 1ed41bdcec5..0af6e1ded5f 100644
+--- a/dlls/quartz/filtergraph.c
++++ b/dlls/quartz/filtergraph.c
+@@ -5681,11 +5681,28 @@ static const IUnknownVtbl IInner_VTable =
+     FilterGraphInner_Release
+ };
+ 
++static BOOL CALLBACK register_winegstreamer_proc(INIT_ONCE *once, void *param, void **ctx)
++{
++    HMODULE mod = LoadLibraryW(L"winegstreamer.dll");
++    if (mod)
++    {
++        HRESULT (WINAPI *proc)(void) = (void *)GetProcAddress(mod, "DllRegisterServer");
++        proc();
++        FreeLibrary(mod);
++    }
++    return TRUE;
++}
++
+ static HRESULT filter_graph_common_create(IUnknown *outer, IUnknown **out, BOOL threaded)
+ {
++    static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
+     struct filter_graph *object;
+     HRESULT hr;
+ 
++    /* HACK: our build system makes it difficult to load gstreamer on prefix
++     * creation, so it won't get registered. Do that here instead. */
++    InitOnceExecuteOnce(&once, register_winegstreamer_proc, NULL, NULL);
++
+     *out = NULL;
+ 
+     fimpl = CoTaskMemAlloc(sizeof(*fimpl));
+
 From eddbdd21c623bd041962fe4f91733c6696188d89 Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <zfigura@codeweavers.com>
 Date: Tue, 11 Aug 2020 14:03:20 -0500

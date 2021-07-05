@@ -1,0 +1,150 @@
+From 0b2bf517a1ac691d74f14df9498902ae03d51b9f Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 31 Aug 2020 23:01:25 -0500
+Subject: [PATCH 04/11] ntdll/tests: Add basic tests for thread-id alert
+ functions.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/tests/sync.c | 95 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+
+diff --git a/dlls/ntdll/tests/sync.c b/dlls/ntdll/tests/sync.c
+index 21124dae922..be49405d8de 100644
+--- a/dlls/ntdll/tests/sync.c
++++ b/dlls/ntdll/tests/sync.c
+@@ -26,6 +26,7 @@
+ #include "winternl.h"
+ #include "wine/test.h"
+ 
++static NTSTATUS (WINAPI *pNtAlertThreadByThreadId)( HANDLE );
+ static NTSTATUS (WINAPI *pNtClose)( HANDLE );
+ static NTSTATUS (WINAPI *pNtCreateEvent) ( PHANDLE, ACCESS_MASK, const OBJECT_ATTRIBUTES *, EVENT_TYPE, BOOLEAN);
+ static NTSTATUS (WINAPI *pNtCreateKeyedEvent)( HANDLE *, ACCESS_MASK, const OBJECT_ATTRIBUTES *, ULONG );
+@@ -43,6 +44,7 @@ static NTSTATUS (WINAPI *pNtReleaseMutant)( HANDLE, LONG * );
+ static NTSTATUS (WINAPI *pNtReleaseSemaphore)( HANDLE, ULONG, ULONG * );
+ static NTSTATUS (WINAPI *pNtResetEvent)( HANDLE, LONG * );
+ static NTSTATUS (WINAPI *pNtSetEvent)( HANDLE, LONG * );
++static NTSTATUS (WINAPI *pNtWaitForAlertByThreadId)( void *, const LARGE_INTEGER * );
+ static NTSTATUS (WINAPI *pNtWaitForKeyedEvent)( HANDLE, const void *, BOOLEAN, const LARGE_INTEGER * );
+ static BOOLEAN  (WINAPI *pRtlAcquireResourceExclusive)( RTL_RWLOCK *, BOOLEAN );
+ static BOOLEAN  (WINAPI *pRtlAcquireResourceShared)( RTL_RWLOCK *, BOOLEAN );
+@@ -753,10 +755,101 @@ static void test_resource(void)
+     pRtlDeleteResource(&resource);
+ }
+ 
++static DWORD WINAPI tid_alert_thread( void *arg )
++{
++    NTSTATUS ret;
++
++    ret = pNtAlertThreadByThreadId( arg );
++    ok(!ret, "got %#x\n", ret);
++
++    ret = pNtWaitForAlertByThreadId( (void *)0x123, NULL );
++    ok(ret == STATUS_ALERTED, "got %#x\n", ret);
++
++    return 0;
++}
++
++static void test_tid_alert( char **argv )
++{
++    LARGE_INTEGER timeout = {0};
++    char cmdline[MAX_PATH];
++    STARTUPINFOA si = {0};
++    PROCESS_INFORMATION pi;
++    HANDLE thread;
++    NTSTATUS ret;
++    DWORD tid;
++
++    if (!pNtWaitForAlertByThreadId)
++    {
++        win_skip("NtWaitForAlertByThreadId is not available\n");
++        return;
++    }
++
++    ret = pNtWaitForAlertByThreadId( (void *)0x123, &timeout );
++    ok(ret == STATUS_TIMEOUT, "got %#x\n", ret);
++
++    ret = pNtAlertThreadByThreadId( 0 );
++    ok(ret == STATUS_INVALID_CID, "got %#x\n", ret);
++
++    ret = pNtAlertThreadByThreadId( (HANDLE)0xdeadbeef );
++    ok(ret == STATUS_INVALID_CID, "got %#x\n", ret);
++
++    ret = pNtAlertThreadByThreadId( (HANDLE)(DWORD_PTR)GetCurrentThreadId() );
++    ok(!ret, "got %#x\n", ret);
++
++    ret = pNtAlertThreadByThreadId( (HANDLE)(DWORD_PTR)GetCurrentThreadId() );
++    ok(!ret, "got %#x\n", ret);
++
++    ret = pNtWaitForAlertByThreadId( (void *)0x123, &timeout );
++    ok(ret == STATUS_ALERTED, "got %#x\n", ret);
++
++    ret = pNtWaitForAlertByThreadId( (void *)0x123, &timeout );
++    ok(ret == STATUS_TIMEOUT, "got %#x\n", ret);
++
++    ret = pNtWaitForAlertByThreadId( (void *)0x321, &timeout );
++    ok(ret == STATUS_TIMEOUT, "got %#x\n", ret);
++
++    thread = CreateThread( NULL, 0, tid_alert_thread, (HANDLE)(DWORD_PTR)GetCurrentThreadId(), 0, &tid );
++    timeout.QuadPart = -1000 * 10000;
++    ret = pNtWaitForAlertByThreadId( (void *)0x123, &timeout );
++    ok(ret == STATUS_ALERTED, "got %#x\n", ret);
++
++    ret = WaitForSingleObject( thread, 100 );
++    ok(ret == WAIT_TIMEOUT, "got %d\n", ret);
++    ret = pNtAlertThreadByThreadId( (HANDLE)(DWORD_PTR)tid );
++    ok(!ret, "got %#x\n", ret);
++
++    ret = WaitForSingleObject( thread, 1000 );
++    ok(!ret, "got %d\n", ret);
++
++    ret = pNtAlertThreadByThreadId( (HANDLE)(DWORD_PTR)tid );
++    ok(!ret, "got %#x\n", ret);
++
++    CloseHandle(thread);
++
++    ret = pNtAlertThreadByThreadId( (HANDLE)(DWORD_PTR)tid );
++    todo_wine ok(ret == STATUS_INVALID_CID, "got %#x\n", ret);
++
++    sprintf( cmdline, "%s %s subprocess", argv[0], argv[1] );
++    ret = CreateProcessA( NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi );
++    ok(ret, "failed to create process, error %u\n", GetLastError());
++    ret = pNtAlertThreadByThreadId( (HANDLE)(DWORD_PTR)pi.dwThreadId );
++    todo_wine ok(ret == STATUS_ACCESS_DENIED, "got %#x\n", ret);
++    ok(!WaitForSingleObject( pi.hProcess, 1000 ), "wait failed\n");
++    CloseHandle( pi.hProcess );
++    CloseHandle( pi.hThread );
++}
++
+ START_TEST(sync)
+ {
+     HMODULE module = GetModuleHandleA("ntdll.dll");
++    char **argv;
++    int argc;
++
++    argc = winetest_get_mainargs( &argv );
++
++    if (argc > 2) return;
+ 
++    pNtAlertThreadByThreadId        = (void *)GetProcAddress(module, "NtAlertThreadByThreadId");
+     pNtClose                        = (void *)GetProcAddress(module, "NtClose");
+     pNtCreateEvent                  = (void *)GetProcAddress(module, "NtCreateEvent");
+     pNtCreateKeyedEvent             = (void *)GetProcAddress(module, "NtCreateKeyedEvent");
+@@ -774,6 +867,7 @@ START_TEST(sync)
+     pNtReleaseSemaphore             = (void *)GetProcAddress(module, "NtReleaseSemaphore");
+     pNtResetEvent                   = (void *)GetProcAddress(module, "NtResetEvent");
+     pNtSetEvent                     = (void *)GetProcAddress(module, "NtSetEvent");
++    pNtWaitForAlertByThreadId       = (void *)GetProcAddress(module, "NtWaitForAlertByThreadId");
+     pNtWaitForKeyedEvent            = (void *)GetProcAddress(module, "NtWaitForKeyedEvent");
+     pRtlAcquireResourceExclusive    = (void *)GetProcAddress(module, "RtlAcquireResourceExclusive");
+     pRtlAcquireResourceShared       = (void *)GetProcAddress(module, "RtlAcquireResourceShared");
+@@ -791,4 +885,5 @@ START_TEST(sync)
+     test_semaphore();
+     test_keyed_events();
+     test_resource();
++    test_tid_alert( argv );
+ }
+-- 
+2.31.1
+

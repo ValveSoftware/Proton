@@ -1,0 +1,28 @@
+From: Kalen Alwardt <kalenalwardt@gmail.com>
+Subject: [PATCH resend] ntdll: Export ZwFilterToken().
+Message-Id: <20210611214831.53528-1-kalenalwardt@gmail.com>
+Date: Fri, 11 Jun 2021 16:48:31 -0500
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=39142
+Signed-off-by: Kalen Alwardt <kalenalwardt@gmail.com>
+---
+ dlls/ntdll/ntdll.spec | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index 6bd6579d432..8cba4fa164a 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -1224,7 +1224,7 @@
+ # @ stub ZwEnumerateSystemEnvironmentValuesEx
+ @ stdcall -private -syscall ZwEnumerateValueKey(long long long ptr long ptr) NtEnumerateValueKey
+ @ stub ZwExtendSection
+-# @ stub ZwFilterToken
++@ stdcall -private -syscall ZwFilterToken(long long ptr ptr ptr ptr) NtFilterToken
+ @ stdcall -private -syscall ZwFindAtom(ptr long ptr) NtFindAtom
+ @ stdcall -private -syscall ZwFlushBuffersFile(long ptr) NtFlushBuffersFile
+ @ stdcall -private -syscall ZwFlushInstructionCache(long ptr long) NtFlushInstructionCache
+
+-- 
+2.18.0.windows.1
+

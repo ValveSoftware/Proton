@@ -15,9 +15,9 @@ index 21aaa2e54b6..e291e2b550d 100644
 --- a/dlls/wined3d/cs.c
 +++ b/dlls/wined3d/cs.c
 @@ -77,6 +77,7 @@ enum wined3d_cs_op
+     WINED3D_CS_OP_COPY_UAV_COUNTER,
      WINED3D_CS_OP_GENERATE_MIPMAPS,
      WINED3D_CS_OP_EXECUTE_COMMAND_LIST,
-     WINED3D_CS_OP_UPLOAD_SUB_RESOURCE,
 +    WINED3D_CS_OP_GL_TEXTURE_CALLBACK,
      WINED3D_CS_OP_STOP,
  };
@@ -86,10 +86,10 @@ index 21aaa2e54b6..e291e2b550d 100644
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
  {
      struct wined3d_cs_stop *op;
-@@ -2815,6 +2866,7 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
+@@ -2865,6 +2916,7 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
+     /* WINED3D_CS_OP_COPY_UAV_COUNTER            */ wined3d_cs_exec_copy_uav_counter,
      /* WINED3D_CS_OP_GENERATE_MIPMAPS            */ wined3d_cs_exec_generate_mipmaps,
      /* WINED3D_CS_OP_EXECUTE_COMMAND_LIST        */ wined3d_cs_exec_execute_command_list,
-     /* WINED3D_CS_OP_UPLOAD_SUB_RESOURCE         */ wined3d_cs_exec_upload_sub_resource,
 +    /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
  };
  
@@ -165,8 +165,8 @@ index e291e2b550d..cf55385c3c1 100644
 --- a/dlls/wined3d/cs.c
 +++ b/dlls/wined3d/cs.c
 @@ -78,6 +78,7 @@ enum wined3d_cs_op
+     WINED3D_CS_OP_GENERATE_MIPMAPS,
      WINED3D_CS_OP_EXECUTE_COMMAND_LIST,
-     WINED3D_CS_OP_UPLOAD_SUB_RESOURCE,
      WINED3D_CS_OP_GL_TEXTURE_CALLBACK,
 +    WINED3D_CS_OP_USER_CALLBACK,
      WINED3D_CS_OP_STOP,
@@ -224,9 +224,9 @@ index e291e2b550d..cf55385c3c1 100644
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
  {
      struct wined3d_cs_stop *op;
-@@ -2855,6 +2894,7 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
+@@ -2893,6 +2932,7 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
+     /* WINED3D_CS_OP_GENERATE_MIPMAPS            */ wined3d_cs_exec_generate_mipmaps,
      /* WINED3D_CS_OP_EXECUTE_COMMAND_LIST        */ wined3d_cs_exec_execute_command_list,
-     /* WINED3D_CS_OP_UPLOAD_SUB_RESOURCE         */ wined3d_cs_exec_upload_sub_resource,
      /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
 +    /* WINED3D_CS_OP_USER_CALLBACK               */ wined3d_cs_exec_user_callback,
  };
@@ -737,14 +737,6 @@ diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
 index cf55385c3c1..0eeabdb6640 100644
 --- a/dlls/wined3d/cs.c
 +++ b/dlls/wined3d/cs.c
-@@ -79,6 +79,7 @@ enum wined3d_cs_op
-     WINED3D_CS_OP_UPLOAD_SUB_RESOURCE,
-     WINED3D_CS_OP_GL_TEXTURE_CALLBACK,
-     WINED3D_CS_OP_USER_CALLBACK,
-+    WINED3D_CS_OP_WAIT_IDLE,
-     WINED3D_CS_OP_STOP,
- };
- 
 @@ -476,6 +477,11 @@ struct wined3d_cs_user_callback
      BYTE data[1];
  };
@@ -777,14 +769,6 @@ index cf55385c3c1..0eeabdb6640 100644
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
  {
      struct wined3d_cs_stop *op;
-@@ -2875,6 +2894,7 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
-     /* WINED3D_CS_OP_UPLOAD_SUB_RESOURCE         */ wined3d_cs_exec_upload_sub_resource,
-     /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
-     /* WINED3D_CS_OP_USER_CALLBACK               */ wined3d_cs_exec_user_callback,
-+    /* WINED3D_CS_OP_WAIT_IDLE                   */ wined3d_cs_exec_wait_idle,
- };
- 
- static void *wined3d_cs_st_require_space(struct wined3d_device_context *context,
 diff --git a/dlls/wined3d/device.c b/dlls/wined3d/device.c
 index 286d4d3acf5..a3e41cb38ef 100644
 --- a/dlls/wined3d/device.c
@@ -1039,14 +1023,6 @@ diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
 index edfdeecee3c..298f74c46c0 100644
 --- a/dlls/wined3d/cs.c
 +++ b/dlls/wined3d/cs.c
-@@ -79,7 +79,6 @@ enum wined3d_cs_op
-     WINED3D_CS_OP_UPLOAD_SUB_RESOURCE,
-     WINED3D_CS_OP_GL_TEXTURE_CALLBACK,
-     WINED3D_CS_OP_USER_CALLBACK,
--    WINED3D_CS_OP_WAIT_IDLE,
-     WINED3D_CS_OP_STOP,
- };
- 
 @@ -2804,19 +2803,6 @@ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
      cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
@@ -1067,14 +1043,6 @@ index edfdeecee3c..298f74c46c0 100644
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
  {
      struct wined3d_cs_stop *op;
-@@ -2873,7 +2859,6 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
-     /* WINED3D_CS_OP_UPLOAD_SUB_RESOURCE         */ wined3d_cs_exec_upload_sub_resource,
-     /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
-     /* WINED3D_CS_OP_USER_CALLBACK               */ wined3d_cs_exec_user_callback,
--    /* WINED3D_CS_OP_WAIT_IDLE                   */ wined3d_cs_exec_wait_idle,
- };
- 
- static void *wined3d_cs_st_require_space(struct wined3d_device_context *context,
 diff --git a/dlls/wined3d/device.c b/dlls/wined3d/device.c
 index a3e41cb38ef..9ec837e837d 100644
 --- a/dlls/wined3d/device.c
@@ -1155,7 +1123,7 @@ index 298f74c46c0..511883924a1 100644
 --- a/dlls/wined3d/cs.c
 +++ b/dlls/wined3d/cs.c
 @@ -79,6 +79,7 @@ enum wined3d_cs_op
-     WINED3D_CS_OP_UPLOAD_SUB_RESOURCE,
+     WINED3D_CS_OP_EXECUTE_COMMAND_LIST,
      WINED3D_CS_OP_GL_TEXTURE_CALLBACK,
      WINED3D_CS_OP_USER_CALLBACK,
 +    WINED3D_CS_OP_FENCE,
@@ -1223,7 +1191,7 @@ index 298f74c46c0..511883924a1 100644
  {
      struct wined3d_cs_stop *op;
 @@ -2918,6 +2965,7 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
-     /* WINED3D_CS_OP_UPLOAD_SUB_RESOURCE         */ wined3d_cs_exec_upload_sub_resource,
+     /* WINED3D_CS_OP_EXECUTE_COMMAND_LIST        */ wined3d_cs_exec_execute_command_list,
      /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
      /* WINED3D_CS_OP_USER_CALLBACK               */ wined3d_cs_exec_user_callback,
 +    /* WINED3D_CS_OP_FENCE                       */ wined3d_cs_exec_fence,

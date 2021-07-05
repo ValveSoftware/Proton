@@ -34,7 +34,7 @@ index aa3df4a..5251820 100644
 + 	linux/types.h \
 + 	linux/ucdrom.h \
  diff --git a/configure.ac b/configure.ac
--index caff5d1fe52..d30b437320a 100644
+-index ade04399af0..3dabc0d33d1 100644
 +index 6202d68ee45..bcc37745576 100644
  --- a/configure.ac
  +++ b/configure.ac
@@ -43,7 +43,7 @@ index aa3df4a..5251820 100644
   #define NONAMELESSUNION
   #define NONAMELESSSTRUCT
   #include "ntstatus.h"
--@@ -2292,6 +2300,114 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
+-@@ -2107,6 +2115,114 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
 +@@ -2344,6 +2352,115 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
       return 0;
   }
@@ -68,7 +68,7 @@ index aa3df4a..5251820 100644
   
   /***********************************************************************
    *           handle_interrupt
--@@ -2751,6 +2867,7 @@ void signal_init_process(void)
+-@@ -2623,6 +2739,7 @@ void signal_init_process(void)
 +@@ -2816,6 +2933,7 @@ void signal_init_process(void)
       if (sigaction( SIGSEGV, &sig_act, NULL ) == -1) goto error;
       if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
@@ -92,20 +92,20 @@ index aa3df4a..5251820 100644
 + #undef HAVE_LINUX_SERIAL_H
 + 
  diff --git a/tools/winebuild/import.c b/tools/winebuild/import.c
--index 0fddbaf6134..901423cc028 100644
+-index a194ae50104..d5ef8fe2ba7 100644
 +index 720cf0589fd..9a7537451ae 100644
  --- a/tools/winebuild/import.c
  +++ b/tools/winebuild/import.c
--@@ -1510,6 +1510,7 @@ static void output_syscall_dispatcher( int count, const char *variant )
+-@@ -1603,6 +1603,7 @@ static void output_syscall_dispatcher(void)
 +@@ -1518,6 +1518,7 @@ static void output_syscall_dispatcher( int count, const char *variant )
-          /* Legends of Runeterra hooks the first system call return instruction, and
-           * depends on us returning to it. Adjust the return address accordingly. */
-          output( "\tsubq $0xb,0x8(%%rbp)\n" );
-@@ -182,7 +211,7 @@ index 0fddbaf6134..901423cc028 100644
-          output( "\tmovq 0x8(%%rbp),%%rbx\n" );
-          output( "\tmovq %%rbx,-0x28(%%rbp)\n" );
-          output( "\tleaq 0x10(%%rbp),%%rbx\n" );
--@@ -1779,7 +1780,7 @@ void output_syscalls( DLLSPEC *spec )
+          output( "\tleaq 0x28(%%rsp),%%rsi\n" );   /* first argument */
+          output( "\tmovq %%rcx,%%rsp\n" );
+          output( "\tmovq 0x00(%%rcx),%%rax\n" );
+@@ -182,7 +211,7 @@ index f92c1b89c9c..13e1a3bb929 100644
+          output( "\tmovq 0x18(%%rcx),%%rdx\n" );
+          output( "\tmovl %%eax,%%ebx\n" );
+          output( "\tshrl $8,%%ebx\n" );
+-@@ -1942,7 +1943,7 @@ void output_syscalls( DLLSPEC *spec )
 +@@ -1810,7 +1811,7 @@ void output_syscalls( DLLSPEC *spec )
                * validate that instruction, we can just put a jmp there instead. */
               output( "\t.byte 0x4c,0x8b,0xd1\n" ); /* movq %rcx,%r10 */

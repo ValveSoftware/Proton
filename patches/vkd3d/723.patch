@@ -1,0 +1,188 @@
+From 3863d577633488edfc3d4105706b0eb5e614c116 Mon Sep 17 00:00:00 2001
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Date: Tue, 29 Jun 2021 14:48:23 +0200
+Subject: [PATCH] tests: Add test for VBV stride edge cases.
+
+Verifies that AMD native driver behaves oddly with stride < offset
+cases.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ tests/d3d12.c | 159 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 159 insertions(+)
+
+diff --git a/tests/d3d12.c b/tests/d3d12.c
+index 898f05a7..3ff22cd7 100644
+--- a/tests/d3d12.c
++++ b/tests/d3d12.c
+@@ -19737,6 +19737,164 @@ static void test_null_rtv(void)
+     destroy_test_context(&context);
+ }
+ 
++static void test_vbv_stride_edge_cases(void)
++{
++    D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc;
++    D3D12_STREAM_OUTPUT_BUFFER_VIEW so_view;
++    D3D12_INPUT_LAYOUT_DESC input_layout;
++    D3D12_SO_DECLARATION_ENTRY so_entry;
++    struct test_context_desc desc;
++    D3D12_VERTEX_BUFFER_VIEW vbv;
++    struct resource_readback rb;
++    struct test_context context;
++    ID3D12Resource *vb, *xfb;
++    ID3D12PipelineState *pso;
++    unsigned int i;
++
++    static const D3D12_INPUT_ELEMENT_DESC layout_desc[] =
++    {
++        {"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 16, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
++    };
++
++    static const DWORD vs_code[] =
++    {
++#if 0
++    float4 main(float4 pos : POSITION) : SV_Position
++    {
++        return pos;
++    }
++#endif
++        0x43425844, 0x1808c035, 0xc030df61, 0x84df42ec, 0xfc8e362e, 0x00000001, 0x000000dc, 0x00000003,
++        0x0000002c, 0x00000060, 0x00000094, 0x4e475349, 0x0000002c, 0x00000001, 0x00000008, 0x00000020,
++        0x00000000, 0x00000000, 0x00000003, 0x00000000, 0x00000f0f, 0x49534f50, 0x4e4f4954, 0xababab00,
++        0x4e47534f, 0x0000002c, 0x00000001, 0x00000008, 0x00000020, 0x00000000, 0x00000001, 0x00000003,
++        0x00000000, 0x0000000f, 0x505f5653, 0x7469736f, 0x006e6f69, 0x58454853, 0x00000040, 0x00010050,
++        0x00000010, 0x0100086a, 0x0300005f, 0x001010f2, 0x00000000, 0x04000067, 0x001020f2, 0x00000000,
++        0x00000001, 0x05000036, 0x001020f2, 0x00000000, 0x00101e46, 0x00000000, 0x0100003e,
++    };
++    static const D3D12_SHADER_BYTECODE vs = { vs_code, sizeof(vs_code) };
++    const UINT so_stride = 16;
++    float vb_data[1024];
++
++    /* Various edge case behavior when stride < offset.
++     * This is actually broken on native AMD drivers where bounds checking
++     * happens based on vertex index being less than VBV size / stride. */
++    struct test_case
++    {
++        UINT stride;
++        UINT size;
++        float reference[8];
++    };
++
++    /* Negative value marks case which should be 0.0f due to robustness.
++     * The positive value denotes the value we should read if robustness does not work as expected. */
++    static const struct test_case tests[] = {
++        /* Stride 0 should always work as expected on AMD. */
++        { 0, 4, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } },
++        { 0, 8, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } },
++        { 0, 12, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } },
++        { 0, 16, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } }, /* Fully OOB */
++        { 0, 32, { 4.0f, 5.0f, 6.0f, 7.0f, 4.0f, 5.0f, 6.0f, 7.0f } }, /* Fine */
++
++        { 4, 16, { -4.0f, -5.0f, -6.0f, -7.0f, -5.0f, -6.0f, -7.0f, -8.0f } }, /* Fully OOB, but native D3D12 AMD driver thinks there are valid elements here. */
++        { 4, 36, { 4.0f, 5.0f, 6.0f, 7.0f, 5.0f, 6.0f, 7.0f, 8.0f } }, /* Fine. There should be room for 2 vertices here. */
++
++        { 8, 16, { -4.0f, -5.0f, -6.0f, -7.0f, -6.0f, -7.0f, -8.0f, -9.0f } }, /* Fully OOB, but native D3D12 AMD driver thinks there are valid elements here. */
++        { 8, 40, { 4.0f, 5.0f, 6.0f, 7.0f, 6.0f, 7.0f, 8.0f, 9.0f } }, /* Fine. There should be room for 2. */
++
++        { 12, 16, { -4.0f, -5.0f, -6.0f, -7.0f, 0.0f, 0.0f, 0.0f, 0.0f } }, /* Fully OOB, but native D3D12 AMD driver thinks there is one valid element. */
++        { 12, 44, { 4.0f, 5.0f, 6.0f, 7.0f, 7.0f, 8.0f, 9.0f, 10.0f } }, /* Fine. There should be room for 2. */
++    };
++
++    memset(&desc, 0, sizeof(desc));
++    desc.no_root_signature = true;
++    if (!init_test_context(&context, &desc))
++        return;
++
++    context.root_signature = create_empty_root_signature(context.device,
++        D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
++        D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT);
++    input_layout.pInputElementDescs = layout_desc;
++    input_layout.NumElements = ARRAY_SIZE(layout_desc);
++
++    init_pipeline_state_desc(&pso_desc, context.root_signature, DXGI_FORMAT_UNKNOWN, &vs, NULL, &input_layout);
++    pso_desc.PS.BytecodeLength = 0;
++    pso_desc.PS.pShaderBytecode = NULL;
++    pso_desc.StreamOutput.NumEntries = 1;
++    pso_desc.StreamOutput.RasterizedStream = 0;
++    pso_desc.StreamOutput.pBufferStrides = &so_stride;
++    pso_desc.StreamOutput.NumStrides = 1;
++    pso_desc.StreamOutput.pSODeclaration = &so_entry;
++    pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
++    so_entry.ComponentCount = 4;
++    so_entry.OutputSlot = 0;
++    so_entry.SemanticIndex = 0;
++    so_entry.SemanticName = "SV_Position";
++    so_entry.StartComponent = 0;
++    so_entry.Stream = 0;
++
++    xfb = create_default_buffer(context.device, 4096, D3D12_RESOURCE_FLAG_NONE, D3D12_RESOURCE_STATE_STREAM_OUT);
++    for (i = 0; i < ARRAY_SIZE(vb_data); i++)
++        vb_data[i] = (float)i;
++    vb = create_upload_buffer(context.device, sizeof(vb_data), vb_data);
++
++    ID3D12Device_CreateGraphicsPipelineState(context.device, &pso_desc, &IID_ID3D12PipelineState, (void **)&pso);
++
++    ID3D12GraphicsCommandList_SetGraphicsRootSignature(context.list, context.root_signature);
++    ID3D12GraphicsCommandList_SetPipelineState(context.list, pso);
++
++    so_view.BufferFilledSizeLocation = ID3D12Resource_GetGPUVirtualAddress(xfb);
++    so_view.BufferLocation = ID3D12Resource_GetGPUVirtualAddress(xfb) + 16;
++    so_view.SizeInBytes = 4096 - 16;
++    ID3D12GraphicsCommandList_SOSetTargets(context.list, 0, 1, &so_view);
++    ID3D12GraphicsCommandList_IASetPrimitiveTopology(context.list, D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
++
++    vbv.BufferLocation = ID3D12Resource_GetGPUVirtualAddress(vb);
++
++    for (i = 0; i < ARRAY_SIZE(tests); i++)
++    {
++        const D3D12_VIEWPORT vp = { 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f };
++        const D3D12_RECT rect = { 0, 0, 1, 1 };
++        vbv.SizeInBytes = tests[i].size;
++        vbv.StrideInBytes = tests[i].stride;
++        ID3D12GraphicsCommandList_RSSetViewports(context.list, 1, &vp);
++        ID3D12GraphicsCommandList_RSSetScissorRects(context.list, 1, &rect);
++        ID3D12GraphicsCommandList_IASetVertexBuffers(context.list, 0, 1, &vbv);
++        ID3D12GraphicsCommandList_DrawInstanced(context.list, 2, 1, 0, 0);
++    }
++    transition_resource_state(context.list, xfb, D3D12_RESOURCE_STATE_STREAM_OUT, D3D12_RESOURCE_STATE_COPY_SOURCE);
++
++    get_buffer_readback_with_command_list(xfb, DXGI_FORMAT_R32G32B32A32_FLOAT, &rb, context.queue, context.list);
++
++    for (i = 0; i < ARRAY_SIZE(tests); i++)
++    {
++        const struct vec4 *v0, *v1;
++        v0 = get_readback_vec4(&rb, 1 + 2 * i, 0);
++        v1 = get_readback_vec4(&rb, 2 + 2 * i, 0);
++
++#define check(dat, ref_index) do { \
++    float ref = tests[i].reference[ref_index]; \
++    bool robust_is_zero = ref < 0.0f; \
++    ref = fabsf(ref); \
++    if (robust_is_zero && dat == ref) \
++        skip("Test %u, index %u expected 0 output, but robustness failed. Got expected output as if robustness did not happen.\n", i, ref_index); \
++    else \
++        ok(dat == ref || (robust_is_zero && dat == 0.0f), "Test %u, index %u, %f != %f\n", i, ref_index, dat, ref); \
++} while(0)
++
++        check(v0->x, 0); check(v0->y, 1); check(v0->z, 2); check(v0->w, 3);
++        check(v1->x, 4); check(v1->y, 5); check(v1->z, 6); check(v1->w, 7);
++#undef check
++    }
++
++    release_resource_readback(&rb);
++
++    ID3D12PipelineState_Release(pso);
++    ID3D12Resource_Release(xfb);
++    ID3D12Resource_Release(vb);
++    destroy_test_context(&context);
++}
++
+ static void test_null_vbv(void)
+ {
+     ID3D12GraphicsCommandList *command_list;
+@@ -51900,4 +52058,5 @@ START_TEST(d3d12)
+     run_test(test_missing_bindings_root_signature);
+     run_test(test_mismatching_pso_stages);
+     run_test(test_null_descriptor_mismatch_type);
++    run_test(test_vbv_stride_edge_cases);
+ }

@@ -1,0 +1,17 @@
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 10e79d3f8ff..37b3ddc8095 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -2040,6 +2040,12 @@ INT WINAPI WS_getsockopt(SOCKET s, INT level,
+           debugstr_sockopt(level, optname), debugstr_optval(optval, 0),
+           optlen, optlen ? *optlen : 0);
+ 
++    if (!socket_list_find( s ))
++    {
++        SetLastError( WSAENOTSOCK );
++        return -1;
++    }
++
+     switch(level)
+     {
+     case WS_SOL_SOCKET:

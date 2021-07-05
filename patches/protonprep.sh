@@ -33,15 +33,20 @@
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
 
-    echo "add dxvk PR patches"
-    patch -Np1 < ../patches/dxvk/1582.patch
+#    echo "add dxvk PR patches"
+#    patch -Np1 < ../patches/dxvk/1582.patch
     
-    echo "ninja gaiden patch"
-    patch -Np1 < ../patches/dxvk/ninja_gaiden_hotfix.patch
-
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
+    cd ..
+    
+    cd vkd3d-proton
+    git reset --hard HEAD
+    git clean -xdf
+    patch -Np1 < ../patches/vkd3d/698.patch
+    patch -Np1 < ../patches/vkd3d/723.patch
+    patch -Np1 < ../patches/vkd3d/729.patch
     cd ..
 
     #WINE STAGING
@@ -62,6 +67,8 @@
     git reset --hard HEAD
     git clean -xdf
 
+    #echo "revert d171d1116764260f4ae272c69b54e5dfd13c6835 which breaks the wayland driver"
+    #git revert --no-commit d171d1116764260f4ae272c69b54e5dfd13c6835
 
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
@@ -157,10 +164,6 @@
 
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
-
-#    echo "origin downloads fix"
-#    not needed for proton, also breaks gta V online sessions
-#    patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
     # TODO: Add game-specific check
     echo "mk11 patch"
@@ -263,25 +266,13 @@
     ## VULKAN-CENTRIC PATCHES
 
     echo "fullscreen hack"
-#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-childwindow-experimental.patch
-#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging.patch
-    patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging-tkg.patch
-
-    # old childwindow hack
-#    echo "vulkan childwindow fix"
-#    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
-
-    echo "proton nvidia hacks"
-    patch -Np1 < ../patches/proton/26-proton-nvidia-hacks.patch
+    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-tkg.patch
 
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
 #    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
 
     ## END VULKAN-CENTRIC PATCHES
-
-#    echo "fullscreen hack wined3d additions"
-#    patch -Np1 < ../patches/proton/43-valve_proton_fullscreen_hack-staging-wined3d.patch
 
     ### END PROTON PATCH SECTION ###
 
@@ -298,27 +289,12 @@
     patch -Np1 < ../patches/wine-hotfixes/205333
 
     # pending upstream wine fixes
-    
-    # more mfplat fixes
 
-    # mfplat reverts
-    
-    # 6.10 8a506ea9b2c44f9043048f8756848772bc75a598 breaks several UE4 games (Notably Soul Calibur VI)
-    patch -Np1 < ../patches/wine-hotfixes/hotfix_regression_8a506ea9b2c44f9043048f8756848772bc75a598.patch
-
-    # 6.10 626438a6be2df298c527870c8df9e6deb2f1c0fc breaks Catherine Classic intro logos. 
-    # New game still crashes, but reverting this allows 
-    # it to get to the main menu at least.
-    patch -Np1 < ../patches/wine-hotfixes/hotfix_regression_626438a6be2df298c527870c8df9e6deb2f1c0fc.patch
-
-    # additional pending mfplat fixes
+    # additional pending mfplat fonv audio loop fix
     patch -Np1 < ../patches/wine-hotfixes/205277
-    
+
     # FH4 performance frequency patch
     patch -Np1 < ../patches/wine-hotfixes/204113
-    
-    # openglfreak's pending X11 patch
-    patch -Np1 < ../patches/wine-hotfixes/207289
 
     echo "proton QPC performance patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_QPC.patch
@@ -328,17 +304,18 @@
     
     echo "Horizon Zero Dawn animations fix"
     patch -Np1 < ../patches/wine-hotfixes/HZD_animations_pr112.patch
+
+    # RPGMaker VX fix
+    patch -Np1 < ../patches/wine-hotfixes/rpgmaker.patch
     
-    echo "FarCry regression fix"
-    patch -Np1 < ../patches/wine-hotfixes/hotfix_regression_4088cf0f70961f4c54decf7915c5a767427c7700.patch
+    # this is needed for battle.net
+    patch -RNp1 < ../patches/wine-hotfixes/revert-ws2_32-Reimplement-select-on-top-of-IOCTL_AFD_POL.patch
     
-    echo "network regression fix"
-    # fixes network issues caused by a891713f48fbcdae05f27f7e73b1cec78cf42644 and a70c5172c6bb0e61ad24c202a9bf4e88b8c868b0
-    # notably in MK11 and possibly others
-    #patch -Np1 < ../patches/wine-hotfixes/steam_network_fix.patch
-    patch -Np1 < ../patches/wine-hotfixes/scratch.diff
-    
-    patch -Np1 < ../patches/wine-hotfixes/msvcrt_logf_fix.patch
+    # BF4 ping fix
+    patch -Np1 < ../patches/wine-hotfixes/207990
+
+    #disabled, still horribly broken
+#    patch -Np1 < ../patches/wine-hotfixes/wine_wayland_driver.patch
 
     ### END WINEPATCH SECTION ###
 

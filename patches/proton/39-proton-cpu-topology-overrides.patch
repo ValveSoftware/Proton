@@ -197,11 +197,11 @@ index bf3d6c34f14..fc8165f2828 100644
      num = 1;
      FIXME("Detecting the number of processors is not supported.\n");
  #endif
--    NtCurrentTeb()->Peb->NumberOfProcessors = num;
+-    peb->NumberOfProcessors = num;
 +
 +    fill_cpu_override(num);
 +
-+    NtCurrentTeb()->Peb->NumberOfProcessors = cpu_override.mapping.cpu_count
++    peb->NumberOfProcessors = cpu_override.mapping.cpu_count
 +            ? cpu_override.mapping.cpu_count : num;
      get_cpuinfo( &cpu_info );
      TRACE( "<- CPU arch %d, level %d, rev %d, features 0x%x\n",
@@ -392,17 +392,18 @@ index ca5dac43bb0..bc6a5451611 100644
 +    }
  #endif
  
-     if (NtCurrentTeb()->Peb->NumberOfProcessors > 1)
+     if (peb->NumberOfProcessors > 1)
 diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
-index a3a418cfaa5..8edd529afd8 100644
+index 39ab7912490..b29de19ec8e 100644
 --- a/dlls/ntdll/unix/unix_private.h
 +++ b/dlls/ntdll/unix/unix_private.h
-@@ -247,6 +247,7 @@ extern NTSTATUS open_unix_file( HANDLE *handle, const char *unix_name, ACCESS_MA
+@@ -279,6 +279,7 @@ extern NTSTATUS open_unix_file( HANDLE *handle, const char *unix_name, ACCESS_MA
+                                 ULONG options, void *ea_buffer, ULONG ea_length ) DECLSPEC_HIDDEN;
  extern void init_files(void) DECLSPEC_HIDDEN;
  extern void init_cpu_info(void) DECLSPEC_HIDDEN;
- extern void add_completion( HANDLE handle, ULONG_PTR value, NTSTATUS status, ULONG info, BOOL async ) DECLSPEC_HIDDEN;
 +extern struct cpu_topology_override *get_cpu_topology_override(void) DECLSPEC_HIDDEN;
- 
+ extern void add_completion( HANDLE handle, ULONG_PTR value, NTSTATUS status, ULONG info, BOOL async ) DECLSPEC_HIDDEN;
+
  extern void dbg_init(void) DECLSPEC_HIDDEN;
  
 diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
