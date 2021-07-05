@@ -58,3 +58,6 @@
 [submodule "dxvk-nvapi"]
 	path = dxvk-nvapi
 	url = https://github.com/jp7677/dxvk-nvapi
+[submodule "xkbcommon"]
+	path = xkbcommon
+	url = https://github.com/xkbcommon/libxkbcommon
