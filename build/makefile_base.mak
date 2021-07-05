@@ -745,6 +745,17 @@ $(OBJ)/.vrclient-post-source:
 	mkdir -p $(VRCLIENT_OBJ64) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ64)/vrclient_x64.spec
 	touch $@
 
+##
+## xkbcommon -- needed for wayland support in wome
+##
+
+XKBCOMMON_MESON_ARGS := \
+        -Denable-docs='false'
+
+$(eval $(call rules-source,xkbcommon,$(SRCDIR)/xkbcommon))
+$(eval $(call rules-meson,xkbcommon,32))
+$(eval $(call rules-meson,xkbcommon,64))
+
 
 ##
 ## dxvk
