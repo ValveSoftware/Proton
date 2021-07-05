@@ -23,14 +23,13 @@ from ctypes import cast
 from ctypes import c_int
 from ctypes import c_char_p
 from ctypes import c_void_p
-from ctypes.util import find_library
 
 from filelock import FileLock
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.10-GE-1"
+CURRENT_PREFIX_VERSION="6.12-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -77,7 +76,7 @@ def makedirs(path):
         #already exists
         pass
 
-def try_copy(src, dst, add_write_perm=True):
+def try_copy(src, dst, add_write_perm=True, optional=False):
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
@@ -93,6 +92,12 @@ def try_copy(src, dst, add_write_perm=True):
         if add_write_perm:
             new_mode = os.lstat(dstfile).st_mode | stat.S_IWUSR | stat.S_IWGRP
             os.chmod(dstfile, new_mode)
+
+    except FileNotFoundError as e:
+        if optional:
+            log('Error while copying to \"' + dst + '\": ' + e.strerror)
+        else:
+            raise
 
     except PermissionError as e:
         if e.errno == errno.EPERM:
@@ -149,14 +154,8 @@ def try_get_game_library_dir():
 # On failure, returns None
 def find_nvidia_wine_dll_dir():
     try:
-        libdl_soname = find_library("dl")
-
-        # If we couldn't determine the proper soname for libdl, bail out.
-        if libdl_soname is None:
-            return None
-
-        libdl = CDLL(libdl_soname)
-    except (FileNotFoundError, OSError):
+        libdl = CDLL("libdl.so.2")
+    except (OSError):
         return None
 
     try:
@@ -532,6 +531,9 @@ class CompatData:
             if not os.path.exists(self.prefix_dir):
                 makedirs(self.prefix_dir + "/drive_c")
                 set_dir_casefold_bit(self.prefix_dir + "/drive_c")
+                if not os.path.exists(self.prefix_dir + "/dosdevices"):
+                    makedirs(self.prefix_dir + "/dosdevices")
+                    set_dir_casefold_bit(self.prefix_dir + "/dosdevices")
 
             if not os.path.exists(self.prefix_dir + "/user.reg"):
                 self.copy_pfx()
@@ -543,15 +545,10 @@ class CompatData:
                 os.symlink("/", self.prefix_dir + "/dosdevices/z:")
 
             # collect configuration info
-            if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
-                #modern steam client sets this
-                steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
-            else:
-                #linux-only fallback, really shouldn't get here
-                steamdir = os.environ["HOME"] + ".steam/root/"
+            steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
 
             use_wined3d = "wined3d" in g_session.compat_config
-            use_dxvk_dxgi = "WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"]
+            use_dxvk_dxgi = not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
             use_nvapi = 'enablenvapi' in g_session.compat_config
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
@@ -573,7 +570,21 @@ class CompatData:
                     "qdvd.dll," +
                     "qedit.dll," +
                     "quartz.dll," +
-                    
+
+                    #directplay
+                    "dplay.dll," +
+                    "dplaysvr.exe," +
+                    "dplayx.dll," +
+                    "dpmodemx.dll," +
+                    "dpnaddr.dll," +
+                    "dpnet.dll," +
+                    "dpnlobby.dll," +
+                    "dpnhpast.dll," +
+                    "dpnhupnp.dll," +
+                    "dpnsvr.exe," +
+                    "dpwsockx.dll," +
+                    "dpvoice.dll," +
+
                     #directmusic
                     "dmband.dll," +
                     "dmcompos.dll," +
@@ -752,20 +763,19 @@ class CompatData:
                 str(use_nvapi),
             ))
 
-            if old_ver == CURRENT_PREFIX_VERSION:
-                # check whether any prefix config has changed
-                try:
-                    with open(self.config_info_file, "r") as f:
-                        old_prefix_info = f.read()
-                except IOError:
-                    old_prefix_info = ""
+            # check whether any prefix config has changed
+            try:
+                with open(self.config_info_file, "r") as f:
+                    old_prefix_info = f.read()
+            except IOError:
+                old_prefix_info = ""
 
-                if old_prefix_info != prefix_info:
-                    # update builtin dll symlinks or copies
-                    self.update_builtin_libs(builtin_dll_copy)
+            if old_prefix_info != prefix_info:
+                # update builtin dll symlinks or copies
+                self.update_builtin_libs(builtin_dll_copy)
 
-                    with open(self.config_info_file, "w") as f:
-                        f.write(prefix_info)
+                with open(self.config_info_file, "w") as f:
+                    f.write(prefix_info)
 
             with open(self.version_file, "w") as f:
                 f.write(CURRENT_PREFIX_VERSION + "\n")
@@ -820,12 +830,11 @@ class CompatData:
 
             if use_wined3d:
                 dxvkfiles = ["dxvk_config"]
-                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9", "dxgi"]
+                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
             else:
-                dxvkfiles = ["dxvk_config", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9", "dxgi"]
+                dxvkfiles = ["dxvk_config", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 wined3dfiles = []
 
-            #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
             if use_dxvk_dxgi:
                 dxvkfiles.append("dxgi")
             else:
@@ -867,7 +876,8 @@ class CompatData:
             if nvidia_wine_dll_dir:
                 for dll in ["_nvngx.dll", "nvngx.dll"]:
                     try_copy(nvidia_wine_dll_dir + "/" + dll,
-                             self.prefix_dir + "drive_c/windows/system32/" + dll)
+                             self.prefix_dir + "drive_c/windows/system32/" + dll,
+                             optional=True)
 
             try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll",
                     self.prefix_dir + "drive_c/windows/system32/d3d12.dll")
@@ -983,7 +993,7 @@ class Session:
         except (OSError, IOError, TypeError, KeyError):
             pass
 
-    def init_session(self):
+    def init_session(self, update_prefix_files):
         # Hack to redirect the "My Documents" dir to the new "Documents" dir - https://github.com/wine-mirror/wine/commit/4111801ab317529c3e24c39a6a97e7043438231a
         if not os.path.islink(g_compatdata.prefix_dir + "drive_c/users/steamuser/Documents"):
             if os.path.exists(g_compatdata.prefix_dir + "drive_c/users/steamuser/My Documents"):
@@ -1088,6 +1098,9 @@ class Session:
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
+        if "PROTON_CRASH_REPORT_DIR" in self.env:
+            self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
+
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
                 basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
@@ -1095,7 +1108,7 @@ class Session:
                 lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
                 if os.path.exists(lfile_path):
                     os.remove(lfile_path)
-                self.log_file = open(lfile_path, "w+")
+                self.log_file = open(lfile_path, "a")
                 self.log_file.write("======================\n")
                 with open(g_proton.version_file, "r") as f:
                     self.log_file.write("Proton: " + f.readline().strip() + "\n")
@@ -1116,7 +1129,8 @@ class Session:
         else:
             self.env["WINEDEBUG"] = "-all"
 
-        g_compatdata.setup_prefix()
+        if update_prefix_files:
+            g_compatdata.setup_prefix()
 
         if "nod3d12" in self.compat_config:
             self.dlloverrides["d3d12"] = ""
@@ -1319,7 +1333,7 @@ if __name__ == "__main__":
 
     import protonfixes
     
-    g_session.init_session()
+    g_session.init_session(sys.argv[1] != "runinprefix")
 
     #determine mode
     if sys.argv[1] == "run":
@@ -1330,6 +1344,8 @@ if __name__ == "__main__":
         g_session.run_proc([g_proton.wineserver_bin, "-w"])
         #then run
         g_session.run()
+    elif sys.argv[1] == "runinprefix":
+        g_session.run_proc([g_proton.wine_bin] + sys.argv[2:])
     elif sys.argv[1] == "getcompatpath":
         #linux -> windows path
         path = subprocess.check_output([g_proton.wine64_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
