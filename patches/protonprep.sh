@@ -228,6 +228,7 @@
     patch -Np1 < ../patches/proton/41-proton-07_nfs_registry.patch
     patch -Np1 < ../patches/proton/45-proton-08_FH4_registry.patch
     patch -Np1 < ../patches/proton/46-proton-09_nvapi_registry.patch
+    patch -Np1 < ../patches/proton/47-proton-10_dirt_5_registry.patch
 
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
