@@ -4013,3 +4013,133 @@ index b21f22c3629..2e34568ea17 100644
  @ stdcall D3DKMTOpenAdapterFromGdiDisplayName(ptr)
  @ stdcall D3DKMTOpenAdapterFromHdc(ptr)
  @ stdcall D3DKMTQueryStatistics(ptr)
+From ce0c255a1fd40bfa9a1de6f6765b83a4dcf9d0dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 21 May 2021 14:57:46 +0200
+Subject: [PATCH] user32: Implement rudimentary EnableMouseInPointer support.
+
+CW-Bug-Id: 18943
+---
+ dlls/user32/input.c        |  9 +++++----
+ dlls/user32/message.c      | 32 ++++++++++++++++++++++++++++++++
+ dlls/user32/user_private.h |  1 +
+ include/winuser.h          | 26 ++++++++++++++++++++++++++
+ 4 files changed, 64 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/user32/input.c b/dlls/user32/input.c
+index 455f857d9d0..dbfc9f36819 100644
+--- a/dlls/user32/input.c
++++ b/dlls/user32/input.c
+@@ -1324,15 +1324,16 @@ int WINAPI GetMouseMovePointsEx( UINT size, LPMOUSEMOVEPOINT ptin, LPMOUSEMOVEPO
+     return copied;
+ }
+ 
++BOOL enable_mouse_in_pointer = FALSE;
++
+ /***********************************************************************
+  *		EnableMouseInPointer (USER32.@)
+  */
+ BOOL WINAPI EnableMouseInPointer(BOOL enable)
+ {
+-    FIXME("(%#x) stub\n", enable);
+-
+-    SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
+-    return FALSE;
++    FIXME("(%#x) semi-stub\n", enable);
++    enable_mouse_in_pointer = TRUE;
++    return TRUE;
+ }
+ 
+ static DWORD CALLBACK devnotify_window_callback(HANDLE handle, DWORD flags, DEV_BROADCAST_HDR *header)
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index a54ecccc7cd..57baea203e5 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2590,6 +2590,38 @@ static BOOL process_mouse_message( MSG *msg, UINT hw_id, ULONG_PTR extra_info, H
+        in the WM_SETCURSOR message even if it's non-client mouse message */
+     SendMessageW( msg->hwnd, WM_SETCURSOR, (WPARAM)msg->hwnd, MAKELONG( hittest, msg->message ));
+ 
++    if (enable_mouse_in_pointer) switch (msg->message)
++    {
++    case WM_MOUSEMOVE:
++    case WM_LBUTTONDOWN:
++    case WM_LBUTTONUP:
++    case WM_RBUTTONDOWN:
++    case WM_RBUTTONUP:
++    case WM_MBUTTONDOWN:
++    case WM_MBUTTONUP:
++    case WM_XBUTTONDOWN:
++    case WM_XBUTTONUP:
++    {
++        WORD flags = POINTER_MESSAGE_FLAG_INRANGE|POINTER_MESSAGE_FLAG_INCONTACT|POINTER_MESSAGE_FLAG_PRIMARY;
++        if (msg->message == WM_LBUTTONDOWN) flags |= POINTER_MESSAGE_FLAG_FIRSTBUTTON;
++        if (msg->message == WM_RBUTTONDOWN) flags |= POINTER_MESSAGE_FLAG_SECONDBUTTON;
++        if (msg->message == WM_MBUTTONDOWN) flags |= POINTER_MESSAGE_FLAG_THIRDBUTTON;
++        if (msg->message == WM_XBUTTONDOWN && LOWORD( msg->wParam ) == MK_LBUTTON) flags |= POINTER_MESSAGE_FLAG_FIRSTBUTTON;
++        if (msg->message == WM_XBUTTONDOWN && LOWORD( msg->wParam ) == MK_RBUTTON) flags |= POINTER_MESSAGE_FLAG_SECONDBUTTON;
++        if (msg->message == WM_XBUTTONDOWN && LOWORD( msg->wParam ) == MK_MBUTTON) flags |= POINTER_MESSAGE_FLAG_THIRDBUTTON;
++        if (msg->message == WM_XBUTTONDOWN && LOWORD( msg->wParam ) == MK_XBUTTON1) flags |= POINTER_MESSAGE_FLAG_FOURTHBUTTON;
++        if (msg->message == WM_XBUTTONDOWN && LOWORD( msg->wParam ) == MK_XBUTTON2) flags |= POINTER_MESSAGE_FLAG_FIFTHBUTTON;
++        SendMessageW( msg->hwnd, WM_POINTERUPDATE, MAKELONG( 1, flags ), MAKELONG( msg->pt.x, msg->pt.y ) );
++        break;
++    }
++    case WM_MOUSEWHEEL:
++        SendMessageW( msg->hwnd, WM_POINTERWHEEL, MAKELONG( 1, HIWORD( msg->wParam ) ), MAKELONG( msg->pt.x, msg->pt.y ) );
++        break;
++    case WM_MOUSEHWHEEL:
++        SendMessageW( msg->hwnd, WM_POINTERHWHEEL, MAKELONG( 1, HIWORD( msg->wParam ) ), MAKELONG( msg->pt.x, msg->pt.y ) );
++        break;
++    }
++
+     msg->message = message;
+     return !eatMsg;
+ }
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 5a36f9bb7aa..0910e453f13 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -236,6 +236,7 @@ static inline BOOL is_broadcast( HWND hwnd )
+ }
+ 
+ extern HMODULE user32_module DECLSPEC_HIDDEN;
++extern BOOL enable_mouse_in_pointer DECLSPEC_HIDDEN;
+ 
+ struct dce;
+ struct tagWND;
+diff --git a/include/winuser.h b/include/winuser.h
+index fe82613e590..402fbee9dc4 100644
+--- a/include/winuser.h
++++ b/include/winuser.h
+@@ -3474,6 +3474,32 @@ typedef struct tagMENUGETOBJECTINFO
+     void  *pvObj;
+ } MENUGETOBJECTINFO, *PMENUGETOBJECTINFO;
+ 
++#define POINTER_MESSAGE_FLAG_NEW                      0x00000001
++#define POINTER_MESSAGE_FLAG_INRANGE                  0x00000002
++#define POINTER_MESSAGE_FLAG_INCONTACT                0x00000004
++#define POINTER_MESSAGE_FLAG_FIRSTBUTTON              0x00000010
++#define POINTER_MESSAGE_FLAG_SECONDBUTTON             0x00000020
++#define POINTER_MESSAGE_FLAG_THIRDBUTTON              0x00000040
++#define POINTER_MESSAGE_FLAG_FOURTHBUTTON             0x00000080
++#define POINTER_MESSAGE_FLAG_FIFTHBUTTON              0x00000100
++#define POINTER_MESSAGE_FLAG_PRIMARY                  0x00002000
++#define POINTER_MESSAGE_FLAG_CONFIDENCE               0x00004000
++#define POINTER_MESSAGE_FLAG_CANCELED                 0x00008000
++
++#define GET_POINTERID_WPARAM(wparam)                  (LOWORD(wparam))
++#define IS_POINTER_FLAG_SET_WPARAM(wparam, flags)     ((HIWORD(wparam) & (flags)) == (flags))
++#define IS_POINTER_NEW_WPARAM(wparam)                 IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_NEW)
++#define IS_POINTER_INRANGE_WPARAM(wparam)             IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_INRANGE)
++#define IS_POINTER_INCONTACT_WPARAM(wparam)           IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_INCONTACT)
++#define IS_POINTER_FIRSTBUTTON_WPARAM(wparam)         IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_FIRSTBUTTON)
++#define IS_POINTER_SECONDBUTTON_WPARAM(wparam)        IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_SECONDBUTTON)
++#define IS_POINTER_THIRDBUTTON_WPARAM(wparam)         IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_THIRDBUTTON)
++#define IS_POINTER_FOURTHBUTTON_WPARAM(wparam)        IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_FOURTHBUTTON)
++#define IS_POINTER_FIFTHBUTTON_WPARAM(wparam)         IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_FIFTHBUTTON)
++#define IS_POINTER_PRIMARY_WPARAM(wparam)             IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_PRIMARY)
++#define HAS_POINTER_CONFIDENCE_WPARAM(wparam)         IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_CONFIDENCE)
++#define IS_POINTER_CANCELED_WPARAM(wparam)            IS_POINTER_FLAG_SET_WPARAM(wparam, POINTER_MESSAGE_FLAG_CANCELED)
++
+ #if defined(_WINGDI_) && !defined(NOGDI)
+ WINUSERAPI LONG        WINAPI ChangeDisplaySettingsA(LPDEVMODEA,DWORD);
+ WINUSERAPI LONG        WINAPI ChangeDisplaySettingsW(LPDEVMODEW,DWORD);
