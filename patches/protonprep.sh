@@ -307,9 +307,12 @@
 
     # RPGMaker VX fix
     patch -Np1 < ../patches/wine-hotfixes/rpgmaker.patch
-    
-    # this is needed for battle.net
-    patch -RNp1 < ../patches/wine-hotfixes/revert-ws2_32-Reimplement-select-on-top-of-IOCTL_AFD_POL.patch
+
+    # bnet unfucker
+    patch -Np1 < ../patches/wine-hotfixes/pending_upstream_battlenet_unfucker.patch
+
+    # server cpu usage unfucker
+    patch -Np1 < ../patches/wine-hotfixes/pending_upstream_server_cpu_unfucker.patch
     
     # BF4 ping fix
     patch -Np1 < ../patches/wine-hotfixes/207990

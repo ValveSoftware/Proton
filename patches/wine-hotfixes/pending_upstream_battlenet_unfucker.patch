@@ -1,0 +1,742 @@
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 1/5] ws2_32/tests: Fix some connection timeout tests.
+Message-Id: <20210706001419.1846231-1-zfigura@codeweavers.com>
+Date: Mon,  5 Jul 2021 19:14:15 -0500
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/ws2_32/tests/afd.c  |  6 ++++--
+ dlls/ws2_32/tests/sock.c | 30 ++++++++++++++++++++++--------
+ 2 files changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/ws2_32/tests/afd.c b/dlls/ws2_32/tests/afd.c
+index 8f7f4acf4f2..2637630ce8d 100644
+--- a/dlls/ws2_32/tests/afd.c
++++ b/dlls/ws2_32/tests/afd.c
+@@ -448,7 +448,8 @@ static void test_poll(void)
+ 
+         addr.sin_port = 255;
+         ret = connect(client, (struct sockaddr *)&addr, sizeof(addr));
+-        ok(!ret || WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++        ok(ret == -1, "got %d\n", ret);
++        ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
+ 
+         ret = WaitForSingleObject(event, 10000);
+         ok(!ret, "got %#x\n", ret);
+@@ -474,6 +475,7 @@ static void test_poll(void)
+     server = accept(listener, NULL, NULL);
+     ok(server != -1, "got error %u\n", WSAGetLastError());
+ 
++    in_params->timeout = -1000 * 10000;
+     in_params->count = 2;
+     in_params->sockets[0].socket = client;
+     in_params->sockets[0].flags = AFD_POLL_READ;
+@@ -1310,7 +1312,7 @@ static void test_get_events(void)
+         ok(ret == -1, "expected failure\n");
+         ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
+ 
+-        ret = WaitForSingleObject(event, 2000);
++        ret = WaitForSingleObject(event, 10000);
+         ok(!ret, "got %#x\n", ret);
+ 
+         memset(&params, 0xcc, sizeof(params));
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index 8617a6fb7e3..1fd75dc40d8 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -3252,17 +3252,20 @@ static void test_select(void)
+         FD_SET(fdWrite, &exceptfds);
+         select_timeout.tv_sec = 10;
+         ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
+-        ok(ret == 1, "expected 1, got %d\n", ret);
++        todo_wine ok(ret == 1, "expected 1, got %d\n", ret);
+         len = sizeof(id);
+         id = 0xdeadbeef;
+         ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char*)&id, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        ok(id == WSAECONNREFUSED, "expected 10061, got %d\n", id);
+-        ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
++        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
+         ok(select_timeout.tv_usec == 250000, "select timeout should not have changed\n");
+         closesocket(fdWrite);
+     }
+ 
++    select_timeout.tv_sec = 1;
++    select_timeout.tv_usec = 250000;
++
+     /* Try select() on a closed socket after connection */
+     tcp_socketpair(&fdRead, &fdWrite);
+     closesocket(fdRead);
+@@ -6372,22 +6375,33 @@ static void test_WSAPoll(void)
+      * so make the test interactive-only. */
+     if (winetest_interactive)
+     {
+-        const struct sockaddr_in invalid_addr = {.sin_family = AF_INET, .sin_addr.s_addr = inet_addr("192.0.2.0")};
++        const struct sockaddr_in invalid_addr =
++        {
++            .sin_family = AF_INET,
++            .sin_addr.s_addr = htonl(INADDR_LOOPBACK),
++            .sin_port = 255,
++        };
++        SOCKET client;
+ 
+-        client = setup_connector_socket(&invalid_addr, sizeof(invalid_addr), TRUE);
++        client = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
++        set_blocking(client, FALSE);
++
++        ret = connect(client, (const struct sockaddr *)&invalid_addr, sizeof(invalid_addr));
++        ok(ret == -1, "got %d\n", ret);
++        ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
+ 
+         fds[0].fd = client;
+         fds[0].events = POLLRDNORM | POLLRDBAND | POLLWRNORM;
+         fds[0].revents = 0xdead;
+         ret = pWSAPoll(fds, 1, 10000);
+-        ok(ret == 1, "got %d\n", ret);
+-        ok(fds[0].revents == POLLERR, "got events %#x\n", fds[0].revents);
++        todo_wine ok(ret == 1, "got %d\n", ret);
++        todo_wine ok(fds[0].revents == (POLLWRNORM | POLLHUP | POLLERR), "got events %#x\n", fds[0].revents);
+ 
+         len = sizeof(err);
+         err = 0xdeadbeef;
+         ret = getsockopt(client, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        ok(err == WSAECONNREFUSED, "expected 10061, got %d\n", err);
++        todo_wine ok(err == WSAECONNREFUSED, "got error %u\n", err);
+         closesocket(client);
+     }
+ 
+
+-- 
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 2/5] ws2_32/tests: Add more tests for connection failure.
+Message-Id: <20210706001419.1846231-2-zfigura@codeweavers.com>
+Date: Mon,  5 Jul 2021 19:14:16 -0500
+In-Reply-To: <20210706001419.1846231-1-zfigura@codeweavers.com>
+References: <20210706001419.1846231-1-zfigura@codeweavers.com>
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/ws2_32/tests/afd.c  |  86 +++++++++++++++++++++
+ dlls/ws2_32/tests/sock.c | 159 ++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 236 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/ws2_32/tests/afd.c b/dlls/ws2_32/tests/afd.c
+index 2637630ce8d..9afb8e86dc9 100644
+--- a/dlls/ws2_32/tests/afd.c
++++ b/dlls/ws2_32/tests/afd.c
+@@ -460,6 +460,71 @@ static void test_poll(void)
+         ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
+         ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
+ 
++        in_params->timeout = now.QuadPart;
++        memset(out_params, 0xcc, sizeof(out_buffer));
++        ret = NtDeviceIoControlFile((HANDLE)client, event, NULL, NULL, &io,
++                IOCTL_AFD_POLL, in_params, params_size, out_params, params_size);
++        todo_wine
++        {
++            ok(!ret, "got %#x\n", ret);
++            ok(!io.Status, "got %#x\n", io.Status);
++            ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
++            ok(out_params->count == 1, "got count %u\n", out_params->count);
++            ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
++            ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
++            ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
++        }
++
++        memset(out_params, 0xcc, sizeof(out_buffer));
++        ret = NtDeviceIoControlFile((HANDLE)client, event, NULL, NULL, &io,
++                IOCTL_AFD_POLL, in_params, params_size, out_params, params_size);
++        todo_wine
++        {
++            ok(!ret, "got %#x\n", ret);
++            ok(!io.Status, "got %#x\n", io.Status);
++            ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
++            ok(out_params->count == 1, "got count %u\n", out_params->count);
++            ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
++            ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
++            ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
++        }
++
++        ret = connect(client, (struct sockaddr *)&addr, sizeof(addr));
++        ok(ret == -1, "got %d\n", ret);
++        todo_wine ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++        if (WSAGetLastError() == WSAECONNABORTED)
++        {
++            ret = connect(client, (struct sockaddr *)&addr, sizeof(addr));
++            ok(ret == -1, "got %d\n", ret);
++            ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++        }
++
++        /* A subsequent poll call returns no events, or times out. However, this
++         * can't be reliably tested, as e.g. Linux will fail the connection
++         * immediately. */
++
++        closesocket(client);
++
++        client = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
++
++        ret = connect(client, (struct sockaddr *)&addr, sizeof(addr));
++        ok(ret == -1, "expected failure\n");
++        ok(WSAGetLastError() == WSAECONNREFUSED, "got error %u\n", WSAGetLastError());
++
++        memset(out_params, 0xcc, sizeof(out_buffer));
++        ret = NtDeviceIoControlFile((HANDLE)client, event, NULL, NULL, &io,
++                IOCTL_AFD_POLL, in_params, params_size, out_params, params_size);
++        todo_wine
++        {
++            ok(!ret, "got %#x\n", ret);
++            ok(!io.Status, "got %#x\n", io.Status);
++            ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
++            ok(out_params->count == 1, "got count %u\n", out_params->count);
++            ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
++            ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
++            ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
++        }
++
+         closesocket(client);
+     }
+ 
+@@ -1329,6 +1394,27 @@ static void test_get_events(void)
+                 ok(!params.status[i], "got status[%u] %#x\n", i, params.status[i]);
+         }
+ 
++        ResetEvent(event);
++        ret = WSAEventSelect(client, event, FD_CONNECT);
++        ok(!ret, "got error %u\n", GetLastError());
++
++        ret = WaitForSingleObject(event, 0);
++        ok(ret == WAIT_TIMEOUT, "got %#x\n", ret);
++
++        memset(&params, 0xcc, sizeof(params));
++        memset(&io, 0xcc, sizeof(io));
++        ret = NtDeviceIoControlFile((HANDLE)client, NULL, NULL, NULL, &io,
++                IOCTL_AFD_GET_EVENTS, NULL, 0, &params, sizeof(params));
++        ok(!ret, "got %#x\n", ret);
++        ok(!params.flags, "got flags %#x\n", params.flags);
++        for (i = 0; i < ARRAY_SIZE(params.status); ++i)
++        {
++            if (i == AFD_POLL_BIT_CONNECT_ERR)
++                ok(params.status[i] == STATUS_CONNECTION_REFUSED, "got status[%u] %#x\n", i, params.status[i]);
++            else
++                ok(!params.status[i], "got status[%u] %#x\n", i, params.status[i]);
++        }
++
+         closesocket(client);
+     }
+ 
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index 1fd75dc40d8..1b697423e27 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -3239,30 +3239,144 @@ static void test_select(void)
+     ok(ret == 0, "expected 0, got %d\n", ret);
+     ret = closesocket(fdWrite);
+     ok(ret == 0, "expected 0, got %d\n", ret);
+-    ret = closesocket(fdListen);
+-    ok(ret == 0, "expected 0, got %d\n", ret);
+ 
+     /* w10pro64 sometimes takes over 2 seconds for an error to be reported. */
+     if (winetest_interactive)
+     {
+-        len = sizeof(address);
+-        fdWrite = setup_connector_socket(&address, len, TRUE);
++        const struct sockaddr_in invalid_addr =
++        {
++            .sin_family = AF_INET,
++            .sin_addr.s_addr = htonl(INADDR_LOOPBACK),
++            .sin_port = 255,
++        };
++
++        fdWrite = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
++        set_blocking(fdWrite, FALSE);
++
++        ret = connect(fdWrite, (struct sockaddr *)&invalid_addr, sizeof(invalid_addr));
++        ok(ret == -1, "got %d\n", ret);
++        ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++
+         FD_ZERO_ALL();
++        FD_SET(fdWrite, &readfds);
+         FD_SET(fdWrite, &writefds);
+         FD_SET(fdWrite, &exceptfds);
+         select_timeout.tv_sec = 10;
+         ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
+         todo_wine ok(ret == 1, "expected 1, got %d\n", ret);
+-        len = sizeof(id);
+-        id = 0xdeadbeef;
+-        ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char*)&id, &len);
+-        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
+         todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
+         ok(select_timeout.tv_usec == 250000, "select timeout should not have changed\n");
++
++        len = sizeof(id);
++        id = 0xdeadbeef;
++        ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
++        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
++        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
++
++        len = sizeof(id);
++        id = 0xdeadbeef;
++        ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
++        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
++        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
++
++        FD_ZERO_ALL();
++        FD_SET(fdWrite, &readfds);
++        FD_SET(fdWrite, &writefds);
++        FD_SET(fdWrite, &exceptfds);
++        select_timeout.tv_sec = 10;
++        ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
++        todo_wine ok(ret == 1, "got %d\n", ret);
++        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++
++        /* Calling connect() doesn't reset the socket error, but a successful
++         * connection does. This is kind of tricky to test, because while
++         * Windows takes a couple seconds to actually fail the connection,
++         * Linux will fail the connection almost immediately. */
++
++        ret = connect(fdWrite, (const struct sockaddr *)&invalid_addr, sizeof(invalid_addr));
++        ok(ret == -1, "got %d\n", ret);
++        todo_wine ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++        if (WSAGetLastError() == WSAECONNABORTED)
++        {
++            ret = connect(fdWrite, (const struct sockaddr *)&invalid_addr, sizeof(invalid_addr));
++            ok(ret == -1, "got %d\n", ret);
++            ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++        }
++
++        len = sizeof(id);
++        id = 0xdeadbeef;
++        ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
++        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
++        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
++
++        FD_ZERO_ALL();
++        FD_SET(fdWrite, &readfds);
++        FD_SET(fdWrite, &writefds);
++        FD_SET(fdWrite, &exceptfds);
++        select_timeout.tv_sec = 10;
++        ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
++        todo_wine ok(ret == 1, "got %d\n", ret);
++        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++
++        len = sizeof(address);
++        ret = getsockname(fdListen, (struct sockaddr *)&address, &len);
++        ok(!ret, "got error %u\n", WSAGetLastError());
++        ret = connect(fdWrite, (const struct sockaddr *)&address, sizeof(address));
++        ok(ret == -1, "got %d\n", ret);
++        todo_wine ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++        if (WSAGetLastError() == WSAECONNABORTED)
++        {
++            ret = connect(fdWrite, (const struct sockaddr *)&address, sizeof(address));
++            ok(ret == -1, "got %d\n", ret);
++            ok(WSAGetLastError() == WSAEWOULDBLOCK, "got error %u\n", WSAGetLastError());
++        }
++
++        FD_ZERO_ALL();
++        FD_SET(fdWrite, &readfds);
++        FD_SET(fdWrite, &writefds);
++        FD_SET(fdWrite, &exceptfds);
++        select_timeout.tv_sec = 1;
++        ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
++        ok(ret == 1, "expected 1, got %d\n", ret);
++        ok(FD_ISSET(fdWrite, &writefds), "fdWrite socket is not in the set\n");
++
++        len = sizeof(id);
++        id = 0xdeadbeef;
++        ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
++        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
++        todo_wine ok(!id, "got error %u\n", id);
++
++        closesocket(fdWrite);
++
++        /* test polling after a (synchronous) failure */
++
++        fdWrite = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
++
++        ret = connect(fdWrite, (const struct sockaddr *)&invalid_addr, sizeof(invalid_addr));
++        ok(ret == -1, "got %d\n", ret);
++        ok(WSAGetLastError() == WSAECONNREFUSED, "got error %u\n", WSAGetLastError());
++
++        FD_ZERO_ALL();
++        FD_SET(fdWrite, &readfds);
++        FD_SET(fdWrite, &writefds);
++        FD_SET(fdWrite, &exceptfds);
++        select_timeout.tv_sec = 0;
++        ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
++        todo_wine ok(ret == 1, "expected 1, got %d\n", ret);
++        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++
++        len = sizeof(id);
++        id = 0xdeadbeef;
++        ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
++        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
++        todo_wine ok(!id, "got error %u\n", id);
++
+         closesocket(fdWrite);
+     }
+ 
++    ret = closesocket(fdListen);
++    ok(ret == 0, "expected 0, got %d\n", ret);
++
+     select_timeout.tv_sec = 1;
+     select_timeout.tv_usec = 250000;
+ 
+@@ -6402,6 +6516,33 @@ static void test_WSAPoll(void)
+         ret = getsockopt(client, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+         todo_wine ok(err == WSAECONNREFUSED, "got error %u\n", err);
++
++        len = sizeof(err);
++        err = 0xdeadbeef;
++        ret = getsockopt(client, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
++        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
++        todo_wine ok(err == WSAECONNREFUSED, "got error %u\n", err);
++
++        check_poll_todo(client, POLLWRNORM | POLLHUP | POLLERR);
++
++        closesocket(client);
++
++        /* test polling after a (synchronous) failure */
++
++        client = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
++
++        ret = connect(client, (const struct sockaddr *)&invalid_addr, sizeof(invalid_addr));
++        ok(ret == -1, "got %d\n", ret);
++        ok(WSAGetLastError() == WSAECONNREFUSED, "got error %u\n", WSAGetLastError());
++
++        check_poll_todo(client, POLLWRNORM | POLLHUP | POLLERR);
++
++        len = sizeof(err);
++        err = 0xdeadbeef;
++        ret = getsockopt(client, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
++        ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
++        todo_wine ok(!err, "got error %u\n", err);
++
+         closesocket(client);
+     }
+ 
+
+-- 
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 3/5] server: Return a Win32 error code from IOCTL_AFD_WINE_GET_SO_ERROR.
+Message-Id: <20210706001419.1846231-3-zfigura@codeweavers.com>
+Date: Mon,  5 Jul 2021 19:14:17 -0500
+In-Reply-To: <20210706001419.1846231-1-zfigura@codeweavers.com>
+References: <20210706001419.1846231-1-zfigura@codeweavers.com>
+
+Fixes: fb3956fcf94397bed53598943a9524520bc23e08
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/ws2_32/tests/sock.c | 10 +++++-----
+ server/sock.c            |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index 1b697423e27..df5a69b4564 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -3271,13 +3271,13 @@ static void test_select(void)
+         id = 0xdeadbeef;
+         ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
++        ok(id == WSAECONNREFUSED, "got error %u\n", id);
+ 
+         len = sizeof(id);
+         id = 0xdeadbeef;
+         ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
++        ok(id == WSAECONNREFUSED, "got error %u\n", id);
+ 
+         FD_ZERO_ALL();
+         FD_SET(fdWrite, &readfds);
+@@ -3307,7 +3307,7 @@ static void test_select(void)
+         id = 0xdeadbeef;
+         ret = getsockopt(fdWrite, SOL_SOCKET, SO_ERROR, (char *)&id, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        todo_wine ok(id == WSAECONNREFUSED, "got error %u\n", id);
++        ok(id == WSAECONNREFUSED, "got error %u\n", id);
+ 
+         FD_ZERO_ALL();
+         FD_SET(fdWrite, &readfds);
+@@ -6515,13 +6515,13 @@ static void test_WSAPoll(void)
+         err = 0xdeadbeef;
+         ret = getsockopt(client, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        todo_wine ok(err == WSAECONNREFUSED, "got error %u\n", err);
++        ok(err == WSAECONNREFUSED, "got error %u\n", err);
+ 
+         len = sizeof(err);
+         err = 0xdeadbeef;
+         ret = getsockopt(client, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
+         ok(!ret, "getsockopt failed with %d\n", WSAGetLastError());
+-        todo_wine ok(err == WSAECONNREFUSED, "got error %u\n", err);
++        ok(err == WSAECONNREFUSED, "got error %u\n", err);
+ 
+         check_poll_todo(client, POLLWRNORM | POLLHUP | POLLERR);
+ 
+diff --git a/server/sock.c b/server/sock.c
+index befa9117c13..2b5915c87fe 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -2587,7 +2587,7 @@ static int sock_ioctl( struct fd *fd, ioctl_code_t code, struct async *async )
+             {
+                 if (sock->errors[i])
+                 {
+-                    error = sock->errors[i];
++                    error = sock_get_error( sock->errors[i] );
+                     break;
+                 }
+             }
+
+-- 
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 4/5] server: Separate a poll_single_socket() helper.
+Message-Id: <20210706001419.1846231-4-zfigura@codeweavers.com>
+Date: Mon,  5 Jul 2021 19:14:18 -0500
+In-Reply-To: <20210706001419.1846231-1-zfigura@codeweavers.com>
+References: <20210706001419.1846231-1-zfigura@codeweavers.com>
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ server/sock.c | 44 +++++++++++++++++++++++++-------------------
+ 1 file changed, 25 insertions(+), 19 deletions(-)
+
+diff --git a/server/sock.c b/server/sock.c
+index 2b5915c87fe..b1cf628abae 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -2734,6 +2734,29 @@ static int sock_ioctl( struct fd *fd, ioctl_code_t code, struct async *async )
+     }
+ }
+ 
++static int poll_single_socket( struct sock *sock, int mask )
++{
++    struct pollfd pollfd;
++
++    pollfd.fd = get_unix_fd( sock->fd );
++    pollfd.events = poll_flags_from_afd( sock, mask );
++    if (pollfd.events < 0 || poll( &pollfd, 1, 0 ) < 0)
++        return 0;
++
++    if ((mask & AFD_POLL_HUP) && (pollfd.revents & POLLIN) && sock->type == WS_SOCK_STREAM)
++    {
++        char dummy;
++
++        if (!recv( get_unix_fd( sock->fd ), &dummy, 1, MSG_PEEK ))
++        {
++            pollfd.revents &= ~POLLIN;
++            pollfd.revents |= POLLHUP;
++        }
++    }
++
++    return get_poll_flags( sock, pollfd.revents ) & mask;
++}
++
+ static int poll_socket( struct sock *poll_sock, struct async *async, timeout_t timeout,
+                         unsigned int count, const struct poll_socket_input *input )
+ {
+@@ -2788,26 +2811,9 @@ static int poll_socket( struct sock *poll_sock, struct async *async, timeout_t t
+     for (i = 0; i < count; ++i)
+     {
+         struct sock *sock = req->sockets[i].sock;
+-        struct pollfd pollfd;
+-        int flags;
++        int mask = req->sockets[i].flags;
++        int flags = poll_single_socket( sock, mask );
+ 
+-        pollfd.fd = get_unix_fd( sock->fd );
+-        pollfd.events = poll_flags_from_afd( sock, req->sockets[i].flags );
+-        if (pollfd.events < 0 || poll( &pollfd, 1, 0 ) < 0) continue;
+-
+-        if ((req->sockets[i].flags & AFD_POLL_HUP) && (pollfd.revents & POLLIN) &&
+-            sock->type == WS_SOCK_STREAM)
+-        {
+-            char dummy;
+-
+-            if (!recv( get_unix_fd( sock->fd ), &dummy, 1, MSG_PEEK ))
+-            {
+-                pollfd.revents &= ~POLLIN;
+-                pollfd.revents |= POLLHUP;
+-            }
+-        }
+-
+-        flags = get_poll_flags( sock, pollfd.revents ) & req->sockets[i].flags;
+         if (flags)
+         {
+             req->iosb->status = STATUS_SUCCESS;
+
+-- 
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 5/5] server: Report AFD_POLL_CONNECT_ERR if a previous connection attempt failed.
+Message-Id: <20210706001419.1846231-5-zfigura@codeweavers.com>
+Date: Mon,  5 Jul 2021 19:14:19 -0500
+In-Reply-To: <20210706001419.1846231-1-zfigura@codeweavers.com>
+References: <20210706001419.1846231-1-zfigura@codeweavers.com>
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51331
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51366
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/ws2_32/tests/afd.c  | 51 +++++++++++++++++-----------------------
+ dlls/ws2_32/tests/sock.c | 16 ++++++-------
+ server/sock.c            |  8 +++++++
+ 3 files changed, 37 insertions(+), 38 deletions(-)
+
+diff --git a/dlls/ws2_32/tests/afd.c b/dlls/ws2_32/tests/afd.c
+index 9afb8e86dc9..4b8796157aa 100644
+--- a/dlls/ws2_32/tests/afd.c
++++ b/dlls/ws2_32/tests/afd.c
+@@ -464,30 +464,24 @@ static void test_poll(void)
+         memset(out_params, 0xcc, sizeof(out_buffer));
+         ret = NtDeviceIoControlFile((HANDLE)client, event, NULL, NULL, &io,
+                 IOCTL_AFD_POLL, in_params, params_size, out_params, params_size);
+-        todo_wine
+-        {
+-            ok(!ret, "got %#x\n", ret);
+-            ok(!io.Status, "got %#x\n", io.Status);
+-            ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
+-            ok(out_params->count == 1, "got count %u\n", out_params->count);
+-            ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
+-            ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
+-            ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
+-        }
++        ok(!ret, "got %#x\n", ret);
++        ok(!io.Status, "got %#x\n", io.Status);
++        ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
++        ok(out_params->count == 1, "got count %u\n", out_params->count);
++        ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
++        ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
++        ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
+ 
+         memset(out_params, 0xcc, sizeof(out_buffer));
+         ret = NtDeviceIoControlFile((HANDLE)client, event, NULL, NULL, &io,
+                 IOCTL_AFD_POLL, in_params, params_size, out_params, params_size);
+-        todo_wine
+-        {
+-            ok(!ret, "got %#x\n", ret);
+-            ok(!io.Status, "got %#x\n", io.Status);
+-            ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
+-            ok(out_params->count == 1, "got count %u\n", out_params->count);
+-            ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
+-            ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
+-            ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
+-        }
++        ok(!ret, "got %#x\n", ret);
++        ok(!io.Status, "got %#x\n", io.Status);
++        ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
++        ok(out_params->count == 1, "got count %u\n", out_params->count);
++        ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
++        ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
++        ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
+ 
+         ret = connect(client, (struct sockaddr *)&addr, sizeof(addr));
+         ok(ret == -1, "got %d\n", ret);
+@@ -514,16 +508,13 @@ static void test_poll(void)
+         memset(out_params, 0xcc, sizeof(out_buffer));
+         ret = NtDeviceIoControlFile((HANDLE)client, event, NULL, NULL, &io,
+                 IOCTL_AFD_POLL, in_params, params_size, out_params, params_size);
+-        todo_wine
+-        {
+-            ok(!ret, "got %#x\n", ret);
+-            ok(!io.Status, "got %#x\n", io.Status);
+-            ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
+-            ok(out_params->count == 1, "got count %u\n", out_params->count);
+-            ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
+-            ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
+-            ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
+-        }
++        ok(!ret, "got %#x\n", ret);
++        ok(!io.Status, "got %#x\n", io.Status);
++        ok(io.Information == offsetof(struct afd_poll_params, sockets[1]), "got %#Ix\n", io.Information);
++        ok(out_params->count == 1, "got count %u\n", out_params->count);
++        ok(out_params->sockets[0].socket == client, "got socket %#Ix\n", out_params->sockets[0].socket);
++        ok(out_params->sockets[0].flags == AFD_POLL_CONNECT_ERR, "got flags %#x\n", out_params->sockets[0].flags);
++        ok(out_params->sockets[0].status == STATUS_CONNECTION_REFUSED, "got status %#x\n", out_params->sockets[0].status);
+ 
+         closesocket(client);
+     }
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index df5a69b4564..9e7cd3a1d39 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -3263,8 +3263,8 @@ static void test_select(void)
+         FD_SET(fdWrite, &exceptfds);
+         select_timeout.tv_sec = 10;
+         ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
+-        todo_wine ok(ret == 1, "expected 1, got %d\n", ret);
+-        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++        ok(ret == 1, "expected 1, got %d\n", ret);
++        ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
+         ok(select_timeout.tv_usec == 250000, "select timeout should not have changed\n");
+ 
+         len = sizeof(id);
+@@ -3285,8 +3285,8 @@ static void test_select(void)
+         FD_SET(fdWrite, &exceptfds);
+         select_timeout.tv_sec = 10;
+         ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
+-        todo_wine ok(ret == 1, "got %d\n", ret);
+-        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++        ok(ret == 1, "got %d\n", ret);
++        ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
+ 
+         /* Calling connect() doesn't reset the socket error, but a successful
+          * connection does. This is kind of tricky to test, because while
+@@ -3315,8 +3315,8 @@ static void test_select(void)
+         FD_SET(fdWrite, &exceptfds);
+         select_timeout.tv_sec = 10;
+         ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
+-        todo_wine ok(ret == 1, "got %d\n", ret);
+-        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++        ok(ret == 1, "got %d\n", ret);
++        ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
+ 
+         len = sizeof(address);
+         ret = getsockname(fdListen, (struct sockaddr *)&address, &len);
+@@ -3362,8 +3362,8 @@ static void test_select(void)
+         FD_SET(fdWrite, &exceptfds);
+         select_timeout.tv_sec = 0;
+         ret = select(0, &readfds, &writefds, &exceptfds, &select_timeout);
+-        todo_wine ok(ret == 1, "expected 1, got %d\n", ret);
+-        todo_wine ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
++        ok(ret == 1, "expected 1, got %d\n", ret);
++        ok(FD_ISSET(fdWrite, &exceptfds), "fdWrite socket is not in the set\n");
+ 
+         len = sizeof(id);
+         id = 0xdeadbeef;
+diff --git a/server/sock.c b/server/sock.c
+index b1cf628abae..58e9cf4302a 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -2820,6 +2820,14 @@ static int poll_socket( struct sock *poll_sock, struct async *async, timeout_t t
+             output[i].flags = flags;
+             output[i].status = sock_get_ntstatus( sock_error( sock->fd ) );
+         }
++
++        /* FIXME: do other error conditions deserve a similar treatment? */
++        if (sock->state != SOCK_CONNECTING && sock->errors[AFD_POLL_BIT_CONNECT_ERR] && (mask & AFD_POLL_CONNECT_ERR))
++        {
++            req->iosb->status = STATUS_SUCCESS;
++            output[i].flags |= AFD_POLL_CONNECT_ERR;
++            output[i].status = sock_get_ntstatus( sock->errors[AFD_POLL_BIT_CONNECT_ERR] );
++        }
+     }
+ 
+     if (req->iosb->status != STATUS_PENDING)
+
+-- 
+2.30.2
+
+

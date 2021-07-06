@@ -1,0 +1,66 @@
+From: David Koolhoven <david@koolhoven-home.net>
+Subject: [PATCH 1/2] server: Only remove non-listening fd from poll
+Message-Id: <20210702180649.38766-1-david@koolhoven-home.net>
+Date: Fri,  2 Jul 2021 14:06:48 -0400
+
+This makes sure we poll listening non-connection
+file descriptors even if the event is POLLERR or POLLHUP.
+
+Signed-off-by: David Koolhoven <david@koolhoven-home.net>
+---
+ server/sock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/sock.c b/server/sock.c
+index befa9117c13..ce2f390ec05 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -1024,7 +1024,7 @@ static void sock_poll_event( struct fd *fd, int event )
+         fprintf(stderr, "socket %p select event: %x\n", sock, event);
+ 
+     /* we may change event later, remove from loop here */
+-    if (event & (POLLERR|POLLHUP)) set_fd_events( sock->fd, -1 );
++    if (event & (POLLERR|POLLHUP) && sock->state != SOCK_LISTENING) set_fd_events( sock->fd, -1 );
+ 
+     switch (sock->state)
+     {
+
+-- 
+2.32.0
+
+From: David Koolhoven <david@koolhoven-home.net>
+Subject: [PATCH 2/2] server: Prevent polling on shutdown fd
+Message-Id: <20210702180649.38766-2-david@koolhoven-home.net>
+Date: Fri,  2 Jul 2021 14:06:49 -0400
+In-Reply-To: <20210702180649.38766-1-david@koolhoven-home.net>
+References: <20210702180649.38766-1-david@koolhoven-home.net>
+
+Make sure we're not going to poll on connectionless file descriptors
+which have received shutdown signals on their read and write ends.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51319
+Signed-off-by: David Koolhoven <david@koolhoven-home.net>
+---
+ server/sock.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/server/sock.c b/server/sock.c
+index ce2f390ec05..ecf10441c2b 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -1197,6 +1197,10 @@ static int sock_get_poll_events( struct fd *fd )
+         {
+             ev |= POLLOUT;
+         }
++        if (sock->rd_shutdown && sock->wr_shutdown && ev == 0)
++        {
++            ev = -1;
++        }
+ 
+         break;
+     }
+
+-- 
+2.32.0
+
+
