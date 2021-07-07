@@ -280,7 +280,7 @@
     ### WINE PATCH SECTION ###
 
     echo "mfplat additions"
-    patch -Np1 < ../patches/wine-hotfixes/mfplat-rebase.patch
+    patch -Np1 < ../patches/wine-hotfixes/mfplat-godfall-hotfix.patch
 
     # these are applied out of order since guy's mfplat patches are based on vanilla wine
     echo "proton-specific mfplat video conversion patches"
