@@ -1,4 +1,6 @@
-#ifndef __cplusplus
+#ifdef __cplusplus
+#include <algorithm>
+#else
 #ifndef bool
 typedef char bool; /* 1 byte on modern visual studio c++ */
 #endif

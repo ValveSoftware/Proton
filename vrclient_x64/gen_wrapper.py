@@ -280,6 +280,7 @@ skip_structs = [
 ]
 
 struct_conversion_cache = {}
+struct_needs_size_adjustment_cache = {}
 
 print_sizes = []
 
@@ -470,6 +471,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     unnamed = 'a'
     do_lin_to_win = None
     do_win_to_lin = None
+    do_size_fixup = None
     do_wrap = None
     do_unwrap = None
     need_convert = []
@@ -498,6 +500,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                         do_lin_to_win = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
                     #preserve pointers
                     typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.get_canonical().spelling), display_sdkver(sdkver)))
+                elif real_type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
+                        strip_ns(real_type.spelling) in next_is_size_structs and \
+                        struct_needs_size_adjustment(real_type.get_canonical()):
+                    do_size_fixup = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
 
         if param.spelling == "":
             cfile.write(", %s _%s" % (typename, unnamed))
@@ -588,6 +594,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     unnamed = 'a'
     first = True
     next_is_size = False
+    next_is_size_no_conv = False
     convert_size_param = ""
     for param in get_params(method):
         if not first:
@@ -614,15 +621,24 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             elif path_conv and param.spelling in path_conv["w2l_names"]:
                 cfile.write(", %s ? lin_%s : NULL" % (param.spelling, param.spelling))
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+            elif do_size_fixup and do_size_fixup[1] == param.spelling:
+                next_is_size = True
+                next_is_size_no_conv = True
+                cfile.write(", %s" % param.spelling)
+                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif next_is_size:
                 cfile.write(", %s" % param.spelling)
                 next_is_size = False
-                if param.type.spelling == "uint32_t":
+                if next_is_size_no_conv and param.type.spelling == "uint32_t":
+                    cpp.write("std::min(%s, (uint32_t)sizeof(vr::%s))" % (param.spelling, do_size_fixup[0]))
+                    convert_size_param = ", " + param.spelling
+                elif param.type.spelling == "uint32_t":
                     cpp.write("%s ? sizeof(lin) : 0" % param.spelling)
                     convert_size_param = ", " + param.spelling
                 else:
                     cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
                     convert_size_param = ", -1"
+                next_is_size_no_conv = False
             elif "&" in param.type.spelling:
                 cfile.write(", %s" % param.spelling)
                 cpp.write("*%s" % param.spelling)
@@ -884,15 +900,21 @@ def struct_needs_conversion_nocache(struct):
 #    if strip_const(struct.spelling) in manually_handled_structs:
 #        return True
 
+    needs_size_adjustment = False
+
     #check 32-bit compat
     windows_struct = find_windows_struct(struct)
     assert(not windows_struct is None) #must find windows_struct
     for field in struct.get_fields():
         if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
-            return True
+            return True, False
         if field.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
                 struct_needs_conversion(field.type.get_canonical()):
-            return True
+            return True, False
+
+    assert(struct.get_size() <= windows_struct.get_size())
+    if struct.get_size() < windows_struct.get_size():
+        needs_size_adjustment = True
 
     #check 64-bit compat
     windows_struct = find_windows64_struct(struct)
@@ -901,19 +923,31 @@ def struct_needs_conversion_nocache(struct):
     assert(not lin64_struct is None) #must find lin64_struct
     for field in lin64_struct.get_fields():
         if lin64_struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
-            return True
+            return True, False
         if field.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
                 struct_needs_conversion(field.type.get_canonical()):
-            return True
+            return True, False
 
-    return False
+    assert(lin64_struct.get_size() <= windows_struct.get_size())
+    if lin64_struct.get_size() < windows_struct.get_size():
+        needs_size_adjustment = True
+
+    return False, needs_size_adjustment
 
 def struct_needs_conversion(struct):
     if not sdkver in struct_conversion_cache:
         struct_conversion_cache[sdkver] = {}
+        struct_needs_size_adjustment_cache[sdkver] = {}
+
     if not strip_const(struct.spelling) in struct_conversion_cache[sdkver]:
-        struct_conversion_cache[sdkver][strip_const(struct.spelling)] = struct_needs_conversion_nocache(struct)
+        struct_conversion_cache[sdkver][strip_const(struct.spelling)], \
+                struct_needs_size_adjustment_cache[sdkver][strip_const(struct.spelling)] = \
+                struct_needs_conversion_nocache(struct)
+
     return struct_conversion_cache[sdkver][strip_const(struct.spelling)]
+
+def struct_needs_size_adjustment(struct):
+    return not struct_needs_conversion(struct) and struct_needs_size_adjustment_cache[sdkver][strip_const(struct.spelling)]
 
 def get_field_attribute_str(field):
     ftype = field.type.get_canonical()

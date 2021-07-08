@@ -166,7 +166,7 @@ vr::EVRInputError cppIVRInput_IVRInput_010_GetOriginLocalizedName(void *linux_si
 
 vr::EVRInputError cppIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(void *linux_side, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize)
 {
-    return ((IVRInput*)linux_side)->GetOriginTrackedDeviceInfo((vr::VRInputValueHandle_t)origin, (vr::InputOriginInfo_t *)pOriginInfo, (uint32_t)unOriginInfoSize);
+    return ((IVRInput*)linux_side)->GetOriginTrackedDeviceInfo((vr::VRInputValueHandle_t)origin, (vr::InputOriginInfo_t *)pOriginInfo, std::min(unOriginInfoSize, (uint32_t)sizeof(vr::InputOriginInfo_t)));
 }
 
 vr::EVRInputError cppIVRInput_IVRInput_010_GetActionBindingInfo(void *linux_side, VRActionHandle_t action, InputBindingInfo_t * pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t * punReturnedBindingInfoCount)
