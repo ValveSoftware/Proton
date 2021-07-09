@@ -172,6 +172,11 @@ EVROverlayError ivroverlay_001_set_overlay_texture(
         void *linux_side, VROverlayHandle_t overlayHandle, void *texture,
         unsigned int version);
 
+EVRInputError ivrinput_get_digital_action_data(
+        void *func,
+        void *linux_side, VRActionHandle_t action_handle, void *action_data, uint32_t action_data_size,
+        VRInputValueHandle_t restrict_to_device, unsigned int version);
+
 #endif  /* __cplusplus */
 
 #define TRACE WINE_TRACE
