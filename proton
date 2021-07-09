@@ -735,6 +735,25 @@ class Session:
         except (OSError, IOError, TypeError, KeyError):
             pass
 
+    def setup_logging(self, append_forever=False):
+        basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
+
+        if append_forever:
+            #SteamGameId is not always available
+            lfile_path = basedir + "/steam-proton.log"
+        else:
+            if not "SteamGameId" in os.environ:
+                return False
+
+            lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
+
+            if os.path.exists(lfile_path):
+                os.remove(lfile_path)
+
+        makedirs(basedir)
+        self.log_file = open(lfile_path, "a")
+        return True
+
     def init_session(self, update_prefix_files):
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
@@ -828,20 +847,16 @@ class Session:
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
-        if "SteamGameId" in self.env:
-            if self.env["WINEDEBUG"] != "-all":
-                basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
-                makedirs(basedir)
-                lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
-                if os.path.exists(lfile_path):
-                    os.remove(lfile_path)
-                self.log_file = open(lfile_path, "a")
+        if self.env["WINEDEBUG"] != "-all":
+            if self.setup_logging(append_forever=False):
                 self.log_file.write("======================\n")
                 with open(g_proton.version_file, "r") as f:
                     self.log_file.write("Proton: " + f.readline().strip() + "\n")
-                self.log_file.write("SteamGameId: " + self.env["SteamGameId"] + "\n")
+                if "SteamGameId" in self.env:
+                    self.log_file.write("SteamGameId: " + self.env["SteamGameId"] + "\n")
                 self.log_file.write("Command: " + str(sys.argv[2:] + self.cmdlineappend) + "\n")
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
+
                 self.try_log_slr_versions()
 
                 #dump some important variables into the log header
@@ -853,8 +868,8 @@ class Session:
 
                 self.log_file.write("======================\n")
                 self.log_file.flush()
-        else:
-            self.env["WINEDEBUG"] = "-all"
+            else:
+                self.env["WINEDEBUG"] = "-all"
 
         if "PROTON_REMOTE_DEBUG_CMD" in self.env:
             self.remote_debug_cmd = self.env.get("PROTON_REMOTE_DEBUG_CMD").split(" ")
