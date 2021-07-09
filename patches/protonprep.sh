@@ -40,14 +40,6 @@
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
-    
-    cd vkd3d-proton
-    git reset --hard HEAD
-    git clean -xdf
-    patch -Np1 < ../patches/vkd3d/698.patch
-    patch -Np1 < ../patches/vkd3d/723.patch
-    patch -Np1 < ../patches/vkd3d/729.patch
-    cd ..
 
     #WINE STAGING
     cd wine-staging
