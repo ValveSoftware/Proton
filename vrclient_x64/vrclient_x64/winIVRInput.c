@@ -66,7 +66,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_010_GetDigitalActionData, 28)
 EVRInputError __thiscall winIVRInput_IVRInput_010_GetDigitalActionData(winIVRInput_IVRInput_010 *_this, VRActionHandle_t action, winInputDigitalActionData_t_1168 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_010_GetDigitalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+    return ivrinput_get_digital_action_data(cppIVRInput_IVRInput_010_GetDigitalActionData, _this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice, 10);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_010_GetAnalogActionData, 28)
@@ -413,7 +413,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_GetDigitalActionData, 28)
 EVRInputError __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, winInputDigitalActionData_t_1916 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_007_GetDigitalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+    return ivrinput_get_digital_action_data(cppIVRInput_IVRInput_007_GetDigitalActionData, _this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice, 7);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_GetAnalogActionData, 28)
@@ -724,7 +724,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_006_GetDigitalActionData, 28)
 EVRInputError __thiscall winIVRInput_IVRInput_006_GetDigitalActionData(winIVRInput_IVRInput_006 *_this, VRActionHandle_t action, winInputDigitalActionData_t_1418 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_006_GetDigitalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+    return ivrinput_get_digital_action_data(cppIVRInput_IVRInput_006_GetDigitalActionData, _this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice, 6);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_006_GetAnalogActionData, 28)
@@ -1017,7 +1017,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_GetDigitalActionData, 28)
 EVRInputError __thiscall winIVRInput_IVRInput_005_GetDigitalActionData(winIVRInput_IVRInput_005 *_this, VRActionHandle_t action, winInputDigitalActionData_t_1322 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_005_GetDigitalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+    return ivrinput_get_digital_action_data(cppIVRInput_IVRInput_005_GetDigitalActionData, _this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice, 5);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_GetAnalogActionData, 28)
@@ -1301,7 +1301,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetDigitalActionData, 28)
 EVRInputError __thiscall winIVRInput_IVRInput_004_GetDigitalActionData(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, winInputDigitalActionData_t_1017 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_004_GetDigitalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+    return ivrinput_get_digital_action_data(cppIVRInput_IVRInput_004_GetDigitalActionData, _this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice, 4);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetAnalogActionData, 28)

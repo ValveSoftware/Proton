@@ -385,6 +385,11 @@ def ivroverlay_set_overlay_texture(cppname, method):
             "025" in cppname
     return "ivroverlay_set_overlay_texture"
 
+def ivrinput_get_digital_action_data(cppname, method):
+    if "003" in cppname:
+        return None
+    return "ivrinput_get_digital_action_data"
+
 method_overrides = [
     ("IVRClientCore", "BIsHmdPresent", ivrclientcore_is_hmd_present),
     ("IVRClientCore", "Init", ivrclientcore_init),
@@ -402,6 +407,7 @@ method_overrides = [
     ("IVRRenderModels", "LoadIntoTextureD3D11_Async", ivrrendermodels_load_into_texture_d3d11_async),
     ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
     ("IVROverlay", "SetOverlayTexture", ivroverlay_set_overlay_texture),
+    ("IVRInput",  "GetDigitalActionData", ivrinput_get_digital_action_data),
 ]
 
 method_overrides_data = [
