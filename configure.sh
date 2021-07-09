@@ -57,6 +57,8 @@ dependency_afdko() {
     fi
 }
 
+CONTAINER_MOUNT_OPTS=""
+
 check_container_engine() {
     info "Making sure that the container engine is working."
     if ! cmd $arg_container_engine run --rm $arg_protonsdk_image; then
@@ -64,12 +66,15 @@ check_container_engine() {
     fi
 
     touch permission_check
-    local inner_uid="$($arg_container_engine run -v "$(pwd):/test" \
+    local inner_uid="$($arg_container_engine run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
                                             --rm $arg_protonsdk_image \
-                                            stat --format "%u" /test/permission_check)"
+                                            stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
 
-    if [ "$inner_uid" -eq 0 ]; then
+    if [[ $inner_uid == *"Permission denied"* ]]; then
+        err "The container cannot access files. Are you using SELinux?"
+        die "Please read README.md and check your $arg_container_engine setup works."
+    elif [ "$inner_uid" -eq 0 ]; then
         # namespace maps the user as root or the build is performed as host's root
         ROOTLESS_CONTAINER=1
     elif [ "$inner_uid" -eq "$(id -u)" ]; then
@@ -130,6 +135,10 @@ function configure() {
       die "Missing dependencies, cannot continue."
   fi
 
+  if [[ -n "$arg_relabel_volumes" ]]; then
+    CONTAINER_MOUNT_OPTS=:Z
+  fi
+
   if [[ -n "$arg_container_engine" ]]; then
     check_container_engine
   fi
@@ -153,6 +162,9 @@ function configure() {
     echo "CONTAINER_ENGINE := $arg_container_engine"
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
+    fi
+    if [[ -n "$CONTAINER_MOUNT_OPTS" ]]; then
+      echo "CONTAINER_MOUNT_OPTS := $CONTAINER_MOUNT_OPTS"
     fi
     if [[ -n "$arg_enable_ccache" ]]; then
       echo "ENABLE_CCACHE := 1"
@@ -179,6 +191,7 @@ arg_no_protonsdk=""
 arg_build_name=""
 arg_container_engine="docker"
 arg_docker_opts=""
+arg_relabel_volumes=""
 arg_enable_ccache=""
 arg_help=""
 invalid_args=""
@@ -222,6 +235,8 @@ function parse_args() {
     elif [[ $arg = --docker-opts ]]; then
       arg_docker_opts="$val"
       val_used=1
+    elif [[ $arg = --relabel-volumes ]]; then
+      arg_relabel_volumes="1"
     elif [[ $arg = --enable-ccache ]]; then
       arg_enable_ccache="1"
     elif [[ $arg = --proton-sdk-image ]]; then
@@ -279,6 +294,8 @@ usage() {
   "$1" "                                e.g. podman. Defaults to docker."
   "$1" ""
   "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
+  "$1" ""
+  "$1" "    --relabel-volumes Bind-mounted volumes will be relabeled. Use with caution."
   "$1" ""
   "$1" "    --enable-ccache Mount \$CCACHE_DIR or \$HOME/.ccache inside of the container and use ccache for the build."
   "$1" ""

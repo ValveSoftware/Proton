@@ -222,6 +222,18 @@ engine with `--container-engine=<executable_name>`.
 You can enable ccache with `--enable-cache` flag. This will mount your
 `$CCACHE_DIR` or `$HOME/.ccache` inside the container.
 
+If SELinux is in use, the Proton build container may fail to access your
+user's files. This is caused by [SELinux's filesystem labels][selinux-labels].
+You may pass the --relabel-volumes switch to configure to cause the
+[container engine to relabel its bind-mounts][bind-mounts] and allow access
+to those files from within the container. This can be dangerous when used
+with system directories. Proceed with caution and refer your container
+engine's manual.
+
+[selinux-labels]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/security-enhanced_linux/sect-security-enhanced_linux-working_with_selinux-selinux_contexts_labeling_files
+[bind-mounts]: https://docs.docker.com/storage/bind-mounts/
+
+
 Example:
 
     mkdir build && cd build
