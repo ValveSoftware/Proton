@@ -79,6 +79,9 @@
     echo "revert e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30 which breaks controller detection on some distros"
     git revert --no-commit e4fbae832c868e9fcf5a91c58255fe3f4ea1cb30
     
+    # this breaks sea of thieves
+    git revert --no-commit b8aaf86b2dbb8ecb3f7094cc40a0df89bb2add27 
+    
     echo "temporary pulseaudio reverts"
     git revert --no-commit 2e64d91428757eaa88475b49bf50922cda603b59
     git revert --no-commit f77af3dd6324fadaf153062d77b51f755f71faea
