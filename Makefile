@@ -167,8 +167,10 @@ module: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
 	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
 	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
-	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
-	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/ && \
+	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so ]; then \
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/; \
+	fi && \
 	rm -f /vagrant/$(module)/lib*/wine/*.fake
 
 dxvk: | vagrant_share/dxvk/lib/wine/dxvk
