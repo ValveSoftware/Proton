@@ -343,6 +343,7 @@ $(DIST_FONTS): fonts
 	mkdir -p $@
 	cp $(FONTS_OBJ)/*.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
+	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
 
 .PHONY: dist
 
@@ -821,8 +822,25 @@ msyh.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
 msyh.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
 msyh.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 msyh.ttf_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
-
 msyh.ttf = $(FONTS_OBJ)/source-han/msyh.ttf
+
+simsun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
+simsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
+simsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+simsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+simsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+simsun.ttf_MENUNAMEDB = $(FONTS)/patches/SimSun-FontMenuNameDB
+simsun.ttf = $(FONTS_OBJ)/source-han/simsun.ttf
+
+nsimsun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
+nsimsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
+nsimsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+nsimsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+nsimsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+nsimsun.ttf_MENUNAMEDB = $(FONTS)/patches/NSimSun-FontMenuNameDB
+nsimsun.ttf = $(FONTS_OBJ)/source-han/nsimsun.ttf
+
+simsun.ttc = $(FONTS_OBJ)/source-han/simsun.ttc
 
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
@@ -861,12 +879,16 @@ $(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONTINFO) $$(%.
 	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && $(AFDKO_VERB) sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
 	mv $@.tmp $@
 
+$(simsun.ttc): $(simsun.ttf) $(nsimsun.ttf)
+	$(AFDKO_VERB) otf2otc -o $@ $^
+
 fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
 fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
 fonts: $(msyh.ttf)
+fonts: $(simsun.ttc)
 
 ##
 ## Targets

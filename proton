@@ -446,6 +446,7 @@ class CompatData:
             ( g_proton.fonts_dir, "LiberationMono-Regular.ttf", "cour.ttf" ),
             ( g_proton.fonts_dir, "LiberationMono-Bold.ttf", "courbd.ttf" ),
             ( g_proton.fonts_dir, "msyh.ttf", "msyh.ttf" ),
+            ( g_proton.fonts_dir, "simsun.ttc", "simsun.ttc" ),
 
             ( g_proton.wine_fonts_dir, "tahoma.ttf", "tahoma.ttf" ),
         ]
