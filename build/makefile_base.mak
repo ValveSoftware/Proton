@@ -1,3 +1,6 @@
+# Enable secondary expansions, needed for font compilation rules
+.SECONDEXPANSION:
+
 SRC := $(abspath $(SRCDIR))
 OBJ := $(abspath $(CURDIR))
 
@@ -339,7 +342,7 @@ $(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
 $(DIST_FONTS): fonts
 	mkdir -p $@
 	cp $(FONTS_OBJ)/*.ttf "$@"
-	cp $(FONTS_OBJ)/*.otf "$@"
+	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
 
 .PHONY: dist
 
@@ -812,14 +815,14 @@ FONTSCRIPT = $(FONTS)/scripts/generatefont.pe
 LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
 SOURCE_HAN_SANS_SRCDIR = $(FONTS)/source-han-sans
 
-SOURCE_HAN_SANS_REGULAR_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
-SOURCE_HAN_SANS_REGULAR_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
-SOURCE_HAN_SANS_REGULAR_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
-SOURCE_HAN_SANS_REGULAR_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
-SOURCE_HAN_SANS_REGULAR_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
-YAHEI_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
+msyh.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
+msyh.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
+msyh.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+msyh.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+msyh.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+msyh.ttf_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
 
-SOURCE_HAN_SANS_REGULAR_OTF = $(FONTS_OBJ)/SourceHanSansSCRegular.otf
+msyh.ttf = $(FONTS_OBJ)/source-han/msyh.ttf
 
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
@@ -843,20 +846,27 @@ $(FONTS_OBJ)/%.sfd: $(LIBERATION_SRCDIR)/%.sfd | $(FONTS_OBJ)
 	patch $< -o $@ $(firstword $($(*)_PATCH) /dev/null)
 
 #The use of "YaHei" for compatibility with programs that require that exact string. This font is not Microsoft YaHei.
-$(SOURCE_HAN_SANS_REGULAR_OTF): $(SOURCE_HAN_SANS_REGULAR_CIDFONTINFO) $(SOURCE_HAN_SANS_REGULAR_CIDFONT) \
-		$(SOURCE_HAN_SANS_REGULAR_FEATURES) $(SOURCE_HAN_SANS_REGULAR_SEQUENCES) $(SOURCE_HAN_SANS_REGULAR_UNISOURCE) $(YAHEI_MENUNAMEDB)
-	$(AFDKO_VERB) makeotf -f $(SOURCE_HAN_SANS_REGULAR_CIDFONT) -omitMacNames -ff $(SOURCE_HAN_SANS_REGULAR_FEATURES) \
-		-fi $(SOURCE_HAN_SANS_REGULAR_CIDFONTINFO) -mf $(YAHEI_MENUNAMEDB) -r -nS -cs 25 -ch $(SOURCE_HAN_SANS_REGULAR_UNISOURCE) \
-		-ci $(SOURCE_HAN_SANS_REGULAR_SEQUENCES) -o $(SOURCE_HAN_SANS_REGULAR_OTF)
-	$(AFDKO_VERB) tx -cff +S -no_futile $(SOURCE_HAN_SANS_REGULAR_CIDFONT) $(FONTS_OBJ)/CFF.OTC.SC
-	$(AFDKO_VERB) sfntedit -a CFF=$(FONTS_OBJ)/CFF.OTC.SC $(SOURCE_HAN_SANS_REGULAR_OTF)
+$(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONT) \
+		$$(%.ttf_FEATURES) $$(%.ttf_SEQUENCES) $$(%.ttf_UNISOURCE) $$(%.ttf_MENUNAMEDB)
+	mkdir -p $(FONTS_OBJ)/source-han
+	# Do not immediately create the target file, so that make is interrupted
+	# it will restart again
+	$(AFDKO_VERB) makeotf -f $($(notdir $@)_CIDFONT) -omitMacNames -ff $($(notdir $@)_FEATURES) \
+		-fi $($(notdir $@)_CIDFONTINFO) -mf $($(notdir $@)_MENUNAMEDB) -r -nS -cs 25 -ch $($(notdir $@)_UNISOURCE) \
+		-ci $($(notdir $@)_SEQUENCES) -o $@.tmp
+	$(AFDKO_VERB) tx -cff +S -no_futile $($(notdir $@)_CIDFONT) $@.cff
+	# sftnedit uses a hardcoded temporary file in the local directory, so we have
+	# to run it in a dedicated temporary directory to prevent concurrent instances
+	# to step onto each other's feet
+	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && $(AFDKO_VERB) sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
+	mv $@.tmp $@
 
 fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
 fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
-fonts: $(SOURCE_HAN_SANS_REGULAR_OTF)
+fonts: $(msyh.ttf)
 
 ##
 ## Targets
