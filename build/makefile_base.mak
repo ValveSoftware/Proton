@@ -346,6 +346,7 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/*.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
+	cp $(FONTS_OBJ)/source-han/msgothic.ttc "$@"
 
 .PHONY: dist
 
@@ -864,7 +865,32 @@ nsimsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 nsimsun.ttf_MENUNAMEDB = $(FONTS)/patches/NSimSun-FontMenuNameDB
 nsimsun.ttf = $(FONTS_OBJ)/source-han/nsimsun.ttf
 
+msgothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
+msgothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
+msgothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
+msgothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
+msgothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
+msgothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSGothic-FontMenuNameDB
+msgothic.ttf = $(FONTS_OBJ)/source-han/msgothic.ttf
+
+mspgothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
+mspgothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
+mspgothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
+mspgothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
+mspgothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
+mspgothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSPGothic-FontMenuNameDB
+mspgothic.ttf = $(FONTS_OBJ)/source-han/mspgothic.ttf
+
+msuigothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
+msuigothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
+msuigothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
+msuigothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
+msuigothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
+msuigothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSUIGothic-FontMenuNameDB
+msuigothic.ttf = $(FONTS_OBJ)/source-han/msuigothic.ttf
+
 simsun.ttc = $(FONTS_OBJ)/source-han/simsun.ttc
+msgothic.ttc = $(FONTS_OBJ)/source-han/msgothic.ttc
 
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
@@ -906,6 +932,9 @@ $(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONTINFO) $$(%.
 $(simsun.ttc): $(simsun.ttf) $(nsimsun.ttf)
 	$(AFDKO_VERB) otf2otc -o $@ $^
 
+$(msgothic.ttc): $(msgothic.ttf) $(mspgothic.ttf) $(msuigothic.ttf)
+	$(AFDKO_VERB) otf2otc -o $@ $^
+
 fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
 fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
@@ -913,6 +942,7 @@ fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
 fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
+fonts: $(msgothic.ttc)
 
 ##
 ## Targets
