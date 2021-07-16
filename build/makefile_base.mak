@@ -345,6 +345,7 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/msgothic.ttc "$@"
+	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
 
 .PHONY: dist
 
@@ -865,6 +866,14 @@ msuigothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
 msuigothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSUIGothic-FontMenuNameDB
 msuigothic.ttf = $(FONTS_OBJ)/source-han/msuigothic.ttf
 
+malgun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.K
+malgun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.K
+malgun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.K
+malgun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_KR_sequences.txt
+malgun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansKR-UTF32-H
+malgun.ttf_MENUNAMEDB = $(FONTS)/patches/Malgun-FontMenuNameDB
+malgun.ttf = $(FONTS_OBJ)/source-han/malgun.ttf
+
 simsun.ttc = $(FONTS_OBJ)/source-han/simsun.ttc
 msgothic.ttc = $(FONTS_OBJ)/source-han/msgothic.ttc
 
@@ -919,6 +928,7 @@ fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
 fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
+fonts: $(malgun.ttf)
 
 ##
 ## Targets
