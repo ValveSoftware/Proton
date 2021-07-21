@@ -1,5 +1,17 @@
+# Enable secondary expansions, needed for font compilation rules
+.SECONDEXPANSION:
+
 SRC := $(abspath $(SRCDIR))
 OBJ := $(abspath $(CURDIR))
+
+ifeq ($(filter s,$(MAKEFLAGS)),s)
+MAKEFLAGS += --quiet --no-print-directory
+--quiet? := --quiet
+else
+MFLAGS += V=1 VERBOSE=1
+-v? := -v
+--verbose? := --verbose
+endif
 
 ##
 ## Nested make
@@ -45,14 +57,26 @@ include $(SRC)/make/rules-winemaker.mk
 include $(SRC)/make/rules-cargo.mk
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
+CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
 ifeq ($(ENABLE_CCACHE),1)
 	CCACHE_BIN := ccache
+	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
+	DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
 else
-	export CCACHE_DISABLE = 1
+	export CCACHE_DISABLE := 1
+	DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
-DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
-                -v $(HOME):$(HOME) -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) -e MAKEFLAGS \
+ifneq ($(ROOTLESS_CONTAINER),1)
+	DOCKER_OPTS := -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) $(DOCKER_OPTS)
+endif
+
+ifeq ($(CONTAINER_ENGINE),)
+	CONTAINER_ENGINE := docker
+endif
+
+DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) \
+                -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
 STEAMRT_NAME ?= soldier
@@ -73,6 +97,7 @@ endif
 
 MAKECMDGOALS32 := $(filter-out all32,$(filter %32,$(MAKECMDGOALS)))
 MAKECMDGOALS64 := $(filter-out all64,$(filter %64,$(MAKECMDGOALS)))
+CONTAINERGOALS := $(MAKECMDGOALS32) $(MAKECMDGOALS64)
 
 all: all32 all64
 .PHONY: all
@@ -85,13 +110,18 @@ all32 $(MAKECMDGOALS64):
 
 ifeq ($(CONTAINER),)
 J := $(shell nproc)
+ifeq ($(ENABLE_CCACHE),1)
+container-build: $(shell mkdir -p $(CCACHE_DIR))
+endif
 container-build: private SHELL := $(CONTAINER_SHELL)
 container-build:
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(MAKECMDGOALS32) $(MAKECMDGOALS64)
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(CONTAINERGOALS)
 .PHONY: container-build
 
 all32 $(MAKECMDGOALS32): container-build
 all64 $(MAKECMDGOALS64): container-build
+else
+J = $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
 endif
 
 
@@ -318,7 +348,10 @@ $(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
 $(DIST_FONTS): fonts
 	mkdir -p $@
 	cp $(FONTS_OBJ)/*.ttf "$@"
-	cp $(FONTS_OBJ)/*.otf "$@"
+	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
+	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
+	cp $(FONTS_OBJ)/source-han/msgothic.ttc "$@"
+	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
 
 .PHONY: dist
 
@@ -355,13 +388,21 @@ redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 .PHONY: module32 module64 module
 
 module32: private SHELL := $(CONTAINER_SHELL)
-module32: all-source
-	+$(MAKE) -C $(WINE_OBJ32)/dlls/$(module)
+module32: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure32
+module32: | all-source wine-configure32
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ32)/dlls/$(module) && \
+	find $(WINE_OBJ32)/dlls/$(module) -type f -name '*.dll' -printf '%p\0' | \
+	    xargs $(--verbose?) -0 -r -P$(J) -n1 $(SRC)/make/pefixup.py
 
 module64: private SHELL := $(CONTAINER_SHELL)
-module64: all-source
-	+$(MAKE) -C $(WINE_OBJ64)/dlls/$(module)
+module64: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure64
+module64: | all-source wine-configure64
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ64)/dlls/$(module) && \
+	find $(WINE_OBJ64)/dlls/$(module) -type f -name '*.dll' -printf '%p\0' | \
+	    xargs $(--verbose?) -0 -r -P$(J) -n1 $(SRC)/make/pefixup.py
 
+module: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure
+module: | all-source wine-configure
 module: module32 module64
 
 endif # ifeq ($(CONTAINER),)
@@ -498,7 +539,7 @@ GST_GOOD_MESON_ARGS := \
 	-Dwavenc=disabled \
 	-Dximagesrc=disabled \
 	-Dy4m=enabled \
-    -Ddoc='disabled' \
+	-Ddoc='disabled' \
 	$(GST_COMMON_MESON_ARGS)
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
@@ -624,6 +665,8 @@ $(eval $(call rules-winemaker,lsteamclient,64,lsteamclient.dll))
 
 
 ##
+
+##
 ## openxr
 ## Note 32-bit is not supported by SteamVR, so we don't build it.
 ##
@@ -648,7 +691,7 @@ $(eval $(call rules-source,wineopenxr,$(SRCDIR)/wineopenxr))
 # $(eval $(call rules-winemaker,wineopenxr,32,wineopenxr.dll))
 $(eval $(call rules-winemaker,wineopenxr,64,wineopenxr.dll))
 
-$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json
+$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json dist_prefix
 	mkdir -p $(dir $@)
 	cp -a $< $@
 
@@ -782,6 +825,7 @@ $(OBJ)/.dxvk-post-build32:
 	rm -f "$(DST_DIR)"/lib/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
 	touch $@
 
+
 ##
 ## dxvk-nvapi
 ##
@@ -806,6 +850,7 @@ $(OBJ)/.dxvk-nvapi-post-build32:
 	mkdir -p "$(DST_DIR)"/lib/wine/nvapi
 	rm -f "$(DST_DIR)"/lib/wine/nvapi/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk-nvapi ) > "$(DST_DIR)"/lib/wine/nvapi/version; fi
 	touch $@
+
 
 ##
 ## vkd3d-proton
@@ -845,6 +890,31 @@ $(OBJ)/.vkd3d-proton-post-build64:
 	touch $@
 
 
+
+##
+## mediaconv
+## This section is currently disabled in favor of the mfplat patches in wine-staging
+##
+## MEDIACONV_SOURCE_ARGS = \
+##     --exclude Cargo.lock \
+##
+## MEDIACONV_DEPENDS = gst_orc gstreamer gst_base
+##
+## $(eval $(call rules-source,mediaconv,$(SRCDIR)/media-converter))
+## $(eval $(call rules-cargo,mediaconv,32))
+## $(eval $(call rules-cargo,mediaconv,64))
+##
+## $(OBJ)/.mediaconv-post-build64:
+## 	mkdir -p $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
+## 	cp -a $(MEDIACONV_OBJ64)/x86_64-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
+## 	touch $@
+##
+## $(OBJ)/.mediaconv-post-build32:
+## 	mkdir -p $(MEDIACONV_DST32)/lib/gstreamer-1.0/
+## 	cp -a $(MEDIACONV_OBJ32)/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST32)/lib/gstreamer-1.0/
+## 	touch $@
+##
+
 ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts
 GOAL_TARGETS += fonts
@@ -853,77 +923,121 @@ GOAL_TARGETS += fonts
 
 FONTFORGE = fontforge -quiet
 FONTSCRIPT = $(FONTS)/scripts/generatefont.pe
-FONTLINKPATH = ../../../../fonts
 
 LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
-SOURCE_HAN_SANS_SRCDIR =$(FONTS)/source-han-sans
+SOURCE_HAN_SANS_SRCDIR = $(FONTS)/source-han-sans
 
-LIBERATION_SANS_REGULAR_SFD = LiberationSans-Regular.sfd
-LIBERATION_SANS_BOLD_SFD = LiberationSans-Bold.sfd
-LIBERATION_SERIF_REGULAR_SFD = LiberationSerif-Regular.sfd
-LIBERATION_MONO_REGULAR_SFD = LiberationMono-Regular.sfd
-LIBERATION_MONO_BOLD_SFD = LiberationMono-Bold.sfd
+msyh.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
+msyh.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
+msyh.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+msyh.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+msyh.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+msyh.ttf_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
+msyh.ttf = $(FONTS_OBJ)/source-han/msyh.ttf
 
-SOURCE_HAN_SANS_REGULAR_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
-SOURCE_HAN_SANS_REGULAR_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
-SOURCE_HAN_SANS_REGULAR_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
-SOURCE_HAN_SANS_REGULAR_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
-SOURCE_HAN_SANS_REGULAR_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
-YAHEI_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
+simsun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
+simsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
+simsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+simsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+simsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+simsun.ttf_MENUNAMEDB = $(FONTS)/patches/SimSun-FontMenuNameDB
+simsun.ttf = $(FONTS_OBJ)/source-han/simsun.ttf
 
-LIBERATION_SANS_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SANS_REGULAR_SFD:.sfd=.ttf))
-LIBERATION_SANS_BOLD_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SANS_BOLD_SFD:.sfd=.ttf))
-LIBERATION_SERIF_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SERIF_REGULAR_SFD:.sfd=.ttf))
-LIBERATION_MONO_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_MONO_REGULAR_SFD:.sfd=.ttf))
-LIBERATION_MONO_BOLD_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_MONO_BOLD_SFD:.sfd=.ttf))
-SOURCE_HAN_SANS_REGULAR_OTF = $(FONTS_OBJ)/SourceHanSansSCRegular.otf
+nsimsun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
+nsimsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
+nsimsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+nsimsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+nsimsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+nsimsun.ttf_MENUNAMEDB = $(FONTS)/patches/NSimSun-FontMenuNameDB
+nsimsun.ttf = $(FONTS_OBJ)/source-han/nsimsun.ttf
 
-LIBERATION_SFDS = $(LIBERATION_SANS_REGULAR_SFD) $(LIBERATION_SANS_BOLD_SFD) $(LIBERATION_SERIF_REGULAR_SFD) $(LIBERATION_MONO_REGULAR_SFD) \
-            $(LIBERATION_MONO_BOLD_SFD)
-FONT_TTFS = $(LIBERATION_SANS_REGULAR_TTF) $(LIBERATION_SANS_BOLD_TTF) \
-            $(LIBERATION_SERIF_REGULAR_TTF) $(LIBERATION_MONO_REGULAR_TTF) \
-            $(LIBERATION_MONO_BOLD_TTF)
-FONTS_SRC = $(FONT_TTFS:.ttf=.sfd)
+msgothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
+msgothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
+msgothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
+msgothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
+msgothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
+msgothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSGothic-FontMenuNameDB
+msgothic.ttf = $(FONTS_OBJ)/source-han/msgothic.ttf
+
+mspgothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
+mspgothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
+mspgothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
+mspgothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
+mspgothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
+mspgothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSPGothic-FontMenuNameDB
+mspgothic.ttf = $(FONTS_OBJ)/source-han/mspgothic.ttf
+
+msuigothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
+msuigothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
+msuigothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
+msuigothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
+msuigothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
+msuigothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSUIGothic-FontMenuNameDB
+msuigothic.ttf = $(FONTS_OBJ)/source-han/msuigothic.ttf
+
+malgun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.K
+malgun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.K
+malgun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.K
+malgun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_KR_sequences.txt
+malgun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansKR-UTF32-H
+malgun.ttf_MENUNAMEDB = $(FONTS)/patches/Malgun-FontMenuNameDB
+malgun.ttf = $(FONTS_OBJ)/source-han/malgun.ttf
+
+simsun.ttc = $(FONTS_OBJ)/source-han/simsun.ttc
+msgothic.ttc = $(FONTS_OBJ)/source-han/msgothic.ttc
 
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
-$(LIBERATION_SANS_REGULAR_TTF): $(FONTS_SRC) $(FONTSCRIPT)
-	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "Arial" "Arial" "Arial"
-
+LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
-$(LIBERATION_SANS_BOLD_TTF): $(FONTS_SRC) $(FONTSCRIPT)
-	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "Arial-Bold" "Arial" "Arial Bold"
-
+LiberationSans-Bold_NAMES := "Arial-Bold" "Arial" "Arial Bold"
 #The use of "Times New Roman" here is for compatibility with programs that require that exact string. This font is not Times New Roman.
-$(LIBERATION_SERIF_REGULAR_TTF): $(FONTS_SRC) $(FONTSCRIPT)
-	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "TimesNewRoman" "Times New Roman" "Times New Roman"
-
+LiberationSerif-Regular_NAMES := "TimesNewRoman" "Times New Roman" "Times New Roman"
 #The use of "Courier New" here is for compatibility with programs that require that exact string. This font is not Courier New.
-$(LIBERATION_MONO_REGULAR_TTF): $(FONTS_SRC) $(FONTSCRIPT)
-	patch $(@:.ttf=.sfd) $(FONTS)/patches/$(LIBERATION_MONO_REGULAR_SFD:.sfd=.patch)
-	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "CourierNew" "Courier New" "Courier New"
-
+LiberationMono-Regular_NAMES := "CourierNew" "Courier New" "Courier New"
+LiberationMono-Regular_PATCH := $(FONTS)/patches/LiberationMono-Regular.patch
 #The use of "Courier New" here is for compatibility with programs that require that exact string. This font is not Courier New.
-$(LIBERATION_MONO_BOLD_TTF): $(FONTS_SRC) $(FONTSCRIPT)
-	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "CourierNewPS-BoldMT" "Courier New" "Courier New Bold"
-
-#The use of "YaHei" for compatibility with programs that require that exact string. This font is not Microsoft YaHei.
-$(SOURCE_HAN_SANS_REGULAR_OTF): $(SOURCE_HAN_SANS_REGULAR_CIDFONTINFO) $(SOURCE_HAN_SANS_REGULAR_CIDFONT) \
-		$(SOURCE_HAN_SANS_REGULAR_FEATURES) $(SOURCE_HAN_SANS_REGULAR_SEQUENCES) $(SOURCE_HAN_SANS_REGULAR_UNISOURCE) $(YAHEI_MENUNAMEDB)
-	makeotf -f $(SOURCE_HAN_SANS_REGULAR_CIDFONT) -omitMacNames -ff $(SOURCE_HAN_SANS_REGULAR_FEATURES) \
-		-fi $(SOURCE_HAN_SANS_REGULAR_CIDFONTINFO) -mf $(YAHEI_MENUNAMEDB) -r -nS -cs 25 -ch $(SOURCE_HAN_SANS_REGULAR_UNISOURCE) \
-		-ci $(SOURCE_HAN_SANS_REGULAR_SEQUENCES) -o $(SOURCE_HAN_SANS_REGULAR_OTF)
-	tx -cff +S -no_futile $(SOURCE_HAN_SANS_REGULAR_CIDFONT) $(FONTS_OBJ)/CFF.OTC.SC
-	sfntedit -a CFF=$(FONTS_OBJ)/CFF.OTC.SC $(SOURCE_HAN_SANS_REGULAR_OTF)
+LiberationMono-Bold_NAMES := "CourierNewPS-BoldMT" "Courier New" "Courier New Bold"
 
 $(FONTS_OBJ):
 	mkdir -p $@
 
-$(FONTS_SRC): $(FONTS_OBJ)
-	cp -n $(addprefix $(LIBERATION_SRCDIR)/, $(LIBERATION_SFDS)) $<
+$(FONTS_OBJ)/%.ttf: $(FONTS_OBJ)/%.sfd $(FONTSCRIPT) | $(FONTS_OBJ)
+	$(FONTFORGE) -script $(FONTSCRIPT) $< $($(*)_NAMES)
 
-fonts: $(LIBERATION_SANS_REGULAR_TTF) $(LIBERATION_SANS_BOLD_TTF) \
-       $(LIBERATION_SERIF_REGULAR_TTF) $(LIBERATION_MONO_REGULAR_TTF) \
-       $(LIBERATION_MONO_BOLD_TTF) $(SOURCE_HAN_SANS_REGULAR_OTF) | $(FONTS_SRC)
+$(FONTS_OBJ)/%.sfd: $(LIBERATION_SRCDIR)/%.sfd | $(FONTS_OBJ)
+	patch $< -o $@ $(firstword $($(*)_PATCH) /dev/null)
+
+#The use of "YaHei" for compatibility with programs that require that exact string. This font is not Microsoft YaHei.
+$(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONT) \
+		$$(%.ttf_FEATURES) $$(%.ttf_SEQUENCES) $$(%.ttf_UNISOURCE) $$(%.ttf_MENUNAMEDB)
+	mkdir -p $(FONTS_OBJ)/source-han
+	# Do not immediately create the target file, so that make is interrupted
+	# it will restart again
+	$(AFDKO_VERB) makeotf -f $($(notdir $@)_CIDFONT) -omitMacNames -ff $($(notdir $@)_FEATURES) \
+		-fi $($(notdir $@)_CIDFONTINFO) -mf $($(notdir $@)_MENUNAMEDB) -r -nS -cs 25 -ch $($(notdir $@)_UNISOURCE) \
+		-ci $($(notdir $@)_SEQUENCES) -o $@.tmp
+	$(AFDKO_VERB) tx -cff +S -no_futile $($(notdir $@)_CIDFONT) $@.cff
+	# sftnedit uses a hardcoded temporary file in the local directory, so we have
+	# to run it in a dedicated temporary directory to prevent concurrent instances
+	# to step onto each other's feet
+	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && $(AFDKO_VERB) sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
+	mv $@.tmp $@
+
+$(simsun.ttc): $(simsun.ttf) $(nsimsun.ttf)
+	$(AFDKO_VERB) otf2otc -o $@ $^
+
+$(msgothic.ttc): $(msgothic.ttf) $(mspgothic.ttf) $(msuigothic.ttf)
+	$(AFDKO_VERB) otf2otc -o $@ $^
+
+fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
+fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
+fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
+fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
+fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
+fonts: $(msyh.ttf)
+fonts: $(simsun.ttc)
+fonts: $(msgothic.ttc)
+fonts: $(malgun.ttf)
 
 ##
 ## Targets
