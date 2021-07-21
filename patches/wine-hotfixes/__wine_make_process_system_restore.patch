@@ -111,22 +111,6 @@ index e6775959a22a..b9d29c1d5600 100644
  };
  struct make_process_system_reply
  {
-diff --git a/include/winternl.h b/include/winternl.h
-index 691638f359cf..aa8c76a536af 100644
---- a/include/winternl.h
-+++ b/include/winternl.h
-@@ -1455,7 +1455,10 @@ typedef enum _PROCESSINFOCLASS {
-     ProcessThreadStackAllocation = 41,
-     ProcessWorkingSetWatchEx = 42,
-     ProcessImageFileNameWin32 = 43,
--    MaxProcessInfoClass
-+    MaxProcessInfoClass,
-+#ifdef __WINESRC__
-+    ProcessWineMakeProcessSystem = 1000,
-+#endif
- } PROCESSINFOCLASS, PROCESS_INFORMATION_CLASS;
- 
- #define MEM_EXECUTE_OPTION_DISABLE   0x01
 diff --git a/programs/services/rpc.c b/programs/services/rpc.c
 index df69a741b513..8d688c2f904f 100644
 --- a/programs/services/rpc.c

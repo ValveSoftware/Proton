@@ -26,7 +26,7 @@ index b8a2060cf46..8259d92ebac 100644
 +        vendor = HW_VENDOR_AMD;
 +        device = CARD_AMD_RADEON_RX_480;
 +    }
- 
+
      if (wined3d_settings.pci_device_id != PCI_DEVICE_NONE)
      {
 
@@ -52,7 +52,7 @@ index 20d3c48c4d9..aca8738c4c0 100644
 -timeout_t master_socket_timeout = 3 * -TICKS_PER_SEC;  /* master socket timeout, default is 3 seconds */
 +timeout_t master_socket_timeout = 0; /* master socket timeout, default is 3 seconds */
  const char *server_argv0;
- 
+
  /* parse-line args */
 
 From ba15ba1c9b8ee40e13ef1bd7f018924259f36c1b Mon Sep 17 00:00:00 2001
@@ -77,13 +77,13 @@ index 3b451a22577..ca5dac43bb0 100644
 +#ifdef HAVE_PRCTL
 +#include <sys/prctl.h>
 +#endif
- 
+
  #define NONAMELESSUNION
  #include "ntstatus.h"
 @@ -344,6 +347,16 @@ void wait_suspend( CONTEXT *context )
  }
- 
- 
+
+
 +/* "How to: Set a Thread Name in Native Code"
 + * https://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx */
 +typedef struct tagTHREADNAME_INFO
@@ -100,7 +100,7 @@ index 3b451a22577..ca5dac43bb0 100644
 @@ -366,6 +379,21 @@ NTSTATUS send_debug_event( EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_c
      for (i = 0; i < min( rec->NumberParameters, EXCEPTION_MAXIMUM_PARAMETERS ); i++)
          params[i] = rec->ExceptionInformation[i];
- 
+
 +    if (rec->ExceptionCode == 0x406d1388)
 +    {
 +        const THREADNAME_INFO *threadname = (const THREADNAME_INFO *)rec->ExceptionInformation;
@@ -133,9 +133,9 @@ index e22559912c3..41ec809b727 100644
 --- a/dlls/dwrite/font.c
 +++ b/dlls/dwrite/font.c
 @@ -740,7 +740,8 @@ static HRESULT WINAPI dwritefontface_GetRecommendedRenderingMode(IDWriteFontFace
- 
+
      ppem = emSize * ppdip;
- 
+
 -    if (ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
 +    /* HACK: disable outline rendering mode to workaround d2d issue */
 +    if (0 && ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
@@ -165,11 +165,11 @@ index c6e3a2ca597..fd919295c5a 100644
 @@ -69,7 +69,6 @@ static UINT array_size;
  static struct list AtsList = LIST_INIT(AtsList);
  static UINT activated = 0;
- 
+
 -DWORD tlsIndex = 0;
  TfClientId processId = 0;
  ITfCompartmentMgr *globalCompartmentMgr = NULL;
- 
+
 @@ -397,23 +396,19 @@ HRESULT add_active_textservice(TF_LANGUAGEPROFILE *lp)
      ActivatedTextService *actsvr;
      ITfCategoryMgr *catmgr;
@@ -177,35 +177,35 @@ index c6e3a2ca597..fd919295c5a 100644
 -    ITfThreadMgrEx *tm = TlsGetValue(tlsIndex);
 +    ITfThreadMgr *tm;
      ITfClientId *clientid;
- 
+
 -    if (!tm) return E_UNEXPECTED;
 +    if (FAILED(TF_GetThreadMgr(&tm))) return E_UNEXPECTED;
- 
+
      actsvr = HeapAlloc(GetProcessHeap(),0,sizeof(ActivatedTextService));
 -    if (!actsvr) return E_OUTOFMEMORY;
 +    if (!actsvr) goto fail;
- 
+
 -    ITfThreadMgrEx_QueryInterface(tm, &IID_ITfClientId, (void **)&clientid);
 +    ITfThreadMgr_QueryInterface(tm, &IID_ITfClientId, (void **)&clientid);
      ITfClientId_GetClientId(clientid, &lp->clsid, &actsvr->tid);
      ITfClientId_Release(clientid);
- 
+
 -    if (!actsvr->tid)
 -    {
 -        HeapFree(GetProcessHeap(),0,actsvr);
 -        return E_OUTOFMEMORY;
 -    }
 +    if (!actsvr->tid) goto fail;
- 
+
      actsvr->pITfTextInputProcessor = NULL;
      actsvr->LanguageProfile = *lp;
 @@ -440,20 +435,21 @@ HRESULT add_active_textservice(TF_LANGUAGEPROFILE *lp)
          deactivate_remove_conflicting_ts(&actsvr->LanguageProfile.catid);
- 
+
      if (activated > 0)
 -        activate_given_ts(actsvr, tm);
 +        activate_given_ts(actsvr, (ITfThreadMgrEx *)tm);
- 
+
      entry = HeapAlloc(GetProcessHeap(),0,sizeof(AtsEntry));
 -
 -    if (!entry)
@@ -214,10 +214,10 @@ index c6e3a2ca597..fd919295c5a 100644
 -        return E_OUTOFMEMORY;
 -    }
 +    if (!entry) goto fail;
- 
+
      entry->ats = actsvr;
      list_add_head(&AtsList, &entry->entry);
- 
+
 +    ITfThreadMgr_Release(tm);
      return S_OK;
 +
@@ -226,7 +226,7 @@ index c6e3a2ca597..fd919295c5a 100644
 +    HeapFree(GetProcessHeap(), 0, actsvr);
 +    return E_OUTOFMEMORY;
  }
- 
+
  BOOL get_active_textservice(REFCLSID rclsid, TF_LANGUAGEPROFILE *profile)
 @@ -560,11 +556,9 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD fdwReason, LPVOID fImpLoad)
      switch (fdwReason)
@@ -243,7 +243,7 @@ index c6e3a2ca597..fd919295c5a 100644
 @@ -622,20 +616,6 @@ HRESULT WINAPI TF_CreateThreadMgr(ITfThreadMgr **pptim)
      return ThreadMgr_Constructor(NULL,(IUnknown**)pptim);
  }
- 
+
 -/***********************************************************************
 - *              TF_GetThreadMgr (MSCTF.@)
 - */
@@ -268,19 +268,19 @@ index 584bb1044ed..ace2bee23d9 100644
 @@ -35,7 +35,6 @@
  #define COOKIE_MAGIC_UIELEMENTSINK 0x00a0
  #define COOKIE_MAGIC_INPUTPROCESSORPROFILEACTIVATIONSINK 0x00b0
- 
+
 -extern DWORD tlsIndex DECLSPEC_HIDDEN;
  extern TfClientId processId DECLSPEC_HIDDEN;
  extern ITfCompartmentMgr *globalCompartmentMgr DECLSPEC_HIDDEN;
- 
+
 diff --git a/dlls/msctf/threadmgr.c b/dlls/msctf/threadmgr.c
 index 2c208fbc04f..2119ea2193b 100644
 --- a/dlls/msctf/threadmgr.c
 +++ b/dlls/msctf/threadmgr.c
 @@ -37,6 +37,17 @@
- 
+
  WINE_DEFAULT_DEBUG_CHANNEL(msctf);
- 
+
 +static CRITICAL_SECTION ThreadMgrCs;
 +static CRITICAL_SECTION_DEBUG ThreadMgrCsDebug =
 +{
@@ -303,12 +303,12 @@ index 2c208fbc04f..2119ea2193b 100644
 +    DWORD threadId;
 +    struct list entry;
  } ThreadMgr;
- 
+
  typedef struct tagEnumTfDocumentMgr {
 @@ -110,6 +124,11 @@ typedef struct tagEnumTfDocumentMgr {
- 
+
  static HRESULT EnumTfDocumentMgr_Constructor(struct list* head, IEnumTfDocumentMgrs **ppOut);
- 
+
 +static inline ThreadMgr *impl_from_ITfThreadMgr(ITfThreadMgr *iface)
 +{
 +    return CONTAINING_RECORD(iface, ThreadMgr, ITfThreadMgrEx_iface);
@@ -320,7 +320,7 @@ index 2c208fbc04f..2119ea2193b 100644
 @@ -155,6 +174,35 @@ static inline EnumTfDocumentMgr *impl_from_IEnumTfDocumentMgrs(IEnumTfDocumentMg
      return CONTAINING_RECORD(iface, EnumTfDocumentMgr, IEnumTfDocumentMgrs_iface);
  }
- 
+
 +/***********************************************************************
 + *              TF_GetThreadMgr (MSCTF.@)
 + */
@@ -356,7 +356,7 @@ index 2c208fbc04f..2119ea2193b 100644
 @@ -163,7 +211,9 @@ static void ThreadMgr_Destructor(ThreadMgr *This)
      if (This->focusHook)
          UnhookWindowsHookEx(This->focusHook);
- 
+
 -    TlsSetValue(tlsIndex,NULL);
 +    EnterCriticalSection(&ThreadMgrCs);
 +    list_remove(&This->entry);
@@ -365,12 +365,12 @@ index 2c208fbc04f..2119ea2193b 100644
      if (This->focus)
          ITfDocumentMgr_Release(This->focus);
 @@ -386,17 +436,20 @@ static HRESULT WINAPI ThreadMgr_SetFocus(ITfThreadMgrEx *iface, ITfDocumentMgr *
- 
+
  static LRESULT CALLBACK ThreadFocusHookProc(int nCode, WPARAM wParam, LPARAM lParam)
  {
 +    ITfThreadMgr *ThreadMgr_iface;
      ThreadMgr *This;
- 
+
 -    This = TlsGetValue(tlsIndex);
 -    if (!This)
 +    if (FAILED(TF_GetThreadMgr(&ThreadMgr_iface)))
@@ -386,18 +386,18 @@ index 2c208fbc04f..2119ea2193b 100644
 +        ITfThreadMgr_Release(ThreadMgr_iface);
          return 0;
      }
- 
+
 @@ -417,6 +470,7 @@ static LRESULT CALLBACK ThreadFocusHookProc(int nCode, WPARAM wParam, LPARAM lPa
          }
      }
- 
+
 +    ITfThreadMgr_Release(ThreadMgr_iface);
      return CallNextHookEx(This->focusHook, nCode, wParam, lParam);
  }
- 
+
 @@ -1338,13 +1392,8 @@ HRESULT ThreadMgr_Constructor(IUnknown *pUnkOuter, IUnknown **ppOut)
          return CLASS_E_NOAGGREGATION;
- 
+
      /* Only 1 ThreadMgr is created per thread */
 -    This = TlsGetValue(tlsIndex);
 -    if (This)
@@ -407,7 +407,7 @@ index 2c208fbc04f..2119ea2193b 100644
 +    if (SUCCEEDED(TF_GetThreadMgr((ITfThreadMgr **)ppOut)))
          return S_OK;
 -    }
- 
+
      This = HeapAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY,sizeof(ThreadMgr));
      if (This == NULL)
 @@ -1359,7 +1408,6 @@ HRESULT ThreadMgr_Constructor(IUnknown *pUnkOuter, IUnknown **ppOut)
@@ -415,13 +415,13 @@ index 2c208fbc04f..2119ea2193b 100644
      This->ITfSourceSingle_iface.lpVtbl = &SourceSingleVtbl;
      This->refCount = 1;
 -    TlsSetValue(tlsIndex,This);
- 
+
      CompartmentMgr_Constructor((IUnknown*)&This->ITfThreadMgrEx_iface, &IID_IUnknown, (IUnknown**)&This->CompartmentMgr);
- 
+
 @@ -1376,6 +1424,11 @@ HRESULT ThreadMgr_Constructor(IUnknown *pUnkOuter, IUnknown **ppOut)
      list_init(&This->UIElementSink);
      list_init(&This->InputProcessorProfileActivationSink);
- 
+
 +    This->threadId = GetCurrentThreadId();
 +    EnterCriticalSection(&ThreadMgrCs);
 +    list_add_tail(&ThreadMgrList, &This->entry);
@@ -446,7 +446,7 @@ index 4533236f0f5..353e9f50fb9 100644
 +++ b/programs/dxdiag/main.c
 @@ -71,7 +71,13 @@ static BOOL process_file_name(const WCHAR *cmdline, enum output_type output_type
          endptr = cmdline + lstrlenW(cmdline);
- 
+
      len = endptr - cmdline;
 -    if (len == 0 || len >= filename_len)
 +    if (len == 0)
@@ -457,16 +457,16 @@ index 4533236f0f5..353e9f50fb9 100644
 +
 +    if (len >= filename_len)
          return FALSE;
- 
+
      memcpy(filename, cmdline, len * sizeof(WCHAR));
 diff --git a/programs/dxdiag/output.c b/programs/dxdiag/output.c
 index 50240fb2860..f0f6a6da0c3 100644
 --- a/programs/dxdiag/output.c
 +++ b/programs/dxdiag/output.c
 @@ -169,8 +169,12 @@ static BOOL output_text_information(struct dxdiag_information *dxdiag_info, cons
- 
+
      fill_system_text_output_table(dxdiag_info, output_table[0].fields);
- 
+
 -    hFile = CreateFileW(filename, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
 -                        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 +    if (filename && *filename)
@@ -481,11 +481,11 @@ index 50240fb2860..f0f6a6da0c3 100644
 @@ -227,7 +231,7 @@ static HRESULT save_xml_document(IXMLDOMDocument *xmldoc, const WCHAR *filename)
      VARIANT destVar;
      HRESULT hr;
- 
+
 -    if (!bstr)
 +    if (!bstr || !filename || !*filename)
          return E_OUTOFMEMORY;
- 
+
      V_VT(&destVar) = VT_BSTR;
 From e485252dfad51a7e463643d56fe138129597e4b6 Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
@@ -512,7 +512,7 @@ index 6344157f384..6fefe5d6d80 100644
 -    ((flags & HEAP_TAIL_CHECKING_ENABLED) || RUNNING_ON_VALGRIND ? ALIGNMENT : 0)
 +/* extra size to add at the end of block to mitigate overruns and allow tail checking */
 +#define HEAP_TAIL_EXTRA_SIZE ALIGNMENT
- 
+
  /* size of the blocks on the free lists */
  #define HEAP_FREELIST_SIZE(index) \
 @@ -800,7 +799,7 @@ static void HEAP_ShrinkBlock(SUBHEAP *subheap, ARENA_INUSE *pArena, SIZE_T size)
@@ -522,7 +522,7 @@ index 6344157f384..6fefe5d6d80 100644
 -    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
 +    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
      LPVOID address = NULL;
- 
+
      if (block_size < size) return NULL;  /* overflow */
 @@ -1814,7 +1813,7 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
      if (!heapPtr) return NULL;
@@ -536,12 +536,12 @@ index 6344157f384..6fefe5d6d80 100644
 @@ -1968,7 +1967,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
      flags |= heapPtr->flags;
      if (!(flags & HEAP_NO_SERIALIZE)) RtlEnterCriticalSection( &heapPtr->critSection );
- 
+
 -    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
 +    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
      if (rounded_size < size) goto oom;  /* overflow */
      if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
- 
+
 From 5cd65deffffad9073538acf4fd8e794ac07824a5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 9 Oct 2019 09:47:12 +0200
@@ -568,7 +568,7 @@ index 6079d1fe28b..18e7b8a913e 100644
      output_filename( make->is_cross ? "$(CROSSLDFLAGS)" : "$(LDFLAGS)" );
 +    output_filename( make->is_cross ? "-Wl,--file-alignment,4096" : "" );
      output( "\n" );
- 
+
      if (spec_file && make->importlib)
 From 213905a322620eb326b655ab89fbca07316e6357 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -590,7 +590,7 @@ index d2fc629c843..5a97590dbce 100644
 @@ -161,12 +161,32 @@ static HRESULT dxgi_adapter_get_desc(struct dxgi_adapter *adapter, DXGI_ADAPTER_
      if (FAILED(hr = wined3d_get_adapter_identifier(adapter->factory->wined3d, adapter->ordinal, 0, &adapter_id)))
          return hr;
- 
+
 +    {
 +        /* HACK for Proton issue #3204
 +         *
@@ -617,7 +617,7 @@ index d2fc629c843..5a97590dbce 100644
          hr = E_FAIL;
      }
 +skip_description:
- 
+
      desc->VendorId = adapter_id.vendor_id;
      desc->DeviceId = adapter_id.device_id;
 From 4aa052e0c8ae276fc07afcd93d6e290a88214837 Mon Sep 17 00:00:00 2001
@@ -643,23 +643,23 @@ index 8e2b839fe89..630d8c7e16a 100644
  #include <stdarg.h>
  #include <stdio.h>
 -#include <math.h>
- 
+
  #define COBJMACROS
- 
+
 @@ -138,9 +137,9 @@ static HRESULT DirectSoundDevice_Create(DirectSoundDevice ** ppDevice)
      device->ref            = 1;
      device->priolevel      = DSSCL_NORMAL;
      device->stopped        = 1;
 -    device->speaker_config = DSSPEAKER_COMBINED(DSSPEAKER_STEREO, DSSPEAKER_GEOMETRY_WIDE);
- 
+
 -    DSOUND_ParseSpeakerConfig(device);
 +    device->speaker_config = 0;
 +    device->num_speakers = 0;
- 
+
      /* 3D listener initial parameters */
      device->ds3dl.dwSize   = sizeof(DS3DLISTENER);
 @@ -1127,75 +1126,3 @@ HRESULT WINAPI DirectSoundCreate8(
- 
+
      return hr;
  }
 -
@@ -743,25 +743,25 @@ index 69c4a2f3902..1a3e88a0d29 100644
  HRESULT DSOUND_Create8(REFIID riid, void **ppv) DECLSPEC_HIDDEN;
  HRESULT IDirectSoundImpl_Create(IUnknown *outer_unk, REFIID riid, void **ppv, BOOL has_ds8) DECLSPEC_HIDDEN;
 -void DSOUND_ParseSpeakerConfig(DirectSoundDevice *device) DECLSPEC_HIDDEN;
- 
+
  /* primary.c */
- 
+
 diff --git a/dlls/dsound/primary.c b/dlls/dsound/primary.c
 index 852ec51b7ff..fdbbc00cd33 100644
 --- a/dlls/dsound/primary.c
 +++ b/dlls/dsound/primary.c
 @@ -24,6 +24,7 @@
   */
- 
+
  #include <stdarg.h>
 +#include <math.h>
- 
+
  #define COBJMACROS
  #define NONAMELESSUNION
 @@ -110,6 +111,78 @@ static DWORD DSOUND_FindSpeakerConfig(IMMDevice *mmdevice, int channels)
      return def;
  }
- 
+
 +static void DSOUND_ParseSpeakerConfig(DirectSoundDevice *device)
 +{
 +    switch (DSSPEAKER_CONFIG(device->speaker_config)) {
@@ -840,7 +840,7 @@ index 852ec51b7ff..fdbbc00cd33 100644
 @@ -124,7 +197,7 @@ static HRESULT DSOUND_WaveFormat(DirectSoundDevice *device, IAudioClient *client
          if (FAILED(hr))
              return hr;
- 
+
 -        if (mixwfe->Format.nChannels < device->num_speakers) {
 +        if (device->num_speakers == 0 || mixwfe->Format.nChannels < device->num_speakers) {
              device->speaker_config = DSOUND_FindSpeakerConfig(device->mmdevice, mixwfe->Format.nChannels);
@@ -870,7 +870,7 @@ index 6378a091f0b..e976fda77f2 100644
 -    FIXME("(%p %d %p %d) stub\n", hwnd, attribute, pv_attribute, size);
 +    if (!hwnd) return E_HANDLE;
 +    if (!pv_attribute) return E_INVALIDARG;
- 
+
 -    return E_NOTIMPL;
 +    switch (attribute)
 +    {
@@ -895,7 +895,7 @@ index 6378a091f0b..e976fda77f2 100644
 +
 +    return S_OK;
  }
- 
+
  /**********************************************************************
 From 1a2e600a9c35a9558b32e7986668d7dc81c8b5ae Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
@@ -921,9 +921,9 @@ index 3a3691326f8..d273a22c8f3 100644
  MODULE    = dwmapi.dll
  IMPORTLIB = dwmapi
 +IMPORTS   = user32
- 
+
  EXTRADLLFLAGS = -mno-cygwin
- 
+
 diff --git a/dlls/dwmapi/dwmapi_main.c b/dlls/dwmapi/dwmapi_main.c
 index e976fda77f2..212c88c5a02 100644
 --- a/dlls/dwmapi/dwmapi_main.c
@@ -931,7 +931,7 @@ index e976fda77f2..212c88c5a02 100644
 @@ -217,6 +217,13 @@ HRESULT WINAPI DwmGetWindowAttribute(HWND hwnd, DWORD attribute, PVOID pv_attrib
          *(BOOL*)(pv_attribute) = FALSE;
          break;
- 
+
 +    case DWMWA_EXTENDED_FRAME_BOUNDS:
 +        if (size < sizeof(RECT)) return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
 +
@@ -941,7 +941,7 @@ index e976fda77f2..212c88c5a02 100644
 +
      case DWMWA_CLOAKED:
          if (size < sizeof(DWORD)) return E_INVALIDARG;
- 
+
 From 52c36274080a6edc1f1420b08df1ecf0defa9ca3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 5 Dec 2019 12:41:57 -0600
@@ -969,7 +969,7 @@ index 868f898bbbb..95f498123ea 100644
 +            pgnutls_decode_rs_value = compat_gnutls_decode_rs_value;
 +        }
      }
- 
+
      if (TRACE_ON( bcrypt ))
 From 8fd9d6bd3d567893f933b7d55615446476745654 Mon Sep 17 00:00:00 2001
 From: Vincent Povirk <vincent@codeweavers.com>
@@ -988,7 +988,7 @@ index 9cd6812d032..9e5fe2f3129 100644
 @@ -69,6 +69,17 @@ static char *strdup_unixcp( const WCHAR *str )
      return ret;
  }
- 
+
 +static void restore_system_environment(void)
 +{
 +    const char* orig_ld_path = getenv("ORIG_LD_LIBRARY_PATH");
@@ -1004,9 +1004,9 @@ index 9cd6812d032..9e5fe2f3129 100644
  static int launch_app( const WCHAR *candidates, const WCHAR *argv1 )
  {
 @@ -78,6 +89,11 @@ static int launch_app( const WCHAR *candidates, const WCHAR *argv1 )
- 
+
      if (!(cmdline = strdup_unixcp( argv1 ))) return 1;
- 
+
 +    /* PROTON HACK: Restore ORIG_LD_LIBRARY_PATH to LD_LIBRARY_PATH.
 +     * System programs may not work correctly with our libraries, in
 +     * particular gio on Ubuntu 19.04 is broken by our libgio. */
@@ -1036,7 +1036,7 @@ index 5a97590dbce..a5563498cdd 100644
 @@ -200,6 +200,25 @@ static HRESULT dxgi_adapter_get_desc(struct dxgi_adapter *adapter, DXGI_ADAPTER_
      desc->GraphicsPreemptionGranularity = 0; /* FIXME */
      desc->ComputePreemptionGranularity = 0; /* FIXME */
- 
+
 +    {
 +        /* HACK
 +         *
@@ -1058,7 +1058,7 @@ index 5a97590dbce..a5563498cdd 100644
 +
      return hr;
  }
- 
+
 From c619409f235cf660cdd4fd3295d5e04ec628daa1 Mon Sep 17 00:00:00 2001
 From: Alexey Prokhin <alexey@prokhin.ru>
 Date: Thu, 23 Apr 2020 12:29:55 +0300
@@ -1076,7 +1076,7 @@ index 0ae3aadde92..e95ede8aed5 100644
 +++ b/dlls/kernelbase/sync.c
 @@ -960,6 +960,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetQueuedCompletionStatus( HANDLE port, LPDWORD co
      }
- 
+
      if (status == STATUS_TIMEOUT) SetLastError( WAIT_TIMEOUT );
 +    else if (status == ERROR_WAIT_NO_CHILDREN) SetLastError( ERROR_ABANDONED_WAIT_0 );
      else SetLastError( RtlNtStatusToDosError(status) );
@@ -1111,7 +1111,7 @@ index 20eb6a05922..d99c6b462b2 100644
      char *unix_name;
      int name_len, unix_len;
      NTSTATUS status;
- 
+
 +    if (!attr->ObjectName->Buffer && attr->ObjectName->Length)
 +        return STATUS_ACCESS_VIOLATION;
 +
@@ -1122,10 +1122,10 @@ index 20eb6a05922..d99c6b462b2 100644
 +
          return nt_to_unix_file_name_no_root( attr->ObjectName, name_ret, disposition );
 +    }
- 
+
      name     = attr->ObjectName->Buffer;
      name_len = attr->ObjectName->Length / sizeof(WCHAR);
- 
+
      if (name_len && name[0] == '\\') return STATUS_INVALID_PARAMETER;
 From 514d3e11c999b11a95ab35df5b4ab454d34fe791 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
@@ -1146,7 +1146,7 @@ index 7ea80852090..272e1c5b176 100644
 @@ -3425,6 +3425,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
      if (zero_bits > 21 && zero_bits < 32) return STATUS_INVALID_PARAMETER_3;
      if (!is_win64 && !is_wow64 && zero_bits >= 32) return STATUS_INVALID_PARAMETER_3;
- 
+
 +    if (type & MEM_WRITE_WATCH)
 +    {
 +        static int disable = -1;
@@ -1182,17 +1182,17 @@ index d364be90d6d..5a9a4a211c1 100644
 @@ -29,11 +29,13 @@ WINE_DEFAULT_DEBUG_CHANNEL(d3d10core);
  HRESULT WINAPI D3D11CoreCreateDevice(IDXGIFactory *factory, IDXGIAdapter *adapter, unsigned int flags,
          const D3D_FEATURE_LEVEL *feature_levels, unsigned int level_count, ID3D11Device **device);
- 
+
 +HRESULT WINAPI D3D11CoreRegisterLayers(void);
 +
  HRESULT WINAPI D3D10CoreRegisterLayers(void)
  {
      TRACE("\n");
- 
+
 -    return E_NOTIMPL;
 +    return D3D11CoreRegisterLayers();
  }
- 
+
  HRESULT WINAPI D3D10CoreCreateDevice(IDXGIFactory *factory, IDXGIAdapter *adapter,
 
 From 376a037ce1391e071835a0bf30ebf1fcec43c367 Mon Sep 17 00:00:00 2001
@@ -1210,7 +1210,7 @@ index 83c3f3734a7..006ab370844 100644
 --- a/dlls/dxgi/dxgi_main.c
 +++ b/dlls/dxgi/dxgi_main.c
 @@ -106,8 +106,8 @@ static HRESULT register_d3d10core_layers(HMODULE d3d10core)
- 
+
      if (!dxgi_main.d3d10core)
      {
 -        HRESULT hr;
@@ -1219,11 +1219,11 @@ index 83c3f3734a7..006ab370844 100644
 +        HRESULT (WINAPI *register_layers)(void);
          HMODULE mod;
          BOOL ret;
- 
+
 @@ -117,8 +117,10 @@ static HRESULT register_d3d10core_layers(HMODULE d3d10core)
              return E_FAIL;
          }
- 
+
 -        d3d11core_register_layers = (void *)GetProcAddress(mod, "D3D11CoreRegisterLayers");
 -        hr = d3d11core_register_layers();
 +        if ((register_layers = (void *)GetProcAddress(mod, "D3D11CoreRegisterLayers")) ||
@@ -1250,16 +1250,16 @@ index eb2ef57c7d6..c7881fe4516 100644
 @@ -41,6 +41,8 @@
  #include "wine/exception.h"
  #include "wine/debug.h"
- 
+
 +#include "wine/heap.h"
 +
  WINE_DEFAULT_DEBUG_CHANNEL(file);
- 
+
  /* info structure for FindFirstFile handle */
 @@ -432,6 +434,72 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileA( LPCSTR name, DWORD access, DWORD sh
      return CreateFileW( nameW, access, sharing, sa, creation, attributes, template );
  }
- 
+
 +#define MAX_BLACKLISTED_FILENAMES 32
 +
 +static struct
@@ -1326,21 +1326,21 @@ index eb2ef57c7d6..c7881fe4516 100644
 +
 +    return FALSE;
 +}
- 
+
  /*************************************************************************
   *	CreateFileW   (kernelbase.@)
 @@ -460,7 +528,6 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
          FILE_OVERWRITE      /* TRUNCATE_EXISTING */
      };
- 
+
 -
      /* sanity checks */
- 
+
      if (!filename || !filename[0])
 @@ -479,6 +546,13 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
             (sharing & FILE_SHARE_DELETE) ? "FILE_SHARE_DELETE " : "",
             creation, attributes);
- 
+
 +    if (is_file_blacklisted(filename))
 +    {
 +        FIXME("\"%s\" is blacklisted.\n", debugstr_w(filename));
@@ -1367,7 +1367,7 @@ index c7881fe4516..bb4be45da5d 100644
 --- a/dlls/kernelbase/file.c
 +++ b/dlls/kernelbase/file.c
 @@ -447,23 +447,57 @@ static unsigned int blacklist_filename_count;
- 
+
  static BOOL CALLBACK init_file_blacklist(PINIT_ONCE init_once, PVOID parameter, PVOID *context)
  {
 +    static WCHAR origin_blacklist[] = L"kernel32.dll;user32.dll";
@@ -1375,7 +1375,7 @@ index c7881fe4516..bb4be45da5d 100644
      const WCHAR separators[] = L",; ";
      WCHAR *buffer, *token;
      DWORD size;
- 
+
 -    if (!(size = GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", NULL, 0)))
 -        return TRUE;
 -
@@ -1390,7 +1390,7 @@ index c7881fe4516..bb4be45da5d 100644
 +            ERR("No memory.\n");
 +            return FALSE;
 +        }
- 
+
 -    if (GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", buffer, size) != size - 1)
 +        if (GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", buffer, size) != size - 1)
 +        {
@@ -1432,7 +1432,7 @@ index c7881fe4516..bb4be45da5d 100644
 +        if (!buffer)
 +            return TRUE;
      }
- 
+
      blacklist_filename_count = 0;
 From ff790e8d99f2026af9b8569355fc1df5e6f0c639 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
@@ -1456,7 +1456,7 @@ index 43268221936..f39d6f0cd7b 100644
 +    if (!ret) return heap_strdupW( L"The Proton Project" );
      return ret;
  }
- 
+
 @@ -1227,7 +1227,7 @@ static WCHAR *get_bios_releasedate( const char *buf, UINT len )
  static WCHAR *get_bios_smbiosbiosversion( const char *buf, UINT len )
  {
@@ -1465,7 +1465,7 @@ index 43268221936..f39d6f0cd7b 100644
 +    if (!ret) return heap_strdupW( L"Proton" );
      return ret;
  }
- 
+
 @@ -1307,7 +1307,7 @@ static enum fill_status fill_bios( struct table *table, const struct expr *cond
      rec->smbiosminorversion     = get_bios_smbiosminorversion( buf, len );
      rec->systembiosmajorversion = get_bios_system_bios_major_release( buf, len );
@@ -1474,7 +1474,7 @@ index 43268221936..f39d6f0cd7b 100644
 +    rec->version                = L"PROTON - 1";
      if (!match_row( table, row, cond, &status )) free_row_values( table, row );
      else row++;
- 
+
 @@ -1468,8 +1468,8 @@ static enum fill_status fill_compsys( struct table *table, const struct expr *co
      rec->description            = L"AT/AT COMPATIBLE";
      rec->domain                 = L"WORKGROUP";
@@ -1494,7 +1494,7 @@ index 43268221936..f39d6f0cd7b 100644
 +    if (!ret) return heap_strdupW( L"Proton" );
      return ret;
  }
- 
+
 @@ -1533,7 +1533,7 @@ done:
  static WCHAR *get_compsysproduct_vendor( const char *buf, UINT len )
  {
@@ -1503,7 +1503,7 @@ index 43268221936..f39d6f0cd7b 100644
 +    if (!ret) return heap_strdupW( L"The Proton Project" );
      return ret;
  }
- 
+
 @@ -2652,7 +2652,7 @@ static enum fill_status fill_networkadapter( struct table *table, const struct e
          rec->index                = aa->u.s.IfIndex;
          rec->interface_index      = aa->u.s.IfIndex;
@@ -1530,9 +1530,9 @@ index 43268221936..f39d6f0cd7b 100644
 +    if (!ret) return heap_strdupW( L"Proton" );
      return ret;
  }
- 
+
 @@ -3955,7 +3955,7 @@ static enum fill_status fill_sounddevice( struct table *table, const struct expr
- 
+
      rec = (struct record_sounddevice *)table->data;
      rec->deviceid = get_sounddevice_pnpdeviceid( &desc );
 -    rec->manufacturer = L"The Wine Project";
@@ -1540,7 +1540,7 @@ index 43268221936..f39d6f0cd7b 100644
      rec->name = L"Wine Audio Device";
      rec->pnpdeviceid = get_sounddevice_pnpdeviceid( &desc );
      rec->productname = L"Wine Audio Device";
--- 
+--
 2.26.2
 
 From 87326687df23529255c2493d178dac1310919980 Mon Sep 17 00:00:00 2001
@@ -1562,7 +1562,7 @@ index 4010a727a08..ef9a640a771 100644
 @@ -232,6 +232,13 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
          return WSAHOST_NOT_FOUND;
      }
- 
+
 +    if (nodename && !strcmp(nodename, "download-alt.easyanticheat.net"))
 +    {
 +        ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
@@ -1708,7 +1708,7 @@ index a33440107b6..397aa64dce2 100644
 +            L"easteamproxy.exe",
 +            L"NFS11Remastered.exe"
          };
- 
+
          WCHAR cur_exe[MAX_PATH];
 From e6c7aa8bc42fea042c3d504009ad8a0fb70a6c0c Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -1727,7 +1727,7 @@ index a4a10bc8e93..551ef146cd7 100644
 @@ -2,6 +2,4 @@ MODULE    = vulkan-1.dll
  IMPORTS   = winevulkan
  IMPORTLIB = vulkan-1
- 
+
 -EXTRADLLFLAGS = -Wb,--prefer-native
 -
  RC_SRCS = version.rc
@@ -1746,7 +1746,7 @@ index 33ad0489006..66fadacf920 100644
 --- a/dlls/ntdll/unix/signal_x86_64.c
 +++ b/dlls/ntdll/unix/signal_x86_64.c
 @@ -2368,6 +2368,63 @@ static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
- 
+
      ctx->uc_mcontext.gregs[REG_RIP] = *dispatcher_address;
  }
 +
@@ -1807,7 +1807,7 @@ index 33ad0489006..66fadacf920 100644
 +    }
 +}
  #endif
- 
+
  #ifdef HAVE_SECCOMP
 @@ -2425,27 +2482,75 @@ static void install_bpf(struct sigaction *sig_act)
         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
@@ -1835,7 +1835,7 @@ index 33ad0489006..66fadacf920 100644
      struct sock_fprog prog;
 +    BOOL rdr2 = FALSE;
      NTSTATUS status;
- 
+
      sig_act->sa_sigaction = sigsys_handler;
 +    memset(&prog, 0, sizeof(prog));
 +
@@ -1852,7 +1852,7 @@ index 33ad0489006..66fadacf920 100644
 +    }
 +
      sigaction(SIGSYS, sig_act, NULL);
- 
+
 -    if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
 +    if (rdr2)
      {
@@ -1887,7 +1887,7 @@ index 33ad0489006..66fadacf920 100644
 +        prog.len = ARRAY_SIZE(filter);
 +        prog.filter = filter;
      }
- 
+
 -    memset(&prog, 0, sizeof(prog));
 -    prog.len = ARRAY_SIZE(filter);
 -    prog.filter = filter;
@@ -1945,13 +1945,13 @@ index 4df88d1f386..1506a73573b 100644
  FontSubStr="Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"
  Control="System\CurrentControlSet\Control"
 +Packages="Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\PackageRepository\Packages"
- 
+
  [Classes]
  HKCR,.chm,,2,"chm.file"
 @@ -1129,6 +1134,18 @@ HKLM,System\CurrentControlSet\Control\Nls\Locale\Alternate Sorts,"00030404",,"9"
  HKLM,"Software\Microsoft\OLE","EnableDCOM",,"Y"
  HKLM,"Software\Microsoft\OLE","EnableRemoteConnect",,"N"
- 
+
 +[Packages]
 +HKLM,"%Packages%\Microsoft.VCLibs.140.00_14.0.29231.0_x86__8wekyb3d8bbwe","Path",0x00020002,"%SystemRoot%\system32"
 +
@@ -1967,7 +1967,7 @@ index 4df88d1f386..1506a73573b 100644
  [Printing]
  HKLM,%Control%\Print\Monitors\Local Port,"Driver",2,"localspl.dll"
  HKLM,%Control%\Print\Printers,"DefaultSpoolDirectory",2,"%11%\spool\printers"
--- 
+--
 2.30.2
 
 From 4a2ca2d4e87c84a57dde064296822860701fc877 Mon Sep 17 00:00:00 2001
@@ -2030,15 +2030,15 @@ index 835c5398685..9a35d679323 100644
 @@ -23,6 +23,7 @@
  #include "winternl.h"
  #include "appmodel.h"
- 
+
 +static LONG (WINAPI * pGetPackagesByPackageFamily)(const WCHAR *, UINT32 *, WCHAR **, UINT32 *, WCHAR *);
  static BOOL (WINAPI * pGetProductInfo)(DWORD, DWORD, DWORD, DWORD, DWORD *);
  static UINT (WINAPI * pGetSystemFirmwareTable)(DWORD, DWORD, void *, DWORD);
  static LONG (WINAPI * pPackageIdFromFullName)(const WCHAR *, UINT32, UINT32 *, BYTE *);
 @@ -43,6 +44,7 @@ static void init_function_pointers(void)
- 
+
      hmod = GetModuleHandleA("kernel32.dll");
- 
+
 +    GET_PROC(GetPackagesByPackageFamily);
      GET_PROC(GetProductInfo);
      GET_PROC(GetSystemFirmwareTable);
@@ -2046,7 +2046,7 @@ index 835c5398685..9a35d679323 100644
 @@ -918,6 +920,134 @@ static void test_PackageIdFromFullName(void)
      ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
  }
- 
+
 +static void test_package_info(void)
 +{
 +    static const WCHAR package_family_msvc140[] = L"Microsoft.VCLibs.140.00_8wekyb3d8bbwe";
@@ -2207,24 +2207,24 @@ index 66bd619e394..dca4ffb8647 100644
  #include "winerror.h"
 +#include "winreg.h"
  #include "appmodel.h"
- 
+
  #include "kernelbase.h"
  #include "wine/debug.h"
 +#include "wine/heap.h"
- 
+
  WINE_DEFAULT_DEBUG_CHANNEL(ver);
- 
+
 @@ -154,6 +156,8 @@ static const struct
      }
  };
- 
+
 +static const WCHAR packages_key_name[] = L"Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows"
 +        L"\\CurrentVersion\\AppModel\\PackageRepository\\Packages";
- 
+
  /******************************************************************************
   *  init_current_version
 @@ -1681,3 +1685,114 @@ LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *
- 
+
      return ERROR_SUCCESS;
  }
 +
@@ -2349,9 +2349,9 @@ index e4288bbfbb0..27a0d0a8646 100644
 +LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count, WCHAR **full_names,
 +        UINT32 *buffer_length, WCHAR *buffer);
  LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *buffer_length, BYTE *buffer);
- 
+
  #if defined(__cplusplus)
--- 
+--
 2.30.2
 
 From 1bf233880b472769e5b560a3d50adbbecfeb5736 Mon Sep 17 00:00:00 2001
@@ -2423,7 +2423,7 @@ index 9a35d679323..ed1ef3e3bf7 100644
      GET_PROC(GetSystemFirmwareTable);
 +    GET_PROC(PackageFullNameFromId);
      GET_PROC(PackageIdFromFullName);
- 
+
      hmod = GetModuleHandleA("ntdll.dll");
 @@ -803,9 +805,11 @@ static void test_PackageIdFromFullName(void)
      {
@@ -2459,7 +2459,7 @@ index 9a35d679323..ed1ef3e3bf7 100644
 +    ok(ret == ERROR_SUCCESS, "Got unexpected ret %u.\n", ret);
 +    ok(!lstrcmpW(fullname, test_package_fullname), "Got unexpected fullname %s.\n", debugstr_w(fullname));
  }
- 
+
  static void test_package_info(void)
 diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
 index 5d21680f512..81d88b1a33a 100644
@@ -2481,7 +2481,7 @@ index dca4ffb8647..560e45e965a 100644
 @@ -1597,6 +1597,16 @@ static UINT32 processor_arch_from_string(const WCHAR *str, unsigned int len)
      return ~0u;
  }
- 
+
 +const WCHAR *string_from_processor_arch(UINT32 code)
 +{
 +    unsigned int i;
@@ -2497,8 +2497,8 @@ index dca4ffb8647..560e45e965a 100644
   */
 @@ -1687,6 +1697,39 @@ LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *
  }
- 
- 
+
+
 +/***********************************************************************
 + *         PackageFullNameFromId   (kernelbase.@)
 + */
@@ -2545,9 +2545,9 @@ index 27a0d0a8646..be59bc70f5f 100644
          UINT32 *buffer_length, WCHAR *buffer);
 +LONG WINAPI PackageFullNameFromId(const PACKAGE_ID *package_id, UINT32 *length, WCHAR *full_name);
  LONG WINAPI PackageIdFromFullName(const WCHAR *full_name, UINT32 flags, UINT32 *buffer_length, BYTE *buffer);
- 
+
  #if defined(__cplusplus)
--- 
+--
 2.30.2
 
 From fb64ea93325eb2d4aa9be77c3e2b07ca20052c3d Mon Sep 17 00:00:00 2001
@@ -2610,15 +2610,15 @@ index ed1ef3e3bf7..1d5dc550d46 100644
 @@ -23,6 +23,7 @@
  #include "winternl.h"
  #include "appmodel.h"
- 
+
 +static LONG (WINAPI * pGetPackagePath)(const PACKAGE_ID *, const UINT32, UINT32 *, WCHAR *);
  static LONG (WINAPI * pGetPackagesByPackageFamily)(const WCHAR *, UINT32 *, WCHAR **, UINT32 *, WCHAR *);
  static BOOL (WINAPI * pGetProductInfo)(DWORD, DWORD, DWORD, DWORD, DWORD *);
  static UINT (WINAPI * pGetSystemFirmwareTable)(DWORD, DWORD, void *, DWORD);
 @@ -45,6 +46,7 @@ static void init_function_pointers(void)
- 
+
      hmod = GetModuleHandleA("kernel32.dll");
- 
+
 +    GET_PROC(GetPackagePath);
      GET_PROC(GetPackagesByPackageFamily);
      GET_PROC(GetProductInfo);
@@ -2641,12 +2641,12 @@ index ed1ef3e3bf7..1d5dc550d46 100644
 -    PACKAGE_ID *id;
 -    DWORD arch;
      LONG ret;
- 
+
      if (!pGetPackagesByPackageFamily)
 @@ -1032,6 +1034,10 @@ static void test_package_info(void)
      ok(count == ARRAY_SIZE(full_names), "Got unexpected count %u.\n", count);
      ok(length == ARRAY_SIZE(buffer), "Got unexpected length %u.\n", length);
- 
+
 +    length = 0;
 +    ret = pGetPackagePath(NULL, 0, &length, NULL);
 +    ok(ret == ERROR_INVALID_PARAMETER, "Got unexpected ret %u.\n", ret);
@@ -2657,13 +2657,13 @@ index ed1ef3e3bf7..1d5dc550d46 100644
 @@ -1050,6 +1056,7 @@ static void test_package_info(void)
      ok(count >= 1, "Got unexpected count %u.\n", count);
      ok(length > 1, "Got unexpected length %u.\n", length);
- 
+
 +    total_length = length;
      id = (PACKAGE_ID *)id_buffer;
      curr_length = 0;
      arch_found = FALSE;
 @@ -1063,9 +1070,56 @@ static void test_package_info(void)
- 
+
          if (id->processorArchitecture == arch)
              arch_found = TRUE;
 +
@@ -2718,7 +2718,7 @@ index ed1ef3e3bf7..1d5dc550d46 100644
 +    ret = pGetPackagePath(id, 0, &length, path);
 +    ok(ret == ERROR_NOT_FOUND, "Got unexpected ret %u.\n", ret);
  }
- 
+
  START_TEST(version)
 diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
 index 81d88b1a33a..0b374a53b60 100644
@@ -2738,7 +2738,7 @@ index 560e45e965a..1f16194a565 100644
 --- a/dlls/kernelbase/version.c
 +++ b/dlls/kernelbase/version.c
 @@ -1839,3 +1839,85 @@ LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count,
- 
+
      return short_buffer ? ERROR_INSUFFICIENT_BUFFER : ERROR_SUCCESS;
  }
 +
@@ -2835,7 +2835,7 @@ index be59bc70f5f..c73cb8d26ef 100644
  LONG WINAPI GetPackagesByPackageFamily(const WCHAR *family_name, UINT32 *count, WCHAR **full_names,
          UINT32 *buffer_length, WCHAR *buffer);
  LONG WINAPI PackageFullNameFromId(const PACKAGE_ID *package_id, UINT32 *length, WCHAR *full_name);
--- 
+--
 2.30.2
 
 From 995fdfb8cdb0a8eed82e16640034dc9673ded681 Mon Sep 17 00:00:00 2001
@@ -2875,9 +2875,9 @@ index 9a615fb277c..810477d02a0 100644
                                      return errno_to_status( errno );
 +                                }
                              }
- 
+
                              goto tryagain;  /* break out of two loops and a switch */
--- 
+--
 2.30.2
 
 From 47be204baf902d876fc5e5b0240b6167500ec0dd Mon Sep 17 00:00:00 2001
@@ -2902,16 +2902,16 @@ index af18bdd2c32..020faa26a11 100644
 @@ -29,7 +29,7 @@ static inline struct dxgi_factory *impl_from_IWineDXGIFactory(IWineDXGIFactory *
      return CONTAINING_RECORD(iface, struct dxgi_factory, IWineDXGIFactory_iface);
  }
- 
+
 -static HRESULT STDMETHODCALLTYPE dxgi_factory_QueryInterface(IWineDXGIFactory *iface, REFIID iid, void **out)
 +static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH dxgi_factory_QueryInterface(IWineDXGIFactory *iface, REFIID iid, void **out)
  {
      struct dxgi_factory *factory = impl_from_IWineDXGIFactory(iface);
- 
+
 @@ -58,7 +58,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_QueryInterface(IWineDXGIFactory *i
      return E_NOINTERFACE;
  }
- 
+
 -static ULONG STDMETHODCALLTYPE dxgi_factory_AddRef(IWineDXGIFactory *iface)
 +static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH dxgi_factory_AddRef(IWineDXGIFactory *iface)
  {
@@ -2920,7 +2920,7 @@ index af18bdd2c32..020faa26a11 100644
 @@ -68,7 +68,7 @@ static ULONG STDMETHODCALLTYPE dxgi_factory_AddRef(IWineDXGIFactory *iface)
      return refcount;
  }
- 
+
 -static ULONG STDMETHODCALLTYPE dxgi_factory_Release(IWineDXGIFactory *iface)
 +static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH dxgi_factory_Release(IWineDXGIFactory *iface)
  {
@@ -2929,7 +2929,7 @@ index af18bdd2c32..020faa26a11 100644
 @@ -267,7 +267,494 @@ static BOOL STDMETHODCALLTYPE dxgi_factory_IsWindowedStereoEnabled(IWineDXGIFact
      return FALSE;
  }
- 
+
 -static HRESULT STDMETHODCALLTYPE dxgi_factory_CreateSwapChainForHwnd(IWineDXGIFactory *iface,
 +struct proxy_swapchain
 +{
@@ -3423,7 +3423,7 @@ index af18bdd2c32..020faa26a11 100644
          const DXGI_SWAP_CHAIN_FULLSCREEN_DESC *fullscreen_desc,
          IDXGIOutput *output, IDXGISwapChain1 **swapchain)
 @@ -299,9 +786,23 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_CreateSwapChainForHwnd(IWineDXGIFa
- 
+
      if (SUCCEEDED(IUnknown_QueryInterface(device, &IID_IWineDXGISwapChainFactory, (void **)&swapchain_factory)))
      {
 +        IDXGISwapChain4 *swapchain_impl;
@@ -3446,7 +3446,7 @@ index af18bdd2c32..020faa26a11 100644
 +        }
          return hr;
      }
- 
+
 diff --git a/dlls/dxgi/swapchain.c b/dlls/dxgi/swapchain.c
 index 82e5fbf811d..b1153ac4927 100644
 --- a/dlls/dxgi/swapchain.c
@@ -3454,16 +3454,16 @@ index 82e5fbf811d..b1153ac4927 100644
 @@ -232,7 +232,7 @@ static ULONG STDMETHODCALLTYPE d3d11_swapchain_AddRef(IDXGISwapChain1 *iface)
      return refcount;
  }
- 
+
 -static ULONG STDMETHODCALLTYPE d3d11_swapchain_Release(IDXGISwapChain1 *iface)
 +static ULONG STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d11_swapchain_Release(IDXGISwapChain1 *iface)
  {
      struct d3d11_swapchain *swapchain = d3d11_swapchain_from_IDXGISwapChain1(iface);
      ULONG refcount = InterlockedDecrement(&swapchain->refcount);
 @@ -325,7 +325,7 @@ static HRESULT STDMETHODCALLTYPE d3d11_swapchain_GetDevice(IDXGISwapChain1 *ifac
- 
+
  /* IDXGISwapChain1 methods */
- 
+
 -static HRESULT d3d11_swapchain_present(struct d3d11_swapchain *swapchain,
 +static HRESULT DECLSPEC_HOTPATCH d3d11_swapchain_present(struct d3d11_swapchain *swapchain,
          unsigned int sync_interval, unsigned int flags)
@@ -3472,7 +3472,7 @@ index 82e5fbf811d..b1153ac4927 100644
 @@ -697,7 +697,7 @@ static HRESULT STDMETHODCALLTYPE d3d11_swapchain_GetCoreWindow(IDXGISwapChain1 *
      return DXGI_ERROR_INVALID_CALL;
  }
- 
+
 -static HRESULT STDMETHODCALLTYPE d3d11_swapchain_Present1(IDXGISwapChain1 *iface,
 +static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d11_swapchain_Present1(IDXGISwapChain1 *iface,
          UINT sync_interval, UINT flags, const DXGI_PRESENT_PARAMETERS *present_parameters)
@@ -3495,7 +3495,7 @@ index c21cb18d8ff..1c626be213b 100644
 @@ -3,6 +3,8 @@ IMPORTLIB = dxgi
  IMPORTS   = gdi32 dxguid uuid wined3d user32
  EXTRAINCL = $(VKD3D_CFLAGS)
- 
+
 +EXTRADLLFLAGS = -Wl,--image-base,0x7bb00000
 +
  C_SRCS = \
@@ -3519,7 +3519,7 @@ index d9b599fadc7..25acdced21e 100644
 @@ -1742,6 +1742,32 @@ static MonoAssembly* CDECL mono_assembly_preload_hook_fn(MonoAssemblyName *aname
          }
      }
- 
+
 +    if (!strcmp(assemblyname, "ManagedStarter"))
 +    {
 +        /* HACK for Mount & Blade II: Bannerlord
@@ -3547,7 +3547,7 @@ index d9b599fadc7..25acdced21e 100644
 +    }
 +
      /* FIXME: We should search the given paths before the GAC. */
- 
+
      if ((search_flags & ASSEMBLY_SEARCH_GAC) != 0)
 From 003223a6816f3121a8e60d8ef3ec79e1768878ce Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -3568,7 +3568,7 @@ index 83c3f3734a7..941e23b3394 100644
 @@ -56,6 +56,18 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, void *reserved)
      return TRUE;
  }
- 
+
 +static BOOL is_re8(void)
 +{
 +    static int status = -1;
@@ -3587,13 +3587,13 @@ index 83c3f3734a7..941e23b3394 100644
 @@ -70,6 +82,9 @@ HRESULT WINAPI CreateDXGIFactory1(REFIID iid, void **factory)
  {
      TRACE("iid %s, factory %p.\n", debugstr_guid(iid), factory);
- 
+
 +    if(is_re8())
 +        return get_re8_dxgi_factory(iid, factory);
 +
      return dxgi_factory_create(iid, factory, TRUE);
  }
- 
+
 diff --git a/dlls/dxgi/dxgi_private.h b/dlls/dxgi/dxgi_private.h
 index acba3544e39..9d1b1cde342 100644
 --- a/dlls/dxgi/dxgi_private.h
@@ -3601,7 +3601,7 @@ index acba3544e39..9d1b1cde342 100644
 @@ -209,4 +209,6 @@ struct dxgi_surface
  HRESULT dxgi_surface_init(struct dxgi_surface *surface, IDXGIDevice *device,
          IUnknown *outer, struct wined3d_texture *wined3d_texture) DECLSPEC_HIDDEN;
- 
+
 +HRESULT get_re8_dxgi_factory(REFIID riid, void **factory) DECLSPEC_HIDDEN;
 +
  #endif /* __WINE_DXGI_PRIVATE_H */
@@ -3612,7 +3612,7 @@ index 020faa26a11..ba7d3e78905 100644
 @@ -1044,6 +1044,8 @@ static const struct IWineDXGIFactoryVtbl dxgi_factory_vtbl =
      dxgi_factory_UnregisterAdaptersChangedEvent,
  };
- 
+
 +static const struct IWineDXGIFactoryVtbl re8_factory_vtbl;
 +
  struct dxgi_factory *unsafe_impl_from_IDXGIFactory(IDXGIFactory *iface)
@@ -3629,7 +3629,7 @@ index 020faa26a11..ba7d3e78905 100644
      IWineDXGIFactory_Release(wine_factory);
      return factory;
 @@ -1125,3 +1128,97 @@ HWND dxgi_factory_get_device_window(struct dxgi_factory *factory)
- 
+
      return factory->device_window;
  }
 +
@@ -3748,7 +3748,7 @@ index 69fcd44160e..cb7b8b0e2b0 100644
 @@ -1568,11 +1568,6 @@ VkResult WINAPI vkGetPhysicalDevicePresentRectanglesKHR(VkPhysicalDevice physica
      return unix_funcs->p_vkGetPhysicalDevicePresentRectanglesKHR(physicalDevice, surface, pRectCount, pRects);
  }
- 
+
 -void WINAPI vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
 -{
 -    unix_funcs->p_vkGetPhysicalDeviceProperties(physicalDevice, pProperties);
@@ -3763,16 +3763,16 @@ index 746a25041d0..57d811a41c9 100644
 +++ b/dlls/winevulkan/loader.c
 @@ -18,6 +18,7 @@
   */
- 
+
  #include <stdarg.h>
 +#include <stdlib.h>
- 
+
  #include "windef.h"
  #include "winbase.h"
 @@ -344,6 +344,26 @@ static void fill_luid_property(VkPhysicalDeviceProperties2 *properties2)
              id->deviceNodeMask);
  }
- 
+
 +void WINAPI vkGetPhysicalDeviceProperties(VkPhysicalDevice phys_dev,
 +        VkPhysicalDeviceProperties *properties)
 +{
@@ -3797,7 +3797,7 @@ index 746a25041d0..57d811a41c9 100644
          VkPhysicalDeviceProperties2 *properties2)
  {
 @@ -351,6 +372,18 @@ void WINAPI vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
- 
+
      unix_funcs->p_vkGetPhysicalDeviceProperties2(phys_dev, properties2);
      fill_luid_property(properties2);
 +
@@ -3813,10 +3813,10 @@ index 746a25041d0..57d811a41c9 100644
 +        }
 +    }
  }
- 
+
  void WINAPI vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
 @@ -360,6 +393,18 @@ void WINAPI vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
- 
+
      unix_funcs->p_vkGetPhysicalDeviceProperties2KHR(phys_dev, properties2);
      fill_luid_property(properties2);
 +
@@ -3832,7 +3832,7 @@ index 746a25041d0..57d811a41c9 100644
 +        }
 +    }
  }
- 
+
  BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
 index f584330dc6e..3efdcb4c88c 100755
@@ -3845,8 +3845,8 @@ index f584330dc6e..3efdcb4c88c 100755
 +    "vkGetPhysicalDeviceProperties" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
      "vkGetPhysicalDeviceProperties2" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
      "vkGetPhysicalDeviceProperties2KHR" : {"dispatch" : True, "driver" : False, "thunk" : ThunkType.PUBLIC, "loader_thunk" : ThunkType.PRIVATE},
- 
--- 
+
+--
 2.30.2
 
 From ecfae7775fc3149e55058cd9d969d0d0aa24b9b9 Mon Sep 17 00:00:00 2001
@@ -3867,7 +3867,7 @@ index e146a3a4f85..2d79d1ec420 100644
 @@ -1437,6 +1437,18 @@ NTSTATUS WINAPI D3DKMTCloseAdapter( const D3DKMT_CLOSEADAPTER *desc )
      return status;
  }
- 
+
 +
 +static void d3dkmt_adapter_alloc_handle( struct d3dkmt_adapter *adapter )
 +{
@@ -3894,21 +3894,21 @@ index e146a3a4f85..2d79d1ec420 100644
 @@ -1500,13 +1511,9 @@ NTSTATUS WINAPI D3DKMTOpenAdapterFromGdiDisplayName( D3DKMT_OPENADAPTERFROMGDIDI
                                      (BYTE *)&luid, sizeof( luid ), NULL, 0))
          goto done;
- 
+
 -    EnterCriticalSection( &driver_section );
 -    /* D3DKMT_HANDLE is UINT, so we can't use pointer as handle */
 -    adapter->handle = ++handle_start;
 -    list_add_tail( &d3dkmt_adapters, &adapter->entry );
 -    LeaveCriticalSection( &driver_section );
 +    d3dkmt_adapter_alloc_handle( adapter );
- 
+
 -    desc->hAdapter = handle_start;
 +    desc->hAdapter = adapter->handle;
      desc->AdapterLuid = luid;
      desc->VidPnSourceId = index;
      status = STATUS_SUCCESS;
 @@ -1650,3 +1657,93 @@ NTSTATUS WINAPI D3DKMTCheckVidPnExclusiveOwnership( const D3DKMT_CHECKVIDPNEXCLU
- 
+
      return get_display_driver()->pD3DKMTCheckVidPnExclusiveOwnership( desc );
  }
 +
@@ -4013,6 +4013,316 @@ index b21f22c3629..2e34568ea17 100644
  @ stdcall D3DKMTOpenAdapterFromGdiDisplayName(ptr)
  @ stdcall D3DKMTOpenAdapterFromHdc(ptr)
  @ stdcall D3DKMTQueryStatistics(ptr)
+
+From 177a787cc4dcec5c6f5aecec10d3532aebf54e1a Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 19 Apr 2021 15:29:39 +0300
+Subject: [PATCH] winevulkan: Don't hardcode performance frequency.
+
+For FH4.
+---
+ dlls/winevulkan/vulkan.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 55e48f928e9..e159c87159c 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1653,7 +1653,6 @@ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevi
+
+ /* From ntdll/unix/sync.c */
+ #define NANOSECONDS_IN_A_SECOND 1000000000
+-#define TICKSPERSEC             10000000
+
+ static inline VkTimeDomainEXT get_performance_counter_time_domain(void)
+ {
+@@ -1680,7 +1679,17 @@ static VkTimeDomainEXT map_to_host_time_domain(VkTimeDomainEXT domain)
+
+ static inline uint64_t convert_monotonic_timestamp(uint64_t value)
+ {
+-    return value / (NANOSECONDS_IN_A_SECOND / TICKSPERSEC);
++    static LARGE_INTEGER freq;
++
++    if (!freq.QuadPart)
++    {
++        LARGE_INTEGER temp;
++
++        RtlQueryPerformanceFrequency(&temp);
++        InterlockedCompareExchange64(&freq.QuadPart, temp.QuadPart, 0);
++    }
++
++    return value * freq.QuadPart / NANOSECONDS_IN_A_SECOND;
+ }
+
+ static inline uint64_t convert_timestamp(VkTimeDomainEXT host_domain, VkTimeDomainEXT target_domain, uint64_t value)
+From cbb4df46b9fdb46ee0f0d1724ac1379ba17d0575 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 14 Jul 2021 20:45:38 +0300
+Subject: [PATCH] ntdll: Add stub implementation for
+ NtSetInformationFile(FileAllocationInformation).
+
+CW-Bug-Id: 19085
+---
+ dlls/ntdll/unix/file.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index 80eb16198b4..517b137e8ba 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -4375,6 +4375,15 @@ NTSTATUS WINAPI NtSetInformationFile( HANDLE handle, IO_STATUS_BLOCK *io,
+         else io->u.Status = STATUS_INVALID_PARAMETER_3;
+         break;
+
++    case FileAllocationInformation:
++    {
++        const FILE_ALLOCATION_INFORMATION *info = ptr;
++
++        FIXME("FileAllocationInformation AllocationSize %p stub.\n", (void *)(ULONG_PTR)info->AllocationSize.QuadPart);
++        io->u.Status = STATUS_SUCCESS;
++        break;
++    }
++
+     case FilePipeInformation:
+         if (len >= sizeof(FILE_PIPE_INFORMATION))
+         {
+From 2c609dcfd614b111f28e820823c4d77bdf59f1ff Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 15 Jul 2021 00:40:57 +0300
+Subject: [PATCH] winebuild: Output stubs after syscalls.
+
+CW-Bug-Id: 19085
+---
+ tools/winebuild/spec32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/winebuild/spec32.c b/tools/winebuild/spec32.c
+index 02029056b30..01124a515ed 100644
+--- a/tools/winebuild/spec32.c
++++ b/tools/winebuild/spec32.c
+@@ -762,10 +762,10 @@ void output_spec32_file( DLLSPEC *spec )
+     open_output_file();
+     output_standard_file_header();
+     output_module( spec );
+-    output_stubs( spec );
+     output_exports( spec );
+     output_imports( spec );
+     output_syscalls( spec );
++    output_stubs( spec );
+     if (needs_get_pc_thunk) output_get_pc_thunk();
+     output_resources( spec );
+     output_gnu_stack_note();
+From 7750e85dad194a39a1e5bb17e3afc80399e63fcb Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 14 Jul 2021 20:24:39 +0300
+Subject: [PATCH] ntdll: Catch all syscalls at the lower addresses.
+
+CW-Bug-Id: 19085
+---
+ dlls/ntdll/unix/signal_x86_64.c | 67 ++++++++++++++++++---------------
+ tools/winebuild/import.c        |  5 +--
+ 2 files changed, 39 insertions(+), 33 deletions(-)
+
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 3487f761324..ede34a36c3e 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -71,6 +71,7 @@
+ # include <linux/filter.h>
+ # include <linux/seccomp.h>
+ # include <sys/prctl.h>
++# include <linux/audit.h>
+ #endif
+
+ #define NONAMELESSUNION
+@@ -2490,36 +2491,33 @@ static void install_bpf(struct sigaction *sig_act)
+ #   ifndef SECCOMP_SET_MODE_FILTER
+ #       define SECCOMP_SET_MODE_FILTER 1
+ #   endif
+-    static const unsigned int flags = SECCOMP_FILTER_FLAG_SPEC_ALLOW;
+-    static struct sock_filter filter[] =
++    static const BYTE syscall_trap_test[] =
+     {
+-       BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
+-                (offsetof(struct seccomp_data, nr))),
+-       BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0xf000, 0, 1),
+-       BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
+-       BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
++        0x48, 0x89, 0xc8,   /* mov %rcx, %rax */
++        0x0f, 0x05,         /* syscall */
++        0xc3,               /* retq */
+     };
+-    static struct sock_filter filter_rdr2[] =
++    static const unsigned int flags = SECCOMP_FILTER_FLAG_SPEC_ALLOW;
++    static struct sock_filter filter[] =
+     {
+-        /* Trap anything called from RDR2 or the launcher (0x140000000 - 0x150000000)*/
+-        /* > 0x140000000 */
+-        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
+-        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x40000000 /*lsb*/, 0, 7),
+         BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
+-        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 5),
+-
+-        /* < 0x150000000 */
+-        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
+-        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x50000000 /*lsb*/, 3, 0),
+-        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
+-        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 1),
++        /* Native libs are loaded at high addresses. */
++        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x7000 /*msb*/, 0, 1),
++        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
++        /* Allow i386. */
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, arch)),
++        BPF_JUMP (BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_X86_64, 1, 0),
++        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
++        /* Allow wine64-preloader */
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer)),
++        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x7d400000, 1, 0),
++        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
++        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x7d402000, 0, 1),
+         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
+-
+-        /* Allow everything else */
+         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+     };
++    long (WINAPI *test_syscall)(long sc_number);
+     struct sock_fprog prog;
+-    BOOL rdr2 = FALSE;
+     NTSTATUS status;
+
+     sig_act->sa_sigaction = sigsys_handler;
+@@ -2529,20 +2527,23 @@ static void install_bpf(struct sigaction *sig_act)
+         const char *sgi = getenv("SteamGameId");
+         if (sgi && (!strcmp(sgi, "1174180") || !strcmp(sgi, "1404210")))
+         {
+-            /* Use specific filter and signal handler for Red Dead Redemption 2 */
+-            prog.len = ARRAY_SIZE(filter_rdr2);
+-            prog.filter = filter_rdr2;
++            /* Use specific signal handler for Red Dead Redemption 2 */
+             sig_act->sa_sigaction = sigsys_handler_rdr2;
+-            rdr2 = TRUE;
+         }
+     }
+
+     sigaction(SIGSYS, sig_act, NULL);
+
+-    if (rdr2)
++    test_syscall = mmap((void *)0x600000000000, 0x1000, PROT_EXEC | PROT_READ | PROT_WRITE,
++            MAP_PRIVATE | MAP_ANON, -1, 0);
++    if (test_syscall != (void *)0x600000000000)
+     {
+         int ret;
+
++        ERR("Could not allocate test syscall, falling back to seccomp presence check, test_syscall %p, errno %d.\n",
++                test_syscall, errno);
++        if (test_syscall != MAP_FAILED) munmap(test_syscall, 0x1000);
++
+         if ((ret = prctl(PR_GET_SECCOMP, 0, NULL, 0, 0)))
+         {
+             if (ret == 2)
+@@ -2554,7 +2555,10 @@ static void install_bpf(struct sigaction *sig_act)
+     }
+     else
+     {
+-        if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
++        memcpy(test_syscall, syscall_trap_test, sizeof(syscall_trap_test));
++        status = test_syscall(0xffff);
++        munmap(test_syscall, 0x1000);
++        if (status == STATUS_INVALID_PARAMETER)
+         {
+             TRACE("Seccomp filters already installed.\n");
+             return;
+@@ -2564,10 +2568,13 @@ static void install_bpf(struct sigaction *sig_act)
+             ERR("Unexpected status %#x, errno %d.\n", status, errno);
+             return;
+         }
+-        prog.len = ARRAY_SIZE(filter);
+-        prog.filter = filter;
+     }
+
++    TRACE("Installing seccomp filters.\n");
++
++    prog.len = ARRAY_SIZE(filter);
++    prog.filter = filter;
++
+     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
+     {
+         ERR("prctl(PR_SET_NO_NEW_PRIVS, ...): %s.\n", strerror(errno));
+diff --git a/tools/winebuild/import.c b/tools/winebuild/import.c
+index 234a7d936d7..de4a5436cda 100644
+--- a/tools/winebuild/import.c
++++ b/tools/winebuild/import.c
+@@ -1607,7 +1607,6 @@ static void output_syscall_dispatcher( int count, const char *variant )
+         output( "\tleaq 0x28(%%rsp),%%rsi\n" );   /* first argument */
+         output( "\tmovq %%rcx,%%rsp\n" );
+         output( "\tmovq 0x00(%%rcx),%%rax\n" );
+-        output( "\tsubq $0xf000,%%rax\n" );
+         output( "\tmovq 0x18(%%rcx),%%rdx\n" );
+         output( "\tmovl %%eax,%%ebx\n" );
+         output( "\tshrl $8,%%ebx\n" );
+@@ -1912,7 +1911,7 @@ void output_syscalls( DLLSPEC *spec )
+              * validate that instruction, we can just put a jmp there instead. */
+             output( "\t.byte 0x4c,0x8b,0xd1\n" ); /* movq %rcx,%r10 */
+             output( "\t.byte 0xb8\n" );           /* movl $i,%eax */
+-            output( "\t.long %u\n", 0xf000 + i );
++            output( "\t.long %u\n", i );
+             output( "\t.byte 0xf6,0x04,0x25,0x08,0x03,0xfe,0x7f,0x01\n" ); /* testb $1,0x7ffe0308 */
+             output( "\t.byte 0x75,0x03\n" );      /* jne 1f */
+             output( "\t.byte 0x0f,0x05\n" );      /* syscall */
+From f78b6f2dac4b118537b9e37f45fac797a2ad0a79 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 14 Jul 2021 20:43:39 +0300
+Subject: [PATCH] ntdll: Support '\??\GlobalRoot' prefix in
+ get_dos_prefix_len().
+
+CW-Bug-Id: 19085
+---
+ dlls/ntdll/unix/file.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index 517b137e8ba..36c51d27857 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -2934,16 +2934,31 @@ static inline int get_dos_prefix_len( const UNICODE_STRING *name )
+ {
+     static const WCHAR nt_prefixW[] = {'\\','?','?','\\'};
+     static const WCHAR dosdev_prefixW[] = {'\\','D','o','s','D','e','v','i','c','e','s','\\'};
++    static const WCHAR globalrootW[] = {'\\','?','?','\\','G','l','o','b','a','l','R','o','o','t'};
++    int prefix_len = 0;
++    WCHAR *prefix;
++    USHORT length;
+
+-    if (name->Length >= sizeof(nt_prefixW) &&
+-        !memcmp( name->Buffer, nt_prefixW, sizeof(nt_prefixW) ))
+-        return ARRAY_SIZE( nt_prefixW );
++    prefix = name->Buffer;
++    length = name->Length;
+
+-    if (name->Length >= sizeof(dosdev_prefixW) &&
+-        !wcsnicmp( name->Buffer, dosdev_prefixW, ARRAY_SIZE( dosdev_prefixW )))
+-        return ARRAY_SIZE( dosdev_prefixW );
++    if (length >= ARRAY_SIZE( globalrootW ) &&
++        !wcsnicmp( prefix, globalrootW, ARRAY_SIZE( globalrootW )))
++    {
++        WARN("Stripping off GlobalRoot prefix.\n");
++        prefix += ARRAY_SIZE( globalrootW );
++        prefix_len += ARRAY_SIZE( globalrootW );
++        length -= ARRAY_SIZE( globalrootW );
++    }
+
+-    return 0;
++    if (length >= sizeof(nt_prefixW) &&
++        !memcmp( prefix, nt_prefixW, sizeof(nt_prefixW) ))
++        prefix_len += ARRAY_SIZE( nt_prefixW );
++    else if (length >= sizeof(dosdev_prefixW) &&
++        !wcsnicmp( prefix, dosdev_prefixW, ARRAY_SIZE( dosdev_prefixW )))
++        prefix_len += ARRAY_SIZE( dosdev_prefixW );
++
++    return prefix_len;
+ }
+
+
 From ce0c255a1fd40bfa9a1de6f6765b83a4dcf9d0dd Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 21 May 2021 14:57:46 +0200
@@ -4033,7 +4343,7 @@ index 455f857d9d0..dbfc9f36819 100644
 @@ -1324,15 +1324,16 @@ int WINAPI GetMouseMovePointsEx( UINT size, LPMOUSEMOVEPOINT ptin, LPMOUSEMOVEPO
      return copied;
  }
- 
+
 +BOOL enable_mouse_in_pointer = FALSE;
 +
  /***********************************************************************
@@ -4049,7 +4359,7 @@ index 455f857d9d0..dbfc9f36819 100644
 +    enable_mouse_in_pointer = TRUE;
 +    return TRUE;
  }
- 
+
  static DWORD CALLBACK devnotify_window_callback(HANDLE handle, DWORD flags, DEV_BROADCAST_HDR *header)
 diff --git a/dlls/user32/message.c b/dlls/user32/message.c
 index a54ecccc7cd..57baea203e5 100644
@@ -4058,7 +4368,7 @@ index a54ecccc7cd..57baea203e5 100644
 @@ -2590,6 +2590,38 @@ static BOOL process_mouse_message( MSG *msg, UINT hw_id, ULONG_PTR extra_info, H
         in the WM_SETCURSOR message even if it's non-client mouse message */
      SendMessageW( msg->hwnd, WM_SETCURSOR, (WPARAM)msg->hwnd, MAKELONG( hittest, msg->message ));
- 
+
 +    if (enable_mouse_in_pointer) switch (msg->message)
 +    {
 +    case WM_MOUSEMOVE:
@@ -4100,10 +4410,10 @@ index 5a36f9bb7aa..0910e453f13 100644
 +++ b/dlls/user32/user_private.h
 @@ -236,6 +236,7 @@ static inline BOOL is_broadcast( HWND hwnd )
  }
- 
+
  extern HMODULE user32_module DECLSPEC_HIDDEN;
 +extern BOOL enable_mouse_in_pointer DECLSPEC_HIDDEN;
- 
+
  struct dce;
  struct tagWND;
 diff --git a/include/winuser.h b/include/winuser.h
@@ -4113,7 +4423,7 @@ index fe82613e590..402fbee9dc4 100644
 @@ -3474,6 +3474,32 @@ typedef struct tagMENUGETOBJECTINFO
      void  *pvObj;
  } MENUGETOBJECTINFO, *PMENUGETOBJECTINFO;
- 
+
 +#define POINTER_MESSAGE_FLAG_NEW                      0x00000001
 +#define POINTER_MESSAGE_FLAG_INRANGE                  0x00000002
 +#define POINTER_MESSAGE_FLAG_INCONTACT                0x00000004
@@ -4143,3 +4453,62 @@ index fe82613e590..402fbee9dc4 100644
  #if defined(_WINGDI_) && !defined(NOGDI)
  WINUSERAPI LONG        WINAPI ChangeDisplaySettingsA(LPDEVMODEA,DWORD);
  WINUSERAPI LONG        WINAPI ChangeDisplaySettingsW(LPDEVMODEW,DWORD);
+
+From efb05519cd3e8187edce6d28a044680fe58b17c7 Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Thu, 24 Jun 2021 17:27:08 +0200
+Subject: [PATCH] HACK: gdi32/font: Do font linking for Arial too.
+
+---
+ dlls/gdi32/font.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/gdi32/font.c b/dlls/gdi32/font.c
+index 8b2af98a3a4..21520dda46a 100644
+--- a/dlls/gdi32/font.c
++++ b/dlls/gdi32/font.c
+@@ -2594,6 +2594,7 @@ static void update_font_system_link_info(UINT current_ansi_codepage)
+         set_multi_value_key(hkey, L"Lucida Sans Unicode", link, len);
+         set_multi_value_key(hkey, L"Microsoft Sans Serif", link, len);
+         set_multi_value_key(hkey, L"Tahoma", link, len);
++        set_multi_value_key(hkey, L"Arial", link, len);
+         RegCloseKey(hkey);
+     }
+ }
+From 498ecc1a9e25a63aa0b082b28896647bbc063cb3 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 25 Jun 2021 23:17:43 +0300
+Subject: [PATCH] esync, fsync: Use usleep(0) instead of NtYieldExecution() in
+ esync_pulse_event().
+
+---
+ dlls/ntdll/unix/esync.c | 2 +-
+ dlls/ntdll/unix/fsync.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/unix/esync.c b/dlls/ntdll/unix/esync.c
+index 810477d02a0..80f2ee88fc2 100644
+--- a/dlls/ntdll/unix/esync.c
++++ b/dlls/ntdll/unix/esync.c
+@@ -626,7 +626,7 @@ NTSTATUS esync_pulse_event( HANDLE handle )
+
+     /* Try to give other threads a chance to wake up. Hopefully erring on this
+      * side is the better thing to do... */
+-    NtYieldExecution();
++    usleep(0);
+
+     read( obj->fd, &value, sizeof(value) );
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index c816b036238..a29024be70b 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -704,7 +704,7 @@ NTSTATUS fsync_pulse_event( HANDLE handle, LONG *prev )
+
+     /* Try to give other threads a chance to wake up. Hopefully erring on this
+      * side is the better thing to do... */
+-    NtYieldExecution();
++    usleep(0);
+
+     __atomic_store_n( &event->signaled, 0, __ATOMIC_SEQ_CST );
+

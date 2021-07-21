@@ -120,7 +120,7 @@ index a625f000254..be27b00cfd0 100644
 +         * actually modifying the video at all.*/
 +        if (!(capssetter = gst_element_factory_make("capssetter", NULL)))
 +        {
-+            ERR("Failed to create capssetter, are %u-bit GStreamer \"good\" plugins installed?\n",
++            GST_ERROR("Failed to create capssetter, are %u-bit GStreamer \"good\" plugins installed?\n",
 +                    8 * (int)sizeof(void *));
 +            goto out;
 +        }
