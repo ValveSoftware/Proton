@@ -2325,4 +2325,46 @@ index 282d9dbe5ca..2a1242cb5c5 100644
      {2880, 1620}, /* 16:9 */
      {3200, 1800}, /* 16:9 */
      {1440, 900},  /*  8:5 */
+From c7f9f832e966649b232316557653d69a8fa5947b Mon Sep 17 00:00:00 2001
+From: Thomas Crider <gloriouseggroll@gmail.com>
+Date: Wed, 21 Jul 2021 00:34:52 -0600
+Subject: [PATCH] FSR: Add fshack input resolutions
+
+https://www.tomshardware.com/news/amd-fidelityfx-super-resolution-fsr-performance-tested
+---
+ dlls/winex11.drv/fs.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
+index 2a1242cb5c5..756964fe714 100644
+--- a/dlls/winex11.drv/fs.c
++++ b/dlls/winex11.drv/fs.c
+@@ -62,14 +62,21 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+     {800, 600},   /*  4:3 */
+     {1024, 768},  /*  4:3 */
+     {1600, 1200}, /*  4:3 */
+-    {960, 540},   /* 16:9 */
+-    {1280, 720},  /* 16:9 */
++    {960, 540},   /* 16:9 - 'FSR 1080p Performance' */
++    {1130, 635},  /* 16:9 - 'FSR 1080p Balanced' */
++    {1280, 720},  /* 16:9 - 'FSR 1440p Performance, 1080p Quality' */
++    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality' */
++    {1506, 847},  /* 16:9 - 'FSR 1440p Balanced' */
+     {1600, 900},  /* 16:9 */
+-    {1920, 1080}, /* 16:9 */
+-    {2560, 1440}, /* 16:9 */
++    {1706, 960},  /* 16:9 - 'FSR 1440p Quality' */
++    {1920, 1080}, /* 16:9 - 'FSR 2160p Performance' */
++    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality' */
++    {2259, 1270}, /* 16:9 - 'FSR 2160p Balanced' */
++    {2560, 1440}, /* 16:9 - 'FSR 2160p Quality' */
+     {2304, 1296}, /* 16:9 */
+     {2048, 1152}, /* 16:9 */
+     {2880, 1620}, /* 16:9 */
++    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra QUality' */
+     {3200, 1800}, /* 16:9 */
+     {1440, 900},  /*  8:5 */
+     {1680, 1050}, /*  8:5 */
+--
+2.31.1
 
