@@ -1,0 +1,68 @@
+From ef54960f954ced48337fc9e5c2f8560abc0f2aac Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Fri, 9 Jul 2021 19:42:06 +0100
+Subject: [PATCH] vkd3d: Add config to use host-visible vram for UPLOAD heap
+
+Adds the "upload_hvv" config flag, which will make D3D12_HEAP_TYPE_UPLOAD attempt to use host-visible VRAM for allocations.
+
+This takes advantage of large or resizable BAR if available.
+
+I see a perf delta of 83-84 -> 92-94 (~12%) when using this in Horizon Zero Dawn.
+
+Signed-off-by: Joshua Ashton <joshua@froggi.es>
+---
+ README.md           | 1 +
+ include/vkd3d.h     | 1 +
+ libs/vkd3d/device.c | 1 +
+ libs/vkd3d/memory.c | 2 ++
+ 4 files changed, 5 insertions(+)
+
+diff --git a/README.md b/README.md
+index 972b81814..52c46773d 100644
+--- a/README.md
++++ b/README.md
+@@ -154,6 +154,7 @@ commas or semicolons.
+     - `dxr` - Enables DXR support if supported by device.
+     - `force_static_cbv` - Unsafe speed hack on NVIDIA. May or may not give a significant performance uplift.
+     - `single_queue` - Do not use asynchronous compute or transfer queues.
++    - `upload_hvv` - Attempt to use host-visible VRAM (large/resizable BAR) for the UPLOAD heap. May improve performance at the cost of using additional video memory over system memory.
+  - `VKD3D_DEBUG` - controls the debug level for log messages produced by
+    vkd3d-proton. Accepts the following values: none, err, info, fixme, warn, trace.
+  - `VKD3D_SHADER_DEBUG` - controls the debug level for log messages produced by
+diff --git a/include/vkd3d.h b/include/vkd3d.h
+index c36aa6581..f6419e7a1 100644
+--- a/include/vkd3d.h
++++ b/include/vkd3d.h
+@@ -70,6 +70,7 @@ enum vkd3d_config_flags
+     VKD3D_CONFIG_FLAG_FORCE_RTV_EXCLUSIVE_QUEUE = 0x00000080,
+     VKD3D_CONFIG_FLAG_FORCE_DSV_EXCLUSIVE_QUEUE = 0x00000100,
+     VKD3D_CONFIG_FLAG_FORCE_MINIMUM_SUBGROUP_SIZE = 0x00000200,
++    VKD3D_CONFIG_FLAG_UPLOAD_HVV = 0x00000400,
+ };
+ 
+ typedef HRESULT (*PFN_vkd3d_signal_event)(HANDLE event);
+diff --git a/libs/vkd3d/device.c b/libs/vkd3d/device.c
+index 99a0d2f86..800a348c4 100644
+--- a/libs/vkd3d/device.c
++++ b/libs/vkd3d/device.c
+@@ -490,6 +490,7 @@ static const struct vkd3d_debug_option vkd3d_config_options[] =
+     {"force_rtv_exclusive_queue", VKD3D_CONFIG_FLAG_FORCE_RTV_EXCLUSIVE_QUEUE},
+     {"force_dsv_exclusive_queue", VKD3D_CONFIG_FLAG_FORCE_DSV_EXCLUSIVE_QUEUE},
+     {"force_exclusive_queue", VKD3D_CONFIG_FLAG_FORCE_RTV_EXCLUSIVE_QUEUE | VKD3D_CONFIG_FLAG_FORCE_DSV_EXCLUSIVE_QUEUE},
++    {"upload_hvv", VKD3D_CONFIG_FLAG_UPLOAD_HVV},
+ };
+ 
+ static void vkd3d_config_flags_init_once(void)
+diff --git a/libs/vkd3d/memory.c b/libs/vkd3d/memory.c
+index d3ee45173..bf64360bd 100644
+--- a/libs/vkd3d/memory.c
++++ b/libs/vkd3d/memory.c
+@@ -83,6 +83,8 @@ static HRESULT vkd3d_select_memory_flags(struct d3d12_device *device, const D3D1
+ 
+         case D3D12_HEAP_TYPE_UPLOAD:
+             *type_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
++            if (vkd3d_config_flags & VKD3D_CONFIG_FLAG_UPLOAD_HVV)
++                *type_flags |= VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+             break;
+ 
+         case D3D12_HEAP_TYPE_READBACK:
