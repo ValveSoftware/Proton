@@ -19,9 +19,9 @@ if [[ $(tput colors 2>/dev/null || echo 0) -gt 0 ]]; then
   COLOR_CLEAR=$'\e[0m'
 fi
 
-sh_quote() { 
+sh_quote() {
         local quoted
-        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}"; 
+        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}";
 }
 err()      { echo >&2 "${COLOR_ERR}!!${COLOR_CLEAR} $*"; }
 stat()     { echo >&2 "${COLOR_STAT}::${COLOR_CLEAR} $*"; }
@@ -30,6 +30,55 @@ showcmd()  { echo >&2 "+ ${COLOR_CMD}$(sh_quote "$@")${COLOR_CLEAR}"; }
 die()      { err "$@"; exit 1; }
 finish()   { stat "$@"; exit 0; }
 cmd()      { showcmd "$@"; "$@"; }
+
+#
+# Dependency Checks
+#
+
+MISSING_DEPENDENCIES=0
+
+dependency_command() {
+    local COMMAND=$1
+    shift
+    if ! command -v "$COMMAND" &> /dev/null; then
+        err "Couldn't find command '$COMMAND'. Please install ${@:-$COMMAND}."
+        MISSING_DEPENDENCIES=1
+    fi
+}
+
+dependency_afdko() {
+    if command -v makeotf &> /dev/null; then
+        AFDKO_VERB=
+    elif command -v afdko &> /dev/null; then
+        AFDKO_VERB=afdko
+    else
+        err "Couldn't find 'afdko'. Install it and make sure that 'makeotf' is in your PATH or 'afdko makeotf' works."
+            MISSING_DEPENDENCIES=1
+    fi
+}
+
+check_container_engine() {
+    info "Making sure that the container engine is working."
+    if ! cmd $arg_container_engine run --rm $arg_protonsdk_image; then
+        die "Broken container engine. Please fix your $arg_container_engine setup."
+    fi
+
+    touch permission_check
+    local inner_uid="$($arg_container_engine run -v "$(pwd):/test" \
+                                            --rm $arg_protonsdk_image \
+                                            stat --format "%u" /test/permission_check)"
+    rm permission_check
+
+    if [ "$inner_uid" -eq 0 ]; then
+        # namespace maps the user as root or the build is performed as host's root
+        ROOTLESS_CONTAINER=1
+    elif [ "$inner_uid" -eq "$(id -u)" ]; then
+        ROOTLESS_CONTAINER=0
+    else
+        err "File owner's UID doesn't map to 0 or $(id -u) in the container."
+        die "Don't know how to map permissions. Please check your $arg_container_engine setup."
+    fi
+}
 
 #
 # Configure
@@ -64,6 +113,27 @@ function configure() {
     info "No build name specified, using default: $build_name"
   fi
 
+  dependency_command fontforge
+  dependency_command find "findutils"
+  dependency_command make "GNU Make"
+  dependency_command rsync
+  dependency_command wget
+  dependency_command xz
+  dependency_command patch
+  dependency_command autoconf
+  dependency_command git
+  dependency_command python3
+
+  dependency_afdko
+
+  if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
+      die "Missing dependencies, cannot continue."
+  fi
+
+  if [[ -n "$arg_container_engine" ]]; then
+    check_container_engine
+  fi
+
   ## Write out config
   # Don't die after this point or we'll have rather unhelpfully deleted the Makefile
   [[ ! -e "$MAKEFILE" ]] || rm "$MAKEFILE"
@@ -79,9 +149,16 @@ function configure() {
     echo "STEAMRT_NAME  := $(escape_for_make "$steamrt_name")"
     echo "STEAMRT_IMAGE := $(escape_for_make "$steamrt_image")"
 
+    echo "ROOTLESS_CONTAINER := $ROOTLESS_CONTAINER"
+    echo "CONTAINER_ENGINE := $arg_container_engine"
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
     fi
+    if [[ -n "$arg_enable_ccache" ]]; then
+      echo "ENABLE_CCACHE := 1"
+    fi
+
+    echo "AFDKO_VERB := $AFDKO_VERB"
 
     # Include base
     echo ""
@@ -97,10 +174,12 @@ function configure() {
 #
 
 arg_steamrt="soldier"
-arg_steamrt_image=""
-arg_no_steamrt=""
+arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20210505.0-2"
+arg_no_protonsdk=""
 arg_build_name=""
+arg_container_engine="docker"
 arg_docker_opts=""
+arg_enable_ccache=""
 arg_help=""
 invalid_args=""
 function parse_args() {
@@ -137,17 +216,22 @@ function parse_args() {
     elif [[ $arg = --build-name ]]; then
       arg_build_name="$val"
       val_used=1
+    elif [[ $arg = --container-engine ]]; then
+      arg_container_engine="$val"
+      val_used=1
     elif [[ $arg = --docker-opts ]]; then
       arg_docker_opts="$val"
       val_used=1
-    elif [[ $arg = --steam-runtime-image ]]; then
+    elif [[ $arg = --enable-ccache ]]; then
+      arg_enable_ccache="1"
+    elif [[ $arg = --proton-sdk-image ]]; then
       val_used=1
-      arg_steamrt_image="$val"
+      arg_protonsdk_image="$val"
     elif [[ $arg = --steam-runtime ]]; then
       val_used=1
       arg_steamrt="$val"
-    elif [[ $arg = --no-steam-runtime ]]; then
-      arg_no_steamrt=1
+    elif [[ $arg = --no-proton-sdk ]]; then
+      arg_no_protonsdk=1
     else
       err "Unrecognized option $arg"
       return 1
@@ -182,7 +266,7 @@ function parse_args() {
 }
 
 usage() {
-  "$1" "Usage: $0 { --no-steam-runtime | --steam-runtime-image=<image> --steam-runtime=<name> }"
+  "$1" "Usage: $0 { --no-proton-sdk | --proton-sdk-image=<image> --steam-runtime=<name> }"
   "$1" "  Generate a Makefile for building Proton.  May be run from another directory to create"
   "$1" "  out-of-tree build directories (e.g. mkdir mybuild && cd mybuild && ../configure.sh)"
   "$1" ""
@@ -191,32 +275,36 @@ usage() {
   "$1" ""
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
   "$1" ""
+  "$1" "    --container-engine=<engine> Which container Docker-compatible container engine to use,"
+  "$1" "                                e.g. podman. Defaults to docker."
+  "$1" ""
   "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
+  "$1" ""
+  "$1" "    --enable-ccache Mount \$CCACHE_DIR or \$HOME/.ccache inside of the container and use ccache for the build."
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
   "$1" "    the Steam Runtime SDK to ensure compatibility.  See README.md for more information."
   "$1" ""
-  "$1" "    --steam-runtime-image=<image>  Automatically invoke the Steam Runtime SDK in <image>"
-  "$1" "                                   for build steps that must be run in an SDK"
-  "$1" "                                   environment.  See README.md for instructions to"
-  "$1" "                                   create this image."
+  "$1" "    --proton-sdk-image=<image>  Automatically invoke the Steam Runtime SDK in <image>"
+  "$1" "                                for build steps that must be run in an SDK"
+  "$1" "                                environment.  See README.md for instructions to"
+  "$1" "                                create this image."
   "$1" "    --steam-runtime=soldier  Name of the steam runtime release to build for (soldier, scout)."
   "$1" ""
-  "$1" "    --no-steam-runtime  Do not automatically invoke any runtime SDK as part of the build."
-  "$1" "                        Build steps may still be manually run in a runtime environment."
+  "$1" "    --no-proton-sdk  Do not automatically invoke any runtime SDK as part of the build."
+  "$1" "                     Build steps may still be manually run in a runtime environment."
   exit 1;
 }
 
-[[ $# -gt 0 ]] || usage info
 parse_args "$@" || usage err
 [[ -z $arg_help ]] || usage info
 
 # Sanity check arguments
-if [[ -n $arg_no_steamrt && -n $arg_steamrt_image ]]; then
-    die "Cannot specify --steam-runtime-image as well as --no-steam-runtime"
-elif [[ -z $arg_no_steamrt && -z $arg_steamrt_image ]]; then
-    die "Must specify either --no-steam-runtime or --steam-runtime-image"
+if [[ -n $arg_no_protonsdk && -n $arg_protonsdk_image ]]; then
+    die "Cannot specify --proton-sdk-image as well as --no-proton-sdk"
+elif [[ -z $arg_no_protonsdk && -z $arg_protonsdk_image ]]; then
+    die "Must specify either --no-proton-sdk or --proton-sdk-image"
 fi
 
-configure "$arg_steamrt_image" "$arg_steamrt"
+configure "$arg_protonsdk_image" "$arg_steamrt"
