@@ -25,7 +25,7 @@ $$(OBJ)/.$(1)-source: $$(shell echo -n 'syncing $(1)... ' >&2 && \
                               rsync --dry-run --filter=:C --exclude '*~' --exclude .git $$($(2)_SOURCE_ARGS) --info=name -Oarx --delete "$$(abspath $(3))/" "$$($(2)_SRC)" | \
                               grep -v -e ^$$$$ | grep -q ^ && echo $(1)-rebuild && \
                               echo 'done, dirty' >&2 || echo 'done' >&2)
-	rsync --filter=:C --exclude '*~' --exclude .git $$($(2)_SOURCE_ARGS) --info=name -Oarx --delete "$$(abspath $(3))/" "$$($(2)_SRC)"
+	rsync --filter=:C --exclude '*~' --exclude .git $$($(2)_SOURCE_ARGS) --info=name -Oarx --delete "$$(abspath $(3))/" "$$($(2)_SRC)" $(--quiet?)
 	touch $$@
 
 $$(OBJ)/.$(1)-post-source: $$(OBJ)/.$(1)-source
