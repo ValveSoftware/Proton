@@ -25,6 +25,7 @@ from ctypes import c_char_p
 from ctypes import c_void_p
 
 from filelock import FileLock
+from random import randrange
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -412,6 +413,52 @@ class CompatData:
                     log("Unable to write new registry file to " + self.prefix_dir + "system.reg")
                     pass
 
+            # Prior to prefix version 6.3-3, ShellExecute* APIs used DDE.
+            # Wipe out old registry entries.
+            if int(old_proton_maj) < 6 or (int(old_proton_maj) == 6 and int(old_proton_min) < 3) or \
+                    (int(old_proton_maj) == 6 and int(old_proton_min) == 3 and int(old_prefix_ver) < 3):
+                delete_keys = {
+                    "[Software\\\\Classes\\\\htmlfile\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\pdffile\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\xmlfile\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\ftp\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\http\\\\shell\\\\open\\\\ddeexec",
+                    "[Software\\\\Classes\\\\https\\\\shell\\\\open\\\\ddeexec",
+                }
+                dde_wb = '@="\\"C:\\\\windows\\\\system32\\\\winebrowser.exe\\" -nohome"'
+
+                sysreg_fp = self.prefix_dir + "system.reg"
+                new_sysreg_fp = self.prefix_dir + "system.reg.new"
+
+                log("Removing ShellExecute DDE registry entries.")
+
+                with open(sysreg_fp, "r") as reg_in:
+                    with open(new_sysreg_fp, "w") as reg_out:
+                        for line in reg_in:
+                            if line[:line.find("ddeexec")+len("ddeexec")] in delete_keys:
+                                reg_out.write(line.replace("ddeexec", "ddeexec_old", 1))
+                            elif line.rstrip() == dde_wb:
+                                reg_out.write(line.replace("-nohome", "%1"))
+                            else:
+                                reg_out.write(line)
+
+                # Slightly randomize backup file name to avoid colliding with
+                # other backups.
+                backup_sysreg_fp = "{}system.reg.{:x}.old".format(self.prefix_dir, randrange(16 ** 8))
+
+                try:
+                    os.rename(sysreg_fp, backup_sysreg_fp)
+                except OSError:
+                    log("Failed to back up old system.reg. Simply deleting it.")
+                    os.remove(sysreg_fp)
+                    pass
+
+                try:
+                    os.rename(new_sysreg_fp, sysreg_fp)
+                except OSError:
+                    log("Unable to write new registry file to " + sysreg_fp)
+                    pass
+
             stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
                               self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll" ]
             for builtin in stale_builtins:
@@ -501,7 +548,10 @@ class CompatData:
             ( g_proton.fonts_dir, "LiberationSerif-Regular.ttf", "times.ttf" ),
             ( g_proton.fonts_dir, "LiberationMono-Regular.ttf", "cour.ttf" ),
             ( g_proton.fonts_dir, "LiberationMono-Bold.ttf", "courbd.ttf" ),
-            ( g_proton.fonts_dir, "SourceHanSansSCRegular.otf", "msyh.ttf" ),
+            ( g_proton.fonts_dir, "msyh.ttf", "msyh.ttf" ),
+            ( g_proton.fonts_dir, "simsun.ttc", "simsun.ttc" ),
+            ( g_proton.fonts_dir, "msgothic.ttc", "msgothic.ttc" ),
+            ( g_proton.fonts_dir, "malgun.ttf", "malgun.ttf" ),
 
             ( g_proton.wine_fonts_dir, "tahoma.ttf", "tahoma.ttf" ),
         ]
@@ -548,7 +598,8 @@ class CompatData:
             steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
 
             use_wined3d = "wined3d" in g_session.compat_config
-            use_dxvk_dxgi = not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
+            use_dxvk_dxgi = not use_wined3d and \
+                    not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
             use_nvapi = 'enablenvapi' in g_session.compat_config
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
@@ -562,7 +613,7 @@ class CompatData:
                     "xaudio*.dll," +
                     "xinput*.dll," +
                     "devenum.dll," +
-                    
+
                     #directshow
                     "amstream.dll," +
                     "qasf.dll," +
@@ -770,7 +821,7 @@ class CompatData:
             except IOError:
                 old_prefix_info = ""
 
-            if old_prefix_info != prefix_info:
+            if old_ver != CURRENT_PREFIX_VERSION or old_prefix_info != prefix_info:
                 # update builtin dll symlinks or copies
                 self.update_builtin_libs(builtin_dll_copy)
 
@@ -1299,7 +1350,7 @@ class Session:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
 
         commandstring = str(sys.argv[2:] + self.cmdlineappend)
-        
+
         # use a string check instead of single string in case we need to check for more in the future
         check_args = [
             'iscriptevaluator.exe' in commandstring,
@@ -1330,7 +1381,7 @@ if __name__ == "__main__":
     g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
     g_session = Session()
-    
+
     #install stupid EA Origin if need.
     if "link2ea" in str(sys.argv[2]):
         os.environ["ORIGIN"] = "1"
@@ -1341,7 +1392,7 @@ if __name__ == "__main__":
         g_proton.make_default_prefix()
 
     import protonfixes
-    
+
     g_session.init_session(sys.argv[1] != "runinprefix")
 
     #determine mode
