@@ -1004,7 +1004,16 @@ class Session:
                 except OSError as e:
                     print("Error: %s : %s" % (dir_path, e.strerror))
                 os.symlink(src, dst)
-
+        # Hack to redirect the "Application Data" dir to the new "AppData/Roaming" dir
+        if not os.path.islink(g_compatdata.prefix_dir + "drive_c/users/steamuser/AppData/Roaming"):
+            if os.path.exists(g_compatdata.prefix_dir + "drive_c/users/steamuser/Application Data"):
+                src = g_compatdata.prefix_dir + "drive_c/users/steamuser/Application Data"
+                dst = g_compatdata.prefix_dir + "drive_c/users/steamuser/AppData/Roaming"
+                try:
+                    shutil.rmtree(dst, ignore_errors=True)
+                except OSError as e:
+                    print("Error: %s : %s" % (dir_path, e.strerror))
+                os.symlink(src, dst)
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
         #load environment overrides
