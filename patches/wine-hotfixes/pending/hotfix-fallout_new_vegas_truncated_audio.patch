@@ -11,6 +11,8 @@ other games that use mp3 soundtracks.
 BTW, is it a good idea to submit such workarounds, or is it
 better to leave it broken until a proper fix is found? Another alternative
 would be to simply revert commit d7fecebe93938bf1ef2349ac74413e28d6b8e153.
+
+https://bugs.winehq.org/show_bug.cgi?id=51126
 ---
  dlls/winegstreamer/quartz_parser.c | 10 +++++++++-
  dlls/winegstreamer/wg_parser.c     |  6 +++++-
