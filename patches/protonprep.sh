@@ -128,6 +128,17 @@
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
 
+    echo "These break various rockstar game services"
+    git revert --no-commit 4c10543b6a54cdcc57b5ce7efd839b17d60471e6
+    git revert --no-commit 67c8a82f3d0a43709a3be622dbe15a5ff8165475
+    git revert --no-commit 2f3ab0b242321a044ca68794f811165a8f748a74
+    git revert --no-commit 4c7c7d07d4dd30b0751c7ad0bbc1db5577807b72
+    git revert --no-commit 0978421102910d7a7443f9f57ea0bfe3c882270e
+    git revert --no-commit 8e13903665fdf81fcd6054fb3de981d5a3f617f1
+
+    echo "this breaks both rockstar and egs"
+    git revert --no-commit 5edf65616a8dcbf5988bbabe0493827d9e125fc3
+
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
 
@@ -335,6 +346,10 @@
     
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
+
+    echo "sword of legends launcher fix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-sword_of_legends_launcher_fix.patch
+
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
