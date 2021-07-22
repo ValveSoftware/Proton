@@ -2361,10 +2361,47 @@ index 2a1242cb5c5..756964fe714 100644
      {2304, 1296}, /* 16:9 */
      {2048, 1152}, /* 16:9 */
      {2880, 1620}, /* 16:9 */
-+    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra QUality' */
++    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra Quality' */
      {3200, 1800}, /* 16:9 */
      {1440, 900},  /*  8:5 */
      {1680, 1050}, /*  8:5 */
+--
+2.31.1
+
+From c760fe3301802efffc966ff8b4a99326a76f07ec Mon Sep 17 00:00:00 2001
+From: Thomas Crider <gloriouseggroll@gmail.com>
+Date: Thu, 22 Jul 2021 00:03:31 -0600
+Subject: [PATCH] =?UTF-8?q?fsr:=20add=20ultra-wide=20input=20resolutions?=
+ =?UTF-8?q?=20=1B[200~?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+https://gpuopen.com/fidelityfx-superresolution/#quality
+---
+ dlls/winex11.drv/fs.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
+index 756964fe714..6151f43bacf 100644
+--- a/dlls/winex11.drv/fs.c
++++ b/dlls/winex11.drv/fs.c
+@@ -84,9 +84,14 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+     {2560, 1600}, /*  8:5 */
+     {1440, 960},  /*  3:2 */
+     {1920, 1280}, /*  3:2 */
+-    {2560, 1080}, /* 21:9 ultra-wide */
+     {1920, 800},  /* 12:5 */
+     {3840, 1600}, /* 12:5 */
++    {1720, 720}, /* 21:9 - 'FSR ultra-wide Performance' */
++    {2024, 847}, /* 21:9 - 'FSR ultra-wide Balanced' */
++    {2293, 960}, /* 21:9 - 'FSR ultra-wide Quality' */
++    {2560, 1080}, /* 21:9 ultra-wide */
++    {2646, 1108}, /* 21:9 - 'FSR ultra-wide Ultra Quality' */
++    {3440, 1440}, /* 21:9 ultra-wide */
+     {1280, 1024}, /*  5:4 */
+ };
+
 --
 2.31.1
 
