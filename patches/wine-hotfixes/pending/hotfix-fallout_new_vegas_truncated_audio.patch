@@ -1,4 +1,304 @@
 From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH v2 1/5] winegstreamer: Inline query_duration() into wg_parser_connect().
+Message-Id: <20210722051904.683599-1-zfigura@codeweavers.com>
+Date: Thu, 22 Jul 2021 00:19:00 -0500
+
+From: Anton Baskanov <baskanov@gmail.com>
+
+Signed-off-by: Anton Baskanov <baskanov@gmail.com>
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+Finally resending these with my sign-off after a month. Sorry it took so long.
+The code is fragile here, which does not really help matters.
+
+Rebased 208041 onto current git, and I also added a [redundant, but not clearly
+so] initialization of "stream->duration" in the failure case.
+
+ dlls/winegstreamer/wg_parser.c | 45 ++++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 21 deletions(-)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index f247b4b3621..d45e3624945 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -1489,26 +1489,6 @@ static gboolean src_event_cb(GstPad *pad, GstObject *parent, GstEvent *event)
+     return ret;
+ }
+
+-static LONGLONG query_duration(GstPad *pad)
+-{
+-    gint64 duration, byte_length;
+-
+-    if (gst_pad_query_duration(pad, GST_FORMAT_TIME, &duration))
+-        return duration / 100;
+-
+-    GST_INFO("Failed to query time duration; trying to convert from byte length.\n");
+-
+-    /* To accurately get a duration for the stream, we want to only consider the
+-     * length of that stream. Hence, query for the pad duration, instead of
+-     * using the file duration. */
+-    if (gst_pad_query_duration(pad, GST_FORMAT_BYTES, &byte_length)
+-            && gst_pad_query_convert(pad, GST_FORMAT_BYTES, byte_length, GST_FORMAT_TIME, &duration))
+-        return duration / 100;
+-
+-    GST_WARNING("Failed to query duration.\n");
+-    return 0;
+-}
+-
+ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_size)
+ {
+     GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("quartz_src",
+@@ -1545,6 +1525,7 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+     for (i = 0; i < parser->stream_count; ++i)
+     {
+         struct wg_parser_stream *stream = parser->streams[i];
++        gint64 duration, byte_length;
+
+         while (!stream->has_caps && !parser->error)
+             pthread_cond_wait(&parser->init_cond, &parser->mutex);
+@@ -1558,7 +1539,29 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+          * avidemux, wavparse, qtdemux) in practice record duration before
+          * fixing caps, so as a heuristic, wait until we get caps before trying
+          * to query for duration. */
+-        stream->duration = query_duration(stream->their_src);
++        if (gst_pad_query_duration(stream->their_src, GST_FORMAT_TIME, &duration))
++        {
++            stream->duration = duration / 100;
++        }
++        else
++        {
++            GST_INFO("Failed to query time duration; trying to convert from byte length.\n");
++
++            /* To accurately get a duration for the stream, we want to only
++             * consider the length of that stream. Hence, query for the pad
++             * duration, instead of using the file duration. */
++            if (gst_pad_query_duration(stream->their_src, GST_FORMAT_BYTES, &byte_length)
++                    && gst_pad_query_convert(stream->their_src, GST_FORMAT_BYTES, byte_length,
++                            GST_FORMAT_TIME, &duration))
++            {
++                stream->duration = duration / 100;
++            }
++            else
++            {
++                stream->duration = 0;
++                GST_WARNING("Failed to query duration.\n");
++            }
++        }
+     }
+
+     pthread_mutex_unlock(&parser->mutex);
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 2/5] winegstreamer: Always wait for duration-changed when querying for duration.
+Message-Id: <20210722051904.683599-2-zfigura@codeweavers.com>
+Date: Thu, 22 Jul 2021 00:19:01 -0500
+In-Reply-To: <20210722051904.683599-1-zfigura@codeweavers.com>
+References: <20210722051904.683599-1-zfigura@codeweavers.com>
+
+From: Anton Baskanov <baskanov@gmail.com>
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51126
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+Based on 208040 and 208043, but not really functionally identical to them. I
+kept in the convert case here for clarity and atomicity, since it's removed
+later in the series. I also significantly rewrote the comments.
+
+ dlls/winegstreamer/wg_parser.c | 69 ++++++++++++++++++++--------------
+ 1 file changed, 41 insertions(+), 28 deletions(-)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index d45e3624945..3036ae60293 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -61,7 +61,7 @@ struct wg_parser
+     pthread_mutex_t mutex;
+
+     pthread_cond_t init_cond;
+-    bool no_more_pads, has_duration, error;
++    bool no_more_pads, error;
+
+     pthread_cond_t read_cond, read_done_cond;
+     struct
+@@ -1401,9 +1401,6 @@ static GstBusSyncReply bus_handler_cb(GstBus *bus, GstMessage *msg, gpointer use
+         break;
+
+     case GST_MESSAGE_DURATION_CHANGED:
+-        pthread_mutex_lock(&parser->mutex);
+-        parser->has_duration = true;
+-        pthread_mutex_unlock(&parser->mutex);
+         pthread_cond_signal(&parser->init_cond);
+         break;
+
+@@ -1529,22 +1526,44 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+
+         while (!stream->has_caps && !parser->error)
+             pthread_cond_wait(&parser->init_cond, &parser->mutex);
+-        if (parser->error)
+-        {
+-            pthread_mutex_unlock(&parser->mutex);
+-            return E_FAIL;
+-        }
++
+         /* GStreamer doesn't actually provide any guarantees about when duration
+-         * is available, even for seekable streams. However, many elements (e.g.
+-         * avidemux, wavparse, qtdemux) in practice record duration before
+-         * fixing caps, so as a heuristic, wait until we get caps before trying
+-         * to query for duration. */
+-        if (gst_pad_query_duration(stream->their_src, GST_FORMAT_TIME, &duration))
+-        {
+-            stream->duration = duration / 100;
+-        }
+-        else
++         * is available, even for seekable streams. It's basically built for
++         * applications that don't care, e.g. movie players that can display
++         * a duration once it's available, and update it visually if a better
++         * estimate is found. This doesn't really match well with DirectShow or
++         * Media Foundation, which both expect duration to be available
++         * immediately on connecting, so we have to use some complex heuristics
++         * to try to actually get a usable duration.
++         *
++         * Some elements (avidemux, wavparse, qtdemux) record duration almost
++         * immediately, before fixing caps. Such elements don't send
++         * duration-changed messages. Therefore always try querying duration
++         * after caps have been found.
++         *
++         * Some elements (mpegaudioparse) send duration-changed. In the case of
++         * a mp3 stream without seek tables it will not be sent immediately, but
++         * only after enough frames have been parsed to form an estimate. They
++         * may send it multiple times with increasingly accurate estimates, but
++         * unfortunately we have no way of knowing whether another estimate will
++         * be sent, so we always take the first one. We assume that if the
++         * duration is not immediately available then the element will always
++         * send duration-changed.
++         */
++
++        for (;;)
+         {
++            if (parser->error)
++            {
++                pthread_mutex_unlock(&parser->mutex);
++                return E_FAIL;
++            }
++            if (gst_pad_query_duration(stream->their_src, GST_FORMAT_TIME, &duration))
++            {
++                stream->duration = duration / 100;
++                break;
++            }
++
+             GST_INFO("Failed to query time duration; trying to convert from byte length.\n");
+
+             /* To accurately get a duration for the stream, we want to only
+@@ -1555,12 +1574,15 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+                             GST_FORMAT_TIME, &duration))
+             {
+                 stream->duration = duration / 100;
++                break;
+             }
+-            else
++            if (stream->eos)
+             {
+                 stream->duration = 0;
+                 GST_WARNING("Failed to query duration.\n");
++                break;
+             }
++            pthread_cond_wait(&parser->init_cond, &parser->mutex);
+         }
+     }
+
+@@ -1763,15 +1785,6 @@ static BOOL mpeg_audio_parser_init_gst(struct wg_parser *parser)
+         return FALSE;
+     }
+
+-    pthread_mutex_lock(&parser->mutex);
+-    while (!parser->has_duration && !parser->error && !stream->eos)
+-        pthread_cond_wait(&parser->init_cond, &parser->mutex);
+-    if (parser->error)
+-    {
+-        pthread_mutex_unlock(&parser->mutex);
+-        return FALSE;
+-    }
+-    pthread_mutex_unlock(&parser->mutex);
+     return TRUE;
+ }
+
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 3/5] winegstreamer: Continue polling if duration is unavailable after duration-changed.
+Message-Id: <20210722051904.683599-3-zfigura@codeweavers.com>
+Date: Thu, 22 Jul 2021 00:19:02 -0500
+In-Reply-To: <20210722051904.683599-1-zfigura@codeweavers.com>
+References: <20210722051904.683599-1-zfigura@codeweavers.com>
+
+From: Anton Baskanov <baskanov@gmail.com>
+
+Signed-off-by: Anton Baskanov <baskanov@gmail.com>
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+Rebased 208042 onto current git and other changes.
+
+ dlls/winegstreamer/wg_parser.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 3036ae60293..f2a74399b5a 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -61,7 +61,7 @@ struct wg_parser
+     pthread_mutex_t mutex;
+
+     pthread_cond_t init_cond;
+-    bool no_more_pads, error;
++    bool no_more_pads, has_duration, error;
+
+     pthread_cond_t read_cond, read_done_cond;
+     struct
+@@ -1401,6 +1401,9 @@ static GstBusSyncReply bus_handler_cb(GstBus *bus, GstMessage *msg, gpointer use
+         break;
+
+     case GST_MESSAGE_DURATION_CHANGED:
++        pthread_mutex_lock(&parser->mutex);
++        parser->has_duration = true;
++        pthread_mutex_unlock(&parser->mutex);
+         pthread_cond_signal(&parser->init_cond);
+         break;
+
+@@ -1582,7 +1585,22 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
+                 GST_WARNING("Failed to query duration.\n");
+                 break;
+             }
+-            pthread_cond_wait(&parser->init_cond, &parser->mutex);
++
++            /* Elements based on GstBaseParse send duration-changed before
++             * actually updating the duration in GStreamer versions prior
++             * to 1.17.1. See <gstreamer.git:d28e0b4147fe7073b2>. So after
++             * receiving duration-changed we have to continue polling until
++             * the query succeeds. */
++            if (parser->has_duration)
++            {
++                pthread_mutex_unlock(&parser->mutex);
++                g_usleep(10000);
++                pthread_mutex_lock(&parser->mutex);
++            }
++            else
++            {
++                pthread_cond_wait(&parser->init_cond, &parser->mutex);
++            }
+         }
+     }
+
+
+--
+2.30.2
+
+
+From: Zebediah Figura <zfigura@codeweavers.com>
 Subject: [PATCH 4/5] winegstreamer: Don't try to convert duration from byte length.
 Message-Id: <20210722051904.683599-4-zfigura@codeweavers.com>
 Date: Thu, 22 Jul 2021 00:19:03 -0500
@@ -57,6 +357,126 @@ index f2a74399b5a..169f223c5a5 100644
              if (stream->eos)
              {
                  stream->duration = 0;
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 5/5] quartz/tests: Add more strict tests for accurate duration retrieval.
+Message-Id: <20210722051904.683599-5-zfigura@codeweavers.com>
+Date: Thu, 22 Jul 2021 00:19:04 -0500
+In-Reply-To: <20210722051904.683599-1-zfigura@codeweavers.com>
+References: <20210722051904.683599-1-zfigura@codeweavers.com>
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/quartz/tests/avisplit.c   |  2 +-
+ dlls/quartz/tests/mpegsplit.c  | 51 +++++++++++++++++++++++++++++++++-
+ dlls/quartz/tests/waveparser.c |  2 +-
+ 3 files changed, 52 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/quartz/tests/avisplit.c b/dlls/quartz/tests/avisplit.c
+index 7ded1773637..10088c033b7 100644
+--- a/dlls/quartz/tests/avisplit.c
++++ b/dlls/quartz/tests/avisplit.c
+@@ -1537,7 +1537,7 @@ static void test_seeking(void)
+     duration = 0;
+     hr = IMediaSeeking_GetDuration(seeking, &duration);
+     ok(hr == S_OK, "Got hr %#x.\n", hr);
+-    ok(duration > 0, "Got duration %s.\n", wine_dbgstr_longlong(duration));
++    ok(duration == 50000000, "Got duration %I64d.\n", duration);
+
+     stop = current = 0xdeadbeef;
+     hr = IMediaSeeking_GetStopPosition(seeking, &stop);
+diff --git a/dlls/quartz/tests/mpegsplit.c b/dlls/quartz/tests/mpegsplit.c
+index be971897f99..9c0c34d6c9c 100644
+--- a/dlls/quartz/tests/mpegsplit.c
++++ b/dlls/quartz/tests/mpegsplit.c
+@@ -1705,7 +1705,7 @@ static void test_seeking(void)
+     duration = 0;
+     hr = IMediaSeeking_GetDuration(seeking, &duration);
+     ok(hr == S_OK, "Got hr %#x.\n", hr);
+-    ok(duration > 0, "Got duration %s.\n", wine_dbgstr_longlong(duration));
++    ok(duration == 5392500, "Got duration %I64d.\n", duration);
+
+     stop = current = 0xdeadbeef;
+     hr = IMediaSeeking_GetStopPosition(seeking, &stop);
+@@ -1894,6 +1894,54 @@ static void test_streaming(void)
+     ok(ret, "Failed to delete file, error %u.\n", GetLastError());
+ }
+
++static void test_large_file(void)
++{
++    static const BYTE frame[96] = {0xff, 0xfb, 0x14, 0xc4};
++    IBaseFilter *filter = create_mpeg_splitter();
++    static WCHAR path[MAX_PATH];
++    REFERENCE_TIME duration;
++    IMediaSeeking *seeking;
++    IFilterGraph2 *graph;
++    unsigned int i;
++    IPin *source;
++    BYTE *buffer;
++    HRESULT hr;
++    ULONG ref;
++    DWORD ret;
++    FILE *f;
++
++    GetTempPathW(ARRAY_SIZE(path), path);
++    wcscat(path, L"big_test.mp3");
++
++    /* allocate a larger buffer so I/O is faster on the testbot */
++    buffer = malloc(1000 * sizeof(frame));
++    for (i = 0; i < 1000; ++i)
++        memcpy(buffer + i * 96, frame, sizeof(frame));
++    f = _wfopen(path, L"w");
++    for (i = 0; i < 100; ++i)
++        fwrite(buffer, 1000 * sizeof(frame), 1, f);
++    fclose(f);
++    free(buffer);
++
++    graph = connect_input(filter, path);
++    IBaseFilter_FindPin(filter, L"Audio", &source);
++    IPin_QueryInterface(source, &IID_IMediaSeeking, (void **)&seeking);
++
++    duration = 0xdeadbeef;
++    hr = IMediaSeeking_GetDuration(seeking, &duration);
++    ok(hr == S_OK, "Got hr %#x.\n", hr);
++    ok(duration == 2400 * 10000000ull, "Got duration %I64d.\n", duration);
++
++    IMediaSeeking_Release(seeking);
++    IPin_Release(source);
++    ref = IFilterGraph2_Release(graph);
++    ok(!ref, "Got outstanding refcount %d.\n", ref);
++    ref = IBaseFilter_Release(filter);
++    ok(!ref, "Got outstanding refcount %d.\n", ref);
++    ret = DeleteFileW(path);
++    ok(ret, "Failed to delete file, error %u.\n", GetLastError());
++}
++
+ START_TEST(mpegsplit)
+ {
+     IBaseFilter *filter;
+@@ -1919,6 +1967,7 @@ START_TEST(mpegsplit)
+     test_connect_pin();
+     test_seeking();
+     test_streaming();
++    test_large_file();
+
+     CoUninitialize();
+ }
+diff --git a/dlls/quartz/tests/waveparser.c b/dlls/quartz/tests/waveparser.c
+index f78e15e5c19..fee93b33f5f 100644
+--- a/dlls/quartz/tests/waveparser.c
++++ b/dlls/quartz/tests/waveparser.c
+@@ -929,7 +929,7 @@ static void test_seeking(void)
+     duration = 0xdeadbeef;
+     hr = IMediaSeeking_GetDuration(seeking, &duration);
+     ok(hr == S_OK, "Got hr %#x.\n", hr);
+-    ok(duration > 0, "Got duration %s.\n", wine_dbgstr_longlong(duration));
++    ok(duration == 1000000, "Got duration %I64d.\n", duration);
+
+     stop = current = 0xdeadbeef;
+     hr = IMediaSeeking_GetStopPosition(seeking, &stop);
 
 --
 2.30.2
