@@ -45,17 +45,17 @@ index f247b4b3621..d45e3624945 100644
 -    return 0;
 -}
 -
- static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_size)
+ static gchar *query_language(GstPad *pad)
  {
-     GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("quartz_src",
+     GstTagList *tag_list;
 @@ -1545,6 +1525,7 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
      for (i = 0; i < parser->stream_count; ++i)
      {
          struct wg_parser_stream *stream = parser->streams[i];
 +        gint64 duration, byte_length;
 
+         stream->language_code = query_language(stream->their_src);
          while (!stream->has_caps && !parser->error)
-             pthread_cond_wait(&parser->init_cond, &parser->mutex);
 @@ -1558,7 +1539,29 @@ static HRESULT CDECL wg_parser_connect(struct wg_parser *parser, uint64_t file_s
           * avidemux, wavparse, qtdemux) in practice record duration before
           * fixing caps, so as a heuristic, wait until we get caps before trying
@@ -114,15 +114,6 @@ diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
 index d45e3624945..3036ae60293 100644
 --- a/dlls/winegstreamer/wg_parser.c
 +++ b/dlls/winegstreamer/wg_parser.c
-@@ -61,7 +61,7 @@ struct wg_parser
-     pthread_mutex_t mutex;
-
-     pthread_cond_t init_cond;
--    bool no_more_pads, has_duration, error;
-+    bool no_more_pads, error;
-
-     pthread_cond_t read_cond, read_done_cond;
-     struct
 @@ -1401,9 +1401,6 @@ static GstBusSyncReply bus_handler_cb(GstBus *bus, GstMessage *msg, gpointer use
          break;
 
@@ -250,15 +241,6 @@ diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
 index 3036ae60293..f2a74399b5a 100644
 --- a/dlls/winegstreamer/wg_parser.c
 +++ b/dlls/winegstreamer/wg_parser.c
-@@ -61,7 +61,7 @@ struct wg_parser
-     pthread_mutex_t mutex;
-
-     pthread_cond_t init_cond;
--    bool no_more_pads, error;
-+    bool no_more_pads, has_duration, error;
-
-     pthread_cond_t read_cond, read_done_cond;
-     struct
 @@ -1401,6 +1401,9 @@ static GstBusSyncReply bus_handler_cb(GstBus *bus, GstMessage *msg, gpointer use
          break;
 
