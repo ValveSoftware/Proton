@@ -3785,7 +3785,7 @@ index 2d1f585d8ab..0f84ea9f214 100644
 @@ -130,6 +130,35 @@ static const GUID DInput_Wine_SDL_Joystick_GUID = { /* 001E36B7-5DBA-4C4F-A8C9-C
  static int have_sdldevs = -1;
  static struct SDLDev *sdldevs = NULL;
- 
+
 +/* logic from SDL2's SDL_ShouldIgnoreGameController */
 +static BOOL is_in_sdl_blacklist(DWORD vid, DWORD pid)
 +{
@@ -5655,7 +5655,7 @@ index 3ff46c8cfbe..ecca97d832a 100644
 @@ -728,6 +728,83 @@ static BOOL enum_device_state_ds4_13button(SDL_Joystick *js, JoystickImpl *This,
      return FALSE;
  }
- 
+
 +static BOOL enum_device_state_ms_xb360(SDL_Joystick *js, JoystickImpl *This, struct device_state_item *st, int idx)
 +{
 +#define SPECIALCASE_TRIGGERS -1
@@ -5756,7 +5756,7 @@ index 3ff46c8cfbe..ecca97d832a 100644
 +        }
 +        break;
      }
- 
+
      TRACE("for %04x/%04x, using no maps\n", sdldev->vendor_id, sdldev->product_id);
 From f3e99504b3dee3d87d06ef6d5e40b1d13ce71073 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -6493,6 +6493,286 @@ index ae3c9852eb7..e8e47b15140 100644
  
      return 0xffff;
  }
+From 997d32c69d2d1f6747ef469b95b9abc2a720025b Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Tue, 23 Mar 2021 20:00:36 +0200
+Subject: [PATCH] dinput: Implement device creation using product GUID.
+
+This fixes Far Cry Primal controller discovery.
+
+Signed-off-by: Arkadiusz Hiler <ahiler@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 0a82d891fc0b5b7f8b176e5e52d8858bab8d28bb)
+
+CW-Bug-Id: 18652
+---
+ dlls/dinput/joystick.c            |  4 ++--
+ dlls/dinput/joystick_linux.c      | 10 ++++++++++
+ dlls/dinput/joystick_linuxinput.c | 10 ++++++++++
+ dlls/dinput/joystick_osx.c        | 16 ++++++++++++++++
+ dlls/dinput/tests/device.c        | 22 ++++++++++++++++++++++
+ 5 files changed, 60 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dinput/joystick.c b/dlls/dinput/joystick.c
+index fc4040757f8..2844ba4c844 100644
+--- a/dlls/dinput/joystick.c
++++ b/dlls/dinput/joystick.c
+@@ -744,7 +744,7 @@ HRESULT WINAPI JoystickAGenericImpl_GetDeviceInfo(
+         index = pd.dwData;
+
+     /* Return joystick */
+-    pdidi->guidInstance = This->guidInstance;
++    pdidi->guidInstance = This->base.guid;
+     pdidi->guidProduct = This->guidProduct;
+     /* we only support traditional joysticks for now */
+     pdidi->dwDevType = This->devcaps.dwDevType;
+@@ -788,7 +788,7 @@ HRESULT WINAPI JoystickWGenericImpl_GetDeviceInfo(
+         index = pd.dwData;
+
+     /* Return joystick */
+-    pdidi->guidInstance = This->guidInstance;
++    pdidi->guidInstance = This->base.guid;
+     pdidi->guidProduct = This->guidProduct;
+     /* we only support traditional joysticks for now */
+     pdidi->dwDevType = This->devcaps.dwDevType;
+diff --git a/dlls/dinput/joystick_linux.c b/dlls/dinput/joystick_linux.c
+index 4229f3ee642..e50385da6de 100644
+--- a/dlls/dinput/joystick_linux.c
++++ b/dlls/dinput/joystick_linux.c
+@@ -598,6 +598,7 @@ static unsigned short get_joystick_index(REFGUID guid)
+ {
+     GUID wine_joystick = DInput_Wine_Joystick_GUID;
+     GUID dev_guid = *guid;
++    INT i;
+
+     wine_joystick.Data3 = 0;
+     dev_guid.Data3 = 0;
+@@ -608,6 +609,9 @@ static unsigned short get_joystick_index(REFGUID guid)
+     /* for the wine joystick GUIDs use the index stored in Data3 */
+     if(IsEqualGUID(&wine_joystick, &dev_guid)) return guid->Data3;
+
++    for(i = 0; i < joystick_devices_count; i++)
++        if(IsEqualGUID(&joystick_devices[i].guid_product, guid)) return i;
++
+     return MAX_JOYSTICKS;
+ }
+
+@@ -790,6 +794,9 @@ static HRESULT WINAPI JoystickLinuxAImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8A ifa
+
+     fill_joystick_dideviceinstanceA( ddi, This->generic.base.dinput->dwVersion,
+                                      get_joystick_index(&This->generic.base.guid) );
++
++    ddi->guidInstance = This->generic.base.guid;
++
+     return DI_OK;
+ }
+
+@@ -806,6 +813,9 @@ static HRESULT WINAPI JoystickLinuxWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W ifa
+
+     fill_joystick_dideviceinstanceW( ddi, This->generic.base.dinput->dwVersion,
+                                      get_joystick_index(&This->generic.base.guid) );
++
++    ddi->guidInstance = This->generic.base.guid;
++
+     return DI_OK;
+ }
+
+diff --git a/dlls/dinput/joystick_linuxinput.c b/dlls/dinput/joystick_linuxinput.c
+index 66fc9b7f9b1..a8c0e8e24cc 100644
+--- a/dlls/dinput/joystick_linuxinput.c
++++ b/dlls/dinput/joystick_linuxinput.c
+@@ -612,6 +612,7 @@ static unsigned short get_joystick_index(REFGUID guid)
+ {
+     GUID wine_joystick = DInput_Wine_Joystick_Base_GUID;
+     GUID dev_guid = *guid;
++    INT i;
+
+     wine_joystick.Data3 = 0;
+     dev_guid.Data3 = 0;
+@@ -622,6 +623,9 @@ static unsigned short get_joystick_index(REFGUID guid)
+     /* for the wine joystick GUIDs use the index stored in Data3 */
+     if(IsEqualGUID(&wine_joystick, &dev_guid)) return guid->Data3 - DInput_Wine_Joystick_Base_GUID.Data3;
+
++    for(i = 0; i < have_joydevs; i++)
++        if(IsEqualGUID(&joydevs[i].guid_product, guid)) return i;
++
+     return MAX_JOYDEV;
+ }
+
+@@ -1452,6 +1456,9 @@ static HRESULT WINAPI JoystickAImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8A iface,
+
+     fill_joystick_dideviceinstanceA(pdidi, This->generic.base.dinput->dwVersion,
+                                     get_joystick_index(&This->generic.base.guid));
++
++    pdidi->guidInstance = This->generic.base.guid;
++
+     return DI_OK;
+ }
+
+@@ -1469,6 +1476,9 @@ static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
+
+     fill_joystick_dideviceinstanceW(pdidi, This->generic.base.dinput->dwVersion,
+                                     get_joystick_index(&This->generic.base.guid));
++
++    pdidi->guidInstance = This->generic.base.guid;
++
+     return DI_OK;
+ }
+
+diff --git a/dlls/dinput/joystick_osx.c b/dlls/dinput/joystick_osx.c
+index 0dd77842a20..b43ab6b8075 100644
+--- a/dlls/dinput/joystick_osx.c
++++ b/dlls/dinput/joystick_osx.c
+@@ -1324,6 +1324,10 @@ static unsigned short get_joystick_index(REFGUID guid)
+ {
+     GUID wine_joystick = DInput_Wine_OsX_Joystick_GUID;
+     GUID dev_guid = *guid;
++    GUID prod_guid = *guid;
++    IOHIDDeviceRef device;
++    int joystick_devices_count;
++    INT i;
+
+     wine_joystick.Data3 = 0;
+     dev_guid.Data3 = 0;
+@@ -1334,6 +1338,18 @@ static unsigned short get_joystick_index(REFGUID guid)
+     /* for the wine joystick GUIDs use the index stored in Data3 */
+     if(IsEqualGUID(&wine_joystick, &dev_guid)) return guid->Data3;
+
++    prod_guid.Data1 = 0;
++    if(IsEqualGUID(&DInput_PIDVID_Product_GUID, &prod_guid))
++    {
++        joystick_devices_count = find_joystick_devices();
++        for(i = 0; i < joystick_devices_count; i++)
++        {
++            device = get_device_ref(i);
++            if(guid->Data1 == make_vid_pid(device))
++                return i;
++        }
++    }
++
+     return 0xffff;
+ }
+
+diff --git a/dlls/dinput/tests/device.c b/dlls/dinput/tests/device.c
+index dcf8a373348..fd212bf2514 100644
+--- a/dlls/dinput/tests/device.c
++++ b/dlls/dinput/tests/device.c
+@@ -197,12 +197,14 @@ struct enum_data
+ {
+     IDirectInputA *pDI;
+     HWND hwnd;
++    BOOL tested_product_creation;
+ };
+
+ static BOOL CALLBACK enum_devices(const DIDEVICEINSTANCEA *lpddi, void *pvRef)
+ {
+     struct enum_data *data = pvRef;
+     IDirectInputDeviceA *device, *obj = NULL;
++    DIDEVICEINSTANCEA ddi2;
+     HRESULT hr;
+
+     hr = IDirectInput_GetDeviceStatus(data->pDI, &lpddi->guidInstance);
+@@ -226,6 +228,24 @@ static BOOL CALLBACK enum_devices(const DIDEVICEINSTANCEA *lpddi, void *pvRef)
+         IUnknown_Release(obj);
+
+         IUnknown_Release(device);
++
++        if (!IsEqualGUID(&lpddi->guidInstance, &lpddi->guidProduct))
++        {
++            data->tested_product_creation = TRUE;
++            hr = IDirectInput_CreateDevice(data->pDI, &lpddi->guidProduct, &device, NULL);
++            ok(SUCCEEDED(hr), "IDirectInput_CreateDevice() failed: %08x\n", hr);
++
++            ddi2.dwSize = sizeof(ddi2);
++            hr = IDirectInputDevice_GetDeviceInfo(device, &ddi2);
++            ok(SUCCEEDED(hr), "IDirectInput_GetDeviceInfo failed: %08x\n", hr);
++
++            ok(IsEqualGUID(&lpddi->guidProduct, &ddi2.guidProduct), "Product GUIDs do not match. Expected %s, got %s\n", debugstr_guid(&lpddi->guidProduct), debugstr_guid(&ddi2.guidProduct));
++            ok(IsEqualGUID(&ddi2.guidProduct, &ddi2.guidInstance), "Instance GUID should equal product GUID. Expected %s, got %s\n", debugstr_guid(&ddi2.guidProduct), debugstr_guid(&ddi2.guidInstance));
++            /* we cannot compare guidInstances as we may get a different device */
++
++            IUnknown_Release(device);
++        }
++
+     }
+     return DIENUM_CONTINUE;
+ }
+@@ -263,9 +283,11 @@ static void device_tests(void)
+
+         data.pDI = pDI;
+         data.hwnd = hwnd;
++        data.tested_product_creation = FALSE;
+         hr = IDirectInput_EnumDevices(pDI, 0, enum_devices, &data, DIEDFL_ALLDEVICES);
+         ok(SUCCEEDED(hr), "IDirectInput_EnumDevices() failed: %08x\n", hr);
+
++        if (!data.tested_product_creation) winetest_skip("Device creation using product GUID not tested\n");
+
+         /* If GetDeviceStatus returns DI_OK the device must exist */
+         hr = IDirectInput_GetDeviceStatus(pDI, &GUID_Joystick);
+From deb80a74a461eff1646b29c871ffffa3597337f3 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Thu, 18 Mar 2021 12:07:58 +0200
+Subject: [PATCH] dinput: Support product GUIDs in CreateDevice with the SDL
+ backend.
+
+CW-Bug-Id: 18652
+---
+ dlls/dinput/joystick_sdl.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index e8e47b15140..8cb839aa610 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -1273,6 +1273,7 @@ static unsigned short get_joystick_index(REFGUID guid)
+     int i;
+     WORD vid, pid;
+     LONG nth_instance;
++    GUID prod_guid = *guid;
+
+     /* for the standard joystick GUID use index 0 */
+     if(IsEqualGUID(&GUID_Joystick,guid)) return 0;
+@@ -1295,6 +1296,19 @@ static unsigned short get_joystick_index(REFGUID guid)
+         }
+     }
+
++    prod_guid.Data1 = 0;
++    if(IsEqualGUID(&prod_guid, &DInput_PIDVID_Product_GUID)){
++        vid = LOWORD(guid->Data1);
++        pid = HIWORD(guid->Data1);
++
++        for(i = 0; i < ARRAY_SIZE(sdldevs); ++i){
++            if(!sdldevs[i].valid)
++                break;
++            if(sdldevs[i].vendor_id == vid &&
++                    sdldevs[i].product_id == pid)
++                return i;
++            }
++    }
+     return 0xffff;
+ }
+
+@@ -1587,6 +1601,9 @@ static HRESULT WINAPI JoystickAImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8A iface,
+
+     fill_joystick_dideviceinstanceA(pdidi, This->generic.base.dinput->dwVersion,
+                                     get_joystick_index(&This->generic.base.guid));
++
++    pdidi->guidInstance = This->generic.base.guid;
++
+     return DI_OK;
+ }
+
+@@ -1604,6 +1621,9 @@ static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
+
+     fill_joystick_dideviceinstanceW(pdidi, This->generic.base.dinput->dwVersion,
+                                     get_joystick_index(&This->generic.base.guid));
++
++    pdidi->guidInstance = This->generic.base.guid;
++
+     return DI_OK;
+ }
+
+
 From 8a9c394a2cc531c40ef18a7f27031ff23a1dc4f5 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 28 Aug 2018 10:35:19 -0500
@@ -6581,279 +6861,6 @@ index 8aea638a8d7..7cdca280295 100644
              }
          }
  
-From d49f6efaf88352ab4f1383f8c4b28f2f20f3eb10 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Tue, 30 Apr 2019 11:18:45 -0500
-Subject: [PATCH] winebus.sys: Report triggers as a single axis
-
-This breaks our xinput (triggers can't be de-mangled).
----
- dlls/winebus.sys/bus_sdl.c | 71 +++++++++++++++++++++++++++-----------
- dlls/xinput1_3/hid.c       | 23 ++++++------
- 2 files changed, 61 insertions(+), 33 deletions(-)
-
-diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
-index 7fcb19a6e88..8921844de26 100644
---- a/dlls/winebus.sys/bus_sdl.c
-+++ b/dlls/winebus.sys/bus_sdl.c
-@@ -182,17 +182,17 @@ static const BYTE CONTROLLER_AXIS [] = {
- static const BYTE CONTROLLER_TRIGGERS [] = {
-     USAGE_PAGE(1, HID_USAGE_PAGE_GENERIC),
-     USAGE(1, HID_USAGE_GENERIC_Z),
--    USAGE(1, HID_USAGE_GENERIC_RZ),
--    LOGICAL_MINIMUM(2, 0x0000),
--    LOGICAL_MAXIMUM(2, 0x7fff),
--    PHYSICAL_MINIMUM(2, 0x0000),
--    PHYSICAL_MAXIMUM(2, 0x7fff),
-+    LOGICAL_MINIMUM(4, 0x00000000),
-+    LOGICAL_MAXIMUM(4, 0x0000ffff),
-+    PHYSICAL_MINIMUM(4, 0x00000000),
-+    PHYSICAL_MAXIMUM(4, 0x0000ffff),
-     REPORT_SIZE(1, 16),
--    REPORT_COUNT(1, 2),
-+    REPORT_COUNT(1, 1),
-     INPUT(1, Data|Var|Abs),
- };
- 
--#define CONTROLLER_NUM_AXES 6
-+#define CONTROLLER_NUM_AXES 5
-+#define COMBINED_TRIGGER_INDEX 4
- 
- #define CONTROLLER_NUM_HATSWITCHES 1
- 
-@@ -261,14 +261,23 @@ static void set_button_value(struct platform_private *ext, int index, int value)
-     }
- }
- 
--static void set_axis_value(struct platform_private *ext, int index, short value, BOOL controller)
-+static unsigned short map_axis_to_hid(short v)
- {
--    WORD *report = (WORD *)(ext->report_buffer + ext->axis_start);
-+    return ((int)v) + 32768;
-+}
- 
--    if (controller && (index == SDL_CONTROLLER_AXIS_TRIGGERLEFT || index == SDL_CONTROLLER_AXIS_TRIGGERRIGHT))
--        report[index] = LE_WORD(value);
--    else
--        report[index] = LE_WORD(value) + 32768;
-+static short compose_trigger_value(SDL_GameController *joystick)
-+{
-+    /* yes, they are combined into one value and cannot be detangled */
-+    return 0x8000
-+        + pSDL_GameControllerGetAxis(joystick, SDL_CONTROLLER_AXIS_TRIGGERLEFT)
-+        - pSDL_GameControllerGetAxis(joystick, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
-+}
-+
-+static void set_axis_value(struct platform_private *ext, int index, short value)
-+{
-+    WORD *report = (WORD *)(ext->report_buffer + ext->axis_start);
-+    report[index] = LE_WORD(value);
- }
- 
- static void set_ball_value(struct platform_private *ext, int index, int value1, int value2)
-@@ -496,7 +505,7 @@ static BOOL build_report_descriptor(struct platform_private *ext)
- 
-     /* Initialize axis in the report */
-     for (i = 0; i < axis_count; i++)
--        set_axis_value(ext, i, pSDL_JoystickGetAxis(ext->sdl_joystick, i), FALSE);
-+        set_axis_value(ext, i, map_axis_to_hid(pSDL_JoystickGetAxis(ext->sdl_joystick, i)));
-     for (i = 0; i < hat_count; i++)
-         set_hat_value(ext, i, pSDL_JoystickGetHat(ext->sdl_joystick, i));
- 
-@@ -533,7 +542,7 @@ static SHORT compose_dpad_value(SDL_GameController *joystick)
- static BOOL build_mapped_report_descriptor(struct platform_private *ext)
- {
-     BYTE *report_ptr;
--    INT i, descript_size;
-+    INT descript_size;
- 
-     static const int BUTTON_BIT_COUNT = CONTROLLER_NUM_BUTTONS + CONTROLLER_NUM_HATSWITCHES * 4;
- 
-@@ -593,8 +602,19 @@ static BOOL build_mapped_report_descriptor(struct platform_private *ext)
-     }
- 
-     /* Initialize axis in the report */
--    for (i = SDL_CONTROLLER_AXIS_LEFTX; i < SDL_CONTROLLER_AXIS_MAX; i++)
--        set_axis_value(ext, i, pSDL_GameControllerGetAxis(ext->sdl_controller, i), TRUE);
-+    set_axis_value(ext, SDL_CONTROLLER_AXIS_LEFTX,
-+            map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_LEFTX)));
-+
-+    set_axis_value(ext, SDL_CONTROLLER_AXIS_LEFTY,
-+            map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_LEFTY)));
-+
-+    set_axis_value(ext, SDL_CONTROLLER_AXIS_RIGHTX,
-+            map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_RIGHTX)));
-+
-+    set_axis_value(ext, SDL_CONTROLLER_AXIS_RIGHTY,
-+            map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_RIGHTY)));
-+
-+    set_axis_value(ext, COMBINED_TRIGGER_INDEX, compose_trigger_value(ext->sdl_controller));
- 
-     set_hat_value(ext, 0, compose_dpad_value(ext->sdl_controller));
- 
-@@ -773,7 +793,7 @@ static BOOL set_report_from_event(SDL_Event *event)
- 
-             if (ie->axis < 6)
-             {
--                set_axis_value(private, ie->axis, ie->value, FALSE);
-+                set_axis_value(private, ie->axis, map_axis_to_hid(ie->value));
-                 process_hid_report(device, private->report_buffer, private->buffer_length);
-             }
-             break;
-@@ -861,8 +881,19 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
-         case SDL_CONTROLLERAXISMOTION:
-         {
-             SDL_ControllerAxisEvent *ie = &event->caxis;
--
--            set_axis_value(private, ie->axis, ie->value, TRUE);
-+            switch (ie->axis)
-+            {
-+                case SDL_CONTROLLER_AXIS_LEFTX:
-+                case SDL_CONTROLLER_AXIS_LEFTY:
-+                case SDL_CONTROLLER_AXIS_RIGHTX:
-+                case SDL_CONTROLLER_AXIS_RIGHTY:
-+                    set_axis_value(private, ie->axis, map_axis_to_hid(ie->value));
-+                    break;
-+                case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
-+                case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-+                    set_axis_value(private, COMBINED_TRIGGER_INDEX, compose_trigger_value(private->sdl_controller));
-+                    break;
-+            }
-             process_hid_report(device, private->report_buffer, private->buffer_length);
-             break;
-         }
-diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
-index 7cdca280295..803eae9d8f2 100644
---- a/dlls/xinput1_3/hid.c
-+++ b/dlls/xinput1_3/hid.c
-@@ -64,7 +64,7 @@ struct hid_platform_private {
-     char *input_report_buf[2];
-     char *output_report_buf;
- 
--    struct axis_info lx, ly, ltrigger, rx, ry, rtrigger;
-+    struct axis_info lx, ly, triggers, rx, ry;
- };
- 
- static DWORD last_check = 0;
-@@ -77,10 +77,9 @@ static void MarkUsage(struct hid_platform_private *private, WORD usage, LONG min
-     {
-         case HID_USAGE_GENERIC_X: private->lx = info; break;
-         case HID_USAGE_GENERIC_Y: private->ly = info; break;
--        case HID_USAGE_GENERIC_Z: private->ltrigger = info; break;
-+        case HID_USAGE_GENERIC_Z: private->triggers = info; break;
-         case HID_USAGE_GENERIC_RX: private->rx = info; break;
-         case HID_USAGE_GENERIC_RY: private->ry = info; break;
--        case HID_USAGE_GENERIC_RZ: private->rtrigger = info; break;
-     }
- }
- 
-@@ -132,14 +131,13 @@ static BOOL VerifyGamepad(PHIDP_PREPARSED_DATA ppd, XINPUT_CAPABILITIES *xinput_
-     }
-     HeapFree(GetProcessHeap(), 0, value_caps);
- 
--    if (private->ltrigger.bits)
-+    if (private->triggers.bits)
-+    {
-         xinput_caps->Gamepad.bLeftTrigger = (1u << (sizeof(xinput_caps->Gamepad.bLeftTrigger) + 1)) - 1;
--    else
--        WARN("Missing axis LeftTrigger\n");
--    if (private->rtrigger.bits)
-         xinput_caps->Gamepad.bRightTrigger = (1u << (sizeof(xinput_caps->Gamepad.bRightTrigger) + 1)) - 1;
-+    }
-     else
--        WARN("Missing axis RightTrigger\n");
-+        WARN("Missing Trigger axes\n");
-     if (private->lx.bits)
-         xinput_caps->Gamepad.sThumbLX = (1u << (sizeof(xinput_caps->Gamepad.sThumbLX) + 1)) - 1;
-     else
-@@ -438,13 +436,12 @@ void HID_update_state(xinput_controller *device, XINPUT_STATE *state)
-         if (status != HIDP_STATUS_SUCCESS) WARN("HidP_GetScaledUsageValue HID_USAGE_PAGE_GENERIC / HID_USAGE_GENERIC_RY returned %#x\n", status);
-         else device->state.Gamepad.sThumbRY = -scale_short(value, &private->ry) - 1;
- 
--        status = HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_RZ, &value, private->ppd, report_buf[0], report_len);
--        if (status != HIDP_STATUS_SUCCESS) WARN("HidP_GetScaledUsageValue HID_USAGE_PAGE_GENERIC / HID_USAGE_GENERIC_RZ returned %#x\n", status);
--        else device->state.Gamepad.bRightTrigger = scale_byte(value, &private->rtrigger);
--
-         status = HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_Z, &value, private->ppd, report_buf[0], report_len);
-         if (status != HIDP_STATUS_SUCCESS) WARN("HidP_GetScaledUsageValue HID_USAGE_PAGE_GENERIC / HID_USAGE_GENERIC_Z returned %#x\n", status);
--        else device->state.Gamepad.bLeftTrigger = scale_byte(value, &private->ltrigger);
-+        else {
-+            device->state.Gamepad.bLeftTrigger = scale_byte(value, &private->triggers);
-+            device->state.Gamepad.bRightTrigger = scale_byte(value, &private->triggers);
-+        }
-     }
- 
-     memcpy(state, &device->state, sizeof(*state));
-From 2891984f793c137be47ae9f3c8106cebb05d1941 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Tue, 30 Apr 2019 11:20:26 -0500
-Subject: [PATCH] winebus.sys: Report axes in correct order
-
----
- dlls/winebus.sys/bus_sdl.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
-index 8921844de26..ff8411e46c6 100644
---- a/dlls/winebus.sys/bus_sdl.c
-+++ b/dlls/winebus.sys/bus_sdl.c
-@@ -138,6 +138,13 @@ static inline struct platform_private *impl_from_DEVICE_OBJECT(DEVICE_OBJECT *de
-     return (struct platform_private *)get_platform_private(device);
- }
- 
-+static const int controller_axis_map[SDL_CONTROLLER_AXIS_MAX] = {
-+    /* SDL_CONTROLLER_AXIS_LEFTX -> */ 1,
-+    /* SDL_CONTROLLER_AXIS_LEFTY -> */ 0,
-+    /* SDL_CONTROLLER_AXIS_RIGHTX -> */ 3,
-+    /* SDL_CONTROLLER_AXIS_RIGHTY -> */ 2,
-+};
-+
- static const BYTE REPORT_AXIS_TAIL[] = {
-     0x17, 0x00, 0x00, 0x00, 0x00,   /* LOGICAL_MINIMUM (0) */
-     0x27, 0xff, 0xff, 0x00, 0x00,   /* LOGICAL_MAXIMUM (65535) */
-@@ -166,10 +173,10 @@ static const BYTE CONTROLLER_BUTTONS[] = {
- 
- static const BYTE CONTROLLER_AXIS [] = {
-     USAGE_PAGE(1, HID_USAGE_PAGE_GENERIC),
--    USAGE(1, HID_USAGE_GENERIC_X),
-     USAGE(1, HID_USAGE_GENERIC_Y),
--    USAGE(1, HID_USAGE_GENERIC_RX),
-+    USAGE(1, HID_USAGE_GENERIC_X),
-     USAGE(1, HID_USAGE_GENERIC_RY),
-+    USAGE(1, HID_USAGE_GENERIC_RX),
-     LOGICAL_MINIMUM(4, 0x00000000),
-     LOGICAL_MAXIMUM(4, 0x0000ffff),
-     PHYSICAL_MINIMUM(4, 0x00000000),
-@@ -602,16 +609,16 @@ static BOOL build_mapped_report_descriptor(struct platform_private *ext)
-     }
- 
-     /* Initialize axis in the report */
--    set_axis_value(ext, SDL_CONTROLLER_AXIS_LEFTX,
-+    set_axis_value(ext, controller_axis_map[SDL_CONTROLLER_AXIS_LEFTX],
-             map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_LEFTX)));
- 
--    set_axis_value(ext, SDL_CONTROLLER_AXIS_LEFTY,
-+    set_axis_value(ext, controller_axis_map[SDL_CONTROLLER_AXIS_LEFTY],
-             map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_LEFTY)));
- 
--    set_axis_value(ext, SDL_CONTROLLER_AXIS_RIGHTX,
-+    set_axis_value(ext, controller_axis_map[SDL_CONTROLLER_AXIS_RIGHTX],
-             map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_RIGHTX)));
- 
--    set_axis_value(ext, SDL_CONTROLLER_AXIS_RIGHTY,
-+    set_axis_value(ext, controller_axis_map[SDL_CONTROLLER_AXIS_RIGHTY],
-             map_axis_to_hid(pSDL_GameControllerGetAxis(ext->sdl_controller, SDL_CONTROLLER_AXIS_RIGHTY)));
- 
-     set_axis_value(ext, COMBINED_TRIGGER_INDEX, compose_trigger_value(ext->sdl_controller));
-@@ -887,7 +894,7 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
-                 case SDL_CONTROLLER_AXIS_LEFTY:
-                 case SDL_CONTROLLER_AXIS_RIGHTX:
-                 case SDL_CONTROLLER_AXIS_RIGHTY:
--                    set_axis_value(private, ie->axis, map_axis_to_hid(ie->value));
-+                    set_axis_value(private, controller_axis_map[ie->axis], map_axis_to_hid(ie->value));
-                     break;
-                 case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
-                 case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
 From c5d52c73b754568df148013907f26e5da3525166 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 6 Aug 2019 13:27:25 -0500
@@ -9418,10 +9425,10 @@ index 44ab240bf25..0c477fc4770 100644
  /******************************************************************************
    *     GetProperty : get input device properties
    */
-@@ -1498,12 +1423,6 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
+@@ -1437,12 +1437,6 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
      return DI_OK;
  }
- 
+
 -static HRESULT WINAPI JoystickAImpl_GetProperty(LPDIRECTINPUTDEVICE8A iface, REFGUID rguid, LPDIPROPHEADER pdiph)
 -{
 -    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
@@ -9431,10 +9438,10 @@ index 44ab240bf25..0c477fc4770 100644
  static BOOL _SetProperty(JoystickImpl *This, const GUID *prop, const DIPROPHEADER *header)
  {
      int rc;
-@@ -1557,39 +1476,9 @@ static HRESULT WINAPI JoystickWImpl_SetProperty(IDirectInputDevice8W *iface,
+@@ -1496,42 +1490,9 @@ static HRESULT WINAPI JoystickWImpl_SetProperty(IDirectInputDevice8W *iface,
          return JoystickWGenericImpl_SetProperty(iface, prop, header);
  }
- 
+
 -static HRESULT WINAPI JoystickAImpl_SetProperty(IDirectInputDevice8A *iface,
 -        const GUID *prop, const DIPROPHEADER *header)
 -{
@@ -9465,26 +9472,19 @@ index 44ab240bf25..0c477fc4770 100644
 -
 -    fill_joystick_dideviceinstanceA(pdidi, This->generic.base.dinput->dwVersion,
 -                                    get_joystick_index(&This->generic.base.guid));
+-
+-    pdidi->guidInstance = This->generic.base.guid;
+-
 -    return DI_OK;
 -}
 -
  static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
                                                    LPDIDEVICEINSTANCEW pdidi)
  {
-@@ -1604,6 +1493,9 @@ static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
- 
-     fill_joystick_dideviceinstanceW(pdidi, This->generic.base.dinput->dwVersion,
-                                     get_joystick_index(&This->generic.base.guid));
-+
-+    pdidi->guidInstance = This->generic.base.guid;
-+
-     return DI_OK;
- }
- 
 @@ -1665,18 +1557,6 @@ static HRESULT WINAPI JoystickWImpl_CreateEffect(IDirectInputDevice8W *iface,
      return DI_OK;
  }
- 
+
 -static HRESULT WINAPI JoystickAImpl_CreateEffect(IDirectInputDevice8A *iface,
 -        const GUID *type, const DIEFFECT *params, IDirectInputEffect **out,
 -        IUnknown *outer)
@@ -9503,7 +9503,7 @@ index 44ab240bf25..0c477fc4770 100644
 @@ -1758,87 +1638,6 @@ static HRESULT WINAPI JoystickWImpl_EnumEffects(LPDIRECTINPUTDEVICE8W iface,
      return DI_OK;
  }
- 
+
 -static HRESULT WINAPI JoystickAImpl_EnumEffects(LPDIRECTINPUTDEVICE8A iface,
 -                                                LPDIENUMEFFECTSCALLBACKA lpCallback,
 -                                                LPVOID pvRef,
@@ -9591,7 +9591,7 @@ index 44ab240bf25..0c477fc4770 100644
 @@ -1849,16 +1648,6 @@ static HRESULT WINAPI JoystickWImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8W iface,
      return sdl_input_get_info_W(This->sdldev->sdl_js, guid, pdei);
  }
- 
+
 -static HRESULT WINAPI JoystickAImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8A iface,
 -                          LPDIEFFECTINFOA pdei,
 -                          REFGUID guid)
@@ -9608,7 +9608,7 @@ index 44ab240bf25..0c477fc4770 100644
 @@ -1911,12 +1700,6 @@ static HRESULT WINAPI JoystickWImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE
      return DI_OK;
  }
- 
+
 -static HRESULT WINAPI JoystickAImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE8A iface, DWORD dwFlags)
 -{
 -    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
@@ -9621,7 +9621,7 @@ index 44ab240bf25..0c477fc4770 100644
 @@ -1938,55 +1721,11 @@ static HRESULT WINAPI JoystickWImpl_EnumCreatedEffectObjects(LPDIRECTINPUTDEVICE
      return DI_OK;
  }
- 
+
 -static HRESULT WINAPI JoystickAImpl_EnumCreatedEffectObjects(LPDIRECTINPUTDEVICE8A iface,
 -                                                             LPDIENUMCREATEDEFFECTOBJECTSCALLBACK lpCallback,
 -                                                             LPVOID pvRef, DWORD dwFlags)
@@ -9682,4 +9682,1022 @@ index 44ab240bf25..0c477fc4770 100644
 -  NULL,
    NULL
  };
- 
+
+From 276a410246381e969d6999150bde35f4a9969232 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Mon, 19 Apr 2021 14:25:14 +0300
+Subject: [PATCH] dinput: Extract SDL controller vidpid and name hacks to
+ separate functions.
+
+So they can be moved to their own file and shared with other parts of
+Wine.
+
+CW-Bug-Id: #18761
+---
+ dlls/dinput/joystick_sdl.c | 228 +++++++++++++++++++------------------
+ 1 file changed, 115 insertions(+), 113 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 8cb839aa610..ffb1e14e885 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -77,6 +77,85 @@ WINE_DEFAULT_DEBUG_CHANNEL(dinput);
+ #define PID_MICROSOFT_XBOX_ONE_S 0x02ea
+ #define PID_MICROSOFT_XBOX_ONE_S_2 0x02fd
+
++static BOOL __controller_hack_sdl_is_vid_pid_xbox_360(WORD vid, WORD pid)
++{
++    if(vid != VID_MICROSOFT)
++        return FALSE;
++
++    if(pid == PID_MICROSOFT_XBOX_360 ||
++        pid == PID_MICROSOFT_XBOX_360_WIRELESS ||
++        pid == PID_MICROSOFT_XBOX_360_ADAPTER)
++        return TRUE;
++
++    return FALSE;
++}
++static BOOL __controller_hack_sdl_is_vid_pid_xbox_one(WORD vid, WORD pid) {
++    if(vid != VID_MICROSOFT)
++        return FALSE;
++
++    if(pid == PID_MICROSOFT_XBOX_ONE ||
++        pid == PID_MICROSOFT_XBOX_ONE_CF ||
++        pid == PID_MICROSOFT_XBOX_ONE_ELITE ||
++        pid == PID_MICROSOFT_XBOX_ONE_S ||
++        pid == PID_MICROSOFT_XBOX_ONE_S_2)
++        return TRUE;
++
++    return FALSE;
++}
++
++static BOOL __controller_hack_sdl_is_vid_pid_sony_dualshock4(WORD vid, WORD pid)
++{
++    if(vid != VID_SONY)
++        return FALSE;
++
++    if(pid == PID_SONY_DUALSHOCK_4 ||
++        pid == PID_SONY_DUALSHOCK_4_2 ||
++        pid == PID_SONY_DUALSHOCK_4_DONGLE)
++        return TRUE;
++
++    return FALSE;
++}
++
++static BOOL __controller_hack_sdl_is_vid_pid_sony_dualsense(WORD vid, WORD pid)
++{
++    if(vid == VID_SONY && pid == PID_SONY_DUALSENSE)
++        return TRUE;
++
++    return FALSE;
++}
++
++static void __controller_hack_sdl_vid_pid_override(WORD *vid, WORD *pid)
++{
++    TRACE("(*vid = %04hx, *pid = *%04hx\n", *vid, *pid);
++    if(*vid == VID_VALVE && *pid == PID_VALVE_VIRTUAL_CONTROLLER)
++    {
++        TRACE("Valve Virtual Controller found - pretending it's x360\n");
++        *vid = VID_MICROSOFT;
++        *pid = PID_MICROSOFT_XBOX_360;
++    }
++}
++
++static void __controller_hack_sdl_name_override(WORD vid, WORD pid, const char **name)
++{
++    const char *new_name = NULL;
++
++    TRACE("vid = %04hx, pid = %04hx, *name = %s\n", vid, pid, debugstr_a(*name));
++
++    if(__controller_hack_sdl_is_vid_pid_xbox_360(vid, pid))
++        new_name = "Controller (XBOX 360 For Windows)";
++    else if(__controller_hack_sdl_is_vid_pid_xbox_one(vid, pid))
++        new_name = "Controller (XBOX One For Windows)";
++    else if(__controller_hack_sdl_is_vid_pid_sony_dualshock4(vid, pid) ||
++             __controller_hack_sdl_is_vid_pid_sony_dualsense(vid, pid))
++        new_name = "Wireless Controller";
++
++    if(new_name)
++    {
++        TRACE("new name for the controller = %s\n", debugstr_a(new_name));
++        *name = new_name;
++    }
++}
++
+ typedef struct JoystickImpl JoystickImpl;
+ static const IDirectInputDevice8AVtbl JoystickAvt;
+ static const IDirectInputDevice8WVtbl JoystickWvt;
+@@ -388,11 +467,7 @@ static void find_sdldevs(void)
+             continue;
+         }
+
+-        if(sdldev->vendor_id == VID_VALVE && sdldev->product_id == PID_VALVE_VIRTUAL_CONTROLLER)
+-        {
+-            sdldev->vendor_id = VID_MICROSOFT;
+-            sdldev->product_id = PID_MICROSOFT_XBOX_360;
+-        }
++        __controller_hack_sdl_vid_pid_override(&sdldev->vendor_id, &sdldev->product_id);
+
+         sdldev->nth_instance = get_num_vidpids(sdldev->vendor_id, sdldev->product_id);
+
+@@ -410,66 +485,10 @@ static void find_sdldevs(void)
+     LeaveCriticalSection(&sdldevs_lock);
+ }
+
+-static struct device_info_override {
+-    WORD vid;
+-    WORD pid;
+-    const char *instance_name;
+-    const char *product_name;
+-    DWORD dev_type;
+-    DWORD dev_type8;
+-} device_info_overrides[] = {
+-    { VID_SONY, PID_SONY_DUALSHOCK_4, "Wireless Controller", "Wireless Controller",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8) },
+-
+-    { VID_SONY, PID_SONY_DUALSHOCK_4_2, "Wireless Controller", "Wireless Controller",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8) },
+-
+-    { VID_SONY, PID_SONY_DUALSHOCK_4_DONGLE, "Wireless Controller", "Wireless Controller",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8) },
+-
+-    { VID_SONY, PID_SONY_DUALSENSE, "Wireless Controller", "Wireless Controller",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_360, "Controller (XBOX 360 For Windows)", "Controller (XBOX 360 For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_360_WIRELESS, "Controller (XBOX 360 For Windows)", "Controller (XBOX 360 For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_360_ADAPTER, "Controller (XBOX 360 For Windows)", "Controller (XBOX 360 For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_ONE, "Controller (XBOX One For Windows)", "Controller (XBOX One For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_ONE_CF, "Controller (XBOX One For Windows)", "Controller (XBOX One For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_ONE_ELITE, "Controller (XBOX One For Windows)", "Controller (XBOX One For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_ONE_S, "Controller (XBOX One For Windows)", "Controller (XBOX One For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-
+-    { VID_MICROSOFT, PID_MICROSOFT_XBOX_ONE_S_2, "Controller (XBOX One For Windows)", "Controller (XBOX One For Windows)",
+-        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
+-        DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) },
+-};
+-
+ static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
+ {
+-    DWORD dwSize = lpddi->dwSize, i;
++    DWORD dwSize = lpddi->dwSize;
++    const char *name;
+
+     TRACE("%d %p\n", dwSize, lpddi);
+     memset(lpddi, 0, dwSize);
+@@ -503,30 +522,26 @@ static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD ver
+             lpddi->wUsage = 0x05; /* Game Pad */
+     }
+
+-    for(i = 0; i < ARRAY_SIZE(device_info_overrides); ++i)
++    name = sdldevs[id].name;
++    __controller_hack_sdl_name_override(sdldevs[id].vendor_id, sdldevs[id].product_id, &name);
++    strcpy(lpddi->tszInstanceName, name);
++    strcpy(lpddi->tszProductName, name);
++
++    if(__controller_hack_sdl_is_vid_pid_xbox_one(sdldevs[id].vendor_id, sdldevs[id].product_id) ||
++       __controller_hack_sdl_is_vid_pid_xbox_360(sdldevs[id].vendor_id, sdldevs[id].product_id))
+     {
+-        const struct device_info_override *override = &device_info_overrides[i];
+-        if(sdldevs[id].vendor_id == override->vid &&
+-                sdldevs[id].product_id == override->pid)
+-        {
+-            TRACE("found devinfo override for %04hx/%04hx\n",
+-                    override->vid, override->pid);
+             if(version >= 0x800)
+-                lpddi->dwDevType = override->dev_type8;
++                lpddi->dwDevType = DIDEVTYPE_HID | DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8);
+             else
+-                lpddi->dwDevType = override->dev_type;
+-
+-            strcpy(lpddi->tszInstanceName, override->instance_name);
+-            strcpy(lpddi->tszProductName,  override->product_name);
+-
+-            break;
+-        }
++                lpddi->dwDevType = DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8);
+     }
+-
+-    if(i >= ARRAY_SIZE(device_info_overrides))
++    else if(__controller_hack_sdl_is_vid_pid_sony_dualshock4(sdldevs[id].vendor_id, sdldevs[id].product_id) ||
++            __controller_hack_sdl_is_vid_pid_sony_dualsense(sdldevs[id].vendor_id, sdldevs[id].product_id))
+     {
+-        strcpy(lpddi->tszInstanceName, sdldevs[id].name);
+-        strcpy(lpddi->tszProductName,  sdldevs[id].name);
++            if (version >= 0x800)
++                lpddi->dwDevType = DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8);
++            else
++                lpddi->dwDevType = DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8);
+     }
+ }
+
+@@ -1081,38 +1096,25 @@ static HRESULT poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+
+ static enum_device_state_function select_enum_function(struct SDLDev *sdldev)
+ {
+-    switch(sdldev->vendor_id){
+-    case VID_SONY:
+-        switch(sdldev->product_id){
+-        case PID_SONY_DUALSHOCK_4:
+-        case PID_SONY_DUALSHOCK_4_2:
+-        case PID_SONY_DUALSHOCK_4_DONGLE:
+-            TRACE("for %04x/%04x, polling ds4 controller\n", sdldev->vendor_id, sdldev->product_id);
+-            if(sdldev->n_buttons >= 16)
+-                return enum_device_state_ds4_16button;
+-
+-            TRACE("SDL only reports %u buttons for this PS4 controller. Please upgrade SDL to > 2.0.10 and/or give your user hidraw access.\n",
+-                    sdldev->n_buttons);
+-            return enum_device_state_ds4_13button;
+-        }
+-        case PID_SONY_DUALSENSE:
+-                return enum_device_state_dualsense;
+-        break;
++    if(__controller_hack_sdl_is_vid_pid_sony_dualshock4(sdldev->vendor_id, sdldev->product_id))
++    {
++        TRACE("for %04x/%04x, polling ds4 controller\n", sdldev->vendor_id, sdldev->product_id);
++        if(sdldev->n_buttons >= 16)
++            return enum_device_state_ds4_16button;
+
+-    case VID_MICROSOFT:
+-        switch(sdldev->product_id){
+-        case PID_MICROSOFT_XBOX_360:
+-        case PID_MICROSOFT_XBOX_360_WIRELESS:
+-        case PID_MICROSOFT_XBOX_360_ADAPTER:
+-        case PID_MICROSOFT_XBOX_ONE:
+-        case PID_MICROSOFT_XBOX_ONE_CF:
+-        case PID_MICROSOFT_XBOX_ONE_ELITE:
+-        case PID_MICROSOFT_XBOX_ONE_S:
+-        case PID_MICROSOFT_XBOX_ONE_S_2:
+-            TRACE("for %04x/%04x, polling xbox 360/one controller\n", sdldev->vendor_id, sdldev->product_id);
+-            return enum_device_state_ms_xb360;
+-        }
+-        break;
++        TRACE("SDL only reports %u buttons for this PS4 controller. Please upgrade SDL to > 2.0.10 and/or give your user hidraw access.\n",
++                sdldev->n_buttons);
++        return enum_device_state_ds4_13button;
++    }
++    else if(__controller_hack_sdl_is_vid_pid_sony_dualsense(sdldev->vendor_id, sdldev->product_id))
++    {
++            return enum_device_state_dualsense;
++    }
++    else if(__controller_hack_sdl_is_vid_pid_xbox_360(sdldev->vendor_id, sdldev->product_id) ||
++            __controller_hack_sdl_is_vid_pid_xbox_one(sdldev->vendor_id, sdldev->product_id))
++    {
++        TRACE("for %04x/%04x, polling xbox 360/one controller\n", sdldev->vendor_id, sdldev->product_id);
++        return enum_device_state_ms_xb360;
+     }
+
+     TRACE("for %04x/%04x, using no maps\n", sdldev->vendor_id, sdldev->product_id);
+From 14f1dbc4111700d87ac0c36a8870f16c40deeedc Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Thu, 20 May 2021 17:04:35 +0300
+Subject: [PATCH] dinput: Move controller vidpid and name wrangling to a
+ separate file.
+
+... so we can share it with winebus.sys/bus_sdl.c
+
+CW-Bug-Id: #18761
+---
+ dlls/dinput/joystick_sdl.c              |  98 +------------------
+ include/wine/sdl_controller_overrides.h | 119 ++++++++++++++++++++++++
+ 2 files changed, 120 insertions(+), 97 deletions(-)
+ create mode 100644 include/wine/sdl_controller_overrides.h
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index ffb1e14e885..57a5eabf8f3 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -58,103 +58,7 @@
+
+ WINE_DEFAULT_DEBUG_CHANNEL(dinput);
+
+-#define VID_SONY 0x054c
+-#define PID_SONY_DUALSHOCK_4 0x05c4
+-#define PID_SONY_DUALSHOCK_4_2 0x09cc
+-#define PID_SONY_DUALSHOCK_4_DONGLE 0x0ba0
+-#define PID_SONY_DUALSENSE 0x0ce6
+-
+-#define VID_VALVE 0x28de
+-#define PID_VALVE_VIRTUAL_CONTROLLER 0x11ff
+-
+-#define VID_MICROSOFT 0x045e
+-#define PID_MICROSOFT_XBOX_360 0x028e
+-#define PID_MICROSOFT_XBOX_360_WIRELESS 0x028f
+-#define PID_MICROSOFT_XBOX_360_ADAPTER  0x0719
+-#define PID_MICROSOFT_XBOX_ONE 0x02d1
+-#define PID_MICROSOFT_XBOX_ONE_CF 0x02dd
+-#define PID_MICROSOFT_XBOX_ONE_ELITE 0x02e3
+-#define PID_MICROSOFT_XBOX_ONE_S 0x02ea
+-#define PID_MICROSOFT_XBOX_ONE_S_2 0x02fd
+-
+-static BOOL __controller_hack_sdl_is_vid_pid_xbox_360(WORD vid, WORD pid)
+-{
+-    if(vid != VID_MICROSOFT)
+-        return FALSE;
+-
+-    if(pid == PID_MICROSOFT_XBOX_360 ||
+-        pid == PID_MICROSOFT_XBOX_360_WIRELESS ||
+-        pid == PID_MICROSOFT_XBOX_360_ADAPTER)
+-        return TRUE;
+-
+-    return FALSE;
+-}
+-static BOOL __controller_hack_sdl_is_vid_pid_xbox_one(WORD vid, WORD pid) {
+-    if(vid != VID_MICROSOFT)
+-        return FALSE;
+-
+-    if(pid == PID_MICROSOFT_XBOX_ONE ||
+-        pid == PID_MICROSOFT_XBOX_ONE_CF ||
+-        pid == PID_MICROSOFT_XBOX_ONE_ELITE ||
+-        pid == PID_MICROSOFT_XBOX_ONE_S ||
+-        pid == PID_MICROSOFT_XBOX_ONE_S_2)
+-        return TRUE;
+-
+-    return FALSE;
+-}
+-
+-static BOOL __controller_hack_sdl_is_vid_pid_sony_dualshock4(WORD vid, WORD pid)
+-{
+-    if(vid != VID_SONY)
+-        return FALSE;
+-
+-    if(pid == PID_SONY_DUALSHOCK_4 ||
+-        pid == PID_SONY_DUALSHOCK_4_2 ||
+-        pid == PID_SONY_DUALSHOCK_4_DONGLE)
+-        return TRUE;
+-
+-    return FALSE;
+-}
+-
+-static BOOL __controller_hack_sdl_is_vid_pid_sony_dualsense(WORD vid, WORD pid)
+-{
+-    if(vid == VID_SONY && pid == PID_SONY_DUALSENSE)
+-        return TRUE;
+-
+-    return FALSE;
+-}
+-
+-static void __controller_hack_sdl_vid_pid_override(WORD *vid, WORD *pid)
+-{
+-    TRACE("(*vid = %04hx, *pid = *%04hx\n", *vid, *pid);
+-    if(*vid == VID_VALVE && *pid == PID_VALVE_VIRTUAL_CONTROLLER)
+-    {
+-        TRACE("Valve Virtual Controller found - pretending it's x360\n");
+-        *vid = VID_MICROSOFT;
+-        *pid = PID_MICROSOFT_XBOX_360;
+-    }
+-}
+-
+-static void __controller_hack_sdl_name_override(WORD vid, WORD pid, const char **name)
+-{
+-    const char *new_name = NULL;
+-
+-    TRACE("vid = %04hx, pid = %04hx, *name = %s\n", vid, pid, debugstr_a(*name));
+-
+-    if(__controller_hack_sdl_is_vid_pid_xbox_360(vid, pid))
+-        new_name = "Controller (XBOX 360 For Windows)";
+-    else if(__controller_hack_sdl_is_vid_pid_xbox_one(vid, pid))
+-        new_name = "Controller (XBOX One For Windows)";
+-    else if(__controller_hack_sdl_is_vid_pid_sony_dualshock4(vid, pid) ||
+-             __controller_hack_sdl_is_vid_pid_sony_dualsense(vid, pid))
+-        new_name = "Wireless Controller";
+-
+-    if(new_name)
+-    {
+-        TRACE("new name for the controller = %s\n", debugstr_a(new_name));
+-        *name = new_name;
+-    }
+-}
++#include "wine/sdl_controller_overrides.h"
+
+ typedef struct JoystickImpl JoystickImpl;
+ static const IDirectInputDevice8AVtbl JoystickAvt;
+diff --git a/include/wine/sdl_controller_overrides.h b/include/wine/sdl_controller_overrides.h
+new file mode 100644
+index 00000000000..80813b9cc4f
+--- /dev/null
++++ b/include/wine/sdl_controller_overrides.h
+@@ -0,0 +1,119 @@
++/*
++ * Copyright 2021 Arkadiusz Hiler for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#ifndef __SDL_CONTROLLER_OVERRIDES_H
++#define __SDL_CONTROLLER_OVERRIDES_H
++
++#define VID_SONY 0x054c
++#define PID_SONY_DUALSHOCK_4 0x05c4
++#define PID_SONY_DUALSHOCK_4_2 0x09cc
++#define PID_SONY_DUALSHOCK_4_DONGLE 0x0ba0
++#define PID_SONY_DUALSENSE 0x0ce6
++
++#define VID_VALVE 0x28de
++#define PID_VALVE_VIRTUAL_CONTROLLER 0x11ff
++
++#define VID_MICROSOFT 0x045e
++#define PID_MICROSOFT_XBOX_360 0x028e
++#define PID_MICROSOFT_XBOX_360_WIRELESS 0x028f
++#define PID_MICROSOFT_XBOX_360_ADAPTER  0x0719
++#define PID_MICROSOFT_XBOX_ONE 0x02d1
++#define PID_MICROSOFT_XBOX_ONE_CF 0x02dd
++#define PID_MICROSOFT_XBOX_ONE_ELITE 0x02e3
++#define PID_MICROSOFT_XBOX_ONE_S 0x02ea
++#define PID_MICROSOFT_XBOX_ONE_S_2 0x02fd
++
++static BOOL __controller_hack_sdl_is_vid_pid_xbox_360(WORD vid, WORD pid)
++{
++    if (vid != VID_MICROSOFT)
++        return FALSE;
++
++    if (pid == PID_MICROSOFT_XBOX_360 ||
++        pid == PID_MICROSOFT_XBOX_360_WIRELESS ||
++        pid == PID_MICROSOFT_XBOX_360_ADAPTER)
++        return TRUE;
++
++    return FALSE;
++}
++static BOOL __controller_hack_sdl_is_vid_pid_xbox_one(WORD vid, WORD pid) {
++    if (vid != VID_MICROSOFT)
++        return FALSE;
++
++    if (pid == PID_MICROSOFT_XBOX_ONE ||
++        pid == PID_MICROSOFT_XBOX_ONE_CF ||
++        pid == PID_MICROSOFT_XBOX_ONE_ELITE ||
++        pid == PID_MICROSOFT_XBOX_ONE_S ||
++        pid == PID_MICROSOFT_XBOX_ONE_S_2)
++        return TRUE;
++
++    return FALSE;
++}
++
++static BOOL __controller_hack_sdl_is_vid_pid_sony_dualshock4(WORD vid, WORD pid)
++{
++    if (vid != VID_SONY)
++        return FALSE;
++
++    if (pid == PID_SONY_DUALSHOCK_4 ||
++        pid == PID_SONY_DUALSHOCK_4_2 ||
++        pid == PID_SONY_DUALSHOCK_4_DONGLE)
++        return TRUE;
++
++    return FALSE;
++}
++
++static BOOL __controller_hack_sdl_is_vid_pid_sony_dualsense(WORD vid, WORD pid)
++{
++    if (vid == VID_SONY && pid == PID_SONY_DUALSENSE)
++        return TRUE;
++
++    return FALSE;
++}
++
++static void __controller_hack_sdl_vid_pid_override(WORD *vid, WORD *pid)
++{
++    TRACE("(*vid = %04hx, *pid = *%04hx\n", *vid, *pid);
++    if (*vid == VID_VALVE && *pid == PID_VALVE_VIRTUAL_CONTROLLER)
++    {
++        TRACE("Valve Virtual Controller found - pretending it's x360\n");
++        *vid = VID_MICROSOFT;
++        *pid = PID_MICROSOFT_XBOX_360;
++    }
++}
++
++static void __controller_hack_sdl_name_override(WORD vid, WORD pid, const char **name)
++{
++    const char *new_name = NULL;
++
++    TRACE("vid = %04hx, pid = %04hx, *name = %s\n", vid, pid, debugstr_a(*name));
++
++    if (__controller_hack_sdl_is_vid_pid_xbox_360(vid, pid))
++        new_name = "Controller (XBOX 360 For Windows)";
++    else if (__controller_hack_sdl_is_vid_pid_xbox_one(vid, pid))
++        new_name = "Controller (XBOX One For Windows)";
++    else if (__controller_hack_sdl_is_vid_pid_sony_dualshock4(vid, pid) ||
++             __controller_hack_sdl_is_vid_pid_sony_dualsense(vid, pid))
++        new_name = "Wireless Controller";
++
++    if (new_name)
++    {
++        TRACE("new name for the controller = %s\n", debugstr_a(new_name));
++        *name = new_name;
++    }
++}
++#endif /* __SDL_CONTROLLER_OVERRIDES_H */
+From 4bef8cf8bafa30bf8b59df726fb96b7c04b1e139 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Thu, 20 May 2021 15:45:38 +0300
+Subject: [PATCH] sdl_controller_overrides: Rename Xbox One S 2 to WIRELESS.
+
+CW-Bug-Id: #18761
+---
+ include/wine/sdl_controller_overrides.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/wine/sdl_controller_overrides.h b/include/wine/sdl_controller_overrides.h
+index 80813b9cc4f..8273c31ee8a 100644
+--- a/include/wine/sdl_controller_overrides.h
++++ b/include/wine/sdl_controller_overrides.h
+@@ -36,7 +36,7 @@
+ #define PID_MICROSOFT_XBOX_ONE_CF 0x02dd
+ #define PID_MICROSOFT_XBOX_ONE_ELITE 0x02e3
+ #define PID_MICROSOFT_XBOX_ONE_S 0x02ea
+-#define PID_MICROSOFT_XBOX_ONE_S_2 0x02fd
++#define PID_MICROSOFT_XBOX_ONE_S_WIRELESS 0x02fd
+
+ static BOOL __controller_hack_sdl_is_vid_pid_xbox_360(WORD vid, WORD pid)
+ {
+@@ -58,7 +58,7 @@ static BOOL __controller_hack_sdl_is_vid_pid_xbox_one(WORD vid, WORD pid) {
+         pid == PID_MICROSOFT_XBOX_ONE_CF ||
+         pid == PID_MICROSOFT_XBOX_ONE_ELITE ||
+         pid == PID_MICROSOFT_XBOX_ONE_S ||
+-        pid == PID_MICROSOFT_XBOX_ONE_S_2)
++        pid == PID_MICROSOFT_XBOX_ONE_S_WIRELESS)
+         return TRUE;
+
+     return FALSE;
+
+From 8e7234f124581cb1d1f4830e1eddb5f734afa806 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Mon, 17 May 2021 14:35:12 +0300
+Subject: [PATCH] sdl_controller_overrides: Pretend that unknown xinput
+ controllers are X360.
+
+Some input systems (e.g. InControl) have vid/pid/string databases and
+use them for controller matching. Since we cannot report the same values
+as Windows for all the controllers on the market, let's just pretend
+that the unknown ones are X360.
+
+CW-Bug-Id: #18761
+---
+ dlls/dinput/joystick_sdl.c              |  2 +-
+ include/wine/sdl_controller_overrides.h | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 57a5eabf8f3..dd94619d5eb 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -371,7 +371,7 @@ static void find_sdldevs(void)
+             continue;
+         }
+
+-        __controller_hack_sdl_vid_pid_override(&sdldev->vendor_id, &sdldev->product_id);
++        __controller_hack_sdl_vid_pid_override(&sdldev->vendor_id, &sdldev->product_id, sdldev->name);
+
+         sdldev->nth_instance = get_num_vidpids(sdldev->vendor_id, sdldev->product_id);
+
+diff --git a/include/wine/sdl_controller_overrides.h b/include/wine/sdl_controller_overrides.h
+index 8273c31ee8a..22f50e5d54b 100644
+--- a/include/wine/sdl_controller_overrides.h
++++ b/include/wine/sdl_controller_overrides.h
+@@ -85,7 +85,7 @@ static BOOL __controller_hack_sdl_is_vid_pid_sony_dualsense(WORD vid, WORD pid)
+     return FALSE;
+ }
+
+-static void __controller_hack_sdl_vid_pid_override(WORD *vid, WORD *pid)
++static void __controller_hack_sdl_vid_pid_override(WORD *vid, WORD *pid, const char *sdl_joystick_name)
+ {
+     TRACE("(*vid = %04hx, *pid = *%04hx\n", *vid, *pid);
+     if (*vid == VID_VALVE && *pid == PID_VALVE_VIRTUAL_CONTROLLER)
+@@ -94,6 +94,18 @@ static void __controller_hack_sdl_vid_pid_override(WORD *vid, WORD *pid)
+         *vid = VID_MICROSOFT;
+         *pid = PID_MICROSOFT_XBOX_360;
+     }
++    else if (sdl_joystick_name &&
++             (strstr(sdl_joystick_name, "Xbox") ||
++              strstr(sdl_joystick_name, "XBOX") ||
++              strstr(sdl_joystick_name, "X-Box")) &&
++             !(__controller_hack_sdl_is_vid_pid_xbox_one(*vid, *pid) ||
++               __controller_hack_sdl_is_vid_pid_xbox_360(*vid, *pid)))
++    {
++        WARN("Unknown xinput controller found - pretending it's x360\n");
++
++        *vid = VID_MICROSOFT;
++        *pid = PID_MICROSOFT_XBOX_360;
++    }
+ }
+
+ static void __controller_hack_sdl_name_override(WORD vid, WORD pid, const char **name)
+From ab43b7f1c87789d8ada8220f9ac71fdc55b11551 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Mon, 17 May 2021 14:35:42 +0300
+Subject: [PATCH] sdl_controller_overrides: Fix casing of 'Xbox' for Xbox One
+ controllers.
+
+CW-Bug-Id: #18761
+---
+ include/wine/sdl_controller_overrides.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/wine/sdl_controller_overrides.h b/include/wine/sdl_controller_overrides.h
+index 22f50e5d54b..178ef15d522 100644
+--- a/include/wine/sdl_controller_overrides.h
++++ b/include/wine/sdl_controller_overrides.h
+@@ -117,7 +117,7 @@ static void __controller_hack_sdl_name_override(WORD vid, WORD pid, const char *
+     if (__controller_hack_sdl_is_vid_pid_xbox_360(vid, pid))
+         new_name = "Controller (XBOX 360 For Windows)";
+     else if (__controller_hack_sdl_is_vid_pid_xbox_one(vid, pid))
+-        new_name = "Controller (XBOX One For Windows)";
++        new_name = "Controller (Xbox One For Windows)";
+     else if (__controller_hack_sdl_is_vid_pid_sony_dualshock4(vid, pid) ||
+              __controller_hack_sdl_is_vid_pid_sony_dualsense(vid, pid))
+         new_name = "Wireless Controller";
+From 54320ab915c69654c9f1e93c633c287de6b21999 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Mon, 19 Apr 2021 14:25:44 +0300
+Subject: [PATCH] sdl_controller_overrides: Add newer Xbox controllers.
+
+All of those claim to be "Xbox One".
+
+CW-Bug-Id: #18761
+---
+ include/wine/sdl_controller_overrides.h | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/include/wine/sdl_controller_overrides.h b/include/wine/sdl_controller_overrides.h
+index 178ef15d522..68a39d3e5c2 100644
+--- a/include/wine/sdl_controller_overrides.h
++++ b/include/wine/sdl_controller_overrides.h
+@@ -37,6 +37,10 @@
+ #define PID_MICROSOFT_XBOX_ONE_ELITE 0x02e3
+ #define PID_MICROSOFT_XBOX_ONE_S 0x02ea
+ #define PID_MICROSOFT_XBOX_ONE_S_WIRELESS 0x02fd
++#define PID_MICROSOFT_XBOX_ELITE_2 0x0b00
++#define PID_MICROSOFT_XBOX_ELITE_2_WIRELESS 0x0b05
++#define PID_MICROSOFT_XBOX_SERIES 0x0b12
++#define PID_MICROSOFT_XBOX_SERIES_WIRELESS 0x0b13
+
+ static BOOL __controller_hack_sdl_is_vid_pid_xbox_360(WORD vid, WORD pid)
+ {
+@@ -58,7 +62,11 @@ static BOOL __controller_hack_sdl_is_vid_pid_xbox_one(WORD vid, WORD pid) {
+         pid == PID_MICROSOFT_XBOX_ONE_CF ||
+         pid == PID_MICROSOFT_XBOX_ONE_ELITE ||
+         pid == PID_MICROSOFT_XBOX_ONE_S ||
+-        pid == PID_MICROSOFT_XBOX_ONE_S_WIRELESS)
++        pid == PID_MICROSOFT_XBOX_ONE_S_WIRELESS ||
++        pid == PID_MICROSOFT_XBOX_ELITE_2 ||
++        pid == PID_MICROSOFT_XBOX_ELITE_2_WIRELESS ||
++        pid == PID_MICROSOFT_XBOX_SERIES ||
++        pid == PID_MICROSOFT_XBOX_SERIES_WIRELESS)
+         return TRUE;
+
+     return FALSE;
+From 7d4ae8c3071d02c536c0d9343cf989ec77bda698 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 1 Oct 2019 12:26:39 -0500
+Subject: [PATCH] xinput: Recheck when a device notification is sent
+
+Dark Souls Remasters checks for xinput devices when it receives a
+WM_DEVICECHANGE message. We would only poll for new devices if it had
+been at least 2 seconds since the last check. So often, DS would receive
+the message, but we would refuse to poll for devices, so the game would
+think no controller was present.
+
+This commit fixes that by also subscribing to event notifications and
+triggering a poll. This isn't quite what Windows does. If the game
+subscribes to event notifications _before_ our xinput does, then it
+could still fail as Dark Souls does (but Dark Souls does not register in
+that order). For this reason we also keep the timeout mechanism, which
+will hopefully work for any games that are unlucky enough to fall into
+this corner case.
+---
+ dlls/xinput1_1/Makefile.in   |   2 +-
+ dlls/xinput1_2/Makefile.in   |   2 +-
+ dlls/xinput1_3/Makefile.in   |   2 +-
+ dlls/xinput1_3/hid.c         |  16 -----
+ dlls/xinput1_3/xinput_main.c | 127 +++++++++++++++++++++++++++++++++--
+ dlls/xinput1_4/Makefile.in   |   2 +-
+ dlls/xinput9_1_0/Makefile.in |   2 +-
+ 7 files changed, 128 insertions(+), 25 deletions(-)
+
+diff --git a/dlls/xinput1_1/Makefile.in b/dlls/xinput1_1/Makefile.in
+index a2b17a248cd..c0e489a4e93 100644
+--- a/dlls/xinput1_1/Makefile.in
++++ b/dlls/xinput1_1/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_1.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+
+ EXTRADLLFLAGS = -mno-cygwin
+
+diff --git a/dlls/xinput1_2/Makefile.in b/dlls/xinput1_2/Makefile.in
+index fd38c6f6cc5..2cec1a573e3 100644
+--- a/dlls/xinput1_2/Makefile.in
++++ b/dlls/xinput1_2/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_2.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+
+ EXTRADLLFLAGS = -mno-cygwin
+
+diff --git a/dlls/xinput1_3/Makefile.in b/dlls/xinput1_3/Makefile.in
+index 3b4968fb6d8..0b067bc0a74 100644
+--- a/dlls/xinput1_3/Makefile.in
++++ b/dlls/xinput1_3/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_3.dll
+ IMPORTLIB = xinput
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+
+ EXTRADLLFLAGS = -mno-cygwin
+
+diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
+index 978399e1c52..44166a3eac2 100644
+--- a/dlls/xinput1_3/hid.c
++++ b/dlls/xinput1_3/hid.c
+@@ -67,8 +67,6 @@ struct hid_platform_private {
+     struct axis_info lx, ly, triggers, rx, ry;
+ };
+
+-static DWORD last_check = 0;
+-
+ static void MarkUsage(struct hid_platform_private *private, WORD usage, LONG min, LONG max, USHORT bits)
+ {
+     struct axis_info info = {min, max-min, bits};
+@@ -214,19 +212,6 @@ void HID_find_gamepads(xinput_controller *devices)
+     DWORD idx;
+     int i, open_device_idx;
+
+-    idx = GetTickCount();
+-    if ((idx - last_check) < 2000)
+-        return;
+-
+-    EnterCriticalSection(&xinput_crit);
+-
+-    if ((idx - last_check) < 2000)
+-    {
+-        LeaveCriticalSection(&xinput_crit);
+-        return;
+-    }
+-    last_check = idx;
+-
+     HidD_GetHidGuid(&hid_guid);
+     hid_guid.Data4[7]++; /* HACK: look up the xinput-specific devices */
+
+@@ -292,7 +277,6 @@ void HID_find_gamepads(xinput_controller *devices)
+     }
+     HeapFree(GetProcessHeap(), 0, data);
+     SetupDiDestroyDeviceInfoList(device_info_set);
+-    LeaveCriticalSection(&xinput_crit);
+ }
+
+ static void remove_gamepad(xinput_controller *device)
+diff --git a/dlls/xinput1_3/xinput_main.c b/dlls/xinput1_3/xinput_main.c
+index 63b7dd7f0b5..173a3fdb508 100644
+--- a/dlls/xinput1_3/xinput_main.c
++++ b/dlls/xinput1_3/xinput_main.c
+@@ -25,6 +25,7 @@
+ #include "windef.h"
+ #include "winbase.h"
+ #include "winerror.h"
++#include "winuser.h"
+
+ #include "xinput.h"
+ #include "xinput_private.h"
+@@ -34,6 +35,8 @@
+
+ WINE_DEFAULT_DEBUG_CHANNEL(xinput);
+
++static HINSTANCE xinput_instance;
++
+ /* xinput_crit guards controllers array */
+ static CRITICAL_SECTION_DEBUG xinput_critsect_debug =
+ {
+@@ -95,11 +98,79 @@ static void unlock_device(xinput_controller *device)
+     LeaveCriticalSection(&device->crit);
+ }
+
++static BOOL should_check = TRUE;
++static BOOL msg_wnd_quit;
++static HWND msg_wnd;
++static HANDLE msg_wnd_thread;
++static HINSTANCE msg_wnd_module;
++
++static LRESULT CALLBACK device_notification_wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
++{
++    switch(msg)
++    {
++    case WM_DEVICECHANGE:
++        should_check = TRUE;
++        break;
++    case WM_USER:
++        DestroyWindow(msg_wnd);
++        break;
++    case WM_DESTROY:
++        msg_wnd_quit = TRUE;
++        break;
++    }
++    return DefWindowProcW(hwnd, msg, wparam, lparam);
++}
++
++static DWORD WINAPI msg_wnd_threadproc(void *user)
++{
++    MSG msg;
++    WNDCLASSEXW cls = {0};
++    HANDLE inst;
++    HANDLE evt = user;
++
++    static const WCHAR xinput_class[] = {'_','_','w','i','n','e','_','x','i','n','p','u','t','_','d','e','v','n','o','t','i','f','y',0};
++
++    cls.cbSize = sizeof(cls);
++    cls.hInstance = xinput_instance;
++    cls.lpszClassName = xinput_class;
++    cls.lpfnWndProc = device_notification_wndproc;
++    RegisterClassExW(&cls);
++
++    msg_wnd = CreateWindowExW(0, xinput_class, NULL, 0, 0, 0, 0, 0,
++            HWND_MESSAGE, NULL, NULL, NULL);
++
++    RegisterDeviceNotificationW(msg_wnd, NULL, 0);
++
++    msg_wnd_quit = FALSE;
++
++    SetEvent(evt);
++    evt = NULL;
++
++    while(!msg_wnd_quit && ((int)GetMessageW(&msg, msg_wnd, 0, 0)) > 0)
++    {
++        TranslateMessage(&msg);
++        DispatchMessageW(&msg);
++    }
++
++    EnterCriticalSection(&xinput_crit);
++    inst = msg_wnd_module;
++    msg_wnd_module = NULL;
++    CloseHandle(msg_wnd_thread);
++    msg_wnd_thread = NULL;
++    msg_wnd = NULL;
++    LeaveCriticalSection(&xinput_crit);
++
++    FreeLibraryAndExitThread(inst, 0);
++
++    return 0;
++}
++
+ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
+ {
+     switch(reason)
+     {
+         case DLL_PROCESS_ATTACH:
++            xinput_instance = inst;
+             DisableThreadLibraryCalls(inst);
+             break;
+         case DLL_PROCESS_DETACH:
+@@ -110,6 +181,43 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
+     return TRUE;
+ }
+
++static void find_gamepads(void)
++{
++    static ULONGLONG last_check = 0;
++    ULONGLONG now;
++
++#define DELAY_BETWEEN_CHECKS_MS 2000
++
++    now = GetTickCount64();
++    if (!should_check && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
++        return;
++
++    EnterCriticalSection(&xinput_crit);
++
++    if (!msg_wnd_thread)
++    {
++        HANDLE evt = CreateEventW(NULL, 0, 0, NULL);
++        GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
++                (const WCHAR *)&msg_wnd_threadproc, &msg_wnd_module);
++        msg_wnd_thread = CreateThread(NULL, 0, &msg_wnd_threadproc, evt, 0, NULL);
++        WaitForSingleObject(evt, INFINITE);
++        CloseHandle(evt);
++    }
++
++    if (!should_check && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
++    {
++        LeaveCriticalSection(&xinput_crit);
++        return;
++    }
++
++    last_check = now;
++    should_check = FALSE;
++
++    HID_find_gamepads(controllers);
++
++    LeaveCriticalSection(&xinput_crit);
++}
++
+ void WINAPI DECLSPEC_HOTPATCH XInputEnable(BOOL enable)
+ {
+     int index;
+@@ -120,7 +228,18 @@ void WINAPI DECLSPEC_HOTPATCH XInputEnable(BOOL enable)
+     to the controllers. Setting to true will send the last vibration
+     value (sent to XInputSetState) to the controller and allow messages to
+     be sent */
+-    HID_find_gamepads(controllers);
++
++    if (enable)
++    {
++        find_gamepads();
++    }
++    else
++    {
++        EnterCriticalSection(&xinput_crit);
++        if(msg_wnd)
++            PostMessageW(msg_wnd, WM_USER, 0, 0);
++        LeaveCriticalSection(&xinput_crit);
++    }
+
+     for (index = 0; index < XUSER_MAX_COUNT; index ++)
+     {
+@@ -136,7 +255,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputSetState(DWORD index, XINPUT_VIBRATION* vib
+
+     TRACE("(index %u, vibration %p)\n", index, vibration);
+
+-    HID_find_gamepads(controllers);
++    find_gamepads();
+
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+@@ -157,7 +276,7 @@ static DWORD xinput_get_state(DWORD index, XINPUT_STATE *state)
+     if (!state)
+         return ERROR_BAD_ARGUMENTS;
+
+-    HID_find_gamepads(controllers);
++    find_gamepads();
+
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+@@ -421,7 +540,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetCapabilities(DWORD index, DWORD flags, X
+ {
+     TRACE("(index %u, flags 0x%x, capabilities %p)\n", index, flags, capabilities);
+
+-    HID_find_gamepads(controllers);
++    find_gamepads();
+
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+diff --git a/dlls/xinput1_4/Makefile.in b/dlls/xinput1_4/Makefile.in
+index cdf4b4fed05..8f5aef39594 100644
+--- a/dlls/xinput1_4/Makefile.in
++++ b/dlls/xinput1_4/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_4.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+
+ EXTRADLLFLAGS = -mno-cygwin
+
+diff --git a/dlls/xinput9_1_0/Makefile.in b/dlls/xinput9_1_0/Makefile.in
+index dc8739c4640..12285c42673 100644
+--- a/dlls/xinput9_1_0/Makefile.in
++++ b/dlls/xinput9_1_0/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput9_1_0.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+
+ EXTRADLLFLAGS = -mno-cygwin
+
