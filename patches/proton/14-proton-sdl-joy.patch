@@ -4052,56 +4052,31 @@ diff --git a/dlls/dinput/joystick.c b/dlls/dinput/joystick.c
 index 1c73f6351c8..9c7f2ef4193 100644
 --- a/dlls/dinput/joystick.c
 +++ b/dlls/dinput/joystick.c
-@@ -402,15 +402,15 @@ HRESULT WINAPI JoystickWGenericImpl_SetProperty(LPDIRECTINPUTDEVICE8W iface, REF
-                     remap_props.lMin = pr->lMin;
-                     remap_props.lMax = pr->lMax;
- 
--                    switch (This->base.data_format.wine_df->rgodf[i].dwOfs) {
--                    case DIJOFS_X        : This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
--                    case DIJOFS_Y        : This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
--                    case DIJOFS_Z        : This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
--                    case DIJOFS_RX       : This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
--                    case DIJOFS_RY       : This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
--                    case DIJOFS_RZ       : This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
--                    case DIJOFS_SLIDER(0): This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
--                    case DIJOFS_SLIDER(1): This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
-+                    switch (DIDFT_GETINSTANCE(This->base.data_format.wine_df->rgodf[i].dwType)) {
-+                    case 0: This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
-+                    case 1: This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
-+                    case 2: This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
-+                    case 3: This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
-+                    case 4: This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
-+                    case 5: This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
-+                    case 6: This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
-+                    case 7: This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
- 	            default: break;
-                     }
- 
-@@ -432,15 +432,15 @@ HRESULT WINAPI JoystickWGenericImpl_SetProperty(LPDIRECTINPUTDEVICE8W iface, REF
-                     remap_props.lMin = pr->lMin;
-                     remap_props.lMax = pr->lMax;
- 
--                    switch (This->base.data_format.wine_df->rgodf[obj].dwOfs) {
--                    case DIJOFS_X        : This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
--                    case DIJOFS_Y        : This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
--                    case DIJOFS_Z        : This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
--                    case DIJOFS_RX       : This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
--                    case DIJOFS_RY       : This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
--                    case DIJOFS_RZ       : This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
--                    case DIJOFS_SLIDER(0): This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
--                    case DIJOFS_SLIDER(1): This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
-+                    switch (DIDFT_GETINSTANCE(This->base.data_format.wine_df->rgodf[obj].dwType)) {
-+                    case 0: This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
-+                    case 1: This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
-+                    case 2: This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
-+                    case 3: This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
-+                    case 4: This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
-+                    case 5: This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
-+                    case 6: This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
-+                    case 7: This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
- 		    default: break;
-                     }
- 
+@@ -367,15 +367,15 @@ static void remap_apply(JoystickGenericImpl *This, int obj, ObjProps *remap_prop
+     /* Many games poll the joystick immediately after setting the range
+      * for calibration purposes, so the old values need to be remapped
+      * to the new range before it does so */
+-    switch (This->base.data_format.wine_df->rgodf[obj].dwOfs){
+-    case DIJOFS_X        : This->js.lX  = joystick_map_axis(remap_props, This->js.lX); break;
+-    case DIJOFS_Y        : This->js.lY  = joystick_map_axis(remap_props, This->js.lY); break;
+-    case DIJOFS_Z        : This->js.lZ  = joystick_map_axis(remap_props, This->js.lZ); break;
+-    case DIJOFS_RX       : This->js.lRx = joystick_map_axis(remap_props, This->js.lRx); break;
+-    case DIJOFS_RY       : This->js.lRy = joystick_map_axis(remap_props, This->js.lRy); break;
+-    case DIJOFS_RZ       : This->js.lRz = joystick_map_axis(remap_props, This->js.lRz); break;
+-    case DIJOFS_SLIDER(0): This->js.rglSlider[0] = joystick_map_axis(remap_props, This->js.rglSlider[0]); break;
+-    case DIJOFS_SLIDER(1): This->js.rglSlider[1] = joystick_map_axis(remap_props, This->js.rglSlider[1]); break;
++    switch (DIDFT_GETINSTANCE(This->base.data_format.wine_df->rgodf[obj].dwType)) {
++    case 0: This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
++    case 1: This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
++    case 2: This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
++    case 3: This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
++    case 4: This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
++    case 5: This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
++    case 6: This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
++    case 7: This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
+     default: break;
+     }
+ }
 From ecf58e5b0b0bda00bbeecd239dea636d25d35c37 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 21 Aug 2019 14:12:27 -0500
@@ -4189,7 +4164,7 @@ index 2b26eb806d3..4229f3ee642 100644
      }
      while (1)
      {
-@@ -860,16 +860,16 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+@@ -860,17 +860,17 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
  	plfd.fd = This->joyfd;
  	plfd.events = POLLIN;
  	if (poll(&plfd,1,0) != 1)
@@ -4204,11 +4179,12 @@ index 2b26eb806d3..4229f3ee642 100644
                jse.type,jse.number,jse.value);
          if (jse.type & JS_EVENT_BUTTON)
          {
+             int button;
 -            if (jse.number >= This->generic.devcaps.dwButtons) return;
 +            if (jse.number >= This->generic.devcaps.dwButtons) continue;
- 
-             inst_id = DIDFT_MAKEINSTANCE(jse.number) | DIDFT_PSHBUTTON;
-             This->generic.js.rgbButtons[jse.number] = value = jse.value ? 0x80 : 0x00;
+
+             button = This->generic.button_map[jse.number];
+
 @@ -878,7 +878,7 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
          {
              int number = This->generic.axis_map[jse.number];	/* wine format object index */
@@ -4240,37 +4216,33 @@ index 102de8269b9..66fc9b7f9b1 100644
  
  /* This GUID is slightly different from the linux joystick one. Take note. */
  static const GUID DInput_Wine_Joystick_Base_GUID = { /* 9e573eda-7734-11d2-8d4a-23903fb6bdf7 */
-@@ -809,14 +809,14 @@ static void fake_current_js_state(JoystickImpl *ji)
+@@ -731,7 +731,7 @@ static void fake_current_js_state(JoystickImpl *ji)
  #undef CENTER_AXIS
- 
+
  /* convert wine format offset to user format object index */
 -static void joy_polldev( IDirectInputDevice8W *iface )
 +static HRESULT joy_polldev( IDirectInputDevice8W *iface )
  {
      struct pollfd plfd;
      struct input_event ie;
-     JoystickImpl *This = impl_from_IDirectInputDevice8W( iface );
- 
-     if (This->joyfd==-1)
--	return;
-+	return DIERR_INPUTLOST;
- 
-     while (1)
-     {
-@@ -827,11 +827,11 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
- 	plfd.events = POLLIN;
- 
- 	if (poll(&plfd,1,0) != 1)
--	    return;
-+	    return DI_OK;
- 
- 	/* we have one event, so we can read */
- 	if (sizeof(ie)!=read(This->joyfd,&ie,sizeof(ie)))
--	    return;
-+	    return DIERR_INPUTLOST;
- 
- 	TRACE("input_event: type %d, code %d, value %d\n",ie.type,ie.code,ie.value);
- 	switch (ie.type) {
+@@ -794,7 +794,7 @@ static void joy_polldev( IDirectInputDevice8W *iface )
+                 This->joyfd = -1;
+                 This->joyfd_state = WINE_FD_STATE_DISCONNECTED;
+             }
+-            return;
++            return DI_OK;
+         }
+
+        /* we have one event, so we can read */
+@@ -808,7 +808,7 @@ static void joy_polldev( IDirectInputDevice8W *iface )
+                 This->joyfd = -1;
+                 This->joyfd_state = WINE_FD_STATE_DISCONNECTED;
+             }
+-            return;
++            return DIERR_INPUTLOST;
+         }
+
+        TRACE("input_event: type %d, code %d, value %d\n",ie.type,ie.code,ie.value);
 @@ -910,6 +910,8 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
              queue_event(iface, inst_id,
                          value, GetCurrentTime(), This->generic.base.dinput->evsequence++);
@@ -6493,222 +6465,6 @@ index ae3c9852eb7..e8e47b15140 100644
  
      return 0xffff;
  }
-From 997d32c69d2d1f6747ef469b95b9abc2a720025b Mon Sep 17 00:00:00 2001
-From: Arkadiusz Hiler <ahiler@codeweavers.com>
-Date: Tue, 23 Mar 2021 20:00:36 +0200
-Subject: [PATCH] dinput: Implement device creation using product GUID.
-
-This fixes Far Cry Primal controller discovery.
-
-Signed-off-by: Arkadiusz Hiler <ahiler@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
-(cherry picked from commit 0a82d891fc0b5b7f8b176e5e52d8858bab8d28bb)
-
-CW-Bug-Id: 18652
----
- dlls/dinput/joystick.c            |  4 ++--
- dlls/dinput/joystick_linux.c      | 10 ++++++++++
- dlls/dinput/joystick_linuxinput.c | 10 ++++++++++
- dlls/dinput/joystick_osx.c        | 16 ++++++++++++++++
- dlls/dinput/tests/device.c        | 22 ++++++++++++++++++++++
- 5 files changed, 60 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/dinput/joystick.c b/dlls/dinput/joystick.c
-index fc4040757f8..2844ba4c844 100644
---- a/dlls/dinput/joystick.c
-+++ b/dlls/dinput/joystick.c
-@@ -744,7 +744,7 @@ HRESULT WINAPI JoystickAGenericImpl_GetDeviceInfo(
-         index = pd.dwData;
-
-     /* Return joystick */
--    pdidi->guidInstance = This->guidInstance;
-+    pdidi->guidInstance = This->base.guid;
-     pdidi->guidProduct = This->guidProduct;
-     /* we only support traditional joysticks for now */
-     pdidi->dwDevType = This->devcaps.dwDevType;
-@@ -788,7 +788,7 @@ HRESULT WINAPI JoystickWGenericImpl_GetDeviceInfo(
-         index = pd.dwData;
-
-     /* Return joystick */
--    pdidi->guidInstance = This->guidInstance;
-+    pdidi->guidInstance = This->base.guid;
-     pdidi->guidProduct = This->guidProduct;
-     /* we only support traditional joysticks for now */
-     pdidi->dwDevType = This->devcaps.dwDevType;
-diff --git a/dlls/dinput/joystick_linux.c b/dlls/dinput/joystick_linux.c
-index 4229f3ee642..e50385da6de 100644
---- a/dlls/dinput/joystick_linux.c
-+++ b/dlls/dinput/joystick_linux.c
-@@ -598,6 +598,7 @@ static unsigned short get_joystick_index(REFGUID guid)
- {
-     GUID wine_joystick = DInput_Wine_Joystick_GUID;
-     GUID dev_guid = *guid;
-+    INT i;
-
-     wine_joystick.Data3 = 0;
-     dev_guid.Data3 = 0;
-@@ -608,6 +609,9 @@ static unsigned short get_joystick_index(REFGUID guid)
-     /* for the wine joystick GUIDs use the index stored in Data3 */
-     if(IsEqualGUID(&wine_joystick, &dev_guid)) return guid->Data3;
-
-+    for(i = 0; i < joystick_devices_count; i++)
-+        if(IsEqualGUID(&joystick_devices[i].guid_product, guid)) return i;
-+
-     return MAX_JOYSTICKS;
- }
-
-@@ -790,6 +794,9 @@ static HRESULT WINAPI JoystickLinuxAImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8A ifa
-
-     fill_joystick_dideviceinstanceA( ddi, This->generic.base.dinput->dwVersion,
-                                      get_joystick_index(&This->generic.base.guid) );
-+
-+    ddi->guidInstance = This->generic.base.guid;
-+
-     return DI_OK;
- }
-
-@@ -806,6 +813,9 @@ static HRESULT WINAPI JoystickLinuxWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W ifa
-
-     fill_joystick_dideviceinstanceW( ddi, This->generic.base.dinput->dwVersion,
-                                      get_joystick_index(&This->generic.base.guid) );
-+
-+    ddi->guidInstance = This->generic.base.guid;
-+
-     return DI_OK;
- }
-
-diff --git a/dlls/dinput/joystick_linuxinput.c b/dlls/dinput/joystick_linuxinput.c
-index 66fc9b7f9b1..a8c0e8e24cc 100644
---- a/dlls/dinput/joystick_linuxinput.c
-+++ b/dlls/dinput/joystick_linuxinput.c
-@@ -612,6 +612,7 @@ static unsigned short get_joystick_index(REFGUID guid)
- {
-     GUID wine_joystick = DInput_Wine_Joystick_Base_GUID;
-     GUID dev_guid = *guid;
-+    INT i;
-
-     wine_joystick.Data3 = 0;
-     dev_guid.Data3 = 0;
-@@ -622,6 +623,9 @@ static unsigned short get_joystick_index(REFGUID guid)
-     /* for the wine joystick GUIDs use the index stored in Data3 */
-     if(IsEqualGUID(&wine_joystick, &dev_guid)) return guid->Data3 - DInput_Wine_Joystick_Base_GUID.Data3;
-
-+    for(i = 0; i < have_joydevs; i++)
-+        if(IsEqualGUID(&joydevs[i].guid_product, guid)) return i;
-+
-     return MAX_JOYDEV;
- }
-
-@@ -1452,6 +1456,9 @@ static HRESULT WINAPI JoystickAImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8A iface,
-
-     fill_joystick_dideviceinstanceA(pdidi, This->generic.base.dinput->dwVersion,
-                                     get_joystick_index(&This->generic.base.guid));
-+
-+    pdidi->guidInstance = This->generic.base.guid;
-+
-     return DI_OK;
- }
-
-@@ -1469,6 +1476,9 @@ static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
-
-     fill_joystick_dideviceinstanceW(pdidi, This->generic.base.dinput->dwVersion,
-                                     get_joystick_index(&This->generic.base.guid));
-+
-+    pdidi->guidInstance = This->generic.base.guid;
-+
-     return DI_OK;
- }
-
-diff --git a/dlls/dinput/joystick_osx.c b/dlls/dinput/joystick_osx.c
-index 0dd77842a20..b43ab6b8075 100644
---- a/dlls/dinput/joystick_osx.c
-+++ b/dlls/dinput/joystick_osx.c
-@@ -1324,6 +1324,10 @@ static unsigned short get_joystick_index(REFGUID guid)
- {
-     GUID wine_joystick = DInput_Wine_OsX_Joystick_GUID;
-     GUID dev_guid = *guid;
-+    GUID prod_guid = *guid;
-+    IOHIDDeviceRef device;
-+    int joystick_devices_count;
-+    INT i;
-
-     wine_joystick.Data3 = 0;
-     dev_guid.Data3 = 0;
-@@ -1334,6 +1338,18 @@ static unsigned short get_joystick_index(REFGUID guid)
-     /* for the wine joystick GUIDs use the index stored in Data3 */
-     if(IsEqualGUID(&wine_joystick, &dev_guid)) return guid->Data3;
-
-+    prod_guid.Data1 = 0;
-+    if(IsEqualGUID(&DInput_PIDVID_Product_GUID, &prod_guid))
-+    {
-+        joystick_devices_count = find_joystick_devices();
-+        for(i = 0; i < joystick_devices_count; i++)
-+        {
-+            device = get_device_ref(i);
-+            if(guid->Data1 == make_vid_pid(device))
-+                return i;
-+        }
-+    }
-+
-     return 0xffff;
- }
-
-diff --git a/dlls/dinput/tests/device.c b/dlls/dinput/tests/device.c
-index dcf8a373348..fd212bf2514 100644
---- a/dlls/dinput/tests/device.c
-+++ b/dlls/dinput/tests/device.c
-@@ -197,12 +197,14 @@ struct enum_data
- {
-     IDirectInputA *pDI;
-     HWND hwnd;
-+    BOOL tested_product_creation;
- };
-
- static BOOL CALLBACK enum_devices(const DIDEVICEINSTANCEA *lpddi, void *pvRef)
- {
-     struct enum_data *data = pvRef;
-     IDirectInputDeviceA *device, *obj = NULL;
-+    DIDEVICEINSTANCEA ddi2;
-     HRESULT hr;
-
-     hr = IDirectInput_GetDeviceStatus(data->pDI, &lpddi->guidInstance);
-@@ -226,6 +228,24 @@ static BOOL CALLBACK enum_devices(const DIDEVICEINSTANCEA *lpddi, void *pvRef)
-         IUnknown_Release(obj);
-
-         IUnknown_Release(device);
-+
-+        if (!IsEqualGUID(&lpddi->guidInstance, &lpddi->guidProduct))
-+        {
-+            data->tested_product_creation = TRUE;
-+            hr = IDirectInput_CreateDevice(data->pDI, &lpddi->guidProduct, &device, NULL);
-+            ok(SUCCEEDED(hr), "IDirectInput_CreateDevice() failed: %08x\n", hr);
-+
-+            ddi2.dwSize = sizeof(ddi2);
-+            hr = IDirectInputDevice_GetDeviceInfo(device, &ddi2);
-+            ok(SUCCEEDED(hr), "IDirectInput_GetDeviceInfo failed: %08x\n", hr);
-+
-+            ok(IsEqualGUID(&lpddi->guidProduct, &ddi2.guidProduct), "Product GUIDs do not match. Expected %s, got %s\n", debugstr_guid(&lpddi->guidProduct), debugstr_guid(&ddi2.guidProduct));
-+            ok(IsEqualGUID(&ddi2.guidProduct, &ddi2.guidInstance), "Instance GUID should equal product GUID. Expected %s, got %s\n", debugstr_guid(&ddi2.guidProduct), debugstr_guid(&ddi2.guidInstance));
-+            /* we cannot compare guidInstances as we may get a different device */
-+
-+            IUnknown_Release(device);
-+        }
-+
-     }
-     return DIENUM_CONTINUE;
- }
-@@ -263,9 +283,11 @@ static void device_tests(void)
-
-         data.pDI = pDI;
-         data.hwnd = hwnd;
-+        data.tested_product_creation = FALSE;
-         hr = IDirectInput_EnumDevices(pDI, 0, enum_devices, &data, DIEDFL_ALLDEVICES);
-         ok(SUCCEEDED(hr), "IDirectInput_EnumDevices() failed: %08x\n", hr);
-
-+        if (!data.tested_product_creation) winetest_skip("Device creation using product GUID not tested\n");
-
-         /* If GetDeviceStatus returns DI_OK the device must exist */
-         hr = IDirectInput_GetDeviceStatus(pDI, &GUID_Joystick);
 From deb80a74a461eff1646b29c871ffffa3597337f3 Mon Sep 17 00:00:00 2001
 From: Arkadiusz Hiler <ahiler@codeweavers.com>
 Date: Thu, 18 Mar 2021 12:07:58 +0200
