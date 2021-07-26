@@ -1,0 +1,417 @@
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 1/6] server: Also return STATUS_PIPE_DISCONNECTED for shutdown nonblocking sockets.
+Message-Id: <20210724235432.25471-1-zfigura@codeweavers.com>
+Date: Sat, 24 Jul 2021 18:54:27 -0500
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/ws2_32/tests/sock.c | 10 +++++-----
+ server/sock.c            |  6 ++++--
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index 41fcb5d9248..5f2a68e5073 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -7453,12 +7453,12 @@ static void test_shutdown(void)
+     WSASetLastError(0xdeadbeef);
+     ret = recv(client, buffer, sizeof(buffer), 0);
+     ok(ret == -1, "got %d\n", ret);
+-    todo_wine ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
++    ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
+
+     WSASetLastError(0xdeadbeef);
+     ret = recv(client, buffer, sizeof(buffer), 0);
+     ok(ret == -1, "got %d\n", ret);
+-    todo_wine ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
++    ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
+
+     WSASetLastError(0xdeadbeef);
+     ret = shutdown(server, SD_SEND);
+@@ -7513,7 +7513,7 @@ static void test_shutdown(void)
+     WSASetLastError(0xdeadbeef);
+     ret = recv(client, buffer, sizeof(buffer), 0);
+     ok(ret == -1, "got %d\n", ret);
+-    todo_wine ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
++    ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
+
+     WSASetLastError(0xdeadbeef);
+     ret = send(client, "test", 5, 0);
+@@ -7577,7 +7577,7 @@ static void test_shutdown(void)
+     WSASetLastError(0xdeadbeef);
+     ret = WSARecv(client, &wsabuf, 1, &size, &flags, NULL, NULL);
+     ok(ret == -1, "got %d\n", ret);
+-    todo_wine ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
++    ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
+
+     ret = send(server, "test", 5, 0);
+     ok(ret == 5, "got %d\n", ret);
+@@ -7649,7 +7649,7 @@ static void test_shutdown(void)
+     WSASetLastError(0xdeadbeef);
+     ret = recvfrom(server, buffer, sizeof(buffer), 0, NULL, NULL);
+     ok(ret == -1, "got %d\n", ret);
+-    todo_wine ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
++    ok(WSAGetLastError() == WSAESHUTDOWN, "got error %u\n", WSAGetLastError());
+
+     ret = sendto(client, "test", 5, 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
+     ok(ret == 5, "got %d\n", ret);
+diff --git a/server/sock.c b/server/sock.c
+index cd77ff7bdca..e5b0e81ead2 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -3216,7 +3216,8 @@ DECL_HANDLER(recv_socket)
+         status = STATUS_PENDING;
+     }
+
+-    if (status == STATUS_PENDING && sock->rd_shutdown) status = STATUS_PIPE_DISCONNECTED;
++    if ((status == STATUS_PENDING || status == STATUS_DEVICE_NOT_READY) && sock->rd_shutdown)
++        status = STATUS_PIPE_DISCONNECTED;
+
+     sock->pending_events &= ~(req->oob ? AFD_POLL_OOB : AFD_POLL_READ);
+     sock->reported_events &= ~(req->oob ? AFD_POLL_OOB : AFD_POLL_READ);
+@@ -3326,7 +3327,8 @@ DECL_HANDLER(send_socket)
+         status = STATUS_PENDING;
+     }
+
+-    if (status == STATUS_PENDING && sock->wr_shutdown) status = STATUS_PIPE_DISCONNECTED;
++    if ((status == STATUS_PENDING || status == STATUS_DEVICE_NOT_READY) && sock->wr_shutdown)
++        status = STATUS_PIPE_DISCONNECTED;
+
+     if ((async = create_request_async( fd, get_fd_comp_flags( fd ), &req->async )))
+     {
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 2/6] server: Separate SD_RECEIVE and hangup conditions.
+Message-Id: <20210724235432.25471-2-zfigura@codeweavers.com>
+Date: Sat, 24 Jul 2021 18:54:28 -0500
+In-Reply-To: <20210724235432.25471-1-zfigura@codeweavers.com>
+References: <20210724235432.25471-1-zfigura@codeweavers.com>
+
+This patch does result in one functional change: if we are selecting for
+AFD_POLL_READ on a socket which has had SD_RECEIVE and there are no asyncs, we
+will now respond to POLLIN instead of ignoring it. Neither this nor the previous
+behaviour matches Windows, which instead puts the socket into an aborted state
+and sends RST to the peer if any data is received after SD_RECEIVE or if
+SD_RECEIVE is done while there is pending data.
+
+Apart from this there is no functional change, as the places where rd_shutdown
+alone is checked can't be reached if there was a hangup. It is instead for
+semantic clarity.
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ server/sock.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/server/sock.c b/server/sock.c
+index e5b0e81ead2..85ea019ad92 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -214,6 +214,7 @@ struct sock
+     unsigned int        rd_shutdown : 1; /* is the read end shut down? */
+     unsigned int        wr_shutdown : 1; /* is the write end shut down? */
+     unsigned int        wr_shutdown_pending : 1; /* is a write shutdown pending? */
++    unsigned int        hangup : 1;  /* has the read end received a hangup? */
+     unsigned int        nonblocking : 1; /* is the socket nonblocking? */
+     unsigned int        bound : 1;   /* is the socket bound? */
+ };
+@@ -930,7 +931,7 @@ static int sock_dispatch_asyncs( struct sock *sock, int event, int error )
+         int status = sock_get_ntstatus( error );
+         struct accept_req *req, *next;
+
+-        if (sock->rd_shutdown)
++        if (sock->rd_shutdown || sock->hangup)
+             async_wake_up( &sock->read_q, status );
+         if (sock->wr_shutdown)
+             async_wake_up( &sock->write_q, status );
+@@ -1072,15 +1073,17 @@ static void sock_poll_event( struct fd *fd, int event )
+             }
+         }
+
+-        if ((hangup_seen || event & (POLLHUP | POLLERR)) && (!sock->rd_shutdown || !sock->wr_shutdown))
++        if (hangup_seen || (sock_shutdown_type == SOCK_SHUTDOWN_POLLHUP && (event & POLLHUP)))
++        {
++            sock->hangup = 1;
++        }
++        else if (event & (POLLHUP | POLLERR))
+         {
+-            error = error ? error : sock_error( fd );
+-            if ( (event & POLLERR) || ( sock_shutdown_type == SOCK_SHUTDOWN_EOF && (event & POLLHUP) ))
+-                sock->wr_shutdown = 1;
+             sock->rd_shutdown = 1;
++            sock->wr_shutdown = 1;
+
+             if (debug_level)
+-                fprintf(stderr, "socket %p aborted by error %d, event: %x\n", sock, error, event);
++                fprintf( stderr, "socket %p aborted by error %d, event %#x\n", sock, error, event );
+         }
+
+         if (hangup_seen)
+@@ -1168,7 +1171,9 @@ static int sock_get_poll_events( struct fd *fd )
+         }
+         else
+         {
+-            if (!sock->rd_shutdown)
++            /* Don't ask for POLLIN if we got a hangup. We won't receive more
++             * data anyway, but we will get POLLIN if SOCK_SHUTDOWN_EOF. */
++            if (!sock->hangup)
+             {
+                 if (mask & AFD_POLL_READ)
+                     ev |= POLLIN;
+@@ -1380,6 +1385,7 @@ static struct sock *create_socket(void)
+     sock->rd_shutdown = 0;
+     sock->wr_shutdown = 0;
+     sock->wr_shutdown_pending = 0;
++    sock->hangup = 0;
+     sock->nonblocking = 0;
+     sock->bound = 0;
+     sock->rcvbuf = 0;
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 3/6] server: Remove the socket from the polling loop if both it and the peer have SHUT_WR.
+Message-Id: <20210724235432.25471-3-zfigura@codeweavers.com>
+Date: Sat, 24 Jul 2021 18:54:29 -0500
+In-Reply-To: <20210724235432.25471-1-zfigura@codeweavers.com>
+References: <20210724235432.25471-1-zfigura@codeweavers.com>
+
+Based on a patch by Torge Matthies.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51319
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ server/sock.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/server/sock.c b/server/sock.c
+index 85ea019ad92..2d2aa733565 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -1161,6 +1161,20 @@ static int sock_get_poll_events( struct fd *fd )
+
+     case SOCK_CONNECTED:
+     case SOCK_CONNECTIONLESS:
++        if (sock->hangup && sock->wr_shutdown && !sock->wr_shutdown_pending)
++        {
++            /* Linux returns POLLHUP if a socket is both SHUT_RD and SHUT_WR, or
++             * if both the socket and its peer are SHUT_WR.
++             *
++             * We don't use SHUT_RD, so we can only encounter this in the latter
++             * case. In that case there can't be any pending read requests (they
++             * would have already been completed with a length of zero), the
++             * above condition ensures that we don't have any pending write
++             * requests, and nothing that can change about the socket state that
++             * would complete a pending poll request. */
++            return -1;
++        }
++
+         if (sock->accept_recv_req)
+         {
+             ev |= POLLIN;
+@@ -1267,7 +1281,10 @@ static void sock_reselect_async( struct fd *fd, struct async_queue *queue )
+     struct sock *sock = get_fd_user( fd );
+
+     if (sock->wr_shutdown_pending && list_empty( &sock->write_q.queue ))
++    {
+         shutdown( get_unix_fd( sock->fd ), SHUT_WR );
++        sock->wr_shutdown_pending = 0;
++    }
+
+     /* Don't reselect the ifchange queue; we always ask for POLLIN.
+      * Don't reselect an uninitialized socket; we can't call set_fd_events() on
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 4/6] server: Remove the socket from the polling loop if it was aborted.
+Message-Id: <20210724235432.25471-4-zfigura@codeweavers.com>
+Date: Sat, 24 Jul 2021 18:54:30 -0500
+In-Reply-To: <20210724235432.25471-1-zfigura@codeweavers.com>
+References: <20210724235432.25471-1-zfigura@codeweavers.com>
+
+Don't use rd_shutdown and wr_shutdown to determine this. On the one hand, it's
+possible to have pending asyncs even if rd_shutdown && wr_shutdown, which will
+be cheerfully completed upon receiving data. On the other hand, RST doesn't
+cause WSAESHUTDOWN, but rather WSAECONNRESET.
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ server/sock.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/server/sock.c b/server/sock.c
+index 2d2aa733565..2660cf2dee0 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -215,6 +215,7 @@ struct sock
+     unsigned int        wr_shutdown : 1; /* is the write end shut down? */
+     unsigned int        wr_shutdown_pending : 1; /* is a write shutdown pending? */
+     unsigned int        hangup : 1;  /* has the read end received a hangup? */
++    unsigned int        aborted : 1; /* did we get a POLLERR or irregular POLLHUP? */
+     unsigned int        nonblocking : 1; /* is the socket nonblocking? */
+     unsigned int        bound : 1;   /* is the socket bound? */
+ };
+@@ -1079,8 +1080,7 @@ static void sock_poll_event( struct fd *fd, int event )
+         }
+         else if (event & (POLLHUP | POLLERR))
+         {
+-            sock->rd_shutdown = 1;
+-            sock->wr_shutdown = 1;
++            sock->aborted = 1;
+
+             if (debug_level)
+                 fprintf( stderr, "socket %p aborted by error %d, event %#x\n", sock, error, event );
+@@ -1175,6 +1175,9 @@ static int sock_get_poll_events( struct fd *fd )
+             return -1;
+         }
+
++        if (sock->aborted)
++            return -1;
++
+         if (sock->accept_recv_req)
+         {
+             ev |= POLLIN;
+@@ -1403,6 +1406,7 @@ static struct sock *create_socket(void)
+     sock->wr_shutdown = 0;
+     sock->wr_shutdown_pending = 0;
+     sock->hangup = 0;
++    sock->aborted = 0;
+     sock->nonblocking = 0;
+     sock->bound = 0;
+     sock->rcvbuf = 0;
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 5/6] ntdll: Fill the I/O status block with the results of the send_socket call in sock_send().
+Message-Id: <20210724235432.25471-5-zfigura@codeweavers.com>
+Date: Sat, 24 Jul 2021 18:54:31 -0500
+In-Reply-To: <20210724235432.25471-1-zfigura@codeweavers.com>
+References: <20210724235432.25471-1-zfigura@codeweavers.com>
+
+The server might change the status. In particular, if we got a short but nonzero
+write on a nonblocking socket, try_send() would return STATUS_DEVICE_NOT_READY
+and hence leave the I/O status block unfilled. The server subsequently massages
+this into STATUS_SUCCESS, causing a garbage size to be eventually returned from
+ws2_32 send().
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51439
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+Despite the comment, I'd open to filling the IOSB in sock_transmit() anyway.
+
+ dlls/ntdll/unix/socket.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/ntdll/unix/socket.c b/dlls/ntdll/unix/socket.c
+index 6b863fd61f0..e29dc7f66d1 100644
+--- a/dlls/ntdll/unix/socket.c
++++ b/dlls/ntdll/unix/socket.c
+@@ -922,12 +922,6 @@ static NTSTATUS sock_send( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+     if (status == STATUS_DEVICE_NOT_READY && force_async)
+         status = STATUS_PENDING;
+
+-    if (!NT_ERROR(status))
+-    {
+-        io->Status = status;
+-        io->Information = async->sent_len;
+-    }
+-
+     SERVER_START_REQ( send_socket )
+     {
+         req->status = status;
+@@ -936,6 +930,11 @@ static NTSTATUS sock_send( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+         status = wine_server_call( req );
+         wait_handle = wine_server_ptr_handle( reply->wait );
+         options     = reply->options;
++        if ((!NT_ERROR(status) || wait_handle) && status != STATUS_PENDING)
++        {
++            io->Status = status;
++            io->Information = async->sent_len;
++        }
+     }
+     SERVER_END_REQ;
+
+@@ -1111,6 +1110,10 @@ static NTSTATUS sock_transmit( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc,
+         status = wine_server_call( req );
+         wait_handle = wine_server_ptr_handle( reply->wait );
+         options     = reply->options;
++        /* In theory we'd fill the iosb here, as above in sock_send(), but it's
++         * actually currently impossible to get STATUS_SUCCESS. The server will
++         * either return STATUS_PENDING or an error code, and in neither case
++         * should the iosb be filled. */
+     }
+     SERVER_END_REQ;
+
+
+--
+2.30.2
+
+From: Zebediah Figura <zfigura@codeweavers.com>
+Subject: [PATCH 6/6] ntdll: Fill the I/O status block with the results of the recv_socket call in sock_recv().
+Message-Id: <20210724235432.25471-6-zfigura@codeweavers.com>
+Date: Sat, 24 Jul 2021 18:54:32 -0500
+In-Reply-To: <20210724235432.25471-1-zfigura@codeweavers.com>
+References: <20210724235432.25471-1-zfigura@codeweavers.com>
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/ntdll/unix/socket.c | 11 +++++------
+ dlls/ws2_32/tests/afd.c  |  4 ++--
+ 2 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/ntdll/unix/socket.c b/dlls/ntdll/unix/socket.c
+index e29dc7f66d1..3ea722a48ec 100644
+--- a/dlls/ntdll/unix/socket.c
++++ b/dlls/ntdll/unix/socket.c
+@@ -615,12 +615,6 @@ static NTSTATUS sock_recv( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+     if (status == STATUS_DEVICE_NOT_READY && force_async)
+         status = STATUS_PENDING;
+
+-    if (!NT_ERROR(status))
+-    {
+-        io->Status = status;
+-        io->Information = information;
+-    }
+-
+     SERVER_START_REQ( recv_socket )
+     {
+         req->status = status;
+@@ -630,6 +624,11 @@ static NTSTATUS sock_recv( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+         status = wine_server_call( req );
+         wait_handle = wine_server_ptr_handle( reply->wait );
+         options     = reply->options;
++        if ((!NT_ERROR(status) || wait_handle) && status != STATUS_PENDING)
++        {
++            io->Status = status;
++            io->Information = information;
++        }
+     }
+     SERVER_END_REQ;
+
+diff --git a/dlls/ws2_32/tests/afd.c b/dlls/ws2_32/tests/afd.c
+index 50922500859..eb7c8ee50de 100644
+--- a/dlls/ws2_32/tests/afd.c
++++ b/dlls/ws2_32/tests/afd.c
+@@ -978,8 +978,8 @@ static void test_recv(void)
+     ret = NtDeviceIoControlFile((HANDLE)client, event, NULL, NULL, &io,
+             IOCTL_AFD_RECV, &params, sizeof(params), NULL, 0);
+     ok(ret == STATUS_PENDING, "got %#x\n", ret);
+-    todo_wine ok(!io.Status, "got status %#x\n", io.Status);
+-    todo_wine ok(!io.Information, "got information %#Ix\n", io.Information);
++    ok(!io.Status, "got status %#x\n", io.Status);
++    ok(!io.Information, "got information %#Ix\n", io.Information);
+
+     ret = send(server, "data", 5, 0);
+     ok(ret == 5, "got %d\n", ret);
+
+--
+2.30.2
+
