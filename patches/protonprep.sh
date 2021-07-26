@@ -17,13 +17,6 @@
     patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
     cd ..
 
-    cd lsteamclient
-    git reset --hard HEAD
-    git clean -xdf
-    echo "add warframe 5 minute crash fix"
-    patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient_disable_SteamController007_if_no_controller.patch
-    cd ..
-
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
@@ -42,9 +35,6 @@
 
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
-
-#    echo "add dxvk PR patches"
-#    patch -Np1 < ../patches/dxvk/1582.patch
     
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
@@ -128,28 +118,13 @@
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
 
-    echo "These break various rockstar game services"
-    git revert --no-commit 4c10543b6a54cdcc57b5ce7efd839b17d60471e6
-    git revert --no-commit 67c8a82f3d0a43709a3be622dbe15a5ff8165475
-    git revert --no-commit 2f3ab0b242321a044ca68794f811165a8f748a74
-    git revert --no-commit 4c7c7d07d4dd30b0751c7ad0bbc1db5577807b72
-    git revert --no-commit 0978421102910d7a7443f9f57ea0bfe3c882270e
-    git revert --no-commit 8e13903665fdf81fcd6054fb3de981d5a3f617f1
-
-    echo "this breaks both rockstar and egs"
-    git revert --no-commit 5edf65616a8dcbf5988bbabe0493827d9e125fc3
+#    echo "this breaks both rockstar and egs"
+#    git revert --no-commit 5edf65616a8dcbf5988bbabe0493827d9e125fc3
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
 
 ### (2-2) WINE STAGING APPLY SECTION ###
-
-    # disable these when using proton's SDL patches
-    # -W dinput-SetActionMap-genre \
-    # -W dinput-axis-recalc \
-    # -W dinput-joy-mappings \
-    # -W dinput-reconnect-joystick \
-    # -W dinput-remap-joystick \
 
     # these cause window freezes/hangs with origin
     # -W winex11-_NET_ACTIVE_WINDOW \
@@ -170,11 +145,6 @@
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
-    -W dinput-SetActionMap-genre \
-    -W dinput-axis-recalc \
-    -W dinput-joy-mappings \
-    -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W imm32-com-initialization \
@@ -326,20 +296,12 @@
     echo "heap allocation hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_heap_alloc.patch
 
-    # https://github.com/Frogging-Family/wine-tkg-git/blob/1ec43473650e10649fd5c4bed85ea0d6b291ccff
-    echo "wineserver cpu usage fix with various launchers"
-    patch -Np1 < ../patches/wine-hotfixes/performance/wineserver-socket-spin-workaround.patch
-
 #    disabled, still horribly broken
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
 
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
-
-    # https://bugs.winehq.org/show_bug.cgi?id=51126
-    echo "fallout new vegas truncated audio hotfix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-fallout_new_vegas_truncated_audio.patch
     
     echo "RPGMaker VX fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-rpgmaker_vx.patch
@@ -347,9 +309,8 @@
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
 
-    echo "sword of legends launcher fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-sword_of_legends_launcher_fix.patch
-
+    echo "gtav save fix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-gtav_save_fix.patch
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
