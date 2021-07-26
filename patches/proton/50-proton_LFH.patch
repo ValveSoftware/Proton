@@ -15,7 +15,7 @@ index 02f4587d43b..e68135e499d 100644
 @@ -326,6 +326,8 @@ SIZE_T WINAPI GlobalSize(HGLOBAL hmem)
         return 0;
     }
- 
+
 +    __TRY
 +    {
     if(ISPOINTER(hmem))
@@ -57,18 +57,18 @@ index 8558bd7f1b3..db96fb010b4 100644
 +static BOOL (WINAPI *pHeapSetInformation)(HANDLE, HEAP_INFORMATION_CLASS, PVOID, SIZE_T);
  static BOOL (WINAPI *pGetPhysicallyInstalledSystemMemory)(ULONGLONG *);
  static ULONG (WINAPI *pRtlGetNtGlobalFlags)(void);
- 
+
 @@ -528,6 +529,8 @@ static void test_HeapCreate(void)
      UINT i;
      BOOL error;
      DWORD dwSize;
 +    ULONG hci;
 +    SIZE_T size;
- 
+
      /* Retrieve the page size for this system */
      GetSystemInfo(&sysInfo);
 @@ -624,6 +627,71 @@ static void test_HeapCreate(void)
- 
+
     /* Check that HeapDestroy works */
     ok(HeapDestroy(heap),"HeapDestroy failed\n");
 +
@@ -137,8 +137,8 @@ index 8558bd7f1b3..db96fb010b4 100644
 +        ok(HeapDestroy(heap),"HeapDestroy failed\n");
 +    }
  }
- 
- 
+
+
 
 From d0249a662c5930b8b5f3ea4c85414de0d10bf8aa Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -155,7 +155,7 @@ index 847005e8abe..2910d9617e1 100644
 --- a/dlls/kernelbase/memory.c
 +++ b/dlls/kernelbase/memory.c
 @@ -638,7 +638,12 @@ HLOCAL WINAPI DECLSPEC_HOTPATCH LocalAlloc( UINT flags, SIZE_T size )
- 
+
      if (!(flags & LMEM_MOVEABLE)) /* pointer */
      {
 -        ptr = HeapAlloc( GetProcessHeap(), heap_flags, size );
@@ -216,15 +216,15 @@ index cae41cba0d9..69a3de404fb 100644
 -    return heapPtr;
 +    return NULL;
  }
- 
- 
+
+
 @@ -1331,15 +1336,8 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
                                *             does not complain    */
  {
      SUBHEAP *subheap;
 -    BOOL ret = FALSE;
      const ARENA_LARGE *large_arena;
- 
+
 -    flags &= HEAP_NO_SERIALIZE;
 -    flags |= heapPtr->flags;
 -    /* calling HeapLock may result in infinite recursion, so do the critsect directly */
@@ -247,7 +247,7 @@ index cae41cba0d9..69a3de404fb 100644
 -        goto done;
 +        return HEAP_ValidateInUseArena( subheap, arena, quiet );
      }
- 
+
      LIST_FOR_EACH_ENTRY( subheap, &heapPtr->subheap_list, SUBHEAP, entry )
 @@ -1367,25 +1365,21 @@ static BOOL HEAP_IsRealArena( HEAP *heapPtr,   /* [in] ptr to the heap */
          {
@@ -265,20 +265,20 @@ index cae41cba0d9..69a3de404fb 100644
              }
          }
      }
- 
+
      LIST_FOR_EACH_ENTRY( large_arena, &heapPtr->large_list, ARENA_LARGE, entry )
 -        if (!validate_large_arena( heapPtr, large_arena, quiet )) goto done;
 -
 -    ret = TRUE;
 +        if (!validate_large_arena( heapPtr, large_arena, quiet )) return FALSE;
- 
+
 -done:
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 -    return ret;
 +    return TRUE;
  }
- 
- 
+
+
 @@ -2062,9 +2056,19 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
   */
  BOOLEAN WINAPI RtlValidateHeap( HANDLE heap, ULONG flags, LPCVOID ptr )
@@ -298,8 +298,8 @@ index cae41cba0d9..69a3de404fb 100644
 +    TRACE("(%p,%08x,%p): returning %d\n", heapPtr, flags, ptr, ret );
 +    return ret;
  }
- 
- 
+
+
 
 From 32fcd770e6962851d0e3592520e9a85e37b8af59 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -325,7 +325,7 @@ index 69a3de404fb..673223797bf 100644
      HEAP *heapPtr = HEAP_GetPtr( heap );
 +    NTSTATUS status;
 +    SIZE_T size = ~(SIZE_T)0;
- 
+
      if (!heapPtr)
      {
          RtlSetLastWin32ErrorAndNtStatusFromNtStatus( STATUS_INVALID_HANDLE );
@@ -335,7 +335,7 @@ index 69a3de404fb..673223797bf 100644
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
 -    if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
- 
+
 -    pArena = (const ARENA_INUSE *)ptr - 1;
 -    if (!validate_block_pointer( heapPtr, &subheap, pArena ))
 -    {
@@ -354,7 +354,7 @@ index 69a3de404fb..673223797bf 100644
 +    if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
 +    status = HEAP_std_get_allocated_size( heap, flags, ptr, &size );
      if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
- 
+
 -    TRACE("(%p,%08x,%p): returning %08lx\n", heap, flags, ptr, ret );
 -    return ret;
 +    TRACE("(%p,%08x,%p): status %#x, size %08lx\n", heapPtr, flags, ptr, status, size );
@@ -375,8 +375,8 @@ index 69a3de404fb..673223797bf 100644
 +    else *out = (arena->size & ARENA_SIZE_MASK) - arena->unused_bytes;
 +    return STATUS_SUCCESS;
  }
- 
- 
+
+
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
 index 30640366f5b..81e1387e734 100644
 --- a/dlls/ntdll/ntdll_misc.h
@@ -384,7 +384,7 @@ index 30640366f5b..81e1387e734 100644
 @@ -105,6 +105,8 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
- 
+
 +NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
 +
  #define HASH_STRING_ALGORITHM_DEFAULT  0
@@ -413,10 +413,10 @@ index 673223797bf..f6e05cc3aa1 100644
 -    SUBHEAP *subheap;
 +    NTSTATUS status;
      HEAP *heapPtr;
- 
+
      /* Validate the parameters */
 @@ -1746,29 +1745,36 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
- 
+
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
 +
@@ -435,20 +435,20 @@ index 673223797bf..f6e05cc3aa1 100644
 +    ARENA_INUSE *pInUse;
 +    HEAP *heapPtr = heap;
 +    SUBHEAP *subheap;
- 
+
      /* Inform valgrind we are trying to free memory, so it can throw up an error message */
      notify_free( ptr );
- 
+
      /* Some sanity checks */
      pInUse  = (ARENA_INUSE *)ptr - 1;
 -    if (!validate_block_pointer( heapPtr, &subheap, pInUse )) goto error;
 +    if (!validate_block_pointer( heapPtr, &subheap, pInUse )) return STATUS_INVALID_PARAMETER;
- 
+
      if (!subheap)
          free_large_block( heapPtr, flags, ptr );
      else
          HEAP_MakeInUseBlockFree( subheap, pInUse );
- 
+
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 -    TRACE("(%p,%08x,%p): returning TRUE\n", heap, flags, ptr );
 -    return TRUE;
@@ -460,8 +460,8 @@ index 673223797bf..f6e05cc3aa1 100644
 -    return FALSE;
 +    return STATUS_SUCCESS;
  }
- 
- 
+
+
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
 index 81e1387e734..d134000f949 100644
 --- a/dlls/ntdll/ntdll_misc.h
@@ -469,10 +469,10 @@ index 81e1387e734..d134000f949 100644
 @@ -105,6 +105,7 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
- 
+
 +NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
- 
+
  #define HASH_STRING_ALGORITHM_DEFAULT  0
 
 From c3d16d6c08ea66c3b53fb846017ab002ee98dd8a Mon Sep 17 00:00:00 2001
@@ -500,9 +500,9 @@ index f6e05cc3aa1..0d42dbaccea 100644
      HEAP *heapPtr = HEAP_GetPtr( heap );
 -    SIZE_T rounded_size;
 +    void *ptr;
- 
+
      /* Validate the parameters */
- 
+
      if (!heapPtr) return NULL;
      flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
      flags |= heapPtr->flags;
@@ -513,7 +513,7 @@ index f6e05cc3aa1..0d42dbaccea 100644
 -        return NULL;
 -    }
 -    if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
- 
+
      if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
 +    status = HEAP_std_allocate( heap, flags, size, &ptr );
 +    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
@@ -536,7 +536,7 @@ index f6e05cc3aa1..0d42dbaccea 100644
 +    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
 +    if (rounded_size < size) return STATUS_NO_MEMORY; /* overflow */
 +    if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
- 
+
      if (rounded_size >= HEAP_MIN_LARGE_BLOCK_SIZE && (flags & HEAP_GROWABLE))
      {
 -        void *ret = allocate_large_block( heap, flags, size );
@@ -547,9 +547,9 @@ index f6e05cc3aa1..0d42dbaccea 100644
 +        if (!(*out = allocate_large_block( heapPtr, flags, size ))) return STATUS_NO_MEMORY;
 +        return STATUS_SUCCESS;
      }
- 
+
      /* Locate a suitable free block */
- 
+
 -    if (!(pArena = HEAP_FindFreeBlock( heapPtr, rounded_size, &subheap )))
 -    {
 -        TRACE("(%p,%08x,%08lx): returning NULL\n",
@@ -559,13 +559,13 @@ index f6e05cc3aa1..0d42dbaccea 100644
 -        return NULL;
 -    }
 +    if (!(pArena = HEAP_FindFreeBlock( heapPtr, rounded_size, &subheap ))) return STATUS_NO_MEMORY;
- 
+
      /* Remove the arena from the free list */
- 
+
 @@ -1706,10 +1708,8 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
      notify_alloc( pInUse + 1, size, flags & HEAP_ZERO_MEMORY );
      initialize_block( pInUse + 1, size, pInUse->unused_bytes, flags );
- 
+
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 -
 -    TRACE("(%p,%08x,%08lx): returning %p\n", heap, flags, size, pInUse + 1 );
@@ -573,8 +573,8 @@ index f6e05cc3aa1..0d42dbaccea 100644
 +    *out = pInUse + 1;
 +    return STATUS_SUCCESS;
  }
- 
- 
+
+
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
 index d134000f949..0a629e09510 100644
 --- a/dlls/ntdll/ntdll_misc.h
@@ -582,11 +582,11 @@ index d134000f949..0a629e09510 100644
 @@ -105,6 +105,7 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
- 
+
 +NTSTATUS HEAP_std_allocate( HANDLE heap, ULONG flags, SIZE_T size, void **out );
  NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
- 
+
 
 From 0568b9fbef50d3487a4a24b5dd4172d7072d614b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -612,7 +612,7 @@ index 0d42dbaccea..4a9b45856b7 100644
 -    SUBHEAP *subheap;
 -    SIZE_T oldBlockSize, oldActualSize, rounded_size;
      void *ret;
- 
+
      if (!ptr) return NULL;
 @@ -1814,17 +1812,33 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
               HEAP_REALLOC_IN_PLACE_ONLY;
@@ -634,12 +634,12 @@ index 0d42dbaccea..4a9b45856b7 100644
 +    ARENA_INUSE *pArena;
 +    SUBHEAP *subheap;
 +    SIZE_T oldBlockSize, oldActualSize, rounded_size;
- 
+
      rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
 -    if (rounded_size < size) goto oom;  /* overflow */
 +    if (rounded_size < size) return STATUS_NO_MEMORY; /* overflow */
      if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
- 
+
      pArena = (ARENA_INUSE *)ptr - 1;
 -    if (!validate_block_pointer( heapPtr, &subheap, pArena )) goto error;
 +    if (!validate_block_pointer( heapPtr, &subheap, pArena )) return STATUS_INVALID_PARAMETER;
@@ -650,10 +650,10 @@ index 0d42dbaccea..4a9b45856b7 100644
 +        if (!(*out = realloc_large_block( heapPtr, flags, ptr, size ))) return STATUS_NO_MEMORY;
 +        return STATUS_SUCCESS;
      }
- 
+
      /* Check if we need to grow the block */
 @@ -1837,12 +1851,12 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
- 
+
          if (rounded_size >= HEAP_MIN_LARGE_BLOCK_SIZE && (flags & HEAP_GROWABLE))
          {
 -            if (flags & HEAP_REALLOC_IN_PLACE_ONLY) goto oom;
@@ -679,18 +679,18 @@ index 0d42dbaccea..4a9b45856b7 100644
              HEAP_ShrinkBlock( subheap, pArena, rounded_size );
          }
 @@ -1864,7 +1878,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
- 
+
              if ((flags & HEAP_REALLOC_IN_PLACE_ONLY) ||
                  !(pNew = HEAP_FindFreeBlock( heapPtr, rounded_size, &newsubheap )))
 -                goto oom;
 +                return STATUS_NO_MEMORY;
- 
+
              /* Build the in-use arena */
- 
+
 @@ -1905,24 +1919,8 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
- 
+
      /* Return the new arena */
- 
+
 -    ret = pArena + 1;
 -done:
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
@@ -712,19 +712,19 @@ index 0d42dbaccea..4a9b45856b7 100644
 +    *out = pArena + 1;
 +    return STATUS_SUCCESS;
  }
- 
- 
+
+
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
 index 0a629e09510..468202d17eb 100644
 --- a/dlls/ntdll/ntdll_misc.h
 +++ b/dlls/ntdll/ntdll_misc.h
 @@ -107,6 +107,7 @@ static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiB
- 
+
  NTSTATUS HEAP_std_allocate( HANDLE heap, ULONG flags, SIZE_T size, void **out );
  NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
 +NTSTATUS HEAP_std_reallocate( HANDLE heap, ULONG flags, void *ptr, SIZE_T size, void **out );
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
- 
+
  #define HASH_STRING_ALGORITHM_DEFAULT  0
 
 From 3dd5314d54770631bae800d5d9b83477a615411c Mon Sep 17 00:00:00 2001
@@ -763,7 +763,7 @@ index 54806b0ab22..925742a81fd 100644
 +    HEAP_notify_thread_destroy(TRUE);
      for (;;) NtTerminateProcess( GetCurrentProcess(), status );
  }
- 
+
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
 index 468202d17eb..6dadf3a74a5 100644
 --- a/dlls/ntdll/ntdll_misc.h
@@ -771,7 +771,7 @@ index 468202d17eb..6dadf3a74a5 100644
 @@ -110,6 +110,8 @@ NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
  NTSTATUS HEAP_std_reallocate( HANDLE heap, ULONG flags, void *ptr, SIZE_T size, void **out );
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
- 
+
 +void HEAP_notify_thread_destroy( BOOLEAN last );
 +
  #define HASH_STRING_ALGORITHM_DEFAULT  0
@@ -788,7 +788,7 @@ index d0c2a89d4bb..cdac28eb14d 100644
 +    HEAP_notify_thread_destroy(FALSE);
      for (;;) NtTerminateThread( GetCurrentThread(), status );
  }
- 
+
 
 From 3ad5427e10fc7c7b06617d1f529b5067000ee918 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -825,7 +825,7 @@ index 43543bdb304..e4ed51ef522 100644
      DWORD            freeMask[HEAP_NB_FREE_LISTS / (8 * sizeof(DWORD))];
 +    int              extended_type; /* Extended heap type */
  } HEAP;
- 
+
  #define HEAP_MAGIC       ((DWORD)('H' | ('E'<<8) | ('A'<<16) | ('P'<<24)))
 @@ -1506,6 +1507,8 @@ void heap_set_debug_flags( HANDLE handle )
                                                MAX_FREE_PENDING * sizeof(*heap->pending_free) );
@@ -834,8 +834,8 @@ index 43543bdb304..e4ed51ef522 100644
 +
 +    HEAP_lfh_set_debug_flags( flags );
  }
- 
- 
+
+
 @@ -1549,11 +1552,13 @@ HANDLE WINAPI RtlCreateHeap( ULONG flags, PVOID addr, SIZE_T totalSize, SIZE_T c
          HEAP *heapPtr = subheap->heap;
          enter_critical_section( &processHeap->critSection );
@@ -849,11 +849,11 @@ index 43543bdb304..e4ed51ef522 100644
 +        processHeap->extended_type = HEAP_STD;
          list_init( &processHeap->entry );
      }
- 
+
 @@ -1654,9 +1659,17 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
      flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
      flags |= heapPtr->flags;
- 
+
 -    if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
 -    status = HEAP_std_allocate( heap, flags, size, &ptr );
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
@@ -868,13 +868,13 @@ index 43543bdb304..e4ed51ef522 100644
 +        if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 +        break;
 +    }
- 
+
      TRACE("(%p,%08x,%08lx), status %#x, ptr %p\n", heapPtr, flags, size, status, ptr );
      if (!status) return ptr;
 @@ -1746,9 +1759,17 @@ BOOLEAN WINAPI DECLSPEC_HOTPATCH RtlFreeHeap( HANDLE heap, ULONG flags, void *pt
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
- 
+
 -    if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
 -    status = HEAP_std_free( heap, flags, ptr );
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
@@ -889,7 +889,7 @@ index 43543bdb304..e4ed51ef522 100644
 +        if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 +        break;
 +    }
- 
+
      TRACE("(%p,%08x,%p), status %#x\n", heapPtr, flags, ptr, status );
      if (!status) return TRUE;
 @@ -1811,9 +1832,18 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
@@ -911,13 +911,13 @@ index 43543bdb304..e4ed51ef522 100644
 +        if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 +        break;
 +    }
- 
+
      TRACE("(%p,%08x,%p,%08lx): returning %p, status %#x\n", heapPtr, flags, ptr, size, ret, status );
      if (!status) return ret;
 @@ -2021,9 +2051,17 @@ SIZE_T WINAPI RtlSizeHeap( HANDLE heap, ULONG flags, const void *ptr )
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
- 
+
 -    if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
 -    status = HEAP_std_get_allocated_size( heap, flags, ptr, &size );
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
@@ -932,7 +932,7 @@ index 43543bdb304..e4ed51ef522 100644
 +        if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 +        break;
 +    }
- 
+
      TRACE("(%p,%08x,%p): status %#x, size %08lx\n", heapPtr, flags, ptr, status, size );
      if (!status) return size;
 @@ -2061,19 +2099,27 @@ NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr,
@@ -943,10 +943,10 @@ index 43543bdb304..e4ed51ef522 100644
 +    NTSTATUS status = STATUS_SUCCESS;
      HEAP *heapPtr = HEAP_GetPtr( heap );
      if (!heapPtr) return FALSE;
- 
+
      flags &= HEAP_NO_SERIALIZE;
      flags |= heapPtr->flags;
- 
+
 -    if (!(flags & HEAP_NO_SERIALIZE)) enter_critical_section( &heapPtr->critSection );
 -    ret = HEAP_IsRealArena( heapPtr, flags, ptr, QUIET );
 -    if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
@@ -961,14 +961,14 @@ index 43543bdb304..e4ed51ef522 100644
 +        if (!(flags & HEAP_NO_SERIALIZE)) leave_critical_section( &heapPtr->critSection );
 +        break;
 +    }
- 
+
 -    TRACE("(%p,%08x,%p): returning %d\n", heapPtr, flags, ptr, ret );
 -    return ret;
 +    TRACE("(%p,%08x,%p): status %#x\n", heapPtr, flags, ptr, status );
 +    return !status;
  }
- 
- 
+
+
 @@ -2241,6 +2287,13 @@ ULONG WINAPI RtlGetProcessHeaps( ULONG count, HANDLE *heaps )
  NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_class,
                                           PVOID info, SIZE_T size_in, PSIZE_T size_out)
@@ -986,14 +986,14 @@ index 43543bdb304..e4ed51ef522 100644
 @@ -2249,7 +2302,7 @@ NTSTATUS WINAPI RtlQueryHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS inf
          if (size_in < sizeof(ULONG))
              return STATUS_BUFFER_TOO_SMALL;
- 
+
 -        *(ULONG *)info = 0; /* standard heap */
 +        *(ULONG *)info = heapPtr->extended_type;
          return STATUS_SUCCESS;
- 
+
      default:
 @@ -2269,4 +2322,5 @@ NTSTATUS WINAPI RtlSetHeapInformation( HANDLE heap, HEAP_INFORMATION_CLASS info_
- 
+
  void HEAP_notify_thread_destroy( BOOLEAN last )
  {
 +    HEAP_lfh_notify_thread_destroy( last );
@@ -1068,7 +1068,7 @@ index 6dadf3a74a5..a6d42a1628e 100644
 @@ -105,12 +105,24 @@ static inline TEB64 *NtCurrentTeb64(void) { return NULL; }
  static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiBatchCount; }
  #endif
- 
+
 +#define HEAP_STD 0
 +#define HEAP_LAL 1
 +#define HEAP_LFH 2
@@ -1077,7 +1077,7 @@ index 6dadf3a74a5..a6d42a1628e 100644
  NTSTATUS HEAP_std_free( HANDLE heap, ULONG flags, void *ptr );
  NTSTATUS HEAP_std_reallocate( HANDLE heap, ULONG flags, void *ptr, SIZE_T size, void **out );
  NTSTATUS HEAP_std_get_allocated_size( HANDLE heap, ULONG flags, const void *ptr, SIZE_T *out );
- 
+
 +NTSTATUS HEAP_lfh_allocate( HANDLE std_heap, ULONG flags, SIZE_T size, void **out );
 +NTSTATUS HEAP_lfh_free( HANDLE std_heap, ULONG flags, void *ptr );
 +NTSTATUS HEAP_lfh_reallocate( HANDLE std_heap, ULONG flags, void *ptr, SIZE_T size, void **out );
@@ -1087,7 +1087,7 @@ index 6dadf3a74a5..a6d42a1628e 100644
  void HEAP_notify_thread_destroy( BOOLEAN last );
 +void HEAP_lfh_notify_thread_destroy( BOOLEAN last );
 +void HEAP_lfh_set_debug_flags( ULONG flags );
- 
+
  #define HASH_STRING_ALGORITHM_DEFAULT  0
  #define HASH_STRING_ALGORITHM_X65599   1
 
@@ -1111,7 +1111,7 @@ index db96fb010b4..9e613995e39 100644
 @@ -644,7 +644,28 @@ static void test_HeapCreate(void)
             "HeapQueryInformation failed\n");
          trace("HeapQueryInformation returned %d\n", hci);
- 
+
 +        hci = 0;
 +        ok(pHeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0),
 +           "HeapSetInformation(HeapEnableTerminationOnCorruption) failed\n");
@@ -1138,7 +1138,7 @@ index db96fb010b4..9e613995e39 100644
             "HeapSetInformation failed\n");
          ok(pHeapQueryInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci), &size),
 @@ -653,10 +674,8 @@ static void test_HeapCreate(void)
- 
+
          hci = 1;
          SetLastError(0xdeadbeef);
 -        todo_wine
@@ -1147,7 +1147,7 @@ index db96fb010b4..9e613995e39 100644
 -        todo_wine
          ok(GetLastError() == ERROR_GEN_FAILURE,
             "expected ERROR_GEN_FAILURE, got %u\n", GetLastError());
- 
+
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
 index e4ed51ef522..bb31f60b9d2 100644
 --- a/dlls/ntdll/heap.c
@@ -1193,7 +1193,7 @@ index e4ed51ef522..bb31f60b9d2 100644
 +        return STATUS_INVALID_INFO_CLASS;
 +    }
  }
- 
+
  void HEAP_notify_thread_destroy( BOOLEAN last )
 diff --git a/include/winnt.h b/include/winnt.h
 index b83f588a16d..424651ea673 100644
@@ -1201,13 +1201,13 @@ index b83f588a16d..424651ea673 100644
 +++ b/include/winnt.h
 @@ -921,7 +921,8 @@ NTSYSAPI WORD         WINAPI RtlQueryDepthSList(PSLIST_HEADER);
  #define HEAP_SHARED                     0x04000000
- 
+
  typedef enum _HEAP_INFORMATION_CLASS {
 -    HeapCompatibilityInformation,
 +    HeapCompatibilityInformation = 0,
 +    HeapEnableTerminationOnCorruption = 1,
  } HEAP_INFORMATION_CLASS;
- 
+
  /* Processor feature flags.  */
 
 From a39b771c377b731568883a503ca7255f49c391e6 Mon Sep 17 00:00:00 2001
@@ -1227,7 +1227,7 @@ index bb31f60b9d2..1e0408c028c 100644
 @@ -172,12 +172,6 @@ typedef struct tagHEAP
  #define COMMIT_MASK          0xffff  /* bitmask for commit/decommit granularity */
  #define MAX_FREE_PENDING     1024    /* max number of free requests to delay */
- 
+
 -/* some undocumented flags (names are made up) */
 -#define HEAP_PAGE_ALLOCS      0x01000000
 -#define HEAP_VALIDATE         0x10000000
@@ -1235,7 +1235,7 @@ index bb31f60b9d2..1e0408c028c 100644
 -#define HEAP_VALIDATE_PARAMS  0x40000000
 -
  static HEAP *processHeap;  /* main process heap */
- 
+
  static BOOL HEAP_IsRealArena( HEAP *heapPtr, DWORD flags, LPCVOID block, BOOL quiet );
 diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
 index a6d42a1628e..15b102fb75e 100644
@@ -1244,7 +1244,7 @@ index a6d42a1628e..15b102fb75e 100644
 @@ -109,6 +109,12 @@ static inline TEB64 *NtCurrentTeb64(void) { return (TEB64 *)NtCurrentTeb()->GdiB
  #define HEAP_LAL 1
  #define HEAP_LFH 2
- 
+
 +/* some undocumented flags (names are made up) */
 +#define HEAP_PAGE_ALLOCS      0x01000000
 +#define HEAP_VALIDATE         0x10000000
@@ -1324,12 +1324,12 @@ index 0c324472e32..8c982f91ea0 100644
 @@ -21,37 +21,1112 @@
  #include "ntstatus.h"
  #define WIN32_NO_STATUS
- 
+
 +#include "wine/list.h"
 +#include "wine/debug.h"
 +
  #include "ntdll_misc.h"
- 
+
 -NTSTATUS HEAP_lfh_allocate( HANDLE std_heap, ULONG flags, SIZE_T size, void **out )
 +WINE_DEFAULT_DEBUG_CHANNEL(heap);
 +
@@ -1627,14 +1627,14 @@ index 0c324472e32..8c982f91ea0 100644
 -    return STATUS_NOT_IMPLEMENTED;
 +    return arena->used_count > 0;
  }
- 
+
 -NTSTATUS HEAP_lfh_free( HANDLE std_heap, ULONG flags, void *ptr )
 +static inline int LFH_class_is_block(LFH_heap *heap, LFH_class *class)
  {
 -    return STATUS_NOT_IMPLEMENTED;
 +    return class >= heap->block_class && class < (heap->block_class + TOTAL_BLOCK_CLASS_COUNT);
  }
- 
+
 -NTSTATUS HEAP_lfh_reallocate( HANDLE std_heap, ULONG flags, void *ptr, SIZE_T size, void **out )
 +static void LFH_class_initialize(LFH_heap *heap, LFH_class *class, size_t index)
  {
@@ -1661,7 +1661,7 @@ index 0c324472e32..8c982f91ea0 100644
 +    class->next = arena->class_entry;
 +    return arena;
  }
- 
+
 -NTSTATUS HEAP_lfh_get_allocated_size( HANDLE std_heap, ULONG flags, const void *ptr, SIZE_T *out )
 +static inline void LFH_class_remove_arena(LFH_class *class, LFH_arena *arena)
  {
@@ -1670,7 +1670,7 @@ index 0c324472e32..8c982f91ea0 100644
 +    while (*next != arena) next = &(*next)->class_entry;
 +    *next = arena->class_entry;
  }
- 
+
 -NTSTATUS HEAP_lfh_validate( HANDLE std_heap, ULONG flags, const void *ptr )
 +static inline LFH_arena *LFH_class_peek_arena(LFH_class *class)
  {
@@ -2415,7 +2415,7 @@ index 0c324472e32..8c982f91ea0 100644
 +
 +    return STATUS_SUCCESS;
  }
- 
+
  void HEAP_lfh_notify_thread_destroy(BOOLEAN last)
  {
 +    SLIST_HEADER *list_orphan = LFH_orphan_list();
@@ -2435,7 +2435,7 @@ index 0c324472e32..8c982f91ea0 100644
 +    else if ((heap = LFH_thread_heap(FALSE)) && LFH_validate_heap(0, heap))
 +        RtlInterlockedPushEntrySList(list_orphan, &heap->entry_orphan);
  }
- 
+
  void HEAP_lfh_set_debug_flags(ULONG flags)
  {
 +    LFH_heap *heap = LFH_thread_heap(FALSE);
@@ -2454,7 +2454,7 @@ index a864604377e..aa6c279bf9a 100644
      void              *jmp_buf;       /* setjmp buffer for exception handling */
 +    void              *heap;          /* thread local heap data */
  };
- 
+
  C_ASSERT( sizeof(struct ntdll_thread_data) <= sizeof(((TEB *)0)->GdiTebBatch) );
 
 From 361dc9564a98d195ee8442d9f89acc5aa8e87c7b Mon Sep 17 00:00:00 2001
@@ -2475,15 +2475,15 @@ index 925742a81fd..29166e42ee1 100644
          WINE_MODREF *kernel32;
          PEB *peb = NtCurrentTeb()->Peb;
 +        DWORD hci = 2;
- 
+
          peb->LdrData            = &ldr;
          peb->FastPebLock        = &peb_lock;
 @@ -3773,6 +3774,7 @@ void WINAPI LdrInitializeThunk( CONTEXT *context, ULONG_PTR unknown2, ULONG_PTR
          wm->ldr.LoadCount = -1;
- 
+
          build_ntdll_module();
 +        RtlSetHeapInformation( GetProcessHeap(), HeapCompatibilityInformation, &hci, sizeof(hci) );
- 
+
          if ((status = load_dll( NULL, L"kernel32.dll", NULL, 0, &kernel32 )) != STATUS_SUCCESS)
          {
 
@@ -2501,7 +2501,7 @@ index b74a759227a..5941d0a4934 100644
 --- a/dlls/msvcrt/heap.c
 +++ b/dlls/msvcrt/heap.c
 @@ -530,7 +530,9 @@ int CDECL _set_sbh_threshold(size_t threshold)
- 
+
    if(!sb_heap)
    {
 +      ULONG hci = 2;
@@ -2511,7 +2511,7 @@ index b74a759227a..5941d0a4934 100644
            return 0;
    }
 @@ -867,7 +869,9 @@ int CDECL strncpy_s(char *dest, size_t numberOfElements,
- 
+
  BOOL msvcrt_init_heap(void)
  {
 +    ULONG hci = 2;
@@ -2519,7 +2519,7 @@ index b74a759227a..5941d0a4934 100644
 +    HeapSetInformation(heap, HeapCompatibilityInformation, &hci, sizeof(hci));
      return heap != NULL;
  }
- 
+
 
 From 646422a2d45396c94c487aba54e1b98385ad2d6c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -2535,9 +2535,9 @@ index 8c982f91ea0..1ec822c7de1 100644
 --- a/dlls/ntdll/heap_lfh.c
 +++ b/dlls/ntdll/heap_lfh.c
 @@ -26,6 +26,14 @@
- 
+
  #include "ntdll_misc.h"
- 
+
 +#if defined(__GNUC__) || defined(__clang__)
 +#define likely(x) __builtin_expect(!!(x), 1)
 +#define unlikely(x) __builtin_expect(!!(x), 0)
@@ -2547,16 +2547,16 @@ index 8c982f91ea0..1ec822c7de1 100644
 +#endif
 +
  WINE_DEFAULT_DEBUG_CHANNEL(heap);
- 
+
  typedef struct LFH_ptr LFH_ptr;
 @@ -686,26 +694,26 @@ static inline BOOLEAN LFH_validate_block(ULONG flags, const LFH_block *block)
      const LFH_arena *arena_arena = LFH_large_arena_from_block((LFH_block *)arena);
      const char *err = NULL;
- 
+
 -    if (flags & HEAP_VALIDATE)
 +    if (unlikely(flags & HEAP_VALIDATE))
          return LFH_validate_arena(flags, arena);
- 
+
 -    if (!arena)
 +    if (unlikely(!arena))
          err = "invalid arena";
@@ -2579,32 +2579,32 @@ index 8c982f91ea0..1ec822c7de1 100644
 -    else if ((UINT_PTR)block != (UINT_PTR)block_arena)
 +    else if (unlikely((UINT_PTR)block != (UINT_PTR)block_arena))
          err = "invalid block for large/huge arena";
- 
+
 -    if (err) WARN("%08x %p: %s\n", flags, block, err);
 +    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
      return err == NULL;
  }
- 
+
 @@ -713,12 +721,12 @@ static BOOLEAN LFH_validate_free_block(ULONG flags, const LFH_block *block)
  {
      const char *err = NULL;
- 
+
 -    if (!LFH_validate_block(flags, block))
 +    if (unlikely(!LFH_validate_block(flags, block)))
          return FALSE;
 -    if (block->type != LFH_block_type_free)
 +    if (unlikely(block->type != LFH_block_type_free))
          err = "invalid free block type";
- 
+
 -    if (err) WARN("%08x %p: %s\n", flags, block, err);
 +    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
      return err == NULL;
  }
- 
+
 @@ -726,19 +734,19 @@ static BOOLEAN LFH_validate_defer_block(ULONG flags, const LFH_block *block)
  {
      const char *err = NULL;
- 
+
 -    if (!LFH_validate_block(flags, block))
 +    if (unlikely(!LFH_validate_block(flags, block)))
          return FALSE;
@@ -2620,16 +2620,16 @@ index 8c982f91ea0..1ec822c7de1 100644
 -            if (data[i] != 0xfeeefeee) err = "invalid free filler";
 +            if (unlikely(data[i] != 0xfeeefeee)) err = "invalid free filler";
      }
- 
+
 -    if (err) WARN("%08x %p: %s\n", flags, block, err);
 +    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
      return err == NULL;
  }
- 
+
 @@ -746,11 +754,11 @@ static inline BOOLEAN LFH_validate_used_block(ULONG flags, const LFH_block *bloc
  {
      const char *err = NULL;
- 
+
 -    if (!LFH_validate_block(flags, block))
 +    if (unlikely(!LFH_validate_block(flags, block)))
          return FALSE;
@@ -2644,20 +2644,20 @@ index 8c982f91ea0..1ec822c7de1 100644
 @@ -759,7 +767,7 @@ static inline BOOLEAN LFH_validate_used_block(ULONG flags, const LFH_block *bloc
              if (data[i] != 0xab) err = "invalid tail filler";
      }
- 
+
 -    if (err) WARN("%08x %p: %s\n", flags, block, err);
 +    if (unlikely(err)) WARN("%08x %p: %s\n", flags, block, err);
      return err == NULL;
  }
- 
+
 @@ -784,35 +792,35 @@ static BOOLEAN LFH_validate_arena(ULONG flags, const LFH_arena *arena)
      const LFH_arena *block_arena = LFH_block_arena_from_block((LFH_block *)arena);
      const LFH_arena *large_arena = LFH_large_arena_from_block((LFH_block *)arena);
- 
+
 -    if (flags & HEAP_VALIDATE)
 +    if (unlikely(flags & HEAP_VALIDATE))
          return LFH_validate_heap(flags, LFH_heap_from_arena(arena));
- 
+
 -    if (arena != large_arena && arena != block_arena)
 +    if (unlikely(arena != large_arena && arena != block_arena))
          err = "invalid arena alignment";
@@ -2691,115 +2691,115 @@ index 8c982f91ea0..1ec822c7de1 100644
 +        if (unlikely(!LFH_validate_arena_free_blocks(flags, arena)))
              err = "invalid large arena free list";
      }
- 
+
 -    if (err) WARN("%08x %p: %s\n", flags, arena, err);
 +    if (unlikely(err)) WARN("%08x %p: %s\n", flags, arena, err);
      return err == NULL;
  }
- 
+
 @@ -871,7 +879,7 @@ static BOOLEAN LFH_validate_heap(ULONG flags, const LFH_heap *heap)
          }
      }
- 
+
 -    if (err) WARN("%08x %p: %s\n", flags, heap, err);
 +    if (unlikely(err)) WARN("%08x %p: %s\n", flags, heap, err);
      return err == NULL;
  }
- 
+
 @@ -1009,7 +1017,7 @@ static inline BOOLEAN LFH_validate(ULONG flags, const LFH_ptr *ptr)
      const LFH_heap *heap;
- 
+
      /* clear HEAP_VALIDATE so we only validate block */
 -    if (ptr)
 +    if (likely(ptr))
          return LFH_validate_used_block(flags & ~HEAP_VALIDATE, block);
- 
+
      if (!(heap = LFH_thread_heap(FALSE)))
 @@ -1020,10 +1028,10 @@ static inline BOOLEAN LFH_validate(ULONG flags, const LFH_ptr *ptr)
- 
+
  static inline BOOLEAN LFH_try_validate_all(ULONG flags)
  {
 -    if (!(flags & HEAP_VALIDATE_ALL))
 +    if (likely(!(flags & HEAP_VALIDATE_ALL)))
          return TRUE;
- 
+
 -    if (LFH_validate(flags, NULL))
 +    if (likely(LFH_validate(flags, NULL)))
          return TRUE;
- 
+
      LFH_dump_heap(LFH_thread_heap(FALSE));
 @@ -1034,10 +1042,10 @@ NTSTATUS HEAP_lfh_allocate(HANDLE heap, ULONG flags, SIZE_T size, void **out)
  {
      TRACE("heap %p, flags %08x, size %lx, out %p.\n", heap, flags, size, out);
- 
+
 -    if (!LFH_try_validate_all(flags))
 +    if (unlikely(!LFH_try_validate_all(flags)))
          return STATUS_INVALID_PARAMETER;
- 
+
 -    if (!(*out = LFH_allocate(flags, size)))
 +    if (unlikely(!(*out = LFH_allocate(flags, size))))
          return STATUS_NO_MEMORY;
- 
+
      return STATUS_SUCCESS;
 @@ -1047,13 +1055,13 @@ NTSTATUS HEAP_lfh_free(HANDLE heap, ULONG flags, void *ptr)
  {
      TRACE("heap %p, flags %08x, ptr %p.\n", heap, flags, ptr);
- 
+
 -    if (!LFH_try_validate_all(flags))
 +    if (unlikely(!LFH_try_validate_all(flags)))
          return STATUS_INVALID_PARAMETER;
- 
+
 -    if (!LFH_validate(flags, ptr))
 +    if (unlikely(!LFH_validate(flags, ptr)))
          return STATUS_INVALID_PARAMETER;
- 
+
 -    if (!LFH_free(flags, ptr))
 +    if (unlikely(!LFH_free(flags, ptr)))
          return STATUS_INVALID_PARAMETER;
- 
+
      return STATUS_SUCCESS;
 @@ -1063,13 +1071,13 @@ NTSTATUS HEAP_lfh_reallocate(HANDLE heap, ULONG flags, void *ptr, SIZE_T size, v
  {
      TRACE("heap %p, flags %08x, ptr %p, size %lx, out %p.\n", heap, flags, ptr, size, out);
- 
+
 -    if (!LFH_try_validate_all(flags))
 +    if (unlikely(!LFH_try_validate_all(flags)))
          return STATUS_INVALID_PARAMETER;
- 
+
 -    if (!LFH_validate(flags, ptr))
 +    if (unlikely(!LFH_validate(flags, ptr)))
          return STATUS_INVALID_PARAMETER;
- 
+
 -    if (!(*out = LFH_reallocate(flags, ptr, size)))
 +    if (unlikely(!(*out = LFH_reallocate(flags, ptr, size))))
          return STATUS_NO_MEMORY;
- 
+
      return STATUS_SUCCESS;
 @@ -1079,10 +1087,10 @@ NTSTATUS HEAP_lfh_get_allocated_size(HANDLE heap, ULONG flags, const void *ptr,
  {
      TRACE("heap %p, flags %08x, ptr %p, out %p.\n", heap, flags, ptr, out);
- 
+
 -    if (!LFH_try_validate_all(flags))
 +    if (unlikely(!LFH_try_validate_all(flags)))
          return STATUS_INVALID_PARAMETER;
- 
+
 -    if (!LFH_validate(flags, ptr))
 +    if (unlikely(!LFH_validate(flags, ptr)))
          return STATUS_INVALID_PARAMETER;
- 
+
      *out = LFH_get_allocated_size(flags, ptr);
 @@ -1093,10 +1101,10 @@ NTSTATUS HEAP_lfh_validate(HANDLE heap, ULONG flags, const void *ptr)
  {
      TRACE("heap %p, flags %08x, ptr %p.\n", heap, flags, ptr);
- 
+
 -    if (!LFH_try_validate_all(flags))
 +    if (unlikely(!LFH_try_validate_all(flags)))
          return STATUS_INVALID_PARAMETER;
- 
+
 -    if (!LFH_validate(flags, ptr))
 +    if (unlikely(!LFH_validate(flags, ptr)))
          return STATUS_INVALID_PARAMETER;
- 
+
      return STATUS_SUCCESS;
 
 From a9ed408a396e49e346b7b9f8dd213016fa98ef67 Mon Sep 17 00:00:00 2001
@@ -2822,12 +2822,12 @@ index f1cea6caa83..bd7bc287201 100644
  #include <stdio.h>
 +#include <stdint.h>
  #include <string.h>
- 
+
  #include "windef.h"
 @@ -140,13 +141,78 @@ void * __cdecl memmove( void *dst, const void *src, size_t n )
  }
- 
- 
+
+
 +static FORCEINLINE void memset_c_unaligned_32( char *d, uint64_t v, size_t n )
 +{
 +    if (n >= 24)
@@ -2905,7 +2905,7 @@ index f1cea6caa83..bd7bc287201 100644
 +    memset_c_unaligned_32( dst, v, n );
      return dst;
  }
- 
+
 
 From e716aa2bfdbf18acbf372345b318efe50645b38c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -2923,8 +2923,8 @@ index bd7bc287201..badc6707988 100644
 +++ b/dlls/ntdll/string.c
 @@ -94,6 +94,130 @@ int __cdecl memcmp( const void *ptr1, const void *ptr2, size_t n )
  }
- 
- 
+
+
 +static FORCEINLINE void memmove_c_unaligned_32( char *d, const char *s, size_t n )
 +{
 +    uint64_t tmp0, tmp1, tmp2, tmpn;
@@ -3072,8 +3072,8 @@ index bd7bc287201..badc6707988 100644
 -    return dst;
 +    return memmove_c( dst, src, n );
  }
- 
- 
+
+
 @@ -124,20 +235,7 @@ void * __cdecl memcpy( void *dst, const void *src, size_t n )
   */
  void * __cdecl memmove( void *dst, const void *src, size_t n )
@@ -3094,8 +3094,8 @@ index bd7bc287201..badc6707988 100644
 -    return dst;
 +    return memmove_c( dst, src, n );
  }
- 
- 
+
+
 From c56598427c4bc89ea01cbb72ec551545c2bd6e3d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 19 May 2021 18:49:10 +0200
@@ -3117,7 +3117,7 @@ index 8c982f91ea0..5411ea31847 100644
 --- a/dlls/ntdll/heap_lfh.c
 +++ b/dlls/ntdll/heap_lfh.c
 @@ -238,7 +238,7 @@ static inline size_t LFH_block_get_alloc_size(const LFH_block *block, ULONG flag
- 
+
  static inline size_t LFH_get_class_size(ULONG flags, size_t size)
  {
 -    size_t extra = sizeof(LFH_block) + ((flags & HEAP_TAIL_CHECKING_ENABLED) ? 16 : 0);
@@ -3125,3 +3125,25 @@ index 8c982f91ea0..5411ea31847 100644
      if (size + extra < size) return ~(size_t)0;
      return size + extra;
  }
+From ddf89dae5b5b000df51daf558177d663522811e8 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 20 Jul 2021 21:16:09 +0300
+Subject: [PATCH] fixup! ntdll: Add extended heap type and LFH stubs.
+
+---
+ dlls/ntdll/heap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index d6e32e7c3fc..e9d7f248a24 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -2229,7 +2229,7 @@ BOOLEAN WINAPI RtlValidateHeap( HANDLE heap, ULONG flags, LPCVOID ptr )
+     switch (heapPtr->extended_type)
+     {
+     case HEAP_LFH:
+-        if (!(status = HEAP_lfh_validate( heapPtr, flags, ptr ))) return TRUE;
++        if (!HEAP_lfh_validate( heapPtr, flags, ptr )) break;
+         /* fallthrough */
+     default:
+         if (!(flags & HEAP_NO_SERIALIZE)) RtlEnterCriticalSection( &heapPtr->critSection );
