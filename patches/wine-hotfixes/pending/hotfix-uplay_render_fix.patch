@@ -1,0 +1,57 @@
+From 43c3113aa696898ec5758118b92f8c2a5fb61714 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 30 Jul 2021 21:01:13 +0300
+Subject: [PATCH] kernelbase: HACK: Force CEF software rendering for
+ UplayWebCore.
+
+(To be revisited once builtin d3dcompiler is added).
+---
+ dlls/kernelbase/process.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/kernelbase/process.c b/dlls/kernelbase/process.c
+index 33197563cd8..9bcb377a62e 100644
+--- a/dlls/kernelbase/process.c
++++ b/dlls/kernelbase/process.c
+@@ -33,6 +33,7 @@
+ 
+ #include "kernelbase.h"
+ #include "wine/debug.h"
++#include "wine/heap.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(process);
+ 
+@@ -517,7 +518,31 @@ BOOL WINAPI DECLSPEC_HOTPATCH CreateProcessInternalW( HANDLE token, const WCHAR
+     }
+     else
+     {
+-        if (!(tidy_cmdline = get_file_name( cmd_line, name, ARRAY_SIZE(name) ))) return FALSE;
++        static const WCHAR *opt = L" --use-gl=swiftshader";
++        WCHAR *cmdline_new = NULL;
++
++        if (cmd_line && wcsstr( cmd_line, L"UplayWebCore.exe" ))
++        {
++            FIXME( "HACK: appending %s to command line %s.\n", debugstr_w(opt), debugstr_w(cmd_line) );
++
++            cmdline_new = heap_alloc( sizeof(WCHAR) * (lstrlenW(cmd_line) + lstrlenW(opt) + 1) );
++            lstrcpyW(cmdline_new, cmd_line);
++            lstrcatW(cmdline_new, opt);
++        }
++
++        tidy_cmdline = get_file_name( cmdline_new ? cmdline_new : cmd_line, name, ARRAY_SIZE(name) );
++
++        if (!tidy_cmdline)
++        {
++            heap_free( cmdline_new );
++            return FALSE;
++        }
++
++        if (cmdline_new)
++        {
++            if (cmdline_new == tidy_cmdline) cmd_line = NULL;
++            else heap_free( cmdline_new );
++        }
+         app_name = name;
+     }
+ 
+
