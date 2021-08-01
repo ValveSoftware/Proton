@@ -330,7 +330,7 @@ Amine is the current maintainer of dxvk-async. This is a feature that was origin
 
 ### wine-staging maintainers
 
-I also of course need to thank my fellow wine-staging maintainers: Alistair Leslie-Highes, Zebediah Figura and Paul Gofman
+I also of course need to thank my fellow wine-staging maintainers: Alistair Leslie-Hughes, Zebediah Figura and Paul Gofman
 
 They have contributed MANY patches to staging, far beyond what I have done, as well as kept up with regular rebasing. A lot of times when bug reports come to me, if it has to do with staging I end up testing and relaying information to these guys in order to get issues resolved.
 
