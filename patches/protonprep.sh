@@ -67,8 +67,9 @@
 
 ### (2-1) PROBLEMATIC COMMIT REVERT SECTION ###
 
-    #echo "revert d171d1116764260f4ae272c69b54e5dfd13c6835 which breaks the wayland driver"
-    #git revert --no-commit d171d1116764260f4ae272c69b54e5dfd13c6835
+    # this breaks controllers in some unity games
+    # https://bugs.winehq.org/show_bug.cgi?id=51277
+    git revert --no-commit 97afac469fbe012e22acc1f1045c88b1004a241f
 
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
@@ -118,8 +119,8 @@
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
 
-#    echo "this breaks both rockstar and egs"
-#    git revert --no-commit 5edf65616a8dcbf5988bbabe0493827d9e125fc3
+#    # network test
+#    git revert --no-commit 3b33a6b4873d2d75418c298880766f63b82d4534
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -167,10 +168,6 @@
 
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
-
-    echo "fix ffxiv launcher Log In button"
-    patch -Np1 < ../patches/game-patches/ffxiv-launcher-workaround.patch
-
 
     # TODO: Add game-specific check
     echo "mk11 patch"
@@ -296,21 +293,22 @@
     echo "heap allocation hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_heap_alloc.patch
 
+    echo "uplay broken rendering hotfix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-uplay_render_fix.patch
+
+    echo "msfs2020 hotfix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-msfs2020.patch
+
 #    disabled, still horribly broken
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
+
 
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
     
-    echo "RPGMaker VX fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-rpgmaker_vx.patch
-    
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
-
-    echo "gtav save fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-gtav_save_fix.patch
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
