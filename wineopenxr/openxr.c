@@ -66,6 +66,7 @@ static const struct
 substitute_extensions[] =
 {
     {"XR_KHR_D3D11_enable", "XR_KHR_vulkan_enable"},
+    {"XR_KHR_win32_convert_performance_counter_time", "XR_KHR_convert_timespec_time", TRUE},
 };
 
 static char *wineopenxr_strdup(const char *src)
