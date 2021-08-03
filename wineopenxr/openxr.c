@@ -58,15 +58,16 @@ static void *heap_realloc(void *p, size_t s)
 static const char WINE_VULKAN_DEVICE_EXTENSION_NAME[] = "VK_WINE_openxr_device_extensions";
 static const char WINE_VULKAN_DEVICE_VARIABLE[] = "__WINE_OPENXR_VK_DEVICE_EXTENSIONS";
 
-static const struct
+static struct
 {
     const char *win32_ext, *linux_ext;
     BOOL remove_original;
+    BOOL force_enable;
 }
 substitute_extensions[] =
 {
     {"XR_KHR_D3D11_enable", "XR_KHR_vulkan_enable"},
-    {"XR_KHR_win32_convert_performance_counter_time", "XR_KHR_convert_timespec_time", TRUE},
+    {"XR_KHR_win32_convert_performance_counter_time", "XR_KHR_convert_timespec_time", TRUE, TRUE},
 };
 
 static char *wineopenxr_strdup(const char *src)
@@ -535,7 +536,7 @@ XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerNam
     {
         extra_extensions_count = 0;
         for (i = 0; i <  ARRAY_SIZE(substitute_extensions); ++i)
-            if (!substitute_extensions[i].remove_original)
+            if (!substitute_extensions[i].remove_original || substitute_extensions[i].force_enable)
                 ++extra_extensions_count;
 
         *propertyCountOutput += extra_extensions_count;
@@ -547,8 +548,16 @@ XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerNam
     for (i = 0; i < count; ++i)
     {
         for (j = 0; j < ARRAY_SIZE(substitute_extensions); ++j)
+        {
             if (!strcmp(properties[i].extensionName, substitute_extensions[j].linux_ext))
             {
+                if (substitute_extensions[j].force_enable)
+                {
+                    WINE_FIXME("Force enabled extension %s already supported by the runtime.\n",
+                            substitute_extensions[j].linux_ext);
+                    substitute_extensions[j].force_enable = FALSE;
+                }
+
                 if (substitute_extensions[j].remove_original)
                     dst = i;
                 else
@@ -556,7 +565,16 @@ XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerNam
                 strcpy(properties[dst].extensionName, substitute_extensions[j].win32_ext);
                 break;
             }
+        }
     }
+
+
+    for (j = 0; j < ARRAY_SIZE(substitute_extensions); ++j)
+        if (substitute_extensions[j].force_enable)
+        {
+            strcpy(properties[*propertyCountOutput].extensionName, substitute_extensions[j].win32_ext);
+            ++*propertyCountOutput;
+        }
 
     WINE_TRACE("Enumerated extensions:\n");
     for(i = 0; i < *propertyCountOutput; ++i)
@@ -674,7 +692,7 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
 {
     XrResult res;
     struct wine_XrInstance *wine_instance;
-    uint32_t i, j, type = 0;
+    uint32_t i, j, count, type = 0;
     XrInstanceCreateInfo our_createInfo;
     const char *ext_name;
     char **new_list;
@@ -697,6 +715,7 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
 
     new_list = heap_alloc(createInfo->enabledExtensionCount * sizeof(*new_list));
 
+    count = 0;
     /* remove win32 extensions */
     for(i = 0; i < createInfo->enabledExtensionCount; ++i)
     {
@@ -705,16 +724,20 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
         {
             if (!strcmp(ext_name, substitute_extensions[j].win32_ext))
             {
-                ext_name = substitute_extensions[j].linux_ext;
+                if (substitute_extensions[j].force_enable)
+                    ext_name = NULL;
+                else
+                    ext_name = substitute_extensions[j].linux_ext;
                 break;
             }
         }
-        new_list[i] = wineopenxr_strdup(ext_name);
+        if (ext_name)
+            new_list[count++] = wineopenxr_strdup(ext_name);
     }
 
     our_createInfo = *createInfo;
     our_createInfo.enabledExtensionNames = (const char * const*)new_list;
-    our_createInfo.enabledExtensionCount = createInfo->enabledExtensionCount;
+    our_createInfo.enabledExtensionCount = count;
     createInfo = &our_createInfo;
 
     WINE_TRACE("Enabled extensions:\n");
