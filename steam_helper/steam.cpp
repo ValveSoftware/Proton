@@ -563,7 +563,6 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     int return_code;
     LSTATUS status;
     unsigned int i;
-    char str[256];
     VkResult res;
 
     WINE_TRACE("Starting VR info initialization.\n");
@@ -587,14 +586,8 @@ static DWORD WINAPI initialize_vr_data(void *arg)
         WINE_ERR("Could not get IVRClientCore, error %d.\n", return_code);
     }
 
-    if ((env_str = getenv("SteamGameId")))
-        app_id = atoi(env_str);
-    else
-        app_id = 1245040; /* Proton 5.0 */
-
     /* Without overriding the app_key vrclient waits 2 seconds for a valid appkey before returning. */
-    sprintf(str, "{ \"app_key\" : \"steam.app.%u\" }", app_id);
-    error = client_core->Init(vr::VRApplication_Background, str);
+    error = client_core->Init(vr::VRApplication_Background, NULL);
     if (error != vr::VRInitError_None)
     {
         if (error == vr::VRInitError_Init_NoServerForBackgroundApp)
