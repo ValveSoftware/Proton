@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<?xml-model href="registry.rnc" type="application/relax-ng-compact-syntax"?>
+<?xml-model href="registry.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <registry>
     <comment>
 Copyright (c) 2017-2021, The Khronos Group Inc.
@@ -48,6 +51,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         <tag name="STARBREEZE" author="Starbreeze"                  contact="David Srour @dsrour"/>
         <tag name="TOBII"      author="Tobii"                       contact="Denny Rönngren @denron"/>
         <tag name="ULTRALEAP"  author="Ultraleap"                   contact="Robert Blenkinsopp @rblenkinsopp"/>
+        <tag name="UNITY"      author="Unity Technologies"          contact="Jack Pritz @jackpritz, Peter Kuhn @peterunity"/>
         <tag name="VALVE"      author="Valve"                       contact="Joe Ludwig @JoeLudwig"/>
         <tag name="VARJO"      author="Varjo"                       contact="Sergiy Dubovik @dubik, Rémi Arnaud @VarjoRemi"/>
     </tags>
@@ -116,7 +120,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         updates them automatically by processing a line at a time.
         -->
         <type category="define">// OpenXR current version number.
-#define <name>XR_CURRENT_API_VERSION</name> <type>XR_MAKE_VERSION</type>(1, 0, 17)</type>
+#define <name>XR_CURRENT_API_VERSION</name> <type>XR_MAKE_VERSION</type>(1, 0, 18)</type>
 
         <!--
         NOTE: For avoidance of ambiguity, there should only be 1 <name> tag immediately in
@@ -251,6 +255,16 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         <!-- Bitmask types for XR_FB_android_surface_swapchain_create -->
         <type bitvalues="XrAndroidSurfaceSwapchainFlagBitsFB" category="bitmask">typedef <type>XrFlags64</type> <name>XrAndroidSurfaceSwapchainFlagsFB</name>;</type>
 
+        <!-- Bitmask types for XR_FB_composition_layer_image_layout -->
+        <type bitvalues="XrCompositionLayerImageLayoutFlagBitsFB" category="bitmask">typedef <type>XrFlags64</type> <name>XrCompositionLayerImageLayoutFlagsFB</name>;</type>
+
+        <!-- Bitmask types for XR_FB_composition_layer_secure_content -->
+        <type bitvalues="XrCompositionLayerSecureContentFlagBitsFB" category="bitmask">typedef <type>XrFlags64</type> <name>XrCompositionLayerSecureContentFlagsFB</name>;</type>
+
+        <!-- Bitmask types for XR_FB_foveation -->
+        <type bitvalues="XrSwapchainCreateFoveationFlagBitsFB" category="bitmask">typedef <type>XrFlags64</type> <name>XrSwapchainCreateFoveationFlagsFB</name>;</type>
+        <type bitvalues="XrSwapchainStateFoveationFlagBitsFB"  category="bitmask">typedef <type>XrFlags64</type> <name>XrSwapchainStateFoveationFlagsFB</name>;</type>
+
         <!-- Handles referring to internally-maintained objects. -->
         <!-- These types which can be 64-bit integers or opaque pointers, selected at compile time based on pointer size -->
         <type category="handle"><type>XR_DEFINE_HANDLE</type>(<name>XrInstance</name>)</type>
@@ -261,8 +275,12 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         <type category="handle" parent="XrSession"><type>XR_DEFINE_HANDLE</type>(<name>XrSpace</name>)</type>
         <type category="handle" parent="XrInstance"><type>XR_DEFINE_HANDLE</type>(<name>XrDebugUtilsMessengerEXT</name>)</type>
         <type category="handle" parent="XrSession"><type>XR_DEFINE_HANDLE</type>(<name>XrSpatialAnchorMSFT</name>)</type>
+
         <!-- XR_EXT_hand_tracking -->
         <type category="handle" parent="XrSession"><type>XR_DEFINE_HANDLE</type>(<name>XrHandTrackerEXT</name>)</type>
+
+        <!-- XR_FB_foveation -->
+        <type category="handle" parent="XrSession"><type>XR_DEFINE_HANDLE</type>(<name>XrFoveationProfileFB</name>)</type>
 
         <!-- enums and flag bits generated from corresponding <enums> tags below -->
         <type name="XrStructureType" category="enum"/>
@@ -308,8 +326,21 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         <!-- enums for XR_MSFT_spatial_graph_bridge -->
         <type name="XrSpatialGraphNodeTypeMSFT" category="enum"/>
 
-        <!-- enums and flag bits for XR_FB_android_surface_swapchain_create -->
+        <!-- enums for XR_FB_android_surface_swapchain_create -->
         <type name="XrAndroidSurfaceSwapchainFlagBitsFB" category="enum"/>
+
+        <!-- enums for XR_FB_composition_layer_image_layout -->
+        <type name="XrCompositionLayerImageLayoutFlagBitsFB" category="enum"/>
+
+        <!-- enums for XR_FB_composition_layer_alpha_blend -->
+        <type name="XrBlendFactorFB" category="enum"/>
+
+        <!-- enums for XR_FB_composition_layer_secure_content -->
+        <type name="XrCompositionLayerSecureContentFlagBitsFB" category="enum"/>
+
+        <!-- enums and flag bits for XR_FB_foveation -->
+        <type name="XrSwapchainCreateFoveationFlagBitsFB" category="enum"/>
+        <type name="XrSwapchainStateFoveationFlagBitsFB" category="enum"/>
 
         <!-- Struct types -->
         <type category="struct" name="XrVector2f">
@@ -1135,6 +1166,23 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
             <member><type>XrPosef</type>                         <name>poseInAnchorSpace</name></member>
         </type>
 
+        <!-- types for XR_FB_composition_layer_image_layout -->
+        <type category="struct" name="XrCompositionLayerImageLayoutFB" structextends="XrCompositionLayerBaseHeader">
+            <member values="XR_TYPE_COMPOSITION_LAYER_IMAGE_LAYOUT_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member><type>void</type>* <name>next</name></member>
+            <member optional="true"><type>XrCompositionLayerImageLayoutFlagsFB</type> <name>flags</name></member>
+        </type>
+
+        <!-- types for XR_FB_composition_layer_alpha_blend -->
+        <type category="struct" name="XrCompositionLayerAlphaBlendFB" structextends="XrCompositionLayerBaseHeader">
+            <member values="XR_TYPE_COMPOSITION_LAYER_ALPHA_BLEND_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member><type>void</type>* <name>next</name></member>
+            <member><type>XrBlendFactorFB</type> <name>srcFactorColor</name></member>
+            <member><type>XrBlendFactorFB</type> <name>dstFactorColor</name></member>
+            <member><type>XrBlendFactorFB</type> <name>srcFactorAlpha</name></member>
+            <member><type>XrBlendFactorFB</type> <name>dstFactorAlpha</name></member>
+        </type>
+
         <!-- types for XR_MNDX_egl_enable -->
         <type category="struct" name="XrGraphicsBindingEGLMNDX" structextends="XrSessionCreateInfo">
             <member values="XR_TYPE_GRAPHICS_BINDING_EGL_MNDX"><type>XrStructureType</type> <name>type</name></member>
@@ -1359,6 +1407,13 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
             <member><type>VkComponentSwizzle</type> <name>swizzleAlpha</name></member>
             <member><type>float</type> <name>maxAnisotropy</name></member>
             <member><type>XrColor4f</type> <name>borderColor</name></member>
+        </type>
+
+        <!-- XR_FB_composition_layer_secure_content structs -->
+        <type category="struct" name="XrCompositionLayerSecureContentFB" structextends="XrCompositionLayerBaseHeader">
+            <member values="XR_TYPE_COMPOSITION_LAYER_SECURE_CONTENT_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member>const <type>void</type>* <name>next</name></member>
+            <member><type>XrCompositionLayerSecureContentFlagsFB</type> <name>flags</name></member>
         </type>
 
         <!-- XR_KHR_loader_init -->
@@ -1629,6 +1684,43 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
             <member><type>XrColorSpaceFB</type> <name>colorSpace</name></member>
         </type>
 
+        <!-- XR_FB_foveation structs -->
+        <type category="struct" name="XrFoveationProfileCreateInfoFB">
+            <member values="XR_TYPE_FOVEATION_PROFILE_CREATE_INFO_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member><type>void</type>*                                                             <name>next</name></member>
+        </type>
+        <type category="struct" name="XrSwapchainCreateInfoFoveationFB" structextends="XrSwapchainCreateInfo">
+            <member values="XR_TYPE_SWAPCHAIN_CREATE_INFO_FOVEATION_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member><type>void</type>*                                             <name>next</name></member>
+            <member optional="true"><type>XrSwapchainCreateFoveationFlagsFB</type> <name>flags</name></member>
+        </type>
+        <type category="struct" name="XrSwapchainStateFoveationFB" parentstruct="XrSwapchainStateBaseHeaderFB">
+            <member values="XR_TYPE_SWAPCHAIN_STATE_FOVEATION_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member><type>void</type>*                                            <name>next</name></member>
+            <member optional="true"><type>XrSwapchainStateFoveationFlagsFB</type> <name>flags</name></member>
+            <member><type>XrFoveationProfileFB</type>                             <name>profile</name></member>
+        </type>
+
+        <!-- XR_FB_foveation_vulkan structs -->
+        <type category="struct" name="XrSwapchainImageFoveationVulkanFB" structextends="XrSwapchainImageVulkanKHR" returnedonly="true">
+            <member values="XR_TYPE_SWAPCHAIN_IMAGE_FOVEATION_VULKAN_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member><type>void</type>*    <name>next</name></member>
+            <member><type>VkImage</type>  <name>image</name></member>
+            <member><type>uint32_t</type> <name>width</name></member>
+            <member><type>uint32_t</type> <name>height</name></member>
+        </type>
+
+        <!-- XR_FB_foveation_configuration structs -->
+        <type name="XrFoveationLevelFB" category="enum"/>
+        <type name="XrFoveationDynamicFB" category="enum"/>
+        <type category="struct" name="XrFoveationLevelProfileCreateInfoFB" structextends="XrFoveationProfileCreateInfoFB">
+            <member values="XR_TYPE_FOVEATION_LEVEL_PROFILE_CREATE_INFO_FB"><type>XrStructureType</type> <name>type</name></member>
+            <member><type>void</type>*                <name>next</name></member>
+            <member><type>XrFoveationLevelFB</type>   <name>level</name></member>
+            <member><type>float</type>                <name>verticalOffset</name></member>
+            <member><type>XrFoveationDynamicFB</type> <name>dynamic</name></member>
+        </type>
+
         <!-- XR_VARJO_composition_layer_depth_test -->
         <type category="struct" name="XrCompositionLayerDepthTestVARJO" structextends="XrCompositionLayerProjection">
             <member values="XR_TYPE_COMPOSITION_LAYER_DEPTH_TEST_VARJO"><type>XrStructureType</type> <name>type</name></member>
@@ -1669,6 +1761,25 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
             <member><type>XrVector3f</type>                <name>position</name></member>
             <member><type>XrVector3f</type>                <name>normal</name></member>
             <member><type>XrVector3f</type>                <name>velocity</name></member>
+        </type>
+
+        <!-- XR_MSFT_spatial_anchor_persistence -->
+        <type category="handle" parent="XrSession"><type>XR_DEFINE_HANDLE</type>(<name>XrSpatialAnchorStoreConnectionMSFT</name>)</type>
+
+        <type category="struct" name="XrSpatialAnchorPersistenceNameMSFT">
+            <member><type>char</type> <name>name</name>[<enum>XR_MAX_SPATIAL_ANCHOR_NAME_SIZE_MSFT</enum>]</member>
+        </type>
+        <type category="struct" name="XrSpatialAnchorPersistenceInfoMSFT">
+            <member values="XR_TYPE_SPATIAL_ANCHOR_PERSISTENCE_INFO_MSFT"><type>XrStructureType</type> <name>type</name></member>
+            <member>const <type>void</type>*                            <name>next</name></member>
+            <member><type>XrSpatialAnchorPersistenceNameMSFT</type>     <name>spatialAnchorPersistenceName</name></member>
+            <member><type>XrSpatialAnchorMSFT</type>                    <name>spatialAnchor</name></member>
+        </type>
+        <type category="struct" name="XrSpatialAnchorFromPersistedAnchorCreateInfoMSFT">
+            <member values="XR_TYPE_SPATIAL_ANCHOR_FROM_PERSISTED_ANCHOR_CREATE_INFO_MSFT"><type>XrStructureType</type> <name>type</name></member>
+            <member>const <type>void</type>*                            <name>next</name></member>
+            <member><type>XrSpatialAnchorStoreConnectionMSFT</type>     <name>spatialAnchorStore</name></member>
+            <member><type>XrSpatialAnchorPersistenceNameMSFT</type>     <name>spatialAnchorPersistenceName</name></member>
         </type>
 
     </types>
@@ -1982,6 +2093,16 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         <enum value="7"   name="XR_COLOR_SPACE_ADOBE_RGB_FB"/>
     </enums>
 
+    <!-- XR_FB_composition_layer_alpha_blend -->
+    <enums name="XrBlendFactorFB" type="enum">
+        <enum value="0"   name="XR_BLEND_FACTOR_ZERO_FB"/>
+        <enum value="1"   name="XR_BLEND_FACTOR_ONE_FB"/>
+        <enum value="2"   name="XR_BLEND_FACTOR_SRC_ALPHA_FB"/>
+        <enum value="3"   name="XR_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA_FB"/>
+        <enum value="4"   name="XR_BLEND_FACTOR_DST_ALPHA_FB"/>
+        <enum value="5"   name="XR_BLEND_FACTOR_ONE_MINUS_DST_ALPHA_FB"/>
+    </enums>
+
     <!-- XR_MSFT_composition_layer_reprojection -->
     <enums name="XrReprojectionModeMSFT" type="enum">
         <enum value="1"   name="XR_REPROJECTION_MODE_DEPTH_MSFT"/>
@@ -2124,6 +2245,38 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
     <enums name="XrAndroidSurfaceSwapchainFlagBitsFB" type="bitmask">
         <enum bitpos="0" name="XR_ANDROID_SURFACE_SWAPCHAIN_SYNCHRONOUS_BIT_FB"    comment="Create the underlying BufferQueue in synchronous mode"/>
         <enum bitpos="1" name="XR_ANDROID_SURFACE_SWAPCHAIN_USE_TIMESTAMPS_BIT_FB" comment="Acquire most recent buffer whose presentation timestamp is not greater than display time of final composited frame"/>
+    </enums>
+
+    <!-- flags for XR_FB_composition_layer_image_layout -->
+    <enums name="XrCompositionLayerImageLayoutFlagBitsFB" type="bitmask">
+        <enum bitpos="0" name="XR_COMPOSITION_LAYER_IMAGE_LAYOUT_VERTICAL_FLIP_BIT_FB" comment="The coordinate origin of the swapchain image must be considered to be flipped vertically."/>
+    </enums>
+
+    <!-- flags for XR_FB_foveation -->
+    <enums name="XrSwapchainCreateFoveationFlagBitsFB" type="bitmask">
+        <enum bitpos="0" name="XR_SWAPCHAIN_CREATE_FOVEATION_SCALED_BIN_BIT_FB"           comment="Explicitly create the swapchain with scaled bin foveation support. The application must ensure that the swapchain is using the OpenGL graphics API and that the QCOM_texture_foveated extension is supported and enabled."/>
+        <enum bitpos="1" name="XR_SWAPCHAIN_CREATE_FOVEATION_FRAGMENT_DENSITY_MAP_BIT_FB" comment="Explicitly create the swapchain with fragment density map foveation support. The application must ensure that the swapchain is using the Vulkan graphics API and that the VK_EXT_fragment_density_map extension is supported and enabled."/>
+    </enums>
+    <enums name="XrSwapchainStateFoveationFlagBitsFB" type="bitmask">
+        <!-- This is currently empty, awaiting future flags. -->
+    </enums>
+
+    <!-- flags for XR_FB_composition_layer_secure_content -->
+    <enums name="XrCompositionLayerSecureContentFlagBitsFB" type="bitmask">
+        <enum bitpos="0" name="XR_COMPOSITION_LAYER_SECURE_CONTENT_EXCLUDE_LAYER_BIT_FB" comment="Indicates the layer will only be visible inside the HMD, and not visible to external sources"/>
+        <enum bitpos="1" name="XR_COMPOSITION_LAYER_SECURE_CONTENT_REPLACE_LAYER_BIT_FB" comment="Indicates the layer will be displayed inside the HMD, but replaced by proxy content when written to external sources"/>
+    </enums>
+
+    <!-- enums for XR_FB_foveation_configuration -->
+    <enums name="XrFoveationLevelFB" type="enum">
+        <enum value="0"   name="XR_FOVEATION_LEVEL_NONE_FB"   comment="No foveation"/>
+        <enum value="1"   name="XR_FOVEATION_LEVEL_LOW_FB"    comment="Less foveation (higher periphery visual fidelity, lower performance)"/>
+        <enum value="2"   name="XR_FOVEATION_LEVEL_MEDIUM_FB" comment="Medium foveation (medium periphery visual fidelity, medium performance)"/>
+        <enum value="3"   name="XR_FOVEATION_LEVEL_HIGH_FB"   comment="High foveation (lower periphery visual fidelity, higher performance)"/>
+    </enums>
+    <enums name="XrFoveationDynamicFB" type="enum">
+        <enum value="0"   name="XR_FOVEATION_DYNAMIC_DISABLED_FB"      comment="Static foveation at the maximum desired level"/>
+        <enum value="1"   name="XR_FOVEATION_DYNAMIC_LEVEL_ENABLED_FB" comment="Dynamic changing foveation based on performance headroom available up to the maximum desired level"/>
     </enums>
 
     <!-- SECTION: OpenXR command definitions -->
@@ -2652,7 +2805,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </command>
         <command successcodes="XR_SUCCESS" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_HANDLE_INVALID">
             <proto><type>XrResult</type> <name>xrDestroySpatialAnchorMSFT</name></proto>
-            <param><type>XrSpatialAnchorMSFT</type> <name>anchor</name></param>
+            <param externsync="true_with_children"><type>XrSpatialAnchorMSFT</type> <name>anchor</name></param>
         </command>
 
         <!-- commands for XR_EXT_conformance_automation -->
@@ -2900,6 +3053,18 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
             <param>const <type>XrColorSpaceFB</type> <name>colorspace</name></param>
         </command>
 
+        <!-- XR_FB_foveation -->
+        <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_VALIDATION_FAILURE,XR_ERROR_RUNTIME_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_OUT_OF_MEMORY,XR_ERROR_LIMIT_REACHED">
+            <proto><type>XrResult</type> <name>xrCreateFoveationProfileFB</name></proto>
+            <param><type>XrSession</type> <name>session</name></param>
+            <param>const <type>XrFoveationProfileCreateInfoFB</type>* <name>createInfo</name></param>
+            <param><type>XrFoveationProfileFB</type>* <name>profile</name></param>
+        </command>
+        <command successcodes="XR_SUCCESS" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_RUNTIME_FAILURE,XR_ERROR_HANDLE_INVALID">
+            <proto><type>XrResult</type> <name>xrDestroyFoveationProfileFB</name></proto>
+            <param externsync="true_with_children"><type>XrFoveationProfileFB</type> <name>profile</name></param>
+        </command>
+
         <!-- commands for XR_VARJO_environment_depth_estimation -->
         <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_RUNTIME_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_FEATURE_UNSUPPORTED">
             <proto><type>XrResult</type> <name>xrSetEnvironmentDepthEstimationVARJO</name></proto>
@@ -2930,6 +3095,45 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
             <param><type>XrInstance</type> <name>instance</name></param>
             <param><type>wchar_t</type> <name>buffer</name>[<enum>XR_MAX_AUDIO_DEVICE_STR_SIZE_OCULUS</enum>]</param>
         </command>
+
+        <!-- XR_MSFT_spatial_anchor_persistence -->
+        <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_VALIDATION_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_OUT_OF_MEMORY,XR_ERROR_LIMIT_REACHED">
+            <proto><type>XrResult</type> <name>xrCreateSpatialAnchorStoreConnectionMSFT</name></proto>
+            <param><type>XrSession</type> <name>session</name></param>
+            <param><type>XrSpatialAnchorStoreConnectionMSFT</type>* <name>spatialAnchorStore</name></param>
+        </command>
+        <command successcodes="XR_SUCCESS" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_HANDLE_INVALID,XR_ERROR_OUT_OF_MEMORY">
+            <proto><type>XrResult</type> <name>xrDestroySpatialAnchorStoreConnectionMSFT</name></proto>
+            <param externsync="true_with_children"><type>XrSpatialAnchorStoreConnectionMSFT</type> <name>spatialAnchorStore</name></param>
+        </command>
+        <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_VALIDATION_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_OUT_OF_MEMORY,XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT">
+            <proto><type>XrResult</type> <name>xrPersistSpatialAnchorMSFT</name></proto>
+            <param><type>XrSpatialAnchorStoreConnectionMSFT</type> <name>spatialAnchorStore</name></param>
+            <param>const <type>XrSpatialAnchorPersistenceInfoMSFT</type>* <name>spatialAnchorPersistenceInfo</name></param>
+        </command>
+        <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_VALIDATION_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_OUT_OF_MEMORY,XR_ERROR_SIZE_INSUFFICIENT">
+            <proto><type>XrResult</type> <name>xrEnumeratePersistedSpatialAnchorNamesMSFT</name></proto>
+            <param><type>XrSpatialAnchorStoreConnectionMSFT</type> <name>spatialAnchorStore</name></param>
+            <param optional="true"><type>uint32_t</type> <name>spatialAnchorNamesCapacityInput</name></param>
+            <param optional="true"><type>uint32_t</type>* <name>spatialAnchorNamesCountOutput</name></param>
+            <param optional="true" len="spatialAnchorNamesCapacityInput"><type>XrSpatialAnchorPersistenceNameMSFT</type>* <name>persistedAnchorNames</name></param>
+        </command>
+        <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_VALIDATION_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_OUT_OF_MEMORY,XR_ERROR_LIMIT_REACHED,XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT,XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT">
+            <proto><type>XrResult</type> <name>xrCreateSpatialAnchorFromPersistedNameMSFT</name></proto>
+            <param><type>XrSession</type> <name>session</name></param>
+            <param>const <type>XrSpatialAnchorFromPersistedAnchorCreateInfoMSFT</type>* <name>spatialAnchorCreateInfo</name></param>
+            <param><type>XrSpatialAnchorMSFT</type>* <name>spatialAnchor</name></param>
+        </command>
+        <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_VALIDATION_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_OUT_OF_MEMORY,XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT,XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT">
+            <proto><type>XrResult</type> <name>xrUnpersistSpatialAnchorMSFT</name></proto>
+            <param><type>XrSpatialAnchorStoreConnectionMSFT</type>        <name>spatialAnchorStore</name></param>
+            <param>const <type>XrSpatialAnchorPersistenceNameMSFT</type>* <name>spatialAnchorPersistenceName</name></param>
+        </command>
+        <command successcodes="XR_SUCCESS,XR_SESSION_LOSS_PENDING" errorcodes="XR_ERROR_FUNCTION_UNSUPPORTED,XR_ERROR_VALIDATION_FAILURE,XR_ERROR_HANDLE_INVALID,XR_ERROR_INSTANCE_LOST,XR_ERROR_SESSION_LOST,XR_ERROR_OUT_OF_MEMORY">
+            <proto><type>XrResult</type> <name>xrClearSpatialAnchorStoreMSFT</name></proto>
+            <param><type>XrSpatialAnchorStoreConnectionMSFT</type> <name>spatialAnchorStore</name></param>
+        </command>
+
     </commands>
 
     <!-- SECTION: OpenXR API interface definitions -->
@@ -3090,7 +3294,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
 
             <!-- Core-like basic data types, documented in core spec, though currently only used by KHR extensions: -->
 
-            <!-- used in XR_KHR_composition_layer_color_modulation -->
+            <!-- used in XR_KHR_composition_layer_color_scale_bias -->
             <type name="XrColor4f"/>
             <!-- used in XR_KHR_space bounds -->
             <type name="XrExtent2Df"/>
@@ -3452,7 +3656,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
 
     <extension name="XR_MSFT_spatial_anchor" number="40" type="instance" supported="openxr">
         <require>
-            <enum value="1" name="XR_MSFT_spatial_anchor_SPEC_VERSION"/>
+            <enum value="2" name="XR_MSFT_spatial_anchor_SPEC_VERSION"/>
             <enum value="&quot;XR_MSFT_spatial_anchor&quot;" name="XR_MSFT_SPATIAL_ANCHOR_EXTENSION_NAME"/>
 
             <enum offset="0" extends="XrStructureType" name="XR_TYPE_SPATIAL_ANCHOR_CREATE_INFO_MSFT"/>
@@ -3465,17 +3669,22 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_OCULUS_extension_41" number="41" type="instance" supported="disabled">
+    <extension name="XR_FB_composition_layer_image_layout" number="41" type="instance" supported="openxr">
         <require>
-            <enum value="1" name="XR_OCULUS_extension_41_SPEC_VERSION"/>
-            <enum value="&quot;XR_OCULUS_extension_41&quot;" name="XR_OCULUS_EXTENSION_41_EXTENSION_NAME"/>
+            <enum value="1"                                                name="XR_FB_composition_layer_image_layout_SPEC_VERSION"/>
+            <enum value="&quot;XR_FB_composition_layer_image_layout&quot;" name="XR_FB_COMPOSITION_LAYER_IMAGE_LAYOUT_EXTENSION_NAME"/>
+            <type name="XrCompositionLayerImageLayoutFB"/>
+            <enum offset="0" extends="XrStructureType" name="XR_TYPE_COMPOSITION_LAYER_IMAGE_LAYOUT_FB"/>
         </require>
     </extension>
 
-    <extension name="XR_OCULUS_extension_42" number="42" type="instance" supported="disabled">
+    <extension name="XR_FB_composition_layer_alpha_blend" number="42" type="instance" supported="openxr">
         <require>
-            <enum value="1" name="XR_OCULUS_extension_42_SPEC_VERSION"/>
-            <enum value="&quot;XR_OCULUS_extension_42&quot;" name="XR_OCULUS_EXTENSION_42_EXTENSION_NAME"/>
+            <enum value="2"                                               name="XR_FB_composition_layer_alpha_blend_SPEC_VERSION"/>
+            <enum value="&quot;XR_FB_composition_layer_alpha_blend&quot;" name="XR_FB_COMPOSITION_LAYER_ALPHA_BLEND_EXTENSION_NAME"/>
+            <type name="XrBlendFactorFB"/>
+            <type name="XrCompositionLayerAlphaBlendFB"/>
+            <enum offset="1" extends="XrStructureType" name="XR_TYPE_COMPOSITION_LAYER_ALPHA_BLEND_FB"/>
         </require>
     </extension>
 
@@ -3797,10 +4006,13 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_FB_extension_73" number="73" type="instance" supported="disabled">
+    <extension name="XR_FB_composition_layer_secure_content" number="73" type="instance" supported="openxr">
         <require>
-            <enum value="1" name="XR_FB_extension_73_SPEC_VERSION"/>
-            <enum value="&quot;XR_FB_extension_73&quot;" name="XR_FB_extension_73_EXTENSION_NAME"/>
+            <enum value="1"                                                  name="XR_FB_composition_layer_secure_content_SPEC_VERSION"/>
+            <enum value="&quot;XR_FB_composition_layer_secure_content&quot;" name="XR_FB_COMPOSITION_LAYER_SECURE_CONTENT_EXTENSION_NAME"/>
+
+            <enum offset="0" extends="XrStructureType"                       name="XR_TYPE_COMPOSITION_LAYER_SECURE_CONTENT_FB"/>
+            <type name="XrCompositionLayerSecureContentFB"/>
         </require>
     </extension>
 
@@ -3994,11 +4206,11 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_MND_swapchain_usage_input_attachment_bit" number="97" type="instance" supported="openxr">
+    <extension name="XR_MND_swapchain_usage_input_attachment_bit" number="97" type="instance" supported="openxr" promotedto="XR_KHR_swapchain_usage_input_attachment_bit">
         <require>
             <enum value="2" name="XR_MND_swapchain_usage_input_attachment_bit_SPEC_VERSION"/>
             <enum value="&quot;XR_MND_swapchain_usage_input_attachment_bit&quot;" name="XR_MND_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_EXTENSION_NAME"/>
-            <!-- NOTE: This was added before the working group established a process. Future vendor extensions MUST NOT extend core bitmasks. -->
+            <!-- NOTE: This was added before the working group established a process, and has been normalized by promotion to KHR. Future vendor extensions MUST NOT extend core bitmasks. -->
             <enum bitpos="7" extends="XrSwapchainUsageFlagBits" name="XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_MND" comment="Specifies that the image may: be used as a input attachment."/>
         </require>
     </extension>
@@ -4222,17 +4434,36 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_FB_extension_115" number="115" type="instance" supported="disabled">
+    <extension name="XR_FB_foveation" number="115" type="instance" requires="XR_FB_swapchain_update_state" supported="openxr">
         <require>
-            <enum value="1" name="XR_FB_extension_115_SPEC_VERSION"/>
-            <enum value="&quot;XR_FB_extension_115&quot;" name="XR_FB_extension_115_EXTENSION_NAME"/>
+            <enum value="1"                            name="XR_FB_foveation_SPEC_VERSION"/>
+            <enum value="&quot;XR_FB_foveation&quot;"  name="XR_FB_FOVEATION_EXTENSION_NAME"/>
+
+            <enum offset="0" extends="XrObjectType"    name="XR_OBJECT_TYPE_FOVEATION_PROFILE_FB"        comment="XrFoveationProfileFB"/>
+
+            <enum offset="0" extends="XrStructureType" name="XR_TYPE_FOVEATION_PROFILE_CREATE_INFO_FB"/>
+            <enum offset="1" extends="XrStructureType" name="XR_TYPE_SWAPCHAIN_CREATE_INFO_FOVEATION_FB"/>
+            <enum offset="2" extends="XrStructureType" name="XR_TYPE_SWAPCHAIN_STATE_FOVEATION_FB"/>
+
+            <type name="XrFoveationProfileCreateInfoFB"/>
+            <type name="XrSwapchainCreateInfoFoveationFB"/>
+            <type name="XrSwapchainStateFoveationFB"/>
+
+            <command name="xrCreateFoveationProfileFB"/>
+            <command name="xrDestroyFoveationProfileFB"/>
         </require>
     </extension>
 
-    <extension name="XR_FB_extension_116" number="116" type="instance" supported="disabled">
+    <extension name="XR_FB_foveation_configuration" number="116" type="instance" requires="XR_FB_foveation" supported="openxr">
         <require>
-            <enum value="1" name="XR_FB_extension_116_SPEC_VERSION"/>
-            <enum value="&quot;XR_FB_extension_116&quot;" name="XR_FB_extension_116_EXTENSION_NAME"/>
+            <enum value="1"                                         name="XR_FB_foveation_configuration_SPEC_VERSION"/>
+            <enum value="&quot;XR_FB_foveation_configuration&quot;" name="XR_FB_FOVEATION_CONFIGURATION_EXTENSION_NAME"/>
+
+            <enum offset="0" extends="XrStructureType"              name="XR_TYPE_FOVEATION_LEVEL_PROFILE_CREATE_INFO_FB"/>
+
+            <type name="XrFoveationLevelFB"/>
+            <type name="XrFoveationDynamicFB"/>
+            <type name="XrFoveationLevelProfileCreateInfoFB"/>
         </require>
     </extension>
 
@@ -4276,7 +4507,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
 
     <extension name="XR_VARJO_foveated_rendering" number="122" type="instance" requires="XR_VARJO_quad_views" supported="openxr">
         <require>
-            <enum value="1" name="XR_VARJO_foveated_rendering_SPEC_VERSION"/>
+            <enum value="2" name="XR_VARJO_foveated_rendering_SPEC_VERSION"/>
             <enum value="&quot;XR_VARJO_foveated_rendering&quot;" name="XR_VARJO_FOVEATED_RENDERING_EXTENSION_NAME"/>
             <enum offset="0" extends="XrStructureType" name="XR_TYPE_VIEW_LOCATE_FOVEATED_RENDERING_VARJO"/>
             <enum offset="1" extends="XrStructureType" name="XR_TYPE_FOVEATED_VIEW_CONFIGURATION_VIEW_VARJO"/>
@@ -4292,7 +4523,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
 
     <extension name="XR_VARJO_composition_layer_depth_test" number="123" type="instance" requires="XR_KHR_composition_layer_depth" supported="openxr">
         <require>
-            <enum value="1" name="XR_VARJO_composition_layer_depth_test_SPEC_VERSION"/>
+            <enum value="2" name="XR_VARJO_composition_layer_depth_test_SPEC_VERSION"/>
             <enum value="&quot;XR_VARJO_composition_layer_depth_test&quot;" name="XR_VARJO_COMPOSITION_LAYER_DEPTH_TEST_EXTENSION_NAME"/>
             <enum offset="0" extends="XrStructureType" name="XR_TYPE_COMPOSITION_LAYER_DEPTH_TEST_VARJO"/>
             <type name="XrCompositionLayerDepthTestVARJO"/>
@@ -4433,13 +4664,35 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_MSFT_extension_143" number="143" type="instance" supported="disabled">
+    <extension name="XR_MSFT_spatial_anchor_persistence" number="143" requires="XR_MSFT_spatial_anchor" type="instance" supported="openxr">
         <require>
-            <enum value="1" name="XR_MSFT_extension_143_SPEC_VERSION"/>
-            <enum value="&quot;XR_MSFT_extension_143&quot;" name="XR_MSFT_extension_143_EXTENSION_NAME"/>
+            <enum value="2"                                              name="XR_MSFT_spatial_anchor_persistence_SPEC_VERSION"/>
+            <enum value="&quot;XR_MSFT_spatial_anchor_persistence&quot;" name="XR_MSFT_SPATIAL_ANCHOR_PERSISTENCE_EXTENSION_NAME"/>
+
+            <type name="XrSpatialAnchorStoreConnectionMSFT"/>
+            <type name="XrSpatialAnchorPersistenceNameMSFT"/>
+            <type name="XrSpatialAnchorPersistenceInfoMSFT"/>
+            <type name="XrSpatialAnchorFromPersistedAnchorCreateInfoMSFT"/>
+
+            <command name="xrCreateSpatialAnchorStoreConnectionMSFT"/>
+            <command name="xrDestroySpatialAnchorStoreConnectionMSFT"/>
+            <command name="xrPersistSpatialAnchorMSFT"/>
+            <command name="xrEnumeratePersistedSpatialAnchorNamesMSFT"/>
+            <command name="xrCreateSpatialAnchorFromPersistedNameMSFT"/>
+            <command name="xrUnpersistSpatialAnchorMSFT"/>
+            <command name="xrClearSpatialAnchorStoreMSFT"/>
+
+            <enum offset="0"         extends="XrObjectType"    name="XR_OBJECT_TYPE_SPATIAL_ANCHOR_STORE_CONNECTION_MSFT"           comment="XrSpatialAnchorStoreConnectionMSFT"/>
+
+            <enum offset="0"         extends="XrStructureType" name="XR_TYPE_SPATIAL_ANCHOR_PERSISTENCE_INFO_MSFT"/>
+            <enum offset="1"         extends="XrStructureType" name="XR_TYPE_SPATIAL_ANCHOR_FROM_PERSISTED_ANCHOR_CREATE_INFO_MSFT"/>
+
+            <enum offset="1" dir="-" extends="XrResult"        name="XR_ERROR_SPATIAL_ANCHOR_NAME_NOT_FOUND_MSFT"                   comment="A spatial anchor was not found associated with the spatial anchor name provided"/>
+            <enum offset="2" dir="-" extends="XrResult"        name="XR_ERROR_SPATIAL_ANCHOR_NAME_INVALID_MSFT"                     comment="The spatial anchor name provided was not valid"/>
+
+            <enum value="256"                                  name="XR_MAX_SPATIAL_ANCHOR_NAME_SIZE_MSFT"/>
         </require>
     </extension>
-
     <extension name="XR_MSFT_extension_144" number="144" type="instance" supported="disabled">
         <require>
             <enum value="1" name="XR_MSFT_extension_144_SPEC_VERSION"/>
@@ -4562,14 +4815,18 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_FB_extension_161" number="161" type="instance" supported="disabled">
+    <extension name="XR_FB_foveation_vulkan" number="161" type="instance" requires="XR_FB_foveation" protect="XR_USE_GRAPHICS_API_VULKAN" supported="openxr">
         <require>
-            <enum value="1" name="XR_FB_extension_161_SPEC_VERSION"/>
-            <enum value="&quot;XR_FB_extension_161&quot;" name="XR_FB_extension_161_EXTENSION_NAME"/>
+            <enum value="1"                                  name="XR_FB_foveation_vulkan_SPEC_VERSION"/>
+            <enum value="&quot;XR_FB_foveation_vulkan&quot;" name="XR_FB_FOVEATION_VULKAN_EXTENSION_NAME"/>
+
+            <enum offset="0" extends="XrStructureType"       name="XR_TYPE_SWAPCHAIN_IMAGE_FOVEATION_VULKAN_FB"/>
+
+            <type name="XrSwapchainImageFoveationVulkanFB"/>
         </require>
     </extension>
 
-    <extension name="XR_FB_swapchain_update_state_android_surface" number="162" type="instance" supported="openxr" protect="XR_USE_PLATFORM_ANDROID" requires="XR_FB_swapchain_update_state">
+    <extension name="XR_FB_swapchain_update_state_android_surface" number="162" type="instance" supported="openxr" protect="XR_USE_PLATFORM_ANDROID" requires="XR_KHR_android_surface_swapchain,XR_FB_swapchain_update_state">
         <require>
             <enum value="1" name="XR_FB_swapchain_update_state_android_surface_SPEC_VERSION"/>
             <enum value="&quot;XR_FB_swapchain_update_state_android_surface&quot;" name="XR_FB_SWAPCHAIN_UPDATE_STATE_ANDROID_SURFACE_EXTENSION_NAME"/>
@@ -4578,7 +4835,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_FB_swapchain_update_state_opengl_es" number="163" type="instance" supported="openxr" protect="XR_USE_GRAPHICS_API_OPENGL_ES" requires="XR_FB_swapchain_update_state">
+    <extension name="XR_FB_swapchain_update_state_opengl_es" number="163" type="instance" supported="openxr" protect="XR_USE_GRAPHICS_API_OPENGL_ES" requires="XR_KHR_opengl_es_enable,XR_FB_swapchain_update_state">
         <require>
             <enum value="1" name="XR_FB_swapchain_update_state_opengl_es_SPEC_VERSION"/>
             <enum value="&quot;XR_FB_swapchain_update_state_opengl_es&quot;" name="XR_FB_SWAPCHAIN_UPDATE_STATE_OPENGL_ES_EXTENSION_NAME"/>
@@ -4587,7 +4844,7 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_FB_swapchain_update_state_vulkan" number="164" type="instance" supported="openxr" protect="XR_USE_GRAPHICS_API_VULKAN" requires="XR_FB_swapchain_update_state">
+    <extension name="XR_FB_swapchain_update_state_vulkan" number="164" type="instance" supported="openxr" protect="XR_USE_GRAPHICS_API_VULKAN" requires="XR_KHR_vulkan_enable,XR_FB_swapchain_update_state">
         <require>
             <enum value="1" name="XR_FB_swapchain_update_state_vulkan_SPEC_VERSION"/>
             <enum value="&quot;XR_FB_swapchain_update_state_vulkan&quot;" name="XR_FB_SWAPCHAIN_UPDATE_STATE_VULKAN_EXTENSION_NAME"/>
@@ -4603,10 +4860,11 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         </require>
     </extension>
 
-    <extension name="XR_KHR_extension_166" number="166" type="instance" supported="disabled">
+    <extension name="XR_KHR_swapchain_usage_input_attachment_bit" number="166" type="instance" supported="openxr">
         <require>
-            <enum value="1" name="XR_KHR_extension_166_SPEC_VERSION"/>
-            <enum value="&quot;XR_KHR_extension_166&quot;" name="XR_KHR_extension_166_EXTENSION_NAME"/>
+            <enum value="3"                                                       name="XR_KHR_swapchain_usage_input_attachment_bit_SPEC_VERSION"/>
+            <enum value="&quot;XR_KHR_swapchain_usage_input_attachment_bit&quot;" name="XR_KHR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_EXTENSION_NAME"/>
+            <enum extends="XrSwapchainUsageFlagBits"                              name="XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_KHR"                alias="XR_SWAPCHAIN_USAGE_INPUT_ATTACHMENT_BIT_MND" comment="Specifies that the image may: be used as a input attachment."/>
         </require>
     </extension>
 
@@ -4677,6 +4935,146 @@ maintained in the default branch of the Khronos OpenXR GitHub project.
         <require>
             <enum value="1" name="XR_FB_extension_176_SPEC_VERSION"/>
             <enum value="&quot;XR_FB_extension_176&quot;" name="XR_FB_extension_176_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_hand_model_pose" number="177" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                    name="XR_UNITY_hand_model_pose_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_hand_model_pose&quot;" name="XR_UNITY_HAND_MODEL_POSE_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_178" number="178" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_178_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_178&quot;" name="XR_UNITY_EXTENSION_178_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_179" number="179" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_179_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_179&quot;" name="XR_UNITY_EXTENSION_179_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_180" number="180" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_180_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_180&quot;" name="XR_UNITY_EXTENSION_180_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_181" number="181" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_181_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_181&quot;" name="XR_UNITY_EXTENSION_181_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_182" number="182" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_182_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_182&quot;" name="XR_UNITY_EXTENSION_182_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_183" number="183" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_183_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_183&quot;" name="XR_UNITY_EXTENSION_183_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_184" number="184" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_184_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_184&quot;" name="XR_UNITY_EXTENSION_184_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_185" number="185" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_185_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_185&quot;" name="XR_UNITY_EXTENSION_185_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_UNITY_extension_186" number="186" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                  name="XR_UNITY_extension_186_SPEC_VERSION"/>
+            <enum value="&quot;XR_UNITY_extension_186&quot;" name="XR_UNITY_EXTENSION_186_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_187" number="187" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_187_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_187&quot;" name="XR_LIV_EXTENSION_187_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_188" number="188" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_188_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_188&quot;" name="XR_LIV_EXTENSION_188_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_189" number="189" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_189_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_189&quot;" name="XR_LIV_EXTENSION_189_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_190" number="190" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_190_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_190&quot;" name="XR_LIV_EXTENSION_190_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_191" number="191" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_191_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_191&quot;" name="XR_LIV_EXTENSION_191_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_192" number="192" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_192_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_192&quot;" name="XR_LIV_EXTENSION_192_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_193" number="193" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_193_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_193&quot;" name="XR_LIV_EXTENSION_193_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_194" number="194" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_194_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_194&quot;" name="XR_LIV_EXTENSION_194_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_195" number="195" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_195_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_195&quot;" name="XR_LIV_EXTENSION_195_EXTENSION_NAME"/>
+        </require>
+    </extension>
+
+    <extension name="XR_LIV_extension_196" number="196" type="instance" supported="disabled">
+        <require>
+            <enum value="1"                                name="XR_LIV_extension_196_SPEC_VERSION"/>
+            <enum value="&quot;XR_LIV_extension_196&quot;" name="XR_LIV_EXTENSION_196_EXTENSION_NAME"/>
         </require>
     </extension>
 

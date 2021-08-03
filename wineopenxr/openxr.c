@@ -1045,6 +1045,36 @@ XrResult WINAPI wine_xrCreateSpatialAnchorMSFT(XrSession session,
     return XR_SUCCESS;
 }
 
+XrResult WINAPI wine_xrCreateSpatialAnchorFromPersistedNameMSFT(XrSession session,
+        const XrSpatialAnchorFromPersistedAnchorCreateInfoMSFT *create_info,
+        XrSpatialAnchorMSFT *anchor)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrSpatialAnchorMSFT *wine_anchor;
+    XrResult res;
+
+    WINE_TRACE("%p, %p, %p\n", session, create_info, anchor);
+
+    wine_anchor = heap_alloc_zero(sizeof(*wine_anchor));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateSpatialAnchorFromPersistedNameMSFT(wine_session->session,
+            create_info, &wine_anchor->spatial_anchor);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSpatialAnchorFromPersistedNameMSFT failed: %d\n", res);
+        heap_free(wine_anchor);
+        return res;
+    }
+
+    wine_anchor->wine_session = wine_session;
+
+    *anchor = (XrSpatialAnchorMSFT)wine_anchor;
+
+    WINE_TRACE("allocated wine spatialAnchor %p for native spatialAnchor %p\n",
+            wine_anchor, wine_anchor->spatial_anchor);
+
+    return XR_SUCCESS;
+}
+
 XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor)
 {
     wine_XrSpatialAnchorMSFT *wine_anchor = (wine_XrSpatialAnchorMSFT *)anchor;
@@ -1059,6 +1089,55 @@ XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor)
     }
 
     heap_free(wine_anchor);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreateSpatialAnchorStoreConnectionMSFT(XrSession session, XrSpatialAnchorStoreConnectionMSFT *anchor_store)
+{
+    wine_XrSpatialAnchorStoreConnectionMSFT *wine_anchor_store;
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    XrResult res;
+
+    WINE_TRACE("%p, %p\n", session, anchor_store);
+
+    wine_anchor_store = heap_alloc_zero(sizeof(*wine_anchor_store));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateSpatialAnchorStoreConnectionMSFT(wine_session->session,
+            &wine_anchor_store->spatial_anchor_store_connection);
+
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSpatialAnchorStoreConnectionMSFT failed: %d\n", res);
+        heap_free(wine_anchor_store);
+        return res;
+    }
+
+    wine_anchor_store->wine_session = wine_session;
+
+    *anchor_store = (XrSpatialAnchorStoreConnectionMSFT)wine_anchor_store;
+
+    WINE_TRACE("allocated wine_anchor_store %p for native spatial_anchor_store_connection %p\n",
+            wine_anchor_store, wine_anchor_store->spatial_anchor_store_connection);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroySpatialAnchorStoreConnectionMSFT(XrSpatialAnchorStoreConnectionMSFT anchor_store)
+{
+    wine_XrSpatialAnchorStoreConnectionMSFT *wine_anchor_store
+            = (wine_XrSpatialAnchorStoreConnectionMSFT *)anchor_store;
+    XrResult res;
+
+    WINE_TRACE("%p\n", anchor_store);
+
+    res = wine_anchor_store->wine_session->wine_instance->funcs.p_xrDestroySpatialAnchorStoreConnectionMSFT
+            (wine_anchor_store->spatial_anchor_store_connection);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrDestroySpatialAnchorStoreConnectionMSFT failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_anchor_store);
 
     return XR_SUCCESS;
 }
@@ -1153,6 +1232,54 @@ XrResult WINAPI wine_xrDestroySceneMSFT(XrSceneMSFT scene)
     }
 
     heap_free(wine_scene);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreateFoveationProfileFB(XrSession session, const XrFoveationProfileCreateInfoFB *create_info,
+        XrFoveationProfileFB *profile)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrFoveationProfileFB *wine_foveation_profile;
+    XrResult res;
+
+    WINE_TRACE("%p, %p\n", session, profile);
+
+    wine_foveation_profile = heap_alloc_zero(sizeof(*wine_foveation_profile));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateFoveationProfileFB(wine_session->session, create_info,
+            &wine_foveation_profile->foveation_profile);
+
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSpatialAnchorStoreConnectionMSFT failed: %d\n", res);
+        heap_free(wine_foveation_profile);
+        return res;
+    }
+
+    wine_foveation_profile->wine_session = wine_session;
+
+    *profile = (XrFoveationProfileFB)wine_foveation_profile;
+
+    WINE_TRACE("allocated wine_foveation_profile %p for native foveation_profile %p.\n",
+            wine_foveation_profile, wine_foveation_profile->foveation_profile);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroyFoveationProfileFB(XrFoveationProfileFB profile)
+{
+    wine_XrFoveationProfileFB *wine_profile = (wine_XrFoveationProfileFB *)profile;
+    XrResult res;
+
+    WINE_TRACE("%p\n", profile);
+
+    res = wine_profile->wine_session->wine_instance->funcs.p_xrDestroyFoveationProfileFB(wine_profile->foveation_profile);
+    if(res != XR_SUCCESS){
+        WINE_WARN("rDestroyFoveationProfileFB failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_profile);
 
     return XR_SUCCESS;
 }
