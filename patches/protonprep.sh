@@ -166,6 +166,9 @@
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
 
+    echo "ffxiv launcher"
+    patch -Np1 < ../patches/game-patches/ffxiv-launcher-workaround.patch
+
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
