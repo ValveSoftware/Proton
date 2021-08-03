@@ -58,6 +58,16 @@ static void *heap_realloc(void *p, size_t s)
 static const char WINE_VULKAN_DEVICE_EXTENSION_NAME[] = "VK_WINE_openxr_device_extensions";
 static const char WINE_VULKAN_DEVICE_VARIABLE[] = "__WINE_OPENXR_VK_DEVICE_EXTENSIONS";
 
+static const struct
+{
+    const char *win32_ext, *linux_ext;
+    BOOL remove_original;
+}
+substitute_extensions[] =
+{
+    {"XR_KHR_D3D11_enable", "XR_KHR_vulkan_enable"},
+};
+
 static char *wineopenxr_strdup(const char *src)
 {
     const size_t l = strlen(src) + 1;
@@ -510,33 +520,48 @@ XrResult load_host_openxr_loader(void)
 XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerName,
         uint32_t propertyCapacityInput, uint32_t *propertyCountOutput, XrExtensionProperties *properties)
 {
+    uint32_t i, j, dst, count, extra_extensions_count;
     XrResult res;
-    uint32_t i;
-
-    static const char *extra_extensions[] = {
-        "XR_KHR_D3D11_enable",
-    };
 
     WINE_TRACE("\n");
 
     res = xrEnumerateInstanceExtensionProperties(layerName, propertyCapacityInput, propertyCountOutput, properties);
+    if (res != XR_SUCCESS)
+        return res;
 
-    if(res == XR_SUCCESS){
-        if(properties){
-            for(i = 0; i < ARRAY_SIZE(extra_extensions); ++i){
-                strcpy(properties[*propertyCountOutput + i].extensionName, extra_extensions[i]);
-            }
-            *propertyCountOutput += ARRAY_SIZE(extra_extensions);
-            WINE_TRACE("Returning extensions:\n");
-            for(i = 0; i < *propertyCountOutput; ++i){
-                WINE_TRACE("\t-%s\n", properties[i].extensionName);
-            }
-        }else{
-            *propertyCountOutput += ARRAY_SIZE(extra_extensions);
-        }
+
+    if (!properties)
+    {
+        extra_extensions_count = 0;
+        for (i = 0; i <  ARRAY_SIZE(substitute_extensions); ++i)
+            if (!substitute_extensions[i].remove_original)
+                ++extra_extensions_count;
+
+        *propertyCountOutput += extra_extensions_count;
+        WINE_TRACE("%u extensions.\n", *propertyCountOutput);
+        return XR_SUCCESS;
     }
 
-    return res;
+    count = *propertyCountOutput;
+    for (i = 0; i < count; ++i)
+    {
+        for (j = 0; j < ARRAY_SIZE(substitute_extensions); ++j)
+            if (!strcmp(properties[i].extensionName, substitute_extensions[j].linux_ext))
+            {
+                if (substitute_extensions[j].remove_original)
+                    dst = i;
+                else
+                    dst = (*propertyCountOutput)++;
+                strcpy(properties[dst].extensionName, substitute_extensions[j].win32_ext);
+                break;
+            }
+    }
+
+    WINE_TRACE("Enumerated extensions:\n");
+    for(i = 0; i < *propertyCountOutput; ++i)
+        WINE_TRACE("  -%s\n", properties[i].extensionName);
+
+    return XR_SUCCESS;
 }
 
 XrResult WINAPI wine_xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance,
@@ -650,8 +675,8 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
     struct wine_XrInstance *wine_instance;
     uint32_t i, j, type = 0;
     XrInstanceCreateInfo our_createInfo;
-    uint32_t dst = 0;
-    char **new_list = NULL;
+    const char *ext_name;
+    char **new_list;
 
     WINE_TRACE("%p, %p\n", createInfo, instance);
 
@@ -669,33 +694,27 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
         }
     }
 
+    new_list = heap_alloc(createInfo->enabledExtensionCount * sizeof(*new_list));
+
     /* remove win32 extensions */
-    for(i = 0; i < createInfo->enabledExtensionCount; ++i){
-        if(strcmp(createInfo->enabledExtensionNames[i], "XR_KHR_D3D11_enable") != 0){
-            if(i != dst){
-                new_list[dst] = wineopenxr_strdup(createInfo->enabledExtensionNames[i]);
-            }
-            dst++;
-        }else{
-            /* skip this one */
-            if(!new_list){
-                new_list = heap_alloc(createInfo->enabledExtensionCount * sizeof(char *));
-                for(j = 0; j < i; ++j){
-                    new_list[j] = wineopenxr_strdup(createInfo->enabledExtensionNames[j]);
-                }
+    for(i = 0; i < createInfo->enabledExtensionCount; ++i)
+    {
+        ext_name = createInfo->enabledExtensionNames[i];
+        for (j = 0; j < ARRAY_SIZE(substitute_extensions); ++j)
+        {
+            if (!strcmp(ext_name, substitute_extensions[j].win32_ext))
+            {
+                ext_name = substitute_extensions[j].linux_ext;
+                break;
             }
         }
+        new_list[i] = wineopenxr_strdup(ext_name);
     }
-    if(new_list){
-        /* we must have removed a d3d thing, so put vulkan here */
-        new_list[dst] = wineopenxr_strdup("XR_KHR_vulkan_enable");
-        dst++;
 
-        our_createInfo = *createInfo;
-        our_createInfo.enabledExtensionNames = (const char * const*)new_list;
-        our_createInfo.enabledExtensionCount = dst;
-        createInfo = &our_createInfo;
-    }
+    our_createInfo = *createInfo;
+    our_createInfo.enabledExtensionNames = (const char * const*)new_list;
+    our_createInfo.enabledExtensionCount = createInfo->enabledExtensionCount;
+    createInfo = &our_createInfo;
 
     WINE_TRACE("Enabled extensions:\n");
     for(i = 0; i < createInfo->enabledExtensionCount; ++i){
@@ -723,12 +742,10 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
     *instance = (XrInstance)wine_instance;
 
 cleanup:
-    if(createInfo == &our_createInfo){
-        for(i = 0; i < our_createInfo.enabledExtensionCount; ++i){
-            heap_free((void*)our_createInfo.enabledExtensionNames[i]);
-        }
-        heap_free((void*)our_createInfo.enabledExtensionNames);
-    }
+    for(i = 0; i < our_createInfo.enabledExtensionCount; ++i)
+        heap_free((void*)our_createInfo.enabledExtensionNames[i]);
+
+    heap_free((void*)our_createInfo.enabledExtensionNames);
     return res;
 }
 
