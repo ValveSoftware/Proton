@@ -17,7 +17,7 @@ diff -urN a/dlls/ntdll/ntdll.spec a/dlls/ntdll/ntdll.spec
 +++ a/dlls/ntdll/ntdll.spec	2019-04-24 18:48:37 +0900
 @@ -1630,3 +1631,5 @@
  # Filesystem
- @ cdecl -syscall wine_nt_to_unix_file_name(ptr ptr ptr long)
- @ cdecl -syscall wine_unix_to_nt_file_name(str ptr ptr)
+ @ stdcall -syscall wine_nt_to_unix_file_name(ptr ptr ptr long)
+ @ stdcall -syscall wine_unix_to_nt_file_name(str ptr ptr)
 +
 +@ cdecl IsTransgaming()
