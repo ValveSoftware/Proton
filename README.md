@@ -92,6 +92,7 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Various WINE hotfixes for WINE functionality that fix regressions per version
 - Various Proton hotfixes for Proton functionality that fix regressions per version
 - DXVK is compiled with async for faster shader compiling. See environment variables section for more information on usage.
+- AMD FidelityFX Super Resolution (FSR) has been patched in as the fullscreen hack's upscaling backend.
 
 ### Media Foundation fixes (Fully working or playable)
 
@@ -255,6 +256,8 @@ Environment variable options:
 | <tt>seccomp</tt>      | <tt>PROTON_USE_SECCOMP</tt>    | Enable seccomp-bpf filter to emulate native syscalls, required for some DRM protections to work. |
 | <tt>async</tt>      | <tt>DXVK_ASYNC</tt>    | Allows Async to be used with DXVK. This can help with stutter in some games, however it is recommended not to be used with games that have sensitive anti-cheats. Use at your own risk. |
 | <tt>nowritewatch</tt> | <tt>PROTON_NO_WRITE_WATCH</tt> | Disable support for memory write watches in ntdll. This is a very dangerous hack and should only be applied if you have verified that the game can operate without write watches. This improves performance for some very specific games (e.g. CoreRT-based games). |
+|                       | <tt>WINE_FULLSCREEN_FSR</tt>   | Enable AMD FidelityFX Super Resolution (FSR), use in conjunction with `WINE_FULLSCREEN_FSR_STRENGTH` Only works in vulkan games (dxvk and vkd3d-proton included).|
+|                       | <tt>WINE_FULLSCREEN_FSR_STRENGTH</tt> | AMD FidelityFX Super Resolution (FSR), the default sharpening of 5 is enough without needing modification, but can be changed with 0-5 if wanted. 0 Off, 1 Performace, up to 5 Ultra quality. |
 ## Credits
 
 As many of you may or may not already know, there is a Credits section in the README for this Git repository. My proton-ge project contains some of my personal tweaks to Proton, but a large amount of the patches, rebases and fixes come from numerous people's projects. While I tend to get credited for my builds, a lot of the work that goes into it are from other people as well. I'd like to take some time to point a few of these people out of recognition. In future builds, I plan to make clearer and more informative Git commits, as well as attempt to give these people further crediting, as my README may not be sufficient in doing so.
