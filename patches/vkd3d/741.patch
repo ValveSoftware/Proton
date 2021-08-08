@@ -1,4 +1,55 @@
-From ef54960f954ced48337fc9e5c2f8560abc0f2aac Mon Sep 17 00:00:00 2001
+From 9b5b7efc7faf2efa788d57156a14db7f7ae80757 Mon Sep 17 00:00:00 2001
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Date: Wed, 14 Jul 2021 14:02:31 +0200
+Subject: [PATCH] vkd3d: Ensure we do not fallback device allocations to BAR.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ libs/vkd3d/memory.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/libs/vkd3d/memory.c b/libs/vkd3d/memory.c
+index d3ee45173..07fb76621 100644
+--- a/libs/vkd3d/memory.c
++++ b/libs/vkd3d/memory.c
+@@ -151,10 +151,10 @@ static HRESULT vkd3d_try_allocate_device_memory(struct d3d12_device *device,
+         VkDeviceSize size, VkMemoryPropertyFlags type_flags, uint32_t type_mask,
+         void *pNext, VkDeviceMemory *vk_memory, uint32_t *vk_memory_type)
+ {
++    const VkMemoryPropertyFlags optional_flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+     const VkPhysicalDeviceMemoryProperties *memory_info = &device->memory_properties;
+     const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
+     VkMemoryAllocateInfo allocate_info;
+-    VkResult vr;
+
+     /* buffer_mask / sampled_mask etc will generally take care of this,
+      * but for certain fallback scenarios where we select other memory
+@@ -174,14 +174,21 @@ static HRESULT vkd3d_try_allocate_device_memory(struct d3d12_device *device,
+
+         allocate_info.memoryTypeIndex = type_index;
+
+-        if ((vr = VK_CALL(vkAllocateMemory(device->vk_device,
+-                &allocate_info, NULL, vk_memory))) == VK_SUCCESS)
++        if (VK_CALL(vkAllocateMemory(device->vk_device, &allocate_info, NULL, vk_memory)) == VK_SUCCESS)
+         {
+             if (vk_memory_type)
+                 *vk_memory_type = type_index;
+-
+             return S_OK;
+         }
++        else if (type_flags & optional_flags)
++        {
++            /* If we fail to allocate DEVICE_LOCAL memory, immediately fail the call.
++             * This way we avoid any attempt to fall back to PCI-e BAR memory types
++             * which are also DEVICE_LOCAL.
++             * After failure, the calling code removes the DEVICE_LOCAL_BIT flag and tries again,
++             * where we will fall back to system memory instead. */
++            return E_OUTOFMEMORY;
++        }
+     }
+
+     return E_OUTOFMEMORY;
+From 89ed89f08f6df355dd795948bac86c94c78bddd2 Mon Sep 17 00:00:00 2001
 From: Joshua Ashton <joshua@froggi.es>
 Date: Fri, 9 Jul 2021 19:42:06 +0100
 Subject: [PATCH] vkd3d: Add config to use host-visible vram for UPLOAD heap
@@ -18,7 +69,7 @@ Signed-off-by: Joshua Ashton <joshua@froggi.es>
  4 files changed, 5 insertions(+)
 
 diff --git a/README.md b/README.md
-index 972b81814..52c46773d 100644
+index 972b8181..52c46773 100644
 --- a/README.md
 +++ b/README.md
 @@ -154,6 +154,7 @@ commas or semicolons.
@@ -30,7 +81,7 @@ index 972b81814..52c46773d 100644
     vkd3d-proton. Accepts the following values: none, err, info, fixme, warn, trace.
   - `VKD3D_SHADER_DEBUG` - controls the debug level for log messages produced by
 diff --git a/include/vkd3d.h b/include/vkd3d.h
-index c36aa6581..f6419e7a1 100644
+index c36aa658..f6419e7a 100644
 --- a/include/vkd3d.h
 +++ b/include/vkd3d.h
 @@ -70,6 +70,7 @@ enum vkd3d_config_flags
@@ -39,10 +90,10 @@ index c36aa6581..f6419e7a1 100644
      VKD3D_CONFIG_FLAG_FORCE_MINIMUM_SUBGROUP_SIZE = 0x00000200,
 +    VKD3D_CONFIG_FLAG_UPLOAD_HVV = 0x00000400,
  };
- 
+
  typedef HRESULT (*PFN_vkd3d_signal_event)(HANDLE event);
 diff --git a/libs/vkd3d/device.c b/libs/vkd3d/device.c
-index 99a0d2f86..800a348c4 100644
+index 99a0d2f8..800a348c 100644
 --- a/libs/vkd3d/device.c
 +++ b/libs/vkd3d/device.c
 @@ -490,6 +490,7 @@ static const struct vkd3d_debug_option vkd3d_config_options[] =
@@ -51,18 +102,79 @@ index 99a0d2f86..800a348c4 100644
      {"force_exclusive_queue", VKD3D_CONFIG_FLAG_FORCE_RTV_EXCLUSIVE_QUEUE | VKD3D_CONFIG_FLAG_FORCE_DSV_EXCLUSIVE_QUEUE},
 +    {"upload_hvv", VKD3D_CONFIG_FLAG_UPLOAD_HVV},
  };
- 
+
  static void vkd3d_config_flags_init_once(void)
 diff --git a/libs/vkd3d/memory.c b/libs/vkd3d/memory.c
-index d3ee45173..bf64360bd 100644
+index 07fb7662..a01e0b25 100644
 --- a/libs/vkd3d/memory.c
 +++ b/libs/vkd3d/memory.c
 @@ -83,6 +83,8 @@ static HRESULT vkd3d_select_memory_flags(struct d3d12_device *device, const D3D1
- 
+
          case D3D12_HEAP_TYPE_UPLOAD:
              *type_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 +            if (vkd3d_config_flags & VKD3D_CONFIG_FLAG_UPLOAD_HVV)
 +                *type_flags |= VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
              break;
- 
+
          case D3D12_HEAP_TYPE_READBACK:
+From 6025f9e293a3652f8fde1e1dfcf289e9b3768e8b Mon Sep 17 00:00:00 2001
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Date: Mon, 12 Jul 2021 12:52:38 +0200
+Subject: [PATCH] vkd3d: Allow all memory types if UPLOAD_HVV is used.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ libs/vkd3d/resource.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libs/vkd3d/resource.c b/libs/vkd3d/resource.c
+index eeb722fd..19bc1676 100644
+--- a/libs/vkd3d/resource.c
++++ b/libs/vkd3d/resource.c
+@@ -5822,6 +5822,9 @@ static uint32_t vkd3d_memory_info_find_global_mask(struct d3d12_device *device)
+     uint32_t heap_index;
+     uint32_t i, mask;
+
++    if (vkd3d_config_flags & VKD3D_CONFIG_FLAG_UPLOAD_HVV)
++        return UINT32_MAX;
++
+     for (i = 0; i < device->memory_properties.memoryHeapCount; i++)
+     {
+         heap_size = device->memory_properties.memoryHeaps[i].size;
+From 522cacde904803bdf93ca0d2de8db66343d93583 Mon Sep 17 00:00:00 2001
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Date: Mon, 12 Jul 2021 12:52:51 +0200
+Subject: [PATCH] vkd3d: Use BAR memory type for descriptor heap helpers.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ libs/vkd3d/resource.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/libs/vkd3d/resource.c b/libs/vkd3d/resource.c
+index 19bc1676..db99e815 100644
+--- a/libs/vkd3d/resource.c
++++ b/libs/vkd3d/resource.c
+@@ -5180,6 +5180,7 @@ static HRESULT d3d12_descriptor_heap_init_data_buffer(struct d3d12_descriptor_he
+             device->device_info.properties2.properties.limits.nonCoherentAtomSize);
+     VkDeviceSize raw_va_buffer_size = 0, offset_buffer_size = 0;
+     VKD3D_UNUSED VkDeviceSize descriptor_heap_info_size = 0;
++    VkMemoryPropertyFlags property_flags;
+     VkDeviceSize buffer_size, offset;
+     D3D12_HEAP_PROPERTIES heap_info;
+     D3D12_RESOURCE_DESC buffer_desc;
+@@ -5231,9 +5232,12 @@ static HRESULT d3d12_descriptor_heap_init_data_buffer(struct d3d12_descriptor_he
+         if (FAILED(hr = vkd3d_create_buffer(device, &heap_info, heap_flags, &buffer_desc, &descriptor_heap->vk_buffer)))
+             return hr;
+
++        property_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
++        if (vkd3d_config_flags & VKD3D_CONFIG_FLAG_UPLOAD_HVV)
++            property_flags |= VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
++
+         if (FAILED(hr = vkd3d_allocate_buffer_memory(device, descriptor_heap->vk_buffer,
+-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+-                &descriptor_heap->vk_memory)))
++                property_flags, &descriptor_heap->vk_memory)))
+             return hr;
+
+         if ((vr = VK_CALL(vkMapMemory(device->vk_device, descriptor_heap->vk_memory,

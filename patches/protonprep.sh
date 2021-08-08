@@ -35,7 +35,7 @@
 
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
-    
+
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
@@ -48,7 +48,7 @@
 
     # revert pending pulseaudio changes
     git revert --no-commit 183fd3e089b170d5b7405a80a23e81dc7c4dd682
-    
+
     # reenable pulseaudio patches
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
     patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
@@ -69,11 +69,7 @@
 
     # this breaks controllers in some unity games
     # https://bugs.winehq.org/show_bug.cgi?id=51277
-    git revert --no-commit 97afac469fbe012e22acc1f1045c88b1004a241f
-
-    # https://bugs.winehq.org/show_bug.cgi?id=49990
-    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
-    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
+#    git revert --no-commit 97afac469fbe012e22acc1f1045c88b1004a241f
 
     echo "temporary pulseaudio reverts"
     git revert --no-commit 2e64d91428757eaa88475b49bf50922cda603b59
@@ -184,7 +180,7 @@
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
 
 ### END GAME PATCH SECTION ###
-    
+
 ### (2-4) PROTON PATCH SECTION ###
 
     echo "applying __wine_make_process_system_restore revert for steamclient compatibility"
@@ -193,14 +189,14 @@
 
     echo "clock monotonic"
     patch -Np1 < ../patches/proton/01-proton-use_clock_monotonic.patch
-    
+
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../patches/proton/03-proton-fsync_staging.patch
 
     echo "LAA"
     patch -Np1 < ../patches/proton/04-proton-LAA_staging.patch
-    
+
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/08-proton-steamclient_swap.patch
 
@@ -242,7 +238,7 @@
 
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
-    
+
     echo "apply staging bcrypt patches on top of rdr2 fixes"
     patch -Np1 < ../patches/wine-hotfixes/staging/0001-bcrypt-Allow-multiple-backends-to-coexist.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
@@ -309,7 +305,7 @@
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
-    
+
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
 
