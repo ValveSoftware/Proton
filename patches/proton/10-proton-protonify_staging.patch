@@ -1563,30 +1563,32 @@ index 4010a727a08..ef9a640a771 100644
          return WSAHOST_NOT_FOUND;
      }
 
-+    if (nodename && !strcmp(nodename, "download-alt.easyanticheat.net"))
++    if (node && !strcmp(node, "download-alt.easyanticheat.net"))
 +    {
 +        ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
 +        SetLastError(WSAHOST_NOT_FOUND);
 +        return WSAHOST_NOT_FOUND;
 +    }
 +
-     if (!nodename)
-         node = NULL;
-     else if (!nodename[0])
-@@ -1293,6 +1293,13 @@ struct WS_hostent* WINAPI WS_gethostbyname(const char* name)
-         while (extrabuf)
-         {
-             int res = gethostbyname_r( name, &hostentry, extrabuf, ebufsize, &host, &locerr );
+     if (node)
+     {
+         if (!node[0])
+diff --git a/dlls/ws2_32/unixlib.c b/dlls/ws2_32/unixlib.c
+index 4010a727a08..ef9a640a771 100644
+--- a/dlls/ws2_32/unixlib.c
++++ b/dlls/ws2_32/unixlib.c
+@@ -869,6 +869,12 @@ static int CDECL unix_gethostbyname( const char *name, struct WS_hostent *const
+     int locerr;
+     int ret;
+
++    if (!strcmp(name, "download-alt.easyanticheat.net"))
++    {
++        ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
++        return HOST_NOT_FOUND;
++    }
 +
-+            if (!strcmp(name, "download-alt.easyanticheat.net"))
-+            {
-+                ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
-+                res = HOST_NOT_FOUND;
-+            }
-+
-             if (res != ERANGE) break;
-             ebufsize *= 2;
-             extrabuf = HeapReAlloc( GetProcessHeap(), 0, extrabuf, ebufsize );
+     if (!(unix_buffer = malloc( unix_size )))
+         return WSAENOBUFS;
 From c9a5fcb0966ab0ca0722c8c07476c131844f98e1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 16 Oct 2020 23:37:09 +0200
