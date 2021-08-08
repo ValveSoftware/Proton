@@ -45,17 +45,16 @@ index 89caca9f30f..6fb16333397 100644
              TRACE( "found wine frame %p rsp %lx handler %p\n",
                      teb_frame, context.Rsp, teb_frame->Handler );
 diff --git a/dlls/ws2_32/Makefile.in b/dlls/ws2_32/Makefile.in
-index 9d7dfafeb3c..c7f24168dac 100644
+index 78c1633c921..a29e9f0a140 100644
 --- a/dlls/ws2_32/Makefile.in
 +++ b/dlls/ws2_32/Makefile.in
-@@ -1,6 +1,7 @@
- EXTRADEFS = -DUSE_WS_PREFIX
+@@ -1,5 +1,6 @@
  MODULE    = ws2_32.dll
  IMPORTLIB = ws2_32
 +IMPORTS = kernelbase
- DELAYIMPORTS = iphlpapi user32
+ DELAYIMPORTS = advapi32 iphlpapi user32
  EXTRALIBS = $(POLL_LIBS)
- 
+
 diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
 index b4b3981da0a..1ea738ce547 100644
 --- a/dlls/winex11.drv/display.c
