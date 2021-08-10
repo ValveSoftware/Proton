@@ -346,6 +346,7 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/msgothic.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
+	cp $(FONTS)/noto/NotoSansArabic-Regular.ttf "$@"
 
 .PHONY: dist
 
