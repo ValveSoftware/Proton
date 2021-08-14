@@ -6543,15 +6543,15 @@ index bf62f448976..8b32c5ee860 100644
 --- a/dlls/winebus.sys/bus_sdl.c
 +++ b/dlls/winebus.sys/bus_sdl.c
 @@ -1166,6 +1166,9 @@ NTSTATUS sdl_driver_init(void)
-         pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
-         pSDL_JoystickGetProductVersion = dlsym(sdl_handle, "SDL_JoystickGetProductVersion");
-         pSDL_JoystickGetVendor = dlsym(sdl_handle, "SDL_JoystickGetVendor");
-+        if(!pSDL_JoystickGetVendor){
-+            ERR("SDL installation is old! Please upgrade to >=2.0.6 to get accurate joystick information.\n");
-+        }
-     }
- 
-     map_controllers = check_bus_option(&controller_mode, 1);
+     pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
+     pSDL_JoystickGetProductVersion = dlsym(sdl_handle, "SDL_JoystickGetProductVersion");
+     pSDL_JoystickGetVendor = dlsym(sdl_handle, "SDL_JoystickGetVendor");
++    if(!pSDL_JoystickGetVendor){
++        ERR("SDL installation is old! Please upgrade to >=2.0.6 to get accurate joystick information.\n");
++    }
+     return TRUE;
+
+ failed:
 From 348fbd714c074f5c5b523383d4191ad2eab08b49 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 2 May 2019 10:17:49 -0500
@@ -6560,7 +6560,7 @@ Subject: [PATCH] winebus.sys: Don't report the guide button
 This breaks our xinput.
 ---
  dlls/winebus.sys/bus_sdl.c | 5 ++++-
- dlls/xinput1_3/hid.c       | 5 ++---
+ dlls/xinput1_3/main.c       | 5 ++---
  2 files changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
@@ -6573,9 +6573,9 @@ index 8b32c5ee860..7fcb19a6e88 100644
  
 -#define CONTROLLER_NUM_BUTTONS 11
 +#define CONTROLLER_NUM_BUTTONS 10
- 
- static const BYTE CONTROLLER_BUTTONS[] = {
-     USAGE_PAGE(1, HID_USAGE_PAGE_BUTTON),
+ #define CONTROLLER_NUM_AXES 6
+ #define CONTROLLER_NUM_HATSWITCHES 1
+
 @@ -834,7 +834,10 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
                  case SDL_CONTROLLER_BUTTON_START: usage = 7; break;
                  case SDL_CONTROLLER_BUTTON_LEFTSTICK: usage = 8; break;
@@ -6587,36 +6587,36 @@ index 8b32c5ee860..7fcb19a6e88 100644
  
                  case SDL_CONTROLLER_BUTTON_DPAD_UP:
                  case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
+diff --git a/dlls/xinput1_3/main.c b/dlls/xinput1_3/main.c
 index 8aea638a8d7..7cdca280295 100644
---- a/dlls/xinput1_3/hid.c
-+++ b/dlls/xinput1_3/hid.c
-@@ -110,7 +110,7 @@ static BOOL VerifyGamepad(PHIDP_PREPARSED_DATA ppd, XINPUT_CAPABILITIES *xinput_
+--- a/dlls/xinput1_3/main.c
++++ b/dlls/xinput1_3/main.c
+@@ -182,7 +182,7 @@ static BOOL VerifyGamepad(PHIDP_PREPARSED_DATA ppd, XINPUT_CAPABILITIES *xinput_
              button_count = max(button_count, button_caps[i].NotRange.Usage);
      }
      free(button_caps);
 -    if (button_count < 11)
 +    if (button_count < 10)
          WARN("Too few buttons, continuing anyway\n");
-     xinput_caps->Gamepad.wButtons = 0xffff;
+     caps->Gamepad.wButtons = 0xffff;
  
-@@ -341,7 +341,7 @@ void HID_update_state(xinput_controller *device, XINPUT_STATE *state)
-     CHAR *report = private->reports[(private->current_report)%2];
-     CHAR *target_report = private->reports[(private->current_report+1)%2];
- 
+@@ -387,7 +387,7 @@ void HID_update_state(xinput_controller *device, XINPUT_STATE *state)
+     char *report_buf = controller->hid.input_report_buf;
+     XINPUT_STATE state;
+     NTSTATUS status;
 -    USAGE buttons[11];
 +    USAGE buttons[10];
-     ULONG button_length, hat_value;
-     LONG value;
- 
-@@ -383,7 +383,6 @@ void HID_update_state(xinput_controller *device, XINPUT_STATE *state)
-                 case 8: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_START; break;
-                 case 9: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_LEFT_THUMB; break;
-                 case 10: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB; break;
--                case 11: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_GUIDE; break;
-             }
+     ULONG i, button_length, value;
+
+     if (!GetOverlappedResult(controller->device, &controller->hid.read_ovl, &read_len, TRUE))
+@@ -431,7 +431,6 @@ void HID_update_state(xinput_controller *device, XINPUT_STATE *state)
+         case 8: state.Gamepad.wButtons |= XINPUT_GAMEPAD_START; break;
+         case 9: state.Gamepad.wButtons |= XINPUT_GAMEPAD_LEFT_THUMB; break;
+         case 10: state.Gamepad.wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB; break;
+-        case 11: state.Gamepad.wButtons |= XINPUT_GAMEPAD_GUIDE; break;
          }
- 
+     }
+
 From c5d52c73b754568df148013907f26e5da3525166 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 6 Aug 2019 13:27:25 -0500
@@ -6787,7 +6787,7 @@ index 55d444b5fe7..22f7f8df225 100644
          }
 -        udev_driver_init();
 -        iohid_driver_init();
-         irp->IoStatus.u.Status = STATUS_SUCCESS;
+         irp->IoStatus.Status = STATUS_SUCCESS;
          break;
      case IRP_MN_SURPRISE_REMOVAL:
 From b8ca845546043d26d96619460c96c9ec7025c4a5 Mon Sep 17 00:00:00 2001
@@ -7499,11 +7499,10 @@ index d9a64374019..4677e1b47ff 100644
  
      if (!(devnode = udev_device_get_devnode(dev)))
          return;
-@@ -1285,17 +1290,34 @@ static void try_add_device(struct udev_device *dev)
-     }
- 
+@@ -1106,6 +1106,27 @@ static void try_add_device(struct udev_device *dev)
+ #endif
+
      subsystem = udev_device_get_subsystem(dev);
-+
 +    if (strcmp(subsystem, "hidraw") == 0)
 +    {
 +        vtbl = &hidraw_vtbl;
@@ -7528,17 +7527,6 @@ index d9a64374019..4677e1b47ff 100644
      hiddev = udev_device_get_parent_with_subsystem_devtype(dev, "hid", NULL);
      if (hiddev)
      {
-         const char *bcdDevice = NULL;
- #ifdef HAS_PROPER_INPUT_HEADER
--        const platform_vtbl *other_vtbl = NULL;
-         DEVICE_OBJECT *dup = NULL;
--        if (strcmp(subsystem, "hidraw") == 0)
--            other_vtbl = &lnxev_vtbl;
--        else if (strcmp(subsystem, "input") == 0)
--            other_vtbl = &hidraw_vtbl;
- 
-         if (other_vtbl)
-             dup = bus_enumerate_hid_devices(other_vtbl, check_same_device, dev);
 @@ -1378,16 +1400,16 @@ static void try_add_device(struct udev_device *dev)
      TRACE("Found udev device %s (vid %04x, pid %04x, version %u, serial %s)\n",
            debugstr_a(devnode), vid, pid, version, debugstr_w(serial));
@@ -7658,77 +7646,6 @@ index 4677e1b47ff..0a0b6e788b3 100644
  static void build_initial_deviceset(void)
  {
      struct udev_enumerate *enumerate;
-From 601654cdbf3bd75487e73b5b39c6a23ef9149932 Mon Sep 17 00:00:00 2001
-From: Simon McVittie <smcv@collabora.com>
-Date: Wed, 11 Nov 2020 13:48:18 +0000
-Subject: [PATCH] winebus: Make it more explicit how we are checking for
- duplicate devices
-
-Signed-off-by: Simon McVittie <smcv@collabora.com>
----
- dlls/winebus.sys/bus_udev.c | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
-
-diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
-index 0a0b6e788b3..5524992e477 100644
---- a/dlls/winebus.sys/bus_udev.c
-+++ b/dlls/winebus.sys/bus_udev.c
-@@ -1182,9 +1182,23 @@ static const platform_vtbl lnxev_vtbl = {
- };
- #endif
- 
--static int check_same_device(DEVICE_OBJECT *device, void* context)
-+/* Return 0 to stop enumeration if @device's canonical path in /sys is @context. */
-+static int stop_if_syspath_equals(DEVICE_OBJECT *device, void *context)
- {
--    return !compare_platform_device(device, context);
-+    struct platform_private *private = impl_from_DEVICE_OBJECT(device);
-+    const char *want_syspath = context;
-+    const char *syspath = udev_device_get_syspath(private->udev_device);
-+
-+    if (!syspath)
-+        return 1;
-+
-+    if (strcmp(syspath, want_syspath) == 0)
-+    {
-+        TRACE("Found device %p with syspath %s\n", private, debugstr_a(want_syspath));
-+        return 0;
-+    }
-+
-+    return 1;
- }
- 
- static DWORD a_to_bcd(const char *s)
-@@ -1279,6 +1293,7 @@ static void try_add_device(struct udev_device *dev)
- #ifdef HAS_PROPER_INPUT_HEADER
-     const platform_vtbl *other_vtbl = NULL;
- #endif
-+    const char *syspath;
- 
-     if (!(devnode = udev_device_get_devnode(dev)))
-         return;
-@@ -1289,6 +1304,7 @@ static void try_add_device(struct udev_device *dev)
-         return;
-     }
- 
-+    syspath = udev_device_get_syspath(dev);
-     subsystem = udev_device_get_subsystem(dev);
- 
-     if (strcmp(subsystem, "hidraw") == 0)
-@@ -1320,10 +1336,11 @@ static void try_add_device(struct udev_device *dev)
-         DEVICE_OBJECT *dup = NULL;
- 
-         if (other_vtbl)
--            dup = bus_enumerate_hid_devices(other_vtbl, check_same_device, dev);
-+            dup = bus_enumerate_hid_devices(other_vtbl, stop_if_syspath_equals, (void *) syspath);
-         if (dup)
-         {
--            TRACE("Duplicate cross bus device (%p) found, not adding the new one\n", dup);
-+            TRACE("Duplicate cross bus device %s (%p) found, not adding the new one\n",
-+                  debugstr_a(syspath), dup);
-             close(fd);
-             return;
-         }
 From f1a1944eff772aa0fcffa70d29a6426d1e29049e Mon Sep 17 00:00:00 2001
 From: Simon McVittie <smcv@collabora.com>
 Date: Wed, 11 Nov 2020 13:49:50 +0000
@@ -7751,37 +7668,6 @@ diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
 index 5524992e477..6954cb9707f 100644
 --- a/dlls/winebus.sys/bus_udev.c
 +++ b/dlls/winebus.sys/bus_udev.c
-@@ -1282,6 +1282,7 @@ static void try_add_device(struct udev_device *dev)
-     DWORD vid = 0, pid = 0, version = 0, bus_type = 0;
-     struct udev_device *hiddev = NULL, *walk_device;
-     DEVICE_OBJECT *device = NULL;
-+    DEVICE_OBJECT *dup = NULL;
-     const char *subsystem;
-     const char *devnode;
-     WCHAR *serial = NULL;
-@@ -1328,13 +1329,20 @@ static void try_add_device(struct udev_device *dev)
-         return;
-     }
- 
-+    dup = bus_enumerate_hid_devices(vtbl, stop_if_syspath_equals, (void *) syspath);
-+    if (dup)
-+    {
-+        TRACE("Duplicate %s device (%p) found, not adding the new one\n",
-+              debugstr_a(syspath), dup);
-+        close(fd);
-+        return;
-+    }
-+
-     hiddev = udev_device_get_parent_with_subsystem_devtype(dev, "hid", NULL);
-     if (hiddev)
-     {
-         const char *bcdDevice = NULL;
- #ifdef HAS_PROPER_INPUT_HEADER
--        DEVICE_OBJECT *dup = NULL;
--
-         if (other_vtbl)
-             dup = bus_enumerate_hid_devices(other_vtbl, stop_if_syspath_equals, (void *) syspath);
-         if (dup)
 @@ -1658,12 +1666,10 @@ static void process_monitor_event(struct udev_monitor *monitor)
  
      if (!action)
@@ -8778,14 +8664,14 @@ index efe4a8c6b46..8a4e66bec55 100644
      pSDL_JoystickEventState(SDL_ENABLE);
      pSDL_GameControllerEventState(SDL_ENABLE);
  
-@@ -1353,6 +1359,7 @@ NTSTATUS sdl_driver_init(void)
-         LOAD_FUNCPTR(SDL_GameControllerAddMapping);
-         LOAD_FUNCPTR(SDL_RegisterEvents);
-         LOAD_FUNCPTR(SDL_PushEvent);
-+        LOAD_FUNCPTR(SDL_LogSetPriority);
+@@ -1359,6 +1365,7 @@ NTSTATUS sdl_driver_init(void)
+     LOAD_FUNCPTR(SDL_GameControllerAddMapping);
+     LOAD_FUNCPTR(SDL_RegisterEvents);
+     LOAD_FUNCPTR(SDL_PushEvent);
++    LOAD_FUNCPTR(SDL_LogSetPriority);
  #undef LOAD_FUNCPTR
-         pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
-         pSDL_JoystickGetProductVersion = dlsym(sdl_handle, "SDL_JoystickGetProductVersion");
+     pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
+     pSDL_JoystickGetProductVersion = dlsym(sdl_handle, "SDL_JoystickGetProductVersion");
 From edbc93d665fe8494a76a2330d2350babe63716f7 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 17 Dec 2020 19:05:37 +0100
@@ -8806,7 +8692,7 @@ index 8a4e66bec55..23501931e69 100644
  static HANDLE deviceloop_handle;
  static UINT quit_event = -1;
 +static HANDLE steam_overlay_event;
- 
+
  #define XINPUT_HACK_ID_BIT 0x80000000
  #define MAKE_FUNCPTR(f) static typeof(f) * p##f = NULL
 @@ -1162,8 +1163,13 @@ static void try_add_device(unsigned int index, BOOL xinput_hack)
@@ -10456,4 +10342,5 @@ index dc8739c4640..12285c42673 100644
 +DELAYIMPORTS = hid setupapi user32
 
  EXTRADLLFLAGS = -mno-cygwin
+
 

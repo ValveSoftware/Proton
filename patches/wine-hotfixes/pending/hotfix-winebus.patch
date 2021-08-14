@@ -1,0 +1,89 @@
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH] winebus.sys: Terminate device loop thread on shutdown.
+Message-Id: <20210810172953.3464064-1-rbernon@codeweavers.com>
+Date: Tue, 10 Aug 2021 19:29:53 +0200
+
+Instead of waiting for it.
+
+Otherwise the module may be unloaded on process shutdown while the
+thread is still busy processing events, causing possible invalid memory
+access (for instance when accessing the static pnp_devset device list).
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+
+I'm not sure what's best here, the crash is pretty hard to reproduce,
+and most likely to happen with a device that sends a lot of events
+(the DualShock 4 for instance reports a constant stream of data).
+
+It's possible to reproduce it more easily by adding Sleep calls in the
+event processing functions.
+
+We could wait a bit before terminating the thread but as we are shutting
+down the process I don't know if it's even worth it.
+
+ dlls/winebus.sys/bus_sdl.c | 31 ++++++-------------------------
+ 1 file changed, 6 insertions(+), 25 deletions(-)
+
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index f3fcc20893e..6133c8eb147 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -67,7 +67,6 @@ static DWORD map_controllers = 0;
+ 
+ static void *sdl_handle = NULL;
+ static HANDLE deviceloop_handle;
+-static UINT quit_event = -1;
+ static HANDLE steam_overlay_event;
+
+ #define XINPUT_HACK_ID_BIT 0x80000000
+@@ -1072,39 +1071,21 @@ static DWORD CALLBACK deviceloop_thread(void *args)
+ 
+     SetEvent(init_done);
+ 
+-    while (1) {
+-        while (pSDL_WaitEvent(&event) != 0) {
+-            if (event.type == quit_event) {
+-                TRACE("Device thread exiting\n");
+-                return 0;
+-            }
+-            process_device_event(&event);
+-        }
+-    }
++    while (pSDL_WaitEvent(&event) != 0)
++        process_device_event(&event);
++
++    ERR("SDL_WaitEvent failed: %s\n", pSDL_GetError());
++    return -1;
+ }
+ 
+ void sdl_driver_unload( void )
+ {
+-    SDL_Event event;
+-
+     TRACE("Unload Driver\n");
+ 
+     if (!deviceloop_handle)
+         return;
+ 
+-    quit_event = pSDL_RegisterEvents(1);
+-    if (quit_event == -1) {
+-        ERR("error registering quit event\n");
+-        return;
+-    }
+-
+-    event.type = quit_event;
+-    if (pSDL_PushEvent(&event) != 1) {
+-        ERR("error pushing quit event\n");
+-        return;
+-    }
+-
+-    WaitForSingleObject(deviceloop_handle, INFINITE);
++    TerminateThread(deviceloop_handle, 0);
+     CloseHandle(deviceloop_handle);
+     dlclose(sdl_handle);
+ }
+
+-- 
+2.32.0
+
