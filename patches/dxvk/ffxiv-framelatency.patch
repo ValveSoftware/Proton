@@ -1,0 +1,19 @@
+diff --git a/src/util/config/config.cpp b/src/util/config/config.cpp
+index 7e331c33..db0210df 100644
+--- a/src/util/config/config.cpp
++++ b/src/util/config/config.cpp
+@@ -444,6 +444,13 @@ namespace dxvk {
+       { "dxgi.tearFree",                    "False" },
+       { "dxgi.syncInterval",                "1"     },
+     }} },
++    /* Final Fantasy XIV */
++    { R"(\\ffxiv_dx11\.exe$)", {{
++      { "dxgi.maxFrameLatency",             "1" },
++    }} },
++    { R"(\\ffxiv\.exe$)", {{
++      { "dxgi.maxFrameLatency",             "1" },
++    }} },
+   }};
+ 
+ 
+
