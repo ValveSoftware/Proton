@@ -23,6 +23,9 @@
 
     echo "add pending resizable bar PR"
     patch -Np1 < ../patches/vkd3d/741.patch
+
+    echo "diablo 2 dx12 hotfix"
+    patch -Np1 < ../patches/vkd3d/767.patch
     cd ..
 
     cd dxvk
@@ -35,6 +38,9 @@
 
     echo "proton re8 fixups"
     patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
+
+    echo "ffxiv hotfix https://github.com/doitsujin/dxvk/issues/2210"
+    patch -Np1 < ../patches/dxvk/ffxiv-framelatency.patch
 
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
@@ -67,11 +73,15 @@
 
 ### (2-1) PROBLEMATIC COMMIT REVERT SECTION ###
 
-    # this breaks controllers in some unity games
-    # https://bugs.winehq.org/show_bug.cgi?id=51277
-#    git revert --no-commit 97afac469fbe012e22acc1f1045c88b1004a241f
+
+    # https://bugs.winehq.org/show_bug.cgi?id=49990
+    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
+    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
     echo "temporary pulseaudio reverts"
+    git revert --no-commit e309bad98c736d3409b5ceaffa77486a73c1f80b
+    git revert --no-commit 7d60d0d7bbc0138133d1968dc3802e2e79ab5b32
+    git revert --no-commit 4303e753137d0b44cff4f9261d10ef86d57016f2
     git revert --no-commit 2e64d91428757eaa88475b49bf50922cda603b59
     git revert --no-commit f77af3dd6324fadaf153062d77b51f755f71faea
     git revert --no-commit ce151dd681fe5ee80daba96dce12e37d6846e152
@@ -115,8 +125,10 @@
     git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
     git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
 
-#    # network test
-#    git revert --no-commit 3b33a6b4873d2d75418c298880766f63b82d4534
+    # restore e309bad98c736d3409b5ceaffa77486a73c1f80b and
+    # 7d60d0d7bbc0138133d1968dc3802e2e79ab5b32 without winepulse
+    # bits to prevent breakage elsewhere.
+    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -310,6 +322,17 @@
 
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
+
+    echo "riftbreaker fix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-riftbreaker.patch
+
+    # https://bugs.winehq.org/show_bug.cgi?id=51596
+    echo "winelib fix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-winelib.patch
+
+#    disabled, currently breaks more than one controller being able to be used.
+#    echo "winebus fix"
+#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-winebus.patch
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
