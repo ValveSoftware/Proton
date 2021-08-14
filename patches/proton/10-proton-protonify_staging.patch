@@ -1581,7 +1581,7 @@ index 4010a727a08..ef9a640a771 100644
      int locerr;
      int ret;
 
-+    if (!strcmp(name, "download-alt.easyanticheat.net"))
++    if (!strcmp(params->name, "download-alt.easyanticheat.net"))
 +    {
 +        ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
 +        return HOST_NOT_FOUND;
