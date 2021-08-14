@@ -61,14 +61,14 @@ CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
 ifeq ($(ENABLE_CCACHE),1)
 	CCACHE_BIN := ccache
 	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
-	DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
+	DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR)$(CONTAINER_MOUNT_OPTS) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
 else
 	export CCACHE_DISABLE := 1
 	DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
 ifneq ($(ROOTLESS_CONTAINER),1)
-	DOCKER_OPTS := -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) $(DOCKER_OPTS)
+	DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS) -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS) \
 endif
 
 ifeq ($(CONTAINER_ENGINE),)
@@ -352,6 +352,7 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/msgothic.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
+	cp $(FONTS)/noto/NotoSansArabic-Regular.ttf "$@"
 
 .PHONY: dist
 

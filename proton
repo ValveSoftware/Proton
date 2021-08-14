@@ -77,7 +77,38 @@ def makedirs(path):
         #already exists
         pass
 
-def try_copy(src, dst, add_write_perm=True, optional=False):
+def merge_user_dir(src, dst):
+    extant_dirs = []
+    for src_dir, dirs, files in os.walk(src):
+        dst_dir = src_dir.replace(src, dst, 1)
+
+        #as described below, avoid merging game save subdirs, too
+        child_of_extant_dir = False
+        for dir_ in extant_dirs:
+            if dir_ in dst_dir:
+                child_of_extant_dir = True
+                break
+        if child_of_extant_dir:
+            continue
+
+        #we only want to copy into directories which don't already exist. games
+        #may not react well to two save directory instances being merged.
+        if not os.path.exists(dst_dir) or os.path.samefile(dst_dir, dst):
+            makedirs(dst_dir)
+            for dir_ in dirs:
+                src_file = os.path.join(src_dir, dir_)
+                dst_file = os.path.join(dst_dir, dir_)
+                if os.path.islink(src_file) and not os.path.exists(dst_file):
+                    try_copy(src_file, dst_file, copy_metadata=True)
+            for file_ in files:
+                src_file = os.path.join(src_dir, file_)
+                dst_file = os.path.join(dst_dir, file_)
+                if not os.path.exists(dst_file):
+                    try_copy(src_file, dst_file, copy_metadata=True)
+        else:
+            extant_dirs += dst_dir
+
+def try_copy(src, dst, add_write_perm=True, copy_metadata=True, optional=False):
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
@@ -88,7 +119,10 @@ def try_copy(src, dst, add_write_perm=True, optional=False):
             if os.path.lexists(dst):
                 os.remove(dst)
 
-        shutil.copy(src, dst)
+        if copy_metadata:
+            shutil.copy2(src, dst)
+        else:
+            shutil.copy(src, dst)
 
         if add_write_perm:
             new_mode = os.lstat(dstfile).st_mode | stat.S_IWUSR | stat.S_IWGRP
@@ -519,7 +553,7 @@ class CompatData:
                 if len(rel_dir) > 0:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
-                if not os.path.exists(dst_dir):
+                if not os.path.lexists(dst_dir):
                     os.makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for file_ in files:
@@ -552,6 +586,7 @@ class CompatData:
             ( g_proton.fonts_dir, "simsun.ttc", "simsun.ttc" ),
             ( g_proton.fonts_dir, "msgothic.ttc", "msgothic.ttc" ),
             ( g_proton.fonts_dir, "malgun.ttf", "malgun.ttf" ),
+            ( g_proton.fonts_dir, "NotoSansArabic-Regular.ttf", "NotoSansArabic-Regular.ttf" ),
 
             ( g_proton.wine_fonts_dir, "tahoma.ttf", "tahoma.ttf" ),
         ]
@@ -567,6 +602,31 @@ class CompatData:
                     os.symlink(fname, lname)
             else:
                 os.symlink(fname, lname)
+
+    def migrate_user_paths(self):
+        #move winxp-style paths to vista+ paths. we can't do this in
+        #upgrade_pfx because Steam may drop cloud files here at any time.
+        for (old, new, link) in \
+                [
+                    (self.prefix_dir + "drive_c/users/steamuser/Local Settings/Application Data",
+                        self.prefix_dir + "drive_c/users/steamuser/AppData/Local",
+                        "../AppData/Local"),
+                    (self.prefix_dir + "drive_c/users/steamuser/Application Data",
+                        self.prefix_dir + "drive_c/users/steamuser/AppData/Roaming",
+                        "./AppData/Roaming"),
+                    (self.prefix_dir + "drive_c/users/steamuser/My Documents",
+                        self.prefix_dir + "drive_c/users/steamuser/Documents",
+                        "./Documents"),
+                ]:
+            if os.path.lexists(old) and not os.path.islink(old):
+                merge_user_dir(src=old, dst=new)
+                os.rename(old, old + " BACKUP")
+            if not os.path.lexists(old):
+                makedirs(os.path.dirname(old))
+                os.symlink(src=link, dst=old)
+            elif os.path.islink(old) and not (os.readlink(old) == link):
+                os.remove(old)
+                os.symlink(src=link, dst=old)
 
     def setup_prefix(self):
         with self.prefix_lock:
@@ -593,6 +653,8 @@ class CompatData:
 
             if not os.path.lexists(self.prefix_dir + "/dosdevices/z:"):
                 os.symlink("/", self.prefix_dir + "/dosdevices/z:")
+
+            self.migrate_user_paths()
 
             # collect configuration info
             steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
@@ -1044,40 +1106,26 @@ class Session:
         except (OSError, IOError, TypeError, KeyError):
             pass
 
+    def setup_logging(self, append_forever=False):
+        basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
+
+        if append_forever:
+            #SteamGameId is not always available
+            lfile_path = basedir + "/steam-proton.log"
+        else:
+            if not "SteamGameId" in os.environ:
+                return False
+
+            lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
+
+            if os.path.exists(lfile_path):
+                os.remove(lfile_path)
+
+        makedirs(basedir)
+        self.log_file = open(lfile_path, "a")
+        return True
+
     def init_session(self, update_prefix_files):
-        # Hack to redirect the "My Documents" dir to the new "Documents" dir - https://github.com/wine-mirror/wine/commit/4111801ab317529c3e24c39a6a97e7043438231a
-        if not os.path.islink(g_compatdata.prefix_dir + "drive_c/users/steamuser/Documents"):
-            if os.path.exists(g_compatdata.prefix_dir + "drive_c/users/steamuser/My Documents"):
-                src = g_compatdata.prefix_dir + "drive_c/users/steamuser/My Documents"
-                dst = g_compatdata.prefix_dir + "drive_c/users/steamuser/Documents"
-                try:
-                    shutil.rmtree(dst, ignore_errors=True)
-                except OSError as e:
-                    print("Error: %s : %s" % (dir_path, e.strerror))
-                os.symlink(src, dst)
-
-        # Hack to redirect "AppData/Roaming" to "Application Data" dir
-        if not os.path.islink(g_compatdata.prefix_dir + "drive_c/users/steamuser/AppData/Roaming"):
-            if os.path.exists(g_compatdata.prefix_dir + "drive_c/users/steamuser/Application Data"):
-                src = g_compatdata.prefix_dir + "drive_c/users/steamuser/Application Data"
-                dst = g_compatdata.prefix_dir + "drive_c/users/steamuser/AppData/Roaming"
-                try:
-                    shutil.rmtree(dst, ignore_errors=True)
-                except OSError as e:
-                    print("Error: %s : %s" % (dir_path, e.strerror))
-                os.symlink(src, dst)
-
-        # Hack to redirect "AppData/Local" to "Local Settings/Application Data" dir
-        if not os.path.islink(g_compatdata.prefix_dir + "drive_c/users/steamuser/AppData/Local"):
-            if os.path.exists(g_compatdata.prefix_dir + "drive_c/users/steamuser/Local Settings/Application Data"):
-                src = g_compatdata.prefix_dir + "drive_c/users/steamuser/Local Settings/Application Data"
-                dst = g_compatdata.prefix_dir + "drive_c/users/steamuser/AppData/Local"
-                try:
-                    shutil.rmtree(dst, ignore_errors=True)
-                except OSError as e:
-                    print("Error: %s : %s" % (dir_path, e.strerror))
-                os.symlink(src, dst)
-
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
         #load environment overrides
@@ -1174,20 +1222,16 @@ class Session:
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
-        if "SteamGameId" in self.env:
-            if self.env["WINEDEBUG"] != "-all":
-                basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
-                makedirs(basedir)
-                lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
-                if os.path.exists(lfile_path):
-                    os.remove(lfile_path)
-                self.log_file = open(lfile_path, "a")
+        if self.env["WINEDEBUG"] != "-all":
+            if self.setup_logging(append_forever=False):
                 self.log_file.write("======================\n")
                 with open(g_proton.version_file, "r") as f:
                     self.log_file.write("Proton: " + f.readline().strip() + "\n")
-                self.log_file.write("SteamGameId: " + self.env["SteamGameId"] + "\n")
+                if "SteamGameId" in self.env:
+                    self.log_file.write("SteamGameId: " + self.env["SteamGameId"] + "\n")
                 self.log_file.write("Command: " + str(sys.argv[2:] + self.cmdlineappend) + "\n")
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
+
                 self.try_log_slr_versions()
 
                 #dump some important variables into the log header
@@ -1199,8 +1243,13 @@ class Session:
 
                 self.log_file.write("======================\n")
                 self.log_file.flush()
+            else:
+                self.env["WINEDEBUG"] = "-all"
+
+        if "PROTON_REMOTE_DEBUG_CMD" in self.env:
+            self.remote_debug_cmd = self.env.get("PROTON_REMOTE_DEBUG_CMD").split(" ")
         else:
-            self.env["WINEDEBUG"] = "-all"
+            self.remote_debug_cmd = None
 
         if update_prefix_files:
             g_compatdata.setup_prefix()
@@ -1362,6 +1411,12 @@ class Session:
             except OSError:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
 
+        if self.remote_debug_cmd:
+            remote_debug_proc = subprocess.Popen([g_proton.wine54_bin] + self.remote_debug_cmd,
+                                                 env=self.env, stderr=self.log_file, stdout=self.log_file)
+        else:
+            remote_debug_proc = None
+
         commandstring = str(sys.argv[2:] + self.cmdlineappend)
 
         # use a string check instead of single string in case we need to check for more in the future
@@ -1380,6 +1435,14 @@ class Session:
 
         #log("Running: " + commandstring)
 
+        if remote_debug_proc:
+            remote_debug_proc.kill()
+            try:
+                remote_debug_proc.communicate(2)
+            except subprocess.TimeoutExpired as e:
+                log("terminate remote debugger")
+                remote_debug_proc.terminate()
+                remote_debug_proc.communicate()
 
 if __name__ == "__main__":
     if not "STEAM_COMPAT_DATA_PATH" in os.environ:
