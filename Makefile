@@ -181,8 +181,10 @@ module: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
 	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/i386-unix/ && \
 	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/x86_64-unix/ && \
-	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/i386-unix/ && \
-	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/x86_64-unix/ && \
+	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so ]; then \
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/i386-unix/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/x86_64-unix/ && \
+	fi && \
 	rm -f /vagrant/$(module)/lib*/wine/*.fake &&\
 	rm -f /vagrant/$(module)/lib/wine/i386-unix/*.fake &&\
 	rm -f /vagrant/$(module)/lib64/wine/x86_64-unix/*.fake
