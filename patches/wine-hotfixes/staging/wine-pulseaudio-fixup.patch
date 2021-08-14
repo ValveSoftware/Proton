@@ -1,0 +1,157 @@
+From 7d60d0d7bbc0138133d1968dc3802e2e79ab5b32 Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Thu, 12 Aug 2021 11:33:21 +0200
+Subject: [PATCH] winegcc: Use custom subsystem 'unixlib' instead of 'native'
+ for Unix libraries.
+
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winepulse.drv/Makefile.in | 2 +-
+ tools/winegcc/winegcc.c        | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/winegcc/winegcc.c b/tools/winegcc/winegcc.c
+index 69c18b72b673..426336e4536d 100644
+--- a/tools/winegcc/winegcc.c
++++ b/tools/winegcc/winegcc.c
+@@ -523,7 +523,7 @@ static strarray *get_link_args( struct options *opts, const char *output_name )
+         if (opts->unicode_app) strarray_add( flags, "-municode" );
+         if (opts->nodefaultlibs || opts->use_msvcrt) strarray_add( flags, "-nodefaultlibs" );
+         if (opts->nostartfiles || opts->use_msvcrt) strarray_add( flags, "-nostartfiles" );
+-        if (opts->subsystem) strarray_add( flags, strmake("-Wl,--subsystem,%s", opts->subsystem ));
++        if (opts->subsystem && strcmp(opts->subsystem, "unixlib")) strarray_add( flags, strmake("-Wl,--subsystem,%s", opts->subsystem ));
+
+         strarray_add( flags, "-Wl,--nxcompat" );
+
+@@ -563,7 +563,7 @@ static strarray *get_link_args( struct options *opts, const char *output_name )
+         if (opts->nodefaultlibs || opts->use_msvcrt) strarray_add( flags, "-nodefaultlibs" );
+         if (opts->nostartfiles || opts->use_msvcrt) strarray_add( flags, "-nostartfiles" );
+         if (opts->image_base) strarray_add( flags, strmake("-Wl,-base:%s", opts->image_base ));
+-        if (opts->subsystem)
++        if (opts->subsystem && strcmp(opts->subsystem, "unixlib"))
+             strarray_add( flags, strmake("-Wl,-subsystem:%s", opts->subsystem ));
+         else
+             strarray_add( flags, strmake("-Wl,-subsystem:%s", opts->gui_app ? "windows" : "console" ));
+@@ -1091,7 +1091,7 @@ static void add_library( struct options *opts, strarray *lib_dirs, strarray *fil
+         strarray_add(files, strmake("-a%s", fullname));
+         break;
+     case file_dll:
+-        if (opts->unix_lib && opts->subsystem && !strcmp(opts->subsystem, "native"))
++        if (opts->unix_lib && opts->subsystem && !strcmp(opts->subsystem, "unixlib"))
+         {
+             if (get_lib_type(opts->target_platform, lib_dirs, library, "", ".so", &unixlib) == file_so)
+             {
+@@ -1177,7 +1177,7 @@ static const char *build_spec_obj( struct options *opts, const char *spec_file,
+         strarray_add(spec_args, entry_point);
+     }
+
+-    if (opts->subsystem)
++    if (opts->subsystem && strcmp( opts->subsystem, "unixlib" ))
+     {
+         strarray_add(spec_args, "--subsystem");
+         strarray_add(spec_args, opts->subsystem);
+
+From e309bad98c736d3409b5ceaffa77486a73c1f80b Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Thu, 12 Aug 2021 13:46:35 +0200
+Subject: [PATCH] include: Add a private header for Unix libraries definitions.
+
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/unix_private.h |  3 +--
+ dlls/winepulse.drv/unixlib.h   |  1 +
+ dlls/wow64/syscall.c           |  1 +
+ include/wine/unixlib.h         | 33 +++++++++++++++++++++++++++++++++
+ include/winternl.h             |  4 ----
+ 5 files changed, 36 insertions(+), 6 deletions(-)
+ create mode 100644 include/wine/unixlib.h
+
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index 0fce580b120..9c6c323298c 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -24,6 +24,7 @@
+ #include <pthread.h>
+ #include <signal.h>
+ #include "unixlib.h"
++#include "wine/unixlib.h"
+ #include "wine/server.h"
+ #include "wine/list.h"
+
+@@ -151,8 +152,6 @@ extern void init_environment( int argc, char *argv[], char *envp[] ) DECLSPEC_HI
+ extern void init_startup_info(void) DECLSPEC_HIDDEN;
+ extern void *create_startup_info( const UNICODE_STRING *nt_image, const RTL_USER_PROCESS_PARAMETERS *params,
+                                   DWORD *info_size ) DECLSPEC_HIDDEN;
+-extern DWORD ntdll_umbstowcs( const char *src, DWORD srclen, WCHAR *dst, DWORD dstlen ) DECLSPEC_HIDDEN;
+-extern int ntdll_wcstoumbs( const WCHAR *src, DWORD srclen, char *dst, DWORD dstlen, BOOL strict ) DECLSPEC_HIDDEN;
+ extern char **build_envp( const WCHAR *envW ) DECLSPEC_HIDDEN;
+ extern NTSTATUS exec_wineloader( char **argv, int socketfd, const pe_image_info_t *pe_info ) DECLSPEC_HIDDEN;
+ extern NTSTATUS load_builtin( const pe_image_info_t *image_info, WCHAR *filename,
+diff --git a/dlls/wow64/syscall.c b/dlls/wow64/syscall.c
+index bdd9a6b6ea7..495c10b121a 100644
+--- a/dlls/wow64/syscall.c
++++ b/dlls/wow64/syscall.c
+@@ -27,6 +27,7 @@
+ #include "winnt.h"
+ #include "winternl.h"
+ #include "wine/exception.h"
++#include "wine/unixlib.h"
+ #include "wow64_private.h"
+ #include "wine/debug.h"
+
+diff --git a/include/wine/unixlib.h b/include/wine/unixlib.h
+new file mode 100644
+index 00000000000..7997a924eac
+--- /dev/null
++++ b/include/wine/unixlib.h
+@@ -0,0 +1,33 @@
++/*
++ * Definitions for Unix libraries
++ *
++ * Copyright (C) 2021 Alexandre Julliard
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#ifndef __WINE_WINE_UNIXLIB_H
++#define __WINE_WINE_UNIXLIB_H
++
++typedef NTSTATUS (*unixlib_entry_t)( void *args );
++typedef UINT64 unixlib_handle_t;
++
++extern NTSTATUS WINAPI __wine_unix_call( unixlib_handle_t handle, unsigned int code, void *args );
++
++/* some useful helpers from ntdll */
++extern DWORD ntdll_umbstowcs( const char *src, DWORD srclen, WCHAR *dst, DWORD dstlen );
++extern int ntdll_wcstoumbs( const WCHAR *src, DWORD srclen, char *dst, DWORD dstlen, BOOL strict );
++
++#endif  /* __WINE_WINE_UNIXLIB_H */
+diff --git a/include/winternl.h b/include/winternl.h
+index 523e65007ed..06f00740e43 100644
+--- a/include/winternl.h
++++ b/include/winternl.h
+@@ -4612,12 +4612,8 @@ static inline PLIST_ENTRY RemoveTailList(PLIST_ENTRY le)
+
+ #ifdef __WINESRC__
+
+-typedef NTSTATUS (*unixlib_entry_t)( void *args );
+-typedef UINT64 unixlib_handle_t;
+-
+ /* Wine internal functions */
+ extern NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out );
+-extern NTSTATUS WINAPI __wine_unix_call( unixlib_handle_t handle, unsigned int code, void *args );
+
+ /* The thread information for 16-bit threads */
+ /* NtCurrentTeb()->SubSystemTib points to this */
