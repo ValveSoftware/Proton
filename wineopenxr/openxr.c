@@ -58,6 +58,18 @@ static void *heap_realloc(void *p, size_t s)
 static const char WINE_VULKAN_DEVICE_EXTENSION_NAME[] = "VK_WINE_openxr_device_extensions";
 static const char WINE_VULKAN_DEVICE_VARIABLE[] = "__WINE_OPENXR_VK_DEVICE_EXTENSIONS";
 
+static struct
+{
+    const char *win32_ext, *linux_ext;
+    BOOL remove_original;
+    BOOL force_enable;
+}
+substitute_extensions[] =
+{
+    {"XR_KHR_D3D11_enable", "XR_KHR_vulkan_enable"},
+    {"XR_KHR_win32_convert_performance_counter_time", "XR_KHR_convert_timespec_time", TRUE, TRUE},
+};
+
 static char *wineopenxr_strdup(const char *src)
 {
     const size_t l = strlen(src) + 1;
@@ -510,33 +522,65 @@ XrResult load_host_openxr_loader(void)
 XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerName,
         uint32_t propertyCapacityInput, uint32_t *propertyCountOutput, XrExtensionProperties *properties)
 {
+    uint32_t i, j, dst, count, extra_extensions_count;
     XrResult res;
-    uint32_t i;
-
-    static const char *extra_extensions[] = {
-        "XR_KHR_D3D11_enable",
-    };
 
     WINE_TRACE("\n");
 
     res = xrEnumerateInstanceExtensionProperties(layerName, propertyCapacityInput, propertyCountOutput, properties);
+    if (res != XR_SUCCESS)
+        return res;
 
-    if(res == XR_SUCCESS){
-        if(properties){
-            for(i = 0; i < ARRAY_SIZE(extra_extensions); ++i){
-                strcpy(properties[*propertyCountOutput + i].extensionName, extra_extensions[i]);
+
+    if (!properties)
+    {
+        extra_extensions_count = 0;
+        for (i = 0; i <  ARRAY_SIZE(substitute_extensions); ++i)
+            if (!substitute_extensions[i].remove_original || substitute_extensions[i].force_enable)
+                ++extra_extensions_count;
+
+        *propertyCountOutput += extra_extensions_count;
+        WINE_TRACE("%u extensions.\n", *propertyCountOutput);
+        return XR_SUCCESS;
+    }
+
+    count = *propertyCountOutput;
+    for (i = 0; i < count; ++i)
+    {
+        for (j = 0; j < ARRAY_SIZE(substitute_extensions); ++j)
+        {
+            if (!strcmp(properties[i].extensionName, substitute_extensions[j].linux_ext))
+            {
+                if (substitute_extensions[j].force_enable)
+                {
+                    WINE_FIXME("Force enabled extension %s already supported by the runtime.\n",
+                            substitute_extensions[j].linux_ext);
+                    substitute_extensions[j].force_enable = FALSE;
+                }
+
+                if (substitute_extensions[j].remove_original)
+                    dst = i;
+                else
+                    dst = (*propertyCountOutput)++;
+                strcpy(properties[dst].extensionName, substitute_extensions[j].win32_ext);
+                break;
             }
-            *propertyCountOutput += ARRAY_SIZE(extra_extensions);
-            WINE_TRACE("Returning extensions:\n");
-            for(i = 0; i < *propertyCountOutput; ++i){
-                WINE_TRACE("\t-%s\n", properties[i].extensionName);
-            }
-        }else{
-            *propertyCountOutput += ARRAY_SIZE(extra_extensions);
         }
     }
 
-    return res;
+
+    for (j = 0; j < ARRAY_SIZE(substitute_extensions); ++j)
+        if (substitute_extensions[j].force_enable)
+        {
+            strcpy(properties[*propertyCountOutput].extensionName, substitute_extensions[j].win32_ext);
+            ++*propertyCountOutput;
+        }
+
+    WINE_TRACE("Enumerated extensions:\n");
+    for(i = 0; i < *propertyCountOutput; ++i)
+        WINE_TRACE("  -%s\n", properties[i].extensionName);
+
+    return XR_SUCCESS;
 }
 
 XrResult WINAPI wine_xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance,
@@ -648,10 +692,10 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
 {
     XrResult res;
     struct wine_XrInstance *wine_instance;
-    uint32_t i, j, type = 0;
+    uint32_t i, j, count, type = 0;
     XrInstanceCreateInfo our_createInfo;
-    uint32_t dst = 0;
-    char **new_list = NULL;
+    const char *ext_name;
+    char **new_list;
 
     WINE_TRACE("%p, %p\n", createInfo, instance);
 
@@ -669,33 +713,32 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
         }
     }
 
+    new_list = heap_alloc(createInfo->enabledExtensionCount * sizeof(*new_list));
+
+    count = 0;
     /* remove win32 extensions */
-    for(i = 0; i < createInfo->enabledExtensionCount; ++i){
-        if(strcmp(createInfo->enabledExtensionNames[i], "XR_KHR_D3D11_enable") != 0){
-            if(i != dst){
-                new_list[dst] = wineopenxr_strdup(createInfo->enabledExtensionNames[i]);
-            }
-            dst++;
-        }else{
-            /* skip this one */
-            if(!new_list){
-                new_list = heap_alloc(createInfo->enabledExtensionCount * sizeof(char *));
-                for(j = 0; j < i; ++j){
-                    new_list[j] = wineopenxr_strdup(createInfo->enabledExtensionNames[j]);
-                }
+    for(i = 0; i < createInfo->enabledExtensionCount; ++i)
+    {
+        ext_name = createInfo->enabledExtensionNames[i];
+        for (j = 0; j < ARRAY_SIZE(substitute_extensions); ++j)
+        {
+            if (!strcmp(ext_name, substitute_extensions[j].win32_ext))
+            {
+                if (substitute_extensions[j].force_enable)
+                    ext_name = NULL;
+                else
+                    ext_name = substitute_extensions[j].linux_ext;
+                break;
             }
         }
+        if (ext_name)
+            new_list[count++] = wineopenxr_strdup(ext_name);
     }
-    if(new_list){
-        /* we must have removed a d3d thing, so put vulkan here */
-        new_list[dst] = wineopenxr_strdup("XR_KHR_vulkan_enable");
-        dst++;
 
-        our_createInfo = *createInfo;
-        our_createInfo.enabledExtensionNames = (const char * const*)new_list;
-        our_createInfo.enabledExtensionCount = dst;
-        createInfo = &our_createInfo;
-    }
+    our_createInfo = *createInfo;
+    our_createInfo.enabledExtensionNames = (const char * const*)new_list;
+    our_createInfo.enabledExtensionCount = count;
+    createInfo = &our_createInfo;
 
     WINE_TRACE("Enabled extensions:\n");
     for(i = 0; i < createInfo->enabledExtensionCount; ++i){
@@ -723,12 +766,10 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
     *instance = (XrInstance)wine_instance;
 
 cleanup:
-    if(createInfo == &our_createInfo){
-        for(i = 0; i < our_createInfo.enabledExtensionCount; ++i){
-            heap_free((void*)our_createInfo.enabledExtensionNames[i]);
-        }
-        heap_free((void*)our_createInfo.enabledExtensionNames);
-    }
+    for(i = 0; i < our_createInfo.enabledExtensionCount; ++i)
+        heap_free((void*)our_createInfo.enabledExtensionNames[i]);
+
+    heap_free((void*)our_createInfo.enabledExtensionNames);
     return res;
 }
 
@@ -1004,6 +1045,36 @@ XrResult WINAPI wine_xrCreateSpatialAnchorMSFT(XrSession session,
     return XR_SUCCESS;
 }
 
+XrResult WINAPI wine_xrCreateSpatialAnchorFromPersistedNameMSFT(XrSession session,
+        const XrSpatialAnchorFromPersistedAnchorCreateInfoMSFT *create_info,
+        XrSpatialAnchorMSFT *anchor)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrSpatialAnchorMSFT *wine_anchor;
+    XrResult res;
+
+    WINE_TRACE("%p, %p, %p\n", session, create_info, anchor);
+
+    wine_anchor = heap_alloc_zero(sizeof(*wine_anchor));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateSpatialAnchorFromPersistedNameMSFT(wine_session->session,
+            create_info, &wine_anchor->spatial_anchor);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSpatialAnchorFromPersistedNameMSFT failed: %d\n", res);
+        heap_free(wine_anchor);
+        return res;
+    }
+
+    wine_anchor->wine_session = wine_session;
+
+    *anchor = (XrSpatialAnchorMSFT)wine_anchor;
+
+    WINE_TRACE("allocated wine spatialAnchor %p for native spatialAnchor %p\n",
+            wine_anchor, wine_anchor->spatial_anchor);
+
+    return XR_SUCCESS;
+}
+
 XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor)
 {
     wine_XrSpatialAnchorMSFT *wine_anchor = (wine_XrSpatialAnchorMSFT *)anchor;
@@ -1022,11 +1093,204 @@ XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor)
     return XR_SUCCESS;
 }
 
+XrResult WINAPI wine_xrCreateSpatialAnchorStoreConnectionMSFT(XrSession session, XrSpatialAnchorStoreConnectionMSFT *anchor_store)
+{
+    wine_XrSpatialAnchorStoreConnectionMSFT *wine_anchor_store;
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    XrResult res;
+
+    WINE_TRACE("%p, %p\n", session, anchor_store);
+
+    wine_anchor_store = heap_alloc_zero(sizeof(*wine_anchor_store));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateSpatialAnchorStoreConnectionMSFT(wine_session->session,
+            &wine_anchor_store->spatial_anchor_store_connection);
+
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSpatialAnchorStoreConnectionMSFT failed: %d\n", res);
+        heap_free(wine_anchor_store);
+        return res;
+    }
+
+    wine_anchor_store->wine_session = wine_session;
+
+    *anchor_store = (XrSpatialAnchorStoreConnectionMSFT)wine_anchor_store;
+
+    WINE_TRACE("allocated wine_anchor_store %p for native spatial_anchor_store_connection %p\n",
+            wine_anchor_store, wine_anchor_store->spatial_anchor_store_connection);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroySpatialAnchorStoreConnectionMSFT(XrSpatialAnchorStoreConnectionMSFT anchor_store)
+{
+    wine_XrSpatialAnchorStoreConnectionMSFT *wine_anchor_store
+            = (wine_XrSpatialAnchorStoreConnectionMSFT *)anchor_store;
+    XrResult res;
+
+    WINE_TRACE("%p\n", anchor_store);
+
+    res = wine_anchor_store->wine_session->wine_instance->funcs.p_xrDestroySpatialAnchorStoreConnectionMSFT
+            (wine_anchor_store->spatial_anchor_store_connection);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrDestroySpatialAnchorStoreConnectionMSFT failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_anchor_store);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreateSceneObserverMSFT(XrSession session,
+        const XrSceneObserverCreateInfoMSFT *createInfo, XrSceneObserverMSFT *observer)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrSceneObserverMSFT *wine_scene_observer_msft;
+    XrResult res;
+
+    WINE_TRACE("%p, %p, %p\n", session, createInfo, observer);
+
+    wine_scene_observer_msft = heap_alloc_zero(sizeof(*wine_scene_observer_msft));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateSceneObserverMSFT(wine_session->session,
+            createInfo, &wine_scene_observer_msft->scene_observer_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSceneObserverMSFT failed: %d\n", res);
+        heap_free(wine_scene_observer_msft);
+        return res;
+    }
+
+    wine_scene_observer_msft->wine_session = wine_session;
+
+    *observer = (XrSceneObserverMSFT)wine_scene_observer_msft;
+
+    WINE_TRACE("allocated wine sceneObserver %p for native sceneObserver %p\n",
+            wine_scene_observer_msft, wine_scene_observer_msft->scene_observer_msft);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroySceneObserverMSFT(XrSceneObserverMSFT observer)
+{
+    wine_XrSceneObserverMSFT *wine_observer = (wine_XrSceneObserverMSFT *)observer;
+    XrResult res;
+
+    WINE_TRACE("%p\n", observer);
+
+    res = wine_observer->wine_session->wine_instance->funcs.p_xrDestroySceneObserverMSFT(wine_observer->scene_observer_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrDestroySceneObserverMSFT failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_observer);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreateSceneMSFT(XrSceneObserverMSFT observer,
+        const XrSceneCreateInfoMSFT *createInfo, XrSceneMSFT *scene)
+{
+    wine_XrSceneObserverMSFT *wine_observer = (wine_XrSceneObserverMSFT *)observer;
+    wine_XrSceneMSFT *wine_scene_msft;
+    XrResult res;
+
+    WINE_TRACE("%p, %p, %p\n", observer, createInfo, scene);
+
+    wine_scene_msft = heap_alloc_zero(sizeof(*wine_scene_msft));
+
+    res = wine_observer->wine_session->wine_instance->funcs.p_xrCreateSceneMSFT(wine_observer->scene_observer_msft,
+            createInfo, &wine_scene_msft->scene_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSceneMSFT failed: %d\n", res);
+        heap_free(wine_scene_msft);
+        return res;
+    }
+
+    wine_scene_msft->wine_scene_observer_msft = wine_observer;
+
+    *scene = (XrSceneMSFT)wine_scene_msft;
+
+    WINE_TRACE("allocated wine sceneMSFT %p for native sceneMSFT %p\n",
+            wine_scene_msft, wine_scene_msft->scene_msft);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroySceneMSFT(XrSceneMSFT scene)
+{
+    wine_XrSceneMSFT *wine_scene = (wine_XrSceneMSFT *)scene;
+    XrResult res;
+
+    WINE_TRACE("%p\n", scene);
+
+    res = wine_scene->wine_scene_observer_msft->wine_session->wine_instance->funcs.p_xrDestroySceneMSFT(wine_scene->scene_msft);
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrDestroySceneMSFT failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_scene);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreateFoveationProfileFB(XrSession session, const XrFoveationProfileCreateInfoFB *create_info,
+        XrFoveationProfileFB *profile)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrFoveationProfileFB *wine_foveation_profile;
+    XrResult res;
+
+    WINE_TRACE("%p, %p\n", session, profile);
+
+    wine_foveation_profile = heap_alloc_zero(sizeof(*wine_foveation_profile));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateFoveationProfileFB(wine_session->session, create_info,
+            &wine_foveation_profile->foveation_profile);
+
+    if(res != XR_SUCCESS){
+        WINE_WARN("xrCreateSpatialAnchorStoreConnectionMSFT failed: %d\n", res);
+        heap_free(wine_foveation_profile);
+        return res;
+    }
+
+    wine_foveation_profile->wine_session = wine_session;
+
+    *profile = (XrFoveationProfileFB)wine_foveation_profile;
+
+    WINE_TRACE("allocated wine_foveation_profile %p for native foveation_profile %p.\n",
+            wine_foveation_profile, wine_foveation_profile->foveation_profile);
+
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroyFoveationProfileFB(XrFoveationProfileFB profile)
+{
+    wine_XrFoveationProfileFB *wine_profile = (wine_XrFoveationProfileFB *)profile;
+    XrResult res;
+
+    WINE_TRACE("%p\n", profile);
+
+    res = wine_profile->wine_session->wine_instance->funcs.p_xrDestroyFoveationProfileFB(wine_profile->foveation_profile);
+    if(res != XR_SUCCESS){
+        WINE_WARN("rDestroyFoveationProfileFB failed: %d\n", res);
+        return res;
+    }
+
+    heap_free(wine_profile);
+
+    return XR_SUCCESS;
+}
+
 XrResult WINAPI wine_xrNegotiateLoaderRuntimeInterface(
         const XrNegotiateLoaderInfo_win *loaderInfo,
         XrNegotiateRuntimeRequest_win *runtimeRequest)
 {
     XrResult res;
+
+    WINE_TRACE("%p %p\n", loaderInfo, runtimeRequest);
 
     if(!loaderInfo || !runtimeRequest)
         return XR_ERROR_INITIALIZATION_FAILED;

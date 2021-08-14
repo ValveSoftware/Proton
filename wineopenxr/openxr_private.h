@@ -50,6 +50,26 @@ typedef struct wine_XrSpatialAnchorMSFT {
     struct wine_XrSession *wine_session;
 } wine_XrSpatialAnchorMSFT;
 
+typedef struct XrSpatialAnchorStoreConnectionMSFT {
+    XrSpatialAnchorStoreConnectionMSFT spatial_anchor_store_connection;
+    struct wine_XrSession *wine_session;
+} wine_XrSpatialAnchorStoreConnectionMSFT;
+
+typedef struct wine_XrSceneObserverMSFT {
+    XrSceneObserverMSFT scene_observer_msft;
+    struct wine_XrSession *wine_session;
+} wine_XrSceneObserverMSFT;
+
+typedef struct wine_XrSceneMSFT {
+    XrSceneMSFT scene_msft;
+    struct wine_XrSceneObserverMSFT *wine_scene_observer_msft;
+} wine_XrSceneMSFT;
+
+typedef struct wine_XrFoveationProfileFB {
+    XrFoveationProfileFB foveation_profile;
+    struct wine_XrSession *wine_session;
+} wine_XrFoveationProfileFB;
+
 typedef struct wine_XrSwapchain{
     XrSwapchain swapchain;
     struct wine_XrSession *wine_session;
