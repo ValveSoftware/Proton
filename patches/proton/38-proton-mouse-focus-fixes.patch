@@ -385,12 +385,10 @@ index bfdb1ed67fd..4e727d86d5d 100644
      if (GetWindowLongW( hwnd, GWL_EXSTYLE ) & WS_EX_NOACTIVATE) return FALSE;
      if (hwnd == GetDesktopWindow()) return FALSE;
      if (GetWindowRect( hwnd, &rect ) && IsRectEmpty( &rect )) return FALSE;
-@@ -1392,9 +1394,10 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
+@@ -1415,7 +1415,10 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
              {
                  TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
                  release_win_data( data );
--                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
--                    SetActiveWindow( hwnd );
 -                SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
 +                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE) && GetForegroundWindow() != hwnd)
 +                    SetPropW( hwnd, restore_window_propW, (HANDLE) TRUE );
@@ -399,3 +397,4 @@ index bfdb1ed67fd..4e727d86d5d 100644
                  return;
              }
              TRACE( "not restoring win %p/%lx style %08x\n", data->hwnd, data->whole_window, style );
+
