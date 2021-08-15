@@ -158,7 +158,8 @@
     -W winex11-WM_WINDOWPOSCHANGING \
     -W imm32-com-initialization \
     -W bcrypt-ECDHSecretAgreement \
-    -W ntdll-NtAlertThreadByThreadId
+    -W ntdll-NtAlertThreadByThreadId \
+    -W dwrite-FontFallback
 
     # apply this manually since imm32-com-initialization is disabled in staging.
     patch -Np1 < ../patches/wine-hotfixes/staging/imm32-com-initialization_no_net_active_window.patch
@@ -290,6 +291,9 @@
 
     echo "proton LFH performance patch"
     patch -Np1 < ../patches/proton/50-proton_LFH.patch
+
+    echo "proton font patches"
+    patch -Np1 < ../patches/proton/51-proton_fonts.patch
 
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"

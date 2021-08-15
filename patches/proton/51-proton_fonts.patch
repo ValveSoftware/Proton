@@ -1,0 +1,316 @@
+From efb05519cd3e8187edce6d28a044680fe58b17c7 Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Thu, 24 Jun 2021 17:27:08 +0200
+Subject: [PATCH] HACK: gdi32/font: Do font linking for Arial too.
+
+---
+ dlls/gdi32/font.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/gdi32/font.c b/dlls/gdi32/font.c
+index 8b2af98a3a4..21520dda46a 100644
+--- a/dlls/gdi32/font.c
++++ b/dlls/gdi32/font.c
+@@ -2594,6 +2594,7 @@ static void update_font_system_link_info(UINT current_ansi_codepage)
+         set_multi_value_key(hkey, L"Lucida Sans Unicode", link, len);
+         set_multi_value_key(hkey, L"Microsoft Sans Serif", link, len);
+         set_multi_value_key(hkey, L"Tahoma", link, len);
++        set_multi_value_key(hkey, L"Arial", link, len);
+         RegCloseKey(hkey);
+     }
+ }
+From 90e3616c89ef7ed38763a3e3af3e9f0cd59697da Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 8 Mar 2017 20:15:40 +0300
+Subject: [PATCH] HACK: dwrite: Don't recommend outline rendering mode
+
+---
+ dlls/dwrite/font.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
+index e22559912c3..41ec809b727 100644
+--- a/dlls/dwrite/font.c
++++ b/dlls/dwrite/font.c
+@@ -740,7 +740,8 @@ static HRESULT WINAPI dwritefontface_GetRecommendedRenderingMode(IDWriteFontFace
+
+     ppem = emSize * ppdip;
+
+-    if (ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
++    /* HACK: disable outline rendering mode to workaround d2d issue */
++    if (0 && ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
+         *mode = DWRITE_RENDERING_MODE_OUTLINE;
+         return S_OK;
+     }
+From bf540ddf817eba2c6ade94f2c3c78a0281bd06fe Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Wed, 9 Dec 2020 11:45:50 +0100
+Subject: [PATCH] dwrite: Add free fallback fonts for CJK.
+
+Add two fonts which are easily found on modern Linux installations. It might
+be wise to add others in the future, so that any random Linux installation
+has at least one of them.
+---
+ dlls/dwrite/analyzer.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/dwrite/analyzer.c b/dlls/dwrite/analyzer.c
+index 6b74a23540a..e4bc8d42943 100644
+--- a/dlls/dwrite/analyzer.c
++++ b/dlls/dwrite/analyzer.c
+@@ -207,7 +207,11 @@ const char *debugstr_sa_script(UINT16 script)
+ }
+
+ /* system font falback configuration */
+-static const WCHAR *cjk_families[] = { L"Meiryo" };
++static const WCHAR meiryoW[] = {'M','e','i','r','y','o',0};
++static const WCHAR droidW[] = {'D','r','o','i','d',' ','S','a','n','s',' ','F','a','l','l','b','a','c','k',0};
++static const WCHAR notoW[] = {'N','o','t','o',' ','S','e','r','i','f',' ','C','J','K',' ','S','C',0};
++
++static const WCHAR *cjk_families[] = { meiryoW, droidW, notoW };
+
+ static const DWRITE_UNICODE_RANGE cjk_ranges[] =
+ {
+From 95a7161e3e0fb68a847296aee8c27cc8b823f6f3 Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Mon, 7 Dec 2020 19:52:23 +0100
+Subject: [PATCH] dwrite: Support at least some Latin fallbacks.
+
+---
+ dlls/dwrite/analyzer.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/dlls/dwrite/analyzer.c b/dlls/dwrite/analyzer.c
+index e4bc8d42943..daa553adbaf 100644
+--- a/dlls/dwrite/analyzer.c
++++ b/dlls/dwrite/analyzer.c
+@@ -220,6 +220,21 @@ static const DWRITE_UNICODE_RANGE cjk_ranges[] =
+     { 0x4e00, 0x9fff }, /* CJK Unified Ideographs */
+ };
+
++static const WCHAR timesW[] = {'T','i','m','e','s',' ','N','e','w',' ','R','o','m','a','n',0};
++static const WCHAR liberationW[] = {'L','i','b','e','r','a','t','i','o','n',' ','S','e','r','i','f',0};
++static const WCHAR dejavuW[] = {'D','e','j','a','V','u',' ','S','e','r','i','f',0};
++
++static const WCHAR *latin_families[] = { timesW, liberationW, dejavuW };
++
++static const DWRITE_UNICODE_RANGE latin_ranges[] =
++{
++    { 0x0000, 0x05ff },
++    { 0x1d00, 0x2eff },
++    { 0xa700, 0xa7ff },
++    { 0xfb00, 0xfb4f },
++    { 0xfe20, 0xfe23 },
++};
++
+ struct fallback_mapping {
+     DWRITE_UNICODE_RANGE *ranges;
+     UINT32 ranges_count;
+@@ -236,6 +251,7 @@ static const struct fallback_mapping fontfallback_neutral_data[] = {
+           (WCHAR **)families, ARRAY_SIZE(families) }
+
+     MAPPING_RANGE(cjk_ranges, cjk_families),
++    MAPPING_RANGE(latin_ranges, latin_families),
+
+ #undef MAPPING_RANGE
+ };
+From d20e756c0ca43d224c3d8b835b4d58a351e07eca Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Fri, 4 Dec 2020 12:07:30 +0100
+Subject: [PATCH] dwrite: Search more generously for font fallbacks.
+
+---
+ dlls/dwrite/analyzer.c | 57 ++++++++++++++++++++++++------------------
+ 1 file changed, 32 insertions(+), 25 deletions(-)
+
+diff --git a/dlls/dwrite/analyzer.c b/dlls/dwrite/analyzer.c
+index daa553adbaf..90b518f9672 100644
+--- a/dlls/dwrite/analyzer.c
++++ b/dlls/dwrite/analyzer.c
+@@ -2066,7 +2066,7 @@ static HRESULT fallback_map_characters(IDWriteFont *font, const WCHAR *text, UIN
+         /* stop on first unsupported character */
+         exists = FALSE;
+         hr = IDWriteFont_HasCharacter(font, text[i], &exists);
+-        if (hr == S_OK && exists)
++        if (SUCCEEDED(hr) && exists)
+             ++*mapped_length;
+         else
+             break;
+@@ -2084,11 +2084,12 @@ static HRESULT fallback_get_fallback_font(struct dwrite_fontfallback *fallback,
+     UINT32 i;
+
+     *mapped_font = NULL;
++    *mapped_length = 0;
+
+     mapping = find_fallback_mapping(fallback, text[0]);
+     if (!mapping) {
+         WARN("No mapping range for %#x.\n", text[0]);
+-        return E_FAIL;
++        return S_OK;
+     }
+
+     /* Now let's see what fallback can handle. Pick first font that could be created. */
+@@ -2103,19 +2104,18 @@ static HRESULT fallback_get_fallback_font(struct dwrite_fontfallback *fallback,
+
+     if (!*mapped_font) {
+         WARN("Failed to create fallback font.\n");
+-        return E_FAIL;
++        return S_OK;
+     }
+
+     hr = fallback_map_characters(*mapped_font, text, length, mapped_length);
+-    if (FAILED(hr))
+-        WARN("Mapping with fallback family %s failed, hr %#x.\n", debugstr_w(mapping->families[i]), hr);
+
+     if (!*mapped_length) {
++        WARN("Mapping with fallback family %s failed.\n", debugstr_w(mapping->families[i]));
+         IDWriteFont_Release(*mapped_font);
+         *mapped_font = NULL;
+     }
+
+-    return *mapped_length ? S_OK : E_FAIL;
++    return hr;
+ }
+
+ static HRESULT WINAPI fontfallback_MapCharacters(IDWriteFontFallback1 *iface, IDWriteTextAnalysisSource *source,
+@@ -2150,30 +2150,37 @@ static HRESULT WINAPI fontfallback_MapCharacters(IDWriteFontFallback1 *iface, ID
+
+     if (basefamily && *basefamily) {
+         hr = create_matching_font(basecollection, basefamily, weight, style, stretch, ret_font);
+-        if (FAILED(hr))
+-            goto done;
+
+-        hr = fallback_map_characters(*ret_font, text, length, mapped_length);
+-        if (FAILED(hr))
+-            goto done;
++        /* It is not a fatal error for create_matching_font to
++           fail. We still have other fallbacks to try. */
++
++        if (SUCCEEDED(hr))
++        {
++            hr = fallback_map_characters(*ret_font, text, length, mapped_length);
++            if (FAILED(hr))
++                goto done;
++        }
+     }
+
+     if (!*mapped_length) {
+-        IDWriteFont *mapped_font;
+-
+-        hr = fallback_get_fallback_font(fallback, text, length, weight, style, stretch, mapped_length, &mapped_font);
+-        if (FAILED(hr)) {
+-            /* fallback wasn't found, keep base font if any, so we can get at least some visual output */
+-            if (*ret_font) {
+-                *mapped_length = length;
+-                hr = S_OK;
+-            }
+-        }
+-        else {
+-            if (*ret_font)
+-                IDWriteFont_Release(*ret_font);
+-            *ret_font = mapped_font;
++        if (*ret_font)
++        {
++            IDWriteFont_Release(*ret_font);
++            *ret_font = NULL;
+         }
++
++        hr = fallback_get_fallback_font(fallback, text, length, weight, style, stretch, mapped_length, ret_font);
++        if (FAILED(hr))
++            goto done;
++    }
++
++    if (!*mapped_length)
++    {
++        /* fallback wasn't found, ask the caller to skip one character
++           and try again; FIXME: skip the appropriate number of
++           characters instead of just one */
++        *mapped_length = 1;
++        hr = S_OK;
+     }
+
+ done:
+From 15fdab13f3d2b667ec997ee634b89631aef01cda Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Tue, 10 Aug 2021 10:47:49 +0200
+Subject: [PATCH] HACK: dwrite: Fix font mappings for the Cyberpunk 2077
+ installer.
+
+This was first reported at
+https://github.com/ValveSoftware/Proton/issues/4450#issuecomment-882996582.
+
+For Cyberpunk 2077 launcher font support.
+
+CW-Bug-Id: #19125
+---
+ dlls/dwrite/analyzer.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/dwrite/analyzer.c b/dlls/dwrite/analyzer.c
+index 90b518f9672..d4c8584a65d 100644
+--- a/dlls/dwrite/analyzer.c
++++ b/dlls/dwrite/analyzer.c
+@@ -207,11 +207,12 @@ const char *debugstr_sa_script(UINT16 script)
+ }
+
+ /* system font falback configuration */
++static const WCHAR simsunW[] = {'S','i','m','S','u','n',0};
+ static const WCHAR meiryoW[] = {'M','e','i','r','y','o',0};
+ static const WCHAR droidW[] = {'D','r','o','i','d',' ','S','a','n','s',' ','F','a','l','l','b','a','c','k',0};
+ static const WCHAR notoW[] = {'N','o','t','o',' ','S','e','r','i','f',' ','C','J','K',' ','S','C',0};
+
+-static const WCHAR *cjk_families[] = { meiryoW, droidW, notoW };
++static const WCHAR *cjk_families[] = { simsunW, meiryoW, droidW, notoW };
+
+ static const DWRITE_UNICODE_RANGE cjk_ranges[] =
+ {
+@@ -220,6 +221,18 @@ static const DWRITE_UNICODE_RANGE cjk_ranges[] =
+     { 0x4e00, 0x9fff }, /* CJK Unified Ideographs */
+ };
+
++static const WCHAR malgunW[] = {'M','a','l','g','u','n',' ','G','o','t','h','i','c',0};
++
++static const WCHAR *hangul_families[] = { malgunW };
++
++static const DWRITE_UNICODE_RANGE hangul_ranges[] =
++{
++    { 0x1100, 0x11ff }, /* Hangul Jamo */
++    { 0x3130, 0x318f }, /* Hangul Compatibility Jamo */
++    { 0xa960, 0xa97f }, /* Hangul Jamo Extended-A */
++    { 0xac00, 0xd7ff }, /* Hangul Syllables, Hangul Jamo Extended-B */
++};
++
+ static const WCHAR timesW[] = {'T','i','m','e','s',' ','N','e','w',' ','R','o','m','a','n',0};
+ static const WCHAR liberationW[] = {'L','i','b','e','r','a','t','i','o','n',' ','S','e','r','i','f',0};
+ static const WCHAR dejavuW[] = {'D','e','j','a','V','u',' ','S','e','r','i','f',0};
+@@ -235,6 +248,19 @@ static const DWRITE_UNICODE_RANGE latin_ranges[] =
+     { 0xfe20, 0xfe23 },
+ };
+
++static const WCHAR noto_sans_arabicW[] = {'N','o','t','o',' ','S','a','n','s',' ','A','r','a','b','i','c',0};
++
++static const WCHAR *arabic_families[] = { noto_sans_arabicW };
++
++static const DWRITE_UNICODE_RANGE arabic_ranges[] =
++{
++    { 0x0600, 0x06ff }, /* Arabic */
++    { 0x0750, 0x077f }, /* Arabic Supplement */
++    { 0x08a0, 0x08ff }, /* Arabic Extended-A */
++    { 0xfb50, 0xfdff }, /* Arabic Presentation Forms-A */
++    { 0xfe70, 0xfeff }, /* Arabic Presentation Forms-B */
++};
++
+ struct fallback_mapping {
+     DWRITE_UNICODE_RANGE *ranges;
+     UINT32 ranges_count;
+@@ -251,7 +277,9 @@ static const struct fallback_mapping fontfallback_neutral_data[] = {
+           (WCHAR **)families, ARRAY_SIZE(families) }
+
+     MAPPING_RANGE(cjk_ranges, cjk_families),
++    MAPPING_RANGE(hangul_ranges, hangul_families),
+     MAPPING_RANGE(latin_ranges, latin_families),
++    MAPPING_RANGE(arabic_ranges, arabic_families),
+
+ #undef MAPPING_RANGE
+ };
+
