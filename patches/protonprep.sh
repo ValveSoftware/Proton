@@ -61,6 +61,9 @@
 
     # protonify syscall emulation
     patch -Np1 < ../patches/wine-hotfixes/staging/protonify_stg_syscall_emu.patch
+
+    # partial revert to fix steamclient
+    patch -RNp1 < ../patches/wine-hotfixes/staging/staging-server-default-integrity.patch
     cd ..
 
 ### END PREP SECTION ###
@@ -77,6 +80,9 @@
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
+
+    echo "this breaks hitman 2"
+    git revert --no-commit 8f37560faf130eecd137c14db39555952edf9aaa
 
     echo "temporary pulseaudio reverts"
     git revert --no-commit e309bad98c736d3409b5ceaffa77486a73c1f80b
