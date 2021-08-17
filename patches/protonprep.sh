@@ -84,6 +84,16 @@
     echo "this breaks hitman 2"
     git revert --no-commit 8f37560faf130eecd137c14db39555952edf9aaa
 
+    echo "this breaks temtem"
+    git revert --no-commit 091c92521ee22558bbc2adcdd8b18b213d818180
+    git revert --no-commit fade7a5862a31d26c7368818824cce6c4988a1b3
+    git revert --no-commit 3bace8862f1b49e40574d1c9647e6984f10d026f
+
+    # https://github.com/ValveSoftware/Proton/issues/1295#issuecomment-859185208
+    echo "these break Tokyo Xanadu Xe+"
+    git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
+    git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
+
     echo "temporary pulseaudio reverts"
     git revert --no-commit e309bad98c736d3409b5ceaffa77486a73c1f80b
     git revert --no-commit 7d60d0d7bbc0138133d1968dc3802e2e79ab5b32
