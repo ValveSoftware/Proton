@@ -519,7 +519,7 @@ class CompatData:
                 if len(rel_dir) > 0:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
-                if not os.path.exists(dst_dir):
+                if not os.path.lexists(dst_dir):
                     os.makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for dir_ in dirs:
@@ -601,16 +601,24 @@ class CompatData:
         #upgrade_pfx because Steam may drop cloud files here at any time.
         for (old, new, link) in \
                 [
-                    (self.prefix_dir + "drive_c/users/steamuser/Local Settings/Application Data",
+                    ("drive_c/users/steamuser/Local Settings/Application Data",
                         self.prefix_dir + "drive_c/users/steamuser/AppData/Local",
                         "../AppData/Local"),
-                    (self.prefix_dir + "drive_c/users/steamuser/Application Data",
+                    ("drive_c/users/steamuser/Application Data",
                         self.prefix_dir + "drive_c/users/steamuser/AppData/Roaming",
                         "./AppData/Roaming"),
-                    (self.prefix_dir + "drive_c/users/steamuser/My Documents",
+                    ("drive_c/users/steamuser/My Documents",
                         self.prefix_dir + "drive_c/users/steamuser/Documents",
                         "./Documents"),
                 ]:
+
+            #running unofficial Proton/Wine builds against a Proton prefix could
+            #create an infinite symlink loop. detect this and clean it up.
+            if os.path.lexists(new) and os.path.islink(new) and os.readlink(new).endswith(old):
+                os.remove(new)
+
+            old = self.prefix_dir + old
+
             if os.path.lexists(old) and not os.path.islink(old):
                 merge_user_dir(src=old, dst=new)
                 os.rename(old, old + " BACKUP")
