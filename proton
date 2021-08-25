@@ -99,16 +99,16 @@ def merge_user_dir(src, dst):
                 src_file = os.path.join(src_dir, dir_)
                 dst_file = os.path.join(dst_dir, dir_)
                 if os.path.islink(src_file) and not os.path.exists(dst_file):
-                    try_copy(src_file, dst_file, copy_metadata=True)
+                    try_copy(src_file, dst_file, copy_metadata=True, follow_symlinks=False)
             for file_ in files:
                 src_file = os.path.join(src_dir, file_)
                 dst_file = os.path.join(dst_dir, file_)
                 if not os.path.exists(dst_file):
-                    try_copy(src_file, dst_file, copy_metadata=True)
+                    try_copy(src_file, dst_file, copy_metadata=True, follow_symlinks=False)
         else:
             extant_dirs += dst_dir
 
-def try_copy(src, dst, add_write_perm=True, copy_metadata=False, optional=False):
+def try_copy(src, dst, add_write_perm=True, copy_metadata=False, optional=False, follow_symlinks=True):
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
@@ -120,9 +120,9 @@ def try_copy(src, dst, add_write_perm=True, copy_metadata=False, optional=False)
                 os.remove(dst)
 
         if copy_metadata:
-            shutil.copy2(src, dst)
+            shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
         else:
-            shutil.copy(src, dst)
+            shutil.copy(src, dst, follow_symlinks=follow_symlinks)
 
         if add_write_perm:
             new_mode = os.lstat(dstfile).st_mode | stat.S_IWUSR | stat.S_IWGRP
