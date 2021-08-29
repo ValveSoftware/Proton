@@ -119,6 +119,29 @@ index 3b451a22577..ca5dac43bb0 100644
      SERVER_START_REQ( queue_exception_event )
      {
          req->first   = first_chance;
+From 90e3616c89ef7ed38763a3e3af3e9f0cd59697da Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 8 Mar 2017 20:15:40 +0300
+Subject: [PATCH] HACK: dwrite: Don't recommend outline rendering mode
+
+---
+ dlls/dwrite/font.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
+index e22559912c3..41ec809b727 100644
+--- a/dlls/dwrite/font.c
++++ b/dlls/dwrite/font.c
+@@ -740,7 +740,8 @@ static HRESULT WINAPI dwritefontface_GetRecommendedRenderingMode(IDWriteFontFace
+
+     ppem = emSize * ppdip;
+
+-    if (ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
++    /* HACK: disable outline rendering mode to workaround d2d issue */
++    if (0 && ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
+         *mode = DWRITE_RENDERING_MODE_OUTLINE;
+         return S_OK;
+     }
 From 5c59517008697ce74becddb59a3e6702a963bb49 Mon Sep 17 00:00:00 2001
 From: Zhiyi Zhang <zzhang@codeweavers.com>
 Date: Fri, 16 Aug 2019 09:46:25 +0000
@@ -1712,170 +1735,6 @@ index a4a10bc8e93..551ef146cd7 100644
 -EXTRADLLFLAGS = -Wb,--prefer-native
 -
  RC_SRCS = version.rc
-From 2ec8739c7440157e189b762b486433697fee06e3 Mon Sep 17 00:00:00 2001
-From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Wed, 5 Aug 2020 14:26:23 -0700
-Subject: [PATCH] HACK: ntdll: Support x86_64 syscall emulation for Red Dead
- Redemption 2.
-
----
- dlls/ntdll/unix/signal_x86_64.c | 125 +++++++++++++++++++++++++++++---
- 1 file changed, 115 insertions(+), 10 deletions(-)
-
-diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
-index 33ad0489006..66fadacf920 100644
---- a/dlls/ntdll/unix/signal_x86_64.c
-+++ b/dlls/ntdll/unix/signal_x86_64.c
-@@ -2368,6 +2368,63 @@ static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
-
-     ctx->uc_mcontext.gregs[REG_RIP] = *dispatcher_address;
- }
-+
-+unsigned int __wine_syscall_nr_NtClose;
-+unsigned int __wine_syscall_nr_NtCreateFile;
-+unsigned int __wine_syscall_nr_NtGetContextThread;
-+unsigned int __wine_syscall_nr_NtQueryInformationProcess;
-+unsigned int __wine_syscall_nr_NtQuerySystemInformation;
-+unsigned int __wine_syscall_nr_NtQueryVirtualMemory;
-+unsigned int __wine_syscall_nr_NtReadFile;
-+unsigned int __wine_syscall_nr_NtWriteFile;
-+
-+static void sigsys_handler_rdr2( int signal, siginfo_t *siginfo, void *sigcontext )
-+{
-+    ULONG64 *dispatcher_address = (ULONG64 *)((char *)user_shared_data + page_size);
-+    ucontext_t *ctx = sigcontext;
-+    void ***rsp;
-+
-+    TRACE("SIGSYS, rax %#llx, rip %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX],
-+            ctx->uc_mcontext.gregs[REG_RIP]);
-+
-+    rsp = (void ***)&ctx->uc_mcontext.gregs[REG_RSP];
-+    *rsp -= 1;
-+    **rsp = (void *)(ctx->uc_mcontext.gregs[REG_RIP] + 0xb);
-+
-+    ctx->uc_mcontext.gregs[REG_RIP] = *dispatcher_address;
-+
-+    /* syscall numbers are for Windows 10 1809 (build 17763) */
-+    switch (ctx->uc_mcontext.gregs[REG_RAX])
-+    {
-+        case 0x19:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQueryInformationProcess;
-+            break;
-+        case 0x36:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQuerySystemInformation;
-+            break;
-+        case 0xec:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtGetContextThread;
-+            break;
-+        case 0x55:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtCreateFile;
-+            break;
-+        case 0x08:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtWriteFile;
-+            break;
-+        case 0x06:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtReadFile;
-+            break;
-+        case 0x0f:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtClose;
-+            break;
-+        case 0x23:
-+            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQueryVirtualMemory;
-+            break;
-+         default:
-+            FIXME("Unhandled syscall %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX]);
-+            break;
-+    }
-+}
- #endif
-
- #ifdef HAVE_SECCOMP
-@@ -2425,27 +2482,75 @@ static void install_bpf(struct sigaction *sig_act)
-        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
-        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-     };
-+    static struct sock_filter filter_rdr2[] =
-+    {
-+        /* Trap anything called from RDR2 or the launcher (0x140000000 - 0x150000000)*/
-+        /* > 0x140000000 */
-+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
-+        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x40000000 /*lsb*/, 0, 7),
-+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
-+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 5),
-+
-+        /* < 0x150000000 */
-+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
-+        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x50000000 /*lsb*/, 3, 0),
-+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
-+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 1),
-+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
-+
-+        /* Allow everything else */
-+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-+    };
-     struct sock_fprog prog;
-+    BOOL rdr2 = FALSE;
-     NTSTATUS status;
-
-     sig_act->sa_sigaction = sigsys_handler;
-+    memset(&prog, 0, sizeof(prog));
-+
-+    {
-+        const char *sgi = getenv("SteamGameId");
-+        if (sgi && (!strcmp(sgi, "1174180") || !strcmp(sgi, "1404210")))
-+        {
-+            /* Use specific filter and signal handler for Red Dead Redemption 2 */
-+            prog.len = ARRAY_SIZE(filter_rdr2);
-+            prog.filter = filter_rdr2;
-+            sig_act->sa_sigaction = sigsys_handler_rdr2;
-+            rdr2 = TRUE;
-+        }
-+    }
-+
-     sigaction(SIGSYS, sig_act, NULL);
-
--    if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
-+    if (rdr2)
-     {
--        TRACE("Seccomp filters already installed.\n");
--        return;
-+        int ret;
-+
-+        if ((ret = prctl(PR_GET_SECCOMP, 0, NULL, 0, 0)))
-+        {
-+            if (ret == 2)
-+                TRACE("Seccomp filters already installed.\n");
-+            else
-+                ERR("Seccomp filters cannot be installed, ret %d, error %s.\n", ret, strerror(errno));
-+            return;
-+        }
-     }
--    if (status != -ENOSYS && (status != -1 || errno != ENOSYS))
-+    else
-     {
--        ERR("Unexpected status %#x, errno %d.\n", status, errno);
--        return;
-+        if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
-+        {
-+            TRACE("Seccomp filters already installed.\n");
-+            return;
-+        }
-+        if (status != -ENOSYS && (status != -1 || errno != ENOSYS))
-+        {
-+            ERR("Unexpected status %#x, errno %d.\n", status, errno);
-+            return;
-+        }
-+        prog.len = ARRAY_SIZE(filter);
-+        prog.filter = filter;
-     }
-
--    memset(&prog, 0, sizeof(prog));
--    prog.len = ARRAY_SIZE(filter);
--    prog.filter = filter;
--
-     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
-     {
-         ERR("prctl(PR_SET_NO_NEW_PRIVS, ...): %s.\n", strerror(errno));
 From 07461415f4399934a3c03c8dd6e146167bd67dfd Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Thu, 25 Mar 2021 17:53:37 +0300
@@ -3987,13 +3846,13 @@ index b21f22c3629..2e34568ea17 100644
 --- a/dlls/gdi32/gdi32.spec
 +++ b/dlls/gdi32/gdi32.spec
 @@ -87,6 +87,7 @@
- @ stdcall D3DKMTDestroyDCFromMemory(ptr)
- @ stdcall D3DKMTDestroyDevice(ptr)
- @ stdcall D3DKMTEscape(ptr)
+ @ stdcall D3DKMTDestroyDCFromMemory(ptr) NtGdiDdDDIDestroyDCFromMemory
+ @ stdcall D3DKMTDestroyDevice(ptr) NtGdiDdDDIDestroyDevice
+ @ stdcall D3DKMTEscape(ptr) NtGdiDdDDIEscape
 +@ stdcall D3DKMTOpenAdapterFromDeviceName(ptr)
  @ stdcall D3DKMTOpenAdapterFromGdiDisplayName(ptr)
- @ stdcall D3DKMTOpenAdapterFromHdc(ptr)
- @ stdcall D3DKMTQueryStatistics(ptr)
+ @ stdcall D3DKMTOpenAdapterFromHdc(ptr) NtGdiDdDDIOpenAdapterFromHdc
+ @ stdcall D3DKMTQueryStatistics(ptr) NtGdiDdDDIQueryStatistics
 
 From 177a787cc4dcec5c6f5aecec10d3532aebf54e1a Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
@@ -4036,273 +3895,6 @@ index 55e48f928e9..e159c87159c 100644
  }
 
  static inline uint64_t convert_timestamp(VkTimeDomainEXT host_domain, VkTimeDomainEXT target_domain, uint64_t value)
-From cbb4df46b9fdb46ee0f0d1724ac1379ba17d0575 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Wed, 14 Jul 2021 20:45:38 +0300
-Subject: [PATCH] ntdll: Add stub implementation for
- NtSetInformationFile(FileAllocationInformation).
-
-CW-Bug-Id: 19085
----
- dlls/ntdll/unix/file.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
-index 80eb16198b4..517b137e8ba 100644
---- a/dlls/ntdll/unix/file.c
-+++ b/dlls/ntdll/unix/file.c
-@@ -4375,6 +4375,15 @@ NTSTATUS WINAPI NtSetInformationFile( HANDLE handle, IO_STATUS_BLOCK *io,
-         else io->u.Status = STATUS_INVALID_PARAMETER_3;
-         break;
-
-+    case FileAllocationInformation:
-+    {
-+        const FILE_ALLOCATION_INFORMATION *info = ptr;
-+
-+        FIXME("FileAllocationInformation AllocationSize %p stub.\n", (void *)(ULONG_PTR)info->AllocationSize.QuadPart);
-+        io->u.Status = STATUS_SUCCESS;
-+        break;
-+    }
-+
-     case FilePipeInformation:
-         if (len >= sizeof(FILE_PIPE_INFORMATION))
-         {
-From 2c609dcfd614b111f28e820823c4d77bdf59f1ff Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Thu, 15 Jul 2021 00:40:57 +0300
-Subject: [PATCH] winebuild: Output stubs after syscalls.
-
-CW-Bug-Id: 19085
----
- tools/winebuild/spec32.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/winebuild/spec32.c b/tools/winebuild/spec32.c
-index 02029056b30..01124a515ed 100644
---- a/tools/winebuild/spec32.c
-+++ b/tools/winebuild/spec32.c
-@@ -762,10 +762,10 @@ void output_spec32_file( DLLSPEC *spec )
-     open_output_file();
-     output_standard_file_header();
-     output_module( spec );
--    output_stubs( spec );
-     output_exports( spec );
-     output_imports( spec );
-     output_syscalls( spec );
-+    output_stubs( spec );
-     if (needs_get_pc_thunk) output_get_pc_thunk();
-     output_resources( spec );
-     output_gnu_stack_note();
-From 7750e85dad194a39a1e5bb17e3afc80399e63fcb Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Wed, 14 Jul 2021 20:24:39 +0300
-Subject: [PATCH] ntdll: Catch all syscalls at the lower addresses.
-
-CW-Bug-Id: 19085
----
- dlls/ntdll/unix/signal_x86_64.c | 67 ++++++++++++++++++---------------
- tools/winebuild/import.c        |  5 +--
- 2 files changed, 39 insertions(+), 33 deletions(-)
-
-diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
-index 3487f761324..ede34a36c3e 100644
---- a/dlls/ntdll/unix/signal_x86_64.c
-+++ b/dlls/ntdll/unix/signal_x86_64.c
-@@ -71,6 +71,7 @@
- # include <linux/filter.h>
- # include <linux/seccomp.h>
- # include <sys/prctl.h>
-+# include <linux/audit.h>
- #endif
-
- #define NONAMELESSUNION
-@@ -2490,36 +2491,33 @@ static void install_bpf(struct sigaction *sig_act)
- #   ifndef SECCOMP_SET_MODE_FILTER
- #       define SECCOMP_SET_MODE_FILTER 1
- #   endif
--    static const unsigned int flags = SECCOMP_FILTER_FLAG_SPEC_ALLOW;
--    static struct sock_filter filter[] =
-+    static const BYTE syscall_trap_test[] =
-     {
--       BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
--                (offsetof(struct seccomp_data, nr))),
--       BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0xf000, 0, 1),
--       BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
--       BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-+        0x48, 0x89, 0xc8,   /* mov %rcx, %rax */
-+        0x0f, 0x05,         /* syscall */
-+        0xc3,               /* retq */
-     };
--    static struct sock_filter filter_rdr2[] =
-+    static const unsigned int flags = SECCOMP_FILTER_FLAG_SPEC_ALLOW;
-+    static struct sock_filter filter[] =
-     {
--        /* Trap anything called from RDR2 or the launcher (0x140000000 - 0x150000000)*/
--        /* > 0x140000000 */
--        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
--        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x40000000 /*lsb*/, 0, 7),
-         BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
--        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 5),
--
--        /* < 0x150000000 */
--        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
--        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x50000000 /*lsb*/, 3, 0),
--        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
--        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 1),
-+        /* Native libs are loaded at high addresses. */
-+        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x7000 /*msb*/, 0, 1),
-+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-+        /* Allow i386. */
-+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, arch)),
-+        BPF_JUMP (BPF_JMP | BPF_JEQ | BPF_K, AUDIT_ARCH_X86_64, 1, 0),
-+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-+        /* Allow wine64-preloader */
-+        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer)),
-+        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x7d400000, 1, 0),
-+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
-+        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x7d402000, 0, 1),
-         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
--
--        /* Allow everything else */
-         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-     };
-+    long (WINAPI *test_syscall)(long sc_number);
-     struct sock_fprog prog;
--    BOOL rdr2 = FALSE;
-     NTSTATUS status;
-
-     sig_act->sa_sigaction = sigsys_handler;
-@@ -2529,20 +2527,23 @@ static void install_bpf(struct sigaction *sig_act)
-         const char *sgi = getenv("SteamGameId");
-         if (sgi && (!strcmp(sgi, "1174180") || !strcmp(sgi, "1404210")))
-         {
--            /* Use specific filter and signal handler for Red Dead Redemption 2 */
--            prog.len = ARRAY_SIZE(filter_rdr2);
--            prog.filter = filter_rdr2;
-+            /* Use specific signal handler for Red Dead Redemption 2 */
-             sig_act->sa_sigaction = sigsys_handler_rdr2;
--            rdr2 = TRUE;
-         }
-     }
-
-     sigaction(SIGSYS, sig_act, NULL);
-
--    if (rdr2)
-+    test_syscall = mmap((void *)0x600000000000, 0x1000, PROT_EXEC | PROT_READ | PROT_WRITE,
-+            MAP_PRIVATE | MAP_ANON, -1, 0);
-+    if (test_syscall != (void *)0x600000000000)
-     {
-         int ret;
-
-+        ERR("Could not allocate test syscall, falling back to seccomp presence check, test_syscall %p, errno %d.\n",
-+                test_syscall, errno);
-+        if (test_syscall != MAP_FAILED) munmap(test_syscall, 0x1000);
-+
-         if ((ret = prctl(PR_GET_SECCOMP, 0, NULL, 0, 0)))
-         {
-             if (ret == 2)
-@@ -2554,7 +2555,10 @@ static void install_bpf(struct sigaction *sig_act)
-     }
-     else
-     {
--        if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
-+        memcpy(test_syscall, syscall_trap_test, sizeof(syscall_trap_test));
-+        status = test_syscall(0xffff);
-+        munmap(test_syscall, 0x1000);
-+        if (status == STATUS_INVALID_PARAMETER)
-         {
-             TRACE("Seccomp filters already installed.\n");
-             return;
-@@ -2564,10 +2568,13 @@ static void install_bpf(struct sigaction *sig_act)
-             ERR("Unexpected status %#x, errno %d.\n", status, errno);
-             return;
-         }
--        prog.len = ARRAY_SIZE(filter);
--        prog.filter = filter;
-     }
-
-+    TRACE("Installing seccomp filters.\n");
-+
-+    prog.len = ARRAY_SIZE(filter);
-+    prog.filter = filter;
-+
-     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
-     {
-         ERR("prctl(PR_SET_NO_NEW_PRIVS, ...): %s.\n", strerror(errno));
-diff --git a/tools/winebuild/import.c b/tools/winebuild/import.c
-index 234a7d936d7..de4a5436cda 100644
---- a/tools/winebuild/import.c
-+++ b/tools/winebuild/import.c
-@@ -1607,7 +1607,6 @@ static void output_syscall_dispatcher( int count, const char *variant )
-         output( "\tleaq 0x28(%%rsp),%%rsi\n" );   /* first argument */
-         output( "\tmovq %%rcx,%%rsp\n" );
-         output( "\tmovq 0x00(%%rcx),%%rax\n" );
--        output( "\tsubq $0xf000,%%rax\n" );
-         output( "\tmovq 0x18(%%rcx),%%rdx\n" );
-         output( "\tmovl %%eax,%%ebx\n" );
-         output( "\tshrl $8,%%ebx\n" );
-@@ -1912,7 +1911,7 @@ void output_syscalls( DLLSPEC *spec )
-              * validate that instruction, we can just put a jmp there instead. */
-             output( "\t.byte 0x4c,0x8b,0xd1\n" ); /* movq %rcx,%r10 */
-             output( "\t.byte 0xb8\n" );           /* movl $i,%eax */
--            output( "\t.long %u\n", 0xf000 + i );
-+            output( "\t.long %u\n", i );
-             output( "\t.byte 0xf6,0x04,0x25,0x08,0x03,0xfe,0x7f,0x01\n" ); /* testb $1,0x7ffe0308 */
-             output( "\t.byte 0x75,0x03\n" );      /* jne 1f */
-             output( "\t.byte 0x0f,0x05\n" );      /* syscall */
-From f78b6f2dac4b118537b9e37f45fac797a2ad0a79 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Wed, 14 Jul 2021 20:43:39 +0300
-Subject: [PATCH] ntdll: Support '\??\GlobalRoot' prefix in
- get_dos_prefix_len().
-
-CW-Bug-Id: 19085
----
- dlls/ntdll/unix/file.c | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
-
-diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
-index 517b137e8ba..36c51d27857 100644
---- a/dlls/ntdll/unix/file.c
-+++ b/dlls/ntdll/unix/file.c
-@@ -2934,16 +2934,31 @@ static inline int get_dos_prefix_len( const UNICODE_STRING *name )
- {
-     static const WCHAR nt_prefixW[] = {'\\','?','?','\\'};
-     static const WCHAR dosdev_prefixW[] = {'\\','D','o','s','D','e','v','i','c','e','s','\\'};
-+    static const WCHAR globalrootW[] = {'\\','?','?','\\','G','l','o','b','a','l','R','o','o','t'};
-+    int prefix_len = 0;
-+    WCHAR *prefix;
-+    USHORT length;
-
--    if (name->Length >= sizeof(nt_prefixW) &&
--        !memcmp( name->Buffer, nt_prefixW, sizeof(nt_prefixW) ))
--        return ARRAY_SIZE( nt_prefixW );
-+    prefix = name->Buffer;
-+    length = name->Length;
-
--    if (name->Length >= sizeof(dosdev_prefixW) &&
--        !wcsnicmp( name->Buffer, dosdev_prefixW, ARRAY_SIZE( dosdev_prefixW )))
--        return ARRAY_SIZE( dosdev_prefixW );
-+    if (length >= ARRAY_SIZE( globalrootW ) &&
-+        !wcsnicmp( prefix, globalrootW, ARRAY_SIZE( globalrootW )))
-+    {
-+        WARN("Stripping off GlobalRoot prefix.\n");
-+        prefix += ARRAY_SIZE( globalrootW );
-+        prefix_len += ARRAY_SIZE( globalrootW );
-+        length -= ARRAY_SIZE( globalrootW );
-+    }
-
--    return 0;
-+    if (length >= sizeof(nt_prefixW) &&
-+        !memcmp( prefix, nt_prefixW, sizeof(nt_prefixW) ))
-+        prefix_len += ARRAY_SIZE( nt_prefixW );
-+    else if (length >= sizeof(dosdev_prefixW) &&
-+        !wcsnicmp( prefix, dosdev_prefixW, ARRAY_SIZE( dosdev_prefixW )))
-+        prefix_len += ARRAY_SIZE( dosdev_prefixW );
-+
-+    return prefix_len;
- }
-
 
 From ce0c255a1fd40bfa9a1de6f6765b83a4dcf9d0dd Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -4434,6 +4026,294 @@ index fe82613e590..402fbee9dc4 100644
  #if defined(_WINGDI_) && !defined(NOGDI)
  WINUSERAPI LONG        WINAPI ChangeDisplaySettingsA(LPDEVMODEA,DWORD);
  WINUSERAPI LONG        WINAPI ChangeDisplaySettingsW(LPDEVMODEW,DWORD);
+
+From 43c3113aa696898ec5758118b92f8c2a5fb61714 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 30 Jul 2021 21:01:13 +0300
+Subject: [PATCH] kernelbase: HACK: Force CEF software rendering for
+ UplayWebCore.
+
+(To be revisited once builtin d3dcompiler is added).
+---
+ dlls/kernelbase/process.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/kernelbase/process.c b/dlls/kernelbase/process.c
+index 33197563cd8..9bcb377a62e 100644
+--- a/dlls/kernelbase/process.c
++++ b/dlls/kernelbase/process.c
+@@ -33,6 +33,7 @@
+
+ #include "kernelbase.h"
+ #include "wine/debug.h"
++#include "wine/heap.h"
+
+ WINE_DEFAULT_DEBUG_CHANNEL(process);
+
+@@ -517,7 +518,31 @@ BOOL WINAPI DECLSPEC_HOTPATCH CreateProcessInternalW( HANDLE token, const WCHAR
+     }
+     else
+     {
+-        if (!(tidy_cmdline = get_file_name( cmd_line, name, ARRAY_SIZE(name) ))) return FALSE;
++        static const WCHAR *opt = L" --use-gl=swiftshader";
++        WCHAR *cmdline_new = NULL;
++
++        if (cmd_line && wcsstr( cmd_line, L"UplayWebCore.exe" ))
++        {
++            FIXME( "HACK: appending %s to command line %s.\n", debugstr_w(opt), debugstr_w(cmd_line) );
++
++            cmdline_new = heap_alloc( sizeof(WCHAR) * (lstrlenW(cmd_line) + lstrlenW(opt) + 1) );
++            lstrcpyW(cmdline_new, cmd_line);
++            lstrcatW(cmdline_new, opt);
++        }
++
++        tidy_cmdline = get_file_name( cmdline_new ? cmdline_new : cmd_line, name, ARRAY_SIZE(name) );
++
++        if (!tidy_cmdline)
++        {
++            heap_free( cmdline_new );
++            return FALSE;
++        }
++
++        if (cmdline_new)
++        {
++            if (cmdline_new == tidy_cmdline) cmd_line = NULL;
++            else heap_free( cmdline_new );
++        }
+         app_name = name;
+     }
+
+From 0597fa1ef89f5c4840c9b5762d74d7ce2e0abb56 Mon Sep 17 00:00:00 2001
+From: Arkadiusz Hiler <ahiler@codeweavers.com>
+Date: Wed, 23 Jun 2021 13:37:04 +0300
+Subject: [PATCH] winex11.drv: Add a GPU for each Vulkan device that was not
+ tied to an XRandR provider.
+
+This assures that each Vulkan device has a LUID assigned (see X11DRV_InitGpu
+and VkPhysicalDeviceIDProperties).
+
+LUIDs are important for DirectX <-> Vulkan interop. VKD3D-Proton and
+DXVK's DXGI use that to identify which underlaying Vulkan device to use
+for the selected adapter.
+
+This change fixes GPU selection in Hitman 2 in DX12 mode. Without it
+VKD3D-Proton resorts to a heuristic (vid/pid matching, and if that fails
+use the first device in enumeration order) which can select the wrong
+one on some multi-GPU Nvidia setups due to nvapihack.
+
+This also fixes Forza Horizon 4 on Wayland as XWayland doesn't expose
+providers which results in missing LUIDs even for the GPU driving the
+outputs.
+
+CW-Bug-Id: #18737
+CW-Bug-Id: #18925
+---
+ dlls/winex11.drv/xrandr.c | 149 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 139 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index 7edaaf07dc2..a17b8f47fbf 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -602,6 +602,113 @@ static BOOL is_crtc_primary( RECT primary, const XRRCrtcInfo *crtc )
+            crtc->y + crtc->height == primary.bottom;
+ }
+
++static void add_remaining_gpus_via_vulkan( struct x11drv_gpu **gpus, int *count )
++{
++    static const char *extensions[] =
++    {
++        VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
++    };
++    const struct vulkan_funcs *vulkan_funcs = get_vulkan_driver( WINE_VULKAN_DRIVER_VERSION );
++    PFN_vkGetPhysicalDeviceProperties2KHR pvkGetPhysicalDeviceProperties2KHR;
++    PFN_vkEnumeratePhysicalDevices pvkEnumeratePhysicalDevices;
++    uint32_t device_count;
++    VkPhysicalDevice *vk_physical_devices = NULL;
++    VkPhysicalDeviceProperties2 properties2;
++    VkInstanceCreateInfo create_info;
++    VkPhysicalDeviceIDProperties id;
++    VkInstance vk_instance = NULL;
++    INT gpu_idx, device_idx;
++    INT original_gpu_count = *count;
++    struct x11drv_gpu *new_gpu;
++    BOOL new;
++    VkResult vr;
++
++    memset( &create_info, 0, sizeof(create_info) );
++    create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
++    create_info.enabledExtensionCount = ARRAY_SIZE(extensions);
++    create_info.ppEnabledExtensionNames = extensions;
++    vr = vulkan_funcs->p_vkCreateInstance( &create_info, NULL, &vk_instance );
++
++    if (vr != VK_SUCCESS)
++    {
++        WARN("Failed to create a Vulkan instance, vr %d.\n", vr);
++        goto done;
++    }
++
++#define LOAD_VK_FUNC(f)                                                             \
++    if (!(p##f = (void *)vulkan_funcs->p_vkGetInstanceProcAddr( vk_instance, #f ))) \
++    {                                                                               \
++        WARN("Failed to load " #f ".\n");                                           \
++        goto done;                                                                  \
++    }
++
++    LOAD_VK_FUNC(vkEnumeratePhysicalDevices)
++    LOAD_VK_FUNC(vkGetPhysicalDeviceProperties2KHR)
++#undef LOAD_VK_FUNC
++
++    vr = pvkEnumeratePhysicalDevices( vk_instance, &device_count, NULL );
++    if (vr != VK_SUCCESS || !device_count)
++    {
++        WARN("No Vulkan device found, vr %d, device_count %d.\n", vr, device_count);
++        goto done;
++    }
++
++    if (!(vk_physical_devices = heap_calloc( device_count, sizeof(*vk_physical_devices) )))
++        goto done;
++
++    vr = pvkEnumeratePhysicalDevices( vk_instance, &device_count, vk_physical_devices );
++    if (vr != VK_SUCCESS)
++    {
++        WARN("vkEnumeratePhysicalDevices failed, vr %d.\n", vr);
++        goto done;
++    }
++
++    for (device_idx = 0; device_idx < device_count; ++device_idx)
++    {
++            memset( &id, 0, sizeof(id) );
++            id.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES;
++            properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
++            properties2.pNext = &id;
++
++            pvkGetPhysicalDeviceProperties2KHR( vk_physical_devices[device_idx], &properties2 );
++
++            /* Ignore Khronos vendor IDs */
++            if (properties2.properties.vendorID >= 0x10000)
++                continue;
++
++            new = TRUE;
++            for (gpu_idx = 0; gpu_idx < original_gpu_count; ++gpu_idx)
++            {
++                if (!memcmp( &(*gpus)[gpu_idx].vulkan_uuid, id.deviceUUID, sizeof(id.deviceUUID) ))
++                {
++                    new = FALSE;
++                    break;
++                }
++            }
++
++            if (!new)
++                continue;
++
++            *gpus = heap_realloc( *gpus, (*count + 1) * sizeof(**gpus) );
++            if (!gpus) goto done;
++            new_gpu = &(*gpus)[(*count)++];
++            memset( new_gpu, 0, sizeof(*new_gpu) );
++            new_gpu->id = -1;
++
++            memcpy( &new_gpu->vulkan_uuid, id.deviceUUID, sizeof(id.deviceUUID) );
++            new_gpu->vendor_id = properties2.properties.vendorID;
++            new_gpu->device_id = properties2.properties.deviceID;
++            MultiByteToWideChar( CP_UTF8, 0, properties2.properties.deviceName, -1, new_gpu->name, ARRAY_SIZE(new_gpu->name) );
++
++            TRACE("Added a new GPU via Vulkan: %04x:%04x %s\n", new_gpu->vendor_id, new_gpu->device_id, debugstr_w(new_gpu->name));
++    }
++
++done:
++    heap_free( vk_physical_devices );
++    if (vk_instance)
++        vulkan_funcs->p_vkDestroyInstance( vk_instance, NULL );
++}
++
+ VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDisplayKHR)
+
+ static BOOL get_gpu_properties_from_vulkan( struct x11drv_gpu *gpu, const XRRProviderInfo *provider_info )
+@@ -718,6 +825,7 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+     XRRProviderInfo *provider_info = NULL;
+     XRRCrtcInfo *crtc_info = NULL;
+     INT primary_provider = -1;
++    INT gpu_count = 0;
+     RECT primary_rect;
+     BOOL ret = FALSE;
+     INT i, j;
+@@ -730,22 +838,17 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+     if (!provider_resources)
+         goto done;
+
+-    gpus = heap_calloc( provider_resources->nproviders ? provider_resources->nproviders : 1, sizeof(*gpus) );
+-    if (!gpus)
+-        goto done;
+-
+     /* Some XRandR implementations don't support providers.
+      * In this case, report a fake one to try searching adapters in screen resources */
+     if (!provider_resources->nproviders)
+     {
+         WARN("XRandR implementation doesn't report any providers, faking one.\n");
+-        lstrcpyW( gpus[0].name, wine_adapterW );
+-        *new_gpus = gpus;
+-        *count = 1;
+-        ret = TRUE;
+-        goto done;
++        goto fallback;
+     }
+
++    gpus = heap_calloc( provider_resources->nproviders, sizeof(*gpus) );
++    if (!gpus) goto done;
++
+     primary_rect = get_primary_rect( screen_resources );
+     for (i = 0; i < provider_resources->nproviders; ++i)
+     {
+@@ -778,6 +881,7 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+             /* FIXME: Add an alternate method of getting PCI IDs, for systems that don't support Vulkan */
+         }
+         pXRRFreeProviderInfo( provider_info );
++        gpu_count++;
+     }
+
+     /* Make primary GPU the first */
+@@ -788,8 +892,29 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+         gpus[primary_provider] = tmp;
+     }
+
++fallback:
++    /* Add the Vulkan only GPUs only if we need all the detailed properties */
++    if (get_properties)
++        add_remaining_gpus_via_vulkan( &gpus, &gpu_count );
++
++    if (gpu_count == 0)
++    {
++        /* we need at least one for get_adapters() / get_id() */
++        gpus = heap_calloc( 1, sizeof(*gpus) );
++        if (!gpus) goto done;
++        lstrcpyW( gpus[0].name, wine_adapterW );
++        gpu_count = 1;
++    }
++    else if (gpus[0].id == -1)
++    {
++        /* the only GPUs we have are from Vulkan, mark the first one
++         * as main so that we can use screen resources for adapters,
++         * see xrandr14_get_adapters() */
++        gpus[0].id = 0;
++    }
++
+     *new_gpus = gpus;
+-    *count = provider_resources->nproviders;
++    *count = gpu_count;
+     ret = TRUE;
+ done:
+     if (provider_resources)
+@@ -834,6 +959,10 @@ static BOOL xrandr14_get_adapters( ULONG_PTR gpu_id, struct x11drv_adapter **new
+     if (!screen_resources)
+         goto done;
+
++    /* Vulkan-only, adapter-less GPU */
++    if (gpu_id == -1)
++        goto done;
++
+     if (gpu_id)
+     {
+         provider_info = pXRRGetProviderInfo( gdi_display, screen_resources, gpu_id );
 
 From 498ecc1a9e25a63aa0b082b28896647bbc063cb3 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
