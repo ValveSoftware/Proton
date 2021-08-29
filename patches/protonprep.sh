@@ -20,12 +20,6 @@
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
-
-    echo "add pending resizable bar PR"
-    patch -Np1 < ../patches/vkd3d/741.patch
-
-    echo "diablo 2 dx12 hotfix"
-    patch -Np1 < ../patches/vkd3d/767.patch
     cd ..
 
     cd dxvk
@@ -59,9 +53,6 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
     patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
 
-    # protonify syscall emulation
-    patch -Np1 < ../patches/wine-hotfixes/staging/protonify_stg_syscall_emu.patch
-
     # partial revert to fix steamclient
     patch -RNp1 < ../patches/wine-hotfixes/staging/staging-server-default-integrity.patch
     cd ..
@@ -81,70 +72,68 @@
     echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
-    echo "this breaks hitman 2"
-    git revert --no-commit 8f37560faf130eecd137c14db39555952edf9aaa
-
-    echo "this breaks temtem"
-    git revert --no-commit 091c92521ee22558bbc2adcdd8b18b213d818180
-    git revert --no-commit fade7a5862a31d26c7368818824cce6c4988a1b3
-    git revert --no-commit 3bace8862f1b49e40574d1c9647e6984f10d026f
-
     # https://github.com/ValveSoftware/Proton/issues/1295#issuecomment-859185208
     echo "these break Tokyo Xanadu Xe+"
     git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
     git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
 
-    echo "temporary pulseaudio reverts"
-    git revert --no-commit e309bad98c736d3409b5ceaffa77486a73c1f80b
-    git revert --no-commit 7d60d0d7bbc0138133d1968dc3802e2e79ab5b32
-    git revert --no-commit 4303e753137d0b44cff4f9261d10ef86d57016f2
-    git revert --no-commit 2e64d91428757eaa88475b49bf50922cda603b59
-    git revert --no-commit f77af3dd6324fadaf153062d77b51f755f71faea
-    git revert --no-commit ce151dd681fe5ee80daba96dce12e37d6846e152
-    git revert --no-commit 77813eb7586779df0fb3b700000a17e339fd5ce3
-    git revert --no-commit d8e9621cfad50596378283704dfb1e6926d77ed8
-    git revert --no-commit a4149d53f734bf898087e22170eab5bed9a423d1
-    git revert --no-commit b4c7823bbb6a792098131f5572506784c8ed0f35
-    git revert --no-commit 70f59eb179d6a1c1b4dbc9e0a45b5731cd260793
-    git revert --no-commit e19d97ff4e2f5a7800d6df77b8acce95130b84c3
-    git revert --no-commit 4432b66e372caf0096df56f45502d7dea1f1800c
-    git revert --no-commit 6a6296562f536ed10d221f0df43ef30bbd674cb2
-    git revert --no-commit aba40bd50a065b3ac913dbc1263c38535fb5d9e7
-    git revert --no-commit bf74f36350c92daae84623dc0bd0530c212bb908
-    git revert --no-commit 1518e73b23211af738ae448a80466c0199f24419
-    git revert --no-commit 44e4132489c28b429737be022f6d4044c5beab3e
-    git revert --no-commit a6131544e87c554f70c21a04fb4697d8e1f508d5
-    git revert --no-commit 80b996c53c767fef4614f097f14c310285d9c081
-    git revert --no-commit 459e911b653c7519a335661a6c0b0894e86d2f1a
-    git revert --no-commit 42d826bc8c1d625ed2985ff06c2cd047209a1916
-    git revert --no-commit 30c17619e5401618122ca330cf0909f49b170a59
-    git revert --no-commit af84907ccad3e28f364ecfaa75ccb5fedf7f5a42
-    git revert --no-commit a5997bece730beb8ab72d66b824ed2a1cb92c254
-    git revert --no-commit 24a7c33fc1ad6dbab489284cfb6dba4130297ddb
-    git revert --no-commit 8cb88173d87efedce8c345beea05641f5617d857
-    git revert --no-commit 505d4b8b14913f3abd362bf27272e6b239cb6ce4
-    git revert --no-commit 638455136b4d30b853b02b77a2f33dc61c60b267
-    git revert --no-commit 13cac6287c454146eff73aabc4b92b5c8f76d4df
-    git revert --no-commit d7b957654d4739b8dd07c91f051b7940f416ef42
-    git revert --no-commit 8ea23d0d44ced0ce7dadc9b2546cbc56f6bce364
-    git revert --no-commit 0b0ae164f4ccebf4b5bc1bb1529a90786d2d5941
-    git revert --no-commit 131b7fd5e16a3da17aed28e86933074c5d663d9f
-    git revert --no-commit 8060e56b26add8eafffb211119798569ea3188ff
-    git revert --no-commit bca0706f3a93fa0a57f4dbdc6ae541e8f25afb34
-    git revert --no-commit b1ddfca16e4696a52adf2bdd8333eeffb3c6170c
-    git revert --no-commit a5d4079c8285c10ab2019c9fd9d19a6b22babb76
-    git revert --no-commit ebd344f2922f4044117904e024a0a87576a3eff1
-    git revert --no-commit 0eeefec6c56084a0677403aee46493e2c03a1dca
-    git revert --no-commit 5477f2b0156d16952a286dd0df148c2f60b71fe6
-    git revert --no-commit fa097243e06b3855a240c866a028add722025ead
-    git revert --no-commit 8df72bade54d1ef7a6d9e79f20ee0a2697019c13
-    git revert --no-commit e264ec9c718eb66038221f8b533fc099927ed966
-    git revert --no-commit d3673fcb034348b708a5d8b8c65a746faaeec19d
-
-    # restore e309bad98c736d3409b5ceaffa77486a73c1f80b and
-    # 7d60d0d7bbc0138133d1968dc3802e2e79ab5b32 without winepulse
-    # bits to prevent breakage elsewhere.
+    echo "pulseaudio fixup to re-enable staging patches"
     patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
+
+    echo "these break the re village gdi32 patch"
+    git revert --no-commit 1c1ff37390c94101f474ce8ee57a3bd830ca965f
+    git revert --no-commit fbd39cd8b5de10c53fbb6c5e298c8863beec13fd
+
+    # this is still needed for proper interchangeable
+    # joystick support on guilty gear strive
+    # ex. ps5 controller + xbox controller in guilty gear strive
+    # without it, the game expects player 2 to also use a ps5 controller
+    # in training mode.
+    # with it, player 2 can be an xbox controller
+    # note you have to take some funky steps
+    # for 2 player to work in training mode in general (not linux specific):
+    # https://playgame.tips/how-to-play-with-a-friend-in-training
+    # normal 2 player works fine
+    echo "revert HID joystick commits"
+    git revert --no-commit 079c47a38e0a3d5d5dfc2323bfefd869a25d128d
+    git revert --no-commit 11c6b376c04b4e1b6095c85656bcb1decc908b0c
+    git revert --no-commit 09c14c63211e21c4f590f1fb1e32038835037e1a
+    git revert --no-commit 7e1d1fac7035dc68cc43e315b2b55d532415da7a
+    git revert --no-commit edbb3fac25bae08535a741acdf3813fe1059b114
+    git revert --no-commit b4d8cd38918c3ec74d70d9d229f3d88de91e405c
+    git revert --no-commit 9d7f1eefa1a58b62aec5c1ab7df2b258dc91a31f
+    git revert --no-commit 9a78467975100321773d11e0a3e2a427498a00cc
+    git revert --no-commit 6e7ca583746d3a266c56e777c13f3086bf73d141
+    git revert --no-commit ee5cde83dae7024873438be4c806c106fe121b04
+    git revert --no-commit 8f065f97c91433eab9d6141e5cce118d00701210
+    git revert --no-commit 620b514aa0b41187a3c438eb515bbeab02feb7bb
+    git revert --no-commit 68c6c7d9362c53b4e0668c056f74d1f3e706a5fc
+    git revert --no-commit db410052a397d257dbbe88903336285741d8cb0b
+    git revert --no-commit d3885f92fc71ae8330935fe880d7524ab7385b6b
+    git revert --no-commit 12ef137b47fe16748c33c881cbb137bcd4e4cbbd
+    git revert --no-commit fd73402ce6dc5dec568e17d33c45e7e203fa01e2
+    git revert --no-commit c2fc919e04199326d1e9d5bcb40fa7ddd71831f4
+    git revert --no-commit aa40700f9f46d7e04a6263582718669c5d0f5639
+    git revert --no-commit acff5b41910af0fc91724e224317508e8f4a98b1
+    git revert --no-commit 5c3f2f88a6e518cc8c2cc4ff6d0c1ef5d92218be
+    git revert --no-commit 5703d5c0b3209c93779a3fe9f27487d8ad8efcf6
+    git revert --no-commit d1e0c5a732236f99c334f50a5d694543a58ba05d
+    git revert --no-commit 1117f9f072020b5a95410301244703f4d94ff484
+    git revert --no-commit ef7432d86e3d7ee1edf3c814efd4ef36dbed1020
+    git revert --no-commit 2681caa3f8cdcf5555b90947bc2a70efe5cb306f
+    git revert --no-commit 81c15d2d81951de8938613662861b5a2b875b443
+    git revert --no-commit 10a812fb7dfe2d24632821fc33a571de62391e47
+    git revert --no-commit 91f4af3418230305c9407711abe34d89156a47cf
+    git revert --no-commit 6ba3a548427f3edee7117fdca72aa6bd44a404cd
+    git revert --no-commit 787d4af53b739d843d804fbb9ba6ddc4c343f3f8
+    git revert --no-commit b36c6ae0e8d529cec1272156e808dddf04996187
+    git revert --no-commit afa1e60b279842c1e8dfebde0cc6a9a10ad82ee2
+    git revert --no-commit 0ba137e36db87b270f03c152c9e9bc88c809df14
+    git revert --no-commit 2726644124b10c80f9e1ef2640a9eb1a2b74ef1f
+    git revert --no-commit 74b7845ff04da620a49e4d898c31687e7bda7a47
+    git revert --no-commit 3b40a032675fdf3cc24e1b207896aa4c8cadc8cc
+    git revert --no-commit b117f6548a3f3734b23f865f2e9aeceed27062ed
+    git revert --no-commit 6b504fe7783b3680b911d739b60dedcbeec0e2f3
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -213,6 +202,9 @@
 ### END GAME PATCH SECTION ###
 
 ### (2-4) PROTON PATCH SECTION ###
+
+    echo "applying proton-specific syscall emulation patch"
+    patch -Np1 < ../patches/proton/53-protonif_stg_syscall_emu.patch
 
     echo "applying __wine_make_process_system_restore revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -311,6 +303,9 @@
     echo "proton font patches"
     patch -Np1 < ../patches/proton/51-proton_fonts.patch
 
+    echo "proton quake champions patches"
+    patch -Np1 < ../patches/proton/52-proton_quake_champions_syscall.patch
+
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
 #    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
@@ -343,16 +338,10 @@
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
 
-    echo "riftbreaker fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-riftbreaker.patch
-
     # https://bugs.winehq.org/show_bug.cgi?id=51596
     echo "winelib fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-winelib.patch
 
-#    disabled, currently breaks more than one controller being able to be used.
-#    echo "winebus fix"
-#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-winebus.patch
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
