@@ -1,0 +1,122 @@
+name: Feature Request
+description: Suggest an idea (a new feature or other improvement) for this project
+title: '[feature] '
+labels: enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Please fill out forms as cleanly as possible.
+         1. You can find the Steam AppID in the URL of the shop page of the game. e.g. for `The Witcher 3: Wild Hunt` the AppID is `292030`.
+         2. You can find your driver and Linux version, as well as your graphics processor's name in the system information report of Steam.
+         3. You can retrieve a full system information report by clicking `Help` then `System Information` in the Steam client on your machine.
+         4. Please copy it to your clipboard by pressing `Ctrl+A` and then `Ctrl+C`. Then paste it in a [Gist](https://gist.github.com/) and post the link in this issue.
+         5. Please search for open issues and pull requests by the name of the game and find out whether they are relevant and should be referenced above.
+        #### Make sure that you have
+        * properly edited & filled in the title of this bug report
+  - type: dropdown
+    id: version
+    attributes:
+      label: Proton Version
+      description: |
+        What Proton version are you using?
+      multiple: false
+      options:
+        - Proton-Experimental
+        - Proton-6.3-x
+        - Proton-5.13-x
+        - Proton-5.0-x
+        - Proton-4.11-x
+        - Proton-4.2-x
+        - Proton-3.16-x
+        - Proton-3.7-x
+        - Git
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: OS
+    attributes:
+      label: What Operating System are you using?
+      multiple: false
+      options:
+        - SteamOS
+        - Debian
+        - Ubuntu
+        - Arch
+        - Linux x86
+        - Linux x86_64
+        - Linux ARM (Raspberry Pi)
+        - Other
+    validations:
+      required: false
+  - type: input
+    id: other
+    attributes:
+      label: If Other OS, please describe
+      description: Other details
+      placeholder: "SteamOS, Debian 11, Ubuntu 20.04, Arch, etc."
+    validations:
+      required: false
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: I confirm
+      description: I have searched and not found similar issues.
+      options:
+        - label: I haven't found an existing compatibility report for this game.
+          required: true
+        - label: I have checked whether there are updates for my system available that contain this feature already. (`Steam Beta`)
+          required: true
+  - type: textarea
+    id: appid
+    attributes:
+      label: Description
+      description: What do you want to be added?
+      placeholder: "Please consider adding feature ..."
+    validations:
+      required: true
+  - type: textarea
+    id: system
+    attributes:
+      label: Justification _optional_
+      description: Why integration in Proton instead of Wine?
+      placeholder: "Proton is better for ..."
+    validations:
+      required: false
+  - type: textarea
+    id: log
+    attributes:
+      label: Risks _optional_
+      placeholder: "What could go wrong ..."
+    validations:
+      required: false
+  - type: textarea
+    id: issues
+    attributes:
+      label: References _optional_
+      description: Which issues are related?
+      placeholder: "Similar issues, software, features, etc."
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Add any other context or screenshots about the feature request here.
+      description: Screenshots or Links?
+      placeholder: "Ex. Screenshot or Link"
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct & Contributing Guidelines
+      description: By submitting this issue, you agree to follow our [contributing guidelines](https://docs.github.com/articles/github-community-guidelines) and code of conduct.
+      options:
+        - label: Yes, I agree.
+          required: true
+  - type: markdown
+    attributes:
+      value: |
+         * Make sure you have properly filled in the title of this bug report
