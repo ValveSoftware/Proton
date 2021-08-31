@@ -980,9 +980,6 @@ class Session:
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
 
-        #default wine-mono override for FNA games
-        self.env.setdefault("WINE_MONO_OVERRIDES", "Microsoft.Xna.Framework.*,Gac=n")
-
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
 
