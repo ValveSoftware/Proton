@@ -34,3 +34,6 @@
 [submodule "dxvk-nvapi"]
 	path = dxvk-nvapi
 	url = https://github.com/jp7677/dxvk-nvapi
+[submodule "vkd3d"]
+	path = vkd3d
+	url = git://repo.or.cz/vkd3d/zf.git
