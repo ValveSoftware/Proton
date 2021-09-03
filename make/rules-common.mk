@@ -57,10 +57,10 @@ $$(OBJ)/.$(1)-dist$(3):
 	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
 	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P$$(J) mkdir -p
 	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P$$(J) -n2 cp -a
-	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' ')' \
 	    -printf '--only-keep-debug\0%p\0$$(DST_LIBDIR$(3))/%p.debug\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096
-	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' ')' \
 	    -printf '--add-gnu-debuglink=$$(DST_LIBDIR$(3))/%p.debug\0--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n4 objcopy --file-alignment=4096
 	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.dll' \
@@ -73,9 +73,9 @@ $$(OBJ)/.$(1)-dist$(3):
 	mkdir -p $$($(2)_LIBDIR$(3))/ $$(DST_LIBDIR$(3))/
 	cd $$($(2)_LIBDIR$(3)) && find -type f -printf '$$(DST_LIBDIR$(3))/%h\0' | sort -z | uniq -z | xargs $(--verbose?) -0 -r -P$$(J) mkdir -p
 	cd $$($(2)_LIBDIR$(3)) && find -type l -printf '%p\0$$(DST_LIBDIR$(3))/%p\0' | xargs $(--verbose?) -0 -r -P$$(J) -n2 cp -a
-	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' ')' \
 	    -printf '$$(DST_LIBDIR$(3))/%p.debug\0' | xargs $(--verbose?) -0 -r -P$$(J) rm -f
-	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.def' ')' \
+	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' ')' \
 	    -printf '--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096
 	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.dll' \
@@ -124,10 +124,11 @@ $(2)_ENV$(3) = \
     LD_LIBRARY_PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_LIBDIR$(3))),,:)$$$$LD_LIBRARY_PATH" \
     PKG_CONFIG_PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_LIBDIR$(3))/pkgconfig))" \
     CFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
+    CPPFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CPPFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
     CXXFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17" \
     LDFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \
              $$(foreach d,$$($(2)_DEPS$(3)),-Wl,-rpath-link=$$($$(d)_LIBDIR$(3))) \
-             $$($(2)_LDFLAGS) $$(LDFLAGS)"
+             $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$(LDFLAGS)"
 
 endef
 
