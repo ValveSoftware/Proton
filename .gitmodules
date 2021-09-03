@@ -40,3 +40,6 @@
 [submodule "Vulkan-Headers"]
 	path = Vulkan-Headers
 	url = https://github.com/KhronosGroup/Vulkan-Headers
+[submodule "SPIRV-Headers"]
+	path = SPIRV-Headers
+	url = https://github.com/KhronosGroup/SPIRV-Headers
