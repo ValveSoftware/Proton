@@ -779,6 +779,12 @@ class CompatData:
             makedirs(self.prefix_dir + "/drive_c/openxr/")
             try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", self.prefix_dir + "/drive_c/openxr/")
 
+            #copy vkd3d files into place
+            try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll",
+                    self.prefix_dir + "drive_c/windows/system32/libvkd3d-shader-1.dll")
+            try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll",
+                    self.prefix_dir + "drive_c/windows/syswow64/libvkd3d-shader-1.dll")
+
             if use_wined3d:
                 dxvkfiles = ["dxvk_config"]
                 wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
