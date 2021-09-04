@@ -573,6 +573,15 @@ $(eval $(call rules-cmake,jxrlib,64))
 
 
 ##
+## Vulkan-Headers
+##
+
+$(eval $(call rules-source,vulkan-headers,$(SRCDIR)/Vulkan-Headers))
+$(eval $(call rules-cmake,vulkan-headers,32))
+$(eval $(call rules-cmake,vulkan-headers,64))
+
+
+##
 ## lsteamclient
 ##
 
