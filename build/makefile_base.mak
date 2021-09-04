@@ -581,6 +581,15 @@ $(eval $(call rules-cmake,vulkan-headers,64))
 
 
 ##
+## SPIRV-Headers
+##
+
+$(eval $(call rules-source,spirv-headers,$(SRCDIR)/SPIRV-Headers))
+$(eval $(call rules-cmake,spirv-headers,32))
+$(eval $(call rules-cmake,spirv-headers,64))
+
+
+##
 ## lsteamclient
 ##
 
