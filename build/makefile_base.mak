@@ -669,11 +669,7 @@ $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
 $(eval $(call rules-autoconf,wine,64))
 
-$(WINE_SRC)/configure: $(SRCDIR)/wine/configure.ac | $(OBJ)/.wine-source
-	cd $(WINE_SRC) && autoreconf -fi
-	touch $@
-
-$(OBJ)/.wine-post-source: $(WINE_SRC)/configure
+$(OBJ)/.wine-post-source:
 	cd $(WINE_SRC) && tools/make_requests
 	touch $@
 
