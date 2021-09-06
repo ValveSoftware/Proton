@@ -7,7 +7,12 @@ define create-rules-autoconf
 $(call create-rules-common,$(1),$(2),$(3))
 
 ifeq ($(CONTAINER),1)
-$$(OBJ)/.$(1)-configure$(3): $$($(2)_SRC)/configure.ac
+$$(OBJ)/.$(1)-pre-configure: $$($(2)_SRC)/configure.ac
+	@echo ":: autoreconfing $(1)..." >&2
+	cd "$$($(2)_SRC)" && autoreconf -fiv
+	touch $$@
+
+$$(OBJ)/.$(1)-configure$(3): $$(OBJ)/.$(1)-pre-configure
 	@echo ":: configuring $(3)bit $(1)..." >&2
 	rm -rf "$$($(2)_OBJ$(3))/config.cache"
 
