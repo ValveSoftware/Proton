@@ -10,6 +10,7 @@ import json
 import os
 import shutil
 import errno
+import platform
 import stat
 import subprocess
 import sys
@@ -17,13 +18,21 @@ import tarfile
 import shlex
 
 from ctypes import CDLL
+from ctypes import CFUNCTYPE
 from ctypes import POINTER
 from ctypes import Structure
 from ctypes import addressof
 from ctypes import cast
+from ctypes import get_errno
+from ctypes import sizeof
 from ctypes import c_int
+from ctypes import c_int64
+from ctypes import c_uint
+from ctypes import c_long
 from ctypes import c_char_p
 from ctypes import c_void_p
+from ctypes import c_size_t
+from ctypes import c_ssize_t
 
 from filelock import FileLock
 from random import randrange
@@ -142,10 +151,15 @@ def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, op
         elif track_file and prefix is not None:
             track_file.write(os.path.relpath(dst, prefix) + '\n')
 
-        if copy_metadata:
-            shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
+        if os.path.islink(src) and not follow_symlinks:
+            shutil.copyfile(src, dst, follow_symlinks=False)
         else:
-            shutil.copy(src, dst, follow_symlinks=follow_symlinks)
+            copyfile(src, dst)
+
+        if copy_metadata:
+            shutil.copystat(src, dst, follow_symlinks=follow_symlinks)
+        else:
+            shutil.copymode(src, dst, follow_symlinks=follow_symlinks)
 
         if add_write_perm:
             new_mode = os.lstat(dst).st_mode | stat.S_IWUSR | stat.S_IWGRP
@@ -175,15 +189,62 @@ def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, op
         else:
             raise
 
+# copy_file_range implementation for old Python versions
+__syscall__copy_file_range = None
+
+def copy_file_range_ctypes(fd_in, fd_out, count):
+    "Copy data using the copy_file_range syscall through ctypes, assuming x86_64 Linux"
+    global __syscall__copy_file_range
+    __NR_copy_file_range = 326
+
+    if __syscall__copy_file_range is None:
+        c_int64_p = POINTER(c_int64)
+        prototype = CFUNCTYPE(c_ssize_t, c_long, c_int, c_int64_p,
+            c_int, c_int64_p, c_size_t, c_uint)
+        __syscall__copy_file_range = prototype(('syscall', CDLL(None)))
+
+    while True:
+        ret = __syscall__copy_file_range(__NR_copy_file_range, fd_in, None, fd_out, None, count, 0)
+        if ret >= 0 or get_errno() != errno.EINTR:
+            break
+
+    if ret < 0:
+        raise OSError(get_errno(), errno.errorcode.get(get_errno(), 'unknown'))
+
+    return ret
+
+def copyfile_reflink(srcname, dstname):
+    "Copy srcname to dstname, making reflink if possible"
+    global copyfile
+    with open(srcname, 'rb', buffering=0) as src:
+        bytes_to_copy = os.fstat(src.fileno()).st_size
+        try:
+            with open(dstname, 'wb', buffering=0) as dst:
+                while bytes_to_copy > 0:
+                    bytes_to_copy -= copy_file_range(src.fileno(), dst.fileno(), bytes_to_copy)
+        except OSError as e:
+            if e.errno != errno.EXDEV and e.errno != errno.ENOSYS:
+                raise e
+            if e.errno == errno.ENOSYS:
+                copyfile = shutil.copyfile
+            shutil.copyfile(srcname, dstname)
+
+if hasattr(os, 'copy_file_range'):
+    copyfile = copyfile_reflink
+    copy_file_range = os.copy_file_range
+elif sys.platform == 'linux' and platform.machine() == 'x86_64' and sizeof(c_void_p) == 8:
+    copyfile = copyfile_reflink
+    copy_file_range = copy_file_range_ctypes
+else:
+    copyfile = shutil.copyfile
+
 def try_copyfile(src, dst):
     try:
         if os.path.isdir(dst):
-            dstfile = dst + "/" + os.path.basename(src)
-            if file_exists(dstfile, follow_symlinks=False):
-                os.remove(dstfile)
-        elif file_exists(dst, follow_symlinks=False):
+            dst = dst + "/" + os.path.basename(src)
+        if file_exists(dst, follow_symlinks=False):
             os.remove(dst)
-        shutil.copyfile(src, dst)
+        copyfile(src, dst)
     except PermissionError as e:
         if e.errno == errno.EPERM:
             #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
