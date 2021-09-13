@@ -1,0 +1,27 @@
+From f9482924e5cc7d554910c0f45438dde6c2f3a93a Mon Sep 17 00:00:00 2001
+From: Esdras Tarsis <esdrastarsis@gmail.com>
+Date: Fri, 10 Sep 2021 12:20:36 -0300
+Subject: [PATCH] wbemprox: Accept the root\microsoft\windows\storage
+ namespace.
+
+Signed-off-by: Esdras Tarsis <esdrastarsis@gmail.com>
+---
+ dlls/wbemprox/wbemlocator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/wbemprox/wbemlocator.c b/dlls/wbemprox/wbemlocator.c
+index 5e86f2be86d..57cc392e843 100644
+--- a/dlls/wbemprox/wbemlocator.c
++++ b/dlls/wbemprox/wbemlocator.c
+@@ -134,7 +134,7 @@ static HRESULT parse_resource( const WCHAR *resource, WCHAR **server, WCHAR **na
+     }
+     q++;
+     len = lstrlenW( q );
+-    if (wcsicmp( q, L"cimv2" ) && wcsicmp( q, L"default" ))
++    if (wcsicmp( q, L"cimv2" ) && wcsicmp( q, L"default" ) && wcsicmp( q, L"microsoft\\windows\\storage"))
+         goto done;
+     if (!(*namespace = heap_alloc( (len + 1) * sizeof(WCHAR) ))) hr = E_OUTOFMEMORY;
+     else
+-- 
+2.33.0
+
