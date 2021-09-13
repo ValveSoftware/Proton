@@ -801,6 +801,7 @@ class CompatData:
                         self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll")
                 g_session.dlloverrides["nvapi64"] = "n"
                 g_session.dlloverrides["nvapi"] = "n"
+                g_session.dlloverrides["nvcuda"] = "b"
             else:
                 nvapi64_dll = self.prefix_dir + "drive_c/windows/system32/nvapi64.dll"
                 nvapi32_dll = self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll"
