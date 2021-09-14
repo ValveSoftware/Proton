@@ -1174,7 +1174,7 @@ class Session:
             f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
             f.write("cd \"" + os.getcwd() + "\"\n")
             f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
-            f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
+            f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | sed -e 's/^0*//')\n")
             f.write("if [ -z \"$WPID_HEX\" ]; then \n")
             f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
             f.write("    exit 1\n")
