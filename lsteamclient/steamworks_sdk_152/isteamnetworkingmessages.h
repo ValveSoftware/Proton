@@ -2,7 +2,6 @@
 
 #ifndef ISTEAMNETWORKINGMESSAGES
 #define ISTEAMNETWORKINGMESSAGES
-#pragma once
 
 #include "steamnetworkingtypes.h"
 #include "steam_api_common.h"
@@ -78,7 +77,7 @@ public:
 	///   GetSessionConnectionInfo to get the details.)  In order to acknowledge the broken session
 	///   and start a new one, you must call CloseSessionWithUser
 	/// - See ISteamNetworkingSockets::SendMessageToConnection for more possible return values
-	virtual EResult SendMessageToUser( const SteamNetworkingIdentity &identityRemote, const void *pubData, uint32 cubData, int nSendFlags, int nRemoteChannel ) = 0;
+	virtual EResult SendMessageToUser( const SteamNetworkingIdentity *identityRemote, const void *pubData, uint32 cubData, int nSendFlags, int nRemoteChannel ) = 0;
 
 	/// Reads the next message that has been sent from another user via SendMessageToUser() on the given channel.
 	/// Returns number of messages returned into your list.  (0 if no message are available on that channel.)
@@ -96,20 +95,20 @@ public:
 	/// existing active session, this function will return true, even if it is not pending.
 	///
 	/// Calling SendMessageToUser() will implicitly accepts any pending session request to that user.
-	virtual bool AcceptSessionWithUser( const SteamNetworkingIdentity &identityRemote ) = 0;
+	virtual bool AcceptSessionWithUser( const SteamNetworkingIdentity *identityRemote ) = 0;
 
 	/// Call this when you're done talking to a user to immediately free up resources under-the-hood.
 	/// If the remote user tries to send data to you again, another SteamNetworkingMessagesSessionRequest_t
 	/// callback will be posted.
 	///
 	/// Note that sessions that go unused for a few minutes are automatically timed out.
-	virtual bool CloseSessionWithUser( const SteamNetworkingIdentity &identityRemote ) = 0;
+	virtual bool CloseSessionWithUser( const SteamNetworkingIdentity *identityRemote ) = 0;
 
 	/// Call this  when you're done talking to a user on a specific channel.  Once all
 	/// open channels to a user have been closed, the open session to the user will be
 	/// closed, and any new data from this user will trigger a
 	/// SteamSteamNetworkingMessagesSessionRequest_t callback
-	virtual bool CloseChannelWithUser( const SteamNetworkingIdentity &identityRemote, int nLocalChannel ) = 0;
+	virtual bool CloseChannelWithUser( const SteamNetworkingIdentity *identityRemote, int nLocalChannel ) = 0;
 
 	/// Returns information about the latest state of a connection, if any, with the given peer.
 	/// Primarily intended for debugging purposes, but can also be used to get more detailed
@@ -120,7 +119,7 @@ public:
 	/// you do not need the corresponding details.  Note that sessions time out after a while,
 	/// so if a connection fails, or SendMessageToUser returns k_EResultNoConnection, you cannot wait
 	/// indefinitely to obtain the reason for failure.
-	virtual ESteamNetworkingConnectionState GetSessionConnectionInfo( const SteamNetworkingIdentity &identityRemote, SteamNetConnectionInfo_t *pConnectionInfo, SteamNetworkingQuickConnectionStatus *pQuickStatus ) = 0;
+	virtual ESteamNetworkingConnectionState GetSessionConnectionInfo( const SteamNetworkingIdentity *identityRemote, SteamNetConnectionInfo_t *pConnectionInfo, SteamNetworkingQuickConnectionStatus *pQuickStatus ) = 0;
 };
 #define STEAMNETWORKINGMESSAGES_INTERFACE_VERSION "SteamNetworkingMessages002"
 

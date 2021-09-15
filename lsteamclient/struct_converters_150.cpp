@@ -102,19 +102,5 @@ void lin_to_win_struct_SteamUGCDetails_t_150(const struct SteamUGCDetails_t *lin
     win->m_unNumChildren = lin->m_unNumChildren;
 }
 
-#pragma pack( push, 8 )
-struct winSteamNetConnectionStatusChangedCallback_t_712 {
-    HSteamNetConnection m_hConn;
-    SteamNetConnectionInfo_t m_info __attribute__((aligned(8)));
-    ESteamNetworkingConnectionState m_eOldState;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_SteamNetConnectionStatusChangedCallback_t_712(const struct SteamNetConnectionStatusChangedCallback_t *lin, struct winSteamNetConnectionStatusChangedCallback_t_712 *win)
-{
-    win->m_hConn = lin->m_hConn;
-    win->m_info = lin->m_info;
-    win->m_eOldState = lin->m_eOldState;
-}
-
 
 }

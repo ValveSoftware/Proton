@@ -44,8 +44,8 @@ case 1112:
 case 1221:
     switch(callback_len){
     default:
-    case 584: cb_SteamNetConnectionStatusChangedCallback_t_584(lin_callback, callback); break;
     case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
+    case 584: cb_SteamNetConnectionStatusChangedCallback_t_584(lin_callback, callback); break;
     }
     break;
 case 1303:
@@ -191,6 +191,12 @@ case 2103:
     switch(callback_len){
     default:
     case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
+    }
+    break;
+case 2803:
+    switch(callback_len){
+    default:
+    case 40: cb_SteamInputConfigurationLoaded_t_40(lin_callback, callback); break;
     }
     break;
 case 3402:
@@ -441,8 +447,8 @@ case 1112:
 case 1221:
     switch(callback_len){
     default:
-    case 584: cb_SteamNetConnectionStatusChangedCallback_t_584(lin_callback, callback); break;
     case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
+    case 584: cb_SteamNetConnectionStatusChangedCallback_t_584(lin_callback, callback); break;
     }
     break;
 case 1303:
@@ -588,6 +594,12 @@ case 2103:
     switch(callback_len){
     default:
     case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
+    }
+    break;
+case 2803:
+    switch(callback_len){
+    default:
+    case 40: cb_SteamInputConfigurationLoaded_t_40(lin_callback, callback); break;
     }
     break;
 case 3402:

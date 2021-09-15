@@ -262,6 +262,27 @@ ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils010_GetIPv6Conne
     return cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState(_this->linux_side, eProtocol);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck, 4)
+bool __thiscall winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(winISteamUtils_SteamUtils010 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput, 24)
+bool __thiscall winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(winISteamUtils_SteamUtils010 *_this, EFloatingGamepadTextInputMode eKeyboardMode, int nTextFieldXPosition, int nTextFieldYPosition, int nTextFieldWidth, int nTextFieldHeight)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(_this->linux_side, eKeyboardMode, nTextFieldXPosition, nTextFieldYPosition, nTextFieldWidth, nTextFieldHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_SetGameLauncherMode, 8)
+void __thiscall winISteamUtils_SteamUtils010_SetGameLauncherMode(winISteamUtils_SteamUtils010 *_this, bool bLauncherMode)
+{
+    TRACE("%p\n", _this);
+    cppISteamUtils_SteamUtils010_SetGameLauncherMode(_this->linux_side, bLauncherMode);
+}
+
 extern vtable_ptr winISteamUtils_SteamUtils010_vtable;
 
 #ifndef __GNUC__
@@ -302,6 +323,9 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_InitFilterText)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_FilterText)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_GetIPv6ConnectivityState)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_SetGameLauncherMode)
     );
 #ifndef __GNUC__
 }

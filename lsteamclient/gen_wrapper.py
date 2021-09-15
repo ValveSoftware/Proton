@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/11.1.0'
+CLANG_PATH='/usr/lib/clang/12.0.1'
 
 import pprint
 import sys
@@ -15,6 +15,7 @@ import re
 import math
 
 sdk_versions = [
+    "152",
     "151",
     "150",
     "149",
@@ -217,6 +218,9 @@ manually_handled_methods = {
         ],
         "cppISteamNetworkingMessages_SteamNetworkingMessages002": [
             "ReceiveMessagesOnChannel"
+        ],
+        "cppISteamInput_SteamInput005": [
+            "EnableActionEventCallbacks"
         ],
 }
 
@@ -586,6 +590,8 @@ def struct_needs_conversion_nocache(struct):
 
     #check 32-bit compat
     windows_struct = find_windows_struct(struct)
+    if windows_struct is None:
+        print("Couldn't find windows struct for " + struct.spelling)
     assert(not windows_struct is None) #must find windows_struct
     for field in struct.get_fields():
         if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
