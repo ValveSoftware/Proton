@@ -99,7 +99,12 @@ typedef uint32_t EUserUGCList,
         ESteamIPv6ConnectivityProtocol,
         EDurationControlOnlineState,
         ETextFilteringContext,
-        ESteamNetworkingConnectionState
+        ESteamNetworkingConnectionState,
+        EFloatingGamepadTextInputMode,
+        ERemoteStorageLocalFileChange,
+        ERemoteStorageFilePathType,
+        ESteamInputGlyphSize,
+        EControllerHapticLocation
 ;
 
 /* XXX NO */
@@ -226,6 +231,7 @@ typedef struct SteamRelayNetworkStatus_t SteamRelayNetworkStatus_t;
 typedef struct SteamIPAddress_t SteamIPAddress_t;
 typedef struct SteamNetworkingConfigValue_t SteamNetworkingConfigValue_t;
 typedef struct SteamNetworkingMessage_t SteamNetworkingMessage_t;
+typedef struct SteamInputActionEvent_t SteamInputActionEvent_t;
 
 typedef uint32 (*SteamAPI_CheckCallbackRegistered_t)(int cb);
 typedef void *SteamAPIWarningMessageHook_t; //already cdecl, no need for conversion(?)
@@ -290,6 +296,8 @@ typedef uint32 HSteamNetPollGroup;
 typedef uint32 SteamNetworkingPOPID;
 typedef uint32 RemotePlaySessionID_t;
 typedef char* SteamNetworkingErrMsg;
+
+typedef void (*SteamInputActionEventCallbackPointer)(SteamInputActionEvent_t *);
 
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t

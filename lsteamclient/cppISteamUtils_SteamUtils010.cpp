@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_151/steam_api.h"
-#include "steamworks_sdk_151/steamnetworkingtypes.h"
+#include "steamworks_sdk_152/steam_api.h"
+#include "steamworks_sdk_152/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_151
+#define SDKVER_152
 #include "struct_converters.h"
 #include "cppISteamUtils_SteamUtils010.h"
 uint32 cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive(void *linux_side)
@@ -179,6 +179,21 @@ int cppISteamUtils_SteamUtils010_FilterText(void *linux_side, ETextFilteringCont
 ESteamIPv6ConnectivityState cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState(void *linux_side, ESteamIPv6ConnectivityProtocol eProtocol)
 {
     return ((ISteamUtils*)linux_side)->GetIPv6ConnectivityState((ESteamIPv6ConnectivityProtocol)eProtocol);
+}
+
+bool cppISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(void *linux_side)
+{
+    return ((ISteamUtils*)linux_side)->IsSteamRunningOnSteamDeck();
+}
+
+bool cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(void *linux_side, EFloatingGamepadTextInputMode eKeyboardMode, int nTextFieldXPosition, int nTextFieldYPosition, int nTextFieldWidth, int nTextFieldHeight)
+{
+    return ((ISteamUtils*)linux_side)->ShowFloatingGamepadTextInput((EFloatingGamepadTextInputMode)eKeyboardMode, (int)nTextFieldXPosition, (int)nTextFieldYPosition, (int)nTextFieldWidth, (int)nTextFieldHeight);
+}
+
+void cppISteamUtils_SteamUtils010_SetGameLauncherMode(void *linux_side, bool bLauncherMode)
+{
+    ((ISteamUtils*)linux_side)->SetGameLauncherMode((bool)bLauncherMode);
 }
 
 #ifdef __cplusplus

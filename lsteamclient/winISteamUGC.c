@@ -58,7 +58,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUG
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult, 20)
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(winISteamUGC_STEAMUGC_INTERFACE_VERSION015 *_this, UGCQueryHandle_t handle, uint32 index, winSteamUGCDetails_t_151 * pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(winISteamUGC_STEAMUGC_INTERFACE_VERSION015 *_this, UGCQueryHandle_t handle, uint32 index, winSteamUGCDetails_t_152 * pDetails)
 {
     TRACE("%p\n", _this);
     return cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(_this->linux_side, handle, index, pDetails);
@@ -612,6 +612,20 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem(
     return cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem(_this->linux_side, nPublishedFileID);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA, 4)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA(winISteamUGC_STEAMUGC_INTERFACE_VERSION015 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus, 4)
+SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus(winISteamUGC_STEAMUGC_INTERFACE_VERSION015 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus(_this->linux_side);
+}
+
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION015_vtable;
 
 #ifndef __GNUC__
@@ -700,6 +714,8 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAppDependency)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetAppDependencies)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA)
+        VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus)
     );
 #ifndef __GNUC__
 }

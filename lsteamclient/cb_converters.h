@@ -34,10 +34,6 @@ struct CreateBeaconCallback_t;
 struct winCreateBeaconCallback_t_16;
 extern void cb_CreateBeaconCallback_t_16(const struct CreateBeaconCallback_t *l, struct winCreateBeaconCallback_t_16 *w);
 
-struct RemoteStorageAppSyncProgress_t;
-struct winRemoteStorageAppSyncProgress_t_288;
-extern void cb_RemoteStorageAppSyncProgress_t_288(const struct RemoteStorageAppSyncProgress_t *l, struct winRemoteStorageAppSyncProgress_t_288 *w);
-
 struct RemoteStorageFileShareResult_t;
 struct winRemoteStorageFileShareResult_t_280;
 extern void cb_RemoteStorageFileShareResult_t_280(const struct RemoteStorageFileShareResult_t *l, struct winRemoteStorageFileShareResult_t_280 *w);
@@ -133,6 +129,10 @@ extern void cb_HTTPRequestHeadersReceived_t_16(const struct HTTPRequestHeadersRe
 struct HTTPRequestDataReceived_t;
 struct winHTTPRequestDataReceived_t_24;
 extern void cb_HTTPRequestDataReceived_t_24(const struct HTTPRequestDataReceived_t *l, struct winHTTPRequestDataReceived_t_24 *w);
+
+struct SteamInputConfigurationLoaded_t;
+struct winSteamInputConfigurationLoaded_t_40;
+extern void cb_SteamInputConfigurationLoaded_t_40(const struct SteamInputConfigurationLoaded_t *l, struct winSteamInputConfigurationLoaded_t_40 *w);
 
 struct SteamUGCRequestUGCDetailsResult_t;
 struct winSteamUGCRequestUGCDetailsResult_t_9784;
@@ -319,16 +319,20 @@ struct winSteamInventoryStartPurchaseResult_t_24;
 extern void cb_SteamInventoryStartPurchaseResult_t_24(const struct SteamInventoryStartPurchaseResult_t *l, struct winSteamInventoryStartPurchaseResult_t_24 *w);
 
 struct SteamNetConnectionStatusChangedCallback_t;
-struct winSteamNetConnectionStatusChangedCallback_t_584;
-extern void cb_SteamNetConnectionStatusChangedCallback_t_584(const struct SteamNetConnectionStatusChangedCallback_t *l, struct winSteamNetConnectionStatusChangedCallback_t_584 *w);
+struct winSteamNetConnectionStatusChangedCallback_t_712;
+extern void cb_SteamNetConnectionStatusChangedCallback_t_712(const struct SteamNetConnectionStatusChangedCallback_t *l, struct winSteamNetConnectionStatusChangedCallback_t_712 *w);
 
 struct GSReputation_t;
 struct winGSReputation_t_40;
 extern void cb_GSReputation_t_40(const struct GSReputation_t *l, struct winGSReputation_t_40 *w);
 
+struct RemoteStorageAppSyncProgress_t;
+struct winRemoteStorageAppSyncProgress_t_288;
+extern void cb_RemoteStorageAppSyncProgress_t_288(const struct RemoteStorageAppSyncProgress_t *l, struct winRemoteStorageAppSyncProgress_t_288 *w);
+
 struct SteamNetConnectionStatusChangedCallback_t;
-struct winSteamNetConnectionStatusChangedCallback_t_712;
-extern void cb_SteamNetConnectionStatusChangedCallback_t_712(const struct SteamNetConnectionStatusChangedCallback_t *l, struct winSteamNetConnectionStatusChangedCallback_t_712 *w);
+struct winSteamNetConnectionStatusChangedCallback_t_584;
+extern void cb_SteamNetConnectionStatusChangedCallback_t_584(const struct SteamNetConnectionStatusChangedCallback_t *l, struct winSteamNetConnectionStatusChangedCallback_t_584 *w);
 
 struct HTTPRequestCompleted_t;
 struct winHTTPRequestCompleted_t_24;

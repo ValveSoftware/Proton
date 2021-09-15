@@ -44,18 +44,18 @@ CSteamID *__thiscall winISteamUser_SteamUser021_GetSteamID(winISteamUser_SteamUs
     return _r;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_InitiateGameConnection, 32)
-int __thiscall winISteamUser_SteamUser021_InitiateGameConnection(winISteamUser_SteamUser021 *_this, void * pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED, 32)
+int __thiscall winISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED(winISteamUser_SteamUser021 *_this, void * pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser021_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+    return cppISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_TerminateGameConnection, 12)
-void __thiscall winISteamUser_SteamUser021_TerminateGameConnection(winISteamUser_SteamUser021 *_this, uint32 unIPServer, uint16 usPortServer)
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED, 12)
+void __thiscall winISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED(winISteamUser_SteamUser021 *_this, uint32 unIPServer, uint16 usPortServer)
 {
     TRACE("%p\n", _this);
-    cppISteamUser_SteamUser021_TerminateGameConnection(_this->linux_side, unIPServer, usPortServer);
+    cppISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED(_this->linux_side, unIPServer, usPortServer);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser021_TrackAppUsageEvent, 20)
@@ -259,8 +259,8 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_BLoggedOn)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_GetSteamID)
-        VTABLE_ADD_FUNC(winISteamUser_SteamUser021_InitiateGameConnection)
-        VTABLE_ADD_FUNC(winISteamUser_SteamUser021_TerminateGameConnection)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_TrackAppUsageEvent)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_GetUserDataFolder)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_StartVoiceRecording)
