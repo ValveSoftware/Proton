@@ -1,8 +1,8 @@
 extern HSteamUser cppISteamUser_SteamUser021_GetHSteamUser(void *);
 extern bool cppISteamUser_SteamUser021_BLoggedOn(void *);
 extern CSteamID cppISteamUser_SteamUser021_GetSteamID(void *);
-extern int cppISteamUser_SteamUser021_InitiateGameConnection(void *, void *, int, CSteamID, uint32, uint16, bool);
-extern void cppISteamUser_SteamUser021_TerminateGameConnection(void *, uint32, uint16);
+extern int cppISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED(void *, void *, int, CSteamID, uint32, uint16, bool);
+extern void cppISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED(void *, uint32, uint16);
 extern void cppISteamUser_SteamUser021_TrackAppUsageEvent(void *, CGameID, int, const char *);
 extern bool cppISteamUser_SteamUser021_GetUserDataFolder(void *, char *, int);
 extern void cppISteamUser_SteamUser021_StartVoiceRecording(void *);

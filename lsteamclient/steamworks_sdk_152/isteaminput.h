@@ -586,7 +586,7 @@ struct SteamInputActionEvent_t
 			InputDigitalActionHandle_t actionHandle;
 			InputDigitalActionData_t digitalActionData;
 		} digitalAction;
-	};
+	} x;
 };
 
 #pragma pack( pop )

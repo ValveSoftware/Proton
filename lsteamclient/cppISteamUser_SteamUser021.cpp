@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_151/steam_api.h"
-#include "steamworks_sdk_151/steamnetworkingtypes.h"
+#include "steamworks_sdk_152/steam_api.h"
+#include "steamworks_sdk_152/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_151
+#define SDKVER_152
 #include "struct_converters.h"
 #include "cppISteamUser_SteamUser021.h"
 HSteamUser cppISteamUser_SteamUser021_GetHSteamUser(void *linux_side)
@@ -26,14 +26,14 @@ CSteamID cppISteamUser_SteamUser021_GetSteamID(void *linux_side)
     return ((ISteamUser*)linux_side)->GetSteamID();
 }
 
-int cppISteamUser_SteamUser021_InitiateGameConnection(void *linux_side, void * pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
+int cppISteamUser_SteamUser021_InitiateGameConnection_DEPRECATED(void *linux_side, void * pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
 {
-    return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
+    return ((ISteamUser*)linux_side)->InitiateGameConnection_DEPRECATED((void *)pAuthBlob, (int)cbMaxAuthBlob, (CSteamID)steamIDGameServer, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure);
 }
 
-void cppISteamUser_SteamUser021_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)
+void cppISteamUser_SteamUser021_TerminateGameConnection_DEPRECATED(void *linux_side, uint32 unIPServer, uint16 usPortServer)
 {
-    ((ISteamUser*)linux_side)->TerminateGameConnection((uint32)unIPServer, (uint16)usPortServer);
+    ((ISteamUser*)linux_side)->TerminateGameConnection_DEPRECATED((uint32)unIPServer, (uint16)usPortServer);
 }
 
 void cppISteamUser_SteamUser021_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)

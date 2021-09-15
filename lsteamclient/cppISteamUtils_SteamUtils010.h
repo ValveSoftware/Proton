@@ -32,3 +32,6 @@ extern bool cppISteamUtils_SteamUtils010_IsSteamChinaLauncher(void *);
 extern bool cppISteamUtils_SteamUtils010_InitFilterText(void *, uint32);
 extern int cppISteamUtils_SteamUtils010_FilterText(void *, ETextFilteringContext, CSteamID, const char *, char *, uint32);
 extern ESteamIPv6ConnectivityState cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState(void *, ESteamIPv6ConnectivityProtocol);
+extern bool cppISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(void *);
+extern bool cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(void *, EFloatingGamepadTextInputMode, int, int, int, int);
+extern void cppISteamUtils_SteamUtils010_SetGameLauncherMode(void *, bool);
