@@ -808,12 +808,12 @@ VKD3D_CONFIGURE_ARGS = \
 
 VKD3D_CONFIGURE_ARGS32 = \
   --host=i686-w64-mingw32 \
-  CC="$$(CCACHE_BIN) i686-w64-mingw32-gcc" \
+  CC="$(CCACHE_BIN) i686-w64-mingw32-gcc" \
   LD="i686-w64-mingw32-ld" \
 
 VKD3D_CONFIGURE_ARGS64 = \
   --host=x86_64-w64-mingw32 \
-  CC="$$(CCACHE_BIN) x86_64-w64-mingw32-gcc" \
+  CC="$(CCACHE_BIN) x86_64-w64-mingw32-gcc" \
   LD="x86_64-w64-mingw32-ld" \
 
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
