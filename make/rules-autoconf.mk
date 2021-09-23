@@ -21,9 +21,6 @@ $$(OBJ)/.$(1)-configure$(3): $$(OBJ)/.$(1)-pre-configure
 	    --prefix="$$($(2)_DST$(3))" \
 	    --libdir="$$($(2)_DST$(3))/lib$(subst 32,,$(3))" \
 	    $$($(2)_ENV$(3)) \
-	    CROSSCFLAGS="$$(COMMON_FLAGS)" \
-	    CROSSCXXFLAGS="$$(COMMON_FLAGS) -std=c++17" \
-	    CROSSLDFLAGS="$$(CROSSLDFLAGS)" \
 	    $$($(2)_CONFIGURE_ARGS) \
 	    $$($(2)_CONFIGURE_ARGS$(3))
 
