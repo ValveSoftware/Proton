@@ -2,6 +2,7 @@
 #   $(1): lowercase package name
 #   $(2): uppercase package name
 #   $(3): 32/64, build type
+#   $(4): CROSS/<empty>, cross compile
 define create-rules-common
 $(2)_OBJ$(3) := $$(OBJ)/obj-$(1)$(3)
 $(2)_DST$(3) := $$(OBJ)/dst-$(1)$(3)
@@ -106,29 +107,55 @@ all: $(1)
 
 CONTAINERGOALS := $(CONTAINERGOALS) $(filter $(1),$(MAKECMDGOALS))
 
+$(2)_INCFLAGS$(3) = $$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3)))
+$(2)_LIBFLAGS$(3) = $$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \
+                    $$(foreach d,$$($(2)_DEPS$(3)),-Wl,-rpath-link=$$($$(d)_LIBDIR$(3))) \
+
+# PKG_CONFIG is intentionally never using CROSS target, as it's missing
+# wrapper scripts in the toolchain, we use PKG_CONFIG_LIBDIR directly
+# instead.
 
 $(2)_ENV$(3) = \
     CARGO_HOME=$$(OBJ)/.cargo \
-    CARGO_TARGET_$$(call toupper,$$(CARGO_TARGET_$(3)))_LINKER="$$(ARCH$(3))-linux-gnu-gcc" \
+    CARGO_TARGET_$$(call toupper,$$(CARGO_TARGET_$(3)))_LINKER="$$(TARGET_$(4)$(3))-gcc" \
     CCACHE_BASEDIR="$$(CCACHE_BASEDIR)" \
     STRIP="$$(STRIP)" \
-    CC="$$(CCACHE_BIN) $$(ARCH$(3))-linux-gnu-gcc" \
-    CXX="$$(CCACHE_BIN) $$(ARCH$(3))-linux-gnu-g++" \
-    LD="$$(ARCH$(3))-linux-gnu-ld" \
-    PKG_CONFIG="$$(ARCH$(3))-linux-gnu-pkg-config" \
-    CROSSCC="$$(CCACHE_BIN) $$(ARCH$(3))-w64-mingw32-gcc" \
-    CROSSCXX="$$(CCACHE_BIN) $$(ARCH$(3))-w64-mingw32-g++" \
-    CROSSLD="$$(ARCH$(3))-w64-mingw32-ld" \
-    CROSSPKG_CONFIG="$$(ARCH$(3))-linux-gnu-pkg-config" \
+    AR="$$(TARGET_$(4)$(3))-ar" \
+    RANLIB="$$(TARGET_$(4)$(3))-ranlib" \
+    CC="$$(CCACHE_BIN) $$(TARGET_$(4)$(3))-gcc" \
+    CXX="$$(CCACHE_BIN) $$(TARGET_$(4)$(3))-g++" \
+    LD="$$(TARGET_$(4)$(3))-ld" \
+    PKG_CONFIG="$$(TARGET_$(3))-pkg-config" \
     PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_BINDIR$(3))),,:):$$(SRC)/glslang/bin:$$$$PATH" \
     LD_LIBRARY_PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_LIBDIR$(3))),,:)$$$$LD_LIBRARY_PATH" \
     PKG_CONFIG_PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_LIBDIR$(3))/pkgconfig))" \
-    CFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
-    CPPFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CPPFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
-    CXXFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3))) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17" \
-    LDFLAGS="$$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \
-             $$(foreach d,$$($(2)_DEPS$(3)),-Wl,-rpath-link=$$($$(d)_LIBDIR$(3))) \
-             $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$(LDFLAGS)"
+    PKG_CONFIG_LIBDIR="/usr/lib/$$(PKG_CONFIG_TARGET_$(4)$(3))/pkgconfig:/usr/share/pkgconfig" \
+    CFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
+    CPPFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CPPFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
+    CXXFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17" \
+    LDFLAGS="$$($(2)_LIBFLAGS$(3)) $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$($(4)LDFLAGS)" \
+
+ifneq ($(4),CROSS)
+
+# CROSS-prefixed variables for non-CROSS builds which may need to cross
+# compile some binaries.
+#
+# This is for instance used by Wine, but also Meson, as it requires the
+# environment variable to ones for native.
+
+$(2)_ENV$(3) += \
+    CROSSAR="$$(TARGET_CROSS$(3))-ar" \
+    CROSSRANLIB="$$(TARGET_CROSS$(3))-ranlib" \
+    CROSSCC="$$(CCACHE_BIN) $$(TARGET_CROSS$(3))-gcc" \
+    CROSSCXX="$$(CCACHE_BIN) $$(TARGET_CROSS$(3))-g++" \
+    CROSSLD="$$(TARGET_CROSS$(3))-ld" \
+    CROSSCFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
+    CROSSCPPFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CPPFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3))" \
+    CROSSCXXFLAGS="$$($(2)_INCFLAGS$(3)) $$($(2)_CXXFLAGS) $$(COMMON_FLAGS) $$(COMMON_FLAGS$(3)) -std=c++17" \
+    CROSSLDFLAGS="$$($(2)_LIBFLAGS$(3)) $$($(2)_LDFLAGS$(3)) $$($(2)_LDFLAGS) $$(CROSSLDFLAGS)" \
+    CROSSPKG_CONFIG_LIBDIR="/usr/lib/$$(PKG_CONFIG_TARGET_CROSS$(3))/pkgconfig:/usr/share/pkgconfig" \
+
+endif
 
 endef
 
@@ -139,12 +166,19 @@ else
 install-strip = objcopy --file-alignment=4096 --strip-debug $(1) $(2)/$(notdir $(1)) && rm -f $(2)/$(notdir $(1)).debug
 endif
 
-ARCH32 := i686
-ARCH64 := x86_64
+TARGET_32 := i686-linux-gnu
+TARGET_64 := x86_64-linux-gnu
+TARGET_CROSS32 := i686-w64-mingw32
+TARGET_CROSS64 := x86_64-w64-mingw32
+
+PKG_CONFIG_TARGET_32 := i386-linux-gnu
+PKG_CONFIG_TARGET_64 := x86_64-linux-gnu
+PKG_CONFIG_TARGET_CROSS32 := i386-w64-mingw32
+PKG_CONFIG_TARGET_CROSS64 := x86_64-w64-mingw32
 
 $(OBJ)/.%-post-build32:
 	touch $@
 $(OBJ)/.%-post-build64:
 	touch $@
 
-rules-common = $(call create-rules-common,$(1),$(call toupper,$(1)),$(2))
+rules-common = $(call create-rules-common,$(1),$(call toupper,$(1)),$(2),$(3))
