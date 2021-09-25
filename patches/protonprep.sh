@@ -70,11 +70,6 @@
 
 ### (2-1) PROBLEMATIC COMMIT REVERT SECTION ###
 
-
-    # https://bugs.winehq.org/show_bug.cgi?id=49990
-    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
-    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
-
     # https://github.com/ValveSoftware/Proton/issues/1295#issuecomment-859185208
     echo "these break Tokyo Xanadu Xe+"
     git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
@@ -124,6 +119,11 @@
     echo "applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
+
+    # https://bugs.winehq.org/show_bug.cgi?id=49990
+    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
+    patch -RNp1 < ../patches/wine-hotfixes/pending/hotfix-revert_bd27af974a21085cd0dc78b37b715bbcc3cfab69.patch
+
 
 ### END WINE STAGING APPLY SECTION ###
 
