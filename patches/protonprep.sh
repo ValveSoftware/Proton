@@ -17,6 +17,11 @@
     patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
     cd ..
 
+    cd steam_helper
+    git checkout steam.cpp
+    patch -Np1 < ../patches/steamhelper/__wine_make_process_system_update.patch
+    cd ..
+
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
@@ -53,8 +58,6 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
     patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
 
-    # partial revert to fix steamclient
-    patch -RNp1 < ../patches/wine-hotfixes/staging/staging-server-default-integrity.patch
     cd ..
 
 ### END PREP SECTION ###
@@ -77,63 +80,10 @@
     git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
     git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
 
+
     echo "pulseaudio fixup to re-enable staging patches"
     patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
-    echo "these break the re village gdi32 patch"
-    git revert --no-commit 1c1ff37390c94101f474ce8ee57a3bd830ca965f
-    git revert --no-commit fbd39cd8b5de10c53fbb6c5e298c8863beec13fd
-
-    # this is still needed for proper interchangeable
-    # joystick support on guilty gear strive
-    # ex. ps5 controller + xbox controller in guilty gear strive
-    # without it, the game expects player 2 to also use a ps5 controller
-    # in training mode.
-    # with it, player 2 can be an xbox controller
-    # note you have to take some funky steps
-    # for 2 player to work in training mode in general (not linux specific):
-    # https://playgame.tips/how-to-play-with-a-friend-in-training
-    # normal 2 player works fine
-    echo "revert HID joystick commits"
-    git revert --no-commit 079c47a38e0a3d5d5dfc2323bfefd869a25d128d
-    git revert --no-commit 11c6b376c04b4e1b6095c85656bcb1decc908b0c
-    git revert --no-commit 09c14c63211e21c4f590f1fb1e32038835037e1a
-    git revert --no-commit 7e1d1fac7035dc68cc43e315b2b55d532415da7a
-    git revert --no-commit edbb3fac25bae08535a741acdf3813fe1059b114
-    git revert --no-commit b4d8cd38918c3ec74d70d9d229f3d88de91e405c
-    git revert --no-commit 9d7f1eefa1a58b62aec5c1ab7df2b258dc91a31f
-    git revert --no-commit 9a78467975100321773d11e0a3e2a427498a00cc
-    git revert --no-commit 6e7ca583746d3a266c56e777c13f3086bf73d141
-    git revert --no-commit ee5cde83dae7024873438be4c806c106fe121b04
-    git revert --no-commit 8f065f97c91433eab9d6141e5cce118d00701210
-    git revert --no-commit 620b514aa0b41187a3c438eb515bbeab02feb7bb
-    git revert --no-commit 68c6c7d9362c53b4e0668c056f74d1f3e706a5fc
-    git revert --no-commit db410052a397d257dbbe88903336285741d8cb0b
-    git revert --no-commit d3885f92fc71ae8330935fe880d7524ab7385b6b
-    git revert --no-commit 12ef137b47fe16748c33c881cbb137bcd4e4cbbd
-    git revert --no-commit fd73402ce6dc5dec568e17d33c45e7e203fa01e2
-    git revert --no-commit c2fc919e04199326d1e9d5bcb40fa7ddd71831f4
-    git revert --no-commit aa40700f9f46d7e04a6263582718669c5d0f5639
-    git revert --no-commit acff5b41910af0fc91724e224317508e8f4a98b1
-    git revert --no-commit 5c3f2f88a6e518cc8c2cc4ff6d0c1ef5d92218be
-    git revert --no-commit 5703d5c0b3209c93779a3fe9f27487d8ad8efcf6
-    git revert --no-commit d1e0c5a732236f99c334f50a5d694543a58ba05d
-    git revert --no-commit 1117f9f072020b5a95410301244703f4d94ff484
-    git revert --no-commit ef7432d86e3d7ee1edf3c814efd4ef36dbed1020
-    git revert --no-commit 2681caa3f8cdcf5555b90947bc2a70efe5cb306f
-    git revert --no-commit 81c15d2d81951de8938613662861b5a2b875b443
-    git revert --no-commit 10a812fb7dfe2d24632821fc33a571de62391e47
-    git revert --no-commit 91f4af3418230305c9407711abe34d89156a47cf
-    git revert --no-commit 6ba3a548427f3edee7117fdca72aa6bd44a404cd
-    git revert --no-commit 787d4af53b739d843d804fbb9ba6ddc4c343f3f8
-    git revert --no-commit b36c6ae0e8d529cec1272156e808dddf04996187
-    git revert --no-commit afa1e60b279842c1e8dfebde0cc6a9a10ad82ee2
-    git revert --no-commit 0ba137e36db87b270f03c152c9e9bc88c809df14
-    git revert --no-commit 2726644124b10c80f9e1ef2640a9eb1a2b74ef1f
-    git revert --no-commit 74b7845ff04da620a49e4d898c31687e7bda7a47
-    git revert --no-commit 3b40a032675fdf3cc24e1b207896aa4c8cadc8cc
-    git revert --no-commit b117f6548a3f3734b23f865f2e9aeceed27062ed
-    git revert --no-commit 6b504fe7783b3680b911d739b60dedcbeec0e2f3
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -188,7 +138,6 @@
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
-    # TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
 
@@ -205,10 +154,6 @@
 
     echo "applying proton-specific syscall emulation patch"
     patch -Np1 < ../patches/proton/53-protonif_stg_syscall_emu.patch
-
-    echo "applying __wine_make_process_system_restore revert for steamclient compatibility"
-    # revert this, it breaks lsteamclient compilation
-    patch -RNp1 < ../patches/wine-hotfixes/steamclient/__wine_make_process_system_restore.patch
 
     echo "clock monotonic"
     patch -Np1 < ../patches/proton/01-proton-use_clock_monotonic.patch
@@ -232,8 +177,9 @@
     echo "steam bits"
     patch -Np1 < ../patches/proton/12-proton-steam-bits.patch
 
-    echo "proton SDL patches"
-    patch -Np1 < ../patches/proton/14-proton-sdl-joy.patch
+    # disabled for now, there was a massive controller HID update in WINE, so we're using that instead.
+#    echo "proton SDL patches"
+#    patch -Np1 < ../patches/proton/14-proton-sdl-joy.patch
 
     echo "Valve VR patches"
     patch -Np1 < ../patches/proton/16-proton-vrclient-wined3d.patch
@@ -258,6 +204,7 @@
     patch -Np1 < ../patches/proton/45-proton-08_FH4_registry.patch
     patch -Np1 < ../patches/proton/46-proton-09_nvapi_registry.patch
     patch -Np1 < ../patches/proton/47-proton-10_dirt_5_registry.patch
+    patch -Np1 < ../patches/proton/54-proton-11_death_loop_registry.patch
 
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
@@ -321,12 +268,6 @@
     echo "heap allocation hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_heap_alloc.patch
 
-    echo "uplay broken rendering hotfix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-uplay_render_fix.patch
-
-    echo "msfs2020 hotfix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-msfs2020.patch
-
 #    disabled, still horribly broken
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
 
@@ -335,12 +276,11 @@
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
 
+    echo "gamepad hotfix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_gamepad.patch
+
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
-
-    # https://bugs.winehq.org/show_bug.cgi?id=51596
-    echo "winelib fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-winelib.patch
 
 
 ### END WINE PENDING UPSTREAM SECTION ###
