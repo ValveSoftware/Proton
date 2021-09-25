@@ -13,9 +13,9 @@ index f295ff0b8b4..c28c68332d5 100644
 --- a/programs/wineboot/wineboot.c
 +++ b/programs/wineboot/wineboot.c
 @@ -82,6 +82,8 @@
- 
+
  WINE_DEFAULT_DEBUG_CHANNEL(wineboot);
- 
+
 +#define TICKSPERSEC        10000000
 +
  extern BOOL shutdown_close_windows( BOOL force );
@@ -24,7 +24,7 @@ index f295ff0b8b4..c28c68332d5 100644
 @@ -241,12 +243,28 @@ static void initialize_xstate_features(struct _KUSER_SHARED_DATA *data)
      TRACE("XSAVE feature 2 %#x, %#x, %#x, %#x.\n", regs[0], regs[1], regs[2], regs[3]);
  }
- 
+
 +static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data)
 +{
 +    data->QpcBypassEnabled = 0;
@@ -34,11 +34,11 @@ index f295ff0b8b4..c28c68332d5 100644
 +}
 +
  #else
- 
+
  static void initialize_xstate_features(struct _KUSER_SHARED_DATA *data)
  {
  }
- 
+
 +static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data)
 +{
 +    data->QpcBypassEnabled = 0;
@@ -48,14 +48,14 @@ index f295ff0b8b4..c28c68332d5 100644
 +}
 +
  #endif
- 
+
  static void create_user_shared_data(void)
 @@ -336,6 +354,7 @@ static void create_user_shared_data(void)
      data->ActiveGroupCount = 1;
- 
+
      initialize_xstate_features( data );
 +    initialize_qpc_features( data );
- 
+
      UnmapViewOfFile( data );
  }
 From 5af21c994fd138b05f3357870b19f69b7f15612f Mon Sep 17 00:00:00 2001
@@ -79,7 +79,7 @@ index f92443500d8..c0eb1f7f923 100644
 +    frequency->QuadPart = user_shared_data->QpcFrequency;
      return TRUE;
  }
- 
+
 From 2a14e52a188d62973ded3a980cd83faafe86784d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 4 Mar 2021 10:46:06 +0100
@@ -99,9 +99,9 @@ index c0eb1f7f923..404a07a4402 100644
  #include "wine/debug.h"
  #include "ntdll_misc.h"
 +#include "intrin.h"
- 
+
  WINE_DEFAULT_DEBUG_CHANNEL(ntdll);
- 
+
 @@ -380,6 +381,26 @@ LONGLONG WINAPI RtlGetSystemTimePrecise( void )
   */
  BOOL WINAPI DECLSPEC_HOTPATCH RtlQueryPerformanceCounter( LARGE_INTEGER *counter )
@@ -144,7 +144,7 @@ index c28c68332d5..6a16e609772 100644
 --- a/programs/wineboot/wineboot.c
 +++ b/programs/wineboot/wineboot.c
 @@ -245,10 +245,98 @@ static void initialize_xstate_features(struct _KUSER_SHARED_DATA *data)
- 
+
  static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data)
  {
 +    int regs[4], cpuid_level, denom, numer, freq, tmp;
@@ -240,7 +240,7 @@ index c28c68332d5..6a16e609772 100644
 +        data->QpcBias = 0;
 +    }
  }
- 
+
  #else
 From e7e1b259412189a56ef6a6962f42807a26e1aab8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
@@ -257,7 +257,7 @@ index 1b51a191979..9d4e4d7ffd9 100644
 --- a/dlls/ntdll/threadpool.c
 +++ b/dlls/ntdll/threadpool.c
 @@ -591,8 +591,10 @@ static DWORD WINAPI timer_callback_wrapper(LPVOID p)
- 
+
  static inline ULONGLONG queue_current_time(void)
  {
 -    LARGE_INTEGER now, freq;
@@ -268,7 +268,7 @@ index 1b51a191979..9d4e4d7ffd9 100644
 +    RtlQueryPerformanceCounter(&now);
      return now.QuadPart * 1000 / freq.QuadPart;
  }
- 
+
 From 6977fdc4cd9776ea80fa0957f87486cead4fb889 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 4 Mar 2021 10:51:05 +0100
@@ -284,9 +284,9 @@ index 21ce6e12c99..e54d9df2362 100644
 --- a/dlls/hal/hal.c
 +++ b/dlls/hal/hal.c
 @@ -193,6 +193,7 @@ ULONGLONG WINAPI KeQueryPerformanceCounter(LARGE_INTEGER *frequency)
- 
+
      TRACE("(%p)\n", frequency);
- 
+
 -    NtQueryPerformanceCounter(&counter, frequency);
 +    RtlQueryPerformanceFrequency(frequency);
 +    RtlQueryPerformanceCounter(&counter);
@@ -313,7 +313,7 @@ index 2ed5e268119..aa26ad2acce 100644
 -    NtQueryPerformanceCounter( &pdb->PerfTime, &pdb->PerfFreq );
 +    RtlQueryPerformanceFrequency( &pdb->PerfFreq );
 +    RtlQueryPerformanceCounter( &pdb->PerfTime );
- 
+
      data = pdb + 1;
      pdb->SystemNameOffset = sizeof(*pdb);
 From 0b23c1488f302577e17dd8d1821f524959e6bcb3 Mon Sep 17 00:00:00 2001
@@ -336,11 +336,11 @@ index 634b5df7923..bbf6613e849 100644
 -    LARGE_INTEGER now, freq;
 +    static LARGE_INTEGER freq;
 +    LARGE_INTEGER now;
- 
+
 +    if (!freq.QuadPart) QueryPerformanceFrequency(&freq);
      QueryPerformanceCounter(&now);
 -    QueryPerformanceFrequency(&freq);
- 
+
      return (now.QuadPart * 1000) / freq.QuadPart;
  }
 From b1a2ec3485868e0837a187772cbfacab96bfc418 Mon Sep 17 00:00:00 2001
@@ -363,13 +363,13 @@ index ff88ae16d8d..2750e229109 100644
 +#if defined(__i386__) || defined(__x86_64__)
 +#include <x86intrin.h>
 +#endif
- 
+
  #include "ntstatus.h"
  #define WIN32_NO_STATUS
 @@ -406,6 +409,26 @@ static const int user_shared_data_timeout = 16;
- static void set_user_shared_data_time(void)
- {
-     timeout_t tick_count = monotonic_time / 10000;
+     timeout_t timezone_bias;
+     struct tm *tm;
+     time_t now;
 +    unsigned __int64 tsc, qpc_bias, qpc_freq = user_shared_data->QpcFrequency;
 +    unsigned int aux, qpc_shift = user_shared_data->QpcShift;
 +    unsigned int qpc_bypass = user_shared_data->QpcBypassEnabled;
@@ -390,26 +390,17 @@ index ff88ae16d8d..2750e229109 100644
 +#endif
 +
 +    qpc_bias = ((monotonic_time * qpc_freq / 10000000) << qpc_shift) - tsc;
- 
-     /* on X86 there should be total store order guarantees, so volatile is enough
-      * to ensure the stores aren't reordered by the compiler, and then they will
-@@ -424,6 +447,7 @@ static void set_user_shared_data_time(void)
-     user_shared_data->TickCount.LowPart   = tick_count;
-     user_shared_data->TickCount.High1Time = tick_count >> 32;
-     *(volatile ULONG *)&user_shared_data->TickCountLowDeprecated = tick_count;
-+    user_shared_data->QpcBias = qpc_bias;
- #else
-     __atomic_store_n(&user_shared_data->SystemTime.High2Time, current_time >> 32, __ATOMIC_SEQ_CST);
-     __atomic_store_n(&user_shared_data->SystemTime.LowPart, current_time, __ATOMIC_SEQ_CST);
-@@ -437,6 +461,7 @@ static void set_user_shared_data_time(void)
-     __atomic_store_n(&user_shared_data->TickCount.LowPart, tick_count, __ATOMIC_SEQ_CST);
-     __atomic_store_n(&user_shared_data->TickCount.High1Time, tick_count >> 32, __ATOMIC_SEQ_CST);
-     __atomic_store_n(&user_shared_data->TickCountLowDeprecated, tick_count, __ATOMIC_SEQ_CST);
-+    __atomic_store_n(&user_shared_data->QpcBias, qpc_bias, __ATOMIC_SEQ_CST);
- #endif
- }
- 
 
+     if (monotonic_time - last_timezone_update > TICKS_PER_SEC)
+     {
+@@ -424,6 +447,7 @@ static void set_user_shared_data_time(void)
+     atomic_store_ulong(&user_shared_data->TickCount.LowPart, tick_count);
+     atomic_store_long(&user_shared_data->TickCount.High1Time, tick_count >> 32);
+     atomic_store_ulong(&user_shared_data->TickCountLowDeprecated, tick_count);
++    user_shared_data->QpcBias = qpc_bias;
+ }
+
+ void set_current_time(void)
 From 0f850e60fb84ce75c6d2666bd1ddca67a956a658 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 28 Apr 2021 11:50:36 +0200
@@ -437,7 +428,7 @@ index 99031a0668e..79b40cd7af3 100644
 @@ -86,6 +86,14 @@ extern const WCHAR syswow64_dir[] DECLSPEC_HIDDEN;
  extern void (FASTCALL *pBaseThreadInitThunk)(DWORD,LPTHREAD_START_ROUTINE,void *) DECLSPEC_HIDDEN;
  extern const struct unix_funcs *unix_funcs DECLSPEC_HIDDEN;
- 
+
 +struct hypervisor_shared_data
 +{
 +    UINT64 unknown;
@@ -447,7 +438,7 @@ index 99031a0668e..79b40cd7af3 100644
 +
 +extern struct hypervisor_shared_data *hypervisor_shared_data DECLSPEC_HIDDEN;
  extern struct _KUSER_SHARED_DATA *user_shared_data DECLSPEC_HIDDEN;
- 
+
  /* locale */
 diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
 index d3c3db7fd68..b68a23ff58f 100644
@@ -456,11 +447,11 @@ index d3c3db7fd68..b68a23ff58f 100644
 @@ -35,6 +35,7 @@
  WINE_DECLARE_DEBUG_CHANNEL(relay);
  WINE_DECLARE_DEBUG_CHANNEL(thread);
- 
+
 +struct hypervisor_shared_data *hypervisor_shared_data = (void *)0x7ffd0000;
  struct _KUSER_SHARED_DATA *user_shared_data = (void *)0x7ffe0000;
- 
- 
+
+
 diff --git a/dlls/ntdll/time.c b/dlls/ntdll/time.c
 index 404a07a4402..1c00010bffb 100644
 --- a/dlls/ntdll/time.c
@@ -468,7 +459,7 @@ index 404a07a4402..1c00010bffb 100644
 @@ -376,6 +376,14 @@ LONGLONG WINAPI RtlGetSystemTimePrecise( void )
      return unix_funcs->RtlGetSystemTimePrecise();
  }
- 
+
 +/* 128-bit multiply a by b and return the high 64 bits, same as __umulh */
 +static UINT64 multiply_tsc(UINT64 a, UINT64 b)
 +{
@@ -483,7 +474,7 @@ index 404a07a4402..1c00010bffb 100644
 @@ -397,6 +405,9 @@ BOOL WINAPI DECLSPEC_HOTPATCH RtlQueryPerformanceCounter( LARGE_INTEGER *counter
              tsc = __rdtsc();
          }
- 
+
 +        if (user_shared_data->u3.QpcBypassEnabled & SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_HV_PAGE)
 +            tsc = multiply_tsc(tsc, hypervisor_shared_data->QpcMultiplier) + hypervisor_shared_data->QpcBias;
 +
@@ -509,7 +500,7 @@ index 8b77c577d01..7aa4a64fbef 100644
 @@ -2942,6 +2942,18 @@ NTSTATUS WINAPI NtQuerySystemInformation( SYSTEM_INFORMATION_CLASS class,
          ret = STATUS_SUCCESS;
          break;
- 
+
 +    case SystemHypervisorSharedPageInformation:
 +    {
 +        len = sizeof(void *);
@@ -524,7 +515,7 @@ index 8b77c577d01..7aa4a64fbef 100644
 +
      default:
  	FIXME( "(0x%08x,%p,0x%08x,%p) stub\n", class, info, size, ret_size );
- 
+
 diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
 index 453460c4960..a2f683d9ff1 100644
 --- a/dlls/ntdll/unix/unix_private.h
@@ -552,15 +543,15 @@ index 181a19edc9e..123b5ad211a 100644
 @@ -159,6 +159,7 @@ static void *user_space_limit    = (void *)0x7fff0000;
  static void *working_set_limit   = (void *)0x7fff0000;
  #endif
- 
+
 +void *hypervisor_shared_data = (void *)0x7ffd0000;
  struct _KUSER_SHARED_DATA *user_shared_data = (void *)0x7ffe0000;
- 
+
  /* TEB allocation blocks */
 @@ -2717,6 +2718,14 @@ TEB *virtual_alloc_first_teb(void)
          exit(1);
      }
- 
+
 +    status = NtAllocateVirtualMemory( NtCurrentProcess(), (void **)&hypervisor_shared_data, 0, &data_size,
 +                                      MEM_RESERVE | MEM_COMMIT, PAGE_READONLY );
 +    if (status)
@@ -574,8 +565,8 @@ index 181a19edc9e..123b5ad211a 100644
      teb_block_pos = 30;
 @@ -2948,6 +2957,35 @@ void virtual_map_user_shared_data(void)
  }
- 
- 
+
+
 +/***********************************************************************
 + *           virtual_map_hypervisor_shared_data
 + */
@@ -615,7 +606,7 @@ index 6a16e609772..9bebededa4f 100644
 @@ -243,9 +243,81 @@ static void initialize_xstate_features(struct _KUSER_SHARED_DATA *data)
      TRACE("XSAVE feature 2 %#x, %#x, %#x, %#x.\n", regs[0], regs[1], regs[2], regs[3]);
  }
- 
+
 +static UINT64 read_tsc_frequency(void)
 +{
 +    UINT64 freq = 0;
@@ -692,13 +683,13 @@ index 6a16e609772..9bebededa4f 100644
  {
 -    int regs[4], cpuid_level, denom, numer, freq, tmp;
 +    int regs[4];
- 
+
      if (data->QpcBypassEnabled) return;
- 
+
 @@ -285,48 +357,10 @@ static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data)
      else
          data->QpcBypassEnabled |= SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_MFENCE;
- 
+
 -    __cpuid(regs, 0);
 -    tmp = regs[2];
 -    regs[2] = regs[3];
@@ -744,12 +735,12 @@ index 6a16e609772..9bebededa4f 100644
 -                  data->QpcFrequency, data->QpcShift, data->QpcBias);
 -        }
      }
- 
+
      if (!data->QpcFrequency)
 @@ -355,6 +389,81 @@ static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data)
- 
+
  #endif
- 
+
 +struct hypervisor_shared_data
 +{
 +    UINT64 unknown;
@@ -830,7 +821,7 @@ index 6a16e609772..9bebededa4f 100644
      struct _KUSER_SHARED_DATA *data;
 @@ -1839,6 +1948,7 @@ int __cdecl main( int argc, char *argv[] )
      ResetEvent( event );  /* in case this is a restart */
- 
+
      create_user_shared_data();
 +    create_hypervisor_shared_data();
      create_hardware_registry_keys();
@@ -848,7 +839,7 @@ index 304b79e9a18..6ee4803aaa2 100644
      static const struct unicode_str intl_str = {intlW, sizeof(intlW)};
      static const struct unicode_str user_data_str = {user_dataW, sizeof(user_dataW)};
 +    static const struct unicode_str hypervisor_data_str = {hypervisor_dataW, sizeof(hypervisor_dataW)};
- 
+
      struct directory *dir_driver, *dir_device, *dir_global, *dir_kernel, *dir_nls;
      struct object *named_pipe_device, *mailslot_device, *null_device;
 @@ -523,6 +525,7 @@ void init_directories( struct fd *intl_fd )
@@ -857,7 +848,7 @@ index 304b79e9a18..6ee4803aaa2 100644
      release_object( create_user_data_mapping( &dir_kernel->obj, &user_data_str, OBJ_PERMANENT, NULL ));
 +    release_object( create_hypervisor_data_mapping( &dir_kernel->obj, &hypervisor_data_str, OBJ_PERMANENT, NULL ));
      release_object( intl_fd );
- 
+
      release_object( named_pipe_device );
 diff --git a/server/fd.c b/server/fd.c
 index 2750e229109..7a1cd4bcddc 100644
@@ -866,11 +857,11 @@ index 2750e229109..7a1cd4bcddc 100644
 @@ -403,9 +403,18 @@ static struct list rel_timeout_list = LIST_INIT(rel_timeout_list); /* sorted rel
  timeout_t current_time;
  timeout_t monotonic_time;
- 
+
 +struct hypervisor_shared_data *hypervisor_shared_data = NULL;
  struct _KUSER_SHARED_DATA *user_shared_data = NULL;
  static const int user_shared_data_timeout = 16;
- 
+
 +/* 128-bit multiply a by b and return the high 64 bits, same as __umulh */
 +static UINT64 multiply_tsc(UINT64 a, UINT64 b)
 +{
@@ -879,13 +870,13 @@ index 2750e229109..7a1cd4bcddc 100644
 +    return (ah * bh) + (m >> 32);
 +}
 +
- static void set_user_shared_data_time(void)
+ static void atomic_store_ulong(volatile ULONG *ptr, ULONG value)
  {
-     timeout_t tick_count = monotonic_time / 10000;
+     /* on x86 there should be total store order guarantees, so volatile is
 @@ -428,7 +437,13 @@ static void set_user_shared_data_time(void)
      }
  #endif
- 
+
 -    qpc_bias = ((monotonic_time * qpc_freq / 10000000) << qpc_shift) - tsc;
 +    if (!(qpc_bypass & SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_HV_PAGE))
 +        qpc_bias = ((monotonic_time * qpc_freq / 10000000) << qpc_shift) - tsc;
@@ -894,33 +885,21 @@ index 2750e229109..7a1cd4bcddc 100644
 +        tsc = multiply_tsc(tsc, hypervisor_shared_data->QpcMultiplier);
 +        qpc_bias = monotonic_time - tsc;
 +    }
- 
+
      /* on X86 there should be total store order guarantees, so volatile is enough
       * to ensure the stores aren't reordered by the compiler, and then they will
 @@ -447,7 +462,10 @@ static void set_user_shared_data_time(void)
-     user_shared_data->TickCount.LowPart   = tick_count;
-     user_shared_data->TickCount.High1Time = tick_count >> 32;
-     *(volatile ULONG *)&user_shared_data->TickCountLowDeprecated = tick_count;
+     atomic_store_ulong(&user_shared_data->TickCount.LowPart, tick_count);
+     atomic_store_long(&user_shared_data->TickCount.High1Time, tick_count >> 32);
+     atomic_store_ulong(&user_shared_data->TickCountLowDeprecated, tick_count);
 -    user_shared_data->QpcBias = qpc_bias;
 +    if (qpc_bypass & SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_HV_PAGE)
 +        hypervisor_shared_data->QpcBias = qpc_bias;
 +    else
 +        user_shared_data->QpcBias = qpc_bias;
- #else
-     __atomic_store_n(&user_shared_data->SystemTime.High2Time, current_time >> 32, __ATOMIC_SEQ_CST);
-     __atomic_store_n(&user_shared_data->SystemTime.LowPart, current_time, __ATOMIC_SEQ_CST);
-@@ -461,7 +479,10 @@ static void set_user_shared_data_time(void)
-     __atomic_store_n(&user_shared_data->TickCount.LowPart, tick_count, __ATOMIC_SEQ_CST);
-     __atomic_store_n(&user_shared_data->TickCount.High1Time, tick_count >> 32, __ATOMIC_SEQ_CST);
-     __atomic_store_n(&user_shared_data->TickCountLowDeprecated, tick_count, __ATOMIC_SEQ_CST);
--    __atomic_store_n(&user_shared_data->QpcBias, qpc_bias, __ATOMIC_SEQ_CST);
-+    if (qpc_bypass & SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_HV_PAGE)
-+        __atomic_store_n(&hypervisor_shared_data->QpcBias, qpc_bias, __ATOMIC_SEQ_CST);
-+    else
-+        __atomic_store_n(&user_shared_data->QpcBias, qpc_bias, __ATOMIC_SEQ_CST);
- #endif
  }
- 
+
+ void set_current_time(void)
 diff --git a/server/file.h b/server/file.h
 index 3f0c3a559b3..719af8c01b3 100644
 --- a/server/file.h
@@ -938,7 +917,7 @@ index 3f0c3a559b3..719af8c01b3 100644
 +};
 +extern struct hypervisor_shared_data *hypervisor_shared_data;
  extern struct _KUSER_SHARED_DATA *user_shared_data;
- 
+
  #define TICKS_PER_SEC 10000000
 @@ -188,6 +196,8 @@ extern struct mapping *create_fd_mapping( struct object *root, const struct unic
                                            unsigned int attr, const struct security_descriptor *sd );
@@ -946,9 +925,9 @@ index 3f0c3a559b3..719af8c01b3 100644
                                                  unsigned int attr, const struct security_descriptor *sd );
 +extern struct object *create_hypervisor_data_mapping( struct object *root, const struct unicode_str *name,
 +                                                      unsigned int attr, const struct security_descriptor *sd );
- 
+
  /* device functions */
- 
+
 diff --git a/server/mapping.c b/server/mapping.c
 index 2253591f6fa..07fb6decb62 100644
 --- a/server/mapping.c
@@ -958,7 +937,7 @@ index 2253591f6fa..07fb6decb62 100644
      }
      return &mapping->obj;
  }
- 
+
 +struct object *create_hypervisor_data_mapping( struct object *root, const struct unicode_str *name,
 +                                               unsigned int attr, const struct security_descriptor *sd )
 +{
@@ -1004,7 +983,7 @@ index 9bebededa4f..79a4bda4d67 100644
 @@ -315,6 +315,30 @@ static UINT64 read_tsc_frequency(void)
      return freq;
  }
- 
+
 +static BOOL is_tsc_trusted_by_the_kernel(void)
 +{
 +    char buf[4] = {};
@@ -1044,7 +1023,7 @@ index 9bebededa4f..79a4bda4d67 100644
 +    }
 +
      data->QpcBypassEnabled |= SHARED_GLOBAL_FLAGS_QPC_BYPASS_ENABLED;
- 
+
      /* check for rdtscp support bit */
 From 69f2470f937f46ae362d0ba5c144f170f5850a8e Mon Sep 17 00:00:00 2001
 From: Joshua Ashton <joshua@froggi.es>
@@ -1108,16 +1087,16 @@ index 0662feac9ce..dc0e645dd09 100644
 @@ -339,7 +339,7 @@ static BOOL is_tsc_trusted_by_the_kernel(void)
      return ret;
  }
- 
+
 -static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data)
 +static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data, UINT64 tsc_frequency)
  {
      int regs[4];
- 
+
 @@ -388,7 +388,7 @@ static void initialize_qpc_features(struct _KUSER_SHARED_DATA *data)
      else
          data->QpcBypassEnabled |= SHARED_GLOBAL_FLAGS_QPC_BYPASS_USE_MFENCE;
- 
+
 -    if ((data->QpcFrequency = (read_tsc_frequency() >> 10)))
 +    if ((data->QpcFrequency = (tsc_frequency >> 10)))
      {
@@ -1126,14 +1105,14 @@ index 0662feac9ce..dc0e645dd09 100644
 @@ -433,7 +433,7 @@ static UINT64 muldiv_tsc(UINT64 a, UINT64 b, UINT64 c)
      return ka * kb * c + kb * ra + ka * rb + (ra * rb + c / 2) / c;
  }
- 
+
 -static void create_hypervisor_shared_data(void)
 +static void create_hypervisor_shared_data(UINT64 tsc_frequency)
  {
      struct _KUSER_SHARED_DATA *user_shared_data = (void *)0x7ffe0000;
      struct hypervisor_shared_data *hypervisor_shared_data;
 @@ -480,7 +480,7 @@ static void create_hypervisor_shared_data(void)
- 
+
      if (user_shared_data->QpcBypassEnabled & SHARED_GLOBAL_FLAGS_QPC_BYPASS_ENABLED)
      {
 -        hypervisor_shared_data->QpcMultiplier = muldiv_tsc((UINT64)5000 << 32, (UINT64)2000 << 32, read_tsc_frequency());
@@ -1144,7 +1123,7 @@ index 0662feac9ce..dc0e645dd09 100644
 @@ -495,7 +495,7 @@ static void create_hypervisor_shared_data(void)
      UnmapViewOfFile( hypervisor_shared_data );
  }
- 
+
 -static void create_user_shared_data(void)
 +static void create_user_shared_data(UINT64 tsc_frequency)
  {
@@ -1152,16 +1131,16 @@ index 0662feac9ce..dc0e645dd09 100644
      RTL_OSVERSIONINFOEXW version;
 @@ -582,7 +582,7 @@ static void create_user_shared_data(void)
      data->ActiveGroupCount = 1;
- 
+
      initialize_xstate_features( data );
 -    initialize_qpc_features( data );
 +    initialize_qpc_features( data, tsc_frequency );
- 
+
      UnmapViewOfFile( data );
  }
 @@ -894,7 +894,7 @@ static void create_bios_key( HKEY system_key )
  }
- 
+
  /* create the volatile hardware registry keys */
 -static void create_hardware_registry_keys(void)
 +static void create_hardware_registry_keys(UINT64 tsc_frequency)
@@ -1175,7 +1154,7 @@ index 0662feac9ce..dc0e645dd09 100644
 -            UINT64 tsc_freq = read_tsc_frequency(); /* Hz */
 -            DWORD tsc_freq_mhz = (DWORD)(tsc_freq / 1000000ull);
 +            DWORD tsc_freq_mhz = (DWORD)(tsc_frequency / 1000000ull); /* Hz -> Mhz */
- 
+
              RegSetValueExW( hkey, L"FeatureSet", 0, REG_DWORD, (BYTE *)&sci.FeatureSet, sizeof(DWORD) );
              set_reg_value( hkey, L"Identifier", id );
 @@ -1896,9 +1895,12 @@ int __cdecl main( int argc, char *argv[] )
@@ -1185,16 +1164,16 @@ index 0662feac9ce..dc0e645dd09 100644
 +    UINT64 tsc_frequency;
      UNICODE_STRING nameW;
      BOOL is_wow64;
- 
+
 +    tsc_frequency = read_tsc_frequency();
 +
      end_session = force = init = kill = restart = shutdown = update = FALSE;
      GetWindowsDirectoryW( windowsdir, MAX_PATH );
      if( !SetCurrentDirectoryW( windowsdir ) )
 @@ -1981,9 +1983,9 @@ int __cdecl main( int argc, char *argv[] )
- 
+
      ResetEvent( event );  /* in case this is a restart */
- 
+
 -    create_user_shared_data();
 -    create_hypervisor_shared_data();
 -    create_hardware_registry_keys();

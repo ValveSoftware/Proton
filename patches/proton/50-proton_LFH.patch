@@ -820,9 +820,9 @@ index 43543bdb304..e4ed51ef522 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
 @@ -163,6 +163,7 @@ typedef struct tagHEAP
-     struct list     *freeList;      /* Free lists */
-     struct wine_rb_tree freeTree;   /* Free tree */
-     DWORD            freeMask[HEAP_NB_FREE_LISTS / (8 * sizeof(DWORD))];
+     ARENA_INUSE    **pending_free;  /* Ring buffer for pending free requests */
+     RTL_CRITICAL_SECTION critSection; /* Critical section for serialization */
+     FREE_LIST_ENTRY *freeList;      /* Free lists */
 +    int              extended_type; /* Extended heap type */
  } HEAP;
 

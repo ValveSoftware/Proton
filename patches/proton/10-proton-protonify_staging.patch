@@ -1543,54 +1543,6 @@ index 43268221936..f39d6f0cd7b 100644
 --
 2.26.2
 
-From 87326687df23529255c2493d178dac1310919980 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Wed, 4 Nov 2020 18:08:21 +0300
-Subject: [PATCH] ws2_32: HACK Fail 'download-alt.easyanticheat.net' DNS name
- resolution.
-
-This has the same effect as the following reverted ECDHE-ECDSA patch,
-but allows those ciphers to be used for other programs.
----
- dlls/ws2_32/protocol.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/dlls/ws2_32/protocol.c b/dlls/ws2_32/protocol.c
-index 4010a727a08..ef9a640a771 100644
---- a/dlls/ws2_32/protocol.c
-+++ b/dlls/ws2_32/protocol.c
-@@ -232,6 +232,13 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
-         return WSAHOST_NOT_FOUND;
-     }
-
-+    if (node && !strcmp(node, "download-alt.easyanticheat.net"))
-+    {
-+        ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
-+        SetLastError(WSAHOST_NOT_FOUND);
-+        return WSAHOST_NOT_FOUND;
-+    }
-+
-     if (node)
-     {
-         if (!node[0])
-diff --git a/dlls/ws2_32/unixlib.c b/dlls/ws2_32/unixlib.c
-index 4010a727a08..ef9a640a771 100644
---- a/dlls/ws2_32/unixlib.c
-+++ b/dlls/ws2_32/unixlib.c
-@@ -869,6 +869,12 @@ static int CDECL unix_gethostbyname( const char *name, struct WS_hostent *const
-     int locerr;
-     int ret;
-
-+    if (!strcmp(params->name, "download-alt.easyanticheat.net"))
-+    {
-+        ERR("HACK: failing download-alt.easyanticheat.net resolution.\n");
-+        return HOST_NOT_FOUND;
-+    }
-+
-     if (!(unix_buffer = malloc( unix_size )))
-         return WSAENOBUFS;
-
-
 From c9a5fcb0966ab0ca0722c8c07476c131844f98e1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 16 Oct 2020 23:37:09 +0200
@@ -3332,15 +3284,15 @@ diff --git a/dlls/dxgi/Makefile.in b/dlls/dxgi/Makefile.in
 index c21cb18d8ff..1c626be213b 100644
 --- a/dlls/dxgi/Makefile.in
 +++ b/dlls/dxgi/Makefile.in
-@@ -3,6 +3,8 @@ IMPORTLIB = dxgi
+@@ -3,7 +3,7 @@ IMPORTLIB = dxgi
  IMPORTS   = gdi32 dxguid uuid wined3d user32
  EXTRAINCL = $(VKD3D_CFLAGS)
 
-+EXTRADLLFLAGS = -Wl,--image-base,0x7bb00000
-+
+-EXTRADLLFLAGS = -mcygwin
++EXTRADLLFLAGS = -Wl,--image-base,0x7bb00000 -mcygwin
+
  C_SRCS = \
  	adapter.c \
- 	device.c \
 From fec2ecbd2dfd3c357f63c8f7bd9383b7a10d4553 Mon Sep 17 00:00:00 2001
 From: Esme Povirk <esme@codeweavers.com>
 Date: Thu, 22 Apr 2021 14:35:40 -0500
@@ -3688,171 +3640,6 @@ index f584330dc6e..3efdcb4c88c 100755
 
 --
 2.30.2
-
-From ecfae7775fc3149e55058cd9d969d0d0aa24b9b9 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Tue, 11 May 2021 21:00:45 +0300
-Subject: [PATCH] gdi32: Implement D3DKMTOpenAdapterFromDeviceName().
-
-CW-Bug-Id: 18931
----
- dlls/gdi32/driver.c   | 111 +++++++++++++++++++++++++++++++++++++++---
- dlls/gdi32/gdi32.spec |   1 +
- 2 files changed, 105 insertions(+), 7 deletions(-)
-
-diff --git a/dlls/gdi32/driver.c b/dlls/gdi32/driver.c
-index e146a3a4f85..2d79d1ec420 100644
---- a/dlls/gdi32/driver.c
-+++ b/dlls/gdi32/driver.c
-@@ -1437,6 +1437,18 @@ NTSTATUS WINAPI D3DKMTCloseAdapter( const D3DKMT_CLOSEADAPTER *desc )
-     return status;
- }
-
-+
-+static void d3dkmt_adapter_alloc_handle( struct d3dkmt_adapter *adapter )
-+{
-+    static D3DKMT_HANDLE handle_start = 0;
-+
-+    EnterCriticalSection( &driver_section );
-+    /* D3DKMT_HANDLE is UINT, so we can't use pointer as handle */
-+    adapter->handle = ++handle_start;
-+    list_add_tail( &d3dkmt_adapters, &adapter->entry );
-+    LeaveCriticalSection( &driver_section );
-+}
-+
- /******************************************************************************
-  *		D3DKMTOpenAdapterFromGdiDisplayName [GDI32.@]
-  */
-@@ -1445,7 +1457,6 @@ NTSTATUS WINAPI D3DKMTOpenAdapterFromGdiDisplayName( D3DKMT_OPENADAPTERFROMGDIDI
-     WCHAR *end, key_nameW[MAX_PATH], bufferW[MAX_PATH];
-     HDEVINFO devinfo = INVALID_HANDLE_VALUE;
-     NTSTATUS status = STATUS_UNSUCCESSFUL;
--    static D3DKMT_HANDLE handle_start = 0;
-     struct d3dkmt_adapter *adapter;
-     SP_DEVINFO_DATA device_data;
-     DWORD size, state_flags;
-@@ -1500,13 +1511,9 @@ NTSTATUS WINAPI D3DKMTOpenAdapterFromGdiDisplayName( D3DKMT_OPENADAPTERFROMGDIDI
-                                     (BYTE *)&luid, sizeof( luid ), NULL, 0))
-         goto done;
-
--    EnterCriticalSection( &driver_section );
--    /* D3DKMT_HANDLE is UINT, so we can't use pointer as handle */
--    adapter->handle = ++handle_start;
--    list_add_tail( &d3dkmt_adapters, &adapter->entry );
--    LeaveCriticalSection( &driver_section );
-+    d3dkmt_adapter_alloc_handle( adapter );
-
--    desc->hAdapter = handle_start;
-+    desc->hAdapter = adapter->handle;
-     desc->AdapterLuid = luid;
-     desc->VidPnSourceId = index;
-     status = STATUS_SUCCESS;
-@@ -1650,3 +1657,93 @@ NTSTATUS WINAPI D3DKMTCheckVidPnExclusiveOwnership( const D3DKMT_CHECKVIDPNEXCLU
-
-     return get_display_driver()->pD3DKMTCheckVidPnExclusiveOwnership( desc );
- }
-+
-+/******************************************************************************
-+ *		D3DKMTOpenAdapterFromDeviceName [GDI32.@]
-+ */
-+NTSTATUS WINAPI D3DKMTOpenAdapterFromDeviceName(D3DKMT_OPENADAPTERFROMDEVICENAME *device_name)
-+{
-+    SP_DEVICE_INTERFACE_DATA iface_data = {sizeof(iface_data)};
-+    SP_DEVICE_INTERFACE_DETAIL_DATA_W *iface_detail_data;
-+    SP_DEVINFO_DATA device_data = {sizeof(device_data)};
-+    WCHAR iface_detail_buffer[256];
-+    struct d3dkmt_adapter *adapter;
-+    UNICODE_STRING guid_str;
-+    unsigned int i, j;
-+    DEVPROPTYPE type;
-+    LUID luid = {0};
-+    GUID iface_uid;
-+    const WCHAR *p;
-+    HDEVINFO set;
-+    BOOL found;
-+
-+    TRACE( "device_name %p.\n", device_name );
-+
-+    p = device_name->pDeviceName + lstrlenW( device_name->pDeviceName );
-+    while(p != device_name->pDeviceName && *p != L'#')
-+        --p;
-+    if (*p == L'#') ++p;
-+    RtlInitUnicodeString( &guid_str, p );
-+    if (RtlGUIDFromString( &guid_str, &iface_uid ))
-+    {
-+        WARN( "Could not parse guid from %s.\n", debugstr_w( device_name->pDeviceName ));
-+        return STATUS_UNSUCCESSFUL;
-+    }
-+
-+    set = SetupDiGetClassDevsW( &iface_uid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT );
-+    iface_detail_data = (SP_DEVICE_INTERFACE_DETAIL_DATA_W *)iface_detail_buffer;
-+    iface_detail_data->cbSize = sizeof(*iface_detail_data);
-+
-+    found = FALSE;
-+    j = 0;
-+    while (SetupDiEnumDeviceInfo( set, j, &device_data ))
-+    {
-+        i = 0;
-+        while (SetupDiEnumDeviceInterfaces(set, &device_data, &iface_uid, i, &iface_data))
-+        {
-+            if (SetupDiGetDeviceInterfaceDetailW( set, &iface_data, iface_detail_data,
-+                                                  sizeof(iface_detail_buffer), NULL, &device_data ))
-+            {
-+                if (!lstrcmpiW( device_name->pDeviceName, iface_detail_data->DevicePath ))
-+                {
-+                    found = TRUE;
-+
-+                    if (SetupDiGetDevicePropertyW( set, &device_data, &DEVPROPKEY_GPU_LUID, &type,
-+                                                    (BYTE *)&luid, sizeof( luid ), NULL, 0))
-+                        TRACE( "luid %#x:%#x.\n", luid.HighPart, luid.LowPart );
-+                    else
-+                        ERR( "Could not get luid.\n" );
-+
-+                    goto done;
-+                }
-+            }
-+            else
-+            {
-+                ERR( "Could not get interface detail, iface %u.\n", i );
-+            }
-+            ++i;
-+        }
-+        ++j;
-+    }
-+
-+done:
-+    SetupDiDestroyDeviceInfoList( set );
-+    if (!found)
-+    {
-+        WARN( "Device %s not found.\n", debugstr_w(device_name->pDeviceName ));
-+        return STATUS_UNSUCCESSFUL;
-+    }
-+
-+    adapter = heap_alloc( sizeof( *adapter ));
-+    if (!adapter)
-+    {
-+        ERR( "No memory.\n" );
-+        return STATUS_NO_MEMORY;
-+    }
-+    d3dkmt_adapter_alloc_handle( adapter );
-+
-+    device_name->hAdapter = adapter->handle;
-+    device_name->AdapterLuid = luid;
-+
-+    return STATUS_SUCCESS;
-+}
-diff --git a/dlls/gdi32/gdi32.spec b/dlls/gdi32/gdi32.spec
-index b21f22c3629..2e34568ea17 100644
---- a/dlls/gdi32/gdi32.spec
-+++ b/dlls/gdi32/gdi32.spec
-@@ -87,6 +87,7 @@
- @ stdcall D3DKMTDestroyDCFromMemory(ptr) NtGdiDdDDIDestroyDCFromMemory
- @ stdcall D3DKMTDestroyDevice(ptr) NtGdiDdDDIDestroyDevice
- @ stdcall D3DKMTEscape(ptr) NtGdiDdDDIEscape
-+@ stdcall D3DKMTOpenAdapterFromDeviceName(ptr)
- @ stdcall D3DKMTOpenAdapterFromGdiDisplayName(ptr)
- @ stdcall D3DKMTOpenAdapterFromHdc(ptr) NtGdiDdDDIOpenAdapterFromHdc
- @ stdcall D3DKMTQueryStatistics(ptr) NtGdiDdDDIQueryStatistics
 
 From 177a787cc4dcec5c6f5aecec10d3532aebf54e1a Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
@@ -5460,3 +5247,674 @@ index a2b71bfb701..7227e97d6b9 100644
      if (hUserKey)
          RegCloseKey(hUserKey);
      if (hKey)
+From 608febc497cb6e0c19ec593b0c285018f19bbcde Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 15 Sep 2021 00:12:11 +0300
+Subject: [PATCH] wintrust: Cache CRYPT_PROVIDER_FUNCTIONS for the last used
+ action ID.
+
+CW-Bug-ID: #19427
+
+For DeathLoop.
+---
+ dlls/wintrust/register.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/dlls/wintrust/register.c b/dlls/wintrust/register.c
+index effe9d18f20..476055ad03c 100644
+--- a/dlls/wintrust/register.c
++++ b/dlls/wintrust/register.c
+@@ -835,6 +835,17 @@ static FARPROC WINTRUST_ReadProviderFromReg(WCHAR *GuidString, const WCHAR *Func
+     return Func;
+ }
+
++static CRITICAL_SECTION cache_cs;
++static CRITICAL_SECTION_DEBUG cache_cs_debug =
++{
++    0, 0, &cache_cs,
++    { &cache_cs_debug.ProcessLocksList, &cache_cs_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": cs") }
++};
++static CRITICAL_SECTION cache_cs = { &cache_cs_debug, -1, 0, 0, 0, 0 };
++static GUID cached_guid;
++static CRYPT_PROVIDER_FUNCTIONS cached_provider_functions;
++
+ /***********************************************************************
+  *              WintrustLoadFunctionPointers (WINTRUST.@)
+  */
+@@ -842,6 +853,7 @@ BOOL WINAPI WintrustLoadFunctionPointers( GUID* pgActionID,
+                                           CRYPT_PROVIDER_FUNCTIONS* pPfns )
+ {
+     WCHAR GuidString[39];
++    BOOL cached;
+
+     TRACE("(%s %p)\n", debugstr_guid(pgActionID), pPfns);
+
+@@ -853,6 +865,16 @@ BOOL WINAPI WintrustLoadFunctionPointers( GUID* pgActionID,
+     }
+     if (pPfns->cbStruct != sizeof(CRYPT_PROVIDER_FUNCTIONS)) return FALSE;
+
++    EnterCriticalSection( &cache_cs );
++    if (IsEqualGUID( &cached_guid, pgActionID ))
++    {
++        TRACE( "Using cached data.\n" );
++        *pPfns = cached_provider_functions;
++        cached = TRUE;
++    } else cached = FALSE;
++    LeaveCriticalSection( &cache_cs );
++    if (cached) return TRUE;
++
+     /* Create this string only once, instead of in the helper function */
+     WINTRUST_Guid2Wstr( pgActionID, GuidString);
+
+@@ -873,6 +895,11 @@ BOOL WINAPI WintrustLoadFunctionPointers( GUID* pgActionID,
+     pPfns->pfnTestFinalPolicy = (PFN_PROVIDER_TESTFINALPOLICY_CALL)WINTRUST_ReadProviderFromReg(GuidString, DiagnosticPolicy);
+     pPfns->pfnCleanupPolicy = (PFN_PROVIDER_CLEANUP_CALL)WINTRUST_ReadProviderFromReg(GuidString, Cleanup);
+
++    EnterCriticalSection( &cache_cs );
++    cached_guid = *pgActionID;
++    cached_provider_functions = *pPfns;
++    LeaveCriticalSection( &cache_cs );
++
+     return TRUE;
+ }
+
+From a9ec37d83082b1623aea4bc5933f77f4c8a356cf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 14 Sep 2021 14:16:47 +0200
+Subject: [PATCH] msvcrt: Check for ERMS support and use rep stosb for large
+ memset calls.
+
+---
+ dlls/msvcrt/math.c   | 13 +++++++++
+ dlls/msvcrt/msvcrt.h |  1 +
+ dlls/msvcrt/string.c | 64 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 78 insertions(+)
+
+diff --git a/dlls/msvcrt/math.c b/dlls/msvcrt/math.c
+index d6b0d9422e7..ed763f02589 100644
+--- a/dlls/msvcrt/math.c
++++ b/dlls/msvcrt/math.c
+@@ -42,6 +42,7 @@
+ #include <limits.h>
+ #include <locale.h>
+ #include <math.h>
++#include <intrin.h>
+
+ #include "msvcrt.h"
+ #include "winternl.h"
+@@ -64,6 +65,7 @@ typedef int (CDECL *MSVCRT_matherr_func)(struct _exception *);
+
+ static MSVCRT_matherr_func MSVCRT_default_matherr_func = NULL;
+
++BOOL erms_supported;
+ BOOL sse2_supported;
+ static BOOL sse2_enabled;
+
+@@ -71,6 +73,17 @@ static const struct unix_funcs *unix_funcs;
+
+ void msvcrt_init_math( void *module )
+ {
++#if defined(__i386__) || defined(__x86_64__)
++    int regs[4];
++
++    __cpuid(regs, 0);
++    if (regs[0] >= 7)
++    {
++        __cpuidex(regs, 7, 0);
++        erms_supported = ((regs[1] >> 9) & 1);
++    }
++#endif
++
+     sse2_supported = IsProcessorFeaturePresent( PF_XMMI64_INSTRUCTIONS_AVAILABLE );
+ #if _MSVCR_VER <=71
+     sse2_enabled = FALSE;
+diff --git a/dlls/msvcrt/msvcrt.h b/dlls/msvcrt/msvcrt.h
+index c84e0a0a638..69c52616e3f 100644
+--- a/dlls/msvcrt/msvcrt.h
++++ b/dlls/msvcrt/msvcrt.h
+@@ -32,6 +32,7 @@
+ #include "winbase.h"
+ #undef strncpy
+
++extern BOOL erms_supported DECLSPEC_HIDDEN;
+ extern BOOL sse2_supported DECLSPEC_HIDDEN;
+
+ #define DBL80_MAX_10_EXP 4932
+diff --git a/dlls/msvcrt/string.c b/dlls/msvcrt/string.c
+index 70cca8d18ee..3daa0d483d0 100644
+--- a/dlls/msvcrt/string.c
++++ b/dlls/msvcrt/string.c
+@@ -2722,6 +2722,13 @@ __ASM_GLOBAL_FUNC( sse2_memmove,
+         MEMMOVE_CLEANUP
+         "ret" )
+
++#undef MEMMOVE_INIT
++#undef MEMMOVE_CLEANUP
++#undef DEST_REG
++#undef SRC_REG
++#undef LEN_REG
++#undef TMP_REG
++
+ #endif
+
+ /*********************************************************************
+@@ -2845,6 +2852,56 @@ void * __cdecl memcpy(void *dst, const void *src, size_t n)
+     return memmove(dst, src, n);
+ }
+
++#if defined(__i386__) || defined(__x86_64__)
++
++#ifdef __i386__
++#define DEST_REG "%edi"
++#define LEN_REG "%ecx"
++#define VAL_REG "%eax"
++
++#define MEMSET_INIT \
++    "movl " DEST_REG ", %edx\n\t" \
++    "movl 4(%esp), " DEST_REG "\n\t" \
++    "movl 8(%esp), " VAL_REG "\n\t" \
++    "movl 12(%esp), " LEN_REG "\n\t"
++
++#define MEMSET_RET \
++    "movl %edx, " DEST_REG "\n\t" \
++    "ret"
++
++#else
++
++#define DEST_REG "%rdi"
++#define LEN_REG "%rcx"
++#define VAL_REG "%eax"
++
++#define MEMSET_INIT \
++    "movq " DEST_REG ", %r9\n\t" \
++    "movq %rcx, " DEST_REG "\n\t" \
++    "movl %edx, " VAL_REG "\n\t" \
++    "movq %r8, " LEN_REG "\n\t"
++
++#define MEMSET_RET \
++    "movq %r9, " DEST_REG "\n\t" \
++    "ret"
++
++#endif
++
++void __cdecl erms_memset_aligned_32(unsigned char *d, unsigned int c, size_t n);
++__ASM_GLOBAL_FUNC( erms_memset_aligned_32,
++        MEMSET_INIT
++        "rep\n\t"
++        "stosb\n\t"
++        MEMSET_RET )
++
++#undef MEMSET_INIT
++#undef MEMSET_RET
++#undef DEST_REG
++#undef LEN_REG
++#undef VAL_REG
++
++#endif
++
+ static inline void memset_aligned_32(unsigned char *d, uint64_t v, size_t n)
+ {
+     while (n >= 32)
+@@ -2880,6 +2937,13 @@ void *__cdecl memset(void *dst, int c, size_t n)
+         if (n <= 64) return dst;
+
+         n = (n - a) & ~0x1f;
++#if defined(__i386__) || defined(__x86_64__)
++        if (n >= 2048 && erms_supported)
++        {
++            erms_memset_aligned_32(d + a, v, n);
++            return dst;
++        }
++#endif
+         memset_aligned_32(d + a, v, n);
+         return dst;
+     }
+From 454d37da51ed35ce16d73ba162c4fad3de7f93b1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 14 Sep 2021 14:16:48 +0200
+Subject: [PATCH] msvcrt: Add an SSE2 memset_aligned_32 implementation.
+
+---
+ dlls/msvcrt/string.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/dlls/msvcrt/string.c b/dlls/msvcrt/string.c
+index 3daa0d483d0..74409a6fb76 100644
+--- a/dlls/msvcrt/string.c
++++ b/dlls/msvcrt/string.c
+@@ -2894,6 +2894,27 @@ __ASM_GLOBAL_FUNC( erms_memset_aligned_32,
+         "stosb\n\t"
+         MEMSET_RET )
+
++void __cdecl sse2_memset_aligned_32(unsigned char *d, unsigned int c, size_t n);
++__ASM_GLOBAL_FUNC( sse2_memset_aligned_32,
++        MEMSET_INIT
++        "movd " VAL_REG ", %xmm0\n\t"
++        "pshufd $0, %xmm0, %xmm0\n\t"
++        "test $0x20, " LEN_REG "\n\t"
++        "je 1f\n\t"
++        "sub $0x20, " LEN_REG "\n\t"
++        "movdqa %xmm0, 0x00(" DEST_REG ", " LEN_REG ")\n\t"
++        "movdqa %xmm0, 0x10(" DEST_REG ", " LEN_REG ")\n\t"
++        "je 2f\n\t"
++        "1:\n\t"
++        "sub $0x40, " LEN_REG "\n\t"
++        "movdqa %xmm0, 0x00(" DEST_REG ", " LEN_REG ")\n\t"
++        "movdqa %xmm0, 0x10(" DEST_REG ", " LEN_REG ")\n\t"
++        "movdqa %xmm0, 0x20(" DEST_REG ", " LEN_REG ")\n\t"
++        "movdqa %xmm0, 0x30(" DEST_REG ", " LEN_REG ")\n\t"
++        "ja 1b\n\t"
++        "2:\n\t"
++        MEMSET_RET )
++
+ #undef MEMSET_INIT
+ #undef MEMSET_RET
+ #undef DEST_REG
+@@ -2943,9 +2964,21 @@ void *__cdecl memset(void *dst, int c, size_t n)
+             erms_memset_aligned_32(d + a, v, n);
+             return dst;
+         }
++#ifdef __x86_64__
++        sse2_memset_aligned_32(d + a, v, n);
++        return dst;
++#else
++        if (sse2_supported)
++        {
++            sse2_memset_aligned_32(d + a, v, n);
++            return dst;
++        }
++#endif
+ #endif
++#ifndef __x86_64__
+         memset_aligned_32(d + a, v, n);
+         return dst;
++#endif
+     }
+     if (n >= 8)
+     {
+From 1ace788f817b0175e63d02732c0c11269d19ae0a Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 16 Sep 2021 18:01:42 +0300
+Subject: [PATCH] kernelbase: Return an error from
+ InitializeProcessForWsWatch() stub.
+
+CW-Bug-ID: #19445
+
+For DeathLoop.
+---
+ dlls/kernelbase/debug.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/kernelbase/debug.c b/dlls/kernelbase/debug.c
+index cbc53e22ac1..60b03c57137 100644
+--- a/dlls/kernelbase/debug.c
++++ b/dlls/kernelbase/debug.c
+@@ -1525,7 +1525,8 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetWsChangesEx( HANDLE process, PSAPI_WS_WATCH_INF
+ BOOL WINAPI /* DECLSPEC_HOTPATCH */ InitializeProcessForWsWatch( HANDLE process )
+ {
+     FIXME( "(process=%p): stub\n", process );
+-    return TRUE;
++    SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
++    return FALSE;
+ }
+
+
+From d55d240e244101fa38edbcd6f5812c56166c2dea Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 16 Sep 2021 15:20:21 +0300
+Subject: [PATCH] ntdll: Factor out get_vprot_range_size() function.
+
+CW-Bug-ID: #19436
+
+For DeathLoop.
+---
+ dlls/ntdll/unix/virtual.c | 48 ++++++++++++++++++++++++++-------------
+ 1 file changed, 32 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
+index 31192891c41..b1efef169ec 100644
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -749,6 +749,22 @@ static BYTE get_page_vprot( const void *addr )
+ }
+
+
++/***********************************************************************
++ *           get_vprot_range_size
++ *
++ * Return the size of the region with equal masked protection byte.
++ */
++static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vprot )
++{
++    BYTE *addr;
++
++    *vprot = get_page_vprot( base );
++    for (addr = base + page_size; addr != base + size; addr += page_size)
++        if ((*vprot ^ get_page_vprot( addr )) & mask) break;
++
++    return addr - base;
++}
++
+ /***********************************************************************
+  *           set_page_vprot
+  *
+@@ -1960,18 +1976,21 @@ static NTSTATUS map_file_into_view( struct file_view *view, int fd, size_t start
+  */
+ static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vprot )
+ {
+-    SIZE_T i, start;
++    SIZE_T offset;
+
+-    start = ((char *)base - (char *)view->base) >> page_shift;
+-    *vprot = get_page_vprot( base );
++    base = ROUND_ADDR( base, page_mask );
++    offset = (BYTE *)base - (BYTE *)view->base;
+
+     if (view->protect & SEC_RESERVE)
+     {
+         SIZE_T ret = 0;
++
++        *vprot = get_page_vprot( base );
++
+         SERVER_START_REQ( get_mapping_committed_range )
+         {
+             req->base   = wine_server_client_ptr( view->base );
+-            req->offset = start << page_shift;
++            req->offset = offset;
+             if (!wine_server_call( req ))
+             {
+                 ret = reply->size;
+@@ -1985,9 +2004,8 @@ static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vpro
+         SERVER_END_REQ;
+         return ret;
+     }
+-    for (i = start + 1; i < view->size >> page_shift; i++)
+-        if ((*vprot ^ get_page_vprot( (char *)view->base + (i << page_shift) )) & VPROT_COMMITTED) break;
+-    return (i - start) << page_shift;
++
++    return get_vprot_range_size( base, view->size - offset, VPROT_COMMITTED, vprot );
+ }
+
+
+@@ -3909,7 +3927,7 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+                                        SIZE_T len, SIZE_T *res_len )
+ {
+     struct file_view *view;
+-    char *base, *alloc_base = 0, *alloc_end = working_set_limit;
++    BYTE *base, *alloc_base = 0, *alloc_end = working_set_limit;
+     struct wine_rb_entry *ptr;
+     sigset_t sigset;
+
+@@ -3956,20 +3974,20 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+     while (ptr)
+     {
+         view = WINE_RB_ENTRY_VALUE( ptr, struct file_view, entry );
+-        if ((char *)view->base > base)
++        if ((BYTE *)view->base > base)
+         {
+             alloc_end = view->base;
+             ptr = ptr->left;
+         }
+-        else if ((char *)view->base + view->size <= base)
++        else if ((BYTE *)view->base + view->size <= base)
+         {
+-            alloc_base = (char *)view->base + view->size;
++            alloc_base = (BYTE *)view->base + view->size;
+             ptr = ptr->right;
+         }
+         else
+         {
+             alloc_base = view->base;
+-            alloc_end = (char *)view->base + view->size;
++            alloc_end = (BYTE *)view->base + view->size;
+             break;
+         }
+     }
+@@ -4007,7 +4025,6 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+     else
+     {
+         BYTE vprot;
+-        char *ptr;
+         SIZE_T range_size = get_committed_size( view, base, &vprot );
+
+         info->State = (vprot & VPROT_COMMITTED) ? MEM_COMMIT : MEM_RESERVE;
+@@ -4016,9 +4033,8 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+         if (view->protect & SEC_IMAGE) info->Type = MEM_IMAGE;
+         else if (view->protect & (SEC_FILE | SEC_RESERVE | SEC_COMMIT)) info->Type = MEM_MAPPED;
+         else info->Type = MEM_PRIVATE;
+-        for (ptr = base; ptr < base + range_size; ptr += page_size)
+-            if ((get_page_vprot( ptr ) ^ vprot) & ~(VPROT_WRITEWATCH|VPROT_WRITTEN)) break;
+-        info->RegionSize = ptr - base;
++
++        info->RegionSize = get_vprot_range_size( base, range_size, ~(VPROT_WRITEWATCH|VPROT_WRITTEN), &vprot );
+     }
+     server_leave_uninterrupted_section( &virtual_mutex, &sigset );
+
+From 9d1fb0f283cc699ff4d16d02782f5bd7f05cbd91 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 16 Sep 2021 15:34:02 +0300
+Subject: [PATCH] ntdll: Scan pages only once in get_basic_memory_info().
+
+CW-Bug-ID: #19436
+
+For DeathLoop.
+---
+ dlls/ntdll/unix/virtual.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
+index b1efef169ec..074b3f6260d 100644
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -4004,7 +4004,7 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+         {
+             /* not in a reserved area at all, pretend it's allocated */
+ #ifdef __i386__
+-            if (base >= (char *)address_space_start)
++            if (base >= (BYTE *)address_space_start)
+             {
+                 info->State             = MEM_RESERVE;
+                 info->Protect           = PAGE_NOACCESS;
+@@ -4025,7 +4025,13 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+     else
+     {
+         BYTE vprot;
+-        SIZE_T range_size = get_committed_size( view, base, &vprot );
++        SIZE_T range_size;
++
++        if (view->protect & SEC_RESERVE)
++            range_size = get_committed_size( view, base, &vprot );
++        else
++            range_size = view->size - (base - (BYTE *)view->base);
++        info->RegionSize = get_vprot_range_size( base, range_size, ~(VPROT_WRITEWATCH|VPROT_WRITTEN), &vprot );
+
+         info->State = (vprot & VPROT_COMMITTED) ? MEM_COMMIT : MEM_RESERVE;
+         info->Protect = (vprot & VPROT_COMMITTED) ? get_win32_prot( vprot, view->protect ) : 0;
+@@ -4033,8 +4039,6 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+         if (view->protect & SEC_IMAGE) info->Type = MEM_IMAGE;
+         else if (view->protect & (SEC_FILE | SEC_RESERVE | SEC_COMMIT)) info->Type = MEM_MAPPED;
+         else info->Type = MEM_PRIVATE;
+-
+-        info->RegionSize = get_vprot_range_size( base, range_size, ~(VPROT_WRITEWATCH|VPROT_WRITTEN), &vprot );
+     }
+     server_leave_uninterrupted_section( &virtual_mutex, &sigset );
+
+From 393e789b44088f5cc3c7d66d76220fb1fcea7be0 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 16 Sep 2021 17:17:59 +0300
+Subject: [PATCH] ntdll: Optimize get_vprot_range_size() for big ranges.
+
+CW-Bug-ID: #19436
+
+For DeathLoop.
+---
+ dlls/ntdll/unix/virtual.c | 79 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 74 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
+index 074b3f6260d..e65590bea2c 100644
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -753,16 +753,85 @@ static BYTE get_page_vprot( const void *addr )
+  *           get_vprot_range_size
+  *
+  * Return the size of the region with equal masked protection byte.
++ * base and size should be page aligned.
+  */
+ static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vprot )
+ {
+-    BYTE *addr;
++#define BYTES_IN_WORD sizeof(UINT64)
++    SIZE_T i, start_idx, end_idx, aligned_start_idx, aligned_end_idx, count;
++    static const UINT_PTR index_align_mask = BYTES_IN_WORD - 1;
++    UINT64 vprot_word, mask_word, changed_word;
++    const BYTE *vprot_ptr;
++    unsigned int j;
++#ifdef _WIN64
++    size_t idx_page;
++#endif
++    size_t idx;
++
++
++    TRACE("base %p, size %p, mask %#x.\n", base, (void *)size, mask);
+
+-    *vprot = get_page_vprot( base );
+-    for (addr = base + page_size; addr != base + size; addr += page_size)
+-        if ((*vprot ^ get_page_vprot( addr )) & mask) break;
++    start_idx = (size_t)base >> page_shift;
++    end_idx = start_idx + (size >> page_shift);
++    idx = start_idx;
++#ifdef _WIN64
++    end_idx = min( end_idx, pages_vprot_size << pages_vprot_shift );
++    if (end_idx <= start_idx) return size;
++    idx_page = idx >> pages_vprot_shift;
++    idx &= pages_vprot_mask;
++    vprot_ptr = pages_vprot[idx_page];
++#else
++    vprot_ptr = pages_vprot;
++#endif
++
++    aligned_start_idx = (start_idx + index_align_mask) & ~index_align_mask;
++    if (aligned_start_idx > end_idx) aligned_start_idx = end_idx;
++
++    aligned_end_idx = end_idx & ~index_align_mask;
++    if (aligned_end_idx < aligned_start_idx) aligned_end_idx = aligned_start_idx;
++
++    /* Page count in zero level page table on x64 is at least the multiples of BYTES_IN_WORD
++     * so we don't have to worry about crossing the boundary on unaligned idx values. */
++    *vprot = vprot_ptr[idx];
++    count = aligned_start_idx - start_idx;
++
++    for (i = 0; i < count; ++i)
++        if ((*vprot ^ vprot_ptr[idx++]) & mask) return i << page_shift;
++
++    count += aligned_end_idx - aligned_start_idx;
++    vprot_word = 0x101010101010101ull * *vprot;
++    mask_word = 0x101010101010101ull * mask;
++    for (; i < count; i += 8)
++    {
++#ifdef _WIN64
++        if (idx >> pages_vprot_shift)
++        {
++            idx = 0;
++            vprot_ptr = pages_vprot[idx_page++];
++        }
++#endif
++        changed_word = (vprot_word ^ *(UINT64 *)(vprot_ptr + idx)) & mask_word;
++        if (changed_word)
++        {
++            for (j = 0; !((BYTE *)&changed_word)[j]; ++j) ++i;
++            return i << page_shift;
++        }
++        idx += 8;
++    }
++
++#ifdef _WIN64
++    if (aligned_end_idx != end_idx && (idx >> pages_vprot_shift))
++    {
++        idx = 0;
++        vprot_ptr = pages_vprot[idx_page++];
++    }
++#endif
++    count += end_idx - aligned_end_idx;
++    for (; i < count; ++i)
++        if ((*vprot ^ vprot_ptr[idx++]) & mask) return i << page_shift;
+
+-    return addr - base;
++    return *vprot & mask ? count << page_shift : size;
++#undef BYTES_IN_WORD
+ }
+
+ /***********************************************************************
+From 3754c209915177edf10e4b5dba162cf22150ec77 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 16 Sep 2021 20:26:13 +0300
+Subject: [PATCH] fixup! ntdll: Optimize get_vprot_range_size() for big ranges.
+
+---
+ dlls/ntdll/unix/virtual.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
+index e65590bea2c..bde9f7a7854 100644
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -779,7 +779,7 @@ static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vp
+     if (end_idx <= start_idx) return size;
+     idx_page = idx >> pages_vprot_shift;
+     idx &= pages_vprot_mask;
+-    vprot_ptr = pages_vprot[idx_page];
++    vprot_ptr = pages_vprot[idx_page++];
+ #else
+     vprot_ptr = pages_vprot;
+ #endif
+@@ -823,7 +823,7 @@ static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vp
+     if (aligned_end_idx != end_idx && (idx >> pages_vprot_shift))
+     {
+         idx = 0;
+-        vprot_ptr = pages_vprot[idx_page++];
++        vprot_ptr = pages_vprot[idx_page];
+     }
+ #endif
+     count += end_idx - aligned_end_idx;
+
+From c5012eb1b2613f053a331d9156046fe8b7245687 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 17 Sep 2021 21:49:11 +0300
+Subject: [PATCH] advapi32: HACK: Don't free provider library in
+ CryptReleaseContext() for DeathLoop.
+
+CW-Bug-Id: 19427
+
+Avoids a lockup in DeathLoop. To be dropped once we have a
+GetModuleHandle() not blocking on the loader lock.
+---
+ dlls/advapi32/crypt.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/advapi32/crypt.c b/dlls/advapi32/crypt.c
+index 20c55558fa5..db6e16ae435 100644
+--- a/dlls/advapi32/crypt.c
++++ b/dlls/advapi32/crypt.c
+@@ -645,9 +645,19 @@ BOOL WINAPI CryptReleaseContext (HCRYPTPROV hProv, DWORD dwFlags)
+
+ 	if (InterlockedDecrement(&pProv->refcount) == 0)
+ 	{
++		static unsigned int once;
++		char sgi[64];
++
+ 		ret = pProv->pFuncs->pCPReleaseContext(pProv->hPrivate, dwFlags);
+ 		pProv->dwMagic = 0;
+-		FreeLibrary(pProv->hModule);
++		if(GetEnvironmentVariableA("SteamGameId", sgi, sizeof(sgi)) && !strcmp(sgi, "1252330"))
++		{
++			if (!once++) FIXME("HACK: not freeing provider library.\n");
++		}
++		else
++		{
++			FreeLibrary(pProv->hModule);
++		}
+ #if 0
+ 		CRYPT_Free(pProv->pVTable->pContextInfo);
+ #endif
