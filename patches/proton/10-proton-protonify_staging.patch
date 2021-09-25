@@ -5560,34 +5560,34 @@ index cbc53e22ac1..60b03c57137 100644
  }
 
 
-From d55d240e244101fa38edbcd6f5812c56166c2dea Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
-Date: Thu, 16 Sep 2021 15:20:21 +0300
-Subject: [PATCH] ntdll: Factor out get_vprot_range_size() function.
+Subject: [PATCH v6 1/3] ntdll: Factor out get_vprot_range_size() function.
+Message-Id: <20210923152006.161400-1-pgofman@codeweavers.com>
+Date: Thu, 23 Sep 2021 18:20:04 +0300
 
-CW-Bug-ID: #19436
-
-For DeathLoop.
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
 ---
- dlls/ntdll/unix/virtual.c | 48 ++++++++++++++++++++++++++-------------
- 1 file changed, 32 insertions(+), 16 deletions(-)
+ dlls/ntdll/unix/virtual.c | 40 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 11 deletions(-)
 
 diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index 31192891c41..b1efef169ec 100644
+index 984af2d4a21..41d878546bb 100644
 --- a/dlls/ntdll/unix/virtual.c
 +++ b/dlls/ntdll/unix/virtual.c
-@@ -749,6 +749,22 @@ static BYTE get_page_vprot( const void *addr )
+@@ -943,6 +943,24 @@ static BYTE get_page_vprot( const void *addr )
  }
 
 
 +/***********************************************************************
 + *           get_vprot_range_size
 + *
-+ * Return the size of the region with equal masked protection byte.
-+ */
-+static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vprot )
++ * Return the size of the region with equal masked vprot byte.
++ * Also return the protections for the first page.
++ * The function assumes that base and size are page aligned and
++ * base + size does not wrap around. */
++static SIZE_T get_vprot_range_size( char *base, SIZE_T size, BYTE mask, BYTE *vprot )
 +{
-+    BYTE *addr;
++    char *addr;
 +
 +    *vprot = get_page_vprot( base );
 +    for (addr = base + page_size; addr != base + size; addr += page_size)
@@ -5599,7 +5599,7 @@ index 31192891c41..b1efef169ec 100644
  /***********************************************************************
   *           set_page_vprot
   *
-@@ -1960,18 +1976,21 @@ static NTSTATUS map_file_into_view( struct file_view *view, int fd, size_t start
+@@ -2047,18 +2065,21 @@ done:
   */
  static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vprot )
  {
@@ -5609,7 +5609,7 @@ index 31192891c41..b1efef169ec 100644
 -    start = ((char *)base - (char *)view->base) >> page_shift;
 -    *vprot = get_page_vprot( base );
 +    base = ROUND_ADDR( base, page_mask );
-+    offset = (BYTE *)base - (BYTE *)view->base;
++    offset = (char *)base - (char *)view->base;
 
      if (view->protect & SEC_RESERVE)
      {
@@ -5625,7 +5625,7 @@ index 31192891c41..b1efef169ec 100644
              if (!wine_server_call( req ))
              {
                  ret = reply->size;
-@@ -1985,9 +2004,8 @@ static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vpro
+@@ -2072,9 +2093,8 @@ static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vpro
          SERVER_END_REQ;
          return ret;
      }
@@ -5637,41 +5637,7 @@ index 31192891c41..b1efef169ec 100644
  }
 
 
-@@ -3909,7 +3927,7 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
-                                        SIZE_T len, SIZE_T *res_len )
- {
-     struct file_view *view;
--    char *base, *alloc_base = 0, *alloc_end = working_set_limit;
-+    BYTE *base, *alloc_base = 0, *alloc_end = working_set_limit;
-     struct wine_rb_entry *ptr;
-     sigset_t sigset;
-
-@@ -3956,20 +3974,20 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
-     while (ptr)
-     {
-         view = WINE_RB_ENTRY_VALUE( ptr, struct file_view, entry );
--        if ((char *)view->base > base)
-+        if ((BYTE *)view->base > base)
-         {
-             alloc_end = view->base;
-             ptr = ptr->left;
-         }
--        else if ((char *)view->base + view->size <= base)
-+        else if ((BYTE *)view->base + view->size <= base)
-         {
--            alloc_base = (char *)view->base + view->size;
-+            alloc_base = (BYTE *)view->base + view->size;
-             ptr = ptr->right;
-         }
-         else
-         {
-             alloc_base = view->base;
--            alloc_end = (char *)view->base + view->size;
-+            alloc_end = (BYTE *)view->base + view->size;
-             break;
-         }
-     }
-@@ -4007,7 +4025,6 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+@@ -4196,7 +4216,6 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
      else
      {
          BYTE vprot;
@@ -5679,7 +5645,7 @@ index 31192891c41..b1efef169ec 100644
          SIZE_T range_size = get_committed_size( view, base, &vprot );
 
          info->State = (vprot & VPROT_COMMITTED) ? MEM_COMMIT : MEM_RESERVE;
-@@ -4016,9 +4033,8 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+@@ -4205,9 +4224,8 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
          if (view->protect & SEC_IMAGE) info->Type = MEM_IMAGE;
          else if (view->protect & (SEC_FILE | SEC_RESERVE | SEC_COMMIT)) info->Type = MEM_MAPPED;
          else info->Type = MEM_PRIVATE;
@@ -5691,47 +5657,110 @@ index 31192891c41..b1efef169ec 100644
      }
      server_leave_uninterrupted_section( &virtual_mutex, &sigset );
 
-From 9d1fb0f283cc699ff4d16d02782f5bd7f05cbd91 Mon Sep 17 00:00:00 2001
+
+--
+2.31.1
+
 From: Paul Gofman <pgofman@codeweavers.com>
-Date: Thu, 16 Sep 2021 15:34:02 +0300
-Subject: [PATCH] ntdll: Scan pages only once in get_basic_memory_info().
+Subject: [PATCH v6 2/3] ntdll: Scan pages only once in get_basic_memory_info().
+Message-Id: <20210923152006.161400-2-pgofman@codeweavers.com>
+Date: Thu, 23 Sep 2021 18:20:05 +0300
+In-Reply-To: <20210923152006.161400-1-pgofman@codeweavers.com>
+References: <20210923152006.161400-1-pgofman@codeweavers.com>
 
-CW-Bug-ID: #19436
-
-For DeathLoop.
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
 ---
- dlls/ntdll/unix/virtual.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+v5:
+    - Introduce get_committed_size_vprot() to avoid checking for SEC_RESERVE in get_basic_memory_info()
+      and keep that logic contained.
+v6:
+    - Fix get_committed_size function name in comment.
+
+ dlls/ntdll/unix/virtual.c | 37 ++++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
 
 diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index b1efef169ec..074b3f6260d 100644
+index 41d878546bb..dfabd770509 100644
 --- a/dlls/ntdll/unix/virtual.c
 +++ b/dlls/ntdll/unix/virtual.c
-@@ -4004,7 +4004,7 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
-         {
-             /* not in a reserved area at all, pretend it's allocated */
- #ifdef __i386__
--            if (base >= (char *)address_space_start)
-+            if (base >= (BYTE *)address_space_start)
+@@ -2058,21 +2058,21 @@ done:
+
+
+ /***********************************************************************
+- *           get_committed_size
++ *           get_committed_size_vprot
+  *
+- * Get the size of the committed range starting at base.
++ * Get the size of the committed range with equal masked vprot bytes starting at base.
+  * Also return the protections for the first page.
+  */
+-static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vprot )
++static SIZE_T get_committed_size_vprot( struct file_view *view, void *base, BYTE *vprot, BYTE vprot_mask )
+ {
+-    SIZE_T offset;
++    SIZE_T offset, size;
+
+     base = ROUND_ADDR( base, page_mask );
+     offset = (char *)base - (char *)view->base;
+
+     if (view->protect & SEC_RESERVE)
+     {
+-        SIZE_T ret = 0;
++        size = 0;
+
+         *vprot = get_page_vprot( base );
+
+@@ -2082,22 +2082,34 @@ static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vpro
+             req->offset = offset;
+             if (!wine_server_call( req ))
              {
-                 info->State             = MEM_RESERVE;
-                 info->Protect           = PAGE_NOACCESS;
-@@ -4025,7 +4025,13 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+-                ret = reply->size;
++                size = reply->size;
+                 if (reply->committed)
+                 {
+                     *vprot |= VPROT_COMMITTED;
+-                    set_page_vprot_bits( base, ret, VPROT_COMMITTED, 0 );
++                    set_page_vprot_bits( base, size, VPROT_COMMITTED, 0 );
+                 }
+             }
+         }
+         SERVER_END_REQ;
+-        return ret;
+-    }
+
+-    return get_vprot_range_size( base, view->size - offset, VPROT_COMMITTED, vprot );
++        if (!size || !vprot_mask) return size;
++    } else size = view->size - offset;
++
++    return get_vprot_range_size( base, size, VPROT_COMMITTED | vprot_mask, vprot );
+ }
+
+
++/***********************************************************************
++ *           get_committed_size
++ *
++ * Get the size of the committed range starting at base.
++ * Also return the protections for the first page.
++ */
++static SIZE_T get_committed_size( struct file_view *view, void *base, BYTE *vprot )
++{
++    return get_committed_size_vprot( view, base, vprot, 0 );
++}
++
+ /***********************************************************************
+  *           decommit_view
+  *
+@@ -4216,7 +4228,8 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
      else
      {
          BYTE vprot;
 -        SIZE_T range_size = get_committed_size( view, base, &vprot );
-+        SIZE_T range_size;
 +
-+        if (view->protect & SEC_RESERVE)
-+            range_size = get_committed_size( view, base, &vprot );
-+        else
-+            range_size = view->size - (base - (BYTE *)view->base);
-+        info->RegionSize = get_vprot_range_size( base, range_size, ~(VPROT_WRITEWATCH|VPROT_WRITTEN), &vprot );
++        info->RegionSize = get_committed_size_vprot( view, base, &vprot, ~(VPROT_WRITEWATCH|VPROT_WRITTEN) );
 
          info->State = (vprot & VPROT_COMMITTED) ? MEM_COMMIT : MEM_RESERVE;
          info->Protect = (vprot & VPROT_COMMITTED) ? get_win32_prot( vprot, view->protect ) : 0;
-@@ -4033,8 +4039,6 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
+@@ -4224,8 +4237,6 @@ static NTSTATUS get_basic_memory_info( HANDLE process, LPCVOID addr,
          if (view->protect & SEC_IMAGE) info->Type = MEM_IMAGE;
          else if (view->protect & (SEC_FILE | SEC_RESERVE | SEC_COMMIT)) info->Type = MEM_MAPPED;
          else info->Type = MEM_PRIVATE;
@@ -5740,144 +5769,103 @@ index b1efef169ec..074b3f6260d 100644
      }
      server_leave_uninterrupted_section( &virtual_mutex, &sigset );
 
-From 393e789b44088f5cc3c7d66d76220fb1fcea7be0 Mon Sep 17 00:00:00 2001
+
+--
+2.31.1
+
 From: Paul Gofman <pgofman@codeweavers.com>
-Date: Thu, 16 Sep 2021 17:17:59 +0300
-Subject: [PATCH] ntdll: Optimize get_vprot_range_size() for big ranges.
+Subject: [PATCH v6 3/3] ntdll: Optimize get_vprot_range_size() for big ranges.
+Message-Id: <20210923152006.161400-3-pgofman@codeweavers.com>
+Date: Thu, 23 Sep 2021 18:20:06 +0300
+In-Reply-To: <20210923152006.161400-1-pgofman@codeweavers.com>
+References: <20210923152006.161400-1-pgofman@codeweavers.com>
 
-CW-Bug-ID: #19436
-
-For DeathLoop.
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
 ---
- dlls/ntdll/unix/virtual.c | 79 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 74 insertions(+), 5 deletions(-)
+v5:
+    - simplify the code:
+        - get rid of allocated vprot bytes range check since the function is
+          called for the ranges within views only for which the vprot bytes
+          should always be allocated;
+        - get rid of a few variables and one #ifdef straightening up a bit page index
+          handling on 64;
+        - renamed 'i' to 'curr_idx';
+
+ dlls/ntdll/unix/virtual.c | 53 +++++++++++++++++++++++++++++++++------
+ 1 file changed, 46 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index 074b3f6260d..e65590bea2c 100644
+index dfabd770509..9377c21cfc3 100644
 --- a/dlls/ntdll/unix/virtual.c
 +++ b/dlls/ntdll/unix/virtual.c
-@@ -753,16 +753,85 @@ static BYTE get_page_vprot( const void *addr )
-  *           get_vprot_range_size
+@@ -948,17 +948,56 @@ static BYTE get_page_vprot( const void *addr )
   *
-  * Return the size of the region with equal masked protection byte.
+  * Return the size of the region with equal masked vprot byte.
+  * Also return the protections for the first page.
+- * The function assumes that base and size are page aligned and
+- * base + size does not wrap around. */
 + * base and size should be page aligned.
-  */
- static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vprot )
++ * The function assumes that base and size are page aligned,
++ * base + size does not wrap around and the range is within view so
++ * vprot bytes are allocated for the range. */
+ static SIZE_T get_vprot_range_size( char *base, SIZE_T size, BYTE mask, BYTE *vprot )
  {
--    BYTE *addr;
-+#define BYTES_IN_WORD sizeof(UINT64)
-+    SIZE_T i, start_idx, end_idx, aligned_start_idx, aligned_end_idx, count;
+-    char *addr;
++#define BYTES_IN_WORD sizeof(UINT_PTR)
++    static const UINT_PTR word_from_byte = (UINT_PTR)0x101010101010101;
 +    static const UINT_PTR index_align_mask = BYTES_IN_WORD - 1;
-+    UINT64 vprot_word, mask_word, changed_word;
++    SIZE_T curr_idx, start_idx, end_idx, aligned_start_idx;
++    UINT_PTR vprot_word, mask_word;
 +    const BYTE *vprot_ptr;
-+    unsigned int j;
-+#ifdef _WIN64
-+    size_t idx_page;
-+#endif
-+    size_t idx;
-+
-+
-+    TRACE("base %p, size %p, mask %#x.\n", base, (void *)size, mask);
 
 -    *vprot = get_page_vprot( base );
 -    for (addr = base + page_size; addr != base + size; addr += page_size)
 -        if ((*vprot ^ get_page_vprot( addr )) & mask) break;
-+    start_idx = (size_t)base >> page_shift;
++    TRACE("base %p, size %p, mask %#x.\n", base, (void *)size, mask);
+
+-    return addr - base;
++    curr_idx = start_idx = (size_t)base >> page_shift;
 +    end_idx = start_idx + (size >> page_shift);
-+    idx = start_idx;
-+#ifdef _WIN64
-+    end_idx = min( end_idx, pages_vprot_size << pages_vprot_shift );
-+    if (end_idx <= start_idx) return size;
-+    idx_page = idx >> pages_vprot_shift;
-+    idx &= pages_vprot_mask;
-+    vprot_ptr = pages_vprot[idx_page];
-+#else
-+    vprot_ptr = pages_vprot;
-+#endif
 +
 +    aligned_start_idx = (start_idx + index_align_mask) & ~index_align_mask;
 +    if (aligned_start_idx > end_idx) aligned_start_idx = end_idx;
 +
-+    aligned_end_idx = end_idx & ~index_align_mask;
-+    if (aligned_end_idx < aligned_start_idx) aligned_end_idx = aligned_start_idx;
++#ifdef _WIN64
++    vprot_ptr = pages_vprot[curr_idx >> pages_vprot_shift] + (curr_idx & pages_vprot_mask);
++#else
++    vprot_ptr = pages_vprot + curr_idx;
++#endif
++    *vprot = *vprot_ptr;
 +
-+    /* Page count in zero level page table on x64 is at least the multiples of BYTES_IN_WORD
++    /* Page count page table is at least the multiples of BYTES_IN_WORD
 +     * so we don't have to worry about crossing the boundary on unaligned idx values. */
-+    *vprot = vprot_ptr[idx];
-+    count = aligned_start_idx - start_idx;
 +
-+    for (i = 0; i < count; ++i)
-+        if ((*vprot ^ vprot_ptr[idx++]) & mask) return i << page_shift;
++    for (; curr_idx < aligned_start_idx; ++curr_idx, ++vprot_ptr)
++        if ((*vprot ^ *vprot_ptr) & mask) return (curr_idx - start_idx) << page_shift;
 +
-+    count += aligned_end_idx - aligned_start_idx;
-+    vprot_word = 0x101010101010101ull * *vprot;
-+    mask_word = 0x101010101010101ull * mask;
-+    for (; i < count; i += 8)
++    vprot_word = word_from_byte * *vprot;
++    mask_word = word_from_byte * mask;
++    for (; curr_idx < end_idx; curr_idx += BYTES_IN_WORD, vprot_ptr += BYTES_IN_WORD)
 +    {
 +#ifdef _WIN64
-+        if (idx >> pages_vprot_shift)
-+        {
-+            idx = 0;
-+            vprot_ptr = pages_vprot[idx_page++];
-+        }
++        if (!(curr_idx & pages_vprot_mask)) vprot_ptr = pages_vprot[curr_idx >> pages_vprot_shift];
 +#endif
-+        changed_word = (vprot_word ^ *(UINT64 *)(vprot_ptr + idx)) & mask_word;
-+        if (changed_word)
++        if ((vprot_word ^ *(UINT_PTR *)vprot_ptr) & mask_word)
 +        {
-+            for (j = 0; !((BYTE *)&changed_word)[j]; ++j) ++i;
-+            return i << page_shift;
++            for (; curr_idx < end_idx; ++curr_idx, ++vprot_ptr)
++                if ((*vprot ^ *vprot_ptr) & mask) break;
++            return (curr_idx - start_idx) << page_shift;
 +        }
-+        idx += 8;
 +    }
-+
-+#ifdef _WIN64
-+    if (aligned_end_idx != end_idx && (idx >> pages_vprot_shift))
-+    {
-+        idx = 0;
-+        vprot_ptr = pages_vprot[idx_page++];
-+    }
-+#endif
-+    count += end_idx - aligned_end_idx;
-+    for (; i < count; ++i)
-+        if ((*vprot ^ vprot_ptr[idx++]) & mask) return i << page_shift;
-
--    return addr - base;
-+    return *vprot & mask ? count << page_shift : size;
++    return size;
 +#undef BYTES_IN_WORD
  }
 
  /***********************************************************************
-From 3754c209915177edf10e4b5dba162cf22150ec77 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Thu, 16 Sep 2021 20:26:13 +0300
-Subject: [PATCH] fixup! ntdll: Optimize get_vprot_range_size() for big ranges.
 
----
- dlls/ntdll/unix/virtual.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--
+2.31.1
 
-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index e65590bea2c..bde9f7a7854 100644
---- a/dlls/ntdll/unix/virtual.c
-+++ b/dlls/ntdll/unix/virtual.c
-@@ -779,7 +779,7 @@ static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vp
-     if (end_idx <= start_idx) return size;
-     idx_page = idx >> pages_vprot_shift;
-     idx &= pages_vprot_mask;
--    vprot_ptr = pages_vprot[idx_page];
-+    vprot_ptr = pages_vprot[idx_page++];
- #else
-     vprot_ptr = pages_vprot;
- #endif
-@@ -823,7 +823,7 @@ static SIZE_T get_vprot_range_size( BYTE *base, SIZE_T size, BYTE mask, BYTE *vp
-     if (aligned_end_idx != end_idx && (idx >> pages_vprot_shift))
-     {
-         idx = 0;
--        vprot_ptr = pages_vprot[idx_page++];
-+        vprot_ptr = pages_vprot[idx_page];
-     }
- #endif
-     count += end_idx - aligned_end_idx;
 
 From c5012eb1b2613f053a331d9156046fe8b7245687 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
