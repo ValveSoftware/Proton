@@ -1,33 +1,17 @@
-From cdf78d56452306fcaca0eddb160a89b86aea1d3d Mon Sep 17 00:00:00 2001
-From: Thomas Crider <gloriouseggroll@gmail.com>
-Date: Sat, 28 Aug 2021 11:49:53 -0600
-Subject: [PATCH] winepulse: revert winepulse unixlib conversion to allow staging
- patches to re-apply (needed to fix crackling audio in some games
-
----
- dlls/winepulse.drv/Makefile.in |    8 +-
- dlls/winepulse.drv/mmdevdrv.c  | 3979 +++++++++++++++++++++++++++++---
- dlls/winepulse.drv/mult.c      | 2015 ----------------
- dlls/winepulse.drv/pulse.c     | 1983 ----------------
- dlls/winepulse.drv/unixlib.h   |  213 --
- 5 files changed, 3650 insertions(+), 4548 deletions(-)
- delete mode 100644 dlls/winepulse.drv/mult.c
- delete mode 100644 dlls/winepulse.drv/pulse.c
- delete mode 100644 dlls/winepulse.drv/unixlib.h
-
 diff --git a/dlls/winepulse.drv/Makefile.in b/dlls/winepulse.drv/Makefile.in
-index 4bf053d4e54..d6600632360 100644
+index f98262bcf63..d6600632360 100644
 --- a/dlls/winepulse.drv/Makefile.in
 +++ b/dlls/winepulse.drv/Makefile.in
-@@ -1,11 +1,7 @@
+@@ -1,10 +1,9 @@
  MODULE    = winepulse.drv
+-UNIXLIB   = winepulse.so
  IMPORTS   = dxguid uuid winmm user32 advapi32 ole32
--EXTRALIBS = $(PULSE_LIBS) $(PTHREAD_LIBS) -Wl,--subsystem,unixlib
+-EXTRALIBS = $(PULSE_LIBS) $(PTHREAD_LIBS) -lm
 +EXTRALIBS = $(PULSE_LIBS) $(PTHREAD_LIBS)
  EXTRAINCL = $(PULSE_CFLAGS)
 
--EXTRADLLFLAGS = -mno-cygwin
--
++EXTRADLLFLAGS = -mcygwin
++
  C_SRCS = \
 -	mmdevdrv.c \
 -	mult.c \
@@ -8570,24 +8554,11 @@ index 2e6ad4848eb..00000000000
 -    pulse_is_started,
 -};
 diff --git a/dlls/winepulse.drv/unixlib.h b/dlls/winepulse.drv/unixlib.h
-index d28a73ca649..98639e7705f 100644
---- a/dlls/winepulse.drv/unixlib.h
-+++ b/dlls/winepulse.drv/unixlib.h
-@@ -17,7 +17,6 @@
-  */
-
- #include "wine/list.h"
--#include "wine/unixlib.h"
-
- struct pulse_stream;
-
-
-diff --git a/dlls/winepulse.drv/unixlib.h b/dlls/winepulse.drv/unixlib.h
 deleted file mode 100644
-index 98639e7705f..00000000000
+index d28a73ca649..00000000000
 --- a/dlls/winepulse.drv/unixlib.h
 +++ /dev/null
-@@ -1,213 +0,0 @@
+@@ -1,214 +0,0 @@
 -/*
 - * Copyright 2021 Jacek Caban for CodeWeavers
 - *
@@ -8607,6 +8578,7 @@ index 98639e7705f..00000000000
 - */
 -
 -#include "wine/list.h"
+-#include "wine/unixlib.h"
 -
 -struct pulse_stream;
 -
@@ -8801,6 +8773,3 @@ index 98639e7705f..00000000000
 -    test_connect,
 -    is_started,
 -};
---
-2.31.1
-
