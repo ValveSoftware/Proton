@@ -918,6 +918,21 @@ noto_sans_thaana.ttf = $(FONTS)/noto/NotoSansThaana-Regular.ttf
 noto_sans_thai.ttf = $(FONTS)/noto/NotoSansThai-Regular.ttf
 micross.ttf = $(FONTS_OBJ)/micross.ttf
 
+noto_sans_bengaliui.ttf = $(FONTS)/noto/NotoSansBengaliUI-Regular.ttf
+noto_sans_devanagariui.ttf = $(FONTS)/noto/NotoSansDevanagariUI-Regular.ttf
+noto_sans_gujaratiui.ttf = $(FONTS)/noto/NotoSansGujaratiUI-Regular.ttf
+noto_sans_gurmukhiui.ttf = $(FONTS)/noto/NotoSansGurmukhiUI-Regular.ttf
+noto_sans_kannadaui.ttf = $(FONTS)/noto/NotoSansKannadaUI-Regular.ttf
+noto_sans_malayalamui.ttf = $(FONTS)/noto/NotoSansMalayalamUI-Regular.ttf
+noto_sans_meeteimayek.ttf = $(FONTS)/noto/NotoSansMeeteiMayek-Regular.ttf
+noto_sans_olchiki.ttf = $(FONTS)/noto/NotoSansOlChiki-Regular.ttf
+noto_sans_oriyaui.ttf = $(FONTS)/noto/NotoSansOriyaUI-Regular.ttf
+noto_sans_sinhalaui.ttf = $(FONTS)/noto/NotoSansSinhalaUI-Regular.ttf
+noto_sans_sorasompeng.ttf = $(FONTS)/noto/NotoSansSoraSompeng-Regular.ttf
+noto_sans_tamilui.ttf = $(FONTS)/noto/NotoSansTamilUI-Regular.ttf
+noto_sans_teluguui.ttf = $(FONTS)/noto/NotoSansTeluguUI-Regular.ttf
+nirmala.ttf = $(FONTS_OBJ)/nirmala.ttf
+
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
@@ -968,6 +983,14 @@ $(micross.ttf): $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_armenian.tt
 		$(noto_sans_coptic.ttf) $(noto_sans_georgian.ttf) $(noto_sans_gujarati.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_khmer.ttf) \
 		$(noto_sans_tamil.ttf) $(noto_sans_thaana.ttf) $(noto_sans_thai.ttf) "MicrosoftSansSerif" "Microsoft Sans Serif" "Regular" $(micross.ttf)
 
+$(nirmala.ttf): $(noto_sans.ttf) $(noto_sans_bengaliui.ttf) $(noto_sans_devanagariui.ttf) $(noto_sans_gujaratiui.ttf) $(noto_sans_gurmukhiui.ttf) \
+		$(noto_sans_kannadaui.ttf) $(noto_sans_malayalamui.ttf) $(noto_sans_meeteimayek.ttf) $(noto_sans_olchiki.ttf) $(noto_sans_oriyaui.ttf) \
+		$(noto_sans_sinhalaui.ttf) $(noto_sans_sorasompeng.ttf) $(noto_sans_tamilui.ttf) $(noto_sans_teluguui.ttf)
+	$(FONTFORGE) -script $(MERGEFONTSSCRIPT) $(noto_sans.ttf) $(noto_sans_bengaliui.ttf) $(noto_sans_devanagariui.ttf) $(noto_sans_gujaratiui.ttf) \
+		$(noto_sans_gurmukhiui.ttf) $(noto_sans_kannadaui.ttf) $(noto_sans_malayalamui.ttf) $(noto_sans_meeteimayek.ttf) $(noto_sans_olchiki.ttf) \
+		$(noto_sans_oriyaui.ttf) $(noto_sans_sinhalaui.ttf) $(noto_sans_sorasompeng.ttf) $(noto_sans_tamilui.ttf) $(noto_sans_teluguui.ttf) \
+		"NirmalaUI" "Nirmala UI" "Regular" $(nirmala.ttf)
+
 fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
 fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
@@ -978,6 +1001,7 @@ fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
 fonts: $(malgun.ttf)
 fonts: $(micross.ttf)
+fonts: $(nirmala.ttf)
 
 ##
 ## Targets
