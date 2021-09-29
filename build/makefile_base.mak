@@ -840,6 +840,7 @@ GOAL_TARGETS += fonts
 
 FONTFORGE = fontforge -quiet
 FONTSCRIPT = $(FONTS)/scripts/generatefont.pe
+MERGEFONTSSCRIPT = $(FONTS)/scripts/mergefonts.pe
 
 LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
 SOURCE_HAN_SANS_SRCDIR = $(FONTS)/source-han-sans
@@ -903,6 +904,20 @@ malgun.ttf = $(FONTS_OBJ)/source-han/malgun.ttf
 simsun.ttc = $(FONTS_OBJ)/source-han/simsun.ttc
 msgothic.ttc = $(FONTS_OBJ)/source-han/msgothic.ttc
 
+noto_sans.ttf = $(FONTS)/noto/NotoSans-Regular.ttf
+noto_sans_arabic.ttf = $(FONTS)/noto/NotoSansArabic-Regular.ttf
+noto_sans_armenian.tff = $(FONTS)/noto/NotoSansArmenian-Regular.ttf
+noto_sans_bengali.ttf = $(FONTS)/noto/NotoSansBengali-Regular.ttf
+noto_sans_coptic.ttf = $(FONTS)/noto/NotoSansCoptic-Regular.ttf
+noto_sans_georgian.ttf = $(FONTS)/noto/NotoSansGeorgian-Regular.ttf
+noto_sans_gujarati.ttf = $(FONTS)/noto/NotoSansGujarati-Regular.ttf
+noto_sans_hebrew.ttf = $(FONTS)/noto/NotoSansHebrew-Regular.ttf
+noto_sans_khmer.ttf = $(FONTS)/noto/NotoSansKhmer-Regular.ttf
+noto_sans_tamil.ttf = $(FONTS)/noto/NotoSansTamil-Regular.ttf
+noto_sans_thaana.ttf = $(FONTS)/noto/NotoSansThaana-Regular.ttf
+noto_sans_thai.ttf = $(FONTS)/noto/NotoSansThai-Regular.ttf
+micross.ttf = $(FONTS_OBJ)/micross.ttf
+
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
@@ -946,6 +961,13 @@ $(simsun.ttc): $(simsun.ttf) $(nsimsun.ttf)
 $(msgothic.ttc): $(msgothic.ttf) $(mspgothic.ttf) $(msuigothic.ttf)
 	$(AFDKO_VERB) otf2otc -o $@ $^
 
+$(micross.ttf): $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_armenian.ttf) $(noto_sans_bengali.ttf) $(noto_sans_coptic.ttf) \
+		$(noto_sans_georgian.ttf) $(noto_sans_gujarati.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_khmer.ttf) $(noto_sans_tamil.ttf) \
+		$(noto_sans_thaana.ttf) $(noto_sans_thai.ttf)
+	$(FONTFORGE) -script $(MERGEFONTSSCRIPT) $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_armenian.ttf) $(noto_sans_bengali.ttf) \
+		$(noto_sans_coptic.ttf) $(noto_sans_georgian.ttf) $(noto_sans_gujarati.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_khmer.ttf) \
+		$(noto_sans_tamil.ttf) $(noto_sans_thaana.ttf) $(noto_sans_thai.ttf) "MicrosoftSansSerif" "Microsoft Sans Serif" "Regular" $(micross.ttf)
+
 fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
 fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
@@ -955,6 +977,7 @@ fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
 fonts: $(malgun.ttf)
+fonts: $(micross.ttf)
 
 ##
 ## Targets
