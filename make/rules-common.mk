@@ -181,6 +181,11 @@ PKG_CONFIG_TARGET_64 := x86_64-linux-gnu
 PKG_CONFIG_TARGET_CROSS32 := i386-w64-mingw32
 PKG_CONFIG_TARGET_CROSS64 := x86_64-w64-mingw32
 
+LIBDIR_WINE_32 := wine/i386-unix
+LIBDIR_WINE_64 := wine/x86_64-unix
+LIBDIR_WINE_CROSS32 := wine/i386-windows
+LIBDIR_WINE_CROSS64 := wine/x86_64-windows
+
 $(OBJ)/.%-post-build32:
 	touch $@
 $(OBJ)/.%-post-build64:
