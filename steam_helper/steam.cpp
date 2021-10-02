@@ -559,6 +559,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     unsigned int app_id;
     unsigned int length;
     void *lib_vrclient;
+    DWORD hmd_present;
     int return_code;
     LSTATUS status;
     unsigned int i;
@@ -596,6 +597,11 @@ static DWORD WINAPI initialize_vr_data(void *arg)
         goto done;
     }
     vr_initialized = TRUE;
+
+    hmd_present = !!client_core->BIsHmdPresent();
+    WINE_TRACE("hmd_present %#x.\n", hmd_present);
+    if ((status = RegSetValueExA(vr_key, "is_hmd_present", 0, REG_DWORD, (BYTE *)&hmd_present, sizeof(hmd_present))))
+        WINE_ERR("Could not set is_hmd_present value, status %#x.\n", status);
 
     compositor = reinterpret_cast<vr::IVRCompositor*>(client_core->GetGenericInterface(vr::IVRCompositor_Version, &error));
     if (!compositor)
