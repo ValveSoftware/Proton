@@ -646,6 +646,24 @@ $(eval $(call rules-cmake,jxrlib,64))
 
 
 ##
+## Vulkan-Headers
+##
+
+$(eval $(call rules-source,vulkan-headers,$(SRCDIR)/Vulkan-Headers))
+$(eval $(call rules-cmake,vulkan-headers,32))
+$(eval $(call rules-cmake,vulkan-headers,64))
+
+
+##
+## SPIRV-Headers
+##
+
+$(eval $(call rules-source,spirv-headers,$(SRCDIR)/SPIRV-Headers))
+$(eval $(call rules-cmake,spirv-headers,32))
+$(eval $(call rules-cmake,spirv-headers,64))
+
+
+##
 ## lsteamclient
 ##
 
@@ -731,6 +749,7 @@ WINE_SOURCE_ARGS = \
 
 WINE_CONFIGURE_ARGS = \
   --with-mingw \
+  --without-xpresent \
   --disable-tests
 
 WINE_CONFIGURE_ARGS64 = --enable-win64
@@ -741,11 +760,7 @@ $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
 $(eval $(call rules-autoconf,wine,64))
 
-$(WINE_SRC)/configure: $(SRCDIR)/wine/configure.ac | $(OBJ)/.wine-source
-	cd $(WINE_SRC) && autoreconf -fi
-	touch $@
-
-$(OBJ)/.wine-post-source: $(WINE_SRC)/configure
+$(OBJ)/.wine-post-source:
 	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan
 	cd $(WINE_SRC) && tools/make_requests
 	touch $@
@@ -852,6 +867,60 @@ $(OBJ)/.dxvk-nvapi-post-build32:
 	rm -f "$(DST_DIR)"/lib/wine/nvapi/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk-nvapi ) > "$(DST_DIR)"/lib/wine/nvapi/version; fi
 	touch $@
 
+
+##
+## vkd3d
+##
+
+VKD3D_SOURCE_ARGS = \
+  --exclude aclocal.m4 \
+  --exclude autom4te.cache \
+  --exclude bin/ \
+  --exclude configure \
+  --exclude include/config.h.in \
+  --exclude Makefile.in \
+  --exclude m4/libtool.m4 \
+  --exclude m4/ltoptions.m4 \
+  --exclude m4/ltsugar.m4 \
+  --exclude m4/ltversion.m4 \
+  --exclude m4/lt~obsolete.m4 \
+
+VKD3D_CONFIGURE_ARGS = \
+  --disable-doxygen-doc \
+  --disable-tests \
+  --disable-demos \
+  --without-ncurses \
+  WIDL=$(WINE_OBJ64)/tools/widl/widl
+
+VKD3D_CONFIGURE_ARGS32 = \
+  --host=i686-w64-mingw32 \
+  CC="$(CCACHE_BIN) i686-w64-mingw32-gcc" \
+  LD="i686-w64-mingw32-ld" \
+
+VKD3D_CONFIGURE_ARGS64 = \
+  --host=x86_64-w64-mingw32 \
+  CC="$(CCACHE_BIN) x86_64-w64-mingw32-gcc" \
+  LD="x86_64-w64-mingw32-ld" \
+
+VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
+VKD3D_LDFLAGS32 = -L$(WINE_OBJ32)/dlls/vulkan-1/
+VKD3D_LDFLAGS64 = -L$(WINE_OBJ64)/dlls/vulkan-1/
+
+VKD3D_DEPENDS = wine vulkan-headers spirv-headers
+
+$(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
+$(eval $(call rules-autoconf,vkd3d,32))
+$(eval $(call rules-autoconf,vkd3d,64))
+
+$(OBJ)/.vkd3d-post-build64:
+	mkdir -p $(DST_DIR)/lib64/vkd3d/
+	$(call install-strip,$(VKD3D_DST64)/bin/libvkd3d-shader-1.dll,$(DST_LIBDIR64)/vkd3d)
+	touch $@
+
+$(OBJ)/.vkd3d-post-build32:
+	mkdir -p $(DST_DIR)/lib/vkd3d/
+	$(call install-strip,$(VKD3D_DST32)/bin/libvkd3d-shader-1.dll,$(DST_LIBDIR32)/vkd3d)
+	touch $@
 
 ##
 ## vkd3d-proton
