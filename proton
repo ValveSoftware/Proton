@@ -30,7 +30,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.18-GE-2"
+CURRENT_PREFIX_VERSION="6.18-GE-3"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -99,16 +99,16 @@ def merge_user_dir(src, dst):
                 src_file = os.path.join(src_dir, dir_)
                 dst_file = os.path.join(dst_dir, dir_)
                 if os.path.islink(src_file) and not os.path.exists(dst_file):
-                    try_copy(src_file, dst_file, copy_metadata=True)
+                    try_copy(src_file, dst_file, copy_metadata=True, follow_symlinks=False)
             for file_ in files:
                 src_file = os.path.join(src_dir, file_)
                 dst_file = os.path.join(dst_dir, file_)
                 if not os.path.exists(dst_file):
-                    try_copy(src_file, dst_file, copy_metadata=True)
+                    try_copy(src_file, dst_file, copy_metadata=True, follow_symlinks=False)
         else:
             extant_dirs += dst_dir
 
-def try_copy(src, dst, add_write_perm=True, copy_metadata=True, optional=False):
+def try_copy(src, dst, add_write_perm=True, copy_metadata=False, optional=False, follow_symlinks=True):
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
@@ -120,9 +120,9 @@ def try_copy(src, dst, add_write_perm=True, copy_metadata=True, optional=False):
                 os.remove(dst)
 
         if copy_metadata:
-            shutil.copy2(src, dst)
+            shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
         else:
-            shutil.copy(src, dst)
+            shutil.copy(src, dst, follow_symlinks=follow_symlinks)
 
         if add_write_perm:
             new_mode = os.lstat(dstfile).st_mode | stat.S_IWUSR | stat.S_IWGRP
@@ -526,7 +526,7 @@ class CompatData:
                 if len(rel_dir) > 0:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
-                if not os.path.exists(dst_dir):
+                if not os.path.lexists(dst_dir):
                     os.makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for dir_ in dirs:
@@ -608,16 +608,24 @@ class CompatData:
         #upgrade_pfx because Steam may drop cloud files here at any time.
         for (old, new, link) in \
                 [
-                    (self.prefix_dir + "drive_c/users/steamuser/Local Settings/Application Data",
+                    ("drive_c/users/steamuser/Local Settings/Application Data",
                         self.prefix_dir + "drive_c/users/steamuser/AppData/Local",
                         "../AppData/Local"),
-                    (self.prefix_dir + "drive_c/users/steamuser/Application Data",
+                    ("drive_c/users/steamuser/Application Data",
                         self.prefix_dir + "drive_c/users/steamuser/AppData/Roaming",
                         "./AppData/Roaming"),
-                    (self.prefix_dir + "drive_c/users/steamuser/My Documents",
+                    ("drive_c/users/steamuser/My Documents",
                         self.prefix_dir + "drive_c/users/steamuser/Documents",
                         "./Documents"),
                 ]:
+
+            #running unofficial Proton/Wine builds against a Proton prefix could
+            #create an infinite symlink loop. detect this and clean it up.
+            if os.path.lexists(new) and os.path.islink(new) and os.readlink(new).endswith(old):
+                os.remove(new)
+
+            old = self.prefix_dir + old
+
             if os.path.lexists(old) and not os.path.islink(old):
                 merge_user_dir(src=old, dst=new)
                 os.rename(old, old + " BACKUP")
@@ -648,13 +656,13 @@ class CompatData:
             if not os.path.exists(self.prefix_dir + "/user.reg"):
                 self.copy_pfx()
 
+            self.migrate_user_paths()
+
             if not os.path.lexists(self.prefix_dir + "/dosdevices/c:"):
                 os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
 
             if not os.path.lexists(self.prefix_dir + "/dosdevices/z:"):
                 os.symlink("/", self.prefix_dir + "/dosdevices/z:")
-
-            self.migrate_user_paths()
 
             # collect configuration info
             steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
@@ -941,6 +949,12 @@ class CompatData:
             makedirs(self.prefix_dir + "/drive_c/openxr/")
             try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", self.prefix_dir + "/drive_c/openxr/")
 
+            #copy vkd3d files into place
+            try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll",
+                    self.prefix_dir + "drive_c/windows/system32/libvkd3d-shader-1.dll")
+            try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll",
+                    self.prefix_dir + "drive_c/windows/syswow64/libvkd3d-shader-1.dll")
+
             if use_wined3d:
                 dxvkfiles = ["dxvk_config"]
                 wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
@@ -975,6 +989,7 @@ class CompatData:
                         self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll")
                 g_session.dlloverrides["nvapi64"] = "n"
                 g_session.dlloverrides["nvapi"] = "n"
+                g_session.dlloverrides["nvcuda"] = "b"
             else:
                 nvapi64_dll = self.prefix_dir + "drive_c/windows/system32/nvapi64.dll"
                 nvapi32_dll = self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll"
@@ -1153,9 +1168,6 @@ class Session:
         self.env.setdefault("WINEDEBUG", "-all")
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
-
-        #default wine-mono override for FNA games
-        self.env.setdefault("WINE_MONO_OVERRIDES", "Microsoft.Xna.Framework.*,Gac=n")
 
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
@@ -1355,7 +1367,7 @@ class Session:
             f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
             f.write("cd \"" + os.getcwd() + "\"\n")
             f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
-            f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
+            f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | sed -e 's/^0*//')\n")
             f.write("if [ -z \"$WPID_HEX\" ]; then \n")
             f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
             f.write("    exit 1\n")
