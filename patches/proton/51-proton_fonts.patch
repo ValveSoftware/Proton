@@ -8,6 +8,19 @@ Subject: [PATCH] HACK: gdi32/font: Do font linking for Arial too.
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/gdi32/font.c b/dlls/gdi32/font.c
+index b70653efe6a..5ec4d66488f 100644
+--- a/dlls/gdi32/font.c
++++ b/dlls/gdi32/font.c
+@@ -1510,6 +1510,8 @@ static const WCHAR microsoft_sans_serifW[] =
+     {'M','i','c','r','o','s','o','f','t',' ','S','a','n','s',' ','S','e','r','i','f',0};
+ static const WCHAR tahomaW[] =
+     {'T','a','h','o','m','a',0};
++static const WCHAR arialW[] =
++    {'A','r','i','a','l',0};
+ static const WCHAR ms_ui_gothicW[] =
+     {'M','S',' ','U','I',' ','G','o','t','h','i','c',0};
+ static const WCHAR sim_sunW[] =
+diff --git a/dlls/gdi32/font.c b/dlls/gdi32/font.c
 index 8b2af98a3a4..21520dda46a 100644
 --- a/dlls/gdi32/font.c
 +++ b/dlls/gdi32/font.c
