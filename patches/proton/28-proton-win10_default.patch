@@ -301,3 +301,33 @@ index f78d4bdae25..eb69a5941a9 100644
 
      HKEY cv_h;
      DWORD type, sz;
+From 7381437f853f4a1706ff80aa74860fc5366f2fd0 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 29 Sep 2021 14:39:06 +0300
+Subject: [PATCH] wine.inf: Add ReleaseId value to %CurrentVersionNT%.
+
+CW-Bug-Id: #19484
+---
+ loader/wine.inf.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 2db2abab2d8..1cfe19dace6 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3976,6 +3976,7 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+ HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 10"
++HKLM,%CurrentVersionNT%,"ReleaseId",,"1909"
+ HKLM,%Control%\ProductOptions,"ProductType",2,"WinNT"
+ HKLM,%Control%\Windows,"CSDVersion",0x10003,0x0
+ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+@@ -3994,6 +3995,7 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+ HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 10"
++HKLM,%CurrentVersionNT%,"ReleaseId",,"1909"
+ HKLM,%Control%\ProductOptions,"ProductType",2,"WinNT"
+ HKLM,%Control%\Windows,"CSDVersion",0x10003,0x0
+ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"

@@ -413,6 +413,8 @@ From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 5 Apr 2021 13:20:41 -0500
 Subject: [PATCH] ntdll: Export a function to set a Unix environment variable
 
+Tk-Glitch <tkg@froggi.es>: Added a function to unset a Unix environment variable
+
 ---
  dlls/ntdll/env.c               | 5 +++++
  dlls/ntdll/ntdll.spec          | 1 +
@@ -427,7 +429,7 @@ diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
 index 4931e407e57..bc5ed6648aa 100644
 --- a/dlls/ntdll/env.c
 +++ b/dlls/ntdll/env.c
-@@ -1072,3 +1072,8 @@ void init_user_process_params(void)
+@@ -1072,3 +1072,13 @@ void init_user_process_params(void)
      set_wow64_environment( &params->Environment );
      params->EnvironmentSize = RtlSizeHeap( GetProcessHeap(), 0, params->Environment );
  }
@@ -436,15 +438,21 @@ index 4931e407e57..bc5ed6648aa 100644
 +{
 +    unix_funcs->set_unix_env( var, val );
 +}
++
++void __cdecl __wine_unset_unix_env( const char *var )
++{
++    unix_funcs->unset_unix_env( var );
++}
 diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
 index 185dd6767eb..6c71032bd31 100644
 --- a/dlls/ntdll/ntdll.spec
 +++ b/dlls/ntdll/ntdll.spec
-@@ -1610,6 +1610,7 @@
+@@ -1610,6 +1610,8 @@
  @ cdecl __wine_init_unix_lib(long long ptr ptr)
  @ extern __wine_syscall_dispatcher
  @ extern -arch=i386 __wine_ldt_copy
 +@ cdecl __wine_set_unix_env(ptr ptr)
++@ cdecl __wine_unset_unix_env(ptr)
 
  # Debugging
  @ cdecl -norelay __wine_dbg_get_channel_flags(ptr)
@@ -452,7 +460,7 @@ diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
 index 9308c7ed76c..f92e6c33846 100644
 --- a/dlls/ntdll/unix/env.c
 +++ b/dlls/ntdll/unix/env.c
-@@ -1735,3 +1735,8 @@ NTSTATUS WINAPI NtQueryInstallUILanguage( LANGID *lang )
+@@ -1735,3 +1735,13 @@ NTSTATUS WINAPI NtQueryInstallUILanguage( LANGID *lang )
      *lang = system_ui_language;
      return STATUS_SUCCESS;
  }
@@ -461,15 +469,21 @@ index 9308c7ed76c..f92e6c33846 100644
 +{
 +    setenv(var, val, 1);
 +}
++
++void CDECL unset_unix_env( const char *var )
++{
++    unsetenv(var);
++}
 diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
 index e565c324eef..7cdd8b89dfd 100644
 --- a/dlls/ntdll/unix/loader.c
 +++ b/dlls/ntdll/unix/loader.c
-@@ -1818,6 +1818,7 @@ static struct unix_funcs unix_funcs =
+@@ -1818,6 +1818,8 @@ static struct unix_funcs unix_funcs =
      unwind_builtin_dll,
      __wine_dbg_output,
      steamclient_setup_trampolines,
 +    set_unix_env,
++    unset_unix_env,
  };
 
 
@@ -477,11 +491,12 @@ diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
 index f4bd0b7876e..ab37830cb3c 100644
 --- a/dlls/ntdll/unix/unix_private.h
 +++ b/dlls/ntdll/unix/unix_private.h
-@@ -258,6 +258,8 @@ extern void WINAPI call_raise_user_exception_dispatcher( NTSTATUS (WINAPI *dispa
+@@ -258,6 +258,9 @@ extern void WINAPI call_raise_user_exception_dispatcher( NTSTATUS (WINAPI *dispa
  extern void *get_syscall_frame(void) DECLSPEC_HIDDEN;
  extern void set_syscall_frame(void *frame) DECLSPEC_HIDDEN;
 
 +extern void CDECL set_unix_env(const char *var, const char *val) DECLSPEC_HIDDEN;
++extern void CDECL unset_unix_env(const char *var) DECLSPEC_HIDDEN;
 +
  #define TICKSPERSEC 10000000
  #define SECS_1601_TO_1970  ((369 * 365 + 89) * (ULONGLONG)86400)
@@ -490,11 +505,12 @@ diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
 index 0f136508b54..b252ed9ae7e 100644
 --- a/dlls/ntdll/unixlib.h
 +++ b/dlls/ntdll/unixlib.h
-@@ -94,6 +94,7 @@ struct unix_funcs
+@@ -94,6 +94,8 @@ struct unix_funcs
 
      /* steamclient HACK */
      void          (CDECL *steamclient_setup_trampolines)( HMODULE src_mod, HMODULE tgt_mod );
 +    void          (CDECL *set_unix_env)( const char *var, const char *val );
++    void          (CDECL *unset_unix_env)( const char *var );
  };
 
  #endif /* __NTDLL_UNIXLIB_H */
@@ -502,11 +518,12 @@ diff --git a/include/wine/debug.h b/include/wine/debug.h
 index 2255f62e502..60bd9630202 100644
 --- a/include/wine/debug.h
 +++ b/include/wine/debug.h
-@@ -148,6 +148,7 @@ extern const char * __cdecl __wine_dbg_strdup( const char *str );
+@@ -148,6 +148,8 @@ extern const char * __cdecl __wine_dbg_strdup( const char *str );
  extern int __cdecl __wine_dbg_output( const char *str );
  extern int __cdecl __wine_dbg_header( enum __wine_debug_class cls, struct __wine_debug_channel *channel,
                                        const char *function );
 +extern void __cdecl __wine_set_unix_env( const char *var, const char *val );
++extern void __cdecl __wine_unset_unix_env( const char *var );
 
  /*
   * Exported definitions and macros
@@ -543,6 +560,50 @@ index cb5b0465f68..847c689c1e0 100644
 
          LeaveCriticalSection( &desktop_section );
 
+From 8fd9d6bd3d567893f933b7d55615446476745654 Mon Sep 17 00:00:00 2001
+From: Vincent Povirk <vincent@codeweavers.com>
+Date: Wed, 1 Apr 2020 11:47:05 -0500
+Subject: [PATCH] winebrowser: Restore original LD_LIBRARY_PATH before calling
+ to system
+
+---
+ programs/winebrowser/main.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/programs/winebrowser/main.c b/programs/winebrowser/main.c
+index 9cd6812d032..9e5fe2f3129 100644
+--- a/programs/winebrowser/main.c
++++ b/programs/winebrowser/main.c
+@@ -69,6 +69,17 @@ static char *strdup_unixcp( const WCHAR *str )
+     return ret;
+ }
+
++static void restore_system_environment(void)
++{
++    const char* orig_ld_path = getenv("ORIG_LD_LIBRARY_PATH");
++
++    if (orig_ld_path)
++    {
++        __wine_set_unix_env("LD_LIBRARY_PATH", orig_ld_path);
++        __wine_unset_unix_env("ORIG_LD_LIBRARY_PATH");
++    }
++}
++
+ /* try to launch a unix app from a comma separated string of app names */
+ static int launch_app( const WCHAR *candidates, const WCHAR *argv1 )
+ {
+@@ -78,6 +89,11 @@ static int launch_app( const WCHAR *candidates, const WCHAR *argv1 )
+
+     if (!(cmdline = strdup_unixcp( argv1 ))) return 1;
+
++    /* PROTON HACK: Restore ORIG_LD_LIBRARY_PATH to LD_LIBRARY_PATH.
++     * System programs may not work correctly with our libraries, in
++     * particular gio on Ubuntu 19.04 is broken by our libgio. */
++    restore_system_environment();
++
+     while (*candidates)
+     {
+         WCHAR **args = CommandLineToArgvW( candidates, &count );
 From 36e637ec9c2e14836e316e30546c5f6936a7e249 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 31 Jul 2020 09:09:47 +0200

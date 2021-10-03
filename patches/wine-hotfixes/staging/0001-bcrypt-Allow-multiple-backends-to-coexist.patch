@@ -8,9 +8,8 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  dlls/bcrypt/Makefile.in       |   3 +-
  dlls/bcrypt/bcrypt_internal.h |   3 +
  dlls/bcrypt/gnutls.c          |  32 +++--
- dlls/bcrypt/macos.c           |  18 ++-
  dlls/bcrypt/unixlib.c         | 219 ++++++++++++++++++++++++++++++++++
- 5 files changed, 260 insertions(+), 15 deletions(-)
+ 4 files changed, 242 insertions(+), 15 deletions(-)
  create mode 100644 dlls/bcrypt/unixlib.c
 
 diff --git a/dlls/bcrypt/Makefile.in b/dlls/bcrypt/Makefile.in
@@ -18,24 +17,23 @@ index 49ce3548e64..666ade4e59e 100644
 --- a/dlls/bcrypt/Makefile.in
 +++ b/dlls/bcrypt/Makefile.in
 @@ -11,6 +11,7 @@ C_SRCS = \
- 	macos.c \
+ 	gnutls.c \
  	md2.c \
  	sha256.c \
 -	sha512.c
 +	sha512.c \
 +	unixlib.c
- 
+
  RC_SRCS = version.rc
 diff --git a/dlls/bcrypt/bcrypt_internal.h b/dlls/bcrypt/bcrypt_internal.h
 index 92077546a91..87c386d5322 100644
 --- a/dlls/bcrypt/bcrypt_internal.h
 +++ b/dlls/bcrypt/bcrypt_internal.h
-@@ -225,4 +225,7 @@ struct key_funcs
+@@ -225,4 +225,6 @@ struct key_funcs
      NTSTATUS (CDECL *key_secret_agreement)( struct key *, struct key *, struct secret * );
  };
- 
+
 +const struct key_funcs *gnutls_lib_init(DWORD reason);
-+const struct key_funcs *macos_lib_init(DWORD reason);
 +
  #endif /* __BCRYPT_INTERNAL_H */
 diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
@@ -43,7 +41,7 @@ index b25db419b53..2d6d34e2587 100644
 --- a/dlls/bcrypt/gnutls.c
 +++ b/dlls/bcrypt/gnutls.c
 @@ -470,9 +470,12 @@ fail:
- 
+
  static void gnutls_uninitialize(void)
  {
 -    pgnutls_global_deinit();
@@ -55,13 +53,13 @@ index b25db419b53..2d6d34e2587 100644
 +        dlclose( libgnutls_handle );
 +        libgnutls_handle = NULL;
 +    }
- 
+
  #if defined(HAVE_GMP_H) && defined(SONAME_LIBGMP)
      dlclose( libgmp_handle );
 @@ -2249,19 +2252,28 @@ static const struct key_funcs key_funcs =
-     key_secret_agreement,
+     NULL
  };
- 
+
 -NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out )
 +const struct key_funcs * gnutls_lib_init( DWORD reason )
  {
@@ -80,7 +78,7 @@ index b25db419b53..2d6d34e2587 100644
 -    return STATUS_SUCCESS;
 +    return NULL;
  }
- 
+
 -#endif /* HAVE_GNUTLS_CIPHER_INIT */
 +#else /* HAVE_GNUTLS_CIPHER_INIT */
 +#include "ntstatus.h"
@@ -94,42 +92,12 @@ index b25db419b53..2d6d34e2587 100644
 +    return NULL;
 +}
 +#endif
-diff --git a/dlls/bcrypt/macos.c b/dlls/bcrypt/macos.c
-index 096a191a5d6..dbd0699fe72 100644
---- a/dlls/bcrypt/macos.c
-+++ b/dlls/bcrypt/macos.c
-@@ -309,11 +309,21 @@ static const struct key_funcs key_funcs =
-     key_secret_agreement,
- };
- 
--NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out )
-+const struct key_funcs * macos_lib_init( DWORD reason )
- {
--    if (reason != DLL_PROCESS_ATTACH) return STATUS_SUCCESS;
--    *(const struct key_funcs **)ptr_out = &key_funcs;
--    return STATUS_SUCCESS;
-+    if (reason != DLL_PROCESS_ATTACH) return NULL;
-+    return &key_funcs;
- }
- 
-+#else
-+#include "ntstatus.h"
-+#define WIN32_NO_STATUS
-+#include "windef.h"
-+#include "winbase.h"
-+#include "winternl.h"
-+
-+const struct key_funcs * macos_lib_init( DWORD reason )
-+{
-+    return NULL;
-+}
- #endif
 diff --git a/dlls/bcrypt/unixlib.c b/dlls/bcrypt/unixlib.c
 new file mode 100644
 index 00000000000..7b9dbbd0236
 --- /dev/null
 +++ b/dlls/bcrypt/unixlib.c
-@@ -0,0 +1,219 @@
+@@ -0,0 +1,216 @@
 +#if 0
 +#pragma makedep unix
 +#endif
@@ -308,13 +276,10 @@ index 00000000000..7b9dbbd0236
 +NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out )
 +{
 +    const struct key_funcs *gnutls_funcs = gnutls_lib_init(reason);
-+    const struct key_funcs *macos_funcs = macos_lib_init(reason);
 +
 +    if (reason == DLL_PROCESS_ATTACH)
 +    {
 +#define RESOLVE_FUNC(name) \
-+        if (macos_funcs && macos_funcs->key_##name) \
-+            key_funcs.key_##name = macos_funcs->key_##name; \
 +        if (gnutls_funcs && gnutls_funcs->key_##name) \
 +            key_funcs.key_##name = gnutls_funcs->key_##name;
 +
@@ -349,6 +314,6 @@ index 00000000000..7b9dbbd0236
 +}
 +
 +#endif
--- 
+--
 2.31.1
 

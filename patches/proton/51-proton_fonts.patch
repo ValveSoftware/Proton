@@ -12,11 +12,11 @@ index 8b2af98a3a4..21520dda46a 100644
 --- a/dlls/gdi32/font.c
 +++ b/dlls/gdi32/font.c
 @@ -2594,6 +2594,7 @@ static void update_font_system_link_info(UINT current_ansi_codepage)
-         set_multi_value_key(hkey, L"Lucida Sans Unicode", link, len);
-         set_multi_value_key(hkey, L"Microsoft Sans Serif", link, len);
-         set_multi_value_key(hkey, L"Tahoma", link, len);
-+        set_multi_value_key(hkey, L"Arial", link, len);
-         RegCloseKey(hkey);
+         set_multi_value_key(hkey, lucida_sans_unicodeW, link, len);
+         set_multi_value_key(hkey, microsoft_sans_serifW, link, len);
+         set_multi_value_key(hkey, tahomaW, link, len);
++        set_multi_value_key(hkey, arialW, link, len);
+         NtClose( hkey );
      }
  }
 From 90e3616c89ef7ed38763a3e3af3e9f0cd59697da Mon Sep 17 00:00:00 2001
