@@ -61,3 +61,12 @@
 [submodule "xkbcommon"]
 	path = xkbcommon
 	url = https://github.com/xkbcommon/libxkbcommon
+[submodule "SPIRV-Headers"]
+        path = SPIRV-Headers
+	url = https://github.com/KhronosGroup/SPIRV-Headers
+[submodule "Vulkan-Headers"]
+        path = Vulkan-Headers
+	url = https://github.com/KhronosGroup/Vulkan-Headers
+[submodule "vkd3d"]
+        path = vkd3d
+        url = git://repo.or.cz/vkd3d/zf.git
