@@ -276,9 +276,6 @@
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
 
-    echo "gamepad hotfix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_gamepad.patch
-
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
 
