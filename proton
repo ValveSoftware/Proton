@@ -1232,7 +1232,7 @@ class Session:
                     f.write(" \"" + arg + "\"")
             f.write(")\n")
             self.dump_dbg_env(f)
-            f.write("\t\"" + g_proton.wine64_bin + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
+            f.write("\t\"" + g_proton.wine64_bin + "\" c:\\\\windows\\\\system32\\\\steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
         os.chmod(tmpdir + "run", 0o755)
 
     def run_proc(self, args, local_env=None):
@@ -1253,7 +1253,7 @@ class Session:
         else:
             remote_debug_proc = None
 
-        rc = self.run_proc([g_proton.wine64_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
+        rc = self.run_proc([g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
             remote_debug_proc.kill()
