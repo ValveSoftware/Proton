@@ -77,7 +77,7 @@ Vagrant.configure(2) do |config|
       #install host build-time dependencies
       apt-get update
       apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
-          fontforge-nox python-debian python-pip python3-pefile
+          fontforge-nox python-debian python-pip python3-pefile uuid-dev
 
       # use python 3 to avoid python2 afdko breakage
       apt-get install -y python3-pip
