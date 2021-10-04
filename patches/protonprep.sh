@@ -268,7 +268,7 @@
     echo "heap allocation hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_heap_alloc.patch
 
-#    disabled, still horribly broken
+#    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
 
 
@@ -278,6 +278,10 @@
 
     echo "BF4 ping fix"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
+
+    # https://bugs.winehq.org/show_bug.cgi?id=49887
+    echo "EA Desktop fix (for new EA beta client)"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-EA_desktop_fix.patch
 
 
 ### END WINE PENDING UPSTREAM SECTION ###
