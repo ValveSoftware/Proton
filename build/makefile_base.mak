@@ -647,7 +647,7 @@ $(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json dist_prefix
 
 STEAMEXE_CFLAGS = -Wno-attributes
 STEAMEXE_CXXFLAGS = -Wno-attributes
-STEAMEXE_LDFLAGS = -lsteam_api -lole32 -ldl -static-libgcc -static-libstdc++
+STEAMEXE_LDFLAGS = -L$(STEAMEXE_SRC)/32/ -L$(STEAMEXE_SRC)/64/ -lsteam_api -lole32 -ldl -static-libgcc -static-libstdc++
 
 STEAMEXE_WINEMAKER_ARGS = \
 	"-I$(SRC)/lsteamclient/steamworks_sdk_142/" \
@@ -657,10 +657,15 @@ STEAMEXE_WINEMAKER_ARGS = \
 STEAMEXE_DEPENDS = wine
 
 $(eval $(call rules-source,steamexe,$(SRCDIR)/steam_helper))
+$(eval $(call rules-winemaker,steamexe,64,steam.exe))
 $(eval $(call rules-winemaker,steamexe,32,steam.exe))
 
 $(OBJ)/.steamexe-post-build32:
-	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_LIBDIR32)/
+	cp $(STEAMEXE_SRC)/32/libsteam_api.so $(DST_LIBDIR32)/
+	touch $@
+
+$(OBJ)/.steamexe-post-build64:
+	cp $(STEAMEXE_SRC)/64/libsteam_api.so $(DST_LIBDIR64)/
 	touch $@
 
 
