@@ -319,7 +319,8 @@ done:
     return value == 1;
 }
 
-XrResult load_host_openxr_loader(void)
+int WINAPI __wineopenxr_get_extensions_internal(char **ret_instance_extensions,
+        char **ret_device_extensions)
 {
     PFN_xrGetVulkanInstanceExtensionsKHR pxrGetVulkanInstanceExtensionsKHR;
     PFN_xrGetSystem pxrGetSystem;
@@ -328,6 +329,7 @@ XrResult load_host_openxr_loader(void)
     PFN_xrGetVulkanGraphicsRequirementsKHR pxrGetVulkanGraphicsRequirementsKHR;
     PFN_xrGetInstanceProperties pxrGetInstanceProperties;
     PFN_xrEnumerateViewConfigurations pxrEnumerateViewConfigurations;
+    char *instance_extensions, *device_extensions;
     uint32_t len, i;
     XrInstance instance;
     XrSystemId system;
@@ -340,16 +342,6 @@ XrResult load_host_openxr_loader(void)
     static const char *xr_extensions[] = {
         "XR_KHR_vulkan_enable",
     };
-
-    if(g_instance_extensions || g_device_extensions)
-        /* already done */
-        return XR_SUCCESS;
-
-    if(!HACK_does_openvr_work()){
-        return XR_ERROR_INITIALIZATION_FAILED;
-    }
-
-    load_vk_unwrappers();
 
     XrInstanceCreateInfo xrCreateInfo = {
         .type = XR_TYPE_INSTANCE_CREATE_INFO,
@@ -423,13 +415,12 @@ XrResult load_host_openxr_loader(void)
         xrDestroyInstance(instance);
         return res;
     }
-    g_instance_extensions = heap_alloc(len);
-    res = pxrGetVulkanInstanceExtensionsKHR(instance, system, len, &len, g_instance_extensions);
+    instance_extensions = heap_alloc(len);
+    res = pxrGetVulkanInstanceExtensionsKHR(instance, system, len, &len, instance_extensions);
     if(res != XR_SUCCESS){
         WINE_WARN("xrGetVulkanInstanceExtensionsKHR failed: %d\n", res);
         xrDestroyInstance(instance);
-        heap_free(g_instance_extensions);
-        g_instance_extensions = NULL;
+        heap_free(instance_extensions);
         return res;
     }
 
@@ -454,7 +445,7 @@ XrResult load_host_openxr_loader(void)
         .ppEnabledExtensionNames = NULL,
     };
 
-    parse_extensions(g_instance_extensions,
+    parse_extensions(instance_extensions,
             &vk_createinfo.enabledExtensionCount,
             (char ***)&vk_createinfo.ppEnabledExtensionNames);
 
@@ -465,8 +456,7 @@ XrResult load_host_openxr_loader(void)
             heap_free((void*)vk_createinfo.ppEnabledExtensionNames[i]);
         heap_free((void*)vk_createinfo.ppEnabledExtensionNames);
         xrDestroyInstance(instance);
-        heap_free(g_instance_extensions);
-        g_instance_extensions = NULL;
+        heap_free(instance_extensions);
         return XR_ERROR_INITIALIZATION_FAILED;
     }
 
@@ -479,8 +469,7 @@ XrResult load_host_openxr_loader(void)
         WINE_WARN("xrGetVulkanGraphicsDeviceKHR failed: %d\n", res);
         vkDestroyInstance(vk_instance, NULL);
         xrDestroyInstance(instance);
-        heap_free(g_instance_extensions);
-        g_instance_extensions = NULL;
+        heap_free(instance_extensions);
         return res;
     }
 
@@ -493,30 +482,45 @@ XrResult load_host_openxr_loader(void)
         WINE_WARN("pxrGetVulkanDeviceExtensionsKHR fail: %d\n", res);
         vkDestroyInstance(vk_instance, NULL);
         xrDestroyInstance(instance);
-        heap_free(g_instance_extensions);
-        g_instance_extensions = NULL;
+        heap_free(instance_extensions);
         return res;
     }
-    g_device_extensions = heap_alloc(len);
-    res = pxrGetVulkanDeviceExtensionsKHR(instance, system, len, &len, g_device_extensions);
+    device_extensions = heap_alloc(len);
+    res = pxrGetVulkanDeviceExtensionsKHR(instance, system, len, &len, device_extensions);
     if(res != XR_SUCCESS){
         WINE_WARN("pxrGetVulkanDeviceExtensionsKHR fail: %d\n", res);
         vkDestroyInstance(vk_instance, NULL);
         xrDestroyInstance(instance);
-        heap_free(g_instance_extensions);
-        g_instance_extensions = NULL;
-        heap_free(g_device_extensions);
-        g_device_extensions = NULL;
+        heap_free(instance_extensions);
+        heap_free(device_extensions);
         return res;
     }
 
     vkDestroyInstance(vk_instance, NULL);
     xrDestroyInstance(instance);
 
-    WINE_TRACE("Got required instance extensions: %s\n", g_instance_extensions);
-    WINE_TRACE("Got required device extensions: %s\n", g_device_extensions);
+    WINE_TRACE("Got required instance extensions: %s\n", instance_extensions);
+    WINE_TRACE("Got required device extensions: %s\n", device_extensions);
+
+    *ret_instance_extensions = instance_extensions;
+    *ret_device_extensions = device_extensions;
 
     return XR_SUCCESS;
+}
+
+XrResult load_host_openxr_loader(void)
+{
+    if(g_instance_extensions || g_device_extensions)
+        /* already done */
+        return XR_SUCCESS;
+
+    if(!HACK_does_openvr_work()){
+        return XR_ERROR_INITIALIZATION_FAILED;
+    }
+
+    load_vk_unwrappers();
+
+    return __wineopenxr_get_extensions_internal(&g_instance_extensions, &g_device_extensions);
 }
 
 XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerName,
