@@ -1058,6 +1058,9 @@ class Session:
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
+        if "usenativexinput13" in self.compat_config:
+            self.dlloverrides["xinput1_3"] = "n"
+
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
