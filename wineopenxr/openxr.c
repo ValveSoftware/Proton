@@ -248,7 +248,7 @@ static void parse_extensions(const char *in, uint32_t *out_count,
     *out_strs = list;
 }
 
-static BOOL HACK_does_openvr_work(void)
+static BOOL get_vulkan_extensions(void)
 {
     /* Linux SteamVR's xrCreateInstance will hang forever if SteamVR hasn't
      * already been launched by the user.  Since that's the only way to tell if
@@ -282,10 +282,7 @@ static BOOL HACK_does_openvr_work(void)
     }
 
     if (value)
-    {
-        RegCloseKey(vr_key);
-        return value == 1;
-    }
+        goto done;
 
     event = CreateEventA( NULL, FALSE, FALSE, NULL );
     while (1)
@@ -293,12 +290,14 @@ static BOOL HACK_does_openvr_work(void)
         if (RegNotifyChangeKeyValue(vr_key, FALSE, REG_NOTIFY_CHANGE_LAST_SET, event, TRUE))
         {
             WINE_ERR("Error registering registry change notification.\n");
+            CloseHandle(event);
             goto done;
         }
         size = sizeof(value);
         if ((status = RegQueryValueExA(vr_key, "state", NULL, &type, (BYTE *)&value, &size)))
         {
             WINE_ERR("Could not query value, status %#x.\n", status);
+            CloseHandle(event);
             goto done;
         }
         if (value)
@@ -312,9 +311,39 @@ static BOOL HACK_does_openvr_work(void)
             break;
         }
     }
+    CloseHandle(event);
 
 done:
-    CloseHandle(event);
+    if (value == 1)
+    {
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type, NULL, &size)))
+        {
+            WINE_ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", wait_status);
+            RegCloseKey(vr_key);
+            return FALSE;
+        }
+        g_instance_extensions = heap_alloc(size);
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type, g_instance_extensions, &size)))
+        {
+            WINE_ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", wait_status);
+            RegCloseKey(vr_key);
+            return FALSE;
+        }
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, NULL, &size)))
+        {
+            WINE_ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", wait_status);
+            RegCloseKey(vr_key);
+            return FALSE;
+        }
+        g_device_extensions = heap_alloc(size);
+        if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, g_device_extensions, &size)))
+        {
+            WINE_ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", wait_status);
+            RegCloseKey(vr_key);
+            return FALSE;
+        }
+    }
+
     RegCloseKey(vr_key);
     return value == 1;
 }
@@ -514,13 +543,13 @@ XrResult load_host_openxr_loader(void)
         /* already done */
         return XR_SUCCESS;
 
-    if(!HACK_does_openvr_work()){
+    if(!get_vulkan_extensions()){
         return XR_ERROR_INITIALIZATION_FAILED;
     }
 
     load_vk_unwrappers();
 
-    return __wineopenxr_get_extensions_internal(&g_instance_extensions, &g_device_extensions);
+    return XR_SUCCESS;
 }
 
 XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerName,
