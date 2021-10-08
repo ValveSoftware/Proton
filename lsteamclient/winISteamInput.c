@@ -39,8 +39,10 @@ bool __thiscall winISteamInput_SteamInput005_Shutdown(winISteamInput_SteamInput0
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_SetInputActionManifestFilePath, 8)
 bool __thiscall winISteamInput_SteamInput005_SetInputActionManifestFilePath(winISteamInput_SteamInput005 *_this, const char * pchInputActionManifestAbsolutePath)
 {
+    char lin_pchInputActionManifestAbsolutePath[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchInputActionManifestAbsolutePath, lin_pchInputActionManifestAbsolutePath, 0);
     TRACE("%p\n", _this);
-    return cppISteamInput_SteamInput005_SetInputActionManifestFilePath(_this->linux_side, pchInputActionManifestAbsolutePath);
+    return cppISteamInput_SteamInput005_SetInputActionManifestFilePath(_this->linux_side, pchInputActionManifestAbsolutePath ? lin_pchInputActionManifestAbsolutePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_RunFrame, 8)
