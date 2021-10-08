@@ -156,11 +156,6 @@ const char * cppISteamController_SteamController008_GetStringForXboxOrigin(void 
     return ((ISteamController*)linux_side)->GetStringForXboxOrigin((EXboxOrigin)eOrigin);
 }
 
-const char * cppISteamController_SteamController008_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
-{
-    return ((ISteamController*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
-}
-
 EControllerActionOrigin cppISteamController_SteamController008_GetActionOriginFromXboxOrigin(void *linux_side, ControllerHandle_t controllerHandle, EXboxOrigin eOrigin)
 {
     return ((ISteamController*)linux_side)->GetActionOriginFromXboxOrigin((ControllerHandle_t)controllerHandle, (EXboxOrigin)eOrigin);

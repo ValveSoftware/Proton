@@ -27,4 +27,11 @@ const char * cppISteamInput_SteamInput002_GetGlyphForActionOrigin(void *linux_si
     return steamclient_isteaminput_getglyph(eOrigin, path_result);
 }
 
+const char * cppISteamInput_SteamInput002_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
+}
+
 }

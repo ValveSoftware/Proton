@@ -220,16 +220,19 @@ manually_handled_methods = {
             "ReceiveMessagesOnChannel"
         ],
         "cppISteamInput_SteamInput001": [
-            "GetGlyphForActionOrigin"
+            "GetGlyphForActionOrigin",
+            "GetGlyphForXboxOrigin"
         ],
         "cppISteamInput_SteamInput002": [
-            "GetGlyphForActionOrigin"
+            "GetGlyphForActionOrigin",
+            "GetGlyphForXboxOrigin"
         ],
         "cppISteamInput_SteamInput005": [
             "EnableActionEventCallbacks",
             "GetGlyphPNGForActionOrigin",
             "GetGlyphSVGForActionOrigin",
-            "GetGlyphForActionOrigin_Legacy"
+            "GetGlyphForActionOrigin_Legacy",
+            "GetGlyphForXboxOrigin"
         ],
         "cppISteamController_SteamController005": [
             "GetGlyphForActionOrigin"
@@ -238,10 +241,12 @@ manually_handled_methods = {
             "GetGlyphForActionOrigin"
         ],
         "cppISteamController_SteamController007": [
-            "GetGlyphForActionOrigin"
+            "GetGlyphForActionOrigin",
+            "GetGlyphForXboxOrigin"
         ],
         "cppISteamController_SteamController008": [
-            "GetGlyphForActionOrigin"
+            "GetGlyphForActionOrigin",
+            "GetGlyphForXboxOrigin"
         ],
 }
 
