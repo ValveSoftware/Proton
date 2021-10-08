@@ -369,11 +369,25 @@ const char * cppISteamInput_SteamInput001_GetGlyphForActionOrigin(void *linux_si
     return steamclient_isteaminput_getglyph(eOrigin, path_result);
 }
 
+const char * cppISteamInput_SteamInput001_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
+}
+
 const char * cppISteamController_SteamController007_GetGlyphForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
 {
     const char *path_result;
     path_result = ((ISteamController*)linux_side)->GetGlyphForActionOrigin((EControllerActionOrigin)eOrigin);
     return steamclient_isteamcontroller_getglyph(eOrigin, path_result);
+}
+
+const char * cppISteamController_SteamController007_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamController*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
 }
 
 }

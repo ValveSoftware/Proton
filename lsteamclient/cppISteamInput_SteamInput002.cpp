@@ -156,11 +156,6 @@ const char * cppISteamInput_SteamInput002_GetStringForXboxOrigin(void *linux_sid
     return ((ISteamInput*)linux_side)->GetStringForXboxOrigin((EXboxOrigin)eOrigin);
 }
 
-const char * cppISteamInput_SteamInput002_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
-{
-    return ((ISteamInput*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
-}
-
 EInputActionOrigin cppISteamInput_SteamInput002_GetActionOriginFromXboxOrigin(void *linux_side, InputHandle_t inputHandle, EXboxOrigin eOrigin)
 {
     return ((ISteamInput*)linux_side)->GetActionOriginFromXboxOrigin((InputHandle_t)inputHandle, (EXboxOrigin)eOrigin);

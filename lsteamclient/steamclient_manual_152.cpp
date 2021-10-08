@@ -42,6 +42,7 @@ void cppISteamInput_SteamInput005_EnableActionEventCallbacks(void *linux_side, w
 
 /***** convert and cache ISteamInput glyph paths *****/
 static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs;
+static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs_xbox;
 static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs_svg;
 static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs_png[3 /* ESteamInputGlyphSize */];
 
@@ -93,6 +94,22 @@ const char *steamclient_isteaminput_getglyph(int origin, const char *lin_path)
     return cached_input_glyphs[origin];
 }
 
+const char *steamclient_isteaminput_getglyph_xbox(int origin, const char *lin_path)
+{
+    if(!lin_path)
+        return NULL;
+
+    if(cached_input_glyphs_xbox.find(origin) == cached_input_glyphs_xbox.end()){
+        char *dos_path = (char *)HeapAlloc(GetProcessHeap(), 0, PATH_MAX);
+
+        steamclient_unix_path_to_dos_path(1, lin_path, dos_path, PATH_MAX, 0);
+
+        cached_input_glyphs_xbox[origin] = dos_path;
+    }
+
+    return cached_input_glyphs_xbox[origin];
+}
+
 const char * cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(void *linux_side, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
 {
     const char *path_result;
@@ -112,6 +129,13 @@ const char * cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(void *l
     const char *path_result;
     path_result = ((ISteamInput*)linux_side)->GetGlyphForActionOrigin_Legacy((EInputActionOrigin)eOrigin);
     return steamclient_isteaminput_getglyph(eOrigin, path_result);
+}
+
+const char * cppISteamInput_SteamInput005_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
 }
 
 /***** convert and cache ISteamController glyph paths *****/
@@ -138,6 +162,13 @@ const char * cppISteamController_SteamController008_GetGlyphForActionOrigin(void
     const char *path_result;
     path_result = ((ISteamController*)linux_side)->GetGlyphForActionOrigin((EControllerActionOrigin)eOrigin);
     return steamclient_isteamcontroller_getglyph(eOrigin, path_result);
+}
+
+const char * cppISteamController_SteamController008_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamController*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
 }
 
 }
