@@ -96,11 +96,6 @@ int cppISteamController_SteamController007_GetAnalogActionOrigins(void *linux_si
     return ((ISteamController*)linux_side)->GetAnalogActionOrigins((ControllerHandle_t)controllerHandle, (ControllerActionSetHandle_t)actionSetHandle, (ControllerAnalogActionHandle_t)analogActionHandle, (EControllerActionOrigin *)originsOut);
 }
 
-const char * cppISteamController_SteamController007_GetGlyphForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
-{
-    return ((ISteamController*)linux_side)->GetGlyphForActionOrigin((EControllerActionOrigin)eOrigin);
-}
-
 const char * cppISteamController_SteamController007_GetStringForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
 {
     return ((ISteamController*)linux_side)->GetStringForActionOrigin((EControllerActionOrigin)eOrigin);

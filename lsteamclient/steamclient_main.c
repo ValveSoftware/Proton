@@ -25,8 +25,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 char g_tmppath[PATH_MAX];
 
-static char *controller_glyphs[512]; /* at least k_EControllerActionOrigin_Count */
-
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;
 
@@ -232,19 +230,6 @@ void steamclient_free_stringlist(const char **out)
             HeapFree(GetProcessHeap(), 0, (char *)*o);
         HeapFree(GetProcessHeap(), 0, out);
     }
-}
-
-const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path)
-{
-    if(!lin_path)
-        return NULL;
-
-    if(!controller_glyphs[origin])
-        controller_glyphs[origin] = HeapAlloc(GetProcessHeap(), 0, PATH_MAX);
-
-    steamclient_unix_path_to_dos_path(1, lin_path, controller_glyphs[origin], PATH_MAX, 0);
-
-    return controller_glyphs[origin];
 }
 
 #ifdef __linux__

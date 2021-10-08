@@ -121,21 +121,6 @@ int cppISteamInput_SteamInput005_GetAnalogActionOrigins(void *linux_side, InputH
     return ((ISteamInput*)linux_side)->GetAnalogActionOrigins((InputHandle_t)inputHandle, (InputActionSetHandle_t)actionSetHandle, (InputAnalogActionHandle_t)analogActionHandle, (EInputActionOrigin *)originsOut);
 }
 
-const char * cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(void *linux_side, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
-{
-    return ((ISteamInput*)linux_side)->GetGlyphPNGForActionOrigin((EInputActionOrigin)eOrigin, (ESteamInputGlyphSize)eSize, (uint32)unFlags);
-}
-
-const char * cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(void *linux_side, EInputActionOrigin eOrigin, uint32 unFlags)
-{
-    return ((ISteamInput*)linux_side)->GetGlyphSVGForActionOrigin((EInputActionOrigin)eOrigin, (uint32)unFlags);
-}
-
-const char * cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(void *linux_side, EInputActionOrigin eOrigin)
-{
-    return ((ISteamInput*)linux_side)->GetGlyphForActionOrigin_Legacy((EInputActionOrigin)eOrigin);
-}
-
 const char * cppISteamInput_SteamInput005_GetStringForActionOrigin(void *linux_side, EInputActionOrigin eOrigin)
 {
     return ((ISteamInput*)linux_side)->GetStringForActionOrigin((EInputActionOrigin)eOrigin);

@@ -204,11 +204,8 @@ const char * __thiscall winISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy, 8)
 const char * __thiscall winISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(winISteamInput_SteamInput005 *_this, EInputActionOrigin eOrigin)
 {
-    const char *path_result;
     TRACE("%p\n", _this);
-    path_result = cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(_this->linux_side, eOrigin);
-    path_result = steamclient_isteamcontroller_getglyph(eOrigin, path_result);
-    return path_result;
+    return cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(_this->linux_side, eOrigin);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput005_GetStringForActionOrigin, 8)
@@ -557,11 +554,8 @@ int __thiscall winISteamInput_SteamInput002_GetAnalogActionOrigins(winISteamInpu
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_GetGlyphForActionOrigin, 8)
 const char * __thiscall winISteamInput_SteamInput002_GetGlyphForActionOrigin(winISteamInput_SteamInput002 *_this, EInputActionOrigin eOrigin)
 {
-    const char *path_result;
     TRACE("%p\n", _this);
-    path_result = cppISteamInput_SteamInput002_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
-    path_result = steamclient_isteamcontroller_getglyph(eOrigin, path_result);
-    return path_result;
+    return cppISteamInput_SteamInput002_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput002_GetStringForActionOrigin, 8)
@@ -870,11 +864,8 @@ int __thiscall winISteamInput_SteamInput001_GetAnalogActionOrigins(winISteamInpu
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetGlyphForActionOrigin, 8)
 const char * __thiscall winISteamInput_SteamInput001_GetGlyphForActionOrigin(winISteamInput_SteamInput001 *_this, EInputActionOrigin eOrigin)
 {
-    const char *path_result;
     TRACE("%p\n", _this);
-    path_result = cppISteamInput_SteamInput001_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
-    path_result = steamclient_isteamcontroller_getglyph(eOrigin, path_result);
-    return path_result;
+    return cppISteamInput_SteamInput001_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetStringForActionOrigin, 8)
