@@ -558,7 +558,17 @@ path_conversions = [
             "w2l_arrays": [False],
             "w2l_urls": [False],
             "return_is_size": False
-        }
+        },
+        {
+            "parent_name": "SetInputActionManifestFilePath",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "l2w_urls": [],
+            "w2l_names": ["pchInputActionManifestAbsolutePath"],
+            "w2l_arrays": [False],
+            "w2l_urls": [False],
+            "return_is_size": False
+        },
 ]
 
 def strip_const(typename):
