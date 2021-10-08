@@ -362,4 +362,18 @@ bool cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue(void *linux
     }
 }
 
+const char * cppISteamInput_SteamInput001_GetGlyphForActionOrigin(void *linux_side, EInputActionOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphForActionOrigin((EInputActionOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph(eOrigin, path_result);
+}
+
+const char * cppISteamController_SteamController007_GetGlyphForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamController*)linux_side)->GetGlyphForActionOrigin((EControllerActionOrigin)eOrigin);
+    return steamclient_isteamcontroller_getglyph(eOrigin, path_result);
+}
+
 }

@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <limits.h>
 typedef uint32_t EHTMLMouseButton, EHTMLKeyModifiers;
-#define nullptr (void*)0
 
 #ifndef __cplusplus
 #ifndef bool

@@ -155,11 +155,6 @@ const char * cppISteamController_SteamController006_GetStringForActionOrigin(voi
     return ((ISteamController*)linux_side)->GetStringForActionOrigin((EControllerActionOrigin)eOrigin);
 }
 
-const char * cppISteamController_SteamController006_GetGlyphForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
-{
-    return ((ISteamController*)linux_side)->GetGlyphForActionOrigin((EControllerActionOrigin)eOrigin);
-}
-
 ESteamInputType cppISteamController_SteamController006_GetInputTypeForHandle(void *linux_side, ControllerHandle_t controllerHandle)
 {
     return ((ISteamController*)linux_side)->GetInputTypeForHandle((ControllerHandle_t)controllerHandle);
