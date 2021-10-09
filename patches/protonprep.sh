@@ -129,7 +129,6 @@
     echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
     patch -RNp1 < ../patches/wine-hotfixes/pending/hotfix-revert_bd27af974a21085cd0dc78b37b715bbcc3cfab69.patch
 
-
 ### END WINE STAGING APPLY SECTION ###
 
 ### (2-3) GAME PATCH SECTION ###
@@ -214,9 +213,13 @@
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
 
+    echo "valve rdr2 bcrypt fixes"
+    patch -Np1 < ../patches/proton/55-proton-bcrypt_rdr2_fixes.patch
+
     echo "apply staging bcrypt patches on top of rdr2 fixes"
     patch -Np1 < ../patches/wine-hotfixes/staging/0001-bcrypt-Allow-multiple-backends-to-coexist.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
