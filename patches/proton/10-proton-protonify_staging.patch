@@ -942,35 +942,6 @@ index e976fda77f2..212c88c5a02 100644
      case DWMWA_CLOAKED:
          if (size < sizeof(DWORD)) return E_INVALIDARG;
 
-From 52c36274080a6edc1f1420b08df1ecf0defa9ca3 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Thu, 5 Dec 2019 12:41:57 -0600
-Subject: [PATCH] bcrypt: Fallback to _gnutls_decode_ber_rs_raw if
- gnutls_decode_rs_value is unavailable.
-
-This can be removed when the runtime ships gnutls >= 3.6
----
- dlls/bcrypt/gnutls.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
-index 868f898bbbb..95f498123ea 100644
---- a/dlls/bcrypt/gnutls.c
-+++ b/dlls/bcrypt/gnutls.c
-@@ -267,8 +267,11 @@ BOOL gnutls_initialize(void)
-     }
-     if (!(pgnutls_decode_rs_value = dlsym( libgnutls_handle, "gnutls_decode_rs_value" )))
-     {
--        WARN("gnutls_decode_rs_value not found\n");
--        pgnutls_decode_rs_value = compat_gnutls_decode_rs_value;
-+        if (!(pgnutls_decode_rs_value = dlsym( libgnutls_handle, "_gnutls_decode_ber_rs_raw" )))
-+        {
-+            WARN("gnutls_decode_rs_value and legacy alternative _gnutls_decode_ber_rs_raw not found\n");
-+            pgnutls_decode_rs_value = compat_gnutls_decode_rs_value;
-+        }
-     }
-
-     if (TRACE_ON( bcrypt ))
 From b739d48093cce805b7b4f48fdbd9d0bb62bc8013 Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Mon, 13 Apr 2020 16:25:47 -0700
@@ -5203,78 +5174,6 @@ index a2b71bfb701..7227e97d6b9 100644
      if (hUserKey)
          RegCloseKey(hUserKey);
      if (hKey)
-From 608febc497cb6e0c19ec593b0c285018f19bbcde Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Wed, 15 Sep 2021 00:12:11 +0300
-Subject: [PATCH] wintrust: Cache CRYPT_PROVIDER_FUNCTIONS for the last used
- action ID.
-
-CW-Bug-ID: #19427
-
-For DeathLoop.
----
- dlls/wintrust/register.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/dlls/wintrust/register.c b/dlls/wintrust/register.c
-index effe9d18f20..476055ad03c 100644
---- a/dlls/wintrust/register.c
-+++ b/dlls/wintrust/register.c
-@@ -835,6 +835,17 @@ static FARPROC WINTRUST_ReadProviderFromReg(WCHAR *GuidString, const WCHAR *Func
-     return Func;
- }
-
-+static CRITICAL_SECTION cache_cs;
-+static CRITICAL_SECTION_DEBUG cache_cs_debug =
-+{
-+    0, 0, &cache_cs,
-+    { &cache_cs_debug.ProcessLocksList, &cache_cs_debug.ProcessLocksList },
-+      0, 0, { (DWORD_PTR)(__FILE__ ": cs") }
-+};
-+static CRITICAL_SECTION cache_cs = { &cache_cs_debug, -1, 0, 0, 0, 0 };
-+static GUID cached_guid;
-+static CRYPT_PROVIDER_FUNCTIONS cached_provider_functions;
-+
- /***********************************************************************
-  *              WintrustLoadFunctionPointers (WINTRUST.@)
-  */
-@@ -842,6 +853,7 @@ BOOL WINAPI WintrustLoadFunctionPointers( GUID* pgActionID,
-                                           CRYPT_PROVIDER_FUNCTIONS* pPfns )
- {
-     WCHAR GuidString[39];
-+    BOOL cached;
-
-     TRACE("(%s %p)\n", debugstr_guid(pgActionID), pPfns);
-
-@@ -853,6 +865,16 @@ BOOL WINAPI WintrustLoadFunctionPointers( GUID* pgActionID,
-     }
-     if (pPfns->cbStruct != sizeof(CRYPT_PROVIDER_FUNCTIONS)) return FALSE;
-
-+    EnterCriticalSection( &cache_cs );
-+    if (IsEqualGUID( &cached_guid, pgActionID ))
-+    {
-+        TRACE( "Using cached data.\n" );
-+        *pPfns = cached_provider_functions;
-+        cached = TRUE;
-+    } else cached = FALSE;
-+    LeaveCriticalSection( &cache_cs );
-+    if (cached) return TRUE;
-+
-     /* Create this string only once, instead of in the helper function */
-     WINTRUST_Guid2Wstr( pgActionID, GuidString);
-
-@@ -873,6 +895,11 @@ BOOL WINAPI WintrustLoadFunctionPointers( GUID* pgActionID,
-     pPfns->pfnTestFinalPolicy = (PFN_PROVIDER_TESTFINALPOLICY_CALL)WINTRUST_ReadProviderFromReg(GuidString, DiagnosticPolicy);
-     pPfns->pfnCleanupPolicy = (PFN_PROVIDER_CLEANUP_CALL)WINTRUST_ReadProviderFromReg(GuidString, Cleanup);
-
-+    EnterCriticalSection( &cache_cs );
-+    cached_guid = *pgActionID;
-+    cached_provider_functions = *pPfns;
-+    LeaveCriticalSection( &cache_cs );
-+
-     return TRUE;
- }
-
 From a9ec37d83082b1623aea4bc5933f77f4c8a356cf Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 14 Sep 2021 14:16:47 +0200

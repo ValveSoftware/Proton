@@ -166,6 +166,28 @@ index 33ad0489006..66fadacf920 100644
      if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
      {
          ERR("prctl(PR_SET_NO_NEW_PRIVS, ...): %s.\n", strerror(errno));
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index a177ee862c4..df6f747b159 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -2411,7 +2411,7 @@ static void sigsys_handler_rdr2( int signal, siginfo_t *siginfo, void *sigcontex
+
+     ctx->uc_mcontext.gregs[REG_RIP] = *dispatcher_address;
+
+-    /* syscall numbers are for Windows 10 1809 (build 17763) */
++    /* syscall numbers are for Windows 10 1909 (build 18363) */
+     switch (ctx->uc_mcontext.gregs[REG_RAX])
+     {
+         case 0x19:
+@@ -2420,7 +2420,7 @@ static void sigsys_handler_rdr2( int signal, siginfo_t *siginfo, void *sigcontex
+         case 0x36:
+             ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQuerySystemInformation;
+             break;
+-        case 0xec:
++        case 0xed:
+             ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtGetContextThread;
+             break;
+         case 0x55:
 From cfee71114e8f61d7ae8383c514a9993fcc1cb5a5 Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Fri, 10 Jul 2020 16:04:51 -0700

@@ -1,16 +1,16 @@
 From efb05519cd3e8187edce6d28a044680fe58b17c7 Mon Sep 17 00:00:00 2001
 From: Giovanni Mascellani <gmascellani@codeweavers.com>
 Date: Thu, 24 Jun 2021 17:27:08 +0200
-Subject: [PATCH] HACK: gdi32/font: Do font linking for Arial too.
+Subject: [PATCH] HACK: win32u/font: Do font linking for Arial too.
 
 ---
- dlls/gdi32/font.c | 1 +
+ dlls/win32u/font.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/dlls/gdi32/font.c b/dlls/gdi32/font.c
+diff --git a/dlls/win32u/font.c b/dlls/win32u/font.c
 index b70653efe6a..5ec4d66488f 100644
---- a/dlls/gdi32/font.c
-+++ b/dlls/gdi32/font.c
+--- a/dlls/win32u/font.c
++++ b/dlls/win32u/font.c
 @@ -1510,6 +1510,8 @@ static const WCHAR microsoft_sans_serifW[] =
      {'M','i','c','r','o','s','o','f','t',' ','S','a','n','s',' ','S','e','r','i','f',0};
  static const WCHAR tahomaW[] =
@@ -20,10 +20,10 @@ index b70653efe6a..5ec4d66488f 100644
  static const WCHAR ms_ui_gothicW[] =
      {'M','S',' ','U','I',' ','G','o','t','h','i','c',0};
  static const WCHAR sim_sunW[] =
-diff --git a/dlls/gdi32/font.c b/dlls/gdi32/font.c
+diff --git a/dlls/win32u/font.c b/dlls/win32u/font.c
 index 8b2af98a3a4..21520dda46a 100644
---- a/dlls/gdi32/font.c
-+++ b/dlls/gdi32/font.c
+--- a/dlls/win32u/font.c
++++ b/dlls/win32u/font.c
 @@ -2594,6 +2594,7 @@ static void update_font_system_link_info(UINT current_ansi_codepage)
          set_multi_value_key(hkey, lucida_sans_unicodeW, link, len);
          set_multi_value_key(hkey, microsoft_sans_serifW, link, len);

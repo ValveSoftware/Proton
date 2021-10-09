@@ -75,6 +75,12 @@
     git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
     git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
 
+    echo "temporary bcrypt reverts for rdr2"
+    git revert --no-commit dc3a240a2dc89e5280f37c3b50df86e09705dc70
+    git revert --no-commit 696255907c53d52836d80c2360bf4c66ec327a3d
+    git revert --no-commit 52ca433e7801cbc588763089bf6a8637f076bfe1
+    git revert --no-commit e4f716bc26fc61e2734f6e8dec4473fc63b6b99f
+
 
     echo "pulseaudio fixup to re-enable staging patches"
     patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
@@ -107,7 +113,6 @@
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W imm32-com-initialization \
-    -W bcrypt-ECDHSecretAgreement \
     -W ntdll-NtAlertThreadByThreadId \
     -W dwrite-FontFallback
 
@@ -276,8 +281,8 @@
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
 
-    echo "BF4 ping fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
+#    echo "BF4 ping fix"
+#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-bf4_ping.patch
 
     # https://bugs.winehq.org/show_bug.cgi?id=49887
     echo "EA Desktop fix (for new EA beta client)"
