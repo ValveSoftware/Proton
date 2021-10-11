@@ -1,0 +1,36 @@
+From 57e993f39d97db71434e90320092dc442a098eb1 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Mon, 11 Oct 2021 13:44:40 +1100
+Subject: [PATCH] wininet: Support option
+ INTERNET_OPTION_SERVER_CERT_CHAIN_CONTEXT for http connections
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ dlls/wininet/http.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/dlls/wininet/http.c b/dlls/wininet/http.c
+index 8e40a4cee2b..aef29f28caf 100644
+--- a/dlls/wininet/http.c
++++ b/dlls/wininet/http.c
+@@ -2330,6 +2330,17 @@ static DWORD HTTPREQ_QueryOption(object_header_t *hdr, DWORD option, void *buffe
+ 
+         *(ULONG*)buffer = hdr->ErrorMask;
+         *size = sizeof(ULONG);
++        return ERROR_SUCCESS;
++    case INTERNET_OPTION_SERVER_CERT_CHAIN_CONTEXT:
++        TRACE("INTERNET_OPTION_SERVER_CERT_CHAIN_CONTEXT\n");
++
++        if (*size < sizeof(PCERT_CHAIN_CONTEXT))
++            return ERROR_INSUFFICIENT_BUFFER;
++
++        if(req->server->cert_chain)
++            *((PCERT_CHAIN_CONTEXT*)buffer) = (PCERT_CHAIN_CONTEXT)CertDuplicateCertificateChain(req->server->cert_chain);
++        *size = sizeof(PCERT_CHAIN_CONTEXT);
++
+         return ERROR_SUCCESS;
+     }
+ 
+-- 
+2.33.0
+

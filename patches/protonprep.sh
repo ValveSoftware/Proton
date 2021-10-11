@@ -291,6 +291,9 @@
     echo "EA Desktop fix (for new EA beta client)"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-EA_desktop_fix.patch
 
+    echo "RaceRoom fix"
+    patch -Np1 < ../patches/wine-hotfixes/testing/0001-wininet-Support-option-INTERNET_OPTION_SERVER_CERT_C.patch
+
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
