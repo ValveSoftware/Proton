@@ -204,6 +204,14 @@ static DUMP_FOZDB: Lazy<Mutex<Option<fossilize::StreamArchive>>> = Lazy::new(|| 
     }
 });
 
+static DUMPING_DISABLED: Lazy<bool> = Lazy::new(|| {
+    let v = match std::env::var("MEDIACONV_AUDIO_DONT_DUMP") {
+        Err(_) => { return false; },
+        Ok(c) => c,
+    };
+    return v != "0";
+});
+
 #[derive(Clone)]
 struct NeedTranscodeHead {
     wmaversion: i32,
@@ -368,25 +376,29 @@ impl StreamState {
             }
 
             if !found {
-                gst_trace!(CAT, "recording stream id {}", self.cur_hash);
-                db.write_entry(AUDIOCONV_FOZ_TAG_CODECINFO,
-                               self.buffers[0].0,
-                               &mut self.codec_info.as_ref().unwrap().serialize().as_slice(),
-                               fossilize::CRCCheck::WithCRC)
-                    .map_err(|e| gst_loggable_error!(CAT, "Unable to write stream header: {:?}", e))?;
+                if *DUMPING_DISABLED {
+                    gst_trace!(CAT, "dumping disabled, so not recording stream id {}", self.cur_hash);
+                } else {
+                    gst_trace!(CAT, "recording stream id {}", self.cur_hash);
+                    db.write_entry(AUDIOCONV_FOZ_TAG_CODECINFO,
+                                   self.buffers[0].0,
+                                   &mut self.codec_info.as_ref().unwrap().serialize().as_slice(),
+                                   fossilize::CRCCheck::WithCRC)
+                        .map_err(|e| gst_loggable_error!(CAT, "Unable to write stream header: {:?}", e))?;
 
-                db.write_entry(AUDIOCONV_FOZ_TAG_STREAM,
-                               self.cur_hash,
-                               &mut StreamStateSerializer::new(self),
-                               fossilize::CRCCheck::WithCRC)
-                    .map_err(|e| gst_loggable_error!(CAT, "Unable to write stream: {:?}", e))?;
+                    db.write_entry(AUDIOCONV_FOZ_TAG_STREAM,
+                                   self.cur_hash,
+                                   &mut StreamStateSerializer::new(self),
+                                   fossilize::CRCCheck::WithCRC)
+                        .map_err(|e| gst_loggable_error!(CAT, "Unable to write stream: {:?}", e))?;
 
-                for buffer in self.buffers.iter() {
-                    db.write_entry(AUDIOCONV_FOZ_TAG_AUDIODATA,
-                                   buffer.0,
-                                   &mut buffer.1.as_slice(),
-                               fossilize::CRCCheck::WithCRC)
-                        .map_err(|e| gst_loggable_error!(CAT, "Unable to write audio data: {:?}", e))?;
+                    for buffer in self.buffers.iter() {
+                        db.write_entry(AUDIOCONV_FOZ_TAG_AUDIODATA,
+                                       buffer.0,
+                                       &mut buffer.1.as_slice(),
+                                   fossilize::CRCCheck::WithCRC)
+                            .map_err(|e| gst_loggable_error!(CAT, "Unable to write audio data: {:?}", e))?;
+                    }
                 }
             }
         }
