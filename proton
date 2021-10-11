@@ -1079,6 +1079,14 @@ class Session:
 
                 self.try_log_slr_versions()
 
+                try:
+                    uname = os.uname()
+                    kernel_version = f"{uname.sysname} {uname.release} {uname.version} {uname.machine}"
+                except OSError:
+                    kernel_version = "unknown"
+
+                self.log_file.write(f"Kernel: {kernel_version}\n")
+
                 #dump some important variables into the log header
                 for var in ["WINEDLLOVERRIDES", "WINEDEBUG"]:
                     if var in os.environ:
