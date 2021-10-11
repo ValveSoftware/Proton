@@ -41,41 +41,47 @@ void cppISteamInput_SteamInput005_EnableActionEventCallbacks(void *linux_side, w
 }
 
 /***** convert and cache ISteamInput glyph paths *****/
+static const size_t ESteamInputGlyphSize_count = 3;
 static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs;
 static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs_xbox;
-static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs_svg;
-static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyphs_png[3 /* ESteamInputGlyphSize */];
+static std::unordered_map<int /*flags*/, std::unordered_map<int /*EInputActionOrigin*/, char *> > cached_input_glyphs_svg;
+static std::unordered_map<int /*flags*/, std::unordered_map<int /*EInputActionOrigin*/, char *> > cached_input_glyphs_png[ESteamInputGlyphSize_count];
 
-static const char *steamclient_isteaminput_getglyph_png(int origin, int size, const char *lin_path)
+static const char *steamclient_isteaminput_getglyph_png(int origin, int flags, int size, const char *lin_path)
 {
     if(!lin_path)
         return NULL;
 
-    if(cached_input_glyphs_png[size].find(origin) == cached_input_glyphs_png[size].end()){
+    if(size >= ESteamInputGlyphSize_count){
+        ERR("invalid glyph size: %u\n", size);
+        return NULL;
+    }
+
+    if(cached_input_glyphs_png[size][flags].find(origin) == cached_input_glyphs_png[size][flags].end()){
         char *dos_path = (char *)HeapAlloc(GetProcessHeap(), 0, PATH_MAX);
 
         steamclient_unix_path_to_dos_path(1, lin_path, dos_path, PATH_MAX, 0);
 
-        cached_input_glyphs_png[size][origin] = dos_path;
+        cached_input_glyphs_png[size][flags][origin] = dos_path;
     }
 
-    return cached_input_glyphs_png[size][origin];
+    return cached_input_glyphs_png[size][flags][origin];
 }
 
-static const char *steamclient_isteaminput_getglyph_svg(int origin, const char *lin_path)
+static const char *steamclient_isteaminput_getglyph_svg(int origin, int flags, const char *lin_path)
 {
     if(!lin_path)
         return NULL;
 
-    if(cached_input_glyphs_svg.find(origin) == cached_input_glyphs_svg.end()){
+    if(cached_input_glyphs_svg[flags].find(origin) == cached_input_glyphs_svg[flags].end()){
         char *dos_path = (char *)HeapAlloc(GetProcessHeap(), 0, PATH_MAX);
 
         steamclient_unix_path_to_dos_path(1, lin_path, dos_path, PATH_MAX, 0);
 
-        cached_input_glyphs_svg[origin] = dos_path;
+        cached_input_glyphs_svg[flags][origin] = dos_path;
     }
 
-    return cached_input_glyphs_svg[origin];
+    return cached_input_glyphs_svg[flags][origin];
 }
 
 const char *steamclient_isteaminput_getglyph(int origin, const char *lin_path)
@@ -114,14 +120,14 @@ const char * cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(void *linux
 {
     const char *path_result;
     path_result = ((ISteamInput*)linux_side)->GetGlyphPNGForActionOrigin((EInputActionOrigin)eOrigin, eSize, unFlags);
-    return steamclient_isteaminput_getglyph_png(eOrigin, eSize, path_result);
+    return steamclient_isteaminput_getglyph_png(eOrigin, eSize, unFlags, path_result);
 }
 
 const char * cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(void *linux_side, EInputActionOrigin eOrigin, uint32 unFlags)
 {
     const char *path_result;
     path_result = ((ISteamInput*)linux_side)->GetGlyphSVGForActionOrigin((EInputActionOrigin)eOrigin, unFlags);
-    return steamclient_isteaminput_getglyph_svg(eOrigin, path_result);
+    return steamclient_isteaminput_getglyph_svg(eOrigin, unFlags, path_result);
 }
 
 const char * cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(void *linux_side, EInputActionOrigin eOrigin)
