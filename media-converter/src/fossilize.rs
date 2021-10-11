@@ -244,6 +244,9 @@ impl StreamArchive {
                     version > FOSSILIZE_VERSION {
                 return Err(Error::CorruptDatabase);
             }
+
+            self.write_pos = MAGIC_LEN_BYTES as u64;
+
             loop {
                 let mut name_and_header = [0u8; PAYLOAD_NAME_LEN_BYTES + PAYLOAD_HEADER_LEN_BYTES];
                 let res = self.file.read_exact(&mut name_and_header);
