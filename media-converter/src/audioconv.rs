@@ -542,24 +542,7 @@ impl AudioConvState {
 
         let buf = Box::new(*include_bytes!("../blank.ptna"));
 
-        /* calculate average expected length of this buffer */
-        let codec_data = self.codec_data.as_ref().unwrap();
-
-        let mut repeat_count = if codec_data.bitrate > 0 {
-            let buffer_time_ms = (buf_len * 8 /* to bits */ * 1000 /* to ms */) as f32
-                / (codec_data.bitrate as f32);
-
-            /* repeat the known-length blank file enough times to fill the expected length */
-            buffer_time_ms / BLANK_AUDIO_FILE_LENGTH_MS
-        } else {
-            /* invalid bitrate, so just play the file once */
-            0.0
-        };
-
-        /* scale to output rate */
-        repeat_count *= codec_data.rate as f32 / BLANK_AUDIO_FILE_RATE;
-
-        Ok((buf, repeat_count))
+        Ok((buf, 0.0))
     }
 }
 
