@@ -496,7 +496,7 @@ impl AudioConvState {
         self.loop_hash_state.reset();
     }
 
-    fn open_transcode_file(&mut self, buffer: gst::Buffer) -> io::Result<(Box<[u8]>, f32)> {
+    fn open_transcode_file(&mut self, buffer: gst::Buffer) -> io::Result<Box<[u8]>> {
         let mapped = buffer.into_mapped_buffer_readable().unwrap();
         let buf_len = mapped.get_size();
 
@@ -523,7 +523,7 @@ impl AudioConvState {
                 /* success */
                 let mut buf = vec![0u8; transcoded_size].into_boxed_slice();
                 if read_fozdb.read_entry(AUDIOCONV_FOZ_TAG_PTNADATA, hash, 0, &mut buf, fossilize::CRCCheck::WithoutCRC).is_ok() {
-                    return Ok((buf, 0.0));
+                    return Ok(buf);
                 }
             }
             if try_loop {
@@ -531,7 +531,7 @@ impl AudioConvState {
                     /* success */
                     let mut buf = vec![0u8; transcoded_size].into_boxed_slice();
                     if read_fozdb.read_entry(AUDIOCONV_FOZ_TAG_PTNADATA, loop_hash, 0, &mut buf, fossilize::CRCCheck::WithoutCRC).is_ok() {
-                        return Ok((buf, 0.0));
+                        return Ok(buf);
                     }
                 }
             }
@@ -542,7 +542,7 @@ impl AudioConvState {
 
         let buf = Box::new(*include_bytes!("../blank.ptna"));
 
-        Ok((buf, 0.0))
+        Ok(buf)
     }
 }
 
@@ -713,7 +713,7 @@ impl AudioConv {
             None => { return Err(gst::FlowError::Error); },
         };
 
-        let (ptnadata, mut repeat_count) = state.open_transcode_file(buffer).map_err(|_| {
+        let ptnadata = state.open_transcode_file(buffer).map_err(|_| {
             gst_error!(CAT, "ERROR! Failed to read transcoded audio! Things will go badly..."); gst::FlowError::Error
         })?;
 
@@ -721,14 +721,7 @@ impl AudioConv {
         loop {
 
             if offs >= ptnadata.len() {
-                if repeat_count > 0.0 {
-                    /* TODO: we're sending the whole partial packet. we could set padding instead */
-                    repeat_count -= 1.0;
-                    offs = 0;
-                    continue;
-                } else {
-                    break;
-                }
+                break;
             }
 
             if offs + 4 >= ptnadata.len() {
