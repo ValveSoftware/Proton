@@ -75,13 +75,6 @@
     git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
     git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
 
-    echo "temporary bcrypt reverts for rdr2"
-    git revert --no-commit dc3a240a2dc89e5280f37c3b50df86e09705dc70
-    git revert --no-commit 696255907c53d52836d80c2360bf4c66ec327a3d
-    git revert --no-commit 52ca433e7801cbc588763089bf6a8637f076bfe1
-    git revert --no-commit e4f716bc26fc61e2734f6e8dec4473fc63b6b99f
-
-
     echo "pulseaudio fixup to re-enable staging patches"
     patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
@@ -217,8 +210,7 @@
     patch -Np1 < ../patches/proton/55-proton-bcrypt_rdr2_fixes.patch
 
     echo "apply staging bcrypt patches on top of rdr2 fixes"
-    patch -Np1 < ../patches/wine-hotfixes/staging/0001-bcrypt-Allow-multiple-backends-to-coexist.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/0001-bcrypt-Add-support-for-calculating-secret-ecc-keys.patch
 
 
     echo "set prefix win10"
