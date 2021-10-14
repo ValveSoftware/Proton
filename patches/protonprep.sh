@@ -300,6 +300,8 @@
 
 ### (2-7) WINE CUSTOM PATCHES ###
 
+    echo "EVE Online - Fixe launcher 19.09"
+    patch -Np1 < ../patches/wine-hotfixes/eveonline/70739.patch
 
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
