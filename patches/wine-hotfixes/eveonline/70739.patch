@@ -1,0 +1,27 @@
+From 199c27d907eafbb52fb3cd0a66807624fd7b920f Mon Sep 17 00:00:00 2001
+From: algebro <algebro at tuta dot io>
+Date: Tue, 5 Oct 2021 16:24:52 -0400
+Subject: [PATCH] append exe directory to dll path with
+ LOAD_WITH_ALTERED_SEARCH_PATH
+
+---
+ dlls/ntdll/loader.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 3e3f991eba2..37472188900 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -4182,8 +4182,7 @@ NTSTATUS WINAPI LdrGetDllPath( PCWSTR module, ULONG flags, PWSTR *path, PWSTR *u
+     else
+     {
+         const WCHAR *dlldir = dll_directory.Length ? dll_directory.Buffer : NULL;
+-        if (!(flags & LOAD_WITH_ALTERED_SEARCH_PATH))
+-            module = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
++        module = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
+         status = get_dll_load_path( module, dlldir, dll_safe_mode, path );
+     }
+ 
+-- 
+2.33.0
+
