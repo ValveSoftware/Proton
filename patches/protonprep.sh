@@ -145,6 +145,10 @@
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
 
+    # missing http: scheme workaround see: https://github.com/ValveSoftware/Proton/issues/5195
+    echo "The Good Life (1452500) workaround"
+    patch -Np1 < ../patches/game-patches/thegoodlife-mfplat-http-scheme-workaround.patch
+
 ### END GAME PATCH SECTION ###
 
 ### (2-4) PROTON PATCH SECTION ###
