@@ -1051,6 +1051,9 @@ class Session:
         if "usenativexinput13" in self.compat_config:
             self.dlloverrides["xinput1_3"] = "n"
 
+        if "disablelibglesv2" in self.compat_config:
+            self.dlloverrides["libglesv2"] = "d"
+
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
