@@ -62,6 +62,12 @@ EXTERN_C HANDLE CDECL __wine_make_process_system(void);
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 
+static bool env_nonzero(const char *env)
+{
+    const char *v = getenv(env);
+    return v != NULL && *v && v[0] != '0';
+}
+
 static void set_active_process_pid(void)
 {
     DWORD pid = GetCurrentProcessId();
@@ -1176,6 +1182,22 @@ int main(int argc, char *argv[])
         set_active_process_pid();
         setup_steam_registry();
         setup_steam_files();
+
+        if (env_nonzero("PROTON_WAIT_ATTACH"))
+        {
+            unsigned int sleep_count = 0;
+            WINE_TRACE("PROTON_WAIT_ATTACH is set, waiting for debugger...\n");
+            while (!IsDebuggerPresent())
+            {
+                Sleep(100);
+                ++sleep_count;
+                if (sleep_count >= 10)
+                {
+                    WINE_TRACE("still waiting for debugger...\n");
+                    sleep_count = 0;
+                }
+            }
+        }
 
         wait_handle = __wine_make_process_system();
         game_process = TRUE;
