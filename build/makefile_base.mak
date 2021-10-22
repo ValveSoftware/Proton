@@ -546,32 +546,6 @@ $(eval $(call rules-meson,gst_good,64))
 
 
 ##
-## FAudio
-##
-
-FAUDIO_CMAKE_ARGS = -DGSTREAMER=ON -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DXNASONG=OFF
-FAUDIO_DEPENDS = gst_orc gstreamer gst_base
-
-$(eval $(call rules-source,faudio,$(SRCDIR)/FAudio))
-$(eval $(call rules-cmake,faudio,32))
-$(eval $(call rules-cmake,faudio,64))
-
-
-##
-## jxrlib
-##
-
-JXRLIB_CMAKE_ARGS64 = -DJXRLIB_INSTALL_LIB_DIR=lib64
-
-JXRLIB_INCDIR32 = $(JXRLIB_DST32)/include/jxrlib
-JXRLIB_INCDIR64 = $(JXRLIB_DST64)/include/jxrlib
-
-$(eval $(call rules-source,jxrlib,$(SRCDIR)/jxrlib))
-$(eval $(call rules-cmake,jxrlib,32))
-$(eval $(call rules-cmake,jxrlib,64))
-
-
-##
 ## Vulkan-Headers
 ##
 
@@ -700,7 +674,7 @@ WINE_CONFIGURE_ARGS = \
 
 WINE_CONFIGURE_ARGS64 = --enable-win64
 
-WINE_DEPENDS = gst_orc gstreamer gst_base faudio jxrlib
+WINE_DEPENDS = gst_orc gstreamer gst_base
 
 $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
