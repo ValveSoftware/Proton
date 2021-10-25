@@ -8731,3 +8731,673 @@ index 56f6221b9df..5fc8cfb47c5 100644
      XFlush( data->display );  /* make sure changes are done before we start painting again */
      if (data->surface && data->vis.visualid != default_visual.visualid)
          data->surface->funcs->flush( data->surface );
+From f6d7b88f72f14d4e78511f89dda6435159ee40e9 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 31 Mar 2020 20:07:49 +0300
+Subject: [PATCH] winex11.drv: Remove active client window from window data
+ before deleting it.
+
+CW-Bug-ID: #19216
+
+Fixes a crash with BadDrawable X error which happens when client window is used
+in windows.c:sync_client_position() after the GL drawable has been deleted.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49649
+---
+ dlls/winex11.drv/opengl.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
+index 5b085231d11..c8fcb799e76 100644
+--- a/dlls/winex11.drv/opengl.c
++++ b/dlls/winex11.drv/opengl.c
+@@ -254,6 +254,7 @@ enum dc_gl_type
+ struct gl_drawable
+ {
+     LONG                           ref;          /* reference count */
++    HWND                           hwnd;
+     enum dc_gl_type                type;         /* type of GL surface */
+     GLXDrawable                    drawable;     /* drawable for rendering with GL */
+     Window                         window;       /* window if drawable is a GLXWindow */
+@@ -1297,10 +1298,23 @@ static void release_gl_drawable( struct gl_drawable *gl )
+     {
+     case DC_GL_WINDOW:
+     case DC_GL_CHILD_WIN:
++    {
++        struct x11drv_win_data *data = get_win_data( gl->hwnd );
++
+         TRACE( "destroying %lx drawable %lx\n", gl->window, gl->drawable );
++        if (data)
++        {
++            if (data->client_window == gl->window)
++            {
++                XDeleteContext( data->display, data->client_window, winContext );
++                data->client_window = 0;
++            }
++            release_win_data( data );
++        }
+         pglXDestroyWindow( gdi_display, gl->drawable );
+         XDestroyWindow( gdi_display, gl->window );
+         break;
++    }
+     case DC_GL_PIXMAP_WIN:
+         TRACE( "destroying pixmap %lx drawable %lx\n", gl->pixmap, gl->drawable );
+         pglXDestroyPixmap( gdi_display, gl->drawable );
+@@ -1457,6 +1471,7 @@ static struct gl_drawable *create_gl_drawable( HWND hwnd, const struct wgl_pixel
+     /* Default GLX and WGL swap interval is 1, but in case of glXSwapIntervalSGI
+      * there is no way to query it, so we have to store it here.
+      */
++    gl->hwnd = hwnd;
+     gl->swap_interval = 1;
+     gl->refresh_swap_interval = TRUE;
+     gl->format = format;
+From 68f9023fafc57f8f0861d80e054a389fbcefcac7 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 10 Sep 2021 22:21:13 +0300
+Subject: [PATCH] winex11.drv: Create offscreen GL drawable for layered windows
+ managed through UpdateLayeredWindow().
+
+CW-Bug-ID: #19216
+---
+ dlls/winex11.drv/opengl.c | 71 ++++++++++++++++++++++++++++-----------
+ dlls/winex11.drv/window.c | 39 ++++++++++++++++++++-
+ dlls/winex11.drv/x11drv.h |  3 ++
+ 3 files changed, 93 insertions(+), 20 deletions(-)
+
+diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
+index c8fcb799e76..3d58253977b 100644
+--- a/dlls/winex11.drv/opengl.c
++++ b/dlls/winex11.drv/opengl.c
+@@ -251,6 +251,12 @@ enum dc_gl_type
+     DC_GL_PBUFFER     /* pseudo memory DC using a PBuffer */
+ };
+
++enum dc_gl_layered_type
++{
++    DC_GL_LAYERED_NONE,
++    DC_GL_LAYERED_UPDATES,
++};
++
+ struct gl_drawable
+ {
+     LONG                           ref;          /* reference count */
+@@ -261,6 +267,7 @@ struct gl_drawable
+     Pixmap                         pixmap;       /* base pixmap if drawable is a GLXPixmap */
+     const struct wgl_pixel_format *format;       /* pixel format for the drawable */
+     SIZE                           pixmap_size;  /* pixmap size for GLXPixmap drawables */
++    enum dc_gl_layered_type        layered_type;
+     int                            swap_interval;
+     BOOL                           refresh_swap_interval;
+     BOOL                           mutable_pf;
+@@ -1451,6 +1458,19 @@ static GLXContext create_glxcontext(Display *display, struct wgl_context *contex
+ }
+
+
++static enum dc_gl_layered_type get_gl_layered_type( HWND hwnd )
++{
++    struct x11drv_win_data *data;
++    enum dc_gl_layered_type ret;
++
++    if (!(data = get_win_data( hwnd ))) return DC_GL_LAYERED_NONE;
++    ret = data->layered && !data->layered_attributes ? DC_GL_LAYERED_UPDATES : DC_GL_LAYERED_NONE;
++    release_win_data( data );
++
++    return ret;
++}
++
++
+ /***********************************************************************
+  *              create_gl_drawable
+  */
+@@ -1458,6 +1478,7 @@ static struct gl_drawable *create_gl_drawable( HWND hwnd, const struct wgl_pixel
+                                                BOOL mutable_pf )
+ {
+     struct gl_drawable *gl, *prev;
++    struct x11drv_win_data *data;
+     XVisualInfo *visual = format->visual;
+     RECT rect;
+     int width, height;
+@@ -1478,10 +1499,24 @@ static struct gl_drawable *create_gl_drawable( HWND hwnd, const struct wgl_pixel
+     gl->ref = 1;
+     gl->mutable_pf = mutable_pf;
+
+-    if (!known_child && !GetWindow( hwnd, GW_CHILD ) && GetAncestor( hwnd, GA_PARENT ) == GetDesktopWindow())  /* childless top-level window */
+-    {
+-        struct x11drv_win_data *data;
++    gl->layered_type = get_gl_layered_type( hwnd );
+
++    if (gl->layered_type)
++    {
++        detach_client_window( hwnd );
++        gl->type = DC_GL_PIXMAP_WIN;
++        gl->pixmap = XCreatePixmap( gdi_display, root_window, width, height, visual->depth );
++        if (gl->pixmap)
++        {
++            gl->drawable = pglXCreatePixmap( gdi_display, gl->format->fbconfig, gl->pixmap, NULL );
++            if (!gl->drawable) XFreePixmap( gdi_display, gl->pixmap );
++            gl->pixmap_size.cx = width;
++            gl->pixmap_size.cy = height;
++        }
++        TRACE( "%p created pixmap drawable %lx for layered window, type %u.\n", hwnd, gl->drawable, gl->layered_type );
++    }
++    else if (!known_child && !GetWindow( hwnd, GW_CHILD ) && GetAncestor( hwnd, GA_PARENT ) == GetDesktopWindow())  /* childless top-level window */
++    {
+         gl->type = DC_GL_WINDOW;
+         gl->window = create_client_window( hwnd, visual );
+         if (gl->window)
+@@ -1611,6 +1646,7 @@ static BOOL set_pixel_format(HDC hdc, int format, BOOL allow_change)
+  */
+ void sync_gl_drawable( HWND hwnd, BOOL known_child )
+ {
++    enum dc_gl_layered_type new_layered_type;
+     struct gl_drawable *old, *new;
+     struct x11drv_win_data *data;
+
+@@ -1618,20 +1654,17 @@ void sync_gl_drawable( HWND hwnd, BOOL known_child )
+
+     if (!(old = get_gl_drawable( hwnd, 0 ))) return;
+
+-    switch (old->type)
++    new_layered_type = get_gl_layered_type( hwnd );
++    if (old->type == DC_GL_PIXMAP_WIN || (known_child && old->type == DC_GL_WINDOW)
++        || old->layered_type != new_layered_type)
+     {
+-    case DC_GL_WINDOW:
+-        if (!known_child) break; /* Still a childless top-level window */
+-        /* fall through */
+-    case DC_GL_PIXMAP_WIN:
+-        if (!(new = create_gl_drawable( hwnd, old->format, known_child, old->mutable_pf ))) break;
+-        mark_drawable_dirty( old, new );
+-        XFlush( gdi_display );
+-        TRACE( "Recreated GL drawable %lx to replace %lx\n", new->drawable, old->drawable );
+-        release_gl_drawable( new );
+-        break;
+-    default:
+-        break;
++        if ((new = create_gl_drawable( hwnd, old->format, known_child, old->mutable_pf )))
++        {
++            mark_drawable_dirty( old, new );
++            XFlush( gdi_display );
++            TRACE( "Recreated GL drawable %lx to replace %lx\n", new->drawable, old->drawable );
++            release_gl_drawable( new );
++        }
+     }
+
+     if (DC_GL_PIXMAP_WIN != old->type) {
+@@ -2572,7 +2572,7 @@ static void wglFinish(void)
+     {
+         switch (gl->type)
+         {
+-        case DC_GL_PIXMAP_WIN: escape.drawable = gl->pixmap; break;
++        case DC_GL_PIXMAP_WIN: if (!gl->layered_type) escape.drawable = gl->pixmap; break;
+         case DC_GL_CHILD_WIN:  escape.drawable = gl->window; break;
+         default: break;
+         }
+@@ -4411,7 +4444,7 @@ static BOOL WINAPI glxdrv_wglSwapBuffers( HDC hdc )
+     {
+     case DC_GL_PIXMAP_WIN:
+         if (ctx) sync_context( ctx );
+-        escape.drawable = gl->pixmap;
++        if (!gl->layered_type) escape.drawable = gl->pixmap;
+         if (pglXCopySubBufferMESA) {
+             /* (glX)SwapBuffers has an implicit glFlush effect, however
+              * GLX_MESA_copy_sub_buffer doesn't. Make sure GL is flushed before
+diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
+index 72d453eaca9..c01b812c98c 100644
+--- a/dlls/winex11.drv/opengl.c
++++ b/dlls/winex11.drv/opengl.c
+@@ -2572,7 +2572,7 @@ static void wglFinish(void)
+     {
+         switch (gl->type)
+         {
+-        case DC_GL_PIXMAP_WIN: escape.drawable = gl->pixmap; break;
++        case DC_GL_PIXMAP_WIN: if (!gl->layered_type) escape.drawable = gl->pixmap; break;
+         case DC_GL_CHILD_WIN:  escape.drawable = gl->window; break;
+         default: break;
+         }
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 5fc8cfb47c5..1bb6de574ff 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -1713,7 +1713,7 @@ static void move_window_bits( HWND hwnd, Window window, const RECT *old_rect, co
+  *
+  * Create a dummy parent window for child windows that don't have a true X11 parent.
+  */
+-static Window get_dummy_parent(void)
++Window get_dummy_parent(void)
+ {
+     static Window dummy_parent;
+
+@@ -1749,6 +1749,30 @@ void udpate_client_window( HWND hwnd )
+ }
+
+
++/**********************************************************************
++ *		detach_client_window
++ */
++void detach_client_window( HWND hwnd )
++{
++    struct x11drv_win_data *data;
++
++    if (!(data = get_win_data( hwnd ))) return;
++
++    if (!data->client_window)
++    {
++        release_win_data( data );
++        return;
++    }
++
++    XDeleteContext( data->display, data->client_window, winContext );
++    XReparentWindow( gdi_display, data->client_window, get_dummy_parent(), 0, 0 );
++    TRACE( "%p reparent xwin %lx/%lx\n", data->hwnd, data->whole_window, data->client_window );
++    data->client_window = 0;
++    XFlush( data->display );
++    release_win_data( data );
++}
++
++
+ /**********************************************************************
+  *		create_dummy_client_window
+  */
+@@ -2038,6 +2062,7 @@ void CDECL X11DRV_SetWindowStyle( HWND hwnd, INT offset, STYLESTRUCT *style )
+     struct x11drv_win_data *data;
+     DWORD changed = style->styleNew ^ style->styleOld;
+     HWND parent = GetAncestor( hwnd, GA_PARENT );
++    BOOL need_sync_gl = FALSE;
+
+     if (offset == GWL_STYLE && (changed & WS_CHILD))
+     {
+@@ -2087,12 +2087,15 @@ void CDECL X11DRV_SetWindowStyle( HWND hwnd, INT offset, STYLESTRUCT *style )
+     if (offset == GWL_EXSTYLE && (changed & WS_EX_LAYERED)) /* changing WS_EX_LAYERED resets attributes */
+     {
+         data->layered = FALSE;
++        data->layered_attributes = FALSE;
++        need_sync_gl = TRUE;
+         set_window_visual( data, &default_visual, FALSE );
+         set_window_opacity( data->display, data->whole_window, 0xff );
+         if (data->surface) set_surface_color_key( data->surface, CLR_INVALID );
+     }
+ done:
+     release_win_data( data );
++    if (need_sync_gl) sync_gl_drawable( hwnd, FALSE );
+ }
+
+
+@@ -3072,6 +3100,7 @@ void CDECL X11DRV_SetWindowRgn( HWND hwnd, HRGN hrgn, BOOL redraw )
+ void CDECL X11DRV_SetLayeredWindowAttributes( HWND hwnd, COLORREF key, BYTE alpha, DWORD flags )
+ {
+     struct x11drv_win_data *data = get_win_data( hwnd );
++    BOOL need_sync_gl;
+
+     if (data)
+     {
+@@ -3082,7 +3111,9 @@ void CDECL X11DRV_SetLayeredWindowAttributes( HWND hwnd, COLORREF key, BYTE alph
+         if (data->surface)
+             set_surface_color_key( data->surface, (flags & LWA_COLORKEY) ? key : CLR_INVALID );
+
++        need_sync_gl = !data->layered || !data->layered_attributes;
+         data->layered = TRUE;
++        data->layered_attributes = TRUE;
+         if (!data->mapped)  /* mapping is delayed until attributes are set */
+         {
+             DWORD style = GetWindowLongW( data->hwnd, GWL_STYLE );
+@@ -3092,10 +3123,12 @@ void CDECL X11DRV_SetLayeredWindowAttributes( HWND hwnd, COLORREF key, BYTE alph
+             {
+                 release_win_data( data );
+                 map_window( hwnd, style );
++                if (need_sync_gl) sync_gl_drawable( hwnd, FALSE );
+                 return;
+             }
+         }
+         release_win_data( data );
++        if (need_sync_gl) sync_gl_drawable( hwnd, FALSE );
+     }
+     else
+     {
+@@ -3124,12 +3157,14 @@ BOOL CDECL X11DRV_UpdateLayeredWindow( HWND hwnd, const UPDATELAYEREDWINDOWINFO
+     BITMAPINFO *bmi = (BITMAPINFO *)buffer;
+     void *src_bits, *dst_bits;
+     RECT rect, src_rect;
++    BOOL need_sync_gl;
+     HDC hdc = 0;
+     HBITMAP dib;
+     BOOL ret = FALSE;
+
+     if (!(data = get_win_data( hwnd ))) return FALSE;
+
++    need_sync_gl = !data->layered;
+     data->layered = TRUE;
+     if (!data->embedded && argb_visual.visualid) set_window_visual( data, &argb_visual, TRUE );
+
+@@ -3149,6 +3184,8 @@ BOOL CDECL X11DRV_UpdateLayeredWindow( HWND hwnd, const UPDATELAYEREDWINDOWINFO
+     if (surface) window_surface_add_ref( surface );
+     release_win_data( data );
+
++    if (need_sync_gl) sync_gl_drawable( hwnd, FALSE );
++
+     if (!surface) return FALSE;
+     if (!info->hdcSrc)
+     {
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index dc24cf49d36..9bd0d22414e 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -578,6 +578,8 @@ struct x11drv_win_data
+     BOOL        embedded : 1;   /* is window an XEMBED client? */
+     BOOL        shaped : 1;     /* is window using a custom region shape? */
+     BOOL        layered : 1;    /* is window layered and with valid attributes? */
++    BOOL        layered_attributes : 1;
++                                /* is layered window has leyered attributes set (or otherwise managed with UpdateLayeredWindow()? */
+     BOOL        use_alpha : 1;  /* does window use an alpha channel? */
+     BOOL        fs_hack : 1;
+     BOOL        pending_fullscreen : 1;
+@@ -617,6 +619,7 @@ extern void make_window_embedded( struct x11drv_win_data *data ) DECLSPEC_HIDDEN
+ extern Window create_dummy_client_window(void) DECLSPEC_HIDDEN;
+ extern Window create_client_window( HWND hwnd, const XVisualInfo *visual ) DECLSPEC_HIDDEN;
+ extern void destroy_client_window( HWND hwnd, Window old_window, Window new_window ) DECLSPEC_HIDDEN;
++extern void detach_client_window( HWND hwnd ) DECLSPEC_HIDDEN;
+ extern void set_window_visual( struct x11drv_win_data *data, const XVisualInfo *vis, BOOL use_alpha ) DECLSPEC_HIDDEN;
+ extern void change_systray_owner( Display *display, Window systray_window ) DECLSPEC_HIDDEN;
+ extern void update_systray_balloon_position(void) DECLSPEC_HIDDEN;
+From 1a5d40f6ea01a8a9719001e441fba1055bc448f2 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 13 Sep 2021 00:39:05 +0300
+Subject: [PATCH] winex11.drv: Always sync windowless GL drawables on size
+ change.
+
+CW-Bug-ID: #19216
+---
+ dlls/winex11.drv/window.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 1bb6de574ff..f6d7df91d2a 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -2805,6 +2805,7 @@ void CDECL X11DRV_WindowPosChanged( HWND hwnd, HWND insert_after, UINT swp_flags
+     DWORD new_style = GetWindowLongW( hwnd, GWL_STYLE );
+     RECT old_window_rect, old_whole_rect, old_client_rect;
+     HWND prev_window = NULL;
++    BOOL needs_resize;
+     int event_type;
+
+     if (!(data = get_win_data( hwnd ))) return;
+@@ -2865,13 +2866,13 @@ void CDECL X11DRV_WindowPosChanged( HWND hwnd, HWND insert_after, UINT swp_flags
+
+     sync_client_position( data, &old_client_rect, &old_whole_rect );
+
++    needs_resize = !data->client_window && (data->client_rect.right - data->client_rect.left !=
++                   old_client_rect.right - old_client_rect.left ||
++                   data->client_rect.bottom - data->client_rect.top !=
++                   old_client_rect.bottom - old_client_rect.top);
++
+     if (!data->whole_window)
+     {
+-        BOOL needs_resize = (!data->client_window &&
+-                             (data->client_rect.right - data->client_rect.left !=
+-                              old_client_rect.right - old_client_rect.left ||
+-                              data->client_rect.bottom - data->client_rect.top !=
+-                              old_client_rect.bottom - old_client_rect.top));
+         release_win_data( data );
+         if (needs_resize) sync_gl_drawable( hwnd, FALSE );
+         return;
+@@ -2963,6 +2964,7 @@ void CDECL X11DRV_WindowPosChanged( HWND hwnd, HWND insert_after, UINT swp_flags
+         data->surface->funcs->flush( data->surface );
+
+     release_win_data( data );
++    if (needs_resize) sync_gl_drawable( hwnd, FALSE );
+ }
+
+ /* check if the window icon should be hidden (i.e. moved off-screen) */
+From f0da915d7a7ab3846678447e0287d325fb26aeac Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 10 Sep 2021 21:51:14 +0300
+Subject: [PATCH] user32: Allow using surface to paint the client area of
+ OpenGL windows.
+
+CW-Bug-ID: #19216
+---
+ dlls/user32/painting.c | 16 +++++-----------
+ server/window.c        |  3 ++-
+ 2 files changed, 7 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/user32/painting.c b/dlls/user32/painting.c
+index db244ff04a5..ecce91a9202 100644
+--- a/dlls/user32/painting.c
++++ b/dlls/user32/painting.c
+@@ -110,7 +110,6 @@ static void update_visible_region( struct dce *dce )
+     HRGN vis_rgn = 0;
+     HWND top_win = 0;
+     DWORD flags = dce->flags;
+-    DWORD paint_flags = 0;
+     size_t size = 256;
+     RECT win_rect, top_rect;
+     WND *win;
+@@ -147,7 +146,6 @@ static void update_visible_region( struct dce *dce )
+                 top_rect.top    = reply->top_rect.top;
+                 top_rect.right  = reply->top_rect.right;
+                 top_rect.bottom = reply->top_rect.bottom;
+-                paint_flags     = reply->paint_flags;
+             }
+             else size = reply->total_size;
+         }
+@@ -162,16 +160,12 @@ static void update_visible_region( struct dce *dce )
+     if (dce->clip_rgn) CombineRgn( vis_rgn, vis_rgn, dce->clip_rgn,
+                                    (flags & DCX_INTERSECTRGN) ? RGN_AND : RGN_DIFF );
+
+-    /* don't use a surface to paint the client area of OpenGL windows */
+-    if (!(paint_flags & SET_WINPOS_PIXEL_FORMAT) || (flags & DCX_WINDOW))
++    win = WIN_GetPtr( top_win );
++    if (win && win != WND_DESKTOP && win != WND_OTHER_PROCESS)
+     {
+-        win = WIN_GetPtr( top_win );
+-        if (win && win != WND_DESKTOP && win != WND_OTHER_PROCESS)
+-        {
+-            surface = win->surface;
+-            if (surface) window_surface_add_ref( surface );
+-            WIN_ReleasePtr( win );
+-        }
++        surface = win->surface;
++        if (surface) window_surface_add_ref( surface );
++        WIN_ReleasePtr( win );
+     }
+
+     if (!surface) SetRectEmpty( &top_rect );
+diff --git a/server/window.c b/server/window.c
+index 3d41ebbfad6..8f2b32ac907 100644
+--- a/server/window.c
++++ b/server/window.c
+@@ -1151,7 +1151,8 @@ static struct region *get_surface_region( struct window *win )
+     set_region_rect( clip, &win->client_rect );
+     if (win->win_region && !intersect_window_region( clip, win )) goto error;
+
+-    if ((win->paint_flags & PAINT_HAS_PIXEL_FORMAT) && !subtract_region( region, region, clip ))
++    if (!(win->ex_style & WS_EX_LAYERED) && (win->paint_flags & PAINT_HAS_PIXEL_FORMAT)
++            && !subtract_region( region, region, clip ))
+         goto error;
+
+     /* clip children */
+From b07b31aa5fa7c0e88f676633df6bc18a37248277 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 9 Sep 2021 21:16:26 +0300
+Subject: [PATCH] winex11.drv: Use window surface for GL presentation for
+ layered windows.
+
+CW-Bug-ID: #19216
+---
+ dlls/winex11.drv/opengl.c | 87 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 81 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
+index 3d58253977b..e0236c4b602 100644
+--- a/dlls/winex11.drv/opengl.c
++++ b/dlls/winex11.drv/opengl.c
+@@ -255,6 +255,7 @@ enum dc_gl_layered_type
+ {
+     DC_GL_LAYERED_NONE,
+     DC_GL_LAYERED_UPDATES,
++    DC_GL_LAYERED_ATTRIBUTES,
+ };
+
+ struct gl_drawable
+@@ -1464,7 +1465,8 @@ static enum dc_gl_layered_type get_gl_layered_type( HWND hwnd )
+     enum dc_gl_layered_type ret;
+
+     if (!(data = get_win_data( hwnd ))) return DC_GL_LAYERED_NONE;
+-    ret = data->layered && !data->layered_attributes ? DC_GL_LAYERED_UPDATES : DC_GL_LAYERED_NONE;
++    if (data->layered) ret = data->layered_attributes ? DC_GL_LAYERED_ATTRIBUTES : DC_GL_LAYERED_UPDATES;
++    else ret = DC_GL_LAYERED_NONE;
+     release_win_data( data );
+
+     return ret;
+@@ -3023,11 +3025,81 @@ static void fs_hack_blit_framebuffer( struct gl_drawable *gl, GLenum draw_buffer
+         general_state_handlers[i].state_handler(RESET, gl, ctx, &state, NULL, NULL, NULL);
+ }
+
++static void update_window_surface(struct gl_drawable *gl, HWND hwnd)
++{
++    char buffer[FIELD_OFFSET( BITMAPINFO, bmiColors[256] )];
++    BITMAPINFO *bmi = (BITMAPINFO *)buffer;
++    struct window_surface *surface;
++    struct x11drv_win_data *data;
++    unsigned int y, width, height, stride, pitch;
++    BYTE *dst_bits, *src_bits;
++    XImage *image;
++    RECT rect;
++
++    TRACE( "gl %p, hwnd %p, gl->layered_type %u.\n", gl, hwnd, gl->layered_type );
++
++    if (gl->layered_type != DC_GL_LAYERED_ATTRIBUTES || !gl->pixmap) return;
++
++    if (!(data = get_win_data( hwnd ))) return;
++
++    surface = data->surface;
++    if (!surface)
++    {
++        TRACE( "No surface.\n" );
++        release_win_data( data );
++        return;
++    }
++
++    rect = data->client_rect;
++    OffsetRect( &rect, -data->whole_rect.left, -data->whole_rect.top );
++
++    dst_bits = surface->funcs->get_info( surface, bmi );
++    surface->funcs->lock( surface );
++
++    rect.right = min( rect.right, abs( bmi->bmiHeader.biWidth ));
++    rect.bottom = min( rect.bottom, abs( bmi->bmiHeader.biHeight ));
++
++    width = min( rect.right - rect.left, gl->pixmap_size.cx );
++    height = min( rect.bottom - rect.top, gl->pixmap_size.cy );
++
++    image = XGetImage( gdi_display, gl->pixmap, 0, 0, width, height,
++                       AllPlanes, ZPixmap );
++    if (!image)
++    {
++        TRACE( "NULL image.\n" );
++        goto done;
++    }
++
++    if (image->bits_per_pixel != bmi->bmiHeader.biBitCount)
++    {
++        static unsigned int once;
++
++        if (!once++)
++            FIXME("Bits per pixel does not match, image %u, bmi %u.\n", image->bits_per_pixel, bmi->bmiHeader.biBitCount);
++        goto done;
++    }
++
++    stride = bmi->bmiHeader.biBitCount / 8;
++    pitch = (bmi->bmiHeader.biWidth * stride + 3) & ~3;
++    src_bits = (BYTE *)image->data;
++    for (y = 0; y < height; ++y)
++        memcpy( dst_bits + (y + rect.top) * pitch + rect.left * stride,
++                src_bits + y * image->bytes_per_line, width * stride );
++
++    add_bounds_rect( surface->funcs->get_bounds( surface ), &rect );
++
++done:
++    surface->funcs->unlock( surface );
++    if (image) XDestroyImage( image );
++    release_win_data( data );
++}
++
+ static void wglFinish(void)
+ {
+     struct x11drv_escape_present_drawable escape;
+     struct gl_drawable *gl;
+     struct wgl_context *ctx = NtCurrentTeb()->glContext;
++    HWND hwnd;
+
+     TRACE("\n");
+
+@@ -3035,7 +3107,7 @@ static void wglFinish(void)
+     escape.drawable = 0;
+     escape.flush = FALSE;
+
+-    if ((gl = get_gl_drawable( WindowFromDC( ctx->hdc ), 0 )))
++    if ((gl = get_gl_drawable( (hwnd = WindowFromDC( ctx->hdc )), 0 )))
+     {
+         switch (gl->type)
+         {
+@@ -3055,7 +3127,7 @@ static void wglFinish(void)
+             ctx->fs_hack = FALSE;
+             fs_hack_setup_context(ctx, gl);
+         }
+-
++        update_window_surface( gl, hwnd );
+         release_gl_drawable( gl );
+     }
+
+@@ -3068,6 +3140,7 @@ static void wglFlush(void)
+     struct x11drv_escape_present_drawable escape;
+     struct gl_drawable *gl;
+     struct wgl_context *ctx = NtCurrentTeb()->glContext;
++    HWND hwnd;
+
+     TRACE("\n");
+
+@@ -3075,7 +3148,7 @@ static void wglFlush(void)
+     escape.drawable = 0;
+     escape.flush = FALSE;
+
+-    if ((gl = get_gl_drawable( WindowFromDC( ctx->hdc ), 0 )))
++    if ((gl = get_gl_drawable( (hwnd = WindowFromDC( ctx->hdc )), 0 )))
+     {
+         switch (gl->type)
+         {
+@@ -3095,7 +3168,7 @@ static void wglFlush(void)
+             ctx->fs_hack = FALSE;
+             fs_hack_setup_context(ctx, gl);
+         }
+-
++        update_window_surface( gl, hwnd );
+         release_gl_drawable( gl );
+     }
+
+@@ -4419,6 +4492,7 @@ static BOOL WINAPI glxdrv_wglSwapBuffers( HDC hdc )
+     struct gl_drawable *gl;
+     struct wgl_context *ctx = NtCurrentTeb()->glContext;
+     INT64 ust, msc, sbc, target_sbc = 0;
++    HWND hwnd;
+
+     TRACE("(%p)\n", hdc);
+
+@@ -4426,7 +4500,7 @@ static BOOL WINAPI glxdrv_wglSwapBuffers( HDC hdc )
+     escape.drawable = 0;
+     escape.flush = !pglXWaitForSbcOML;
+
+-    if (!(gl = get_gl_drawable( WindowFromDC( hdc ), hdc )))
++    if (!(gl = get_gl_drawable( (hwnd = WindowFromDC( hdc )), hdc )))
+     {
+         SetLastError( ERROR_INVALID_HANDLE );
+         return FALSE;
+@@ -4491,6 +4565,7 @@ static BOOL WINAPI glxdrv_wglSwapBuffers( HDC hdc )
+     if (escape.drawable && pglXWaitForSbcOML)
+         pglXWaitForSbcOML( gdi_display, gl->drawable, target_sbc, &ust, &msc, &sbc );
+
++    update_window_surface( gl, hwnd );
+     release_gl_drawable( gl );
+
+     if (escape.drawable) ExtEscape( ctx->hdc, X11DRV_ESCAPE, sizeof(escape), (LPSTR)&escape, 0, NULL );
