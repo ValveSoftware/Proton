@@ -152,6 +152,11 @@
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
 
+    # https://bugs.winehq.org/show_bug.cgi?id=51821
+    echo "EVE Online - Fixe launcher 19.09"
+    patch -Np1 < ../patches/game-patches/eve-online-launcher.patch
+
+
 ### END GAME PATCH SECTION ###
 
 ### (2-4) PROTON PATCH SECTION ###
@@ -375,9 +380,6 @@
 
 ### (2-7) WINE CUSTOM PATCHES ###
 
-    # https://bugs.winehq.org/show_bug.cgi?id=51821
-    echo "EVE Online - Fixe launcher 19.09"
-    patch -Np1 < ../patches/wine-hotfixes/eveonline/70739.patch
 
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
