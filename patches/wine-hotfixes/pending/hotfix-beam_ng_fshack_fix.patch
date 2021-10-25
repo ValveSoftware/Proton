@@ -1,0 +1,35 @@
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index d48575c0f0b..9076038274b 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -779,16 +779,20 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+             last_cursor_change = input->u.mi.time;
+         }
+ 
+-        pt.x = clip_rect.left;
+-        pt.y = clip_rect.top;
+-        fs_hack_point_user_to_real(&pt);
+-
+-        pt.x += input->u.mi.dx;
+-        pt.y += input->u.mi.dy;
+-        fs_hack_point_real_to_user(&pt);
+-
+-        input->u.mi.dx = pt.x;
+-        input->u.mi.dy = pt.y;
++        /* For some reason BeamNG.drive right click camera control breaks with this, so don't use it with that game */
++        const char *sgi = getenv("SteamGameId");
++        if ((sgi && strcmp(sgi, "284160"))) {
++            pt.x = clip_rect.left;
++            pt.y = clip_rect.top;
++            fs_hack_point_user_to_real(&pt);
++
++            pt.x += input->u.mi.dx;
++            pt.y += input->u.mi.dy;
++            fs_hack_point_real_to_user(&pt);
++
++            input->u.mi.dx = pt.x;
++            input->u.mi.dy = pt.y;
++        }
+ 
+         __wine_send_input( hwnd, input, NULL );
+         return;
