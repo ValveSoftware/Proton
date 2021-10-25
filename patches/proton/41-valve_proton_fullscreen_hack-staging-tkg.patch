@@ -8588,3 +8588,146 @@ index 74df1e80843..9263919862a 100644
          if (real_sz)
          {
              real_sz->width = (client_rect.right - client_rect.left) * scale;
+From 4c93c26837f4ba05e941903741ebce569b02af78 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 31 Aug 2021 00:41:15 +0300
+Subject: [PATCH] winex11.drv: HACK: Mind insert_after X11DRV_WindowPosChanged
+ in some cases.
+
+CW-Bug-ID: 19335
+---
+ dlls/winex11.drv/window.c | 51 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 45 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 56f6221b9df..5fc8cfb47c5 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -1482,17 +1482,18 @@ void X11DRV_X_to_window_rect( struct x11drv_win_data *data, RECT *rect, int x, i
+  *
+  * Synchronize the X window position with the Windows one
+  */
+-static void sync_window_position( struct x11drv_win_data *data,
++static HWND sync_window_position( struct x11drv_win_data *data,
+                                   UINT swp_flags, const RECT *old_window_rect,
+                                   const RECT *old_whole_rect, const RECT *old_client_rect )
+ {
+     DWORD style = GetWindowLongW( data->hwnd, GWL_STYLE );
+     DWORD ex_style = GetWindowLongW( data->hwnd, GWL_EXSTYLE );
++    HWND prev_window = NULL;
+     RECT original_rect = {0};
+     XWindowChanges changes;
+     unsigned int mask = 0;
+
+-    if (data->managed && data->iconic) return;
++    if (data->managed && data->iconic) return NULL;
+
+     /* resizing a managed maximized window is not allowed */
+     if (!(style & WS_MAXIMIZE) || !data->managed)
+@@ -1530,9 +1531,10 @@ static void sync_window_position( struct x11drv_win_data *data,
+     {
+         /* find window that this one must be after */
+         HWND prev = GetWindow( data->hwnd, GW_HWNDPREV );
++
+         while (prev && !(GetWindowLongW( prev, GWL_STYLE ) & WS_VISIBLE))
+             prev = GetWindow( prev, GW_HWNDPREV );
+-        if (!prev)  /* top child */
++        if (!(prev_window = prev))  /* top child */
+         {
+             changes.stack_mode = Above;
+             mask |= CWStackMode;
+@@ -1553,6 +1555,7 @@ static void sync_window_position( struct x11drv_win_data *data,
+     update_net_wm_states( data );
+     data->configure_serial = NextRequest( data->display );
+     XReconfigureWMWindow( data->display, data->whole_window, data->vis.screen, mask, &changes );
++
+     if (!IsRectEmpty( &original_rect ))
+     {
+         data->whole_rect = original_rect;
+@@ -1578,6 +1581,8 @@ static void sync_window_position( struct x11drv_win_data *data,
+            data->whole_rect.right - data->whole_rect.left,
+            data->whole_rect.bottom - data->whole_rect.top,
+            changes.sibling, mask, data->configure_serial );
++
++    return prev_window;
+ }
+
+
+@@ -2740,6 +2745,25 @@ void CDECL X11DRV_WindowPosChanging( HWND hwnd, HWND insert_after, UINT swp_flag
+ }
+
+
++static void restack_windows( struct x11drv_win_data *data, HWND prev )
++{
++    struct x11drv_win_data *prev_data;
++
++    TRACE("data->hwnd %p, prev %p.\n", data->hwnd, prev);
++
++    while (prev)
++    {
++        if (!(prev_data = get_win_data( prev ))) break;
++
++        TRACE( "Raising window %p.\n", prev );
++
++        if (prev_data->whole_window && data->display == prev_data->display)
++            XRaiseWindow( prev_data->display, prev_data->whole_window );
++        release_win_data( prev_data );
++        prev = GetWindow( prev, GW_HWNDPREV );
++    }
++}
++
+ /***********************************************************************
+  *		WindowPosChanged   (X11DRV.@)
+  */
+@@ -2752,6 +2776,7 @@ void CDECL X11DRV_WindowPosChanged( HWND hwnd, HWND insert_after, UINT swp_flags
+     struct x11drv_win_data *data;
+     DWORD new_style = GetWindowLongW( hwnd, GWL_STYLE );
+     RECT old_window_rect, old_whole_rect, old_client_rect;
++    HWND prev_window = NULL;
+     int event_type;
+
+     if (!(data = get_win_data( hwnd ))) return;
+@@ -2854,8 +2879,8 @@ void CDECL X11DRV_WindowPosChanged( HWND hwnd, HWND insert_after, UINT swp_flags
+
+     /* don't change position if we are about to minimize or maximize a managed window */
+     if ((!event_type || event_type == PropertyNotify) &&
+-        !(data->managed && (swp_flags & SWP_STATECHANGED) && (new_style & (WS_MINIMIZE|WS_MAXIMIZE))))
+-        sync_window_position( data, swp_flags, &old_window_rect, &old_whole_rect, &old_client_rect );
++            !(data->managed && (swp_flags & SWP_STATECHANGED) && (new_style & (WS_MINIMIZE|WS_MAXIMIZE))))
++        prev_window = sync_window_position( data, swp_flags, &old_window_rect, &old_whole_rect, &old_client_rect );
+
+     if ((new_style & WS_VISIBLE) &&
+         ((new_style & WS_MINIMIZE) || is_window_rect_mapped( rectWindow )))
+@@ -2871,6 +2896,10 @@ void CDECL X11DRV_WindowPosChanged( HWND hwnd, HWND insert_after, UINT swp_flags
+             release_win_data( data );
+             if (needs_icon) fetch_icon_data( hwnd, 0, 0 );
+             if (needs_map) map_window( hwnd, new_style );
++
++            if (!(data = get_win_data( hwnd ))) return;
++            restack_windows( data, prev_window );
++            release_win_data( data );
+             return;
+         }
+         else if ((swp_flags & SWP_STATECHANGED) && (!data->iconic != !(new_style & WS_MINIMIZE)))
+@@ -2887,10 +2916,20 @@ void CDECL X11DRV_WindowPosChanged( HWND hwnd, HWND insert_after, UINT swp_flags
+         else
+         {
+             if (swp_flags & (SWP_FRAMECHANGED|SWP_STATECHANGED)) set_wm_hints( data );
+-            if (!event_type || event_type == PropertyNotify) update_net_wm_states( data );
++            if (!event_type || event_type == PropertyNotify)
++            {
++                update_net_wm_states( data );
++                if (!prev_window && insert_after && data->net_wm_state & (1 << NET_WM_STATE_FULLSCREEN))
++                {
++                    prev_window = GetWindow( hwnd, GW_HWNDPREV );
++                    if (prev_window != insert_after) prev_window = NULL;
++                }
++            }
+         }
+     }
+
++    restack_windows( data, prev_window );
++
+     XFlush( data->display );  /* make sure changes are done before we start painting again */
+     if (data->surface && data->vis.visualid != default_visual.visualid)
+         data->surface->funcs->flush( data->surface );

@@ -4053,19 +4053,6 @@ index 810477d02a0..80f2ee88fc2 100644
 
      read( obj->fd, &value, sizeof(value) );
 
-diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
-index c816b036238..a29024be70b 100644
---- a/dlls/ntdll/unix/fsync.c
-+++ b/dlls/ntdll/unix/fsync.c
-@@ -704,7 +704,7 @@ NTSTATUS fsync_pulse_event( HANDLE handle, LONG *prev )
-
-     /* Try to give other threads a chance to wake up. Hopefully erring on this
-      * side is the better thing to do... */
--    NtYieldExecution();
-+    usleep(0);
-
-     __atomic_store_n( &event->signaled, 0, __ATOMIC_SEQ_CST );
-
 From ba230cf936910f12e756cf63594b6238391e6691 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 6 Jul 2021 14:04:51 +0200

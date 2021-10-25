@@ -32,29 +32,6 @@ index 8b2af98a3a4..21520dda46a 100644
          NtClose( hkey );
      }
  }
-From 90e3616c89ef7ed38763a3e3af3e9f0cd59697da Mon Sep 17 00:00:00 2001
-From: Nikolay Sivov <nsivov@codeweavers.com>
-Date: Wed, 8 Mar 2017 20:15:40 +0300
-Subject: [PATCH] HACK: dwrite: Don't recommend outline rendering mode
-
----
- dlls/dwrite/font.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
-index e22559912c3..41ec809b727 100644
---- a/dlls/dwrite/font.c
-+++ b/dlls/dwrite/font.c
-@@ -740,7 +740,8 @@ static HRESULT WINAPI dwritefontface_GetRecommendedRenderingMode(IDWriteFontFace
-
-     ppem = emSize * ppdip;
-
--    if (ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
-+    /* HACK: disable outline rendering mode to workaround d2d issue */
-+    if (0 && ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
-         *mode = DWRITE_RENDERING_MODE_OUTLINE;
-         return S_OK;
-     }
 From bf540ddf817eba2c6ade94f2c3c78a0281bd06fe Mon Sep 17 00:00:00 2001
 From: Giovanni Mascellani <gmascellani@codeweavers.com>
 Date: Wed, 9 Dec 2020 11:45:50 +0100
