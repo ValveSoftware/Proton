@@ -380,6 +380,8 @@
 
 ### (2-7) WINE CUSTOM PATCHES ###
 
+    echo "Castlevania Advance fix"
+    patch -Np1 < ../patches/game-patches/castlevania-advance-collection.patch
 
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
