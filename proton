@@ -30,7 +30,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.19-GE-1"
+CURRENT_PREFIX_VERSION="6.20-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1245,6 +1245,14 @@ class Session:
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
 
                 self.try_log_slr_versions()
+
+                try:
+                    uname = os.uname()
+                    kernel_version = f"{uname.sysname} {uname.release} {uname.version} {uname.machine}"
+                except OSError:
+                    kernel_version = "unknown"
+
+                self.log_file.write(f"Kernel: {kernel_version}\n")
 
                 #dump some important variables into the log header
                 for var in ["WINEDLLOVERRIDES", "WINEDEBUG"]:
