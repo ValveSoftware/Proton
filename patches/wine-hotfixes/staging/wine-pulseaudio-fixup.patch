@@ -1,3 +1,16 @@
+diff --git a/dlls/winepulse.drv/pulse.c b/dlls/winepulse.drv/pulse.c
+index 2e6ad4848eb3..bce70ac358cc 100644
+--- a/dlls/winepulse.drv/pulse.c
++++ b/dlls/winepulse.drv/pulse.c
+@@ -22,6 +22,8 @@
+ #pragma makedep unix
+ #endif
+
++#define _NTSYSTEM_
++
+ #include <stdarg.h>
+ #include <pthread.h>
+ #include <math.h>
 diff --git a/dlls/winepulse.drv/Makefile.in b/dlls/winepulse.drv/Makefile.in
 index f98262bcf63..d6600632360 100644
 --- a/dlls/winepulse.drv/Makefile.in
