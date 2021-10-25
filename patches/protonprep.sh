@@ -350,6 +350,9 @@
     echo "hotfix for beam ng right click camera being broken with fshack"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-beam_ng_fshack_fix.patch
 
+    echo "hotfix to update mono version"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
+
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
 
