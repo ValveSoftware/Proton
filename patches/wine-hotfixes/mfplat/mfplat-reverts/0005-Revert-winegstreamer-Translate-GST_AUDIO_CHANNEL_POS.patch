@@ -1,0 +1,30 @@
+From 6bde437d76c256778d706da4874a4db2a37e0e3a Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Sat, 9 Oct 2021 13:47:44 +1100
+Subject: [PATCH 05/22] Revert "winegstreamer: Translate
+ GST_AUDIO_CHANNEL_POSITION_MONO to SPEAKER_FRONT_CENTER."
+
+This reverts commit 009c1d66fa202666f778d7df2bbcc522993935cf.
+---
+ dlls/winegstreamer/wg_parser.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index c3c9051a174..0c23ae6d351 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -159,10 +159,7 @@ static uint32_t wg_channel_position_from_gst(GstAudioChannelPosition position)
+         SPEAKER_TOP_BACK_CENTER,
+     };
+ 
+-    if (position == GST_AUDIO_CHANNEL_POSITION_MONO)
+-        return SPEAKER_FRONT_CENTER;
+-
+-    if (position >= 0 && position < ARRAY_SIZE(position_map))
++    if (position < ARRAY_SIZE(position_map))
+         return position_map[position];
+     return 0;
+ }
+-- 
+2.33.0
+

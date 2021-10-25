@@ -1,0 +1,304 @@
+From 328f8b7e095596cb11d86484665062591aebcf55 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Thu, 11 Mar 2021 12:33:02 -0500
+Subject: [PATCH] winegstreamer: Implement ::SetInputType for decode transform.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/decode_transform.c | 80 ++++++++++++++++++++++++++-
+ dlls/winegstreamer/gst_private.h      | 10 ++++
+ dlls/winegstreamer/mfplat.c           | 17 +++++-
+ dlls/winegstreamer/quartz_parser.c    |  1 +
+ dlls/winegstreamer/wg_parser.c        | 76 +++++++++++++++++++++++++
+ 5 files changed, 180 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winegstreamer/decode_transform.c b/dlls/winegstreamer/decode_transform.c
+index 3c71fddd67c..f709ef32fc1 100644
+--- a/dlls/winegstreamer/decode_transform.c
++++ b/dlls/winegstreamer/decode_transform.c
+@@ -56,6 +56,8 @@ struct mf_decoder
+     IMFTransform IMFTransform_iface;
+     LONG refcount;
+     enum decoder_type type;
++    IMFMediaType *input_type;
++    CRITICAL_SECTION cs;
+ };
+ 
+ static struct mf_decoder *impl_mf_decoder_from_IMFTransform(IMFTransform *iface)
+@@ -99,6 +101,14 @@ static ULONG WINAPI mf_decoder_Release(IMFTransform *iface)
+ 
+     if (!refcount)
+     {
++        if (decoder->input_type)
++        {
++            IMFMediaType_Release(decoder->input_type);
++            decoder->input_type = NULL;
++        }
++
++        DeleteCriticalSection(&decoder->cs);
++
+         heap_free(decoder);
+     }
+ 
+@@ -255,9 +265,73 @@ static HRESULT WINAPI mf_decoder_GetOutputAvailableType(IMFTransform *iface, DWO
+ 
+ static HRESULT WINAPI mf_decoder_SetInputType(IMFTransform *iface, DWORD id, IMFMediaType *type, DWORD flags)
+ {
+-    FIXME("%p, %u, %p, %#x.\n", iface, id, type, flags);
++    struct mf_decoder *decoder = impl_mf_decoder_from_IMFTransform(iface);
++    struct wg_format input_format;
++    GUID major_type, subtype;
++    unsigned int i;
++    HRESULT hr;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %u, %p, %#x.\n", decoder, id, type, flags);
++
++    if (id != 0)
++        return MF_E_INVALIDSTREAMNUMBER;
++
++    if (!type)
++    {
++        if (flags & MFT_SET_TYPE_TEST_ONLY)
++            return S_OK;
++
++        EnterCriticalSection(&decoder->cs);
++
++        if (decoder->input_type)
++        {
++            IMFMediaType_Release(decoder->input_type);
++            decoder->input_type = NULL;
++        }
++
++        LeaveCriticalSection(&decoder->cs);
++
++        return S_OK;
++    }
++
++    if (FAILED(IMFMediaType_GetGUID(type, &MF_MT_MAJOR_TYPE, &major_type)))
++        return MF_E_INVALIDTYPE;
++    if (FAILED(IMFMediaType_GetGUID(type, &MF_MT_SUBTYPE, &subtype)))
++        return MF_E_INVALIDTYPE;
++
++    if (!(IsEqualGUID(&major_type, decoder_descs[decoder->type].major_type)))
++        return MF_E_INVALIDTYPE;
++
++    for (i = 0; i < decoder_descs[decoder->type].input_types_count; i++)
++    {
++        if (IsEqualGUID(&subtype, decoder_descs[decoder->type].input_types[i]))
++            break;
++        if (i == decoder_descs[decoder->type].input_types_count)
++            return MF_E_INVALIDTYPE;
++    }
++
++    mf_media_type_to_wg_format(type, &input_format);
++    if (!input_format.major_type)
++        return MF_E_INVALIDTYPE;
++
++    if (flags & MFT_SET_TYPE_TEST_ONLY)
++        return S_OK;
++
++    EnterCriticalSection(&decoder->cs);
++
++    hr = S_OK;
++
++    if (!decoder->input_type)
++        hr = MFCreateMediaType(&decoder->input_type);
++
++    if (SUCCEEDED(hr) && FAILED(hr = IMFMediaType_CopyAllItems(type, (IMFAttributes*) decoder->input_type)))
++    {
++        IMFMediaType_Release(decoder->input_type);
++        decoder->input_type = NULL;
++    }
++
++    LeaveCriticalSection(&decoder->cs);
++    return hr;
+ }
+ 
+ static HRESULT WINAPI mf_decoder_SetOutputType(IMFTransform *iface, DWORD id, IMFMediaType *type, DWORD flags)
+@@ -375,6 +449,8 @@ HRESULT decode_transform_create(REFIID riid, void **obj, enum decoder_type type)
+ 
+     object->type = type;
+ 
++    InitializeCriticalSection(&object->cs);
++
+     *obj = &object->IMFTransform_iface;
+     return S_OK;
+ }
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index 2d2ebbda61f..215cf4577d4 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -97,9 +97,19 @@ struct wg_format
+                 WG_VIDEO_FORMAT_YVYU,
+ 
+                 WG_VIDEO_FORMAT_CINEPAK,
++
++                WG_VIDEO_FORMAT_H264,
+             } format;
+             uint32_t width, height;
+             uint32_t fps_n, fps_d;
++            union
++            {
++                struct
++                {
++                    uint32_t profile;
++                    uint32_t level;
++                } h264;
++            } compressed;
+         } video;
+         struct
+         {
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index f8f83031b7e..9d1cbd87746 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -533,6 +533,7 @@ video_formats[] =
+     {&MFVideoFormat_YUY2,   WG_VIDEO_FORMAT_YUY2},
+     {&MFVideoFormat_YV12,   WG_VIDEO_FORMAT_YV12},
+     {&MFVideoFormat_YVYU,   WG_VIDEO_FORMAT_YVYU},
++    {&MFVideoFormat_H264,   WG_VIDEO_FORMAT_H264},
+ };
+ 
+ static const struct
+@@ -719,10 +720,22 @@ static void mf_media_type_to_wg_format_video(IMFMediaType *type, struct wg_forma
+         if (IsEqualGUID(&subtype, video_formats[i].subtype))
+         {
+             format->u.video.format = video_formats[i].format;
+-            return;
++            break;
+         }
+     }
+-    FIXME("Unrecognized video subtype %s.\n", debugstr_guid(&subtype));
++    if (i == ARRAY_SIZE(video_formats))
++        FIXME("Unrecognized video subtype %s.\n", debugstr_guid(&subtype));
++
++    if (format->u.video.format == WG_VIDEO_FORMAT_H264)
++    {
++        UINT32 profile, level;
++
++        if (SUCCEEDED(IMFMediaType_GetUINT32(type, &MF_MT_MPEG2_PROFILE, &profile)))
++            format->u.video.compressed.h264.profile = profile;
++
++        if (SUCCEEDED(IMFMediaType_GetUINT32(type, &MF_MT_MPEG2_LEVEL, &level)))
++            format->u.video.compressed.h264.level = level;
++    }
+ }
+ 
+ void mf_media_type_to_wg_format(IMFMediaType *type, struct wg_format *format)
+diff --git a/dlls/winegstreamer/quartz_parser.c b/dlls/winegstreamer/quartz_parser.c
+index 09a916d7f5c..fc1b72cd958 100644
+--- a/dlls/winegstreamer/quartz_parser.c
++++ b/dlls/winegstreamer/quartz_parser.c
+@@ -268,6 +268,7 @@ static unsigned int get_image_size(const struct wg_format *format)
+             return width * height * 3;
+ 
+         case WG_VIDEO_FORMAT_UNKNOWN:
++        case WG_VIDEO_FORMAT_H264:
+             break;
+     }
+ 
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 879aece63b7..1afe92f04ac 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -387,6 +387,22 @@ static void wg_channel_mask_to_gst(GstAudioChannelPosition *positions, uint32_t
+     }
+ }
+ 
++static void wg_set_caps_from_wg_format(GstCaps *caps, const struct wg_format *format)
++{
++    switch (format->major_type)
++    {
++        case WG_MAJOR_TYPE_VIDEO:
++        {
++            gst_caps_set_simple(caps, "width", G_TYPE_INT, format->u.video.width, NULL);
++            gst_caps_set_simple(caps, "height", G_TYPE_INT, format->u.video.height, NULL);
++            gst_caps_set_simple(caps, "framerate", GST_TYPE_FRACTION, format->u.video.fps_n, format->u.video.fps_d, NULL);
++            break;
++        }
++        default:
++            break;
++    }
++}
++
+ static GstCaps *wg_format_to_caps_audio(const struct wg_format *format)
+ {
+     GstAudioChannelPosition positions[32];
+@@ -428,6 +444,65 @@ static GstCaps *wg_format_to_caps_video(const struct wg_format *format)
+     unsigned int i;
+     GstCaps *caps;
+ 
++    /* compressed types */
++
++    if (format->u.video.format == WG_VIDEO_FORMAT_H264)
++    {
++        const char *profile;
++        const char *level;
++
++        caps = gst_caps_new_empty_simple("video/x-h264");
++        wg_set_caps_from_wg_format(caps, format);
++
++        gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "byte-stream", NULL);
++        gst_caps_set_simple(caps, "alignment", G_TYPE_STRING, "au", NULL);
++
++        switch (format->u.video.compressed.h264.profile)
++        {
++            case /* eAVEncH264VProfile_Main */ 77:  profile = "main"; break;
++            case /* eAVEncH264VProfile_High */ 100: profile = "high"; break;
++            case /* eAVEncH264VProfile_444 */  244: profile = "high-4:4:4"; break;
++            default:
++                GST_ERROR("Unrecognized H.264 profile attribute %u\n", format->u.video.compressed.h264.profile);
++                /* fallthrough */
++            case 0: profile = NULL;
++        }
++
++        switch (format->u.video.compressed.h264.level)
++        {
++            case /* eAVEncH264VLevel1 */   10: level = "1";   break;
++            case /* eAVEncH264VLevel1_1 */ 11: level = "1.1"; break;
++            case /* eAVEncH264VLevel1_2 */ 12: level = "1.2"; break;
++            case /* eAVEncH264VLevel1_3 */ 13: level = "1.3"; break;
++            case /* eAVEncH264VLevel2 */   20: level = "2";   break;
++            case /* eAVEncH264VLevel2_1 */ 21: level = "2.1"; break;
++            case /* eAVEncH264VLevel2_2 */ 22: level = "2.2"; break;
++            case /* eAVEncH264VLevel3 */   30: level = "3";   break;
++            case /* eAVEncH264VLevel3_1 */ 31: level = "3.1"; break;
++            case /* eAVEncH264VLevel3_2 */ 32: level = "3.2"; break;
++            case /* eAVEncH264VLevel4 */   40: level = "4";   break;
++            case /* eAVEncH264VLevel4_1 */ 41: level = "4.1"; break;
++            case /* eAVEncH264VLevel4_2 */ 42: level = "4.2"; break;
++            case /* eAVEncH264VLevel5 */   50: level = "5";   break;
++            case /* eAVEncH264VLevel5_1 */ 51: level = "5.1"; break;
++            case /* eAVEncH264VLevel5_2 */ 52: level = "5.2"; break;
++            default:
++                GST_ERROR("Unrecognized H.264 level attribute %u\n", format->u.video.compressed.h264.level);
++                /* fallthrough */
++            case 0: level = NULL;
++        }
++
++        if (profile)
++            gst_caps_set_simple(caps, "profile", G_TYPE_STRING, profile, NULL);
++
++        if (level)
++            gst_caps_set_simple(caps, "level", G_TYPE_STRING, level, NULL);
++
++        return caps;
++    }
++
++    /* uncompressed types */
++
+     if ((video_format = wg_video_format_to_gst(format->u.video.format)) == GST_VIDEO_FORMAT_UNKNOWN)
+         return NULL;
+ 
+@@ -587,6 +662,7 @@ static void CDECL wg_parser_stream_enable(struct wg_parser_stream *stream, const
+             case WG_VIDEO_FORMAT_YVYU:
+             case WG_VIDEO_FORMAT_UNKNOWN:
+             case WG_VIDEO_FORMAT_CINEPAK:
++            case WG_VIDEO_FORMAT_H264:
+                 gst_util_set_object_arg(G_OBJECT(stream->flip), "method", "none");
+                 break;
+         }
+-- 
+2.30.2
+

@@ -1,0 +1,168 @@
+From 2c3d9dfc09ee64767347574e0bd6e8f5511a6a54 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Sat, 9 Oct 2021 13:47:39 +1100
+Subject: [PATCH 02/22] Revert "wmvcore: Move the async reader implementation
+ to winegstreamer."
+
+This reverts commit bf7c05d87a65b7b9999d71fc0df602e3dfa2fafa.
+---
+ dlls/winegstreamer/Makefile.in                |  1 -
+ dlls/winegstreamer/winegstreamer.spec         |  1 -
+ dlls/wmvcore/Makefile.in                      |  1 +
+ .../wm_asyncreader.c => wmvcore/reader.c}     | 54 +++++++++++--------
+ dlls/wmvcore/wmvcore_main.c                   | 15 ------
+ 5 files changed, 32 insertions(+), 40 deletions(-)
+ rename dlls/{winegstreamer/wm_asyncreader.c => wmvcore/reader.c} (98%)
+
+diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
+index 17311cd663c..671e3bcb7ba 100644
+--- a/dlls/winegstreamer/Makefile.in
++++ b/dlls/winegstreamer/Makefile.in
+@@ -13,7 +13,6 @@ C_SRCS = \
+ 	mfplat.c \
+ 	quartz_parser.c \
+ 	wg_parser.c \
+-	wm_asyncreader.c \
+ 	wm_syncreader.c
+ 
+ IDL_SRCS = \
+diff --git a/dlls/winegstreamer/winegstreamer.spec b/dlls/winegstreamer/winegstreamer.spec
+index bc6a390f8b1..bd9f53a7445 100644
+--- a/dlls/winegstreamer/winegstreamer.spec
++++ b/dlls/winegstreamer/winegstreamer.spec
+@@ -2,5 +2,4 @@
+ @ stdcall -private DllGetClassObject(ptr ptr ptr)
+ @ stdcall -private DllRegisterServer()
+ @ stdcall -private DllUnregisterServer()
+-@ stdcall winegstreamer_create_wm_async_reader(ptr)
+ @ stdcall winegstreamer_create_wm_sync_reader(ptr)
+diff --git a/dlls/wmvcore/Makefile.in b/dlls/wmvcore/Makefile.in
+index 6aed828abae..d0b230dd7c0 100644
+--- a/dlls/wmvcore/Makefile.in
++++ b/dlls/wmvcore/Makefile.in
+@@ -6,6 +6,7 @@ DELAYIMPORTS = winegstreamer
+ EXTRADLLFLAGS = -Wb,--prefer-native
+ 
+ C_SRCS = \
++	reader.c \
+ 	wmvcore_main.c \
+ 	writer.c
+ 
+diff --git a/dlls/winegstreamer/wm_asyncreader.c b/dlls/wmvcore/reader.c
+similarity index 98%
+rename from dlls/winegstreamer/wm_asyncreader.c
+rename to dlls/wmvcore/reader.c
+index d3fd1624f24..12ba8099ab1 100644
+--- a/dlls/winegstreamer/wm_asyncreader.c
++++ b/dlls/wmvcore/reader.c
+@@ -16,8 +16,11 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "gst_private.h"
++#include "wmvcore.h"
++
+ #include "wmsdk.h"
++#include "wine/debug.h"
++#include "wine/heap.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(wmvcore);
+ 
+@@ -150,7 +153,7 @@ static ULONG WINAPI WMReader_Release(IWMReader *iface)
+     TRACE("(%p) ref=%d\n", This, ref);
+ 
+     if(!ref)
+-        free(This);
++        heap_free(This);
+ 
+     return ref;
+ }
+@@ -2036,31 +2039,36 @@ static const IWMPacketSize2Vtbl WMPacketSize2Vtbl =
+     packetsize_SetMinPacketSize
+ };
+ 
+-HRESULT WINAPI winegstreamer_create_wm_async_reader(IWMReader **reader)
++HRESULT WINAPI WMCreateReader(IUnknown *reserved, DWORD rights, IWMReader **ret_reader)
+ {
+-    WMReader *object;
++    WMReader *reader;
+ 
+-    TRACE("reader %p.\n", reader);
++    TRACE("(%p, %x, %p)\n", reserved, rights, ret_reader);
+ 
+-    if (!(object = calloc(1, sizeof(*object))))
++    reader = heap_alloc(sizeof(*reader));
++    if(!reader)
+         return E_OUTOFMEMORY;
+ 
+-    object->IReferenceClock_iface.lpVtbl = &ReferenceClockVtbl;
+-    object->IWMHeaderInfo3_iface.lpVtbl = &WMHeaderInfo3Vtbl;
+-    object->IWMLanguageList_iface.lpVtbl = &WMLanguageListVtbl;
+-    object->IWMPacketSize2_iface.lpVtbl = &WMPacketSize2Vtbl;
+-    object->IWMProfile3_iface.lpVtbl = &WMProfile3Vtbl;
+-    object->IWMReader_iface.lpVtbl = &WMReaderVtbl;
+-    object->IWMReaderAdvanced6_iface.lpVtbl = &WMReaderAdvanced6Vtbl;
+-    object->IWMReaderAccelerator_iface.lpVtbl = &WMReaderAcceleratorVtbl;
+-    object->IWMReaderNetworkConfig2_iface.lpVtbl = &WMReaderNetworkConfig2Vtbl;
+-    object->IWMReaderPlaylistBurn_iface.lpVtbl = &WMReaderPlaylistBurnVtbl;
+-    object->IWMReaderStreamClock_iface.lpVtbl = &WMReaderStreamClockVtbl;
+-    object->IWMReaderTimecode_iface.lpVtbl = &WMReaderTimecodeVtbl;
+-    object->IWMReaderTypeNegotiation_iface.lpVtbl = &WMReaderTypeNegotiationVtbl;
+-    object->ref = 1;
+-
+-    TRACE("Created async reader %p.\n", object);
+-    *reader = (IWMReader *)&object->IWMReader_iface;
++    reader->IWMReader_iface.lpVtbl = &WMReaderVtbl;
++    reader->IWMReaderAdvanced6_iface.lpVtbl = &WMReaderAdvanced6Vtbl;
++    reader->IWMReaderAccelerator_iface.lpVtbl = &WMReaderAcceleratorVtbl;
++    reader->IWMReaderNetworkConfig2_iface.lpVtbl = &WMReaderNetworkConfig2Vtbl;
++    reader->IWMReaderStreamClock_iface.lpVtbl = &WMReaderStreamClockVtbl;
++    reader->IWMReaderTypeNegotiation_iface.lpVtbl = &WMReaderTypeNegotiationVtbl;
++    reader->IWMReaderTimecode_iface.lpVtbl = &WMReaderTimecodeVtbl;
++    reader->IWMReaderPlaylistBurn_iface.lpVtbl = &WMReaderPlaylistBurnVtbl;
++    reader->IWMHeaderInfo3_iface.lpVtbl = &WMHeaderInfo3Vtbl;
++    reader->IWMLanguageList_iface.lpVtbl = &WMLanguageListVtbl;
++    reader->IReferenceClock_iface.lpVtbl = &ReferenceClockVtbl;
++    reader->IWMProfile3_iface.lpVtbl = &WMProfile3Vtbl;
++    reader->IWMPacketSize2_iface.lpVtbl = &WMPacketSize2Vtbl;
++    reader->ref = 1;
++
++    *ret_reader = &reader->IWMReader_iface;
+     return S_OK;
+ }
++
++HRESULT WINAPI WMCreateReaderPriv(IWMReader **ret_reader)
++{
++    return WMCreateReader(NULL, 0, ret_reader);
++}
+diff --git a/dlls/wmvcore/wmvcore_main.c b/dlls/wmvcore/wmvcore_main.c
+index ff837921286..8d4d4251369 100644
+--- a/dlls/wmvcore/wmvcore_main.c
++++ b/dlls/wmvcore/wmvcore_main.c
+@@ -25,23 +25,8 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(wmvcore);
+ 
+-HRESULT WINAPI winegstreamer_create_wm_async_reader(IWMReader **reader);
+ HRESULT WINAPI winegstreamer_create_wm_sync_reader(IWMSyncReader **reader);
+ 
+-HRESULT WINAPI WMCreateReader(IUnknown *reserved, DWORD rights, IWMReader **reader)
+-{
+-    TRACE("reserved %p, rights %#x, reader %p.\n", reserved, rights, reader);
+-
+-    return winegstreamer_create_wm_async_reader(reader);
+-}
+-
+-HRESULT WINAPI WMCreateReaderPriv(IWMReader **reader)
+-{
+-    TRACE("reader %p.\n", reader);
+-
+-    return winegstreamer_create_wm_async_reader(reader);
+-}
+-
+ HRESULT WINAPI WMCreateSyncReader(IUnknown *reserved, DWORD rights, IWMSyncReader **reader)
+ {
+     TRACE("reserved %p, rights %#x, reader %p.\n", reserved, rights, reader);
+-- 
+2.33.0
+
