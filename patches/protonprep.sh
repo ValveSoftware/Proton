@@ -156,6 +156,8 @@
     echo "EVE Online - Fixe launcher 19.09"
     patch -Np1 < ../patches/game-patches/eve-online-launcher.patch
 
+    echo "Castlevania Advance fix"
+    patch -Np1 < ../patches/game-patches/castlevania-advance-collection.patch
 
 ### END GAME PATCH SECTION ###
 
@@ -379,9 +381,6 @@
 
 
 ### (2-7) WINE CUSTOM PATCHES ###
-
-    echo "Castlevania Advance fix"
-    patch -Np1 < ../patches/game-patches/castlevania-advance-collection.patch
 
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
