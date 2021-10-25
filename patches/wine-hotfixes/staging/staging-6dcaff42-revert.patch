@@ -1,0 +1,45 @@
+From 37c9b11188387ec5eebbf88647c51562e6230303 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Tue, 19 Oct 2021 14:36:36 +0200
+Subject: Selective revert of staging 164b361be646a1e23fad1892893821de3805c5c6
+
+diff --git a/patches/user32-rawinput-mouse/0008-winex11.drv-Listen-to-RawMotion-and-RawButton-events.patch b/patches/user32-rawinput-mouse/0008-winex11.drv-Listen-to-RawMotion-and-RawButton-events.patch
+index c313a16c0..bf18664d1 100644
+--- a/patches/user32-rawinput-mouse/0008-winex11.drv-Listen-to-RawMotion-and-RawButton-events.patch
++++ b/patches/user32-rawinput-mouse/0008-winex11.drv-Listen-to-RawMotion-and-RawButton-events.patch
+@@ -245,9 +245,9 @@ index 7a89a010395..2fd8519971d 100644
+ --- a/dlls/winex11.drv/x11drv_main.c
+ +++ b/dlls/winex11.drv/x11drv_main.c
+ @@ -647,6 +647,8 @@ void CDECL X11DRV_ThreadDetach(void)
++
+      if (data)
+      {
+-         vulkan_thread_detach();
+ +        if (GetWindowThreadProcessId( GetDesktopWindow(), NULL ) == GetCurrentThreadId())
+ +            x11drv_xinput_disable( data->display, DefaultRootWindow( data->display ), PointerMotionMask );
+          if (data->xim) XCloseIM( data->xim );
+
+diff --git a/patches/winex11-Vulkan_support/0001-winex11-Specify-a-default-vulkan-driver-if-one-not-f.patch b/patches/winex11-Vulkan_support/0001-winex11-Specify-a-default-vulkan-driver-if-one-not-f.patch
+index fccbec73..9f5ba3e9 100644
+--- a/patches/winex11-Vulkan_support/0001-winex11-Specify-a-default-vulkan-driver-if-one-not-f.patch
++++ b/patches/winex11-Vulkan_support/0001-winex11-Specify-a-default-vulkan-driver-if-one-not-f.patch
+@@ -49,7 +49,7 @@ index 4f6624b3db8..6e343f47f34 100644
+          return TRUE;
+      }
+  
+-@@ -735,20 +745,3 @@ const struct vulkan_funcs *get_vulkan_driver(UINT version)
++@@ -735,16 +745,3 @@ const struct vulkan_funcs *get_vulkan_driver(UINT version)
+      return NULL;
+  }
+  
+@@ -65,10 +65,6 @@ index 4f6624b3db8..6e343f47f34 100644
+ -{
+ -}
+ -
+--void vulkan_thread_detach(void)
+--{
+--}
+--
+ -#endif /* SONAME_LIBVULKAN */
+ -- 
+ 2.33.0

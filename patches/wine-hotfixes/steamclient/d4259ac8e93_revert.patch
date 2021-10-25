@@ -1,0 +1,62 @@
+diff --git a/include/Makefile.in b/include/Makefile.in
+index ef4a6d55558f..940106952141 100644
+--- a/include/Makefile.in
++++ b/include/Makefile.in
+@@ -672,6 +674,7 @@ SOURCES = \
+ 	snmp.h \
+ 	softpub.h \
+ 	spatialaudioclient.idl \
++	specstrings.h \
+ 	sperror.h \
+ 	sql.h \
+ 	sqlext.h \
+diff --git a/include/ntdef.h b/include/ntdef.h
+index 68ced669baac..74c88ba572be 100644
+--- a/include/ntdef.h
++++ b/include/ntdef.h
+@@ -20,6 +20,7 @@
+ #define _NTDEF_
+
+ #include <basetsd.h>
++#include <specstrings.h>
+
+ #ifdef __cplusplus
+ extern "C" {
+diff --git a/include/rpcdce.h b/include/rpcdce.h
+index 2b289b265507..79418f8084cf 100644
+--- a/include/rpcdce.h
++++ b/include/rpcdce.h
+@@ -33,6 +33,8 @@ extern "C" {
+ #define OPTIONAL
+ #endif
+
++#include <specstrings.h>
++
+ #ifndef GUID_DEFINED
+ #include <guiddef.h>
+ #endif
+diff --git a/include/winerror.h b/include/winerror.h
+index f22b24f267be..377c61e724b1 100644
+--- a/include/winerror.h
++++ b/include/winerror.h
+@@ -19,6 +19,8 @@
+ #ifndef __WINE_WINERROR_H
+ #define __WINE_WINERROR_H
+
++#include <specstrings.h>
++
+ #define FACILITY_NULL                         0
+ #define FACILITY_RPC                          1
+ #define FACILITY_DISPATCH                     2
+diff --git a/include/winnt.h b/include/winnt.h
+index 53d9af8bf960..58f1267773dd 100644
+--- a/include/winnt.h
++++ b/include/winnt.h
+@@ -24,6 +24,7 @@
+ #include <basetsd.h>
+ #include <guiddef.h>
+ #include <winapifamily.h>
++#include <specstrings.h>
+
+ #ifndef RC_INVOKED
+ #include <ctype.h>
