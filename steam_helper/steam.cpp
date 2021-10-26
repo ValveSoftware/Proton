@@ -1055,14 +1055,21 @@ static BOOL steam_protocol_handler(int argc, char *argv[])
 
 static void setup_steam_files(void)
 {
-    static const WCHAR libraryfolders_nameW[] = L"C:\\Program Files (x86)\\Steam\\steamapps\\libraryfolders.vdf";
+    static const WCHAR config_pathW[] = L"C:\\Program Files (x86)\\Steam\\config";
     static const WCHAR steamapps_pathW[] = L"C:\\Program Files (x86)\\Steam\\steamapps";
+    static const WCHAR libraryfolders_nameW[] = L"C:\\Program Files (x86)\\Steam\\steamapps\\libraryfolders.vdf";
     const char *steam_install_path = getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH");
     const char *steam_library_paths = getenv("STEAM_COMPAT_LIBRARY_PATHS");
     const char *start, *end, *next;
     unsigned int i, index = 1;
     std::string contents;
     char idx_str[10];
+
+    if (!CreateDirectoryW(config_pathW, NULL) && GetLastError() != ERROR_ALREADY_EXISTS)
+    {
+        WINE_ERR("Failed to create config directory, GetLastError() %u.\n", GetLastError());
+        return;
+    }
 
     if (!CreateDirectoryW(steamapps_pathW, NULL) && GetLastError() != ERROR_ALREADY_EXISTS)
     {
