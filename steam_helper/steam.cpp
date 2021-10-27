@@ -1206,7 +1206,9 @@ int main(int argc, char *argv[])
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
     HANDLE event2 = INVALID_HANDLE_VALUE;
     HANDLE event = INVALID_HANDLE_VALUE;
+    HANDLE child = INVALID_HANDLE_VALUE;
     BOOL game_process = FALSE;
+    DWORD rc = 0;
 
     WINE_TRACE("\n");
 
@@ -1249,7 +1251,6 @@ int main(int argc, char *argv[])
 
     if (argc > 1)
     {
-        HANDLE child;
         BOOL should_await;
 
         setup_vrpaths();
@@ -1266,8 +1267,6 @@ int main(int argc, char *argv[])
 
             if (wait_handle == INVALID_HANDLE_VALUE)
                 wait_handle = child;
-            else
-                CloseHandle(child);
         }
     }
 
@@ -1281,5 +1280,12 @@ int main(int argc, char *argv[])
         CloseHandle(event);
     if (event2 != INVALID_HANDLE_VALUE)
         CloseHandle(event2);
-    return 0;
+
+    if (child != INVALID_HANDLE_VALUE)
+    {
+        GetExitCodeProcess(child, &rc);
+        CloseHandle(child);
+    }
+
+    return rc;
 }
