@@ -1229,7 +1229,7 @@ class Session:
     def run_proc(self, args, local_env=None):
         if local_env is None:
             local_env = self.env
-        subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
+        return subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
 
     def run(self):
         if "PROTON_DUMP_DEBUG_COMMANDS" in self.env and nonzero(self.env["PROTON_DUMP_DEBUG_COMMANDS"]):
@@ -1244,7 +1244,7 @@ class Session:
         else:
             remote_debug_proc = None
 
-        self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
+        rc = self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
             remote_debug_proc.kill()
@@ -1254,6 +1254,8 @@ class Session:
                 log("terminate remote debugger")
                 remote_debug_proc.terminate()
                 remote_debug_proc.communicate()
+
+        return rc
 
 if __name__ == "__main__":
     if not "STEAM_COMPAT_DATA_PATH" in os.environ:
@@ -1277,16 +1279,17 @@ if __name__ == "__main__":
     g_session.init_session(sys.argv[1] != "runinprefix")
 
     #determine mode
+    rc = 0
     if sys.argv[1] == "run":
         #start target app
-        g_session.run()
+        rc = g_session.run()
     elif sys.argv[1] == "waitforexitandrun":
         #wait for wineserver to shut down
         g_session.run_proc([g_proton.wineserver_bin, "-w"])
         #then run
-        g_session.run()
+        rc = g_session.run()
     elif sys.argv[1] == "runinprefix":
-        g_session.run_proc([g_proton.wine_bin] + sys.argv[2:])
+        rc = g_session.run_proc([g_proton.wine_bin] + sys.argv[2:])
     elif sys.argv[1] == "getcompatpath":
         #linux -> windows path
         path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
@@ -1299,7 +1302,7 @@ if __name__ == "__main__":
         log("Need a verb.")
         sys.exit(1)
 
-    sys.exit(0)
+    sys.exit(rc)
 
 #pylint --disable=C0301,C0326,C0330,C0111,C0103,R0902,C1801,R0914,R0912,R0915
 # vim: set syntax=python:
