@@ -62,6 +62,12 @@ EXTERN_C HANDLE CDECL __wine_make_process_system(void);
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 
+static bool env_nonzero(const char *env)
+{
+    const char *v = getenv(env);
+    return v != NULL && *v && v[0] != '0';
+}
+
 static void set_active_process_pid(void)
 {
     DWORD pid = GetCurrentProcessId();
@@ -539,6 +545,7 @@ extern "C"
 
 static DWORD WINAPI initialize_vr_data(void *arg)
 {
+    int (WINAPI *p__wineopenxr_get_extensions_internal)(char **instance_extensions, char **device_extensions);
     vr::IVRClientCore* (*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
     uint32_t instance_extensions_count, device_count;
     VkPhysicalDevice *phys_devices = NULL;
@@ -548,6 +555,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     VkApplicationInfo app_info = {};
     char *buffer = NULL, *new_buffer;
     vr::IVRClientCore* client_core;
+    char *xr_inst_ext, *xr_dev_ext;
     vr::IVRCompositor* compositor;
     VkInstance vk_instance = NULL;
     BOOL vr_initialized = FALSE;
@@ -558,6 +566,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     const char *env_str;
     unsigned int app_id;
     unsigned int length;
+    HMODULE hwineopenxr;
     void *lib_vrclient;
     DWORD hmd_present;
     int return_code;
@@ -710,6 +719,40 @@ static DWORD WINAPI initialize_vr_data(void *arg)
             WINE_ERR("Could not set %s value, status %#x.\n", name, status);
             return FALSE;
         }
+    }
+
+    if ((hwineopenxr = LoadLibraryA("wineopenxr.dll")))
+    {
+        p__wineopenxr_get_extensions_internal = reinterpret_cast<decltype(p__wineopenxr_get_extensions_internal)>
+                (GetProcAddress(hwineopenxr, "__wineopenxr_get_extensions_internal"));
+        if (p__wineopenxr_get_extensions_internal)
+        {
+            if (!p__wineopenxr_get_extensions_internal(&xr_inst_ext, &xr_dev_ext))
+            {
+                WINE_TRACE("Got XR extensions.\n");
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_instance_extensions", 0, REG_SZ,
+                        (BYTE *)xr_inst_ext, strlen(xr_inst_ext) + 1)))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_instance_extensions value, status %#x.\n", status);
+                    return FALSE;
+                }
+                if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_extensions", 0, REG_SZ,
+                        (BYTE *)xr_dev_ext, strlen(xr_dev_ext) + 1)))
+                {
+                    WINE_ERR("Could not set openxr_vulkan_device_extensions value, status %#x.\n", status);
+                    return FALSE;
+                }
+            }
+        }
+        else
+        {
+            WINE_ERR("__wineopenxr_get_extensions_internal not found in wineopenxr.dll.\n");
+        }
+        FreeLibrary(hwineopenxr);
+    }
+    else
+    {
+        WINE_WARN("Could not load wineopenxr.dll, err %u.\n", GetLastError());
     }
 
     vr_status = 1;
@@ -1183,6 +1226,22 @@ int main(int argc, char *argv[])
         set_active_process_pid();
         setup_steam_registry();
         setup_steam_files();
+
+        if (env_nonzero("PROTON_WAIT_ATTACH"))
+        {
+            unsigned int sleep_count = 0;
+            WINE_TRACE("PROTON_WAIT_ATTACH is set, waiting for debugger...\n");
+            while (!IsDebuggerPresent())
+            {
+                Sleep(100);
+                ++sleep_count;
+                if (sleep_count >= 10)
+                {
+                    WINE_TRACE("still waiting for debugger...\n");
+                    sleep_count = 0;
+                }
+            }
+        }
 
         wait_handle = __wine_make_process_system();
         game_process = TRUE;
