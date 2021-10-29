@@ -46,13 +46,13 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # revert pending pulseaudio changes
-    git revert --no-commit 183fd3e089b170d5b7405a80a23e81dc7c4dd682
+#    # revert pending pulseaudio changes
+#    git revert --no-commit 183fd3e089b170d5b7405a80a23e81dc7c4dd682
 
-    # reenable pulseaudio patches
-    patch -Np1 < ../patches/wine-hotfixes/staging/x3daudio_staging_revert.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
-    patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
+#    # reenable pulseaudio patches
+#    patch -Np1 < ../patches/wine-hotfixes/staging/x3daudio_staging_revert.patch
+#    patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
+#    patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
 
     # restore pre-164b361be646a1e23fad1892893821de3805c5c6 patches:
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-6dcaff42-revert.patch
@@ -83,17 +83,21 @@
     git revert --no-commit dedda40e5d7b5a3bcf67eea95145810da283d7d9
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
-    echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
-    git revert --no-commit d8be85863fedf6982944d06ebd1ce5904cb3d4e1
+#    echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
+#    git revert --no-commit d8be85863fedf6982944d06ebd1ce5904cb3d4e1
 
     echo "revert due to fshack breakage"
     git revert --no-commit 2adf4376d86119b8a6f7cde51c9a972564575bac
     git revert --no-commit 6dcaff421f87a93efe18b2efe0ec64d94ed1d483
 
-    echo "pulseaudio fixup to re-enable staging patches"
-    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
+#    echo "pulseaudio fixup to re-enable staging patches"
+#    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
+#    git revert --no-commit 7d43ac947412c7981539a34a557d7b310e084163
+#    git revert --no-commit 030008f6cc2907a140588244f767e8b4c6b121a3
+#    git revert --no-commit 66948f8934b8aaca70cd0d2faafb81bfc51e67c6
+#    git revert --no-commit c6c3d6f9635bfa1aae8934b70f3ae9c7e549fe26
     git revert --no-commit 37e9f0eadae9f62ccae8919a92686695927e9274
     git revert --no-commit dd182a924f89b948010ecc0d79f43aec83adfe65
     git revert --no-commit 4f10b95c8355c94e4c6f506322b80be7ae7aa174
@@ -145,9 +149,8 @@
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
 
-#    BLOPS2 uses CEG which does not work in proton. Disabled for now
-#    echo "blackops 2 fix"
-#    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
+    echo "blackops 2 fix"
+    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
@@ -179,8 +182,8 @@
     echo "protonify"
     patch -Np1 < ../patches/proton/10-proton-protonify_staging.patch
 
-    echo "protonify-audio"
-    patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
+#    echo "protonify-audio"
+#    patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
 
     echo "steam bits"
     patch -Np1 < ../patches/proton/12-proton-steam-bits.patch
@@ -381,6 +384,8 @@
 
 
 ### (2-7) WINE CUSTOM PATCHES ###
+    patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio.patch
+    patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio_pulse.patch
 
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###

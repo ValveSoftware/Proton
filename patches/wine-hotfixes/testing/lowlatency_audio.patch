@@ -1,0 +1,25 @@
+From 63a91cb7793723e5b9aca11da179736f6d05c70e Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Thu, 2 Aug 2018 21:07:33 +0200
+Subject: Low latency alsa patch stolen from https://blog.thepoon.fr/osuLinuxAudioLatency/
+
+https://aur.archlinux.org/packages/wine-osu/
+
+diff --git a/dlls/winealsa.drv/mmdevdrv.c b/dlls/winealsa.drv/mmdevdrv.c
+index b285705509..ec90fa1d11 100644
+--- a/dlls/winealsa.drv/mmdevdrv.c
++++ b/dlls/winealsa.drv/mmdevdrv.c
+@@ -53,9 +53,9 @@ WINE_DECLARE_DEBUG_CHANNEL(winediag);
+ 
+ #define NULL_PTR_ERR MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, RPC_X_NULL_REF_POINTER)
+ 
+-static const REFERENCE_TIME DefaultPeriod = 100000;
+-static const REFERENCE_TIME MinimumPeriod = 50000;
+-#define                     EXTRA_SAFE_RT   40000
++static const REFERENCE_TIME DefaultPeriod = 4000;
++static const REFERENCE_TIME MinimumPeriod = 2000;
++#define                     EXTRA_SAFE_RT   1000
+ 
+ struct ACImpl;
+ typedef struct ACImpl ACImpl;
+ 

@@ -1,0 +1,56 @@
+From b6e658f5946df843a7709e22fd753442b98dcedc Mon Sep 17 00:00:00 2001
+From: X9VoiD <oscar.silvestrexx@gmail.com>
+Date: Thu, 28 Oct 2021 02:42:16 +0800
+Subject: [PATCH] Add PulseAudio/Pipewire latency overrides
+
+---
+ dlls/winepulse.drv/pulse.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winepulse.drv/pulse.c b/dlls/winepulse.drv/pulse.c
+index bce70ac358c..4d1c5fbdd3d 100644
+--- a/dlls/winepulse.drv/pulse.c
++++ b/dlls/winepulse.drv/pulse.c
+@@ -505,11 +505,20 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
+     if (length)
+         pulse_def_period[!render] = pulse_min_period[!render] = pa_bytes_to_usec(10 * length, &ss);
+ 
+-    if (pulse_min_period[!render] < MinimumPeriod)
+-        pulse_min_period[!render] = MinimumPeriod;
+-
+-    if (pulse_def_period[!render] < DefaultPeriod)
+-        pulse_def_period[!render] = DefaultPeriod;
++    const char *penv = getenv("STAGING_AUDIO_PERIOD");
++    if (penv) {
++        int val = atoi(penv);
++        if (val > 0) {
++            pulse_def_period[!render] = pulse_min_period[!render] = val;
++            printf("Audio period set to %d.\n", val);
++        }
++        else if (val < 0) {
++            if (pulse_min_period[!render] < MinimumPeriod)
++                pulse_min_period[!render] = MinimumPeriod;
++            if (pulse_def_period[!render] < DefaultPeriod)
++                pulse_def_period[!render] = DefaultPeriod;
++        }
++    }
+ 
+     wfx->wFormatTag = WAVE_FORMAT_EXTENSIBLE;
+     wfx->cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+@@ -860,6 +869,13 @@ static NTSTATUS pulse_create_stream(void *args)
+     if (duration < 3 * period)
+         duration = 3 * period;
+ 
++    const char *denv = getenv("STAGING_AUDIO_DURATION");
++    if (denv) {
++        int val = atoi(denv);
++        duration = val;
++        printf("Staging audio duration set to %d.\n", val);
++    }
++
+     stream->period_bytes = pa_frame_size(&stream->ss) * muldiv(period, stream->ss.rate, 10000000);
+ 
+     stream->bufsize_frames = ceil((duration / 10000000.) * params->fmt->nSamplesPerSec);
+-- 
+2.33.1
+

@@ -14,4 +14,4 @@ fixes the Unhandled Exception error on start up of Black Ops 2
 +    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(6), 0x00000000 );
      ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(7), 0x11110055 );
  
-     switch (context->cpu)
+     switch (context->machine)
