@@ -30,7 +30,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.20-GE-1"
+CURRENT_PREFIX_VERSION="6.20-GE-2"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1447,10 +1447,10 @@ class Session:
         ]
 
         if any(check_args):
-            self.run_proc([g_proton.wine64_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            self.run_proc([g_proton.wine64_bin, "start.exe", "/exec", "C:\\Program Files (x86)\\Steam\\Steam.exe"] + sys.argv[2:] + self.cmdlineappend)
             #commandstring = str([g_proton.wine64_bin, "start.exe", "/exec", "steam"] + sys.argv[2:] + self.cmdlineappend)
         else:
-            self.run_proc([g_proton.wine64_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
+            self.run_proc([g_proton.wine64_bin, "start.exe", "/b", "C:\\Program Files (x86)\\Steam\\Steam.exe"] + sys.argv[2:] + self.cmdlineappend)
             #commandstring = str([g_proton.wine64_bin, "start.exe", "/b", "steam"] + sys.argv[2:] + self.cmdlineappend)
 
         #log("Running: " + commandstring)
