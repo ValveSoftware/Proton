@@ -53,7 +53,8 @@ dependency_afdko() {
         AFDKO_VERB=afdko
     else
         err "Couldn't find 'afdko'. Install it and make sure that 'makeotf' is in your PATH or 'afdko makeotf' works."
-            MISSING_DEPENDENCIES=1
+        err "Some distributions don't package afdko correctly, you may need to 'pip install afdko'."
+        MISSING_DEPENDENCIES=1
     fi
 }
 
