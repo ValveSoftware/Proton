@@ -653,7 +653,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     USE_VULKAN_PROC(vkEnumeratePhysicalDevices)
     USE_VULKAN_PROC(vkGetPhysicalDeviceProperties)
     USE_VULKAN_PROC(__wine_get_native_VkPhysicalDevice)
-#undef USE_OPENVR_PROC
+#undef USE_VULKAN_PROC
 
     parse_extensions(buffer, &instance_extensions_count, &instance_extensions);
 
