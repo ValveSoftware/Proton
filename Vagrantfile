@@ -77,13 +77,10 @@ Vagrant.configure(2) do |config|
       #install host build-time dependencies
       apt-get update
       apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
-          fontforge-nox python-debian python-pip
+          fontforge-nox python-debian uuid-dev python3-pip
 
       #install adobe font devkit to build source san hans
-      pip install afdko
-
-      #work around an afdko dependency bug
-      pip install singledispatch==3.4.0.4
+      pip3 install afdko
 
       #allow vagrant user to run docker
       adduser vagrant docker
