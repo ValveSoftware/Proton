@@ -121,9 +121,7 @@ typedef struct ControllerAnalogActionData_t { unsigned char a[13]; } ControllerA
 typedef struct ControllerDigitalActionData_t { unsigned char a[2]; } ControllerDigitalActionData_t;
 typedef struct ControllerMotionData_t { unsigned char a[40]; } ControllerMotionData_t;
 typedef struct SteamNetworkPingLocation_t { uint8 m_data[ 512 ]; } SteamNetworkPingLocation_t;
-
-/* XXX GET SIZE */
-typedef struct SteamIPAddress_t { uint8 m_data[12]; } SteamIPAddress_t;
+typedef struct SteamIPAddress_t { uint8 m_data[20]; } SteamIPAddress_t;
 
 #pragma pack( push, 1 )
 
