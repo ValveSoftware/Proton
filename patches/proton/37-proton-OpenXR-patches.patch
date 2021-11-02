@@ -1,4 +1,4 @@
-From 700ee48e028333b7afbcf3ac0c2e2b3c6ccbfedf Mon Sep 17 00:00:00 2001
+From b29d87597b35e568bb32534c1673974136d78765 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 30 Dec 2020 13:22:43 -0600
 Subject: [PATCH] winevulkan: Retrieve XR extensions from the environment
@@ -8,13 +8,13 @@ Subject: [PATCH] winevulkan: Retrieve XR extensions from the environment
  1 file changed, 132 insertions(+), 4 deletions(-)
 
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index a0009ae85f5..c10a53e4acf 100644
+index 2d35a09aa75..6c27c6f9894 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -382,13 +382,83 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
+@@ -357,12 +357,82 @@ static void wine_vk_device_free_create_info(VkDeviceCreateInfo *create_info)
      free_VkDeviceCreateInfo_struct_chain(create_info);
  }
- 
+
 +static char *strdupA(const char *s)
 +{
 +    size_t l = strlen(s) + 1;
@@ -87,22 +87,20 @@ index a0009ae85f5..c10a53e4acf 100644
 -        VkDeviceCreateInfo *dst)
 +        VkDeviceCreateInfo *dst, BOOL *must_free_extensions)
  {
-     VkDeviceGroupDeviceCreateInfo *group_info;
 -    unsigned int i;
 +    unsigned int i, append_xr = 0, wine_extension_count;
      VkResult res;
- 
+
 +    static const char *wine_xr_extension_name = "VK_WINE_openxr_device_extensions";
 +
      *dst = *src;
- 
+
      if ((res = convert_VkDeviceCreateInfo_struct_chain(src->pNext, dst)) < 0)
-@@ -451,8 +521,55 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
+@@ -375,8 +445,54 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
      dst->enabledLayerCount = 0;
      dst->ppEnabledLayerNames = NULL;
- 
+
 -    TRACE("Enabled %u extensions.\n", dst->enabledExtensionCount);
-+
      for (i = 0; i < dst->enabledExtensionCount; i++)
 +    {
 +        const char *extension_name = dst->ppEnabledExtensionNames[i];
@@ -144,7 +142,7 @@ index a0009ae85f5..c10a53e4acf 100644
 +
 +        *must_free_extensions = TRUE;
 +        wine_extension_count = dst->enabledExtensionCount - xr_extensions_len;
-+    } else {
++    }else{
 +        *must_free_extensions = FALSE;
 +        wine_extension_count = dst->enabledExtensionCount;
 +    }
@@ -154,10 +152,10 @@ index a0009ae85f5..c10a53e4acf 100644
      {
          const char *extension_name = dst->ppEnabledExtensionNames[i];
          TRACE("Extension %u: %s.\n", i, debugstr_a(extension_name));
-@@ -435,6 +584,14 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
+@@ -429,6 +545,15 @@ static VkResult wine_vk_device_convert_create_info(const VkDeviceCreateInfo *src
      return VK_SUCCESS;
  }
- 
+
 +static void wine_vk_device_free_create_info_extensions(VkDeviceCreateInfo *create_info)
 +{
 +    unsigned int i;
@@ -166,26 +164,28 @@ index a0009ae85f5..c10a53e4acf 100644
 +    heap_free((void*)create_info->ppEnabledExtensionNames);
 +}
 +
++
  /* Helper function used for freeing a device structure. This function supports full
   * and partial object cleanups and can thus be used for vkCreateDevice failures.
   */
-@@ -918,6 +918,7 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
+@@ -757,6 +882,7 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
      uint32_t max_queue_families;
      struct VkDevice_T *object;
      unsigned int i;
 +    BOOL create_info_free_extensions;
      VkResult res;
- 
+
      TRACE("%p, %p, %p, %p\n", phys_dev, create_info, allocator, device);
-@@ -942,13 +943,15 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
-     object->base.loader_magic = VULKAN_ICD_MAGIC_VALUE;
+@@ -719,7 +835,7 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
+     object->base.base.loader_magic = VULKAN_ICD_MAGIC_VALUE;
      object->phys_dev = phys_dev;
- 
+
 -    res = wine_vk_device_convert_create_info(create_info, &create_info_host);
 +    res = wine_vk_device_convert_create_info(create_info, &create_info_host, &create_info_free_extensions);
      if (res != VK_SUCCESS)
          goto fail;
- 
+
+@@ -745,6 +861,8 @@ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice phys_dev,
      res = phys_dev->instance->funcs.p_vkCreateDevice(phys_dev->phys_dev,
              &create_info_host, NULL /* allocator */, &object->device);
      wine_vk_device_free_create_info(&create_info_host);

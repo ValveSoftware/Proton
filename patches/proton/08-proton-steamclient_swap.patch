@@ -135,9 +135,9 @@ index 0fe79ee499c..adaaa6acaf6 100644
 +}
 +
 +
- /* math function wrappers */
- static double CDECL ntdll_atan( double d )  { return atan( d ); }
- static double CDECL ntdll_ceil( double d )  { return ceil( d ); }
+ /***********************************************************************
+  *           unix_funcs
+  */
 @@ -1470,6 +1535,7 @@ static struct unix_funcs unix_funcs =
      init_builtin_dll,
      init_unix_lib,

@@ -21,11 +21,11 @@ index 21aaa2e54b6..e291e2b550d 100644
 +    WINED3D_CS_OP_GL_TEXTURE_CALLBACK,
      WINED3D_CS_OP_STOP,
  };
- 
+
 @@ -457,6 +458,15 @@ struct wined3d_cs_generate_mipmaps
      struct wined3d_shader_resource_view *view;
  };
- 
+
 +struct wined3d_cs_gl_texture_callback
 +{
 +    enum wined3d_cs_op opcode;
@@ -41,7 +41,7 @@ index 21aaa2e54b6..e291e2b550d 100644
 @@ -2698,6 +2708,47 @@ void wined3d_device_context_emit_generate_mipmaps(struct wined3d_device_context
      wined3d_device_context_submit(context, WINED3D_CS_QUEUE_DEFAULT);
  }
- 
+
 +static void wined3d_cs_exec_gl_texture_callback(struct wined3d_cs *cs, const void *data)
 +{
 +    const struct wined3d_cs_gl_texture_callback *op = data;
@@ -92,7 +92,7 @@ index 21aaa2e54b6..e291e2b550d 100644
      /* WINED3D_CS_OP_EXECUTE_COMMAND_LIST        */ wined3d_cs_exec_execute_command_list,
 +    /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
  };
- 
+
  static void *wined3d_cs_st_require_space(struct wined3d_device_context *context,
 diff --git a/dlls/wined3d/texture.c b/dlls/wined3d/texture.c
 index 39e6e2a68b7..bdcd0b55ae6 100644
@@ -101,7 +101,7 @@ index 39e6e2a68b7..bdcd0b55ae6 100644
 @@ -4574,6 +4574,16 @@ void wined3d_texture_download_from_texture(struct wined3d_texture *dst_texture,
      wined3d_texture_invalidate_location(dst_texture, dst_sub_resource_idx, ~dst_location);
  }
- 
+
 +void CDECL wined3d_access_gl_texture(struct wined3d_texture *texture,
 +        wined3d_gl_texture_callback callback, const void *data, unsigned int size)
 +{
@@ -122,7 +122,7 @@ index f5b1a078907..756d47ef20d 100644
 @@ -4762,6 +4762,9 @@ static inline void wined3d_cs_finish(struct wined3d_cs *cs, enum wined3d_cs_queu
      cs->c.ops->finish(&cs->c, queue_id);
  }
- 
+
 +void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_texture *texture,
 +        wined3d_gl_texture_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
 +
@@ -136,7 +136,7 @@ index dd1c15f14ed..2123e857a52 100644
 @@ -2969,6 +2969,11 @@ ULONG __cdecl wined3d_vertex_declaration_incref(struct wined3d_vertex_declaratio
  HRESULT __cdecl wined3d_extract_shader_input_signature_from_dxbc(struct wined3d_shader_signature *signature,
          const void *byte_code, SIZE_T byte_code_size);
- 
+
 +typedef void (__cdecl *wined3d_gl_texture_callback)(unsigned int gl_texture, const void *data, unsigned int size);
 +
 +void __cdecl wined3d_access_gl_texture(struct wined3d_texture *texture,
@@ -145,7 +145,7 @@ index dd1c15f14ed..2123e857a52 100644
  /* Return the integer base-2 logarithm of x. Undefined for x == 0. */
  static inline unsigned int wined3d_log2i(unsigned int x)
  {
--- 
+--
 2.30.2
 
 From 34565d56b8cfcdcf787c5a3a0466f990918d1139 Mon Sep 17 00:00:00 2001
@@ -171,11 +171,11 @@ index e291e2b550d..cf55385c3c1 100644
 +    WINED3D_CS_OP_USER_CALLBACK,
      WINED3D_CS_OP_STOP,
  };
- 
+
 @@ -467,6 +468,14 @@ struct wined3d_cs_gl_texture_callback
      BYTE data[1];
  };
- 
+
 +struct wined3d_cs_user_callback
 +{
 +    enum wined3d_cs_op opcode;
@@ -190,7 +190,7 @@ index e291e2b550d..cf55385c3c1 100644
 @@ -2749,6 +2758,36 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
      cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
- 
+
 +static void wined3d_cs_exec_user_callback(struct wined3d_cs *cs, const void *data)
 +{
 +    const struct wined3d_cs_user_callback *op = data;
@@ -230,7 +230,7 @@ index e291e2b550d..cf55385c3c1 100644
      /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
 +    /* WINED3D_CS_OP_USER_CALLBACK               */ wined3d_cs_exec_user_callback,
  };
- 
+
  static void *wined3d_cs_st_require_space(struct wined3d_device_context *context,
 diff --git a/dlls/wined3d/device.c b/dlls/wined3d/device.c
 index 484130b3103..286d4d3acf5 100644
@@ -253,12 +253,12 @@ index 756d47ef20d..602647b1e94 100644
 --- a/dlls/wined3d/wined3d_private.h
 +++ b/dlls/wined3d/wined3d_private.h
 @@ -4764,6 +4764,8 @@ static inline void wined3d_cs_finish(struct wined3d_cs *cs, enum wined3d_cs_queu
- 
+
  void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_texture *texture,
          wined3d_gl_texture_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
 +void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
 +        wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
- 
+
  static inline void wined3d_device_context_push_constants(struct wined3d_device_context *context,
          enum wined3d_push_constants p, unsigned int start_idx, unsigned int count, const void *constants)
 diff --git a/include/wine/wined3d.h b/include/wine/wined3d.h
@@ -268,7 +268,7 @@ index 2123e857a52..39689bdb4e1 100644
 @@ -2974,6 +2974,11 @@ typedef void (__cdecl *wined3d_gl_texture_callback)(unsigned int gl_texture, con
  void __cdecl wined3d_access_gl_texture(struct wined3d_texture *texture,
          wined3d_gl_texture_callback callback, const void *data, unsigned int size);
- 
+
 +typedef void (__cdecl *wined3d_cs_callback)(const void *data, unsigned int size);
 +
 +void __cdecl wined3d_device_run_cs_callback(struct wined3d_device *device,
@@ -277,7 +277,7 @@ index 2123e857a52..39689bdb4e1 100644
  /* Return the integer base-2 logarithm of x. Undefined for x == 0. */
  static inline unsigned int wined3d_log2i(unsigned int x)
  {
--- 
+--
 2.30.2
 
 From 434e12794d7dda50554dbcf781af282816d39121 Mon Sep 17 00:00:00 2001
@@ -301,7 +301,7 @@ index 1a8cdc6d77c..2b1809726ca 100644
 @@ -39,6 +39,8 @@
  #include "wine/winedxgi.h"
  #include "wine/rbtree.h"
- 
+
 +#include "wine/wined3d-interop.h"
 +
  #define MAKE_TAG(ch0, ch1, ch2, ch3) \
@@ -315,7 +315,7 @@ index 1a8cdc6d77c..2b1809726ca 100644
 +    IWineD3D11Texture2D ID3D11Texture2D_iface;
      ID3D10Texture2D ID3D10Texture2D_iface;
      LONG refcount;
- 
+
 diff --git a/dlls/d3d11/device.c b/dlls/d3d11/device.c
 index 0819918b2a1..41967dd0a1c 100644
 --- a/dlls/d3d11/device.c
@@ -323,19 +323,19 @@ index 0819918b2a1..41967dd0a1c 100644
 @@ -3165,7 +3165,7 @@ static HRESULT STDMETHODCALLTYPE d3d11_device_CreateTexture2D(ID3D11Device2 *ifa
      if (FAILED(hr = d3d_texture2d_create(device, desc, data, &object)))
          return hr;
- 
+
 -    *texture = &object->ID3D11Texture2D_iface;
 +    *texture = (ID3D11Texture2D *)&object->ID3D11Texture2D_iface;
- 
+
      return S_OK;
  }
 @@ -6594,7 +6594,7 @@ static HRESULT CDECL device_parent_create_swapchain_texture(struct wined3d_devic
- 
+
      *wined3d_texture = texture->wined3d_texture;
      wined3d_texture_incref(*wined3d_texture);
 -    ID3D11Texture2D_Release(&texture->ID3D11Texture2D_iface);
 +    IWineD3D11Texture2D_Release(&texture->ID3D11Texture2D_iface);
- 
+
      return S_OK;
  }
 diff --git a/dlls/d3d11/texture.c b/dlls/d3d11/texture.c
@@ -343,9 +343,9 @@ index 061bbb09795..dd21c6d7f08 100644
 --- a/dlls/d3d11/texture.c
 +++ b/dlls/d3d11/texture.c
 @@ -518,13 +518,20 @@ HRESULT d3d_texture1d_create(struct d3d_device *device, const D3D11_TEXTURE1D_DE
- 
+
  /* ID3D11Texture2D methods */
- 
+
 -static HRESULT STDMETHODCALLTYPE d3d11_texture2d_QueryInterface(ID3D11Texture2D *iface, REFIID riid, void **object)
 +static inline struct d3d_texture2d *impl_from_IWineD3D11Texture2D(IWineD3D11Texture2D *iface)
  {
@@ -357,9 +357,9 @@ index 061bbb09795..dd21c6d7f08 100644
 +        REFIID riid, void **object)
 +{
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
- 
+
      TRACE("iface %p, riid %s, object %p.\n", iface, debugstr_guid(riid), object);
- 
+
 -    if (IsEqualGUID(riid, &IID_ID3D11Texture2D)
 +    if (IsEqualGUID(riid, &IID_IWineD3D11Texture2D)
 +            || IsEqualGUID(riid, &IID_ID3D11Texture2D)
@@ -369,43 +369,43 @@ index 061bbb09795..dd21c6d7f08 100644
 @@ -554,9 +561,9 @@ static HRESULT STDMETHODCALLTYPE d3d11_texture2d_QueryInterface(ID3D11Texture2D
      return E_NOINTERFACE;
  }
- 
+
 -static ULONG STDMETHODCALLTYPE d3d11_texture2d_AddRef(ID3D11Texture2D *iface)
 +static ULONG STDMETHODCALLTYPE d3d11_texture2d_AddRef(IWineD3D11Texture2D *iface)
  {
 -    struct d3d_texture2d *texture = impl_from_ID3D11Texture2D(iface);
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
      ULONG refcount = InterlockedIncrement(&texture->refcount);
- 
+
      TRACE("%p increasing refcount to %u.\n", texture, refcount);
 @@ -572,9 +579,9 @@ static ULONG STDMETHODCALLTYPE d3d11_texture2d_AddRef(ID3D11Texture2D *iface)
      return refcount;
  }
- 
+
 -static ULONG STDMETHODCALLTYPE d3d11_texture2d_Release(ID3D11Texture2D *iface)
 +static ULONG STDMETHODCALLTYPE d3d11_texture2d_Release(IWineD3D11Texture2D *iface)
  {
 -    struct d3d_texture2d *texture = impl_from_ID3D11Texture2D(iface);
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
      ULONG refcount = InterlockedDecrement(&texture->refcount);
- 
+
      TRACE("%p decreasing refcount to %u.\n", texture, refcount);
 @@ -594,9 +601,9 @@ static ULONG STDMETHODCALLTYPE d3d11_texture2d_Release(ID3D11Texture2D *iface)
      return refcount;
  }
- 
+
 -static void STDMETHODCALLTYPE d3d11_texture2d_GetDevice(ID3D11Texture2D *iface, ID3D11Device **device)
 +static void STDMETHODCALLTYPE d3d11_texture2d_GetDevice(IWineD3D11Texture2D *iface, ID3D11Device **device)
  {
 -    struct d3d_texture2d *texture = impl_from_ID3D11Texture2D(iface);
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
- 
+
      TRACE("iface %p, device %p.\n", iface, device);
- 
+
 @@ -604,10 +611,10 @@ static void STDMETHODCALLTYPE d3d11_texture2d_GetDevice(ID3D11Texture2D *iface,
      ID3D11Device_AddRef(*device);
  }
- 
+
 -static HRESULT STDMETHODCALLTYPE d3d11_texture2d_GetPrivateData(ID3D11Texture2D *iface,
 +static HRESULT STDMETHODCALLTYPE d3d11_texture2d_GetPrivateData(IWineD3D11Texture2D *iface,
          REFGUID guid, UINT *data_size, void *data)
@@ -414,11 +414,11 @@ index 061bbb09795..dd21c6d7f08 100644
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
      IDXGISurface *dxgi_surface;
      HRESULT hr;
- 
+
 @@ -624,10 +631,10 @@ static HRESULT STDMETHODCALLTYPE d3d11_texture2d_GetPrivateData(ID3D11Texture2D
      return d3d_get_private_data(&texture->private_store, guid, data_size, data);
  }
- 
+
 -static HRESULT STDMETHODCALLTYPE d3d11_texture2d_SetPrivateData(ID3D11Texture2D *iface,
 +static HRESULT STDMETHODCALLTYPE d3d11_texture2d_SetPrivateData(IWineD3D11Texture2D *iface,
          REFGUID guid, UINT data_size, const void *data)
@@ -427,11 +427,11 @@ index 061bbb09795..dd21c6d7f08 100644
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
      IDXGISurface *dxgi_surface;
      HRESULT hr;
- 
+
 @@ -644,10 +651,10 @@ static HRESULT STDMETHODCALLTYPE d3d11_texture2d_SetPrivateData(ID3D11Texture2D
      return d3d_set_private_data(&texture->private_store, guid, data_size, data);
  }
- 
+
 -static HRESULT STDMETHODCALLTYPE d3d11_texture2d_SetPrivateDataInterface(ID3D11Texture2D *iface,
 +static HRESULT STDMETHODCALLTYPE d3d11_texture2d_SetPrivateDataInterface(IWineD3D11Texture2D *iface,
          REFGUID guid, const IUnknown *data)
@@ -440,11 +440,11 @@ index 061bbb09795..dd21c6d7f08 100644
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
      IDXGISurface *dxgi_surface;
      HRESULT hr;
- 
+
 @@ -664,7 +671,7 @@ static HRESULT STDMETHODCALLTYPE d3d11_texture2d_SetPrivateDataInterface(ID3D11T
      return d3d_set_private_data_interface(&texture->private_store, guid, data);
  }
- 
+
 -static void STDMETHODCALLTYPE d3d11_texture2d_GetType(ID3D11Texture2D *iface,
 +static void STDMETHODCALLTYPE d3d11_texture2d_GetType(IWineD3D11Texture2D *iface,
          D3D11_RESOURCE_DIMENSION *resource_dimension)
@@ -453,33 +453,33 @@ index 061bbb09795..dd21c6d7f08 100644
 @@ -672,21 +679,21 @@ static void STDMETHODCALLTYPE d3d11_texture2d_GetType(ID3D11Texture2D *iface,
      *resource_dimension = D3D11_RESOURCE_DIMENSION_TEXTURE2D;
  }
- 
+
 -static void STDMETHODCALLTYPE d3d11_texture2d_SetEvictionPriority(ID3D11Texture2D *iface, UINT eviction_priority)
 +static void STDMETHODCALLTYPE d3d11_texture2d_SetEvictionPriority(IWineD3D11Texture2D *iface, UINT eviction_priority)
  {
      FIXME("iface %p, eviction_priority %#x stub!\n", iface, eviction_priority);
  }
- 
+
 -static UINT STDMETHODCALLTYPE d3d11_texture2d_GetEvictionPriority(ID3D11Texture2D *iface)
 +static UINT STDMETHODCALLTYPE d3d11_texture2d_GetEvictionPriority(IWineD3D11Texture2D *iface)
  {
      FIXME("iface %p stub!\n", iface);
- 
+
      return 0;
  }
- 
+
 -static void STDMETHODCALLTYPE d3d11_texture2d_GetDesc(ID3D11Texture2D *iface, D3D11_TEXTURE2D_DESC *desc)
 +static void STDMETHODCALLTYPE d3d11_texture2d_GetDesc(IWineD3D11Texture2D *iface, D3D11_TEXTURE2D_DESC *desc)
  {
 -    struct d3d_texture2d *texture = impl_from_ID3D11Texture2D(iface);
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
      struct wined3d_resource_desc wined3d_desc;
- 
+
      TRACE("iface %p, desc %p.\n", iface, desc);
 @@ -708,7 +715,19 @@ static void STDMETHODCALLTYPE d3d11_texture2d_GetDesc(ID3D11Texture2D *iface, D3
      desc->SampleDesc.Quality = wined3d_desc.multisample_quality;
  }
- 
+
 -static const struct ID3D11Texture2DVtbl d3d11_texture2d_vtbl =
 +static void STDMETHODCALLTYPE d3d11_texture2d_access_gl_texture(IWineD3D11Texture2D *iface,
 +        gl_texture_callback callback, const void *data, unsigned int size)
@@ -504,7 +504,7 @@ index 061bbb09795..dd21c6d7f08 100644
 +    /* IWineD3D11Texture methods */
 +    d3d11_texture2d_access_gl_texture,
  };
- 
+
  struct d3d_texture2d *unsafe_impl_from_ID3D11Texture2D(ID3D11Texture2D *iface)
  {
      if (!iface)
@@ -513,7 +513,7 @@ index 061bbb09795..dd21c6d7f08 100644
 +    assert(iface->lpVtbl == (void *)&d3d11_texture2d_vtbl);
      return CONTAINING_RECORD(iface, struct d3d_texture2d, ID3D11Texture2D_iface);
  }
- 
+
 diff --git a/include/Makefile.in b/include/Makefile.in
 index 9822bce6bdd..d9b646f7de1 100644
 --- a/include/Makefile.in
@@ -563,7 +563,7 @@ index 00000000000..884baf958c2
 +{
 +    void access_gl_texture(gl_texture_callback callback, const void *data, unsigned int data_size);
 +}
--- 
+--
 2.30.2
 
 From 17c027811a6641eea3298f5cb24c69c796dca328 Mon Sep 17 00:00:00 2001
@@ -587,7 +587,7 @@ index 2b1809726ca..ec0bd79fdd5 100644
      IUnknown *outer_unk;
 +    IWineD3D11Device IWineD3D11Device_iface;
      LONG refcount;
- 
+
      BOOL d3d11_only;
 diff --git a/dlls/d3d11/device.c b/dlls/d3d11/device.c
 index 41967dd0a1c..887e7de00e9 100644
@@ -596,7 +596,7 @@ index 41967dd0a1c..887e7de00e9 100644
 @@ -3119,6 +3119,53 @@ static ULONG STDMETHODCALLTYPE d3d11_device_Release(ID3D11Device2 *iface)
      return IUnknown_Release(device->outer_unk);
  }
- 
+
 +/* IWineD3D11Device methods */
 +
 +static inline struct d3d_device *impl_from_IWineD3D11Device(IWineD3D11Device *iface)
@@ -686,7 +686,7 @@ index 884baf958c2..d5c91623b3c 100644
 +{
 +    void run_on_command_stream(user_cs_callback callback, const void *data, unsigned int data_size);
 +}
--- 
+--
 2.30.2
 
 From af8a3f1e0c505ecb0a2f6a899989431e85013f74 Mon Sep 17 00:00:00 2001
@@ -710,7 +710,7 @@ index 887e7de00e9..1ff3f32f2c2 100644
 @@ -3156,6 +3156,17 @@ static void STDMETHODCALLTYPE wine_device_run_on_command_stream(IWineD3D11Device
      wined3d_mutex_unlock();
  }
- 
+
 +static void STDMETHODCALLTYPE wine_device_wait_idle(IWineD3D11Device *iface)
 +{
 +    struct d3d_device *device = impl_from_IWineD3D11Device(iface);
@@ -731,7 +731,7 @@ index 887e7de00e9..1ff3f32f2c2 100644
      wine_device_run_on_command_stream,
 +    wine_device_wait_idle,
  };
- 
+
  static HRESULT STDMETHODCALLTYPE d3d11_device_CreateBuffer(ID3D11Device2 *iface, const D3D11_BUFFER_DESC *desc,
 diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
 index cf55385c3c1..0eeabdb6640 100644
@@ -740,7 +740,7 @@ index cf55385c3c1..0eeabdb6640 100644
 @@ -476,6 +477,11 @@ struct wined3d_cs_user_callback
      BYTE data[1];
  };
- 
+
 +struct wined3d_cs_wait_idle
 +{
 +    enum wined3d_cs_op opcode;
@@ -752,7 +752,7 @@ index cf55385c3c1..0eeabdb6640 100644
 @@ -2788,6 +2794,19 @@ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
      cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
- 
+
 +static void wined3d_cs_exec_wait_idle(struct wined3d_cs *cs, const void *data) {}
 +
 +void wined3d_cs_emit_wait_idle(struct wined3d_cs *cs)
@@ -774,7 +774,7 @@ index 286d4d3acf5..a3e41cb38ef 100644
 --- a/dlls/wined3d/device.c
 +++ b/dlls/wined3d/device.c
 @@ -6328,3 +6328,10 @@ void CDECL wined3d_device_run_cs_callback(struct wined3d_device *device,
- 
+
      wined3d_cs_emit_user_callback(device->cs, callback, data, size);
  }
 +
@@ -793,7 +793,7 @@ index 602647b1e94..8a38f6d4925 100644
  void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
          wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
 +void wined3d_cs_emit_wait_idle(struct wined3d_cs *cs) DECLSPEC_HIDDEN;
- 
+
  static inline void wined3d_device_context_push_constants(struct wined3d_device_context *context,
          enum wined3d_push_constants p, unsigned int start_idx, unsigned int count, const void *constants)
 diff --git a/include/wine/wined3d-interop.idl b/include/wine/wined3d-interop.idl
@@ -812,14 +812,14 @@ index 39689bdb4e1..c90a71dbd5b 100644
 --- a/include/wine/wined3d.h
 +++ b/include/wine/wined3d.h
 @@ -2978,6 +2978,7 @@ typedef void (__cdecl *wined3d_cs_callback)(const void *data, unsigned int size)
- 
+
  void __cdecl wined3d_device_run_cs_callback(struct wined3d_device *device,
          wined3d_cs_callback callback, const void *data, unsigned int size);
 +void __cdecl wined3d_device_wait_idle(struct wined3d_device *device);
- 
+
  /* Return the integer base-2 logarithm of x. Undefined for x == 0. */
  static inline unsigned int wined3d_log2i(unsigned int x)
--- 
+--
 2.30.2
 
 From 9c84c7ec7714dc3f0f9038b60735788f9d37d77c Mon Sep 17 00:00:00 2001
@@ -843,7 +843,7 @@ index dd21c6d7f08..c46aae99a24 100644
 +++ b/dlls/d3d11/texture.c
 @@ -716,14 +716,28 @@ static void STDMETHODCALLTYPE d3d11_texture2d_GetDesc(IWineD3D11Texture2D *iface
  }
- 
+
  static void STDMETHODCALLTYPE d3d11_texture2d_access_gl_texture(IWineD3D11Texture2D *iface,
 -        gl_texture_callback callback, const void *data, unsigned int size)
 +        gl_texture_callback callback, IUnknown *depth_unk, const void *data, unsigned int size)
@@ -851,9 +851,9 @@ index dd21c6d7f08..c46aae99a24 100644
 -    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface), *depth_tex = NULL;
 +    IWineD3D11Texture2D *depth_d3d11 = NULL;
- 
+
      TRACE("iface %p, callback %p, data %p, size %u.\n", iface, callback, data, size);
- 
+
      wined3d_mutex_lock();
 -    wined3d_access_gl_texture(texture->wined3d_texture, callback, data, size);
 +
@@ -872,7 +872,7 @@ index dd21c6d7f08..c46aae99a24 100644
 +
      wined3d_mutex_unlock();
  }
- 
+
 diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
 index 0eeabdb6640..edfdeecee3c 100644
 --- a/dlls/wined3d/cs.c
@@ -892,37 +892,37 @@ index 0eeabdb6640..edfdeecee3c 100644
 +    struct wined3d_texture_gl *depth_texture = wined3d_texture_gl(op->depth_texture);
      const struct wined3d_gl_info *gl_info;
      struct wined3d_context *context;
- 
+
 @@ -2734,8 +2736,12 @@ static void wined3d_cs_exec_gl_texture_callback(struct wined3d_cs *cs, const voi
      gl_info = wined3d_context_gl(context)->gl_info;
- 
+
      wined3d_texture_load_location(&texture->t, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
 +    if (depth_texture)
 +        wined3d_texture_load_location(&depth_texture->t, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
- 
+
 -    op->callback(texture->texture_rgb.name, op->data, op->data_size);
 +    op->callback(texture->texture_rgb.name,
 +            depth_texture ? depth_texture->texture_rgb.name : 0,
 +            op->data, op->data_size);
- 
+
      context_invalidate_compute_state(context, STATE_COMPUTE_SHADER_RESOURCE_BINDING);
      context_invalidate_state(context, STATE_GRAPHICS_SHADER_RESOURCE_BINDING);
 @@ -2744,17 +2750,21 @@ static void wined3d_cs_exec_gl_texture_callback(struct wined3d_cs *cs, const voi
- 
+
      context_release(context);
- 
+
 +    if (depth_texture)
 +        wined3d_resource_release(&depth_texture->t.resource);
      wined3d_resource_release(&texture->t.resource);
  }
- 
+
  void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_texture *texture,
 -        wined3d_gl_texture_callback callback, const void *data, unsigned int size)
 +        wined3d_gl_texture_callback callback, struct wined3d_texture *depth_texture,
 +        const void *data, unsigned int size)
  {
      struct wined3d_cs_gl_texture_callback *op;
- 
+
      op = cs->c.ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
      op->opcode = WINED3D_CS_OP_GL_TEXTURE_CALLBACK;
      op->texture = texture;
@@ -936,21 +936,21 @@ index bdcd0b55ae6..b8fa5d7d3ae 100644
 +++ b/dlls/wined3d/texture.c
 @@ -4575,13 +4575,14 @@ void wined3d_texture_download_from_texture(struct wined3d_texture *dst_texture,
  }
- 
+
  void CDECL wined3d_access_gl_texture(struct wined3d_texture *texture,
 -        wined3d_gl_texture_callback callback, const void *data, unsigned int size)
 +        wined3d_gl_texture_callback callback, struct wined3d_texture *depth_texture,
 +        const void *data, unsigned int size)
  {
      struct wined3d_device *device = texture->resource.device;
- 
+
 -    TRACE("texture %p, callback %p, data %p, size %u.\n", texture, callback, data, size);
 +    TRACE("texture %p, depth_texture %p, callback %p, data %p, size %u.\n", texture, depth_texture, callback, data, size);
- 
+
 -    wined3d_cs_emit_gl_texture_callback(device->cs, texture, callback, data, size);
 +    wined3d_cs_emit_gl_texture_callback(device->cs, texture, callback, depth_texture, data, size);
  }
- 
+
  static void wined3d_texture_no3d_upload_data(struct wined3d_context *context,
 diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
 index 8a38f6d4925..a01ee1690c1 100644
@@ -958,7 +958,7 @@ index 8a38f6d4925..a01ee1690c1 100644
 +++ b/dlls/wined3d/wined3d_private.h
 @@ -4763,7 +4763,8 @@ static inline void wined3d_cs_finish(struct wined3d_cs *cs, enum wined3d_cs_queu
  }
- 
+
  void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_texture *texture,
 -        wined3d_gl_texture_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
 +        wined3d_gl_texture_callback callback, struct wined3d_texture *depth_texture,
@@ -973,12 +973,12 @@ index 6f8ea3770e3..c5395ccc0ed 100644
 @@ -16,7 +16,7 @@
   * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
   */
- 
+
 -typedef void (__cdecl *gl_texture_callback)(unsigned int gl_texture, const void *data, unsigned int data_size);
 +typedef void (__cdecl *gl_texture_callback)(unsigned int gl_texture, unsigned int gl_depth_texture, const void *data, unsigned int data_size);
- 
+
  import "d3d11.idl";
- 
+
 @@ -27,7 +27,7 @@ import "d3d11.idl";
  ]
  interface IWineD3D11Texture2D : ID3D11Texture2D
@@ -986,7 +986,7 @@ index 6f8ea3770e3..c5395ccc0ed 100644
 -    void access_gl_texture(gl_texture_callback callback, const void *data, unsigned int data_size);
 +    void access_gl_texture(gl_texture_callback callback, IUnknown *depth_texture, const void *data, unsigned int data_size);
  }
- 
+
  typedef void (__cdecl *user_cs_callback)(const void *data, unsigned int data_size);
 diff --git a/include/wine/wined3d.h b/include/wine/wined3d.h
 index c90a71dbd5b..81235a7677c 100644
@@ -995,17 +995,17 @@ index c90a71dbd5b..81235a7677c 100644
 @@ -2969,10 +2969,10 @@ ULONG __cdecl wined3d_vertex_declaration_incref(struct wined3d_vertex_declaratio
  HRESULT __cdecl wined3d_extract_shader_input_signature_from_dxbc(struct wined3d_shader_signature *signature,
          const void *byte_code, SIZE_T byte_code_size);
- 
+
 -typedef void (__cdecl *wined3d_gl_texture_callback)(unsigned int gl_texture, const void *data, unsigned int size);
 +typedef void (__cdecl *wined3d_gl_texture_callback)(unsigned int gl_texture, unsigned int gl_depth_texture, const void *data, unsigned int size);
- 
+
  void __cdecl wined3d_access_gl_texture(struct wined3d_texture *texture,
 -        wined3d_gl_texture_callback callback, const void *data, unsigned int size);
 +        wined3d_gl_texture_callback callback, struct wined3d_texture *depth_texture, const void *data, unsigned int size);
- 
+
  typedef void (__cdecl *wined3d_cs_callback)(const void *data, unsigned int size);
- 
--- 
+
+--
 2.30.2
 
 From d00f400da6cc085c207d0501944804ad63cb486b Mon Sep 17 00:00:00 2001
@@ -1026,7 +1026,7 @@ index edfdeecee3c..298f74c46c0 100644
 @@ -2804,19 +2803,6 @@ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
      cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
- 
+
 -static void wined3d_cs_exec_wait_idle(struct wined3d_cs *cs, const void *data) {}
 -
 -void wined3d_cs_emit_wait_idle(struct wined3d_cs *cs)
@@ -1050,7 +1050,7 @@ index a3e41cb38ef..9ec837e837d 100644
 @@ -6333,5 +6333,5 @@ void CDECL wined3d_device_wait_idle(struct wined3d_device *device)
  {
      TRACE("device %p.\n", device);
- 
+
 -    wined3d_cs_emit_wait_idle(device->cs);
 +    device->cs->c.ops->finish(device->cs, WINED3D_CS_QUEUE_DEFAULT);
  }
@@ -1063,10 +1063,10 @@ index a01ee1690c1..0a18d909c5e 100644
  void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
          wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
 -void wined3d_cs_emit_wait_idle(struct wined3d_cs *cs) DECLSPEC_HIDDEN;
- 
+
  static inline void wined3d_device_context_push_constants(struct wined3d_device_context *context,
          enum wined3d_push_constants p, unsigned int start_idx, unsigned int count, const void *constants)
--- 
+--
 2.30.2
 
 From 08d1dd39399a79f3f701cbcb37b733a5f48af5fa Mon Sep 17 00:00:00 2001
@@ -1092,7 +1092,7 @@ index c46aae99a24..7f7e8254225 100644
 @@ -741,6 +741,20 @@ static void STDMETHODCALLTYPE d3d11_texture2d_access_gl_texture(IWineD3D11Textur
      wined3d_mutex_unlock();
  }
- 
+
 +static unsigned int STDMETHODCALLTYPE d3d11_texture2d_get_gl_texture(IWineD3D11Texture2D *iface)
 +{
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
@@ -1116,7 +1116,7 @@ index c46aae99a24..7f7e8254225 100644
      d3d11_texture2d_access_gl_texture,
 +    d3d11_texture2d_get_gl_texture,
  };
- 
+
  struct d3d_texture2d *unsafe_impl_from_ID3D11Texture2D(ID3D11Texture2D *iface)
 diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
 index 298f74c46c0..511883924a1 100644
@@ -1129,11 +1129,11 @@ index 298f74c46c0..511883924a1 100644
 +    WINED3D_CS_OP_FENCE,
      WINED3D_CS_OP_STOP,
  };
- 
+
 @@ -482,6 +483,12 @@ struct wined3d_cs_wait_idle
      enum wined3d_cs_op opcode;
  };
- 
+
 +struct wined3d_cs_fence
 +{
 +    enum wined3d_cs_op opcode;
@@ -1146,7 +1146,7 @@ index 298f74c46c0..511883924a1 100644
 @@ -2803,6 +2810,46 @@ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
      cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
  }
- 
+
 +static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
 +{
 +    const struct wined3d_cs_fence *op = data;
@@ -1196,7 +1196,7 @@ index 298f74c46c0..511883924a1 100644
      /* WINED3D_CS_OP_USER_CALLBACK               */ wined3d_cs_exec_user_callback,
 +    /* WINED3D_CS_OP_FENCE                       */ wined3d_cs_exec_fence,
  };
- 
+
  static void *wined3d_cs_st_require_space(struct wined3d_device_context *context,
 diff --git a/dlls/wined3d/device.c b/dlls/wined3d/device.c
 index 9ec837e837d..9d042f4d0e1 100644
@@ -1205,11 +1205,11 @@ index 9ec837e837d..9d042f4d0e1 100644
 @@ -218,6 +218,8 @@ void wined3d_device_cleanup(struct wined3d_device *device)
      if (device->swapchain_count)
          wined3d_device_uninit_3d(device);
- 
+
 +    wined3d_destroy_gl_vr_context(&device->vr_context);
 +
      wined3d_cs_destroy(device->cs);
- 
+
      for (i = 0; i < ARRAY_SIZE(device->multistate_funcs); ++i)
 diff --git a/dlls/wined3d/texture.c b/dlls/wined3d/texture.c
 index b8fa5d7d3ae..25c5e57fca0 100644
@@ -1218,7 +1218,7 @@ index b8fa5d7d3ae..25c5e57fca0 100644
 @@ -4585,6 +4585,129 @@ void CDECL wined3d_access_gl_texture(struct wined3d_texture *texture,
      wined3d_cs_emit_gl_texture_callback(device->cs, texture, callback, depth_texture, data, size);
  }
- 
+
 +static const struct wined3d_gl_info *wined3d_prepare_vr_gl_context(struct wined3d_device *device)
 +{
 +    const struct wined3d_adapter *adapter = device->adapter;
@@ -1352,7 +1352,7 @@ index 0a18d909c5e..4bd32d95cda 100644
 @@ -3774,6 +3774,14 @@ struct wined3d_so_desc_entry
      struct wined3d_stream_output_element elements[1];
  };
- 
+
 +struct wined3d_vr_gl_context
 +{
 +    HWND window;
@@ -1371,12 +1371,12 @@ index 0a18d909c5e..4bd32d95cda 100644
 +
 +    struct wined3d_vr_gl_context vr_context;
  };
- 
+
  void wined3d_device_cleanup(struct wined3d_device *device) DECLSPEC_HIDDEN;
 @@ -4768,6 +4778,11 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
  void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
          wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
- 
+
 +GLsync wined3d_cs_synchronize(struct wined3d_cs *cs) DECLSPEC_HIDDEN;
 +
 +void wined3d_destroy_gl_vr_context(struct wined3d_vr_gl_context *ctx) DECLSPEC_HIDDEN;
@@ -1396,7 +1396,7 @@ index c5395ccc0ed..b1bda8ada76 100644
 +
 +    unsigned int get_gl_texture();
  }
- 
+
  typedef void (__cdecl *user_cs_callback)(const void *data, unsigned int data_size);
 diff --git a/include/wine/wined3d.h b/include/wine/wined3d.h
 index 81235a7677c..d63c54ca593 100644
@@ -1405,13 +1405,13 @@ index 81235a7677c..d63c54ca593 100644
 @@ -2974,6 +2974,8 @@ typedef void (__cdecl *wined3d_gl_texture_callback)(unsigned int gl_texture, uns
  void __cdecl wined3d_access_gl_texture(struct wined3d_texture *texture,
          wined3d_gl_texture_callback callback, struct wined3d_texture *depth_texture, const void *data, unsigned int size);
- 
+
 +unsigned int __cdecl wined3d_get_gl_texture(struct wined3d_texture *texture);
 +
  typedef void (__cdecl *wined3d_cs_callback)(const void *data, unsigned int size);
- 
+
  void __cdecl wined3d_device_run_cs_callback(struct wined3d_device *device,
--- 
+--
 2.30.2
 
 From cc1f77d00ee61e8620029c08110015543682acb8 Mon Sep 17 00:00:00 2001
@@ -1437,43 +1437,43 @@ index 511883924a1..6242651dd72 100644
 +    struct wined3d_texture *texture;
      GLsync *fence;
  };
- 
+
 @@ -2820,6 +2821,8 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
      context = context_acquire(cs->c.device, NULL, 0);
      gl_info = wined3d_context_gl(context)->gl_info;
- 
+
 +    wined3d_texture_load_location(op->texture, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
 +
      fence = GL_EXTCALL(glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
      wined3d_context_gl(context)->gl_info->gl_ops.gl.p_glFlush();
- 
+
 @@ -2830,13 +2833,14 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
      context_release(context);
  }
- 
+
 -static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs)
 +static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs, struct wined3d_texture *texture)
  {
      struct wined3d_cs_fence *op;
      GLsync fence;
- 
+
      op = cs->c.ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
      op->opcode = WINED3D_CS_OP_FENCE;
 +    op->texture = texture;
      op->fence = &fence;
- 
+
      cs->c.ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
 @@ -2845,9 +2849,9 @@ static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs)
      return fence;
  }
- 
+
 -GLsync wined3d_cs_synchronize(struct wined3d_cs *cs)
 +GLsync wined3d_cs_synchronize(struct wined3d_cs *cs, struct wined3d_texture *texture)
  {
 -    return wined3d_cs_emit_fence(cs);
 +    return wined3d_cs_emit_fence(cs, texture);
  }
- 
+
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
 diff --git a/dlls/wined3d/texture.c b/dlls/wined3d/texture.c
 index 25c5e57fca0..72a64889ca9 100644
@@ -1482,12 +1482,12 @@ index 25c5e57fca0..72a64889ca9 100644
 @@ -4698,7 +4698,7 @@ unsigned int CDECL wined3d_get_gl_texture(struct wined3d_texture *texture)
      if (!(gl_info = wined3d_prepare_vr_gl_context(device)))
          return 0;
- 
+
 -    fence = wined3d_cs_synchronize(device->cs);
 +    fence = wined3d_cs_synchronize(device->cs, texture);
      GL_EXTCALL(glWaitSync(fence, 0, GL_TIMEOUT_IGNORED));
      GL_EXTCALL(glDeleteSync(fence));
- 
+
 diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
 index 4bd32d95cda..2a9b2c08877 100644
 --- a/dlls/wined3d/wined3d_private.h
@@ -1495,13 +1495,13 @@ index 4bd32d95cda..2a9b2c08877 100644
 @@ -4778,7 +4778,7 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
  void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
          wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
- 
+
 -GLsync wined3d_cs_synchronize(struct wined3d_cs *cs) DECLSPEC_HIDDEN;
 +GLsync wined3d_cs_synchronize(struct wined3d_cs *cs, struct wined3d_texture *texture) DECLSPEC_HIDDEN;
- 
+
  void wined3d_destroy_gl_vr_context(struct wined3d_vr_gl_context *ctx) DECLSPEC_HIDDEN;
- 
--- 
+
+--
 2.30.2
 
 From 29f4110ef25083ad84d3f441986345abf79f3eaf Mon Sep 17 00:00:00 2001
@@ -1520,7 +1520,7 @@ index 7f7e8254225..32bf3c3c9cc 100644
 +++ b/dlls/d3d11/texture.c
 @@ -716,27 +716,20 @@ static void STDMETHODCALLTYPE d3d11_texture2d_GetDesc(IWineD3D11Texture2D *iface
  }
- 
+
  static void STDMETHODCALLTYPE d3d11_texture2d_access_gl_texture(IWineD3D11Texture2D *iface,
 -        gl_texture_callback callback, IUnknown *depth_unk, const void *data, unsigned int size)
 +        gl_texture_callback callback, IWineD3D11Texture2D *depth_texture, const void *data, unsigned int size)
@@ -1528,13 +1528,13 @@ index 7f7e8254225..32bf3c3c9cc 100644
      struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface), *depth_tex = NULL;
 -    IWineD3D11Texture2D *depth_d3d11 = NULL;
 +    struct wined3d_texture *wined3d_depth_texture = NULL;
- 
+
 -    TRACE("iface %p, callback %p, data %p, size %u.\n", iface, callback, data, size);
 +    TRACE("iface %p, callback %p, depth_texture %p, data %p, size %u.\n",
 +            iface, callback, depth_texture, data, size);
- 
+
      wined3d_mutex_lock();
- 
+
 -    if (depth_unk)
 -    {
 -        HRESULT hr;
@@ -1546,11 +1546,11 @@ index 7f7e8254225..32bf3c3c9cc 100644
 -    wined3d_access_gl_texture(texture->wined3d_texture, callback, depth_tex ? depth_tex->wined3d_texture : NULL, data, size);
 +    if (depth_texture)
 +        wined3d_depth_texture = impl_from_IWineD3D11Texture2D(depth_texture)->wined3d_texture;
- 
+
 -    if (depth_d3d11)
 -        IWineD3D11Texture2D_Release(depth_d3d11);
 +    wined3d_access_gl_texture(texture->wined3d_texture, callback, wined3d_depth_texture, data, size);
- 
+
      wined3d_mutex_unlock();
  }
 diff --git a/include/wine/wined3d-interop.idl b/include/wine/wined3d-interop.idl
@@ -1564,10 +1564,10 @@ index b1bda8ada76..f960e2f6d9d 100644
 -    void access_gl_texture(gl_texture_callback callback, IUnknown *depth_texture, const void *data, unsigned int data_size);
 +    void access_gl_texture(gl_texture_callback callback,
 +            IWineD3D11Texture2D *depth_texture, const void *data, unsigned int data_size);
- 
+
      unsigned int get_gl_texture();
  }
--- 
+--
 2.30.2
 
 From 9a97a24ad5001cc4d25b9b8236fbf13b76d9eaef Mon Sep 17 00:00:00 2001
@@ -1590,9 +1590,9 @@ index 32bf3c3c9cc..f6e7d474d99 100644
 -    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface), *depth_tex = NULL;
 +    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
      struct wined3d_texture *wined3d_depth_texture = NULL;
- 
+
      TRACE("iface %p, callback %p, depth_texture %p, data %p, size %u.\n",
--- 
+--
 2.30.2
 
 From b476c31f53be82ad3b8a3ec9d7987f75e8040cfe Mon Sep 17 00:00:00 2001
@@ -1610,13 +1610,13 @@ index 2879e1653d3..bbc9ce7b99c 100644
 +++ b/dlls/wined3d/wined3d.spec
 @@ -367,3 +367,8 @@
  @ cdecl wined3d_vertex_declaration_incref(ptr)
- 
+
  @ cdecl wined3d_extract_shader_input_signature_from_dxbc(ptr ptr long)
 +
 +@ cdecl wined3d_access_gl_texture(ptr ptr ptr long)
 +@ cdecl wined3d_device_run_cs_callback(ptr ptr ptr long)
 +@ cdecl wined3d_device_wait_idle(ptr)
 +@ cdecl wined3d_get_gl_texture(ptr)
--- 
+--
 2.30.2
 
