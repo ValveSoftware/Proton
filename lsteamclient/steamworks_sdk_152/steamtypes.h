@@ -127,7 +127,7 @@ struct SteamIPAddress_t
 
 		// Internal use only
 		uint64			m_ipv6Qword[2];	// big endian
-	};
+	} x;
 
 	ESteamIPType m_eType;
 

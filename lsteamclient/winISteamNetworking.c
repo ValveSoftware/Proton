@@ -78,7 +78,7 @@ bool __thiscall winISteamNetworking_SteamNetworking006_AllowP2PPacketRelay(winIS
     return cppISteamNetworking_SteamNetworking006_AllowP2PPacketRelay(_this->linux_side, bAllow);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_CreateListenSocket, 20)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_CreateListenSocket, 36)
 SNetListenSocket_t __thiscall winISteamNetworking_SteamNetworking006_CreateListenSocket(winISteamNetworking_SteamNetworking006 *_this, int nVirtualP2PPort, SteamIPAddress_t nIP, uint16 nPort, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
@@ -92,7 +92,7 @@ SNetSocket_t __thiscall winISteamNetworking_SteamNetworking006_CreateP2PConnecti
     return cppISteamNetworking_SteamNetworking006_CreateP2PConnectionSocket(_this->linux_side, steamIDTarget, nVirtualPort, nTimeoutSec, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_CreateConnectionSocket, 16)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_CreateConnectionSocket, 32)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking006_CreateConnectionSocket(winISteamNetworking_SteamNetworking006 *_this, SteamIPAddress_t nIP, uint16 nPort, int nTimeoutSec)
 {
     TRACE("%p\n", _this);
