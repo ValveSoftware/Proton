@@ -65,6 +65,7 @@ Vagrant.configure(2) do |config|
     debian10.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["vagrant_share"]
 
     debian10.vm.provision "shell", privileged: "true", inline: <<-SHELL
+      set -e
       #install docker and steam-runtime dependencies
       dpkg --add-architecture i386
       apt-get update
@@ -78,6 +79,9 @@ Vagrant.configure(2) do |config|
       apt-get update
       apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
           fontforge-nox python-debian python-pip python3-pefile uuid-dev
+
+      # https://github.blog/2021-09-01-improving-git-protocol-security-github/
+      git config --global url.https://github.com/.insteadOf git://github.com/
 
       # use python 3 to avoid python2 afdko breakage
       apt-get install -y python3-pip
