@@ -94,10 +94,22 @@
 #    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
-#    git revert --no-commit 7d43ac947412c7981539a34a557d7b310e084163
-#    git revert --no-commit 030008f6cc2907a140588244f767e8b4c6b121a3
-#    git revert --no-commit 66948f8934b8aaca70cd0d2faafb81bfc51e67c6
-#    git revert --no-commit c6c3d6f9635bfa1aae8934b70f3ae9c7e549fe26
+    git revert --no-commit f26e0ba212e6164eb7535f472415334d1a9c9044
+    git revert --no-commit bc52edc19d8a45b9062d9568652403251872026e
+    git revert --no-commit b3655b5be5f137281e8757db4e6985018b21c296
+    git revert --no-commit 95ffc879882fdedaf9fdf40eb1c556a025ae5bfd
+    git revert --no-commit 0dc309ef6ac54484d92f6558d6ca2f8e50eb28e2
+    git revert --no-commit 25948222129fe48ac4c65a4cf093477d19d25f18
+    git revert --no-commit 7f481ea05faf02914ecbc1932703e528511cce1a
+    git revert --no-commit c45be242e5b6bc0a80796d65716ced8e0bc5fd41
+    git revert --no-commit d5154e7eea70a19fe528f0de6ebac0186651e0f3
+    git revert --no-commit d39747f450ad4356868f46cfda9a870347cce9dd
+    git revert --no-commit 250f86b02389b2148471ad67bcc0775ff3b2c6ba
+    git revert --no-commit 40ced5e054d1f16ce47161079c960ac839910cb7
+    git revert --no-commit 8bd3c8bf5a9ea4765f791f1f78f60bcf7060eba6
+    git revert --no-commit 87e4c289e46701c6f582e95c330eefb6fc5ec68a
+    git revert --no-commit 51b6d45503e5849f28cce1a9aa9b7d3dba9de0fe
+    git revert --no-commit c76418fbfd72e496c800aec28c5a1d713389287f
     git revert --no-commit 37e9f0eadae9f62ccae8919a92686695927e9274
     git revert --no-commit dd182a924f89b948010ecc0d79f43aec83adfe65
     git revert --no-commit 4f10b95c8355c94e4c6f506322b80be7ae7aa174
@@ -105,6 +117,7 @@
     git revert --no-commit 3dd8eeeebdeec619570c764285bdcae82dee5868
     git revert --no-commit 831c6a88aab78db054beb42ca9562146b53963e7
     git revert --no-commit 2d0dc2d47ca6b2d4090dfe32efdba4f695b197ce
+
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -119,19 +132,90 @@
     # Notably DOOM Eternal and Resident Evil Village
     # -W ntdll-NtAlertThreadByThreadId
 
+    # ntdll-Junction_Points breaks Valve's CEG drm
+    # the other two rely on it.
+    # note: we also have to manually remove the ntdll-Junction_Points patchset from esync in staging.
+    # we also disable esync and apply it manually instead
+    # -W ntdll-Junction_Points \
+    # -W server-File_Permissions \
+    # -W server-Stored_ACLs \
+    # -W eventfd_synchronization \
+
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W ntdll-NtAlertThreadByThreadId \
+    -W ntdll-Junction_Points \
+    -W server-File_Permissions \
+    -W server-Stored_ACLs \
+    -W eventfd_synchronization \
     -W dwrite-FontFallback
 
     echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
-    patch -Rnp1 < ../patches/wine-hotfixes/steamclient/d4259ac8e93_revert.patch
+    patch -RNp1 < ../patches/wine-hotfixes/steamclient/d4259ac8e93_revert.patch
 
     echo "applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
+
+    echo "manually apply esync patches"
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0001-configure-Check-for-sys-eventfd.h-ppoll-and-shm_open.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0002-server-Create-server-objects-for-eventfd-based-synch.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0003-ntdll-Create-eventfd-based-objects-for-semaphores.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0004-ntdll-Implement-NtReleaseSemaphore.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0005-ntdll-Implement-NtClose.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0006-ntdll-Implement-NtWaitForMultipleObjects.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0007-ntdll-server-Implement-NtCreateEvent.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0008-ntdll-Implement-NtSetEvent.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0009-ntdll-Implement-NtResetEvent.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0010-ntdll-Implement-waiting-on-manual-reset-events.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0011-server-Add-an-object-operation-to-grab-the-esync-fil.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0012-server-Add-a-request-to-get-the-eventfd-file-descrip.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0013-server-Create-eventfd-file-descriptors-for-process-o.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0014-ntdll-server-Implement-waiting-on-server-bound-objec.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0015-server-Create-eventfd-file-descriptors-for-event-obj.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0016-server-Allow-re-setting-esync-events-on-the-server-s.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0017-ntdll-Try-again-if-poll-returns-EINTR.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0018-server-Create-eventfd-file-descriptors-for-thread-ob.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0019-rpcrt4-Avoid-closing-the-server-thread-handle-while-.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0020-server-Create-eventfd-file-descriptors-for-message-q.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0021-server-ntdll-Implement-message-waits.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0022-server-Create-eventfd-descriptors-for-device-manager.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0023-ntdll-server-Implement-NtCreateMutant.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0024-ntdll-Implement-NtReleaseMutant.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0025-ntdll-Implement-waiting-on-mutexes.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0026-ntdll-Implement-wait-all.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0027-esync-Add-a-README.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0028-ntdll-Implement-NtSignalAndWaitForSingleObject.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0029-ntdll-Implement-NtOpenSemaphore.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0030-ntdll-Implement-NtOpenEvent.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0031-ntdll-Implement-NtOpenMutant.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0032-server-Implement-esync_map_access.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0033-server-Implement-NtDuplicateObject.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0034-server-Create-eventfd-descriptors-for-timers.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0035-ntdll-server-Implement-alertable-waits.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0036-esync-Update-README.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0037-kernel32-tests-Mark-some-existing-tests-as-failing-u.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0038-kernel32-tests-Add-some-semaphore-tests.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0039-kernel32-tests-Add-some-event-tests.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0040-kernel32-tests-Add-some-mutex-tests.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0041-kernel32-tests-Add-some-tests-for-wait-timeouts.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0042-kernel32-tests-Zigzag-test.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0043-ntdll-Implement-NtQuerySemaphore.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0044-ntdll-Implement-NtQueryEvent.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0045-ntdll-Implement-NtQueryMutant.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0046-server-Create-eventfd-descriptors-for-pseudo-fd-obje.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0047-esync-Update-README.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0048-esync-Add-note-about-file-limits-not-being-raised-wh.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0049-ntdll-Try-to-avoid-poll-for-uncontended-objects.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0050-ntdll-server-Try-to-avoid-poll-for-signaled-events.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0051-esync-Update-README.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0052-ntdll-Implement-NtPulseEvent.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0053-esync-Update-README.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0054-server-Create-esync-file-descriptors-for-true-file-o.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0055-ntdll-server-Abandon-esync-mutexes-on-thread-exit.patch
+    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0056-server-Create-esync-file-descriptors-for-console-ser.patch
 
 ### END WINE STAGING APPLY SECTION ###
 
@@ -148,9 +232,6 @@
 
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
-
-    echo "blackops 2 fix"
-    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
@@ -260,6 +341,8 @@
 
     echo "proton quake champions patches"
     patch -Np1 < ../patches/proton/52-proton_quake_champions_syscall.patch
+
+
 
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
@@ -376,9 +459,6 @@
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
 
-    echo "7b17d70 regression fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-memset_regression_fix_7b17d70.patch
-
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
@@ -386,6 +466,9 @@
 ### (2-7) WINE CUSTOM PATCHES ###
     patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio.patch
     patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio_pulse.patch
+
+    patch -Np1 < ../patches/wine-hotfixes/pending/218508.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/21750.patch
 
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
