@@ -60,6 +60,9 @@
     # add proton-specific syscall emulation patches
     patch -Np1 < ../patches/wine-hotfixes/staging/proton-staging-syscall-emu.patch
 
+    # allow esync patches to apply without depending on ntdll-Junction_Points
+    patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
+
     cd ..
 
 ### END PREP SECTION ###
@@ -149,7 +152,6 @@
     -W ntdll-Junction_Points \
     -W server-File_Permissions \
     -W server-Stored_ACLs \
-    -W eventfd_synchronization \
     -W dwrite-FontFallback
 
     echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
@@ -159,63 +161,6 @@
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
 
-    echo "manually apply esync patches"
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0001-configure-Check-for-sys-eventfd.h-ppoll-and-shm_open.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0002-server-Create-server-objects-for-eventfd-based-synch.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0003-ntdll-Create-eventfd-based-objects-for-semaphores.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0004-ntdll-Implement-NtReleaseSemaphore.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0005-ntdll-Implement-NtClose.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0006-ntdll-Implement-NtWaitForMultipleObjects.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0007-ntdll-server-Implement-NtCreateEvent.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0008-ntdll-Implement-NtSetEvent.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0009-ntdll-Implement-NtResetEvent.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0010-ntdll-Implement-waiting-on-manual-reset-events.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0011-server-Add-an-object-operation-to-grab-the-esync-fil.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0012-server-Add-a-request-to-get-the-eventfd-file-descrip.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0013-server-Create-eventfd-file-descriptors-for-process-o.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0014-ntdll-server-Implement-waiting-on-server-bound-objec.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0015-server-Create-eventfd-file-descriptors-for-event-obj.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0016-server-Allow-re-setting-esync-events-on-the-server-s.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0017-ntdll-Try-again-if-poll-returns-EINTR.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0018-server-Create-eventfd-file-descriptors-for-thread-ob.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0019-rpcrt4-Avoid-closing-the-server-thread-handle-while-.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0020-server-Create-eventfd-file-descriptors-for-message-q.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0021-server-ntdll-Implement-message-waits.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0022-server-Create-eventfd-descriptors-for-device-manager.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0023-ntdll-server-Implement-NtCreateMutant.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0024-ntdll-Implement-NtReleaseMutant.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0025-ntdll-Implement-waiting-on-mutexes.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0026-ntdll-Implement-wait-all.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0027-esync-Add-a-README.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0028-ntdll-Implement-NtSignalAndWaitForSingleObject.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0029-ntdll-Implement-NtOpenSemaphore.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0030-ntdll-Implement-NtOpenEvent.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0031-ntdll-Implement-NtOpenMutant.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0032-server-Implement-esync_map_access.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0033-server-Implement-NtDuplicateObject.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0034-server-Create-eventfd-descriptors-for-timers.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0035-ntdll-server-Implement-alertable-waits.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0036-esync-Update-README.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0037-kernel32-tests-Mark-some-existing-tests-as-failing-u.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0038-kernel32-tests-Add-some-semaphore-tests.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0039-kernel32-tests-Add-some-event-tests.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0040-kernel32-tests-Add-some-mutex-tests.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0041-kernel32-tests-Add-some-tests-for-wait-timeouts.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0042-kernel32-tests-Zigzag-test.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0043-ntdll-Implement-NtQuerySemaphore.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0044-ntdll-Implement-NtQueryEvent.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0045-ntdll-Implement-NtQueryMutant.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0046-server-Create-eventfd-descriptors-for-pseudo-fd-obje.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0047-esync-Update-README.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0048-esync-Add-note-about-file-limits-not-being-raised-wh.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0049-ntdll-Try-to-avoid-poll-for-uncontended-objects.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0050-ntdll-server-Try-to-avoid-poll-for-signaled-events.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0051-esync-Update-README.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0052-ntdll-Implement-NtPulseEvent.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0053-esync-Update-README.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0054-server-Create-esync-file-descriptors-for-true-file-o.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0055-ntdll-server-Abandon-esync-mutexes-on-thread-exit.patch
-    patch -Np1 < ../wine-staging/patches/eventfd_synchronization/0056-server-Create-esync-file-descriptors-for-console-ser.patch
 
 ### END WINE STAGING APPLY SECTION ###
 
