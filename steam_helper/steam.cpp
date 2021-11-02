@@ -653,7 +653,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     USE_VULKAN_PROC(vkEnumeratePhysicalDevices)
     USE_VULKAN_PROC(vkGetPhysicalDeviceProperties)
     USE_VULKAN_PROC(__wine_get_native_VkPhysicalDevice)
-#undef USE_OPENVR_PROC
+#undef USE_VULKAN_PROC
 
     parse_extensions(buffer, &instance_extensions_count, &instance_extensions);
 
@@ -917,6 +917,7 @@ static HANDLE run_process(BOOL *should_await)
     PROCESS_INFORMATION pi;
     DWORD flags = CREATE_UNICODE_ENVIRONMENT;
     BOOL use_shell_execute = TRUE;
+    BOOL hide_window;
 
     /* skip argv[0] */
     if (*cmdline == '"')
@@ -1022,6 +1023,7 @@ run:
     SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
 
     use_shell_execute = should_use_shell_execute(cmdline);
+    hide_window = env_nonzero("PROTON_HIDE_PROCESS_WINDOW");
 
     /* only await the process finishing if we launch a process directly...
      * Steam simply calls ShellExecuteA with the same parameters.
@@ -1035,12 +1037,18 @@ run:
     if (use_shell_execute)
     {
         static const WCHAR verb[] = { 'o', 'p', 'e', 'n', 0 };
-        ShellExecuteW(NULL, verb, cmdline, NULL, NULL, SW_SHOWNORMAL);
+        ShellExecuteW(NULL, verb, cmdline, NULL, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL);
 
         return INVALID_HANDLE_VALUE;
     }
     else
     {
+        if (hide_window)
+        {
+            si.dwFlags |= STARTF_USESHOWWINDOW;
+            si.wShowWindow = SW_HIDE;
+        }
+
         if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
         {
             WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
@@ -1206,7 +1214,9 @@ int main(int argc, char *argv[])
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
     HANDLE event2 = INVALID_HANDLE_VALUE;
     HANDLE event = INVALID_HANDLE_VALUE;
+    HANDLE child = INVALID_HANDLE_VALUE;
     BOOL game_process = FALSE;
+    DWORD rc = 0;
 
     WINE_TRACE("\n");
 
@@ -1249,7 +1259,6 @@ int main(int argc, char *argv[])
 
     if (argc > 1)
     {
-        HANDLE child;
         BOOL should_await;
 
         setup_vrpaths();
@@ -1266,8 +1275,6 @@ int main(int argc, char *argv[])
 
             if (wait_handle == INVALID_HANDLE_VALUE)
                 wait_handle = child;
-            else
-                CloseHandle(child);
         }
     }
 
@@ -1281,5 +1288,12 @@ int main(int argc, char *argv[])
         CloseHandle(event);
     if (event2 != INVALID_HANDLE_VALUE)
         CloseHandle(event2);
-    return 0;
+
+    if (child != INVALID_HANDLE_VALUE)
+    {
+        GetExitCodeProcess(child, &rc);
+        CloseHandle(child);
+    }
+
+    return rc;
 }
