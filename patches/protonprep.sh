@@ -254,6 +254,9 @@
     echo "applying fsync patches"
     patch -Np1 < ../patches/proton/03-proton-fsync_staging.patch
 
+    echo "proton futex waitv patches"
+    patch -Np1 < ../patches/proton/57-fsync_futex_waitv.patch
+
     echo "LAA"
     patch -Np1 < ../patches/proton/04-proton-LAA_staging.patch
 
@@ -321,8 +324,8 @@
     echo "CPU topology overrides"
     patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
 
-    echo "proton futex2 patches"
-    patch -Np1 < ../patches/proton/40-proton-futex2.patch
+#    echo "proton futex2 patches"
+#    patch -Np1 < ../patches/proton/40-proton-futex2.patch
 
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-tkg.patch
@@ -341,8 +344,6 @@
 
     echo "proton quake champions patches"
     patch -Np1 < ../patches/proton/52-proton_quake_champions_syscall.patch
-
-
 
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
