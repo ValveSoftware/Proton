@@ -1,0 +1,68 @@
+From: Torge Matthies <openglfreak@googlemail.com>
+Subject: [PATCH v2 1/2] ws2_32: Validate pointers in select().
+Message-Id: <20211017202755.333793-1-openglfreak@googlemail.com>
+Date: Sun, 17 Oct 2021 22:27:54 +0200
+
+The documentation says that SOCKET_ERROR is returned and the error is
+set to WSAEFAULT if any of the input pointers point to unmapped memory.
+
+Signed-off-by: Torge Matthies <openglfreak@googlemail.com>
+---
+ dlls/ws2_32/socket.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index b3dab22ae6e..7b7a985c40d 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -2384,6 +2384,14 @@ int WINAPI select( int count, fd_set *read_ptr, fd_set *write_ptr,
+ 
+     TRACE( "read %p, write %p, except %p, timeout %p\n", read_ptr, write_ptr, except_ptr, timeout );
+ 
++    if ((read_ptr && IsBadWritePtr(read_ptr, sizeof(*read_ptr)))
++        || (write_ptr && IsBadWritePtr(write_ptr, sizeof(*write_ptr)))
++        || (except_ptr && IsBadWritePtr(except_ptr, sizeof(*except_ptr))))
++    {
++        SetLastError( WSAEFAULT );
++        return -1;
++    }
++
+     FD_ZERO( &read );
+     FD_ZERO( &write );
+     FD_ZERO( &except );
+@@ -2393,11 +2401,6 @@ int WINAPI select( int count, fd_set *read_ptr, fd_set *write_ptr,
+ 
+     if (!(sync_event = get_sync_event())) return -1;
+ 
+-    if (timeout)
+-        params->timeout = timeout->tv_sec * -10000000 + timeout->tv_usec * -10;
+-    else
+-        params->timeout = TIMEOUT_INFINITE;
+-
+     for (i = 0; i < read.fd_count; ++i)
+     {
+         params->sockets[params->count].socket = read.fd_array[i];
+@@ -2428,6 +2431,18 @@ int WINAPI select( int count, fd_set *read_ptr, fd_set *write_ptr,
+         return -1;
+     }
+ 
++    if (timeout)
++    {
++        if (IsBadReadPtr(timeout, sizeof(*timeout)))
++        {
++            SetLastError( WSAEFAULT );
++            return -1;
++        }
++        params->timeout = timeout->tv_sec * -10000000 + timeout->tv_usec * -10;
++    }
++    else
++        params->timeout = TIMEOUT_INFINITE;
++
+     params_size = offsetof( struct afd_poll_params, sockets[params->count] );
+ 
+     status = NtDeviceIoControlFile( (HANDLE)poll_socket, sync_event, NULL, NULL, &io,
+
+-- 
+2.33.1
+
+
