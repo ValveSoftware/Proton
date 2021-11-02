@@ -79,6 +79,9 @@ Vagrant.configure(2) do |config|
       apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
           fontforge-nox python-debian uuid-dev python3-pip
 
+      # https://github.blog/2021-09-01-improving-git-protocol-security-github/
+      git config --global url.https://github.com/.insteadOf git://github.com/
+
       #install adobe font devkit to build source san hans
       pip3 install afdko
 
