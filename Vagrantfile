@@ -79,6 +79,9 @@ Vagrant.configure(2) do |config|
       apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
           fontforge-nox python-debian python-pip
 
+      #work around an afdko dependency bug
+      pip install zopfli==0.1.8
+
       #install adobe font devkit to build source san hans
       pip install afdko
 
