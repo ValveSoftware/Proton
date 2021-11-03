@@ -395,7 +395,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012), "STEAMUSERSTATS_INTERFACE_VERSION012");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_vtable;
     r->linux_side = linux_side;
@@ -766,7 +766,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011), "STEAMUSERSTATS_INTERFACE_VERSION011");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_vtable;
     r->linux_side = linux_side;
@@ -1121,7 +1121,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010), "STEAMUSERSTATS_INTERFACE_VERSION010");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_vtable;
     r->linux_side = linux_side;
@@ -1404,7 +1404,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009), "STEAMUSERSTATS_INTERFACE_VERSION009");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_vtable;
     r->linux_side = linux_side;
@@ -1679,7 +1679,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008), "STEAMUSERSTATS_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_vtable;
     r->linux_side = linux_side;
@@ -1946,7 +1946,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007), "STEAMUSERSTATS_INTERFACE_VERSION007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_vtable;
     r->linux_side = linux_side;
@@ -2197,7 +2197,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006), "STEAMUSERSTATS_INTERFACE_VERSION006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_vtable;
     r->linux_side = linux_side;
@@ -2440,7 +2440,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005), "STEAMUSERSTATS_INTERFACE_VERSION005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_vtable;
     r->linux_side = linux_side;
@@ -2603,7 +2603,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004), "STEAMUSERSTATS_INTERFACE_VERSION004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_vtable;
     r->linux_side = linux_side;
@@ -2734,7 +2734,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003), "STEAMUSERSTATS_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_vtable;
     r->linux_side = linux_side;
@@ -2905,7 +2905,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002), "STEAMUSERSTATS_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_vtable;
     r->linux_side = linux_side;
@@ -3108,7 +3108,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001));
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001), "STEAMUSERSTATS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

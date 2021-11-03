@@ -416,7 +416,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamInput_SteamInput005 *create_winISteamInput_SteamInput005(void *linux_side)
 {
-    winISteamInput_SteamInput005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamInput_SteamInput005));
+    winISteamInput_SteamInput005 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput005), "SteamInput005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamInput_SteamInput005_vtable;
     r->linux_side = linux_side;
@@ -726,7 +726,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamInput_SteamInput002 *create_winISteamInput_SteamInput002(void *linux_side)
 {
-    winISteamInput_SteamInput002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamInput_SteamInput002));
+    winISteamInput_SteamInput002 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput002), "SteamInput002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamInput_SteamInput002_vtable;
     r->linux_side = linux_side;
@@ -1036,7 +1036,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamInput_SteamInput001 *create_winISteamInput_SteamInput001(void *linux_side)
 {
-    winISteamInput_SteamInput001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamInput_SteamInput001));
+    winISteamInput_SteamInput001 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput001), "SteamInput001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamInput_SteamInput001_vtable;
     r->linux_side = linux_side;

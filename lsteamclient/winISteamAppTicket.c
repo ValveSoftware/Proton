@@ -43,7 +43,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *create_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001));
+    winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001), "STEAMAPPTICKET_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

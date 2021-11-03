@@ -519,7 +519,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016), "STEAMREMOTESTORAGE_INTERFACE_VERSION016");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_vtable;
     r->linux_side = linux_side;
@@ -998,7 +998,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014), "STEAMREMOTESTORAGE_INTERFACE_VERSION014");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_vtable;
     r->linux_side = linux_side;
@@ -1477,7 +1477,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013), "STEAMREMOTESTORAGE_INTERFACE_VERSION013");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_vtable;
     r->linux_side = linux_side;
@@ -1932,7 +1932,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012), "STEAMREMOTESTORAGE_INTERFACE_VERSION012");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_vtable;
     r->linux_side = linux_side;
@@ -2387,7 +2387,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011), "STEAMREMOTESTORAGE_INTERFACE_VERSION011");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_vtable;
     r->linux_side = linux_side;
@@ -2842,7 +2842,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010), "STEAMREMOTESTORAGE_INTERFACE_VERSION010");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_vtable;
     r->linux_side = linux_side;
@@ -3287,7 +3287,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009), "STEAMREMOTESTORAGE_INTERFACE_VERSION009");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_vtable;
     r->linux_side = linux_side;
@@ -3732,7 +3732,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008), "STEAMREMOTESTORAGE_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_vtable;
     r->linux_side = linux_side;
@@ -4145,7 +4145,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007), "STEAMREMOTESTORAGE_INTERFACE_VERSION007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_vtable;
     r->linux_side = linux_side;
@@ -4558,7 +4558,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006), "STEAMREMOTESTORAGE_INTERFACE_VERSION006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_vtable;
     r->linux_side = linux_side;
@@ -4837,7 +4837,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005), "STEAMREMOTESTORAGE_INTERFACE_VERSION005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_vtable;
     r->linux_side = linux_side;
@@ -5040,7 +5040,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004), "STEAMREMOTESTORAGE_INTERFACE_VERSION004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_vtable;
     r->linux_side = linux_side;
@@ -5227,7 +5227,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003), "STEAMREMOTESTORAGE_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_vtable;
     r->linux_side = linux_side;
@@ -5310,7 +5310,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002), "STEAMREMOTESTORAGE_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_vtable;
     r->linux_side = linux_side;
@@ -5401,7 +5401,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001));
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001), "STEAMREMOTESTORAGE_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

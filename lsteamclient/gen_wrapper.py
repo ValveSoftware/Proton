@@ -986,7 +986,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write("}\n")
     cfile.write("#endif\n\n")
     cfile.write("%s *create_%s(void *linux_side)\n{\n" % (winclassname, winclassname))
-    cfile.write("    %s *r = HeapAlloc(GetProcessHeap(), 0, sizeof(%s));\n" % (winclassname, winclassname))
+    cfile.write("    %s *r = alloc_mem_for_iface(sizeof(%s), \"%s\");\n" % (winclassname, winclassname, iface_version))
     cfile.write("    TRACE(\"-> %p\\n\", r);\n")
     cfile.write("    r->vtable = &%s_vtable;\n" % winclassname)
     cfile.write("    r->linux_side = linux_side;\n")

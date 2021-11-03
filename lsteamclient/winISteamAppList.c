@@ -78,7 +78,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *create_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001));
+    winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001), "STEAMAPPLIST_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

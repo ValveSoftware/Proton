@@ -390,7 +390,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer014 *create_winISteamGameServer_SteamGameServer014(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer014 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer014));
+    winISteamGameServer_SteamGameServer014 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer014), "SteamGameServer014");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer014_vtable;
     r->linux_side = linux_side;
@@ -772,7 +772,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer013 *create_winISteamGameServer_SteamGameServer013(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer013 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer013));
+    winISteamGameServer_SteamGameServer013 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer013), "SteamGameServer013");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer013_vtable;
     r->linux_side = linux_side;
@@ -1153,7 +1153,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer012 *create_winISteamGameServer_SteamGameServer012(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer012));
+    winISteamGameServer_SteamGameServer012 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer012), "SteamGameServer012");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer012_vtable;
     r->linux_side = linux_side;
@@ -1534,7 +1534,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer011 *create_winISteamGameServer_SteamGameServer011(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer011));
+    winISteamGameServer_SteamGameServer011 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer011), "SteamGameServer011");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer011_vtable;
     r->linux_side = linux_side;
@@ -1747,7 +1747,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer010 *create_winISteamGameServer_SteamGameServer010(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer010));
+    winISteamGameServer_SteamGameServer010 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer010), "SteamGameServer010");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer010_vtable;
     r->linux_side = linux_side;
@@ -1928,7 +1928,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer009 *create_winISteamGameServer_SteamGameServer009(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer009));
+    winISteamGameServer_SteamGameServer009 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer009), "SteamGameServer009");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer009_vtable;
     r->linux_side = linux_side;
@@ -2093,7 +2093,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer008 *create_winISteamGameServer_SteamGameServer008(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer008));
+    winISteamGameServer_SteamGameServer008 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer008), "SteamGameServer008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer008_vtable;
     r->linux_side = linux_side;
@@ -2234,7 +2234,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer005 *create_winISteamGameServer_SteamGameServer005(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer005));
+    winISteamGameServer_SteamGameServer005 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer005), "SteamGameServer005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer005_vtable;
     r->linux_side = linux_side;
@@ -2375,7 +2375,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer004 *create_winISteamGameServer_SteamGameServer004(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer004));
+    winISteamGameServer_SteamGameServer004 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer004), "SteamGameServer004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer004_vtable;
     r->linux_side = linux_side;
@@ -2539,7 +2539,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer003 *create_winISteamGameServer_SteamGameServer003(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer003));
+    winISteamGameServer_SteamGameServer003 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer003), "SteamGameServer003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer003_vtable;
     r->linux_side = linux_side;
@@ -2735,7 +2735,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServer_SteamGameServer002 *create_winISteamGameServer_SteamGameServer002(void *linux_side)
 {
-    winISteamGameServer_SteamGameServer002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer002));
+    winISteamGameServer_SteamGameServer002 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer002), "SteamGameServer002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServer_SteamGameServer002_vtable;
     r->linux_side = linux_side;

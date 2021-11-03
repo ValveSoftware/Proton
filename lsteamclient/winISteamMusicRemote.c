@@ -291,7 +291,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *create_winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001));
+    winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001), "STEAMMUSICREMOTE_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

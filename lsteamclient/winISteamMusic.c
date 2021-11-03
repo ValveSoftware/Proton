@@ -107,7 +107,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *create_winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001));
+    winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001), "STEAMMUSIC_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

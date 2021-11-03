@@ -342,7 +342,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking009 *create_winISteamMatchmaking_SteamMatchMaking009(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking009));
+    winISteamMatchmaking_SteamMatchMaking009 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking009), "SteamMatchMaking009");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking009_vtable;
     r->linux_side = linux_side;
@@ -660,7 +660,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking008 *create_winISteamMatchmaking_SteamMatchMaking008(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking008));
+    winISteamMatchmaking_SteamMatchMaking008 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking008), "SteamMatchMaking008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking008_vtable;
     r->linux_side = linux_side;
@@ -962,7 +962,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking007 *create_winISteamMatchmaking_SteamMatchMaking007(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking007));
+    winISteamMatchmaking_SteamMatchMaking007 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking007), "SteamMatchMaking007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking007_vtable;
     r->linux_side = linux_side;
@@ -1216,7 +1216,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking006 *create_winISteamMatchmaking_SteamMatchMaking006(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking006));
+    winISteamMatchmaking_SteamMatchMaking006 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking006), "SteamMatchMaking006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking006_vtable;
     r->linux_side = linux_side;
@@ -1494,7 +1494,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking005 *create_winISteamMatchmaking_SteamMatchMaking005(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking005));
+    winISteamMatchmaking_SteamMatchMaking005 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking005), "SteamMatchMaking005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking005_vtable;
     r->linux_side = linux_side;
@@ -1739,7 +1739,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking004 *create_winISteamMatchmaking_SteamMatchMaking004(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking004));
+    winISteamMatchmaking_SteamMatchMaking004 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking004), "SteamMatchMaking004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking004_vtable;
     r->linux_side = linux_side;
@@ -1992,7 +1992,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking003 *create_winISteamMatchmaking_SteamMatchMaking003(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking003));
+    winISteamMatchmaking_SteamMatchMaking003 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking003), "SteamMatchMaking003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking003_vtable;
     r->linux_side = linux_side;
@@ -2181,7 +2181,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking002 *create_winISteamMatchmaking_SteamMatchMaking002(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking002));
+    winISteamMatchmaking_SteamMatchMaking002 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking002), "SteamMatchMaking002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking002_vtable;
     r->linux_side = linux_side;
@@ -2386,7 +2386,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMatchmaking_SteamMatchMaking001 *create_winISteamMatchmaking_SteamMatchMaking001(void *linux_side)
 {
-    winISteamMatchmaking_SteamMatchMaking001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking001));
+    winISteamMatchmaking_SteamMatchMaking001 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking001), "SteamMatchMaking001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMatchmaking_SteamMatchMaking001_vtable;
     r->linux_side = linux_side;

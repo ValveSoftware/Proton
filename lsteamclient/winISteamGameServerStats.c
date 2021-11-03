@@ -115,7 +115,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameServerStats_SteamGameServerStats001 *create_winISteamGameServerStats_SteamGameServerStats001(void *linux_side)
 {
-    winISteamGameServerStats_SteamGameServerStats001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServerStats_SteamGameServerStats001));
+    winISteamGameServerStats_SteamGameServerStats001 *r = alloc_mem_for_iface(sizeof(winISteamGameServerStats_SteamGameServerStats001), "SteamGameServerStats001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameServerStats_SteamGameServerStats001_vtable;
     r->linux_side = linux_side;

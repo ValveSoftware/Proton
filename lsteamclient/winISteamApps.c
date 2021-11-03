@@ -274,7 +274,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION008));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION008), "STEAMAPPS_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable;
     r->linux_side = linux_side;
@@ -497,7 +497,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION007(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION007));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION007), "STEAMAPPS_INTERFACE_VERSION007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION007_vtable;
     r->linux_side = linux_side;
@@ -704,7 +704,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION006(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION006));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION006), "STEAMAPPS_INTERFACE_VERSION006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION006_vtable;
     r->linux_side = linux_side;
@@ -894,7 +894,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION005(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION005));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION005), "STEAMAPPS_INTERFACE_VERSION005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION005_vtable;
     r->linux_side = linux_side;
@@ -1033,7 +1033,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION004(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION004));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION004), "STEAMAPPS_INTERFACE_VERSION004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION004_vtable;
     r->linux_side = linux_side;
@@ -1124,7 +1124,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION003(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION003));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION003), "STEAMAPPS_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION003_vtable;
     r->linux_side = linux_side;
@@ -1207,7 +1207,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION002));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION002), "STEAMAPPS_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION002_vtable;
     r->linux_side = linux_side;
@@ -1242,7 +1242,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION001));
+    winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION001), "STEAMAPPS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

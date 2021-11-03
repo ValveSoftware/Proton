@@ -92,7 +92,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *create_winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001));
+    winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001), "STEAMREMOTEPLAY_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;
