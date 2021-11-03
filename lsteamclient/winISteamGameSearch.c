@@ -147,7 +147,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameSearch_SteamMatchGameSearch001 *create_winISteamGameSearch_SteamMatchGameSearch001(void *linux_side)
 {
-    winISteamGameSearch_SteamMatchGameSearch001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameSearch_SteamMatchGameSearch001));
+    winISteamGameSearch_SteamMatchGameSearch001 *r = alloc_mem_for_iface(sizeof(winISteamGameSearch_SteamMatchGameSearch001), "SteamMatchGameSearch001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameSearch_SteamMatchGameSearch001_vtable;
     r->linux_side = linux_side;

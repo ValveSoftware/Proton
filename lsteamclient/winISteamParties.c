@@ -131,7 +131,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamParties_SteamParties002 *create_winISteamParties_SteamParties002(void *linux_side)
 {
-    winISteamParties_SteamParties002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamParties_SteamParties002));
+    winISteamParties_SteamParties002 *r = alloc_mem_for_iface(sizeof(winISteamParties_SteamParties002), "SteamParties002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamParties_SteamParties002_vtable;
     r->linux_side = linux_side;

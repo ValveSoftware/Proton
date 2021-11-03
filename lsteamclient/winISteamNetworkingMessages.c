@@ -83,7 +83,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamNetworkingMessages_SteamNetworkingMessages002 *create_winISteamNetworkingMessages_SteamNetworkingMessages002(void *linux_side)
 {
-    winISteamNetworkingMessages_SteamNetworkingMessages002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamNetworkingMessages_SteamNetworkingMessages002));
+    winISteamNetworkingMessages_SteamNetworkingMessages002 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingMessages_SteamNetworkingMessages002), "SteamNetworkingMessages002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamNetworkingMessages_SteamNetworkingMessages002_vtable;
     r->linux_side = linux_side;

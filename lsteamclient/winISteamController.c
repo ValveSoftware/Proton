@@ -310,7 +310,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamController_SteamController008 *create_winISteamController_SteamController008(void *linux_side)
 {
-    winISteamController_SteamController008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamController_SteamController008));
+    winISteamController_SteamController008 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController008), "SteamController008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamController_SteamController008_vtable;
     r->linux_side = linux_side;
@@ -612,7 +612,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamController_SteamController007 *create_winISteamController_SteamController007(void *linux_side)
 {
-    winISteamController_SteamController007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamController_SteamController007));
+    winISteamController_SteamController007 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController007), "SteamController007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamController_SteamController007_vtable;
     r->linux_side = linux_side;
@@ -890,7 +890,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamController_SteamController006 *create_winISteamController_SteamController006(void *linux_side)
 {
-    winISteamController_SteamController006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamController_SteamController006));
+    winISteamController_SteamController006 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController006), "SteamController006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamController_SteamController006_vtable;
     r->linux_side = linux_side;
@@ -1128,7 +1128,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamController_SteamController005 *create_winISteamController_SteamController005(void *linux_side)
 {
-    winISteamController_SteamController005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamController_SteamController005));
+    winISteamController_SteamController005 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController005), "SteamController005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamController_SteamController005_vtable;
     r->linux_side = linux_side;
@@ -1334,7 +1334,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamController_SteamController004 *create_winISteamController_SteamController004(void *linux_side)
 {
-    winISteamController_SteamController004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamController_SteamController004));
+    winISteamController_SteamController004 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController004), "SteamController004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamController_SteamController004_vtable;
     r->linux_side = linux_side;
@@ -1499,7 +1499,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamController_SteamController003 *create_winISteamController_SteamController003(void *linux_side)
 {
-    winISteamController_SteamController003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamController_SteamController003));
+    winISteamController_SteamController003 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController003), "SteamController003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamController_SteamController003_vtable;
     r->linux_side = linux_side;
@@ -1576,7 +1576,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *create_winISteamController_STEAMCONTROLLER_INTERFACE_VERSION(void *linux_side)
 {
-    winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION));
+    winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *r = alloc_mem_for_iface(sizeof(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION), "STEAMCONTROLLER_INTERFACE_VERSION");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_vtable;
     r->linux_side = linux_side;

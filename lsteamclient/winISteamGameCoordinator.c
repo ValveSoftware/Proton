@@ -59,7 +59,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamGameCoordinator_SteamGameCoordinator001 *create_winISteamGameCoordinator_SteamGameCoordinator001(void *linux_side)
 {
-    winISteamGameCoordinator_SteamGameCoordinator001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameCoordinator_SteamGameCoordinator001));
+    winISteamGameCoordinator_SteamGameCoordinator001 *r = alloc_mem_for_iface(sizeof(winISteamGameCoordinator_SteamGameCoordinator001), "SteamGameCoordinator001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamGameCoordinator_SteamGameCoordinator001_vtable;
     r->linux_side = linux_side;

@@ -67,7 +67,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamVideo_STEAMVIDEO_INTERFACE_V002 *create_winISteamVideo_STEAMVIDEO_INTERFACE_V002(void *linux_side)
 {
-    winISteamVideo_STEAMVIDEO_INTERFACE_V002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V002));
+    winISteamVideo_STEAMVIDEO_INTERFACE_V002 *r = alloc_mem_for_iface(sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V002), "STEAMVIDEO_INTERFACE_V002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtable;
     r->linux_side = linux_side;
@@ -110,7 +110,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamVideo_STEAMVIDEO_INTERFACE_V001 *create_winISteamVideo_STEAMVIDEO_INTERFACE_V001(void *linux_side)
 {
-    winISteamVideo_STEAMVIDEO_INTERFACE_V001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V001));
+    winISteamVideo_STEAMVIDEO_INTERFACE_V001 *r = alloc_mem_for_iface(sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V001), "STEAMVIDEO_INTERFACE_V001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtable;
     r->linux_side = linux_side;

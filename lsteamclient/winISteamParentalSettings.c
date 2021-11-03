@@ -83,7 +83,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001));
+    winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001), "STEAMPARENTALSETTINGS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

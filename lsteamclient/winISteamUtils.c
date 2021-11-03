@@ -333,7 +333,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils010 *create_winISteamUtils_SteamUtils010(void *linux_side)
 {
-    winISteamUtils_SteamUtils010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils010));
+    winISteamUtils_SteamUtils010 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils010), "SteamUtils010");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils010_vtable;
     r->linux_side = linux_side;
@@ -634,7 +634,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils009 *create_winISteamUtils_SteamUtils009(void *linux_side)
 {
-    winISteamUtils_SteamUtils009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils009));
+    winISteamUtils_SteamUtils009 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils009), "SteamUtils009");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils009_vtable;
     r->linux_side = linux_side;
@@ -887,7 +887,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils008 *create_winISteamUtils_SteamUtils008(void *linux_side)
 {
-    winISteamUtils_SteamUtils008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils008));
+    winISteamUtils_SteamUtils008 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils008), "SteamUtils008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils008_vtable;
     r->linux_side = linux_side;
@@ -1124,7 +1124,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils007 *create_winISteamUtils_SteamUtils007(void *linux_side)
 {
-    winISteamUtils_SteamUtils007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils007));
+    winISteamUtils_SteamUtils007 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils007), "SteamUtils007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils007_vtable;
     r->linux_side = linux_side;
@@ -1353,7 +1353,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils006 *create_winISteamUtils_SteamUtils006(void *linux_side)
 {
-    winISteamUtils_SteamUtils006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils006));
+    winISteamUtils_SteamUtils006 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils006), "SteamUtils006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils006_vtable;
     r->linux_side = linux_side;
@@ -1566,7 +1566,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils005 *create_winISteamUtils_SteamUtils005(void *linux_side)
 {
-    winISteamUtils_SteamUtils005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils005));
+    winISteamUtils_SteamUtils005 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils005), "SteamUtils005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils005_vtable;
     r->linux_side = linux_side;
@@ -1737,7 +1737,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils004 *create_winISteamUtils_SteamUtils004(void *linux_side)
 {
-    winISteamUtils_SteamUtils004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils004));
+    winISteamUtils_SteamUtils004 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils004), "SteamUtils004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils004_vtable;
     r->linux_side = linux_side;
@@ -1876,7 +1876,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUtils_SteamUtils002 *create_winISteamUtils_SteamUtils002(void *linux_side)
 {
-    winISteamUtils_SteamUtils002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUtils_SteamUtils002));
+    winISteamUtils_SteamUtils002 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils002), "SteamUtils002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUtils_SteamUtils002_vtable;
     r->linux_side = linux_side;

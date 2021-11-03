@@ -340,7 +340,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005(void *linux_side)
 {
-    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005));
+    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005), "STEAMHTMLSURFACE_INTERFACE_VERSION_005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtable;
     r->linux_side = linux_side;
@@ -664,7 +664,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004(void *linux_side)
 {
-    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004));
+    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004), "STEAMHTMLSURFACE_INTERFACE_VERSION_004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtable;
     r->linux_side = linux_side;
@@ -980,7 +980,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003(void *linux_side)
 {
-    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003));
+    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003), "STEAMHTMLSURFACE_INTERFACE_VERSION_003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtable;
     r->linux_side = linux_side;
@@ -1288,7 +1288,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002(void *linux_side)
 {
-    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002));
+    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002), "STEAMHTMLSURFACE_INTERFACE_VERSION_002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtable;
     r->linux_side = linux_side;
@@ -1580,7 +1580,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001(void *linux_side)
 {
-    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001));
+    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001), "STEAMHTMLSURFACE_INTERFACE_VERSION_001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
     r->linux_side = linux_side;

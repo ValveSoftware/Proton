@@ -723,7 +723,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION015 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION015(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION015 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION015));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION015 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION015), "STEAMUGC_INTERFACE_VERSION015");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION015_vtable;
     r->linux_side = linux_side;
@@ -1398,7 +1398,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION014 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION014(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION014 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION014));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION014 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION014), "STEAMUGC_INTERFACE_VERSION014");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION014_vtable;
     r->linux_side = linux_side;
@@ -2065,7 +2065,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION013 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION013(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION013 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION013));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION013 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION013), "STEAMUGC_INTERFACE_VERSION013");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION013_vtable;
     r->linux_side = linux_side;
@@ -2716,7 +2716,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION012 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION012(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION012));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION012 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION012), "STEAMUGC_INTERFACE_VERSION012");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION012_vtable;
     r->linux_side = linux_side;
@@ -3351,7 +3351,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION010 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION010(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION010));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION010 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION010), "STEAMUGC_INTERFACE_VERSION010");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION010_vtable;
     r->linux_side = linux_side;
@@ -3930,7 +3930,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION009 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION009(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION009));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION009 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION009), "STEAMUGC_INTERFACE_VERSION009");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION009_vtable;
     r->linux_side = linux_side;
@@ -4477,7 +4477,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION008 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION008(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION008));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION008), "STEAMUGC_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION008_vtable;
     r->linux_side = linux_side;
@@ -4980,7 +4980,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION007 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION007(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION007));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION007 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION007), "STEAMUGC_INTERFACE_VERSION007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION007_vtable;
     r->linux_side = linux_side;
@@ -5417,7 +5417,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION006 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION006(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION006));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION006 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION006), "STEAMUGC_INTERFACE_VERSION006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION006_vtable;
     r->linux_side = linux_side;
@@ -5822,7 +5822,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION005 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION005(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION005));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION005 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION005), "STEAMUGC_INTERFACE_VERSION005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION005_vtable;
     r->linux_side = linux_side;
@@ -6120,7 +6120,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION004 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION004(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION004));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION004 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION004), "STEAMUGC_INTERFACE_VERSION004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION004_vtable;
     r->linux_side = linux_side;
@@ -6402,7 +6402,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION003 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION003(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION003));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION003), "STEAMUGC_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION003_vtable;
     r->linux_side = linux_side;
@@ -6684,7 +6684,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION002 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION002));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION002), "STEAMUGC_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION002_vtable;
     r->linux_side = linux_side;
@@ -6823,7 +6823,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamUGC_STEAMUGC_INTERFACE_VERSION001 *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamUGC_STEAMUGC_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION001));
+    winISteamUGC_STEAMUGC_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamUGC_STEAMUGC_INTERFACE_VERSION001), "STEAMUGC_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamUGC_STEAMUGC_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

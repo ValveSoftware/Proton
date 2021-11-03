@@ -339,7 +339,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamInventory_STEAMINVENTORY_INTERFACE_V003 *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V003(void *linux_side)
 {
-    winISteamInventory_STEAMINVENTORY_INTERFACE_V003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V003));
+    winISteamInventory_STEAMINVENTORY_INTERFACE_V003 *r = alloc_mem_for_iface(sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V003), "STEAMINVENTORY_INTERFACE_V003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamInventory_STEAMINVENTORY_INTERFACE_V003_vtable;
     r->linux_side = linux_side;
@@ -662,7 +662,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamInventory_STEAMINVENTORY_INTERFACE_V002 *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V002(void *linux_side)
 {
-    winISteamInventory_STEAMINVENTORY_INTERFACE_V002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V002));
+    winISteamInventory_STEAMINVENTORY_INTERFACE_V002 *r = alloc_mem_for_iface(sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V002), "STEAMINVENTORY_INTERFACE_V002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamInventory_STEAMINVENTORY_INTERFACE_V002_vtable;
     r->linux_side = linux_side;
@@ -881,7 +881,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamInventory_STEAMINVENTORY_INTERFACE_V001 *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V001(void *linux_side)
 {
-    winISteamInventory_STEAMINVENTORY_INTERFACE_V001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V001));
+    winISteamInventory_STEAMINVENTORY_INTERFACE_V001 *r = alloc_mem_for_iface(sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V001), "STEAMINVENTORY_INTERFACE_V001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamInventory_STEAMINVENTORY_INTERFACE_V001_vtable;
     r->linux_side = linux_side;

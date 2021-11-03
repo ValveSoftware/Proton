@@ -650,7 +650,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends017 *create_winISteamFriends_SteamFriends017(void *linux_side)
 {
-    winISteamFriends_SteamFriends017 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends017));
+    winISteamFriends_SteamFriends017 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends017), "SteamFriends017");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends017_vtable;
     r->linux_side = linux_side;
@@ -1260,7 +1260,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends015 *create_winISteamFriends_SteamFriends015(void *linux_side)
 {
-    winISteamFriends_SteamFriends015 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends015));
+    winISteamFriends_SteamFriends015 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends015), "SteamFriends015");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends015_vtable;
     r->linux_side = linux_side;
@@ -1806,7 +1806,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends014 *create_winISteamFriends_SteamFriends014(void *linux_side)
 {
-    winISteamFriends_SteamFriends014 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends014));
+    winISteamFriends_SteamFriends014 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends014), "SteamFriends014");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends014_vtable;
     r->linux_side = linux_side;
@@ -2344,7 +2344,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends013 *create_winISteamFriends_SteamFriends013(void *linux_side)
 {
-    winISteamFriends_SteamFriends013 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends013));
+    winISteamFriends_SteamFriends013 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends013), "SteamFriends013");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends013_vtable;
     r->linux_side = linux_side;
@@ -2882,7 +2882,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends012 *create_winISteamFriends_SteamFriends012(void *linux_side)
 {
-    winISteamFriends_SteamFriends012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends012));
+    winISteamFriends_SteamFriends012 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends012), "SteamFriends012");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends012_vtable;
     r->linux_side = linux_side;
@@ -3420,7 +3420,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends011 *create_winISteamFriends_SteamFriends011(void *linux_side)
 {
-    winISteamFriends_SteamFriends011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends011));
+    winISteamFriends_SteamFriends011 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends011), "SteamFriends011");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends011_vtable;
     r->linux_side = linux_side;
@@ -3926,7 +3926,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends010 *create_winISteamFriends_SteamFriends010(void *linux_side)
 {
-    winISteamFriends_SteamFriends010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends010));
+    winISteamFriends_SteamFriends010 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends010), "SteamFriends010");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends010_vtable;
     r->linux_side = linux_side;
@@ -4311,7 +4311,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends009 *create_winISteamFriends_SteamFriends009(void *linux_side)
 {
-    winISteamFriends_SteamFriends009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends009));
+    winISteamFriends_SteamFriends009 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends009), "SteamFriends009");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends009_vtable;
     r->linux_side = linux_side;
@@ -4615,7 +4615,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends008 *create_winISteamFriends_SteamFriends008(void *linux_side)
 {
-    winISteamFriends_SteamFriends008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends008));
+    winISteamFriends_SteamFriends008 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends008), "SteamFriends008");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends008_vtable;
     r->linux_side = linux_side;
@@ -4869,7 +4869,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends007 *create_winISteamFriends_SteamFriends007(void *linux_side)
 {
-    winISteamFriends_SteamFriends007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends007));
+    winISteamFriends_SteamFriends007 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends007), "SteamFriends007");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends007_vtable;
     r->linux_side = linux_side;
@@ -5107,7 +5107,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends006 *create_winISteamFriends_SteamFriends006(void *linux_side)
 {
-    winISteamFriends_SteamFriends006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends006));
+    winISteamFriends_SteamFriends006 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends006), "SteamFriends006");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends006_vtable;
     r->linux_side = linux_side;
@@ -5329,7 +5329,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends005 *create_winISteamFriends_SteamFriends005(void *linux_side)
 {
-    winISteamFriends_SteamFriends005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends005));
+    winISteamFriends_SteamFriends005 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends005), "SteamFriends005");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends005_vtable;
     r->linux_side = linux_side;
@@ -5519,7 +5519,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends004 *create_winISteamFriends_SteamFriends004(void *linux_side)
 {
-    winISteamFriends_SteamFriends004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends004));
+    winISteamFriends_SteamFriends004 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends004), "SteamFriends004");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends004_vtable;
     r->linux_side = linux_side;
@@ -5709,7 +5709,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends003 *create_winISteamFriends_SteamFriends003(void *linux_side)
 {
-    winISteamFriends_SteamFriends003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends003));
+    winISteamFriends_SteamFriends003 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends003), "SteamFriends003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends003_vtable;
     r->linux_side = linux_side;
@@ -5979,7 +5979,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends002 *create_winISteamFriends_SteamFriends002(void *linux_side)
 {
-    winISteamFriends_SteamFriends002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends002));
+    winISteamFriends_SteamFriends002 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends002), "SteamFriends002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends002_vtable;
     r->linux_side = linux_side;
@@ -6223,7 +6223,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamFriends_SteamFriends001 *create_winISteamFriends_SteamFriends001(void *linux_side)
 {
-    winISteamFriends_SteamFriends001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends001));
+    winISteamFriends_SteamFriends001 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends001), "SteamFriends001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends001_vtable;
     r->linux_side = linux_side;

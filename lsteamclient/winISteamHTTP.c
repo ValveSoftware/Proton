@@ -235,7 +235,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003 *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003(void *linux_side)
 {
-    winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003));
+    winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003), "STEAMHTTP_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_vtable;
     r->linux_side = linux_side;
@@ -462,7 +462,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002 *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002(void *linux_side)
 {
-    winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002));
+    winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002), "STEAMHTTP_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_vtable;
     r->linux_side = linux_side;
@@ -609,7 +609,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001 *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001));
+    winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001), "STEAMHTTP_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

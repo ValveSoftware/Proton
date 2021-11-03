@@ -115,7 +115,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003(void *linux_side)
 {
-    winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003));
+    winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003), "STEAMSCREENSHOTS_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_vtable;
     r->linux_side = linux_side;
@@ -202,7 +202,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002(void *linux_side)
 {
-    winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002));
+    winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002), "STEAMSCREENSHOTS_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_vtable;
     r->linux_side = linux_side;
@@ -281,7 +281,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001(void *linux_side)
 {
-    winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001));
+    winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001), "STEAMSCREENSHOTS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_vtable;
     r->linux_side = linux_side;

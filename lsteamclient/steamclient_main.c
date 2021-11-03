@@ -9,6 +9,7 @@
 #include "winbase.h"
 #include "winnls.h"
 #include "winuser.h"
+#include "winternl.h"
 #include "wine/debug.h"
 #include "wine/list.h"
 #include "steam_defs.h"
@@ -230,6 +231,121 @@ void steamclient_free_stringlist(const char **out)
             HeapFree(GetProcessHeap(), 0, (char *)*o);
         HeapFree(GetProcessHeap(), 0, out);
     }
+}
+
+static void *get_mem_from_steamclient_dll(size_t size, unsigned int version)
+{
+    static BYTE * const error_ptr = (BYTE *)~(ULONG_PTR)0;
+    static struct
+    {
+        unsigned int version;
+        size_t size;
+        void *ptr;
+    }
+    allocated[32];
+    static unsigned int allocated_count;
+    static BYTE *alloc_base, *alloc_end;
+    unsigned int i;
+
+    if (alloc_base == error_ptr)
+    {
+        /* Previously failed to locate the section. */
+        return NULL;
+    }
+
+    for (i = 0; i < allocated_count; ++i)
+    {
+        if (allocated[i].version == version)
+        {
+            if (allocated[i].size != size)
+            {
+                FIXME("Size does not match.\n");
+                return NULL;
+            }
+            return allocated[i].ptr;
+        }
+    }
+
+    if (allocated_count == ARRAY_SIZE(allocated))
+    {
+        FIXME("Too many interface versions.\n");
+        return NULL;
+    }
+
+    if (!alloc_base)
+    {
+        const IMAGE_SECTION_HEADER *sec;
+        const IMAGE_NT_HEADERS *nt;
+        HMODULE mod;
+
+        if (!(mod = GetModuleHandleW(L"steamclient.dll")))
+        {
+            /* That is steamclient64.dll for x64 but no known use cases on x64.*/
+            WARN("Module not found, err %u.\n", GetLastError());
+            alloc_base = error_ptr;
+            return NULL;
+        }
+        if (!(nt = RtlImageNtHeader(mod)))
+        {
+            FIXME("Got NULL NT image headers.\n");
+            alloc_base = error_ptr;
+            return NULL;
+        }
+        sec = (const IMAGE_SECTION_HEADER *)((const BYTE *)&nt->OptionalHeader + nt->FileHeader.SizeOfOptionalHeader);
+        for (i = 0; i < nt->FileHeader.NumberOfSections; i++)
+        {
+            if (!memcmp(sec[i].Name, ".data", 5))
+            {
+                alloc_base = (BYTE *)mod + sec[i].VirtualAddress;
+                alloc_end = alloc_base + sec[i].SizeOfRawData;
+                TRACE("Found .data section, start %p, end %p.\n", alloc_base, alloc_end);
+                break;
+            }
+        }
+        if (i == nt->FileHeader.NumberOfSections)
+        {
+            FIXME(".data section not found.\n");
+            alloc_base = error_ptr;
+            return NULL;
+        }
+    }
+
+    if (alloc_end - alloc_base < size)
+    {
+        FIXME("Not enough section size left.\n");
+        return NULL;
+    }
+    allocated[allocated_count].version = version;
+    allocated[allocated_count].size = size;
+    allocated[allocated_count].ptr = alloc_base;
+    alloc_base += size;
+
+    return allocated[allocated_count++].ptr;
+}
+
+void *alloc_mem_for_iface(size_t size, const char *iface_version)
+{
+    const char steamclient_iface_name[] = "SteamClient";
+    unsigned int version;
+    void *ret;
+
+    /* Mafia II depends on SteamClient interface pointer to point inside
+     * native Windows steamclient.dll. */
+    if (strncmp(iface_version, steamclient_iface_name, ARRAY_SIZE(steamclient_iface_name) - 1))
+         goto fallback;
+
+    version = atoi(iface_version + ARRAY_SIZE(steamclient_iface_name) - 1);
+    if (!version)
+    {
+        FIXME("Could not get iface version from %s.\n", iface_version);
+        goto fallback;
+    }
+
+    if ((ret = get_mem_from_steamclient_dll(size, version)))
+        return ret;
+
+fallback:
+    return HeapAlloc(GetProcessHeap(), 0, size);
 }
 
 #ifdef __linux__

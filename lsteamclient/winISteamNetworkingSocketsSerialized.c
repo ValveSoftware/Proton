@@ -99,7 +99,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003(void *linux_side)
 {
-    winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003));
+    winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003), "SteamNetworkingSocketsSerialized003");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_vtable;
     r->linux_side = linux_side;
@@ -190,7 +190,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002(void *linux_side)
 {
-    winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002));
+    winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002), "SteamNetworkingSocketsSerialized002");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_vtable;
     r->linux_side = linux_side;

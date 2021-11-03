@@ -147,7 +147,7 @@ void __asm_dummy_vtables(void) {
 
 winISteamMasterServerUpdater_SteamMasterServerUpdater001 *create_winISteamMasterServerUpdater_SteamMasterServerUpdater001(void *linux_side)
 {
-    winISteamMasterServerUpdater_SteamMasterServerUpdater001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMasterServerUpdater_SteamMasterServerUpdater001));
+    winISteamMasterServerUpdater_SteamMasterServerUpdater001 *r = alloc_mem_for_iface(sizeof(winISteamMasterServerUpdater_SteamMasterServerUpdater001), "SteamMasterServerUpdater001");
     TRACE("-> %p\n", r);
     r->vtable = &winISteamMasterServerUpdater_SteamMasterServerUpdater001_vtable;
     r->linux_side = linux_side;
