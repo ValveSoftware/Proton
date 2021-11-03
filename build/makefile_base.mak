@@ -345,7 +345,7 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/*.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
-	cp $(FONTS_OBJ)/source-han/msgothic.ttc "$@"
+	cp $(FONTS_OBJ)/ume-gothic/msgothic.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
 
 .PHONY: dist
@@ -937,6 +937,7 @@ MERGEFONTSSCRIPT = $(FONTS)/scripts/mergefonts.pe
 
 LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
 SOURCE_HAN_SANS_SRCDIR = $(FONTS)/source-han-sans
+UME_DIR = $(FONTS)/ume
 
 msyh.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
 msyh.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
@@ -962,29 +963,17 @@ nsimsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 nsimsun.ttf_MENUNAMEDB = $(FONTS)/patches/NSimSun-FontMenuNameDB
 nsimsun.ttf = $(FONTS_OBJ)/source-han/nsimsun.ttf
 
-msgothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
-msgothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
-msgothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
-msgothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
-msgothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
-msgothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSGothic-FontMenuNameDB
-msgothic.ttf = $(FONTS_OBJ)/source-han/msgothic.ttf
+msgothic.ttf_FONT = $(UME_DIR)/ume-tgo4.ttf
+msgothic.ttf_NAMETABLE_PATCH = $(FONTS)/patches/UmeGothic-nametable.patch
+msgothic.ttf = $(FONTS_OBJ)/ume-gothic/msgothic.ttf
 
-mspgothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
-mspgothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
-mspgothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
-mspgothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
-mspgothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
-mspgothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSPGothic-FontMenuNameDB
-mspgothic.ttf = $(FONTS_OBJ)/source-han/mspgothic.ttf
+mspgothic.ttf_FONT = $(UME_DIR)/ume-pgo4.ttf
+mspgothic.ttf_NAMETABLE_PATCH = $(FONTS)/patches/UmePGothic-nametable.patch
+mspgothic.ttf = $(FONTS_OBJ)/ume-gothic/mspgothic.ttf
 
-msuigothic.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.J
-msuigothic.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.J
-msuigothic.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.J
-msuigothic.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_JP_sequences.txt
-msuigothic.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansJP-UTF32-H
-msuigothic.ttf_MENUNAMEDB = $(FONTS)/patches/MSUIGothic-FontMenuNameDB
-msuigothic.ttf = $(FONTS_OBJ)/source-han/msuigothic.ttf
+msuigothic.ttf_FONT = $(UME_DIR)/ume-ugo4.ttf
+msuigothic.ttf_NAMETABLE_PATCH = $(FONTS)/patches/UmeUIGothic-nametable.patch
+msuigothic.ttf = $(FONTS_OBJ)/ume-gothic/msuigothic.ttf
 
 malgun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.K
 malgun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.K
@@ -995,7 +984,7 @@ malgun.ttf_MENUNAMEDB = $(FONTS)/patches/Malgun-FontMenuNameDB
 malgun.ttf = $(FONTS_OBJ)/source-han/malgun.ttf
 
 simsun.ttc = $(FONTS_OBJ)/source-han/simsun.ttc
-msgothic.ttc = $(FONTS_OBJ)/source-han/msgothic.ttc
+msgothic.ttc = $(FONTS_OBJ)/ume-gothic/msgothic.ttc
 
 noto_sans.ttf = $(FONTS)/noto/NotoSans-Regular.ttf
 noto_sans_arabic.ttf = $(FONTS)/noto/NotoSansArabic-Regular.ttf
@@ -1062,6 +1051,12 @@ $(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONTINFO) $$(%.
 	# to step onto each other's feet
 	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && $(AFDKO_VERB) sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
 	mv $@.tmp $@
+
+$(FONTS_OBJ)/ume-gothic/%.ttf: $$(%.ttf_FONT) $$(%.ttf_NAMETABLE_PATCH)
+	mkdir -p $(FONTS_OBJ)/ume-gothic
+	ttx -o $(FONTS_OBJ)/ume-gothic/$(notdir $(basename $($(notdir $@)_NAMETABLE_PATCH))).ttx -t name $($(notdir $@)_FONT)
+	patch $(FONTS_OBJ)/ume-gothic/$(notdir $(basename $($(notdir $@)_NAMETABLE_PATCH))).ttx $($(notdir $@)_NAMETABLE_PATCH)
+	ttx -o $@ -m $($(notdir $@)_FONT) $(FONTS_OBJ)/ume-gothic/$(notdir $(basename $($(notdir $@)_NAMETABLE_PATCH))).ttx
 
 $(simsun.ttc): $(simsun.ttf) $(nsimsun.ttf)
 	$(AFDKO_VERB) otf2otc -o $@ $^

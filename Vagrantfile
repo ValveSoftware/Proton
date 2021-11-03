@@ -86,6 +86,9 @@ Vagrant.configure(2) do |config|
       #install adobe font devkit to build source san hans
       pip3 install afdko
 
+      #install fontTools to manipulate ume fonts
+      pip3 install fonttools
+
       #allow vagrant user to run docker
       adduser vagrant docker
 
