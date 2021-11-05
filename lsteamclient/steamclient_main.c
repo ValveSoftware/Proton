@@ -233,9 +233,17 @@ void steamclient_free_stringlist(const char **out)
     }
 }
 
+static BYTE *alloc_start, *alloc_end;
+
+static BOOL allocated_from_steamclient_dll( void *ptr )
+{
+    return (BYTE *)ptr >= alloc_start && (BYTE *)ptr < alloc_end;
+}
+
 static void *get_mem_from_steamclient_dll(size_t size, unsigned int version)
 {
     static BYTE * const error_ptr = (BYTE *)~(ULONG_PTR)0;
+    static const unsigned int magic = 0x53ba947a;
     static struct
     {
         unsigned int version;
@@ -244,13 +252,20 @@ static void *get_mem_from_steamclient_dll(size_t size, unsigned int version)
     }
     allocated[32];
     static unsigned int allocated_count;
-    static BYTE *alloc_base, *alloc_end;
+    static BYTE *alloc_base;
     unsigned int i;
 
     if (alloc_base == error_ptr)
     {
         /* Previously failed to locate the section. */
         return NULL;
+    }
+
+    if (alloc_base && (IsBadReadPtr(alloc_start, sizeof(magic)) || *(unsigned int *)alloc_start != magic))
+    {
+        TRACE("steamclient.dll reloaded.\n");
+        alloc_base = alloc_start = alloc_end = NULL;
+        allocated_count = 0;
     }
 
     for (i = 0; i < allocated_count; ++i)
@@ -296,9 +311,17 @@ static void *get_mem_from_steamclient_dll(size_t size, unsigned int version)
         {
             if (!memcmp(sec[i].Name, ".data", 5))
             {
-                alloc_base = (BYTE *)mod + sec[i].VirtualAddress;
+                alloc_start = alloc_base = (BYTE *)mod + sec[i].VirtualAddress;
                 alloc_end = alloc_base + sec[i].SizeOfRawData;
+                if (alloc_end - alloc_start < sizeof(magic))
+                {
+                    ERR(".data section is too small.\n");
+                    alloc_base = error_ptr;
+                    return NULL;
+                }
                 TRACE("Found .data section, start %p, end %p.\n", alloc_base, alloc_end);
+                *(unsigned int *)alloc_base = magic;
+                alloc_base += sizeof(unsigned int);
                 break;
             }
         }
@@ -533,13 +556,16 @@ void *create_win_interface(const char *name, void *linux_side)
     {
         if (!strcmp(name, constructors[i].iface_version))
         {
+            ret = constructors[i].ctor(linux_side);
+            if (allocated_from_steamclient_dll(ret))
+                break;
+
             e = HeapAlloc(GetProcessHeap(), 0, sizeof(*e));
             e->name = constructors[i].iface_version;
             e->linux_side = linux_side;
-            e->interface = constructors[i].ctor(linux_side);
+            e->interface = ret;
             list_add_tail(&steamclient_interfaces, &e->entry);
 
-            ret = e->interface;
             break;
         }
     }
