@@ -302,9 +302,6 @@
     echo "CPU topology overrides"
     patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
 
-#    echo "proton futex2 patches"
-#    patch -Np1 < ../patches/proton/40-proton-futex2.patch
-
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-tkg.patch
 
@@ -419,10 +416,6 @@
 
 
 ### (2-5) WINE HOTFIX SECTION ###
-
-    # fixes witcher 3, borderlands 3, rockstar social club, and a few others
-#    echo "heap allocation hotfix"
-#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_heap_alloc.patch
 
     echo "hotfix for beam ng right click camera being broken with fshack"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-beam_ng_fshack_fix.patch
