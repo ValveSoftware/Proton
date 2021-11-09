@@ -1437,7 +1437,7 @@ class Session:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
 
         if self.remote_debug_cmd:
-            remote_debug_proc = subprocess.Popen([g_proton.wine54_bin] + self.remote_debug_cmd,
+            remote_debug_proc = subprocess.Popen([g_proton.wine64_bin] + self.remote_debug_cmd,
                                                  env=self.env, stderr=self.log_file, stdout=self.log_file)
         else:
             remote_debug_proc = None
