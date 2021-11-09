@@ -1,25 +1,19 @@
 diff --git a/steam.cpp b/steam.cpp
+index 89e949a..5c24a1c 100644
 --- a/steam.cpp
 +++ b/steam.cpp
-@@ -33,6 +33,7 @@
-  * Windows version of Steam running. */
-
- #include <windows.h>
-+#include <winternl.h>
- #include <shlobj.h>
- #include <string.h>
- #include <stdio.h>
-@@ -52,7 +52,6 @@
+@@ -61,8 +61,6 @@
 
  WINE_DEFAULT_DEBUG_CHANNEL(steam);
 
 -EXTERN_C HANDLE CDECL __wine_make_process_system(void);
-
+-
  #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 
-@@ -1177,7 +1177,7 @@ int main(int argc, char *argv[])
-         setup_steam_registry();
-         setup_steam_files();
+ static bool env_nonzero(const char *env)
+@@ -1378,7 +1376,7 @@ int main(int argc, char *argv[])
+
+         SteamAPI_Shutdown();
 
 -        wait_handle = __wine_make_process_system();
 +        NtSetInformationProcess(GetCurrentProcess(), (PROCESS_INFORMATION_CLASS)1000 /*ProcessWineMakeProcessSystem*/, &wait_handle, sizeof(HANDLE));
