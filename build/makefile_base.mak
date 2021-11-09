@@ -378,7 +378,8 @@ deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	cp -af --no-dereference --preserve=mode,links $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	# Use -r instead of -a for sshfs
+	cp -rf --no-dereference --preserve=mode,links $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
@@ -989,6 +990,39 @@ $(OBJ)/.vkd3d-proton-post-build64:
 ## 	cp -a $(MEDIACONV_OBJ32)/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST32)/lib/gstreamer-1.0/
 ## 	touch $@
 ##
+
+##
+## BattlEye Bridge
+##
+
+ifneq ($(wildcard $(SRCDIR)/battleye-bridge/.*),)
+
+BATTLEYE_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
+
+BATTLEYE_DEPENDS = wine
+
+$(eval $(call rules-source,battleye,$(SRCDIR)/battleye-bridge))
+$(eval $(call rules-winemaker,battleye,32,beclient.dll))
+$(eval $(call rules-winemaker,battleye,64,beclient_x64.dll))
+
+$(OBJ)/.battleye-post-source:
+	mkdir -p $(BATTLEYE_OBJ32) && cp -a $(BATTLEYE_SRC)/beclient.spec $(BATTLEYE_OBJ32)/beclient.spec
+	mkdir -p $(BATTLEYE_OBJ64) && cp -a $(BATTLEYE_SRC)/beclient.spec $(BATTLEYE_OBJ64)/beclient_x64.spec
+	touch $@
+
+$(OBJ)/.battleye-post-build64:
+	mkdir -p $(OBJ)/dist-battleye/v1
+	cp -r $(BATTLEYE_DST64)/* $(OBJ)/dist-battleye/v1/
+	rm -rf $(BATTLEYE_DST64)/*
+	touch $@
+
+$(OBJ)/.battleye-post-build32:
+	mkdir -p $(OBJ)/dist-battleye/v1
+	cp -r $(BATTLEYE_DST32)/* $(OBJ)/dist-battleye/v1/
+	rm -rf $(BATTLEYE_DST32)/*
+	touch $@
+
+endif
 
 ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts
