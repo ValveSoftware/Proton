@@ -32,7 +32,10 @@
  * a small subset of the actual Steam functionality for games that expect
  * Windows version of Steam running. */
 
+#include "ntstatus.h"
+#define WIN32_NO_STATUS
 #include <windows.h>
+#include <winternl.h>
 #include <shlobj.h>
 #include <string.h>
 #include <stdio.h>
@@ -97,6 +100,7 @@ static DWORD WINAPI create_steam_window(void *arg)
     return 0;
 }
 
+/* requires steam API to be initialized */
 static void setup_steam_registry(void)
 {
     const char *ui_lang;
@@ -104,12 +108,6 @@ static void setup_steam_registry(void)
     char buf[256];
     HKEY key;
     LSTATUS status;
-
-    if (!SteamAPI_Init())
-    {
-        WINE_ERR("SteamAPI_Init failed\n");
-        return;
-    }
 
     ui_lang = SteamUtils()->GetSteamUILanguage();
     WINE_TRACE("UI language: %s\n", wine_dbgstr_a(ui_lang));
@@ -131,8 +129,35 @@ static void setup_steam_registry(void)
         RegCloseKey(key);
     }
     else WINE_ERR("Could not create key: %u\n", status);
+}
 
-    SteamAPI_Shutdown();
+static void copy_to_win(const char *unix_path, const WCHAR *win_path)
+{
+    WCHAR *src_path = wine_get_dos_file_name(unix_path);
+    if (!src_path)
+        return;
+
+    CopyFileW(src_path, win_path, FALSE);
+
+    HeapFree(GetProcessHeap(), 0, src_path);
+}
+
+/* requires steam API to be initialized */
+static void setup_battleye_bridge(void)
+{
+    const unsigned int be_runtime_appid = 1161040;
+    char path[2048];
+    char *path_end;
+
+    if (!SteamApps()->BIsAppInstalled(be_runtime_appid))
+        return;
+
+    if (!SteamApps()->GetAppInstallDir(be_runtime_appid, path, sizeof(path)))
+        return;
+
+    WINE_TRACE("Found battleye runtime at %s\n", path);
+
+    setenv("PROTON_BATTLEYE_RUNTIME", path, 1);
 }
 
 static std::string get_linux_vr_path(void)
@@ -1209,6 +1234,94 @@ static void setup_steam_files(void)
         WINE_ERR("Could not write %s.\n", wine_dbgstr_w(libraryfolders_nameW));
 }
 
+#ifndef DIRECTORY_QUERY
+#define DIRECTORY_QUERY 0x0001
+#endif
+
+static HANDLE find_ack_event(void)
+{
+    static const WCHAR steam_ack_event[] = L"STEAM_START_ACK_EVENT";
+    static const WCHAR name[] = L"\\BaseNamedObjects\\Session\\1";
+    DIRECTORY_BASIC_INFORMATION *di;
+    OBJECT_ATTRIBUTES attr;
+    HANDLE dir, ret = NULL;
+    ULONG context, size;
+    UNICODE_STRING str;
+    char buffer[1024];
+    NTSTATUS status;
+
+    di = (DIRECTORY_BASIC_INFORMATION *)buffer;
+
+    RtlInitUnicodeString(&str, name);
+    InitializeObjectAttributes(&attr, &str, 0, 0, NULL);
+    status = NtOpenDirectoryObject( &dir, DIRECTORY_QUERY, &attr );
+    if (status)
+    {
+        WINE_WARN("Failed to open directory %s, status %#x.\n", wine_dbgstr_w(name), status);
+        return NULL;
+    }
+
+    status = NtQueryDirectoryObject(dir, di, sizeof(buffer), TRUE, TRUE, &context, &size);
+    while (!status)
+    {
+        if (!strncmpW(di->ObjectName.Buffer, steam_ack_event, ARRAY_SIZE(steam_ack_event) - 1))
+        {
+            WINE_TRACE("Found event %s.\n", wine_dbgstr_w(di->ObjectName.Buffer));
+            ret = OpenEventW(SYNCHRONIZE, FALSE, di->ObjectName.Buffer);
+            if (!ret)
+                WINE_WARN("Failed to create event, err %u.\n", GetLastError());
+            break;
+        }
+        status = NtQueryDirectoryObject(dir, di, sizeof(buffer), TRUE, FALSE, &context, &size);
+    }
+    if (status && status != STATUS_NO_MORE_ENTRIES)
+        WINE_WARN("NtQueryDirectoryObject failed, status %#x.\n", status);
+    WINE_TRACE("ret %p.\n", ret);
+
+    CloseHandle(dir);
+    return ret;
+}
+
+static DWORD WINAPI steam_drm_thread(void *arg)
+{
+    HANDLE consume, produce;
+    HANDLE start_ack = NULL;
+    HANDLE child = arg;
+    DWORD pid;
+    LONG prev;
+
+    consume = CreateSemaphoreA(NULL, 0, 512, "STEAM_DIPC_CONSUME");
+    if (!consume)
+    {
+        WINE_ERR("Failed to create consume semaphore, err %u.\n", GetLastError());
+        return -1;
+    }
+    produce = CreateSemaphoreA(NULL, 1, 512, "SREAM_DIPC_PRODUCE");
+    if (!produce)
+    {
+        CloseHandle(consume);
+        WINE_ERR("Failed to create produce semaphore, err %u.\n", GetLastError());
+        return -1;
+    }
+
+    pid = GetProcessId(child);
+
+    WINE_TRACE("Child pid %04x.\n", pid);
+
+    while (WaitForSingleObject(consume, INFINITE) == WAIT_OBJECT_0)
+    {
+        WINE_TRACE("Got event.\n");
+
+        if (!start_ack)
+            start_ack = find_ack_event();
+        if (start_ack)
+            SetEvent(start_ack);
+        ReleaseSemaphore(produce, 1, &prev);
+        WINE_TRACE("prev %d.\n", prev);
+    }
+
+    return 0;
+}
 int main(int argc, char *argv[])
 {
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
@@ -1234,7 +1347,17 @@ int main(int argc, char *argv[])
         CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
 
         set_active_process_pid();
-        setup_steam_registry();
+
+        if (SteamAPI_Init())
+        {
+            setup_steam_registry();
+            setup_battleye_bridge();
+        }
+        else
+        {
+            WINE_ERR("SteamAPI_Init failed\n");
+        }
+
         setup_steam_files();
 
         if (env_nonzero("PROTON_WAIT_ATTACH"))
@@ -1252,6 +1375,8 @@ int main(int argc, char *argv[])
                 }
             }
         }
+
+        SteamAPI_Shutdown();
 
         wait_handle = __wine_make_process_system();
         game_process = TRUE;
@@ -1276,6 +1401,9 @@ int main(int argc, char *argv[])
             if (wait_handle == INVALID_HANDLE_VALUE)
                 wait_handle = child;
         }
+
+        if (game_process)
+            CreateThread(NULL, 0, steam_drm_thread, child, 0, NULL);
     }
 
     if(wait_handle != INVALID_HANDLE_VALUE)
