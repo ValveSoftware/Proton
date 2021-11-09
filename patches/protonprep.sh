@@ -41,6 +41,14 @@
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
+    cd vkd3d-proton
+    git reset --hard HEAD
+    git clean -xdf
+
+    echo "add pending GoTG patches"
+    patch -Np1 < ../patches/vkd3d-proton/GoTG-WIP.patch
+    cd ..
+
     #WINE STAGING
     cd wine-staging
     git reset --hard HEAD
@@ -97,6 +105,30 @@
 #    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit aafbbdb8bcc9b668008038dc6fcfba028c4cc6f6
+    git revert --no-commit 682093d0bdc24a55fcde37ca4f9cc9ed46c3c7df
+    git revert --no-commit 21dc092b910f80616242761a00d8cdab2f8aa7bd
+    git revert --no-commit d7175e265537ffd24dbf8fd3bcaaa1764db03e13
+    git revert --no-commit 5306d0ff3c95e7b9b1c77fa2bb30b420d07879f7
+    git revert --no-commit 00bc5eb73b95cbfe404fe18e1d0aadacc8ab4662
+    git revert --no-commit a855591fd29f1f47947459f8710b580a4f90ce3a
+    git revert --no-commit 34d85311f33335d2babff3983bb96fb0ce9bae5b
+    git revert --no-commit 42c82012c7ac992a98930011647482fc94c63a87
+    git revert --no-commit 4398e8aba2d2c96ee209f59658c2aa6caf26687a
+    git revert --no-commit c9f5903e5a315989d03d48e4a53291be48fd8d89
+    git revert --no-commit 56dde41b6d91c589d861dca5d50ffa9f607da1db
+    git revert --no-commit c3811e84617e409875957b3d0b43fc5be91f01f6
+    git revert --no-commit 799c7704e8877fe2ee73391f9f2b8d39e222b8d5
+    git revert --no-commit 399ccc032750e2658526fc70fa0bfee7995597df
+    git revert --no-commit f7b45d419f94a6168e3d9a97fb2df21f448446f1
+    git revert --no-commit 6cb1d1ec4ffa77bbc2223703b93033bd86730a60
+    git revert --no-commit 7c02cd8cf8e1b97df8f8bfddfeba68d7c7b4f820
+    git revert --no-commit 6f8d366b57e662981c68ba0bd29465f391167de9
+    git revert --no-commit 74c2e9020f04b26e7ccf217d956ead740566e991
+    git revert --no-commit 04d94e3c092bbbaee5ec1331930b11af58ced629
+    git revert --no-commit 538b86bfc640ddcfd4d28b1e2660acdef0ce9b08
+    git revert --no-commit 3b8579d8a570eeeaf0d4e0667e748d484df138aa
+    git revert --no-commit 970c1bc49b804d0b7fa515292f27ac2fb4ef29e8
     git revert --no-commit f26e0ba212e6164eb7535f472415334d1a9c9044
     git revert --no-commit bc52edc19d8a45b9062d9568652403251872026e
     git revert --no-commit b3655b5be5f137281e8757db4e6985018b21c296
@@ -246,6 +278,7 @@
     patch -Np1 < ../patches/proton/47-proton-10_dirt_5_registry.patch
     patch -Np1 < ../patches/proton/54-proton-11_death_loop_registry.patch
     patch -Np1 < ../patches/proton/56-proton-12_disable_libglesv2_for_nw.js.patch
+    patch -Np1 < ../patches/proton/58-proton-13_atiadlxx_builtin_for_gotg.patch
 
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
@@ -388,8 +421,8 @@
 ### (2-5) WINE HOTFIX SECTION ###
 
     # fixes witcher 3, borderlands 3, rockstar social club, and a few others
-    echo "heap allocation hotfix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_heap_alloc.patch
+#    echo "heap allocation hotfix"
+#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-remi_heap_alloc.patch
 
     echo "hotfix for beam ng right click camera being broken with fshack"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-beam_ng_fshack_fix.patch
