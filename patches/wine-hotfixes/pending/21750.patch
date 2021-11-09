@@ -16,9 +16,9 @@ index b3dab22ae6e..7b7a985c40d 100644
 --- a/dlls/ws2_32/socket.c
 +++ b/dlls/ws2_32/socket.c
 @@ -2384,6 +2384,14 @@ int WINAPI select( int count, fd_set *read_ptr, fd_set *write_ptr,
- 
+
      TRACE( "read %p, write %p, except %p, timeout %p\n", read_ptr, write_ptr, except_ptr, timeout );
- 
+
 +    if ((read_ptr && IsBadWritePtr(read_ptr, sizeof(*read_ptr)))
 +        || (write_ptr && IsBadWritePtr(write_ptr, sizeof(*write_ptr)))
 +        || (except_ptr && IsBadWritePtr(except_ptr, sizeof(*except_ptr))))
@@ -31,9 +31,9 @@ index b3dab22ae6e..7b7a985c40d 100644
      FD_ZERO( &write );
      FD_ZERO( &except );
 @@ -2393,11 +2401,6 @@ int WINAPI select( int count, fd_set *read_ptr, fd_set *write_ptr,
- 
+
      if (!(sync_event = get_sync_event())) return -1;
- 
+
 -    if (timeout)
 -        params->timeout = timeout->tv_sec * -10000000 + timeout->tv_usec * -10;
 -    else
@@ -45,7 +45,7 @@ index b3dab22ae6e..7b7a985c40d 100644
 @@ -2428,6 +2431,18 @@ int WINAPI select( int count, fd_set *read_ptr, fd_set *write_ptr,
          return -1;
      }
- 
+
 +    if (timeout)
 +    {
 +        if (IsBadReadPtr(timeout, sizeof(*timeout)))
@@ -59,10 +59,9 @@ index b3dab22ae6e..7b7a985c40d 100644
 +        params->timeout = TIMEOUT_INFINITE;
 +
      params_size = offsetof( struct afd_poll_params, sockets[params->count] );
- 
+
      status = NtDeviceIoControlFile( (HANDLE)poll_socket, sync_event, NULL, NULL, &io,
 
--- 
+--
 2.33.1
-
 
