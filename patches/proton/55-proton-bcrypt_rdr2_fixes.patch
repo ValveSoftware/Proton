@@ -1,3 +1,17 @@
+diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
+index 863b47f50eb9..d7b4499c692d 100644
+--- a/dlls/bcrypt/gnutls.c
++++ b/dlls/bcrypt/gnutls.c
+@@ -23,6 +23,7 @@
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <assert.h>
++#include <fcntl.h>
+ #include <sys/types.h>
+ #include <dlfcn.h>
+ #include <gnutls/gnutls.h>
+
+
 From 717a66470ad13872e7e346e7c6de97da1ba1ee2f Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Mon, 7 Dec 2020 12:59:55 +0300
