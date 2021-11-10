@@ -41,14 +41,6 @@
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
-    cd vkd3d-proton
-    git reset --hard HEAD
-    git clean -xdf
-
-    echo "add pending GoTG patches"
-    patch -Np1 < ../patches/vkd3d-proton/GoTG-WIP.patch
-    cd ..
-
     #WINE STAGING
     cd wine-staging
     git reset --hard HEAD
@@ -320,6 +312,7 @@
 
     echo "proton quake champions patches"
     patch -Np1 < ../patches/proton/52-proton_quake_champions_syscall.patch
+
 
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
