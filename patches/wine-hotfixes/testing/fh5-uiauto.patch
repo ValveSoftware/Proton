@@ -1,0 +1,33 @@
+diff --git a/dlls/uiautomationcore/uiautomationcore.spec b/dlls/uiautomationcore/uiautomationcore.spec
+index 656641c4bad..a5ab714f718 100644
+--- a/dlls/uiautomationcore/uiautomationcore.spec
++++ b/dlls/uiautomationcore/uiautomationcore.spec
+@@ -86,7 +86,7 @@
+ #@ stub UiaProviderFromIAccessible
+ @ stub UiaRaiseAsyncContentLoadedEvent
+ @ stdcall UiaRaiseAutomationEvent(ptr long)
+-@ stub UiaRaiseAutomationPropertyChangedEvent
++@ stdcall UiaRaiseAutomationPropertyChangedEvent(ptr long ptr ptr)
+ #@ stub UiaRaiseChangesEvent
+ #@ stub UiaRaiseNotificationEvent
+ @ stub UiaRaiseStructureChangedEvent
+diff --git a/dlls/uiautomationcore/uia_main.c b/dlls/uiautomationcore/uia_main.c
+index 174e4756920..d9fd56c541b 100644
+--- a/dlls/uiautomationcore/uia_main.c
++++ b/dlls/uiautomationcore/uia_main.c
+@@ -212,6 +212,15 @@ HRESULT WINAPI UiaRaiseAutomationEvent(IRawElementProviderSimple *provider, EVEN
+     return S_OK;
+ }
+ 
++/***********************************************************************
++ *          UiaRaiseAutomationPropertyChangedEvent (uiautomationcore.@)
++ */
++HRESULT WINAPI UiaRaiseAutomationPropertyChangedEvent(IRawElementProviderSimple *provider, EVENTID id, IUnknown **value, IUnknown **value2)
++{
++    FIXME("(%p, %lx, %%p, %p) stub!\n", provider, id, value, value2);
++    return S_OK;
++}
++
+ void WINAPI UiaRegisterProviderCallback(UiaProviderCallback *callback)
+ {
+     FIXME("(%p): stub\n", callback);

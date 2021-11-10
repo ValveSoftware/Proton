@@ -424,6 +424,10 @@
     echo "hotfix to update mono version"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
 
+    echo "add missing stub for fh5"
+    patch -Np1 < ../patches/wine-hotfixes/testing/fh5-uiauto.patch
+
+
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
 
