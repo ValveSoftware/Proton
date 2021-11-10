@@ -313,6 +313,8 @@
     echo "proton quake champions patches"
     patch -Np1 < ../patches/proton/52-proton_quake_champions_syscall.patch
 
+    echo "proton battleye patches"
+    patch -Np1 < ../patches/proton/59-proton-battleye_patches.patch
 
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
@@ -420,6 +422,9 @@
     echo "add missing stub for fh5"
     patch -Np1 < ../patches/wine-hotfixes/testing/fh5-uiauto.patch
 
+    #https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
+    echo "unity crash hotfix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
 
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
