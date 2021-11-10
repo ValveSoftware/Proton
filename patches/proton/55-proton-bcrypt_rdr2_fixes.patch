@@ -388,6 +388,14 @@ diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
 index a015d85f85d..a751310c883 100644
 --- a/dlls/bcrypt/gnutls.c
 +++ b/dlls/bcrypt/gnutls.c
+@@ -34,6 +35,7 @@
+ #include <gnutls/gnutls.h>
+ #include <gnutls/crypto.h>
+ #include <gnutls/abstract.h>
++#include <fcntl.h>
+
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
 @@ -80,6 +80,8 @@ static union key_data *key_data( struct key *key )
      return (union key_data *)key->private;
  }
