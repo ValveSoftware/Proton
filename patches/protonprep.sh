@@ -288,8 +288,8 @@
     patch -Np1 < ../patches/proton/55-proton-bcrypt_rdr2_fixes.patch
 
     echo "apply staging bcrypt patches on top of rdr2 fixes"
-    patch -Np1 < ../patches/wine-hotfixes/staging/0001-bcrypt-Add-support-for-calculating-secret-ecc-keys.patch
-
+    patch -Np1 < ../patches/wine-hotfixes/staging/0002-bcrypt-Add-support-for-calculating-secret-ecc-keys.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/0003-bcrypt-Add-support-for-OAEP-padded-asymmetric-key-de.patch
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
