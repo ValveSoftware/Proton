@@ -35,3 +35,4 @@ extern ESteamIPv6ConnectivityState cppISteamUtils_SteamUtils010_GetIPv6Connectiv
 extern bool cppISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(void *);
 extern bool cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(void *, EFloatingGamepadTextInputMode, int, int, int, int);
 extern void cppISteamUtils_SteamUtils010_SetGameLauncherMode(void *, bool);
+extern bool cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(void *);

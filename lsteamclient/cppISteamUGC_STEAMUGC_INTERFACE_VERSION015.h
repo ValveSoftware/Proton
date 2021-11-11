@@ -3,7 +3,7 @@ extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAl
 extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest_2(void *, EUGCQuery, EUGCMatchingUGCType, AppId_t, AppId_t, const char *);
 extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUGCDetailsRequest(void *, PublishedFileId_t *, uint32);
 extern SteamAPICall_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUGCRequest(void *, UGCQueryHandle_t);
-extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(void *, UGCQueryHandle_t, uint32, winSteamUGCDetails_t_152 *);
+extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(void *, UGCQueryHandle_t, uint32, winSteamUGCDetails_t_153_preview *);
 extern uint32 cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumTags(void *, UGCQueryHandle_t, uint32);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTag(void *, UGCQueryHandle_t, uint32, uint32, char *, uint32);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTagDisplayName(void *, UGCQueryHandle_t, uint32, uint32, char *, uint32);
