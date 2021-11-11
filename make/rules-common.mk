@@ -114,6 +114,9 @@ $(2)_LIBFLAGS$(3) = $$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \
 # PKG_CONFIG is intentionally never using CROSS target, as it's missing
 # wrapper scripts in the toolchain, we use PKG_CONFIG_LIBDIR directly
 # instead.
+#
+# RC and WIDL are intentionally always using CROSS target, as their
+# native version doesn't exist.
 
 $(2)_ENV$(3) = \
     CARGO_HOME=$$(OBJ)/.cargo \
@@ -125,6 +128,8 @@ $(2)_ENV$(3) = \
     CC="$$(TARGET_$(4)$(3))-gcc" \
     CXX="$$(TARGET_$(4)$(3))-g++" \
     LD="$$(TARGET_$(4)$(3))-ld" \
+    RC="$$(TARGET_CROSS$(3))-windres" \
+    WIDL="$$(TARGET_CROSS$(3))-widl" \
     PKG_CONFIG="$$(TARGET_$(3))-pkg-config" \
     PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_BINDIR$(3))),,:):$$(SRC)/glslang/bin:$$$$PATH" \
     LD_LIBRARY_PATH="$$(call list-join,:,$$(foreach d,$$($(2)_DEPS$(3)),$$($$(d)_LIBDIR$(3))),,:)$$$$LD_LIBRARY_PATH" \
