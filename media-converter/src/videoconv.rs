@@ -35,6 +35,7 @@ use glib::subclass::prelude::*;
 use crate::format_hash;
 use crate::HASH_SEED;
 use crate::box_array;
+use crate::copy_into_array;
 use crate::BufferedReader;
 
 use gst;
@@ -112,22 +113,85 @@ const VIDEOCONV_FOZ_TAG_OGVDATA: u32 = 1;
 const VIDEOCONV_FOZ_TAG_STREAM: u32 = 2;
 const VIDEOCONV_FOZ_NUM_TAGS: usize = 3;
 
-static DUMP_FOZDB: Lazy<Mutex<Option<fossilize::StreamArchive>>> = Lazy::new(|| {
-    let dump_file_path = match std::env::var("MEDIACONV_VIDEO_DUMP_FILE") {
-        Err(_) => { return Mutex::new(None); },
-        Ok(c) => c,
-    };
+struct VideoConverterDumpFozdb {
+    fozdb: Option<fossilize::StreamArchive>,
+    already_cleaned: bool,
+}
 
-    let dump_file_path = std::path::Path::new(&dump_file_path);
-
-    if fs::create_dir_all(&dump_file_path.parent().unwrap()).is_err() {
-        return Mutex::new(None);
+impl VideoConverterDumpFozdb {
+    fn new() -> Self {
+        Self {
+            fozdb: None,
+            already_cleaned: false,
+        }
     }
 
-    match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(true), VIDEOCONV_FOZ_NUM_TAGS) {
-        Ok(newdb) => Mutex::new(Some(newdb)),
-        Err(_) => Mutex::new(None),
+    fn open(&mut self, create: bool) -> &mut Self {
+        if self.fozdb.is_none() {
+            let dump_file_path = match std::env::var("MEDIACONV_VIDEO_DUMP_FILE") {
+                Err(_) => { return self; },
+                Ok(c) => c,
+            };
+
+            let dump_file_path = std::path::Path::new(&dump_file_path);
+
+            if fs::create_dir_all(&dump_file_path.parent().unwrap()).is_err() {
+                return self;
+            }
+
+            match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(create), VIDEOCONV_FOZ_NUM_TAGS) {
+                Ok(newdb) => {
+                    self.fozdb = Some(newdb);
+                },
+                Err(_) => {
+                    return self;
+                },
+            }
+        }
+        self
     }
+
+    fn close(&mut self) {
+        self.fozdb = None
+    }
+
+    fn discard_transcoded(&mut self) {
+        if self.already_cleaned {
+            return
+        }
+        if let Some(fozdb) = &mut self.open(false).fozdb {
+            if let Ok(read_fozdb_path) = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE") {
+                if let Ok(read_fozdb) = fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), VIDEOCONV_FOZ_NUM_TAGS) {
+                    let mut chunks = Vec::<(u32, u128)>::new();
+
+                    for stream_id in fozdb.iter_tag(VIDEOCONV_FOZ_TAG_STREAM).cloned().collect::<Vec<u128>>() {
+                        if read_fozdb.has_entry(VIDEOCONV_FOZ_TAG_OGVDATA, stream_id) {
+                            if let Ok(chunks_size) = fozdb.entry_size(VIDEOCONV_FOZ_TAG_STREAM, stream_id) {
+                                let mut buf = vec![0u8; chunks_size].into_boxed_slice();
+                                if fozdb.read_entry(VIDEOCONV_FOZ_TAG_STREAM, stream_id, 0, &mut buf, fossilize::CRCCheck::WithCRC).is_ok() {
+                                    for i in 0..(chunks_size / 16) {
+                                        let offs = i * 16;
+                                        let chunk_id = u128::from_le_bytes(copy_into_array(&buf[offs..offs + 16]));
+                                        chunks.push((VIDEOCONV_FOZ_TAG_VIDEODATA, chunk_id));
+                                    }
+                                }
+                            }
+                            chunks.push((VIDEOCONV_FOZ_TAG_STREAM, stream_id));
+                        }
+                    }
+
+                    if fozdb.discard_entries(&chunks).is_err() {
+                        self.close();
+                    }
+                }
+            }
+        }
+        self.already_cleaned = true;
+    }
+}
+
+static DUMP_FOZDB: Lazy<Mutex<VideoConverterDumpFozdb>> = Lazy::new(|| {
+    Mutex::new(VideoConverterDumpFozdb::new())
 });
 
 struct PadReader<'a> {
@@ -611,8 +675,10 @@ impl VideoConv {
     }
 
     fn dump_upstream_data(&self, hash: u128) -> io::Result<()> {
-        let mut db = (*DUMP_FOZDB).lock().unwrap();
-        let db = match &mut *db {
+
+        let db = &mut (*DUMP_FOZDB).lock().unwrap();
+        let mut db = &mut db.open(true).fozdb;
+        let db = match &mut db {
             Some(d) => d,
             None => { gst_error!(CAT, "Unable to open fozdb!"); return Err(io::Error::new(io::ErrorKind::Other, "unable to open fozdb")); },
         };
@@ -645,6 +711,8 @@ impl VideoConv {
         &self,
         state: &mut VideoConvState
     ) -> Result<(), gst::LoggableError> {
+
+        (*DUMP_FOZDB).lock().unwrap().discard_transcoded();
 
         let hash = self.hash_upstream_data();
 
