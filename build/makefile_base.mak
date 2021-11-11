@@ -738,16 +738,12 @@ $(OBJ)/.vrclient-post-source:
 ## dxvk
 ##
 
-DXVK_MESON_ARGS32 = \
-    --bindir=$(DXVK_DST32)/lib/wine/dxvk \
-    --cross-file=$(DXVK_OBJ32)/build-win32.txt
-DXVK_MESON_ARGS64 = \
-    --bindir=$(DXVK_DST64)/lib64/wine/dxvk \
-    --cross-file=$(DXVK_OBJ64)/build-win64.txt
+DXVK_MESON_ARGS32 = --bindir=$(DXVK_DST32)/lib/wine/dxvk
+DXVK_MESON_ARGS64 = --bindir=$(DXVK_DST64)/lib64/wine/dxvk
 
 $(eval $(call rules-source,dxvk,$(SRCDIR)/dxvk))
-$(eval $(call rules-meson,dxvk,32))
-$(eval $(call rules-meson,dxvk,64))
+$(eval $(call rules-meson,dxvk,32,CROSS))
+$(eval $(call rules-meson,dxvk,64,CROSS))
 
 $(OBJ)/.dxvk-post-build64:
 	mkdir -p "$(DST_DIR)"/lib64/wine/dxvk
@@ -764,16 +760,12 @@ $(OBJ)/.dxvk-post-build32:
 ## dxvk-nvapi
 ##
 
-DXVK_NVAPI_MESON_ARGS32 = \
-    --bindir=$(DXVK_NVAPI_DST32)/lib/wine/nvapi \
-    --cross-file=$(DXVK_NVAPI_OBJ32)/build-win32.txt
-DXVK_NVAPI_MESON_ARGS64 = \
-    --bindir=$(DXVK_NVAPI_DST64)/lib64/wine/nvapi \
-    --cross-file=$(DXVK_NVAPI_OBJ64)/build-win64.txt
+DXVK_NVAPI_MESON_ARGS32 = --bindir=$(DXVK_NVAPI_DST32)/lib/wine/nvapi
+DXVK_NVAPI_MESON_ARGS64 = --bindir=$(DXVK_NVAPI_DST64)/lib64/wine/nvapi
 
 $(eval $(call rules-source,dxvk-nvapi,$(SRCDIR)/dxvk-nvapi))
-$(eval $(call rules-meson,dxvk-nvapi,32))
-$(eval $(call rules-meson,dxvk-nvapi,64))
+$(eval $(call rules-meson,dxvk-nvapi,32,CROSS))
+$(eval $(call rules-meson,dxvk-nvapi,64,CROSS))
 
 $(OBJ)/.dxvk-nvapi-post-build64:
 	mkdir -p "$(DST_DIR)"/lib64/wine/nvapi
@@ -849,16 +841,12 @@ VKD3D_PROTON_SOURCE_ARGS = \
   --exclude vkd3d_version.h.in \
 
 VKD3D_PROTON_MESON_ARGS = -Denable_standalone_d3d12=true
-VKD3D_PROTON_MESON_ARGS32 = \
-    --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton \
-    --cross-file=$(VKD3D_PROTON_OBJ32)/build-win32.txt
-VKD3D_PROTON_MESON_ARGS64 = \
-    --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton \
-    --cross-file=$(VKD3D_PROTON_OBJ64)/build-win64.txt
+VKD3D_PROTON_MESON_ARGS32 = --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton
+VKD3D_PROTON_MESON_ARGS64 = --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton
 
 $(eval $(call rules-source,vkd3d-proton,$(SRCDIR)/vkd3d-proton))
-$(eval $(call rules-meson,vkd3d-proton,32))
-$(eval $(call rules-meson,vkd3d-proton,64))
+$(eval $(call rules-meson,vkd3d-proton,32,CROSS))
+$(eval $(call rules-meson,vkd3d-proton,64,CROSS))
 
 $(OBJ)/.vkd3d-proton-post-source:
 	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/vkd3d-proton describe --always --exclude=* --abbrev=15 --dirty=0)#' \
