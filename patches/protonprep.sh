@@ -54,9 +54,6 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
     patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
 
-    # restore pre-164b361be646a1e23fad1892893821de3805c5c6 patches:
-    patch -Np1 < ../patches/wine-hotfixes/staging/staging-6dcaff42-revert.patch
-
     # add proton-specific syscall emulation patches
     patch -Np1 < ../patches/wine-hotfixes/staging/proton-staging-syscall-emu.patch
 
@@ -90,10 +87,8 @@
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
     git revert --no-commit d8be85863fedf6982944d06ebd1ce5904cb3d4e1
 
-    echo "revert due to fshack breakage"
-    git revert --no-commit 963589ee296ae90003dab3e8204766ab4e4c0045
-    git revert --no-commit 2adf4376d86119b8a6f7cde51c9a972564575bac
-    git revert --no-commit 6dcaff421f87a93efe18b2efe0ec64d94ed1d483
+    # this breaks prefix creation
+    git revert --no-commit e5d37832ee66d011ba572a9b571e9fb44a7b2b4d
 
     echo "pulseaudio fixup to re-enable staging patches"
     patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
@@ -327,9 +322,6 @@
     echo "proton battleye patches"
     patch -Np1 < ../patches/proton/59-proton-battleye_patches.patch
 
-#    echo "proton Rainbow Six Siege vulkan patch"
-#    patch -Np1 < ../patches/proton/60-proton-r6s_vulkan.patch
-
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
 #    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
@@ -439,6 +431,10 @@
     # https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
     echo "unity crash hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
+
+    # https://bugs.winehq.org/show_bug.cgi?id=52017
+    echo "fix for broken file browser"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-file_browser_fix.patch
 
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
