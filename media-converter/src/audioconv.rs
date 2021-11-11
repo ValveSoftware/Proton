@@ -47,6 +47,7 @@ use std::io;
 use std::io::Read;
 use std::fs;
 use std::fs::OpenOptions;
+use std::collections::HashSet;
 
 #[cfg(target_arch = "x86")]
 use crate::murmur3_x86_128::murmur3_x86_128_full as murmur3_128_full;
@@ -176,8 +177,8 @@ const _AUDIOCONV_FLAG_RESERVED2: u32 = 0x40000000; /* not yet used */
 const _AUDIOCONV_FLAG_V2: u32 = 0x80000000; /* indicates a "version 2" header, process somehow differently (TBD) */
 
 /* properties of the "blank" audio file */
-const BLANK_AUDIO_FILE_LENGTH_MS: f32 = 10.0;
-const BLANK_AUDIO_FILE_RATE: f32 = 48000.0;
+const _BLANK_AUDIO_FILE_LENGTH_MS: f32 = 10.0;
+const _BLANK_AUDIO_FILE_RATE: f32 = 48000.0;
 
 static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
     gst::DebugCategory::new(
@@ -186,22 +187,112 @@ static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
         Some("Proton audio converter"))
 });
 
-static DUMP_FOZDB: Lazy<Mutex<Option<fossilize::StreamArchive>>> = Lazy::new(|| {
-    let dump_file_path = match std::env::var("MEDIACONV_AUDIO_DUMP_FILE") {
-        Err(_) => { return Mutex::new(None); },
-        Ok(c) => c,
-    };
+struct AudioConverterDumpFozdb {
+    fozdb: Option<fossilize::StreamArchive>,
+    already_cleaned: bool,
+}
 
-    let dump_file_path = std::path::Path::new(&dump_file_path);
-
-    if fs::create_dir_all(&dump_file_path.parent().unwrap()).is_err() {
-        return Mutex::new(None);
+impl AudioConverterDumpFozdb {
+    fn new() -> Self {
+        Self {
+            fozdb: None,
+            already_cleaned: false,
+        }
     }
 
-    match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(true), AUDIOCONV_FOZ_NUM_TAGS) {
-        Ok(newdb) => Mutex::new(Some(newdb)),
-        Err(_) => Mutex::new(None),
+    fn open(&mut self, create: bool) -> &mut Self {
+        if self.fozdb.is_none() {
+            let dump_file_path = match std::env::var("MEDIACONV_AUDIO_DUMP_FILE") {
+                Err(_) => { return self; },
+                Ok(c) => c,
+            };
+
+            let dump_file_path = std::path::Path::new(&dump_file_path);
+
+            if fs::create_dir_all(&dump_file_path.parent().unwrap()).is_err() {
+                return self;
+            }
+
+            match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(create), AUDIOCONV_FOZ_NUM_TAGS) {
+                Ok(newdb) => {
+                    self.fozdb = Some(newdb);
+                },
+                Err(_) => {
+                    return self;
+                },
+            }
+        }
+        self
     }
+
+    fn close(&mut self) {
+        self.fozdb = None
+    }
+
+    fn discard_transcoded(&mut self) {
+        if self.already_cleaned {
+            return;
+        }
+        if let Some(fozdb) = &mut self.open(false).fozdb {
+            if let Ok(read_fozdb_path) = std::env::var("MEDIACONV_AUDIO_TRANSCODED_FILE") {
+                if let Ok(read_fozdb) = fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), AUDIOCONV_FOZ_NUM_TAGS) {
+                    let mut chunks_to_discard = HashSet::<(u32, u128)>::new();
+                    let mut chunks_to_keep = HashSet::<(u32, u128)>::new();
+
+                    for stream_id in fozdb.iter_tag(AUDIOCONV_FOZ_TAG_STREAM).cloned().collect::<Vec<u128>>() {
+                        if let Ok(chunks_size) = fozdb.entry_size(AUDIOCONV_FOZ_TAG_STREAM, stream_id) {
+                            let mut buf = vec![0u8; chunks_size].into_boxed_slice();
+                            if fozdb.read_entry(AUDIOCONV_FOZ_TAG_STREAM, stream_id, 0, &mut buf, fossilize::CRCCheck::WithCRC).is_ok() {
+
+                                let mut has_all = true;
+                                let mut stream_chunks = Vec::<(u32, u128)>::new();
+
+                                for i in 0..(chunks_size / 16) {
+                                    let offs = i * 16;
+                                    let chunk_id = u128::from_le_bytes(copy_into_array(&buf[offs..offs + 16]));
+
+                                    if !read_fozdb.has_entry(AUDIOCONV_FOZ_TAG_PTNADATA, chunk_id) {
+                                        has_all = false;
+                                        break;
+                                    }
+
+                                    stream_chunks.push((AUDIOCONV_FOZ_TAG_AUDIODATA, chunk_id));
+                                }
+
+                                for x in stream_chunks {
+                                    if has_all {
+                                        chunks_to_discard.insert(x);
+                                        chunks_to_discard.insert((AUDIOCONV_FOZ_TAG_CODECINFO, x.1));
+                                    } else {
+                                        chunks_to_keep.insert(x);
+                                        chunks_to_keep.insert((AUDIOCONV_FOZ_TAG_CODECINFO, x.1));
+                                    }
+                                }
+
+                                if has_all {
+                                    chunks_to_discard.insert((AUDIOCONV_FOZ_TAG_STREAM, stream_id));
+                                }
+                            }
+                        }
+                    }
+
+                    let mut chunks = Vec::<(u32, u128)>::new();
+                    for x in chunks_to_discard.difference(&chunks_to_keep) {
+                        chunks.push(*x);
+                    }
+
+                    if fozdb.discard_entries(&chunks).is_err() {
+                        self.close();
+                    }
+                }
+            }
+        }
+        self.already_cleaned = true;
+    }
+}
+
+static DUMP_FOZDB: Lazy<Mutex<AudioConverterDumpFozdb>> = Lazy::new(|| {
+    Mutex::new(AudioConverterDumpFozdb::new())
 });
 
 static DUMPING_DISABLED: Lazy<bool> = Lazy::new(|| {
@@ -333,8 +424,9 @@ impl StreamState {
 
     fn write_to_foz(&self) -> Result<(), gst::LoggableError> {
         if self.needs_dump && !self.buffers.is_empty() {
-            let mut db = (*DUMP_FOZDB).lock().unwrap();
-            let db = match &mut *db {
+            let db = &mut (*DUMP_FOZDB).lock().unwrap();
+            let mut db = &mut db.open(true).fozdb;
+            let db = match &mut db {
                 Some(d) => d,
                 None => { return Err(gst_loggable_error!(CAT, "Failed to open fossilize db!")) },
             };
@@ -660,8 +752,11 @@ impl ElementImpl for AudioConv {
                 {
                     /* open fozdb here; this is the right place to fail and opening may be
                      * expensive */
-                    let db = (*DUMP_FOZDB).lock().unwrap();
-                    if (*db).is_none() {
+                    (*DUMP_FOZDB).lock().unwrap().discard_transcoded();
+
+                    let db = &mut (*DUMP_FOZDB).lock().unwrap();
+                    let db = &mut db.open(true).fozdb;
+                    if db.is_none() {
                         gst_error!(CAT, "Failed to open fossilize db!");
                         return Err(gst::StateChangeError);
                     }
