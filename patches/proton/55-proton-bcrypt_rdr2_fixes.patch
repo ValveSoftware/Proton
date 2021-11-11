@@ -656,7 +656,7 @@ index a015d85f85d..a751310c883 100644
 +    return STATUS_SUCCESS;
 +}
 +
- unixlib_entry_t __wine_unix_call_funcs[] =
+ const unixlib_entry_t __wine_unix_call_funcs[] =
  {
      gnutls_process_attach,
 @@ -1807,7 +2021,8 @@ unixlib_entry_t __wine_unix_call_funcs[] =
@@ -668,7 +668,7 @@ index a015d85f85d..a751310c883 100644
 +    key_secret_agreement,
  };
 
- #endif /* HAVE_GNUTLS_CIPHER_INIT */
+ #ifdef _WIN64
 diff --git a/include/bcrypt.h b/include/bcrypt.h
 index a099f2f4b0e..7abcb50a43c 100644
 --- a/include/bcrypt.h
