@@ -4515,3 +4515,1270 @@ index c0a654939dd..20bf4aa3434 100644
      gpu_info->numDevices = object->device_count;
      gpu_info->devices = object->devices;
  
+From d6ef1e96438b3700c18fcbb3bfcb66ee3c223535 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Sat, 8 May 2021 04:39:30 +0100
+Subject: [PATCH] amd_ags_x64: Implement agsDriverExtensionsDX12_DestroyDevice
+
+Signed-off-by: Joshua Ashton <joshua@froggi.es>
+---
+ dlls/amd_ags_x64/amd_ags_x64.spec   |  2 +-
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index 7551a9346d8..ae825462f28 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -32,7 +32,7 @@
+ @ stub agsDriverExtensionsDX12_CreateFromDevice
+ @ stub agsDriverExtensionsDX12_DeInit
+ @ stub agsDriverExtensionsDX12_Destroy
+-@ stub agsDriverExtensionsDX12_DestroyDevice
++@ stdcall agsDriverExtensionsDX12_DestroyDevice(ptr ptr ptr)
+ @ stub agsDriverExtensionsDX12_Init
+ @ stub agsDriverExtensionsDX12_PopMarker
+ @ stub agsDriverExtensionsDX12_PushMarker
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 1a425d11514..1d4eb74e502 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -9,6 +9,7 @@
+
+ #include "wine/vulkan.h"
+
++#define COBJMACROS
+ #include "d3d11.h"
+ #include "d3d12.h"
+
+@@ -537,6 +538,20 @@ AGSReturnCode WINAPI agsDriverExtensionsDX12_CreateDevice(AGSContext *context,
+     return AGS_SUCCESS;
+ }
+
++AGSReturnCode WINAPI agsDriverExtensionsDX12_DestroyDevice(AGSContext* context, ID3D12Device* device, unsigned int* device_refs)
++{
++    ULONG ref_count;
++
++    if (!device)
++        return AGS_SUCCESS;
++
++    ref_count = ID3D12Device_Release(device);
++    if (device_refs)
++        *device_refs = (unsigned int)ref_count;
++
++    return AGS_SUCCESS;
++}
++
+ AGSDriverVersionResult WINAPI agsCheckDriverVersion(const char* version_reported, unsigned int version_required)
+ {
+     FIXME("version_reported %s, version_required %d semi-stub.\n", debugstr_a(version_reported), version_required);
+From 627d913258288345c16c1fc45f1134c04594c3b6 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Sat, 8 May 2021 04:41:40 +0100
+Subject: [PATCH] amd_ags_x64: Implement AGS 5.4.2
+
+Signed-off-by: Joshua Ashton <joshua@froggi.es>
+---
+ dlls/amd_ags_x64/amd_ags.h          | 46 ++++++++++++++++++++++++++++-
+ dlls/amd_ags_x64/amd_ags_x64_main.c |  8 +++--
+ 2 files changed, 50 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags.h b/dlls/amd_ags_x64/amd_ags.h
+index 47ed5b91a14..0656e3fbbb3 100644
+--- a/dlls/amd_ags_x64/amd_ags.h
++++ b/dlls/amd_ags_x64/amd_ags.h
+@@ -34,6 +34,13 @@
+ /// \endinternal
+ ///
+ /// ---------------------------------------
++/// What's new in AGS 5.4.2 since version 5.4.1
++/// ---------------------------------------
++/// AGS 5.4.2 includes the following updates:
++/// * sharedMemoryInBytes has been reinstated.
++/// * Clock speed returned for APUs.
++///
++/// ---------------------------------------
+ /// What's new in AGS 5.4.1 since version 5.4.0
+ /// ---------------------------------------
+ /// AGS 5.4.1 includes the following updates:
+@@ -130,7 +137,7 @@
+
+ #define AMD_AGS_VERSION_MAJOR 5             ///< AGS major version
+ #define AMD_AGS_VERSION_MINOR 4             ///< AGS minor version
+-#define AMD_AGS_VERSION_PATCH 1             ///< AGS patch version
++#define AMD_AGS_VERSION_PATCH 2             ///< AGS patch version
+
+ #ifdef __cplusplus
+ extern "C" {
+@@ -498,6 +505,43 @@ typedef struct AGSDeviceInfo_541
+     int                             adlAdapterIndex;                ///< Internally used index into the ADL list of adapters
+ } AGSDeviceInfo_541;
+
++/// The device info struct used to describe a physical GPU enumerated by AGS
++typedef struct AGSDeviceInfo_542
++{
++    const char*                     adapterString;                  ///< The adapter name string
++    AsicFamily                      asicFamily;                     ///< Set to Unknown if not AMD hardware
++    int                             isAPU;                          ///< Whether or not this is an APU
++    int                             vendorId;                       ///< The vendor id
++    int                             deviceId;                       ///< The device id
++    int                             revisionId;                     ///< The revision id
++
++    int                             numCUs;                         ///< Number of compute units.
++    int                             numWGPs;                        ///< Number of RDNA Work Group Processors.  Only valid if ASIC is RDNA onwards.
++
++    int                             numROPs;                        ///< Number of ROPs
++    int                             coreClock;                      ///< Core clock speed at 100% power in MHz
++    int                             memoryClock;                    ///< Memory clock speed at 100% power in MHz
++    int                             memoryBandwidth;                ///< Memory bandwidth in MB/s
++    float                           teraFlops;                      ///< Teraflops of GPU. Zero if not GCN onwards. Calculated from iCoreClock * iNumCUs * 64 Pixels/clk * 2 instructions/MAD
++
++    int                             isPrimaryDevice;                ///< Whether or not this is the primary adapter in the system. Not set on the WACK version.
++    unsigned long long              localMemoryInBytes;             ///< The size of local memory in bytes. 0 for non AMD hardware.
++    unsigned long long              sharedMemoryInBytes;            ///< The size of system memory available to the GPU in bytes.  It is important to factor this into your VRAM budget for APUs
++                                                                    ///< as the reported local memory will only be a small fraction of the total memory available to the GPU.
++
++    int                             numDisplays;                    ///< The number of active displays found to be attached to this adapter.
++    AGSDisplayInfo*                 displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
++
++    int                             eyefinityEnabled;               ///< Indicates if Eyefinity is active
++    int                             eyefinityGridWidth;             ///< Contains width of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
++    int                             eyefinityGridHeight;            ///< Contains height of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
++    int                             eyefinityResolutionX;           ///< Contains width in pixels of the multi-monitor Single Large Surface.
++    int                             eyefinityResolutionY;           ///< Contains height in pixels of the multi-monitor Single Large Surface.
++    int                             eyefinityBezelCompensated;      ///< Indicates if bezel compensation is used for the current SLS display area. 1 if enabled, and 0 if disabled.
++
++    int                             adlAdapterIndex;                ///< Internally used index into the ADL list of adapters
++} AGSDeviceInfo_542;
++
+ struct AGSDeviceInfo;
+
+ /// \defgroup general General API functions
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 1d4eb74e502..35de799430d 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -25,6 +25,7 @@ enum amd_ags_version
+     AMD_AGS_VERSION_5_3_0,
+     AMD_AGS_VERSION_5_4_0,
+     AMD_AGS_VERSION_5_4_1,
++    AMD_AGS_VERSION_5_4_2,
+
+     AMD_AGS_VERSION_COUNT
+ };
+@@ -44,17 +45,18 @@ amd_ags_info[AMD_AGS_VERSION_COUNT] =
+     {5, 3, 0, sizeof(AGSDeviceInfo_520)},
+     {5, 4, 0, sizeof(AGSDeviceInfo_540)},
+     {5, 4, 1, sizeof(AGSDeviceInfo_541)},
++    {5, 4, 2, sizeof(AGSDeviceInfo_542)},
+ };
+
+ #define DEF_FIELD(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
+         offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_540, name), \
+-        offsetof(AGSDeviceInfo_541, name)}}
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name)}}
+ #define DEF_FIELD_520_BELOW(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
+         offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), -1, \
+-        -1}}
++        -1, -1}}
+ #define DEF_FIELD_540_UP(name) {DEVICE_FIELD_##name, {-1, -1, \
+         -1, -1, offsetof(AGSDeviceInfo_540, name), \
+-        offsetof(AGSDeviceInfo_541, name)}}
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name)}}
+
+ #define DEVICE_FIELD_adapterString 0
+ #define DEVICE_FIELD_architectureVersion 1
+From 4f14f287f3468b977e2978599e7ac81643b46ec6 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Sat, 8 May 2021 05:14:39 +0100
+Subject: [PATCH] amd_ags_x64: Implement AGS 6.0.0
+
+Signed-off-by: Joshua Ashton <joshua@froggi.es>
+---
+ dlls/amd_ags_x64/amd_ags.h          | 409 +++++++++++++++++++++++-----
+ dlls/amd_ags_x64/amd_ags_x64.spec   |   3 +
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 137 ++++++++--
+ 3 files changed, 468 insertions(+), 81 deletions(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags.h b/dlls/amd_ags_x64/amd_ags.h
+index 0656e3fbbb3..af9c48c1dd5 100644
+--- a/dlls/amd_ags_x64/amd_ags.h
++++ b/dlls/amd_ags_x64/amd_ags.h
+@@ -34,6 +34,20 @@
+ /// \endinternal
+ ///
+ /// ---------------------------------------
++/// What's new in AGS 6.0 since version 5.4.2
++/// ---------------------------------------
++/// AGS 6.0 includes the following updates:
++/// * DX12 ray tracing hit token for RDNA2 hardware.
++/// * Shader intrinsic that exposes ReadLaneAt in DX12.
++/// * Shader intrinsics that expose explicit float conversions in DX12.
++/// * Refactored and revised API to minimize user error.
++/// * Added agsGetVersionNumber.
++/// * Detection for external GPUs.
++/// * Detection of RDNA2 architecture.
++/// * Grouped the more established intrinsics together into per year support.
++/// * Function pointer typedefs for the API
++///
++/// ---------------------------------------
+ /// What's new in AGS 5.4.2 since version 5.4.1
+ /// ---------------------------------------
+ /// AGS 5.4.2 includes the following updates:
+@@ -128,16 +142,16 @@
+ /// * Include the amd_ags.h header file from your source code.
+ /// * Include the AGS hlsl files if you are using the shader intrinsics.
+ /// * Declare a pointer to an AGSContext and make this available for all subsequent calls to AGS.
+-/// * On game initialization, call \ref agsInit passing in the address of the context. On success, this function will return a valid context pointer.
++/// * On game initialization, call \ref agsInitialize passing in the address of the context. On success, this function will return a valid context pointer.
+ ///
+-/// Don't forget to cleanup AGS by calling \ref agsDeInit when the app exits, after the device has been destroyed.
++/// Don't forget to cleanup AGS by calling \ref agsDeInitialize when the app exits, after the device has been destroyed.
+
+ #ifndef AMD_AGS_H
+ #define AMD_AGS_H
+
+-#define AMD_AGS_VERSION_MAJOR 5             ///< AGS major version
+-#define AMD_AGS_VERSION_MINOR 4             ///< AGS minor version
+-#define AMD_AGS_VERSION_PATCH 2             ///< AGS patch version
++#define AMD_AGS_VERSION_MAJOR 6             ///< AGS major version
++#define AMD_AGS_VERSION_MINOR 0             ///< AGS minor version
++#define AMD_AGS_VERSION_PATCH 0             ///< AGS patch version
+
+ #ifdef __cplusplus
+ extern "C" {
+@@ -151,14 +165,17 @@ extern "C" {
+ #define AGS_UNSPECIFIED_VERSION 0xFFFFAD00                                                    ///< Use this to specify no version
+ /// @}
+
+-// Forward declaration of D3D11 types
++// Forward declaration of D3D and DXGI types
+ struct IDXGIAdapter;
++struct IDXGISwapChain;
++struct DXGI_SWAP_CHAIN_DESC;
+ enum D3D_DRIVER_TYPE;
+ enum D3D_FEATURE_LEVEL;
+-struct DXGI_SWAP_CHAIN_DESC;
++ enum D3D_PRIMITIVE_TOPOLOGY;
++
++// Forward declaration of D3D11 types
+ struct ID3D11Device;
+ struct ID3D11DeviceContext;
+-struct IDXGISwapChain;
+ struct ID3D11Resource;
+ struct ID3D11Buffer;
+ struct ID3D11Texture1D;
+@@ -253,14 +270,6 @@ typedef enum AGSDriverExtensionDX12
+ /// The space id for DirectX12 intrinsic support
+ const unsigned int AGS_DX12_SHADER_INSTRINSICS_SPACE_ID = 0x7FFF0ADE; // 2147420894
+
+-
+-/// Additional topologies supported via extensions
+-typedef enum AGSPrimitiveTopology
+-{
+-    AGS_PRIMITIVE_TOPOLOGY_QUADLIST                         = 7,    ///< Quad list
+-    AGS_PRIMITIVE_TOPOLOGY_SCREENRECTLIST                   = 9     ///< Screen rect list
+-} AGSPrimitiveTopology;
+-
+ /// The display flags describing various properties of the display.
+ typedef enum AGSDisplayFlags
+ {
+@@ -282,7 +291,7 @@ typedef enum AGSDisplaySettingsFlags
+
+ /// @}
+
+-typedef struct AGSContext AGSContext;  ///< All function calls in AGS require a pointer to a context. This is generated via \ref agsInit
++typedef struct AGSContext AGSContext;  ///< All function calls in AGS require a pointer to a context. This is generated via \ref agsInitialize
+
+ /// The rectangle struct used by AGS.
+ typedef struct AGSRect
+@@ -293,25 +302,64 @@ typedef struct AGSRect
+     int height;     ///< Height of rectangle
+ } AGSRect;
+
+-/// The clip rectangle struct used by \ref agsDriverExtensionsDX11_SetClipRects
+-typedef struct AGSClipRect
++/// The display info struct used to describe a display enumerated by AGS
++typedef struct AGSDisplayInfo_511
+ {
+-    /// The inclusion mode for the rect
+-    enum
+-    {
+-        ClipRectIncluded = 0,   ///< Include the rect
+-        ClipRectExcluded = 1    ///< Exclude the rect
+-    }               mode; ; ///< Include/exclude rect region
+-    AGSRect         rect; ///< The rect to include/exclude
+-} AGSClipRect;
++    char                    name[ 256 ];                    ///< The name of the display
++    char                    displayDeviceName[ 32 ];        ///< The display device name, i.e. DISPLAY_DEVICE::DeviceName
++
++    unsigned int            displayFlags;                   ///< Bitfield of \ref AGSDisplayFlags
++
++    int                     maxResolutionX;                 ///< The maximum supported resolution of the unrotated display
++    int                     maxResolutionY;                 ///< The maximum supported resolution of the unrotated display
++    float                   maxRefreshRate;                 ///< The maximum supported refresh rate of the display
++
++    AGSRect                 currentResolution;              ///< The current resolution and position in the desktop, ignoring Eyefinity bezel compensation
++    AGSRect                 visibleResolution;              ///< The visible resolution and position. When Eyefinity bezel compensation is enabled this will
++                                                            ///< be the sub region in the Eyefinity single large surface (SLS)
++    float                   currentRefreshRate;             ///< The current refresh rate
++
++    int                     eyefinityGridCoordX;            ///< The X coordinate in the Eyefinity grid. -1 if not in an Eyefinity group
++    int                     eyefinityGridCoordY;            ///< The Y coordinate in the Eyefinity grid. -1 if not in an Eyefinity group
++
++    double                  chromaticityRedX;               ///< Red display primary X coord
++    double                  chromaticityRedY;               ///< Red display primary Y coord
++
++    double                  chromaticityGreenX;             ///< Green display primary X coord
++    double                  chromaticityGreenY;             ///< Green display primary Y coord
++
++    double                  chromaticityBlueX;              ///< Blue display primary X coord
++    double                  chromaticityBlueY;              ///< Blue display primary Y coord
++
++    double                  chromaticityWhitePointX;        ///< White point X coord
++    double                  chromaticityWhitePointY;        ///< White point Y coord
++
++    double                  screenDiffuseReflectance;       ///< Percentage expressed between 0 - 1
++    double                  screenSpecularReflectance;      ///< Percentage expressed between 0 - 1
++
++    double                  minLuminance;                   ///< The minimum luminance of the display in nits
++    double                  maxLuminance;                   ///< The maximum luminance of the display in nits
++    double                  avgLuminance;                   ///< The average luminance of the display in nits
++
++    int                     logicalDisplayIndex;            ///< The internally used index of this display
++    int                     adlAdapterIndex;                ///< The internally used ADL adapter index
++} AGSDisplayInfo_511;
+
+ /// The display info struct used to describe a display enumerated by AGS
+-typedef struct AGSDisplayInfo
++typedef struct AGSDisplayInfo_600
+ {
+     char                    name[ 256 ];                    ///< The name of the display
+     char                    displayDeviceName[ 32 ];        ///< The display device name, i.e. DISPLAY_DEVICE::DeviceName
+
+-    unsigned int            displayFlags;                   ///< Bitfield of \ref AGSDisplayFlags
++    unsigned int            isPrimaryDisplay : 1;           ///< Whether this display is marked as the primary display
++    unsigned int            HDR10 : 1;                      ///< HDR10 is supported on this display
++    unsigned int            dolbyVision : 1;                ///< Dolby Vision is supported on this display
++    unsigned int            freesync : 1;                   ///< Freesync is supported on this display
++    unsigned int            freesyncHDR : 1;                ///< Freesync HDR is supported on this display
++    unsigned int            eyefinityInGroup : 1;           ///< The display is part of the Eyefinity group
++    unsigned int            eyefinityPreferredDisplay : 1;  ///< The display is the preferred display in the Eyefinity group for displaying the UI
++    unsigned int            eyefinityInPortraitMode : 1;    ///< The display is in the Eyefinity group but in portrait mode
++    unsigned int            reservedPadding : 24;           ///< Reserved for future use
+
+     int                     maxResolutionX;                 ///< The maximum supported resolution of the unrotated display
+     int                     maxResolutionY;                 ///< The maximum supported resolution of the unrotated display
+@@ -346,7 +394,8 @@ typedef struct AGSDisplayInfo
+
+     int                     logicalDisplayIndex;            ///< The internally used index of this display
+     int                     adlAdapterIndex;                ///< The internally used ADL adapter index
+-} AGSDisplayInfo;
++    int                     reserved;                       ///< reserved field
++} AGSDisplayInfo_600;
+
+ /// The architecture version
+ typedef enum ArchitectureVersion
+@@ -367,6 +416,7 @@ typedef enum AsicFamily
+     AsicFamily_GCN4,                                            ///< AMD GCN 4 architecture: Polaris.
+     AsicFamily_Vega,                                            ///< AMD Vega architecture, including Raven Ridge (ie AMD Ryzen CPU + AMD Vega GPU).
+     AsicFamily_RDNA,                                            ///< AMD RDNA architecture
++    AsicFamily_RDNA2,                                           ///< AMD RDNA2 architecture
+
+     AsicFamily_Count                                            ///< Number of enumerated ASIC families
+ } AsicFamily;
+@@ -389,7 +439,7 @@ typedef struct AGSDeviceInfo_511
+     long long                       localMemoryInBytes;             ///< The size of local memory in bytes. 0 for non AMD hardware.
+
+     int                             numDisplays;                    ///< The number of active displays found to be attached to this adapter.
+-    AGSDisplayInfo*                 displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
++    AGSDisplayInfo_511*             displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
+
+     int                             eyefinityEnabled;               ///< Indicates if Eyefinity is active
+     int                             eyefinityGridWidth;             ///< Contains width of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
+@@ -421,7 +471,7 @@ typedef struct AGSDeviceInfo_520
+     long long                       localMemoryInBytes;             ///< The size of local memory in bytes. 0 for non AMD hardware.
+
+     int                             numDisplays;                    ///< The number of active displays found to be attached to this adapter.
+-    AGSDisplayInfo*                 displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
++    AGSDisplayInfo_511*             displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
+
+     int                             eyefinityEnabled;               ///< Indicates if Eyefinity is active
+     int                             eyefinityGridWidth;             ///< Contains width of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
+@@ -458,7 +508,7 @@ typedef struct AGSDeviceInfo_540
+                                                                     ///< as the reported local memory will only be a small fraction of the total memory available to the GPU.
+
+     int                             numDisplays;                    ///< The number of active displays found to be attached to this adapter.
+-    AGSDisplayInfo*                 displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
++    AGSDisplayInfo_511*             displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
+
+     int                             eyefinityEnabled;               ///< Indicates if Eyefinity is active
+     int                             eyefinityGridWidth;             ///< Contains width of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
+@@ -493,7 +543,7 @@ typedef struct AGSDeviceInfo_541
+     long long                       localMemoryInBytes;             ///< The size of local memory in bytes. 0 for non AMD hardware.
+
+     int                             numDisplays;                    ///< The number of active displays found to be attached to this adapter.
+-    AGSDisplayInfo*                 displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
++    AGSDisplayInfo_511*             displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
+
+     int                             eyefinityEnabled;               ///< Indicates if Eyefinity is active
+     int                             eyefinityGridWidth;             ///< Contains width of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
+@@ -530,7 +580,7 @@ typedef struct AGSDeviceInfo_542
+                                                                     ///< as the reported local memory will only be a small fraction of the total memory available to the GPU.
+
+     int                             numDisplays;                    ///< The number of active displays found to be attached to this adapter.
+-    AGSDisplayInfo*                 displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
++    AGSDisplayInfo_511*             displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
+
+     int                             eyefinityEnabled;               ///< Indicates if Eyefinity is active
+     int                             eyefinityGridWidth;             ///< Contains width of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
+@@ -542,6 +592,47 @@ typedef struct AGSDeviceInfo_542
+     int                             adlAdapterIndex;                ///< Internally used index into the ADL list of adapters
+ } AGSDeviceInfo_542;
+
++/// The device info struct used to describe a physical GPU enumerated by AGS
++typedef struct AGSDeviceInfo_600
++{
++    const char*                     adapterString;                  ///< The adapter name string
++    AsicFamily                      asicFamily;                     ///< Set to Unknown if not AMD hardware
++    unsigned int                    isAPU : 1;                      ///< Whether this device is an APU
++    unsigned int                    isPrimaryDevice : 1;            ///< Whether this device is marked as the primary device
++    unsigned int                    isExternal :1;                  ///< Whether this device is a detachable, external device
++    unsigned int                    reservedPadding : 29;           ///< Reserved for future use
++
++    int                             vendorId;                       ///< The vendor id
++    int                             deviceId;                       ///< The device id
++    int                             revisionId;                     ///< The revision id
++
++    int                             numCUs;                         ///< Number of compute units
++    int                             numWGPs;                        ///< Number of RDNA Work Group Processors.  Only valid if ASIC is RDNA onwards.
++
++    int                             numROPs;                        ///< Number of ROPs
++    int                             coreClock;                      ///< Core clock speed at 100% power in MHz
++    int                             memoryClock;                    ///< Memory clock speed at 100% power in MHz
++    int                             memoryBandwidth;                ///< Memory bandwidth in MB/s
++    float                           teraFlops;                      ///< Teraflops of GPU. Zero if not GCN onwards. Calculated from iCoreClock * iNumCUs * 64 Pixels/clk * 2 instructions/MAD
++
++    unsigned long long              localMemoryInBytes;             ///< The size of local memory in bytes. 0 for non AMD hardware.
++    unsigned long long              sharedMemoryInBytes;            ///< The size of system memory available to the GPU in bytes.  It is important to factor this into your VRAM budget for APUs
++                                                                    ///< as the reported local memory will only be a small fraction of the total memory available to the GPU.
++
++    int                             numDisplays;                    ///< The number of active displays found to be attached to this adapter.
++    AGSDisplayInfo_600*             displays;                       ///< List of displays allocated by AGS to be numDisplays in length.
++
++    int                             eyefinityEnabled;               ///< Indicates if Eyefinity is active
++    int                             eyefinityGridWidth;             ///< Contains width of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
++    int                             eyefinityGridHeight;            ///< Contains height of the multi-monitor grid that makes up the Eyefinity Single Large Surface.
++    int                             eyefinityResolutionX;           ///< Contains width in pixels of the multi-monitor Single Large Surface.
++    int                             eyefinityResolutionY;           ///< Contains height in pixels of the multi-monitor Single Large Surface.
++    int                             eyefinityBezelCompensated;      ///< Indicates if bezel compensation is used for the current SLS display area. 1 if enabled, and 0 if disabled.
++
++    int                             adlAdapterIndex;                ///< Internally used index into the ADL list of adapters
++    int                             reserved;                       ///< reserved field
++} AGSDeviceInfo_600;
++
+ struct AGSDeviceInfo;
+
+ /// \defgroup general General API functions
+@@ -552,7 +643,7 @@ typedef void* (__stdcall *AGS_ALLOC_CALLBACK_511)( int allocationSize );    ///<
+ typedef void* (__stdcall *AGS_ALLOC_CALLBACK)( size_t allocationSize );     ///< AGS user defined allocation prototype
+ typedef void (__stdcall *AGS_FREE_CALLBACK)( void* allocationPtr );         ///< AGS user defined free prototype
+
+-/// The configuration options that can be passed in to \ref agsInit
++/// The configuration options that can be passed in to \ref agsInititalize
+ typedef struct AGSConfiguration_511
+ {
+     AGS_ALLOC_CALLBACK_511  allocCallback;                  ///< Optional memory allocation callback. If not supplied, malloc() is used
+@@ -571,8 +662,8 @@ typedef union AGSConfiguration
+     AGSConfiguration_520    agsConfiguration520;
+ } AGSConfiguration;
+
+-/// The top level GPU information returned from \ref agsInit
+-typedef struct AGSGPUInfo
++/// The top level GPU information returned from \ref agsInitialize
++typedef struct AGSGPUInfo_511
+ {
+     int                     agsVersionMajor;                ///< Major field of Major.Minor.Patch AGS version number
+     int                     agsVersionMinor;                ///< Minor field of Major.Minor.Patch AGS version number
+@@ -584,24 +675,35 @@ typedef struct AGSGPUInfo
+
+     int                     numDevices;                     ///< Number of GPUs in the system
+     struct AGSDeviceInfo*   devices;                        ///< List of GPUs in the system
+-} AGSGPUInfo;
++} AGSGPUInfo_511;
+
+-/// The struct to specify the display settings to the driver.
+-typedef struct AGSDisplaySettings
++/// The top level GPU information returned from \ref agsInit
++typedef struct AGSGPUInfo_600
+ {
+-    /// The display mode
+-    enum
+-    {
+-        Mode_SDR,                                           ///< SDR mode
+-        Mode_HDR10_PQ,                                      ///< HDR10 PQ encoding, requiring a 1010102 UNORM swapchain and PQ encoding in the output shader.
+-        Mode_HDR10_scRGB,                                   ///< HDR10 scRGB, requiring an FP16 swapchain. Values of 1.0 == 80 nits, 125.0 == 10000 nits.
+-        Mode_FreesyncHDR_scRGB,                             ///< Freesync HDR scRGB, requiring an FP16 swapchain. A value of 1.0 == 80 nits.
+-        // Mode_FreesyncHDR_Gamma22 ADDED IN 5.3.0
+-        Mode_FreesyncHDR_Gamma22,                           ///< Freesync HDR Gamma 2.2, requiring a 1010102 UNORM swapchain.  The output needs to be encoded to gamma 2.2.
+-        Mode_DolbyVision,                                   ///< Dolby Vision, requiring an 8888 UNORM swapchain
++    const char*             driverVersion;                  ///< The AMD driver package version
++    const char*             radeonSoftwareVersion;          ///< The Radeon Software Version
++
++    int                     numDevices;                     ///< Number of GPUs in the system
++    struct AGSDeviceInfo*   devices;                        ///< List of GPUs in the system
++} AGSGPUInfo_600;
+
+-        Mode_Count                                          ///< Number of enumerated display modes
+-    }                       mode;                           ///< The display mode to set the display into
++/// The display mode
++typedef enum AGSDisplaySettings_Mode
++{
++    Mode_SDR,                                           ///< SDR mode
++    Mode_HDR10_PQ,                                      ///< HDR10 PQ encoding, requiring a 1010102 UNORM swapchain and PQ encoding in the output shader.
++    Mode_HDR10_scRGB,                                   ///< HDR10 scRGB, requiring an FP16 swapchain. Values of 1.0 == 80 nits, 125.0 == 10000 nits.
++    Mode_FreesyncHDR_scRGB,                             ///< Freesync HDR scRGB, requiring an FP16 swapchain. A value of 1.0 == 80 nits.
++    Mode_FreesyncHDR_Gamma22,                           ///< Freesync HDR Gamma 2.2, requiring a 1010102 UNORM swapchain.  The output needs to be encoded to gamma 2.2.
++    Mode_DolbyVision,                                   ///< Dolby Vision, requiring an 8888 UNORM swapchain
++
++    Mode_Count                                          ///< Number of enumerated display modes
++} AGSDisplaySettings_Mode;
++
++/// The struct to specify the display settings to the driver.
++typedef struct AGSDisplaySettings_511
++{
++    AGSDisplaySettings_Mode mode;                           ///< The display mode to set the display into
+
+     double                  chromaticityRedX;               ///< Red display primary X coord
+     double                  chromaticityRedY;               ///< Red display primary Y coord
+@@ -623,6 +725,39 @@ typedef struct AGSDisplaySettings
+
+     // ADDED IN 5.2.0
+     int                     flags;                          ///< Bitfield of ::AGSDisplaySettingsFlags
++} AGSDisplaySettings_511;
++
++/// The struct to specify the display settings to the driver.
++typedef struct AGSDisplaySettings_600
++{
++    AGSDisplaySettings_Mode mode;                           ///< The display mode to set the display into
++
++    double                  chromaticityRedX;               ///< Red display primary X coord
++    double                  chromaticityRedY;               ///< Red display primary Y coord
++
++    double                  chromaticityGreenX;             ///< Green display primary X coord
++    double                  chromaticityGreenY;             ///< Green display primary Y coord
++
++    double                  chromaticityBlueX;              ///< Blue display primary X coord
++    double                  chromaticityBlueY;              ///< Blue display primary Y coord
++
++    double                  chromaticityWhitePointX;        ///< White point X coord
++    double                  chromaticityWhitePointY;        ///< White point Y coord
++
++    double                  minLuminance;                   ///< The minimum scene luminance in nits
++    double                  maxLuminance;                   ///< The maximum scene luminance in nits
++
++    double                  maxContentLightLevel;           ///< The maximum content light level in nits (MaxCLL)
++    double                  maxFrameAverageLightLevel;      ///< The maximum frame average light level in nits (MaxFALL)
++
++    unsigned int            disableLocalDimming : 1;        ///< Disables local dimming if possible
++    unsigned int            reservedPadding : 31;           ///< Reserved
++} AGSDisplaySettings_600;
++
++typedef union AGSDisplaySettings
++{
++    AGSDisplaySettings_511 agsDisplaySettings511;
++    AGSDisplaySettings_600 agsDisplaySettings600;
+ } AGSDisplaySettings;
+
+ /// The result returned from \ref agsCheckDriverVersion
+@@ -642,6 +777,12 @@ typedef enum AGSDriverVersionResult
+ ///
+ AMD_AGS_API AGSDriverVersionResult agsCheckDriverVersion( const char* radeonSoftwareVersionReported, unsigned int radeonSoftwareVersionRequired );
+
++///
++/// Function to return the AGS version number.
++///
++/// \return                                         The version number made using AGS_MAKE_VERSION( AMD_AGS_VERSION_MAJOR, AMD_AGS_VERSION_MINOR, AMD_AGS_VERSION_PATCH ).
++///
++AMD_AGS_API int agsGetVersionNumber( void );
+
+ ///
+ /// Function used to initialize the AGS library.
+@@ -656,7 +797,23 @@ AMD_AGS_API AGSDriverVersionResult agsCheckDriverVersion( const char* radeonSoft
+ /// \param [in] config                              Optional pointer to a AGSConfiguration struct to override the default library configuration.
+ /// \param [out] gpuInfo                            Optional pointer to a AGSGPUInfo struct which will get filled in for all the GPUs in the system.
+ ///
+-AMD_AGS_API AGSReturnCode agsInit( AGSContext** context, const AGSConfiguration* config, AGSGPUInfo* gpuInfo );
++AMD_AGS_API AGSReturnCode agsInit( AGSContext** context, const AGSConfiguration* config, AGSGPUInfo_511* gpuInfo );
++
++///
++/// Function used to initialize the AGS library.
++/// agsVersion must be specified as AGS_MAKE_VERSION( AMD_AGS_VERSION_MAJOR, AMD_AGS_VERSION_MINOR, AMD_AGS_VERSION_PATCH ) or the call will return \ref AGS_INVALID_ARGS.
++/// Must be called prior to any of the subsequent AGS API calls.
++/// Must be called prior to ID3D11Device or ID3D12Device creation.
++/// \note The caller of this function should handle the possibility of the call failing in the cases below. One option is to do a vendor id check and only call \ref agsInitialize if there is an AMD GPU present.
++/// \note This function will fail with \ref AGS_NO_AMD_DRIVER_INSTALLED if there is no AMD driver found on the system.
++/// \note This function will fail with \ref AGS_LEGACY_DRIVER in Catalyst versions before 12.20.
++///
++/// \param [in] agsVersion                          The API version specified using the \ref AGS_MAKE_VERSION macro. If this does not match the version in the binary this initialization call will fail.
++/// \param [in] config                              Optional pointer to a AGSConfiguration struct to override the default library configuration.
++/// \param [out] context                            Address of a pointer to a context. This function allocates a context on the heap which is then required for all subsequent API calls.
++/// \param [out] gpuInfo                            Optional pointer to a AGSGPUInfo struct which will get filled in for all the GPUs in the system.
++///
++AMD_AGS_API AGSReturnCode agsInitialize( int agsVersion, const AGSConfiguration* config, AGSContext** context, AGSGPUInfo_600* gpuInfo );
+
+ ///
+ ///   Function used to clean up the AGS library.
+@@ -665,6 +822,13 @@ AMD_AGS_API AGSReturnCode agsInit( AGSContext** context, const AGSConfiguration*
+ ///
+ AMD_AGS_API AGSReturnCode agsDeInit( AGSContext* context );
+
++///
++///   Function used to clean up the AGS library.
++///
++/// \param [in] context                             Pointer to a context. This function will deallocate the context from the heap.
++///
++AMD_AGS_API AGSReturnCode agsDeInitialize( AGSContext* context );
++
+ ///
+ /// Function used to query the number of GPUs used for Crossfire acceleration.
+ /// This may be different from the total number of GPUs present in the system.
+@@ -685,7 +849,7 @@ AMD_AGS_API AGSReturnCode agsGetCrossfireGPUCount( AGSContext* context, int* num
+ /// \note Freesync HDR Gamma 2.2 mode requires a 1010102 swapchain.
+ /// \note Dolby Vision requires a 8888 UNORM swapchain.
+ ///
+-/// \param [in] context                             Pointer to a context. This is generated by \ref agsInit
++/// \param [in] context                             Pointer to a context. This is generated by \ref agsInitialize
+ /// \param [in] deviceIndex                         The index of the device listed in \ref AGSGPUInfo::devices.
+ /// \param [in] displayIndex                        The index of the display listed in \ref AGSDeviceInfo::displays.
+ /// \param [in] settings                            Pointer to the display settings to use.
+@@ -726,6 +890,29 @@ typedef struct AGSDX12ExtensionParams
+ typedef struct AGSDX12ReturnedParams
+ {
+     ID3D12Device*           pDevice;                ///< The newly created device
++    /*
++        This was changed to a struct in 6.0.0+ but it's still the size of an unsigned int.
++        Ignoring this change for now.
++
++        typedef struct ExtensionsSupported                          /// Extensions for DX12
++        {
++            unsigned int        intrinsics16 : 1;                   ///< Supported in Radeon Software Version 16.9.2 onwards. ReadFirstLane, ReadLane, LaneID, Swizzle, Ballot, MBCount, Med3, Barycentrics
++            unsigned int        intrinsics17 : 1;                   ///< Supported in Radeon Software Version 17.9.1 onwards. WaveReduce, WaveScan
++            unsigned int        userMarkers : 1;                    ///< Supported in Radeon Software Version 17.9.1 onwards.
++            unsigned int        appRegistration : 1;                ///< Supported in Radeon Software Version 17.9.1 onwards.
++            unsigned int        UAVBindSlot : 1;                    ///< Supported in Radeon Software Version 19.5.1 onwards.
++            unsigned int        intrinsics19 : 1;                   ///< Supported in Radeon Software Version 19.12.2 onwards. DrawIndex, AtomicU64
++            unsigned int        baseVertex : 1;                     ///< Supported in Radeon Software Version 20.2.1 onwards.
++            unsigned int        baseInstance : 1;                   ///< Supported in Radeon Software Version 20.2.1 onwards.
++            unsigned int        getWaveSize : 1;                    ///< Supported in Radeon Software Version 20.5.1 onwards.
++            unsigned int        floatConversion : 1;                ///< Supported in Radeon Software Version 20.5.1 onwards.
++            unsigned int        readLaneAt : 1;                     ///< Supported in Radeon Software Version 20.11.1 onwards.
++            unsigned int        rayHitToken : 1;                    ///< Supported in Radeon Software Version 20.11.1 onwards.
++            unsigned int        padding : 20;                       ///< Reserved
++        } ExtensionsSupported;
++        ExtensionsSupported     extensionsSupported;                ///< List of supported extensions
++    */
++
+     unsigned int            extensionsSupported;    ///< Bit mask that \ref agsDriverExtensionsDX12_CreateDevice will fill in to indicate which extensions are supported. See \ref AGSDriverExtensionDX12
+ } AGSDX12ReturnedParams;
+
+@@ -747,11 +934,11 @@ typedef struct AGSDX12ReturnedParams
+ /// range[ 0 ].Init( D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 1, 0, AGS_DX12_SHADER_INSTRINSICS_SPACE_ID ); // u0 at driver-reserved space id
+ /// \endcode
+ ///
+-/// Newer drivers also support a user-specified slot in which case the register space id is assumed to be 0.  It is important that the \ref AGS_DX12_EXTENSION_INTRINSIC_UAV_BIND_SLOT bit is set
++/// Newer drivers also support a user-specified slot in which case the register space id is assumed to be 0.  It is important that the \ref AGSDX12ReturnedParams::ExtensionsSupported::UAVBindSlot bit is set.
+ /// to ensure the driver can support this.  If not, then u0 and \ref AGS_DX12_SHADER_INSTRINSICS_SPACE_ID must be used.
+ /// If the driver does support this feature and a non zero slot is required, then the HLSL must also define AMD_EXT_SHADER_INTRINSIC_UAV_OVERRIDE as the matching slot value.
+ ///
+-/// \param [in] context                             Pointer to a context. This is generated by \ref agsInit
++/// \param [in] context                             Pointer to a context. This is generated by \ref agsInitialize
+ /// \param [in] creationParams                      Pointer to the struct to specify the existing DX12 device creation parameters.
+ /// \param [in] extensionParams                     Optional pointer to the struct to specify DX12 additional device creation parameters.
+ /// \param [out] returnedParams                     Pointer to struct to hold all the returned parameters from the call.
+@@ -777,7 +964,7 @@ AMD_AGS_API AGSReturnCode agsDriverExtensionsDX12_DestroyDevice( AGSContext* con
+ /// * The intrinsic instructions require a 5.1 shader model.
+ /// * The Root Signature will need to use an extra resource and sampler. These are not real resources/samplers, they are just used to encode the intrinsic instruction.
+ ///
+-/// \param [in] context                             Pointer to a context. This is generated by \ref agsInit
++/// \param [in] context                             Pointer to a context. This is generated by \ref agsInitialize
+ /// \param [in] device                              The D3D12 device.
+ /// \param [out] extensionsSupported                Pointer to a bit mask that this function will fill in to indicate which extensions are supported. See ::AGSDriverExtensionDX12
+ ///
+@@ -799,7 +986,7 @@ AMD_AGS_API AGSReturnCode agsDriverExtensionsDX12_DeInit( AGSContext* context );
+
+ ///
+ /// Function used to push an AMD user marker onto the command list.
+-/// This is only has an effect if \ref AGS_DX12_EXTENSION_USER_MARKERS is present in the extensionsSupported bitfield of \ref agsDriverExtensionsDX12_CreateDevice
++/// This is only has an effect if \ref AGSDX12ReturnedParams::ExtensionsSupported::userMarkers is present.
+ /// Supported in Radeon Software Version 17.9.1 onwards.
+ ///
+ /// \param [in] context                             Pointer to a context.
+@@ -912,10 +1099,47 @@ typedef struct AGSDX11ReturnedParams_520
+     void*                   breadcrumbBuffer;       ///< The CPU buffer returned if the initialization of the breadcrumb was successful.
+ } AGSDX11ReturnedParams_520;
+
++typedef struct AGSDX11ExtensionsSupported_600               /// Extensions for DX11
++{
++    unsigned int        quadList : 1;                       ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        screenRectList : 1;                 ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        uavOverlap : 1;                     ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        depthBoundsTest : 1;                ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        multiDrawIndirect : 1;              ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        multiDrawIndirectCountIndirect : 1; ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        crossfireAPI : 1;                   ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        createShaderControls : 1;           ///< Supported in Radeon Software Version 16.9.2 onwards.
++    unsigned int        intrinsics16 : 1;                   ///< Supported in Radeon Software Version 16.9.2 onwards. ReadFirstLane, ReadLane, LaneID, Swizzle, Ballot, MBCount, Med3, Barycentrics
++    unsigned int        multiView : 1;                      ///< Supported in Radeon Software Version 16.12.1 onwards.
++    unsigned int        intrinsics17 : 1;                   ///< Supported in Radeon Software Version 17.9.1 onwards. WaveReduce, WaveScan
++    unsigned int        appRegistration : 1;                ///< Supported in Radeon Software Version 17.9.1 onwards.
++    unsigned int        breadcrumbMarkers : 1;              ///< Supported in Radeon Software Version 17.11.1 onwards.
++    unsigned int        MDIDeferredContexts : 1;            ///< Supported in Radeon Software Version 18.8.1 onwards.
++    unsigned int        UAVOverlapDeferredContexts : 1;     ///< Supported in Radeon Software Version 18.8.1 onwards.
++    unsigned int        depthBoundsDeferredContexts : 1;    ///< Supported in Radeon Software Version 18.8.1 onwards.
++    unsigned int        intrinsics19 : 1;                   ///< Supported in Radeon Software Version 19.12.2 onwards. DrawIndex, AtomicU64
++    unsigned int        getWaveSize : 1;                    ///< Supported in Radeon Software Version 20.2.1 onwards.
++    unsigned int        baseVertex : 1;                     ///< Supported in Radeon Software Version 20.2.1 onwards.
++    unsigned int        baseInstance : 1;                   ///< Supported in Radeon Software Version 20.2.1 onwards.
++    unsigned int        padding : 12;                       ///< Reserved
++} AGSDX11ExtensionsSupported_600;
++
++typedef struct AGSDX11ReturnedParams_600
++{
++    ID3D11Device*                  pDevice;                 ///< The newly created device
++    ID3D11DeviceContext*           pImmediateContext;       ///< The newly created immediate device context
++    IDXGISwapChain*                pSwapChain;              ///< The newly created swap chain. This is only created if a valid pSwapChainDesc is supplied in AGSDX11DeviceCreationParams.
++    D3D_FEATURE_LEVEL              featureLevel;            ///< The feature level supported by the newly created device
++    AGSDX11ExtensionsSupported_600 extensionsSupported;     ///< List of supported extensions
++    unsigned int                   crossfireGPUCount;       ///< The number of GPUs that are active for this app
++    void*                          breadcrumbBuffer;        ///< The CPU buffer returned if the initialization of the breadcrumb was successful
++} AGSDX11ReturnedParams_600;
++
+ typedef union AGSDX11ReturnedParams
+ {
+     AGSDX11ReturnedParams_511   agsDX11ReturnedParams511;
+     AGSDX11ReturnedParams_520   agsDX11ReturnedParams520;
++    AGSDX11ReturnedParams_600   agsDX11ReturnedParams600;
+ } AGSDX11ReturnedParams;
+
+ ///
+@@ -925,7 +1149,7 @@ typedef union AGSDX11ReturnedParams
+ /// * The shader compiler should not use the D3DCOMPILE_SKIP_OPTIMIZATION (/Od) option, otherwise it will not work.
+ /// * The shader compiler needs D3DCOMPILE_ENABLE_STRICTNESS (/Ges) enabled.
+ ///
+-/// \param [in] context                             Pointer to a context. This is generated by \ref agsInit
++/// \param [in] context                             Pointer to a context. This is generated by \ref agsInititalize
+ /// \param [in] creationParams                      Pointer to the struct to specify the existing DX11 device creation parameters.
+ /// \param [in] extensionParams                     Optional pointer to the struct to specify DX11 additional device creation parameters.
+ /// \param [out] returnedParams                     Pointer to struct to hold all the returned parameters from the call.
+@@ -991,7 +1215,7 @@ AMD_AGS_API AGSReturnCode agsDriverExtensionsDX11_DestroyDevice_511( AGSContext*
+ /// \defgroup breadcrumbs Breadcrumb API
+ /// API for writing top-of-pipe and bottom-of-pipe markers to help track down GPU hangs.
+ ///
+-/// The API is available if the \ref AGS_DX11_EXTENSION_BREADCRUMB_MARKERS is present in \ref AGSDX11ReturnedParams::extensionsSupported.
++/// The API is available if the \ref AGSDX11ReturnedParams::ExtensionsSupported::breadcrumbMarkers is present.
+ ///
+ /// To use the API, a non zero value needs to be specificed in \ref AGSDX11ExtensionParams::numBreadcrumbMarkers.  This enables the API (if available) and allocates a system memory buffer
+ /// which is returned to the user in \ref AGSDX11ReturnedParams::breadcrumbBuffer.
+@@ -1197,6 +1421,13 @@ AMD_AGS_API AGSReturnCode agsDriverExtensionsDX11_WriteBreadcrumb( AGSContext* c
+ /// API for primitive topologies
+ /// @{
+
++/// Additional topologies supported via extensions
++typedef enum AGSPrimitiveTopology
++{
++    AGS_PRIMITIVE_TOPOLOGY_QUADLIST                         = 7,    ///< Quad list
++    AGS_PRIMITIVE_TOPOLOGY_SCREENRECTLIST                   = 9     ///< Screen rect list
++} AGSPrimitiveTopology;
++
+ ///
+ /// Function used to set the primitive topology. If you are using any of the extended topology types, then this function should
+ /// be called to set ALL topology types.
+@@ -1447,6 +1678,22 @@ AMD_AGS_API AGSReturnCode agsDriverExtensionsDX11_SetViewBroadcastMasks( AGSCont
+ ///
+ AMD_AGS_API AGSReturnCode agsDriverExtensionsDX11_GetMaxClipRects( AGSContext* context, unsigned int* maxRectCount );
+
++/// The inclusion mode for the rect
++typedef enum AGSClipRect_Mode
++{
++    ClipRectIncluded = 0,   ///< Include the rect
++    ClipRectExcluded = 1    ///< Exclude the rect
++} AGSClipRect_Mode;
++
++/// The clip rectangle struct used by \ref agsDriverExtensionsDX11_SetClipRects
++typedef struct AGSClipRect
++{
++    AGSClipRect_Mode mode; ///< Include/exclude rect region
++    AGSRect          rect; ///< The rect to include/exclude
++} AGSClipRect;
++
++
++
+ ///
+ /// Function sets clip rectangles.
+ ///
+@@ -1563,6 +1810,46 @@ AMD_AGS_API AGSReturnCode agsDriverExtensionsDX11_NotifyResourceEndAllAccess( AG
+
+ /// @}
+
++/// \defgroup typedefs Function pointer typedefs
++/// List of function pointer typedefs for the API
++/// @{
++
++typedef AMD_AGS_API AGSDriverVersionResult  (*AGS_CHECKDRIVERVERSION)( const char*, unsigned int ); ///< \ref agsCheckDriverVersion
++typedef AMD_AGS_API int                     (*AGS_GETVERSIONNUMBER)( void ); ///< \ref agsGetVersionNumber
++typedef AMD_AGS_API AGSReturnCode           (*AGS_INITIALIZE)( int, const AGSConfiguration*, AGSContext**, AGSGPUInfo_600* ); ///< \ref agsInitialize
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DEINITIALIZE)( AGSContext* ); ///< \ref agsDeInitialize
++typedef AMD_AGS_API AGSReturnCode           (*AGS_SETDISPLAYMODE)( AGSContext*, int, int, const AGSDisplaySettings* ); ///< \ref agsSetDisplayMode
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX12_CREATEDEVICE)( AGSContext*, const AGSDX12DeviceCreationParams*, const AGSDX12ExtensionParams*, AGSDX12ReturnedParams* ); ///< \ref agsDriverExtensionsDX12_CreateDevice
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX12_DESTROYDEVICE)( AGSContext*, ID3D12Device*, unsigned int* ); ///< \ref agsDriverExtensionsDX12_DestroyDevice
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX12_PUSHMARKER)( AGSContext*, ID3D12GraphicsCommandList*, const char* ); ///< \ref agsDriverExtensionsDX12_PushMarker
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX12_POPMARKER)( AGSContext*, ID3D12GraphicsCommandList* ); ///< \ref agsDriverExtensionsDX12_PopMarker
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX12_SETMARKER)( AGSContext*, ID3D12GraphicsCommandList*, const char* ); ///< \ref agsDriverExtensionsDX12_SetMarker
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_CREATEDEVICE)( AGSContext*, const AGSDX11DeviceCreationParams*, const AGSDX11ExtensionParams*, AGSDX11ReturnedParams* ); ///< \ref agsDriverExtensionsDX11_CreateDevice
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_DESTROYDEVICE)( AGSContext*, ID3D11Device*, unsigned int*, ID3D11DeviceContext*, unsigned int* ); ///< \ref agsDriverExtensionsDX11_DestroyDevice
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_WRITEBREADCRUMB)( AGSContext*, const AGSBreadcrumbMarker* ); ///< \ref agsDriverExtensionsDX11_WriteBreadcrumb
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_IASETPRIMITIVETOPOLOGY)( AGSContext*, enum D3D_PRIMITIVE_TOPOLOGY ); ///< \ref agsDriverExtensionsDX11_IASetPrimitiveTopology
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_BEGINUAVOVERLAP)( AGSContext*, ID3D11DeviceContext* ); ///< \ref agsDriverExtensionsDX11_BeginUAVOverlap
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_ENDUAVOVERLAP)( AGSContext*, ID3D11DeviceContext* ); ///< \ref agsDriverExtensionsDX11_EndUAVOverlap
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_SETDEPTHBOUNDS)( AGSContext*, ID3D11DeviceContext*, bool, float, float ); ///< \ref agsDriverExtensionsDX11_SetDepthBounds
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_MULTIDRAWINSTANCEDINDIRECT)( AGSContext*, ID3D11DeviceContext*, unsigned int, ID3D11Buffer*, unsigned int, unsigned int ); ///< \ref agsDriverExtensionsDX11_MultiDrawInstancedIndirect
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_MULTIDRAWINDEXEDINSTANCEDINDIRECT)( AGSContext*, ID3D11DeviceContext*, unsigned int, ID3D11Buffer*, unsigned int, unsigned int ); ///< \ref agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirect
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_MULTIDRAWINSTANCEDINDIRECTCOUNTINDIRECT)( AGSContext*, ID3D11DeviceContext*, ID3D11Buffer*, unsigned int, ID3D11Buffer*, unsigned int, unsigned int ); ///< \ref agsDriverExtensionsDX11_MultiDrawInstancedIndirectCountIndirect
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_MULTIDRAWINDEXEDINSTANCEDINDIRECTCOUNTINDIRECT)( AGSContext*, ID3D11DeviceContext*, ID3D11Buffer*, unsigned int, ID3D11Buffer*, unsigned int, unsigned int ); ///< \ref agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirectCountIndirect
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_SETMAXASYNCCOMPILETHREADCOUNT)( AGSContext*, unsigned int ); ///< \ref agsDriverExtensionsDX11_SetMaxAsyncCompileThreadCount
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_NUMPENDINGASYNCOMPILEJOBS)( AGSContext*, unsigned int* ); ///< \ref agsDriverExtensionsDX11_NumPendingAsyncCompileJobs
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_SETDISKSHADERCACHEENABLED)( AGSContext*, int ); ///< \ref agsDriverExtensionsDX11_SetDiskShaderCacheEnabled
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_SETVIEWBROADCASTMASKS)( AGSContext*, unsigned long long, unsigned long long, int ); ///< \ref agsDriverExtensionsDX11_SetViewBroadcastMasks
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_GETMAXCLIPRECTS)( AGSContext*, unsigned int* ); ///< \ref agsDriverExtensionsDX11_GetMaxClipRects
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_SETCLIPRECTS)( AGSContext*, unsigned int, const AGSClipRect* ); ///< \ref agsDriverExtensionsDX11_SetClipRects
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_CREATEBUFFER)( AGSContext*, const D3D11_BUFFER_DESC*, const D3D11_SUBRESOURCE_DATA*, ID3D11Buffer**, AGSAfrTransferType, AGSAfrTransferEngine ); ///< \ref agsDriverExtensionsDX11_CreateBuffer
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_CREATETEXTURE1D)( AGSContext*, const D3D11_TEXTURE1D_DESC*, const D3D11_SUBRESOURCE_DATA*, ID3D11Texture1D**, AGSAfrTransferType, AGSAfrTransferEngine ); ///< \ref agsDriverExtensionsDX11_CreateTexture1D
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_CREATETEXTURE2D)( AGSContext*, const D3D11_TEXTURE2D_DESC*, const D3D11_SUBRESOURCE_DATA*, ID3D11Texture2D**, AGSAfrTransferType, AGSAfrTransferEngine ); ///< \ref agsDriverExtensionsDX11_CreateTexture2D
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_CREATETEXTURE3D)( AGSContext*, const D3D11_TEXTURE3D_DESC*, const D3D11_SUBRESOURCE_DATA*, ID3D11Texture3D**, AGSAfrTransferType, AGSAfrTransferEngine ); ///< \ref agsDriverExtensionsDX11_CreateTexture3D
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_NOTIFYRESOURCEENDWRITES)( AGSContext*, ID3D11Resource*, const D3D11_RECT*, const unsigned int*, unsigned int ); ///< \ref agsDriverExtensionsDX11_NotifyResourceEndWrites
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_NOTIFYRESOURCEBEGINALLACCESS)( AGSContext*, ID3D11Resource* ); ///< \ref agsDriverExtensionsDX11_NotifyResourceBeginAllAccess
++typedef AMD_AGS_API AGSReturnCode           (*AGS_DRIVEREXTENSIONSDX11_NOTIFYRESOURCEENDALLACCESS)( AGSContext*, ID3D11Resource* ); ///< \ref agsDriverExtensionsDX11_NotifyResourceEndAllAccess
++/// @}
++
+ #ifdef __cplusplus
+ } // extern "C"
+ #endif
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index ae825462f28..562c4103343 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -1,4 +1,5 @@
+ @ stdcall agsDeInit(ptr)
++@ stdcall agsDeInitialize(ptr)
+ @ stdcall agsCheckDriverVersion(ptr long)
+ @ stub agsDriverExtensionsDX11_BeginUAVOverlap
+ @ stub agsDriverExtensionsDX11_CreateBuffer
+@@ -38,5 +39,7 @@
+ @ stub agsDriverExtensionsDX12_PushMarker
+ @ stub agsDriverExtensionsDX12_SetMarker
+ @ stdcall agsGetCrossfireGPUCount(ptr ptr)
++@ stdcall agsGetVersionNumber()
+ @ stdcall agsInit(ptr ptr ptr)
++@ stdcall agsInitialize(long ptr ptr ptr)
+ @ stub agsSetDisplayMode
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 35de799430d..b7b85b7f7a4 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -26,6 +26,7 @@ enum amd_ags_version
+     AMD_AGS_VERSION_5_4_0,
+     AMD_AGS_VERSION_5_4_1,
+     AMD_AGS_VERSION_5_4_2,
++    AMD_AGS_VERSION_6_0_0,
+
+     AMD_AGS_VERSION_COUNT
+ };
+@@ -46,17 +47,21 @@ amd_ags_info[AMD_AGS_VERSION_COUNT] =
+     {5, 4, 0, sizeof(AGSDeviceInfo_540)},
+     {5, 4, 1, sizeof(AGSDeviceInfo_541)},
+     {5, 4, 2, sizeof(AGSDeviceInfo_542)},
++    {6, 0, 0, sizeof(AGSDeviceInfo_600)},
+ };
+
+ #define DEF_FIELD(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
+         offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_540, name), \
+-        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name)}}
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), offsetof(AGSDeviceInfo_600, name)}}
+ #define DEF_FIELD_520_BELOW(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
+         offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), -1, \
+-        -1, -1}}
++        -1, -1, -1}}
+ #define DEF_FIELD_540_UP(name) {DEVICE_FIELD_##name, {-1, -1, \
+         -1, -1, offsetof(AGSDeviceInfo_540, name), \
+-        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name)}}
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), offsetof(AGSDeviceInfo_600, name)}}
++#define DEF_FIELD_600_BELOW(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
++        offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_540, name), \
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), -1}}
+
+ #define DEVICE_FIELD_adapterString 0
+ #define DEVICE_FIELD_architectureVersion 1
+@@ -80,7 +85,7 @@ device_struct_fields[] =
+     DEF_FIELD_540_UP(asicFamily),
+     DEF_FIELD(vendorId),
+     DEF_FIELD(deviceId),
+-    DEF_FIELD(isPrimaryDevice),
++    DEF_FIELD_600_BELOW(isPrimaryDevice),
+     DEF_FIELD(localMemoryInBytes),
+     DEF_FIELD(numDisplays),
+     DEF_FIELD(displays),
+@@ -263,20 +268,20 @@ static enum amd_ags_version determine_ags_version(void)
+     return ret;
+ }
+
+-struct monitor_enum_context
++struct monitor_enum_context_600
+ {
+     const char *adapter_name;
+-    AGSDisplayInfo **ret_displays;
++    AGSDisplayInfo_600 **ret_displays;
+     int *ret_display_count;
+ };
+
+-static BOOL WINAPI monitor_enum_proc(HMONITOR hmonitor, HDC hdc, RECT *rect, LPARAM context)
++static BOOL WINAPI monitor_enum_proc_600(HMONITOR hmonitor, HDC hdc, RECT *rect, LPARAM context)
+ {
+-    struct monitor_enum_context *c = (struct monitor_enum_context *)context;
++    struct monitor_enum_context_600 *c = (struct monitor_enum_context_600 *)context;
+     MONITORINFOEXA monitor_info;
+-    AGSDisplayInfo *new_alloc;
++    AGSDisplayInfo_600 *new_alloc;
+     DISPLAY_DEVICEA device;
+-    AGSDisplayInfo *info;
++    AGSDisplayInfo_600 *info;
+     unsigned int i, mode;
+     DEVMODEA dev_mode;
+
+@@ -321,7 +326,7 @@ static BOOL WINAPI monitor_enum_proc(HMONITOR hmonitor, HDC hdc, RECT *rect, LPA
+             strcpy(info->name, "Unknown");
+         }
+         if (monitor_info.dwFlags & MONITORINFOF_PRIMARY)
+-            info->displayFlags |= AGS_DISPLAYFLAG_PRIMARY_DISPLAY;
++            info->isPrimaryDisplay = 1;
+
+         mode = 0;
+         memset(&dev_mode, 0, sizeof(dev_mode));
+@@ -360,9 +365,9 @@ static BOOL WINAPI monitor_enum_proc(HMONITOR hmonitor, HDC hdc, RECT *rect, LPA
+     return TRUE;
+ }
+
+-static void init_device_displays(const char *adapter_name, AGSDisplayInfo **ret_displays, int *ret_display_count)
++static void init_device_displays_600(const char *adapter_name, AGSDisplayInfo_600 **ret_displays, int *ret_display_count)
+ {
+-    struct monitor_enum_context context;
++    struct monitor_enum_context_600 context;
+
+     TRACE("adapter_name %s.\n", debugstr_a(adapter_name));
+
+@@ -370,9 +375,32 @@ static void init_device_displays(const char *adapter_name, AGSDisplayInfo **ret_
+     context.ret_displays = ret_displays;
+     context.ret_display_count = ret_display_count;
+
+-    EnumDisplayMonitors(NULL, NULL, monitor_enum_proc, (LPARAM)&context);
++    EnumDisplayMonitors(NULL, NULL, monitor_enum_proc_600, (LPARAM)&context);
++}
++
++static void init_device_displays_511(const char *adapter_name, AGSDisplayInfo_511 **ret_displays, int *ret_display_count)
++{
++    AGSDisplayInfo_600 *displays = NULL;
++    int display_count = 0;
++    int i;
++    *ret_displays = NULL;
++    *ret_display_count = 0;
++
++    init_device_displays_600(adapter_name, &displays, &display_count);
++
++    if ((*ret_displays = heap_alloc(sizeof(**ret_displays) * display_count)))
++    {
++        for (i = 0; i < display_count; i++)
++        {
++            memcpy(&(*ret_displays)[i], &displays[i], sizeof(AGSDisplayInfo_511));
++        }
++        *ret_display_count = display_count;
++    }
++
++    heap_free(displays);
+ }
+
++
+ static AGSReturnCode init_ags_context(AGSContext *context)
+ {
+     AGSReturnCode ret;
+@@ -427,11 +455,31 @@ static AGSReturnCode init_ags_context(AGSContext *context)
+         }
+         SET_DEVICE_FIELD(device, localMemoryInBytes, ULONG64, context->version, local_memory_size);
+         if (!i)
+-            SET_DEVICE_FIELD(device, isPrimaryDevice, int, context->version, 1);
++        {
++            if (context->version >= AMD_AGS_VERSION_6_0_0)
++            {
++                // This is a bitfield now... Nice...
++                struct AGSDeviceInfo_600 *device_600 = (struct AGSDeviceInfo_600 *)device;
++                device_600->isPrimaryDevice = 1;
++            }
++            else
++            {
++                SET_DEVICE_FIELD(device, isPrimaryDevice, int, context->version, 1);
++            }
++        }
+
+-        init_device_displays(vk_properties->deviceName,
+-                GET_DEVICE_FIELD_ADDR(device, displays, AGSDisplayInfo *, context->version),
+-                GET_DEVICE_FIELD_ADDR(device, numDisplays, int, context->version));
++        if (context->version >= AMD_AGS_VERSION_6_0_0)
++        {
++            init_device_displays_600(vk_properties->deviceName,
++                    GET_DEVICE_FIELD_ADDR(device, displays, AGSDisplayInfo_600 *, context->version),
++                    GET_DEVICE_FIELD_ADDR(device, numDisplays, int, context->version));
++        }
++        else
++        {
++            init_device_displays_511(vk_properties->deviceName,
++                    GET_DEVICE_FIELD_ADDR(device, displays, AGSDisplayInfo_511 *, context->version),
++                    GET_DEVICE_FIELD_ADDR(device, numDisplays, int, context->version));
++        }
+
+         device += amd_ags_info[context->version].device_size;
+     }
+@@ -439,7 +487,7 @@ static AGSReturnCode init_ags_context(AGSContext *context)
+     return AGS_SUCCESS;
+ }
+
+-AGSReturnCode WINAPI agsInit(AGSContext **context, const AGSConfiguration *config, AGSGPUInfo *gpu_info)
++AGSReturnCode WINAPI agsInit(AGSContext **context, const AGSConfiguration *config, AGSGPUInfo_511 *gpu_info)
+ {
+     struct AGSContext *object;
+     AGSReturnCode ret;
+@@ -477,7 +525,47 @@ AGSReturnCode WINAPI agsInit(AGSContext **context, const AGSConfiguration *confi
+     return AGS_SUCCESS;
+ }
+
++AGSReturnCode WINAPI agsInitialize(int ags_version, const AGSConfiguration *config, AGSContext **context, AGSGPUInfo_600 *gpu_info)
++{
++    struct AGSContext *object;
++    AGSReturnCode ret;
++
++    TRACE("ags_verison %d, context %p, config %p, gpu_info %p.\n", ags_version, context, config, gpu_info);
++
++    if (!context || !gpu_info)
++        return AGS_INVALID_ARGS;
++
++    if (config)
++        FIXME("Ignoring config %p.\n", config);
++
++    if (!(object = heap_alloc(sizeof(*object))))
++        return AGS_OUT_OF_MEMORY;
++
++    if ((ret = init_ags_context(object)) != AGS_SUCCESS)
++    {
++        heap_free(object);
++        return ret;
++    }
++
++    memset(gpu_info, 0, sizeof(*gpu_info));
++    gpu_info->driverVersion = "20.50.03.05-210326a-365573E-RadeonSoftwareAdrenalin2020";
++    gpu_info->radeonSoftwareVersion  = "21.3.2";
++    gpu_info->numDevices = object->device_count;
++    gpu_info->devices = object->devices;
++
++    TRACE("Created context %p.\n", object);
++
++    *context = object;
++
++    return AGS_SUCCESS;
++}
++
+ AGSReturnCode WINAPI agsDeInit(AGSContext *context)
++{
++    return agsDeInitialize(context);
++}
++
++AGSReturnCode WINAPI agsDeInitialize(AGSContext *context)
+ {
+     unsigned int i;
+     BYTE *device;
+@@ -491,7 +579,7 @@ AGSReturnCode WINAPI agsDeInit(AGSContext *context)
+         device = (BYTE *)context->devices;
+         for (i = 0; i < context->device_count; ++i)
+         {
+-            heap_free(GET_DEVICE_FIELD_ADDR(device, displays, AGSDisplayInfo *, context->version));
++            heap_free(GET_DEVICE_FIELD_ADDR(device, displays, void *, context->version));
+             device += amd_ags_info[context->version].device_size;
+         }
+         heap_free(context->devices);
+@@ -561,6 +649,15 @@ AGSDriverVersionResult WINAPI agsCheckDriverVersion(const char* version_reported
+     return AGS_SOFTWAREVERSIONCHECK_OK;
+ }
+
++int WINAPI agsGetVersionNumber(void)
++{
++    enum amd_ags_version version = determine_ags_version();
++
++    TRACE("version %d.\n", version);
++
++    return AGS_MAKE_VERSION(amd_ags_info[version].major, amd_ags_info[version].minor, amd_ags_info[version].patch);
++}
++
+ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
+ {
+     TRACE("%p, %u, %p.\n", instance, reason, reserved);
+From 4d7523540486ce8fb038332f795758b153429818 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Sat, 8 May 2021 05:20:08 +0100
+Subject: [PATCH] amd_ags_x64: Implement AGS 6.0.1
+
+Signed-off-by: Joshua Ashton <joshua@froggi.es>
+---
+ dlls/amd_ags_x64/amd_ags.h          |  8 ++++----
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 13 +++++++++----
+ 2 files changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags.h b/dlls/amd_ags_x64/amd_ags.h
+index af9c48c1dd5..20fef455f00 100644
+--- a/dlls/amd_ags_x64/amd_ags.h
++++ b/dlls/amd_ags_x64/amd_ags.h
+@@ -151,7 +151,7 @@
+
+ #define AMD_AGS_VERSION_MAJOR 6             ///< AGS major version
+ #define AMD_AGS_VERSION_MINOR 0             ///< AGS minor version
+-#define AMD_AGS_VERSION_PATCH 0             ///< AGS patch version
++#define AMD_AGS_VERSION_PATCH 1             ///< AGS patch version
+
+ #ifdef __cplusplus
+ extern "C" {
+@@ -906,8 +906,8 @@ typedef struct AGSDX12ReturnedParams
+             unsigned int        baseInstance : 1;                   ///< Supported in Radeon Software Version 20.2.1 onwards.
+             unsigned int        getWaveSize : 1;                    ///< Supported in Radeon Software Version 20.5.1 onwards.
+             unsigned int        floatConversion : 1;                ///< Supported in Radeon Software Version 20.5.1 onwards.
+-            unsigned int        readLaneAt : 1;                     ///< Supported in Radeon Software Version 20.11.1 onwards.
+-            unsigned int        rayHitToken : 1;                    ///< Supported in Radeon Software Version 20.11.1 onwards.
++            unsigned int        readLaneAt : 1;                     ///< Supported in Radeon Software Version 20.11.2 onwards.
++            unsigned int        rayHitToken : 1;                    ///< Supported in Radeon Software Version 20.11.2 onwards.
+             unsigned int        padding : 20;                       ///< Reserved
+         } ExtensionsSupported;
+         ExtensionsSupported     extensionsSupported;                ///< List of supported extensions
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index b7b85b7f7a4..97fda0b5230 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -27,6 +27,7 @@ enum amd_ags_version
+     AMD_AGS_VERSION_5_4_1,
+     AMD_AGS_VERSION_5_4_2,
+     AMD_AGS_VERSION_6_0_0,
++    AMD_AGS_VERSION_6_0_1,
+
+     AMD_AGS_VERSION_COUNT
+ };
+@@ -48,20 +49,24 @@ amd_ags_info[AMD_AGS_VERSION_COUNT] =
+     {5, 4, 1, sizeof(AGSDeviceInfo_541)},
+     {5, 4, 2, sizeof(AGSDeviceInfo_542)},
+     {6, 0, 0, sizeof(AGSDeviceInfo_600)},
++    {6, 0, 1, sizeof(AGSDeviceInfo_600)},
+ };
+
+ #define DEF_FIELD(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
+         offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_540, name), \
+-        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), offsetof(AGSDeviceInfo_600, name)}}
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), offsetof(AGSDeviceInfo_600, name), \
++        offsetof(AGSDeviceInfo_600, name)}}
+ #define DEF_FIELD_520_BELOW(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
+         offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), -1, \
+-        -1, -1, -1}}
++        -1, -1, -1, -1}}
+ #define DEF_FIELD_540_UP(name) {DEVICE_FIELD_##name, {-1, -1, \
+         -1, -1, offsetof(AGSDeviceInfo_540, name), \
+-        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), offsetof(AGSDeviceInfo_600, name)}}
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), offsetof(AGSDeviceInfo_600, name), \
++        offsetof(AGSDeviceInfo_600, name)}}
+ #define DEF_FIELD_600_BELOW(name) {DEVICE_FIELD_##name, {offsetof(AGSDeviceInfo_511, name), offsetof(AGSDeviceInfo_520, name), \
+         offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_520, name), offsetof(AGSDeviceInfo_540, name), \
+-        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), -1}}
++        offsetof(AGSDeviceInfo_541, name), offsetof(AGSDeviceInfo_542, name), -1, \
++        -1}}
+
+ #define DEVICE_FIELD_adapterString 0
+ #define DEVICE_FIELD_architectureVersion 1
+From 074fec36577b7334f5223d0c59d47b219b03f263 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 6 Oct 2021 22:56:07 +0300
+Subject: [PATCH] amd_ags_x64: Add agsDriverExtensionsDX11_Init() semi-stub.
+
+---
+ dlls/amd_ags_x64/amd_ags_x64.spec   | 2 +-
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64.spec b/dlls/amd_ags_x64/amd_ags_x64.spec
+index 562c4103343..ebb026da35e 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64.spec
++++ b/dlls/amd_ags_x64/amd_ags_x64.spec
+@@ -14,7 +14,7 @@
+ @ stub agsDriverExtensionsDX11_EndUAVOverlap
+ @ stub agsDriverExtensionsDX11_GetMaxClipRects
+ @ stub agsDriverExtensionsDX11_IASetPrimitiveTopology
+-@ stub agsDriverExtensionsDX11_Init
++@ stdcall agsDriverExtensionsDX11_Init(ptr ptr long ptr)
+ @ stub agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirect
+ @ stub agsDriverExtensionsDX11_MultiDrawIndexedInstancedIndirectCountIndirect
+ @ stub agsDriverExtensionsDX11_MultiDrawInstancedIndirect
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index 97fda0b5230..bbf5efff741 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -663,6 +663,14 @@ int WINAPI agsGetVersionNumber(void)
+     return AGS_MAKE_VERSION(amd_ags_info[version].major, amd_ags_info[version].minor, amd_ags_info[version].patch);
+ }
+
++AGSReturnCode WINAPI agsDriverExtensionsDX11_Init( AGSContext* context, ID3D11Device* device, unsigned int uavSlot, unsigned int* extensionsSupported )
++{
++    FIXME("context %p, device %p, uavSlot %u, extensionsSupported %p stub.\n", context, device, uavSlot, extensionsSupported);
++
++    *extensionsSupported = 0;
++    return AGS_SUCCESS;
++}
++
+ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
+ {
+     TRACE("%p, %u, %p.\n", instance, reason, reserved);
+From c7c0c87cdfa767d5588837dfadbaba541775ed35 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 10 Nov 2021 22:11:59 +0300
+Subject: [PATCH] amd_ags_x64: Bump driver version to 21.10.2.
+
+For FH5.
+---
+ dlls/amd_ags_x64/amd_ags_x64_main.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/amd_ags_x64/amd_ags_x64_main.c b/dlls/amd_ags_x64/amd_ags_x64_main.c
+index bbf5efff741..264d92af019 100644
+--- a/dlls/amd_ags_x64/amd_ags_x64_main.c
++++ b/dlls/amd_ags_x64/amd_ags_x64_main.c
+@@ -518,8 +518,8 @@ AGSReturnCode WINAPI agsInit(AGSContext **context, const AGSConfiguration *confi
+     gpu_info->agsVersionMajor = amd_ags_info[object->version].major;
+     gpu_info->agsVersionMinor = amd_ags_info[object->version].minor;
+     gpu_info->agsVersionPatch = amd_ags_info[object->version].patch;
+-    gpu_info->driverVersion = "20.50.03.05-210326a-365573E-RadeonSoftwareAdrenalin2020";
+-    gpu_info->radeonSoftwareVersion  = "21.3.2";
++    gpu_info->driverVersion = "21.30.25.05-211005a-372402E-RadeonSoftware";
++    gpu_info->radeonSoftwareVersion  = "21.10.2";
+     gpu_info->numDevices = object->device_count;
+     gpu_info->devices = object->devices;
+
+@@ -553,8 +553,8 @@ AGSReturnCode WINAPI agsInitialize(int ags_version, const AGSConfiguration *conf
+     }
+
+     memset(gpu_info, 0, sizeof(*gpu_info));
+-    gpu_info->driverVersion = "20.50.03.05-210326a-365573E-RadeonSoftwareAdrenalin2020";
+-    gpu_info->radeonSoftwareVersion  = "21.3.2";
++    gpu_info->driverVersion = "21.30.25.05-211005a-372402E-RadeonSoftware";
++    gpu_info->radeonSoftwareVersion  = "21.10.2";
+     gpu_info->numDevices = object->device_count;
+     gpu_info->devices = object->devices;
+

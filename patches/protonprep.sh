@@ -91,6 +91,7 @@
     git revert --no-commit d8be85863fedf6982944d06ebd1ce5904cb3d4e1
 
     echo "revert due to fshack breakage"
+    git revert --no-commit 963589ee296ae90003dab3e8204766ab4e4c0045
     git revert --no-commit 2adf4376d86119b8a6f7cde51c9a972564575bac
     git revert --no-commit 6dcaff421f87a93efe18b2efe0ec64d94ed1d483
 
@@ -98,6 +99,13 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit d1662e4beb4c1b757423c71107f7ec115ade19f5
+    git revert --no-commit dab54bd849cd9f109d1a9d16cb171eddec39f2a1
+    git revert --no-commit 3864d2355493cbadedf59f0c2ee7ad7a306fad5a
+    git revert --no-commit fca2f6c12b187763eaae23ed4932d6d049a469c3
+    git revert --no-commit 63fb4d8270d1db7a0034100db550f54e8d9859f1
+    git revert --no-commit 25adac6ede88d835110be20de0164d28c2187977
+    git revert --no-commit dc1a1ae450f1119b1f5714ed99b6049343676293
     git revert --no-commit aafbbdb8bcc9b668008038dc6fcfba028c4cc6f6
     git revert --no-commit 682093d0bdc24a55fcde37ca4f9cc9ed46c3c7df
     git revert --no-commit 21dc092b910f80616242761a00d8cdab2f8aa7bd
@@ -272,6 +280,9 @@
     patch -Np1 < ../patches/proton/54-proton-11_death_loop_registry.patch
     patch -Np1 < ../patches/proton/56-proton-12_disable_libglesv2_for_nw.js.patch
     patch -Np1 < ../patches/proton/58-proton-13_atiadlxx_builtin_for_gotg.patch
+    patch -Np1 < ../patches/proton/60-proton-14-msedgewebview-registry.patch
+    patch -Np1 < ../patches/proton/61-proton-15-FH5-amd_ags_registry.patch
+
 
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
@@ -315,6 +326,9 @@
 
     echo "proton battleye patches"
     patch -Np1 < ../patches/proton/59-proton-battleye_patches.patch
+
+#    echo "proton Rainbow Six Siege vulkan patch"
+#    patch -Np1 < ../patches/proton/60-proton-r6s_vulkan.patch
 
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
@@ -422,7 +436,7 @@
     echo "add missing stub for fh5"
     patch -Np1 < ../patches/wine-hotfixes/testing/fh5-uiauto.patch
 
-    #https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
+    # https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
     echo "unity crash hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
 
