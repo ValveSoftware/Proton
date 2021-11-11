@@ -1,0 +1,29 @@
+From: Torge Matthies <openglfreak@googlemail.com>
+Subject: [PATCH] shell32: Fix getting file attributes from the file system in SHELL32_GetItemAttributes.
+Message-Id: <20211110231822.62069-1-openglfreak@googlemail.com>
+Date: Thu, 11 Nov 2021 00:18:22 +0100
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=52017
+Signed-off-by: Torge Matthies <openglfreak@googlemail.com>
+---
+ dlls/shell32/shlfolder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/shell32/shlfolder.c b/dlls/shell32/shlfolder.c
+index ce7fc072fa3..10aafc160c0 100644
+--- a/dlls/shell32/shlfolder.c
++++ b/dlls/shell32/shlfolder.c
+@@ -417,7 +417,7 @@ HRESULT SHELL32_GetItemAttributes (IShellFolder2 *psf, LPCITEMIDLIST pidl, LPDWO
+     } else if (_ILGetDataPointer (pidl)) {
+ 	DWORD file_attr = _ILGetFileAttributes (pidl, NULL, 0);
+ 
+-        if (!file_attr && has_guid) {
++        if (!file_attr) {
+ 	    WCHAR path[MAX_PATH];
+ 	    STRRET strret;
+ 
+
+-- 
+2.33.1
+
+
