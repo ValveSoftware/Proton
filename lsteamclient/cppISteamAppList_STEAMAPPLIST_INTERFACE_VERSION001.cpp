@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_152/steam_api.h"
-#include "steamworks_sdk_152/steamnetworkingtypes.h"
+#include "steamworks_sdk_153_preview/steam_api.h"
+#include "steamworks_sdk_153_preview/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_152
+#define SDKVER_153_preview
 #include "struct_converters.h"
 #include "cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001.h"
 uint32 cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(void *linux_side)
