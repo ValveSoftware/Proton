@@ -5,9 +5,9 @@ index 8fa3ce61..5e4d32d1 100644
 @@ -1,4 +1,4 @@
 -project('dxvk', ['c', 'cpp'], version : 'v1.9.2', meson_version : '>= 0.46')
 +project('dxvk', ['c', 'cpp'], version : 'v1.9.2-async', meson_version : '>= 0.46')
- 
+
  cpu_family = target_machine.cpu_family()
- 
+
 @@ -103,7 +103,7 @@ else
  endif
  
@@ -21,21 +21,19 @@ diff --git a/src/dxvk/dxvk_context.cpp b/src/dxvk/dxvk_context.cpp
 index 797c4e20..bda90275 100644
 --- a/src/dxvk/dxvk_context.cpp
 +++ b/src/dxvk/dxvk_context.cpp
-@@ -3837,7 +3837,9 @@ namespace dxvk {
-       : DxvkContextFlag::GpDirtyStencilRef);
+@@ -3837,7 +3837,7 @@ namespace dxvk {
      
      // Retrieve and bind actual Vulkan pipeline handle
--    m_gpActivePipeline = m_state.gp.pipeline->getPipelineHandle(m_state.gp.state, m_state.om.framebuffer->getRenderPass());
-+    m_gpActivePipeline = m_state.gp.pipeline->getPipelineHandle(m_state.gp.state,
-+                                                                m_state.om.framebuffer->getRenderPass(),
-+                                                                this->checkAsyncCompilationCompat());
+     m_gpActivePipeline = m_state.gp.pipeline->getPipelineHandle(
+-      m_state.gp.state, m_state.om.framebufferInfo.renderPass());
++      m_state.gp.state, m_state.om.framebufferInfo.renderPass(), this->checkAsyncCompilationCompat());
  
      if (unlikely(!m_gpActivePipeline))
        return false;
 @@ -4093,7 +4095,7 @@ namespace dxvk {
    }
-   
-   
+
+
 -  void DxvkContext::updateFramebuffer() {
 +  void DxvkContext::updateFramebuffer(bool isDraw) {
      if (m_flags.test(DxvkContextFlag::GpDirtyFramebuffer)) {
@@ -46,8 +44,8 @@ index 797c4e20..bda90275 100644
        }
  
 +      if (isDraw) {
-+        for (uint32_t i = 0; i < fb->numAttachments(); i++)
-+          fb->getAttachment(i).view->setRtBindingFrameId(m_device->getCurrentFrameId());
++        for (uint32_t i = 0; i < fbInfo.numAttachments(); i++)
++          fbInfo.getAttachment(i).view->setRtBindingFrameId(m_device->getCurrentFrameId());
 +      }
 +
        m_flags.set(DxvkContextFlag::GpDirtyPipelineState);
@@ -68,8 +66,8 @@ index 797c4e20..bda90275 100644
    
 +  bool DxvkContext::checkAsyncCompilationCompat() {
 +    bool fbCompat = true;
-+    for (uint32_t i = 0; fbCompat && i < m_state.om.framebuffer->numAttachments(); i++) {
-+      const auto& attachment = m_state.om.framebuffer->getAttachment(i);
++    for (uint32_t i = 0; fbCompat && i < m_state.om.framebufferInfo.numAttachments(); i++) {
++      const auto& attachment = m_state.om.framebufferInfo.getAttachment(i);
 +      fbCompat &= attachment.view->getRtBindingAsyncCompilationCompat();
 +    }
 +    return fbCompat;
