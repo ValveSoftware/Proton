@@ -701,7 +701,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         parambytes = 4 #_this
     for param in list(method.get_children()):
         if param.kind == clang.cindex.CursorKind.PARM_DECL:
-            parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
+            if param.type.kind == clang.cindex.TypeKind.LVALUEREFERENCE:
+                parambytes += 4
+            else:
+                parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
     if cppname in manually_handled_methods and \
             used_name in manually_handled_methods[cppname]:
         #just don't write the cpp function
@@ -751,6 +754,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 manual_convert.append(param)
             elif param.spelling in manual_param_converters:
                 manual_convert.append(param)
+
+            win_name = win_name.replace('&', '*')
 
             if param.spelling == "":
                 cfile.write(f", {win_name} _{unnamed}")
@@ -857,6 +862,9 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     cpp.write(f"lin_{param.spelling}")
                 else:
                     cpp.write(f"&lin_{param.spelling}")
+            elif param.type.kind == clang.cindex.TypeKind.LVALUEREFERENCE:
+                cfile.write(f", {param.spelling}")
+                cpp.write(f"*{param.spelling}")
             else:
                 cfile.write(f", {param.spelling}")
                 cpp.write(f"({param.type.spelling}){param.spelling}")

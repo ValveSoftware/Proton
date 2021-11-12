@@ -14,12 +14,12 @@ extern "C" {
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets009.h"
 HSteamListenSocket cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP(void *linux_side, const SteamNetworkingIPAddr * localAddress, int nOptions, const SteamNetworkingConfigValue_t * pOptions)
 {
-    return ((ISteamNetworkingSockets*)linux_side)->CreateListenSocketIP((const SteamNetworkingIPAddr *)localAddress, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
+    return ((ISteamNetworkingSockets*)linux_side)->CreateListenSocketIP(*localAddress, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
 }
 
 HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress(void *linux_side, const SteamNetworkingIPAddr * address, int nOptions, const SteamNetworkingConfigValue_t * pOptions)
 {
-    return ((ISteamNetworkingSockets*)linux_side)->ConnectByIPAddress((const SteamNetworkingIPAddr *)address, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
+    return ((ISteamNetworkingSockets*)linux_side)->ConnectByIPAddress(*address, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
 }
 
 HSteamListenSocket cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketP2P(void *linux_side, int nLocalVirtualPort, int nOptions, const SteamNetworkingConfigValue_t * pOptions)
@@ -29,7 +29,7 @@ HSteamListenSocket cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateLi
 
 HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P(void *linux_side, const SteamNetworkingIdentity * identityRemote, int nRemoteVirtualPort, int nOptions, const SteamNetworkingConfigValue_t * pOptions)
 {
-    return ((ISteamNetworkingSockets*)linux_side)->ConnectP2P((const SteamNetworkingIdentity *)identityRemote, (int)nRemoteVirtualPort, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
+    return ((ISteamNetworkingSockets*)linux_side)->ConnectP2P(*identityRemote, (int)nRemoteVirtualPort, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
 }
 
 EResult cppISteamNetworkingSockets_SteamNetworkingSockets009_AcceptConnection(void *linux_side, HSteamNetConnection hConn)
@@ -139,12 +139,12 @@ bool cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedRelayAuthTicke
 
 int cppISteamNetworkingSockets_SteamNetworkingSockets009_FindRelayAuthTicketForServer(void *linux_side, const SteamNetworkingIdentity * identityGameServer, int nRemoteVirtualPort, SteamDatagramRelayAuthTicket * pOutParsedTicket)
 {
-    return ((ISteamNetworkingSockets*)linux_side)->FindRelayAuthTicketForServer((const SteamNetworkingIdentity *)identityGameServer, (int)nRemoteVirtualPort, (SteamDatagramRelayAuthTicket *)pOutParsedTicket);
+    return ((ISteamNetworkingSockets*)linux_side)->FindRelayAuthTicketForServer(*identityGameServer, (int)nRemoteVirtualPort, (SteamDatagramRelayAuthTicket *)pOutParsedTicket);
 }
 
 HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedicatedServer(void *linux_side, const SteamNetworkingIdentity * identityTarget, int nRemoteVirtualPort, int nOptions, const SteamNetworkingConfigValue_t * pOptions)
 {
-    return ((ISteamNetworkingSockets*)linux_side)->ConnectToHostedDedicatedServer((const SteamNetworkingIdentity *)identityTarget, (int)nRemoteVirtualPort, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
+    return ((ISteamNetworkingSockets*)linux_side)->ConnectToHostedDedicatedServer(*identityTarget, (int)nRemoteVirtualPort, (int)nOptions, (const SteamNetworkingConfigValue_t *)pOptions);
 }
 
 uint16 cppISteamNetworkingSockets_SteamNetworkingSockets009_GetHostedDedicatedServerPort(void *linux_side)
@@ -184,12 +184,12 @@ bool cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSigna
 
 bool cppISteamNetworkingSockets_SteamNetworkingSockets009_GetCertificateRequest(void *linux_side, int * pcbBlob, void * pBlob, SteamNetworkingErrMsg * errMsg)
 {
-    return ((ISteamNetworkingSockets*)linux_side)->GetCertificateRequest((int *)pcbBlob, (void *)pBlob, (SteamNetworkingErrMsg *)errMsg);
+    return ((ISteamNetworkingSockets*)linux_side)->GetCertificateRequest((int *)pcbBlob, (void *)pBlob, *errMsg);
 }
 
 bool cppISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate(void *linux_side, const void * pCertificate, int cbCertificate, SteamNetworkingErrMsg * errMsg)
 {
-    return ((ISteamNetworkingSockets*)linux_side)->SetCertificate((const void *)pCertificate, (int)cbCertificate, (SteamNetworkingErrMsg *)errMsg);
+    return ((ISteamNetworkingSockets*)linux_side)->SetCertificate((const void *)pCertificate, (int)cbCertificate, *errMsg);
 }
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets009_RunCallbacks(void *linux_side)
