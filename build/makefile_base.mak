@@ -575,8 +575,8 @@ $(eval $(call rules-cmake,jxrlib,64))
 ##
 
 $(eval $(call rules-source,vulkan-headers,$(SRCDIR)/Vulkan-Headers))
-$(eval $(call rules-cmake,vulkan-headers,32))
-$(eval $(call rules-cmake,vulkan-headers,64))
+$(eval $(call rules-cmake,vulkan-headers,32,CROSS))
+$(eval $(call rules-cmake,vulkan-headers,64,CROSS))
 
 
 ##
@@ -584,8 +584,23 @@ $(eval $(call rules-cmake,vulkan-headers,64))
 ##
 
 $(eval $(call rules-source,spirv-headers,$(SRCDIR)/SPIRV-Headers))
-$(eval $(call rules-cmake,spirv-headers,32))
-$(eval $(call rules-cmake,spirv-headers,64))
+$(eval $(call rules-cmake,spirv-headers,32,CROSS))
+$(eval $(call rules-cmake,spirv-headers,64,CROSS))
+
+
+##
+## Vulkan-Loader
+##
+
+VULKAN_LOADER_CMAKE_ARGS = -DUSE_MASM=OFF
+VULKAN_LOADER_CMAKE_ARGS64 = -DVULKAN_HEADERS_INSTALL_DIR=$(VULKAN_HEADERS_DST64)
+VULKAN_LOADER_CMAKE_ARGS32 = -DVULKAN_HEADERS_INSTALL_DIR=$(VULKAN_HEADERS_DST32)
+VULKAN_LOADER_CFLAGS = -DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 # 0x0A00 is _WIN32_WINNT_WIN10
+VULKAN_LOADER_DEPENDS = vulkan-headers spirv-headers
+
+$(eval $(call rules-source,vulkan-loader,$(SRCDIR)/Vulkan-Loader))
+$(eval $(call rules-cmake,vulkan-loader,32,CROSS))
+$(eval $(call rules-cmake,vulkan-loader,64,CROSS))
 
 
 ##
@@ -805,7 +820,7 @@ VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
 VKD3D_LDFLAGS32 = -L$(WINE_OBJ32)/dlls/vulkan-1/
 VKD3D_LDFLAGS64 = -L$(WINE_OBJ64)/dlls/vulkan-1/
 
-VKD3D_DEPENDS = wine vulkan-headers spirv-headers
+VKD3D_DEPENDS = wine vulkan-loader vulkan-headers spirv-headers
 
 $(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
 $(eval $(call rules-autoconf,vkd3d,32,CROSS))
