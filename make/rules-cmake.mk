@@ -2,9 +2,10 @@
 #   $(1): lowercase package name
 #   $(2): uppercase package name
 #   $(3): 32/64, build type
+#   $(4): CROSS/<empty>, cross compile
 #
 define create-rules-cmake
-$(call create-rules-common,$(1),$(2),$(3))
+$(call create-rules-common,$(1),$(2),$(3),$(4))
 
 ifeq ($(CONTAINER),1)
 $$(OBJ)/.$(1)-configure$(3): $$($(2)_SRC)/CMakeLists.txt
@@ -16,6 +17,9 @@ $$(OBJ)/.$(1)-configure$(3): $$($(2)_SRC)/CMakeLists.txt
 	    -DCMAKE_INSTALL_PREFIX="$$($(2)_DST$(3))" \
 	    -DCMAKE_INSTALL_LIBDIR="lib$(subst 32,,$(3))" \
 	    -DCMAKE_BUILD_TYPE=plain \
+	    -DCMAKE_SYSTEM_NAME=$(if $(4),Windows,Linux) \
+	    -DCMAKE_SHARED_LIBRARY_PREFIX_C=$(if $(4),,lib) \
+	    -DCMAKE_IMPORT_LIBRARY_PREFIX_C=$(if $(4),,lib) \
 	    $$($(2)_CMAKE_ARGS) \
 	    $$($(2)_CMAKE_ARGS$(3))
 
@@ -31,4 +35,4 @@ $$(OBJ)/.$(1)-build$(3):
 endif
 endef
 
-rules-cmake = $(call create-rules-cmake,$(1),$(call toupper,$(1)),$(2))
+rules-cmake = $(call create-rules-cmake,$(1),$(call toupper,$(1)),$(2),$(3))
