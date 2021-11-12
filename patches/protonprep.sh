@@ -30,12 +30,6 @@
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
 
-    echo "proton re8 fixups"
-    patch -Np1 < ../patches/dxvk/RE8_proton_fixups.patch
-
-    echo "ffxiv hotfix https://github.com/doitsujin/dxvk/issues/2210"
-    patch -Np1 < ../patches/dxvk/ffxiv-framelatency.patch
-
     # this needs to be the last patch in the list.. because reasons?
     echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
@@ -89,6 +83,9 @@
 
     # this breaks prefix creation
     git revert --no-commit e5d37832ee66d011ba572a9b571e9fb44a7b2b4d
+
+    # this breaks mouse input in R6S and Borderlands
+    git revert --no-commit 53fcfe3834da3c43838cd26bdeb4fdb335542627
 
     echo "pulseaudio fixup to re-enable staging patches"
     patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
