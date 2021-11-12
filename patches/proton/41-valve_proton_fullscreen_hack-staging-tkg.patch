@@ -2233,9 +2233,9 @@ index 124bb41f7d9..5986b6cc4ff 100644
 
  #include "winternl.h"
 +#include "winuser.h"
+ #include "ntuser.h"
  #include "ddk/d3dkmthk.h"
  #include "wine/list.h"
-
 @@ -289,4 +290,22 @@ extern void CDECL __wine_set_display_driver( HMODULE module );
  extern struct opengl_funcs * CDECL __wine_get_wgl_driver( HDC hdc, UINT version );
  extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver( HDC hdc, UINT version );

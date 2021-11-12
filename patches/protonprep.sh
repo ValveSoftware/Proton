@@ -79,7 +79,6 @@
 
     echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
-    git revert --no-commit d8be85863fedf6982944d06ebd1ce5904cb3d4e1
 
     # this breaks prefix creation
     git revert --no-commit e5d37832ee66d011ba572a9b571e9fb44a7b2b4d
@@ -87,10 +86,17 @@
     # this breaks mouse input in R6S and Borderlands
     git revert --no-commit 53fcfe3834da3c43838cd26bdeb4fdb335542627
 
-    echo "pulseaudio fixup to re-enable staging patches"
-    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
-
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit 54f825d237c1dcb0774fd3e3f4cfafb7c243aab5
+    git revert --no-commit cad38401bf091917396b24ad9c92091760cc696f
+    git revert --no-commit 894e0712459ec2d48b1298724776134d2a966f66
+    git revert --no-commit 42da77bbcfeae16b5f138ad3f2a3e3030ae0844b
+    git revert --no-commit 2f7e7d284bddd27d98a17beca4da0b6525d72913
+    git revert --no-commit f4b3eb7efbe1d433d7dcf850430f99f0f0066347
+    git revert --no-commit 72b3cb68a702284122a16cbcdd87a621c29bb7a8
+    git revert --no-commit a1a51f54dcb3863f9accfbf8c261407794d2bd13
+    git revert --no-commit 3e0a9877eafef1f484987126cd453cc36cfdeb42
+    git revert --no-commit 5d0858ee9887ef5b99e09912d4379880979ab974
     git revert --no-commit d1662e4beb4c1b757423c71107f7ec115ade19f5
     git revert --no-commit dab54bd849cd9f109d1a9d16cb171eddec39f2a1
     git revert --no-commit 3864d2355493cbadedf59f0c2ee7ad7a306fad5a
@@ -146,6 +152,11 @@
     git revert --no-commit 831c6a88aab78db054beb42ca9562146b53963e7
     git revert --no-commit 2d0dc2d47ca6b2d4090dfe32efdba4f695b197ce
 
+    echo "pulseaudio fixup to re-enable staging patches"
+    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
+
+    echo "manual revert of d8be85863fedf6982944d06ebd1ce5904cb3d4e1 for more audio fixing"
+    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -419,6 +430,8 @@
     echo "hotfix for beam ng right click camera being broken with fshack"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-beam_ng_fshack_fix.patch
 
+    # keep this in place, proton and wine tend to bounce back and forth and proton uses a different URL.
+    # We can always update the patch to match the version and sha256sum even if they are the same version
     echo "hotfix to update mono version"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
 
