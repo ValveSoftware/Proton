@@ -1444,6 +1444,9 @@ class Session:
 
         commandstring = str(sys.argv[2:] + self.cmdlineappend)
 
+        if 'uplay_steam_mode' in commandstring:
+            self.env["WINEFSYNC"] = "0"
+
         # use a string check instead of single string in case we need to check for more in the future
         check_args = [
             'iscriptevaluator.exe' in commandstring,
