@@ -818,10 +818,7 @@ VKD3D_CONFIGURE_ARGS = \
   --without-ncurses \
 
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
-VKD3D_LDFLAGS32 = -L$(WINE_OBJ32)/dlls/vulkan-1/
-VKD3D_LDFLAGS64 = -L$(WINE_OBJ64)/dlls/vulkan-1/
-
-VKD3D_DEPENDS = wine vulkan-loader vulkan-headers spirv-headers
+VKD3D_DEPENDS = vulkan-loader vulkan-headers spirv-headers
 
 $(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
 $(eval $(call rules-autoconf,vkd3d,32,CROSS))
