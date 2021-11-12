@@ -48,7 +48,7 @@ void *cppISteamClient_SteamClient020_GetISteamGameServer(void *linux_side, HStea
 
 void cppISteamClient_SteamClient020_SetLocalIPBinding(void *linux_side, const SteamIPAddress_t * unIP, uint16 usPort)
 {
-    ((ISteamClient*)linux_side)->SetLocalIPBinding((const SteamIPAddress_t *)unIP, (uint16)usPort);
+    ((ISteamClient*)linux_side)->SetLocalIPBinding(*unIP, (uint16)usPort);
 }
 
 void *cppISteamClient_SteamClient020_GetISteamFriends(void *linux_side, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)

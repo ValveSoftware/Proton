@@ -19,27 +19,27 @@ ESteamNetworkingAvailability cppISteamNetworkingUtils_SteamNetworkingUtils003_Ge
 
 float cppISteamNetworkingUtils_SteamNetworkingUtils003_GetLocalPingLocation(void *linux_side, SteamNetworkPingLocation_t * result)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->GetLocalPingLocation((SteamNetworkPingLocation_t *)result);
+    return ((ISteamNetworkingUtils*)linux_side)->GetLocalPingLocation(*result);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils003_EstimatePingTimeBetweenTwoLocations(void *linux_side, const SteamNetworkPingLocation_t * location1, const SteamNetworkPingLocation_t * location2)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeBetweenTwoLocations((const SteamNetworkPingLocation_t *)location1, (const SteamNetworkPingLocation_t *)location2);
+    return ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeBetweenTwoLocations(*location1, *location2);
 }
 
 int cppISteamNetworkingUtils_SteamNetworkingUtils003_EstimatePingTimeFromLocalHost(void *linux_side, const SteamNetworkPingLocation_t * remoteLocation)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeFromLocalHost((const SteamNetworkPingLocation_t *)remoteLocation);
+    return ((ISteamNetworkingUtils*)linux_side)->EstimatePingTimeFromLocalHost(*remoteLocation);
 }
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils003_ConvertPingLocationToString(void *linux_side, const SteamNetworkPingLocation_t * location, char * pszBuf, int cchBufSize)
 {
-    ((ISteamNetworkingUtils*)linux_side)->ConvertPingLocationToString((const SteamNetworkPingLocation_t *)location, (char *)pszBuf, (int)cchBufSize);
+    ((ISteamNetworkingUtils*)linux_side)->ConvertPingLocationToString(*location, (char *)pszBuf, (int)cchBufSize);
 }
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils003_ParsePingLocationString(void *linux_side, const char * pszString, SteamNetworkPingLocation_t * result)
 {
-    return ((ISteamNetworkingUtils*)linux_side)->ParsePingLocationString((const char *)pszString, (SteamNetworkPingLocation_t *)result);
+    return ((ISteamNetworkingUtils*)linux_side)->ParsePingLocationString((const char *)pszString, *result);
 }
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils003_CheckPingDataUpToDate(void *linux_side, float flMaxAgeSeconds)
@@ -95,7 +95,7 @@ ESteamNetworkingConfigValue cppISteamNetworkingUtils_SteamNetworkingUtils003_Get
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_ToString(void *linux_side, const SteamNetworkingIPAddr * addr, char * buf, size_t cbBuf, bool bWithPort)
 {
-    ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIPAddr_ToString((const SteamNetworkingIPAddr *)addr, (char *)buf, (size_t)cbBuf, (bool)bWithPort);
+    ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIPAddr_ToString(*addr, (char *)buf, (size_t)cbBuf, (bool)bWithPort);
 }
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_ParseString(void *linux_side, SteamNetworkingIPAddr * pAddr, const char * pszStr)
@@ -105,7 +105,7 @@ bool cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_Pars
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString(void *linux_side, const SteamNetworkingIdentity * identity, char * buf, size_t cbBuf)
 {
-    ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIdentity_ToString((const SteamNetworkingIdentity *)identity, (char *)buf, (size_t)cbBuf);
+    ((ISteamNetworkingUtils*)linux_side)->SteamNetworkingIdentity_ToString(*identity, (char *)buf, (size_t)cbBuf);
 }
 
 bool cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString(void *linux_side, SteamNetworkingIdentity * pIdentity, const char * pszStr)
