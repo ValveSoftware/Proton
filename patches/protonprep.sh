@@ -285,6 +285,7 @@
     patch -Np1 < ../patches/proton/58-proton-13_atiadlxx_builtin_for_gotg.patch
     patch -Np1 < ../patches/proton/60-proton-14-msedgewebview-registry.patch
     patch -Np1 < ../patches/proton/61-proton-15-FH5-amd_ags_registry.patch
+    patch -Np1 < ../patches/proton/62-proton-16-Age-of-Empires-IV-registry.patch
 
 
     echo "valve rdr2 fixes"
