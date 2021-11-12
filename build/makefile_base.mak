@@ -801,17 +801,6 @@ VKD3D_CONFIGURE_ARGS = \
   --disable-tests \
   --disable-demos \
   --without-ncurses \
-  WIDL=$(WINE_OBJ64)/tools/widl/widl
-
-VKD3D_CONFIGURE_ARGS32 = \
-  --host=i686-w64-mingw32 \
-  CC="$(CCACHE_BIN) i686-w64-mingw32-gcc" \
-  LD="i686-w64-mingw32-ld" \
-
-VKD3D_CONFIGURE_ARGS64 = \
-  --host=x86_64-w64-mingw32 \
-  CC="$(CCACHE_BIN) x86_64-w64-mingw32-gcc" \
-  LD="x86_64-w64-mingw32-ld" \
 
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
 VKD3D_LDFLAGS32 = -L$(WINE_OBJ32)/dlls/vulkan-1/
@@ -820,8 +809,8 @@ VKD3D_LDFLAGS64 = -L$(WINE_OBJ64)/dlls/vulkan-1/
 VKD3D_DEPENDS = wine vulkan-headers spirv-headers
 
 $(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
-$(eval $(call rules-autoconf,vkd3d,32))
-$(eval $(call rules-autoconf,vkd3d,64))
+$(eval $(call rules-autoconf,vkd3d,32,CROSS))
+$(eval $(call rules-autoconf,vkd3d,64,CROSS))
 
 $(OBJ)/.vkd3d-post-build64:
 	mkdir -p $(DST_DIR)/lib64/vkd3d/

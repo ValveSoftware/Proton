@@ -2,9 +2,10 @@
 #   $(1): lowercase package name
 #   $(2): uppercase package name
 #   $(3): 32/64, build type
+#   $(4): CROSS/<empty>, cross compile
 #
 define create-rules-autoconf
-$(call create-rules-common,$(1),$(2),$(3))
+$(call create-rules-common,$(1),$(2),$(3),$(4))
 
 ifeq ($(CONTAINER),1)
 $$(OBJ)/.$(1)-pre-configure: $$($(2)_SRC)/configure.ac
@@ -20,6 +21,7 @@ $$(OBJ)/.$(1)-configure$(3): $$(OBJ)/.$(1)-pre-configure
 	$$($(2)_SRC)/configure $(--quiet?) -C \
 	    --prefix="$$($(2)_DST$(3))" \
 	    --libdir="$$($(2)_DST$(3))/lib$(subst 32,,$(3))" \
+	    --host="$$(TARGET_$(4)$(3))" \
 	    $$($(2)_ENV$(3)) \
 	    $$($(2)_CONFIGURE_ARGS) \
 	    $$($(2)_CONFIGURE_ARGS$(3))
@@ -36,4 +38,4 @@ $$(OBJ)/.$(1)-build$(3):
 endif
 endef
 
-rules-autoconf = $(call create-rules-autoconf,$(1),$(call toupper,$(1)),$(2))
+rules-autoconf = $(call create-rules-autoconf,$(1),$(call toupper,$(1)),$(2),$(3))
