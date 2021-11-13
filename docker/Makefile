@@ -18,7 +18,7 @@ RUST_VERSION = 1.50.0
 SOURCES_URLBASE = https://repo.steampowered.com/proton-sdk
 BINUTILS_URLBASE = $(SOURCES_URLBASE)
 GCC_URLBASE = $(SOURCES_URLBASE)
-MINGW_URLBASE = https://www.gloriouseggroll.tv/proton-sdk
+MINGW_URLBASE = $(SOURCES_URLBASE)
 RUST_URLBASE = $(SOURCES_URLBASE)
 
 BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.xz
