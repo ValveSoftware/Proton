@@ -80,13 +80,11 @@
     echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
 
-    # this breaks prefix creation
-    git revert --no-commit e5d37832ee66d011ba572a9b571e9fb44a7b2b4d
-
-    # this breaks mouse input in R6S and Borderlands
-    git revert --no-commit 53fcfe3834da3c43838cd26bdeb4fdb335542627
-
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit 747905c674d521b61923a6cff1d630c85a74d065
+    git revert --no-commit f3624e2d642c4f5c1042d24a70273db4437fcef9
+    git revert --no-commit 769057b9b281eaaba7ee438dedb7f922b0903472
+    git revert --no-commit 639c04a5b4e1ffd1d8328f60af998185a04d0c50
     git revert --no-commit 54f825d237c1dcb0774fd3e3f4cfafb7c243aab5
     git revert --no-commit cad38401bf091917396b24ad9c92091760cc696f
     git revert --no-commit 894e0712459ec2d48b1298724776134d2a966f66
@@ -317,7 +315,8 @@
     patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
 
     echo "proton QPC performance patch"
-    patch -Np1 < ../patches/proton/49-proton_QPC.patch
+#    patch -Np1 < ../patches/proton/49-proton_QPC.patch
+    patch -Np1 < ../patches/proton/49-proton_QPC-update-replace.patch
 
     echo "proton LFH performance patch"
     patch -Np1 < ../patches/proton/50-proton_LFH.patch
@@ -446,6 +445,9 @@
     # https://bugs.winehq.org/show_bug.cgi?id=52017
     echo "fix for broken file browser"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-file_browser_fix.patch
+
+    echo "fix for prefix creation breakage caused by e5d3783"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-e5d3783-refression-fix.patch
 
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
