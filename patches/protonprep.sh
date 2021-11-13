@@ -465,7 +465,5 @@
 #    patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio.patch
 #    patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio_pulse.patch
 
-    patch -Np1 < ../patches/wine-hotfixes/pending/21750.patch
-
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
