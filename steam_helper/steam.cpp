@@ -1376,8 +1376,6 @@ int main(int argc, char *argv[])
 
         SteamAPI_Shutdown();
 
-        NtSetInformationProcess( GetCurrentProcess(), (PROCESS_INFORMATION_CLASS)1000 /* ProcessWineMakeProcessSystem */,
-                                 &wait_handle, sizeof(HANDLE *) );
         game_process = TRUE;
     }
 
@@ -1397,13 +1395,16 @@ int main(int argc, char *argv[])
             if (child == INVALID_HANDLE_VALUE)
                 return 1;
 
-            if (wait_handle == INVALID_HANDLE_VALUE)
-                wait_handle = child;
+            wait_handle = child;
         }
 
         if (game_process)
             CreateThread(NULL, 0, steam_drm_thread, child, 0, NULL);
     }
+
+    if (game_process)
+        NtSetInformationProcess( GetCurrentProcess(), (PROCESS_INFORMATION_CLASS)1000 /* ProcessWineMakeProcessSystem */,
+                                 &wait_handle, sizeof(HANDLE *) );
 
     if(wait_handle != INVALID_HANDLE_VALUE)
     {
