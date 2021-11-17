@@ -15,6 +15,9 @@ user_settings = {
     #vkd3d debug logging
     "VKD3D_DEBUG": "warn",
 
+    #vkd3d-shader debug logging
+    "VKD3D_SHADER_DEBUG": "fixme",
+
     #wine-mono debug logging (Wine's .NET replacement)
     "WINE_MONO_TRACE": "E:System.NotImplementedException",
     #"MONO_LOG_LEVEL": "info",
