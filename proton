@@ -1084,6 +1084,7 @@ class Session:
             self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
             self.env.setdefault("VKD3D_DEBUG", "warn")
+            self.env.setdefault("VKD3D_SHADER_DEBUG", "fixme")
             self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
 
             if self.env["PROTON_LOG"] != "1":
@@ -1093,6 +1094,7 @@ class Session:
         self.env.setdefault("WINEDEBUG", "-all")
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
+        self.env.setdefault("VKD3D_SHADER_DEBUG", "none")
 
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
