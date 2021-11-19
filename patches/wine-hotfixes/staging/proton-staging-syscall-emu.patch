@@ -8,11 +8,10 @@ diff --git a/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-e
 index aa3df4a..5251820 100644
 --- a/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
 +++ b/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
-@@ -1,13 +1,27 @@
+@@ -1,13 +1,14 @@
  Subject: [PATCH] ntdll: Support x86_64 syscall emulation.
- 
+
  ---
-+ configure                       |   1 +
   configure.ac                    |   1 +
 - dlls/ntdll/unix/signal_x86_64.c | 123 ++++++++++++++++++++++++++++++++
 + dlls/ntdll/unix/signal_x86_64.c | 118 ++++++++++++++++++++++++++++++++
@@ -20,40 +19,23 @@ index aa3df4a..5251820 100644
   tools/winebuild/import.c        |   3 +-
 - 3 files changed, 125 insertions(+), 2 deletions(-)
 + 5 files changed, 125 insertions(+), 1 deletion(-)
- 
-+diff --git a/configure b/configure
-+index fda1b04604f..976bc529e7c 100755
-+--- a/configure
-++++ b/configure
-+@@ -7465,6 +7465,7 @@ for ac_header in \
-+ 	linux/joystick.h \
-+ 	linux/major.h \
-+ 	linux/param.h \
-++	linux/seccomp.h \
-+ 	linux/serial.h \
-+ 	linux/types.h \
-+ 	linux/ucdrom.h \
+
  diff --git a/configure.ac b/configure.ac
 -index 9af23da03e6..058fea5941d 100644
 +index 6202d68ee45..bcc37745576 100644
  --- a/configure.ac
  +++ b/configure.ac
  @@ -455,6 +455,7 @@ AC_CHECK_HEADERS(\
-@@ -47,13 +61,14 @@ index 8d3353e959d..a8a142c2ab1 100644
-  #define NONAMELESSUNION
-  #define NONAMELESSSTRUCT
-  #include "ntstatus.h"
--@@ -2422,6 +2431,118 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
-+@@ -2344,6 +2352,119 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
-      return 0;
-  }
-  
+@@ -61,9 +61,9 @@ index 4600d079536..f028a855147 100644
  +#ifdef HAVE_SECCOMP
  +static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
  +{
 ++    ULONG64 *dispatcher_address = (ULONG64 *)((char *)user_shared_data + page_size);
  +    ucontext_t *ctx = sigcontext;
  +    void ***rsp;
+-+
+ +    TRACE("SIGSYS, rax %#llx, rip %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX],
+ +            ctx->uc_mcontext.gregs[REG_RIP]);
  +
 @@ -64,7 +79,7 @@ index 8d3353e959d..a8a142c2ab1 100644
  +    *rsp -= 1;
@@ -65,7 +47,7 @@ index aa3df4a..5251820 100644
  +#endif
  +
 @@ -162,7 +177,7 @@ index 8d3353e959d..a8a142c2ab1 100644
-  
+
   /***********************************************************************
    *           handle_interrupt
 -@@ -3000,6 +3121,7 @@ void signal_init_process(void)
@@ -84,13 +66,13 @@ index aa3df4a..5251820 100644
 +@@ -450,6 +450,9 @@
 + /* Define to 1 if you have the <linux/rtnetlink.h> header file. */
 + #undef HAVE_LINUX_RTNETLINK_H
-+ 
++
 ++/* Define to 1 if you have the <linux/seccomp.h> header file. */
 ++#undef HAVE_LINUX_SECCOMP_H
 ++
 + /* Define to 1 if you have the <linux/serial.h> header file. */
 + #undef HAVE_LINUX_SERIAL_H
-+ 
++
  diff --git a/tools/winebuild/import.c b/tools/winebuild/import.c
 -index 104397716f1..5f62210f486 100644
 +index 720cf0589fd..9a7537451ae 100644
