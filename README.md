@@ -1,7 +1,10 @@
 # proton-ge-custom
 # Please note, this is a custom build of proton, and is -not- affiliated with Valve's proton. 
+# Please also note I do not provide the flatpak of proton-GE, and I do not provide the AUR version of proton-GE. I will not assist with those.
+# The only version of proton-GE that I provide and will assist with builds of is the one provided within this repository, using the vagrant build system documented here.
+# I cannot validate the accuracy or functionality of other builds that have not been built using the vagrant build system included here.
 
-# If you have an issue that happens with this proton that does -not- happen on Valve's proton, please DO NOT open a bug report on Valve's bug tracker. 
+# If you have an issue that happens with my proton-GE build, provided FROM this repository, that does -not- happen on Valve's proton, please DO NOT open a bug report on Valve's bug tracker.
 
 # Instead, contact me on Discord about the issue:
 
