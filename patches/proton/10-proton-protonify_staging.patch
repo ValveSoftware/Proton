@@ -5706,3 +5706,261 @@ index 01500d93d91..173763d0eb1 100644
        free(trampoline);
        msvcrt_set_errno(GetLastError());
        return 0;
+From 5951f295e18bae30679c826dfd3a5f074d4f2de6 Mon Sep 17 00:00:00 2001
+From: Nick Fox <nick@foxsec.net>
+Date: Fri, 29 Oct 2021 03:17:03 +0000
+Subject: [PATCH] ntdll: fix LdrGetDllPath with LOAD_WITH_ALTERED_SEARCH_PATH
+
+Windows adds the executable directory to the path when LdrGetDllPath
+is called with LOAD_WITH_ALTERED_SEARCH_PATH and a relative module name,
+but only when the module name does not include directories.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=26350
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51821
+Signed-off-by: Nick Fox <nick@foxsec.net>
+
+Pulled from the mailing list, dropped the test changes for Proton.
+
+Signed-off-by: Arkadiusz Hiler <ahiler@codeweavers.com>
+
+CW-Bug-Id: #19664
+---
+ dlls/ntdll/loader.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 85549caedd7..95b32a8b69d 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -4516,7 +4516,8 @@ NTSTATUS WINAPI LdrGetDllPath( PCWSTR module, ULONG flags, PWSTR *path, PWSTR *u
+     else
+     {
+         const WCHAR *dlldir = dll_directory.Length ? dll_directory.Buffer : NULL;
+-        module = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
++        if (!wcschr( module, L'\\' ))
++            module = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
+         status = get_dll_load_path( module, dlldir, dll_safe_mode, path );
+     }
+
+From: Yusuf Khan <yusisamerican@gmail.com>
+Subject: [PATCH] add xinputuap.dll(fixed)
+Message-Id: <CAJoG2+9LfzzX11n784pcoOsu9B0zO4_obeQVz+EzrtQiv+cHLg@mail.gmail.com>
+Date: Tue, 2 Nov 2021 18:20:25 -0700
+
+From c1a0af569a63d97a0298b8846f25ba79e55b213c Mon Sep 17 00:00:00 2001
+From: Yusuf Khan <yusisamerican@gmail.com>
+Date: Tue, 2 Nov 2021 18:16:56 -0700
+Subject: [PATCH] xinput: Add xinputuap.dll
+
+On certain application regarding controllers, including this
+dll will allow the applications to boot.
+
+Note: in the version.rc file I do not know if I should
+credit myself.
+
+Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+---
+v2:modify configure.ac
+v3:not include 6.19 -> 6.20 upgrade
+ configure                     |  2 ++
+ configure.ac                  |  1 +
+ dlls/xinputuap/Makefile.in    |  8 ++++++++
+ dlls/xinputuap/version.rc     | 27 +++++++++++++++++++++++++++
+ dlls/xinputuap/xinputuap.spec |  1 +
+ 5 files changed, 39 insertions(+)
+ create mode 100644 dlls/xinputuap/Makefile.in
+ create mode 100644 dlls/xinputuap/version.rc
+ create mode 100644 dlls/xinputuap/xinputuap.spec
+
+diff --git a/configure b/configure
+index 389b83e931e..eb5602481cc 100755
+--- a/configure
++++ b/configure
+@@ -1769,6 +1769,7 @@ enable_xinput1_2
+ enable_xinput1_3
+ enable_xinput1_4
+ enable_xinput9_1_0
++enable_xinputuap
+ enable_xmllite
+ enable_xolehlp
+ enable_xpsprint
+@@ -19894,6 +19895,7 @@ wine_fn_config_makefile dlls/xinput1_3 enable_xinput1_3
+ wine_fn_config_makefile dlls/xinput1_3/tests enable_tests
+ wine_fn_config_makefile dlls/xinput1_4 enable_xinput1_4
+ wine_fn_config_makefile dlls/xinput9_1_0 enable_xinput9_1_0
++wine_fn_config_makefile dlls/xinputuap enable_xinputuap
+ wine_fn_config_makefile dlls/xmllite enable_xmllite
+ wine_fn_config_makefile dlls/xmllite/tests enable_tests
+ wine_fn_config_makefile dlls/xolehlp enable_xolehlp
+diff --git a/configure.ac b/configure.ac
+index 0dbf7365714..a83ec7526e1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3605,6 +3605,7 @@ WINE_CONFIG_MAKEFILE(dlls/xinput1_3)
+ WINE_CONFIG_MAKEFILE(dlls/xinput1_3/tests)
+ WINE_CONFIG_MAKEFILE(dlls/xinput1_4)
+ WINE_CONFIG_MAKEFILE(dlls/xinput9_1_0)
++WINE_CONFIG_MAKEFILE(dlls/xinputuap)
+ WINE_CONFIG_MAKEFILE(dlls/xmllite)
+ WINE_CONFIG_MAKEFILE(dlls/xmllite/tests)
+ WINE_CONFIG_MAKEFILE(dlls/xolehlp)
+diff --git a/dlls/xinputuap/Makefile.in b/dlls/xinputuap/Makefile.in
+new file mode 100644
+index 00000000000..5d311fe7c31
+--- /dev/null
++++ b/dlls/xinputuap/Makefile.in
+@@ -0,0 +1,8 @@
++MODULE    = xinputuap.dll
++IMPORTS   = hid setupapi advapi32 user32
++PARENTSRC = ../xinput1_3
++
++C_SRCS = \
++	main.c
++
++RC_SRCS = version.rc
+diff --git a/dlls/xinputuap/version.rc b/dlls/xinputuap/version.rc
+new file mode 100644
+index 00000000000..f16ae7b6880
+--- /dev/null
++++ b/dlls/xinputuap/version.rc
+@@ -0,0 +1,27 @@
++/*
++ * The Wine project - Xinput Joystick Library
++ * Copyright 2021 Yusuf Khan
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#define WINE_FILEDESCRIPTION_STR "Wine Common Controller API"
++#define WINE_FILENAME_STR "xinputuap.dll"
++#define WINE_FILEVERSION 10,0,14393,0000
++#define WINE_FILEVERSION_STR "10.0.14393.0000"
++#define WINE_PRODUCTVERSION 10,0,14393,0000
++#define WINE_PRODUCTVERSION_STR "10.0"
++
++#include "wine/wine_common_ver.rc"
+diff --git a/dlls/xinputuap/xinputuap.spec b/dlls/xinputuap/xinputuap.spec
+new file mode 100644
+index 00000000000..1f2ae5bc251
+--- /dev/null
++++ b/dlls/xinputuap/xinputuap.spec
+@@ -0,0 +1 @@
++@ stdcall XInputGetState(long ptr)
+
+--
+2.31.1
+
+From 952e369a305343d2c83072d55dec9e0618b77485 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 18 Nov 2021 18:52:51 +0300
+Subject: [PATCH] kernelbase: Add stub for PrefetchVirtualMemory().
+
+CW-Bug-Id: #19649
+
+For Halo Infinite.
+---
+ .../api-ms-win-core-memory-l1-1-1.spec                      | 2 +-
+ .../api-ms-win-core-memory-l1-1-2.spec                      | 2 +-
+ dlls/kernel32/kernel32.spec                                 | 1 +
+ dlls/kernelbase/kernelbase.spec                             | 2 +-
+ dlls/kernelbase/memory.c                                    | 6 ++++++
+ include/winnt.h                                             | 6 ++++++
+ 6 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/api-ms-win-core-memory-l1-1-1/api-ms-win-core-memory-l1-1-1.spec b/dlls/api-ms-win-core-memory-l1-1-1/api-ms-win-core-memory-l1-1-1.spec
+index 3d5dea93aa5..9c1edb2e761 100644
+--- a/dlls/api-ms-win-core-memory-l1-1-1/api-ms-win-core-memory-l1-1-1.spec
++++ b/dlls/api-ms-win-core-memory-l1-1-1/api-ms-win-core-memory-l1-1-1.spec
+@@ -11,7 +11,7 @@
+ @ stdcall MapViewOfFileEx(long long long long long ptr) kernel32.MapViewOfFileEx
+ @ stub MapViewOfFileFromApp
+ @ stdcall OpenFileMappingW(long long wstr) kernel32.OpenFileMappingW
+-@ stub PrefetchVirtualMemory
++@ stdcall PrefetchVirtualMemory(ptr ptr ptr long) kernel32.PrefetchVirtualMemory
+ @ stdcall QueryMemoryResourceNotification(ptr ptr) kernel32.QueryMemoryResourceNotification
+ @ stdcall ReadProcessMemory(long ptr ptr long ptr) kernel32.ReadProcessMemory
+ @ stdcall ResetWriteWatch(ptr long) kernel32.ResetWriteWatch
+diff --git a/dlls/api-ms-win-core-memory-l1-1-2/api-ms-win-core-memory-l1-1-2.spec b/dlls/api-ms-win-core-memory-l1-1-2/api-ms-win-core-memory-l1-1-2.spec
+index cb305f228ab..735c6ee8b54 100644
+--- a/dlls/api-ms-win-core-memory-l1-1-2/api-ms-win-core-memory-l1-1-2.spec
++++ b/dlls/api-ms-win-core-memory-l1-1-2/api-ms-win-core-memory-l1-1-2.spec
+@@ -16,7 +16,7 @@
+ @ stdcall MapViewOfFileEx(long long long long long ptr) kernel32.MapViewOfFileEx
+ @ stub MapViewOfFileFromApp
+ @ stdcall OpenFileMappingW(long long wstr) kernel32.OpenFileMappingW
+-@ stub PrefetchVirtualMemory
++@ stdcall PrefetchVirtualMemory(ptr ptr ptr long) kernel32.PrefetchVirtualMemory
+ @ stdcall QueryMemoryResourceNotification(ptr ptr) kernel32.QueryMemoryResourceNotification
+ @ stdcall ReadProcessMemory(long ptr ptr long ptr) kernel32.ReadProcessMemory
+ @ stub RegisterBadMemoryNotification
+diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
+index 6073af77833..d837bdc83d2 100644
+--- a/dlls/kernel32/kernel32.spec
++++ b/dlls/kernel32/kernel32.spec
+@@ -1160,6 +1160,7 @@
+ @ stdcall PowerClearRequest(long long)
+ @ stdcall PowerCreateRequest(ptr)
+ @ stdcall PowerSetRequest(long long)
++@ stdcall -import PrefetchVirtualMemory(ptr ptr ptr long)
+ @ stdcall PrepareTape(ptr long long)
+ @ stub PrivCopyFileExW
+ @ stub PrivMoveFileIdentityW
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index 2123c961b72..8543aed835c 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -1164,7 +1164,7 @@
+ @ stdcall PerfStopProvider(long)
+ # @ stub PoolPerAppKeyStateInternal
+ @ stdcall PostQueuedCompletionStatus(long long ptr ptr)
+-# @ stub PrefetchVirtualMemory
++@ stdcall PrefetchVirtualMemory(ptr ptr ptr long)
+ @ stub PrivCopyFileExW
+ @ stdcall PrivilegeCheck(ptr ptr ptr)
+ @ stdcall PrivilegedServiceAuditAlarmW(wstr wstr long ptr long)
+diff --git a/dlls/kernelbase/memory.c b/dlls/kernelbase/memory.c
+index ec70c3267b8..489321821c8 100644
+--- a/dlls/kernelbase/memory.c
++++ b/dlls/kernelbase/memory.c
+@@ -335,6 +335,12 @@ LPVOID WINAPI DECLSPEC_HOTPATCH VirtualAllocFromApp( void *addr, SIZE_T size,
+     return ret;
+ }
+
++BOOL WINAPI PrefetchVirtualMemory( HANDLE process, ULONG_PTR count, WIN32_MEMORY_RANGE_ENTRY *addresses, ULONG flags )
++{
++    FIXME( "process %p, count %p, addresses %p, flags %#x stub.\n", process, (void *)count, addresses, flags );
++
++    return TRUE;
++}
+
+ /***********************************************************************
+  *             VirtualFree   (kernelbase.@)
+diff --git a/include/winnt.h b/include/winnt.h
+index 8776aea4bb6..b07199f8332 100644
+--- a/include/winnt.h
++++ b/include/winnt.h
+@@ -772,6 +772,12 @@ typedef struct DECLSPEC_ALIGN(8) MEM_EXTENDED_PARAMETER {
+     } DUMMYUNIONNAME;
+ } MEM_EXTENDED_PARAMETER, *PMEM_EXTENDED_PARAMETER;
+
++typedef struct _WIN32_MEMORY_RANGE_ENTRY
++{
++    PVOID  VirtualAddress;
++    SIZE_T NumberOfBytes;
++} WIN32_MEMORY_RANGE_ENTRY, *PWIN32_MEMORY_RANGE_ENTRY;
++
+ #define	PAGE_NOACCESS		0x01
+ #define	PAGE_READONLY		0x02
+ #define	PAGE_READWRITE		0x04
