@@ -1,0 +1,36 @@
+From: "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Subject: [PATCH] netprofm: set *ret=NULL if no more connections
+Message-Id: <20210123225155.69567-1-alex_y_xu@yahoo.ca>
+Date: Sat, 23 Jan 2021 17:51:55 -0500
+References: <20210123225155.69567-1-alex_y_xu.ref@yahoo.ca>
+
+Qt 5.14+ tries to check network connection suitability when any network
+connection is made. Unfortunately, this is done incorrectly. The return
+value of IEnumNetworkConnections::Next is only checked for failure, not
+for S_FALSE. Instead, !*ret is used to quit the loop.
+
+Apparently, Windows puts NULL in the output in this case. It is possible
+that all of the non-populated slots are actually set to NULL, but Qt
+only uses count=1. To work around the issue, make Wine set NULL too.
+
+Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+---
+ dlls/netprofm/list.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/netprofm/list.c b/dlls/netprofm/list.c
+index f9b9e2e..833236a 100644
+--- a/dlls/netprofm/list.c
++++ b/dlls/netprofm/list.c
+@@ -1013,6 +1013,7 @@ static HRESULT WINAPI connections_enum_Next(
+         i++;
+     }
+     if (fetched) *fetched = i;
++    if (!i) ret[0] = NULL;
+ 
+     return i < count ? S_FALSE : S_OK;
+ }
+
+-- 
+2.30.0
+

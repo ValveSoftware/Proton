@@ -1,0 +1,108 @@
+From: "Gabriel Ivăncescu" <gabrielopcode@gmail.com>
+Subject: [PATCH] wininet: Improve InternetGetConnectedStateExW to handle offline state.
+Message-Id: <2db373c3b53c93c36b129f171e2225706c1b84b3.1575464997.git.gabrielopcode@gmail.com>
+Date: Wed,  4 Dec 2019 15:10:27 +0200
+
+Some applications (e.g. Deus Ex Human Revolution: Director's Cut) use the
+output from this function to determine whether they should connect (for
+DXHR it happens on exit and it hangs retrying, even on Windows, if there's
+an internet connection). This makes it have Windows behavior when there's
+no connection, to help at least in those cases.
+
+Signed-off-by: Gabriel Ivăncescu <gabrielopcode@gmail.com>
+---
+ dlls/wininet/Makefile.in |  2 +-
+ dlls/wininet/internet.c  | 38 +++++++++++++++++++++++++++++++++-----
+ 2 files changed, 34 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/wininet/Makefile.in b/dlls/wininet/Makefile.in
+index 88b70464f5c..be598dac7d4 100644
+--- a/dlls/wininet/Makefile.in
++++ b/dlls/wininet/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = wininet.dll
+ IMPORTLIB = wininet
+-IMPORTS   = $(ZLIB_PE_LIBS) mpr shlwapi shell32 user32 ws2_32 advapi32
++IMPORTS   = $(ZLIB_PE_LIBS) ole32 mpr shlwapi shell32 user32 ws2_32 advapi32
+ EXTRAINCL = $(ZLIB_PE_CFLAGS)
+ DELAYIMPORTS = secur32 crypt32 cryptui dhcpcsvc iphlpapi
+ 
+diff --git a/dlls/wininet/internet.c b/dlls/wininet/internet.c
+index fb02488934d..4df9edff4bc 100644
+--- a/dlls/wininet/internet.c
++++ b/dlls/wininet/internet.c
+@@ -37,8 +37,10 @@
+ #include <assert.h>
+ #include <wchar.h>
+ 
++#define COBJMACROS
+ #include "windef.h"
+ #include "winbase.h"
++#include "initguid.h"
+ #include "winreg.h"
+ #include "winuser.h"
+ #include "wininet.h"
+@@ -51,6 +53,7 @@
+ #include "winternl.h"
+ #include "iphlpapi.h"
+ #include "dhcpcsdk.h"
++#include "netlistmgr.h"
+ 
+ #include "wine/exception.h"
+ 
+@@ -1198,25 +1201,50 @@ BOOL WINAPI InternetGetConnectedState(LPDWORD lpdwStatus, DWORD dwReserved)
+ BOOL WINAPI InternetGetConnectedStateExW(LPDWORD lpdwStatus, LPWSTR lpszConnectionName,
+                                          DWORD dwNameLen, DWORD dwReserved)
+ {
++    NLM_CONNECTIVITY connectivity;
++    INetworkListManager *mgr;
++    VARIANT_BOOL connected;
++    DWORD status;
++
+     TRACE("(%p, %p, %d, 0x%08x)\n", lpdwStatus, lpszConnectionName, dwNameLen, dwReserved);
+ 
+     /* Must be zero */
+     if(dwReserved)
+         return FALSE;
+ 
+-    if (lpdwStatus) {
+-        WARN("always returning LAN connection.\n");
+-        *lpdwStatus = INTERNET_CONNECTION_LAN;
++    CoInitialize(NULL);
++
++    status = INTERNET_CONNECTION_CONFIGURED | INTERNET_CONNECTION_OFFLINE;
++
++    if (CoCreateInstance(&CLSID_NetworkListManager, NULL, CLSCTX_INPROC_SERVER,
++                          &IID_INetworkListManager, (void**)&mgr) == S_OK)
++    {
++        if (SUCCEEDED(INetworkListManager_IsConnectedToInternet(mgr, &connected)) &&
++            connected == VARIANT_TRUE &&
++            SUCCEEDED(INetworkListManager_GetConnectivity(mgr, &connectivity)) &&
++            connectivity != NLM_CONNECTIVITY_DISCONNECTED)
++        {
++            status &= ~INTERNET_CONNECTION_OFFLINE;
++
++            WARN("always returning LAN connection.\n");
++            status |= INTERNET_CONNECTION_LAN;
++        }
++        INetworkListManager_Release(mgr);
+     }
+ 
++    CoUninitialize();
++
++    if (lpdwStatus) *lpdwStatus = status;
++
+     /* When the buffer size is zero LoadStringW fills the buffer with a pointer to
+      * the resource, avoid it as we must not change the buffer in this case */
+     if(lpszConnectionName && dwNameLen) {
+         *lpszConnectionName = '\0';
+-        LoadStringW(WININET_hModule, IDS_LANCONNECTION, lpszConnectionName, dwNameLen);
++        if (status & INTERNET_CONNECTION_LAN)
++            LoadStringW(WININET_hModule, IDS_LANCONNECTION, lpszConnectionName, dwNameLen);
+     }
+ 
+-    return TRUE;
++    return !(status & INTERNET_CONNECTION_OFFLINE);
+ }
+ 
+ 
