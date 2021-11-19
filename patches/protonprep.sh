@@ -437,8 +437,11 @@
     echo "hotfix to update mono version"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
 
-    echo "add missing stub for fh5"
+    echo "add fh5 patches"
     patch -Np1 < ../patches/wine-hotfixes/testing/fh5-uiauto.patch
+
+    echo "add halo infinite patches"
+    patch -Np1 < ../patches/wine-hotfixes/testing/halo-infinite-testing.patch
 
     # https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
     echo "unity crash hotfix"
