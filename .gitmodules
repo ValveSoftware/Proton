@@ -67,6 +67,9 @@
 [submodule "Vulkan-Headers"]
         path = Vulkan-Headers
 	url = https://github.com/KhronosGroup/Vulkan-Headers
+[submodule "Vulkan-Loader"]
+        path = Vulkan-Loader
+        url = https://github.com/KhronosGroup/Vulkan-Loader
 [submodule "vkd3d"]
         path = vkd3d
         url = git://repo.or.cz/vkd3d/zf.git
