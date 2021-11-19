@@ -9,7 +9,7 @@ $(call create-rules-common,$(1),$(2),$(3))
 $(2)_OBJ$(3) := $$($(2)_OBJ$(3))/$(4)
 
 ifeq ($(CONTAINER),1)
-$(OBJ)/.$(1)-configure$(3):
+$$(OBJ)/.$(1)-configure$(3):
 	@echo ":: configuring $(3)bit $(1)..." >&2
 	rsync -arx "$$($(2)_SRC)/" "$$($(2)_OBJ$(3))/"
 	cd "$$($(2)_OBJ$(3))" && env $$($(2)_ENV$(3)) \
@@ -25,7 +25,7 @@ $(OBJ)/.$(1)-configure$(3):
 	sed -re 's@_LDFLAGS=@_LDFLAGS= $$$$(LDFLAGS) @' -i "$$($(2)_OBJ$(3))/Makefile"
 	touch $$@
 
-$(OBJ)/.$(1)-build$(3):
+$$(OBJ)/.$(1)-build$(3):
 	@echo ":: building $(3)bit $(1)..." >&2
 	rsync -arx "$$($(2)_SRC)/" "$$($(2)_OBJ$(3))/"
 	env $$($(2)_ENV$(3)) \

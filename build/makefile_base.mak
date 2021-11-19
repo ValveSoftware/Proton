@@ -59,7 +59,6 @@ include $(SRC)/make/rules-cargo.mk
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
 ifeq ($(ENABLE_CCACHE),1)
-	CCACHE_BIN := ccache
 	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
 	DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR)$(CONTAINER_MOUNT_OPTS) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
 else
@@ -651,8 +650,8 @@ $(eval $(call rules-cmake,jxrlib,64))
 ##
 
 $(eval $(call rules-source,vulkan-headers,$(SRCDIR)/Vulkan-Headers))
-$(eval $(call rules-cmake,vulkan-headers,32))
-$(eval $(call rules-cmake,vulkan-headers,64))
+$(eval $(call rules-cmake,vulkan-headers,32,CROSS))
+$(eval $(call rules-cmake,vulkan-headers,64,CROSS))
 
 
 ##
@@ -660,8 +659,23 @@ $(eval $(call rules-cmake,vulkan-headers,64))
 ##
 
 $(eval $(call rules-source,spirv-headers,$(SRCDIR)/SPIRV-Headers))
-$(eval $(call rules-cmake,spirv-headers,32))
-$(eval $(call rules-cmake,spirv-headers,64))
+$(eval $(call rules-cmake,spirv-headers,32,CROSS))
+$(eval $(call rules-cmake,spirv-headers,64,CROSS))
+
+
+##
+## Vulkan-Loader
+##
+
+VULKAN_LOADER_CMAKE_ARGS = -DUSE_MASM=OFF
+VULKAN_LOADER_CMAKE_ARGS64 = -DVULKAN_HEADERS_INSTALL_DIR=$(VULKAN_HEADERS_DST64)
+VULKAN_LOADER_CMAKE_ARGS32 = -DVULKAN_HEADERS_INSTALL_DIR=$(VULKAN_HEADERS_DST32)
+VULKAN_LOADER_CFLAGS = -DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 # 0x0A00 is _WIN32_WINNT_WIN10
+VULKAN_LOADER_DEPENDS = vulkan-headers spirv-headers
+
+$(eval $(call rules-source,vulkan-loader,$(SRCDIR)/Vulkan-Loader))
+$(eval $(call rules-cmake,vulkan-loader,32,CROSS))
+$(eval $(call rules-cmake,vulkan-loader,64,CROSS))
 
 
 ##
@@ -826,16 +840,12 @@ $(eval $(call rules-meson,xkbcommon,64))
 ## dxvk
 ##
 
-DXVK_MESON_ARGS32 = \
-    --bindir=$(DXVK_DST32)/lib/wine/dxvk \
-    --cross-file=$(DXVK_OBJ32)/build-win32.txt
-DXVK_MESON_ARGS64 = \
-    --bindir=$(DXVK_DST64)/lib64/wine/dxvk \
-    --cross-file=$(DXVK_OBJ64)/build-win64.txt
+DXVK_MESON_ARGS32 = --bindir=$(DXVK_DST32)/lib/wine/dxvk
+DXVK_MESON_ARGS64 = --bindir=$(DXVK_DST64)/lib64/wine/dxvk
 
 $(eval $(call rules-source,dxvk,$(SRCDIR)/dxvk))
-$(eval $(call rules-meson,dxvk,32))
-$(eval $(call rules-meson,dxvk,64))
+$(eval $(call rules-meson,dxvk,32,CROSS))
+$(eval $(call rules-meson,dxvk,64,CROSS))
 
 $(OBJ)/.dxvk-post-build64:
 	mkdir -p "$(DST_DIR)"/lib64/wine/dxvk
@@ -852,16 +862,12 @@ $(OBJ)/.dxvk-post-build32:
 ## dxvk-nvapi
 ##
 
-DXVK_NVAPI_MESON_ARGS32 = \
-    --bindir=$(DXVK_NVAPI_DST32)/lib/wine/nvapi \
-    --cross-file=$(DXVK_NVAPI_OBJ32)/build-win32.txt
-DXVK_NVAPI_MESON_ARGS64 = \
-    --bindir=$(DXVK_NVAPI_DST64)/lib64/wine/nvapi \
-    --cross-file=$(DXVK_NVAPI_OBJ64)/build-win64.txt
+DXVK_NVAPI_MESON_ARGS32 = --bindir=$(DXVK_NVAPI_DST32)/lib/wine/nvapi
+DXVK_NVAPI_MESON_ARGS64 = --bindir=$(DXVK_NVAPI_DST64)/lib64/wine/nvapi
 
 $(eval $(call rules-source,dxvk-nvapi,$(SRCDIR)/dxvk-nvapi))
-$(eval $(call rules-meson,dxvk-nvapi,32))
-$(eval $(call rules-meson,dxvk-nvapi,64))
+$(eval $(call rules-meson,dxvk-nvapi,32,CROSS))
+$(eval $(call rules-meson,dxvk-nvapi,64,CROSS))
 
 $(OBJ)/.dxvk-nvapi-post-build64:
 	mkdir -p "$(DST_DIR)"/lib64/wine/nvapi
@@ -896,27 +902,13 @@ VKD3D_CONFIGURE_ARGS = \
   --disable-tests \
   --disable-demos \
   --without-ncurses \
-  WIDL=$(WINE_OBJ64)/tools/widl/widl
-
-VKD3D_CONFIGURE_ARGS32 = \
-  --host=i686-w64-mingw32 \
-  CC="$(CCACHE_BIN) i686-w64-mingw32-gcc" \
-  LD="i686-w64-mingw32-ld" \
-
-VKD3D_CONFIGURE_ARGS64 = \
-  --host=x86_64-w64-mingw32 \
-  CC="$(CCACHE_BIN) x86_64-w64-mingw32-gcc" \
-  LD="x86_64-w64-mingw32-ld" \
 
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
-VKD3D_LDFLAGS32 = -L$(WINE_OBJ32)/dlls/vulkan-1/
-VKD3D_LDFLAGS64 = -L$(WINE_OBJ64)/dlls/vulkan-1/
-
-VKD3D_DEPENDS = wine vulkan-headers spirv-headers
+VKD3D_DEPENDS = vulkan-loader vulkan-headers spirv-headers
 
 $(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
-$(eval $(call rules-autoconf,vkd3d,32))
-$(eval $(call rules-autoconf,vkd3d,64))
+$(eval $(call rules-autoconf,vkd3d,32,CROSS))
+$(eval $(call rules-autoconf,vkd3d,64,CROSS))
 
 $(OBJ)/.vkd3d-post-build64:
 	mkdir -p $(DST_DIR)/lib64/vkd3d/
@@ -937,16 +929,12 @@ VKD3D_PROTON_SOURCE_ARGS = \
   --exclude vkd3d_version.h.in \
 
 VKD3D_PROTON_MESON_ARGS = -Denable_standalone_d3d12=true
-VKD3D_PROTON_MESON_ARGS32 = \
-    --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton \
-    --cross-file=$(VKD3D_PROTON_OBJ32)/build-win32.txt
-VKD3D_PROTON_MESON_ARGS64 = \
-    --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton \
-    --cross-file=$(VKD3D_PROTON_OBJ64)/build-win64.txt
+VKD3D_PROTON_MESON_ARGS32 = --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton
+VKD3D_PROTON_MESON_ARGS64 = --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton
 
 $(eval $(call rules-source,vkd3d-proton,$(SRCDIR)/vkd3d-proton))
-$(eval $(call rules-meson,vkd3d-proton,32))
-$(eval $(call rules-meson,vkd3d-proton,64))
+$(eval $(call rules-meson,vkd3d-proton,32,CROSS))
+$(eval $(call rules-meson,vkd3d-proton,64,CROSS))
 
 $(OBJ)/.vkd3d-proton-post-source:
 	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/vkd3d-proton describe --always --exclude=* --abbrev=15 --dirty=0)#' \
