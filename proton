@@ -14,6 +14,7 @@ import stat
 import subprocess
 import sys
 import tarfile
+import shlex
 
 from ctypes import CDLL
 from ctypes import POINTER
@@ -1092,7 +1093,7 @@ class Session:
                 self.env["WINEDEBUG"] = "-all"
 
         if "PROTON_REMOTE_DEBUG_CMD" in self.env:
-            self.remote_debug_cmd = self.env.get("PROTON_REMOTE_DEBUG_CMD").split(" ")
+            self.remote_debug_cmd = shlex.split(self.env.get("PROTON_REMOTE_DEBUG_CMD"))
         else:
             self.remote_debug_cmd = None
 
@@ -1248,6 +1249,9 @@ class Session:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
 
         if self.remote_debug_cmd:
+            remote_debug_cmd = self.remote_debug_cmd
+            if not os.path.isabs(remote_debug_cmd[0]):
+                remote_debug_cmd[0] = g_proton.path(remote_debug_cmd[0])
             remote_debug_proc = subprocess.Popen([g_proton.wine_bin] + self.remote_debug_cmd,
                                                  env=self.env, stderr=self.log_file, stdout=self.log_file)
         else:
