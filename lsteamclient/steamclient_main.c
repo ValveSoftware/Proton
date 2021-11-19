@@ -86,7 +86,7 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
     static const char file_prot[] = "file://";
 
     if(!dst || !dst_bytes)
-        return 0;
+        return PATH_MAX - 1;
 
     if(!src || !*src || !api_result){
         *dst = 0;
