@@ -1172,7 +1172,7 @@ class Session:
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
         self.env.setdefault("VKD3D_SHADER_DEBUG", "none")
-        self.env.setdefault["VKD3D_FEATURE_LEVEL"] = "12_0"
+        self.env.setdefault("VKD3D_FEATURE_LEVEL", "12_0")
 
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
