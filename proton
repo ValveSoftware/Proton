@@ -1172,6 +1172,7 @@ class Session:
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
         self.env.setdefault("VKD3D_SHADER_DEBUG", "none")
+        self.env.setdefault["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
@@ -1227,10 +1228,6 @@ class Session:
 
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
-
-        if "vkd3dfl12" in self.compat_config:
-            if not "VKD3D_FEATURE_LEVEL" in self.env:
-                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
