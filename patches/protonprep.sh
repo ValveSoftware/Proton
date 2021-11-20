@@ -54,6 +54,8 @@
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
+    patch -Np1 < ../patches/wine-hotfixes/staging/wined3d-6.22-hotfix.patch
+
     cd ..
 
 ### END PREP SECTION ###
