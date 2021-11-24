@@ -5707,3 +5707,33 @@ index 01500d93d91..173763d0eb1 100644
        msvcrt_set_errno(GetLastError());
        return 0;
 
+From d9d8e9bdb403b553c86b5c1b3d2638c7fca7cd4a Mon Sep 17 00:00:00 2001
+From: Nick Fox <nick@foxsec.net>
+Date: Fri, 29 Oct 2021 03:17:03 +0000
+Subject: [PATCH] ntdll: Fix LdrGetDllPath with LOAD_WITH_ALTERED_SEARCH_PATH
+ without a path.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=26350
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51821
+Signed-off-by: Nick Fox <nick@foxsec.net>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit ef26f7bd5cf36806f7b465dc1942ab6a2e0541b9)
+
+CW-Bug-Id: #19664
+---
+ dlls/ntdll/loader.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 85549caedd7..95b32a8b69d 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -3943,7 +3943,7 @@ NTSTATUS WINAPI LdrGetDllPath( PCWSTR module, ULONG flags, PWSTR *path, PWSTR *u
+     else
+     {
+         const WCHAR *dlldir = dll_directory.Length ? dll_directory.Buffer : NULL;
+-        if (!(flags & LOAD_WITH_ALTERED_SEARCH_PATH))
++        if (!(flags & LOAD_WITH_ALTERED_SEARCH_PATH) || !wcschr( module, L'\\' ))
+             module = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
+         status = get_dll_load_path( module, dlldir, dll_safe_mode, path );
+     }

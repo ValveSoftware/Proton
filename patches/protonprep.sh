@@ -54,8 +54,6 @@
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
-    patch -Np1 < ../patches/wine-hotfixes/staging/wined3d-6.22-hotfix.patch
-
     cd ..
 
 ### END PREP SECTION ###
@@ -183,6 +181,11 @@
     # -W server-Stored_ACLs \
     # -W eventfd_synchronization \
 
+    # Sancreed — 11/21/2021
+    # Heads up, it appears that a bunch of Ubisoft Connect games (3/3 I had installed and could test) will crash
+    # almost immediately on newer Wine Staging/TKG inside pe_load_debug_info function unless the dbghelp-Debug_Symbols staging # patchset is disabled.
+    # -W dbghelp-Debug_Symbols
+
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W winex11-_NET_ACTIVE_WINDOW \
@@ -190,6 +193,7 @@
     -W ntdll-Junction_Points \
     -W server-File_Permissions \
     -W server-Stored_ACLs \
+    -W dbghelp-Debug_Symbols \
     -W dwrite-FontFallback
 
     echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
@@ -218,10 +222,6 @@
 
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
-
-    # https://bugs.winehq.org/show_bug.cgi?id=51821
-    echo "EVE Online - Fixe launcher 19.09"
-    patch -Np1 < ../patches/game-patches/eve-online-launcher.patch
 
     echo "Castlevania Advance fix"
     patch -Np1 < ../patches/game-patches/castlevania-advance-collection.patch
