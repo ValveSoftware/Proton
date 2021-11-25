@@ -156,3 +156,59 @@ index a625f000254..be27b00cfd0 100644
          stream->flip = flip;
          stream->box = videobox;
 
+From 03891654faf9271d81240faf9cd4f471ca5832f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 12 Nov 2021 16:35:52 +0100
+Subject: [PATCH] winegstreamer: Unblock initializing parser on disconnect.
+
+The decoder may be destroyed while the parsed is still initializing and
+we need to notify it, before closing the helper and reader threads, so
+that it terminates as well.
+
+This fixes Biomutant intro videos not playing.
+
+CW-Bug-ID: #18970
+CW-Bug-ID: #19608
+---
+ dlls/winegstreamer/decode_transform.c | 5 ++---
+ dlls/winegstreamer/wg_parser.c        | 4 ++++
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winegstreamer/decode_transform.c b/dlls/winegstreamer/decode_transform.c
+index 64e1c84b2ba..b676249cf52 100644
+--- a/dlls/winegstreamer/decode_transform.c
++++ b/dlls/winegstreamer/decode_transform.c
+@@ -157,11 +157,11 @@ static ULONG WINAPI mf_decoder_Release(IMFTransform *iface)
+             decoder->output_type = NULL;
+         }
+
+-        if (decoder->wg_stream)
+-            unix_funcs->wg_parser_disconnect(decoder->wg_parser);
+-
+         if (decoder->wg_parser)
++        {
++            unix_funcs->wg_parser_disconnect(decoder->wg_parser);
+             unix_funcs->wg_parser_destroy(decoder->wg_parser);
++        }
+
+         DeleteCriticalSection(&decoder->cs);
+         DeleteCriticalSection(&decoder->help_cs);
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index c23500869ce..751282cb8d4 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -2207,9 +2207,13 @@ static void CDECL wg_parser_disconnect(struct wg_parser *parser)
+
+     /* Unblock all of our streams. */
+     pthread_mutex_lock(&parser->mutex);
++    parser->flushing = true;
++    parser->no_more_pads = true;
++    pthread_cond_signal(&parser->init_cond);
+     for (i = 0; i < parser->stream_count; ++i)
+     {
+         parser->streams[i]->flushing = true;
++        pthread_cond_signal(&parser->streams[i]->event_cond);
+         pthread_cond_signal(&parser->streams[i]->event_empty_cond);
+     }
+     pthread_mutex_unlock(&parser->mutex);
