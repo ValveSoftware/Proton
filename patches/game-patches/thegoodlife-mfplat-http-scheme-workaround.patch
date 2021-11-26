@@ -39,9 +39,9 @@ index 519fa23cd23..b4ce5e14a0e 100644
  #include "evr.h"
 +#include "pathcch.h"
 +#include "wininet.h"
- 
- WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
- 
+ /* mfd3d12 guids are not included in mfuuid */
+ #define INITGUID
+ #undef EXTERN_GUID
 @@ -6254,6 +6256,185 @@ static ULONG WINAPI source_resolver_Release(IMFSourceResolver *iface)
      return refcount;
  }

@@ -12,7 +12,7 @@ index 114e663c..b50c06f4 100755
 +++ b/patches/patchinstall.sh
 @@ -1314,9 +1314,6 @@ if test "$enable_winedevice_Default_Drivers" -eq 1; then
  fi
- 
+
  if test "$enable_eventfd_synchronization" -eq 1; then
 -	if test "$enable_ntdll_Junction_Points" -gt 1; then
 -		abort "Patchset ntdll-Junction_Points disabled, but eventfd_synchronization depends on that."
@@ -28,19 +28,6 @@ index 114e663c..b50c06f4 100755
  	enable_server_PeekMessage=1
  	enable_server_Realtime_Priority=1
  	enable_server_Signal_Thread=1
-diff --git a/patches/eventfd_synchronization/0001-configure-Check-for-sys-eventfd.h-ppoll-and-shm_open.patch b/patches/eventfd_synchronization/0001-configure-Check-for-sys-eventfd.h-ppoll-and-shm_open.patch
-index 08568f99..52ea9c0e 100644
---- a/patches/eventfd_synchronization/0001-configure-Check-for-sys-eventfd.h-ppoll-and-shm_open.patch
-+++ b/patches/eventfd_synchronization/0001-configure-Check-for-sys-eventfd.h-ppoll-and-shm_open.patch
-@@ -124,7 +124,7 @@ index 718ab1ca50e..d5f82ad2af4 100644
- +	ppoll \
-  	prctl \
-  	proc_pidinfo \
-- 	renameat \
-+ 	setproctitle \
- @@ -2199,6 +2201,16 @@ case $host_os in
-      ;;
-  esac
 diff --git a/patches/eventfd_synchronization/0046-server-Create-eventfd-descriptors-for-pseudo-fd-obje.patch b/patches/eventfd_synchronization/0046-server-Create-eventfd-descriptors-for-pseudo-fd-obje.patch
 index 18dfad0f..f05ef0bb 100644
 --- a/patches/eventfd_synchronization/0046-server-Create-eventfd-descriptors-for-pseudo-fd-obje.patch
@@ -54,3 +41,18 @@ index 18dfad0f..f05ef0bb 100644
           free( fd->unix_name );
       }
  +
+diff --git a/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch b/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
+index 857362d3..bbe64d3f 100644
+--- a/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
++++ b/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
+@@ -21,8 +21,8 @@ index 199f3e90846..56ca6af4cd9 100644
+ +# include <termios.h>
+ +#endif
+  #include <sys/time.h>
+- #ifdef HAVE_SYS_STATFS_H
+- # include <sys/statfs.h>
++ #include <sys/types.h>
++
+ @@ -1994,6 +1997,32 @@ static BOOL create_port_device( DRIVER_OBJECT *driver, int n, const char *unix_p
+
+      sprintfW( dos_name, dos_name_format, n );

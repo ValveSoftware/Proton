@@ -77,9 +77,6 @@
     git revert --no-commit dedda40e5d7b5a3bcf67eea95145810da283d7d9
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
-#    echo "revert graphics driver breaker"
-#    git revert --no-commit a9b5bb326a1514e2c4185633ab34b22c9bbc9863
-
     echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
 
