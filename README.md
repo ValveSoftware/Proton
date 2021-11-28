@@ -42,8 +42,8 @@ example, if you wish to make changes to Wine, you would apply them to the
 `wine/` directory.
 
 
-Bulding Proton
---------------
+Building Proton
+---------------
 
 Most of Proton builds inside the Proton SDK container with very few
 dependencies on the host side. For convenience we also provide
@@ -54,7 +54,7 @@ The direct container build is recommended for people building Proton on a
 regular basis as it is faster and less resource hungry.
 
 The Vagrant VM is easier to set up but comes with higher overhead, which
-makes it more suitable for an occassional Proton build.
+makes it more suitable for an occasional Proton build.
 
 [vagrant]: https://www.vagrantup.com/
 
@@ -66,7 +66,7 @@ Building with Podman or Docker
 
 You need either a Docker or a Podman setup. We highly recommend [the rootless
 Podman setup][rootless-podman]. Please refer to your distribution's
-docummentation for setup instructions (e.g. Arch [Podman][arch-podman] /
+documentation for setup instructions (e.g. Arch [Podman][arch-podman] /
 [Docker][arch-docker], Debian [Podman][debian-podman] /
 [Docker][debian-docker]).
 
@@ -231,7 +231,7 @@ Install Proton locally
 ----------------------
 
 Steam ships with several versions of Proton, which games will use by default or
-that you can select in Steam Settings's Steam Play page. Steam also supports
+that you can select in Steam Settings' Steam Play page. Steam also supports
 running games with local builds of Proton, which you can install on your
 machine.
 
