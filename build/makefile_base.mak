@@ -184,6 +184,7 @@ CARGO_BUILD_ARG := --release
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 LICENSE := $(SRCDIR)/dist.LICENSE
 OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
+AOM_PATENTS := $(SRCDIR)/aom/PATENTS
 
 GECKO_VER := 2.47.2
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
@@ -257,6 +258,7 @@ DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
 DIST_TOOLMANIFEST := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
 DIST_OFL_LICENSE := $(DST_BASE)/LICENSE.OFL
+DIST_AOM_PATENTS := $(DST_BASE)/PATENTS.AOM
 DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
 DIST_GECKO32 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
 DIST_GECKO64 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
@@ -268,9 +270,11 @@ DIST_WINEOPENXR64 := $(DIST_PREFIX)/drive_c/windows/system32/wineopenxr.dll
 
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
-                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_FONTS)
+                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) \
+                $(DIST_OFL_LICENSE) $(DIST_AOM_PATENTS) $(DIST_FONTS)
 
-DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE)
+DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
+                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AOM_PATENTS)
 REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
@@ -280,6 +284,9 @@ $(DIST_TOOLMANIFEST): $(addprefix $(SRCDIR)/,$(TOOLMANIFEST_VDF_SRC))
 	cp -a $< $@
 
 $(DIST_OFL_LICENSE): $(OFL_LICENSE)
+	cp -a $< $@
+
+$(DIST_AOM_PATENTS): $(AOM_PATENTS)
 	cp -a $< $@
 
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
@@ -490,6 +497,21 @@ GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
 $(eval $(call rules-source,gst_good,$(SRCDIR)/gst-plugins-good))
 $(eval $(call rules-meson,gst_good,32))
 $(eval $(call rules-meson,gst_good,64))
+
+
+##
+## aom
+##
+
+AOM_CMAKE_ARGS = -DENABLE_TESTS=0 -DBUILD_SHARED_LIBS=1
+AOM_CMAKE_ARGS64 = -DAOM_INSTALL_LIB_DIR=lib64
+
+AOM_INCDIR32 = $(AOM_DST32)/include/aom
+AOM_INCDIR64 = $(AOM_DST64)/include/aom
+
+$(eval $(call rules-source,aom,$(SRCDIR)/aom))
+$(eval $(call rules-cmake,aom,32))
+$(eval $(call rules-cmake,aom,64))
 
 
 ##
