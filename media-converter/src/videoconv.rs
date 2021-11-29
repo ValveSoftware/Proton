@@ -111,7 +111,8 @@ static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
 const VIDEOCONV_FOZ_TAG_VIDEODATA: u32 = 0;
 const VIDEOCONV_FOZ_TAG_OGVDATA: u32 = 1;
 const VIDEOCONV_FOZ_TAG_STREAM: u32 = 2;
-const VIDEOCONV_FOZ_NUM_TAGS: usize = 3;
+const VIDEOCONV_FOZ_TAG_MKVDATA: u32 = 3;
+const VIDEOCONV_FOZ_NUM_TAGS: usize = 4;
 
 struct VideoConverterDumpFozdb {
     fozdb: Option<fossilize::StreamArchive>,
@@ -165,7 +166,7 @@ impl VideoConverterDumpFozdb {
                     let mut chunks = Vec::<(u32, u128)>::new();
 
                     for stream_id in fozdb.iter_tag(VIDEOCONV_FOZ_TAG_STREAM).cloned().collect::<Vec<u128>>() {
-                        if read_fozdb.has_entry(VIDEOCONV_FOZ_TAG_OGVDATA, stream_id) {
+                        if read_fozdb.has_entry(VIDEOCONV_FOZ_TAG_MKVDATA, stream_id) {
                             if let Ok(chunks_size) = fozdb.entry_size(VIDEOCONV_FOZ_TAG_STREAM, stream_id) {
                                 let mut buf = vec![0u8; chunks_size].into_boxed_slice();
                                 if fozdb.read_entry(VIDEOCONV_FOZ_TAG_STREAM, stream_id, 0, &mut buf, fossilize::CRCCheck::WithCRC).is_ok() {
@@ -319,7 +320,7 @@ impl VideoConvState {
     /* true if the file is transcoded; false if not */
     fn begin_transcode(&mut self, hash: u128) -> bool {
         if let Some(read_fozdb) = &mut self.read_fozdb {
-            if let Ok(transcoded_size) = read_fozdb.entry_size(VIDEOCONV_FOZ_TAG_OGVDATA, hash) {
+            if let Ok(transcoded_size) = read_fozdb.entry_size(VIDEOCONV_FOZ_TAG_MKVDATA, hash) {
                 self.transcode_hash = Some(hash);
                 self.our_duration = Some(transcoded_size as u64);
                 return true;
@@ -329,7 +330,7 @@ impl VideoConvState {
         gst_log!(CAT, "No transcoded video for {}. Substituting a blank video.", format_hash(hash));
 
         self.transcode_hash = None;
-        self.our_duration = Some(include_bytes!("../blank.ogv").len() as u64);
+        self.our_duration = Some(include_bytes!("../blank.mkv").len() as u64);
 
         false
     }
@@ -338,12 +339,12 @@ impl VideoConvState {
         match self.transcode_hash {
             Some(hash) => {
                 let read_fozdb = self.read_fozdb.as_mut().unwrap();
-                read_fozdb.read_entry(VIDEOCONV_FOZ_TAG_OGVDATA, hash, offs as u64, out, fossilize::CRCCheck::WithoutCRC)
+                read_fozdb.read_entry(VIDEOCONV_FOZ_TAG_MKVDATA, hash, offs as u64, out, fossilize::CRCCheck::WithoutCRC)
                     .map_err(|e| gst_loggable_error!(CAT, "Error reading ogvdata: {:?}", e))
             },
 
             None => {
-                let blank = include_bytes!("../blank.ogv");
+                let blank = include_bytes!("../blank.mkv");
 
                 let to_copy = std::cmp::min(blank.len() - offs, out.len());
 
@@ -434,7 +435,7 @@ impl ObjectSubclass for VideoConv {
             &caps).unwrap();
         klass.add_pad_template(sink_pad_template);
 
-        let caps = gst::Caps::builder("application/ogg").build();
+        let caps = gst::Caps::builder("video/x-matroska").build();
         let src_pad_template = gst::PadTemplate::new(
             "src",
             gst::PadDirection::Src,
@@ -597,7 +598,7 @@ impl VideoConv {
         gst_log!(CAT, obj:pad, "Got an event {:?}", event);
         match event.view() {
             EventView::Caps(_) => {
-                let caps = gst::Caps::builder("application/ogg").build();
+                let caps = gst::Caps::builder("video/x-matroska").build();
                 self.srcpad.push_event(gst::event::Caps::new(&caps))
             }
             _ => pad.event_default(Some(element), event)
