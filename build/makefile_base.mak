@@ -358,7 +358,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist_prefix: wine gst_good
+dist_prefix: wine gst_good gst_bad
 	find $(DST_LIBDIR32)/wine -type f -execdir chmod a-w '{}' '+'
 	find $(DST_LIBDIR64)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
@@ -498,6 +498,31 @@ $(eval $(call rules-source,gst_good,$(SRCDIR)/gst-plugins-good))
 $(eval $(call rules-meson,gst_good,32))
 $(eval $(call rules-meson,gst_good,64))
 
+
+##
+## gst-plugins-bad
+##
+
+GST_BAD_MESON_ARGS := \
+	-Dauto_features=disabled \
+	-Daom=enabled \
+	$(GST_COMMON_MESON_ARGS)
+
+GST_BAD_DEPENDS = gst_orc gstreamer gst_base aom
+
+$(eval $(call rules-source,gst_bad,$(SRCDIR)/gst-plugins-bad))
+$(eval $(call rules-meson,gst_bad,32))
+$(eval $(call rules-meson,gst_bad,64))
+
+$(OBJ)/.gst_bad-post-build32:
+	#remove unwanted gst libs
+	rm $(GST_BAD_DST32)/lib/*.so*
+	touch $@
+
+$(OBJ)/.gst_bad-post-build64:
+	#remove unwanted gst libs
+	rm $(GST_BAD_DST64)/lib64/*.so*
+	touch $@
 
 ##
 ## aom
