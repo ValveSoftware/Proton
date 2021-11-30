@@ -293,6 +293,8 @@ struct VideoConvState {
 
     upstream_duration: Option<u64>,
     our_duration: Option<u64>,
+
+    transcoded_tag: u32,
 }
 
 impl VideoConvState {
@@ -314,6 +316,8 @@ impl VideoConvState {
 
             upstream_duration: None,
             our_duration: None,
+
+            transcoded_tag: VIDEOCONV_FOZ_TAG_MKVDATA,
         })
     }
 
@@ -321,8 +325,17 @@ impl VideoConvState {
     fn begin_transcode(&mut self, hash: u128) -> bool {
         if let Some(read_fozdb) = &mut self.read_fozdb {
             if let Ok(transcoded_size) = read_fozdb.entry_size(VIDEOCONV_FOZ_TAG_MKVDATA, hash) {
+                gst_log!(CAT, "Found an MKV video for hash {}", format_hash(hash));
                 self.transcode_hash = Some(hash);
                 self.our_duration = Some(transcoded_size as u64);
+                self.transcoded_tag = VIDEOCONV_FOZ_TAG_MKVDATA;
+                return true;
+            }
+            if let Ok(transcoded_size) = read_fozdb.entry_size(VIDEOCONV_FOZ_TAG_OGVDATA, hash) {
+                gst_log!(CAT, "Found an OGV video for hash {}", format_hash(hash));
+                self.transcode_hash = Some(hash);
+                self.our_duration = Some(transcoded_size as u64);
+                self.transcoded_tag = VIDEOCONV_FOZ_TAG_OGVDATA;
                 return true;
             }
         }
@@ -339,7 +352,7 @@ impl VideoConvState {
         match self.transcode_hash {
             Some(hash) => {
                 let read_fozdb = self.read_fozdb.as_mut().unwrap();
-                read_fozdb.read_entry(VIDEOCONV_FOZ_TAG_MKVDATA, hash, offs as u64, out, fossilize::CRCCheck::WithoutCRC)
+                read_fozdb.read_entry(self.transcoded_tag, hash, offs as u64, out, fossilize::CRCCheck::WithoutCRC)
                     .map_err(|e| gst_loggable_error!(CAT, "Error reading ogvdata: {:?}", e))
             },
 
@@ -435,7 +448,12 @@ impl ObjectSubclass for VideoConv {
             &caps).unwrap();
         klass.add_pad_template(sink_pad_template);
 
-        let caps = gst::Caps::builder("video/x-matroska").build();
+        let mut caps = gst::Caps::new_empty();
+        {
+            let caps = caps.get_mut().unwrap();
+            caps.append(gst::Caps::builder("video/x-matroska").build());
+            caps.append(gst::Caps::builder("application/ogg").build());
+        }
         let src_pad_template = gst::PadTemplate::new(
             "src",
             gst::PadDirection::Src,
@@ -598,7 +616,34 @@ impl VideoConv {
         gst_log!(CAT, obj:pad, "Got an event {:?}", event);
         match event.view() {
             EventView::Caps(_) => {
-                let caps = gst::Caps::builder("video/x-matroska").build();
+
+                /* push_event, below, can also grab state and cause a deadlock, so make sure it's
+                 * released before calling */
+                let caps = {
+                    let mut state = self.state.lock().unwrap();
+
+                    let mut state = match &mut *state {
+                        Some(s) => s,
+                        None => { gst_error!(CAT, "VideoConv not yet in READY state?"); return false; },
+                    };
+
+                    if !self.sinkpad.activate_mode(gst::PadMode::Pull, true).is_ok() {
+                        gst_error!(CAT, "Failed to activate sinkpad in pull mode");
+                        return false;
+                    }
+
+                    if !self.init_transcode(&mut state).is_ok() {
+                        gst_error!(CAT, "Failed to init transcode");
+                        return false;
+                    }
+
+                    match state.transcoded_tag {
+                        VIDEOCONV_FOZ_TAG_MKVDATA => gst::Caps::builder("video/x-matroska").build(),
+                        VIDEOCONV_FOZ_TAG_OGVDATA => gst::Caps::builder("application/ogg").build(),
+                        _ => { return false; },
+                    }
+                };
+
                 self.srcpad.push_event(gst::event::Caps::new(&caps))
             }
             _ => pad.event_default(Some(element), event)
@@ -717,13 +762,15 @@ impl VideoConv {
         state: &mut VideoConvState
     ) -> Result<(), gst::LoggableError> {
 
-        (*DUMP_FOZDB).lock().unwrap().discard_transcoded();
+        if state.transcode_hash.is_none() {
+            (*DUMP_FOZDB).lock().unwrap().discard_transcoded();
 
-        let hash = self.hash_upstream_data();
+            let hash = self.hash_upstream_data();
 
-        if let Ok(hash) = hash {
-            if !state.begin_transcode(hash) {
-                self.dump_upstream_data(hash).map_err(|_| gst_loggable_error!(CAT, "Dumping file to disk failed"))?;
+            if let Ok(hash) = hash {
+                if !state.begin_transcode(hash) {
+                    self.dump_upstream_data(hash).map_err(|_| gst_loggable_error!(CAT, "Dumping file to disk failed"))?;
+                }
             }
         }
 
