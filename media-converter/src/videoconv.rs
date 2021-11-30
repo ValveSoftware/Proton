@@ -533,10 +533,14 @@ impl VideoConv {
 
         let mut state = self.state.lock().unwrap();
 
-        let state = match &mut *state {
+        let mut state = match &mut *state {
             Some(s) => s,
             None => { return Err(gst::FlowError::Error); }
         };
+
+        if state.upstream_duration.is_none() {
+            self.query_upstream_duration(&mut state);
+        }
 
         let ups_offset = self.duration_ours_to_upstream(&state, offset).unwrap();
         let ups_requested_size = self.duration_ours_to_upstream(&state, requested_size as u64).unwrap() as u32;
