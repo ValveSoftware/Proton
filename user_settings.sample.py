@@ -22,7 +22,8 @@ user_settings = {
     #general purpose media logging
 #    "GST_DEBUG": "4",
     #or, verbose converter logging (may impact playback performance):
-#    "GST_DEBUG": "4,protonaudioconverter:6,protonaudioconverterbin:6,protonvideoconverter:6",
+#    "GST_DEBUG": "4,wine:7,protonaudioconverter:7,protonaudioconverterbin:7,protonvideoconverter:7",
+    "GST_DEBUG_NO_COLOR": "1",
 
     #Enable DXVK's HUD
 #    "DXVK_HUD": "devinfo,fps",
