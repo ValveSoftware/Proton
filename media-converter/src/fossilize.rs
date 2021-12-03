@@ -272,6 +272,11 @@ impl StreamArchive {
                 match res {
                     Ok(p) => {
                         self.write_pos = p;
+                        if tag >= self.seen_blobs.len() &&
+                                self.file.metadata()?.permissions().readonly() {
+                            /* ignore unknown tags for read-only DBs, otherwise panic */
+                            continue;
+                        }
                         self.seen_blobs[tag].insert(hash, payload_entry);
                     },
 
