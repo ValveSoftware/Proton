@@ -197,6 +197,7 @@ impl PayloadEntry {
 
 pub struct StreamArchive {
     file: fs::File,
+    read_only: bool,
 
     seen_blobs: Vec<HashMap<FossilizeHash, PayloadEntry>>,
 
@@ -210,7 +211,7 @@ pub enum CRCCheck {
 
 impl StreamArchive {
 
-    pub fn new<P: AsRef<std::path::Path>>(filename: P, fileopts: &OpenOptions, num_tags: usize) -> Result<Self, Error> {
+    pub fn new<P: AsRef<std::path::Path>>(filename: P, fileopts: &OpenOptions, read_only: bool, num_tags: usize) -> Result<Self, Error> {
 
         let file = fileopts.open(filename)?;
 
@@ -221,6 +222,7 @@ impl StreamArchive {
 
         let mut ret = Self {
             file,
+            read_only,
             seen_blobs,
             write_pos: 0,
         };
@@ -272,6 +274,10 @@ impl StreamArchive {
                 match res {
                     Ok(p) => {
                         self.write_pos = p;
+                        if tag >= self.seen_blobs.len() && self.read_only {
+                            /* ignore unknown tags for read-only DBs, otherwise panic */
+                            continue;
+                        }
                         self.seen_blobs[tag].insert(hash, payload_entry);
                     },
 
