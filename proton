@@ -30,7 +30,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.3-3"
+CURRENT_PREFIX_VERSION="6.3-8"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
