@@ -124,7 +124,7 @@ static DUMP_FOZDB: Lazy<Mutex<Option<fossilize::StreamArchive>>> = Lazy::new(|| 
         return Mutex::new(None);
     }
 
-    match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(true), VIDEOCONV_FOZ_NUM_TAGS) {
+    match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(true), false /* read-only? */, VIDEOCONV_FOZ_NUM_TAGS) {
         Ok(newdb) => Mutex::new(Some(newdb)),
         Err(_) => Mutex::new(None),
     }
@@ -237,7 +237,7 @@ impl VideoConvState {
             gst_loggable_error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
         })?;
 
-        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), VIDEOCONV_FOZ_NUM_TAGS) {
+        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), true /* read-only? */, VIDEOCONV_FOZ_NUM_TAGS) {
             Ok(s) => Some(s),
             Err(_) => None,
         };
