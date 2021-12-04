@@ -139,7 +139,7 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 +            return STATUS_INVALID_PARAMETER;
 +        }
 +        pubkey_len = sizeof(BCRYPT_DH_KEY_BLOB) + bitlen / 8 * 3;
-+        if (!(key->u.a.privkey = heap_alloc( bitlen / 8 )))
++        if (!(key->u.a.privkey = malloc( bitlen / 8 )))
 +        {
 +            free( key );
 +            return STATUS_NO_MEMORY;
@@ -147,7 +147,7 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 +    }
      key->u.a.pubkey_len = pubkey_len;
 
-     if (!(key->u.a.pubkey = heap_alloc( pubkey_len )))
+     if (!(key->u.a.pubkey = malloc( pubkey_len )))
 @@ -1063,6 +1109,7 @@ static NTSTATUS key_import( BCRYPT_ALG_HANDLE algorithm, const WCHAR *type, BCRY
  static NTSTATUS key_export( struct key *key, const WCHAR *type, UCHAR *output, ULONG output_len, ULONG *size )
  {
@@ -258,7 +258,7 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 
 +        if (key_orig->alg_id == ALG_ID_DH && key_orig->u.a.privkey)
 +        {
-+            if (!(buffer = heap_alloc( key_orig->u.a.bitlen / 8 ))) return STATUS_NO_MEMORY;
++            if (!(buffer = malloc( key_orig->u.a.bitlen / 8 ))) return STATUS_NO_MEMORY;
 +            memcpy( buffer, key_orig->u.a.privkey, key_orig->u.a.bitlen / 8 );
 +            key_copy->u.a.privkey = buffer;
 +        }
@@ -346,7 +346,7 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 
      if (!(secret = calloc( 1, sizeof(*secret) ))) return STATUS_NO_MEMORY;
 -    secret->hdr.magic = MAGIC_SECRET;
-+    if (!(secret->data = heap_alloc( privkey->u.a.bitlen / 8 )))
++    if (!(secret->data = malloc( privkey->u.a.bitlen / 8 )))
 +    {
 +        free( secret );
 +        return STATUS_NO_MEMORY;
@@ -940,7 +940,7 @@ index 48910aafe3c..e1742fa7a01 100644
 +        }
 +        else
 +        {
-+            UCHAR *output = heap_alloc(hash_length);
++            UCHAR *output = malloc(hash_length);
 +            hash_finish(&hash, hash_alg_id, output, hash_length);
 +            memcpy(derived, output, derived_size);
 +            free(output);
