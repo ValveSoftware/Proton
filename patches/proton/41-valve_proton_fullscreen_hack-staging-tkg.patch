@@ -4780,7 +4780,7 @@ index 211d78f830d..8025d23889a 100644
  extern void X11DRV_init_desktop( Window win, unsigned int width, unsigned int height ) DECLSPEC_HIDDEN;
  extern void X11DRV_resize_desktop(BOOL) DECLSPEC_HIDDEN;
 @@ -806,6 +842,7 @@ extern HANDLE get_display_device_init_mutex(void) DECLSPEC_HIDDEN;
- extern BOOL get_host_primary_gpu(struct x11drv_gpu *gpu) DECLSPEC_HIDDEN;
+ extern BOOL get_host_primary_gpu(struct gdi_gpu *gpu) DECLSPEC_HIDDEN;
  extern void release_display_device_init_mutex(HANDLE) DECLSPEC_HIDDEN;
  extern void X11DRV_DisplayDevices_SetHandler(const struct x11drv_display_device_handler *handler) DECLSPEC_HIDDEN;
 +extern struct x11drv_display_device_handler X11DRV_DisplayDevices_GetHandler(void) DECLSPEC_HIDDEN;

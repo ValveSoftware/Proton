@@ -3833,7 +3833,7 @@ index 7edaaf07dc2..a17b8f47fbf 100644
             crtc->y + crtc->height == primary.bottom;
  }
 
-+static void add_remaining_gpus_via_vulkan( struct x11drv_gpu **gpus, int *count )
++static void add_remaining_gpus_via_vulkan( struct gdi_gpu **gpus, int *count )
 +{
 +    static const char *extensions[] =
 +    {
@@ -3850,7 +3850,7 @@ index 7edaaf07dc2..a17b8f47fbf 100644
 +    VkInstance vk_instance = NULL;
 +    INT gpu_idx, device_idx;
 +    INT original_gpu_count = *count;
-+    struct x11drv_gpu *new_gpu;
++    struct gdi_gpu *new_gpu;
 +    BOOL new;
 +    VkResult vr;
 +
@@ -3942,8 +3942,8 @@ index 7edaaf07dc2..a17b8f47fbf 100644
 +
  VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDisplayKHR)
 
- static BOOL get_gpu_properties_from_vulkan( struct x11drv_gpu *gpu, const XRRProviderInfo *provider_info )
-@@ -718,6 +825,7 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+ static BOOL get_gpu_properties_from_vulkan( struct gdi_gpu *gpu, const XRRProviderInfo *provider_info )
+@@ -718,6 +825,7 @@ static BOOL xrandr14_get_gpus2( struct gdi_gpu **new_gpus, int *count, BOOL g
      XRRProviderInfo *provider_info = NULL;
      XRRCrtcInfo *crtc_info = NULL;
      INT primary_provider = -1;
@@ -3951,7 +3951,7 @@ index 7edaaf07dc2..a17b8f47fbf 100644
      RECT primary_rect;
      BOOL ret = FALSE;
      INT i, j;
-@@ -730,22 +838,17 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+@@ -730,22 +838,17 @@ static BOOL xrandr14_get_gpus2( struct gdi_gpu **new_gpus, int *count, BOOL g
      if (!provider_resources)
          goto done;
 
@@ -3978,7 +3978,7 @@ index 7edaaf07dc2..a17b8f47fbf 100644
      primary_rect = get_primary_rect( screen_resources );
      for (i = 0; i < provider_resources->nproviders; ++i)
      {
-@@ -778,6 +881,7 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+@@ -778,6 +881,7 @@ static BOOL xrandr14_get_gpus2( struct gdi_gpu **new_gpus, int *count, BOOL g
              /* FIXME: Add an alternate method of getting PCI IDs, for systems that don't support Vulkan */
          }
          pXRRFreeProviderInfo( provider_info );
@@ -3986,7 +3986,7 @@ index 7edaaf07dc2..a17b8f47fbf 100644
      }
 
      /* Make primary GPU the first */
-@@ -788,8 +892,29 @@ static BOOL xrandr14_get_gpus2( struct x11drv_gpu **new_gpus, int *count, BOOL g
+@@ -788,8 +892,29 @@ static BOOL xrandr14_get_gpus2( struct gdi_gpu **new_gpus, int *count, BOOL g
          gpus[primary_provider] = tmp;
      }
 
