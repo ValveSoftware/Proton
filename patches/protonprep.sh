@@ -54,6 +54,9 @@
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
+    # temporary rebase patches until latest rebase is pushed to staging
+    patch -Np1 < ../patches/wine-hotfixes/staging/loader-KeyboardLayouts-staging-hotfix.patch
+
     cd ..
 
 ### END PREP SECTION ###
@@ -72,10 +75,12 @@
     git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
 
     # https://bugs.winehq.org/show_bug.cgi?id=49990
-    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
-    git revert --no-commit b54199101fd307199c481709d4b1358ba4bcce58
-    git revert --no-commit dedda40e5d7b5a3bcf67eea95145810da283d7d9
-    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
+#    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
+#    git revert --no-commit 548bc54bf396d74b5b928bf9be835272ddda1886
+#    git revert --no-commit b502a3e3c6b43ac3947d85ccc263e729ace917fa
+#    git revert --no-commit b54199101fd307199c481709d4b1358ba4bcce58
+#    git revert --no-commit dedda40e5d7b5a3bcf67eea95145810da283d7d9
+#    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
     echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
@@ -437,9 +442,6 @@
     # We can always update the patch to match the version and sha256sum even if they are the same version
     echo "hotfix to update mono version"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
-
-    echo "add fh5 patches"
-    patch -Np1 < ../patches/wine-hotfixes/testing/fh5-uiauto.patch
 
     echo "add halo infinite patches"
     patch -Np1 < ../patches/wine-hotfixes/testing/halo-infinite-testing.patch
