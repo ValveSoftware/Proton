@@ -5737,3 +5737,57 @@ index 85549caedd7..95b32a8b69d 100644
              module = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
          status = get_dll_load_path( module, dlldir, dll_safe_mode, path );
      }
+From 14a581c24ad7e5c1b2115ac0cbacb8b2716f8db5 Mon Sep 17 00:00:00 2001
+From: Eduard Permyakov <epermyakov@codeweavers.com>
+Date: Wed, 17 Nov 2021 15:48:52 +0300
+Subject: [PATCH] dsound: Correctly report hardware audio buffers as
+ unsupported.
+
+Signed-off-by: Eduard Permyakov <epermyakov@codeweavers.com>
+Signed-off-by: Andrew Eikum <aeikum@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 6806954251d0c8c37a5aa9f749b918aa0da98c8d)
+
+Fixes audio for Mass Effect 1 from Mass Effect Legendary Edition.
+
+CW-Bug-Id: #19497
+---
+ dlls/dsound/dsound.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/dsound/dsound.c b/dlls/dsound/dsound.c
+index 69bc6660658..cb53f1058a5 100644
+--- a/dlls/dsound/dsound.c
++++ b/dlls/dsound/dsound.c
+@@ -372,12 +372,12 @@ static HRESULT DirectSoundDevice_Initialize(DirectSoundDevice ** ppDevice, LPCGU
+     device->drvcaps.dwPrimaryBuffers = 1;
+     device->drvcaps.dwMinSecondarySampleRate = DSBFREQUENCY_MIN;
+     device->drvcaps.dwMaxSecondarySampleRate = DSBFREQUENCY_MAX;
+-    device->drvcaps.dwMaxHwMixingAllBuffers = 16;
++    device->drvcaps.dwMaxHwMixingAllBuffers = 1;
+     device->drvcaps.dwMaxHwMixingStaticBuffers = device->drvcaps.dwMaxHwMixingAllBuffers;
+     device->drvcaps.dwMaxHwMixingStreamingBuffers = device->drvcaps.dwMaxHwMixingAllBuffers;
+-    device->drvcaps.dwFreeHwMixingAllBuffers = device->drvcaps.dwMaxHwMixingAllBuffers;
+-    device->drvcaps.dwFreeHwMixingStaticBuffers = device->drvcaps.dwMaxHwMixingStaticBuffers;
+-    device->drvcaps.dwFreeHwMixingStreamingBuffers = device->drvcaps.dwMaxHwMixingStreamingBuffers;
++    device->drvcaps.dwFreeHwMixingAllBuffers = 0;
++    device->drvcaps.dwFreeHwMixingStaticBuffers = 0;
++    device->drvcaps.dwFreeHwMixingStreamingBuffers = 0;
+
+     ZeroMemory(&device->volpan, sizeof(device->volpan));
+
+@@ -434,11 +434,10 @@ static HRESULT DirectSoundDevice_CreateSoundBuffer(
+     }
+
+     if (!(dsbd->dwFlags & DSBCAPS_PRIMARYBUFFER) &&
+-        dsbd->dwFlags & DSBCAPS_LOCHARDWARE &&
+-        device->drvcaps.dwFreeHwMixingAllBuffers == 0)
++        dsbd->dwFlags & DSBCAPS_LOCHARDWARE)
+     {
+-        WARN("ran out of emulated hardware buffers\n");
+-        return DSERR_ALLOCATED;
++        WARN("unable to create hardware buffer\n");
++        return DSERR_UNSUPPORTED;
+     }
+
+     if (dsbd->dwFlags & DSBCAPS_PRIMARYBUFFER) {

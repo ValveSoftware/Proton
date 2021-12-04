@@ -1,0 +1,33 @@
+From: Ming Shao <shaoming@uniontech.com>
+Subject: [PATH] shell32: Fixed a rename behavior
+Message-Id: <20211126031642.18819-1-shaoming@uniontech.com>
+Date: Fri, 26 Nov 2021 11:16:42 +0800
+
+Signed-off-by: Ming Shao <shaoming@uniontech.com>
+---
+ dlls/shell32/shlfileop.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/dlls/shell32/shlfileop.c b/dlls/shell32/shlfileop.c
+index 87a445dd35c..ec4ff7ac036 100644
+--- a/dlls/shell32/shlfileop.c
++++ b/dlls/shell32/shlfileop.c
+@@ -1520,6 +1520,14 @@ int WINAPI SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp)
+     ZeroMemory(&flFrom, sizeof(FILE_LIST));
+     ZeroMemory(&flTo, sizeof(FILE_LIST));
+ 
++    //windows seems to take the first path as a valid path when lpFileOp->pTo has multiple paths
++    if(lpFileOp->wFunc == FO_RENAME)
++    {
++        LPWSTR lpRefTo = lpFileOp->pTo;
++        while(*lpRefTo++);
++        if(*lpRefTo) *lpRefTo = '\0';
++    }
++
+     if ((ret = parse_file_list(&flFrom, lpFileOp->pFrom)))
+         return ret;
+ 
+
+-- 
+2.20.1
+

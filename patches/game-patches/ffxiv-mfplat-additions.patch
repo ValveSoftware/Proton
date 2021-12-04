@@ -1,0 +1,73 @@
+From 36da1bffe396139ea77c06abf94735dda7a28cec Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 26 Oct 2021 19:59:55 +1100
+Subject: [PATCH] include: Add some MFT CLSIDs.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit c45be242e5b6bc0a80796d65716ced8e0bc5fd41)
+---
+ include/mfidl.idl | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/include/mfidl.idl b/include/mfidl.idl
+index 03d15fec553..59fcb6af713 100644
+--- a/include/mfidl.idl
++++ b/include/mfidl.idl
+@@ -1620,6 +1620,14 @@ cpp_quote("EXTERN_GUID(MF_XVP_DISABLE_FRC, 0x2c0afa19, 0x7a97, 0x4d5a, 0x9e, 0xe
+ cpp_quote("EXTERN_GUID(MF_XVP_CALLER_ALLOCATES_OUTPUT, 0x4a2cabc, 0x0cab, 0x40b1, 0xa1, 0xb9, 0x75, 0xbc, 0x36, 0x58, 0xf0, 0x00);")
+ cpp_quote("EXTERN_GUID(MF_XVP_SAMPLE_LOCK_TIMEOUT, 0xaa4ddb29, 0x5134, 0x4363, 0xac, 0x72, 0x83, 0xec, 0x4b, 0xc1, 0x04, 0x26);")
+
++cpp_quote("EXTERN_GUID(CLSID_MSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
++cpp_quote("EXTERN_GUID(CLSID_MSDDPlusDecMFT, 0x177c0afe, 0x900b, 0x48d4, 0x9e, 0x4c, 0x57, 0xad, 0xd2, 0x50, 0xb3, 0xd4);")
++cpp_quote("EXTERN_GUID(CLSID_MSMPEGAudDecMFT, 0x70707b39, 0xb2ca, 0x4015, 0xab, 0xea, 0xf8, 0x44, 0x7d, 0x22, 0xd8, 0x8b);")
++cpp_quote("EXTERN_GUID(CLSID_MSMPEGDecoderMFT, 0x2d709e52, 0x123f, 0x49b5, 0x9c, 0xbc, 0x9a, 0xf5, 0xcd, 0xe2, 0x8f, 0xb9);")
++cpp_quote("EXTERN_GUID(CLSID_MSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
++cpp_quote("EXTERN_GUID(CLSID_MSH264EncoderMFT, 0x6ca50344, 0x051a, 0x4ded, 0x97, 0x79, 0xa4, 0x33, 0x05, 0x16, 0x5e, 0x35);")
++cpp_quote("EXTERN_GUID(CLSID_MSH265DecoderMFT, 0x420a51a3, 0xd605, 0x430c, 0xb4, 0xfc, 0x45, 0x27, 0x4f, 0xa6, 0xc5, 0x62);")
+ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2, 0xe7, 0xc, 0x44, 0x5c, 0x78, 0xc9, 0x82);")
++cpp_quote("EXTERN_GUID(CLSID_WMVDecoderMFT, 0x82d353df, 0x90bd, 0x4382, 0x8b, 0xc2, 0x3f, 0x61, 0x92, 0xb7, 0x6e, 0x34);")
+ cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
+ cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
+From 947e8c337203d0dfc5a0ce04bb21b749cdb419bb Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Fri, 29 Oct 2021 17:33:33 +1100
+Subject: [PATCH] include: Define WMADecMediaObject.
+
+The SDK headers have it defined in both places.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit f26e0ba212e6164eb7535f472415334d1a9c9044)
+---
+ include/mfidl.idl      | 2 ++
+ include/wmcodecdsp.idl | 5 +++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/include/mfidl.idl b/include/mfidl.idl
+index 59fcb6af713..de212734994 100644
+--- a/include/mfidl.idl
++++ b/include/mfidl.idl
+@@ -1631,3 +1631,5 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
+ cpp_quote("EXTERN_GUID(CLSID_WMVDecoderMFT, 0x82d353df, 0x90bd, 0x4382, 0x8b, 0xc2, 0x3f, 0x61, 0x92, 0xb7, 0x6e, 0x34);")
+ cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
+ cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
++
++cpp_quote("EXTERN_GUID(CLSID_WMADecMediaObject, 0x2eeb4adf, 0x4578, 0x4d10, 0xbc, 0xa7, 0xbb, 0x95, 0x5f, 0x56, 0x32, 0x0a);")
+diff --git a/include/wmcodecdsp.idl b/include/wmcodecdsp.idl
+index 87305422332..15dd676a105 100644
+--- a/include/wmcodecdsp.idl
++++ b/include/wmcodecdsp.idl
+@@ -31,6 +31,11 @@ coclass CMP3DecMediaObject {}
+ ]
+ coclass CResamplerMediaObject {}
+
++[
++    uuid(2eeb4adf-4578-4d10-bca7-bb955f56320a)
++]
++coclass CWMADecMediaObject {};
++
+ [
+     uuid(98230571-0087-4204-b020-3282538e57d3)
+ ]
+

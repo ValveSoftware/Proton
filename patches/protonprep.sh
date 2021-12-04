@@ -421,6 +421,8 @@
     echo "The Good Life (1452500) workaround"
     patch -Np1 < ../patches/game-patches/thegoodlife-mfplat-http-scheme-workaround.patch
 
+    echo "FFXIV Video playback mfplat includes"
+    patch -Np1 < ../patches/game-patches/ffxiv-mfplat-additions.patch
 
 ### END MFPLAT PATCH SECTION ###
 
@@ -459,6 +461,8 @@
 
     # https://bugs.winehq.org/show_bug.cgi?id=51687
     patch -Np1 < ../patches/wine-hotfixes/pending/Return_nt_filename_and_resolve_DOS_drive_path.patch
+
+    patch -Np1 < ../patches/wine-hotfixes/testing/220664
 
 ### END WINE HOTFIX SECTION ###
 
