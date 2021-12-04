@@ -135,13 +135,13 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 +    {
 +        if (bitlen < 512)
 +        {
-+            heap_free( key );
++            free( key );
 +            return STATUS_INVALID_PARAMETER;
 +        }
 +        pubkey_len = sizeof(BCRYPT_DH_KEY_BLOB) + bitlen / 8 * 3;
 +        if (!(key->u.a.privkey = heap_alloc( bitlen / 8 )))
 +        {
-+            heap_free( key );
++            free( key );
 +            return STATUS_NO_MEMORY;
 +        }
 +    }
@@ -269,11 +269,11 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 @@ -1699,6 +1808,7 @@ static void key_destroy( struct key *key )
      {
          UNIX_CALL( key_asymmetric_destroy, key );
-         heap_free( key->u.a.pubkey );
-+        heap_free( key->u.a.privkey );
+         free( key->u.a.pubkey );
++        free( key->u.a.privkey );
      }
      key->hdr.magic = 0;
-     heap_free( key );
+     free( key );
 @@ -1732,6 +1842,7 @@ NTSTATUS WINAPI BCryptImportKeyPair( BCRYPT_ALG_HANDLE algorithm, BCRYPT_KEY_HAN
                                       BCRYPT_KEY_HANDLE *ret_key, UCHAR *input, ULONG input_len, ULONG flags )
  {
@@ -324,7 +324,7 @@ index 9e0d06e9cc7..889f6ce85ea 100644
          return set_key_property( key, prop, value, size, flags );
      }
      default:
-@@ -2043,31 +2180,54 @@ NTSTATUS WINAPI BCryptDeriveKeyPBKDF2( BCRYPT_ALG_HANDLE handle, UCHAR *pwd, ULO
+@@ -2224,31 +2224,54 @@ NTSTATUS WINAPI BCryptDeriveKeyPBKDF2( BCRYPT_ALG_HANDLE handle, UCHAR *pwd, ULO
 
  NTSTATUS WINAPI BCryptSecretAgreement(BCRYPT_KEY_HANDLE privatekey, BCRYPT_KEY_HANDLE publickey, BCRYPT_SECRET_HANDLE *handle, ULONG flags)
  {
@@ -344,11 +344,11 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 +    if (!(privkey->u.a.flags & pubkey->u.a.flags & KEY_FLAG_FINALIZED)) return STATUS_INVALID_PARAMETER;
 +    if (privkey->u.a.bitlen != pubkey->u.a.bitlen) return STATUS_INVALID_PARAMETER;
 
-     if (!(secret = heap_alloc_zero( sizeof(*secret) ))) return STATUS_NO_MEMORY;
+     if (!(secret = calloc( 1, sizeof(*secret) ))) return STATUS_NO_MEMORY;
 -    secret->hdr.magic = MAGIC_SECRET;
 +    if (!(secret->data = heap_alloc( privkey->u.a.bitlen / 8 )))
 +    {
-+        heap_free( secret );
++        free( secret );
 +        return STATUS_NO_MEMORY;
 +    }
 
@@ -360,8 +360,8 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 +
 +    if ((status = UNIX_CALL( key_secret_agreement, &params )))
 +    {
-+        heap_free( secret );
-+        heap_free( secret->data );
++        free( secret );
++        free( secret->data );
 +    }
 +    else
 +    {
@@ -380,8 +380,8 @@ index 9e0d06e9cc7..889f6ce85ea 100644
 
      if (!secret || secret->hdr.magic != MAGIC_SECRET) return STATUS_INVALID_HANDLE;
      secret->hdr.magic = 0;
-+    heap_free( secret->data );
-     heap_free( secret );
++    free( secret->data );
+     free( secret );
      return STATUS_SUCCESS;
  }
 diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
@@ -943,7 +943,7 @@ index 48910aafe3c..e1742fa7a01 100644
 +            UCHAR *output = heap_alloc(hash_length);
 +            hash_finish(&hash, hash_alg_id, output, hash_length);
 +            memcpy(derived, output, derived_size);
-+            heap_free(output);
++            free(output);
 +            *result = derived_size;
 +        }
 +
@@ -966,14 +966,6 @@ index fb5ac03b039..22ab7ff0b19 100644
      HeapFree(GetProcessHeap(), 0, buf);
 
      /* ulVersion is not verified */
-@@ -2801,7 +2801,6 @@ static void test_SecretAgreement(void)
-     ok(status == STATUS_INVALID_PARAMETER, "got %08x\n", status);
-
-     status = pBCryptDeriveKey(secret, L"HASH", NULL, NULL, 0, &size, 0);
--    todo_wine
-     ok(status == STATUS_SUCCESS, "got %08x\n", status);
-
-     status = pBCryptDestroyHash(secret);
 --
 2.31.1
 

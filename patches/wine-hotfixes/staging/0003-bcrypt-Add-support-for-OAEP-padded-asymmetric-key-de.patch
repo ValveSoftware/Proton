@@ -21,7 +21,7 @@ index 070dac30a8d..538d063941c 100644
 @@ -236,6 +236,18 @@ struct key_symmetric_get_tag_params
      ULONG        len;
  };
- 
+
 +struct key_asymmetric_encrypt_params
 +{
 +    struct key  *key;
@@ -57,11 +57,11 @@ index d01214c0ca0..479a3414c35 100644
 +        if (buf) *(ULONG *)buf = BCRYPT_SUPPORTED_PAD_PKCS1_SIG | BCRYPT_SUPPORTED_PAD_OAEP;
          return STATUS_SUCCESS;
      }
- 
+
 @@ -1201,6 +1201,12 @@ static NTSTATUS key_symmetric_encrypt( struct key *key,  UCHAR *input, ULONG inp
      UCHAR *buf;
      NTSTATUS status;
- 
+
 +    if (flags & ~BCRYPT_BLOCK_PADDING)
 +    {
 +        FIXME( "flags %08x not implemented\n", flags );
@@ -78,10 +78,10 @@ index d01214c0ca0..479a3414c35 100644
 +    struct key_asymmetric_encrypt_params params;
      struct key *key = handle;
 -    NTSTATUS ret;
- 
+
      TRACE( "%p, %p, %u, %p, %p, %u, %p, %u, %p, %08x\n", handle, input, input_len, padding, iv, iv_len, output,
             output_len, ret_len, flags );
- 
+
      if (!key || key->hdr.magic != MAGIC_KEY) return STATUS_INVALID_HANDLE;
 -    if (!key_is_symmetric( key ))
 -    {
@@ -100,7 +100,7 @@ index d01214c0ca0..479a3414c35 100644
 +        LeaveCriticalSection( &key->u.s.cs );
 +        return ret;
      }
- 
+
 -    EnterCriticalSection( &key->u.s.cs );
 -    ret = key_symmetric_encrypt( key, input, input_len, padding, iv, iv_len, output, output_len, ret_len, flags );
 -    LeaveCriticalSection( &key->u.s.cs );
@@ -115,7 +115,7 @@ index d01214c0ca0..479a3414c35 100644
 +    params.flags    = flags;
 +    return UNIX_CALL( key_asymmetric_encrypt, &params );
  }
- 
+
  NTSTATUS WINAPI BCryptDecrypt( BCRYPT_KEY_HANDLE handle, UCHAR *input, ULONG input_len, void *padding, UCHAR *iv,
 diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
 index 12d78fbb0d2..b843a72ad01 100644
@@ -127,7 +127,7 @@ index 12d78fbb0d2..b843a72ad01 100644
  MAKE_FUNCPTR(gcry_sexp_nth_mpi);
 +MAKE_FUNCPTR(gcry_sexp_nth_data);
  #endif
- 
+
  #undef MAKE_FUNCPTR
 @@ -386,6 +387,7 @@ static NTSTATUS gnutls_process_attach( void *args )
          LOAD_FUNCPTR(gcry_strerror);
@@ -140,16 +140,16 @@ index 12d78fbb0d2..b843a72ad01 100644
 @@ -2113,6 +2115,150 @@ static NTSTATUS key_asymmetric_duplicate( void *args )
      return STATUS_SUCCESS;
  }
- 
+
 +#if defined(HAVE_GCRYPT_H) && defined(SONAME_LIBGCRYPT)
 +const char * gcrypt_hash_algorithm_name(LPCWSTR alg_id)
 +{
-+    if (!strcmpW( alg_id, BCRYPT_SHA1_ALGORITHM ))   return "sha1";
-+    if (!strcmpW( alg_id, BCRYPT_SHA256_ALGORITHM )) return "sha256";
-+    if (!strcmpW( alg_id, BCRYPT_SHA384_ALGORITHM )) return "sha384";
-+    if (!strcmpW( alg_id, BCRYPT_SHA512_ALGORITHM )) return "sha512";
-+    if (!strcmpW( alg_id, BCRYPT_MD2_ALGORITHM ))    return "md2";
-+    if (!strcmpW( alg_id, BCRYPT_MD5_ALGORITHM ))    return "md5";
++    if (!wcscmp( alg_id, BCRYPT_SHA1_ALGORITHM ))   return "sha1";
++    if (!wcscmp( alg_id, BCRYPT_SHA256_ALGORITHM )) return "sha256";
++    if (!wcscmp( alg_id, BCRYPT_SHA384_ALGORITHM )) return "sha384";
++    if (!wcscmp( alg_id, BCRYPT_SHA512_ALGORITHM )) return "sha512";
++    if (!wcscmp( alg_id, BCRYPT_MD2_ALGORITHM ))    return "md2";
++    if (!wcscmp( alg_id, BCRYPT_MD5_ALGORITHM ))    return "md5";
 +    return NULL;
 +}
 +
@@ -303,7 +303,7 @@ index 91647e0f333..928f2627073 100644
 @@ -293,6 +293,13 @@ typedef struct _BCRYPT_PKCS1_PADDING_INFO
      LPCWSTR pszAlgId;
  } BCRYPT_PKCS1_PADDING_INFO;
- 
+
 +typedef struct _BCRYPT_OAEP_PADING_INFO
 +{
 +    LPCWSTR pszAlgId;
@@ -314,6 +314,6 @@ index 91647e0f333..928f2627073 100644
  #define BCRYPT_PAD_NONE                     0x00000001
  #define BCRYPT_PAD_PKCS1                    0x00000002
  #define BCRYPT_PAD_OAEP                     0x00000004
--- 
+--
 2.33.1
 
