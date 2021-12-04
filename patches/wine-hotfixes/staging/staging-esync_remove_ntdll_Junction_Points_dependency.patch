@@ -41,18 +41,4 @@ index 18dfad0f..f05ef0bb 100644
           free( fd->unix_name );
       }
  +
-diff --git a/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch b/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
-index 857362d3..bbe64d3f 100644
---- a/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
-+++ b/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
-@@ -21,8 +21,8 @@ index 199f3e90846..56ca6af4cd9 100644
- +# include <termios.h>
- +#endif
-  #include <sys/time.h>
-- #ifdef HAVE_SYS_STATFS_H
-- # include <sys/statfs.h>
-+ #include <sys/types.h>
-+
- @@ -1994,6 +1997,32 @@ static BOOL create_port_device( DRIVER_OBJECT *driver, int n, const char *unix_p
 
-      sprintfW( dos_name, dos_name_format, n );

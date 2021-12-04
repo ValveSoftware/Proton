@@ -2315,7 +2315,7 @@ new file mode 100644
 index 00000000000..0a88ecdd3f6
 --- /dev/null
 +++ b/server/fsync.c
-@@ -0,0 +1,527 @@
+@@ -0,0 +1,526 @@
 +/*
 + * futex-based synchronization objects
 + *
@@ -2337,7 +2337,6 @@ index 00000000000..0a88ecdd3f6
 + */
 +
 +#include "config.h"
-+#include "wine/port.h"
 +
 +#include <errno.h>
 +#include <fcntl.h>

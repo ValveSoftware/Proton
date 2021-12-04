@@ -1,0 +1,35 @@
+diff --git a/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch b/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
+index 2aac17df..b689f0ca 100644
+--- a/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
++++ b/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
+@@ -81,7 +81,7 @@ diff --git a/dlls/win32u/input.c b/dlls/win32u/input.c
+ index bc3cd17a29e..4ae1b0c900f 100644
+ --- a/dlls/win32u/input.c
+ +++ b/dlls/win32u/input.c
+-@@ -611,23 +611,9 @@ HKL WINAPI NtUserActivateKeyboardLayout( HKL layout, UINT flags )
++@@ -621,11 +621,7 @@ HKL WINAPI NtUserActivateKeyboardLayout( HKL layout, UINT flags )
+   */
+  UINT WINAPI NtUserGetKeyboardLayoutList( INT size, HKL *layouts )
+  {
+@@ -92,20 +92,8 @@ index bc3cd17a29e..4ae1b0c900f 100644
+ -    HKEY hkey, subkey;
+ +    DWORD count;
+      HKL layout;
+- 
+--    static const WCHAR keyboard_layouts_keyW[] =
+--    {
+--        '\\','R','e','g','i','s','t','r','y',
+--        '\\','M','a','c','h','i','n','e',
+--        '\\','S','y','s','t','e','m',
+--        '\\','C','u','r','r','e','n','t','C','o','n','t','r','o','l','S','e','t',
+--        '\\','C','o','n','t','r','o','l',
+--        '\\','K','e','y','b','o','a','r','d',' ','L','a','y','o','u','t','s'
+--    };
+--
++
+      TRACE_(keyboard)( "size %d, layouts %p.\n", size, layouts );
+- 
+-     if ((count = user_driver->pGetKeyboardLayoutList( size, layouts )) != ~0) return count;
+ @@ -639,33 +625,6 @@ UINT WINAPI NtUserGetKeyboardLayoutList( INT size, HKL *layouts )
+      if (size && layouts)
+      {

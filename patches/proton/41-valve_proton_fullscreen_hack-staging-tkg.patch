@@ -4818,15 +4818,15 @@ index a5984fbf121..853ccbe3133 100644
      get_config_key( hkey, appkey, "InputStyle", input_style, sizeof(input_style) );
 
      if (appkey) RegCloseKey( appkey );
-@@ -633,6 +637,8 @@ static BOOL process_attach(void)
+@@ -773,6 +773,8 @@ static BOOL process_attach(void)
      X11DRV_InitMouse( gdi_display );
      if (use_xim) use_xim = X11DRV_InitXIM( input_style );
 
 +    fs_hack_init();
 +
+     init_user_driver();
      X11DRV_DisplayDevices_Init(FALSE);
      return TRUE;
- }
 diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
 index fa748c2af04..c0318781efd 100644
 --- a/dlls/winex11.drv/xrandr.c
@@ -6885,7 +6885,7 @@ index 2e5395fda80..c4562e9db06 100644
 
  #include "windef.h"
  #include "winbase.h"
-@@ -884,6 +885,18 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+@@ -475,6 +475,17 @@ void CDECL X11DRV_UpdateDisplayDevices( const struct gdi_device_manager *device_
 
      for (gpu = 0; gpu < gpu_count; gpu++)
      {
@@ -6900,9 +6900,9 @@ index 2e5395fda80..c4562e9db06 100644
 +                }
 +            }
 +        }
-+
-         if (!X11DRV_InitGpu(gpu_devinfo, &gpus[gpu], gpu, guidW, driverW, &gpu_luid))
-             goto done;
+         device_manager->add_gpu( &gpus[gpu], param );
+
+         /* Initialize adapters */
 
 From 10df80804000aa66c7ef92f1361759e309f0e321 Mon Sep 17 00:00:00 2001
 From: Giovanni Mascellani <gmascellani@codeweavers.com>

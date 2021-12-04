@@ -19,7 +19,7 @@ index 89caca9f30f..6fb16333397 100644
 +    MEMORY_BASIC_INFORMATION wine_frame_stack_info, current_stack_info;
 +    int is_teb_frame_in_current_stack = 1;
      NTSTATUS status;
- 
+
      context = *orig_context;
 @@ -433,6 +435,13 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
      dispatch.TargetIp      = 0;
@@ -45,32 +45,13 @@ index 89caca9f30f..6fb16333397 100644
              TRACE( "found wine frame %p rsp %lx handler %p\n",
                      teb_frame, context.Rsp, teb_frame->Handler );
 diff --git a/dlls/ws2_32/Makefile.in b/dlls/ws2_32/Makefile.in
-index 78c1633c921..a29e9f0a140 100644
+index 9d7dfafeb3c..c7f24168dac 100644
 --- a/dlls/ws2_32/Makefile.in
 +++ b/dlls/ws2_32/Makefile.in
 @@ -1,5 +1,6 @@
  MODULE    = ws2_32.dll
  IMPORTLIB = ws2_32
 +IMPORTS = kernelbase
- DELAYIMPORTS = advapi32 iphlpapi user32
- EXTRALIBS = $(POLL_LIBS)
+ DELAYIMPORTS = dnsapi advapi32 iphlpapi user32
 
-diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
-index b4b3981da0a..1ea738ce547 100644
---- a/dlls/winex11.drv/display.c
-+++ b/dlls/winex11.drv/display.c
-@@ -606,6 +797,14 @@ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *mo
-     hkey = SetupDiCreateDevRegKeyW(devinfo, &device_data, DICS_FLAG_GLOBAL, 0, DIREG_DRV, NULL, NULL);
-     RegCloseKey(hkey);
-
-+    /* This is needed for MK11, but breaks Hitman 2, so we use a specific check for MK11 */
-+    const char *sgi = getenv("SteamGameId");
-+    if ((sgi && !strcmp(sgi, "976310"))) {
-+        /* Create device key */
-+        hkey = SetupDiCreateDevRegKeyW(devinfo, &device_data, DICS_FLAG_GLOBAL, 0, DIREG_DEV, NULL, NULL);
-+        RegCloseKey(hkey);
-+    }
-+
-     /* FIXME:
-      * Following properties are Wine specific, see comments in X11DRV_InitAdapter for details */
-     /* StateFlags */
+ C_SRCS = \
