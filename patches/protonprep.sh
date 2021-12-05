@@ -54,9 +54,6 @@
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
-    # temporary rebase patches until latest rebase is pushed to staging
-    patch -Np1 < ../patches/wine-hotfixes/staging/loader-KeyboardLayouts-staging-hotfix.patch
-
     cd ..
 
 ### END PREP SECTION ###
