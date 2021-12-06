@@ -42,7 +42,7 @@ example, if you wish to make changes to Wine, you would apply them to the
 `wine/` directory.
 
 
-Bulding Proton
+Building Proton
 --------------
 
 Most of Proton builds inside the Proton SDK container with very few
