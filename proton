@@ -31,7 +31,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="6.3-3"
+CURRENT_PREFIX_VERSION="7.0-100"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -58,7 +58,16 @@ def log(msg):
 def file_is_wine_builtin_dll(path):
     if os.path.islink(path):
         contents = os.readlink(path)
-        if os.path.dirname(contents).endswith(('/lib/wine/i386-unix', '/lib/wine/i386-windows', '/lib64/wine/x86_64-unix', '/lib64/wine/x86_64-windows')):
+        if os.path.dirname(contents).endswith((
+                    '/lib/wine',
+                    '/lib64/wine',
+                    '/lib/wine/fakedlls',
+                    '/lib64/wine/fakedlls',
+                    '/lib/wine/i386-unix',
+                    '/lib/wine/i386-windows',
+                    '/lib64/wine/x86_64-unix',
+                    '/lib64/wine/x86_64-windows'
+                )):
             # This may be a broken link to a dll in a removed Proton install
             return True
     if not os.path.exists(path):
