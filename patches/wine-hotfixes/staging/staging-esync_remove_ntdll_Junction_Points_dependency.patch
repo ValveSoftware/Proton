@@ -42,3 +42,23 @@ index 18dfad0f..f05ef0bb 100644
       }
  +
 
+diff --git a/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch b/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
+index d1af558e3..5ad0cbcba 100644
+--- a/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
++++ b/patches/ntdll-Serial_Port_Detection/0001-ntdll-Do-a-device-check-before-returning-a-default-s.patch
+@@ -25,10 +25,10 @@ index 332f390550d..6343807e14d 100644
+ index 73735c22d13..5f720c29bd5 100644
+ --- a/dlls/mountmgr.sys/unixlib.c
+ +++ b/dlls/mountmgr.sys/unixlib.c
+-@@ -46,6 +46,9 @@
+- #ifdef HAVE_SYS_MOUNT_H
+- #include <sys/mount.h>
+- #endif
++@@ -31,6 +31,9 @@
++ #include <stdlib.h>
++ #include <sys/stat.h>
++ #include <unistd.h>
+ +#ifdef HAVE_TERMIOS_H
+ +# include <termios.h>
+ +#endif
+

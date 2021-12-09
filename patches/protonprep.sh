@@ -202,7 +202,6 @@
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
 
-
 ### END WINE STAGING APPLY SECTION ###
 
 ### (2-3) GAME PATCH SECTION ###
@@ -321,8 +320,8 @@
 #    patch -Np1 < ../patches/proton/49-proton_QPC.patch
     patch -Np1 < ../patches/proton/49-proton_QPC-update-replace.patch
 
-    echo "proton LFH performance patch"
-    patch -Np1 < ../patches/proton/50-proton_LFH.patch
+#    echo "proton LFH performance patch"
+#    patch -Np1 < ../patches/proton/50-proton_LFH.patch
 
     echo "proton font patches"
     patch -Np1 < ../patches/proton/51-proton_fonts.patch

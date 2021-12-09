@@ -139,13 +139,13 @@ index 0fe79ee499c..adaaa6acaf6 100644
   *           unix_funcs
   */
 @@ -1470,6 +1535,7 @@ static struct unix_funcs unix_funcs =
-     init_unix_lib,
-     unwind_builtin_dll,
-     RtlGetSystemTimePrecise,
-+    steamclient_setup_trampolines,
  #ifdef __aarch64__
      NtCurrentTeb,
  #endif
++    steamclient_setup_trampolines,
+ };
+
+
 diff --git a/dlls/ntdll/unix/signal_i386.c b/dlls/ntdll/unix/signal_i386.c
 index 162a0b6a701..7a710f59f5e 100644
 --- a/dlls/ntdll/unix/signal_i386.c
@@ -213,17 +213,15 @@ diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
 index 98f19346f77..ecd48427868 100644
 --- a/dlls/ntdll/unixlib.h
 +++ b/dlls/ntdll/unixlib.h
-@@ -134,6 +134,10 @@ struct unix_funcs
-     NTSTATUS      (CDECL *init_unix_lib)( void *module, DWORD reason, const void *ptr_in, void *ptr_out );
-     NTSTATUS      (CDECL *unwind_builtin_dll)( ULONG type, struct _DISPATCHER_CONTEXT *dispatch,
-                                                CONTEXT *context );
-+
+@@ -134,6 +134,8 @@ struct unix_funcs
+ #ifdef __aarch64__
+     TEB *         (WINAPI *NtCurrentTeb)(void);
+ #endif
 +    /* steamclient HACK */
 +    void          (CDECL *steamclient_setup_trampolines)( HMODULE src_mod, HMODULE tgt_mod );
-+
-     /* other Win32 API functions */
-     LONGLONG      (WINAPI *RtlGetSystemTimePrecise)(void);
- #ifdef __aarch64__
+ };
+
+ #endif /* __NTDLL_UNIXLIB_H */
 From 762405d42e29a60e6eb5620cbb6693c43777268f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 5 Aug 2020 10:35:50 +0200
@@ -480,14 +478,14 @@ index e565c324eef..7cdd8b89dfd 100644
 --- a/dlls/ntdll/unix/loader.c
 +++ b/dlls/ntdll/unix/loader.c
 @@ -1818,6 +1818,8 @@ static struct unix_funcs unix_funcs =
-     unwind_builtin_dll,
-     RtlGetSystemTimePrecise,
+     NtCurrentTeb,
+ #endif
      steamclient_setup_trampolines,
 +    set_unix_env,
 +    unset_unix_env,
- #ifdef __aarch64__
-     NtCurrentTeb,
- #endif
+ };
+
+
 diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
 index f4bd0b7876e..ab37830cb3c 100644
 --- a/dlls/ntdll/unix/unix_private.h
@@ -506,15 +504,15 @@ diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
 index 0f136508b54..b252ed9ae7e 100644
 --- a/dlls/ntdll/unixlib.h
 +++ b/dlls/ntdll/unixlib.h
-@@ -94,6 +94,8 @@ struct unix_funcs
-
+@@ -134,6 +134,8 @@ struct unix_funcs
+ #endif
      /* steamclient HACK */
      void          (CDECL *steamclient_setup_trampolines)( HMODULE src_mod, HMODULE tgt_mod );
 +    void          (CDECL *set_unix_env)( const char *var, const char *val );
 +    void          (CDECL *unset_unix_env)( const char *var );
+ };
 
-     /* other Win32 API functions */
-     LONGLONG      (WINAPI *RtlGetSystemTimePrecise)(void);
+ #endif /* __NTDLL_UNIXLIB_H */
 diff --git a/include/wine/debug.h b/include/wine/debug.h
 index 2255f62e502..60bd9630202 100644
 --- a/include/wine/debug.h

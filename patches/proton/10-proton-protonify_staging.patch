@@ -5375,6 +5375,46 @@ index 3daa0d483d0..74409a6fb76 100644
      }
      if (n >= 8)
      {
+From 6d574d1275635d1fda1177707a8f3146249b52ce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 13 Oct 2021 15:19:37 +0200
+Subject: [PATCH] msvcrt: Write memory forward in memset.
+
+Instead of going backward, which may break the Linux kernel page fault
+optimizations.
+---
+ dlls/msvcrt/string.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/msvcrt/string.c b/dlls/msvcrt/string.c
+index 74409a6fb76..63a11c27e03 100644
+--- a/dlls/msvcrt/string.c
++++ b/dlls/msvcrt/string.c
+@@ -2901,16 +2901,18 @@ __ASM_GLOBAL_FUNC( sse2_memset_aligned_32,
+         "pshufd $0, %xmm0, %xmm0\n\t"
+         "test $0x20, " LEN_REG "\n\t"
+         "je 1f\n\t"
++        "add $0x20, " DEST_REG "\n\t"
+         "sub $0x20, " LEN_REG "\n\t"
+-        "movdqa %xmm0, 0x00(" DEST_REG ", " LEN_REG ")\n\t"
+-        "movdqa %xmm0, 0x10(" DEST_REG ", " LEN_REG ")\n\t"
++        "movdqa %xmm0, -0x20(" DEST_REG ")\n\t"
++        "movdqa %xmm0, -0x10(" DEST_REG ")\n\t"
+         "je 2f\n\t"
+         "1:\n\t"
++        "add $0x40, " DEST_REG "\n\t"
+         "sub $0x40, " LEN_REG "\n\t"
+-        "movdqa %xmm0, 0x00(" DEST_REG ", " LEN_REG ")\n\t"
+-        "movdqa %xmm0, 0x10(" DEST_REG ", " LEN_REG ")\n\t"
+-        "movdqa %xmm0, 0x20(" DEST_REG ", " LEN_REG ")\n\t"
+-        "movdqa %xmm0, 0x30(" DEST_REG ", " LEN_REG ")\n\t"
++        "movdqa %xmm0, -0x40(" DEST_REG ")\n\t"
++        "movdqa %xmm0, -0x30(" DEST_REG ")\n\t"
++        "movdqa %xmm0, -0x20(" DEST_REG ")\n\t"
++        "movdqa %xmm0, -0x10(" DEST_REG ")\n\t"
+         "ja 1b\n\t"
+         "2:\n\t"
+         MEMSET_RET )
 From 1ace788f817b0175e63d02732c0c11269d19ae0a Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Thu, 16 Sep 2021 18:01:42 +0300
