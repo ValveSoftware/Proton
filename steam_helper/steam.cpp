@@ -61,8 +61,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steam);
 
-EXTERN_C HANDLE CDECL __wine_make_process_system(void);
-
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 
 static bool env_nonzero(const char *env)
@@ -1378,7 +1376,8 @@ int main(int argc, char *argv[])
 
         SteamAPI_Shutdown();
 
-        wait_handle = __wine_make_process_system();
+        NtSetInformationProcess( GetCurrentProcess(), (PROCESS_INFORMATION_CLASS)1000 /* ProcessWineMakeProcessSystem */,
+                                 &wait_handle, sizeof(HANDLE *) );
         game_process = TRUE;
     }
 
