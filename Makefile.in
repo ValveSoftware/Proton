@@ -377,21 +377,21 @@ dist: $(DIST_TARGETS) all-dist dist_wineopenxr | $(DST_DIR)
 
 deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
-	cp -a $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
+	rsync --delete -arx $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
 	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
 	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
 
 install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	cp -rf --no-dereference --preserve=mode,links $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	rsync --delete -arx $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	cp -f $(DIST_VERSION) $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/dist/
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
 redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(REDIST_DIR)
-	cp -a $(REDIST_COPY_TARGETS) $(REDIST_DIR)
+	rsync --delete -arx $(REDIST_COPY_TARGETS) $(REDIST_DIR)
 	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
 	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
 
