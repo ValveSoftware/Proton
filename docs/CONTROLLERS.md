@@ -15,53 +15,68 @@ the game's behalf. This turns the raw HID protocol data into usable things like
 buttons and joysticks.
 
 dinput is a "legacy" API that allows applictions to talk to any type of
-joystick. On Windows, it is likely implemented on top of HID. Notably, dinput
-allows easy access to controllers that no other API does, so it is still used
-by modern games despite being "legacy."
+joystick. On Windows, it is implemented on top of HID. Notably, dinput allows
+easy access to controllers that no other API does, so it is still used by
+modern games despite being "legacy."
 
 xinput is the new API that supports only Xbox controllers. On Windows, it is
 likely implemented on top of rawinput, as Xbox controllers do not behave like
 standard HID devices.
 
 winmm is the very legacy API, for when joysticks were hooked up through the
-soundcard. On modern Windows, it is likely implemented on top of hid.
+soundcard. On modern Windows, it is implemented on top of dinput.
 
 
 Here is a diagram for how these APIs are mapped down to the system by Proton:
 
 
-               --------
-              |game.exe|
-               --------
-             / | | |  |            application
-    ********|**|*|*|**|***********************
-     ------ /  | | |  |                   wine
-    |xinput|   | | |  |
-     ------   /  | |  |
-      |      /   | |  |
-     ---    /   /  |   \
-    |hid|---   /   |    \
-     ---      /    |     \
-      |      /     |      \
-     --------    ------    -----
-    |rawinput|  |dinput|  |winmm|
-     --------    ------    -----
-       |           |         |
-     -----------   |   ----------------
-    |winebus.sys|  |  |winejoystick.drv|
-     -----------   |   ----------------
-       |        \ /          |            wine
-    ***|*********|***********|****************
-       \         |           |           linux
-        \      ----          |
-         \    |SDL2|         |
-          \    ----          |
-           \     | \         |
-            \    |  ----     |
-             \   |      \    |
-              ------    -----------
-             |hidraw|  |input event|
-              ------    -----------
+                ----------
+               | game.exe |
+                ----------
+               /  | |  |  \
+              /   | |  |   \        application
+    *********/****|*|**|****\******************
+             |    | |   \    \             wine
+             |    | |    |    \
+         ------   | |   -----  \
+        |xinput|  | |  |winmm|  |
+         ------   | |   -----   |
+             |    |  \    |     |
+             |    |   |   |     |
+             \    |   ------    |
+              \   |  |dinput|   |
+               \  |   ------   /
+                | |  /        /
+                | | |        /
+                 ---        /
+                |hid|      /
+                 ---      /
+                  |      /
+                  |     |
+                 --------
+                |rawinput|
+                 --------
+                    |
+               -----------
+              |winebus.sys|
+               -----------
+                |      |                   wine
+    ************|******|***********************
+                |      |                  linux
+                |    ----
+                |   |SDL2|
+                |    ----
+                |    |   \
+                |    |    \
+                |    |     |
+                ------    -----------
+               |hidraw|  |input event|
+                ------    -----------
+                    |       |
+                     \     /
+                    ========
+                   |hardware|
+                    ========
 
 Some things to note:
 
@@ -74,7 +89,7 @@ other) protocol can talk directly to those devices.
 Xbox controllers do not speak real HID. Instead Windows provides a HID
 compatibility layer so dinput, which is implemented on top of HID, will present
 the Xbox controller to legacy games. Of course some games (Unity) have noticed
-that, and talk directly to this internal HID interface, so we had to duplicate
+that, and talk directly to this internal HID interface, so we need to duplicate
 it bit-for-bit in winebus.sys.
 
 Some games support talking directly to certain controller types. For example,
@@ -98,16 +113,3 @@ device for your controller, especially if it is a less well-known controller.
 In those cases, we access it through SDL2 via its linux js backend and try to
 treat it as an Xbox controller, even if it is not mapped with the Steam client
 mapping feature.
-
-
-Future improvements:
-
-winmm's joystick APIs should be implemented on top of HID so it can use the
-Steam controller mapping feature via winebus/SDL2.
-
-xinput should be implemented on top of rawinput, as the Xbox HID compatibility
-layer does not provide all of the features xinput requires. We currently use a
-hack to work around this.
-
-dinput should be implemented on top of HID, so we can avoid the code
-duplication we have now with both winebus and dinput using SDL2 directly.
