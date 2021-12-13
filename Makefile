@@ -164,18 +164,19 @@ deploy: downloads
 	cp -Rf $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy && \
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
-module: | vagrant_share/$(module)/lib/wine/
-module: | vagrant_share/$(module)/lib64/wine/
+module: | vagrant_share/$(module)/lib/wine/i386-windows
+module: | vagrant_share/$(module)/lib/wine/i386-unix
+module: | vagrant_share/$(module)/lib64/wine/x86_64-windows
+module: | vagrant_share/$(module)/lib64/wine/x86_64-unix
 module: private SHELL := $(VAGRANT_SHELL)
 module: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
-	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
-	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
+	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/i386-windows/ && \
+	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/x86_64-windows/ && \
 	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so ]; then \
-		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
-		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/; \
-	fi && \
-	rm -f /vagrant/$(module)/lib*/wine/*.fake
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/i386-unix/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/x86_64-unix/; \
+	fi
 
 dxvk: | vagrant_share/dxvk/lib/wine/dxvk
 dxvk: | vagrant_share/dxvk/lib64/wine/dxvk
