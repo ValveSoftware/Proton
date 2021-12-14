@@ -28,11 +28,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-use glib;
-use glib::subclass;
-use glib::subclass::prelude::*;
-
 use gst;
+use gst::glib;
 use gst::prelude::*;
 use gst::subclass::prelude::*;
 use gst::EventView;
@@ -64,7 +61,7 @@ static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
         Some("Proton audio converter bin"))
 });
 
-struct AudioConvBin {
+pub struct AudioConvBin {
     audioconv: gst::Element,
     opusdec: gst::Element,
     capssetter: gst::Element,
@@ -72,21 +69,18 @@ struct AudioConvBin {
     sinkpad: gst::GhostPad,
 }
 
+#[glib::object_subclass]
 impl ObjectSubclass for AudioConvBin {
     const NAME: &'static str = "ProtonAudioConverterBin";
-
+    type Type = super::AudioConvBin;
     type ParentType = gst::Bin;
-    type Instance = gst::subclass::ElementInstanceStruct<Self>;
-    type Class = subclass::simple::ClassStruct<Self>;
 
-    glib_object_subclass!();
+    fn with_class(klass: &Self::Class) -> Self {
 
-    fn with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
-
-        let templ = klass.get_pad_template("src").unwrap();
+        let templ = klass.pad_template("src").unwrap();
         let srcpad = gst::GhostPad::builder_with_template(&templ, Some("src")).build();
 
-        let templ = klass.get_pad_template("sink").unwrap();
+        let templ = klass.pad_template("sink").unwrap();
         let sinkpad = gst::GhostPad::builder_with_template(&templ, Some("sink"))
             .event_function(|pad, parent, event| {
                 AudioConvBin::catch_panic_pad_function(
@@ -108,79 +102,86 @@ impl ObjectSubclass for AudioConvBin {
             sinkpad,
         }
     }
-
-    fn class_init(klass: &mut subclass::simple::ClassStruct<Self>) {
-        klass.set_metadata("Proton audio converter with rate fixup",
-                           "Codec/Parser",
-                           "Converts audio for Proton, fixing up samplerates",
-                           "Andrew Eikum <aeikum@codeweavers.com>");
-
-        let mut caps = gst::Caps::new_empty();
-        {
-            let caps = caps.get_mut().unwrap();
-            caps.append(gst::Caps::builder("audio/x-wma").build());
-        }
-        let sink_pad_template = gst::PadTemplate::new(
-            "sink",
-            gst::PadDirection::Sink,
-            gst::PadPresence::Always,
-            &caps).unwrap();
-        klass.add_pad_template(sink_pad_template);
-
-        let caps = gst::Caps::builder("audio/x-raw").build();
-        let src_pad_template = gst::PadTemplate::new(
-            "src",
-            gst::PadDirection::Src,
-            gst::PadPresence::Always,
-            &caps).unwrap();
-        klass.add_pad_template(src_pad_template);
-    }
 }
 
 impl ObjectImpl for AudioConvBin {
-    glib_object_impl!();
-
-    fn constructed(&self, obj: &glib::Object) {
+    fn constructed(&self, obj: &Self::Type) {
         self.parent_constructed(obj);
 
-        let bin = obj.downcast_ref::<gst::Bin>().unwrap();
-
-        bin.add(&self.audioconv).unwrap();
-        bin.add(&self.opusdec).unwrap();
-        bin.add(&self.capssetter).unwrap();
+        obj.add(&self.audioconv).unwrap();
+        obj.add(&self.opusdec).unwrap();
+        obj.add(&self.capssetter).unwrap();
 
         self.audioconv.link(&self.opusdec).unwrap();
         self.opusdec.link(&self.capssetter).unwrap();
 
         self.sinkpad
-            .set_target(Some(&self.audioconv.get_static_pad("sink").unwrap()))
+            .set_target(Some(&self.audioconv.static_pad("sink").unwrap()))
             .unwrap();
         self.srcpad
-            .set_target(Some(&self.capssetter.get_static_pad("src").unwrap()))
+            .set_target(Some(&self.capssetter.static_pad("src").unwrap()))
             .unwrap();
 
-        bin.add_pad(&self.sinkpad).unwrap();
-        bin.add_pad(&self.srcpad).unwrap();
+        obj.add_pad(&self.sinkpad).unwrap();
+        obj.add_pad(&self.srcpad).unwrap();
     }
 }
 
 impl BinImpl for AudioConvBin { }
 
-impl ElementImpl for AudioConvBin { }
+impl ElementImpl for AudioConvBin {
+    fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
+        static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+            gst::subclass::ElementMetadata::new(
+                "Proton audio converter with rate fixup",
+                "Codec/Parser",
+                "Converts audio for Proton, fixing up samplerates",
+                "Andrew Eikum <aeikum@codeweavers.com>")
+        });
+
+        Some(&*ELEMENT_METADATA)
+    }
+
+    fn pad_templates() -> &'static [gst::PadTemplate] {
+        static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
+            let mut caps = gst::Caps::new_empty();
+            {
+                let caps = caps.get_mut().unwrap();
+                caps.append(gst::Caps::builder("audio/x-wma").build());
+            }
+            let sink_pad_template = gst::PadTemplate::new(
+                "sink",
+                gst::PadDirection::Sink,
+                gst::PadPresence::Always,
+                &caps).unwrap();
+
+            let caps = gst::Caps::builder("audio/x-raw").build();
+            let src_pad_template = gst::PadTemplate::new(
+                "src",
+                gst::PadDirection::Src,
+                gst::PadPresence::Always,
+                &caps).unwrap();
+
+            vec![src_pad_template, sink_pad_template]
+        });
+
+        PAD_TEMPLATES.as_ref()
+    }
+}
 
 impl AudioConvBin {
     fn sink_event(
         &self,
         pad: &gst::GhostPad,
-        element: &gst::Element,
+        element: &super::AudioConvBin,
         event: gst::Event
     ) -> bool {
         match event.view() {
             EventView::Caps(event_caps) => {
                 /* set up capssetter with this rate */
-                if let Some(s) = event_caps.get_caps().get_structure(0) {
+                if let Some(s) = event_caps.caps().structure(0) {
 
-                    if let Ok(override_rate) = s.get_some::<i32>("rate") {
+                    if let Ok(override_rate) = s.get::<i32>("rate") {
 
                         let mut rate_caps = gst::Caps::new_empty();
                         {
@@ -200,19 +201,10 @@ impl AudioConvBin {
                 }
 
                 /* forward on to the real pad */
-                self.audioconv.get_static_pad("sink").unwrap()
+                self.audioconv.static_pad("sink").unwrap()
                     .send_event(event)
             },
             _ => pad.event_default(Some(element), event)
         }
     }
-}
-
-pub fn register(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
-    gst::Element::register(
-        Some(plugin),
-        "protonaudioconverterbin",
-        gst::Rank::Marginal + 1,
-        AudioConvBin::get_type()
-    )
 }
