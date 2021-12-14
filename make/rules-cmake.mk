@@ -17,7 +17,7 @@ $$(OBJ)/.$(1)-configure$(3): $$($(2)_SRC)/CMakeLists.txt
 	    -DCMAKE_INSTALL_PREFIX="$$($(2)_DST$(3))" \
 	    -DCMAKE_INSTALL_LIBDIR="lib$(subst 32,,$(3))" \
 	    -DCMAKE_BUILD_TYPE=plain \
-	    -DCMAKE_SYSTEM_NAME=$(if $(4),Windows,Linux) \
+	    -DCMAKE_SYSTEM_NAME=$(if $(4),Windows,) \
 	    -DCMAKE_SHARED_LIBRARY_PREFIX_C=$(if $(4),,lib) \
 	    -DCMAKE_IMPORT_LIBRARY_PREFIX_C=$(if $(4),,lib) \
 	    $$($(2)_CMAKE_ARGS) \
