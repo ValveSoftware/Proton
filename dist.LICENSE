@@ -254,10 +254,7 @@ This software contains the following Rust libraries under the MIT license:
     gstreamer-rs <https://gitlab.freedesktop.org/gstreamer/gstreamer-rs>
 
     array-init <https://github.com/Manishearth/array-init/>
-    Copyright (c) 2010 The Rust Project Developers
-
-    autocfg <https://github.com/cuviper/autocfg>
-    Copyright (c) 2018 Josh Stone
+    Copyright (c) 2017-2020 The array-init developers
 
     bitflags <https://github.com/bitflags/bitflags>
     num-integer <https://github.com/rust-num/num-integer>
@@ -266,13 +263,9 @@ This software contains the following Rust libraries under the MIT license:
     Copyright (c) 2014 The Rust Project Developers
 
     cfg-if <https://github.com/alexcrichton/cfg-if>
-    pkg-config <https://github.com/rust-lang/pkg-config-rs>
-    proc-macro2 <https://github.com/alexcrichton/proc-macro2>
+    proc-macro2 <https://github.com/dtolnay/proc-macro2>
     toml <https://github.com/alexcrichton/toml-rs>
     Copyright (c) 2014 Alex Crichton
-
-    chrono <https://github.com/chronotope/chrono>
-    Copyright (c) 2014 Kang Seonghoon
 
     crc32fast <https://github.com/srijs/rust-crc32fast>
     Copyright (c) 2018 Sam Rijs, Alex Crichton and contributors
@@ -280,14 +273,10 @@ This software contains the following Rust libraries under the MIT license:
     futures-channel <https://github.com/rust-lang/futures-rs>
     futures-core <https://github.com/rust-lang/futures-rs>
     futures-executor <https://github.com/rust-lang/futures-rs>
-    futures-macro <https://github.com/rust-lang/futures-rs>
     futures-task <https://github.com/rust-lang/futures-rs>
     futures-util <https://github.com/rust-lang/futures-rs>
     Copyright (c) 2016 Alex Crichton
     Copyright (c) 2017 The Tokio Authors
-
-    glib <https://github.com/gtk-rs/glib>
-    Copyright (c) 2013-2015 The Gtk-rs Project Developers
 
     heck <https://github.com/withoutboats/heck>
     unicode-segmentation <https://github.com/unicode-rs/unicode-segmentation>
@@ -303,41 +292,35 @@ This software contains the following Rust libraries under the MIT license:
     murmur3 <https://github.com/stusmall/murmur3>
     Copyright (c) 2016 Stu Small
 
-    pin-utils <https://github.com/rust-lang/pin-utils>
+    pin-utils <https://github.com/rust-lang-nursery/pin-utils>
     Copyright (c) 2018 The pin-utils authors
 
     pretty-hex <https://github.com/wolandr/pretty-hex>
     Copyright (c) 2018 Andrei Volnin
 
     proc-macro-error <https://gitlab.com/CreepySkeleton/proc-macro-error>
+    proc-macro-error-attr <https://gitlab.com/CreepySkeleton/proc-macro-error>
     Copyright (c) 2019-2020 CreepySkeleton
-
-    proc-macro-hack <https://github.com/dtolnay/proc-macro-hack>
-    Copyright (c) 2018 David Tolnay
 
     quote <https://github.com/dtolnay/quote>
     Copyright (c) 2016 The Rust Project Developers
 
-    slab <https://github.com/carllerche/slab>
+    slab <https://github.com/tokio-rs/slab>
     Copyright (c) 2019 Carl Lerche
 
-    time <https://github.com/time-rs/time>
-    Copyright (c) 2019 Jacob Pratt
-
-    version_check <https://github.com/SergioBenitez/version_check>
-    Copyright (c) 2017-2018 Sergio Benitez
+    smallvec <https://github.com/servo/rust-smallvec>
+    Copyright (c) 2018 The Servo Project Developers
 
     anyhow <https://github.com/dtolnay/anyhow>
-    either <https://github.com/bluss/either>
-    itertools <https://github.com/rust-itertools/itertools>
+    glib <https://github.com/gtk-rs/gtk-rs-core>
     once_cell <https://github.com/matklad/once_cell>
     paste <https://github.com/dtolnay/paste>
-    pin-project <https://github.com/taiki-e/pin-project>
+    pin-project-lite <https://github.com/taiki-e/pin-project-lite>
     proc-macro-crate <https://github.com/bkchr/proc-macro-crate>
     serde <https://github.com/serde-rs/serde>
     syn <https://github.com/dtolnay/syn>
-    syn-mid <https://github.com/taiki-e/syn-mid>
     thiserror <https://github.com/dtolnay/thiserror>
+    thiserror-impl <https://github.com/dtolnay/thiserror>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
