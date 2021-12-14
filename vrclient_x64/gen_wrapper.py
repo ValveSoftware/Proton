@@ -864,41 +864,17 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 def strip_const(typename):
     return typename.replace("const ", "", 1)
 
+windows_structs32 = {}
 def find_windows_struct(struct):
-    children = list(windows_build.cursor.get_children())
-    for child in children:
-        if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
-            for vrchild in list(child.get_children()):
-                if strip_const(strip_ns(struct.spelling)) == strip_ns(vrchild.type.spelling):
-                    return vrchild.type
-        else:
-            if strip_const(strip_ns(struct.spelling)) == strip_ns(child.type.spelling):
-                return child.type
-    return None
+    return windows_structs32.get(strip_const(struct.spelling), None)
 
+windows_structs64 = {}
 def find_windows64_struct(struct):
-    children = list(windows_build64.cursor.get_children())
-    for child in children:
-        if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
-            for vrchild in list(child.get_children()):
-                if strip_const(struct.spelling) == vrchild.type.spelling:
-                    return vrchild.type
-        else:
-            if strip_const(strip_ns(struct.spelling)) == strip_ns(child.type.spelling):
-                return child.type
-    return None
+    return windows_structs64.get(strip_const(struct.spelling), None)
 
+linux_structs64 = {}
 def find_linux64_struct(struct):
-    children = list(linux_build64.cursor.get_children())
-    for child in children:
-        if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
-            for vrchild in list(child.get_children()):
-                if strip_const(struct.spelling) == vrchild.type.spelling:
-                    return vrchild.type
-        else:
-            if strip_const(strip_ns(struct.spelling)) == strip_ns(child.type.spelling):
-                return child.type
-    return None
+    return linux_structs64.get(strip_const(struct.spelling), None)
 
 def struct_needs_conversion_nocache(struct):
 #    if strip_const(struct.spelling) in exempt_structs:
@@ -1423,21 +1399,32 @@ for sdkver in sdk_versions:
         tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
         linux_build64 = index.parse(input_name, args=['-x', 'c++', '-m64', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
 
+        def enumerate_structs(cursor, vr_only=False):
+            for child in cursor.get_children():
+                if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
+                    yield from child.get_children()
+                elif not vr_only:
+                    yield child
+
+        windows_structs32 = dict(reversed([(child.type.spelling, child.type) for child
+                                           in enumerate_structs(windows_build.cursor)]))
+        windows_structs64 = dict(reversed([(child.type.spelling, child.type) for child
+                                           in enumerate_structs(windows_build64.cursor)]))
+        linux_structs64 = dict(reversed([(child.type.spelling, child.type) for child
+                                         in enumerate_structs(linux_build64.cursor)]))
+
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:
             print('There were parse errors')
             pprint.pprint(diagnostics)
         else:
-            children = list(tu.cursor.get_children())
-            for child in children:
-                if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
-                    for vrchild in list(child.get_children()):
-                        if vrchild.kind == CursorKind.CLASS_DECL and vrchild.displayname in classes:
-                            handle_class(sdkver, vrchild)
-                        if vrchild.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
-                            handle_struct(sdkver, vrchild)
-                        if vrchild.displayname in print_sizes:
-                            sys.stdout.write("size of %s is %u\n" % (vrchild.displayname, vrchild.type.get_size()))
+            for child in enumerate_structs(tu.cursor, vr_only=True):
+                if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
+                    handle_class(sdkver, child)
+                if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
+                    handle_struct(sdkver, child)
+                if child.displayname in print_sizes:
+                    sys.stdout.write("size of %s is %u\n" % (child.displayname, child.type.get_size()))
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
