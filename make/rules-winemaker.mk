@@ -31,7 +31,7 @@ $$(OBJ)/.$(1)-build$(3):
 	env $$($(2)_ENV$(3)) \
 	$$(MAKE) -C "$$($(2)_OBJ$(3))" LIBRARIES="$$($(2)_LDFLAGS)"
 	cd "$$($(2)_OBJ$(3))" && touch "$(basename $(4)).spec" && env $$($(2)_ENV$(3)) \
-	winebuild --dll --fake-module -E "$(basename $(4)).spec" -o "$(4).fake"
+	winebuild --$(lastword $(subst ., ,$(4))) --fake-module -E "$(basename $(4)).spec" -o "$(4).fake"
 	mkdir -p $$($(2)_DST$(3))/lib$(subst 32,,$(3))/wine/fakedlls/
 	cp -a $$($(2)_OBJ$(3))/$(4).so $$($(2)_DST$(3))/lib$(subst 32,,$(3))/wine/
 	cp -a $$($(2)_OBJ$(3))/$(4).fake $$($(2)_DST$(3))/lib$(subst 32,,$(3))/wine/fakedlls/$(4)
