@@ -1,21 +1,21 @@
 [package]
 name = "proton-media-converter"
-version = "6.3.0"
+version = "7.0.0"
 authors = ["Andrew Eikum <aeikum@codeweavers.com>"]
 repository = "https://github.com/ValveSoftware/Proton/"
 license = "MIT/Apache-2.0"
-edition = "2018"
+edition = "2021"
 description = "Proton media converter"
 
 [dependencies]
-glib = "0.10"
-gstreamer = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
-gstreamer-base = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
-gstreamer-video = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
-gstreamer-audio = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.7" }
-once_cell = "1.7"
-crc32fast = "1.2"
-array-init = "1.0.*" # >=1.1 requires rust >= 1.51
+glib = "0.14"
+gstreamer = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
+gstreamer-base = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
+gstreamer-video = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
+gstreamer-audio = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
+once_cell = "1.9"
+crc32fast = "1.3"
+array-init = "2.0"
 
 [lib]
 name = "protonmediaconverter"
@@ -23,7 +23,7 @@ crate-type = ["cdylib"]
 path = "src/lib.rs"
 
 [build-dependencies]
-gst-plugin-version-helper = { git = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs", tag = "0.6.0" }
+gst-plugin-version-helper = { git = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs", tag = "0.7.2" }
 
 [profile.release]
 lto = true

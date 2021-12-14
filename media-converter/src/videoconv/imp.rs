@@ -28,10 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-use glib;
-use glib::subclass;
-use glib::subclass::prelude::*;
-
 use crate::format_hash;
 use crate::HASH_SEED;
 use crate::box_array;
@@ -39,6 +35,7 @@ use crate::copy_into_array;
 use crate::BufferedReader;
 
 use gst;
+use gst::glib;
 use gst::prelude::*;
 use gst::subclass::prelude::*;
 use gst::EventView;
@@ -240,14 +237,14 @@ impl<'a> Read for PadReader<'a> {
                 Ok(buf) => {
                     let to_copy;
 
-                    if self.offs + buf.get_size() < self.stride {
-                        to_copy = buf.get_size();
+                    if self.offs + buf.size() < self.stride {
+                        to_copy = buf.size();
                         self.offs += to_copy;
                     }else if self.offs < self.stride {
                         to_copy = self.stride - self.offs;
                         self.offs = self.stride;
                     }else{
-                        to_copy = buf.get_size();
+                        to_copy = buf.size();
                         self.offs += self.stride;
                     };
 
@@ -301,7 +298,7 @@ impl VideoConvState {
     fn new() -> Result<VideoConvState, gst::LoggableError> {
 
         let read_fozdb_path = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE").map_err(|_| {
-            gst_loggable_error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
+            loggable_error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
         })?;
 
         let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), VIDEOCONV_FOZ_NUM_TAGS) {
@@ -343,7 +340,7 @@ impl VideoConvState {
         gst_log!(CAT, "No transcoded video for {}. Substituting a blank video.", format_hash(hash));
 
         self.transcode_hash = None;
-        self.our_duration = Some(include_bytes!("../blank.mkv").len() as u64);
+        self.our_duration = Some(include_bytes!("../../blank.mkv").len() as u64);
 
         false
     }
@@ -353,11 +350,11 @@ impl VideoConvState {
             Some(hash) => {
                 let read_fozdb = self.read_fozdb.as_mut().unwrap();
                 read_fozdb.read_entry(self.transcoded_tag, hash, offs as u64, out, fossilize::CRCCheck::WithoutCRC)
-                    .map_err(|e| gst_loggable_error!(CAT, "Error reading ogvdata: {:?}", e))
+                    .map_err(|e| loggable_error!(CAT, "Error reading ogvdata: {:?}", e))
             },
 
             None => {
-                let blank = include_bytes!("../blank.mkv");
+                let blank = include_bytes!("../../blank.mkv");
 
                 let to_copy = std::cmp::min(blank.len() - offs, out.len());
 
@@ -369,22 +366,20 @@ impl VideoConvState {
     }
 }
 
-struct VideoConv {
+pub struct VideoConv {
     state: Mutex<Option<VideoConvState>>,
     sinkpad: gst::Pad,
     srcpad: gst::Pad,
 }
 
+#[glib::object_subclass]
 impl ObjectSubclass for VideoConv {
     const NAME: &'static str = "ProtonVideoConverter";
+    type Type = super::VideoConv;
     type ParentType = gst::Element;
-    type Instance = gst::subclass::ElementInstanceStruct<Self>;
-    type Class = subclass::simple::ClassStruct<Self>;
 
-    glib_object_subclass!();
-
-    fn with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
-        let templ = klass.get_pad_template("sink").unwrap();
+    fn with_class(klass: &Self::Class) -> Self {
+        let templ = klass.pad_template("sink").unwrap();
         let sinkpad = gst::Pad::builder_with_template(&templ, Some("sink"))
             .event_function(|pad, parent, event| {
                 VideoConv::catch_panic_pad_function(
@@ -394,13 +389,13 @@ impl ObjectSubclass for VideoConv {
                 )
             }).build();
 
-        let templ = klass.get_pad_template("src").unwrap();
+        let templ = klass.pad_template("src").unwrap();
         let srcpad = gst::Pad::builder_with_template(&templ, Some("src"))
             .getrange_function(|pad, parent, offset, in_buf, size| {
                 VideoConv::catch_panic_pad_function(
                     parent,
                     || Err(gst::FlowError::Error),
-                    |videoconv, element| videoconv.get_range(pad, element, offset, in_buf, size)
+                    |videoconv, element| videoconv.range(pad, element, offset, in_buf, size)
                 )
             })
             .query_function(|pad, parent, query| {
@@ -413,7 +408,7 @@ impl ObjectSubclass for VideoConv {
             .activatemode_function(|pad, parent, mode, active| {
                 VideoConv::catch_panic_pad_function(
                     parent,
-                    || Err(gst_loggable_error!(CAT, "Panic activating srcpad with mode")),
+                    || Err(loggable_error!(CAT, "Panic activating srcpad with mode")),
                     |videoconv, element| videoconv.src_activatemode(pad, element, mode, active)
                 )
             }).build();
@@ -424,61 +419,68 @@ impl ObjectSubclass for VideoConv {
             srcpad,
         }
     }
-
-    fn class_init(klass: &mut subclass::simple::ClassStruct<Self>) {
-
-        klass.set_metadata(
-            "Proton video converter",
-            "Codec/Parser",
-            "Converts video for Proton",
-            "Andrew Eikum <aeikum@codeweavers.com>");
-
-        let mut caps = gst::Caps::new_empty();
-        {
-            let caps = caps.get_mut().unwrap();
-            caps.append(gst::Caps::builder("video/x-ms-asf").build());
-            caps.append(gst::Caps::builder("video/x-msvideo").build());
-            caps.append(gst::Caps::builder("video/mpeg").build());
-            caps.append(gst::Caps::builder("video/quicktime").build());
-        }
-        let sink_pad_template = gst::PadTemplate::new(
-            "sink",
-            gst::PadDirection::Sink,
-            gst::PadPresence::Always,
-            &caps).unwrap();
-        klass.add_pad_template(sink_pad_template);
-
-        let mut caps = gst::Caps::new_empty();
-        {
-            let caps = caps.get_mut().unwrap();
-            caps.append(gst::Caps::builder("video/x-matroska").build());
-            caps.append(gst::Caps::builder("application/ogg").build());
-        }
-        let src_pad_template = gst::PadTemplate::new(
-            "src",
-            gst::PadDirection::Src,
-            gst::PadPresence::Always,
-            &caps).unwrap();
-        klass.add_pad_template(src_pad_template);
-    }
 }
 
 impl ObjectImpl for VideoConv {
-    glib_object_impl!();
-
-    fn constructed(&self, obj: &glib::Object) {
+    fn constructed(&self, obj: &Self::Type) {
         self.parent_constructed(obj);
 
-        let element = obj.downcast_ref::<gst::Element>().unwrap();
-        element.add_pad(&self.sinkpad).unwrap();
-        element.add_pad(&self.srcpad).unwrap();
+        obj.add_pad(&self.sinkpad).unwrap();
+        obj.add_pad(&self.srcpad).unwrap();
     }
 }
 
 impl ElementImpl for VideoConv {
+    fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
+        static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+            gst::subclass::ElementMetadata::new(
+                "Proton video converter",
+                "Codec/Parser",
+                "Converts video for Proton",
+                "Andrew Eikum <aeikum@codeweavers.com>"
+            )
+        });
+
+        Some(&*ELEMENT_METADATA)
+    }
+
+    fn pad_templates() -> &'static [gst::PadTemplate] {
+        static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
+            let mut caps = gst::Caps::new_empty();
+            {
+                let caps = caps.get_mut().unwrap();
+                caps.append(gst::Caps::builder("video/x-ms-asf").build());
+                caps.append(gst::Caps::builder("video/x-msvideo").build());
+                caps.append(gst::Caps::builder("video/mpeg").build());
+                caps.append(gst::Caps::builder("video/quicktime").build());
+            }
+            let sink_pad_template = gst::PadTemplate::new(
+                "sink",
+                gst::PadDirection::Sink,
+                gst::PadPresence::Always,
+                &caps).unwrap();
+
+            let mut caps = gst::Caps::new_empty();
+            {
+                let caps = caps.get_mut().unwrap();
+                caps.append(gst::Caps::builder("video/x-matroska").build());
+                caps.append(gst::Caps::builder("application/ogg").build());
+            }
+            let src_pad_template = gst::PadTemplate::new(
+                "src",
+                gst::PadDirection::Src,
+                gst::PadPresence::Always,
+                &caps).unwrap();
+
+            vec![src_pad_template, sink_pad_template]
+        });
+
+        PAD_TEMPLATES.as_ref()
+    }
+
     fn change_state(
         &self,
-        element: &gst::Element,
+        element: &super::VideoConv,
         transition: gst::StateChange
     ) -> Result<gst::StateChangeSuccess, gst::StateChangeError> {
 
@@ -541,10 +543,10 @@ impl <'a> Read for StreamSerializer<'a> {
 }
 
 impl VideoConv {
-    fn get_range(
+    fn range(
         &self,
         _pad: &gst::Pad,
-        _element: &gst::Element,
+        _element: &super::VideoConv,
         offset: u64,
         in_buf: Option<&mut gst::BufferRef>,
         requested_size: u32,
@@ -577,7 +579,7 @@ impl VideoConv {
                         .map_err(|e| { e.log(); gst::FlowError::Error })?;
                 }
 
-                if readed > 0 || buf.get_size() == 0 {
+                if readed > 0 || buf.size() == 0 {
                     buf.set_size(readed);
                     return Ok(gst::PadGetRangeSuccess::FilledBuffer);
                 }
@@ -597,7 +599,7 @@ impl VideoConv {
 
                 let mut b = map.into_buffer();
 
-                if readed > 0 || b.get_size() == 0 {
+                if readed > 0 || b.size() == 0 {
                     b.get_mut().unwrap().set_size(readed);
                     return Ok(gst::PadGetRangeSuccess::NewBuffer(b));
                 }
@@ -610,7 +612,7 @@ impl VideoConv {
     fn sink_event(
         &self,
         pad: &gst::Pad,
-        element: &gst::Element,
+        element: &super::VideoConv,
         event: gst::Event
     ) -> bool {
         gst_log!(CAT, obj:pad, "Got an event {:?}", event);
@@ -654,9 +656,8 @@ impl VideoConv {
         let mut query = gst::query::Duration::new(gst::Format::Bytes);
 
         if self.sinkpad.peer_query(&mut query) {
-            state.upstream_duration = match query.get_result() {
-                gst::format::GenericFormattedValue::Bytes(b) =>
-                    *b,
+            state.upstream_duration = match query.result().try_into().unwrap() {
+                Some(gst::format::Bytes(size)) => Some(size),
                 _ => None,
             }
         }else{
@@ -676,7 +677,7 @@ impl VideoConv {
     fn src_query(
         &self,
         pad: &gst::Pad,
-        element: &gst::Element,
+        element: &super::VideoConv,
         query: &mut gst::QueryRef) -> bool
     {
         gst_log!(CAT, obj: pad, "got query: {:?}", query);
@@ -688,7 +689,7 @@ impl VideoConv {
                     return res;
                 }
 
-                let (flags, min, max, align) = peer_query.get_result();
+                let (flags, min, max, align) = peer_query.result();
 
                 q.set(flags, min, max, align);
                 q.add_scheduling_modes(&[gst::PadMode::Pull]);
@@ -708,8 +709,8 @@ impl VideoConv {
                 }
 
                 if let Some(sz) = state.our_duration {
-                    if q.get_format() == gst::Format::Bytes {
-                        q.set(gst::format::Bytes::from(sz));
+                    if q.format() == gst::Format::Bytes {
+                        q.set(gst::format::Bytes(sz));
                         return true
                     }
                 }
@@ -769,7 +770,7 @@ impl VideoConv {
 
             if let Ok(hash) = hash {
                 if !state.begin_transcode(hash) {
-                    self.dump_upstream_data(hash).map_err(|_| gst_loggable_error!(CAT, "Dumping file to disk failed"))?;
+                    self.dump_upstream_data(hash).map_err(|_| loggable_error!(CAT, "Dumping file to disk failed"))?;
                 }
             }
         }
@@ -780,7 +781,7 @@ impl VideoConv {
     fn src_activatemode(
         &self,
         _pad: &gst::Pad,
-        _element: &gst::Element,
+        _element: &super::VideoConv,
         mode: gst::PadMode,
         active: bool
     ) -> Result<(), gst::LoggableError> {
@@ -792,7 +793,7 @@ impl VideoConv {
 
             let mut state = match &mut *state {
                 Some(s) => s,
-                None => { return Err(gst_loggable_error!(CAT, "VideoConv not yet in READY state?")); }
+                None => { return Err(loggable_error!(CAT, "VideoConv not yet in READY state?")); }
             };
 
             /* once we're initted in pull mode, we can start transcoding */
@@ -801,13 +802,4 @@ impl VideoConv {
 
         Ok(())
     }
-
-}
-
-pub fn register(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
-    gst::Element::register(
-        Some(plugin),
-        "protonvideoconverter",
-        gst::Rank::Marginal,
-        VideoConv::get_type())
 }

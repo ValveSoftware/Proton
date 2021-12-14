@@ -28,14 +28,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-use glib;
-use glib::subclass;
-use glib::subclass::prelude::*;
-
 use crate::format_hash;
 use crate::HASH_SEED;
 
 use gst;
+use gst::glib;
 use gst::prelude::*;
 use gst::subclass::prelude::*;
 use gst::EventView;
@@ -316,17 +313,16 @@ struct NeedTranscodeHead {
 
 impl NeedTranscodeHead {
     fn new_from_caps(caps: &gst::CapsRef) -> Result<Self, gst::LoggableError> {
-        let s = caps.get_structure(0).ok_or_else(|| gst_loggable_error!(CAT, "Caps have no WMA data!"))?;
+        let s = caps.structure(0).ok_or_else(|| loggable_error!(CAT, "Caps have no WMA data!"))?;
 
-        let wmaversion = s.get_some::<i32>("wmaversion").map_err(|_| gst_loggable_error!(CAT, "Caps have no wmaversion field"))?;
-        let bitrate = s.get_some::<i32>("bitrate").map_err(|_| gst_loggable_error!(CAT, "Caps have no bitrate field"))?;
-        let channels = s.get_some::<i32>("channels").map_err(|_| gst_loggable_error!(CAT, "Caps have no channels field"))?;
-        let rate = s.get_some::<i32>("rate").map_err(|_| gst_loggable_error!(CAT, "Caps have no rate field"))?;
-        let block_align = s.get_some::<i32>("block_align").map_err(|_| gst_loggable_error!(CAT, "Caps have no block_align field"))?;
-        let depth = s.get_some::<i32>("depth").map_err(|_| gst_loggable_error!(CAT, "Caps have no depth field"))?;
+        let wmaversion = s.get::<i32>("wmaversion").map_err(|_| loggable_error!(CAT, "Caps have no wmaversion field"))?;
+        let bitrate = s.get::<i32>("bitrate").map_err(|_| loggable_error!(CAT, "Caps have no bitrate field"))?;
+        let channels = s.get::<i32>("channels").map_err(|_| loggable_error!(CAT, "Caps have no channels field"))?;
+        let rate = s.get::<i32>("rate").map_err(|_| loggable_error!(CAT, "Caps have no rate field"))?;
+        let block_align = s.get::<i32>("block_align").map_err(|_| loggable_error!(CAT, "Caps have no block_align field"))?;
+        let depth = s.get::<i32>("depth").map_err(|_| loggable_error!(CAT, "Caps have no depth field"))?;
         let codec_data_buf = s.get::<gst::Buffer>("codec_data")
-            .map_err(|_| gst_loggable_error!(CAT, "Caps have no codec_data field"))?
-            .ok_or_else(|| gst_loggable_error!(CAT, "Caps have NULL codec_data field"))?;
+            .map_err(|_| loggable_error!(CAT, "Caps have no codec_data field"))?;
 
         let mapped = codec_data_buf.into_mapped_buffer_readable().unwrap();
         let mut codec_data = Vec::new();
@@ -428,7 +424,7 @@ impl StreamState {
             let mut db = &mut db.open(true).fozdb;
             let db = match &mut db {
                 Some(d) => d,
-                None => { return Err(gst_loggable_error!(CAT, "Failed to open fossilize db!")) },
+                None => { return Err(loggable_error!(CAT, "Failed to open fossilize db!")) },
             };
 
             let mut found = db.has_entry(AUDIOCONV_FOZ_TAG_STREAM, self.cur_hash);
@@ -476,20 +472,20 @@ impl StreamState {
                                    self.buffers[0].0,
                                    &mut self.codec_info.as_ref().unwrap().serialize().as_slice(),
                                    fossilize::CRCCheck::WithCRC)
-                        .map_err(|e| gst_loggable_error!(CAT, "Unable to write stream header: {:?}", e))?;
+                        .map_err(|e| loggable_error!(CAT, "Unable to write stream header: {:?}", e))?;
 
                     db.write_entry(AUDIOCONV_FOZ_TAG_STREAM,
                                    self.cur_hash,
                                    &mut StreamStateSerializer::new(self),
                                    fossilize::CRCCheck::WithCRC)
-                        .map_err(|e| gst_loggable_error!(CAT, "Unable to write stream: {:?}", e))?;
+                        .map_err(|e| loggable_error!(CAT, "Unable to write stream: {:?}", e))?;
 
                     for buffer in self.buffers.iter() {
                         db.write_entry(AUDIOCONV_FOZ_TAG_AUDIODATA,
                                        buffer.0,
                                        &mut buffer.1.as_slice(),
                                    fossilize::CRCCheck::WithCRC)
-                            .map_err(|e| gst_loggable_error!(CAT, "Unable to write audio data: {:?}", e))?;
+                            .map_err(|e| loggable_error!(CAT, "Unable to write audio data: {:?}", e))?;
                     }
                 }
             }
@@ -555,7 +551,7 @@ impl AudioConvState {
     fn new() -> Result<AudioConvState, gst::LoggableError> {
 
         let read_fozdb_path = std::env::var("MEDIACONV_AUDIO_TRANSCODED_FILE").map_err(|_| {
-            gst_loggable_error!(CAT, "MEDIACONV_AUDIO_TRANSCODED_FILE is not set!")
+            loggable_error!(CAT, "MEDIACONV_AUDIO_TRANSCODED_FILE is not set!")
         })?;
 
         let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), AUDIOCONV_FOZ_NUM_TAGS) {
@@ -590,7 +586,7 @@ impl AudioConvState {
 
     fn open_transcode_file(&mut self, buffer: gst::Buffer) -> io::Result<Box<[u8]>> {
         let mapped = buffer.into_mapped_buffer_readable().unwrap();
-        let buf_len = mapped.get_size();
+        let buf_len = mapped.size();
 
         let hash = hash_data(mapped.as_slice(), buf_len, &mut self.hash_state)
             .map_err(|e|{ gst_warning!(CAT, "Hashing buffer failed! {}", e); io::ErrorKind::Other })?;
@@ -632,28 +628,26 @@ impl AudioConvState {
         /* if we can't, return the blank file */
         self.stream_state.needs_dump = true;
 
-        let buf = Box::new(*include_bytes!("../blank.ptna"));
+        let buf = Box::new(*include_bytes!("../../blank.ptna"));
 
         Ok(buf)
     }
 }
 
-struct AudioConv {
+pub struct AudioConv {
     state: Mutex<Option<AudioConvState>>,
     sinkpad: gst::Pad,
     srcpad: gst::Pad,
 }
 
+#[glib::object_subclass]
 impl ObjectSubclass for AudioConv {
     const NAME: &'static str = "ProtonAudioConverter";
+    type Type = super::AudioConv;
     type ParentType = gst::Element;
-    type Instance = gst::subclass::ElementInstanceStruct<Self>;
-    type Class = subclass::simple::ClassStruct<Self>;
 
-    glib_object_subclass!();
-
-    fn with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
-        let templ = klass.get_pad_template("sink").unwrap();
+    fn with_class(klass: &Self::Class) -> Self {
+        let templ = klass.pad_template("sink").unwrap();
         let sinkpad = gst::Pad::builder_with_template(&templ, Some("sink"))
             .chain_function(|pad, parent, buffer| {
                 AudioConv::catch_panic_pad_function(
@@ -670,7 +664,7 @@ impl ObjectSubclass for AudioConv {
                 )
             }).build();
 
-        let templ = klass.get_pad_template("src").unwrap();
+        let templ = klass.pad_template("src").unwrap();
         let srcpad = gst::Pad::builder_with_template(&templ, Some("src"))
             .query_function(|pad, parent, query| {
                 AudioConv::catch_panic_pad_function(
@@ -682,7 +676,7 @@ impl ObjectSubclass for AudioConv {
             .activatemode_function(|pad, parent, mode, active| {
                 AudioConv::catch_panic_pad_function(
                     parent,
-                    || Err(gst_loggable_error!(CAT, "Panic activating srcpad with mode")),
+                    || Err(loggable_error!(CAT, "Panic activating srcpad with mode")),
                     |audioconv, element| audioconv.src_activatemode(pad, element, mode, active)
                 )
             }).build();
@@ -693,53 +687,59 @@ impl ObjectSubclass for AudioConv {
             srcpad,
         }
     }
-
-    fn class_init(klass: &mut subclass::simple::ClassStruct<Self>) {
-
-        klass.set_metadata(
-            "Proton audio converter",
-            "Codec/Parser",
-            "Converts audio for Proton",
-            "Andrew Eikum <aeikum@codeweavers.com>");
-
-        let mut caps = gst::Caps::new_empty();
-        {
-            let caps = caps.get_mut().unwrap();
-            caps.append(gst::Caps::builder("audio/x-wma").build());
-        }
-        let sink_pad_template = gst::PadTemplate::new(
-            "sink",
-            gst::PadDirection::Sink,
-            gst::PadPresence::Always,
-            &caps).unwrap();
-        klass.add_pad_template(sink_pad_template);
-
-        let caps = gst::Caps::builder("audio/x-opus").build();
-        let src_pad_template = gst::PadTemplate::new(
-            "src",
-            gst::PadDirection::Src,
-            gst::PadPresence::Always,
-            &caps).unwrap();
-        klass.add_pad_template(src_pad_template);
-    }
 }
 
 impl ObjectImpl for AudioConv {
-    glib_object_impl!();
-
-    fn constructed(&self, obj: &glib::Object) {
+    fn constructed(&self, obj: &Self::Type) {
         self.parent_constructed(obj);
 
-        let element = obj.downcast_ref::<gst::Element>().unwrap();
-        element.add_pad(&self.sinkpad).unwrap();
-        element.add_pad(&self.srcpad).unwrap();
+        obj.add_pad(&self.sinkpad).unwrap();
+        obj.add_pad(&self.srcpad).unwrap();
     }
 }
 
 impl ElementImpl for AudioConv {
+    fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
+        static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+            gst::subclass::ElementMetadata::new(
+                "Proton audio converter",
+                "Codec/Parser",
+                "Converts audio for Proton",
+                "Andrew Eikum <aeikum@codeweavers.com>")
+        });
+
+        Some(&*ELEMENT_METADATA)
+    }
+
+    fn pad_templates() -> &'static [gst::PadTemplate] {
+        static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
+            let mut caps = gst::Caps::new_empty();
+            {
+                let caps = caps.get_mut().unwrap();
+                caps.append(gst::Caps::builder("audio/x-wma").build());
+            }
+            let sink_pad_template = gst::PadTemplate::new(
+                "sink",
+                gst::PadDirection::Sink,
+                gst::PadPresence::Always,
+                &caps).unwrap();
+
+            let caps = gst::Caps::builder("audio/x-opus").build();
+            let src_pad_template = gst::PadTemplate::new(
+                "src",
+                gst::PadDirection::Src,
+                gst::PadPresence::Always,
+                &caps).unwrap();
+
+            vec![src_pad_template, sink_pad_template]
+        });
+
+        PAD_TEMPLATES.as_ref()
+    }
+
     fn change_state(
         &self,
-        element: &gst::Element,
+        element: &super::AudioConv,
         transition: gst::StateChange
     ) -> Result<gst::StateChangeSuccess, gst::StateChangeError> {
 
@@ -797,7 +797,7 @@ impl AudioConv {
     fn chain(
         &self,
         _pad: &gst::Pad,
-        _element: &gst::Element,
+        _element: &super::AudioConv,
         buffer: gst::Buffer
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         gst_log!(CAT, "Handling buffer {:?}", buffer);
@@ -849,7 +849,7 @@ impl AudioConv {
             let mut buffer = gst::Buffer::with_size(encoded_len as usize).unwrap();
 
             if !pkt_is_header && padding_len > 0 {
-                gst_audio::AudioClippingMeta::add(buffer.get_mut().unwrap(), gst::format::Default(Some(0)), gst::format::Default(Some(padding_len as u64)));
+                gst_audio::AudioClippingMeta::add(buffer.get_mut().unwrap(), gst::format::Default(0), gst::format::Default(padding_len as u64));
             }
 
             let mut writable = buffer.into_mapped_buffer_writable().unwrap();
@@ -872,7 +872,7 @@ impl AudioConv {
     fn sink_event(
         &self,
         pad: &gst::Pad,
-        element: &gst::Element,
+        element: &super::AudioConv,
         event: gst::Event
     ) -> bool {
         gst_log!(CAT, obj:pad, "Got an event {:?}", event);
@@ -881,7 +881,7 @@ impl AudioConv {
 
                 let mut state = self.state.lock().unwrap();
                 if let Some(state) = &mut *state {
-                    let head = match NeedTranscodeHead::new_from_caps(&event_caps.get_caps()){
+                    let head = match NeedTranscodeHead::new_from_caps(&event_caps.caps()){
                         Ok(h) => h,
                         Err(e) => {
                             gst_error!(CAT, "Invalid WMA caps!");
@@ -920,7 +920,7 @@ impl AudioConv {
     fn src_query(
         &self,
         pad: &gst::Pad,
-        element: &gst::Element,
+        element: &super::AudioConv,
         query: &mut gst::QueryRef) -> bool
     {
         gst_log!(CAT, obj: pad, "got query: {:?}", query);
@@ -932,7 +932,7 @@ impl AudioConv {
                     return res;
                 }
 
-                let (flags, min, max, align) = peer_query.get_result();
+                let (flags, min, max, align) = peer_query.result();
 
                 q.set(flags, min, max, align);
                 true
@@ -944,7 +944,7 @@ impl AudioConv {
     fn src_activatemode(
         &self,
         _pad: &gst::Pad,
-        _element: &gst::Element,
+        _element: &super::AudioConv,
         mode: gst::PadMode,
         active: bool
     ) -> Result<(), gst::LoggableError> {
@@ -953,13 +953,4 @@ impl AudioConv {
 
         Ok(())
     }
-
-}
-
-pub fn register(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
-    gst::Element::register(
-        Some(plugin),
-        "protonaudioconverter",
-        gst::Rank::Marginal,
-        AudioConv::get_type())
 }
