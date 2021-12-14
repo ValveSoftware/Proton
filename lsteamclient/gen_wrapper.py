@@ -609,23 +609,17 @@ path_conversions = [
 def strip_const(typename):
     return typename.replace("const ", "", 1)
 
+windows_structs32 = {}
 def find_windows_struct(struct):
-    for child in list(windows_build.cursor.get_children()):
-        if strip_const(struct.spelling) == child.spelling:
-            return child.type
-    return None
+    return windows_structs32.get(strip_const(struct.spelling), None)
 
+windows_structs64 = {}
 def find_windows64_struct(struct):
-    for child in list(windows_build64.cursor.get_children()):
-        if strip_const(struct.spelling) == child.spelling:
-            return child.type
-    return None
+    return windows_structs64.get(strip_const(struct.spelling), None)
 
+linux_structs64 = {}
 def find_linux64_struct(struct):
-    for child in list(linux_build64.cursor.get_children()):
-        if strip_const(struct.spelling) == child.spelling:
-            return child.type
-    return None
+    return linux_structs64.get(strip_const(struct.spelling), None)
 
 def struct_needs_conversion_nocache(struct):
     if strip_const(struct.spelling) in exempt_structs:
@@ -1309,8 +1303,13 @@ for sdkver in sdk_versions:
                 print('There were parse errors (windows build)')
                 pprint.pprint(diagnostics)
             else:
-                children = list(linux_build.cursor.get_children())
-                for child in children:
+                linux_structs64 = dict(reversed([(child.spelling, child.type) for child
+                                                 in linux_build64.cursor.get_children()]))
+                windows_structs32 = dict(reversed([(child.spelling, child.type) for child
+                                                   in windows_build.cursor.get_children()]))
+                windows_structs64 = dict(reversed([(child.spelling, child.type) for child
+                                                   in windows_build64.cursor.get_children()]))
+                for child in linux_build.cursor.get_children():
                     if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
                         handle_class(sdkver, child)
                     if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
