@@ -28,7 +28,7 @@ index 0b83761ed46..bf3d6c34f14 100644
                  sprintf(name, core_info, i, "thread_siblings");
 -                if(!sysfs_parse_bitmap(name, &thread_mask)) thread_mask = 1<<i;
 +                if(fake_logical_cpus_as_cores || !sysfs_parse_bitmap(name, &thread_mask)) thread_mask = (ULONG_PTR)1<<i;
- 
+
                  /* Needed later for NumaNode and Group. */
                  all_cpus_mask |= thread_mask;
 @@ -910,7 +911,7 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
@@ -69,7 +69,7 @@ index b1d3e863240..7b0c7c32f58 100644
 +    struct cpu_topology_override *cpu_override = get_cpu_topology_override();
      NTSTATUS status;
      int suspend;
- 
+
 @@ -1488,6 +1489,8 @@ void CDECL server_init_process_done( void *relay )
      /* Signal the parent process to continue */
      SERVER_START_REQ( init_process_done )
@@ -88,12 +88,12 @@ index bf3d6c34f14..fc8165f2828 100644
  #include <stdlib.h>
  #include <errno.h>
 +#include <assert.h>
- #ifdef HAVE_SYS_TIME_H
- # include <sys/time.h>
- #endif
+ #include <sys/time.h>
+ #include <time.h>
+ #ifdef HAVE_SYS_PARAM_H
 @@ -165,6 +166,12 @@ struct smbios_boot_info
  #define RSMB 0x52534D42
- 
+
  SYSTEM_CPU_INFORMATION cpu_info = { 0 };
 +static struct
 +{
@@ -101,13 +101,13 @@ index bf3d6c34f14..fc8165f2828 100644
 +    BOOL smt;
 +}
 +cpu_override;
- 
+
  /*******************************************************************************
   * Architecture specific feature detection for CPUs
 @@ -475,6 +482,88 @@ static void get_cpuinfo( SYSTEM_CPU_INFORMATION *info )
- 
+
  #endif /* End architecture specific feature detection for CPUs */
- 
+
 +static void fill_cpu_override(unsigned int host_cpu_count)
 +{
 +    const char *env_override = getenv("WINE_CPU_TOPOLOGY");
@@ -209,7 +209,7 @@ index bf3d6c34f14..fc8165f2828 100644
 @@ -860,6 +953,12 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
          if (op == '-') fscanf(fcpu_list, "%u%c ", &end, &op);
          else end = beg;
- 
+
 +        if (cpu_override.mapping.cpu_count)
 +        {
 +            beg = 0;
@@ -220,7 +220,7 @@ index bf3d6c34f14..fc8165f2828 100644
          {
              DWORD phys_core = 0;
 @@ -873,7 +972,9 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
- 
+
              if (relation == RelationAll || relation == RelationProcessorPackage)
              {
 -                sprintf(name, core_info, i, "physical_package_id");
@@ -252,10 +252,10 @@ index bf3d6c34f14..fc8165f2828 100644
 +                {
 +                    if(fake_logical_cpus_as_cores || !sysfs_parse_bitmap(name, &thread_mask)) thread_mask = (ULONG_PTR)1<<i;
 +                }
- 
+
                  /* Needed later for NumaNode and Group. */
                  all_cpus_mask |= thread_mask;
- 
+
                  if (relation == RelationAll || relation == RelationProcessorCore)
                  {
 -                    sprintf(name, core_info, i, "thread_siblings_list");
@@ -279,11 +279,11 @@ index bf3d6c34f14..fc8165f2828 100644
 +                        else phys_core = i;
                      }
 -                    else phys_core = i;
- 
+
                      if (!logical_proc_info_add_by_id(data, dataex, &len, max_len, RelationProcessorCore, phys_core, thread_mask))
                      {
 @@ -929,36 +1046,40 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
- 
+
              if (relation == RelationAll || relation == RelationCache)
              {
 +                unsigned int cpu_id;
@@ -294,11 +294,11 @@ index bf3d6c34f14..fc8165f2828 100644
                  {
                      CACHE_DESCRIPTOR cache;
                      ULONG_PTR mask = 0;
- 
+
 -                    sprintf(name, cache_info, i, j, "shared_cpu_map");
 +                    sprintf(name, cache_info, cpu_id, j, "shared_cpu_map");
                      if(!sysfs_parse_bitmap(name, &mask)) continue;
- 
+
 -                    sprintf(name, cache_info, i, j, "level");
 +                    sprintf(name, cache_info, cpu_id, j, "level");
                      f = fopen(name, "r");
@@ -306,7 +306,7 @@ index bf3d6c34f14..fc8165f2828 100644
                      fscanf(f, "%u", &r);
                      fclose(f);
                      cache.Level = r;
- 
+
 -                    sprintf(name, cache_info, i, j, "ways_of_associativity");
 +                    sprintf(name, cache_info, cpu_id, j, "ways_of_associativity");
                      f = fopen(name, "r");
@@ -314,7 +314,7 @@ index bf3d6c34f14..fc8165f2828 100644
                      fscanf(f, "%u", &r);
                      fclose(f);
                      cache.Associativity = r;
- 
+
 -                    sprintf(name, cache_info, i, j, "coherency_line_size");
 +                    sprintf(name, cache_info, cpu_id, j, "coherency_line_size");
                      f = fopen(name, "r");
@@ -322,7 +322,7 @@ index bf3d6c34f14..fc8165f2828 100644
                      fscanf(f, "%u", &r);
                      fclose(f);
                      cache.LineSize = r;
- 
+
 -                    sprintf(name, cache_info, i, j, "size");
 +                    sprintf(name, cache_info, cpu_id, j, "size");
                      f = fopen(name, "r");
@@ -331,7 +331,7 @@ index bf3d6c34f14..fc8165f2828 100644
 @@ -967,7 +1088,7 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
                          WARN("unknown cache size %u%c\n", r, op);
                      cache.Size = (op=='K' ? r*1024 : r);
- 
+
 -                    sprintf(name, cache_info, i, j, "type");
 +                    sprintf(name, cache_info, cpu_id, j, "type");
                      f = fopen(name, "r");
@@ -340,7 +340,7 @@ index bf3d6c34f14..fc8165f2828 100644
 @@ -979,6 +1100,19 @@ static NTSTATUS create_logical_proc_info( SYSTEM_LOGICAL_PROCESSOR_INFORMATION *
                      else
                          cache.Type = CacheUnified;
- 
+
 +                    if (cpu_override.mapping.cpu_count)
 +                    {
 +                        ULONG_PTR host_mask = mask;
@@ -366,13 +366,13 @@ index bf3d6c34f14..fc8165f2828 100644
 +            break;
      }
      fclose(fcpu_list);
- 
+
 diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
 index ca5dac43bb0..bc6a5451611 100644
 --- a/dlls/ntdll/unix/thread.c
 +++ b/dlls/ntdll/unix/thread.c
 @@ -1323,7 +1323,20 @@ ULONG WINAPI NtGetCurrentProcessorNumber(void)
- 
+
  #if defined(__linux__) && defined(__NR_getcpu)
      int res = syscall(__NR_getcpu, &processor, NULL, NULL);
 -    if (res != -1) return processor;
@@ -391,7 +391,7 @@ index ca5dac43bb0..bc6a5451611 100644
 +        WARN("Thread is running on processor which is not in the defined override.\n");
 +    }
  #endif
- 
+
      if (peb->NumberOfProcessors > 1)
 diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
 index 39ab7912490..b29de19ec8e 100644
@@ -405,7 +405,7 @@ index 39ab7912490..b29de19ec8e 100644
  extern void add_completion( HANDLE handle, ULONG_PTR value, NTSTATUS status, ULONG info, BOOL async ) DECLSPEC_HIDDEN;
 
  extern void dbg_init(void) DECLSPEC_HIDDEN;
- 
+
 diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
 index f4f45d958be..aed7090572b 100644
 --- a/include/wine/server_protocol.h
@@ -413,16 +413,16 @@ index f4f45d958be..aed7090572b 100644
 @@ -794,6 +794,12 @@ typedef struct
      lparam_t info;
  } cursor_pos_t;
- 
+
 +struct cpu_topology_override
 +{
 +    unsigned int cpu_count;
 +    unsigned char host_cpu_id[64];
 +};
 +
- 
- 
- 
+
+
+
 @@ -895,6 +901,7 @@ struct init_process_done_request
      mod_handle_t module;
      client_ptr_t ldt_copy;
@@ -440,7 +440,7 @@ index 97e074a5261..d1f9ab764f7 100644
  static unsigned int process_get_fsync_idx( struct object *obj, enum fsync_type *type );
  static void terminate_process( struct process *process, struct thread *skip, int exit_code );
 +static void set_process_affinity( struct process *process, affinity_t affinity );
- 
+
  static const struct object_ops process_ops =
  {
 @@ -550,6 +551,7 @@ struct process *create_process( int fd, struct process *parent, int inherit_all,
@@ -468,7 +468,7 @@ index 97e074a5261..d1f9ab764f7 100644
 +    if (have_cpu_override)
 +        process->cpu_override = *cpu_override;
  }
- 
+
  /* open a handle to a process */
 diff --git a/server/process.h b/server/process.h
 index 430fd365508..d1b8b3fc222 100644
@@ -480,7 +480,7 @@ index 430fd365508..d1b8b3fc222 100644
      unsigned int         fsync_idx;
 +    struct cpu_topology_override cpu_override; /* Overridden CPUs to host CPUs mapping. */
  };
- 
+
  #define CPU_FLAG(cpu) (1 << (cpu))
 diff --git a/server/protocol.def b/server/protocol.def
 index 48f9f4fae90..0f2fe077b80 100644
@@ -489,7 +489,7 @@ index 48f9f4fae90..0f2fe077b80 100644
 @@ -810,6 +810,12 @@ typedef struct
      lparam_t info;
  } cursor_pos_t;
- 
+
 +struct cpu_topology_override
 +{
 +    unsigned int cpu_count;
@@ -498,9 +498,9 @@ index 48f9f4fae90..0f2fe077b80 100644
 +
  /****************************************************************/
  /* Request declarations */
- 
+
 @@ -877,6 +883,7 @@ typedef struct
- 
+
  /* Signal the end of the process initialization */
  @REQ(init_process_done)
 +    VARARG(cpu_override,cpu_topology_override); /* Overridden CPUs to host CPUs mapping. */
@@ -512,7 +512,7 @@ index 0fb3aa0e727..31043c3df33 100644
 --- a/server/thread.c
 +++ b/server/thread.c
 @@ -605,8 +605,19 @@ int set_thread_affinity( struct thread *thread, affinity_t affinity )
- 
+
          CPU_ZERO( &set );
          for (i = 0, mask = 1; mask; i++, mask <<= 1)
 -            if (affinity & mask) CPU_SET( i, &set );
@@ -534,26 +534,26 @@ index 0fb3aa0e727..31043c3df33 100644
      }
  #endif
 @@ -1500,7 +1511,7 @@ DECL_HANDLER(init_thread)
- 
+
      if (!process->parent_id)
          process->affinity = current->affinity = get_thread_affinity( current );
 -    else
 +    else if (!process->cpu_override.cpu_count)
          set_thread_affinity( current, current->affinity );
- 
+
      debug_level = max( debug_level, req->debug_level );
 @@ -1514,10 +1525,12 @@ DECL_HANDLER(init_thread)
      current->unix_tid = req->unix_tid;
      current->teb      = req->teb;
      current->entry_point = req->entry;
 +    struct process *process = current->process;
- 
+
      init_thread_context( current );
      generate_debug_event( current, DbgCreateThreadStateChange, &req->entry );
 -    set_thread_affinity( current, current->affinity );
 +    if (!process->cpu_override.cpu_count)
 +        set_thread_affinity( current, current->affinity );
- 
+
      reply->pid     = get_process_id( current->process );
      reply->tid     = get_thread_id( current );
 diff --git a/server/trace.c b/server/trace.c
@@ -563,7 +563,7 @@ index e3a29beb6da..7df5681357b 100644
 @@ -1293,6 +1293,24 @@ static void dump_varargs_handle_infos( const char *prefix, data_size_t size )
      fputc( '}', stderr );
  }
- 
+
 +static void dump_varargs_cpu_topology_override( const char *prefix, data_size_t size )
 +{
 +    const struct cpu_topology_override *cpu_topology = cur_data;
@@ -583,7 +583,7 @@ index e3a29beb6da..7df5681357b 100644
 +}
 +
  typedef void (*dump_func)( const void *req );
- 
+
  /* Everything below this line is generated automatically by tools/make_requests */
 @@ -1369,6 +1387,7 @@ static void dump_init_process_done_request( const struct init_process_done_reque
      dump_uint64( ", module=", &req->module );
@@ -591,6 +591,6 @@ index e3a29beb6da..7df5681357b 100644
      dump_uint64( ", entry=", &req->entry );
 +    dump_varargs_cpu_topology_override( ", cpu_override=", cur_size );
  }
- 
+
  static void dump_init_process_done_reply( const struct init_process_done_reply *req )
-  
+

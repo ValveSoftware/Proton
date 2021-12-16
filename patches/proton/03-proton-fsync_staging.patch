@@ -60,7 +60,7 @@ new file mode 100644
 index 00000000000..5012425b95a
 --- /dev/null
 +++ b/dlls/ntdll/unix/fsync.c
-@@ -0,0 +1,1269 @@
+@@ -0,0 +1,1267 @@
 +/*
 + * futex-based synchronization objects
 + *
@@ -94,9 +94,7 @@ index 00000000000..5012425b95a
 +#include <stdarg.h>
 +#include <stdio.h>
 +#include <stdlib.h>
-+#ifdef HAVE_SYS_MMAN_H
-+# include <sys/mman.h>
-+#endif
++#include <sys/mman.h>
 +#ifdef HAVE_SYS_STAT_H
 +# include <sys/stat.h>
 +#endif
@@ -2315,7 +2313,7 @@ new file mode 100644
 index 00000000000..0a88ecdd3f6
 --- /dev/null
 +++ b/server/fsync.c
-@@ -0,0 +1,526 @@
+@@ -0,0 +1,524 @@
 +/*
 + * futex-based synchronization objects
 + *
@@ -2343,9 +2341,7 @@ index 00000000000..0a88ecdd3f6
 +#include <limits.h>
 +#include <stdio.h>
 +#include <stdarg.h>
-+#ifdef HAVE_SYS_MMAN_H
-+# include <sys/mman.h>
-+#endif
++#include <sys/mman.h>
 +#ifdef HAVE_SYS_STAT_H
 +# include <sys/stat.h>
 +#endif

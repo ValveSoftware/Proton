@@ -2405,3 +2405,16 @@ index 756964fe714..6151f43bacf 100644
 --
 2.31.1
 
+diff --git a/dlls/winevulkan/Makefile.in b/dlls/winevulkan/Makefile.in
+index 38809211308..f7ca282921f 100644
+--- a/dlls/winevulkan/Makefile.in
++++ b/dlls/winevulkan/Makefile.in
+@@ -2,7 +2,7 @@ MODULE    = winevulkan.dll
+ UNIXLIB   = winevulkan.so
+ IMPORTLIB = winevulkan
+ IMPORTS   = user32 gdi32 advapi32 setupapi win32u
+-EXTRALIBS = $(PTHREAD_LIBS)
++EXTRALIBS = -lm $(PTHREAD_LIBS)
+
+ C_SRCS = \
+ 	loader.c \
