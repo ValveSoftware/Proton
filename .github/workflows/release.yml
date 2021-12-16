@@ -1,65 +1,82 @@
+
 on:
-  push:
-    tags:    
-      - "*"
+  workflow_dispatch:
 
 jobs:
   build-proton-ge:
-    runs-on: macos-10.15
-    env:
-      # avoids hanging the system with vagrant checking for updates
-      VAGRANT_CHECKPOINT_DISABLE: yes
-      # Extract the tag name without refs/tags
-      RELEASE_VERSION: ${GITHUB_REF#refs/*/}
-      # Dedicated file for github actions compatible 
-      # with the gh-actions environment
-      VAGRANT_VAGRANTFILE: Vagrantfile.github
+    runs-on: ubuntu-latest
     steps:
-      - name: Display version
-        run: echo ${{ env.RELEASE_VERSION }}
-
-      - name: Install dependencies
-        run: brew install coreutils
-      # would be a shame to wait 2 hours for the
-      # compilation to finish only to realise sha512sum is not
-      # available
-      - name: Test sha512sum availability
-        run: echo "hello" | sha512sum
 
       - uses: actions/checkout@master
         with:
           submodules: false
+    
+      - name: Get Proton Versions
+        run: echo "RELEASE_VERSION=$(cat VERSION)" >> $GITHUB_ENV
+        
+      - name: Display version
+        run: echo ${{ env.RELEASE_VERSION }}
+      
+      - name: Test sha512sum availability
+        run: echo "hello" | sha512sum
 
       - name: Update submodules
         run: |
           set -o xtrace
           git submodule update --init --recursive
-          
-      - name: Show Vagrant version
-        run: vagrant --version
-      
-        # without this the share directory mounting fails
-        # probably because the guest additions are old
-      - name: Setup vbox additions
-        run: vagrant plugin install vagrant-vbguest
+      - name: Add architecture i386
+        run: sudo dpkg --add-architecture i386
+
+      - name: Add update repos
+        run: sudo apt update
+
+      - name: Install dependencies apt
+        run: sudo apt-get install -y ccache texinfo gpgv2 gnupg2 git fontforge-nox python-debian python3-pip apt-transport-https ca-certificates curl gnupg2 software-properties-common
+
+      - name: Install dependencies pip
+        run: pip install afdko singledispatch==3.4.0.4
+
+      - name: Allow user to run stuff in steamrt
+        run: sudo sysctl kernel.unprivileged_userns_clone=1
+
+      - name: Allow user to run stuff in steamrt
+        run: sudo mkdir -p /etc/sysctl.d/
+
+      - name: Allow user to run stuff in steamrt
+        run: echo 'kernel.unprivileged_userns_clone=1' | sudo tee /etc/sysctl.d/docker_user.conf
+
+      - name: Ensure we use only the mingw-w64 that we built
+        run: sudo apt-get remove -y '*mingw-w64*'
 
       - name: apply patches
         run: ./patches/protonprep.sh
 
-      - name: Run vagrant up
-        run: vagrant up --no-tty
-      - name: Run vagrant up
-        run: vagrant up --no-tty
+      - name: Create dir structure
+        working-directory: ./build
+        run: mkdir build
+
+      - name: Configure build proton
+        working-directory: ./build/build
+        run: ../../configure.sh --build-name="${{ env.RELEASE_VERSION }}" --enable-ccache
 
       # Build name following convention: Proton-<tag>
       - name: Build proton
-        run: build_name=Proton-${{ env.RELEASE_VERSION }} make redist
+        working-directory: ./build/build
+        run: make dist
+
+      - name: Rename directory
+        working-directory: ./build/build
+        run: mv dist ${{ env.RELEASE_VERSION }}
+
+      - name: Archive build
+        working-directory: ./build/build
+        run: tar -czvf ${{ env.RELEASE_VERSION }}.tar.gz ${{ env.RELEASE_VERSION }}
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.PROTON_GE_GITHUB_ACTIONS_BUILD }}
-          file: vagrant_share/*
+          file: build/build/${{ env.RELEASE_VERSION }}.tar.gz
           file_glob: true
-          tag: ${{ github.ref }}
+          tag: ${{ env.RELEASE_VERSION }}
           overwrite: false
