@@ -121,13 +121,10 @@ def merge_user_dir(src, dst):
 def try_copy(src, dst, add_write_perm=True, copy_metadata=False, optional=False, follow_symlinks=True):
     try:
         if os.path.isdir(dst):
-            dstfile = dst + "/" + os.path.basename(src)
-            if os.path.lexists(dstfile):
-                os.remove(dstfile)
-        else:
-            dstfile = dst
-            if os.path.lexists(dst):
-                os.remove(dst)
+            dst = os.path.join(dst, os.path.basename(src))
+
+        if os.path.lexists(dst):
+            os.remove(dst)
 
         if copy_metadata:
             shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
@@ -135,8 +132,8 @@ def try_copy(src, dst, add_write_perm=True, copy_metadata=False, optional=False,
             shutil.copy(src, dst, follow_symlinks=follow_symlinks)
 
         if add_write_perm:
-            new_mode = os.lstat(dstfile).st_mode | stat.S_IWUSR | stat.S_IWGRP
-            os.chmod(dstfile, new_mode)
+            new_mode = os.lstat(dst).st_mode | stat.S_IWUSR | stat.S_IWGRP
+            os.chmod(dst, new_mode)
 
     except FileNotFoundError as e:
         if optional:
