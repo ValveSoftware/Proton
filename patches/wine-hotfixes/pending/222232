@@ -1,0 +1,43 @@
+From: Eric Pouech <eric.pouech@gmail.com>
+Subject: [PATCH] Cc: piotr@codeweavers.com
+Message-Id: <163967800733.246841.13676683173140726669.stgit@euterpe>
+Date: Thu, 16 Dec 2021 19:06:48 +0100
+
+msvcrt*: fix double-free and memory leak in type_info destructor
+
+(spotted by toying with the gcc's static analyzer)
+
+Signed-off-by: Eric Pouech <eric.pouech@gmail.com>
+
+---
+ dlls/msvcp90/cxx.h |    2 +-
+ dlls/msvcrt/cxx.h  |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/msvcp90/cxx.h b/dlls/msvcp90/cxx.h
+index 29854d16bab..701ab02fc05 100644
+--- a/dlls/msvcp90/cxx.h
++++ b/dlls/msvcp90/cxx.h
+@@ -457,7 +457,7 @@ void * __thiscall type_info_vector_dtor(type_info * _this, unsigned int flags) \
+         /* we have an array, with the number of elements stored before the first object */ \
+         INT_PTR i, *ptr = (INT_PTR *)_this - 1; \
+ \
+-        for (i = *ptr - 1; i >= 0; i--) free(_this->name); \
++        for (i = *ptr - 1; i >= 0; i--) free(_this[i].name); \
+         free(ptr); \
+     } \
+     else \
+diff --git a/dlls/msvcrt/cxx.h b/dlls/msvcrt/cxx.h
+index 1a5442725ef..cacbb1524b6 100644
+--- a/dlls/msvcrt/cxx.h
++++ b/dlls/msvcrt/cxx.h
+@@ -291,7 +291,7 @@ void * __thiscall type_info_vector_dtor(type_info * _this, unsigned int flags) \
+         /* we have an array, with the number of elements stored before the first object */ \
+         INT_PTR i, *ptr = (INT_PTR *)_this - 1; \
+ \
+-        for (i = *ptr - 1; i >= 0; i--) free(_this->name); \
++        for (i = *ptr - 1; i >= 0; i--) free(_this[i].name); \
+         free(ptr); \
+     } \
+     else \
+

@@ -1,0 +1,95 @@
+From: Paul Gofman <pgofman@codeweavers.com>
+Subject: [PATCH 1/2] ntdll: Set socket IO status before calling server if operation is completed.
+Message-Id: <20211216184329.3219147-1-pgofman@codeweavers.com>
+Date: Thu, 16 Dec 2021 21:43:28 +0300
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+---
+    If the operation is completed before the server call then the completion
+    will be sent during the server call and another thread may receive it
+    before the iosb status is set. It looks like we shouldn't normally have failure
+    status from server once our operation already succeeded.
+
+ dlls/ntdll/unix/socket.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/ntdll/unix/socket.c b/dlls/ntdll/unix/socket.c
+index 92374e39db7..6937a84df85 100644
+--- a/dlls/ntdll/unix/socket.c
++++ b/dlls/ntdll/unix/socket.c
+@@ -679,6 +679,7 @@ static NTSTATUS sock_recv( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+                            struct WS_sockaddr *addr, int *addr_len, DWORD *ret_flags, int unix_flags, int force_async )
+ {
+     struct async_recv_ioctl *async;
++    BOOL ioresult_set = FALSE;
+     ULONG_PTR information;
+     HANDLE wait_handle;
+     DWORD async_size;
+@@ -736,8 +737,12 @@ static NTSTATUS sock_recv( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+     }
+ 
+     status = try_recv( fd, async, &information );
+-
+-    if (status != STATUS_SUCCESS && status != STATUS_BUFFER_OVERFLOW && status != STATUS_DEVICE_NOT_READY)
++    if (!status)
++    {
++        io->Status = 0;
++        io->Information = information;
++        ioresult_set = TRUE;
++    } else if (status != STATUS_BUFFER_OVERFLOW && status != STATUS_DEVICE_NOT_READY)
+     {
+         release_fileio( &async->io );
+         return status;
+@@ -755,7 +760,11 @@ static NTSTATUS sock_recv( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+         status = wine_server_call( req );
+         wait_handle = wine_server_ptr_handle( reply->wait );
+         options     = reply->options;
+-        if ((!NT_ERROR(status) || wait_handle) && status != STATUS_PENDING)
++
++        if (ioresult_set && status)
++            FIXME( "Server status %#x after successful receive.\n", status );
++
++        if ((!ioresult_set || status) && (!NT_ERROR(status) || wait_handle) && status != STATUS_PENDING)
+         {
+             io->Status = status;
+             io->Information = information;
+@@ -865,6 +874,7 @@ static NTSTATUS sock_send( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+                            const struct WS_sockaddr *addr, unsigned int addr_len, int unix_flags, int force_async )
+ {
+     struct async_send_ioctl *async;
++    BOOL ioresult_set = FALSE;
+     HANDLE wait_handle;
+     DWORD async_size;
+     NTSTATUS status;
+@@ -905,7 +915,13 @@ static NTSTATUS sock_send( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+ 
+     status = try_send( fd, async );
+ 
+-    if (status != STATUS_SUCCESS && status != STATUS_DEVICE_NOT_READY)
++    if (!status)
++    {
++        io->Status = 0;
++        io->Information = async->sent_len;
++        ioresult_set = TRUE;
++    }
++    else if (status != STATUS_DEVICE_NOT_READY)
+     {
+         release_fileio( &async->io );
+         return status;
+@@ -922,7 +938,11 @@ static NTSTATUS sock_send( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, voi
+         status = wine_server_call( req );
+         wait_handle = wine_server_ptr_handle( reply->wait );
+         options     = reply->options;
+-        if ((!NT_ERROR(status) || wait_handle) && status != STATUS_PENDING)
++
++        if (ioresult_set && status)
++            FIXME( "Server status %#x after successful send.\n", status );
++
++        if ((!ioresult_set || status) && (!NT_ERROR(status) || wait_handle) && status != STATUS_PENDING)
+         {
+             io->Status = status;
+             io->Information = async->sent_len;
+
+-- 
+2.33.1
+
