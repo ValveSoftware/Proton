@@ -48,9 +48,6 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
     patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
 
-    # add proton-specific syscall emulation patches
-    patch -Np1 < ../patches/wine-hotfixes/staging/proton-staging-syscall-emu.patch
-
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
@@ -79,10 +76,19 @@
 #    git revert --no-commit dedda40e5d7b5a3bcf67eea95145810da283d7d9
 #    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
+    echo "temporary fshack reverts"
+    git revert --no-commit c2384cf23378953b6960e7044a0e467944e8814a
+    git revert --no-commit c3862f2a6121796814ae31913bfb0efeba565087
+    git revert --no-commit 37be0989540cf84dd9336576577ae535f2b6bbb8
+    git revert --no-commit 3661194f8e8146a594673ad3682290f10fa2c096
+    git revert --no-commit 9aef654392756aacdce6109ccbe21ba446ee4387
+
     echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit 78f916f598b4e0acadbda2c095058bf8a268eb72
+    git revert --no-commit 4f58d8144c5c1d3b86e988f925de7eb02c848e6f
     git revert --no-commit 747905c674d521b61923a6cff1d630c85a74d065
     git revert --no-commit f3624e2d642c4f5c1042d24a70273db4437fcef9
     git revert --no-commit 769057b9b281eaaba7ee438dedb7f922b0903472
@@ -190,6 +196,8 @@
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W ntdll-Junction_Points \
+    -W ntdll-Syscall_Emulation \
+    -W ntdll-Serial_Port_Detection \
     -W server-File_Permissions \
     -W server-Stored_ACLs \
     -W dbghelp-Debug_Symbols \
@@ -201,6 +209,12 @@
     echo "applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
     patch -RNp1 < ../wine-staging/patches/Compiler_Warnings/0031-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
+
+    echo "Manually apply modified ntdll-Syscall_Emulation patch for proton, rebasing keeps complaining"
+    patch -Np1 < ../patches/proton/63-ntdll-Support-x86_64-syscall-emulation.patch
+
+    echo "Manually apply modified ntdll-Serial_Port_Detection patch for proton, rebasing keeps complaining"
+    patch -Np1 < ../patches/proton/64-ntdll-Do-a-device-check-before-returning-a-default-s.patch
 
 ### END WINE STAGING APPLY SECTION ###
 
@@ -216,6 +230,7 @@
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
     echo "mk11 patch"
+    # this is needed so that online multi-player does not crash
     patch -Np1 < ../patches/game-patches/mk11.patch
 
     echo "killer instinct vulkan fix"
@@ -405,6 +420,7 @@
     # Needed specifically for proton, not needed for normal wine
     echo "proton mfplat dll register patch"
     patch -Np1 < ../patches/proton/30-proton-mediafoundation_dllreg.patch
+    patch -Np1 < ../patches/proton/31-proton-mfplat-hacks.patch
 
     # Needed for Nier Replicant
     echo "proton mfplat nier replicant patch"
@@ -440,15 +456,11 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
 
     echo "add halo infinite patches"
-    patch -Np1 < ../patches/wine-hotfixes/testing/halo-infinite-testing.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/halo-infinite-twinapi.appcore.dll.patch
 
     # https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
     echo "unity crash hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
-
-    # https://bugs.winehq.org/show_bug.cgi?id=52017
-    echo "fix for broken file browser"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-file_browser_fix.patch
 
 
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
@@ -459,8 +471,6 @@
 
     # https://bugs.winehq.org/show_bug.cgi?id=51687
     patch -Np1 < ../patches/wine-hotfixes/pending/Return_nt_filename_and_resolve_DOS_drive_path.patch
-
-    patch -Np1 < ../patches/wine-hotfixes/testing/220664
 
 ### END WINE HOTFIX SECTION ###
 
