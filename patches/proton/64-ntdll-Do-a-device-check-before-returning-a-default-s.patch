@@ -28,10 +28,10 @@ diff --git a/dlls/mountmgr.sys/unixlib.c b/dlls/mountmgr.sys/unixlib.c
 index 73735c22d13..f83f7104d82 100644
 --- a/dlls/mountmgr.sys/unixlib.c
 +++ b/dlls/mountmgr.sys/unixlib.c
-@@ -46,6 +46,7 @@
- #ifdef HAVE_SYS_MOUNT_H
- #include <sys/mount.h>
- #endif
+@@ -31,6 +31,7 @@
+ #include <stdlib.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
 +#include <termios.h>
  
  #include "unixlib.h"
