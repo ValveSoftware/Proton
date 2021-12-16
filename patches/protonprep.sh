@@ -473,7 +473,6 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/Return_nt_filename_and_resolve_DOS_drive_path.patch
 
     patch -Np1 < ../patches/wine-hotfixes/pending/222232
-    patch -Np1 < ../patches/wine-hotfixes/pending/222236
     patch -Np1 < ../patches/wine-hotfixes/pending/222237
 
 ### END WINE HOTFIX SECTION ###
