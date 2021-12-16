@@ -119,7 +119,7 @@ def merge_user_dir(src, dst):
             extant_dirs += dst_dir
 
 def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, optional=False,
-             follow_symlinks=True):
+             follow_symlinks=True, track_file=False):
     try:
         if prefix is not None:
             dst = os.path.join(prefix, dst)
@@ -129,6 +129,8 @@ def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, op
 
         if os.path.lexists(dst):
             os.remove(dst)
+        elif track_file and prefix is not None:
+            track_file.write(os.path.relpath(dst, prefix) + '\n')
 
         if copy_metadata:
             shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
@@ -738,8 +740,7 @@ class CompatData:
             with open(self.tracked_files_file, "a") as tracked_files:
                 #copy steam files into place
                 steam_dir = "drive_c/Program Files (x86)/Steam/"
-                dst = self.prefix_dir + steam_dir
-                makedirs(dst)
+                makedirs(self.prefix_dir + steam_dir)
                 filestocopy = [("steamclient.dll", "steamclient.dll"),
                                ("steamclient64.dll", "steamclient64.dll"),
                                ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll"),
@@ -748,12 +749,7 @@ class CompatData:
                 for (src,tgt) in filestocopy:
                     srcfile = steamdir + '/legacycompat/' + src
                     if os.path.isfile(srcfile):
-                        dstfile = dst + tgt
-                        if os.path.isfile(dstfile):
-                            os.remove(dstfile)
-                        else:
-                            tracked_files.write(steam_dir + tgt + "\n")
-                        try_copy(srcfile, steam_dir + tgt, prefix=self.prefix_dir)
+                        try_copy(srcfile, steam_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files)
 
                 filestocopy = [("steamclient64.dll", "steamclient64.dll"),
                                ("GameOverlayRenderer.dll", "GameOverlayRenderer.dll"),
@@ -761,34 +757,29 @@ class CompatData:
                 for (src,tgt) in filestocopy:
                     srcfile = g_proton.path(src)
                     if os.path.isfile(srcfile):
-                        dstfile = dst + tgt
-                        if os.path.isfile(dstfile):
-                            os.remove(dstfile)
-                        else:
-                            tracked_files.write(steam_dir + tgt + "\n")
-                        try_copy(srcfile, steam_dir + tgt, prefix=self.prefix_dir)
+                        try_copy(srcfile, steam_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files)
 
                 #copy openvr files into place
                 makedirs(self.prefix_dir + "/drive_c/vrclient/bin")
                 try_copy(g_proton.lib_dir + "wine/i386-windows/vrclient.dll", "drive_c/vrclient/bin",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
                 try_copy(g_proton.lib64_dir + "wine/x86_64-windows/vrclient_x64.dll", "drive_c/vrclient/bin",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
 
                 try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/syswow64",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
                 try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
 
                 makedirs(self.prefix_dir + "/drive_c/openxr")
                 try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", "drive_c/openxr",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
 
                 #copy vkd3d files into place
                 try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
                 try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/syswow64",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
 
                 if use_wined3d:
                     dxvkfiles = ["dxvk_config"]
@@ -804,24 +795,24 @@ class CompatData:
 
                 for f in wined3dfiles:
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir)
+                            prefix=self.prefix_dir, track_file=tracked_files)
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir)
+                            prefix=self.prefix_dir, track_file=tracked_files)
 
                 for f in dxvkfiles:
                     try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir)
+                            prefix=self.prefix_dir, track_file=tracked_files)
                     try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir)
+                            prefix=self.prefix_dir, track_file=tracked_files)
                     g_session.dlloverrides[f] = "n"
 
                 # If the user requested the NVAPI be available, copy it into place.
                 # If they didn't, clean up any stray nvapi DLLs.
                 if use_nvapi:
                     try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir)
+                            prefix=self.prefix_dir, track_file=tracked_files)
                     try_copy(g_proton.lib_dir + "wine/nvapi/nvapi.dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir)
+                            prefix=self.prefix_dir, track_file=tracked_files)
                     g_session.dlloverrides["nvapi64"] = "n"
                     g_session.dlloverrides["nvapi"] = "n"
                     g_session.dlloverrides["nvcuda"] = "b"
@@ -839,12 +830,12 @@ class CompatData:
                 if nvidia_wine_dll_dir:
                     for dll in ["_nvngx.dll", "nvngx.dll"]:
                         try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
-                                 prefix=self.prefix_dir)
+                                 prefix=self.prefix_dir, track_file=tracked_files)
 
                 try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
                 try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/syswow64",
-                        prefix=self.prefix_dir)
+                        prefix=self.prefix_dir, track_file=tracked_files)
 
             gamedrive_path = self.prefix_dir + "dosdevices/s:"
             if "gamedrive" in g_session.compat_config:
