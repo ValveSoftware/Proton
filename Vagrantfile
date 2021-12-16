@@ -68,7 +68,7 @@ Vagrant.configure(2) do |config|
       set -e
       #install docker and steam-runtime dependencies
       dpkg --add-architecture i386
-      apt-get update
+      apt-get update && apt-get --assume-yes upgrade
       apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
       #add docker repo
