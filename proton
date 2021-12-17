@@ -768,83 +768,83 @@ class CompatData:
                             tracked_files.write(steam_dir + tgt + "\n")
                         try_copy(srcfile, steam_dir + tgt, prefix=self.prefix_dir)
 
-            #copy openvr files into place
-            makedirs(self.prefix_dir + "/drive_c/vrclient/bin")
-            try_copy(g_proton.lib_dir + "wine/i386-windows/vrclient.dll", "drive_c/vrclient/bin",
-                    prefix=self.prefix_dir)
-            try_copy(g_proton.lib64_dir + "wine/x86_64-windows/vrclient_x64.dll", "drive_c/vrclient/bin",
-                    prefix=self.prefix_dir)
-
-            try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/syswow64",
-                    prefix=self.prefix_dir)
-            try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/system32",
-                    prefix=self.prefix_dir)
-
-            makedirs(self.prefix_dir + "/drive_c/openxr")
-            try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", "drive_c/openxr",
-                    prefix=self.prefix_dir)
-
-            #copy vkd3d files into place
-            try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/system32",
-                    prefix=self.prefix_dir)
-            try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/syswow64",
-                    prefix=self.prefix_dir)
-
-            if use_wined3d:
-                dxvkfiles = ["dxvk_config"]
-                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
-            else:
-                dxvkfiles = ["dxvk_config", "d3d11", "d3d10core", "d3d9"]
-                wined3dfiles = []
-
-            if use_dxvk_dxgi:
-                dxvkfiles.append("dxgi")
-            else:
-                wined3dfiles.append("dxgi")
-
-            for f in wined3dfiles:
-                try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll", "drive_c/windows/system32",
+                #copy openvr files into place
+                makedirs(self.prefix_dir + "/drive_c/vrclient/bin")
+                try_copy(g_proton.lib_dir + "wine/i386-windows/vrclient.dll", "drive_c/vrclient/bin",
                         prefix=self.prefix_dir)
-                try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll", "drive_c/windows/syswow64",
+                try_copy(g_proton.lib64_dir + "wine/x86_64-windows/vrclient_x64.dll", "drive_c/vrclient/bin",
                         prefix=self.prefix_dir)
 
-            for f in dxvkfiles:
-                try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/system32",
+                try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/syswow64",
                         prefix=self.prefix_dir)
-                try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/syswow64",
+                try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/system32",
                         prefix=self.prefix_dir)
-                g_session.dlloverrides[f] = "n"
 
-            # If the user requested the NVAPI be available, copy it into place.
-            # If they didn't, clean up any stray nvapi DLLs.
-            if use_nvapi:
-                try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll", "drive_c/windows/system32",
+                makedirs(self.prefix_dir + "/drive_c/openxr")
+                try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", "drive_c/openxr",
                         prefix=self.prefix_dir)
-                try_copy(g_proton.lib_dir + "wine/nvapi/nvapi.dll", "drive_c/windows/syswow64",
+
+                #copy vkd3d files into place
+                try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/system32",
                         prefix=self.prefix_dir)
-                g_session.dlloverrides["nvapi64"] = "n"
-                g_session.dlloverrides["nvapi"] = "n"
-                g_session.dlloverrides["nvcuda"] = "b"
-            else:
-                nvapi64_dll = self.prefix_dir + "drive_c/windows/system32/nvapi64.dll"
-                nvapi32_dll = self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll"
-                if os.path.exists(nvapi64_dll):
-                    os.unlink(nvapi64_dll)
-                if os.path.exists(nvapi32_dll):
-                    os.unlink(nvapi32_dll)
+                try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/syswow64",
+                        prefix=self.prefix_dir)
 
-            # Try to detect known DLLs that ship with the NVIDIA Linux Driver
-            # and add them into the prefix
-            nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
-            if nvidia_wine_dll_dir:
-                for dll in ["_nvngx.dll", "nvngx.dll"]:
-                    try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
-                             prefix=self.prefix_dir)
+                if use_wined3d:
+                    dxvkfiles = ["dxvk_config"]
+                    wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
+                else:
+                    dxvkfiles = ["dxvk_config", "d3d11", "d3d10core", "d3d9"]
+                    wined3dfiles = []
 
-            try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/system32",
-                    prefix=self.prefix_dir)
-            try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/syswow64",
-                    prefix=self.prefix_dir)
+                if use_dxvk_dxgi:
+                    dxvkfiles.append("dxgi")
+                else:
+                    wined3dfiles.append("dxgi")
+
+                for f in wined3dfiles:
+                    try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir)
+                    try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll", "drive_c/windows/syswow64",
+                            prefix=self.prefix_dir)
+
+                for f in dxvkfiles:
+                    try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir)
+                    try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/syswow64",
+                            prefix=self.prefix_dir)
+                    g_session.dlloverrides[f] = "n"
+
+                # If the user requested the NVAPI be available, copy it into place.
+                # If they didn't, clean up any stray nvapi DLLs.
+                if use_nvapi:
+                    try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir)
+                    try_copy(g_proton.lib_dir + "wine/nvapi/nvapi.dll", "drive_c/windows/syswow64",
+                            prefix=self.prefix_dir)
+                    g_session.dlloverrides["nvapi64"] = "n"
+                    g_session.dlloverrides["nvapi"] = "n"
+                    g_session.dlloverrides["nvcuda"] = "b"
+                else:
+                    nvapi64_dll = self.prefix_dir + "drive_c/windows/system32/nvapi64.dll"
+                    nvapi32_dll = self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll"
+                    if os.path.exists(nvapi64_dll):
+                        os.unlink(nvapi64_dll)
+                    if os.path.exists(nvapi32_dll):
+                        os.unlink(nvapi32_dll)
+
+                # Try to detect known DLLs that ship with the NVIDIA Linux Driver
+                # and add them into the prefix
+                nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
+                if nvidia_wine_dll_dir:
+                    for dll in ["_nvngx.dll", "nvngx.dll"]:
+                        try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
+                                 prefix=self.prefix_dir)
+
+                try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/system32",
+                        prefix=self.prefix_dir)
+                try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/syswow64",
+                        prefix=self.prefix_dir)
 
             gamedrive_path = self.prefix_dir + "dosdevices/s:"
             if "gamedrive" in g_session.compat_config:
