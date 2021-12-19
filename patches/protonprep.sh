@@ -472,6 +472,9 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/222237
     patch -Np1 < ../patches/wine-hotfixes/pending/222273
 
+    #https://bugs.winehq.org/show_bug.cgi?id=52222
+    patch -Np1 < ../patches/wine-hotfixes/pending/bug_52222_fix.patch
+
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
