@@ -466,9 +466,6 @@
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
 
-    patch -Np1 < ../patches/wine-hotfixes/pending/ps0001-wininet-Improve-InternetGetConnectedStateExW-to-ha.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/ps0010-netprofm-set-ret-NULL-if-no-more-connections.patch
-
     # https://bugs.winehq.org/show_bug.cgi?id=51687
     patch -Np1 < ../patches/wine-hotfixes/pending/Return_nt_filename_and_resolve_DOS_drive_path.patch
 
