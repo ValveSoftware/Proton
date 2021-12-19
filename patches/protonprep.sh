@@ -335,8 +335,8 @@
 #    patch -Np1 < ../patches/proton/49-proton_QPC.patch
     patch -Np1 < ../patches/proton/49-proton_QPC-update-replace.patch
 
-#    echo "proton LFH performance patch"
-#    patch -Np1 < ../patches/proton/50-proton_LFH.patch
+    echo "proton LFH performance patch"
+    patch -Np1 < ../patches/proton/50-proton_LFH.patch
 
     echo "proton font patches"
     patch -Np1 < ../patches/proton/51-proton_fonts.patch
@@ -473,6 +473,7 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/Return_nt_filename_and_resolve_DOS_drive_path.patch
 
     patch -Np1 < ../patches/wine-hotfixes/pending/222237
+    patch -Np1 < ../patches/wine-hotfixes/pending/222273
 
 ### END WINE HOTFIX SECTION ###
 
