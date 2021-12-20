@@ -35,6 +35,7 @@ typedef struct __winISteamGameSearch winISteamGameSearch;
 typedef struct __winISteamInput winISteamInput;
 typedef struct __winISteamParties winISteamParties;
 typedef struct __winISteamRemotePlay winISteamRemotePlay;
+typedef struct __winISteamNetworkingFakeUDPPort winISteamNetworkingFakeUDPPort;
 typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);

@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_152/steam_api.h"
-#include "steamworks_sdk_152/steamnetworkingtypes.h"
+#include "steamworks_sdk_153a/steam_api.h"
+#include "steamworks_sdk_153a/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_152
+#define SDKVER_153a
 #include "struct_converters.h"
 #include "cppISteamUtils_SteamUtils010.h"
 uint32 cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive(void *linux_side)
@@ -194,6 +194,11 @@ bool cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(void *linux_side,
 void cppISteamUtils_SteamUtils010_SetGameLauncherMode(void *linux_side, bool bLauncherMode)
 {
     ((ISteamUtils*)linux_side)->SetGameLauncherMode((bool)bLauncherMode);
+}
+
+bool cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(void *linux_side)
+{
+    return ((ISteamUtils*)linux_side)->DismissFloatingGamepadTextInput();
 }
 
 #ifdef __cplusplus

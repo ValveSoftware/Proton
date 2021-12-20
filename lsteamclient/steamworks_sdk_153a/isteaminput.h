@@ -679,7 +679,7 @@ struct SteamInputActionEvent_t
 	union {
 		AnalogAction_t analogAction;
 		DigitalAction_t digitalAction;
-	};
+	} x;
 };
 
 #pragma pack( pop )

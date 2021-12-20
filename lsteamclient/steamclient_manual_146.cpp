@@ -102,6 +102,7 @@ static struct msg_wrapper *clone_msg(struct SteamNetworkingMessage_t *lin_msg)
     msg->win_msg.m_pfnFreeData = (void*)win_FreeData;
     msg->win_msg.m_pfnRelease = (void*)win_Release;
     msg->win_msg.m_nChannel = msg->lin_msg->m_nChannel;
+    msg->win_msg.m___nPadDummy = msg->lin_msg->m___nPadDummy;
 
     msg->orig_FreeData = msg->lin_msg->m_pfnFreeData;
     msg->lin_msg->m_pfnFreeData = lin_FreeData;
