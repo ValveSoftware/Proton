@@ -890,6 +890,9 @@ class CompatData:
             elif os.path.lexists(gamedrive_path):
                 os.remove(gamedrive_path)
 
+            # add Steam ffmpeg libraries to path
+            prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/", ":")
+
 def comma_escaped(s):
     escaped = False
     idx = -1
