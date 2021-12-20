@@ -103,7 +103,8 @@ typedef uint32_t EUserUGCList,
         ERemoteStorageLocalFileChange,
         ERemoteStorageFilePathType,
         ESteamInputGlyphSize,
-        EControllerHapticLocation
+        EControllerHapticLocation,
+        ESteamNetworkingFakeIPType
 ;
 
 /* XXX NO */
@@ -220,6 +221,7 @@ typedef struct MatchMakingKeyValuePair_t MatchMakingKeyValuePair_t;
 typedef struct SteamPartyBeaconLocation_t SteamPartyBeaconLocation_t;
 typedef struct SteamNetConnectionInfo_t SteamNetConnectionInfo_t;
 typedef struct SteamNetworkingQuickConnectionStatus SteamNetworkingQuickConnectionStatus;
+typedef struct SteamNetConnectionRealTimeStatus_t SteamNetConnectionRealTimeStatus_t;
 typedef struct SteamDatagramRelayAuthTicket SteamDatagramRelayAuthTicket;
 typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
 typedef struct SteamNetAuthenticationStatus_t SteamNetAuthenticationStatus_t;
@@ -229,6 +231,8 @@ typedef struct SteamIPAddress_t SteamIPAddress_t;
 typedef struct SteamNetworkingConfigValue_t SteamNetworkingConfigValue_t;
 typedef struct SteamNetworkingMessage_t SteamNetworkingMessage_t;
 typedef struct SteamInputActionEvent_t SteamInputActionEvent_t;
+typedef struct SteamNetConnectionRealTimeLaneStatus_t SteamNetConnectionRealTimeLaneStatus_t;
+typedef struct SteamNetworkingFakeIPResult_t SteamNetworkingFakeIPResult_t;
 
 typedef uint32 (*SteamAPI_CheckCallbackRegistered_t)(int cb);
 typedef void *SteamAPIWarningMessageHook_t; //already cdecl, no need for conversion(?)

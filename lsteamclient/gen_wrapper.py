@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/12.0.1'
+CLANG_PATH='/usr/lib/clang/13.0.0'
 
 import pprint
 import sys
@@ -15,6 +15,7 @@ import re
 import math
 
 sdk_versions = [
+    "153a",
     "152",
     "151",
     "150",
@@ -156,6 +157,9 @@ files = [
     ("isteamnetworkingutils.h", [
         "ISteamNetworkingUtils"
     ]),
+    ("steamnetworkingfakeip.h", [
+        "ISteamNetworkingFakeUDPPort"
+    ]),
 ]
 
 aliases = {
@@ -212,7 +216,17 @@ manually_handled_methods = {
             "ReceiveMessagesOnPollGroup",
             "SendMessages"
         ],
+        "cppISteamNetworkingSockets_SteamNetworkingSockets012": [
+            "ReceiveMessagesOnConnection",
+            "ReceiveMessagesOnPollGroup",
+            "SendMessages",
+            "CreateFakeUDPPort"
+        ],
         "cppISteamNetworkingUtils_SteamNetworkingUtils003": [
+            "AllocateMessage",
+            "SetConfigValue",
+        ],
+        "cppISteamNetworkingUtils_SteamNetworkingUtils004": [
             "AllocateMessage",
             "SetConfigValue",
         ],
@@ -248,6 +262,10 @@ manually_handled_methods = {
             "GetGlyphForActionOrigin",
             "GetGlyphForXboxOrigin"
         ],
+        "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001": [
+            "DestroyFakeUDPPort",
+            "ReceiveMessages"
+        ],
 }
 
 # manual converters for simple types (function pointers)
@@ -276,7 +294,8 @@ wrapped_classes = [
         "ISteamMatchmakingServerListResponse",
         "ISteamMatchmakingPingResponse",
         "ISteamMatchmakingPlayersResponse",
-        "ISteamMatchmakingRulesResponse"
+        "ISteamMatchmakingRulesResponse",
+        "ISteamNetworkingFakeUDPPort",
 ]
 
 print_sizes = []
@@ -827,8 +846,9 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cpp.write("    return ")
 
     should_do_cb_wrap = "GetAPICallResult" in used_name
-    should_gen_wrapper = method.result_type.spelling.startswith("ISteam") or \
-            used_name.startswith("GetISteamGenericInterface")
+    should_gen_wrapper = cpp != dummy_writer and \
+            (method.result_type.spelling.startswith("ISteam") or \
+             used_name.startswith("GetISteamGenericInterface"))
 
     if should_do_cb_wrap:
         cfile.write(f"do_cb_wrap(0, _this->linux_side, &{cppname}_{used_name}")
@@ -994,7 +1014,10 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write("}\n")
     cfile.write("#endif\n\n")
     cfile.write(f"{winclassname} *create_{winclassname}(void *linux_side)\n{{\n")
-    cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{iface_version}\");\n")
+    if classnode.spelling in wrapped_classes:
+        cfile.write(f"    {winclassname} *r = HeapAlloc(GetProcessHeap(), 0, sizeof({winclassname}));\n")
+    else:
+        cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{iface_version}\");\n")
     cfile.write("    TRACE(\"-> %p\\n\", r);\n")
     cfile.write(f"    r->vtable = &{winclassname}_vtable;\n")
     cfile.write("    r->linux_side = linux_side;\n")

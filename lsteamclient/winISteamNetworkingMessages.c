@@ -30,7 +30,7 @@ EResult __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_SendMe
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel, 16)
-int __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, int nLocalChannel, winSteamNetworkingMessage_t_152 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, int nLocalChannel, winSteamNetworkingMessage_t_153a ** ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(_this->linux_side, nLocalChannel, ppOutMessages, nMaxMessages);
@@ -58,7 +58,7 @@ bool __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_CloseChan
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo, 16)
-ESteamNetworkingConnectionState __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, const SteamNetworkingIdentity * identityRemote, SteamNetConnectionInfo_t * pConnectionInfo, SteamNetworkingQuickConnectionStatus * pQuickStatus)
+ESteamNetworkingConnectionState __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, const SteamNetworkingIdentity * identityRemote, SteamNetConnectionInfo_t * pConnectionInfo, SteamNetConnectionRealTimeStatus_t * pQuickStatus)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo(_this->linux_side, identityRemote, pConnectionInfo, pQuickStatus);

@@ -2,7 +2,6 @@
 
 #ifndef ISTEAMNETWORKINGSOCKETS
 #define ISTEAMNETWORKINGSOCKETS
-#pragma once
 
 #include "steamnetworkingtypes.h"
 #include "steam_api_common.h"
