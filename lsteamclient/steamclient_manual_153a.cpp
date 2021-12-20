@@ -11,24 +11,26 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_150/steam_api.h"
-#include "steamworks_sdk_150/isteamnetworkingsockets.h"
-#include "steamworks_sdk_150/isteamnetworkingutils.h"
-#include "steamworks_sdk_150/steamnetworkingtypes.h"
+#include "steamworks_sdk_153a/steam_api.h"
+#include "steamworks_sdk_153a/isteamnetworkingsockets.h"
+#include "steamworks_sdk_153a/isteamnetworkingutils.h"
+#include "steamworks_sdk_153a/steamnetworkingtypes.h"
+#include "steamworks_sdk_153a/steamnetworkingfakeip.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 
 extern "C" {
-#define SDKVER_150
+#define SDKVER_153a
 #include "struct_converters.h"
 #include "cb_converters.h"
+#include "win_constructors.h"
 
 #include "queue.h"
 
 /***** manual struct converter for SteamNetworkingMessage_t *****/
 
 struct msg_wrapper {
-    struct winSteamNetworkingMessage_t_150 win_msg;
+    struct winSteamNetworkingMessage_t_153a win_msg;
     struct SteamNetworkingMessage_t *lin_msg;
 
     void (*orig_FreeData)(SteamNetworkingMessage_t *);
@@ -39,7 +41,7 @@ struct msg_wrapper {
 static SLIST_HEAD(free_msgs_head, msg_wrapper) free_msgs = SLIST_HEAD_INITIALIZER(free_msgs);
 static CRITICAL_SECTION free_msgs_lock = { NULL, -1, 0, 0, 0, 0 };
 
-static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_150 *win_msg)
+static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_153a *win_msg)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
     TRACE("%p\n", msg);
@@ -50,7 +52,7 @@ static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessag
     }
 }
 
-static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_150 *win_msg)
+static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_153a *win_msg)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
     TRACE("%p\n", msg);
@@ -67,7 +69,7 @@ static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
     struct msg_wrapper *msg = (struct msg_wrapper *)lin_msg->m_pData; /* ! see assignment, below */
     TRACE("%p\n", msg);
     if(msg->win_msg.m_pfnFreeData)
-        ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_150 *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
+        ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_153a *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
 }
 
 static struct msg_wrapper *clone_msg(struct SteamNetworkingMessage_t *lin_msg)
@@ -105,6 +107,8 @@ static struct msg_wrapper *clone_msg(struct SteamNetworkingMessage_t *lin_msg)
     msg->win_msg.m_nChannel = msg->lin_msg->m_nChannel;
     msg->win_msg.m_nFlags = msg->lin_msg->m_nFlags;
     msg->win_msg.m_nUserData = msg->lin_msg->m_nUserData;
+    msg->win_msg.m_idxLane = msg->lin_msg->m_idxLane;
+    msg->win_msg._pad1__ = msg->lin_msg->_pad1__;
 
     msg->orig_FreeData = msg->lin_msg->m_pfnFreeData;
     msg->lin_msg->m_pfnFreeData = lin_FreeData;
@@ -114,7 +118,7 @@ static struct msg_wrapper *clone_msg(struct SteamNetworkingMessage_t *lin_msg)
     return msg;
 }
 
-void lin_to_win_struct_SteamNetworkingMessage_t_150(int n_messages, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_150 **w, int max_messages)
+void lin_to_win_struct_SteamNetworkingMessage_t_153a(int n_messages, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_153a **w, int max_messages)
 {
     int i;
 
@@ -136,28 +140,28 @@ void lin_to_win_struct_SteamNetworkingMessage_t_150(int n_messages, struct Steam
         w[i] = NULL;
 }
 
-int cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection(
+int cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection(
         void *linux_side, HSteamNetConnection hConn,
-        winSteamNetworkingMessage_t_150 **ppOutMessages, int nMaxMessages)
+        winSteamNetworkingMessage_t_153a **ppOutMessages, int nMaxMessages)
 {
     SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
     int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnConnection(hConn, lin_ppOutMessages, nMaxMessages);
-    lin_to_win_struct_SteamNetworkingMessage_t_150(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_153a(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
     return retval;
 }
 
-int cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup(
+int cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup(
         void *linux_side, HSteamNetPollGroup hPollGroup,
-        winSteamNetworkingMessage_t_150 **ppOutMessages, int nMaxMessages)
+        winSteamNetworkingMessage_t_153a **ppOutMessages, int nMaxMessages)
 {
     SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
     int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnPollGroup(hPollGroup, lin_ppOutMessages, nMaxMessages);
-    lin_to_win_struct_SteamNetworkingMessage_t_150(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_153a(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
     return retval;
 }
 
-void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages(
-        void *linux_side, int nMessages, winSteamNetworkingMessage_t_150 **pMessages,
+void cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(
+        void *linux_side, int nMessages, winSteamNetworkingMessage_t_153a **pMessages,
         int64 *pOutMessageNumberOrResult)
 {
 #define MAX_SEND_MESSAGES 64
@@ -188,6 +192,8 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages(
             lin_msgs[i]->m_nChannel = msg->win_msg.m_nChannel;
             lin_msgs[i]->m_nFlags = msg->win_msg.m_nFlags;
             lin_msgs[i]->m_nUserData = msg->win_msg.m_nUserData;
+            lin_msgs[i]->m_idxLane = msg->win_msg.m_idxLane;
+            lin_msgs[i]->_pad1__ = msg->win_msg._pad1__;
         }
 
         ((ISteamNetworkingSockets*)linux_side)->SendMessages(i, lin_msgs, pOutMessageNumberOrResult);
@@ -199,78 +205,76 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages(
     }
 }
 
-int cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(
-        void *linux_side, int nLocalChannel,
-        winSteamNetworkingMessage_t_150 ** ppOutMessages, int nMaxMessages)
+/* from winISteamNetworkingFakeUDPPort.c */
+typedef struct __winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 {
+    void *vtable;
+    void *linux_side;
+} winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001;
+
+void *cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort(void *linux_side, int idxFakeServerPort)
+{
+    ISteamNetworkingFakeUDPPort *lin_iface = ((ISteamNetworkingSockets*)linux_side)->CreateFakeUDPPort(idxFakeServerPort);
+    if(!lin_iface)
+        return NULL;
+    return create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001(lin_iface);
+}
+
+int cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(void *linux_side, winSteamNetworkingMessage_t_153a ** ppOutMessages, int nMaxMessages)
 {
     SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
-    int retval = ((ISteamNetworkingMessages*)linux_side)->ReceiveMessagesOnChannel(nLocalChannel, lin_ppOutMessages, nMaxMessages);
-    lin_to_win_struct_SteamNetworkingMessage_t_150(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    int retval = ((ISteamNetworkingFakeUDPPort*)linux_side)->ReceiveMessages(lin_ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_153a(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
     return retval;
 }
 
+void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort(void *linux_side)
+{
+    winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *win_side =
+        (winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *)
+        (char *)linux_side - offsetof(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001, linux_side);
+    ((ISteamNetworkingFakeUDPPort*)linux_side)->DestroyFakeUDPPort();
+    HeapFree(GetProcessHeap(), 0, win_side);
+}
+
 #pragma pack( push, 8 )
-struct winSteamNetConnectionStatusChangedCallback_t_584 {
+struct winSteamNetConnectionStatusChangedCallback_t_712 {
     HSteamNetConnection m_hConn;
     SteamNetConnectionInfo_t m_info __attribute__((aligned(8)));
     ESteamNetworkingConnectionState m_eOldState;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 
-typedef void (*CDECL win_FnSteamNetConnectionStatusChanged)(winSteamNetConnectionStatusChangedCallback_t_584 *);
+typedef void (*CDECL win_FnSteamNetConnectionStatusChanged)(winSteamNetConnectionStatusChangedCallback_t_712 *);
 static win_FnSteamNetConnectionStatusChanged win_SteamNetConnectionStatusChanged;
 
 static void lin_SteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t *l_dat)
 {
     win_FnSteamNetConnectionStatusChanged fn = win_SteamNetConnectionStatusChanged;
     if(fn){
-        struct winSteamNetConnectionStatusChangedCallback_t_584 w_dat;
-        cb_SteamNetConnectionStatusChangedCallback_t_584(l_dat, &w_dat);
+        struct winSteamNetConnectionStatusChangedCallback_t_712 w_dat;
+        cb_SteamNetConnectionStatusChangedCallback_t_712(l_dat, &w_dat);
         fn(&w_dat);
     }
 }
 
 typedef void (*CDECL win_FnSteamNetAuthenticationStatusChanged)(SteamNetAuthenticationStatus_t *);
-win_FnSteamNetAuthenticationStatusChanged win_SteamNetAuthenticationStatusChanged;
-
-void lin_SteamNetAuthenticationStatusChanged(SteamNetAuthenticationStatus_t *dat)
-{
-    win_FnSteamNetAuthenticationStatusChanged fn = win_SteamNetAuthenticationStatusChanged;
-    if(fn)
-        fn(dat);
-}
+extern win_FnSteamNetAuthenticationStatusChanged win_SteamNetAuthenticationStatusChanged;
 
 typedef void (*CDECL win_FnSteamRelayNetworkStatusChanged)(SteamRelayNetworkStatus_t *);
-win_FnSteamRelayNetworkStatusChanged win_SteamRelayNetworkStatusChanged;
-
-void lin_SteamRelayNetworkStatusChanged(SteamRelayNetworkStatus_t *dat)
-{
-    win_FnSteamRelayNetworkStatusChanged fn = win_SteamRelayNetworkStatusChanged;
-    if(fn)
-        fn(dat);
-}
+extern win_FnSteamRelayNetworkStatusChanged win_SteamRelayNetworkStatusChanged;
 
 typedef void (*CDECL win_FnSteamNetworkingMessagesSessionRequest)(SteamNetworkingMessagesSessionRequest_t *);
-win_FnSteamNetworkingMessagesSessionRequest win_SteamNetworkingMessagesSessionRequest;
-
-void lin_SteamNetworkingMessagesSessionRequest(SteamNetworkingMessagesSessionRequest_t *dat)
-{
-    win_FnSteamNetworkingMessagesSessionRequest fn = win_SteamNetworkingMessagesSessionRequest;
-    if(fn)
-        fn(dat);
-}
+extern win_FnSteamNetworkingMessagesSessionRequest win_SteamNetworkingMessagesSessionRequest;
 
 typedef void (*CDECL win_FnSteamNetworkingMessagesSessionFailed)(SteamNetworkingMessagesSessionFailed_t *);
-win_FnSteamNetworkingMessagesSessionFailed win_SteamNetworkingMessagesSessionFailed;
+extern win_FnSteamNetworkingMessagesSessionFailed win_SteamNetworkingMessagesSessionFailed;
 
-void lin_SteamNetworkingMessagesSessionFailed(SteamNetworkingMessagesSessionFailed_t *dat)
-{
-    win_FnSteamNetworkingMessagesSessionFailed fn = win_SteamNetworkingMessagesSessionFailed;
-    if(fn)
-        fn(dat);
-}
+extern void lin_SteamNetworkingMessagesSessionRequest(SteamNetworkingMessagesSessionRequest_t *dat);
+extern void lin_SteamNetworkingMessagesSessionFailed(SteamNetworkingMessagesSessionFailed_t *dat);
+extern void lin_SteamRelayNetworkStatusChanged(SteamRelayNetworkStatus_t *dat);
+extern void lin_SteamNetAuthenticationStatusChanged(SteamNetAuthenticationStatus_t *dat);
 
-bool cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue(void *linux_side,
+bool cppISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue(void *linux_side,
         ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType,
         intptr_t scopeObj, ESteamNetworkingConfigDataType eDataType, const void *pArg)
 {
@@ -307,32 +311,15 @@ bool cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue(void *linux
     }
 }
 
-const char * cppISteamInput_SteamInput001_GetGlyphForActionOrigin(void *linux_side, EInputActionOrigin eOrigin)
+SteamNetworkingMessage_t *cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage(
+        void *linux_side, int cbAllocateBuffer)
 {
-    const char *path_result;
-    path_result = ((ISteamInput*)linux_side)->GetGlyphForActionOrigin((EInputActionOrigin)eOrigin);
-    return steamclient_isteaminput_getglyph(eOrigin, path_result);
-}
+    struct msg_wrapper *msg;
+    SteamNetworkingMessage_t *retval = ((ISteamNetworkingUtils*)linux_side)->AllocateMessage(cbAllocateBuffer);
 
-const char * cppISteamInput_SteamInput001_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
-{
-    const char *path_result;
-    path_result = ((ISteamInput*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
-    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
-}
+    msg = clone_msg(retval);
 
-const char * cppISteamController_SteamController007_GetGlyphForActionOrigin(void *linux_side, EControllerActionOrigin eOrigin)
-{
-    const char *path_result;
-    path_result = ((ISteamController*)linux_side)->GetGlyphForActionOrigin((EControllerActionOrigin)eOrigin);
-    return steamclient_isteamcontroller_getglyph(eOrigin, path_result);
-}
-
-const char * cppISteamController_SteamController007_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
-{
-    const char *path_result;
-    path_result = ((ISteamController*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
-    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
+    return (SteamNetworkingMessage_t*)&msg->win_msg;
 }
 
 }

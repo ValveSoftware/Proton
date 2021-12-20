@@ -6,7 +6,6 @@
 
 #ifndef ISTEAMNETWORKINGUTILS
 #define ISTEAMNETWORKINGUTILS
-#pragma once
 
 #include "steamnetworkingtypes.h"
 #include "steam_api_common.h"
@@ -419,6 +418,7 @@ struct SteamRelayNetworkStatus_t
 	char m_debugMsg[ 256 ];
 };
 
+#if 0
 #ifndef API_GEN
 
 /// Utility class for printing a SteamNetworkingIdentity.
@@ -470,6 +470,7 @@ inline bool ISteamNetworkingUtils::SetConfigValueStruct( const SteamNetworkingCo
 	const void *pVal = ( opt.m_eDataType == k_ESteamNetworkingConfig_String ) ? (const void *)opt.m_val.m_string : (const void *)&opt.m_val;
 	return SetConfigValue( opt.m_eValue, eScopeType, scopeObj, opt.m_eDataType, pVal );
 }
+#endif
 
 // How to get helper functions.
 #if defined( STEAMNETWORKINGSOCKETS_STATIC_LINK ) || defined(STEAMNETWORKINGSOCKETS_FOREXPORT) || defined( STEAMNETWORKINGSOCKETS_STANDALONELIB )
@@ -488,11 +489,13 @@ inline bool ISteamNetworkingUtils::SetConfigValueStruct( const SteamNetworkingCo
 
 #elif defined( STEAMNETWORKINGSOCKETS_STEAMAPI )
 	// Using steamworks SDK - go through SteamNetworkingUtils()
+#if 0
 	inline void SteamNetworkingIPAddr::ToString( char *buf, size_t cbBuf, bool bWithPort ) const { SteamNetworkingUtils()->SteamNetworkingIPAddr_ToString( *this, buf, cbBuf, bWithPort ); }
 	inline bool SteamNetworkingIPAddr::ParseString( const char *pszStr ) { return SteamNetworkingUtils()->SteamNetworkingIPAddr_ParseString( this, pszStr ); }
 	inline ESteamNetworkingFakeIPType SteamNetworkingIPAddr::GetFakeIPType() const { return SteamNetworkingUtils()->SteamNetworkingIPAddr_GetFakeIPType( *this ); }
 	inline void SteamNetworkingIdentity::ToString( char *buf, size_t cbBuf ) const { SteamNetworkingUtils()->SteamNetworkingIdentity_ToString( *this, buf, cbBuf ); }
 	inline bool SteamNetworkingIdentity::ParseString( const char *pszStr ) { return SteamNetworkingUtils()->SteamNetworkingIdentity_ParseString( this, pszStr ); }
+#endif
 #else
 	#error "Invalid config"
 #endif
