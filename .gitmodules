@@ -46,3 +46,9 @@
 [submodule "Vulkan-Loader"]
 	path = Vulkan-Loader
 	url = https://github.com/KhronosGroup/Vulkan-Loader
+[submodule "gst-libav"]
+	path = gst-libav
+	url = https://gitlab.freedesktop.org/gstreamer/gst-libav.git
+[submodule "ffmpeg"]
+	path = ffmpeg
+	url = https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg.git

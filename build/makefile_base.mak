@@ -353,7 +353,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist_prefix: wine gst_good
+dist_prefix: wine gst_good gst_libav
 	find $(DST_LIBDIR32)/wine -type f -execdir chmod a-w '{}' '+'
 	find $(DST_LIBDIR64)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
@@ -542,6 +542,36 @@ GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
 $(eval $(call rules-source,gst_good,$(SRCDIR)/gst-plugins-good))
 $(eval $(call rules-meson,gst_good,32))
 $(eval $(call rules-meson,gst_good,64))
+
+##
+## FFmpeg
+##
+
+$(eval $(call rules-source,ffmpeg,$(SRCDIR)/ffmpeg))
+$(eval $(call rules-meson,ffmpeg,32))
+$(eval $(call rules-meson,ffmpeg,64))
+
+$(OBJ)/.ffmpeg-post-source:
+	sed -i 's/0.54/0.47/g' $(FFMPEG_SRC)/meson.build
+
+## Only use ffmpeg to build gst-libav; we don't ship it, as it may contain implementations of patented codecs
+$(OBJ)/.ffmpeg-dist32:
+	touch $@
+$(OBJ)/.ffmpeg-dist64:
+	touch $@
+
+##
+## gst-libav
+##
+
+GST_LIBAV_MESON_ARGS := \
+$(GST_COMMON_MESON_ARGS)
+
+GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base ffmpeg
+
+$(eval $(call rules-source,gst_libav,$(SRCDIR)/gst-libav))
+$(eval $(call rules-meson,gst_libav,32))
+$(eval $(call rules-meson,gst_libav,64))
 
 
 ##
