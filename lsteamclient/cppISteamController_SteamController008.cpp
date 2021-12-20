@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_152/steam_api.h"
-#include "steamworks_sdk_152/steamnetworkingtypes.h"
+#include "steamworks_sdk_153a/steam_api.h"
+#include "steamworks_sdk_153a/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_152
+#define SDKVER_153a
 #include "struct_converters.h"
 #include "cppISteamController_SteamController008.h"
 bool cppISteamController_SteamController008_Init(void *linux_side)

@@ -6,7 +6,6 @@
 
 #ifndef STEAMNETWORKINGTYPES
 #define STEAMNETWORKINGTYPES
-#pragma once
 
 #include <string.h>
 #include <stdint.h>
@@ -235,7 +234,7 @@ struct SteamNetworkingIPAddr
 	{
 		uint8 m_ipv6[ 16 ];
 		IPv4MappedAddress m_ipv4;
-	};
+	} data;
 	uint16 m_port; // Host byte order
 
 	/// See if two addresses are identical
@@ -329,7 +328,7 @@ struct SteamNetworkingIdentity
 		char m_szUnknownRawString[ k_cchMaxString ];
 		SteamNetworkingIPAddr m_ip;
 		uint32 m_reserved[ 32 ]; // Pad structure to leave easy room for future expansion
-	};
+	} data;
 };
 #pragma pack(pop)
 
@@ -1728,6 +1727,7 @@ private:
 typedef SteamNetworkingMessage_t ISteamNetworkingMessage;
 typedef SteamNetworkingErrMsg SteamDatagramErrMsg;
 
+#if 0
 inline void SteamNetworkingIPAddr::Clear() { memset( this, 0, sizeof(*this) ); }
 inline bool SteamNetworkingIPAddr::IsIPv6AllZeros() const { const uint64 *q = (const uint64 *)m_ipv6; return q[0] == 0 && q[1] == 0; }
 inline void SteamNetworkingIPAddr::SetIPv6( const uint8 *ipv6, uint16 nPort ) { memcpy( m_ipv6, ipv6, 16 ); m_port = nPort; }
@@ -1757,6 +1757,7 @@ inline const uint8 *SteamNetworkingIdentity::GetGenericBytes( int &cbLen ) const
 	cbLen = m_cbSize; return m_genericBytes; }
 inline bool SteamNetworkingIdentity::operator==(const SteamNetworkingIdentity &x ) const { return m_eType == x.m_eType && m_cbSize == x.m_cbSize && memcmp( m_genericBytes, x.m_genericBytes, m_cbSize ) == 0; }
 inline void SteamNetworkingMessage_t::Release() { (*m_pfnRelease)( this ); }
+#endif
 
 #endif // #ifndef API_GEN
 
