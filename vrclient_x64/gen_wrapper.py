@@ -1394,10 +1394,10 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = Index.create()
-        windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-        windows_build64 = index.parse(input_name, args=['-x', 'c++', '-m64', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
-        linux_build64 = index.parse(input_name, args=['-x', 'c++', '-m64', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
+        windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+        windows_build64 = index.parse(input_name, args=['-x', 'c++', '-m64', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-std=c++11', '-DGNUC', '-I' + CLANG_PATH + '/include/'])
+        linux_build64 = index.parse(input_name, args=['-x', 'c++', '-m64', '-std=c++11', '-DGNUC', '-I' + CLANG_PATH + '/include/'])
 
         def enumerate_structs(cursor, vr_only=False):
             for child in cursor.get_children():
