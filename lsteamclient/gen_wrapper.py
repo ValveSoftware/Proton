@@ -7,9 +7,9 @@ from __future__ import print_function
 
 CLANG_PATH='/usr/lib/clang/13.0.0'
 
+from clang.cindex import CursorKind, Index, Type, TypeKind
 import pprint
 import sys
-import clang.cindex
 import os
 import re
 import math
@@ -641,7 +641,7 @@ def struct_needs_conversion_nocache(struct):
     for field in struct.get_fields():
         if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
             return True
-        if field.type.kind == clang.cindex.TypeKind.RECORD and \
+        if field.type.kind == TypeKind.RECORD and \
                 struct_needs_conversion(field.type):
             return True
 
@@ -653,7 +653,7 @@ def struct_needs_conversion_nocache(struct):
     for field in lin64_struct.get_fields():
         if lin64_struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
             return True
-        if field.type.kind == clang.cindex.TypeKind.RECORD and \
+        if field.type.kind == TypeKind.RECORD and \
                 struct_needs_conversion(field.type):
             return True
 
@@ -680,7 +680,7 @@ def get_path_converter(parent):
         if conv["parent_name"] in parent.spelling:
             if None in conv["l2w_names"]:
                 return conv
-            if type(parent) == clang.cindex.Type:
+            if type(parent) == Type:
                 children = list(parent.get_fields())
             else:
                 children = list(parent.get_children())
@@ -713,14 +713,14 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         existing_methods.insert(idx, used_name)
     else:
         existing_methods.append(used_name)
-    returns_record = method.result_type.get_canonical().kind == clang.cindex.TypeKind.RECORD
+    returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
     if returns_record:
         parambytes = 8 #_this + return pointer
     else:
         parambytes = 4 #_this
     for param in list(method.get_children()):
-        if param.kind == clang.cindex.CursorKind.PARM_DECL:
-            if param.type.kind == clang.cindex.TypeKind.LVALUEREFERENCE:
+        if param.kind == CursorKind.PARM_DECL:
+            if param.type.kind == TypeKind.LVALUEREFERENCE:
                 parambytes += 4
             else:
                 parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
@@ -751,19 +751,19 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     need_convert = []
     manual_convert = []
     for param in list(method.get_children()):
-        if param.kind == clang.cindex.CursorKind.PARM_DECL:
-            if param.type.kind == clang.cindex.TypeKind.POINTER and \
-                    param.type.get_pointee().kind == clang.cindex.TypeKind.FUNCTIONPROTO:
+        if param.kind == CursorKind.PARM_DECL:
+            if param.type.kind == TypeKind.POINTER and \
+                    param.type.get_pointee().kind == TypeKind.FUNCTIONPROTO:
                 #unspecified function pointer
                 typename = "void *"
             else:
                 typename = param.type.spelling.split("::")[-1]
 
             real_type = param.type
-            while real_type.kind == clang.cindex.TypeKind.POINTER:
+            while real_type.kind == TypeKind.POINTER:
                 real_type = real_type.get_pointee()
             win_name = typename
-            if real_type.kind == clang.cindex.TypeKind.RECORD and \
+            if real_type.kind == TypeKind.RECORD and \
                     not real_type.spelling in wrapped_classes and \
                     struct_needs_conversion(real_type):
                 need_convert.append(param)
@@ -808,12 +808,12 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             cfile.write(f"    {method.result_type.spelling} path_result;\n")
 
     for param in need_convert:
-        if param.type.kind == clang.cindex.TypeKind.POINTER:
+        if param.type.kind == TypeKind.POINTER:
             #handle single pointers, but not double pointers
             real_type = param.type
-            while real_type.kind == clang.cindex.TypeKind.POINTER:
+            while real_type.kind == TypeKind.POINTER:
                 real_type = real_type.get_pointee()
-            assert(param.type.get_pointee().kind == clang.cindex.TypeKind.RECORD or \
+            assert(param.type.get_pointee().kind == TypeKind.RECORD or \
                     strip_const(real_type.spelling) in manually_handled_structs)
             cpp.write(f"    {strip_const(param.type.get_pointee().spelling)} lin_{param.spelling};\n")
             cpp.write(f"    win_to_lin_struct_{strip_const(real_type.spelling)}_{sdkver}({param.spelling}, &lin_{param.spelling});\n")
@@ -829,7 +829,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
 
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
 
-    if method.result_type.kind == clang.cindex.TypeKind.VOID:
+    if method.result_type.kind == TypeKind.VOID:
         cfile.write("    ")
     elif path_conv and (len(path_conv["l2w_names"]) > 0 or path_conv["return_is_size"]):
         cfile.write("    path_result = ")
@@ -838,7 +838,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     else:
         cfile.write("    return ")
 
-    if method.result_type.kind == clang.cindex.TypeKind.VOID:
+    if method.result_type.kind == TypeKind.VOID:
         cpp.write("    ")
     elif len(need_convert) > 0:
         cpp.write(f"    {method.result_type.spelling} retval = ")
@@ -860,7 +860,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     unnamed = 'a'
     first = True
     for param in list(method.get_children()):
-        if param.kind == clang.cindex.CursorKind.PARM_DECL:
+        if param.kind == CursorKind.PARM_DECL:
             if not first:
                 cpp.write(", ")
             else:
@@ -869,7 +869,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cfile.write(f", _{unnamed}")
                 cpp.write(f"({param.type.spelling})_{unnamed}")
                 unnamed = chr(ord(unnamed) + 1)
-            elif param.type.kind == clang.cindex.TypeKind.POINTER and \
+            elif param.type.kind == TypeKind.POINTER and \
                     param.type.get_pointee().spelling in wrapped_classes:
                 cfile.write(f", create_Linux{param.type.get_pointee().spelling}({param.spelling}, \"{winclassname}\")")
                 cpp.write(f"({param.type.spelling}){param.spelling}")
@@ -878,11 +878,11 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cpp.write(f"({param.type.spelling}){param.spelling}")
             elif param in need_convert:
                 cfile.write(f", {param.spelling}")
-                if param.type.kind != clang.cindex.TypeKind.POINTER:
+                if param.type.kind != TypeKind.POINTER:
                     cpp.write(f"lin_{param.spelling}")
                 else:
                     cpp.write(f"&lin_{param.spelling}")
-            elif param.type.kind == clang.cindex.TypeKind.LVALUEREFERENCE:
+            elif param.type.kind == TypeKind.LVALUEREFERENCE:
                 cfile.write(f", {param.spelling}")
                 cpp.write(f"*{param.spelling}")
             else:
@@ -907,15 +907,15 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cfile.write(f"    steamclient_free_stringlist(lin_{path_conv['w2l_names'][i]});\n")
     cfile.write("}\n\n")
     for param in need_convert:
-        if param.type.kind == clang.cindex.TypeKind.POINTER:
+        if param.type.kind == TypeKind.POINTER:
             if not "const " in param.type.spelling: #don't modify const arguments
                 real_type = param.type
-                while real_type.kind == clang.cindex.TypeKind.POINTER:
+                while real_type.kind == TypeKind.POINTER:
                     real_type = real_type.get_pointee()
                 cpp.write(f"    lin_to_win_struct_{real_type.spelling}_{sdkver}(&lin_{param.spelling}, {param.spelling});\n")
         else:
             cpp.write(f"    lin_to_win_struct_{param.type.spelling}_{sdkver}(&lin_{param.spelling}, &{param.spelling});\n")
-    if method.result_type.kind != clang.cindex.TypeKind.VOID and \
+    if method.result_type.kind != TypeKind.VOID and \
             len(need_convert) > 0:
         cpp.write("    return retval;\n")
     cpp.write("}\n\n")
@@ -996,10 +996,10 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write(f"}} {winclassname};\n\n")
     methods = []
     for child in children:
-        if child.kind == clang.cindex.CursorKind.CXX_METHOD and \
+        if child.kind == CursorKind.CXX_METHOD and \
                 child.is_virtual_method():
             handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods)
-        elif child.kind == clang.cindex.CursorKind.DESTRUCTOR:
+        elif child.kind == CursorKind.DESTRUCTOR:
             methods.append(handle_destructor(cfile, classnode.spelling, winclassname, child))
 
     cfile.write(f"extern vtable_ptr {winclassname}_vtable;\n\n")
@@ -1042,7 +1042,7 @@ cb_table = {}
 cb_table64 = {}
 
 def get_field_attribute_str(field):
-    if field.type.kind != clang.cindex.TypeKind.RECORD:
+    if field.type.kind != TypeKind.RECORD:
         return ""
     win_struct = find_windows_struct(field.type)
     if win_struct is None:
@@ -1059,12 +1059,12 @@ def handle_struct(sdkver, struct):
     cb_num = None
     has_fields = False
     for c in members:
-        if c.kind == clang.cindex.CursorKind.ENUM_DECL:
+        if c.kind == CursorKind.ENUM_DECL:
             enums = c.get_children()
             for e in enums:
                 if e.displayname == "k_iCallback":
                     cb_num = e.enum_value
-        if c.kind == clang.cindex.CursorKind.FIELD_DECL:
+        if c.kind == CursorKind.FIELD_DECL:
             has_fields = True
 
     w2l_handler_name = None
@@ -1074,15 +1074,15 @@ def handle_struct(sdkver, struct):
         to_file.write("#pragma pack( push, 8 )\n")
         to_file.write(f"struct win{name} {{\n")
         for m in struct.get_children():
-            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+            if m.kind == CursorKind.FIELD_DECL:
+                if m.type.kind == TypeKind.CONSTANTARRAY:
                     to_file.write(f"    {m.type.element_type.spelling} {m.displayname}[{m.type.element_count}];\n")
-                elif m.type.kind == clang.cindex.TypeKind.RECORD and \
+                elif m.type.kind == TypeKind.RECORD and \
                         struct_needs_conversion(m.type):
                     to_file.write(f"    win{m.type.spelling}_{sdkver} {m.displayname};\n")
                 else:
-                    if m.type.kind == clang.cindex.TypeKind.POINTER and \
-                            m.type.get_pointee().kind == clang.cindex.TypeKind.FUNCTIONPROTO:
+                    if m.type.kind == TypeKind.POINTER and \
+                            m.type.get_pointee().kind == TypeKind.FUNCTIONPROTO:
                         to_file.write(f"    void *{m.displayname}; /*fn pointer*/\n")
                     else:
                         to_file.write(f"    {m.type.spelling} {m.displayname}{get_field_attribute_str(m)};\n")
@@ -1216,12 +1216,12 @@ def handle_struct(sdkver, struct):
     path_conv = get_path_converter(struct.type)
 
     def handle_field(m, src, dst):
-        if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-            if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                assert(m.type.element_type.kind != clang.cindex.TypeKind.RECORD or \
+        if m.kind == CursorKind.FIELD_DECL:
+            if m.type.kind == TypeKind.CONSTANTARRAY:
+                assert(m.type.element_type.kind != TypeKind.RECORD or \
                         not struct_needs_conversion(m.type.element_type))
                 cppfile.write(f"    memcpy({dst}->{m.displayname}, {src}->{m.displayname}, sizeof({dst}->{m.displayname}));\n")
-            elif m.type.kind == clang.cindex.TypeKind.RECORD and \
+            elif m.type.kind == TypeKind.RECORD and \
                     struct_needs_conversion(m.type):
                 cppfile.write(f"    {src}_to_{dst}_struct_{m.type.spelling}_{sdkver}(&{src}->{m.displayname}, &{dst}->{m.displayname});\n")
             elif path_conv and m.displayname in path_conv["l2w_names"]:
@@ -1291,7 +1291,7 @@ for sdkver in sdk_versions:
         sys.stdout.write(f"about to parse {input_name}\n")
         if not os.path.isfile(input_name):
             continue
-        index = clang.cindex.Index.create()
+        index = Index.create()
         linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_{sdkver}/', '-I' + CLANG_PATH + '/include/'])
         linux_build64 = index.parse(input_name, args=['-x', 'c++', '-Isteamworks_sdk_{sdkver}/', '-I' + CLANG_PATH + '/include/'])
 
@@ -1311,10 +1311,9 @@ for sdkver in sdk_versions:
             else:
                 children = list(linux_build.cursor.get_children())
                 for child in children:
-                    if child.kind == clang.cindex.CursorKind.CLASS_DECL and child.displayname in classes:
+                    if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
                         handle_class(sdkver, child)
-                    if child.kind == clang.cindex.CursorKind.STRUCT_DECL or \
-                            child.kind == clang.cindex.CursorKind.CLASS_DECL:
+                    if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
                         handle_struct(sdkver, child)
                     if child.displayname in print_sizes:
                         sys.stdout.write(f"size of {child.displayname} is {child.type.get_size()}\n")
