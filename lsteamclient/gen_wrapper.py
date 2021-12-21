@@ -1286,8 +1286,8 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = Index.create()
-        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_{sdkver}/', '-I' + CLANG_PATH + '/include/'])
-        linux_build64 = index.parse(input_name, args=['-x', 'c++', '-Isteamworks_sdk_{sdkver}/', '-I' + CLANG_PATH + '/include/'])
+        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-I' + CLANG_PATH + '/include/'])
+        linux_build64 = index.parse(input_name, args=['-x', 'c++', '-I' + CLANG_PATH + '/include/'])
 
         diagnostics = list(linux_build.diagnostics)
         if len(diagnostics) > 0:
@@ -1296,8 +1296,8 @@ for sdkver in sdk_versions:
                 print('There were parse errors')
                 pprint.pprint(diagnostics)
         else:
-            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_{sdkver}/', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-            windows_build64 = index.parse(input_name, args=['-x', 'c++', '-Isteamworks_sdk_{sdkver}/', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+            windows_build64 = index.parse(input_name, args=['-x', 'c++', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
             diagnostics = list(windows_build.diagnostics)
             if len(diagnostics) > 0:
                 print('There were parse errors (windows build)')
