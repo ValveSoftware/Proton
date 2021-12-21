@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Valve Corporation
+ * Copyright (c) 2020, 2021, 2022 Valve Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,

@@ -1,4 +1,4 @@
-Copyright (c) 2018-2021, Valve Corporation
+Copyright (c) 2018-2022, Valve Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -34,7 +34,7 @@ Browse the source code for more information
 
 This software contains a modified version of Wine licensed under the LGPL 2.1. Wine is
 
-    Copyright (c) 1993-2021 the Wine project authors
+    Copyright (c) 1993-2022 the Wine project authors
 
 Visit Wine at
 
@@ -48,8 +48,8 @@ View our modifications at
 
 This software contains a modified version of DXVK licensed under the zlib/libpng license. DXVK is
 
-    Copyright (c) 2017-2021 Philip Rebohle
-    Copyright (c) 2019-2021 Joshua Ashton
+    Copyright (c) 2017-2022 Philip Rebohle
+    Copyright (c) 2019-2022 Joshua Ashton
 
 Visit DXVK at
 
@@ -61,9 +61,19 @@ View our modifications at
 
 ---- ---- ---- ----
 
+This software contains vkd3d-proton licensed under the LGPL 2.1. vkd3d-proton is
+
+    Copyright 2016-2022 the vkd3d-proton project authors
+
+Visit vkd3d-proton at
+
+    https://github.com/HansKristian-Work/vkd3d-proton
+
+---- ---- ---- ----
+
 This software contains FAudio licensed under the zlib license. FAudio is
 
-    Copyright (c) 2011-2021 Ethan Lee, Luigi Auriemma, and the MonoGame Team
+    Copyright (c) 2011-2022 Ethan Lee, Luigi Auriemma, and the MonoGame Team
 
 Visit FAudio at
 
@@ -100,7 +110,7 @@ Visit Liberation Fonts at
 
 This software contains Source Han Sans licensed under the SIL Open Font License, available at LICENSE.OFL. This font is
 
-    Copyright 2020 Adobe (http://www.adobe.com/)
+    Copyright 2014-2021 Adobe (http://www.adobe.com/)
 
 Visit Source Han Sans at
 
@@ -171,16 +181,6 @@ wine-gecko itself is included under the Mozilla Public License 2.0.
 wine-gecko is available in Source Code form at
 
     https://sourceforge.net/p/wine/wine-gecko
-
----- ---- ---- ----
-
-This software contains vkd3d-proton licensed under the LGPL 2.1. vkd3d-proton is
-
-    Copyright 2016-2020 the vkd3d-proton project authors
-
-Visit vkd3d-proton at
-
-    https://github.com/HansKristian-Work/vkd3d-proton
 
 ---- ---- ---- ----
 
