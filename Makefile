@@ -49,7 +49,6 @@ endif
 
 enable_ccache := 1
 ifneq ($(enable_ccache),0)
-    CCACHE_FLAG := ENABLE_CCACHE=1
     CONFIGURE_CMD += --enable-ccache
 endif
 
@@ -75,7 +74,7 @@ help:
 	@echo "               remember to always set it!"
 	@echo "               Current build name: $(_build_name)"
 	@echo "  unstripped - Set to non-empty to avoid stripping installed library files."
-	@echo "  enable_ccache - Enabled by default, set to 0 to disable ccache."
+	@echo "  enable_ccache - Enabled by default, set to 0 prior to configuring to disable ccache."
 	@echo "  protonsdk_version - Version of the proton sdk image to use for building,"
 	@echo "                      use protonsdk_version=local to build it locally."
 	@echo ""
@@ -106,7 +105,7 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 protonsdk:
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C proton/docker $(UNSTRIPPED) $(CCACHE_FLAG) PROTONSDK_VERSION=$(protonsdk_version) proton
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C proton/docker $(UNSTRIPPED) PROTONSDK_VERSION=$(protonsdk_version) proton
 
 configure: | $(BUILD_DIR)
 	if [ ! -e $(BUILD_DIR)/Makefile ]; then \
@@ -121,12 +120,12 @@ downloads: configure
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR) downloads
 
 proton: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dist && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dist && \
 	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
 
 install-internal: | $(BUILD_ROOT)/compatibilitytools.d/$(_build_name)
 install-internal: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) install
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) install
 
 install: install-internal
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
@@ -136,14 +135,14 @@ install: install-internal
 redist: | $(BUILD_ROOT)/$(DEPLOY_DIR)
 redist: downloads
 	rm -rf $(BUILD_ROOT)/$(DEPLOY_DIR)/* && \
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) redist && \
 	cp -Rf $(BUILD_DIR)/redist/* $(BUILD_ROOT)/$(DEPLOY_DIR) && \
 	echo "Proton build available at $(BUILD_ROOT)/$(DEPLOY_DIR)"
 
 deploy: | $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy
 deploy: downloads
 	rm -rf $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy/* && \
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) deploy && \
 	cp -Rf $(BUILD_DIR)/deploy/* $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy && \
 	echo "Proton deployed to $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy"
 
@@ -152,7 +151,7 @@ module: | $(BUILD_ROOT)/$(module)/lib/wine/i386-unix
 module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows
 module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix
 module: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) module=$(module) module && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) module=$(module) module && \
 	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* $(BUILD_ROOT)/$(module)/lib/wine/i386-windows/ && \
 	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows/ && \
 	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so ]; then \
@@ -163,48 +162,48 @@ module: downloads
 dxvk: | $(BUILD_ROOT)/dxvk/lib/wine/dxvk
 dxvk: | $(BUILD_ROOT)/dxvk/lib64/wine/dxvk
 dxvk: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dxvk && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib/wine/dxvk/ && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib64/wine/dxvk/
 
 dxvk-nvapi: | $(BUILD_ROOT)/dxvk-nvapi/lib/wine/nvapi
 dxvk-nvapi: | $(BUILD_ROOT)/dxvk-nvapi/lib64/wine/nvapi
 dxvk-nvapi: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) dxvk-nvapi && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dxvk-nvapi && \
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/nvapi/*.dll $(BUILD_ROOT)/dxvk-nvapi/lib/wine/nvapi/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/nvapi/*.dll $(BUILD_ROOT)/dxvk-nvapi/lib64/wine/nvapi/
 
 vkd3d-proton: | $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton
 vkd3d-proton: | $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton
 vkd3d-proton: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vkd3d-proton && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) vkd3d-proton && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton/ && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton/
 
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine
 lsteamclient: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) lsteamclient && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) lsteamclient && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib/wine && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib64/wine
 
 vrclient: | $(BUILD_ROOT)/vrclient/lib/wine
 vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine
 vrclient: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) vrclient && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) vrclient && \
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so $(BUILD_ROOT)/vrclient/lib/wine && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so $(BUILD_ROOT)/vrclient/lib64/wine
 
 wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib/wine
 wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine
 wineopenxr: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) wineopenxr && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) wineopenxr && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/wineopenxr.dll.so $(BUILD_ROOT)/wineopenxr/lib64/wine
 
 battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine
 battleye: | $(BUILD_ROOT)/battleye/v1/lib64/wine
 battleye: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) battleye && \
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) battleye && \
 	cp -f $(BUILD_DIR)/dist-battleye/v1/lib/wine/beclient.dll.so $(BUILD_ROOT)/battleye/v1/lib/wine && \
 	cp -f $(BUILD_DIR)/dist-battleye/v1/lib64/wine/beclient_x64.dll.so $(BUILD_ROOT)/battleye/v1/lib64/wine
 
