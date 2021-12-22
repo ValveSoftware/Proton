@@ -81,7 +81,7 @@ documentation for setup instructions (e.g. Arch [Podman][arch-podman] /
 
 ```bash
 mkdir ../build && cd ../build
-../proton/configure.sh --container-engine=podman --enable-ccache --build-name=my_build
+../proton/configure.sh --enable-ccache --build-name=my_build
 ```
 
 Running `configure.sh` will create a `Makefile` allowing you to build Proton.
@@ -89,8 +89,9 @@ The scripts checks if containers are functional and prompt you if any
 host-side dependencies are missing. You should run the command from a
 directory created specifically for your build.
 
-The build by default uses Docker, but you can switch to another, compatible
-engine with `--container-engine=<executable_name>`.
+The configuration script tries to discover a working Docker or Podman setup
+to use, but you can force a compatible engine with
+`--container-engine=<executable_name>`.
 
 You can enable ccache with `--enable-cache` flag. This will mount your
 `$CCACHE_DIR` or `$HOME/.ccache` inside the container.
