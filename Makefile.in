@@ -44,7 +44,7 @@ else # (Rest of the file is the else)
 #   STEAMRT_NAME    - Name of the steam runtime to build against (scout / soldier)
 
 ifeq ($(SRCDIR),)
-	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
+	foo := $(error SRCDIR not set, do not include Makefile.in directly, run ./configure.sh to generate Makefile)
 endif
 
 include $(SRC)/make/utility.mk
