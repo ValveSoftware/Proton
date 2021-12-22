@@ -46,23 +46,9 @@ Building Proton
 ---------------
 
 Most of Proton builds inside the Proton SDK container with very few
-dependencies on the host side. For convenience we also provide
-[Vagrant][vagrant] scripts that will create a VM with all the dependencies
-and a working container runtime and build Proton inside it.
+dependencies on the host side.
 
-The direct container build is recommended for people building Proton on a
-regular basis as it is faster and less resource hungry.
-
-The Vagrant VM is easier to set up but comes with higher overhead, which
-makes it more suitable for an occasional Proton build.
-
-[vagrant]: https://www.vagrantup.com/
-
-
-Building with Podman or Docker
-------------------------------
-
-### Preparing the build environment
+## Preparing the build environment
 
 You need either a Docker or a Podman setup. We highly recommend [the rootless
 Podman setup][rootless-podman]. Please refer to your distribution's
@@ -76,6 +62,33 @@ documentation for setup instructions (e.g. Arch [Podman][arch-podman] /
 [debian-podman]: https://wiki.debian.org/Podman
 [debian-docker]: https://wiki.debian.org/Docker
 
+
+## The Easy Way
+
+We provide a top-level Makefile which will execute most of the build commands
+for you.
+
+After checking out the repository and updating its submodules, assuming that
+you have a working Docker or Podman setup, you can build and install Proton
+with a simple:
+
+```bash
+make install
+```
+
+If your build system is missing dependencies, it will fail quickly with a clear
+error message.
+
+After the build finishes, you may need to restart the Steam client to see the
+new Proton tool. The tool's name in the Steam client will be based on the
+currently checked out branch of Proton. You can override this name using the
+`build_name` variable.
+
+See `make help` for other build targets and options.
+
+
+
+## Manual building
 
 ### Configuring the build
 
@@ -137,97 +150,6 @@ is only useful after building Proton.
 `make dxvk` / `make vkd3d-proton` - rebuild DXVK / vkd3d-proton.
 
 
-Building using Vagrant
-----------------------
-
-This section describes how to use a virtual machine to build proton.
-
-### Preparing the build environment
-
-The VM is managed with [Vagrant][vagrant], which you will need to install and
-configure before invoking these commands. Proton's build system is most well
-tested with Vagrant's VirtualBox and libvirt/qemu backends. It also requires
-the vagrant-sshfs plugin. You may run into problems with the shared folder
-(`vagrant_share`) and/or CPU and memory usage with other backends.
-
-[vagrant]: https://www.vagrantup.com/
-
-
-### The Easy Way
-
-We provide a top-level Makefile which will execute most of the build commands
-for you.
-
-After checking out the repository and updating its submodules, assuming that
-you have working Vagrant setup, you can build and install Proton with a
-simple:
-
-```bash
-make install
-```
-
-You may need to restart the Steam client to see the new Proton tool. The
-tool's name in the Steam client will be based on the currently checked out
-branch of Proton. You can override this name using the `build_name` variable.
-
-See `make help` for other build targets and options.
-
-If your build VM gets cluttered, or falls out of date, you can use `vagrant
-destroy` to wipe the VM clean, then invoke one of the below commands to start
-over.
-
-
-### The Detailed Way
-
-Proton provides a Vagrantfile, which will automatically set up the Debian VM
-for you. After installing Vagrant, initialize the VM by running from within
-the Proton directory:
-
-```bash
-vagrant up
-```
-
-It will take a long time to download the base image and install all the build
-dependencies. Eventually it will complete. You can SSH into the virtual
-machine with:
-
-```bash
-vagrant ssh
-```
-
-**You are now inside a virtual machine with a working Docker setup.** At this
-point you will need to configure and make the build, see [building with
-podman or docker](#building-with-podman-or-docker) section for details.
-
-```bash
-mkdir build/
-cd build
-../proton/configure.sh --build-name=my_build
-make
-```
-
-The Vagrantfile is set up to rsync the `proton` directory into the VM on
-boot. On the host machine, you can use `vagrant rsync-auto` to have Vagrant
-automatically sync changes on your host machine into the build machine. It is
-recommended that you make changes on your host machine, and then perform the
-build in the VM. Any changes you make in the `proton` directory on the VM may
-be overwritten by later rsync updates from the host machine.
-
-The Vagrantfile also creates a directory called `vagrant_share/` in the
-`proton/` directory of your host machine, which is mounted at `/vagrant`
-within the VM. You can use this shared folder to move your Proton build out
-of the VM, or as one way to copy files into the VM.
-
-When you are done with the VM, you can shut it down from the host machine:
-
-```bash
-vagrant halt
-```
-
-Please read the Vagrant documentation for more information about how to use
-Vagrant VMs.
-
-
 Install Proton locally
 ----------------------
 
@@ -244,7 +166,7 @@ The `make install` target will perform this task for you, installing the
 Proton build into the Steam folder for the current user. You will have to
 restart the Steam client for it to pick up on a new tool.
 
-A correct local tool installation should look like this:
+A correct local tool installation should look similar to this:
 
 ```
 compatibilitytools.d/my_proton/
