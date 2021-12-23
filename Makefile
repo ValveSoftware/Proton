@@ -180,32 +180,45 @@ vkd3d-proton: downloads
 	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton/ && \
 	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton/
 
-lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine
-lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine
+lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine/i386-windows
+lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine/i386-unix
+lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-windows
+lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-unix
 lsteamclient: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) lsteamclient && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib/wine && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib64/wine
+	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib/wine/i386-windows/ && \
+	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-unix/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib/wine/i386-unix/ && \
+	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-windows/ && \
+	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-unix/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-unix/
 
-vrclient: | $(BUILD_ROOT)/vrclient/lib/wine
-vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine
+vrclient: | $(BUILD_ROOT)/vrclient/lib/wine/i386-windows
+vrclient: | $(BUILD_ROOT)/vrclient/lib/wine/i386-unix
+vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-windows
+vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-unix
 vrclient: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) vrclient && \
-	cp -f $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so $(BUILD_ROOT)/vrclient/lib/wine && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so $(BUILD_ROOT)/vrclient/lib64/wine
+	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-windows/vrclient.dll $(BUILD_ROOT)/vrclient/lib/wine/i386-windows/ && \
+	cp -f $(BUILD_DIR)/dist/dist/lib/wine/i386-unix/vrclient.dll.so $(BUILD_ROOT)/vrclient/lib/wine/i386-unix/ && \
+	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-windows/vrclient_x64.dll $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-windows/ && \
+	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-unix/vrclient_x64.dll.so $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-unix/
 
-wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib/wine
-wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine
+wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-windows
+wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-unix
 wineopenxr: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) wineopenxr && \
-	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/wineopenxr.dll.so $(BUILD_ROOT)/wineopenxr/lib64/wine
+	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-windows/wineopenxr.dll $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-windows/ && \
+	cp -f $(BUILD_DIR)/dist/dist/lib64/wine/x86_64-unix/wineopenxr.dll.so $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-unix/
 
-battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine
-battleye: | $(BUILD_ROOT)/battleye/v1/lib64/wine
+battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine/i386-windows
+battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine/i386-unix
+battleye: | $(BUILD_ROOT)/battleye/v1/lib64/wine/x86_64-windows
+battleye: | $(BUILD_ROOT)/battleye/v1/lib64/wine/x86_64-unix
 battleye: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) battleye && \
-	cp -f $(BUILD_DIR)/dist-battleye/v1/lib/wine/beclient.dll.so $(BUILD_ROOT)/battleye/v1/lib/wine && \
-	cp -f $(BUILD_DIR)/dist-battleye/v1/lib64/wine/beclient_x64.dll.so $(BUILD_ROOT)/battleye/v1/lib64/wine
+	cp -f $(BUILD_DIR)/dist-battleye/v1/lib/wine/i386-windows/beclient.dll $(BUILD_ROOT)/battleye/v1/lib/wine/i386-windows/ && \
+	cp -f $(BUILD_DIR)/dist-battleye/v1/lib/wine/i386-unix/beclient.dll.so $(BUILD_ROOT)/battleye/v1/lib/wine/i386-unix/ && \
+	cp -f $(BUILD_DIR)/dist-battleye/v1/lib64/wine/x86_64-windows/beclient_x64.dll $(BUILD_ROOT)/battleye/v1/lib64/wine/x86_64-windows/ && \
+	cp -f $(BUILD_DIR)/dist-battleye/v1/lib64/wine/x86_64-unix/beclient_x64.dll.so $(BUILD_ROOT)/battleye/v1/lib64/wine/x86_64-unix/
 
 $(BUILD_ROOT)/%:
 	mkdir -p $@
