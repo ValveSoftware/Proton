@@ -286,6 +286,7 @@ class Proton:
         self.lib64_dir = self.path("files/lib64/")
         self.fonts_dir = self.path("files/share/fonts/")
         self.wine_fonts_dir = self.path("files/share/wine/fonts/")
+        self.wine_inf = self.path("files/share/wine/wine.inf")
         self.version_file = self.path("version")
         self.default_pfx_dir = self.path("files/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
@@ -540,6 +541,11 @@ class CompatData:
                     if not os.path.exists(dst_file):
                         self.pfx_copy(src_file, dst_file)
                         tracked_files.write(rel_dir + file_ + "\n")
+        # Set .update-timestamp so Wine doesn't try to update the prefix.
+        # This is needed in case the mtime of wine.inf has changed in distribution.
+        with open(os.path.join(self.prefix_dir, '.update-timestamp'), 'w') as update_timestamp:
+            mtime = int(os.stat(g_proton.wine_inf).st_mtime)
+            update_timestamp.write(str(mtime))
 
     def update_builtin_libs(self, dll_copy_patterns):
         dll_copy_patterns = dll_copy_patterns.split(',')
