@@ -3722,9 +3722,9 @@ index 33197563cd8..9bcb377a62e 100644
  #include "kernelbase.h"
  #include "wine/debug.h"
 +#include "wine/heap.h"
+ #include "wine/condrv.h"
 
  WINE_DEFAULT_DEBUG_CHANNEL(process);
-
 @@ -517,7 +518,31 @@ BOOL WINAPI DECLSPEC_HOTPATCH CreateProcessInternalW( HANDLE token, const WCHAR
      }
      else

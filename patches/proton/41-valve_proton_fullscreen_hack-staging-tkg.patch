@@ -3426,10 +3426,10 @@ index 77ca60ec44d..f3d35ba53d2 100644
      }
  }
 diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index 2c9aff7e777..d5799690509 100644
+index 85bcdca00ff..6321cbb6774 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
-@@ -460,6 +460,7 @@ static BOOL grab_clipping_window( const RECT *clip )
+@@ -497,6 +497,7 @@ static BOOL grab_clipping_window( const RECT *clip )
      Window clip_window;
      HWND msg_hwnd = 0;
      POINT pos;
@@ -3437,7 +3437,7 @@ index 2c9aff7e777..d5799690509 100644
 
      if (GetWindowThreadProcessId( GetDesktopWindow(), NULL ) == GetCurrentThreadId())
          return TRUE;  /* don't clip in the desktop process */
-@@ -498,9 +499,21 @@ static BOOL grab_clipping_window( const RECT *clip )
+@@ -535,9 +536,21 @@ static BOOL grab_clipping_window( const RECT *clip )
      TRACE( "clipping to %s win %lx\n", wine_dbgstr_rect(clip), clip_window );
 
      if (!data->clip_hwnd) XUnmapWindow( data->display, clip_window );
@@ -3460,50 +3460,31 @@ index 2c9aff7e777..d5799690509 100644
      XMapWindow( data->display, clip_window );
 
      /* if the rectangle is shrinking we may get a pointer warp */
-@@ -680,7 +693,10 @@ static POINT map_event_coords(const XButtonEvent *event, HWND hwnd)
+@@ -734,11 +747,10 @@ static void map_event_coords( HWND hwnd, Window window, Window event_root, int x
          else if (event_root == root_window) pt = root_to_virtual_screen( x_root, y_root );
          else
          {
 -            if (window == data->whole_window)
+-            {
+-                pt.x += data->whole_rect.left - data->client_rect.left;
+-                pt.y += data->whole_rect.top - data->client_rect.top;
+-            }
 +            if(data->fs_hack)
 +                fs_hack_point_real_to_user(&pt);
 +
 +            if (window == data->whole_window && !data->fs_hack)
-             {
-                 pt.x += data->whole_rect.left - data->client_rect.left;
-                 pt.y += data->whole_rect.top - data->client_rect.top;
-@@ -690,6 +690,9 @@ static BOOL map_raw_event_coords( XIRawEvent *event, INPUT *input, RAWINPUT *rawinput )
-     double x_raw = 0, y_raw = 0, x_value = 0, y_value = 0, x_scale, y_scale;
-     RECT virtual_rect;
-     int i;
+
+             if (GetWindowLongW( hwnd, GWL_EXSTYLE ) & WS_EX_LAYOUTRTL)
+                 pt.x = data->client_rect.right - data->client_rect.left - 1 - pt.x;
+@@ -761,6 +773,7 @@ static void map_event_coords( HWND hwnd, Window window, Window event_root, int x
+ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPUT *input )
+ {
+     struct x11drv_win_data *data;
 +    POINT pt;
-+    HMONITOR monitor;
-+    double user_to_real_scale;
 
-     if (x->number < 0 || y->number < 0) return FALSE;
-     if (!event->valuators.mask_len) return FALSE;
-@@ -700,6 +700,12 @@ static BOOL map_raw_event_coords( XIRawEvent *event, INPUT *input, RAWINPUT *rawinput )
-     else
-         FIXME( "Unsupported relative/absolute X/Y axis mismatch\n." );
+     input->type = INPUT_MOUSE;
 
-+    GetCursorPos(&pt);
-+    monitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONULL);
-+    user_to_real_scale = fs_hack_get_user_to_real_scale(monitor);
-+    input->u.mi.dx = lround((double)input->u.mi.dx / user_to_real_scale);
-+    input->u.mi.dy = lround((double)input->u.mi.dy / user_to_real_scale);
-+
-     if (input->u.mi.dwFlags & MOUSEEVENTF_VIRTUALDESK) SetRect( &virtual_rect, 0, 0, 65535, 65535 );
-     else virtual_rect = get_virtual_screen_rect();
-
-@@ -720,6 +736,7 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
-     {
-         struct x11drv_thread_data *thread_data = x11drv_thread_data();
-         HWND clip_hwnd = thread_data->clip_hwnd;
-+        POINT pt;
-
-         if (!clip_hwnd) return;
-         if (thread_data->clip_window != window) return;
-@@ -729,6 +746,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+@@ -777,6 +790,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
              sync_window_cursor( window );
              last_cursor_change = input->u.mi.time;
          }
@@ -3522,7 +3503,7 @@ index 2c9aff7e777..d5799690509 100644
          __wine_send_input( hwnd, input, NULL );
          return;
      }
-@@ -1574,6 +1601,9 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
+@@ -1620,6 +1645,9 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
          return FALSE;
      }
 
@@ -3532,7 +3513,7 @@ index 2c9aff7e777..d5799690509 100644
      XWarpPointer( data->display, root_window, root_window, 0, 0, 0, 0, pos.x, pos.y );
      data->warp_serial = NextRequest( data->display );
 
-@@ -1582,7 +1612,7 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
+@@ -1628,7 +1656,7 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
 
      XNoOp( data->display );
      XFlush( data->display ); /* avoids bad mouse lag in games that do their own mouse warping */
@@ -3540,6 +3521,29 @@ index 2c9aff7e777..d5799690509 100644
 +    TRACE( "warped to (fake) %d,%d serial %lu\n", x, y, data->warp_serial );
      return TRUE;
  }
+
+@@ -1955,6 +1983,9 @@ static BOOL map_raw_event_coords( XIRawEvent *event, INPUT *input, RAWINPUT *raw
+     double x_raw = 0, y_raw = 0, x_value = 0, y_value = 0, x_scale, y_scale;
+     RECT virtual_rect;
+     int i;
++    POINT pt;
++    HMONITOR monitor;
++    double user_to_real_scale;
+
+     if (x->number < 0 || y->number < 0) return FALSE;
+     if (!event->valuators.mask_len) return FALSE;
+@@ -1968,6 +1999,12 @@ static BOOL map_raw_event_coords( XIRawEvent *event, INPUT *input, RAWINPUT *raw
+     else
+         FIXME( "Unsupported relative/absolute X/Y axis mismatch\n." );
+
++    GetCursorPos(&pt);
++    monitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONULL);
++    user_to_real_scale = fs_hack_get_user_to_real_scale(monitor);
++    input->u.mi.dx = lround((double)input->u.mi.dx / user_to_real_scale);
++    input->u.mi.dy = lround((double)input->u.mi.dy / user_to_real_scale);
++
+     if (input->u.mi.dwFlags & MOUSEEVENTF_VIRTUALDESK) SetRect( &virtual_rect, 0, 0, 65535, 65535 );
+     else virtual_rect = get_virtual_screen_rect();
 
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 4a3ab31273a..97463882355 100644
