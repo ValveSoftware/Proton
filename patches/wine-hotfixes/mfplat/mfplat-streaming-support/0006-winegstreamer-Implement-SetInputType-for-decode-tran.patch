@@ -291,14 +291,14 @@ index 879aece63b7..1afe92f04ac 100644
      if ((video_format = wg_video_format_to_gst(format->u.video.format)) == GST_VIDEO_FORMAT_UNKNOWN)
          return NULL;
  
-@@ -587,6 +662,7 @@ static void CDECL wg_parser_stream_enable(struct wg_parser_stream *stream, const
+@@ -671,6 +671,7 @@ static void CDECL wg_parser_stream_enable(struct wg_parser_stream *stream, const
              case WG_VIDEO_FORMAT_YVYU:
              case WG_VIDEO_FORMAT_UNKNOWN:
              case WG_VIDEO_FORMAT_CINEPAK:
 +            case WG_VIDEO_FORMAT_H264:
-                 gst_util_set_object_arg(G_OBJECT(stream->flip), "method", "none");
                  break;
          }
+
 -- 
 2.30.2
 

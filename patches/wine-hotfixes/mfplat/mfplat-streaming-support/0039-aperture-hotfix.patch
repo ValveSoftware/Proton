@@ -1,0 +1,56 @@
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 05968a44dc5..6a488f76c2e 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -762,6 +762,18 @@ static void CDECL wg_parser_stream_enable(struct wg_parser_stream *stream, const
+                 break;
+         }
+ 
++        if (aperture)
++        {
++            if (aperture->left)
++                g_object_set(G_OBJECT(stream->box), "left", -aperture->left, NULL);
++            if (aperture->top)
++                g_object_set(G_OBJECT(stream->box), "top", -aperture->top, NULL);
++            if (aperture->right)
++                g_object_set(G_OBJECT(stream->box), "right", aperture->right - format->u.video.width, NULL);
++            if (aperture->bottom)
++                g_object_set(G_OBJECT(stream->box), "bottom", aperture->bottom - format->u.video.height, NULL);
++        }
++
+         gst_util_set_object_arg(G_OBJECT(stream->flip), "method", flip ? "vertical-flip" : "none");
+     }
+ 
+@@ -1004,25 +1016,13 @@ static GstFlowReturn queue_stream_event(struct wg_parser_stream *stream,
+             return GST_FLOW_ERROR;
+         }
+ 
+-        if (aperture)
++        if (!stream->box && (stream->aperture.left || stream->aperture.top ||
++            (stream->aperture.right && stream->aperture.right != stream->current_format.u.video.width) ||
++            (stream->aperture.bottom && stream->aperture.bottom != stream->current_format.u.video.height)))
+         {
+-            if (!stream->box && (stream->aperture.left || stream->aperture.top ||
+-                (stream->aperture.right && stream->aperture.right != stream->current_format.u.video.width) ||
+-                (stream->aperture.bottom && stream->aperture.bottom != stream->current_format.u.video.height)))
+-            {
+-                fprintf(stderr, "winegstreamer: failed to create videobox, are %u-bit GStreamer \"good\" plugins installed?\n",
+-                    8 * (int)sizeof(void *));
+-                return;
+-            }
+-
+-            if (aperture->left)
+-                g_object_set(G_OBJECT(stream->box), "left", -aperture->left, NULL);
+-            if (aperture->top)
+-                g_object_set(G_OBJECT(stream->box), "top", -aperture->top, NULL);
+-            if (aperture->right)
+-                g_object_set(G_OBJECT(stream->box), "right", aperture->right - format->u.video.width, NULL);
+-            if (aperture->bottom)
+-                g_object_set(G_OBJECT(stream->box), "bottom", aperture->bottom - format->u.video.height, NULL);
++            fprintf(stderr, "winegstreamer: failed to create videobox, are %u-bit GStreamer \"good\" plugins installed?\n",
++                8 * (int)sizeof(void *));
++            return;
+         }
+     }
+     stream->event = *event;
+
