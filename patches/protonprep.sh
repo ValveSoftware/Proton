@@ -195,8 +195,8 @@
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
-    -W ntdll-Junction_Points \
     -W ntdll-Syscall_Emulation \
+    -W ntdll-Junction_Points \
     -W ntdll-Serial_Port_Detection \
     -W server-File_Permissions \
     -W server-Stored_ACLs \
@@ -416,6 +416,7 @@
     patch -Np1 < ../patches/wine-hotfixes/mfplat/mfplat-streaming-support/0036-winegstreamer-Implement-MFT_MESSAGE_COMMAND_FLUSH-fo.patch
     patch -Np1 < ../patches/wine-hotfixes/mfplat/mfplat-streaming-support/0037-winegstreamer-Default-Frame-size-if-one-isn-t-availa.patch
     patch -Np1 < ../patches/wine-hotfixes/mfplat/mfplat-streaming-support/0038-mfplat-Stub-out-MFCreateDXGIDeviceManager-to-avoid-t.patch
+    patch -Np1 < ../patches/wine-hotfixes/mfplat/mfplat-streaming-support/0039-aperture-hotfix.patch
 
     # Needed specifically for proton, not needed for normal wine
     echo "proton mfplat dll register patch"
@@ -468,12 +469,6 @@
 
     # https://bugs.winehq.org/show_bug.cgi?id=51687
     patch -Np1 < ../patches/wine-hotfixes/pending/Return_nt_filename_and_resolve_DOS_drive_path.patch
-
-    patch -Np1 < ../patches/wine-hotfixes/pending/222237
-    patch -Np1 < ../patches/wine-hotfixes/pending/222273
-
-    #https://bugs.winehq.org/show_bug.cgi?id=52222
-    patch -Np1 < ../patches/wine-hotfixes/pending/bug_52222_fix.patch
 
 ### END WINE HOTFIX SECTION ###
 
