@@ -5,11 +5,10 @@ Subject: protonify staging syscall emu
 
 
 diff --git a/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch b/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
-index aa3df4a..5251820 100644
+index 014d6a46..46f04635 100644
 --- a/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
 +++ b/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
-@@ -1,13 +1,14 @@
- Subject: [PATCH] ntdll: Support x86_64 syscall emulation.
+@@ -5,12 +5,13 @@ Subject: [PATCH] ntdll: Support x86_64 syscall emulation.
 
  ---
   configure.ac                    |   1 +
@@ -25,8 +24,24 @@ index aa3df4a..5251820 100644
 +index 6202d68ee45..bcc37745576 100644
  --- a/configure.ac
  +++ b/configure.ac
- @@ -455,6 +455,7 @@ AC_CHECK_HEADERS(\
-@@ -64,7 +79,7 @@ index 8d3353e959d..a8a142c2ab1 100644
+ @@ -448,6 +448,7 @@ AC_CHECK_HEADERS(\
+@@ -53,13 +54,14 @@ index 06d99545913..9a46b4a50b0 100644
+  #define NONAMELESSUNION
+  #define NONAMELESSSTRUCT
+  #include "ntstatus.h"
+-@@ -2432,6 +2441,118 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
++@@ -2344,6 +2352,119 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
+      return 0;
+  }
+
+ +#ifdef HAVE_SECCOMP
+ +static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+ +{
+++    ULONG64 *dispatcher_address = (ULONG64 *)((char *)user_shared_data + page_size);
+ +    ucontext_t *ctx = sigcontext;
+ +    void ***rsp;
+ +
+@@ -70,7 +72,7 @@ index 06d99545913..9a46b4a50b0 100644
  +    *rsp -= 1;
  +    **rsp = (void *)(ctx->uc_mcontext.gregs[REG_RIP] + 0xb);
  +
@@ -35,7 +50,7 @@ index aa3df4a..5251820 100644
  +}
  +#endif
  +
-@@ -162,7 +177,7 @@ index 8d3353e959d..a8a142c2ab1 100644
+@@ -172,7 +174,7 @@ index 06d99545913..9a46b4a50b0 100644
 
   /***********************************************************************
    *           handle_interrupt
@@ -44,7 +59,7 @@ index aa3df4a..5251820 100644
       if (sigaction( SIGSEGV, &sig_act, NULL ) == -1) goto error;
       if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
       if (sigaction( SIGBUS, &sig_act, NULL ) == -1) goto error;
-@@ -170,8 +185,22 @@ index 8d3353e959d..a8a142c2ab1 100644
+@@ -188,8 +190,22 @@ index 06d99545913..9a46b4a50b0 100644
                      "movq 0x18(%rcx),%rdx\n\t"
                      "movl %eax,%ebx\n\t"
                      "shrl $8,%ebx\n\t"
@@ -68,23 +83,3 @@ index aa3df4a..5251820 100644
  --- a/tools/winebuild/import.c
  +++ b/tools/winebuild/import.c
  @@ -1366,7 +1366,6 @@ static int cmp_link_name( const void *e1, const void *e2 )
-diff --git a/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch b/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
-index e7284685..b635ec46 100644
---- a/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
-+++ b/patches/ntdll-Syscall_Emulation/0001-ntdll-Support-x86_64-syscall-emulation.patch
-@@ -54,13 +54,14 @@ index 06d99545913..9a46b4a50b0 100644
-  #define NONAMELESSUNION
-  #define NONAMELESSSTRUCT
-  #include "ntstatus.h"
--@@ -2432,6 +2441,118 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
-+@@ -2432,6 +2441,119 @@ static inline DWORD is_privileged_instr( CONTEXT *context )
-      return 0;
-  }
-
- +#ifdef HAVE_SECCOMP
- +static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
- +{
-++    ULONG64 *dispatcher_address = (ULONG64 *)((char *)user_shared_data + page_size);
- +    ucontext_t *ctx = sigcontext;
- +    void ***rsp;
- +
