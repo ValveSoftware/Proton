@@ -6,11 +6,9 @@ jobs:
   build-proton-ge:
     runs-on: ubuntu-latest
     steps:
+      - name: Clone repo
+        run: 	git clone --recurse-submodules ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} .
 
-      - uses: actions/checkout@master
-        with:
-          submodules: false
-    
       - name: Get Proton Versions
         run: echo "RELEASE_VERSION=$(cat VERSION)" >> $GITHUB_ENV
         
@@ -20,10 +18,6 @@ jobs:
       - name: Test sha512sum availability
         run: echo "hello" | sha512sum
 
-      - name: Update submodules
-        run: |
-          set -o xtrace
-          git submodule update --init --recursive
       - name: Add architecture i386
         run: sudo dpkg --add-architecture i386
 
@@ -55,6 +49,14 @@ jobs:
         working-directory: ./build
         run: mkdir build
 
+      - name: Cache ccache
+        uses: actions/cache@v2
+        with:
+          path: ~/.ccache
+          key: ccache-proton-${{ github.run_id }}
+          restore-keys: |
+            ccache-proton
+
       - name: Configure build proton
         working-directory: ./build/build
         run: ../../configure.sh --build-name="${{ env.RELEASE_VERSION }}" --enable-ccache
@@ -78,5 +80,5 @@ jobs:
           repo_token: ${{ secrets.PROTON_GE_GITHUB_ACTIONS_BUILD }}
           file: build/build/${{ env.RELEASE_VERSION }}.tar.gz
           file_glob: true
-          tag: ${{ env.RELEASE_VERSION }}
+          tag: "${{ env.RELEASE_VERSION }}-build-${{ github.run_number }}"
           overwrite: false
