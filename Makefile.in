@@ -416,15 +416,7 @@ endif # ifeq ($(CONTAINER),)
 ##
 
 GST_COMMON_MESON_ARGS := \
-	-Dexamples=disabled \
-	-Dtests=disabled \
-	-Dgtk_doc=disabled \
-	-Dintrospection=disabled \
-	-Dgobject-cast-checks=disabled \
-	-Dglib-asserts=disabled \
-	-Dglib-checks=disabled \
-	-Dnls=disabled \
-	-Dbenchmarks=disabled
+	-Dorc=enabled
 
 GST_ORC_MESON_ARGS := \
 	-Dorc-test=disabled \
