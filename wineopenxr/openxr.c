@@ -1317,6 +1317,173 @@ XrResult WINAPI wine_xrDestroyFoveationProfileFB(XrFoveationProfileFB profile)
     return XR_SUCCESS;
 }
 
+XrResult WINAPI wine_xrCreateGeometryInstanceFB(XrSession session, const XrGeometryInstanceCreateInfoFB *create_info,
+        XrGeometryInstanceFB *out)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    XrGeometryInstanceCreateInfoFB our_create_info;
+    wine_XrGeometryInstanceFB *wine_instance;
+    XrResult res;
+
+    WINE_TRACE("%p %p %p\n", session, create_info, out);
+
+    wine_instance = heap_alloc_zero(sizeof(*wine_instance));
+    our_create_info = *create_info;
+    our_create_info.layer = ((wine_XrPassthroughLayerFB *)create_info->layer)->layer;
+    our_create_info.mesh = ((wine_XrTriangleMeshFB *)create_info->mesh)->mesh;
+
+    res = wine_session->wine_instance->funcs.p_xrCreateGeometryInstanceFB(wine_session->session, &our_create_info,
+            &wine_instance->instance);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("Failed, res %d\n", res);
+        heap_free(wine_instance);
+        return res;
+    }
+    wine_instance->wine_session = wine_session;
+    *out = (XrGeometryInstanceFB)wine_instance;
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroyGeometryInstanceFB(XrGeometryInstanceFB instance)
+{
+    wine_XrGeometryInstanceFB *wine_instance = (wine_XrGeometryInstanceFB *)instance;
+    XrResult res;
+
+    WINE_TRACE("%p\n", instance);
+
+    res = wine_instance->wine_session->wine_instance->funcs.p_xrDestroyGeometryInstanceFB(wine_instance->instance);
+    if(res != XR_SUCCESS){
+        WINE_WARN("Failed, res %d\n", res);
+        return res;
+    }
+    heap_free(wine_instance);
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreateTriangleMeshFB(XrSession session, const XrTriangleMeshCreateInfoFB *create_info,
+        XrTriangleMeshFB *out)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrTriangleMeshFB *wine_mesh;
+    XrResult res;
+
+    WINE_TRACE("%p %p %p\n", session, create_info, out);
+
+    wine_mesh = heap_alloc_zero(sizeof(*wine_mesh));
+
+    res = wine_session->wine_instance->funcs.p_xrCreateTriangleMeshFB(wine_session->session, create_info,
+            &wine_mesh->mesh);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("Failed, res %d\n", res);
+        heap_free(wine_mesh);
+        return res;
+    }
+    wine_mesh->wine_session = wine_session;
+    *out = (XrTriangleMeshFB)wine_mesh;
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroyTriangleMeshFB(XrTriangleMeshFB mesh)
+{
+    wine_XrTriangleMeshFB *wine_mesh = (wine_XrTriangleMeshFB *)mesh;
+    XrResult res;
+
+    WINE_TRACE("%p\n", mesh);
+
+    res = wine_mesh->wine_session->wine_instance->funcs.p_xrDestroyTriangleMeshFB(wine_mesh->mesh);
+    if(res != XR_SUCCESS){
+        WINE_WARN("Failed, res %d\n", res);
+        return res;
+    }
+    heap_free(wine_mesh);
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreatePassthroughFB(XrSession session, const XrPassthroughCreateInfoFB *create_info,
+        XrPassthroughFB *out)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    wine_XrPassthroughFB *wine_passthrough;
+    XrResult res;
+
+    WINE_TRACE("%p %p %p\n", session, create_info, out);
+
+    wine_passthrough = heap_alloc_zero(sizeof(*wine_passthrough));
+
+    res = wine_session->wine_instance->funcs.p_xrCreatePassthroughFB(wine_session->session, create_info,
+            &wine_passthrough->passthrough);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("Failed, res %d\n", res);
+        heap_free(wine_passthrough);
+        return res;
+    }
+    wine_passthrough->wine_session = wine_session;
+    *out = (XrPassthroughFB)wine_passthrough;
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroyPassthroughFB(XrPassthroughFB passthrough)
+{
+    wine_XrPassthroughFB *wine_passthrough = (wine_XrPassthroughFB *)passthrough;
+    XrResult res;
+
+    WINE_TRACE("%p\n", passthrough);
+
+    res = wine_passthrough->wine_session->wine_instance->funcs.p_xrDestroyPassthroughFB(wine_passthrough->passthrough);
+    if(res != XR_SUCCESS){
+        WINE_WARN("Failed, res %d\n", res);
+        return res;
+    }
+    heap_free(wine_passthrough);
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrCreatePassthroughLayerFB(XrSession session, const XrPassthroughLayerCreateInfoFB *create_info,
+        XrPassthroughLayerFB *out)
+{
+    wine_XrSession *wine_session = (wine_XrSession *)session;
+    XrPassthroughLayerCreateInfoFB our_create_info;
+    wine_XrPassthroughLayerFB *wine_layer;
+    XrResult res;
+
+    WINE_TRACE("%p %p %p\n", session, create_info, out);
+
+    wine_layer = heap_alloc_zero(sizeof(*wine_layer));
+    our_create_info = *create_info;
+    our_create_info.passthrough = ((wine_XrPassthroughFB *)create_info->passthrough)->passthrough;
+
+    res = wine_session->wine_instance->funcs.p_xrCreatePassthroughLayerFB(wine_session->session, &our_create_info,
+            &wine_layer->layer);
+    if(res != XR_SUCCESS)
+    {
+        WINE_WARN("Failed, res %d\n", res);
+        heap_free(wine_layer);
+        return res;
+    }
+    wine_layer->wine_session = wine_session;
+    *out = (XrPassthroughLayerFB)wine_layer;
+    return XR_SUCCESS;
+}
+
+XrResult WINAPI wine_xrDestroyPassthroughLayerFB(XrPassthroughLayerFB layer)
+{
+    wine_XrPassthroughLayerFB *wine_layer = (wine_XrPassthroughLayerFB *)layer;
+    XrResult res;
+
+    WINE_TRACE("%p\n", layer);
+
+    res = wine_layer->wine_session->wine_instance->funcs.p_xrDestroyPassthroughLayerFB(wine_layer->layer);
+    if(res != XR_SUCCESS){
+        WINE_WARN("Failed, res %d\n", res);
+        return res;
+    }
+    heap_free(wine_layer);
+    return XR_SUCCESS;
+}
+
 XrResult WINAPI wine_xrNegotiateLoaderRuntimeInterface(
         const XrNegotiateLoaderInfo_win *loaderInfo,
         XrNegotiateRuntimeRequest_win *runtimeRequest)

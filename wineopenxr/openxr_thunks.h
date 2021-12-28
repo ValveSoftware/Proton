@@ -28,8 +28,11 @@
 XrResult WINAPI wine_xrConvertTimeToWin32PerformanceCounterKHR(XrInstance instance, XrTime time, LARGE_INTEGER *performanceCounter) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrConvertWin32PerformanceCounterToTimeKHR(XrInstance instance, const LARGE_INTEGER *performanceCounter, XrTime *time) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateFoveationProfileFB(XrSession session, const XrFoveationProfileCreateInfoFB *createInfo, XrFoveationProfileFB *profile) DECLSPEC_HIDDEN;
+XrResult WINAPI wine_xrCreateGeometryInstanceFB(XrSession session, const XrGeometryInstanceCreateInfoFB *createInfo, XrGeometryInstanceFB *outGeometryInstance) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateHandTrackerEXT(XrSession session, const XrHandTrackerCreateInfoEXT *createInfo, XrHandTrackerEXT *handTracker) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, XrInstance *instance);
+XrResult WINAPI wine_xrCreatePassthroughFB(XrSession session, const XrPassthroughCreateInfoFB *createInfo, XrPassthroughFB *outPassthrough) DECLSPEC_HIDDEN;
+XrResult WINAPI wine_xrCreatePassthroughLayerFB(XrSession session, const XrPassthroughLayerCreateInfoFB *createInfo, XrPassthroughLayerFB *outLayer) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateSceneMSFT(XrSceneObserverMSFT sceneObserver, const XrSceneCreateInfoMSFT *createInfo, XrSceneMSFT *scene) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateSceneObserverMSFT(XrSession session, const XrSceneObserverCreateInfoMSFT *createInfo, XrSceneObserverMSFT *sceneObserver) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateSession(XrInstance instance, const XrSessionCreateInfo *createInfo, XrSession *session);
@@ -37,17 +40,22 @@ XrResult WINAPI wine_xrCreateSpatialAnchorFromPersistedNameMSFT(XrSession sessio
 XrResult WINAPI wine_xrCreateSpatialAnchorMSFT(XrSession session, const XrSpatialAnchorCreateInfoMSFT *createInfo, XrSpatialAnchorMSFT *anchor) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateSpatialAnchorStoreConnectionMSFT(XrSession session, XrSpatialAnchorStoreConnectionMSFT *spatialAnchorStore) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo *createInfo, XrSwapchain *swapchain);
+XrResult WINAPI wine_xrCreateTriangleMeshFB(XrSession session, const XrTriangleMeshCreateInfoFB *createInfo, XrTriangleMeshFB *outTriangleMesh) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateVulkanDeviceKHR(XrInstance instance, const XrVulkanDeviceCreateInfoKHR *createInfo, VkDevice *vulkanDevice, VkResult *vulkanResult) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrCreateVulkanInstanceKHR(XrInstance instance, const XrVulkanInstanceCreateInfoKHR *createInfo, VkInstance *vulkanInstance, VkResult *vulkanResult) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroyFoveationProfileFB(XrFoveationProfileFB profile) DECLSPEC_HIDDEN;
+XrResult WINAPI wine_xrDestroyGeometryInstanceFB(XrGeometryInstanceFB instance) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroyHandTrackerEXT(XrHandTrackerEXT handTracker) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroyInstance(XrInstance instance);
+XrResult WINAPI wine_xrDestroyPassthroughFB(XrPassthroughFB passthrough) DECLSPEC_HIDDEN;
+XrResult WINAPI wine_xrDestroyPassthroughLayerFB(XrPassthroughLayerFB layer) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroySceneMSFT(XrSceneMSFT scene) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroySceneObserverMSFT(XrSceneObserverMSFT sceneObserver) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroySession(XrSession session);
 XrResult WINAPI wine_xrDestroySpatialAnchorMSFT(XrSpatialAnchorMSFT anchor) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroySpatialAnchorStoreConnectionMSFT(XrSpatialAnchorStoreConnectionMSFT spatialAnchorStore) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrDestroySwapchain(XrSwapchain swapchain);
+XrResult WINAPI wine_xrDestroyTriangleMeshFB(XrTriangleMeshFB mesh) DECLSPEC_HIDDEN;
 XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo);
 XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerName, uint32_t propertyCapacityInput, uint32_t *propertyCountOutput, XrExtensionProperties *properties);
 XrResult WINAPI wine_xrEnumerateSwapchainFormats(XrSession session, uint32_t formatCapacityInput, uint32_t *formatCountOutput, int64_t *formats);
@@ -63,6 +71,15 @@ XrResult WINAPI wine_xrGetVulkanInstanceExtensionsKHR(XrInstance instance, XrSys
 XrResult WINAPI wine_xrPollEvent(XrInstance instance, XrEventDataBuffer *eventData);
 
 /* Private thunks */
+
+typedef struct XrMarkerSpaceCreateInfoVARJO_host
+{
+    XrStructureType type;
+    const void *next;
+    uint64_t markerId;
+    XrPosef poseInMarkerSpace;
+} XrMarkerSpaceCreateInfoVARJO_host;
+
 
 typedef struct XrSceneMeshBuffersGetInfoMSFT_host
 {
@@ -90,8 +107,16 @@ struct openxr_instance_funcs
     XrResult (*p_xrCreateActionSet)(XrInstance, const XrActionSetCreateInfo *, XrActionSet *);
     XrResult (*p_xrCreateActionSpace)(XrSession, const XrActionSpaceCreateInfo *, XrSpace *);
     XrResult (*p_xrCreateFoveationProfileFB)(XrSession, const XrFoveationProfileCreateInfoFB *, XrFoveationProfileFB *);
+    XrResult (*p_xrCreateGeometryInstanceFB)(XrSession, const XrGeometryInstanceCreateInfoFB *, XrGeometryInstanceFB *);
     XrResult (*p_xrCreateHandMeshSpaceMSFT)(XrHandTrackerEXT, const XrHandMeshSpaceCreateInfoMSFT *, XrSpace *);
     XrResult (*p_xrCreateHandTrackerEXT)(XrSession, const XrHandTrackerCreateInfoEXT *, XrHandTrackerEXT *);
+#if defined(USE_STRUCT_CONVERSION)
+    XrResult (*p_xrCreateMarkerSpaceVARJO)(XrSession, const XrMarkerSpaceCreateInfoVARJO_host *, XrSpace *);
+#else
+    XrResult (*p_xrCreateMarkerSpaceVARJO)(XrSession, const XrMarkerSpaceCreateInfoVARJO *, XrSpace *);
+#endif
+    XrResult (*p_xrCreatePassthroughFB)(XrSession, const XrPassthroughCreateInfoFB *, XrPassthroughFB *);
+    XrResult (*p_xrCreatePassthroughLayerFB)(XrSession, const XrPassthroughLayerCreateInfoFB *, XrPassthroughLayerFB *);
     XrResult (*p_xrCreateReferenceSpace)(XrSession, const XrReferenceSpaceCreateInfo *, XrSpace *);
     XrResult (*p_xrCreateSceneMSFT)(XrSceneObserverMSFT, const XrSceneCreateInfoMSFT *, XrSceneMSFT *);
     XrResult (*p_xrCreateSceneObserverMSFT)(XrSession, const XrSceneObserverCreateInfoMSFT *, XrSceneObserverMSFT *);
@@ -102,13 +127,17 @@ struct openxr_instance_funcs
     XrResult (*p_xrCreateSpatialAnchorStoreConnectionMSFT)(XrSession, XrSpatialAnchorStoreConnectionMSFT *);
     XrResult (*p_xrCreateSpatialGraphNodeSpaceMSFT)(XrSession, const XrSpatialGraphNodeSpaceCreateInfoMSFT *, XrSpace *);
     XrResult (*p_xrCreateSwapchain)(XrSession, const XrSwapchainCreateInfo *, XrSwapchain *);
+    XrResult (*p_xrCreateTriangleMeshFB)(XrSession, const XrTriangleMeshCreateInfoFB *, XrTriangleMeshFB *);
     XrResult (*p_xrCreateVulkanDeviceKHR)(XrInstance, const XrVulkanDeviceCreateInfoKHR *, VkDevice *, VkResult *);
     XrResult (*p_xrCreateVulkanInstanceKHR)(XrInstance, const XrVulkanInstanceCreateInfoKHR *, VkInstance *, VkResult *);
     XrResult (*p_xrDeserializeSceneMSFT)(XrSceneObserverMSFT, const XrSceneDeserializeInfoMSFT *);
     XrResult (*p_xrDestroyAction)(XrAction);
     XrResult (*p_xrDestroyActionSet)(XrActionSet);
     XrResult (*p_xrDestroyFoveationProfileFB)(XrFoveationProfileFB);
+    XrResult (*p_xrDestroyGeometryInstanceFB)(XrGeometryInstanceFB);
     XrResult (*p_xrDestroyHandTrackerEXT)(XrHandTrackerEXT);
+    XrResult (*p_xrDestroyPassthroughFB)(XrPassthroughFB);
+    XrResult (*p_xrDestroyPassthroughLayerFB)(XrPassthroughLayerFB);
     XrResult (*p_xrDestroySceneMSFT)(XrSceneMSFT);
     XrResult (*p_xrDestroySceneObserverMSFT)(XrSceneObserverMSFT);
     XrResult (*p_xrDestroySession)(XrSession);
@@ -116,6 +145,7 @@ struct openxr_instance_funcs
     XrResult (*p_xrDestroySpatialAnchorMSFT)(XrSpatialAnchorMSFT);
     XrResult (*p_xrDestroySpatialAnchorStoreConnectionMSFT)(XrSpatialAnchorStoreConnectionMSFT);
     XrResult (*p_xrDestroySwapchain)(XrSwapchain);
+    XrResult (*p_xrDestroyTriangleMeshFB)(XrTriangleMeshFB);
     XrResult (*p_xrEndFrame)(XrSession, const XrFrameEndInfo *);
     XrResult (*p_xrEndSession)(XrSession);
     XrResult (*p_xrEnumerateApiLayerProperties)(uint32_t, uint32_t *, XrApiLayerProperties *);
@@ -131,6 +161,8 @@ struct openxr_instance_funcs
     XrResult (*p_xrEnumerateSwapchainImages)(XrSwapchain, uint32_t, uint32_t *, XrSwapchainImageBaseHeader *);
     XrResult (*p_xrEnumerateViewConfigurationViews)(XrInstance, XrSystemId, XrViewConfigurationType, uint32_t, uint32_t *, XrViewConfigurationView *);
     XrResult (*p_xrEnumerateViewConfigurations)(XrInstance, XrSystemId, uint32_t, uint32_t *, XrViewConfigurationType *);
+    XrResult (*p_xrEnumerateViveTrackerPathsHTCX)(XrInstance, uint32_t, uint32_t *, XrViveTrackerPathsHTCX *);
+    XrResult (*p_xrGeometryInstanceSetTransformFB)(XrGeometryInstanceFB, const XrGeometryInstanceTransformFB *);
     XrResult (*p_xrGetActionStateBoolean)(XrSession, const XrActionStateGetInfo *, XrActionStateBoolean *);
     XrResult (*p_xrGetActionStateFloat)(XrSession, const XrActionStateGetInfo *, XrActionStateFloat *);
     XrResult (*p_xrGetActionStatePose)(XrSession, const XrActionStateGetInfo *, XrActionStatePose *);
@@ -142,8 +174,10 @@ struct openxr_instance_funcs
     XrResult (*p_xrGetControllerModelStateMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelStateMSFT *);
     XrResult (*p_xrGetCurrentInteractionProfile)(XrSession, XrPath, XrInteractionProfileState *);
     XrResult (*p_xrGetDisplayRefreshRateFB)(XrSession, float *);
+    XrResult (*p_xrGetHandMeshFB)(XrHandTrackerEXT, XrHandTrackingMeshFB *);
     XrResult (*p_xrGetInputSourceLocalizedName)(XrSession, const XrInputSourceLocalizedNameGetInfo *, uint32_t, uint32_t *, char *);
     XrResult (*p_xrGetInstanceProperties)(XrInstance, XrInstanceProperties *);
+    XrResult (*p_xrGetMarkerSizeVARJO)(XrSession, uint64_t, XrExtent2Df *);
     XrResult (*p_xrGetOpenGLGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsOpenGLKHR *);
     XrResult (*p_xrGetReferenceSpaceBoundsRect)(XrSession, XrReferenceSpaceType, XrExtent2Df *);
     XrResult (*p_xrGetSceneComponentsMSFT)(XrSceneMSFT, const XrSceneComponentsGetInfoMSFT *, XrSceneComponentsMSFT *);
@@ -170,6 +204,11 @@ struct openxr_instance_funcs
     XrResult (*p_xrLocateSceneComponentsMSFT)(XrSceneMSFT, const XrSceneComponentsLocateInfoMSFT *, XrSceneComponentLocationsMSFT *);
     XrResult (*p_xrLocateSpace)(XrSpace, XrSpace, XrTime, XrSpaceLocation *);
     XrResult (*p_xrLocateViews)(XrSession, const XrViewLocateInfo *, XrViewState *, uint32_t, uint32_t *, XrView *);
+    XrResult (*p_xrPassthroughLayerPauseFB)(XrPassthroughLayerFB);
+    XrResult (*p_xrPassthroughLayerResumeFB)(XrPassthroughLayerFB);
+    XrResult (*p_xrPassthroughLayerSetStyleFB)(XrPassthroughLayerFB, const XrPassthroughStyleFB *);
+    XrResult (*p_xrPassthroughPauseFB)(XrPassthroughFB);
+    XrResult (*p_xrPassthroughStartFB)(XrPassthroughFB);
     XrResult (*p_xrPathToString)(XrInstance, XrPath, uint32_t, uint32_t *, char *);
     XrResult (*p_xrPerfSettingsSetPerformanceLevelEXT)(XrSession, XrPerfSettingsDomainEXT, XrPerfSettingsLevelEXT);
     XrResult (*p_xrPersistSpatialAnchorMSFT)(XrSpatialAnchorStoreConnectionMSFT, const XrSpatialAnchorPersistenceInfoMSFT *);
@@ -185,12 +224,21 @@ struct openxr_instance_funcs
     XrResult (*p_xrSetInputDeviceStateBoolEXT)(XrSession, XrPath, XrPath, XrBool32);
     XrResult (*p_xrSetInputDeviceStateFloatEXT)(XrSession, XrPath, XrPath, float);
     XrResult (*p_xrSetInputDeviceStateVector2fEXT)(XrSession, XrPath, XrPath, XrVector2f);
+    XrResult (*p_xrSetMarkerTrackingPredictionVARJO)(XrSession, uint64_t, XrBool32);
+    XrResult (*p_xrSetMarkerTrackingTimeoutVARJO)(XrSession, uint64_t, XrDuration);
+    XrResult (*p_xrSetMarkerTrackingVARJO)(XrSession, XrBool32);
     XrResult (*p_xrStopHapticFeedback)(XrSession, const XrHapticActionInfo *);
     XrResult (*p_xrStringToPath)(XrInstance, const char *, XrPath *);
     XrResult (*p_xrStructureTypeToString)(XrInstance, XrStructureType, char[]);
     XrResult (*p_xrSuggestInteractionProfileBindings)(XrInstance, const XrInteractionProfileSuggestedBinding *);
     XrResult (*p_xrSyncActions)(XrSession, const XrActionsSyncInfo *);
     XrResult (*p_xrThermalGetTemperatureTrendEXT)(XrSession, XrPerfSettingsDomainEXT, XrPerfSettingsNotificationLevelEXT *, float *, float *);
+    XrResult (*p_xrTriangleMeshBeginUpdateFB)(XrTriangleMeshFB);
+    XrResult (*p_xrTriangleMeshBeginVertexBufferUpdateFB)(XrTriangleMeshFB, uint32_t *);
+    XrResult (*p_xrTriangleMeshEndUpdateFB)(XrTriangleMeshFB, uint32_t, uint32_t);
+    XrResult (*p_xrTriangleMeshEndVertexBufferUpdateFB)(XrTriangleMeshFB);
+    XrResult (*p_xrTriangleMeshGetIndexBufferFB)(XrTriangleMeshFB, uint32_t **);
+    XrResult (*p_xrTriangleMeshGetVertexBufferFB)(XrTriangleMeshFB, XrVector3f **);
     XrResult (*p_xrUnpersistSpatialAnchorMSFT)(XrSpatialAnchorStoreConnectionMSFT, const XrSpatialAnchorPersistenceNameMSFT *);
     XrResult (*p_xrUpdateHandMeshMSFT)(XrHandTrackerEXT, const XrHandMeshUpdateInfoMSFT *, XrHandMeshMSFT *);
     XrResult (*p_xrUpdateSwapchainFB)(XrSwapchain, const XrSwapchainStateBaseHeaderFB *);
@@ -210,8 +258,12 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrCreateActionSet) \
     USE_XR_FUNC(xrCreateActionSpace) \
     USE_XR_FUNC(xrCreateFoveationProfileFB) \
+    USE_XR_FUNC(xrCreateGeometryInstanceFB) \
     USE_XR_FUNC(xrCreateHandMeshSpaceMSFT) \
     USE_XR_FUNC(xrCreateHandTrackerEXT) \
+    USE_XR_FUNC(xrCreateMarkerSpaceVARJO) \
+    USE_XR_FUNC(xrCreatePassthroughFB) \
+    USE_XR_FUNC(xrCreatePassthroughLayerFB) \
     USE_XR_FUNC(xrCreateReferenceSpace) \
     USE_XR_FUNC(xrCreateSceneMSFT) \
     USE_XR_FUNC(xrCreateSceneObserverMSFT) \
@@ -222,13 +274,17 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrCreateSpatialAnchorStoreConnectionMSFT) \
     USE_XR_FUNC(xrCreateSpatialGraphNodeSpaceMSFT) \
     USE_XR_FUNC(xrCreateSwapchain) \
+    USE_XR_FUNC(xrCreateTriangleMeshFB) \
     USE_XR_FUNC(xrCreateVulkanDeviceKHR) \
     USE_XR_FUNC(xrCreateVulkanInstanceKHR) \
     USE_XR_FUNC(xrDeserializeSceneMSFT) \
     USE_XR_FUNC(xrDestroyAction) \
     USE_XR_FUNC(xrDestroyActionSet) \
     USE_XR_FUNC(xrDestroyFoveationProfileFB) \
+    USE_XR_FUNC(xrDestroyGeometryInstanceFB) \
     USE_XR_FUNC(xrDestroyHandTrackerEXT) \
+    USE_XR_FUNC(xrDestroyPassthroughFB) \
+    USE_XR_FUNC(xrDestroyPassthroughLayerFB) \
     USE_XR_FUNC(xrDestroySceneMSFT) \
     USE_XR_FUNC(xrDestroySceneObserverMSFT) \
     USE_XR_FUNC(xrDestroySession) \
@@ -236,6 +292,7 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrDestroySpatialAnchorMSFT) \
     USE_XR_FUNC(xrDestroySpatialAnchorStoreConnectionMSFT) \
     USE_XR_FUNC(xrDestroySwapchain) \
+    USE_XR_FUNC(xrDestroyTriangleMeshFB) \
     USE_XR_FUNC(xrEndFrame) \
     USE_XR_FUNC(xrEndSession) \
     USE_XR_FUNC(xrEnumerateApiLayerProperties) \
@@ -251,6 +308,8 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrEnumerateSwapchainImages) \
     USE_XR_FUNC(xrEnumerateViewConfigurationViews) \
     USE_XR_FUNC(xrEnumerateViewConfigurations) \
+    USE_XR_FUNC(xrEnumerateViveTrackerPathsHTCX) \
+    USE_XR_FUNC(xrGeometryInstanceSetTransformFB) \
     USE_XR_FUNC(xrGetActionStateBoolean) \
     USE_XR_FUNC(xrGetActionStateFloat) \
     USE_XR_FUNC(xrGetActionStatePose) \
@@ -262,8 +321,10 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrGetControllerModelStateMSFT) \
     USE_XR_FUNC(xrGetCurrentInteractionProfile) \
     USE_XR_FUNC(xrGetDisplayRefreshRateFB) \
+    USE_XR_FUNC(xrGetHandMeshFB) \
     USE_XR_FUNC(xrGetInputSourceLocalizedName) \
     USE_XR_FUNC(xrGetInstanceProperties) \
+    USE_XR_FUNC(xrGetMarkerSizeVARJO) \
     USE_XR_FUNC(xrGetOpenGLGraphicsRequirementsKHR) \
     USE_XR_FUNC(xrGetReferenceSpaceBoundsRect) \
     USE_XR_FUNC(xrGetSceneComponentsMSFT) \
@@ -286,6 +347,11 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrLocateSceneComponentsMSFT) \
     USE_XR_FUNC(xrLocateSpace) \
     USE_XR_FUNC(xrLocateViews) \
+    USE_XR_FUNC(xrPassthroughLayerPauseFB) \
+    USE_XR_FUNC(xrPassthroughLayerResumeFB) \
+    USE_XR_FUNC(xrPassthroughLayerSetStyleFB) \
+    USE_XR_FUNC(xrPassthroughPauseFB) \
+    USE_XR_FUNC(xrPassthroughStartFB) \
     USE_XR_FUNC(xrPathToString) \
     USE_XR_FUNC(xrPerfSettingsSetPerformanceLevelEXT) \
     USE_XR_FUNC(xrPersistSpatialAnchorMSFT) \
@@ -301,12 +367,21 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrSetInputDeviceStateBoolEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateFloatEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateVector2fEXT) \
+    USE_XR_FUNC(xrSetMarkerTrackingPredictionVARJO) \
+    USE_XR_FUNC(xrSetMarkerTrackingTimeoutVARJO) \
+    USE_XR_FUNC(xrSetMarkerTrackingVARJO) \
     USE_XR_FUNC(xrStopHapticFeedback) \
     USE_XR_FUNC(xrStringToPath) \
     USE_XR_FUNC(xrStructureTypeToString) \
     USE_XR_FUNC(xrSuggestInteractionProfileBindings) \
     USE_XR_FUNC(xrSyncActions) \
     USE_XR_FUNC(xrThermalGetTemperatureTrendEXT) \
+    USE_XR_FUNC(xrTriangleMeshBeginUpdateFB) \
+    USE_XR_FUNC(xrTriangleMeshBeginVertexBufferUpdateFB) \
+    USE_XR_FUNC(xrTriangleMeshEndUpdateFB) \
+    USE_XR_FUNC(xrTriangleMeshEndVertexBufferUpdateFB) \
+    USE_XR_FUNC(xrTriangleMeshGetIndexBufferFB) \
+    USE_XR_FUNC(xrTriangleMeshGetVertexBufferFB) \
     USE_XR_FUNC(xrUnpersistSpatialAnchorMSFT) \
     USE_XR_FUNC(xrUpdateHandMeshMSFT) \
     USE_XR_FUNC(xrUpdateSwapchainFB) \

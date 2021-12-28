@@ -65,6 +65,26 @@ typedef struct wine_XrSceneMSFT {
     struct wine_XrSceneObserverMSFT *wine_scene_observer_msft;
 } wine_XrSceneMSFT;
 
+typedef struct wine_XrPassthroughFB {
+    XrPassthroughFB passthrough;
+    struct wine_XrSession *wine_session;
+} wine_XrPassthroughFB;
+
+typedef struct wine_XrPassthroughLayerFB {
+    XrPassthroughLayerFB layer;
+    struct wine_XrSession *wine_session;
+} wine_XrPassthroughLayerFB;
+
+typedef struct wine_XrTriangleMeshFB {
+    XrTriangleMeshFB mesh;
+    struct wine_XrSession *wine_session;
+} wine_XrTriangleMeshFB;
+
+typedef struct wine_XrGeometryInstanceFB {
+    XrGeometryInstanceFB instance;
+    struct wine_XrSession *wine_session;
+} wine_XrGeometryInstanceFB;
+
 typedef struct wine_XrFoveationProfileFB {
     XrFoveationProfileFB foveation_profile;
     struct wine_XrSession *wine_session;
