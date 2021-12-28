@@ -15,16 +15,16 @@
 	url = https://github.com/FNA-XNA/FAudio
 [submodule "gstreamer"]
 	path = gstreamer
-	url = https://gitlab.freedesktop.org/gstreamer/gstreamer.git
+	url = https://github.com/GStreamer/gstreamer.git
 [submodule "gst-plugins-base"]
 	path = gst-plugins-base
-	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-base.git
+	url = https://github.com/GStreamer/gst-plugins-base.git
 [submodule "gst-plugins-good"]
 	path = gst-plugins-good
-	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git
+	url = https://github.com/GStreamer/gst-plugins-good.git
 [submodule "gst-orc"]
 	path = gst-orc
-	url = https://gitlab.freedesktop.org/gstreamer/orc.git
+	url = https://github.com/GStreamer/orc.git
 [submodule "vkd3d-proton"]
 	path = vkd3d-proton
 	url = https://github.com/ValveSoftware/vkd3d
