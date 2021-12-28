@@ -189,6 +189,14 @@ FUNCTION_OVERRIDES = {
     "xrDestroySpatialAnchorStoreConnectionMSFT" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrCreateFoveationProfileFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
     "xrDestroyFoveationProfileFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateGeometryInstanceFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroyGeometryInstanceFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreateTriangleMeshFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroyTriangleMeshFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreatePassthroughFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroyPassthroughFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrCreatePassthroughLayerFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
+    "xrDestroyPassthroughLayerFB" : {"dispatch" : True, "driver" : True, "thunk" : False},
 }
 
 STRUCT_CHAIN_CONVERSIONS = [
@@ -894,6 +902,16 @@ class XrHandle(object):
             return None
         if self.name == "XrSpace":
             return None
+        if self.name == "XrGeometryInstanceFB":
+            native_handle_name = "instance"
+        if self.name == "XrPassthroughFB":
+            native_handle_name = "passthrough"
+        if self.name == "XrPassthroughLayerFB":
+            native_handle_name = "layer"
+        if self.name == "XrTriangleMeshFB":
+            native_handle_name = "mesh"
+        if self.name == "XrFoveationProfileFB":
+            native_handle_name = "foveation_profile"
         if self.name == "XrSceneObserverMSFT":
             native_handle_name = "scene_observer_msft"
         if self.name == "XrSceneMSFT":
@@ -1320,7 +1338,7 @@ class XrParam(object):
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type == "HANDLE":
                 self.format_str = "%p"
-            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrControllerModelKeyMSFT"]:
+            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrDuration", "XrControllerModelKeyMSFT"]:
                 self.format_str = "0x%s"
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type in ["XrVector2f"]:
