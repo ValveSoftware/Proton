@@ -7,12 +7,7 @@ define create-rules-cargo
 $(call create-rules-common,$(1),$(2),$(3))
 
 ifeq ($(CONTAINER),1)
-$$(OBJ)/.$(1)-pre-configure:
-	@echo ":: setting freedesktop url override..." >&2
-	git config --global url."https://gitlab.codeweavers.com/gstreamer-mirror/".insteadOf "https://gitlab.freedesktop.org/gstreamer/"
-	touch $$@
-
-$$(OBJ)/.$(1)-configure$(3): $$(OBJ)/.$(1)-pre-configure
+$$(OBJ)/.$(1)-configure$(3):
 	@echo ":: configuring $(3)bit $(1)..." >&2
 	touch $$@
 

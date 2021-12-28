@@ -1,0 +1,2 @@
+[url "https://gitlab.codeweavers.com/gstreamer-mirror/"]
+	insteadOf = https://gitlab.freedesktop.org/gstreamer/

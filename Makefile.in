@@ -75,6 +75,7 @@ ifeq ($(CONTAINER_ENGINE),)
 endif
 
 DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS) -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS) \
+                -v $(SRC)/gitconfig-gstreamer-redirect:/etc/gitconfig \
                 -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
