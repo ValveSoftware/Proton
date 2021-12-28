@@ -998,6 +998,7 @@ XrResult WINAPI wine_xrDestroySession(XrSession session)
     }
 
     heap_free(wine_session->projection_views);
+    heap_free(wine_session->view_infos);
     heap_free(wine_session->composition_layers);
     heap_free(wine_session);
 
@@ -2071,7 +2072,7 @@ XrResult WINAPI wine_xrEnumerateSwapchainImages(XrSwapchain swapchain, uint32_t 
 
 static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *wine_session,
         const XrCompositionLayerBaseHeader *in_layer, CompositionLayer *out_layer,
-        uint32_t *view_idx)
+        uint32_t *view_idx, uint32_t *view_info_idx)
 {
     uint32_t i;
 
@@ -2103,7 +2104,19 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
         break;
 
     case XR_TYPE_COMPOSITION_LAYER_PROJECTION:
+    {
+        const XrCompositionLayerProjectionView *view;
+        unsigned int view_info_count;
+
         out_layer->projection = *(const XrCompositionLayerProjection *)in_layer;
+
+        view_info_count = 0;
+        for (i = 0; i < out_layer->projection.viewCount; ++i)
+        {
+            view = &((XrCompositionLayerProjection *)in_layer)->views[i];
+            while ((view = view->next))
+                ++view_info_count;
+        }
 
         if(out_layer->projection.viewCount + *view_idx > wine_session->projection_view_count){
             wine_session->projection_view_count = out_layer->projection.viewCount + *view_idx;
@@ -2111,17 +2124,62 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
                     sizeof(XrCompositionLayerProjectionView) * wine_session->projection_view_count);
         }
 
+        if(view_info_count + *view_info_idx > wine_session->view_info_count){
+            wine_session->view_info_count += view_info_count;
+            wine_session->view_infos = heap_realloc(wine_session->view_infos,
+                    sizeof(*wine_session->view_infos) * wine_session->view_info_count);
+        }
+
         out_layer->projection.views = &wine_session->projection_views[*view_idx];
         memcpy((void*)out_layer->projection.views, ((const XrCompositionLayerProjection *)in_layer)->views,
                 sizeof(XrCompositionLayerProjectionView) * out_layer->projection.viewCount);
+        view_info_count = 0;
         for(i = 0; i < out_layer->projection.viewCount; ++i){
-            ((XrCompositionLayerProjectionView *)&out_layer->projection.views[i])->subImage.swapchain =
-                ((wine_XrSwapchain *)out_layer->projection.views[i].subImage.swapchain)->swapchain;
+            view = &out_layer->projection.views[i];
+            if (view->type != XR_TYPE_COMPOSITION_LAYER_PROJECTION_VIEW)
+                WINE_WARN("Unexpected view type %u.\n", view->type);
+
+            ((XrCompositionLayerProjectionView *)view)->subImage.swapchain = ((wine_XrSwapchain *)view->subImage.swapchain)->swapchain;
+            while (view->next)
+            {
+                switch (((XrCompositionLayerProjectionView *)view->next)->type)
+                {
+                    case XR_TYPE_COMPOSITION_LAYER_DEPTH_INFO_KHR:
+                    {
+                        XrCompositionLayerDepthInfoKHR *out_depth_info, *in_depth_info;
+
+                        in_depth_info = (XrCompositionLayerDepthInfoKHR *)view->next;
+                        out_depth_info = &wine_session->view_infos[*view_info_idx + view_info_count].depth_info;
+                        *out_depth_info = *in_depth_info;
+                        out_depth_info->subImage.swapchain = ((wine_XrSwapchain *)out_depth_info->subImage.swapchain)->swapchain;
+                        ((XrCompositionLayerProjectionView *)view)->next = out_depth_info;
+                        break;
+                    }
+                    case XR_TYPE_COMPOSITION_LAYER_SPACE_WARP_INFO_FB:
+                    {
+                        XrCompositionLayerSpaceWarpInfoFB *out_warp_info, *in_warp_info;
+
+                        in_warp_info = (XrCompositionLayerSpaceWarpInfoFB *)view->next;
+                        out_warp_info = &wine_session->view_infos[*view_info_idx + view_info_count].space_warp_info;
+                        *out_warp_info = *in_warp_info;
+                        out_warp_info->motionVectorSubImage.swapchain = ((wine_XrSwapchain *)out_warp_info->motionVectorSubImage.swapchain)->swapchain;
+                        out_warp_info->depthSubImage.swapchain = ((wine_XrSwapchain *)out_warp_info->depthSubImage.swapchain)->swapchain;
+                        ((XrCompositionLayerProjectionView *)view)->next = out_warp_info;
+                        break;
+                    }
+                    default:
+                        WINE_WARN("Unknown view info type %u.\n", view->type);
+                        break;
+                }
+                ++view_info_count;
+                view = view->next;
+            }
         }
 
         *view_idx += out_layer->projection.viewCount;
+        *view_info_idx += view_info_count;
         break;
-
+    }
     case XR_TYPE_COMPOSITION_LAYER_QUAD:
         out_layer->quad = *(const XrCompositionLayerQuad *)in_layer;
         out_layer->quad.subImage.swapchain = ((wine_XrSwapchain *)out_layer->quad.subImage.swapchain)->swapchain;
@@ -2138,9 +2196,9 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
 XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo)
 {
     wine_XrSession *wine_session = (wine_XrSession *)session;
+    uint32_t i, view_idx = 0, view_info_idx = 0;
     IDXGIVkInteropDevice2 *dxvk_device;
     XrFrameEndInfo our_frameEndInfo;
-    uint32_t i, view_idx = 0;
     XrResult res;
 
     WINE_TRACE("%p, %p\n", session, frameEndInfo);
@@ -2157,7 +2215,7 @@ XrResult WINAPI wine_xrEndFrame(XrSession session, const XrFrameEndInfo *frameEn
         wine_session->composition_layer_ptrs[i] =
             convert_XrCompositionLayer(wine_session,
                     frameEndInfo->layers[i], &wine_session->composition_layers[i],
-                    &view_idx);
+                    &view_idx, &view_info_idx);
     }
 
     our_frameEndInfo = *frameEndInfo;

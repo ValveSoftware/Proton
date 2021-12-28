@@ -26,6 +26,12 @@ typedef struct wine_XrInstance {
 union CompositionLayer;
 typedef union CompositionLayer CompositionLayer;
 
+typedef union
+{
+    XrCompositionLayerDepthInfoKHR depth_info;
+    XrCompositionLayerSpaceWarpInfoFB space_warp_info;
+} view_info;
+
 typedef struct wine_XrSession {
     XrSession session;
     struct wine_XrInstance *wine_instance;
@@ -36,8 +42,9 @@ typedef struct wine_XrSession {
     CompositionLayer *composition_layers;
     XrCompositionLayerBaseHeader **composition_layer_ptrs;
 
-    uint32_t projection_view_count;
+    uint32_t projection_view_count, view_info_count;
     XrCompositionLayerProjectionView *projection_views;
+    view_info *view_infos;
 } wine_XrSession;
 
 typedef struct wine_XrHandTrackerEXT {
