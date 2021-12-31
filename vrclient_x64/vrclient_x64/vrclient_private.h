@@ -1,11 +1,6 @@
 #include <stdint.h>
 #include <linux/limits.h>
 
-/* 32-bit Mac doesn't support Vulkan and thus DXVK */
-#if !defined(__APPLE__) || defined(__x86_64__)
-#define VRCLIENT_HAVE_DXVK
-#endif
-
 #if __cplusplus
 extern "C" {
 #endif
@@ -55,7 +50,6 @@ void *create_LinuxMatchmakingServerListResponse(void *win);
 
 #ifndef __cplusplus
 typedef struct ID3D11Device ID3D11Device;
-typedef struct IWineD3D11Device IWineD3D11Device;
 typedef struct IDXGIVkInteropDevice IDXGIVkInteropDevice;
 
 struct generic_interface
