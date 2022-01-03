@@ -283,13 +283,6 @@ void __thiscall winISteamUtils_SteamUtils010_SetGameLauncherMode(winISteamUtils_
     cppISteamUtils_SteamUtils010_SetGameLauncherMode(_this->linux_side, bLauncherMode);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput, 4)
-bool __thiscall winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(winISteamUtils_SteamUtils010 *_this)
-{
-    TRACE("%p\n", _this);
-    return cppISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(_this->linux_side);
-}
-
 extern vtable_ptr winISteamUtils_SteamUtils010_vtable;
 
 #ifndef __GNUC__
@@ -333,7 +326,6 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_SetGameLauncherMode)
-        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput)
     );
 #ifndef __GNUC__
 }

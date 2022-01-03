@@ -15,7 +15,6 @@ import re
 import math
 
 sdk_versions = [
-    "153_preview",
     "152",
     "151",
     "150",
