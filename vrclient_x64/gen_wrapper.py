@@ -72,7 +72,7 @@ sdk_versions = [
 ]
 
 files = [
-    ("openvr.h",
+    ("ivrclientcore.h",
         [ #classes
         "IVRApplications",
         "IVRChaperone",
@@ -94,15 +94,10 @@ files = [
         "IVRTrackedCamera",
         "IVRHeadsetView",
         "IVROverlayView",
+        "IVRClientCore",
         ], [ #vrclient-allocated structs
         "RenderModel_t",
         "RenderModel_TextureMap_t",
-        ]
-    ),
-    ("ivrclientcore.h",
-        [ #classes
-        "IVRClientCore",
-        ], [ #vrclient-allocated structs
         ]
     ),
 ]
@@ -1376,10 +1371,17 @@ int main(void)
 
 prog = re.compile("^.*const\s*char.* \*?(\w*)_Version.*\"(.*)\"")
 for sdkver in sdk_versions:
+    print(f'parsing SDK version {sdkver}...')
+    sdkdir = f'openvr_{sdkver}'
+
+    sources = {}
     iface_versions = {}
-    print("sdkver is: " + sdkver)
-    for f in os.listdir("openvr_%s" % sdkver):
-        x = open("openvr_%s/%s" % (sdkver, f), "r")
+    has_vrclientcore = False
+    for file in os.listdir(sdkdir):
+        x = open(f"{sdkdir}/{file}", "r")
+        if file == "ivrclientcore.h":
+            has_vrclientcore = True
+
         for l in x:
             if "_Version" in l:
                 result = prog.match(l)
@@ -1387,44 +1389,64 @@ for sdkver in sdk_versions:
                     iface, version = result.group(1, 2)
                     iface_versions[iface] = version
 
-    for fname, classes, system_structs in files:
-        # Parse as 32-bit C++
-        input_name = "openvr_%s/%s" % (sdkver, fname)
-        sys.stdout.write("about to parse %s\n" % input_name)
-        if not os.path.isfile(input_name):
-            continue
-        index = Index.create()
-        windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-        windows_build64 = index.parse(input_name, args=['-x', 'c++', '-m64', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-std=c++11', '-DGNUC', '-I' + CLANG_PATH + '/include/'])
-        linux_build64 = index.parse(input_name, args=['-x', 'c++', '-m64', '-std=c++11', '-DGNUC', '-I' + CLANG_PATH + '/include/'])
+    if not has_vrclientcore:
+        source = [f'#include "{sdkdir}/openvr.h"']
+    else:
+        source = [f'#include "{sdkdir}/{file}"' for file, _, _ in files]
 
-        def enumerate_structs(cursor, vr_only=False):
-            for child in cursor.get_children():
-                if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
-                    yield from child.get_children()
-                elif not vr_only:
-                    yield child
+    sources["source.cpp"] = "\n".join(source)
+    windows_args = ["-D_WIN32", "-fms-extensions", "-Wno-ignored-attributes",
+                    "-mms-bitfields", "-U__linux__", "-Wno-incompatible-ms-struct"]
+    windows_args += ['-I' + CLANG_PATH + '/include/']
+    linux_args = ["-DGNUC"]
+    linux_args += ['-I' + CLANG_PATH + '/include/']
 
-        windows_structs32 = dict(reversed([(child.type.spelling, child.type) for child
-                                           in enumerate_structs(windows_build.cursor)]))
-        windows_structs64 = dict(reversed([(child.type.spelling, child.type) for child
-                                           in enumerate_structs(windows_build64.cursor)]))
-        linux_structs64 = dict(reversed([(child.type.spelling, child.type) for child
-                                         in enumerate_structs(linux_build64.cursor)]))
+    index = Index.create()
 
-        diagnostics = list(tu.diagnostics)
-        if len(diagnostics) > 0:
-            print('There were parse errors')
-            pprint.pprint(diagnostics)
-        else:
-            for child in enumerate_structs(tu.cursor, vr_only=True):
-                if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
-                    handle_class(sdkver, child)
-                if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
-                    handle_struct(sdkver, child)
-                if child.displayname in print_sizes:
-                    sys.stdout.write("size of %s is %u\n" % (child.displayname, child.type.get_size()))
+    linux_build32 = index.parse("source.cpp", args=linux_args + ["-m32"], unsaved_files=sources.items())
+    diagnostics = list(linux_build32.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    linux_build64 = index.parse("source.cpp", args=linux_args + ["-m64"], unsaved_files=sources.items())
+    diagnostics = list(linux_build64.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    windows_build32 = index.parse("source.cpp", args=windows_args + ["-m32"], unsaved_files=sources.items())
+    diagnostics = list(windows_build32.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    windows_build64 = index.parse("source.cpp", args=windows_args + ["-m64"], unsaved_files=sources.items())
+    diagnostics = list(windows_build64.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    classes = sum([e for _, e, _ in files], [])
+    system_structs = sum([e for _, _, e in files], [])
+
+    def enumerate_structs(cursor, vr_only=False):
+        for child in cursor.get_children():
+            if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
+                yield from child.get_children()
+            elif not vr_only:
+                yield child
+
+    windows_structs32 = dict(reversed([(child.type.spelling, child.type) for child
+                                       in enumerate_structs(windows_build32.cursor)]))
+    windows_structs64 = dict(reversed([(child.type.spelling, child.type) for child
+                                       in enumerate_structs(windows_build64.cursor)]))
+    linux_structs64 = dict(reversed([(child.type.spelling, child.type) for child
+                                     in enumerate_structs(linux_build64.cursor)]))
+
+    for child in enumerate_structs(linux_build32.cursor, vr_only=True):
+        if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
+            handle_class(sdkver, child)
+        if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
+            handle_struct(sdkver, child)
+        if child.displayname in print_sizes:
+            sys.stdout.write("size of %s is %u\n" % (child.displayname, child.type.get_size()))
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
