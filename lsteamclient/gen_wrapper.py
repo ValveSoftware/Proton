@@ -932,7 +932,7 @@ def get_iface_version(classname):
     class_versions[classname].append(ver)
     return (ver, False)
 
-def handle_class(sdkver, classnode):
+def handle_class(sdkver, classnode, file):
     children = list(classnode.get_children())
     if len(children) == 0:
         return
@@ -971,8 +971,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cpp.write(f"#include \"steamworks_sdk_{sdkver}/steam_api.h\"\n")
     if os.path.isfile(f"steamworks_sdk_{sdkver}/steamnetworkingtypes.h"):
         cpp.write(f"#include \"steamworks_sdk_{sdkver}/steamnetworkingtypes.h\"\n")
-    if not fname == "steam_api.h":
-        cpp.write(f"#include \"steamworks_sdk_{sdkver}/{fname}\"\n")
+    if not file == "steam_api.h":
+        cpp.write(f"#include \"steamworks_sdk_{sdkver}/{file}\"\n")
     cpp.write("#pragma pop_macro(\"__cdecl\")\n")
     cpp.write("#include \"steamclient_private.h\"\n")
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
@@ -1267,55 +1267,74 @@ def handle_struct(sdkver, struct):
 
 prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
 for sdkver in sdk_versions:
+    print(f"parsing SDK version {sdkver}...")
+    sdkdir = f"steamworks_sdk_{sdkver}"
+
+    sources = {}
     iface_versions = {}
-    for f in os.listdir(f"steamworks_sdk_{sdkver}"):
+    for file in os.listdir(sdkdir):
         # Some files from Valve have non-UTF-8 stuff in the comments
         # (typically the copyright symbol); therefore we ignore UTF-8
         # encoding errors
-        x = open(f"steamworks_sdk_{sdkver}/{f}", "r", errors='replace')
-        for l in x:
-            if "define STEAM" in l and "_VERSION" in l:
-                result = prog.match(l)
+        lines = open(f"{sdkdir}/{file}", "r", errors="replace").readlines()
+        if file == "isteammasterserverupdater.h":
+            if """#error "This file isn't used any more"\n""" in lines:
+                sources[f"{sdkdir}/isteammasterserverupdater.h"] = ""
+
+        for line in lines:
+            if "define STEAM" in line and "_VERSION" in line:
+                result = prog.match(line)
                 if result:
                     iface, version = result.group(1, 2)
                     iface_versions[iface] = version
 
-    for fname, classes in files:
-        input_name = f"steamworks_sdk_{sdkver}/{fname}"
-        sys.stdout.write(f"about to parse {input_name}\n")
-        if not os.path.isfile(input_name):
-            continue
-        index = Index.create()
-        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-I' + CLANG_PATH + '/include/'])
-        linux_build64 = index.parse(input_name, args=['-x', 'c++', '-I' + CLANG_PATH + '/include/'])
+    source = [f"""#if __has_include("{sdkdir}/{file}")
+                  #include "{sdkdir}/{file}"
+                  #endif""" for file, _ in files]
+    sources["source.cpp"] = "\n".join(source)
+    windows_args = ["-D_WIN32", "-fms-extensions", "-Wno-ignored-attributes",
+                    "-mms-bitfields", "-U__linux__", "-Wno-incompatible-ms-struct"]
+    windows_args += ['-I' + CLANG_PATH + '/include/']
+    linux_args = ["-DGNUC"]
+    linux_args += ['-I' + CLANG_PATH + '/include/']
 
-        diagnostics = list(linux_build.diagnostics)
-        if len(diagnostics) > 0:
-            # Ignore known and harmless issues
-            if not(len(diagnostics) == 1 and "This file isn't used any more" in diagnostics[0].spelling):
-                print('There were parse errors')
-                pprint.pprint(diagnostics)
-        else:
-            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-            windows_build64 = index.parse(input_name, args=['-x', 'c++', '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-            diagnostics = list(windows_build.diagnostics)
-            if len(diagnostics) > 0:
-                print('There were parse errors (windows build)')
-                pprint.pprint(diagnostics)
-            else:
-                linux_structs64 = dict(reversed([(child.spelling, child.type) for child
-                                                 in linux_build64.cursor.get_children()]))
-                windows_structs32 = dict(reversed([(child.spelling, child.type) for child
-                                                   in windows_build.cursor.get_children()]))
-                windows_structs64 = dict(reversed([(child.spelling, child.type) for child
-                                                   in windows_build64.cursor.get_children()]))
-                for child in linux_build.cursor.get_children():
-                    if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
-                        handle_class(sdkver, child)
-                    if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
-                        handle_struct(sdkver, child)
-                    if child.displayname in print_sizes:
-                        sys.stdout.write(f"size of {child.displayname} is {child.type.get_size()}\n")
+    index = Index.create()
+
+    linux_build32 = index.parse("source.cpp", args=linux_args + ["-m32"], unsaved_files=sources.items())
+    diagnostics = list(linux_build32.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    linux_build64 = index.parse("source.cpp", args=linux_args + ["-m64"], unsaved_files=sources.items())
+    diagnostics = list(linux_build64.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    windows_build32 = index.parse("source.cpp", args=windows_args + ["-m32"], unsaved_files=sources.items())
+    diagnostics = list(windows_build32.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    windows_build64 = index.parse("source.cpp", args=windows_args + ["-m64"], unsaved_files=sources.items())
+    diagnostics = list(windows_build64.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    linux_structs64 = dict(reversed([(child.spelling, child.type) for child
+                                     in linux_build64.cursor.get_children()]))
+    windows_structs32 = dict(reversed([(child.spelling, child.type) for child
+                                       in windows_build32.cursor.get_children()]))
+    windows_structs64 = dict(reversed([(child.spelling, child.type) for child
+                                       in windows_build64.cursor.get_children()]))
+
+    classes = dict([(klass, file) for file, classes in files for klass in classes])
+    for child in linux_build32.cursor.get_children():
+        if child.kind == CursorKind.CLASS_DECL and child.displayname in classes:
+            handle_class(sdkver, child, classes[child.displayname])
+        if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
+            handle_struct(sdkver, child)
+        if child.displayname in print_sizes:
+            print("size of %s is %u" % (child.displayname, child.type.get_size()))
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
