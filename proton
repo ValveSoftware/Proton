@@ -192,6 +192,24 @@ def try_get_game_library_dir():
 
     return None
 
+def setup_game_dir_drive():
+        gamedrive_path = g_compatdata.prefix_dir + "dosdevices/s:"
+        if "gamedrive" in g_session.compat_config:
+            library_dir = try_get_game_library_dir()
+            if not library_dir:
+                if os.path.lexists(gamedrive_path):
+                    os.remove(gamedrive_path)
+            else:
+                if os.path.lexists(gamedrive_path):
+                    cur_tgt = os.readlink(gamedrive_path)
+                    if cur_tgt != library_dir:
+                        os.remove(gamedrive_path)
+                        os.symlink(library_dir, gamedrive_path)
+                else:
+                    os.symlink(library_dir, gamedrive_path)
+        elif os.path.lexists(gamedrive_path):
+            os.remove(gamedrive_path)
+
 # Function to find the installed location of DLL files for use by Wine/Proton
 # from the NVIDIA Linux driver
 #
@@ -849,22 +867,7 @@ class CompatData:
                 try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/syswow64",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
-            gamedrive_path = self.prefix_dir + "dosdevices/s:"
-            if "gamedrive" in g_session.compat_config:
-                library_dir = try_get_game_library_dir()
-                if not library_dir:
-                    if os.path.lexists(gamedrive_path):
-                        os.remove(gamedrive_path)
-                else:
-                    if os.path.lexists(gamedrive_path):
-                        cur_tgt = os.readlink(gamedrive_path)
-                        if cur_tgt != library_dir:
-                            os.remove(gamedrive_path)
-                            os.symlink(library_dir, gamedrive_path)
-                    else:
-                        os.symlink(library_dir, gamedrive_path)
-            elif os.path.lexists(gamedrive_path):
-                os.remove(gamedrive_path)
+            setup_game_dir_drive()
 
 def comma_escaped(s):
     escaped = False
@@ -1311,6 +1314,7 @@ if __name__ == "__main__":
     rc = 0
     if sys.argv[1] == "run":
         #start target app
+        setup_game_dir_drive()
         rc = g_session.run()
     elif sys.argv[1] == "waitforexitandrun":
         #wait for wineserver to shut down
