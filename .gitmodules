@@ -49,3 +49,6 @@
 [submodule "ffmpeg"]
 	path = ffmpeg
 	url = https://github.com/FFmpeg/FFmpeg
+[submodule "dav1d"]
+	path = dav1d
+	url = https://github.com/videolan/dav1d.git
