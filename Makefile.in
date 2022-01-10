@@ -185,6 +185,7 @@ CARGO_BUILD_ARG := --release
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 LICENSE := $(SRCDIR)/dist.LICENSE
 OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
+AV1_PATENTS := $(SRCDIR)/dav1d/doc/PATENTS
 
 GECKO_VER := 2.47.2
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
@@ -258,6 +259,7 @@ DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
 DIST_TOOLMANIFEST := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
 DIST_OFL_LICENSE := $(DST_BASE)/LICENSE.OFL
+DIST_AV1_PATENTS := $(DST_BASE)/PATENTS.AV1
 DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
 DIST_GECKO32 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
 DIST_GECKO64 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
@@ -269,9 +271,11 @@ DIST_WINEOPENXR64 := $(DIST_PREFIX)/drive_c/windows/system32/wineopenxr.dll
 
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
-                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_FONTS)
+                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) \
+                $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DIST_FONTS)
 
-DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE)
+DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
+                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
 REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
@@ -281,6 +285,9 @@ $(DIST_TOOLMANIFEST): $(addprefix $(SRCDIR)/,$(TOOLMANIFEST_VDF_SRC))
 	cp -a $< $@
 
 $(DIST_OFL_LICENSE): $(OFL_LICENSE)
+	cp -a $< $@
+
+$(DIST_AV1_PATENTS): $(AV1_PATENTS)
 	cp -a $< $@
 
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
@@ -404,6 +411,20 @@ module: | all-source wine-configure
 module: module32 module64
 
 endif # ifeq ($(CONTAINER),)
+
+
+##
+## dav1d
+##
+
+DAV1D_MESON_ARGS = \
+	-Denable_tools=false \
+	-Denable_tests=false
+
+$(eval $(call rules-source,dav1d,$(SRCDIR)/dav1d))
+$(eval $(call rules-meson,dav1d,32))
+$(eval $(call rules-meson,dav1d,64))
+
 
 ##
 ## gst-orc
