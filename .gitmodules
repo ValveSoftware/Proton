@@ -12,19 +12,19 @@
 	url = https://github.com/liberationfonts/liberation-fonts
 [submodule "gstreamer"]
 	path = gstreamer
-	url = https://github.com/GStreamer/gstreamer.git
+	url = https://gitlab.freedesktop.org/gstreamer/gstreamer.git
 [submodule "gst-plugins-base"]
 	path = gst-plugins-base
-	url = https://github.com/GStreamer/gst-plugins-base.git
+	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-base.git
 [submodule "gst-plugins-good"]
 	path = gst-plugins-good
-	url = https://github.com/GStreamer/gst-plugins-good.git
+	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git
 [submodule "gst-plugins-bad"]
 	path = gst-plugins-bad
-	url = https://github.com/GStreamer/gst-plugins-bad.git
+	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad.git
 [submodule "gst-orc"]
 	path = gst-orc
-	url = https://github.com/GStreamer/orc.git
+	url = https://gitlab.freedesktop.org/gstreamer/orc.git
 [submodule "vkd3d-proton"]
 	path = vkd3d-proton
 	url = https://github.com/HansKristian-Work/vkd3d-proton
