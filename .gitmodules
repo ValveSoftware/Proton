@@ -43,6 +43,3 @@
 [submodule "Vulkan-Loader"]
 	path = Vulkan-Loader
 	url = https://github.com/KhronosGroup/Vulkan-Loader
-[submodule "aom"]
-	path = aom
-	url = https://aomedia.googlesource.com/aom
