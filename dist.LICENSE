@@ -257,6 +257,7 @@ Visit orc at
 This software contains the following Rust libraries under the MIT license:
 
     gstreamer-rs <https://gitlab.freedesktop.org/gstreamer/gstreamer-rs>
+    gst-plugins-rs <https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs>
 
     array-init <https://github.com/Manishearth/array-init/>
     Copyright (c) 2017-2020 The array-init developers
@@ -274,6 +275,9 @@ This software contains the following Rust libraries under the MIT license:
 
     crc32fast <https://github.com/srijs/rust-crc32fast>
     Copyright (c) 2018 Sam Rijs, Alex Crichton and contributors
+
+    dav1d-rs <https://github.com/rust-av/dav1d-rs>
+    Copyright (c) 2018 Luca Barbato
 
     futures-channel <https://github.com/rust-lang/futures-rs>
     futures-core <https://github.com/rust-lang/futures-rs>
