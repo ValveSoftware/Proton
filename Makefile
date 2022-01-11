@@ -124,26 +124,23 @@ ifeq ($(protonsdk_version),local)
 configure: protonsdk
 endif
 
-downloads: configure
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR) downloads
-
-proton: downloads
+proton: configure
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dist && \
 	echo "Proton built locally. Use 'install', 'deploy' or 'redist' targets."
 
-install: downloads
+install: configure
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) install
 	echo "Proton installed to your local Steam installation"
 
 redist: | $(BUILD_ROOT)/$(DEPLOY_DIR)
-redist: downloads
+redist: configure
 	rm -rf $(BUILD_ROOT)/$(DEPLOY_DIR)/* && \
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) redist && \
 	cp -Rf $(BUILD_DIR)/redist/* $(BUILD_ROOT)/$(DEPLOY_DIR) && \
 	echo "Proton build available at $(BUILD_ROOT)/$(DEPLOY_DIR)"
 
 deploy: | $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy
-deploy: downloads
+deploy: configure
 	rm -rf $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy/* && \
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) deploy && \
 	cp -Rf $(BUILD_DIR)/deploy/* $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy && \
@@ -153,7 +150,7 @@ module: | $(BUILD_ROOT)/$(module)/lib/wine/i386-windows
 module: | $(BUILD_ROOT)/$(module)/lib/wine/i386-unix
 module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows
 module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix
-module: downloads
+module: configure
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) module=$(module) module && \
 	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib/wine/i386-windows/ && \
 	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows/ && \
@@ -166,7 +163,7 @@ module: downloads
 		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_SOFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix/; \
 	fi
 
-any $(CONTAINERGOALS): downloads
+any $(CONTAINERGOALS): configure
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CONTAINERGOALS)
 
 dxvk: | $(BUILD_ROOT)/dxvk/lib/wine/dxvk
