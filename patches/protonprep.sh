@@ -40,14 +40,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # revert pending pulseaudio changes
-    git revert --no-commit 183fd3e089b170d5b7405a80a23e81dc7c4dd682
-
-    # reenable pulseaudio patches
-    patch -Np1 < ../patches/wine-hotfixes/staging/x3daudio_staging_revert.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
-    patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
-
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
@@ -83,10 +75,9 @@
     git revert --no-commit 3661194f8e8146a594673ad3682290f10fa2c096
     git revert --no-commit 9aef654392756aacdce6109ccbe21ba446ee4387
 
-    echo "revert faudio updates -- we can't use PE version yet because the staging patches need a rebase in order to fix audio crackling in some games -- notably cyberpunk"
-    git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
-
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit 03d92af78a5000097b26560bba97320eb013441a
+    git revert --no-commit 4d2a628dfe9e4aad9ba772854717253d0c6a7bb7
     git revert --no-commit 78f916f598b4e0acadbda2c095058bf8a268eb72
     git revert --no-commit 4f58d8144c5c1d3b86e988f925de7eb02c848e6f
     git revert --no-commit 747905c674d521b61923a6cff1d630c85a74d065
@@ -158,11 +149,8 @@
     git revert --no-commit 831c6a88aab78db054beb42ca9562146b53963e7
     git revert --no-commit 2d0dc2d47ca6b2d4090dfe32efdba4f695b197ce
 
-    echo "pulseaudio fixup to re-enable staging patches"
-    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
-
-    echo "manual revert of d8be85863fedf6982944d06ebd1ce5904cb3d4e1 for more audio fixing"
-    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
+    echo "1/2 revert faudio updates -- we still need to use our proton version to fix WMA playback"
+    git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -216,6 +204,10 @@
     echo "Manually apply modified ntdll-Serial_Port_Detection patch for proton, rebasing keeps complaining"
     patch -Np1 < ../patches/proton/64-ntdll-Do-a-device-check-before-returning-a-default-s.patch
 
+    echo "2/2 revert faudio updates -- we still need to use our proton version to fix WMA playback"
+    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
+
+
 ### END WINE STAGING APPLY SECTION ###
 
 ### (2-3) GAME PATCH SECTION ###
@@ -261,9 +253,6 @@
 
     echo "protonify"
     patch -Np1 < ../patches/proton/10-proton-protonify_staging.patch
-
-    echo "protonify-audio"
-    patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
 
     echo "steam bits"
     patch -Np1 < ../patches/proton/12-proton-steam-bits.patch
