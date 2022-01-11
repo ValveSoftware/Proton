@@ -204,33 +204,9 @@ FONTS_OBJ := ./obj-fonts
 
 ifeq ($(CONTAINER),)
 
-## downloads -- Convenience target to download packages used during the build
-## process. Places them in subdirs one up from the Proton source dir, so
-## they won't be wiped during git-clean, vagrant rsync, etc.
-
-.PHONY: downloads
-
 GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
 GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
-
-SHARED_GECKO64_TARBALL := $(SRCDIR)/../gecko/$(GECKO64_TARBALL)
-SHARED_GECKO32_TARBALL := $(SRCDIR)/../gecko/$(GECKO32_TARBALL)
-SHARED_MONO_TARBALL := $(SRCDIR)/../mono/$(WINEMONO_TARBALL)
-
-$(SHARED_GECKO64_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O "$@" "$(GECKO64_TARBALL_URL)"
-
-$(SHARED_GECKO32_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O "$@" "$(GECKO32_TARBALL_URL)"
-
-$(SHARED_MONO_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O "$@" "$(MONO_TARBALL_URL)"
-
-downloads: $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
 
 ##
 ## dist/install -- steps to finalize the install
@@ -266,10 +242,10 @@ DIST_TOOLMANIFEST := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
 DIST_OFL_LICENSE := $(DST_BASE)/LICENSE.OFL
 DIST_AV1_PATENTS := $(DST_BASE)/PATENTS.AV1
 DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
-DIST_GECKO32 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
-DIST_GECKO64 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
+DIST_GECKO32 := $(OBJ)/.gecko-dist32
+DIST_GECKO64 := $(OBJ)/.gecko-dist64
 DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
-DIST_WINEMONO := $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
+DIST_WINEMONO := $(OBJ)/.wine-mono-dist
 DIST_FONTS := $(DST_DIR)/share/fonts
 DIST_WINEOPENXR_JSON64 := $(DIST_PREFIX)/drive_c/openxr/wineopenxr64.json
 DIST_WINEOPENXR64 := $(DIST_PREFIX)/drive_c/windows/system32/wineopenxr.dll
@@ -309,47 +285,35 @@ $(DIST_COPY_TARGETS): | $(DST_DIR)
 $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR)
 	sed -r 's|##BUILD_NAME##|$(BUILD_NAME)|' $< > $@
 
-$(DIST_GECKO_DIR):
-	mkdir -p $@
+$(SRC)/contrib/$(GECKO64_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O $@ $(GECKO64_TARBALL_URL)
 
-$(DIST_GECKO64): | $(DIST_GECKO_DIR)
-	if [ -e "$(SHARED_GECKO64_TARBALL)" ]; then \
-		tar -xf "$(SHARED_GECKO64_TARBALL)" -C "$(dir $@)"; \
-	else \
-		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(GECKO64_TARBALL)" ]; then \
-			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO64_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(GECKO64_TARBALL)" "$(GECKO64_TARBALL_URL)"; \
-		fi; \
-		tar -xf "$(SRCDIR)/contrib/$(GECKO64_TARBALL)" -C "$(dir $@)"; \
-	fi
+$(SRC)/contrib/$(GECKO32_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O $@ $(GECKO32_TARBALL_URL)
 
-$(DIST_GECKO32): | $(DIST_GECKO_DIR)
-	if [ -e "$(SHARED_GECKO32_TARBALL)" ]; then \
-		tar -xf "$(SHARED_GECKO32_TARBALL)" -C "$(dir $@)"; \
-	else \
-		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(GECKO32_TARBALL)" ]; then \
-			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO32_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(GECKO32_TARBALL)" "$(GECKO32_TARBALL_URL)"; \
-		fi; \
-		tar -xf "$(SRCDIR)/contrib/$(GECKO32_TARBALL)" -C "$(dir $@)"; \
-	fi
+$(SRC)/contrib/$(WINEMONO_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O $@ $(MONO_TARBALL_URL)
 
-$(DIST_WINEMONO_DIR):
-	mkdir -p $@
+$(OBJ)/.gecko-dist32: $(SRC)/contrib/$(GECKO32_TARBALL)
+	mkdir -p $(DIST_GECKO_DIR)
+	rm -rf $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
+	tar -xf $< -C $(DIST_GECKO_DIR)
+	touch $@
 
-$(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
-	if [ -e "$(SHARED_MONO_TARBALL)" ]; then \
-		tar -xf "$(SHARED_MONO_TARBALL)" -C "$(dir $@)"; \
-	else \
-		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" ]; then \
-			echo ">>>> Downloading wine-mono. To avoid this in future, put it here: $(SRCDIR)/../mono/$(WINEMONO_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" "$(MONO_TARBALL_URL)"; \
-		fi; \
-		tar -xf "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" -C "$(dir $@)"; \
-	fi
+$(OBJ)/.gecko-dist64: $(SRC)/contrib/$(GECKO64_TARBALL)
+	mkdir -p $(DIST_GECKO_DIR)
+	rm -rf $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
+	tar -xf $< -C $(DIST_GECKO_DIR)
+	touch $@
+
+$(OBJ)/.wine-mono-dist: $(SRC)/contrib/$(WINEMONO_TARBALL)
+	mkdir -p $(DIST_WINEMONO_DIR)
+	rm -rf $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
+	tar -xf $< -C $(DIST_WINEMONO_DIR)
+	touch $@
 
 $(DIST_FONTS): fonts
 	mkdir -p $@
