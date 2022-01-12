@@ -4825,17 +4825,17 @@ allows PA to store per-application settings.
  2 files changed, 22 insertions(+)
 
 diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
-index e34c5ea5916..cdf66b03173 100644
+index 35a66e18d8a..f96b28c7c08 100644
 --- a/dlls/winepulse.drv/mmdevdrv.c
 +++ b/dlls/winepulse.drv/mmdevdrv.c
-@@ -571,6 +571,7 @@ static HRESULT pulse_connect(void)
+@@ -245,6 +245,7 @@ static char *get_application_name(void)
+     if (!(str = malloc(len)))
+         return NULL;
      WideCharToMultiByte(CP_UNIXCP, 0, name, -1, str, len, NULL, NULL);
-     TRACE("Name: %s\n", str);
-     pulse_ctx = pa_context_new(pa_mainloop_get_api(pulse_ml), str);
-+    setenv("PULSE_PROP_application.name", str, 1);
-     pa_xfree(str);
-     if (!pulse_ctx) {
-         ERR("Failed to create context\n");
++    SetEnvironmentVariableA("PULSE_PROP_application.name", str);
+     return str;
+ }
+
 diff --git a/dlls/xaudio2_7/xaudio_dll.c b/dlls/xaudio2_7/xaudio_dll.c
 index 699b904a131..1d5e8bf39ec 100644
 --- a/dlls/xaudio2_7/xaudio_dll.c
