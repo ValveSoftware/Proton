@@ -37,6 +37,7 @@ use crate::HASH_SEED;
 use crate::box_array;
 use crate::copy_into_array;
 use crate::BufferedReader;
+use crate::discarding_disabled;
 
 use gst;
 use gst::prelude::*;
@@ -157,7 +158,11 @@ impl VideoConverterDumpFozdb {
 
     fn discard_transcoded(&mut self) {
         if self.already_cleaned {
-            return
+            return;
+        }
+        if discarding_disabled() {
+            self.already_cleaned = true;
+            return;
         }
         if let Some(fozdb) = &mut self.open(false).fozdb {
             if let Ok(read_fozdb_path) = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE") {
