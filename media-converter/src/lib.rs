@@ -141,6 +141,14 @@ impl<'a> Read for BufferedReader<'a> {
     }
 }
 
+fn discarding_disabled() -> bool {
+    let v = match std::env::var("MEDIACONV_DONT_DISCARD") {
+        Err(_) => { return false; },
+        Ok(c) => c,
+    };
+    return v != "0";
+}
+
 fn plugin_init(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
     videoconv::register(plugin)?;
     audioconvbin::register(plugin)?;
