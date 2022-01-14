@@ -309,3 +309,146 @@ index 2db2abab2d8..1cfe19dace6 100644
  HKLM,%Control%\ProductOptions,"ProductType",2,"WinNT"
  HKLM,%Control%\Windows,"CSDVersion",0x10003,0x0
  HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+From 2a13d89fe5453378c2f01717bce38f21ac008a77 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <gofmanp@gmail.com>
+Date: Fri, 14 Jan 2022 11:46:04 +0300
+Subject: [PATCH] Bump current build number to 19043 (Win10 2009).
+
+---
+ dlls/kernel32/version.rc        | 10 +++++-----
+ dlls/kernelbase/version.c       |  2 +-
+ dlls/ntdll/unix/signal_x86_64.c |  4 ++--
+ dlls/ntdll/version.c            |  2 +-
+ loader/wine.inf.in              | 14 ++++++++------
+ programs/wineboot/wineboot.c    |  2 +-
+ 6 files changed, 18 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/kernel32/version.rc b/dlls/kernel32/version.rc
+index c58acb8a8b6..f91262dfa8e 100644
+--- a/dlls/kernel32/version.rc
++++ b/dlls/kernel32/version.rc
+@@ -25,10 +25,10 @@ LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
+ #define WINE_FILEDESCRIPTION_STR "Wine kernel DLL"
+ #define WINE_FILENAME_STR "kernel32.dll"
+
+-/* these values come from Windows 10 Version 1909 */
+-#define WINE_FILEVERSION 10,0,18363,900
+-#define WINE_FILEVERSION_STR "10.0.18363.900"
+-#define WINE_PRODUCTVERSION 10,0,18363,900
+-#define WINE_PRODUCTVERSION_STR "10.0.18363.900"
++/* these values come from Windows 10 Version 2009 */
++#define WINE_FILEVERSION 10,0,19043,1466
++#define WINE_FILEVERSION_STR "10.0.19043.1466"
++#define WINE_PRODUCTVERSION 10,0,19043,1466
++#define WINE_PRODUCTVERSION_STR "10.0.19043.1466"
+
+ #include "wine/wine_common_ver.rc"
+diff --git a/dlls/kernelbase/version.c b/dlls/kernelbase/version.c
+index 7b84167d6a9..19631f8cc06 100644
+--- a/dlls/kernelbase/version.c
++++ b/dlls/kernelbase/version.c
+@@ -158,7 +158,7 @@ static const struct
+     },
+     /* Windows 10 */
+     {
+-        { 10, 0, 0x47bb },
++        { 10, 0, 0x4a63 },
+         {0x8e0f7a12,0xbfb3,0x4fe8,{0xb9,0xa5,0x48,0xfd,0x50,0xa1,0x5a,0x9a}}
+     }
+ };
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 34284b883b6..30c4d78e928 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -2435,7 +2435,7 @@ static void sigsys_handler_rdr2( int signal, siginfo_t *siginfo, void *sigcontex
+
+     ctx->uc_mcontext.gregs[REG_RIP] = *dispatcher_address;
+
+-    /* syscall numbers are for Windows 10 1909 (build 18363) */
++    /* syscall numbers are for Windows 10 2009 (build 19043) */
+     switch (ctx->uc_mcontext.gregs[REG_RAX])
+     {
+         case 0x19:
+@@ -2444,7 +2444,7 @@ static void sigsys_handler_rdr2( int signal, siginfo_t *siginfo, void *sigcontex
+         case 0x36:
+             ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQuerySystemInformation;
+             break;
+-        case 0xed:
++        case 0xf2:
+             ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtGetContextThread;
+             break;
+         case 0x55:
+diff --git a/dlls/ntdll/version.c b/dlls/ntdll/version.c
+index 8ada78255d6..8099383e0ff 100644
+--- a/dlls/ntdll/version.c
++++ b/dlls/ntdll/version.c
+@@ -167,7 +167,7 @@ static const RTL_OSVERSIONINFOEXW VersionData[NB_WINDOWS_VERSIONS] =
+     },
+     /* WIN10 */
+     {
+-        sizeof(RTL_OSVERSIONINFOEXW), 10, 0, 0x47bb, VER_PLATFORM_WIN32_NT,
++        sizeof(RTL_OSVERSIONINFOEXW), 10, 0, 0x4a63, VER_PLATFORM_WIN32_NT,
+         L"", 0, 0, VER_SUITE_SINGLEUSERTS, VER_NT_WORKSTATION, 0
+     },
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index a23878697a9..641f6f80a1d 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3968,8 +3968,8 @@ HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
+ HKLM,%CurrentVersionNT%,"CurrentMajorVersionNumber",0x10001,10
+ HKLM,%CurrentVersionNT%,"CurrentMinorVersionNumber",0x10001,0
+ HKLM,%CurrentVersionNT%,"CSDVersion",2,""
+-HKLM,%CurrentVersionNT%,"CurrentBuild",2,"18363"
+-HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"18363"
++HKLM,%CurrentVersionNT%,"CurrentBuild",2,"19043"
++HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"19043"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -3978,8 +3978,9 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
++HKLM,%CurrentVersionNT%,"DisplayVersion",2,"21H1"
+ HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 10"
+-HKLM,%CurrentVersionNT%,"ReleaseId",,"1909"
++HKLM,%CurrentVersionNT%,"ReleaseId",,"2009"
+ HKLM,%Control%\ProductOptions,"ProductType",2,"WinNT"
+ HKLM,%Control%\Windows,"CSDVersion",0x10003,0x0
+ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+@@ -3987,8 +3988,8 @@ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+ [VersionInfo.ntamd64]
+ HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
+ HKLM,%CurrentVersionNT%,"CSDVersion",2,""
+-HKLM,%CurrentVersionNT%,"CurrentBuild",2,"18363"
+-HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"18363"
++HKLM,%CurrentVersionNT%,"CurrentBuild",2,"19043"
++HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"19043"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -3997,8 +3998,9 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
++HKLM,%CurrentVersionNT%,"DisplayVersion",2,"21H1"
+ HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 10"
+-HKLM,%CurrentVersionNT%,"ReleaseId",,"1909"
++HKLM,%CurrentVersionNT%,"ReleaseId",,"2009"
+ HKLM,%Control%\ProductOptions,"ProductType",2,"WinNT"
+ HKLM,%Control%\Windows,"CSDVersion",0x10003,0x0
+ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+index 0e455223cb9..19d1af6f589 100644
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -1621,7 +1621,7 @@ static void update_user_profile(void)
+
+ static void update_win_version(void)
+ {
+-    static const WCHAR win10_buildW[] = L"18363";
++    static const WCHAR win10_buildW[] = L"19043";
+
+     HKEY cv_h;
+     DWORD type, sz;
