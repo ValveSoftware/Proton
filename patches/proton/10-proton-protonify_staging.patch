@@ -4875,3 +4875,75 @@ index 699b904a131..1d5e8bf39ec 100644
      FAudioCOMConstructWithCustomAllocatorEXT(
          &object->faudio,
          XAUDIO2_VER,
+From cffb57818776b2a368f70861e84ec39f964cd212 Mon Sep 17 00:00:00 2001
+From: Connor McAdams <cmcadams@codeweavers.com>
+Date: Thu, 23 Dec 2021 15:57:46 -0500
+Subject: [PATCH] secur32: Initialize SECBUFFER_ALERT type output buffer's
+ cbBuffer value to 0.
+
+Fixes Doom Eternal Multiplayer, which will send the contents of the
+SECBUFFER_ALERT output buffer if its cbBuffer value is non-zero.
+
+CW-Bug-Id: 17847
+Signed-off-by: Connor McAdams <cmcadams@codeweavers.com>
+---
+ dlls/secur32/schannel.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/dlls/secur32/schannel.c b/dlls/secur32/schannel.c
+index c0187d9a1f7..e3a1a76d29b 100644
+--- a/dlls/secur32/schannel.c
++++ b/dlls/secur32/schannel.c
+@@ -909,6 +909,24 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+     dump_buffer_desc(pInput);
+     dump_buffer_desc(pOutput);
+
++    /*
++     * Find any SECBUFFER_ALERT output buffers and set their count values to
++     * 0. If we don't do this, and the initial count is non-zero, applications
++     * will think we've returned error data in the provided buffer.
++     */
++    if (pOutput && (pOutput->cBuffers > 1))
++    {
++        int i;
++
++        for (i = 0; i < pOutput->cBuffers; i++)
++        {
++            SecBuffer *b = &pOutput->pBuffers[i];
++
++            if (b->BufferType == SECBUFFER_ALERT)
++                b->cbBuffer = 0;
++        }
++    }
++
+     if (ptsExpiry)
+     {
+         ptsExpiry->LowPart = 0;
+From c52bbe771b56a72e5604830ba4a70f620bb90e6f Mon Sep 17 00:00:00 2001
+From: Connor McAdams <cmcadams@codeweavers.com>
+Date: Tue, 11 Jan 2022 15:18:41 -0500
+Subject: [PATCH] secur32: Initialize new context handle with current context
+ handle.
+
+Set the value of phNewContext to match the value of phContext if it's
+set. Doom Eternal/Sea of Thieves will delete the security context if
+these values do not match.
+
+CW-Bug-Id: 17847
+Signed-off-by: Connor McAdams <cmcadams@codeweavers.com>
+---
+ dlls/secur32/schannel.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/secur32/schannel.c b/dlls/secur32/schannel.c
+index e3a1a76d29b..61812978484 100644
+--- a/dlls/secur32/schannel.c
++++ b/dlls/secur32/schannel.c
+@@ -1010,6 +1010,7 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+         if (!(ctx = schan_get_object(phContext->dwLower, SCHAN_HANDLE_CTX))) return SEC_E_INVALID_HANDLE;
+         if (!pInput) return is_dtls_context(ctx) ? SEC_E_INSUFFICIENT_MEMORY : SEC_E_INCOMPLETE_MESSAGE;
+         if ((idx = schan_find_sec_buffer_idx(pInput, 0, SECBUFFER_TOKEN)) == -1) return SEC_E_INCOMPLETE_MESSAGE;
++        if (phNewContext) *phNewContext = *phContext;
+
+         buffer = &pInput->pBuffers[idx];
+         ptr = buffer->pvBuffer;
