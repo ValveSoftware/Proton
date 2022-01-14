@@ -76,6 +76,7 @@
     git revert --no-commit 9aef654392756aacdce6109ccbe21ba446ee4387
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit cb41e4b1753891f5aa22cb617e8dd124c3dd8983
     git revert --no-commit 03d92af78a5000097b26560bba97320eb013441a
     git revert --no-commit 4d2a628dfe9e4aad9ba772854717253d0c6a7bb7
     git revert --no-commit 78f916f598b4e0acadbda2c095058bf8a268eb72
