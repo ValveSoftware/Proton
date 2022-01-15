@@ -58,6 +58,7 @@ RUN apt-get install -y \
   libxpresent-dev:i386 \
   libopenblas-dev \
   libopenblas-dev:i386 \
+  python3-mako \
   python3-pefile \
   libcapstone-dev \
   libcapstone-dev:i386 \
