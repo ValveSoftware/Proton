@@ -708,7 +708,7 @@ impl ElementImpl for AudioConv {
         static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
             gst::subclass::ElementMetadata::new(
                 "Proton audio converter",
-                "Codec/Parser",
+                "Codec/Decoder/Audio",
                 "Converts audio for Proton",
                 "Andrew Eikum <aeikum@codeweavers.com>")
         });
