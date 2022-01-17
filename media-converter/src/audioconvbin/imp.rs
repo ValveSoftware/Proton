@@ -155,7 +155,9 @@ impl ElementImpl for AudioConvBin {
                 gst::PadPresence::Always,
                 &caps).unwrap();
 
-            let caps = gst::Caps::builder("audio/x-raw").build();
+            let caps = gst::Caps::builder("audio/x-raw")
+                .field("format", "S16LE") /* opusdec always output S16LE */
+                .build();
             let src_pad_template = gst::PadTemplate::new(
                 "src",
                 gst::PadDirection::Src,
