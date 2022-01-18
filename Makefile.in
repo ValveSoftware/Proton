@@ -925,6 +925,41 @@ $(OBJ)/.battleye-post-build32:
 
 endif
 
+##
+## EasyAntiCheat Bridge
+##
+
+ifneq ($(wildcard $(SRCDIR)/eac-bridge/.*),)
+
+EAC_DEPENDS = wine
+
+$(eval $(call rules-source,eac,$(SRCDIR)/eac-bridge))
+$(eval $(call create-rules-common,eac,EAC,64))
+$(eval $(call create-rules-common,eac,EAC,32))
+
+
+$(OBJ)/.eac-build64:
+	@echo ":: building 64bit eac..." >&2
+	rsync -arx "$(EAC_SRC)/" "$(EAC_OBJ64)/"
+	env $(EAC_ENV64) \
+	$(MAKE) -C "$(EAC_OBJ64)" WINE_OBJ="$(WINE_OBJ64)" HOST="x86_64-w64-mingw32" CROSSCXX="x86_64-w64-mingw32-g++" BIT="64"
+	mkdir -p $(OBJ)/dist-eac/v2/lib64
+	cp $(EAC_OBJ64)/easyanticheat.dll $(OBJ)/dist-eac/v2/lib64/easyanticheat_x64.dll
+	cp $(EAC_OBJ64)/easyanticheat.so $(OBJ)/dist-eac/v2/lib64/easyanticheat_x64.so
+	touch $@
+
+$(OBJ)/.eac-build32:
+	@echo ":: building 32bit eac..." >&2
+	rsync -arx "$(EAC_SRC)/" "$(EAC_OBJ32)/"
+	env $(EAC_ENV32) \
+	$(MAKE) -C "$(EAC_OBJ32)" WINE_OBJ="$(WINE_OBJ32)" HOST="i686-w64-mingw32" CROSSCXX="i686-w64-mingw32-g++" BIT="32"
+	mkdir -p $(OBJ)/dist-eac/v2/lib32
+	cp $(EAC_OBJ32)/easyanticheat.dll $(OBJ)/dist-eac/v2/lib32/easyanticheat_x86.dll
+	cp $(EAC_OBJ32)/easyanticheat.so $(OBJ)/dist-eac/v2/lib32/easyanticheat_x86.so
+	touch $@
+
+endif
+
 ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts
 GOAL_TARGETS += fonts
