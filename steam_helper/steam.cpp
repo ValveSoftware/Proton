@@ -158,6 +158,23 @@ static void setup_battleye_bridge(void)
     setenv("PROTON_BATTLEYE_RUNTIME", path, 1);
 }
 
+static void setup_eac_bridge(void)
+{
+    const unsigned int eac_runtime_appid = 1826330;
+    char path[2048];
+    char *path_end;
+
+    if (!SteamApps()->BIsAppInstalled(eac_runtime_appid))
+        return;
+
+    if (!SteamApps()->GetAppInstallDir(eac_runtime_appid, path, sizeof(path)))
+        return;
+
+    WINE_TRACE("Found easyanticheat runtime at %s\n", path);
+
+    setenv("PROTON_EAC_RUNTIME", path, 1);
+}
+
 static std::string get_linux_vr_path(void)
 {
     const char *e;
@@ -1350,6 +1367,7 @@ int main(int argc, char *argv[])
         {
             setup_steam_registry();
             setup_battleye_bridge();
+            setup_eac_bridge();
         }
         else
         {
