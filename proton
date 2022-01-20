@@ -1323,6 +1323,8 @@ if __name__ == "__main__":
         rc = g_session.run()
     elif sys.argv[1] == "runinprefix":
         rc = g_session.run_proc([g_proton.wine_bin] + sys.argv[2:])
+    elif sys.argv[1] == "destroyprefix":
+        g_compatdata.remove_tracked_files()
     elif sys.argv[1] == "getcompatpath":
         #linux -> windows path
         path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
