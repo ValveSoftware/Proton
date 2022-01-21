@@ -932,7 +932,10 @@ class Session:
         self.env["WINE_GST_REGISTRY_DIR"] = g_compatdata.path("gstreamer-1.0/")
 
         if "STEAM_COMPAT_MEDIA_PATH" in os.environ:
-            self.env["MEDIACONV_AUDIO_DUMP_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audio.foz"
+            old_audiofoz_path = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audio.foz"
+            if os.path.lexists(old_audiofoz_path):
+                os.remove(old_audiofoz_path)
+            self.env["MEDIACONV_AUDIO_DUMP_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audiov2.foz"
             self.env["MEDIACONV_VIDEO_DUMP_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/video.foz"
 
         if "STEAM_COMPAT_TRANSCODED_MEDIA_PATH" in os.environ:
