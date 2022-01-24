@@ -440,7 +440,7 @@ impl ElementImpl for VideoConv {
         static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
             gst::subclass::ElementMetadata::new(
                 "Proton video converter",
-                "Codec/Parser",
+                "Codec/Demuxer",
                 "Converts video for Proton",
                 "Andrew Eikum <aeikum@codeweavers.com>"
             )
