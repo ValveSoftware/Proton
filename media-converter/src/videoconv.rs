@@ -351,7 +351,7 @@ impl ObjectSubclass for VideoConv {
 
         klass.set_metadata(
             "Proton video converter",
-            "Codec/Parser",
+            "Codec/Demuxer",
             "Converts video for Proton",
             "Andrew Eikum <aeikum@codeweavers.com>");
 
