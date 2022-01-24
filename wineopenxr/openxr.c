@@ -1592,7 +1592,7 @@ XrResult WINAPI wine_xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSyste
     }
 
     WINE_TRACE("got device extensions: %s\n", buf);
-    SetEnvironmentVariableA(WINE_VULKAN_DEVICE_VARIABLE, buf);
+    setenv(WINE_VULKAN_DEVICE_VARIABLE, buf, 1);
 
     heap_free(buf);
 
@@ -2274,7 +2274,8 @@ XrResult WINAPI __wineopenxr_GetVulkanDeviceExtensions(uint32_t buflen, uint32_t
         return XR_SUCCESS;
     }
 
-    SetEnvironmentVariableA(WINE_VULKAN_DEVICE_VARIABLE, g_device_extensions);
+    WINE_TRACE("g_device_extensions %s.\n", g_device_extensions);
+    setenv(WINE_VULKAN_DEVICE_VARIABLE, g_device_extensions, 1);
     *outlen = strlen(WINE_VULKAN_DEVICE_EXTENSION_NAME) + 1;
     strcpy(buf, WINE_VULKAN_DEVICE_EXTENSION_NAME);
 
