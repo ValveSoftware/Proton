@@ -69,6 +69,8 @@
 #    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
     echo "temporary fshack reverts"
+    git revert --no-commit 3b8d7f7f036f3f4771284df97cce99d114fe42cb
+    git revert --no-commit fe5e06185dfc828b5d3873fd1b28f29f15d7c627
     git revert --no-commit c2384cf23378953b6960e7044a0e467944e8814a
     git revert --no-commit c3862f2a6121796814ae31913bfb0efeba565087
     git revert --no-commit 37be0989540cf84dd9336576577ae535f2b6bbb8
