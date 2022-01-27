@@ -69,6 +69,8 @@
 #    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
     echo "temporary fshack reverts"
+    git revert --no-commit f0cd33c69e879177559caaf248e86a4d69f9a09e
+    git revert --no-commit ef9c0b3f691f6897f0acfd72af0a9ea020f0a0bf
     git revert --no-commit 3b8d7f7f036f3f4771284df97cce99d114fe42cb
     git revert --no-commit fe5e06185dfc828b5d3873fd1b28f29f15d7c627
     git revert --no-commit c2384cf23378953b6960e7044a0e467944e8814a
@@ -192,6 +194,8 @@
     -W server-File_Permissions \
     -W server-Stored_ACLs \
     -W dbghelp-Debug_Symbols \
+    -W d3dx11_43-D3DX11CreateTextureFromMemory \
+    -W oleaut32-OLEPictureImpl_SaveAsFile \
     -W dwrite-FontFallback
 
     echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
