@@ -6,8 +6,14 @@ jobs:
   build-proton-ge:
     runs-on: ubuntu-latest
     steps:
+    
+    
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v5.1
+    
       - name: Clone repo
-        run: 	git clone --recurse-submodules ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} .
+        run: git clone -b ${{ steps.branch-name.outputs.current_branch }} --recurse-submodules ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} .
 
       - name: Get Proton Versions
         run: echo "RELEASE_VERSION=$(cat VERSION)" >> $GITHUB_ENV
