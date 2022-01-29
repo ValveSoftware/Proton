@@ -154,33 +154,6 @@ index 9456caba088..af2094a96f0 100644
  BOOL use_system_cursors = TRUE;
  BOOL show_systray = TRUE;
  
-From a58fde69e0ac1945d2e2733d9506cfe4bfe145e7 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Wed, 26 Jun 2019 08:09:27 -0500
-Subject: [PATCH] Revert "winex11.drv: Activate window when restoring from
- iconic state."
-
-This reverts commit 82c6ec3a32f44e8b3e0cc88b7f10e0c0d7fa1b89.
-
-Causes alt-tab problems with several games.
----
- dlls/winex11.drv/event.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index 236c9f862af..d1c15b1de94 100644
---- a/dlls/winex11.drv/event.c
-+++ b/dlls/winex11.drv/event.c
-@@ -1342,8 +1342,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
-             {
-                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
-                 release_win_data( data );
--                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
--                    SetActiveWindow( hwnd );
-                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
-                 return;
-             }
-
 From f649de43236f67943a44ae89dfbbd3d4c7d9eeb4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Thu, 17 Dec 2020 18:47:44 +0100

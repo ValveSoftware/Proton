@@ -40,6 +40,15 @@
     git reset --hard HEAD
     git clean -xdf
 
+    # pulseaudio revert fix in staging:
+    git revert --no-commit 183fd3e089b170d5b7405a80a23e81dc7c4dd682
+    patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
+    patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/pulseaudio-PE-revert-f0cd33c-fixup.patch
+
+    # faudio revert fix in staging:
+    patch -Np1 < ../patches/wine-hotfixes/staging/x3daudio_staging_revert.patch
+
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
@@ -60,6 +69,9 @@
     git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
     git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
 
+    echp "revert in favor of proton stub to allow ffxiv intro videos to work"
+    git revert --no-commit 85747f0abe0b013d9f287a33e10738e28d7418e9
+
     # https://bugs.winehq.org/show_bug.cgi?id=49990
 #    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
 #    git revert --no-commit 548bc54bf396d74b5b928bf9be835272ddda1886
@@ -69,7 +81,6 @@
 #    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
     echo "temporary fshack reverts"
-    git revert --no-commit f0cd33c69e879177559caaf248e86a4d69f9a09e
     git revert --no-commit ef9c0b3f691f6897f0acfd72af0a9ea020f0a0bf
     git revert --no-commit 3b8d7f7f036f3f4771284df97cce99d114fe42cb
     git revert --no-commit fe5e06185dfc828b5d3873fd1b28f29f15d7c627
@@ -80,6 +91,7 @@
     git revert --no-commit 9aef654392756aacdce6109ccbe21ba446ee4387
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
+    git revert --no-commit 11d1e967b6be4e948ad49cc893e27150c220b02d
     git revert --no-commit cb41e4b1753891f5aa22cb617e8dd124c3dd8983
     git revert --no-commit 03d92af78a5000097b26560bba97320eb013441a
     git revert --no-commit 4d2a628dfe9e4aad9ba772854717253d0c6a7bb7
@@ -154,8 +166,12 @@
     git revert --no-commit 831c6a88aab78db054beb42ca9562146b53963e7
     git revert --no-commit 2d0dc2d47ca6b2d4090dfe32efdba4f695b197ce
 
-    echo "1/2 revert faudio updates -- we still need to use our proton version to fix WMA playback"
+    echo "revert faudio updates -- WINE faudio does not have WMA decoding (notably needed for Skyrim voices) so we still need to provide our own with gstreamer support"
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
+    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
+
+    echo "pulseaudio fixup to re-enable staging patches"
+    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -184,6 +200,9 @@
     # almost immediately on newer Wine Staging/TKG inside pe_load_debug_info function unless the dbghelp-Debug_Symbols staging # patchset is disabled.
     # -W dbghelp-Debug_Symbols
 
+    # Disable when using external FAudio
+    # -W xactengine3_7-callbacks \
+
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W winex11-_NET_ACTIVE_WINDOW \
@@ -194,8 +213,7 @@
     -W server-File_Permissions \
     -W server-Stored_ACLs \
     -W dbghelp-Debug_Symbols \
-    -W d3dx11_43-D3DX11CreateTextureFromMemory \
-    -W oleaut32-OLEPictureImpl_SaveAsFile \
+    -W xactengine3_7-callbacks \
     -W dwrite-FontFallback
 
     echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
@@ -211,9 +229,6 @@
     echo "Manually apply modified ntdll-Serial_Port_Detection patch for proton, rebasing keeps complaining"
     patch -Np1 < ../patches/proton/64-ntdll-Do-a-device-check-before-returning-a-default-s.patch
 
-    echo "2/2 revert faudio updates -- we still need to use our proton version to fix WMA playback"
-    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
-
 
 ### END WINE STAGING APPLY SECTION ###
 
@@ -222,8 +237,8 @@
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
 
-    echo "ffxiv launcher"
-    patch -Np1 < ../patches/game-patches/ffxiv-launcher-workaround.patch
+    echo "ffxiv"
+    patch -Np1 < ../patches/game-patches/ffxiv-video-fix.patch
 
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
@@ -260,6 +275,9 @@
 
     echo "protonify"
     patch -Np1 < ../patches/proton/10-proton-protonify_staging.patch
+
+    echo "protonify-audio"
+    patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
 
     echo "steam bits"
     patch -Np1 < ../patches/proton/12-proton-steam-bits.patch

@@ -1,0 +1,138 @@
+diff --git a/patches/winepulse-PulseAudio_Support/0001-winepulse.drv-Use-a-separate-mainloop-and-ctx-for-pu.patch b/patches/winepulse-PulseAudio_Support/0001-winepulse.drv-Use-a-separate-mainloop-and-ctx-for-pu.patch
+index 68f6b1cb4..053db3184 100644
+--- a/patches/winepulse-PulseAudio_Support/0001-winepulse.drv-Use-a-separate-mainloop-and-ctx-for-pu.patch
++++ b/patches/winepulse-PulseAudio_Support/0001-winepulse.drv-Use-a-separate-mainloop-and-ctx-for-pu.patch
+@@ -1,18 +1,18 @@
+-From 5a33ff21b47fe88180df08a13d5ecb2c3ec15e7a Mon Sep 17 00:00:00 2001
++From 9f168a3042f1c5cd042626d4aaac46331e6696bc Mon Sep 17 00:00:00 2001
+ From: Sebastian Lackner <sebastian@fds-team.de>
+ Date: Wed, 4 Nov 2015 02:57:56 +0100
+ Subject: [PATCH] winepulse.drv: Use a separate mainloop and ctx for
+  pulse_test_connect.
+ 
+ ---
+- dlls/winepulse.drv/mmdevdrv.c | 59 ++++++++++++++++-------------------
+- 1 file changed, 27 insertions(+), 32 deletions(-)
++ dlls/winepulse.drv/pulse.c | 57 ++++++++++++++++++--------------------
++ 1 file changed, 27 insertions(+), 30 deletions(-)
+ 
+-diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+-index 1c647c73d62..2d6cabed8c2 100644
+---- a/dlls/winepulse.drv/mmdevdrv.c
+-+++ b/dlls/winepulse.drv/mmdevdrv.c
+-@@ -457,7 +457,7 @@ static void convert_channel_map(const pa_channel_map *pa_map, WAVEFORMATEXTENSIB
++diff --git a/dlls/winepulse.drv/pulse.c b/dlls/winepulse.drv/pulse.c
++index 260723815f6..b55c5889e1b 100644
++--- a/dlls/winepulse.drv/pulse.c
+++++ b/dlls/winepulse.drv/pulse.c
++@@ -370,7 +370,7 @@ static void convert_channel_map(const pa_channel_map *pa_map, WAVEFORMATEXTENSIB
+      fmt->dwChannelMask = pa_mask;
+  }
+  
+@@ -21,7 +21,7 @@ index 1c647c73d62..2d6cabed8c2 100644
+      WAVEFORMATEX *wfx = &fmt->Format;
+      pa_stream *stream;
+      pa_channel_map map;
+-@@ -476,7 +476,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
++@@ -389,7 +389,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
+      attr.minreq = attr.fragsize = pa_frame_size(&ss);
+      attr.prebuf = 0;
+  
+@@ -30,7 +30,7 @@ index 1c647c73d62..2d6cabed8c2 100644
+      if (stream)
+          pa_stream_set_state_callback(stream, pulse_stream_state, NULL);
+      if (!stream)
+-@@ -487,7 +487,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
++@@ -400,7 +400,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
+      else
+          ret = pa_stream_connect_record(stream, NULL, &attr, PA_STREAM_START_CORKED|PA_STREAM_FIX_RATE|PA_STREAM_FIX_CHANNELS|PA_STREAM_EARLY_REQUESTS);
+      if (ret >= 0) {
+@@ -39,7 +39,7 @@ index 1c647c73d62..2d6cabed8c2 100644
+                  pa_stream_get_state(stream) == PA_STREAM_CREATING)
+          {}
+          if (pa_stream_get_state(stream) == PA_STREAM_READY) {
+-@@ -498,7 +498,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
++@@ -411,7 +411,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
+              else
+                  length = pa_stream_get_buffer_attr(stream)->fragsize;
+              pa_stream_disconnect(stream);
+@@ -48,34 +48,29 @@ index 1c647c73d62..2d6cabed8c2 100644
+                      pa_stream_get_state(stream) == PA_STREAM_READY)
+              {}
+          }
+-@@ -620,10 +620,12 @@ static HRESULT pulse_test_connect(void)
+-     WCHAR path[MAX_PATH], *name;
+-     char *str;
++@@ -456,30 +456,31 @@ static HRESULT WINAPI pulse_test_connect(const char *name, struct pulse_config *
++ {
+      pa_operation *o;
++     int ret;
+ +    pa_mainloop *ml;
+ +    pa_context *ctx;
+  
++     pulse_lock();
+ -    pulse_ml = pa_mainloop_new();
+ +    ml = pa_mainloop_new();
+  
+ -    pa_mainloop_set_poll_func(pulse_ml, pulse_poll_func, NULL);
+ +    pa_mainloop_set_poll_func(ml, pulse_poll_func, NULL);
+  
+-     GetModuleFileNameW(NULL, path, ARRAY_SIZE(path));
+-     name = strrchrW(path, '\\');
+-@@ -635,24 +637,23 @@ static HRESULT pulse_test_connect(void)
+-     str = pa_xmalloc(len);
+-     WideCharToMultiByte(CP_UNIXCP, 0, name, -1, str, len, NULL, NULL);
+-     TRACE("Name: %s\n", str);
+--    pulse_ctx = pa_context_new(pa_mainloop_get_api(pulse_ml), str);
+-+    ctx = pa_context_new(pa_mainloop_get_api(ml), str);
+-     pa_xfree(str);
++-    pulse_ctx = pa_context_new(pa_mainloop_get_api(pulse_ml), name);
+ -    if (!pulse_ctx) {
+++    ctx = pa_context_new(pa_mainloop_get_api(ml), name);
+ +    if (!ctx) {
+          ERR("Failed to create context\n");
+ -        pa_mainloop_free(pulse_ml);
+ -        pulse_ml = NULL;
+ +        pa_mainloop_free(ml);
++         pulse_unlock();
+          return E_FAIL;
+      }
+  
+@@ -96,7 +91,7 @@ index 1c647c73d62..2d6cabed8c2 100644
+  
+          if (state == PA_CONTEXT_FAILED || state == PA_CONTEXT_TERMINATED)
+              goto fail;
+-@@ -661,38 +662,32 @@ static HRESULT pulse_test_connect(void)
++@@ -488,29 +489,27 @@ static HRESULT WINAPI pulse_test_connect(const char *name, struct pulse_config *
+              break;
+      }
+  
+@@ -130,9 +125,12 @@ index 1c647c73d62..2d6cabed8c2 100644
+ -    pulse_ctx = NULL;
+ -    pa_mainloop_free(pulse_ml);
+ -    pulse_ml = NULL;
+--
+ +    pa_context_unref(ctx);
+ +    pa_mainloop_free(ml);
++ 
++     config->speakers_mask = g_phys_speakers_mask;
++     config->modes[0].format = pulse_fmt[0];
++@@ -525,10 +524,8 @@ static HRESULT WINAPI pulse_test_connect(const char *name, struct pulse_config *
+      return S_OK;
+  
+  fail:
+@@ -140,12 +138,11 @@ index 1c647c73d62..2d6cabed8c2 100644
+ -    pulse_ctx = NULL;
+ -    pa_mainloop_free(pulse_ml);
+ -    pulse_ml = NULL;
+--
+ +    pa_context_unref(ctx);
+ +    pa_mainloop_free(ml);
+-     return E_FAIL;
+- }
++     pulse_unlock();
+  
++     return E_FAIL;
+ -- 
+-2.17.1
++2.30.2
