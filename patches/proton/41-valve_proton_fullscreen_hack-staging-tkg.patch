@@ -9496,3 +9496,28 @@ index 56f6221b9df..5fc8cfb47c5 100644
      XFlush( data->display );  /* make sure changes are done before we start painting again */
      if (data->surface && data->vis.visualid != default_visual.visualid)
          data->surface->funcs->flush( data->surface );
+From 42b116bee4b2f18eeb1a19ca29ea8554094170a6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 15 Oct 2021 15:31:55 +0200
+Subject: [PATCH] HACK: winex11.drv: Stop forcefully setting input focus on
+ fullscreen windows.
+
+CW-Bug-Id: #19553
+---
+ dlls/winex11.drv/window.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index f6d7df91d2a..2990db76ebb 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -1258,9 +1258,6 @@ void update_net_wm_states( struct x11drv_win_data *data )
+     }
+     data->net_wm_state = new_state;
+
+-    if(new_state & (1 << NET_WM_STATE_FULLSCREEN))
+-        XSetInputFocus( data->display, data->whole_window, RevertToParent, CurrentTime );
+-
+     XChangeProperty( data->display, data->whole_window, x11drv_atom(_NET_WM_BYPASS_COMPOSITOR), XA_CARDINAL,
+                      32, PropModeReplace, (unsigned char *)&net_wm_bypass_compositor, 1 );
+ }
