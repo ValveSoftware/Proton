@@ -1,0 +1,13 @@
+diff --git a/dlls/winepulse.drv/Makefile.in b/dlls/winepulse.drv/Makefile.in
+index c71b2833d13..33a4cb0e4d6 100644
+--- a/dlls/winepulse.drv/Makefile.in
++++ b/dlls/winepulse.drv/Makefile.in
+@@ -5,6 +5,8 @@ IMPORTS   = dxguid uuid winmm user32 advapi32 ole32
+ EXTRALIBS = $(PULSE_LIBS) $(PTHREAD_LIBS) -lm
+ EXTRAINCL = $(PULSE_CFLAGS)
+ 
++EXTRADLLFLAGS = -mcygwin
++
+ C_SRCS = \
+ 	mmdevdrv.c \
+ 	mult.c \

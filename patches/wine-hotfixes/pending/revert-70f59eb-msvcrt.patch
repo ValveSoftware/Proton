@@ -1,0 +1,75 @@
+From 70f59eb179d6a1c1b4dbc9e0a45b5731cd260793 Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Mon, 24 May 2021 18:22:40 +0200
+Subject: [PATCH] winepulse: Build with msvcrt.
+
+Signed-off-by: Jacek Caban <jacek@codeweavers.com>
+Signed-off-by: Andrew Eikum <aeikum@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winepulse.drv/Makefile.in |  2 ++
+ dlls/winepulse.drv/mmdevdrv.c  | 15 ++-------------
+ 2 files changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/winepulse.drv/Makefile.in b/dlls/winepulse.drv/Makefile.in
+index d05d63e92e37..9a04eaee5eeb 100644
+--- a/dlls/winepulse.drv/Makefile.in
++++ b/dlls/winepulse.drv/Makefile.in
+@@ -3,6 +3,8 @@ IMPORTS   = dxguid uuid winmm user32 advapi32 ole32
+ EXTRALIBS = $(PULSE_LIBS) $(PTHREAD_LIBS)
+ EXTRAINCL = $(PULSE_CFLAGS)
+ 
++EXTRADLLFLAGS = -mno-cygwin
++
+ C_SRCS = \
+ 	mmdevdrv.c \
+ 	mult.c \
+diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+index 0d55b0fc2d0f..bc28bce137e5 100644
+--- a/dlls/winepulse.drv/mmdevdrv.c
++++ b/dlls/winepulse.drv/mmdevdrv.c
+@@ -18,26 +18,15 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+
+-#define NONAMELESSUNION
+ #define COBJMACROS
+-#define _GNU_SOURCE
+-
+-#include "config.h"
+
+ #include <stdarg.h>
+-#include <unistd.h>
+-#include <math.h>
+-#include <stdio.h>
+-#include <errno.h>
+ #include <assert.h>
+
+ #include "windef.h"
+ #include "winbase.h"
+-#include "winnls.h"
+-#include "winreg.h"
+ #include "winternl.h"
+ #include "wine/debug.h"
+-#include "wine/unicode.h"
+ #include "wine/list.h"
+
+ #include "ole2.h"
+@@ -147,7 +147,7 @@ struct ACImpl {
+     AudioSessionWrapper *session_wrapper;
+ };
+
+-static const WCHAR defaultW[] = {'P','u','l','s','e','a','u','d','i','o',0};
++static const WCHAR defaultW[] = L"PulseAudio";
+
+ static const IAudioClient3Vtbl AudioClient3_Vtbl;
+ static const IAudioRenderClientVtbl AudioRenderClient_Vtbl;
+@@ -216,7 +205,7 @@ static char *get_application_name(void)
+     char *str;
+ 
+     GetModuleFileNameW(NULL, path, ARRAY_SIZE(path));
+-    name = strrchrW(path, '\\');
++    name = wcsrchr(path, '\\');
+     if (!name)
+         name = path;
+     else

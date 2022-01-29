@@ -40,12 +40,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # pulseaudio revert fix in staging:
-    git revert --no-commit 183fd3e089b170d5b7405a80a23e81dc7c4dd682
-    patch -Np1 < ../patches/wine-hotfixes/staging/staging-reenable-pulse.patch
-    patch -RNp1 < ../patches/wine-hotfixes/staging/staging-pulseaudio-reverts.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/pulseaudio-PE-revert-f0cd33c-fixup.patch
-
     # faudio revert fix in staging:
     patch -Np1 < ../patches/wine-hotfixes/staging/x3daudio_staging_revert.patch
 
@@ -71,14 +65,6 @@
 
     echp "revert in favor of proton stub to allow ffxiv intro videos to work"
     git revert --no-commit 85747f0abe0b013d9f287a33e10738e28d7418e9
-
-    # https://bugs.winehq.org/show_bug.cgi?id=49990
-#    echo "revert bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers and 3D Mark"
-#    git revert --no-commit 548bc54bf396d74b5b928bf9be835272ddda1886
-#    git revert --no-commit b502a3e3c6b43ac3947d85ccc263e729ace917fa
-#    git revert --no-commit b54199101fd307199c481709d4b1358ba4bcce58
-#    git revert --no-commit dedda40e5d7b5a3bcf67eea95145810da283d7d9
-#    git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
 
     echo "temporary fshack reverts"
     git revert --no-commit ef9c0b3f691f6897f0acfd72af0a9ea020f0a0bf
@@ -170,8 +156,16 @@
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
     patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
 
-    echo "pulseaudio fixup to re-enable staging patches"
-    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
+    echo "manual revert of 70f59eb179d6a1c1b4dbc9e0a45b5731cd260793"
+    # the msvcrt build of winepulse causes Forza Horizon 5 to crash at the splash screen
+    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-70f59eb-msvcrt.patch
+
+    # due to this commit 'makefiles: Make -mno-cygwin the default.' 088a787a2cd45ea70e4439251a279260401e9287
+    # we need to revert the change for pulseaudio by intentionally setting empty EXTRADLLFLAGS
+    patch -Np1 < ../patches/wine-hotfixes/pending/msvcrt-default-global-revert-for-winepulse.patch
+
+#    echo "pulseaudio fixup to re-enable staging patches"
+#    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
