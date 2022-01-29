@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-    
       - name: Get branch names
         id: branch-name
         uses: tj-actions/branch-names@v5.1
