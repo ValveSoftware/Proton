@@ -235,7 +235,8 @@
     patch -Np1 < ../patches/game-patches/mwo.patch
 
     echo "ffxiv"
-    patch -Np1 < ../patches/game-patches/ffxiv-video-fix.patch
+    patch -Np1 < ../patches/game-patches/ffxiv-launcher-fix.patch
+    patch -Np1 < ../patches/game-patches/ffxiv-opening-video-fix.patch
 
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
