@@ -22,6 +22,14 @@
     patch -Np1 < ../patches/steamhelper/__wine_make_process_system_update.patch
     cd ..
 
+    cd FAudio
+    git reset --hard HEAD
+    git clean -xdf
+
+    # this was removed because WMA decoding is being implemented in wine, but it's not added yet so it's currently still needed
+    git revert --no-commit bcb8c650f2e2c0212b6c4449616d55afae7a45dd
+    cd ..
+
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
