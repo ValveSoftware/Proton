@@ -69,6 +69,9 @@ def file_is_wine_builtin_dll(path):
 
 def makedirs(path):
     try:
+        #replace broken symlinks with a new directory
+        if os.path.islink(path) and not file_exists(path, follow_symlinks=True):
+            os.remove(path)
         os.makedirs(path)
     except OSError:
         #already exists
@@ -229,7 +232,7 @@ class CompatData:
             dirs = []
             for f in tracked_files:
                 path = self.prefix_dir + f.strip()
-                if file_exists(path, follow_symlinks=True):
+                if file_exists(path, follow_symlinks=False):
                     if os.path.isfile(path) or os.path.islink(path):
                         os.remove(path)
                     else:
@@ -342,7 +345,7 @@ class CompatData:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
                 if not file_exists(dst_dir, follow_symlinks=True):
-                    os.makedirs(dst_dir)
+                    makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for dir_ in dirs:
                     src_file = os.path.join(src_dir, dir_)
@@ -369,7 +372,7 @@ class CompatData:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
                 if not file_exists(dst_dir, follow_symlinks=True):
-                    os.makedirs(dst_dir)
+                    makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for file_ in files:
                     src_file = os.path.join(src_dir, file_)
@@ -771,7 +774,7 @@ class Session:
                 basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
                 makedirs(basedir)
                 lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
-                if file_exists(lfile_path, follow_symlinks=True):
+                if file_exists(lfile_path, follow_symlinks=False):
                     os.remove(lfile_path)
                 self.log_file = open(lfile_path, "w+")
                 self.log_file.write("======================\n")
