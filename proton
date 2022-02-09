@@ -35,6 +35,13 @@ CURRENT_PREFIX_VERSION="6.3-3"
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
 
+def file_exists(s, *, follow_symlinks):
+    if follow_symlinks:
+        #'exists' returns False on broken symlinks
+        return os.path.exists(s)
+    #'lexists' returns True on broken symlinks
+    return os.path.lexists(s)
+
 def nonzero(s):
     return len(s) > 0 and s != "0"
 
@@ -60,7 +67,7 @@ def file_is_wine_builtin_dll(path):
         if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
             # This may be a broken link to a dll in a removed Proton install
             return True
-    if not os.path.exists(path):
+    if not file_exists(path, follow_symlinks=True):
         return False
     try:
         sfile = open(path, "rb")
@@ -93,17 +100,17 @@ def merge_user_dir(src, dst):
 
         #we only want to copy into directories which don't already exist. games
         #may not react well to two save directory instances being merged.
-        if not os.path.exists(dst_dir) or os.path.samefile(dst_dir, dst):
+        if not file_exists(dst_dir, follow_symlinks=True) or os.path.samefile(dst_dir, dst):
             makedirs(dst_dir)
             for dir_ in dirs:
                 src_file = os.path.join(src_dir, dir_)
                 dst_file = os.path.join(dst_dir, dir_)
-                if os.path.islink(src_file) and not os.path.exists(dst_file):
+                if os.path.islink(src_file) and not file_exists(dst_file, follow_symlinks=True):
                     try_copy(src_file, dst_file, copy_metadata=True, follow_symlinks=False)
             for file_ in files:
                 src_file = os.path.join(src_dir, file_)
                 dst_file = os.path.join(dst_dir, file_)
-                if not os.path.exists(dst_file):
+                if not file_exists(dst_file, follow_symlinks=True):
                     try_copy(src_file, dst_file, copy_metadata=True, follow_symlinks=False)
         else:
             extant_dirs += dst_dir
@@ -112,11 +119,11 @@ def try_copy(src, dst, add_write_perm=True, copy_metadata=False, optional=False,
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
-            if os.path.lexists(dstfile):
+            if file_exists(dstfile, follow_symlinks=False):
                 os.remove(dstfile)
         else:
             dstfile = dst
-            if os.path.lexists(dst):
+            if file_exists(dst, follow_symlinks=False):
                 os.remove(dst)
 
         if copy_metadata:
@@ -145,9 +152,9 @@ def try_copyfile(src, dst):
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
-            if os.path.lexists(dstfile):
+            if file_exists(dstfile, follow_symlinks=False):
                 os.remove(dstfile)
-        elif os.path.lexists(dst):
+        elif file_exists(dst, follow_symlinks=False):
             os.remove(dst)
         shutil.copyfile(src, dst)
     except PermissionError as e:
@@ -253,7 +260,7 @@ def find_nvidia_wine_dll_dir():
     nvidia_wine_dir = os.path.join(os.path.dirname(libglx_nvidia_realpath), "nvidia", "wine")
 
     # Check that nvngx.dll exists here, or fail
-    if os.path.exists(os.path.join(nvidia_wine_dir, "nvngx.dll")):
+    if file_exists(os.path.join(nvidia_wine_dir, "nvngx.dll"), follow_symlinks=True):
         return nvidia_wine_dir
 
     return None
@@ -299,18 +306,18 @@ class Proton:
 
     def need_tarball_extraction(self):
         '''Checks if the proton_dist tarball archive must be extracted. Returns true if extraction is needed, false otherwise'''
-        return not os.path.exists(self.dist_dir) or \
-            not os.path.exists(self.path("dist/version")) or \
+        return not file_exists(self.dist_dir, follow_symlinks=True) or \
+            not file_exists(self.path("dist/version"), follow_symlinks=True) or \
             not filecmp.cmp(self.version_file, self.path("dist/version"))
 
     def extract_tarball(self):
         with self.dist_lock:
             if self.need_tarball_extraction():
-                if os.path.exists(self.dist_dir):
+                if file_exists(self.dist_dir, follow_symlinks=True):
                     shutil.rmtree(self.dist_dir)
                 tar = None
                 for sf in ["", ".xz", ".bz2", ".gz"]:
-                    if os.path.exists(self.path("proton_dist.tar" + sf)):
+                    if file_exists(self.path("proton_dist.tar" + sf), follow_symlinks=True):
                         tar = tarfile.open(self.path("proton_dist.tar" + sf), mode="r:*")
                         break
                 if not tar:
@@ -347,7 +354,7 @@ class CompatData:
         return self.base_dir + d
 
     def remove_tracked_files(self):
-        if not os.path.exists(self.tracked_files_file):
+        if not file_exists(self.tracked_files_file, follow_symlinks=True):
             log("Prefix has no tracked_files??")
             return
 
@@ -355,7 +362,7 @@ class CompatData:
             dirs = []
             for f in tracked_files:
                 path = self.prefix_dir + f.strip()
-                if os.path.exists(path):
+                if file_exists(path, follow_symlinks=True):
                     if os.path.isfile(path) or os.path.islink(path):
                         os.remove(path)
                     else:
@@ -395,21 +402,21 @@ class CompatData:
                     (int(new_proton_maj) == int(old_proton_maj) and \
                      int(new_proton_min) < int(old_proton_min)):
                 log("Removing newer prefix")
-                if old_proton_ver == "3.7" and not os.path.exists(self.tracked_files_file):
+                if old_proton_ver == "3.7" and not file_exists(self.tracked_files_file, follow_symlinks=True):
                     #proton 3.7 did not generate tracked_files, so copy it into place first
                     try_copy(g_proton.path("proton_3.7_tracked_files"), self.tracked_files_file)
                 self.remove_tracked_files()
                 return
 
             if old_proton_ver == "3.7" and old_prefix_ver == "1":
-                if not os.path.exists(self.prefix_dir + "/drive_c/windows/syswow64/kernel32.dll"):
+                if not file_exists(self.prefix_dir + "/drive_c/windows/syswow64/kernel32.dll", follow_symlinks=True):
                     #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
                     log("Detected broken 64-bit-only installation, re-creating prefix.")
                     shutil.rmtree(self.prefix_dir)
                     return
 
             #replace broken .NET installations with wine-mono support
-            if os.path.exists(self.prefix_dir + "/drive_c/windows/Microsoft.NET/NETFXRepair.exe") and \
+            if file_exists(self.prefix_dir + "/drive_c/windows/Microsoft.NET/NETFXRepair.exe", follow_symlinks=True) and \
                     file_is_wine_builtin_dll(self.prefix_dir + "/drive_c/windows/system32/mscoree.dll"):
                 log("Broken .NET installation detected, switching to wine-mono.")
                 #deleting this directory allows wine-mono to work
@@ -490,7 +497,7 @@ class CompatData:
             stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
                               self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll" ]
             for builtin in stale_builtins:
-                if os.path.lexists(builtin) and file_is_wine_builtin_dll(builtin):
+                if file_exists(builtin, follow_symlinks=False) and file_is_wine_builtin_dll(builtin):
                     log("Removing stale builtin " + builtin)
                     os.remove(builtin)
 
@@ -520,18 +527,18 @@ class CompatData:
                 if len(rel_dir) > 0:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
-                if not os.path.lexists(dst_dir):
+                if not file_exists(dst_dir, follow_symlinks=False):
                     os.makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for dir_ in dirs:
                     src_file = os.path.join(src_dir, dir_)
                     dst_file = os.path.join(dst_dir, dir_)
-                    if os.path.islink(src_file) and not os.path.exists(dst_file):
+                    if os.path.islink(src_file) and not file_exists(dst_file, follow_symlinks=True):
                         self.pfx_copy(src_file, dst_file)
                 for file_ in files:
                     src_file = os.path.join(src_dir, file_)
                     dst_file = os.path.join(dst_dir, file_)
-                    if not os.path.exists(dst_file):
+                    if not file_exists(dst_file, follow_symlinks=True):
                         self.pfx_copy(src_file, dst_file)
                         tracked_files.write(rel_dir + file_ + "\n")
 
@@ -547,7 +554,7 @@ class CompatData:
                 if len(rel_dir) > 0:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
-                if not os.path.lexists(dst_dir):
+                if not file_exists(dst_dir, follow_symlinks=False):
                     os.makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for file_ in files:
@@ -558,7 +565,7 @@ class CompatData:
                         continue
                     if file_is_wine_builtin_dll(dst_file):
                         os.unlink(dst_file)
-                    elif os.path.lexists(dst_file):
+                    elif file_exists(dst_file, follow_symlinks=False):
                         # builtin library was replaced
                         continue
                     else:
@@ -591,7 +598,7 @@ class CompatData:
         for p in fontsmap:
             lname = os.path.join(windowsfonts, p[2])
             fname = os.path.join(p[0], p[1])
-            if os.path.lexists(lname):
+            if file_exists(lname, follow_symlinks=False):
                 if os.path.islink(lname):
                     os.remove(lname)
                     os.symlink(fname, lname)
@@ -616,15 +623,15 @@ class CompatData:
 
             #running unofficial Proton/Wine builds against a Proton prefix could
             #create an infinite symlink loop. detect this and clean it up.
-            if os.path.lexists(new) and os.path.islink(new) and os.readlink(new).endswith(old):
+            if file_exists(new, follow_symlinks=False) and os.path.islink(new) and os.readlink(new).endswith(old):
                 os.remove(new)
 
             old = self.prefix_dir + old
 
-            if os.path.lexists(old) and not os.path.islink(old):
+            if file_exists(old, follow_symlinks=False) and not os.path.islink(old):
                 merge_user_dir(src=old, dst=new)
                 os.rename(old, old + " BACKUP")
-            if not os.path.lexists(old):
+            if not file_exists(old, follow_symlinks=False):
                 makedirs(os.path.dirname(old))
                 os.symlink(src=link, dst=old)
             elif os.path.islink(old) and not (os.readlink(old) == link):
@@ -633,7 +640,7 @@ class CompatData:
 
     def setup_prefix(self):
         with self.prefix_lock:
-            if os.path.exists(self.version_file):
+            if file_exists(self.version_file, follow_symlinks=True):
                 with open(self.version_file, "r") as f:
                     old_ver = f.readline().strip()
             else:
@@ -641,11 +648,11 @@ class CompatData:
 
             self.upgrade_pfx(old_ver)
 
-            if not os.path.exists(self.prefix_dir):
+            if not file_exists(self.prefix_dir, follow_symlinks=True):
                 makedirs(self.prefix_dir + "/drive_c")
                 set_dir_casefold_bit(self.prefix_dir + "/drive_c")
 
-            if not os.path.exists(self.prefix_dir + "/user.reg"):
+            if not file_exists(self.prefix_dir + "/user.reg", follow_symlinks=True):
                 self.copy_pfx()
 
             self.migrate_user_paths()
@@ -813,9 +820,9 @@ class CompatData:
             else:
                 nvapi64_dll = self.prefix_dir + "drive_c/windows/system32/nvapi64.dll"
                 nvapi32_dll = self.prefix_dir + "drive_c/windows/syswow64/nvapi.dll"
-                if os.path.exists(nvapi64_dll):
+                if file_exists(nvapi64_dll, follow_symlinks=True):
                     os.unlink(nvapi64_dll)
-                if os.path.exists(nvapi32_dll):
+                if file_exists(nvapi32_dll, follow_symlinks=True):
                     os.unlink(nvapi32_dll)
 
             # Try to detect known DLLs that ship with the NVIDIA Linux Driver
@@ -836,17 +843,17 @@ class CompatData:
             if "gamedrive" in g_session.compat_config:
                 library_dir = try_get_game_library_dir()
                 if not library_dir:
-                    if os.path.lexists(gamedrive_path):
+                    if file_exists(gamedrive_path, follow_symlinks=False):
                         os.remove(gamedrive_path)
                 else:
-                    if os.path.lexists(gamedrive_path):
+                    if file_exists(gamedrive_path, follow_symlinks=False):
                         cur_tgt = os.readlink(gamedrive_path)
                         if cur_tgt != library_dir:
                             os.remove(gamedrive_path)
                             os.symlink(library_dir, gamedrive_path)
                     else:
                         os.symlink(library_dir, gamedrive_path)
-            elif os.path.lexists(gamedrive_path):
+            elif file_exists(gamedrive_path, follow_symlinks=False):
                 os.remove(gamedrive_path)
 
 def comma_escaped(s):
@@ -955,7 +962,7 @@ class Session:
 
             lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
 
-            if os.path.exists(lfile_path):
+            if file_exists(lfile_path, follow_symlinks=True):
                 os.remove(lfile_path)
 
         makedirs(basedir)
@@ -967,7 +974,7 @@ class Session:
 
         #load environment overrides
         used_user_settings = {}
-        if os.path.exists(g_proton.user_settings_file):
+        if file_exists(g_proton.user_settings_file, follow_symlinks=True):
             try:
                 import user_settings
                 for key, value in user_settings.user_settings.items():
