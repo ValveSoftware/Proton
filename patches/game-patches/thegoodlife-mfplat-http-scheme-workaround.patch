@@ -21,14 +21,16 @@ diff --git a/dlls/mfplat/Makefile.in b/dlls/mfplat/Makefile.in
 index 9e5c607deae..bc5e13aaa7f 100644
 --- a/dlls/mfplat/Makefile.in
 +++ b/dlls/mfplat/Makefile.in
-@@ -1,6 +1,6 @@
+@@ -1,7 +1,7 @@
+ EXTRADEFS = -DWINE_NO_LONG_TYPES
  MODULE    = mfplat.dll
  IMPORTLIB = mfplat
--IMPORTS   = advapi32 ole32 mfuuid propsys rtworkq
+-IMPORTS   = advapi32 ole32 mfuuid propsys rtworkq kernelbase
 +IMPORTS   = advapi32 ole32 mfuuid propsys rtworkq kernelbase wininet
- 
- EXTRADLLFLAGS = -mno-cygwin -Wb,--prefer-native
- 
+ DELAYIMPORTS = bcrypt
+
+ EXTRADLLFLAGS = -Wb,--prefer-native
+
 diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
 index 519fa23cd23..b4ce5e14a0e 100644
 --- a/dlls/mfplat/main.c

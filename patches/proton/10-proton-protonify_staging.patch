@@ -867,7 +867,7 @@ index 6378a091f0b..e976fda77f2 100644
   */
  HRESULT WINAPI DwmGetWindowAttribute(HWND hwnd, DWORD attribute, PVOID pv_attribute, DWORD size)
  {
--    FIXME("(%p %d %p %d) stub\n", hwnd, attribute, pv_attribute, size);
+-    FIXME("(%p %ld %p %ld) stub\n", hwnd, attribute, pv_attribute, size);
 +    if (!hwnd) return E_HANDLE;
 +    if (!pv_attribute) return E_INVALIDARG;
 
@@ -889,7 +889,7 @@ index 6378a091f0b..e976fda77f2 100644
 +        break;
 +
 +    default:
-+        FIXME("unimplemented attribute %d, size %u, for hwnd %p.\n", attribute, size, hwnd);
++        FIXME("unimplemented attribute %ld, size %u, for hwnd %p.\n", attribute, size, hwnd);
 +        return E_INVALIDARG;
 +    }
 +
