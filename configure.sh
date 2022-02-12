@@ -184,9 +184,9 @@ function configure() {
 #
 # Parse arguments
 #
-
+# https://gitlab.steamos.cloud/proton/soldier/sdk/-/tags
 arg_steamrt="soldier"
-arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20210505.0-2"
+arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20211207.0-1"
 arg_no_protonsdk=""
 arg_build_name=""
 arg_container_engine="docker"
