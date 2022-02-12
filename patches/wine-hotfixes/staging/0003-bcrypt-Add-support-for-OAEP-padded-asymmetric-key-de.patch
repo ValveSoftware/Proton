@@ -71,7 +71,7 @@ index d01214c0ca0..479a3414c35 100644
      if (key->u.s.mode == MODE_ID_GCM)
      {
          BCRYPT_AUTHENTICATED_CIPHER_MODE_INFO *auth_info = padding;
-@@ -1931,28 +1937,32 @@ NTSTATUS WINAPI BCryptDestroyKey( BCRYPT_KEY_HANDLE handle )
+@@ -1968,28 +1968,32 @@ NTSTATUS WINAPI BCryptDestroyKey( BCRYPT_KEY_HANDLE handle )
  NTSTATUS WINAPI BCryptEncrypt( BCRYPT_KEY_HANDLE handle, UCHAR *input, ULONG input_len, void *padding, UCHAR *iv,
                                 ULONG iv_len, UCHAR *output, ULONG output_len, ULONG *ret_len, ULONG flags )
  {
@@ -79,7 +79,7 @@ index d01214c0ca0..479a3414c35 100644
      struct key *key = handle;
 -    NTSTATUS ret;
 
-     TRACE( "%p, %p, %u, %p, %p, %u, %p, %u, %p, %08x\n", handle, input, input_len, padding, iv, iv_len, output,
+     TRACE( "%p, %p, %lu, %p, %p, %lu, %p, %lu, %p, %#lx\n", handle, input, input_len, padding, iv, iv_len, output,
             output_len, ret_len, flags );
 
      if (!key || key->hdr.magic != MAGIC_KEY) return STATUS_INVALID_HANDLE;
@@ -92,7 +92,7 @@ index d01214c0ca0..479a3414c35 100644
 +
 +    if (key_is_symmetric( key ))
      {
--        FIXME( "flags %08x not implemented\n", flags );
+-        FIXME( "flags %#lx not implemented\n", flags );
 -        return STATUS_NOT_IMPLEMENTED;
 +        NTSTATUS ret;
 +        EnterCriticalSection( &key->u.s.cs );

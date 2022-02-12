@@ -3812,3 +3812,15 @@ index 65801df3a61..d8499efa00d 100644
  extern void init_environment( int argc, char *argv[], char *envp[] ) DECLSPEC_HIDDEN;
  extern void init_startup_info(void) DECLSPEC_HIDDEN;
  extern DWORD ntdll_umbstowcs( const char *src, DWORD srclen, WCHAR *dst, DWORD dstlen ) DECLSPEC_HIDDEN;
+diff --git a/server/window.c b/server/window.c
+index bc8e049f40a..de9d4b04ece 100644
+--- a/server/window.c
++++ b/server/window.c
+@@ -109,6 +109,7 @@ static const struct object_ops window_ops =
+     NULL,                     /* remove_queue */
+     NULL,                     /* signaled */
+     NULL,                     /* get_esync_fd */
++    NULL,                     /* get_fsync_fd */
+     NULL,                     /* satisfied */
+     no_signal,                /* signal */
+     no_get_fd,                /* get_fd */
