@@ -74,7 +74,21 @@
     git revert --no-commit 2ad44002da683634de768dbe49a0ba09c5f26f08
     git revert --no-commit dfa4c07941322dbcad54507cd0acf271a6c719ab
 
-    echp "revert in favor of proton stub to allow ffxiv intro videos to work"
+    echo "revert in favor of proton stub to allow ffxiv intro videos to work"
+    git revert --no-commit 98a2689f76ecbe097a0219d7ee332b4f6382bc59
+    git revert --no-commit 186b99c2acbcd6c172e73db6f40aa8da6e7d07dd
+    git revert --no-commit 83023a9f2b4840a97c5b587a2ba6c2f05a44b7b0
+    git revert --no-commit 8c7ad5fc397e4814c33fa4b85be505db94d70016
+    git revert --no-commit fc5719e4c57079b19bde8d169bf0b55194649e73
+    git revert --no-commit 766617d6f0e50b03e9fd43b4bc29bdcddb19daf1
+    git revert --no-commit 91c993bb78f50ea2d4c8159bda87901364c432bb
+    git revert --no-commit 940110d38700808563ee17d77cd59c45c00fd716
+    git revert --no-commit 177c232936dbc17cf212aed389f312d543d0c432
+    git revert --no-commit 1541d6b6d8877b9799219e1f56c460b4ccd4744c
+    git revert --no-commit 22472a3feb84a1d1857a035feb9883fdce39f6bb
+    git revert --no-commit b1fc2a49ffe5573d20d5972a8900ef9b5cc3ae83
+    git revert --no-commit a7508d54db6ef67b139fe15e964c644a304e30ce
+    git revert --no-commit fa3fa0e3d5ee2d7e3a6afc67997a38c2fae6e8dc
     git revert --no-commit 85747f0abe0b013d9f287a33e10738e28d7418e9
 
     echo "temporary fshack reverts"
@@ -88,6 +102,7 @@
     git revert --no-commit 9aef654392756aacdce6109ccbe21ba446ee4387
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
+
     git revert --no-commit 11d1e967b6be4e948ad49cc893e27150c220b02d
     git revert --no-commit cb41e4b1753891f5aa22cb617e8dd124c3dd8983
     git revert --no-commit 03d92af78a5000097b26560bba97320eb013441a
@@ -164,19 +179,9 @@
     git revert --no-commit 2d0dc2d47ca6b2d4090dfe32efdba4f695b197ce
 
     echo "revert faudio updates -- WINE faudio does not have WMA decoding (notably needed for Skyrim voices) so we still need to provide our own with gstreamer support"
+    git revert --no-commit a80c5491600c00a54dfc8251a75706ce86d2a08f
     git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
     patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
-
-    echo "manual revert of 70f59eb179d6a1c1b4dbc9e0a45b5731cd260793"
-    # the msvcrt build of winepulse causes Forza Horizon 5 to crash at the splash screen
-    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-70f59eb-msvcrt.patch
-
-    # due to this commit 'makefiles: Make -mno-cygwin the default.' 088a787a2cd45ea70e4439251a279260401e9287
-    # we need to revert the change for pulseaudio by intentionally setting empty EXTRADLLFLAGS
-    patch -Np1 < ../patches/wine-hotfixes/pending/msvcrt-default-global-revert-for-winepulse.patch
-
-#    echo "pulseaudio fixup to re-enable staging patches"
-#    patch -Np1 < ../patches/wine-hotfixes/staging/wine-pulseaudio-fixup.patch
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -466,6 +471,8 @@
 
 
 
+
+
 ### (2-5) WINE HOTFIX SECTION ###
 
     echo "hotfix for beam ng right click camera being broken with fshack"
@@ -473,8 +480,8 @@
 
     # keep this in place, proton and wine tend to bounce back and forth and proton uses a different URL.
     # We can always update the patch to match the version and sha256sum even if they are the same version
-    echo "hotfix to update mono version"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
+#    echo "hotfix to update mono version"
+#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
 
     echo "add halo infinite patches"
     patch -Np1 < ../patches/wine-hotfixes/pending/halo-infinite-twinapi.appcore.dll.patch
@@ -499,8 +506,6 @@
 
 
 ### (2-7) WINE CUSTOM PATCHES ###
-#    patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio.patch
-#    patch -Np1 < ../patches/wine-hotfixes/testing/lowlatency_audio_pulse.patch
 
 ### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
