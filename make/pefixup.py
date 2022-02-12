@@ -23,3 +23,5 @@ for path in sys.argv[1:]:
 
     if (perm & stat.S_IWUSR) == 0:
         os.chmod(path, perm)
+
+    print("Fixed up PE: ", path)
