@@ -480,8 +480,8 @@
 
     # keep this in place, proton and wine tend to bounce back and forth and proton uses a different URL.
     # We can always update the patch to match the version and sha256sum even if they are the same version
-#    echo "hotfix to update mono version"
-#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
+    echo "hotfix to update mono version"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
 
     echo "add halo infinite patches"
     patch -Np1 < ../patches/wine-hotfixes/pending/halo-infinite-twinapi.appcore.dll.patch
