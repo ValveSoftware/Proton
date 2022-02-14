@@ -1,4 +1,3 @@
-
 on:
   workflow_dispatch:
 
@@ -12,7 +11,7 @@ jobs:
         uses: tj-actions/branch-names@v5.1
     
       - name: Clone repo
-        run: git clone -b ${{ steps.branch-name.outputs.current_branch }} --recurse-submodules ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} .
+        run: git clone -b ${{ steps.branch-name.outputs.current_branch }} --jobs 20 --recurse-submodules ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} .
 
       - name: Get Proton Versions
         run: echo "RELEASE_VERSION=$(cat VERSION)" >> $GITHUB_ENV
@@ -74,6 +73,14 @@ jobs:
       - name: Rename directory
         working-directory: ./build/build
         run: mv dist ${{ env.RELEASE_VERSION }}
+
+      - name: Move files to their right folder
+        working-directory: ./build/build/${{ env.RELEASE_VERSION }}/protonfixes
+        run: |
+          mv cabextract ../files/bin/ && \
+          mv libmspack.so.0 ../files/lib64/ && \
+          mv libmspack.so.0.1.0 ../files/lib64/ && \
+          rm cabextract_1.9-1.debian.tar.xz libmspack_0.10.1-1.debian.tar.xz
 
       - name: Archive build
         working-directory: ./build/build
