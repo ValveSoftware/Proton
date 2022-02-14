@@ -372,6 +372,10 @@
     echo "proton battleye patches"
     patch -Np1 < ../patches/proton/59-proton-battleye_patches.patch
 
+    echo "proton fake current res patches"
+    patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
+
+
 #    disabled for now, needs rebase. only used for vr anyway
 #    echo "proton openxr patches"
 #    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
