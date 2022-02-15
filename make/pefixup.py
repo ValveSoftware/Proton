@@ -11,7 +11,7 @@ for path in sys.argv[1:]:
     for section in pe.sections:
         if section.Name.decode("utf-8")[0:5] == ".text":
             section.Characteristics &= ~pefile.SECTION_CHARACTERISTICS['IMAGE_SCN_CNT_INITIALIZED_DATA']
-        section.Characteristics &= ~pefile.SECTION_CHARACTERISTICS['IMAGE_SCN_ALIGN_MASK']
+        assert not (section.Characteristics & pefile.SECTION_CHARACTERISTICS['IMAGE_SCN_ALIGN_MASK'])
 
     pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
 
