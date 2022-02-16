@@ -17,11 +17,6 @@
     patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
     cd ..
 
-    cd steam_helper
-    git checkout steam.cpp
-    patch -Np1 < ../patches/steamhelper/__wine_make_process_system_update.patch
-    cd ..
-
     cd FAudio
     git reset --hard HEAD
     git clean -xdf
@@ -226,8 +221,8 @@
     -W xactengine3_7-callbacks \
     -W dwrite-FontFallback
 
-    echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
-    patch -RNp1 < ../patches/wine-hotfixes/steamclient/d4259ac8e93_revert.patch
+    #echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
+    #patch -RNp1 < ../patches/wine-hotfixes/steamclient/d4259ac8e93_revert.patch
 
     echo "applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -374,6 +369,9 @@
 
     echo "proton fake current res patches"
     patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
+
+    echo "proton EasyAntiCheat patch"
+    patch -Np1 < ../patches/proton/66-proton-EAC-bridge.patch
 
 
 #    disabled for now, needs rebase. only used for vr anyway
