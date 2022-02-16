@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Valve Corporation
+ * Copyright (c) 2020, 2021, 2022 Valve Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -234,7 +234,7 @@ impl StreamArchive {
         self.write_pos = self.file.seek(io::SeekFrom::Start(0))?;
 
         if self.file.metadata().unwrap().len() > 0 {
-            let mut magic_and_version = [0 as u8; MAGIC_LEN_BYTES];
+            let mut magic_and_version = [0_u8; MAGIC_LEN_BYTES];
             self.file.read_exact(&mut magic_and_version)?;
 
             let version = magic_and_version[15];
@@ -244,6 +244,9 @@ impl StreamArchive {
                     version > FOSSILIZE_VERSION {
                 return Err(Error::CorruptDatabase);
             }
+
+            self.write_pos = MAGIC_LEN_BYTES as u64;
+
             loop {
                 let mut name_and_header = [0u8; PAYLOAD_NAME_LEN_BYTES + PAYLOAD_HEADER_LEN_BYTES];
                 let res = self.file.read_exact(&mut name_and_header);
@@ -269,6 +272,11 @@ impl StreamArchive {
                 match res {
                     Ok(p) => {
                         self.write_pos = p;
+                        if tag >= self.seen_blobs.len() &&
+                                self.file.metadata()?.permissions().readonly() {
+                            /* ignore unknown tags for read-only DBs, otherwise panic */
+                            continue;
+                        }
                         self.seen_blobs[tag].insert(hash, payload_entry);
                     },
 
@@ -331,7 +339,7 @@ impl StreamArchive {
         let to_copy = std::cmp::min(entry.payload_info.full_size as usize - offset as usize, buf.len());
 
         self.file.read_exact(&mut buf[0..to_copy])
-            .map_err(|e| Error::IOError(e))?;
+            .map_err(Error::IOError)?;
 
         if entry.payload_info.crc != 0 {
             if let CRCCheck::WithCRC = crc_opt {
@@ -423,5 +431,128 @@ impl StreamArchive {
         self.seen_blobs[tag as usize].insert(hash, payload_entry);
 
         Ok(())
+    }
+
+    /* rewrites the database, discarding entries listed in 'to_discard' */
+    pub fn discard_entries(&mut self, to_discard: &Vec<(FossilizeTag, FossilizeHash)>) -> Result<(), Error> {
+        self.write_pos = self.file.seek(io::SeekFrom::Start(0))?;
+        for v in self.seen_blobs.iter_mut() {
+            v.clear();
+        }
+
+        let mut magic_and_version = [0 as u8; MAGIC_LEN_BYTES];
+        self.file.read_exact(&mut magic_and_version)?;
+
+        let version = magic_and_version[15];
+
+        if magic_and_version[0..12] != FOSSILIZE_MAGIC ||
+                version < FOSSILIZE_MIN_COMPAT_VERSION ||
+                version > FOSSILIZE_VERSION {
+            return Err(Error::CorruptDatabase);
+        }
+
+        self.write_pos = MAGIC_LEN_BYTES as u64;
+
+        loop {
+            let mut name_and_header = [0u8; PAYLOAD_NAME_LEN_BYTES + PAYLOAD_HEADER_LEN_BYTES];
+            let res = self.file.read_exact(&mut name_and_header);
+
+            if let Err(fail) = res {
+                if fail.kind() == io::ErrorKind::UnexpectedEof {
+                    break;
+                }
+                return Err(Error::IOError(fail));
+            }
+
+            let name = &name_and_header[0..PAYLOAD_NAME_LEN_BYTES];
+
+            let tag = FossilizeTag::from_ascii_bytes(&name[0..FOSSILIZETAG_ASCII_LEN])?;
+            let hash = FossilizeHash::from_ascii_bytes(&name[FOSSILIZETAG_ASCII_LEN..])?;
+
+            let payload_entry = PayloadEntry::new_from_slice(
+                self.file.seek(io::SeekFrom::Current(0))?,
+                &name_and_header[PAYLOAD_NAME_LEN_BYTES..]
+            );
+
+            if to_discard.contains(&(tag, hash)) {
+                /* skip over this entry */
+                let res = self.file.seek(io::SeekFrom::Current(payload_entry.payload_info.size as i64));
+                match res {
+                    Ok(_) => {
+                    },
+
+                    Err(e) => {
+                        /* truncated chunk is not fatal */
+                        if e.kind() != io::ErrorKind::UnexpectedEof {
+                            return Err(Error::IOError(e));
+                        }
+                    },
+                }
+            } else {
+                let mut read_pos = self.file.seek(io::SeekFrom::Current(0))?;
+                if self.write_pos == read_pos - name_and_header.len() as u64 {
+                    /* if we haven't dropped any chunks, we can just skip it rather than rewrite it */
+                    let res = self.file.seek(io::SeekFrom::Current(payload_entry.payload_info.size as i64));
+                    match res {
+                        Ok(p) => {
+                            self.write_pos = p;
+                        },
+
+                        Err(e) => {
+                            /* truncated chunk is not fatal */
+                            if e.kind() != io::ErrorKind::UnexpectedEof {
+                                return Err(Error::IOError(e));
+                            }
+                        },
+                    }
+                } else {
+                    /* we're offset, so we have to rewrite */
+                    self.file.seek(io::SeekFrom::Start(self.write_pos))?;
+
+                    {
+                        /* write header */
+                        let mut name = [0u8; PAYLOAD_NAME_LEN_BYTES];
+                        name[0..FOSSILIZETAG_ASCII_LEN].copy_from_slice(&tag.to_ascii_bytes());
+                        name[FOSSILIZETAG_ASCII_LEN..].copy_from_slice(&hash.to_ascii_bytes());
+                        self.file.write_all(&name)?;
+                        self.write_pos += name.len() as u64;
+
+                        let buf = payload_entry.payload_info.to_slice();
+                        self.file.write_all(&buf)?;
+                        self.write_pos += buf.len() as u64;
+                    }
+
+                    /* copy contents */
+                    const BUFFER_COPY_BYTES: usize = 8 * 1024 * 1024; /* tuneable */
+                    let mut buf = box_array![0u8; BUFFER_COPY_BYTES];
+                    let end_read = read_pos + payload_entry.payload_info.size as u64;
+                    loop {
+                        let to_read = std::cmp::min((end_read - read_pos) as usize, BUFFER_COPY_BYTES);
+                        if to_read == 0 {
+                            break;
+                        }
+
+                        self.file.seek(io::SeekFrom::Start(read_pos))?;
+
+                        let readed = self.file.read(&mut (*buf)[0..to_read])?;
+                        if readed == 0 {
+                            break;
+                        }
+
+                        read_pos += readed as u64;
+
+                        self.file.seek(io::SeekFrom::Start(self.write_pos))?;
+                        self.file.write_all(&buf[0..readed])?;
+                        self.write_pos += readed as u64;
+                    }
+
+                    self.file.seek(io::SeekFrom::Start(read_pos))?;
+                }
+            }
+        }
+
+        self.file.set_len(self.write_pos)?;
+
+        self.prepare()
     }
 }

@@ -19,9 +19,9 @@ if [[ $(tput colors 2>/dev/null || echo 0) -gt 0 ]]; then
   COLOR_CLEAR=$'\e[0m'
 fi
 
-sh_quote() {
+sh_quote() { 
         local quoted
-        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}";
+        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}"; 
 }
 err()      { echo >&2 "${COLOR_ERR}!!${COLOR_CLEAR} $*"; }
 stat()     { echo >&2 "${COLOR_STAT}::${COLOR_CLEAR} $*"; }
@@ -53,27 +53,29 @@ dependency_afdko() {
         AFDKO_VERB=afdko
     else
         err "Couldn't find 'afdko'. Install it and make sure that 'makeotf' is in your PATH or 'afdko makeotf' works."
-            MISSING_DEPENDENCIES=1
+        err "Some distributions don't package afdko correctly, you may need to 'pip install afdko'."
+        MISSING_DEPENDENCIES=1
     fi
 }
 
 CONTAINER_MOUNT_OPTS=""
 
 check_container_engine() {
-    info "Making sure that the container engine is working."
-    if ! cmd $arg_container_engine run --rm $arg_protonsdk_image; then
-        die "Broken container engine. Please fix your $arg_container_engine setup."
+    stat "Trying $1."
+    if ! cmd $1 run --rm $arg_protonsdk_image; then
+        info "$1 is unable to run the container."
+        return 1
     fi
 
     touch permission_check
-    local inner_uid="$($arg_container_engine run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+    local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
                                             --rm $arg_protonsdk_image \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
 
     if [[ $inner_uid == *"Permission denied"* ]]; then
         err "The container cannot access files. Are you using SELinux?"
-        die "Please read README.md and check your $arg_container_engine setup works."
+        die "Please read README.md and check your $1 setup works."
     elif [ "$inner_uid" -eq 0 ]; then
         # namespace maps the user as root or the build is performed as host's root
         ROOTLESS_CONTAINER=1
@@ -81,7 +83,7 @@ check_container_engine() {
         ROOTLESS_CONTAINER=0
     else
         err "File owner's UID doesn't map to 0 or $(id -u) in the container."
-        die "Don't know how to map permissions. Please check your $arg_container_engine setup."
+        die "Don't know how to map permissions. Please check your $1 setup."
     fi
 }
 
@@ -140,8 +142,19 @@ function configure() {
   fi
 
   if [[ -n "$arg_container_engine" ]]; then
-    check_container_engine
+    check_container_engine "$arg_container_engine" || die "Specified container engine \"$arg_container_engine\" doesn't work"
+  else
+    stat "Trying to find usable container engine."
+    if check_container_engine docker; then
+      arg_container_engine="docker"
+    elif check_container_engine podman; then
+      arg_container_engine="podman"
+    else
+        die "${arg_container_engine:-Container engine discovery} has failed. Please fix your setup."
+    fi
   fi
+
+  stat "Using $arg_container_engine."
 
   ## Write out config
   # Don't die after this point or we'll have rather unhelpfully deleted the Makefile
@@ -174,7 +187,7 @@ function configure() {
 
     # Include base
     echo ""
-    echo "include \$(SRCDIR)/build/makefile_base.mak"
+    echo "include \$(SRCDIR)/Makefile.in"
   } >> "$MAKEFILE"
 
   stat "Created $MAKEFILE, now run make to build."
@@ -184,12 +197,12 @@ function configure() {
 #
 # Parse arguments
 #
-# https://gitlab.steamos.cloud/proton/soldier/sdk/-/tags
+
 arg_steamrt="soldier"
 arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20211207.0-1"
 arg_no_protonsdk=""
 arg_build_name=""
-arg_container_engine="docker"
+arg_container_engine=""
 arg_docker_opts=""
 arg_relabel_volumes=""
 arg_enable_ccache=""
@@ -290,8 +303,8 @@ usage() {
   "$1" ""
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
   "$1" ""
-  "$1" "    --container-engine=<engine> Which container Docker-compatible container engine to use,"
-  "$1" "                                e.g. podman. Defaults to docker."
+  "$1" "    --container-engine=<engine> Which Docker-compatible container engine to use,"
+  "$1" "                                e.g. podman. Tries to do autodiscovery when not specified."
   "$1" ""
   "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
   "$1" ""

@@ -64,10 +64,7 @@ $$(OBJ)/.$(1)-dist$(3):
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' ')' \
 	    -printf '--add-gnu-debuglink=$$(DST_LIBDIR$(3))/%p.debug\0--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n4 objcopy --file-alignment=4096
-	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.dll' \
-	    -printf '$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P$$(J) -n1 $$(SRC)/make/pefixup.py
-	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.drv' \
+	cd $$($(2)_LIBDIR$(3)) && find -type f \( -name '*.dll' -o -name '*.drv' \) \
 	    -printf '$$(DST_LIBDIR$(3))/%p\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n1 $$(SRC)/make/pefixup.py
 	touch $$@
@@ -82,10 +79,7 @@ $$(OBJ)/.$(1)-dist$(3):
 	cd $$($(2)_LIBDIR$(3)) && find -type f -not '(' -iname '*.pc' -or -iname '*.cmake' -or -iname '*.a' -or -iname '*.la' -or -iname '*.def' ')' \
 	    -printf '--strip-debug\0%p\0$$(DST_LIBDIR$(3))/%p\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096
-	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.dll' \
-	    -printf '$$(DST_LIBDIR$(3))/%p\0' | \
-	    xargs $(--verbose?) -0 -r -P$$(J) -n1 $$(SRC)/make/pefixup.py
-	cd $$($(2)_LIBDIR$(3)) && find -type f -name '*.drv' \
+	cd $$($(2)_LIBDIR$(3)) && find -type f \( -name '*.dll' -o -name '*.drv' \) \
 	    -printf '$$(DST_LIBDIR$(3))/%p\0' | \
 	    xargs $(--verbose?) -0 -r -P$$(J) -n1 $$(SRC)/make/pefixup.py
 	touch $$@
@@ -186,6 +180,11 @@ PKG_CONFIG_TARGET_32 := i386-linux-gnu
 PKG_CONFIG_TARGET_64 := x86_64-linux-gnu
 PKG_CONFIG_TARGET_CROSS32 := i386-w64-mingw32
 PKG_CONFIG_TARGET_CROSS64 := x86_64-w64-mingw32
+
+LIBDIR_WINE_32 := wine/i386-unix
+LIBDIR_WINE_64 := wine/x86_64-unix
+LIBDIR_WINE_CROSS32 := wine/i386-windows
+LIBDIR_WINE_CROSS64 := wine/x86_64-windows
 
 $(OBJ)/.%-post-build32:
 	touch $@

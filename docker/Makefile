@@ -1,4 +1,3 @@
-# https://gitlab.steamos.cloud/proton/soldier/sdk/-/tags
 STEAMRT_VERSION = 0.20211207.0
 STEAMRT_URLBASE = registry.gitlab.steamos.cloud
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Valve Corporation
+ * Copyright (c) 2020, 2021, 2022 Valve Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,8 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#[macro_use]
-extern crate glib;
 #[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_base as gst_base;
@@ -141,6 +139,14 @@ impl<'a> Read for BufferedReader<'a> {
     }
 }
 
+fn discarding_disabled() -> bool {
+    let v = match std::env::var("MEDIACONV_DONT_DISCARD") {
+        Err(_) => { return false; },
+        Ok(c) => c,
+    };
+    return v != "0";
+}
+
 fn plugin_init(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
     videoconv::register(plugin)?;
     audioconvbin::register(plugin)?;
@@ -148,7 +154,7 @@ fn plugin_init(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
     Ok(())
 }
 
-gst_plugin_define!(
+plugin_define!(
     protonmediaconverter,
     env!("CARGO_PKG_DESCRIPTION"),
     plugin_init,

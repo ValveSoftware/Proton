@@ -73,3 +73,9 @@
 [submodule "vkd3d"]
         path = vkd3d
         url = git://repo.or.cz/vkd3d/zf.git
+[submodule "dav1d"]
+	path = dav1d
+	url = https://github.com/videolan/dav1d.git
+[submodule "gst-plugins-rs"]
+	path = gst-plugins-rs
+	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs.git

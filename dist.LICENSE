@@ -1,4 +1,4 @@
-Copyright (c) 2018-2020, Valve Corporation
+Copyright (c) 2018-2022, Valve Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -34,7 +34,7 @@ Browse the source code for more information
 
 This software contains a modified version of Wine licensed under the LGPL 2.1. Wine is
 
-    Copyright (c) 1993-2020 the Wine project authors
+    Copyright (c) 1993-2022 the Wine project authors
 
 Visit Wine at
 
@@ -48,8 +48,8 @@ View our modifications at
 
 This software contains a modified version of DXVK licensed under the zlib/libpng license. DXVK is
 
-    Copyright (c) 2017-2020 Philip Rebohle
-    Copyright (c) 2019-2020 Joshua Ashton
+    Copyright (c) 2017-2022 Philip Rebohle
+    Copyright (c) 2019-2022 Joshua Ashton
 
 Visit DXVK at
 
@@ -61,21 +61,23 @@ View our modifications at
 
 ---- ---- ---- ----
 
+This software contains vkd3d-proton licensed under the LGPL 2.1. vkd3d-proton is
+
+    Copyright 2016-2022 the vkd3d-proton project authors
+
+Visit vkd3d-proton at
+
+    https://github.com/HansKristian-Work/vkd3d-proton
+
+---- ---- ---- ----
+
 This software contains FAudio licensed under the zlib license. FAudio is
 
-    Copyright (c) 2011-2020 Ethan Lee, Luigi Auriemma, and the MonoGame Team
+    Copyright (c) 2011-2022 Ethan Lee, Luigi Auriemma, and the MonoGame Team
 
 Visit FAudio at
 
     https://github.com/FNA-XNA/FAudio
-
----- ---- ---- ----
-
-This software contains glib licensed under the LGPL 2.1.
-
-Visit glib at
-
-    https://wiki.gnome.org/Projects/GLib
 
 ---- ---- ---- ----
 
@@ -100,11 +102,24 @@ Visit Liberation Fonts at
 
 This software contains Source Han Sans licensed under the SIL Open Font License, available at LICENSE.OFL. This font is
 
-    Copyright 2014-2019 Adobe (http://www.adobe.com/)
+    Copyright 2014-2021 Adobe (http://www.adobe.com/)
 
 Visit Source Han Sans at
 
     https://github.com/adobe-fonts/source-han-sans
+
+---- ---- ---- ----
+
+This software contains Ume fonts distributed under the following license:
+
+    These fonts are free software.  Unlimited permission is granted to
+    use, copy, and distribute it, with or without modification, either
+    commercially and noncommercially.  THESE FONTS ARE PROVIDED "AS
+    IS" WITHOUT WARRANTY.
+
+Visit Ume fonts home page at
+
+    https://osdn.net/projects/ume-font/
 
 ---- ---- ---- ----
 
@@ -171,20 +186,6 @@ wine-gecko itself is included under the Mozilla Public License 2.0.
 wine-gecko is available in Source Code form at
 
     https://sourceforge.net/p/wine/wine-gecko
-
----- ---- ---- ----
-
-This software contains a modified version of Vkd3d licensed under the LGPL 2.1. Vkd3d is
-
-    Copyright 2016-2019 the Vkd3d project authors
-
-Visit Vkd3d at
-
-    https://source.winehq.org/git/vkd3d.git
-
-View our modifications at
-
-    https://github.com/ValveSoftware/vkd3d
 
 ---- ---- ---- ----
 
@@ -256,12 +257,10 @@ Visit orc at
 This software contains the following Rust libraries under the MIT license:
 
     gstreamer-rs <https://gitlab.freedesktop.org/gstreamer/gstreamer-rs>
+    gst-plugins-rs <https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs>
 
     array-init <https://github.com/Manishearth/array-init/>
-    Copyright (c) 2010 The Rust Project Developers
-
-    autocfg <https://github.com/cuviper/autocfg>
-    Copyright (c) 2018 Josh Stone
+    Copyright (c) 2017-2020 The array-init developers
 
     bitflags <https://github.com/bitflags/bitflags>
     num-integer <https://github.com/rust-num/num-integer>
@@ -270,28 +269,23 @@ This software contains the following Rust libraries under the MIT license:
     Copyright (c) 2014 The Rust Project Developers
 
     cfg-if <https://github.com/alexcrichton/cfg-if>
-    pkg-config <https://github.com/rust-lang/pkg-config-rs>
-    proc-macro2 <https://github.com/alexcrichton/proc-macro2>
+    proc-macro2 <https://github.com/dtolnay/proc-macro2>
     toml <https://github.com/alexcrichton/toml-rs>
     Copyright (c) 2014 Alex Crichton
-
-    chrono <https://github.com/chronotope/chrono>
-    Copyright (c) 2014 Kang Seonghoon
 
     crc32fast <https://github.com/srijs/rust-crc32fast>
     Copyright (c) 2018 Sam Rijs, Alex Crichton and contributors
 
+    dav1d-rs <https://github.com/rust-av/dav1d-rs>
+    Copyright (c) 2018 Luca Barbato
+
     futures-channel <https://github.com/rust-lang/futures-rs>
     futures-core <https://github.com/rust-lang/futures-rs>
     futures-executor <https://github.com/rust-lang/futures-rs>
-    futures-macro <https://github.com/rust-lang/futures-rs>
     futures-task <https://github.com/rust-lang/futures-rs>
     futures-util <https://github.com/rust-lang/futures-rs>
     Copyright (c) 2016 Alex Crichton
     Copyright (c) 2017 The Tokio Authors
-
-    glib <https://github.com/gtk-rs/glib>
-    Copyright (c) 2013-2015 The Gtk-rs Project Developers
 
     heck <https://github.com/withoutboats/heck>
     unicode-segmentation <https://github.com/unicode-rs/unicode-segmentation>
@@ -307,41 +301,35 @@ This software contains the following Rust libraries under the MIT license:
     murmur3 <https://github.com/stusmall/murmur3>
     Copyright (c) 2016 Stu Small
 
-    pin-utils <https://github.com/rust-lang/pin-utils>
+    pin-utils <https://github.com/rust-lang-nursery/pin-utils>
     Copyright (c) 2018 The pin-utils authors
 
     pretty-hex <https://github.com/wolandr/pretty-hex>
     Copyright (c) 2018 Andrei Volnin
 
     proc-macro-error <https://gitlab.com/CreepySkeleton/proc-macro-error>
+    proc-macro-error-attr <https://gitlab.com/CreepySkeleton/proc-macro-error>
     Copyright (c) 2019-2020 CreepySkeleton
-
-    proc-macro-hack <https://github.com/dtolnay/proc-macro-hack>
-    Copyright (c) 2018 David Tolnay
 
     quote <https://github.com/dtolnay/quote>
     Copyright (c) 2016 The Rust Project Developers
 
-    slab <https://github.com/carllerche/slab>
+    slab <https://github.com/tokio-rs/slab>
     Copyright (c) 2019 Carl Lerche
 
-    time <https://github.com/time-rs/time>
-    Copyright (c) 2019 Jacob Pratt
-
-    version_check <https://github.com/SergioBenitez/version_check>
-    Copyright (c) 2017-2018 Sergio Benitez
+    smallvec <https://github.com/servo/rust-smallvec>
+    Copyright (c) 2018 The Servo Project Developers
 
     anyhow <https://github.com/dtolnay/anyhow>
-    either <https://github.com/bluss/either>
-    itertools <https://github.com/rust-itertools/itertools>
+    glib <https://github.com/gtk-rs/gtk-rs-core>
     once_cell <https://github.com/matklad/once_cell>
     paste <https://github.com/dtolnay/paste>
-    pin-project <https://github.com/taiki-e/pin-project>
+    pin-project-lite <https://github.com/taiki-e/pin-project-lite>
     proc-macro-crate <https://github.com/bkchr/proc-macro-crate>
     serde <https://github.com/serde-rs/serde>
     syn <https://github.com/dtolnay/syn>
-    syn-mid <https://github.com/taiki-e/syn-mid>
     thiserror <https://github.com/dtolnay/thiserror>
+    thiserror-impl <https://github.com/dtolnay/thiserror>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -447,3 +435,33 @@ This software contains the jxrlib library, which is
     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
     IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
+
+---- ---- ---- ----
+
+This software contains the dav1d library, which is
+
+    Copyright © 2018-2019, VideoLAN and dav1d authors
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+       list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+    ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Distribution of dav1d is also covered by the Alliance for Open Media Patent License 1.0, available at PATENTS.AV1.
