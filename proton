@@ -928,10 +928,7 @@ def default_compat_config():
     ret = set()
     if "SteamAppId" in os.environ:
         appid = os.environ["SteamAppId"]
-        if appid == "1172470": #Apex Legends
-            ret.add("noesync")
-            ret.add("nofsync")
-        elif appid in [
+        if appid in [
                 #affected by CW bug 19126
                 "252490", #Rust
                 "305620", #The Long Dark
