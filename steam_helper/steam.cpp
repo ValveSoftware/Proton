@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2019, 2020 Valve Corporation
+ * Copyright (c) 2015, 2019, 2020, 2021, 2022 Valve Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -60,8 +60,6 @@
 #include "../src/ivrclientcore.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steam);
-
-EXTERN_C HANDLE CDECL __wine_make_process_system(void);
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
 
@@ -158,6 +156,23 @@ static void setup_battleye_bridge(void)
     WINE_TRACE("Found battleye runtime at %s\n", path);
 
     setenv("PROTON_BATTLEYE_RUNTIME", path, 1);
+}
+
+static void setup_eac_bridge(void)
+{
+    const unsigned int eac_runtime_appid = 1826330;
+    char path[2048];
+    char *path_end;
+
+    if (!SteamApps()->BIsAppInstalled(eac_runtime_appid))
+        return;
+
+    if (!SteamApps()->GetAppInstallDir(eac_runtime_appid, path, sizeof(path)))
+        return;
+
+    WINE_TRACE("Found easyanticheat runtime at %s\n", path);
+
+    setenv("PROTON_EAC_RUNTIME", path, 1);
 }
 
 static std::string get_linux_vr_path(void)
@@ -1352,6 +1367,7 @@ int main(int argc, char *argv[])
         {
             setup_steam_registry();
             setup_battleye_bridge();
+            setup_eac_bridge();
         }
         else
         {
@@ -1405,7 +1421,8 @@ int main(int argc, char *argv[])
     }
 
     if (game_process)
-        wait_handle = __wine_make_process_system();
+        NtSetInformationProcess( GetCurrentProcess(), (PROCESS_INFORMATION_CLASS)1000 /* ProcessWineMakeProcessSystem */,
+                                 &wait_handle, sizeof(HANDLE *) );
 
     if(wait_handle != INVALID_HANDLE_VALUE)
     {
