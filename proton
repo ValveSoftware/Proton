@@ -933,16 +933,6 @@ def comma_escaped(s):
         idx = idx - 1
     return escaped
 
-#hopefully short-lived, app-specific workarounds for Proton bugs
-def default_compat_config():
-    ret = set()
-    if "SteamAppId" in os.environ:
-        appid = os.environ["SteamAppId"]
-        if appid == "1172470": #Apex Legends
-            ret.add("noesync")
-            ret.add("nofsync")
-    return ret
-
 class Session:
     def __init__(self):
         self.log_file = None
@@ -954,7 +944,7 @@ class Session:
                 "beclient_x64.dll": "b,n",
         }
 
-        self.compat_config = default_compat_config()
+        self.compat_config = set()
         self.cmdlineappend = []
 
         if "STEAM_COMPAT_CONFIG" in os.environ:
