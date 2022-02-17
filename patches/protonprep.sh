@@ -477,9 +477,6 @@
 
 ### (2-5) WINE HOTFIX SECTION ###
 
-#    echo "hotfix for beam ng right click camera being broken with fshack"
-#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-beam_ng_fshack_fix.patch
-
     # keep this in place, proton and wine tend to bounce back and forth and proton uses a different URL.
     # We can always update the patch to match the version and sha256sum even if they are the same version
     echo "hotfix to update mono version"
@@ -492,6 +489,8 @@
     echo "unity crash hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
 
+    echo "protonify part 2"
+    patch -Np1 < ../patches/proton/67-protonify-2.patch
 
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
