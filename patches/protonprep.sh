@@ -9,13 +9,13 @@
     patch -Np1 < ../patches/gstreamer/mediaconvert-gstdecodebin2.patch
     cd ..
 
-    cd gst-plugins-ugly
-    git reset --hard HEAD
-    git clean -xdf
-    echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
-    patch -Np1 < ../patches/gstreamer/asfdemux-Re-initialize_demux-adapter_in_gst_asf_demux_reset.patch
-    patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
-    cd ..
+#    cd gst-plugins-ugly
+#    git reset --hard HEAD
+#    git clean -xdf
+#    echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
+#    patch -Np1 < ../patches/gstreamer/asfdemux-Re-initialize_demux-adapter_in_gst_asf_demux_reset.patch
+#    patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
+#    cd ..
 
     cd FAudio
     git reset --hard HEAD
@@ -86,15 +86,6 @@
     git revert --no-commit fa3fa0e3d5ee2d7e3a6afc67997a38c2fae6e8dc
     git revert --no-commit 85747f0abe0b013d9f287a33e10738e28d7418e9
 
-    echo "temporary fshack reverts"
-    git revert --no-commit ef9c0b3f691f6897f0acfd72af0a9ea020f0a0bf
-    git revert --no-commit 3b8d7f7f036f3f4771284df97cce99d114fe42cb
-    git revert --no-commit fe5e06185dfc828b5d3873fd1b28f29f15d7c627
-    git revert --no-commit c2384cf23378953b6960e7044a0e467944e8814a
-    git revert --no-commit c3862f2a6121796814ae31913bfb0efeba565087
-    git revert --no-commit 37be0989540cf84dd9336576577ae535f2b6bbb8
-    git revert --no-commit 3661194f8e8146a594673ad3682290f10fa2c096
-    git revert --no-commit 9aef654392756aacdce6109ccbe21ba446ee4387
 
     echo "mfplat early reverts to re-enable staging mfplat patches"
 
@@ -187,9 +178,11 @@
     # -W winex11-_NET_ACTIVE_WINDOW \
     # -W winex11-WM_WINDOWPOSCHANGING \
 
-    # This was found to cause hangs in various games
-    # Notably DOOM Eternal and Resident Evil Village
-    # -W ntdll-NtAlertThreadByThreadId
+    # this interferes with fshack
+    #-W winex11-MWM_Decorations \
+
+    # this interferes with protons keyboard translation patches
+    #-W winex11-key_translation \
 
     # ntdll-Junction_Points breaks Valve's CEG drm
     # the other two rely on it.
@@ -212,6 +205,8 @@
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
+    -W winex11-MWM_Decorations \
+    -W winex11-key_translation \
     -W ntdll-Syscall_Emulation \
     -W ntdll-Junction_Points \
     -W ntdll-Serial_Port_Detection \
@@ -288,9 +283,11 @@
     echo "steam bits"
     patch -Np1 < ../patches/proton/12-proton-steam-bits.patch
 
-    # disabled for now, there was a massive controller HID update in WINE, so we're using that instead.
-#    echo "proton SDL patches"
-#    patch -Np1 < ../patches/proton/14-proton-sdl-joy.patch
+    echo "proton SDL patches"
+    patch -Np1 < ../patches/proton/14-proton-sdl-joy.patch
+
+    echo "proton gamepad patches"
+    patch -Np1 < ../patches/proton/15-proton-gamepad-additions.patch
 
     echo "Valve VR patches"
     patch -Np1 < ../patches/proton/16-proton-vrclient-wined3d.patch
@@ -339,14 +336,22 @@
     echo "dxvk_config"
     patch -Np1 < ../patches/proton/29-proton-dxvk_config.patch
 
-    echo "mouse focus fixes"
-    patch -Np1 < ../patches/proton/38-proton-mouse-focus-fixes.patch
+    echo "key input + mouse focus fixes"
+    patch -Np1 < ../patches/proton/38-proton-keyboard-input-and-mouse-focus-fixes.patch
 
     echo "CPU topology overrides"
     patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
 
     echo "fullscreen hack"
-    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-tkg.patch
+#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-tkg.patch
+    patch -Np1 < ../patches/proton/fshack/01-vulkan-1-prefer-builtin.patch
+    patch -Np1 < ../patches/proton/fshack/02-vulkan-childwindow.patch
+    patch -Np1 < ../patches/proton/fshack/03-window-manager-fixes.patch
+    patch -Np1 < ../patches/proton/fshack/04-fullscreen-hack.patch
+    patch -Np1 < ../patches/proton/fshack/05-steam-overlay-fixes.patch
+
+    echo "proton openxr patches"
+    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
 
     echo "fullscreen hack fsr patch"
     patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
@@ -372,11 +377,6 @@
 
     echo "proton EasyAntiCheat patch"
     patch -Np1 < ../patches/proton/66-proton-EAC-bridge.patch
-
-
-#    disabled for now, needs rebase. only used for vr anyway
-#    echo "proton openxr patches"
-#    patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
 
 ### END PROTON PATCH SECTION ###
 
@@ -477,8 +477,8 @@
 
 ### (2-5) WINE HOTFIX SECTION ###
 
-    echo "hotfix for beam ng right click camera being broken with fshack"
-    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-beam_ng_fshack_fix.patch
+#    echo "hotfix for beam ng right click camera being broken with fshack"
+#    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-beam_ng_fshack_fix.patch
 
     # keep this in place, proton and wine tend to bounce back and forth and proton uses a different URL.
     # We can always update the patch to match the version and sha256sum even if they are the same version
