@@ -134,7 +134,6 @@ install: install-internal
 
 redist: | $(BUILD_ROOT)/$(DEPLOY_DIR)
 redist: downloads
-	rm -rf $(BUILD_ROOT)/$(DEPLOY_DIR)/* && \
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) redist && \
 	cp -Rf $(BUILD_DIR)/redist/* $(BUILD_ROOT)/$(DEPLOY_DIR) && \
 	echo "Proton build available at $(BUILD_ROOT)/$(DEPLOY_DIR)"
