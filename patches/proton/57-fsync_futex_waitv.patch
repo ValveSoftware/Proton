@@ -691,3 +691,188 @@ index c6869b62b4b..6d69c643244 100644
 --
 2.34.1
 
+From d6a237166626d197b1d642f8f7a71900759df2b6 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 15 Feb 2022 17:20:40 +0300
+Subject: [PATCH] fsync: Add WINE_FSYNC_SIMULATE_SCHED_QUANTUM config option.
+
+And auto enable it for Uplay laucher.
+
+CW-Bug-Id: #20155
+---
+ dlls/ntdll/unix/fsync.c        | 20 +++++++++++++++++++-
+ dlls/ntdll/unix/loader.c       | 15 ++++++++++++---
+ dlls/ntdll/unix/unix_private.h |  1 +
+ 3 files changed, 32 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index d468782667a..f42e30d0245 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -116,6 +116,18 @@ static inline void futex_vector_set( struct futex_waitv *waitv, int *addr, int v
+     waitv->__reserved = 0;
+ }
+
++static void simulate_sched_quantum(void)
++{
++    LARGE_INTEGER now;
++    ULONG64 wait_end;
++
++    if (!fsync_simulate_sched_quantum) return;
++
++    NtQuerySystemTime( &now );
++    wait_end = (now.QuadPart / 10 + 499) / 500;
++    usleep( wait_end * 500 - (now.QuadPart / 10) );
++}
++
+ static inline int futex_wait_multiple( const struct futex_waitv *futexes,
+         int count, const ULONGLONG *end )
+ {
+@@ -756,8 +768,8 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+
+     struct futex_waitv futexes[MAXIMUM_WAIT_OBJECTS + 1];
+     struct fsync *objs[MAXIMUM_WAIT_OBJECTS];
++    BOOL msgwait = FALSE, waited = FALSE;
+     int has_fsync = 0, has_server = 0;
+-    BOOL msgwait = FALSE;
+     int dummy_futex = 0;
+     unsigned int spin;
+     LONGLONG timeleft;
+@@ -879,6 +891,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                                     && __sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) == current)
+                             {
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                if (waited) simulate_sched_quantum();
+                                 return i;
+                             }
+                             small_pause();
+@@ -896,6 +909,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         {
+                             TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                             mutex->count++;
++                            if (waited) simulate_sched_quantum();
+                             return i;
+                         }
+
+@@ -905,6 +919,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             {
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                                 mutex->count = 1;
++                                if (waited) simulate_sched_quantum();
+                                 return i;
+                             }
+                             else if (tid == ~0 && (tid = __sync_val_compare_and_swap( &mutex->tid, ~0, GetCurrentThreadId() )) == ~0)
+@@ -932,6 +947,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                                     usleep( 0 );
+
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                if (waited) simulate_sched_quantum();
+                                 return i;
+                             }
+                             small_pause();
+@@ -954,6 +970,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                                     usleep( 0 );
+
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                if (waited) simulate_sched_quantum();
+                                 return i;
+                             }
+                             small_pause();
+@@ -1008,6 +1025,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 TRACE("Wait timed out.\n");
+                 return STATUS_TIMEOUT;
+             }
++            else waited = TRUE;
+         } /* while (1) */
+     }
+     else
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 60a686ca7be..ca653ccb60b 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -2206,24 +2206,31 @@ static struct unix_funcs unix_funcs =
+ };
+
+ BOOL ac_odyssey;
++BOOL fsync_simulate_sched_quantum;
+
+ static void hacks_init(void)
+ {
++    static const char upc_exe[] = "Ubisoft Game Launcher\\upc.exe";
+     static const char ac_odyssey_exe[] = "ACOdyssey.exe";
+-    char cur_exe[MAX_PATH];
+-    DWORD cur_exe_len;
+-    int fd;
+-
+-    fd = open("/proc/self/comm", O_RDONLY);
+-    cur_exe_len = read(fd, cur_exe, sizeof(cur_exe));
+-    close(fd);
+-    cur_exe[cur_exe_len - 1] = 0;
++    const char *env_str;
+
+-    if (!strcasecmp(cur_exe, ac_odyssey_exe))
++    if (main_argc > 1 && strstr(main_argv[1], ac_odyssey_exe))
+     {
+         ERR("HACK: AC Odyssey sync tweak on.\n");
+         ac_odyssey = TRUE;
++        return;
+     }
++    env_str = getenv("WINE_FSYNC_SIMULATE_SCHED_QUANTUM");
++    if (env_str)
++        fsync_simulate_sched_quantum = !!atoi(env_str);
++    else if (main_argc > 1)
++        fsync_simulate_sched_quantum = !!strstr(main_argv[1], upc_exe);
++    if (fsync_simulate_sched_quantum)
++        ERR("HACK: Simulating sched quantum in fsync.\n");
++
++    env_str = getenv("SteamGameId");
++    if (env_str && !strcmp(env_str, "50130"))
++        setenv("WINESTEAMNOEXEC", "1", 0);
+ }
+
+ /***********************************************************************
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index d1840de8876..4bf0e7cb84e 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -148,6 +148,7 @@ extern struct ldt_copy __wine_ldt_copy DECLSPEC_HIDDEN;
+ #endif
+
+ extern BOOL ac_odyssey DECLSPEC_HIDDEN;
++extern BOOL fsync_simulate_sched_quantum DECLSPEC_HIDDEN;
+
+ extern void init_environment( int argc, char *argv[], char *envp[] ) DECLSPEC_HIDDEN;
+ extern void init_startup_info(void) DECLSPEC_HIDDEN;
+From b3fb8a5543db15280952042152f5218ee994b011 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 15 Feb 2022 22:00:23 +0300
+Subject: [PATCH] fixup! fsync: Add WINE_FSYNC_SIMULATE_SCHED_QUANTUM config
+ option.
+
+---
+ dlls/ntdll/unix/fsync.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
+index f42e30d0245..0f19c63a5f2 100644
+--- a/dlls/ntdll/unix/fsync.c
++++ b/dlls/ntdll/unix/fsync.c
+@@ -114,14 +114,11 @@ static inline void futex_vector_set( struct futex_waitv *waitv, int *addr, int v
+
+ static void simulate_sched_quantum(void)
+ {
+-    LARGE_INTEGER now;
+-    ULONG64 wait_end;
+-
+     if (!fsync_simulate_sched_quantum) return;
+-
+-    NtQuerySystemTime( &now );
+-    wait_end = (now.QuadPart / 10 + 499) / 500;
+-    usleep( wait_end * 500 - (now.QuadPart / 10) );
++    /* futex wait is often very quick to resume a waiting thread when woken.
++     * That reveals synchonization bugs in some games which happen to work on
++     * Windows due to the waiting threads having some minimal delay to wake up. */
++    usleep(0);
+ }
+
+ static inline int futex_wait_multiple( const struct futex_waitv *futexes,
