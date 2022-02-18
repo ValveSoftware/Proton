@@ -1,11 +1,21 @@
+From 147164fc7738bda2e50421d731e15489188916e1 Mon Sep 17 00:00:00 2001
+From: Esme Povirk <esme@codeweavers.com>
+Date: Wed, 26 Jan 2022 11:41:28 -0600
+Subject: [PATCH] mscoree: Update Wine Mono to 7.1.2.
+
+---
+ dlls/appwiz.cpl/addons.c       | 6 +++---
+ dlls/mscoree/mscoree_private.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
 diff --git a/dlls/appwiz.cpl/addons.c b/dlls/appwiz.cpl/addons.c
-index 7ef7ca312ae..96ffb8434ed 100644
+index b4da6137d72..8570d58acb7 100644
 --- a/dlls/appwiz.cpl/addons.c
 +++ b/dlls/appwiz.cpl/addons.c
 @@ -58,10 +58,10 @@ WINE_DEFAULT_DEBUG_CHANNEL(appwizcpl);
  #define GECKO_SHA "???"
  #endif
- 
+
 -#define MONO_VERSION "7.1.1"
 +#define MONO_VERSION "7.1.2"
  #if defined(__i386__) || defined(__x86_64__)
@@ -20,12 +30,12 @@ index 7ef7ca312ae..96ffb8434ed 100644
          L"mono",
          MONO_SHA,
 -        "http://source.winehq.org/winemono.php",
-+        "https://github.com/madewokherd/wine-mono/releases/download/wine-mono-" MONO_VERSION" /wine-mono-" MONO_VERSION "-" MONO_ARCH ".msi",
++        "https://github.com/madewokherd/wine-mono/releases/download/wine-mono-" MONO_VERSION "/wine-mono-" MONO_VERSION "-" MONO_ARCH ".msi",
          "Dotnet", "MonoUrl", "MonoCabDir",
          MAKEINTRESOURCEW(ID_DWL_MONO_DIALOG)
      }
 diff --git a/dlls/mscoree/mscoree_private.h b/dlls/mscoree/mscoree_private.h
-index 04844c8da69..aade837a570 100644
+index 1ef5ac200f3..8f826c73252 100644
 --- a/dlls/mscoree/mscoree_private.h
 +++ b/dlls/mscoree/mscoree_private.h
 @@ -45,7 +45,7 @@ extern HRESULT assembly_get_runtime_version(ASSEMBLY *assembly, LPSTR *version)
@@ -37,4 +47,3 @@ index 04844c8da69..aade837a570 100644
 
  /* Mono embedding */
  typedef struct _MonoDomain MonoDomain;
-
