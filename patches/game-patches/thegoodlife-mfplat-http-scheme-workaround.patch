@@ -21,8 +21,7 @@ diff --git a/dlls/mfplat/Makefile.in b/dlls/mfplat/Makefile.in
 index 9e5c607deae..bc5e13aaa7f 100644
 --- a/dlls/mfplat/Makefile.in
 +++ b/dlls/mfplat/Makefile.in
-@@ -1,7 +1,7 @@
- EXTRADEFS = -DWINE_NO_LONG_TYPES
+@@ -1,6 +1,6 @@
  MODULE    = mfplat.dll
  IMPORTLIB = mfplat
 -IMPORTS   = advapi32 ole32 mfuuid propsys rtworkq kernelbase
@@ -236,7 +235,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
      HRESULT hr;
 +    WCHAR tgl_workaround_buffer[PATHCCH_MAX_CCH];
  
-     TRACE("%p, %s, %#x, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, obj_type, object);
+     TRACE("%p, %s, %#lx, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, obj_type, object);
  
      if (!url || !obj_type || !object)
          return E_POINTER;
@@ -251,7 +250,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +        else
 +        {
 +            url = tgl_workaround_buffer;
-+            TRACE("%p, %s, %#x, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, obj_type, object);
++            TRACE("%p, %s, %#lx, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, obj_type, object);
 +        }
 +    }
 +
@@ -264,7 +263,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
      HRESULT hr;
 +    WCHAR tgl_workaround_buffer[PATHCCH_MAX_CCH];
  
-     TRACE("%p, %p, %s, %#x, %p, %p, %p.\n", iface, stream, debugstr_w(url), flags, props, obj_type, object);
+     TRACE("%p, %p, %s, %#lx, %p, %p, %p.\n", iface, stream, debugstr_w(url), flags, props, obj_type, object);
  
      if (!stream || !obj_type || !object)
          return E_POINTER;
@@ -279,7 +278,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +        else
 +        {
 +            url = tgl_workaround_buffer;
-+            TRACE("%p, %p, %s, %#x, %p, %p, %p.\n", iface, stream, debugstr_w(url), flags, props, obj_type, object);
++            TRACE("%p, %p, %s, %#lx, %p, %p, %p.\n", iface, stream, debugstr_w(url), flags, props, obj_type, object);
 +        }
 +    }
 +
@@ -292,7 +291,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
      HRESULT hr;
 +    WCHAR tgl_workaround_buffer[PATHCCH_MAX_CCH];
  
-     TRACE("%p, %s, %#x, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
+     TRACE("%p, %s, %#lx, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
  
 +    if (thegoodlife_workaround_scheme_check(url, tgl_workaround_buffer, PATHCCH_MAX_CCH))
 +    {
@@ -304,7 +303,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +        else
 +        {
 +            url = tgl_workaround_buffer;
-+            TRACE("%p, %s, %#x, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
++            TRACE("%p, %s, %#lx, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
 +        }
 +    }
 +
