@@ -224,7 +224,7 @@ diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
 index 47454310234..f56652b2cdd 100644
 --- a/dlls/mfplat/main.c
 +++ b/dlls/mfplat/main.c
-@@ -9231,9 +9246,32 @@ static const IMFDXGIDeviceManagerVtbl dxgi_device_manager_vtbl =
+@@ -9231,9 +9246,29 @@ static const IMFDXGIDeviceManagerVtbl dxgi_device_manager_vtbl =
  HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **manager)
  {
      struct dxgi_device_manager *object;
@@ -239,9 +239,6 @@ index 47454310234..f56652b2cdd 100644
 +     * Age of Empires Definitive Edition - this gameid should be removed
 +     * once CW bug #19741 is solved. */
 +    if (sgi && (
-+                strcmp(sgi, "1113560") == 0 || /* Nier Replicant */
-+                strcmp(sgi, "1020540") == 0 || /* Contra: Rogue Corps */
-+                strcmp(sgi, "1449280") == 0 || /* Ghostbusters Remastered */
 +                strcmp(sgi, "305620") == 0 || /* The Long Dark */
 +                strcmp(sgi, "585420") == 0 || /* Trailmakers */
 +                strcmp(sgi, "684450") == 0 || /* Surviving the Aftermath */
@@ -11921,6 +11918,28 @@ index 0db0519ff98..178c47d5d32 100644
      g_signal_connect(element, "no-more-pads", G_CALLBACK(no_more_pads_cb), parser);
 
      parser->their_sink = gst_element_get_static_pad(element, "sink");
+From 62f18137cb5ff9b468079d7d1f26a512bdb66c90 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 15 Feb 2022 10:51:42 +0100
+Subject: [PATCH] fixup! winegstreamer: After failing to create decodebin
+ parser, try protonvideoconv.
+
+---
+ dlls/winegstreamer/wg_parser.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 89a64339413..337953db78d 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -30,6 +30,7 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+
++#define GLIB_VERSION_MIN_REQUIRED GLIB_VERSION_2_30
+ #include <gst/gst.h>
+ #include <gst/video/video.h>
+ #include <gst/audio/audio.h>
 From 337006b72fc819575fb188c6f5543d27c4c6b7eb Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 25 Jan 2022 13:37:14 +0100
