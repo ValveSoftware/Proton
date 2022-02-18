@@ -691,6 +691,381 @@ index c6869b62b4b..6d69c643244 100644
 --
 2.34.1
 
+From 5726c4a62f9febce68a352d1e8a99a15325fe25c Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 6 Apr 2021 19:43:48 +0300
+Subject: [PATCH] ntdll: Simulate async file read and IO cancellation to
+ workaround AC:Odyssey out of order dialogues bug.
+
+CW-Bug-ID: #18881
+---
+ dlls/ntdll/unix/file.c   | 237 +++++++++++++++++++++++++++++++++++++++
+ dlls/ntdll/unix/loader.c |   6 +-
+ 2 files changed, 242 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index 3f60060bb38..850c70a6b2b 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -5295,6 +5295,230 @@ static NTSTATUS set_pending_write( HANDLE device )
+     return status;
+ }
+
++static pthread_mutex_t async_file_read_mutex = PTHREAD_MUTEX_INITIALIZER;
++static pthread_cond_t async_file_read_cond = PTHREAD_COND_INITIALIZER;
++
++struct async_file_read_job
++{
++    HANDLE handle;
++    int unix_handle;
++    int needs_close;
++    HANDLE event;
++    IO_STATUS_BLOCK *io;
++    void *buffer;
++    ULONG length;
++    LARGE_INTEGER offset;
++    DWORD thread_id;
++    LONG  cancelled;
++    struct list queue_entry;
++    struct async_file_read_job *next;
++};
++
++
++static struct list async_file_read_queue = LIST_INIT( async_file_read_queue );
++static struct async_file_read_job *async_file_read_running, *async_file_read_free;
++
++static void async_file_complete_io( struct async_file_read_job *job, NTSTATUS status, ULONG total )
++{
++    job->io->u.Status = status;
++    job->io->Information = total;
++
++    if (job->event) NtSetEvent( job->event, NULL );
++}
++
++static void *async_file_read_thread(void *dummy)
++{
++    struct async_file_read_job *job, *ptr;
++    ULONG buffer_length = 0;
++    void *buffer = NULL;
++    struct list *entry;
++    NTSTATUS status;
++    ULONG total;
++    int result;
++
++    pthread_mutex_lock( &async_file_read_mutex );
++    while (1)
++    {
++        while (!(entry = list_head( &async_file_read_queue )))
++        {
++            pthread_cond_wait( &async_file_read_cond, &async_file_read_mutex );
++            continue;
++        }
++
++        job = LIST_ENTRY( entry, struct async_file_read_job, queue_entry );
++        list_remove( entry );
++
++        total = 0;
++
++        if ( job->cancelled )
++        {
++            pthread_mutex_unlock( &async_file_read_mutex );
++            status = STATUS_CANCELLED;
++            goto done;
++        }
++
++        job->next = async_file_read_running;
++        async_file_read_running = job;
++        pthread_mutex_unlock( &async_file_read_mutex );
++
++        if (!buffer_length)
++        {
++            buffer = malloc(job->length);
++            buffer_length = job->length;
++        }
++        else if (buffer_length < job->length)
++        {
++            buffer = realloc(buffer, job->length);
++            buffer_length = job->length;
++        }
++
++        while ((result = pread( job->unix_handle, buffer, job->length, job->offset.QuadPart )) == -1)
++        {
++            if (errno != EINTR)
++            {
++                status = errno_to_status( errno );
++                goto done;
++            }
++            if (job->cancelled)
++                break;
++        }
++
++        total = result;
++        status = (total || !job->length) ? STATUS_SUCCESS : STATUS_END_OF_FILE;
++done:
++        if (job->needs_close) close( job->unix_handle );
++
++        if (!InterlockedCompareExchange(&job->cancelled, 1, 0))
++        {
++            if (status == STATUS_SUCCESS)
++                memcpy( job->buffer, buffer, total );
++
++            async_file_complete_io( job, status, total );
++        }
++
++        pthread_mutex_lock( &async_file_read_mutex );
++
++        if (status != STATUS_CANCELLED)
++        {
++            ptr = async_file_read_running;
++            if (job == ptr)
++            {
++                async_file_read_running = job->next;
++            }
++            else
++            {
++                while (ptr && ptr->next != job)
++                    ptr = ptr->next;
++
++                assert( ptr );
++                ptr->next = job->next;
++            }
++        }
++
++        job->next = async_file_read_free;
++        async_file_read_free = job;
++    }
++
++    return NULL;
++}
++
++static pthread_once_t async_file_read_once = PTHREAD_ONCE_INIT;
++
++static void async_file_read_init(void)
++{
++    pthread_t async_file_read_thread_id;
++    pthread_attr_t pthread_attr;
++
++    ERR("HACK: AC Odyssey async read workaround.\n");
++
++    pthread_attr_init( &pthread_attr );
++    pthread_attr_setscope( &pthread_attr, PTHREAD_SCOPE_SYSTEM );
++    pthread_attr_setdetachstate( &pthread_attr, PTHREAD_CREATE_DETACHED );
++
++    pthread_create( &async_file_read_thread_id, &pthread_attr, (void * (*)(void *))async_file_read_thread, NULL);
++    pthread_attr_destroy( &pthread_attr );
++}
++
++static NTSTATUS queue_async_file_read( HANDLE handle, int unix_handle, int needs_close, HANDLE event,
++                            IO_STATUS_BLOCK *io, void *buffer, ULONG length, LARGE_INTEGER *offset )
++{
++    struct async_file_read_job *job;
++
++    pthread_once( &async_file_read_once, async_file_read_init );
++
++    NtResetEvent( event, NULL );
++
++    pthread_mutex_lock( &async_file_read_mutex );
++
++    if (async_file_read_free)
++    {
++        job = async_file_read_free;
++        async_file_read_free = async_file_read_free->next;
++    }
++    else
++    {
++        if (!(job = malloc( sizeof(*job) )))
++        {
++            pthread_mutex_unlock( &async_file_read_mutex );
++            return STATUS_NO_MEMORY;
++        }
++    }
++
++    job->handle = handle;
++    job->unix_handle = unix_handle;
++    job->needs_close = needs_close;
++    job->event = event;
++    job->io = io;
++    job->buffer = buffer;
++    job->length = length;
++    job->offset = *offset;
++    job->thread_id = GetCurrentThreadId();
++    job->cancelled = 0;
++
++    list_add_tail( &async_file_read_queue, &job->queue_entry );
++
++    pthread_cond_signal( &async_file_read_cond );
++    pthread_mutex_unlock( &async_file_read_mutex );
++
++    return STATUS_PENDING;
++}
++
++static NTSTATUS cancel_async_file_read( HANDLE handle, IO_STATUS_BLOCK *io )
++{
++    DWORD thread_id = GetCurrentThreadId();
++    struct async_file_read_job *job;
++    unsigned int count = 0;
++
++    TRACE( "handle %p, io %p.\n", handle, io );
++
++    pthread_mutex_lock( &async_file_read_mutex );
++    job = async_file_read_running;
++    while (job)
++    {
++        if (((io && job->io == io)
++                || (!io && job->handle == handle && job->thread_id == thread_id))
++                && !InterlockedCompareExchange(&job->cancelled, 1, 0))
++        {
++            async_file_complete_io( job, STATUS_CANCELLED, 0 );
++            ++count;
++        }
++        job = job->next;
++    }
++
++    LIST_FOR_EACH_ENTRY( job, &async_file_read_queue, struct async_file_read_job, queue_entry )
++    {
++        if (((io && job->io == io)
++                || (!io && job->handle == handle && job->thread_id == thread_id))
++                && !InterlockedCompareExchange(&job->cancelled, 1, 0))
++        {
++            async_file_complete_io( job, STATUS_CANCELLED, 0 );
++            ++count;
++        }
++    }
++
++    pthread_mutex_unlock( &async_file_read_mutex );
++    return count ? STATUS_SUCCESS : STATUS_NOT_FOUND;
++}
+
+ /******************************************************************************
+  *              NtReadFile   (NTDLL.@)
+@@ -5336,6 +5560,13 @@ NTSTATUS WINAPI NtReadFile( HANDLE handle, HANDLE event, PIO_APC_ROUTINE apc, vo
+             goto done;
+         }
+
++        if (ac_odyssey && async_read && length && event && !apc)
++        {
++            status = queue_async_file_read( handle, unix_handle, needs_close, event, io, buffer, length, offset );
++            needs_close = 0;
++            goto err;
++        }
++
+         if (offset && offset->QuadPart != FILE_USE_FILE_POINTER_POSITION)
+         {
+             /* async I/O doesn't make sense on regular files */
+@@ -6118,6 +6349,9 @@ NTSTATUS WINAPI NtCancelIoFile( HANDLE handle, IO_STATUS_BLOCK *io_status )
+
+     TRACE( "%p %p\n", handle, io_status );
+
++    if (ac_odyssey && !cancel_async_file_read( handle, NULL ))
++        return (io_status->u.Status = STATUS_SUCCESS);
++
+     SERVER_START_REQ( cancel_async )
+     {
+         req->handle      = wine_server_obj_handle( handle );
+@@ -6143,6 +6377,9 @@ NTSTATUS WINAPI NtCancelIoFileEx( HANDLE handle, IO_STATUS_BLOCK *io, IO_STATUS_
+
+     TRACE( "%p %p %p\n", handle, io, io_status );
+
++    if (ac_odyssey && !cancel_async_file_read( handle, io ))
++        return (io_status->u.Status = STATUS_SUCCESS);
++
+     SERVER_START_REQ( cancel_async )
+     {
+         req->handle = wine_server_obj_handle( handle );
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 7f3d7834a6c..0f3ec16c52f 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -2210,7 +2210,11 @@ static void hacks_init(void)
+
+     if (!strcasecmp(cur_exe, ac_odyssey_exe))
+     {
+-        ERR("HACK: AC Odyssey sync tweak on.\n");
++        if (do_esync() || do_fsync())
++            ERR("HACK: AC Odyssey sync tweak on.\n");
++        else
++            ERR("Not enabling AC Odyssey sync tweak as esync and fsync are disabled.\n");
++
+         ac_odyssey = TRUE;
+     }
+ }
+From c6bad6f294f1d15a7825df71585e695f73bc8561 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 3 Nov 2021 18:07:13 +0300
+Subject: [PATCH] ntdll: HACK: Enable WINESTEAMNOEXEC for Mafia II.
+
+CW-Bug-Id: #19605
+---
+ dlls/ntdll/unix/loader.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 0f3ec16c52f..0a05fb3f10b 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -2201,6 +2201,7 @@ static void hacks_init(void)
+     static const char ac_odyssey_exe[] = "ACOdyssey.exe";
+     char cur_exe[MAX_PATH];
+     DWORD cur_exe_len;
++    const char *sgi;
+     int fd;
+
+     fd = open("/proc/self/comm", O_RDONLY);
+@@ -2216,7 +2217,12 @@ static void hacks_init(void)
+             ERR("Not enabling AC Odyssey sync tweak as esync and fsync are disabled.\n");
+
+         ac_odyssey = TRUE;
++        return;
+     }
++
++    sgi = getenv("SteamGameId");
++    if (sgi && !strcmp(sgi, "50130"))
++        setenv("WINESTEAMNOEXEC", "1", 0);
+ }
+
+ /***********************************************************************
+
+From 6f2c9858d6bb957b807411b28f8ffd77199eafd4 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 14 Feb 2022 22:40:40 +0300
+Subject: [PATCH] fixup! esync, fsync: Yield execution before alertable wait
+ for AC Odyssey.
+
+CW-Bug-Id: #18881
+---
+ dlls/ntdll/unix/loader.c | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 1d4160727e4..301a11c0419 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -2241,23 +2241,11 @@ BOOL ac_odyssey;
+ static void hacks_init(void)
+ {
+     static const char ac_odyssey_exe[] = "ACOdyssey.exe";
+-    char cur_exe[MAX_PATH];
+-    DWORD cur_exe_len;
+     const char *sgi;
+-    int fd;
+-
+-    fd = open("/proc/self/comm", O_RDONLY);
+-    cur_exe_len = read(fd, cur_exe, sizeof(cur_exe));
+-    close(fd);
+-    cur_exe[cur_exe_len - 1] = 0;
+
+-    if (!strcasecmp(cur_exe, ac_odyssey_exe))
++    if (main_argc > 1 && strstr(main_argv[1], ac_odyssey_exe))
+     {
+-        if (do_esync() || do_fsync())
+-            ERR("HACK: AC Odyssey sync tweak on.\n");
+-        else
+-            ERR("Not enabling AC Odyssey sync tweak as esync and fsync are disabled.\n");
+-
++        ERR("HACK: AC Odyssey sync tweak on.\n");
+         ac_odyssey = TRUE;
+         return;
+     }
 From d6a237166626d197b1d642f8f7a71900759df2b6 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Tue, 15 Feb 2022 17:20:40 +0300
@@ -709,7 +1084,7 @@ diff --git a/dlls/ntdll/unix/fsync.c b/dlls/ntdll/unix/fsync.c
 index d468782667a..f42e30d0245 100644
 --- a/dlls/ntdll/unix/fsync.c
 +++ b/dlls/ntdll/unix/fsync.c
-@@ -116,6 +116,18 @@ static inline void futex_vector_set( struct futex_waitv *waitv, int *addr, int v
+@@ -112,6 +112,18 @@ static inline void futex_vector_set( struct futex_waitv *waitv, int *addr, int v
      waitv->__reserved = 0;
  }
 
@@ -787,10 +1162,10 @@ index d468782667a..f42e30d0245 100644
      }
      else
 diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
-index 60a686ca7be..ca653ccb60b 100644
+index 301a11c0419..f078a967be8 100644
 --- a/dlls/ntdll/unix/loader.c
 +++ b/dlls/ntdll/unix/loader.c
-@@ -2206,24 +2206,31 @@ static struct unix_funcs unix_funcs =
+@@ -2237,11 +2237,13 @@ static struct unix_funcs unix_funcs =
  };
 
  BOOL ac_odyssey;
@@ -800,22 +1175,14 @@ index 60a686ca7be..ca653ccb60b 100644
  {
 +    static const char upc_exe[] = "Ubisoft Game Launcher\\upc.exe";
      static const char ac_odyssey_exe[] = "ACOdyssey.exe";
--    char cur_exe[MAX_PATH];
--    DWORD cur_exe_len;
--    int fd;
--
--    fd = open("/proc/self/comm", O_RDONLY);
--    cur_exe_len = read(fd, cur_exe, sizeof(cur_exe));
--    close(fd);
--    cur_exe[cur_exe_len - 1] = 0;
+-    const char *sgi;
 +    const char *env_str;
 
--    if (!strcasecmp(cur_exe, ac_odyssey_exe))
-+    if (main_argc > 1 && strstr(main_argv[1], ac_odyssey_exe))
+     if (main_argc > 1 && strstr(main_argv[1], ac_odyssey_exe))
      {
-         ERR("HACK: AC Odyssey sync tweak on.\n");
+@@ -2249,9 +2251,16 @@ static void hacks_init(void)
          ac_odyssey = TRUE;
-+        return;
+         return;
      }
 +    env_str = getenv("WINE_FSYNC_SIMULATE_SCHED_QUANTUM");
 +    if (env_str)
@@ -824,13 +1191,14 @@ index 60a686ca7be..ca653ccb60b 100644
 +        fsync_simulate_sched_quantum = !!strstr(main_argv[1], upc_exe);
 +    if (fsync_simulate_sched_quantum)
 +        ERR("HACK: Simulating sched quantum in fsync.\n");
-+
+
+-    sgi = getenv("SteamGameId");
+-    if (sgi && !strcmp(sgi, "50130"))
 +    env_str = getenv("SteamGameId");
 +    if (env_str && !strcmp(env_str, "50130"))
-+        setenv("WINESTEAMNOEXEC", "1", 0);
+         setenv("WINESTEAMNOEXEC", "1", 0);
  }
 
- /***********************************************************************
 diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
 index d1840de8876..4bf0e7cb84e 100644
 --- a/dlls/ntdll/unix/unix_private.h
