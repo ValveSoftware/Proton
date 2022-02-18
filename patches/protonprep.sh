@@ -2,29 +2,6 @@
 
 ### (1) PREP SECTION ###
 
-    cd gst-plugins-base
-    git reset --hard HEAD
-    git clean -xdf
-    echo "add Guy's patch for gstreamer preroll buffer for media converter"
-    patch -Np1 < ../patches/gstreamer/mediaconvert-gstdecodebin2.patch
-    cd ..
-
-#    cd gst-plugins-ugly
-#    git reset --hard HEAD
-#    git clean -xdf
-#    echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
-#    patch -Np1 < ../patches/gstreamer/asfdemux-Re-initialize_demux-adapter_in_gst_asf_demux_reset.patch
-#    patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
-#    cd ..
-
-    cd FAudio
-    git reset --hard HEAD
-    git clean -xdf
-
-    # this was removed because WMA decoding is being implemented in wine, but it's not added yet so it's currently still needed
-    git revert --no-commit bcb8c650f2e2c0212b6c4449616d55afae7a45dd
-    cd ..
-
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
@@ -46,9 +23,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # faudio revert fix in staging:
-#    patch -Np1 < ../patches/wine-hotfixes/staging/x3daudio_staging_revert.patch
-
     # allow esync patches to apply without depending on ntdll-Junction_Points
     patch -Np1 < ../patches/wine-hotfixes/staging/staging-esync_remove_ntdll_Junction_Points_dependency.patch
 
@@ -64,13 +38,8 @@
 
 ### (2-1) PROBLEMATIC COMMIT REVERT SECTION ###
 
+    # for some reason this causes the DLL not to load in proton
     git revert --no-commit 9b6253199ffb361557c53b1315263518cebc9871
-
-
-#    echo "revert faudio updates -- WINE faudio does not have WMA decoding (notably needed for Skyrim voices) so we still need to provide our own with gstreamer support"
-#    git revert --no-commit a80c5491600c00a54dfc8251a75706ce86d2a08f
-#    git revert --no-commit 22c26a2dde318b5b370fc269cab871e5a8bc4231
-#    patch -RNp1 < ../patches/wine-hotfixes/pending/revert-d8be858-faudio.patch
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
@@ -101,9 +70,6 @@
     # almost immediately on newer Wine Staging/TKG inside pe_load_debug_info function unless the dbghelp-Debug_Symbols staging # patchset is disabled.
     # -W dbghelp-Debug_Symbols
 
-    # Disable when using external FAudio
-    # -W xactengine3_7-callbacks \
-
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W winex11-_NET_ACTIVE_WINDOW \
@@ -116,11 +82,7 @@
     -W server-File_Permissions \
     -W server-Stored_ACLs \
     -W dbghelp-Debug_Symbols \
-    -W xactengine3_7-callbacks \
     -W dwrite-FontFallback
-
-    #echo "Revert d4259ac on proton builds as it breaks steam helper compilation"
-    #patch -RNp1 < ../patches/wine-hotfixes/steamclient/d4259ac8e93_revert.patch
 
     echo "applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
