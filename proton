@@ -1505,12 +1505,6 @@ class Session:
         else:
             remote_debug_proc = None
 
-
-        commandstring = str(sys.argv[2:] + self.cmdlineappend)
-
-        if 'uplay_steam_mode' in commandstring:
-            self.env["WINEFSYNC"] = "0"
-
         # CoD: Black Ops 3 workaround
         if os.environ.get("SteamGameId", 0) == "311210":
             rc = self.run_proc([g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
