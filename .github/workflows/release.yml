@@ -76,9 +76,9 @@ jobs:
       - name: Move files to their right folder
         working-directory: ./build/${{ env.RELEASE_VERSION }}/protonfixes/
         run: |
-          mv cabextract ../files/bin/ && \
-          mv libmspack.so.0 ../files/lib64/ && \
-          mv libmspack.so.0.1.0 ../files/lib64/ && \
+          mv cabextract ../dist/bin/ && \
+          mv libmspack.so.0 ../dist/lib64/ && \
+          mv libmspack.so.0.1.0 ../dist/lib64/ && \
           rm cabextract_1.9-1.debian.tar.xz libmspack_0.10.1-1.debian.tar.xz
 
       - name: Archive build
