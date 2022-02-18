@@ -224,7 +224,7 @@ diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
 index 47454310234..f56652b2cdd 100644
 --- a/dlls/mfplat/main.c
 +++ b/dlls/mfplat/main.c
-@@ -8959,9 +8959,29 @@ static const IMFDXGIDeviceManagerVtbl dxgi_device_manager_vtbl =
+@@ -9231,9 +9246,32 @@ static const IMFDXGIDeviceManagerVtbl dxgi_device_manager_vtbl =
  HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **manager)
  {
      struct dxgi_device_manager *object;
@@ -239,6 +239,9 @@ index 47454310234..f56652b2cdd 100644
 +     * Age of Empires Definitive Edition - this gameid should be removed
 +     * once CW bug #19741 is solved. */
 +    if (sgi && (
++                strcmp(sgi, "1113560") == 0 || /* Nier Replicant */
++                strcmp(sgi, "1020540") == 0 || /* Contra: Rogue Corps */
++                strcmp(sgi, "1449280") == 0 || /* Ghostbusters Remastered */
 +                strcmp(sgi, "305620") == 0 || /* The Long Dark */
 +                strcmp(sgi, "585420") == 0 || /* Trailmakers */
 +                strcmp(sgi, "684450") == 0 || /* Surviving the Aftermath */
