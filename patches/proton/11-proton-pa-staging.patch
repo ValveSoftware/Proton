@@ -128,11 +128,10 @@ index bcff0d8642a..cb53f1058a5 100644
 
      /* 3D listener initial parameters */
      device->ds3dl.dwSize   = sizeof(DS3DLISTENER);
-@@ -1124,75 +1123,3 @@ HRESULT WINAPI DirectSoundCreate8(
-
+@@ -1128,74 +1128,3 @@ HRESULT WINAPI DirectSoundCreate8(
      return hr;
  }
--
+
 -void DSOUND_ParseSpeakerConfig(DirectSoundDevice *device)
 -{
 -    switch (DSSPEAKER_CONFIG(device->speaker_config)) {
@@ -201,7 +200,7 @@ index bcff0d8642a..cb53f1058a5 100644
 -        break;
 -
 -        default:
--            WARN("unknown speaker_config %u\n", device->speaker_config);
+-            WARN("unknown speaker_config %lu\n", device->speaker_config);
 -    }
 -}
 diff --git a/dlls/dsound/dsound_private.h b/dlls/dsound/dsound_private.h
@@ -615,3 +614,91 @@ index bec462e0f5a..447d71efc8a 100644
 
      write_filter_data(prop_bag, &rgf);
 
+From 5fa7d93d8e52122029e625ea0ca5b4f1882adb83 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 20 Jan 2022 12:24:47 +0100
+Subject: [PATCH] faudio: Clear the end of WMA buffer when decoded output is
+ too short.
+
+---
+ libs/faudio/src/FAudio_platform_win32.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/libs/faudio/src/FAudio_platform_win32.c b/libs/faudio/src/FAudio_platform_win32.c
+index d99bae044a4..6345a359997 100644
+--- a/libs/faudio/src/FAudio_platform_win32.c
++++ b/libs/faudio/src/FAudio_platform_win32.c
+@@ -1143,8 +1143,8 @@ static void FAudio_INTERNAL_DecodeWMAMF(
+ 	uint32_t samples
+ ) {
+ 	const FAudioWaveFormatExtensible *wfx = (FAudioWaveFormatExtensible *)voice->src.format;
++	size_t samples_pos, samples_size, copy_size = 0;
+ 	struct FAudioWMADEC *impl = voice->src.wmadec;
+-	size_t samples_pos, samples_size, copy_size;
+ 	HRESULT hr;
+
+ 	LOG_FUNC_ENTER(voice->audio)
+@@ -1216,8 +1216,12 @@ static void FAudio_INTERNAL_DecodeWMAMF(
+ 		impl->input_size = 0;
+ 	}
+
+-	copy_size = FAudio_clamp(impl->output_pos - samples_pos, 0, samples_size);
+-	FAudio_memcpy(decodeCache, impl->output_buf + samples_pos, copy_size);
++	if (impl->output_pos > samples_pos)
++	{
++		copy_size = FAudio_min(impl->output_pos - samples_pos, samples_size);
++		FAudio_memcpy(decodeCache, impl->output_buf + samples_pos, copy_size);
++	}
++	FAudio_zero(decodeCache + copy_size, samples_size - copy_size);
+ 	LOG_INFO(
+ 		voice->audio,
+ 		"decoded %x / %x bytes, copied %x / %x bytes",
+From e2c6ce707e8b91277eaf637d0923f03ee38c5e1f Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 31 Jan 2022 10:57:51 -0600
+Subject: [PATCH] mmdevapi: Force PCM format for DeviceFormat property
+
+Native xaudio2 returns this format directly from GetDeviceDetails. Far
+Cry 4 expects to get a PCM format from GetDeviceDetails, so we need to
+set it to PCM here.
+---
+ dlls/mmdevapi/devenum.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/dlls/mmdevapi/devenum.c b/dlls/mmdevapi/devenum.c
+index b17572425f3..e59396ae48e 100644
+--- a/dlls/mmdevapi/devenum.c
++++ b/dlls/mmdevapi/devenum.c
+@@ -433,6 +433,7 @@ static HRESULT set_format(MMDevice *dev)
+     HRESULT hr;
+     IAudioClient *client;
+     WAVEFORMATEX *fmt;
++    WAVEFORMATEXTENSIBLE *fmtex;
+     PROPVARIANT pv = { VT_EMPTY };
+
+     hr = drvs.pGetAudioEndpoint(&dev->devguid, &dev->IMMDevice_iface, &client);
+@@ -447,6 +448,24 @@ static HRESULT set_format(MMDevice *dev)
+
+     IAudioClient_Release(client);
+
++    /* for most devices, native Windows only allows PCM formats for
++     * DeviceFormat. GetMixFormat often returns float. */
++    if(fmt->wFormatTag == WAVE_FORMAT_EXTENSIBLE){
++        fmtex = (WAVEFORMATEXTENSIBLE *)fmt;
++        if(IsEqualGUID(&fmtex->SubFormat, &KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)){
++            fmt->wBitsPerSample = 16;
++            fmt->nBlockAlign = fmt->wBitsPerSample * fmt->nChannels / 8;
++            fmt->nAvgBytesPerSec = fmt->nSamplesPerSec * fmt->nBlockAlign;
++            fmtex->SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
++            fmtex->Samples.wValidBitsPerSample = fmt->wBitsPerSample;
++        }
++    }else if(fmt->wFormatTag == WAVE_FORMAT_IEEE_FLOAT){
++        fmt->wFormatTag = WAVE_FORMAT_PCM;
++        fmt->wBitsPerSample = 16;
++        fmt->nBlockAlign = fmt->wBitsPerSample * fmt->nChannels / 8;
++        fmt->nAvgBytesPerSec = fmt->nSamplesPerSec * fmt->nBlockAlign;
++    }
++
+     pv.vt = VT_BLOB;
+     pv.blob.cbSize = sizeof(WAVEFORMATEX) + fmt->cbSize;
+     pv.blob.pBlobData = (BYTE*)fmt;

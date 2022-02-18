@@ -346,7 +346,7 @@ index 5beff41a164..03856fb4b45 100644
  
 +    char str[64];
 +
-     TRACE( "%p %s %#x\n", manager, debugstr_w(name), access );
+     TRACE( "%p %s %#lx\n", manager, debugstr_w(name), access );
  
      if (!manager)
 @@ -324,6 +326,14 @@ SC_HANDLE WINAPI DECLSPEC_HOTPATCH OpenServiceW( SC_HANDLE manager, const WCHAR
@@ -370,7 +370,7 @@ index 5beff41a164..03856fb4b45 100644
  
 +    char str[64];
 +
-     TRACE( "%p %d %p %d %p\n", service, level, buffer, size, ret_size );
+     TRACE( "%p %d %p %ld %p\n", service, level, buffer, size, ret_size );
  
      if (level != SC_STATUS_PROCESS_INFO) return set_error( ERROR_INVALID_LEVEL );
 @@ -1118,6 +1130,24 @@ BOOL WINAPI DECLSPEC_HOTPATCH QueryServiceStatusEx( SC_HANDLE service, SC_STATUS

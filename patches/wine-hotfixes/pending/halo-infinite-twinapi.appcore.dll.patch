@@ -1,4 +1,97 @@
-From 29fe2090b64f9f6d3ffd8c2cb4f3a514fe646f9c Mon Sep 17 00:00:00 2001
+From 1d0ba2bd205ecff473b253135147719046c692ca Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 2 Nov 2021 18:20:25 -0700
+Subject: [PATCH] xinputuap.dll: Add DLL.
+
+Based on a patch by Yusuf Khan <yusisamerican@gmail.com>.
+
+CW-Bug-Id: #19649
+
+For Halo Infinite.
+---
+ configure.ac                  |  1 +
+ dlls/xinputuap/Makefile.in    |  8 ++++++++
+ dlls/xinputuap/version.rc     | 27 +++++++++++++++++++++++++++
+ dlls/xinputuap/xinputuap.spec |  8 ++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 dlls/xinputuap/Makefile.in
+ create mode 100644 dlls/xinputuap/version.rc
+ create mode 100644 dlls/xinputuap/xinputuap.spec
+
+diff --git a/configure.ac b/configure.ac
+index ea5f35d6a7d..43a9e7946b1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3524,6 +3524,7 @@ WINE_CONFIG_MAKEFILE(dlls/xinput1_3)
+ WINE_CONFIG_MAKEFILE(dlls/xinput1_3/tests)
+ WINE_CONFIG_MAKEFILE(dlls/xinput1_4)
+ WINE_CONFIG_MAKEFILE(dlls/xinput9_1_0)
++WINE_CONFIG_MAKEFILE(dlls/xinputuap)
+ WINE_CONFIG_MAKEFILE(dlls/xmllite)
+ WINE_CONFIG_MAKEFILE(dlls/xmllite/tests)
+ WINE_CONFIG_MAKEFILE(dlls/xolehlp)
+diff --git a/dlls/xinputuap/Makefile.in b/dlls/xinputuap/Makefile.in
+new file mode 100644
+index 00000000000..5d311fe7c31
+--- /dev/null
++++ b/dlls/xinputuap/Makefile.in
+@@ -0,0 +1,8 @@
++MODULE    = xinputuap.dll
++IMPORTS   = hid setupapi advapi32 user32
++PARENTSRC = ../xinput1_3
++
++C_SRCS = \
++	main.c
++
++RC_SRCS = version.rc
+diff --git a/dlls/xinputuap/version.rc b/dlls/xinputuap/version.rc
+new file mode 100644
+index 00000000000..f16ae7b6880
+--- /dev/null
++++ b/dlls/xinputuap/version.rc
+@@ -0,0 +1,27 @@
++/*
++ * The Wine project - Xinput Joystick Library
++ * Copyright 2021 Yusuf Khan
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#define WINE_FILEDESCRIPTION_STR "Wine Common Controller API"
++#define WINE_FILENAME_STR "xinputuap.dll"
++#define WINE_FILEVERSION 10,0,14393,0000
++#define WINE_FILEVERSION_STR "10.0.14393.0000"
++#define WINE_PRODUCTVERSION 10,0,14393,0000
++#define WINE_PRODUCTVERSION_STR "10.0"
++
++#include "wine/wine_common_ver.rc"
+diff --git a/dlls/xinputuap/xinputuap.spec b/dlls/xinputuap/xinputuap.spec
+new file mode 100644
+index 00000000000..6ecf5415b91
+--- /dev/null
++++ b/dlls/xinputuap/xinputuap.spec
+@@ -0,0 +1,8 @@
++1 stdcall -private DllMain(long long ptr)
++2 stdcall XInputGetState(long ptr)
++3 stdcall XInputSetState(long ptr)
++4 stdcall XInputGetCapabilities(long long ptr)
++5 stdcall XInputEnable(long)
++7 stdcall XInputGetBatteryInformation(long long ptr)
++8 stdcall XInputGetKeystroke(long long ptr)
++100 stdcall XInputGetStateEx(long ptr)
+From df886d4729dbcd691bf425ed1929d43f9f897b0e Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Wed, 17 Nov 2021 19:34:29 +0300
 Subject: [PATCH] twinapi.appcore.dll: Stub DLL.
@@ -6,19 +99,19 @@ Subject: [PATCH] twinapi.appcore.dll: Stub DLL.
 CW-Bug-Id: #19649
 ---
  configure.ac                                  |   1 +
- dlls/twinapi.appcore.dll/Makefile.in          |   7 +
+ dlls/twinapi.appcore.dll/Makefile.in          |   5 +
  dlls/twinapi.appcore.dll/main.c               | 157 ++++++++++++++++++
  dlls/twinapi.appcore.dll/twinapi.appcore.spec |   3 +
- 4 files changed, 168 insertions(+)
+ 4 files changed, 166 insertions(+)
  create mode 100644 dlls/twinapi.appcore.dll/Makefile.in
  create mode 100644 dlls/twinapi.appcore.dll/main.c
  create mode 100644 dlls/twinapi.appcore.dll/twinapi.appcore.spec
 
 diff --git a/configure.ac b/configure.ac
-index f2eca0c3ce5..b0d9b08fda3 100644
+index 43a9e7946b1..9122a72353e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -3784,6 +3784,7 @@ WINE_CONFIG_MAKEFILE(dlls/twain.dll16,enable_win16)
+@@ -3318,6 +3318,7 @@ WINE_CONFIG_MAKEFILE(dlls/twain.dll16,enable_win16)
  WINE_CONFIG_MAKEFILE(dlls/twain_32)
  WINE_CONFIG_MAKEFILE(dlls/twain_32/tests)
  WINE_CONFIG_MAKEFILE(dlls/typelib.dll16,enable_win16)
@@ -28,14 +121,12 @@ index f2eca0c3ce5..b0d9b08fda3 100644
  WINE_CONFIG_MAKEFILE(dlls/ucrtbase/tests)
 diff --git a/dlls/twinapi.appcore.dll/Makefile.in b/dlls/twinapi.appcore.dll/Makefile.in
 new file mode 100644
-index 00000000000..0f798e15225
+index 00000000000..b96bd5ff03e
 --- /dev/null
 +++ b/dlls/twinapi.appcore.dll/Makefile.in
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,5 @@
 +MODULE = twinapi.appcore.dll
 +IMPORTS = combase
-+
-+EXTRADLLFLAGS = -mno-cygwin
 +
 +C_SRCS = \
 +       main.c
@@ -211,7 +302,7 @@ index 00000000000..721493229c2
 +1 stdcall -private DllCanUnloadNow()
 +2 stdcall -private DllGetActivationFactory(ptr ptr)
 +3 stdcall -private DllGetClassObject(ptr ptr ptr)
-From 1127d223c0ce8f1cf43fd44db21316ccb9b28cf2 Mon Sep 17 00:00:00 2001
+From f7483da74b31cb8fb43cfdb7b7aab7b9c5fe92af Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Wed, 17 Nov 2021 22:34:20 +0300
 Subject: [PATCH] twinapi.appcore.dll: Stub implement
@@ -229,11 +320,11 @@ CW-Bug-Id: #19649
  create mode 100644 include/windows.security.exchangeactivesyncprovisioning.idl
 
 diff --git a/dlls/twinapi.appcore.dll/Makefile.in b/dlls/twinapi.appcore.dll/Makefile.in
-index 0f798e15225..9897089b0fa 100644
+index b96bd5ff03e..f7acd8eae2c 100644
 --- a/dlls/twinapi.appcore.dll/Makefile.in
 +++ b/dlls/twinapi.appcore.dll/Makefile.in
-@@ -5,3 +5,5 @@ EXTRADLLFLAGS = -mno-cygwin
- 
+@@ -3,3 +3,5 @@ IMPORTS = combase
+
  C_SRCS = \
         main.c
 +
@@ -272,17 +363,17 @@ index 9de8b65f945..3842e36153c 100644
 --- a/dlls/twinapi.appcore.dll/main.c
 +++ b/dlls/twinapi.appcore.dll/main.c
 @@ -28,7 +28,11 @@
- 
+
  #include "activation.h"
- 
+
 +#define WIDL_using_Windows_Foundation
 +#define WIDL_using_Windows_Foundation_Collections
  #include "windows.foundation.h"
 +#define WIDL_using_Windows_Security_ExchangeActiveSyncProvisioning
 +#include "windows.security.exchangeactivesyncprovisioning.h"
- 
+
  WINE_DEFAULT_DEBUG_CHANNEL(twinapi);
- 
+
 @@ -44,9 +48,15 @@ static const char *debugstr_hstring(HSTRING hstr)
  struct twinapi_appcore
  {
@@ -290,7 +381,7 @@ index 9de8b65f945..3842e36153c 100644
 +    IEasClientDeviceInformation IEasClientDeviceInformation_iface;
      LONG ref;
  };
- 
+
 +static inline struct twinapi_appcore *impl_from_IEasClientDeviceInformation(IEasClientDeviceInformation *iface)
 +{
 +    return CONTAINING_RECORD(iface, struct twinapi_appcore, IEasClientDeviceInformation_iface);
@@ -306,12 +397,12 @@ index 9de8b65f945..3842e36153c 100644
 +    struct twinapi_appcore *impl = impl_from_IActivationFactory(iface);
 +
      TRACE("iface %p, iid %s, out %p stub!\n", iface, debugstr_guid(iid), out);
- 
+
      if (IsEqualGUID(iid, &IID_IUnknown) ||
 @@ -67,6 +79,13 @@ static HRESULT STDMETHODCALLTYPE twinapi_appcore_QueryInterface(
          return S_OK;
      }
- 
+
 +    if (IsEqualGUID(iid, &IID_IEasClientDeviceInformation))
 +    {
 +        IUnknown_AddRef(iface);
@@ -335,12 +426,12 @@ index 9de8b65f945..3842e36153c 100644
 +
 +    return S_OK;
  }
- 
+
  static const struct IActivationFactoryVtbl activation_factory_vtbl =
 @@ -131,9 +154,124 @@ static const struct IActivationFactoryVtbl activation_factory_vtbl =
      twinapi_appcore_ActivateInstance,
  };
- 
+
 +static HRESULT WINAPI eas_client_devinfo_QueryInterface(IEasClientDeviceInformation *iface,
 +        REFIID riid, void **ppvObject)
 +{
@@ -461,7 +552,7 @@ index 9de8b65f945..3842e36153c 100644
 +    {&eas_client_devinfo_vtbl},
      1
  };
- 
+
 diff --git a/include/Makefile.in b/include/Makefile.in
 index b1087f2ec9d..db0625eaf3b 100644
 --- a/include/Makefile.in
@@ -541,123 +632,3 @@ index 00000000000..1b2a743b057
 +       }
 +    }
 +}
-From: Yusuf Khan <yusisamerican@gmail.com>
-Subject: [PATCH] add xinputuap.dll(fixed)
-Message-Id: <CAJoG2+9LfzzX11n784pcoOsu9B0zO4_obeQVz+EzrtQiv+cHLg@mail.gmail.com>
-Date: Tue, 2 Nov 2021 18:20:25 -0700
-
-From c1a0af569a63d97a0298b8846f25ba79e55b213c Mon Sep 17 00:00:00 2001
-From: Yusuf Khan <yusisamerican@gmail.com>
-Date: Tue, 2 Nov 2021 18:16:56 -0700
-Subject: [PATCH] xinput: Add xinputuap.dll
-
-On certain application regarding controllers, including this
-dll will allow the applications to boot.
-
-Note: in the version.rc file I do not know if I should
-credit myself.
-
-Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
----
-v2:modify configure.ac
-v3:not include 6.19 -> 6.20 upgrade
- configure                     |  2 ++
- configure.ac                  |  1 +
- dlls/xinputuap/Makefile.in    |  8 ++++++++
- dlls/xinputuap/version.rc     | 27 +++++++++++++++++++++++++++
- dlls/xinputuap/xinputuap.spec |  1 +
- 5 files changed, 39 insertions(+)
- create mode 100644 dlls/xinputuap/Makefile.in
- create mode 100644 dlls/xinputuap/version.rc
- create mode 100644 dlls/xinputuap/xinputuap.spec
-
-diff --git a/configure b/configure
-index 389b83e931e..eb5602481cc 100755
---- a/configure
-+++ b/configure
-@@ -1769,6 +1769,7 @@ enable_xinput1_2
- enable_xinput1_3
- enable_xinput1_4
- enable_xinput9_1_0
-+enable_xinputuap
- enable_xmllite
- enable_xolehlp
- enable_xpsprint
-@@ -19894,6 +19895,7 @@ wine_fn_config_makefile dlls/xinput1_3 enable_xinput1_3
- wine_fn_config_makefile dlls/xinput1_3/tests enable_tests
- wine_fn_config_makefile dlls/xinput1_4 enable_xinput1_4
- wine_fn_config_makefile dlls/xinput9_1_0 enable_xinput9_1_0
-+wine_fn_config_makefile dlls/xinputuap enable_xinputuap
- wine_fn_config_makefile dlls/xmllite enable_xmllite
- wine_fn_config_makefile dlls/xmllite/tests enable_tests
- wine_fn_config_makefile dlls/xolehlp enable_xolehlp
-diff --git a/configure.ac b/configure.ac
-index 0dbf7365714..a83ec7526e1 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -3605,6 +3605,7 @@ WINE_CONFIG_MAKEFILE(dlls/xinput1_3)
- WINE_CONFIG_MAKEFILE(dlls/xinput1_3/tests)
- WINE_CONFIG_MAKEFILE(dlls/xinput1_4)
- WINE_CONFIG_MAKEFILE(dlls/xinput9_1_0)
-+WINE_CONFIG_MAKEFILE(dlls/xinputuap)
- WINE_CONFIG_MAKEFILE(dlls/xmllite)
- WINE_CONFIG_MAKEFILE(dlls/xmllite/tests)
- WINE_CONFIG_MAKEFILE(dlls/xolehlp)
-diff --git a/dlls/xinputuap/Makefile.in b/dlls/xinputuap/Makefile.in
-new file mode 100644
-index 00000000000..5d311fe7c31
---- /dev/null
-+++ b/dlls/xinputuap/Makefile.in
-@@ -0,0 +1,8 @@
-+MODULE    = xinputuap.dll
-+IMPORTS   = hid setupapi advapi32 user32
-+PARENTSRC = ../xinput1_3
-+
-+C_SRCS = \
-+	main.c
-+
-+RC_SRCS = version.rc
-diff --git a/dlls/xinputuap/version.rc b/dlls/xinputuap/version.rc
-new file mode 100644
-index 00000000000..f16ae7b6880
---- /dev/null
-+++ b/dlls/xinputuap/version.rc
-@@ -0,0 +1,27 @@
-+/*
-+ * The Wine project - Xinput Joystick Library
-+ * Copyright 2021 Yusuf Khan
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-+ */
-+
-+#define WINE_FILEDESCRIPTION_STR "Wine Common Controller API"
-+#define WINE_FILENAME_STR "xinputuap.dll"
-+#define WINE_FILEVERSION 10,0,14393,0000
-+#define WINE_FILEVERSION_STR "10.0.14393.0000"
-+#define WINE_PRODUCTVERSION 10,0,14393,0000
-+#define WINE_PRODUCTVERSION_STR "10.0"
-+
-+#include "wine/wine_common_ver.rc"
-diff --git a/dlls/xinputuap/xinputuap.spec b/dlls/xinputuap/xinputuap.spec
-new file mode 100644
-index 00000000000..1f2ae5bc251
---- /dev/null
-+++ b/dlls/xinputuap/xinputuap.spec
-@@ -0,0 +1 @@
-+@ stdcall XInputGetState(long ptr)
-
---
-2.31.1
-

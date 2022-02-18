@@ -1364,15 +1364,14 @@ index 0a18d909c5e..4bd32d95cda 100644
  struct wined3d_device
  {
      LONG ref;
-@@ -3842,6 +3850,8 @@ struct wined3d_device
-     /* Context management */
+@@ -4000,6 +4000,7 @@ struct wined3d_device
      struct wined3d_context **contexts;
      UINT context_count;
-+
+
 +    struct wined3d_vr_gl_context vr_context;
+     CRITICAL_SECTION bo_map_lock;
  };
 
- void wined3d_device_cleanup(struct wined3d_device *device) DECLSPEC_HIDDEN;
 @@ -4768,6 +4778,11 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
  void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
          wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;

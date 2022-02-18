@@ -323,9 +323,9 @@ diff --git a/dlls/user32/win.c b/dlls/user32/win.c
 index 610dc7857b4..cb5b0465f68 100644
 --- a/dlls/user32/win.c
 +++ b/dlls/user32/win.c
-@@ -45,6 +45,15 @@ static DWORD process_layout = ~0u;
+@@ -41,6 +41,14 @@ WINE_DEFAULT_DEBUG_CHANNEL(win);
 
- static struct list window_surfaces = LIST_INIT( window_surfaces );
+ static DWORD process_layout = ~0u;
 
 +static CRITICAL_SECTION desktop_section;
 +static CRITICAL_SECTION_DEBUG desktop_critsect_debug =
@@ -335,10 +335,9 @@ index 610dc7857b4..cb5b0465f68 100644
 +      0, 0, { (DWORD_PTR)(__FILE__ ": desktop_section") }
 +};
 +static CRITICAL_SECTION desktop_section = { &desktop_critsect_debug, -1, 0, 0, 0, 0 };
-+
- static CRITICAL_SECTION surfaces_section;
- static CRITICAL_SECTION_DEBUG critsect_debug =
- {
+
+ /**********************************************************************/
+
 @@ -2098,6 +2107,7 @@ HWND WINAPI GetDesktopWindow(void)
          WCHAR app[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe" )];
          WCHAR cmdline[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe /desktop" )];

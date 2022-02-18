@@ -1086,7 +1086,7 @@ index 159797020f2..e8a31100646 100644
 +        if (!lres && GetLastError() == ERROR_TIMEOUT)
 +        {
 +            TRACE("Hook %p timed out; removing it.\n", info->handle);
-+            UnhookWindowsHookEx( info->handle );
++            NtUserUnhookWindowsHookEx( info->handle );
 +        }
      }
      else if (info->proc)

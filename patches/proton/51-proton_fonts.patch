@@ -363,7 +363,7 @@ index 097b7b26596..df68ba869b4 100644
 
      hr = fallback_map_characters(*mapped_font, text, length, mapped_length);
 -    if (FAILED(hr))
--        WARN("Mapping with fallback family %s failed, hr %#x.\n", debugstr_w(mapping->families[i]), hr);
+-        WARN("Mapping with fallback family %s failed, hr %#lx.\n", debugstr_w(mapping->families[i]), hr);
 
      if (!*mapped_length) {
 +        WARN("Mapping with fallback family %s failed.\n", debugstr_w(mapping->families[i]));
