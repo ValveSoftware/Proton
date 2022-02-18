@@ -685,17 +685,6 @@ $(eval $(call rules-meson,gst_ugly,32))
 $(eval $(call rules-meson,gst_ugly,64))
 
 ##
-## FAudio
-##
-
-FAUDIO_CMAKE_ARGS = -DGSTREAMER=ON -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DXNASONG=OFF
-FAUDIO_DEPENDS = gst_orc gstreamer gst_base
-
-$(eval $(call rules-source,faudio,$(SRCDIR)/FAudio))
-$(eval $(call rules-cmake,faudio,32))
-$(eval $(call rules-cmake,faudio,64))
-
-##
 ## Vulkan-Headers
 ##
 
