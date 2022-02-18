@@ -399,3 +399,27 @@ index 5beff41a164..03856fb4b45 100644
      {
          err = svcctl_QueryServiceStatusEx( service, level, buffer, size, ret_size );
 
+From 0de1a4cb50828f0867253d2fb3d6d679d4b8a39d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 15 Feb 2022 10:56:31 +0100
+Subject: [PATCH] fixup! battleye: Add launcher process instead of redirecting
+ CreateProcess call.
+
+---
+ programs/belauncher/main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/programs/belauncher/main.c b/programs/belauncher/main.c
+index 0f727f3ca7d..86ec46ecee4 100644
+--- a/programs/belauncher/main.c
++++ b/programs/belauncher/main.c
+@@ -73,7 +73,8 @@ int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR cmdline, int cm
+         *(strchr(game_exe, '\n')) = 0;
+     game_exe_len = MultiByteToWideChar(CP_ACP, 0, game_exe, -1, NULL, 0) - 1;
+
+-    if (be_arg)
++    if (!be_arg) arg_len = 0;
++    else
+     {
+         if (strchr(be_arg, '\r'))
+             *(strchr(be_arg, '\r')) = 0;
