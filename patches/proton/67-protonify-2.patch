@@ -4887,3 +4887,518 @@ index 42c3f0684cc..3c78efcc134 100644
              sock->addr_len = sockaddr_from_unix( &unix_addr, &sock->addr.addr, sizeof(sock->addr) );
          sock->bound = 1;
 
+From 3244ba9966c0e7bcd445a65b5c325801f9b77131 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 5 Jan 2022 13:31:14 +0300
+Subject: [PATCH] audioses: Add stub dll.
+
+CW-Bug-Id: #19918
+---
+ configure.ac                |  1 +
+ dlls/audioses/Makefile.in   |  1 +
+ dlls/audioses/audioses.spec | 11 +++++++++++
+ 3 files changed, 13 insertions(+)
+ create mode 100644 dlls/audioses/Makefile.in
+ create mode 100644 dlls/audioses/audioses.spec
+
+diff --git a/configure.ac b/configure.ac
+index f37f4e02324..95f9a35bf7f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2625,6 +2625,7 @@ WINE_CONFIG_MAKEFILE(dlls/atl90)
+ WINE_CONFIG_MAKEFILE(dlls/atlthunk)
+ WINE_CONFIG_MAKEFILE(dlls/atlthunk/tests)
+ WINE_CONFIG_MAKEFILE(dlls/atmlib)
++WINE_CONFIG_MAKEFILE(dlls/audioses)
+ WINE_CONFIG_MAKEFILE(dlls/authz)
+ WINE_CONFIG_MAKEFILE(dlls/avicap32)
+ WINE_CONFIG_MAKEFILE(dlls/avifil32)
+diff --git a/dlls/audioses/Makefile.in b/dlls/audioses/Makefile.in
+new file mode 100644
+index 00000000000..370949ea4fe
+--- /dev/null
++++ b/dlls/audioses/Makefile.in
+@@ -0,0 +1 @@
++MODULE    = audioses.dll
+diff --git a/dlls/audioses/audioses.spec b/dlls/audioses/audioses.spec
+new file mode 100644
+index 00000000000..a1884e53243
+--- /dev/null
++++ b/dlls/audioses/audioses.spec
+@@ -0,0 +1,11 @@
++# @ stub AUDIOSES_1
++# @ stub AUDIOSES_2
++# @ stub AUDIOSES_3
++# @ stub AUDIOSES_4
++# @ stub AUDIOSES_5
++# @ stub DllCanUnloadNow
++# @ stub AUDIOSES_7
++# @ stub DllGetActivationFactory
++# @ stub DllGetClassObject
++# @ stub DllRegisterServer
++# @ stub DllUnregisterServer
+From 21ca36991c672528f8e0b3627a180d2049910bd6 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 7 Jan 2022 23:54:20 +0300
+Subject: [PATCH] mshtml: Also call before_async_open() for iframe in
+ nsChannel_AsyncOpen().
+
+CW-Bug-Id: #19930
+---
+ dlls/ieframe/tests/webbrowser.c | 144 +++++++++++++++++++++++++++-----
+ dlls/mshtml/nsio.c              |  65 ++++++++++++++
+ 2 files changed, 188 insertions(+), 21 deletions(-)
+
+diff --git a/dlls/ieframe/tests/webbrowser.c b/dlls/ieframe/tests/webbrowser.c
+index 864a8baf27f..d8587216550 100644
+--- a/dlls/ieframe/tests/webbrowser.c
++++ b/dlls/ieframe/tests/webbrowser.c
+@@ -172,6 +172,7 @@ static HRESULT hr_site_TranslateAccelerator = E_NOTIMPL;
+ static const WCHAR *current_url;
+ static int wb_version, expect_update_commands_enable, set_update_commands_enable;
+ static BOOL nav_back_todo, nav_forward_todo; /* FIXME */
++static BOOL navigation_cancelled;
+
+ enum SessionOp
+ {
+@@ -191,6 +192,8 @@ static LONG (WINAPI *pSetQueryNetSessionCount)(DWORD);
+ #define DWL_HTTP                    0x10
+ #define DWL_REFRESH                 0x20
+ #define DWL_BACK_ENABLE             0x40
++#define DWL_IFRAME_NAV_CANCEL       0x80
++#define DWL_FROM_IFRAME_NAV_CANCEL 0x100
+
+ static DWORD dwl_flags;
+
+@@ -290,6 +293,8 @@ static void _test_ready_state(unsigned line, READYSTATE exstate, VARIANT_BOOL ex
+     hres = IWebBrowser2_get_Busy(wb, &busy);
+     if(expect_busy != BUSY_FAIL) {
+         ok_(__FILE__,line)(hres == S_OK, "get_ReadyState failed: %08x\n", hres);
++        todo_wine_if(dwl_flags & DWL_FROM_IFRAME_NAV_CANCEL && state == READYSTATE_LOADING
++                && busy != expect_busy)
+         ok_(__FILE__,line)(busy == expect_busy, "Busy = %x, expected %x for ready state %d\n",
+                            busy, expect_busy, state);
+     }else {
+@@ -415,13 +420,13 @@ static HRESULT WINAPI OleCommandTarget_Exec(IOleCommandTarget *iface, const GUID
+                 ok(nCmdexecopt == OLECMDEXECOPT_DONTPROMPTUSER || !nCmdexecopt,
+                    "nCmdexecopts=%08x\n", nCmdexecopt);
+             else
+-                ok(!nCmdexecopt, "nCmdexecopts=%08x\n", nCmdexecopt);
++                todo_wine_if(dwl_flags & DWL_IFRAME_NAV_CANCEL) ok(!nCmdexecopt, "nCmdexecopts=%08x\n", nCmdexecopt);
+             ok(pvaOut == NULL, "pvaOut=%p\n", pvaOut);
+             ok(pvaIn != NULL, "pvaIn == NULL\n");
+             ok(V_VT(pvaIn) == VT_I4, "V_VT(pvaIn)=%d\n", V_VT(pvaIn));
+             switch(V_I4(pvaIn)) {
+             case 0:
+-                CHECK_EXPECT2(Exec_SETDOWNLOADSTATE_0);
++                todo_wine_if(dwl_flags & DWL_IFRAME_NAV_CANCEL) CHECK_EXPECT2(Exec_SETDOWNLOADSTATE_0);
+                 break;
+             case 1:
+                 CHECK_EXPECT2(Exec_SETDOWNLOADSTATE_1);
+@@ -480,6 +485,7 @@ static HRESULT WINAPI OleCommandTarget_Exec(IOleCommandTarget *iface, const GUID
+     }else if(IsEqualGUID(&CGID_ShellDocView, pguidCmdGroup)) {
+         switch(nCmdID) {
+         case 63: /* win10 */
++        case 65:
+         case 105: /* TODO */
+         case 132: /* win10 */
+         case 133: /* IE11 */
+@@ -719,11 +725,11 @@ static void _test_invoke_bool(unsigned line, const DISPPARAMS *params, BOOL stri
+ static void test_OnBeforeNavigate(const VARIANT *disp, const VARIANT *url, const VARIANT *flags,
+         const VARIANT *frame, const VARIANT *post_data, const VARIANT *headers, const VARIANT *cancel)
+ {
++    BOOL cancel_nav = FALSE;
+     BSTR str;
+
+     ok(V_VT(disp) == VT_DISPATCH, "V_VT(disp)=%d, expected VT_DISPATCH\n", V_VT(disp));
+     ok(V_DISPATCH(disp) != NULL, "V_DISPATCH(disp) == NULL\n");
+-    ok(V_DISPATCH(disp) == (IDispatch*)wb, "V_DISPATCH(disp)=%p, wb=%p\n", V_DISPATCH(disp), wb);
+
+     ok(V_VT(url) == (VT_BYREF|VT_VARIANT), "V_VT(url)=%x, expected VT_BYREF|VT_VARIANT\n", V_VT(url));
+     ok(V_VARIANTREF(url) != NULL, "V_VARIANTREF(url) == NULL)\n");
+@@ -731,10 +737,21 @@ static void test_OnBeforeNavigate(const VARIANT *disp, const VARIANT *url, const
+         ok(V_VT(V_VARIANTREF(url)) == VT_BSTR, "V_VT(V_VARIANTREF(url))=%d, expected VT_BSTR\n",
+            V_VT(V_VARIANTREF(url)));
+         ok(V_BSTR(V_VARIANTREF(url)) != NULL, "V_BSTR(V_VARIANTREF(url)) == NULL\n");
+-        ok(!lstrcmpW(V_BSTR(V_VARIANTREF(url)), current_url), "unexpected url %s, expected %s\n",
+-           wine_dbgstr_w(V_BSTR(V_VARIANTREF(url))), wine_dbgstr_w(current_url));
++        if (!wcscmp(V_BSTR(V_VARIANTREF(url)), L"invalid:///"))
++            cancel_nav = TRUE;
++        if (!(dwl_flags & DWL_IFRAME_NAV_CANCEL && cancel_nav))
++            ok(!lstrcmpW(V_BSTR(V_VARIANTREF(url)), current_url), "unexpected url %s, expected %s\n",
++                wine_dbgstr_w(V_BSTR(V_VARIANTREF(url))), wine_dbgstr_w(current_url));
+     }
+
++    if (dwl_flags & DWL_IFRAME_NAV_CANCEL && cancel_nav)
++    {
++        ok(!!V_DISPATCH(disp), "Got NULL disp.\n");
++        todo_wine ok(V_DISPATCH(disp) != (IDispatch*)wb, "Got the same browser.\n");
++    }
++    else
++        ok(V_DISPATCH(disp) == (IDispatch*)wb, "V_DISPATCH(disp)=%p, wb=%p\n", V_DISPATCH(disp), wb);
++
+     ok(V_VT(flags) == (VT_BYREF|VT_VARIANT), "V_VT(flags)=%x, expected VT_BYREF|VT_VARIANT\n",
+        V_VT(flags));
+     ok(V_VT(flags) == (VT_BYREF|VT_VARIANT), "V_VT(flags)=%x, expected VT_BYREF|VT_VARIANT\n",
+@@ -805,8 +822,15 @@ static void test_OnBeforeNavigate(const VARIANT *disp, const VARIANT *url, const
+        V_VT(cancel));
+     ok(V_BOOLREF(cancel) != NULL, "V_BOOLREF(pDispParams->rgvarg[0] == NULL)\n");
+     if(V_BOOLREF(cancel))
++    {
+         ok(*V_BOOLREF(cancel) == VARIANT_FALSE, "*V_BOOLREF(cancel) = %x, expected VARIANT_FALSE\n",
+            *V_BOOLREF(cancel));
++        if (cancel_nav)
++        {
++            *V_BOOLREF(cancel) = TRUE;
++            navigation_cancelled = TRUE;
++        }
++    }
+ }
+
+ static void test_navigatecomplete2(DISPPARAMS *dp)
+@@ -821,6 +845,7 @@ static void test_navigatecomplete2(DISPPARAMS *dp)
+     ok(V_VT(dp->rgvarg) == (VT_BYREF|VT_VARIANT), "V_VT(dp->rgvarg) = %d\n", V_VT(dp->rgvarg));
+     v = V_VARIANTREF(dp->rgvarg);
+     ok(V_VT(v) == VT_BSTR, "V_VT(url) = %d\n", V_VT(v));
++    todo_wine_if(!memcmp(V_BSTR(v), L"file:", 10))
+     ok(!lstrcmpW(V_BSTR(v), current_url), "url=%s, expected %s\n", wine_dbgstr_w(V_BSTR(v)),
+        wine_dbgstr_w(current_url));
+
+@@ -845,6 +870,8 @@ static void test_documentcomplete(DISPPARAMS *dp)
+     ok(V_VT(dp->rgvarg) == (VT_BYREF|VT_VARIANT), "V_VT(dp->rgvarg) = %d\n", V_VT(dp->rgvarg));
+     v = V_VARIANTREF(dp->rgvarg);
+     ok(V_VT(v) == VT_BSTR, "V_VT(url) = %d\n", V_VT(v));
++
++    todo_wine_if(!memcmp(V_BSTR(v), L"file:", 10))
+     ok(!lstrcmpW(V_BSTR(v), current_url), "url=%s, expected %s\n", wine_dbgstr_w(V_BSTR(v)),
+        wine_dbgstr_w(current_url));
+
+@@ -907,9 +934,19 @@ static HRESULT WINAPI WebBrowserEvents2_Invoke(IDispatch *iface, DISPID dispIdMe
+                               pDispParams->rgvarg+3, pDispParams->rgvarg+2, pDispParams->rgvarg+1,
+                               pDispParams->rgvarg);
+         if(dwl_flags & (DWL_FROM_PUT_HREF|DWL_FROM_GOFORWARD))
++        {
+             test_ready_state(READYSTATE_COMPLETE, VARIANT_FALSE);
++        }
++        else if (dwl_flags & DWL_IFRAME_NAV_CANCEL)
++        {
++            test_ready_state(READYSTATE_LOADING, navigation_cancelled ? VARIANT_TRUE : VARIANT_FALSE);
++            if (!navigation_cancelled)
++                SET_EXPECT(Invoke_BEFORENAVIGATE2);
++        }
+         else
+-            test_ready_state(READYSTATE_LOADING, VARIANT_FALSE);
++        {
++            test_ready_state(READYSTATE_LOADING, dwl_flags & DWL_FROM_IFRAME_NAV_CANCEL ? VARIANT_TRUE : VARIANT_FALSE);
++        }
+         break;
+
+     case DISPID_SETSECURELOCKICON:
+@@ -948,7 +985,7 @@ static HRESULT WINAPI WebBrowserEvents2_Invoke(IDispatch *iface, DISPID dispIdMe
+                     CHECK_EXPECT2(Invoke_COMMANDSTATECHANGE_NAVIGATEFORWARD_FALSE);
+             }
+         }
+-        else if (V_I4(pDispParams->rgvarg+1) == CSC_NAVIGATEBACK)
++        else if (V_I4(pDispParams->rgvarg+1) == CSC_NAVIGATEBACK && !(dwl_flags & DWL_FROM_IFRAME_NAV_CANCEL))
+         {
+             todo_wine_if(nav_back_todo) {
+                 if(V_BOOL(pDispParams->rgvarg))
+@@ -1681,6 +1718,8 @@ static HRESULT WINAPI DocHostUIHandler_TranslateUrl(IDocHostUIHandler2 *iface, D
+ {
+     todo_wine_if(is_downloading && !(dwl_flags & DWL_EXPECT_BEFORE_NAVIGATE))
+         CHECK_EXPECT(TranslateUrl);
++    if (dwl_flags & DWL_IFRAME_NAV_CANCEL && wcscmp(pchURLIn, L"invalid:///"))
++        SET_EXPECT(TranslateUrl);
+     return E_NOTIMPL;
+ }
+
+@@ -2814,12 +2853,16 @@ static void test_ConnectionPoint(IWebBrowser2 *unk, BOOL init)
+ static void test_Navigate2(IWebBrowser2 *webbrowser, const WCHAR *nav_url)
+ {
+     const WCHAR *title = L"WineHQ - Run Windows applications on Linux, BSD, Solaris and Mac OS X";
++    const WCHAR *file_title = L"wine_test";
+     VARIANT url;
+     BOOL is_file;
+     HRESULT hres;
+
+     test_LocationURL(webbrowser, is_first_load ? L"" : current_url);
+-    test_LocationName(webbrowser, is_first_load ? L"" : (is_http ? title : current_url));
++    if (current_url && !memcmp(current_url, L"file:", 10))
++        test_LocationName(webbrowser, file_title);
++    else
++        test_LocationName(webbrowser, is_first_load ? L"" : (is_http ? title : current_url));
+     test_ready_state(is_first_load ? READYSTATE_UNINITIALIZED : READYSTATE_COMPLETE, VARIANT_FALSE);
+
+     is_http = !memcmp(nav_url, "http:", 5);
+@@ -2990,6 +3033,8 @@ static void test_download(DWORD flags)
+     BOOL *b = &called_Invoke_DOCUMENTCOMPLETE;
+     MSG msg;
+
++    navigation_cancelled = FALSE;
++
+     if(flags & DWL_REFRESH)
+         b = use_container_olecmd ? &called_Exec_SETDOWNLOADSTATE_0 : &called_Invoke_DOWNLOADCOMPLETE;
+     else if((flags & DWL_FROM_PUT_HREF) && !use_container_olecmd && 0)
+@@ -3001,8 +3046,9 @@ static void test_download(DWORD flags)
+     if(flags & (DWL_FROM_PUT_HREF|DWL_FROM_GOBACK|DWL_FROM_GOFORWARD|DWL_REFRESH))
+         test_ready_state(READYSTATE_COMPLETE, VARIANT_FALSE);
+     else
+-        test_ready_state(READYSTATE_LOADING, VARIANT_FALSE);
+-
++    {
++        test_ready_state(READYSTATE_LOADING, flags & DWL_FROM_IFRAME_NAV_CANCEL ? VARIANT_TRUE : VARIANT_FALSE);
++    }
+     if(flags & (DWL_EXPECT_BEFORE_NAVIGATE|(is_http ? DWL_FROM_PUT_HREF : 0)|DWL_FROM_GOFORWARD|DWL_REFRESH))
+         SET_EXPECT(Invoke_PROPERTYCHANGE);
+
+@@ -3065,7 +3111,7 @@ static void test_download(DWORD flags)
+     SET_EXPECT(GetOverridesKeyPath); /* Called randomly on some VMs. */
+
+     trace("Downloading...\n");
+-    while(!*b && GetMessageW(&msg, NULL, 0, 0)) {
++    while(!navigation_cancelled && !*b && GetMessageW(&msg, NULL, 0, 0)) {
+         TranslateMessage(&msg);
+         DispatchMessageW(&msg);
+     }
+@@ -3096,11 +3142,14 @@ static void test_download(DWORD flags)
+         CLEAR_CALLED(EnableModeless_FALSE); /* IE 8 */
+
+     if(!(flags & DWL_REFRESH)) {
+-        todo_wine_if(nav_back_todo) {
+-            if(flags & (DWL_FROM_GOFORWARD|DWL_BACK_ENABLE))
+-                CHECK_CALLED(Invoke_COMMANDSTATECHANGE_NAVIGATEBACK_TRUE);
+-            else
+-                CHECK_CALLED(Invoke_COMMANDSTATECHANGE_NAVIGATEBACK_FALSE);
++        if (!(flags & DWL_FROM_IFRAME_NAV_CANCEL))
++        {
++            todo_wine_if(nav_back_todo) {
++                if(flags & (DWL_FROM_GOFORWARD|DWL_BACK_ENABLE))
++                    CHECK_CALLED(Invoke_COMMANDSTATECHANGE_NAVIGATEBACK_TRUE);
++                else
++                    CHECK_CALLED(Invoke_COMMANDSTATECHANGE_NAVIGATEBACK_FALSE);
++            }
+         }
+         if(flags & DWL_FROM_GOBACK)
+             CHECK_CALLED(Invoke_COMMANDSTATECHANGE_NAVIGATEFORWARD_TRUE);
+@@ -3117,20 +3166,26 @@ static void test_download(DWORD flags)
+     if(!is_first_load)
+         todo_wine CHECK_CALLED(GetHostInfo);
+     if(use_container_olecmd)
+-        CHECK_CALLED(Exec_SETDOWNLOADSTATE_0);
++        todo_wine_if(flags & DWL_IFRAME_NAV_CANCEL) CHECK_CALLED(Exec_SETDOWNLOADSTATE_0);
+     else
+-        CHECK_CALLED(Invoke_DOWNLOADCOMPLETE);
++        todo_wine_if(flags & DWL_IFRAME_NAV_CANCEL) CHECK_CALLED(Invoke_DOWNLOADCOMPLETE);
+     todo_wine CHECK_CALLED(Invoke_TITLECHANGE);
+     if(!(flags & DWL_REFRESH))
+         CHECK_CALLED(Invoke_NAVIGATECOMPLETE2);
+     if(is_first_load)
+         todo_wine CHECK_CALLED(GetDropTarget);
+-    if(!(flags & DWL_REFRESH))
++    if(!(flags & (DWL_REFRESH | DWL_IFRAME_NAV_CANCEL)))
+         CHECK_CALLED(Invoke_DOCUMENTCOMPLETE);
+
+     is_downloading = FALSE;
+
+-    test_ready_state(READYSTATE_COMPLETE, VARIANT_FALSE);
++    if (flags & DWL_IFRAME_NAV_CANCEL)
++    {
++        test_ready_state(READYSTATE_INTERACTIVE, VARIANT_TRUE);
++        SET_EXPECT(Invoke_TITLECHANGE);
++    }
++    else
++        test_ready_state(READYSTATE_COMPLETE, VARIANT_FALSE);
+
+     while(use_container_olecmd && !called_Exec_UPDATECOMMANDS && GetMessageA(&msg, NULL, 0, 0)) {
+         TranslateMessage(&msg);
+@@ -3840,6 +3895,51 @@ static void init_test(IWebBrowser2 *webbrowser, DWORD flags)
+     use_container_dochostui = !(flags & TEST_NODOCHOST);
+ }
+
++static const char iframe_doc_str[] =
++    "<html><body><iframe id=\"ifr\" src=\"invalid://\">Testing</iframe></body></html>";
++
++static void test_iframe_load(IWebBrowser2 *webbrowser)
++{
++    WCHAR file_path[MAX_PATH];
++    WCHAR file_url[MAX_PATH];
++    HRESULT hres;
++    HANDLE file;
++    VARIANT url;
++    DWORD size;
++    BOOL bret;
++
++    GetTempPathW(MAX_PATH, file_path);
++    lstrcatW(file_path, L"wine_ifr_test.html");
++
++    file = CreateFileW(file_path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
++    ok(file != INVALID_HANDLE_VALUE, "CreateFile failed, error %u.\n", GetLastError());
++    if(file == INVALID_HANDLE_VALUE && GetLastError() != ERROR_FILE_EXISTS){
++        ok(0, "CreateFile failed\n");
++        return;
++    }
++    WriteFile(file, iframe_doc_str, strlen(iframe_doc_str), &size, NULL);
++    CloseHandle(file);
++
++    GetLongPathNameW(file_path, file_path, ARRAY_SIZE(file_path));
++    lstrcpyW(file_url, L"file://");
++    lstrcatW(file_url, file_path);
++
++    trace("iframe load...\n");
++    test_Navigate2(webbrowser, file_url);
++    test_download(DWL_EXPECT_BEFORE_NAVIGATE|DWL_IFRAME_NAV_CANCEL|DWL_BACK_ENABLE);
++
++    V_VT(&url) = VT_BSTR;
++    V_BSTR(&url) = SysAllocString(current_url = L"about:blank");
++    hres = IWebBrowser2_Navigate2(webbrowser, &url, NULL, NULL, NULL, NULL);
++    ok(hres == S_OK, "Navigate2 failed: %08x\n", hres);
++    VariantClear(&url);
++
++    test_download(DWL_EXPECT_BEFORE_NAVIGATE|DWL_FROM_IFRAME_NAV_CANCEL);
++
++    bret = DeleteFileW(file_path);
++    ok(bret, "DeleteFileW failed, err %u.\n", GetLastError());
++}
++
+ static void test_WebBrowser(DWORD flags, BOOL do_close)
+ {
+     IWebBrowser2 *webbrowser;
+@@ -3868,6 +3968,7 @@ static void test_WebBrowser(DWORD flags, BOOL do_close)
+     test_LocationURL(webbrowser, L"");
+     test_ConnectionPoint(webbrowser, TRUE);
+
++
+     test_ClientSite(webbrowser, &ClientSite, !do_download);
+     test_Extent(webbrowser);
+     test_wb_funcs(webbrowser, TRUE);
+@@ -3934,6 +4035,8 @@ static void test_WebBrowser(DWORD flags, BOOL do_close)
+             trace("GoForward...\n");
+             test_go_forward(webbrowser, L"http://test.winehq.org/tests/winehq_snapshot/", -1, 0);
+             test_download(DWL_FROM_GOFORWARD|DWL_HTTP);
++            if (!(flags & TEST_NOOLECMD))
++                test_iframe_load(webbrowser);
+         }else {
+             trace("Navigate2 repeated with the same URL...\n");
+             test_Navigate2(webbrowser, L"about:blank");
+@@ -3942,7 +4045,6 @@ static void test_WebBrowser(DWORD flags, BOOL do_close)
+
+         test_EnumVerbs(webbrowser);
+         test_TranslateAccelerator(webbrowser);
+-
+         test_dochost_qs(webbrowser);
+     }else {
+         test_ExecWB(webbrowser, TRUE);
+diff --git a/dlls/mshtml/nsio.c b/dlls/mshtml/nsio.c
+index f921acf4dce..61587570678 100644
+--- a/dlls/mshtml/nsio.c
++++ b/dlls/mshtml/nsio.c
+@@ -275,6 +275,50 @@ static nsresult before_async_open(nsChannel *channel, GeckoBrowser *container, B
+     return NS_OK;
+ }
+
++static nsresult fire_before_navigate(nsChannel *channel, HTMLOuterWindow *window, BOOL *cancel)
++{
++    BSTR frame_name = NULL;
++    OLECHAR *new_url;
++    BSTR uri_str;
++    HRESULT hres;
++
++    hres = IUri_GetDisplayUri(channel->uri->uri, &uri_str);
++    if(FAILED(hres))
++    {
++        ERR("IUri_GetDisplayUri failed, hres %#x.\n", hres);
++        return NS_ERROR_FAILURE;
++    }
++    if(window->browser->doc->hostui)
++    {
++        hres = IDocHostUIHandler_TranslateUrl(window->browser->doc->hostui, 0, uri_str, &new_url);
++        if(hres == S_OK && new_url)
++        {
++            if(wcscmp(uri_str, new_url))
++            {
++                FIXME("TranslateUrl returned new URL %s -> %s.\n", debugstr_w(uri_str), debugstr_w(new_url));
++                CoTaskMemFree(new_url);
++                *cancel = TRUE;
++                SysFreeString(uri_str);
++                return NS_OK;
++            }
++            CoTaskMemFree(new_url);
++        }
++    }
++
++    hres = IHTMLWindow2_get_name(&window->base.IHTMLWindow2_iface, &frame_name);
++    if (FAILED(hres))
++    {
++        SysFreeString(uri_str);
++        return NS_ERROR_FAILURE;
++    }
++
++    hres = IDocObjectService_FireBeforeNavigate2(window->browser->doc->doc_object_service, NULL, uri_str, 0x40,
++            frame_name, NULL, 0, NULL, TRUE, cancel);
++    SysFreeString(frame_name);
++    SysFreeString(uri_str);
++    return SUCCEEDED(hres) ? NS_OK : NS_ERROR_FAILURE;
++}
++
+ HRESULT load_nsuri(HTMLOuterWindow *window, nsWineURI *uri, nsIInputStream *post_stream,
+         nsChannelBSC *channelbsc, DWORD flags)
+ {
+@@ -1077,6 +1121,27 @@ static nsresult NSAPI nsChannel_AsyncOpen(nsIHttpChannel *iface, nsIStreamListen
+                 This->content_type = heap_strdupWtoA(window->browser->doc->mime);
+             }
+         }
++        else if (window->browser && window->frame_element && window->browser->doc
++                && window->browser->doc->doc_object_service)
++        {
++            IUnknown *unk;
++            if (SUCCEEDED(IHTMLFrameBase_QueryInterface(&window->frame_element->IHTMLFrameBase_iface,
++                    &IID_IHTMLIFrameElement, (void **)&unk)))
++            {
++                IUnknown_Release(unk);
++                nsres = fire_before_navigate(This, window, &cancel);
++                if(NS_SUCCEEDED(nsres) && cancel)
++                {
++                    TRACE("canceled.\n");
++                    nsres = NS_BINDING_ABORTED;
++                }
++                else
++                {
++                    FIXME("fire_before_navigate returned error %#x.\n", nsres);
++                    nsres = NS_OK;
++                }
++            }
++        }
+     }
+
+     if(!cancel)
+From 353834ad445346cc37e5cc214534edc6f476f051 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Sat, 18 Dec 2021 00:24:39 +0300
+Subject: [PATCH] ntdll: Change module search order in
+ LdrFindEntryForAddress().
+
+CW-Bug-Id: #19827
+
+To be dropped once we have module search tree implementation.
+---
+ dlls/ntdll/loader.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index a1e5c8acd07..10201aa586d 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -1733,10 +1733,10 @@ NTSTATUS WINAPI LdrFindEntryForAddress( const void *addr, PLDR_DATA_TABLE_ENTRY
+     PLIST_ENTRY mark, entry;
+     PLDR_DATA_TABLE_ENTRY mod;
+
+-    mark = &NtCurrentTeb()->Peb->LdrData->InMemoryOrderModuleList;
+-    for (entry = mark->Flink; entry != mark; entry = entry->Flink)
++    mark = &NtCurrentTeb()->Peb->LdrData->InLoadOrderModuleList;
++    for (entry = mark->Blink; entry != mark; entry = entry->Blink)
+     {
+-        mod = CONTAINING_RECORD(entry, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks);
++        mod = CONTAINING_RECORD(entry, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
+         if (mod->DllBase <= addr &&
+             (const char *)addr < (char*)mod->DllBase + mod->SizeOfImage)
+         {
