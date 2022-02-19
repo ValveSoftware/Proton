@@ -256,6 +256,7 @@
     patch -Np1 < ../patches/proton/fshack/03-window-manager-fixes.patch
     patch -Np1 < ../patches/proton/fshack/04-fullscreen-hack.patch
     patch -Np1 < ../patches/proton/fshack/05-steam-overlay-fixes.patch
+    patch -Np1 < ../patches/proton/fshack/06-post-fshack-tweaks.patch
 
     echo "WINE: -PROTON- openxr patches"
     patch -Np1 < ../patches/proton/37-proton-OpenXR-patches.patch
