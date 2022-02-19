@@ -3460,9 +3460,9 @@ index 1e43766a358..086d16836fc 100644
 --- a/include/wmcodecdsp.idl
 +++ b/include/wmcodecdsp.idl
 @@ -40,3 +40,8 @@ coclass CMSH264DecoderMFT {}
-     uuid(2eeb4adf-4578-4d10-bca7-bb955f56320a)
+     uuid(93af0c51-2275-45d2-a35b-f2ba21caed00)
  ]
- coclass CWMADecMediaObject {};
+ coclass AACMFTEncoder {};
 +
 +[
 +    uuid(98230571-0087-4204-b020-3282538e57d3)

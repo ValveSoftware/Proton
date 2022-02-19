@@ -139,14 +139,14 @@ index 1d89c7f3cc0..37f419116ad 100644
 --- a/dlls/kernel32/kernel32.spec
 +++ b/dlls/kernel32/kernel32.spec
 @@ -616,7 +616,7 @@
- @ stdcall GetConsoleProcessList(ptr long)
+ @ stdcall -import GetConsoleProcessList(ptr long)
  @ stdcall -import GetConsoleScreenBufferInfo(long ptr)
  @ stdcall -import GetConsoleScreenBufferInfoEx(long ptr)
 -# @ stub GetConsoleSelectionInfo
 +@ stdcall -import GetConsoleSelectionInfo(ptr)
- @ stdcall GetConsoleTitleA(ptr long)
+ @ stdcall -import GetConsoleTitleA(ptr long)
  @ stdcall -import GetConsoleTitleW(ptr long)
- @ stdcall GetConsoleWindow()
+ @ stdcall -import GetConsoleWindow()
 diff --git a/dlls/kernelbase/console.c b/dlls/kernelbase/console.c
 index a7eeb439232..98f2483011b 100644
 --- a/dlls/kernelbase/console.c
@@ -171,10 +171,10 @@ index abbb137ef7f..b61c83e5ed9 100644
 --- a/dlls/kernelbase/kernelbase.spec
 +++ b/dlls/kernelbase/kernelbase.spec
 @@ -449,6 +449,7 @@
- @ stdcall GetConsoleOutputCP()
+ @ stdcall GetConsoleProcessList(ptr long)
  @ stdcall GetConsoleScreenBufferInfo(long ptr)
  @ stdcall GetConsoleScreenBufferInfoEx(long ptr)
 +@ stdcall GetConsoleSelectionInfo(ptr)
+ @ stdcall GetConsoleTitleA(ptr long)
  @ stdcall GetConsoleTitleW(ptr long)
- @ stdcall GetCurrencyFormatEx(wstr long wstr ptr ptr long) kernel32.GetCurrencyFormatEx
- @ stdcall GetCurrencyFormatW(long long wstr ptr ptr long) kernel32.GetCurrencyFormatW
+ @ stdcall GetConsoleWindow()

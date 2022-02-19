@@ -3344,9 +3344,9 @@ index 95dfc359043..c8a3795ed1b 100644
  LRESULT WINAPI UiaReturnRawElementProvider(HWND hwnd, WPARAM wParam,
          LPARAM lParam, IRawElementProviderSimple *elprov)
  {
--    FIXME("(%p, %lx, %lx, %p) stub!\n", hwnd, wParam, lParam, elprov);
+-    FIXME("(%p, %Ix, %Ix, %p) stub!\n", hwnd, wParam, lParam, elprov);
 -    return 0;
-+    TRACE("(%p, %lx, %lx, %p)\n", hwnd, wParam, lParam, elprov);
++    TRACE("(%p, %Ix, %Ix, %p)\n", hwnd, wParam, lParam, elprov);
 +
 +    if (lParam != UiaRootObjectId)
 +    {

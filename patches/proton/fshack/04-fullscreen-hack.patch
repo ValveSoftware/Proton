@@ -6760,6 +6760,252 @@ index 05913756fbc..275242657e3 100644
  #include "ntstatus.h"
  #define WIN32_NO_STATUS
  #include <stdarg.h>
+From b3f1bd23771192f136ed9b4f93a1f4b6087611a0 Mon Sep 17 00:00:00 2001
+From: Thomas Crider <gloriouseggroll@gmail.com>
+Date: Sat, 19 Feb 2022 01:55:40 -0700
+Subject: [PATCH] revert 656edbb and 587f377 to retain fshack compat patch
+ compatibility
+
+---
+ dlls/win32u/sysparams.c      |  14 ++---
+ dlls/winex11.drv/Makefile.in |   2 +-
+ dlls/winex11.drv/display.c   | 109 ++++++++++++++++++++++++++++++++++-
+ include/ntuser.h             |   2 -
+ 4 files changed, 111 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/win32u/sysparams.c b/dlls/win32u/sysparams.c
+index 58bd22a3adf..7af1e20f008 100644
+--- a/dlls/win32u/sysparams.c
++++ b/dlls/win32u/sysparams.c
+@@ -1474,7 +1474,7 @@ RECT get_display_rect( const WCHAR *display )
+     return map_dpi_rect( rect, system_dpi, get_thread_dpi() );
+ }
+
+-static RECT get_primary_monitor_rect( UINT dpi )
++static RECT get_primary_monitor_rect(void)
+ {
+     struct monitor *monitor;
+     RECT rect = {0};
+@@ -1489,7 +1489,7 @@ static RECT get_primary_monitor_rect( UINT dpi )
+     }
+
+     unlock_display_devices();
+-    return map_dpi_rect( rect, system_dpi, dpi );
++    return map_dpi_rect( rect, system_dpi, get_thread_dpi() );
+ }
+
+ /**********************************************************************
+@@ -4203,10 +4203,10 @@ int get_system_metrics( int index )
+     case SM_MOUSEWHEELPRESENT:
+         return 1;
+     case SM_CXSCREEN:
+-        rect = get_primary_monitor_rect( get_thread_dpi() );
++        rect = get_primary_monitor_rect();
+         return rect.right - rect.left;
+     case SM_CYSCREEN:
+-        rect = get_primary_monitor_rect( get_thread_dpi() );
++        rect = get_primary_monitor_rect();
+         return rect.bottom - rect.top;
+     case SM_XVIRTUALSCREEN:
+         rect = get_virtual_screen_rect( get_thread_dpi() );
+@@ -4528,18 +4528,12 @@ ULONG_PTR WINAPI NtUserCallOneParam( ULONG_PTR arg, ULONG code )
+         return get_sys_color( arg );
+     case NtUserRealizePalette:
+         return realize_palette( UlongToHandle(arg) );
+-    case NtUserGetPrimaryMonitorRect:
+-        *(RECT *)arg = get_primary_monitor_rect( 0 );
+-        return 1;
+     case NtUserGetSysColorBrush:
+         return HandleToUlong( get_sys_color_brush(arg) );
+     case NtUserGetSysColorPen:
+         return HandleToUlong( get_sys_color_pen(arg) );
+     case NtUserGetSystemMetrics:
+         return get_system_metrics( arg );
+-    case NtUserGetVirtualScreenRect:
+-        *(RECT *)arg = get_virtual_screen_rect( 0 );
+-        return 1;
+     case NtUserMessageBeep:
+         return message_beep( arg );
+     /* temporary exports */
+diff --git a/dlls/winex11.drv/Makefile.in b/dlls/winex11.drv/Makefile.in
+index 93a975d7f63..64df2075cc4 100644
+--- a/dlls/winex11.drv/Makefile.in
++++ b/dlls/winex11.drv/Makefile.in
+@@ -1,6 +1,6 @@
+ EXTRADEFS = -DWINE_NO_LONG_TYPES
+ MODULE    = winex11.drv
+-IMPORTS   = uuid user32 gdi32 advapi32 win32u
++IMPORTS   = uuid setupapi rpcrt4 user32 gdi32 advapi32 win32u
+ DELAYIMPORTS = comctl32 ole32 shell32 imm32
+ EXTRAINCL = $(X_CFLAGS)
+ EXTRALIBS = $(X_LIBS) $(X_EXTRA_LIBS)
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index ab5dcdac23f..04380ff660f 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -19,14 +19,53 @@
+  */
+
+ #include "config.h"
+-#include "x11drv.h"
++
++#include <stdarg.h>
++
++#include "windef.h"
++#include "winbase.h"
++#include "rpc.h"
++#include "winreg.h"
++#include "cfgmgr32.h"
++#include "initguid.h"
++#include "devguid.h"
++#include "devpkey.h"
++#include "ntddvdeo.h"
++#include "setupapi.h"
++#define WIN32_NO_STATUS
++#include "winternl.h"
+ #include "wine/debug.h"
++#include "wine/unicode.h"
++#include "x11drv.h"
+
+ WINE_DEFAULT_DEBUG_CHANNEL(x11drv);
+
++/* Wine specific properties */
++DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_MONITOR_RCMONITOR, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5b, 3);
++
++static const WCHAR displayW[] = {'D','I','S','P','L','A','Y',0};
++static const WCHAR video_keyW[] = {
++    'H','A','R','D','W','A','R','E','\\',
++    'D','E','V','I','C','E','M','A','P','\\',
++    'V','I','D','E','O',0};
++
+ static struct x11drv_display_device_handler host_handler;
+ struct x11drv_display_device_handler desktop_handler;
+
++/* Cached screen information, protected by screen_section */
++static HKEY video_key;
++static RECT virtual_screen_rect;
++static RECT primary_monitor_rect;
++static FILETIME last_query_screen_time;
++static CRITICAL_SECTION screen_section;
++static CRITICAL_SECTION_DEBUG screen_critsect_debug =
++{
++    0, 0, &screen_section,
++    {&screen_critsect_debug.ProcessLocksList, &screen_critsect_debug.ProcessLocksList},
++     0, 0, {(DWORD_PTR)(__FILE__ ": screen_section")}
++};
++static CRITICAL_SECTION screen_section = {&screen_critsect_debug, -1, 0, 0, 0, 0};
++
+ HANDLE get_display_device_init_mutex(void)
+ {
+     static const WCHAR init_mutexW[] = {'d','i','s','p','l','a','y','_','d','e','v','i','c','e','_','i','n','i','t',0};
+@@ -42,6 +81,62 @@ void release_display_device_init_mutex(HANDLE mutex)
+     CloseHandle(mutex);
+ }
+
++/* Update screen rectangle cache from SetupAPI if it's outdated, return FALSE on failure and TRUE on success */
++static BOOL update_screen_cache(void)
++{
++    RECT virtual_rect = {0}, primary_rect = {0}, monitor_rect;
++    SP_DEVINFO_DATA device_data = {sizeof(device_data)};
++    HDEVINFO devinfo = INVALID_HANDLE_VALUE;
++    FILETIME filetime = {0};
++    HANDLE mutex = NULL;
++    DWORD i = 0;
++    INT result;
++    DWORD type;
++    BOOL ret = FALSE;
++
++    EnterCriticalSection(&screen_section);
++    if ((!video_key && RegOpenKeyW(HKEY_LOCAL_MACHINE, video_keyW, &video_key))
++        || RegQueryInfoKeyW(video_key, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, &filetime))
++    {
++        LeaveCriticalSection(&screen_section);
++        return FALSE;
++    }
++    result = CompareFileTime(&filetime, &last_query_screen_time);
++    LeaveCriticalSection(&screen_section);
++    if (result < 1)
++        return TRUE;
++
++    mutex = get_display_device_init_mutex();
++
++    devinfo = SetupDiGetClassDevsW(&GUID_DEVCLASS_MONITOR, displayW, NULL, DIGCF_PRESENT);
++    if (devinfo == INVALID_HANDLE_VALUE)
++        goto fail;
++
++    while (SetupDiEnumDeviceInfo(devinfo, i++, &device_data))
++    {
++        if (!SetupDiGetDevicePropertyW(devinfo, &device_data, &WINE_DEVPROPKEY_MONITOR_RCMONITOR, &type,
++                                       (BYTE *)&monitor_rect, sizeof(monitor_rect), NULL, 0))
++            goto fail;
++
++        UnionRect(&virtual_rect, &virtual_rect, &monitor_rect);
++        if (i == 1)
++            primary_rect = monitor_rect;
++    }
++
++    EnterCriticalSection(&screen_section);
++    virtual_screen_rect = virtual_rect;
++    primary_monitor_rect = primary_rect;
++    last_query_screen_time = filetime;
++    LeaveCriticalSection(&screen_section);
++    ret = TRUE;
++fail:
++    SetupDiDestroyDeviceInfoList(devinfo);
++    release_display_device_init_mutex(mutex);
++    if (!ret)
++        WARN("Update screen cache failed!\n");
++    return ret;
++}
++
+ POINT virtual_screen_to_root(INT x, INT y)
+ {
+     RECT virtual = get_virtual_screen_rect();
+@@ -65,14 +160,22 @@ POINT root_to_virtual_screen(INT x, INT y)
+ RECT get_virtual_screen_rect(void)
+ {
+     RECT virtual;
+-    NtUserCallOneParam( (UINT_PTR)&virtual, NtUserGetVirtualScreenRect );
++
++    update_screen_cache();
++    EnterCriticalSection(&screen_section);
++    virtual = virtual_screen_rect;
++    LeaveCriticalSection(&screen_section);
+     return virtual;
+ }
+
+ RECT get_primary_monitor_rect(void)
+ {
+     RECT primary;
+-    NtUserCallOneParam( (UINT_PTR)&primary, NtUserGetPrimaryMonitorRect );
++
++    update_screen_cache();
++    EnterCriticalSection(&screen_section);
++    primary = primary_monitor_rect;
++    LeaveCriticalSection(&screen_section);
+     return primary;
+ }
+
+diff --git a/include/ntuser.h b/include/ntuser.h
+index b7e2e63dcb3..51f1c624ba6 100644
+--- a/include/ntuser.h
++++ b/include/ntuser.h
+@@ -75,12 +75,10 @@ enum
+ {
+     NtUserGetClipCursor,
+     NtUserGetCursorPos,
+-    NtUserGetPrimaryMonitorRect,
+     NtUserGetSysColor,
+     NtUserGetSysColorBrush,
+     NtUserGetSysColorPen,
+     NtUserGetSystemMetrics,
+-    NtUserGetVirtualScreenRect,
+     NtUserMessageBeep,
+     NtUserRealizePalette,
+     /* temporary exports */
+--
+2.34.1
+
 From 398e397881820bff2add3dd68f1bbc4207294318 Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Wed, 15 Jul 2020 11:25:13 -0700
