@@ -65,70 +65,56 @@ index 5f9f61e2535..43cae2a2bc2 100644
  [NlsFiles]
  c_037.nls
 
-From bc614834ee153ce33449c06e697b4a30748e9257 Mon Sep 17 00:00:00 2001
+From f725f3ce82ddb6b8ab9d427dda5dcd30b512b7f8 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 27 Apr 2017 13:25:04 -0500
-Subject: [PATCH] HACK kernelbase: Substitute the current pid for the Steam
- client pid
+Subject: [PATCH] HACK: steam: kernelbase: Substitute the current pid for the
+ Steam client pid.
 
 ---
- dlls/kernelbase/process.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ dlls/kernelbase/process.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/dlls/kernelbase/process.c b/dlls/kernelbase/process.c
-index 85e0042024c..9c957f02c06 100644
+index 12187b92e5c..a22b59ad80b 100644
 --- a/dlls/kernelbase/process.c
 +++ b/dlls/kernelbase/process.c
-@@ -220,6 +220,22 @@ HANDLE WINAPI DECLSPEC_HOTPATCH OpenProcess( DWORD access, BOOL inherit, DWORD id )
+@@ -1014,6 +1014,21 @@ HANDLE WINAPI DECLSPEC_HOTPATCH OpenProcess( DWORD access, BOOL inherit, DWORD i
      attr.SecurityDescriptor = NULL;
      attr.SecurityQualityOfService = NULL;
 
-+    if(id == 0xfffe)
-+        /* STEAMOS HACK:
-+         * On Windows, the Steam client puts its process ID into the registry
-+         * at:
-+         *
-+         *   [HKCU\Software\Valve\Steam\ActiveProcess]
-+         *   PID=dword:00000008
-+         *
-+         * Games get that pid from the registry and then query it with
-+         * OpenProcess to ensure Steam is running. Since we aren't running the
-+         * Windows Steam in Wine, instead we hack this magic number into the
-+         * registry and then substitute the game's process itself in its place
-+         * so it can query a valid process.
-+         */
-+        id = GetCurrentProcessId();
++    /* PROTON HACK:
++     * On Windows, the Steam client puts its process ID into the registry
++     * at:
++     *
++     *   [HKCU\Software\Valve\Steam\ActiveProcess]
++     *   PID=dword:00000008
++     *
++     * Games get that pid from the registry and then query it with
++     * OpenProcess to ensure Steam is running. Since we aren't running the
++     * Windows Steam in Wine, instead we hack this magic number into the
++     * registry and then substitute the game's process itself in its place
++     * so it can query a valid process.
++     */
++    if (id == 0xfffe) id = GetCurrentProcessId();
 +
      cid.UniqueProcess = ULongToHandle(id);
      cid.UniqueThread  = 0;
 
-diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
-index cc7bf6900b..28bbb26f79 100644
---- a/dlls/ntdll/loader.c
-+++ b/dlls/ntdll/loader.c
-@@ -75,7 +75,7 @@ const WCHAR syswow64_dir[] = L"C:\\windows\\syswow64\\";
- BOOL is_wow64 = FALSE;
-
- /* system search path */
--static const WCHAR system_path[] = L"C:\\windows\\system32;C:\\windows\\system;C:\\windows";
-+static const WCHAR system_path[] = L"C:\\windows\\system32;C:\\windows\\system;C:\\windows;C:\\Program Files (x86)\\Steam";
-
- static BOOL imports_fixup_done = FALSE;  /* set once the imports have been fixed up, before attaching them */
- static BOOL process_detaching = FALSE;  /* set on process detach to avoid deadlocks with thread detach */
-From 207d17259d8aed05d3b69d242c2bc68b02aec378 Mon Sep 17 00:00:00 2001
+From df134c39cab2e1a32c75d34d7b9348482abe73d1 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 19 Jan 2018 14:01:07 -0600
-Subject: [PATCH] HACK: advapi32: Use steamuser as Wine username
+Subject: [PATCH] HACK: proton: advapi32: Use steamuser as Wine username.
 
 ---
- dlls/advapi32/advapi.c | 35 ++++++++++++++++++-----------------
- 1 file changed, 18 insertions(+), 17 deletions(-)
+ dlls/advapi32/advapi.c | 34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
 
 diff --git a/dlls/advapi32/advapi.c b/dlls/advapi32/advapi.c
-index 589405b59e6..a31a05f0250 100644
+index 33c63f3cb20..0ebe6a354b5 100644
 --- a/dlls/advapi32/advapi.c
 +++ b/dlls/advapi32/advapi.c
-@@ -44,14 +44,15 @@ WINE_DEFAULT_DEBUG_CHANNEL(advapi);
+@@ -43,14 +43,15 @@ WINE_DEFAULT_DEBUG_CHANNEL(advapi);
   */
  BOOL WINAPI GetUserNameA( LPSTR name, LPDWORD size )
  {
@@ -152,7 +138,7 @@ index 589405b59e6..a31a05f0250 100644
  }
 
  /******************************************************************************
-@@ -59,14 +60,15 @@ BOOL WINAPI GetUserNameA( LPSTR name, LPDWORD size )
+@@ -58,14 +59,15 @@ BOOL WINAPI GetUserNameA( LPSTR name, LPDWORD size )
   */
  BOOL WINAPI GetUserNameW( LPWSTR name, LPDWORD size )
  {
@@ -176,28 +162,215 @@ index 589405b59e6..a31a05f0250 100644
  }
 
  /******************************************************************************
-From ec9e7190ea7045012b6e33e5ee64cd678bec68c9 Mon Sep 17 00:00:00 2001
+From c3fadbbbeadb8fd49fb2edfd2ee4ca37a46cfbff Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Mon, 22 Jan 2018 14:32:40 -0600
-Subject: [PATCH] HACK: shell32: Never create links to the user's home dirs
+Date: Thu, 30 Sep 2021 19:44:00 +0200
+Subject: [PATCH] HACK: proton: shell32: Never create links to the user's home
+ dirs.
 
 ---
- dlls/shell32/shellpath.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ dlls/shell32/shellpath.c | 181 ---------------------------------------
+ 1 file changed, 181 deletions(-)
 
 diff --git a/dlls/shell32/shellpath.c b/dlls/shell32/shellpath.c
-index f08474b3635..2f637f25537 100644
+index 7bfa504a62f..ab04c39dc24 100644
 --- a/dlls/shell32/shellpath.c
 +++ b/dlls/shell32/shellpath.c
-@@ -4369,7 +4369,7 @@ static void _SHCreateMyDocumentsSymbolicLink(const UINT * aidsMyStuff, const UIN
+@@ -2640,183 +2640,6 @@ static HRESULT _SHExpandEnvironmentStrings(LPCWSTR szSrc, LPWSTR szDest)
+     return hr;
+ }
 
-     /* create symbolic links rather than directories for specific
-      * user shell folders */
+-static char *xdg_config;
+-static DWORD xdg_config_len;
+-
+-static BOOL WINAPI init_xdg_dirs( INIT_ONCE *once, void *param, void **context )
+-{
+-    const WCHAR *var, *fmt = L"\\??\\unix%s/user-dirs.dirs";
+-    char *p;
+-    WCHAR *name, *ptr;
+-    HANDLE file;
+-    DWORD len;
+-
+-    if (!(var = _wgetenv( L"XDG_CONFIG_HOME" )) || var[0] != '/')
+-    {
+-        if (!(var = _wgetenv( L"WINEHOMEDIR" ))) return TRUE;
+-        fmt = L"%s/.config/user-dirs.dirs";
+-    }
+-    len = lstrlenW(var) + lstrlenW(fmt);
+-    name = heap_alloc( len * sizeof(WCHAR) );
+-    swprintf( name, len, fmt, var );
+-    name[1] = '\\';  /* change \??\ to \\?\ */
+-    for (ptr = name; *ptr; ptr++) if (*ptr == '/') *ptr = '\\';
+-
+-    file = CreateFileW( name, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, 0 );
+-    heap_free( name );
+-    if (file != INVALID_HANDLE_VALUE)
+-    {
+-        len = GetFileSize( file, NULL );
+-        if (!(xdg_config = heap_alloc( len + 1 ))) return TRUE;
+-        if (!ReadFile( file, xdg_config, len, &xdg_config_len, NULL ))
+-        {
+-            heap_free( xdg_config );
+-            xdg_config = NULL;
+-        }
+-        else
+-        {
+-            for (p = xdg_config; p < xdg_config + xdg_config_len; p++) if (*p == '\n') *p = 0;
+-            *p = 0;  /* append null to simplify string parsing */
+-        }
+-        CloseHandle( file );
+-    }
+-    return TRUE;
+-}
+-
+-static char *get_xdg_path( const char *var )
+-{
+-    static INIT_ONCE once;
+-    char *p, *ret = NULL;
+-    int i;
+-
+-    InitOnceExecuteOnce( &once, init_xdg_dirs, NULL, NULL );
+-    if (!xdg_config) return NULL;
+-
+-    for (p = xdg_config; p < xdg_config + xdg_config_len; p += strlen(p) + 1)
+-    {
+-        while (*p == ' ' || *p == '\t') p++;
+-        if (strncmp( p, var, strlen(var) )) continue;
+-        p += strlen(var);
+-        while (*p == ' ' || *p == '\t') p++;
+-        if (*p != '=') continue;
+-        p++;
+-        while (*p == ' ' || *p == '\t') p++;
+-        if (*p != '"') continue;
+-        p++;
+-        if (*p != '/' && strncmp( p, "$HOME/", 6 )) continue;
+-
+-        if (!(ret = heap_alloc( strlen(p) + 1 ))) break;
+-        for (i = 0; *p && *p != '"'; i++, p++)
+-        {
+-            if (*p == '\\' && p[1]) p++;
+-            ret[i] = *p;
+-        }
+-        ret[i] = 0;
+-        if (*p != '"')
+-        {
+-            heap_free( ret );
+-            ret = NULL;
+-        }
+-        break;
+-    }
+-    return ret;
+-}
+-
+-static BOOL link_folder( HANDLE mgr, const UNICODE_STRING *path, const char *link )
+-{
+-    struct mountmgr_shell_folder *ioctl;
+-    DWORD len = sizeof(*ioctl) + path->Length + strlen(link) + 1;
+-    BOOL ret;
+-
+-    if (!(ioctl = heap_alloc( len ))) return FALSE;
+-    ioctl->create_backup = FALSE;
+-    ioctl->folder_offset = sizeof(*ioctl);
+-    ioctl->folder_size = path->Length;
+-    memcpy( (char *)ioctl + ioctl->folder_offset, path->Buffer, ioctl->folder_size );
+-    ioctl->symlink_offset = ioctl->folder_offset + ioctl->folder_size;
+-    strcpy( (char *)ioctl + ioctl->symlink_offset, link );
+-
+-    ret = DeviceIoControl( mgr, IOCTL_MOUNTMGR_DEFINE_SHELL_FOLDER, ioctl, len, NULL, 0, NULL, NULL );
+-    heap_free( ioctl );
+-    return ret;
+-}
+-
+-/******************************************************************************
+- * create_link
+- *
+- * Sets up a symbolic link for one of the 'My Whatever' shell folders to point
+- * into the corresponding XDG directory.
+- */
+-static void create_link( const WCHAR *path, const char *xdg_name, const char *default_name )
+-{
+-    UNICODE_STRING nt_name;
+-    char *target = NULL;
+-    HANDLE mgr;
+-
+-    if ((mgr = CreateFileW( MOUNTMGR_DOS_DEVICE_NAME, GENERIC_READ | GENERIC_WRITE,
+-                            FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+-                            0, 0 )) == INVALID_HANDLE_VALUE)
+-    {
+-        FIXME( "failed to connect to mount manager\n" );
+-        return;
+-    }
+-
+-    nt_name.Buffer = NULL;
+-    if (!RtlDosPathNameToNtPathName_U( path, &nt_name, NULL, NULL )) goto done;
+-
+-    if ((target = get_xdg_path( xdg_name )))
+-    {
+-        if (link_folder( mgr, &nt_name, target )) goto done;
+-    }
+-    if (link_folder( mgr, &nt_name, default_name )) goto done;
+-
+-    /* fall back to HOME */
+-    link_folder( mgr, &nt_name, "$HOME" );
+-
+-done:
+-    RtlFreeUnicodeString( &nt_name );
+-    heap_free( target );
+-    CloseHandle( mgr );
+-}
+-
+-/******************************************************************************
+- * _SHCreateSymbolicLink  [Internal]
+- *
+- * Sets up a symbolic link for one of the special shell folders to point into
+- * the users home directory.
+- *
+- * PARAMS
+- *  nFolder [I] CSIDL identifying the folder.
+- */
+-static void _SHCreateSymbolicLink(int nFolder, const WCHAR *path)
+-{
+-    DWORD folder = nFolder & CSIDL_FOLDER_MASK;
+-
+-    switch (folder) {
+-        case CSIDL_PERSONAL:
+-            create_link( path, "XDG_DOCUMENTS_DIR", "$HOME/Documents" );
+-            break;
+-        case CSIDL_DESKTOPDIRECTORY:
+-            create_link( path, "XDG_DESKTOP_DIR", "$HOME/Desktop" );
+-            break;
+-        case CSIDL_MYPICTURES:
+-            create_link( path, "XDG_PICTURES_DIR", "$HOME/Pictures" );
+-            break;
+-        case CSIDL_MYVIDEO:
+-            create_link( path, "XDG_VIDEOS_DIR", "$HOME/Movies" );
+-            break;
+-        case CSIDL_MYMUSIC:
+-            create_link( path, "XDG_MUSIC_DIR", "$HOME/Music" );
+-            break;
+-        case CSIDL_DOWNLOADS:
+-            create_link( path, "XDG_DOWNLOAD_DIR", "$HOME/Downloads" );
+-            break;
+-        case CSIDL_TEMPLATES:
+-            create_link( path, "XDG_TEMPLATES_DIR", "$HOME/Templates" );
+-            break;
+-    }
+-}
+-
+ /******************************************************************************
+  * SHGetFolderPathW			[SHELL32.@]
+  *
+@@ -3005,10 +2828,6 @@ HRESULT WINAPI SHGetFolderPathAndSubDirW(
+         goto end;
+     }
+
+-    /* create symbolic links rather than directories for specific
+-     * user shell folders */
 -    _SHCreateSymbolicLink(folder, szBuildPath);
-+    // _SHCreateSymbolicLink(folder, szBuildPath);
-
+-
      /* create directory/directories */
      ret = SHCreateDirectoryExW(hwndOwner, szBuildPath, NULL);
+     if (ret && ret != ERROR_ALREADY_EXISTS)
 From 17d19e1b23bce6fc6ff5b4e61131c9c58fd57ae5 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 28 Mar 2018 09:21:41 -0500
@@ -254,10 +427,10 @@ index 2b049eb91f8..e6948a73427 100644
  HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
  HKLM,"System\CurrentControlSet\Services\Tcpip\Parameters","DataBasePath",2,"%11%\drivers"
 
-From 80b9333ff296062b4b0c34f7e3509530dd331993 Mon Sep 17 00:00:00 2001
+From ea8d4cc0a661d5588383baa2ed1a6c56d2e66ffc Mon Sep 17 00:00:00 2001
 From: Patryk Obara <dreamer.tan@gmail.com>
 Date: Fri, 26 Apr 2019 20:40:31 +0200
-Subject: [PATCH] winex11: Fill WM_CLASS based on Steam appid
+Subject: [PATCH] HACK: proton: winex11: Fill WM_CLASS based on Steam appid.
 
 Some desktop environments (Gnome 3, Cinnamon) decide on an application
 icon in the following order:
@@ -289,10 +462,10 @@ then generic "steam_proton" name is used instead.
  1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index cee4230e1bb..46d46052796 100644
+index 36fb41ac710..916350c685a 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
-@@ -941,8 +941,19 @@ static void set_initial_wm_hints( Display *display, Window window )
+@@ -855,8 +855,19 @@ static void set_initial_wm_hints( Display *display, Window window )
      /* class hints */
      if ((class_hints = XAllocClassHint()))
      {
@@ -314,10 +487,10 @@ index cee4230e1bb..46d46052796 100644
          XSetClassHint( display, window, class_hints );
          XFree( class_hints );
      }
-From d012d137e4099d1b12079a49a8a5632d205e0a9f Mon Sep 17 00:00:00 2001
+From 30d2ea38ead1a2f1de872c9725e67084feaf5024 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 24 Sep 2018 12:37:49 -0500
-Subject: [PATCH] HACK: dbghelp: Disable DWARF parsing
+Subject: [PATCH] HACK: proton: HACK: dbghelp: Disable DWARF parsing
 
 Patch by Zeb. Our DWARF parser has been known to crash winedbg in some
 cases. Since probably no concerned parties are going to be using plain
@@ -327,12 +500,12 @@ winedbg, just don't bother parsing anything.
  1 file changed, 5 insertions(+)
 
 diff --git a/dlls/dbghelp/dwarf.c b/dlls/dbghelp/dwarf.c
-index 31c008abb8f..ce689dbe6cf 100644
+index 7472b6070e6..e049ee51525 100644
 --- a/dlls/dbghelp/dwarf.c
 +++ b/dlls/dbghelp/dwarf.c
-@@ -3516,6 +3516,11 @@ BOOL dwarf2_parse(struct module* module, unsigned long load_offset,
-     BOOL                ret = TRUE;
+@@ -4162,6 +4162,11 @@ BOOL dwarf2_parse(struct module* module, ULONG_PTR load_offset,
      struct module_format* dwarf2_modfmt;
+     dwarf2_parse_module_context_t module_ctx;
 
 +/* Our DWARF parser has been known to crash winedbg in some cases. Since
 + * probably no concerned parties are going to be using plain winedbg, just don't
@@ -343,11 +516,11 @@ index 31c008abb8f..ce689dbe6cf 100644
          /* lld produces .eh_fram to avoid generating a long name */
          dwarf2_init_section(&eh_frame,                fmap, ".eh_fram",      NULL,             &eh_frame_sect);
 
-From a13270aea50af90aa6c721080b956870d67d81c2 Mon Sep 17 00:00:00 2001
+From daabcc156e6b63cf438aa004ac3f40a741872ad4 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 30 Mar 2018 10:40:43 -0500
-Subject: [PATCH] winedbg: When crash dialog is not shown, dump crash info to
- stderr
+Subject: [PATCH] HACK: proton: winedbg: When crash dialog is not shown, dump
+ crash info to stderr
 
 This way the backtrace and such will appear in the log file instead of
 going to stdout, which we don't capture.
@@ -356,10 +529,10 @@ going to stdout, which we don't capture.
  1 file changed, 3 insertions(+)
 
 diff --git a/programs/winedbg/tgt_active.c b/programs/winedbg/tgt_active.c
-index f632ca0414d..72e63327831 100644
+index 70ad7e8b437..5a26e1aef1f 100644
 --- a/programs/winedbg/tgt_active.c
 +++ b/programs/winedbg/tgt_active.c
-@@ -874,6 +874,9 @@ enum dbg_start dbg_active_auto(int argc, char* argv[])
+@@ -965,6 +965,9 @@ enum dbg_start dbg_active_auto(int argc, char* argv[])
          if (event) thread = display_crash_details( event );
          if (thread) dbg_houtput = output = create_temp_file();
          break;
@@ -369,6 +542,123 @@ index f632ca0414d..72e63327831 100644
      }
 
      input = parser_generate_command_file("echo Modules:", "info share",
+From 05b798206ccddbf1a546a97746d32aff2ca1d8b9 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 18 May 2021 13:34:47 -0500
+Subject: [PATCH] HACK: proton: winedbg: Support dumping crash logs to a
+ directory
+
+CW-Bug-Id: #18944
+---
+ programs/winedbg/debugger.h   |  1 +
+ programs/winedbg/tgt_active.c | 45 +++++++++++++++++++++++++++++++++++
+ programs/winedbg/winedbg.c    |  3 +++
+ 3 files changed, 49 insertions(+)
+
+diff --git a/programs/winedbg/debugger.h b/programs/winedbg/debugger.h
+index b676bc8d955..e4e40bb487f 100644
+--- a/programs/winedbg/debugger.h
++++ b/programs/winedbg/debugger.h
+@@ -283,6 +283,7 @@ extern	DWORD	                dbg_curr_tid;
+ extern  dbg_ctx_t               dbg_context;
+ extern  BOOL                    dbg_interactiveP;
+ extern  HANDLE                  dbg_houtput;
++extern  HANDLE                  dbg_crash_report_file;
+
+ struct dbg_internal_var
+ {
+diff --git a/programs/winedbg/tgt_active.c b/programs/winedbg/tgt_active.c
+index 5a26e1aef1f..d89a76272b0 100644
+--- a/programs/winedbg/tgt_active.c
++++ b/programs/winedbg/tgt_active.c
+@@ -22,6 +22,8 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdarg.h>
++#include <time.h>
++#include <sys/stat.h>
+
+ #include "debugger.h"
+ #include "psapi.h"
+@@ -784,6 +786,48 @@ static HANDLE create_temp_file(void)
+                         NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_DELETE_ON_CLOSE, 0 );
+ }
+
++static HANDLE create_crash_report_file(void)
++{
++    const char *dir = getenv("WINE_CRASH_REPORT_DIR");
++    const char *sgi;
++    char timestr[32];
++    char name[MAX_PATH], *c;
++    time_t t;
++    struct tm lt;
++
++    if(!dir || dir[0] == 0)
++        return INVALID_HANDLE_VALUE;
++
++    strcpy(name, dir);
++
++    for(c = name + 1; *c; ++c){
++        if(*c == '/'){
++            *c = 0;
++            CreateDirectoryA(name, NULL);
++            *c = '/';
++        }
++    }
++    CreateDirectoryA(name, NULL);
++
++    sgi = getenv("SteamGameId");
++
++    t = time(NULL);
++    lt = *localtime(&t);
++    strftime(timestr, ARRAY_SIZE(timestr), "%Y-%m-%d_%H:%M:%S", &lt);
++
++    /* /path/to/crash/reports/2021-05-18_13:21:15_appid-976310_crash.log */
++    snprintf(name, ARRAY_SIZE(name),
++            "%s%s/%s_appid-%s_crash.log",
++            dir[0] == '/' ? "Z:/" : "",
++            dir,
++            timestr,
++            sgi ? sgi : "0"
++            );
++
++    return CreateFileA( name, GENERIC_WRITE, FILE_SHARE_READ,
++                        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
++}
++
+ static const struct
+ {
+     int type;
+@@ -967,6 +1011,7 @@ enum dbg_start dbg_active_auto(int argc, char* argv[])
+         break;
+     case TRUE:
+         dbg_houtput = GetStdHandle(STD_ERROR_HANDLE);
++        dbg_crash_report_file = create_crash_report_file();
+         break;
+     }
+
+diff --git a/programs/winedbg/winedbg.c b/programs/winedbg/winedbg.c
+index dab5fbd85a3..21391bcdcec 100644
+--- a/programs/winedbg/winedbg.c
++++ b/programs/winedbg/winedbg.c
+@@ -82,6 +82,7 @@ DWORD	                dbg_curr_pid = 0;
+ dbg_ctx_t               dbg_context;
+ BOOL    	        dbg_interactiveP = FALSE;
+ HANDLE                  dbg_houtput = 0;
++HANDLE                  dbg_crash_report_file = INVALID_HANDLE_VALUE;
+
+ static struct list      dbg_process_list = LIST_INIT(dbg_process_list);
+
+@@ -108,6 +109,8 @@ static void dbg_outputA(const char* buffer, int len)
+             else break;
+         }
+         WriteFile(dbg_houtput, line_buff, i, &w, NULL);
++        if (dbg_crash_report_file != INVALID_HANDLE_VALUE)
++            WriteFile(dbg_crash_report_file, line_buff, i, &w, NULL);
+         memmove( line_buff, line_buff + i, line_pos - i );
+         line_pos -= i;
+     }
+
 From a7542e9e279970c2ab3ac9c6c986b300135286a0 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 28 Mar 2018 09:17:30 -0500
