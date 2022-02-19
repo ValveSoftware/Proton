@@ -875,6 +875,89 @@ index 5d8d2384e69..4592b095ff5 100644
 
      if (ioctl(impl->base.device_fd, EVIOCGBIT(EV_REL, sizeof(relbits)), relbits) == -1)
      {
+From e62a27bb284c4a7364d69fb09ae4df18c8860185 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 30 Sep 2021 20:38:04 +0200
+Subject: [PATCH] winebus.sys: Ignore some joysticks that SDL reports.
+
+SDL has a blacklist, but it isn't complete. Ignore some more devices
+while we fix upstream.
+---
+ dlls/winebus.sys/bus_sdl.c      |  7 +++++++
+ dlls/winebus.sys/unix_private.h |  1 +
+ dlls/winebus.sys/unixlib.c      | 14 ++++++++++++++
+ include/wine/js_blacklist.h     |  3 +++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 include/wine/js_blacklist.h
+
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index 079a615333e..84c8721270c 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -882,6 +882,13 @@ static void sdl_add_device(unsigned int index)
+         return;
+     }
+
++    if (is_wine_blacklisted(desc.vid, desc.pid))
++    {
++        /* this device is blacklisted */
++        TRACE("ignoring %s, in Wine blacklist\n", debugstr_device_desc(&desc));
++        return;
++    }
++
+     if (desc.vid == 0x28de && desc.pid == 0x11ff)
+     {
+         TRACE("Steam virtual controller, pretending it's an Xbox 360 controller\n");
+diff --git a/dlls/winebus.sys/unix_private.h b/dlls/winebus.sys/unix_private.h
+index 02c9ff947c4..a204eacb3bf 100644
+--- a/dlls/winebus.sys/unix_private.h
++++ b/dlls/winebus.sys/unix_private.h
+@@ -265,6 +265,7 @@ extern void hid_device_drop_report(struct unix_device *iface) DECLSPEC_HIDDEN;
+ extern void hid_device_set_effect_state(struct unix_device *iface, BYTE index, BYTE flags) DECLSPEC_HIDDEN;
+
+ BOOL is_sdl_blacklisted(DWORD vid, DWORD pid) DECLSPEC_HIDDEN;
++BOOL is_wine_blacklisted(DWORD vid, DWORD pid) DECLSPEC_HIDDEN;
+ BOOL is_steam_controller(WORD vid, WORD pid) DECLSPEC_HIDDEN;
+ BOOL is_xbox_gamepad(WORD vid, WORD pid) DECLSPEC_HIDDEN;
+ BOOL is_dualshock4_gamepad(WORD vid, WORD pid) DECLSPEC_HIDDEN;
+diff --git a/dlls/winebus.sys/unixlib.c b/dlls/winebus.sys/unixlib.c
+index 8cff984ac20..ae742b0cba4 100644
+--- a/dlls/winebus.sys/unixlib.c
++++ b/dlls/winebus.sys/unixlib.c
+@@ -35,9 +35,23 @@
+ #include "wine/debug.h"
+ #include "wine/list.h"
+ #include "wine/unixlib.h"
++#include "wine/js_blacklist.h" /* for wine_js_blacklist */
+
+ #include "unix_private.h"
+
++BOOL is_wine_blacklisted(DWORD vid, DWORD pid)
++{
++    int i;
++
++    for (i = 0; i < ARRAY_SIZE(wine_js_blacklist); ++i)
++    {
++        if (vid != wine_js_blacklist[i].vid) continue;
++        if (!wine_js_blacklist[i].pid || wine_js_blacklist[i].pid == pid) return TRUE;
++    }
++
++    return FALSE;
++}
++
+ /* logic from SDL2's SDL_ShouldIgnoreGameController */
+ BOOL is_sdl_blacklisted(DWORD vid, DWORD pid)
+ {
+diff --git a/include/wine/js_blacklist.h b/include/wine/js_blacklist.h
+new file mode 100644
+index 00000000000..b8f2ec7dd28
+--- /dev/null
++++ b/include/wine/js_blacklist.h
+@@ -0,0 +1,3 @@
++static const struct { short vid; short pid; } wine_js_blacklist[] = {
++    {0x056a, 0x0000}, /* all Wacom devices */
++};
+
 From 7926577b40f525e5c4081328e8c2f1dd113ef13b Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 15 Dec 2020 12:23:31 -0600
