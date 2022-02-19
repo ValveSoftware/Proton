@@ -9,7 +9,7 @@
 	url = https://github.com/doitsujin/dxvk/
 [submodule "ffmpeg"]
 	path = ffmpeg
-	url = https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg/
+	url = https://github.com/FFmpeg/FFmpeg
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr/
@@ -71,8 +71,8 @@
         path = Vulkan-Loader
         url = https://github.com/KhronosGroup/Vulkan-Loader
 [submodule "vkd3d"]
-        path = vkd3d
-        url = git://repo.or.cz/vkd3d/zf.git
+	path = vkd3d
+	url = https://github.com/ValveSoftware/vkd3d.git
 [submodule "dav1d"]
 	path = dav1d
 	url = https://github.com/videolan/dav1d.git
