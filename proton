@@ -374,7 +374,7 @@ class Proton:
                 #make default prefix
                 local_env["WINEPREFIX"] = self.default_pfx_dir
                 local_env["WINEDEBUG"] = "-all"
-                g_session.run_proc([self.wine_bin, "wineboot"], local_env)
+                g_session.run_proc([self.wine64_bin, "wineboot"], local_env)
                 g_session.run_proc([self.wineserver_bin, "-w"], local_env)
 
 class CompatData:
@@ -1086,19 +1086,6 @@ def comma_escaped(s):
         idx = idx - 1
     return escaped
 
-#hopefully short-lived, app-specific workarounds for Proton bugs
-def default_compat_config():
-    ret = set()
-    if "SteamAppId" in os.environ:
-        appid = os.environ["SteamAppId"]
-        if appid == "1172470": #Apex Legends
-            ret.add("noesync")
-            ret.add("nofsync")
-        elif appid == "105800": #PixelJunk Eden
-            ret.add("noesync")
-            ret.add("nofsync")
-    return ret
-
 class Session:
     def __init__(self):
         self.log_file = None
@@ -1505,11 +1492,14 @@ class Session:
         else:
             remote_debug_proc = None
 
+        #commented out, used for debugging
+        #commandstring = str(sys.argv[2:] + self.cmdlineappend)
+
         # CoD: Black Ops 3 workaround
         if os.environ.get("SteamGameId", 0) == "311210":
-            rc = self.run_proc([g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
+            rc = self.run_proc([g_proton.wine_bin, "start.exe", "/b", "c:\\Program Files (x86)\\Steam\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
         else:
-            rc = self.run_proc([g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
+            rc = self.run_proc([g_proton.wine64_bin, "start.exe", "/b", "c:\\windows\\system32\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
             remote_debug_proc.kill()
