@@ -133,7 +133,6 @@
     echo "WINE: -STAGING- Manually apply reverted --data-only stdole32.tlb patch"
     patch -Np1 < ../patches/wine-hotfixes/staging/0020-stdole32.tlb-Compile-typelib-with-oldtlb.patch
 
-
 ### END WINE STAGING APPLY SECTION ###
 
 ### (2-3) GAME PATCH SECTION ###
@@ -157,6 +156,9 @@
     echo "WINE: -GAME FIXES- Castlevania Advance fix"
     patch -Np1 < ../patches/game-patches/castlevania-advance-collection.patch
 
+    echo "WINE: -GAME FIXES- add halo infinite patches"
+    patch -Np1 < ../patches/game-patches/halo-infinite-twinapi.appcore.dll.patch
+
 ### END GAME PATCH SECTION ###
 
 ### (2-4) PROTON PATCH SECTION ###
@@ -177,8 +179,11 @@
     echo "WINE: -PROTON- steamclient swap"
     patch -Np1 < ../patches/proton/08-proton-steamclient_swap.patch
 
-    echo "WINE: -PROTON- protonify patches part 1"
+    echo "WINE: -PROTON- protonify part 1"
     patch -Np1 < ../patches/proton/10-proton-protonify_staging.patch
+
+    echo "WINE: -PROTON- protonify part 2"
+    patch -Np1 < ../patches/proton/67-protonify-2.patch
 
     echo "WINE: -PROTON- protonify-audio"
     patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
@@ -246,7 +251,6 @@
     patch -Np1 < ../patches/proton/39-proton-cpu-topology-overrides.patch
 
     echo "WINE: -PROTON- fullscreen hack"
-#    patch -Np1 < ../patches/proton/41-valve_proton_fullscreen_hack-staging-tkg.patch
     patch -Np1 < ../patches/proton/fshack/01-vulkan-1-prefer-builtin.patch
     patch -Np1 < ../patches/proton/fshack/02-vulkan-childwindow.patch
     patch -Np1 < ../patches/proton/fshack/03-window-manager-fixes.patch
@@ -311,18 +315,12 @@
 
     # keep this in place, proton and wine tend to bounce back and forth and proton uses a different URL.
     # We can always update the patch to match the version and sha256sum even if they are the same version
-    echo "hotfix to update mono version"
+    echo "WINE: -HOTFIX- update mono version"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-update_mono_version.patch
 
-    echo "add halo infinite patches"
-    patch -Np1 < ../patches/wine-hotfixes/pending/halo-infinite-twinapi.appcore.dll.patch
-
     # https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
-    echo "unity crash hotfix"
+    echo "WINE: -HOTFIX- unity crash hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
-
-    echo "protonify part 2"
-    patch -Np1 < ../patches/proton/67-protonify-2.patch
 
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
