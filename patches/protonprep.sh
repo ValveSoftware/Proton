@@ -185,6 +185,9 @@
     echo "WINE: -PROTON- protonify part 2"
     patch -Np1 < ../patches/proton/67-protonify-2.patch
 
+    echo "WINE: -PROTON- tabtip + uiautomationcore patches"
+    patch -Np1 < ../patches/proton/68-proton-tabtip-uiautomationcore.patch
+
     echo "WINE: -PROTON- protonify-audio"
     patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
 
