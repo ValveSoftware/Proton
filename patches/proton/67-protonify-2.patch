@@ -4213,3 +4213,677 @@ index b58714d3253..c1a6b1438ea 100644
  C_SRCS = \
  	channel.c \
  	error.c \
+From f1d87f18ff36aa709b26845ae419bfc1ab9a1c37 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 19 Nov 2021 16:30:57 +0300
+Subject: [PATCH] kernelbase: HACK: Force CEF in process GPU rendering for
+ Paradox launcher.
+
+To be removed once other process Vulkan rendering is implemented.
+
+CW-Bug-Id: #19617
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+---
+ dlls/kernelbase/process.c | 49 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 41 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/kernelbase/process.c b/dlls/kernelbase/process.c
+index b2a49a16177..4628081f61f 100644
+--- a/dlls/kernelbase/process.c
++++ b/dlls/kernelbase/process.c
+@@ -678,6 +678,33 @@ static int battleye_launcher_redirect_hack(const WCHAR *app_name, WCHAR *new_nam
+     return 1;
+ }
+
++static const WCHAR *hack_append_command_line( const WCHAR *cmd )
++{
++    static const struct
++    {
++        const WCHAR *exe_name;
++        const WCHAR *append;
++    }
++    options[] =
++    {
++        {L"UplayWebCore.exe", L" --use-gl=swiftshader"},
++        {L"Paradox Launcher.exe", L" --use-gl=swiftshader --in-process-gpu"},
++    };
++    unsigned int i;
++
++    if (!cmd) return NULL;
++
++    for (i = 0; i < ARRAY_SIZE(options); ++i)
++    {
++        if (wcsstr( cmd, options[i].exe_name ))
++        {
++            FIXME( "HACK: appending %s to command line.\n", debugstr_w(options[i].append) );
++            return options[i].append;
++        }
++    }
++    return NULL;
++}
++
+ /**********************************************************************
+  *           CreateProcessInternalW   (kernelbase.@)
+  */
+@@ -694,6 +721,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH CreateProcessInternalW( HANDLE token, const WCHAR
+     RTL_USER_PROCESS_PARAMETERS *params = NULL;
+     RTL_USER_PROCESS_INFORMATION rtl_info;
+     HANDLE parent = 0, debug = 0, elevated_token = NULL;
++    const WCHAR *append;
+     ULONG nt_flags = 0;
+     NTSTATUS status;
+
+@@ -711,33 +739,38 @@ BOOL WINAPI DECLSPEC_HOTPATCH CreateProcessInternalW( HANDLE token, const WCHAR
+                 return FALSE;
+             swprintf( tidy_cmdline, lstrlenW(app_name) + 3, L"\"%s\"", app_name );
+         }
++        else if ((append = hack_append_command_line( app_name )))
++        {
++            tidy_cmdline = RtlAllocateHeap( GetProcessHeap(), 0,
++                                            sizeof(WCHAR) * (lstrlenW(cmd_line) + lstrlenW(append) + 1) );
++            lstrcpyW(tidy_cmdline, cmd_line);
++            lstrcatW(tidy_cmdline, append);
++        }
+     }
+     else
+     {
+-        static const WCHAR *opt = L" --use-gl=swiftshader";
+         WCHAR *cmdline_new = NULL;
+
+-        if (cmd_line && wcsstr( cmd_line, L"UplayWebCore.exe" ))
++        if ((append = hack_append_command_line( cmd_line )))
+         {
+-            FIXME( "HACK: appending %s to command line %s.\n", debugstr_w(opt), debugstr_w(cmd_line) );
+-
+-            cmdline_new = heap_alloc( sizeof(WCHAR) * (lstrlenW(cmd_line) + lstrlenW(opt) + 1) );
++            cmdline_new = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(WCHAR)
++                                           * (lstrlenW(cmd_line) + lstrlenW(append) + 1) );
+             lstrcpyW(cmdline_new, cmd_line);
+-            lstrcatW(cmdline_new, opt);
++            lstrcatW(cmdline_new, append);
+         }
+
+         tidy_cmdline = get_file_name( cmdline_new ? cmdline_new : cmd_line, name, ARRAY_SIZE(name) );
+
+         if (!tidy_cmdline)
+         {
+-            heap_free( cmdline_new );
++            HeapFree( GetProcessHeap(), 0, cmdline_new );
+             return FALSE;
+         }
+
+         if (cmdline_new)
+         {
+             if (cmdline_new == tidy_cmdline) cmd_line = NULL;
+-            else heap_free( cmdline_new );
++            else HeapFree( GetProcessHeap(), 0, cmdline_new );
+         }
+         app_name = name;
+     }
+From 1e979a7c33ec3dbc05435255175bd44a9bcf235c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 16 Nov 2021 21:41:28 +0100
+Subject: [PATCH] HACK: mscoree: Build a dummy CameraQuakeViewer.dll for Nights
+ of Azure.
+
+The game references types from a non-existing DLL, and Mono cannot
+be taught to handle it easily. This is an ugly hack to make sure the
+load succeeds.
+
+CW-Bug-Id: #19046
+---
+ dlls/mscoree/metahost.c | 62 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+
+diff --git a/dlls/mscoree/metahost.c b/dlls/mscoree/metahost.c
+index bf281557c4e..366c415090e 100644
+--- a/dlls/mscoree/metahost.c
++++ b/dlls/mscoree/metahost.c
+@@ -1687,6 +1687,44 @@ static MonoAssembly* mono_assembly_try_load(WCHAR *path)
+     return result;
+ }
+
++static BOOL compile_assembly(const char *source, const char *target, char *target_path, DWORD target_path_len)
++{
++    static const char *csc = "C:\\windows\\Microsoft.NET\\Framework\\v2.0.50727\\csc.exe";
++    char cmdline[2 * MAX_PATH + 74], tmp[MAX_PATH], tmpdir[MAX_PATH], source_path[MAX_PATH];
++    STARTUPINFOA si = {.cb = sizeof(STARTUPINFOA)};
++    PROCESS_INFORMATION pi;
++    HANDLE file;
++    DWORD size;
++    BOOL ret;
++    LUID id;
++
++    if (!PathFileExistsA(csc)) return FALSE;
++    if (!AllocateLocallyUniqueId(&id)) return FALSE;
++
++    GetTempPathA(MAX_PATH, tmp);
++    if (!GetTempFileNameA(tmp, "assembly", id.LowPart, tmpdir)) return FALSE;
++    if (!CreateDirectoryA(tmpdir, NULL) && GetLastError() != ERROR_ALREADY_EXISTS) return FALSE;
++
++    snprintf(source_path, MAX_PATH, "%s\\source.cs", tmpdir);
++    snprintf(target_path, target_path_len, "%s\\%s", tmpdir, target);
++
++    file = CreateFileA(source_path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
++    if (file == INVALID_HANDLE_VALUE) return FALSE;
++    ret = WriteFile(file, source, strlen(source), &size, NULL);
++    CloseHandle(file);
++    if (!ret) return FALSE;
++
++    snprintf(cmdline, ARRAY_SIZE(cmdline), "%s /t:library /out:\"%s\" \"%s\"", csc, target_path, source_path);
++    ret = CreateProcessA(csc, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
++    if (!ret) return FALSE;
++
++    WaitForSingleObject(pi.hProcess, INFINITE);
++    CloseHandle(pi.hThread);
++    CloseHandle(pi.hProcess);
++
++    return PathFileExistsA(target_path);
++}
++
+ static MonoAssembly* CDECL mono_assembly_preload_hook_fn(MonoAssemblyName *aname, char **assemblies_path, void *user_data)
+ {
+     HRESULT hr;
+@@ -1786,6 +1824,30 @@ static MonoAssembly* CDECL mono_assembly_preload_hook_fn(MonoAssemblyName *aname
+         }
+     }
+
++    if (!strcmp(assemblyname, "CameraQuakeViewer"))
++    {
++        /* HACK for Nights of Azure which references type from a non-existing DLL.
++         * Native .NET framework normally gets away with it but Mono cannot
++         * due to some deeply rooted differences. */
++        const char* sgi = getenv("SteamGameId");
++        if (sgi && !strcmp(sgi, "527280"))
++        {
++            char assembly_path[MAX_PATH];
++
++            FIXME("HACK: Building CameraQuakeViewer.dll\n");
++
++            if (compile_assembly("namespace CQViewer { class CQMgr {} }", "CameraQuakeViewer.dll", assembly_path, MAX_PATH))
++                result = mono_assembly_open(assembly_path, &stat);
++            else
++                ERR("HACK: Failed to build CameraQuakeViewer.dll\n");
++
++            if (result)
++                goto done;
++            else
++                ERR("HACK: Failed to load CameraQuakeViewer.dll\n");
++        }
++    }
++
+     /* FIXME: We should search the given paths before the GAC. */
+
+     if ((search_flags & ASSEMBLY_SEARCH_GAC) != 0)
+From fc3d95a311a8e329af3d55a88fc68b41869af863 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 22 Dec 2021 00:57:25 +0300
+Subject: [PATCH] wine.inf: Set a valid Win10 ProductId.
+
+CW-Bug-Id: #19702
+---
+ loader/wine.inf.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 0a41810d884..1c2286d722f 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -549,7 +549,7 @@ HKCU,%CurrentVersion%\Run,,16
+ HKCU,%CurrentVersionNT%\Winlogon,,16
+ HKLM,%CurrentVersion%,"CommonFilesDir",,"%16427%"
+ HKLM,%CurrentVersion%,"FirstInstallDateTime",1,21,81,7c,23
+-HKLM,%CurrentVersion%,"ProductId",,"12345-oem-0000001-54321"
++HKLM,%CurrentVersion%,"ProductId",,"00330-50000-00000-AAOEM"
+ HKLM,%CurrentVersion%,"ProgramFilesDir",,"%16422%"
+ HKLM,%CurrentVersion%,"ProgramFilesPath",0x20000,"%%ProgramFiles%%"
+ HKLM,%CurrentVersion%,"RegisteredOrganization",2,""
+@@ -573,7 +573,7 @@ HKLM,%CurrentVersion%\Setup\WindowsFeatures\WindowsMediaVersion,,,"12.0.7601.188
+ HKLM,%CurrentVersion%\Shell Extensions\Approved,,16
+ HKLM,%CurrentVersion%\Uninstall,,16
+ HKLM,%CurrentVersionNT%,"InstallDate",0x10003,1273299354
+-HKLM,%CurrentVersionNT%,"ProductId",,"12345-oem-0000001-54321"
++HKLM,%CurrentVersionNT%,"ProductId",,"00330-50000-00000-AAOEM"
+ HKLM,%CurrentVersionNT%,"RegisteredOrganization",2,""
+ HKLM,%CurrentVersionNT%,"RegisteredOwner",2,""
+ HKLM,%CurrentVersionNT%,"SystemRoot",,"%10%"
+From 80d7c0c041636e900589e8ae41c5fdd3a0470b29 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 22 Dec 2021 00:59:32 +0300
+Subject: [PATCH] wineboot: Generate better DigitalProductId.
+
+CW-Bug-Id: #19702
+---
+ loader/wine.inf.in           |  4 +--
+ programs/wineboot/wineboot.c | 48 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+), 2 deletions(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 1c2286d722f..677ae91a406 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -5640,7 +5640,7 @@ HKLM,%CurrentVersionNT%,"CSDVersion",2,""
+ HKLM,%CurrentVersionNT%,"CurrentBuild",2,"19043"
+ HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"19043"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+-HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
++HKLM,%CurrentVersionNT%,"DigitalProductId",2,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -5660,7 +5660,7 @@ HKLM,%CurrentVersionNT%,"CSDVersion",2,""
+ HKLM,%CurrentVersionNT%,"CurrentBuild",2,"19043"
+ HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"19043"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+-HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
++HKLM,%CurrentVersionNT%,"DigitalProductId",2,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+index 5d1190583b1..16b44ca28ab 100644
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -68,6 +68,7 @@
+ #include <winternl.h>
+ #include <ddk/wdm.h>
+ #include <sddl.h>
++#include <ntsecapi.h>
+ #include <wine/svcctl.h>
+ #include <wine/asm.h>
+ #include <wine/debug.h>
+@@ -1605,6 +1606,52 @@ static void usage( int status )
+     exit( status );
+ }
+
++static void create_digitalproductid(void)
++{
++    BYTE digital_product_id[0xa4];
++    char product_id[256];
++    LSTATUS status;
++    unsigned int i;
++    DWORD size;
++    DWORD type;
++    HKEY key;
++
++    if ((status = RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows NT\\CurrentVersion",
++                       0, KEY_ALL_ACCESS, &key )))
++        return;
++    size = sizeof(product_id);
++    status = RegQueryValueExA( key, "ProductId", NULL, &type, (BYTE *)product_id, &size );
++    if (status) goto done;
++    if (!size) goto done;
++    if (product_id[size - 1])
++    {
++        if (size == sizeof(product_id)) goto done;
++        product_id[size++] = 0;
++    }
++
++    if (!RegQueryValueExA( key, "DigitalProductId", NULL, &type, NULL, &size ) && size == sizeof(digital_product_id))
++    {
++        if (RegQueryValueExA( key, "DigitalProductId", NULL, &type, digital_product_id, &size ))
++            goto done;
++        for (i = 0; i < size; ++i)
++            if (digital_product_id[i]) break;
++        if (i < size) goto done;
++    }
++
++    memset( digital_product_id, 0, sizeof(digital_product_id) );
++    *(DWORD *)digital_product_id = sizeof(digital_product_id);
++    digital_product_id[4] = 3;
++    strcpy( (char *)digital_product_id + 8, product_id );
++    *(DWORD *)(digital_product_id + 0x20) = 0x0cec;
++    *(DWORD *)(digital_product_id + 0x34) = 0x0cec;
++    strcpy( (char *)digital_product_id + 0x24, "[TH] X19-99481" );
++    digital_product_id[0x42] = 8;
++    RtlGenRandom( digital_product_id + 0x38, 0x18 );
++    RegSetValueExA( key, "DigitalProductId", 0, REG_BINARY, digital_product_id, sizeof(digital_product_id) );
++done:
++    RegCloseKey( key );
++}
++
+ int __cdecl main( int argc, char *argv[] )
+ {
+     /* First, set the current directory to SystemRoot */
+@@ -1716,6 +1763,7 @@ int __cdecl main( int argc, char *argv[] )
+     }
+     if (init || update) update_wineprefix( update );
+
++    create_digitalproductid();
+     create_volatile_environment_registry_key();
+
+     ProcessRunKeys( HKEY_LOCAL_MACHINE, L"RunOnce", TRUE, TRUE );
+From ec73e47719b3d135a3b266eb195f3663e0bed847 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 6 Jan 2022 14:00:35 +0300
+Subject: [PATCH] winhttp: HACK: Reuse threadpool for Monster Hunter Rise.
+
+CW-Bug-Id: #19484
+---
+ dlls/winhttp/main.c            |  6 ++++
+ dlls/winhttp/request.c         | 64 +++++++++++++++++++++++++++++++---
+ dlls/winhttp/winhttp_private.h |  1 +
+ 3 files changed, 67 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winhttp/main.c b/dlls/winhttp/main.c
+index e4449364386..86d0e79a182 100644
+--- a/dlls/winhttp/main.c
++++ b/dlls/winhttp/main.c
+@@ -42,9 +42,15 @@ BOOL WINAPI DllMain(HINSTANCE hInstDLL, DWORD fdwReason, LPVOID lpv)
+     switch(fdwReason)
+     {
+     case DLL_PROCESS_ATTACH:
++    {
++        char str[64];
++
+         winhttp_instance = hInstDLL;
+         DisableThreadLibraryCalls(hInstDLL);
++        if ((reuse_threadpool = GetEnvironmentVariableA( "SteamGameId", str, sizeof(str)) && !strcmp(str, "1446780" )))
++            ERR( "HACK: setting reuse_threadpool.\n" );
+         break;
++    }
+     case DLL_PROCESS_DETACH:
+         if (lpv) break;
+         netconn_unload();
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index d76edfa71d7..18c30087d6f 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -43,6 +43,24 @@ WINE_DEFAULT_DEBUG_CHANNEL(winhttp);
+
+ #define DEFAULT_KEEP_ALIVE_TIMEOUT 30000
+
++BOOL reuse_threadpool;
++
++static struct
++{
++    TP_POOL *pool;
++    LONG ref;
++}
++thread_pool_cache;
++
++static CRITICAL_SECTION thread_pool_cache_cs;
++static CRITICAL_SECTION_DEBUG thread_pool_cache_debug =
++{
++    0, 0, &thread_pool_cache_cs,
++    { &thread_pool_cache_debug.ProcessLocksList, &thread_pool_cache_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": thread_pool_cache_cs") }
++};
++static CRITICAL_SECTION thread_pool_cache_cs = { &thread_pool_cache_debug, -1, 0, 0, 0, 0 };
++
+ static const WCHAR *attribute_table[] =
+ {
+     L"Mime-Version",                /* WINHTTP_QUERY_MIME_VERSION               = 0  */
+@@ -122,13 +140,37 @@ static const WCHAR *attribute_table[] =
+     NULL                            /* WINHTTP_QUERY_PASSPORT_CONFIG            = 78 */
+ };
+
++static TP_POOL *create_thread_pool(void)
++{
++    TP_POOL *pool;
++
++    if (!(pool = CreateThreadpool( NULL ))) return NULL;
++    SetThreadpoolThreadMinimum( pool, 1 );
++    SetThreadpoolThreadMaximum( pool, 1 );
++
++    return pool;
++}
++
+ static DWORD start_queue( struct queue *queue )
+ {
+     if (queue->pool) return ERROR_SUCCESS;
+
+-    if (!(queue->pool = CreateThreadpool( NULL ))) return GetLastError();
+-    SetThreadpoolThreadMinimum( queue->pool, 1 );
+-    SetThreadpoolThreadMaximum( queue->pool, 1 );
++    if (reuse_threadpool)
++    {
++        EnterCriticalSection( &thread_pool_cache_cs );
++        if (!thread_pool_cache.pool)
++        {
++            assert( !thread_pool_cache.ref );
++            thread_pool_cache.pool = create_thread_pool();
++        }
++        ++thread_pool_cache.ref;
++        queue->pool = thread_pool_cache.pool;
++        LeaveCriticalSection( &thread_pool_cache_cs );
++    }
++    else
++    {
++        if (!(queue->pool = create_thread_pool())) return GetLastError();
++    }
+
+     memset( &queue->env, 0, sizeof(queue->env) );
+     queue->env.Version = 1;
+@@ -141,7 +183,21 @@ static DWORD start_queue( struct queue *queue )
+ void stop_queue( struct queue *queue )
+ {
+     if (!queue->pool) return;
+-    CloseThreadpool( queue->pool );
++    if (reuse_threadpool)
++    {
++        EnterCriticalSection( &thread_pool_cache_cs );
++        assert(thread_pool_cache.ref);
++        if (!--thread_pool_cache.ref)
++        {
++            CloseThreadpool( thread_pool_cache.pool );
++            thread_pool_cache.pool = NULL;
++        }
++        LeaveCriticalSection( &thread_pool_cache_cs );
++    }
++    else
++    {
++        CloseThreadpool( queue->pool );
++    }
+     queue->pool = NULL;
+     TRACE("stopped %p\n", queue);
+ }
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 291a38e7bdd..fbd52a0eea7 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -397,5 +397,6 @@ static inline char *strdupWA_sized( const WCHAR *src, DWORD size )
+ }
+
+ extern HINSTANCE winhttp_instance DECLSPEC_HIDDEN;
++extern BOOL reuse_threadpool DECLSPEC_HIDDEN;
+
+ #endif /* _WINE_WINHTTP_PRIVATE_H_ */
+From 883cf0f65186fb8f6faa2f903132ebfdb84f9fb0 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 20 Jan 2022 22:49:14 +0300
+Subject: [PATCH] win32u: Allow getting GL driver when DC is locked by another
+ thread.
+
+CW-Bug-Id: #20015
+---
+ dlls/win32u/dc.c            | 19 -------------------
+ dlls/win32u/driver.c        | 16 +++++++++++-----
+ dlls/win32u/ntgdi_private.h | 19 +++++++++++++++++++
+ 3 files changed, 30 insertions(+), 24 deletions(-)
+
+diff --git a/dlls/win32u/dc.c b/dlls/win32u/dc.c
+index 3aae73779e9..9c09bf66e03 100644
+--- a/dlls/win32u/dc.c
++++ b/dlls/win32u/dc.c
+@@ -63,25 +63,6 @@ static const struct gdi_obj_funcs dc_funcs =
+ };
+
+
+-static inline DC *get_dc_obj( HDC hdc )
+-{
+-    DWORD type;
+-    DC *dc = get_any_obj_ptr( hdc, &type );
+-    if (!dc) return NULL;
+-
+-    switch (type)
+-    {
+-    case NTGDI_OBJ_DC:
+-    case NTGDI_OBJ_MEMDC:
+-    case NTGDI_OBJ_ENHMETADC:
+-        return dc;
+-    default:
+-        GDI_ReleaseObj( hdc );
+-        SetLastError( ERROR_INVALID_HANDLE );
+-        return NULL;
+-    }
+-}
+-
+ /* alloc DC_ATTR from a pool of memory accessible from client */
+ static DC_ATTR *alloc_dc_attr(void)
+ {
+diff --git a/dlls/win32u/driver.c b/dlls/win32u/driver.c
+index 39996086c6d..147f7da1cef 100644
+--- a/dlls/win32u/driver.c
++++ b/dlls/win32u/driver.c
+@@ -1348,13 +1348,19 @@ NTSTATUS WINAPI NtGdiDdDDICheckVidPnExclusiveOwnership( const D3DKMT_CHECKVIDPNE
+ struct opengl_funcs * CDECL __wine_get_wgl_driver( HDC hdc, UINT version )
+ {
+     struct opengl_funcs *ret = NULL;
+-    DC * dc = get_dc_ptr( hdc );
++    DC * dc = get_dc_obj( hdc );
++    PHYSDEV physdev;
+
+-    if (dc)
++    if (!dc) return NULL;
++
++    if (dc->attr->disabled)
+     {
+-        PHYSDEV physdev = GET_DC_PHYSDEV( dc, wine_get_wgl_driver );
+-        ret = physdev->funcs->wine_get_wgl_driver( physdev, version );
+-        release_dc_ptr( dc );
++        GDI_ReleaseObj( hdc );
++        return NULL;
+     }
++
++    physdev = GET_DC_PHYSDEV( dc, wine_get_wgl_driver );
++    ret = physdev->funcs->wine_get_wgl_driver( physdev, version );
++    GDI_ReleaseObj( hdc );
+     return ret;
+ }
+diff --git a/dlls/win32u/ntgdi_private.h b/dlls/win32u/ntgdi_private.h
+index bfeb4557da7..d89f9a56ad4 100644
+--- a/dlls/win32u/ntgdi_private.h
++++ b/dlls/win32u/ntgdi_private.h
+@@ -660,6 +660,25 @@ static inline void copy_bitmapinfo( BITMAPINFO *dst, const BITMAPINFO *src )
+     memcpy( dst, src, get_dib_info_size( src, DIB_RGB_COLORS ));
+ }
+
++static inline DC *get_dc_obj( HDC hdc )
++{
++    DWORD type;
++    DC *dc = get_any_obj_ptr( hdc, &type );
++    if (!dc) return NULL;
++
++    switch (type)
++    {
++    case NTGDI_OBJ_DC:
++    case NTGDI_OBJ_MEMDC:
++    case NTGDI_OBJ_ENHMETADC:
++        return dc;
++    default:
++        GDI_ReleaseObj( hdc );
++        SetLastError( ERROR_INVALID_HANDLE );
++        return NULL;
++    }
++}
++
+ extern void CDECL free_heap_bits( struct gdi_image_bits *bits ) DECLSPEC_HIDDEN;
+
+ void set_gdi_client_ptr( HGDIOBJ handle, void *ptr ) DECLSPEC_HIDDEN;
+From 02303a876c719603df9c1754984edacd7c5bfa2c Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 25 Jan 2022 14:42:07 +0300
+Subject: [PATCH] server: Release correct sockets in poll_socket().
+
+CW-Bug-Id: #20051
+---
+ server/sock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/sock.c b/server/sock.c
+index 7343305d6e0..42c3f0684cc 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -3052,7 +3052,7 @@ static void poll_socket( struct sock *poll_sock, struct async *async, int exclus
+         req->sockets[i].sock = (struct sock *)get_handle_obj( current->process, sockets[i].socket, 0, &sock_ops );
+         if (!req->sockets[i].sock)
+         {
+-            for (j = 0; j < i; ++j) release_object( req->sockets[i].sock );
++            for (j = 0; j < i; ++j) release_object( req->sockets[j].sock );
+             if (req->timeout) remove_timeout_user( req->timeout );
+             free( req );
+             return;
+From 762a8d7bd8e1027eae7222c23253726a08af9964 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 3 Feb 2022 11:35:13 -0600
+Subject: [PATCH] HACK: shell32: Preserve duplicated Documents/Stuff
+ directories
+
+---
+ dlls/shell32/shellpath.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/dlls/shell32/shellpath.c b/dlls/shell32/shellpath.c
+index 78a09888194..7c8bc029575 100644
+--- a/dlls/shell32/shellpath.c
++++ b/dlls/shell32/shellpath.c
+@@ -3113,6 +3113,23 @@ static HRESULT create_extra_folders(void)
+         hr = SHGetFolderPathAndSubDirW(0, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL,
+                                        SHGFP_TYPE_DEFAULT, L"Microsoft\\Windows\\Themes", path);
+     }
++
++
++    /* Proton HACK: In older Proton versions, duplicate Stuff directories were
++     * created at both %PROFILE%\Music and %PROFILE\Documents\Music. Due to
++     * some bugs when downgrading to those older Proton versions, create those
++     * missing Documents directories here, too. */
++    SHGetFolderPathAndSubDirW(0, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL,
++                                   SHGFP_TYPE_DEFAULT, L"Downloads", path);
++    SHGetFolderPathAndSubDirW(0, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL,
++                                   SHGFP_TYPE_DEFAULT, L"Music", path);
++    SHGetFolderPathAndSubDirW(0, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL,
++                                   SHGFP_TYPE_DEFAULT, L"Pictures", path);
++    SHGetFolderPathAndSubDirW(0, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL,
++                                   SHGFP_TYPE_DEFAULT, L"Templates", path);
++    SHGetFolderPathAndSubDirW(0, CSIDL_PERSONAL | CSIDL_FLAG_CREATE, NULL,
++                                   SHGFP_TYPE_DEFAULT, L"Videos", path);
++
+     return hr;
+ }
+
+From 1143da088beef1fdbcfc208af189d25ce28e9f75 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 8 Feb 2022 16:39:35 +0200
+Subject: [PATCH] server: Always update cached socket name after connect.
+
+Fixes a regression introduced by
+5c009c17b3a212c3f5b0034c465077c0c593daae.
+
+For IPV6 socket already bound with bind() with IPV6_V6ONLY set to 0
+the address returned by getsockname() may change after it is connected
+to a IPV4 peer (e. g., from :: to ::ffff:192.0.2.128).
+
+The effect of blamed commit is that before that Unix getsockname()
+was called for each ws2_32 getsockname() and after the commit the
+socket name is cached at bind and connect.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+CW-Bug-Id: #20115
+---
+ server/sock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/sock.c b/server/sock.c
+index 42c3f0684cc..3c78efcc134 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -2342,7 +2342,7 @@ static void sock_ioctl( struct fd *fd, ioctl_code_t code, struct async *async )
+         allow_fd_caching( sock->fd );
+
+         unix_len = sizeof(unix_addr);
+-        if (!sock->bound && !getsockname( unix_fd, &unix_addr.addr, &unix_len ))
++        if (!getsockname( unix_fd, &unix_addr.addr, &unix_len ))
+             sock->addr_len = sockaddr_from_unix( &unix_addr, &sock->addr.addr, sizeof(sock->addr) );
+         sock->bound = 1;
+
