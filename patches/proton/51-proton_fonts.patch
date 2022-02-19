@@ -616,3 +616,77 @@ index 2dcf73380ef..d9ad8a63fdb 100644
  HKLM,%FontsNT%,"SimSun (TrueType)",,"simsun.ttc"
  HKCU,Software\Wine\Fonts\Replacements,"Palatino Linotype",,"Times New Roman"
 
+From 06ef8f2a913dcd776a80ae54c6df5d54a2f731f7 Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Wed, 12 Jan 2022 13:03:28 +0100
+Subject: [PATCH] HACK: win32u/font: Add other font linking entries.
+
+They improve CJK rendering for the Rockstar Launcher.
+
+CW-Bug-Id: #19917
+---
+ dlls/win32u/font.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/dlls/win32u/font.c b/dlls/win32u/font.c
+index be374584282..46dff27d55b 100644
+--- a/dlls/win32u/font.c
++++ b/dlls/win32u/font.c
+@@ -1686,6 +1686,12 @@ static const WCHAR batangW[] =
+     {'B','a','t','a','n','g',0};
+ static const WCHAR arialW[] =
+     {'A','r','i','a','l',0};
++static const WCHAR arial_boldW[] =
++    {'A','r','i','a','l',' ','B','o','l','d',0};
++static const WCHAR courier_newW[] =
++    {'C','o','u','r','i','e','r',' ','N','e','w',0};
++static const WCHAR courier_new_boldW[] =
++    {'C','o','u','r','i','e','r',' ','N','e','w',' ','B','o','l','d',0};
+
+ static const WCHAR * const font_links_list[] =
+ {
+@@ -2882,6 +2888,9 @@ static void update_font_system_link_info(UINT current_ansi_codepage)
+         set_multi_value_key(hkey, microsoft_sans_serifW, link, len);
+         set_multi_value_key(hkey, tahomaW, link, len);
+         set_multi_value_key(hkey, arialW, link, len);
++        set_multi_value_key(hkey, arial_boldW, link, len);
++        set_multi_value_key(hkey, courier_newW, link, len);
++        set_multi_value_key(hkey, courier_new_boldW, link, len);
+         NtClose( hkey );
+     }
+ }
+From f095d59170ab2f71c5fd5c91ec02f5d89692ff15 Mon Sep 17 00:00:00 2001
+From: Giovanni Mascellani <gmascellani@codeweavers.com>
+Date: Fri, 14 Jan 2022 09:46:20 +0100
+Subject: [PATCH] HACK: riched20: Ignore WM_SETFONT for Grand Theft Auto V.
+
+CW-Bug-Id: #19917
+---
+ dlls/riched20/editor.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/dlls/riched20/editor.c b/dlls/riched20/editor.c
+index 429f023ebe4..6a2c7c0748f 100644
+--- a/dlls/riched20/editor.c
++++ b/dlls/riched20/editor.c
+@@ -3570,6 +3570,20 @@ LRESULT editor_handle_message( ME_TextEditor *editor, UINT msg, WPARAM wParam,
+     CHARFORMAT2W fmt;
+     HDC hDC;
+     BOOL bRepaint = LOWORD(lParam);
++    const char *sgi = getenv("STEAM_COMPAT_APP_ID");
++
++    /* Grand Theft Auto V installer tries to set font for license
++     * richedit to Arial, which breaks CJK languages. Given that the
++     * RTF already has reasonable fonts set, we can just ignore the
++     * message. This can be removed once our richedit is able to do
++     * font substitution properly. CW bug #19917.
++     *
++     * It's important that STEAM_COMPAT_APP_ID environment variable is
++     * used instead of the usual SteamGameId, because the latter is
++     * not available during the configuration stage, when the
++     * installer is run. */
++    if (sgi && strcmp(sgi, "271590") == 0)
++        return 0;
+
+     if (!wParam)
+       wParam = (WPARAM)GetStockObject(SYSTEM_FONT);
