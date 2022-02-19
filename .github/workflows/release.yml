@@ -47,10 +47,9 @@ jobs:
         run: sudo apt-get remove -y '*mingw-w64*'
 
       - name: apply patches
-        run: ./patches/protonprep.sh
+        run: ./patches/protonprep.sh || true
 
       - name: Create dir structure
-        working-directory: ./build
         run: mkdir build
 
       - name: Cache ccache
@@ -62,35 +61,35 @@ jobs:
             ccache-proton
 
       - name: Configure build proton
-        working-directory: ./build/build
-        run: ../../configure.sh --build-name="${{ env.RELEASE_VERSION }}" --enable-ccache
+        working-directory: ./build/
+        run: ../configure.sh --build-name="${{ env.RELEASE_VERSION }}" --enable-ccache
 
       # Build name following convention: Proton-<tag>
       - name: Build proton
-        working-directory: ./build/build
+        working-directory: ./build/
         run: make dist
 
       - name: Rename directory
-        working-directory: ./build/build
+        working-directory: ./build/
         run: mv dist ${{ env.RELEASE_VERSION }}
 
       - name: Move files to their right folder
-        working-directory: ./build/build/${{ env.RELEASE_VERSION }}/protonfixes
+        working-directory: ./build/${{ env.RELEASE_VERSION }}/protonfixes/
         run: |
-          mv cabextract ../files/bin/ && \
-          mv libmspack.so.0 ../files/lib64/ && \
-          mv libmspack.so.0.1.0 ../files/lib64/ && \
+          mv cabextract ../dist/bin/ && \
+          mv libmspack.so.0 ../dist/lib64/ && \
+          mv libmspack.so.0.1.0 ../dist/lib64/ && \
           rm cabextract_1.9-1.debian.tar.xz libmspack_0.10.1-1.debian.tar.xz
 
       - name: Archive build
-        working-directory: ./build/build
+        working-directory: ./build/
         run: tar -czvf ${{ env.RELEASE_VERSION }}.tar.gz ${{ env.RELEASE_VERSION }}
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.PROTON_GE_GITHUB_ACTIONS_BUILD }}
-          file: build/build/${{ env.RELEASE_VERSION }}.tar.gz
+          file: build/${{ env.RELEASE_VERSION }}.tar.gz
           file_glob: true
           tag: "${{ env.RELEASE_VERSION }}-build-${{ github.run_number }}"
           overwrite: false
