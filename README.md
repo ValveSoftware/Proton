@@ -218,7 +218,7 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 
 | Compat config string  | Environment Variable               | Description  |
 | :-------------------- | :--------------------------------- | :----------- |
-|                       | `PROTON_LOG`                       | Convenience method for dumping a useful debug log to `$PROTON_LOG_DIR/steam-$APPID.log` For more thorough logging, use `user_settings.py`. |
+|                       | `PROTON_LOG`                       | Convenience method for dumping a useful debug log to `$PROTON_LOG_DIR/steam-$APPID.log`. Set to `1` to enable default logging, or set to a string to be appended to the default `WINEDEBUG` channels. |
 |                       | `PROTON_LOG_DIR`                   | Output log files into the directory specified. Defaults to your home directory. |
 |                       | `PROTON_DUMP_DEBUG_COMMANDS`       | When running a game, Proton will write some useful debug scripts for that game into `$PROTON_DEBUG_DIR/proton_$USER/`. |
 |                       | `PROTON_DEBUG_DIR`                 | Root directory for the Proton debug scripts, `/tmp` by default. |
