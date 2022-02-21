@@ -1,8 +1,8 @@
-From 26b7ef4aa5fb55f7044e4eb3809675c34f5de2ab Mon Sep 17 00:00:00 2001
+From 7b8610676e3cb0e614fa7b960a999b00c3b14b6b Mon Sep 17 00:00:00 2001
 From: Philipp Richter <richterphilipp.pops@gmail.com>
-Date: Tue, 19 Oct 2021 11:56:11 +0200
-Subject: [PATCH] mfplat: workaround for "The Good Life (1452500)" due
- to missing "http:" scheme implementation
+Date: Mon, 21 Feb 2022 13:55:40 +0100
+Subject: [PATCH] mfplat: workaround for "The Good Life (1452500)" due to
+ missing "http:" scheme implementation
 
 "The Good Life (1452500)" wants to load its video files over http: but
 that fails due to the missing implementation in wine.
@@ -14,11 +14,11 @@ the "file:" scheme.
 See: https://github.com/ValveSoftware/Proton/issues/5195
 ---
  dlls/mfplat/Makefile.in |   2 +-
- dlls/mfplat/main.c      | 226 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 227 insertions(+), 1 deletion(-)
+ dlls/mfplat/main.c      | 204 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 205 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/mfplat/Makefile.in b/dlls/mfplat/Makefile.in
-index 9e5c607deae..bc5e13aaa7f 100644
+index 4515d652c58..683127545d6 100644
 --- a/dlls/mfplat/Makefile.in
 +++ b/dlls/mfplat/Makefile.in
 @@ -1,6 +1,6 @@
@@ -27,23 +27,21 @@ index 9e5c607deae..bc5e13aaa7f 100644
 -IMPORTS   = advapi32 ole32 mfuuid propsys rtworkq kernelbase
 +IMPORTS   = advapi32 ole32 mfuuid propsys rtworkq kernelbase wininet
  DELAYIMPORTS = bcrypt
-
+ 
  EXTRADLLFLAGS = -Wb,--prefer-native
-
 diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
-index 519fa23cd23..b4ce5e14a0e 100644
+index 7991152f7a7..e1ff0bf2312 100644
 --- a/dlls/mfplat/main.c
 +++ b/dlls/mfplat/main.c
-@@ -46,6 +46,8 @@
- #include "strsafe.h"
- #undef INITGUID
- #include "evr.h"
-+#include "pathcch.h"
+@@ -54,6 +54,7 @@
+ 
+ #include "bcrypt.h"
+ #include "pathcch.h"
 +#include "wininet.h"
- /* mfd3d12 guids are not included in mfuuid */
- #define INITGUID
- #undef EXTERN_GUID
-@@ -6254,6 +6256,185 @@ static ULONG WINAPI source_resolver_Release(IMFSourceResolver *iface)
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
+@@ -6586,6 +6587,201 @@ static ULONG WINAPI source_resolver_Release(IMFSourceResolver *iface)
      return refcount;
  }
  
@@ -76,7 +74,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +
 +    if (!(InternetCrackUrlW(url, lstrlenW(url), 0, &url_comp)))
 +    {
-+        WARN("InternetCrackUrlW failed: %d\n", GetLastError());
++        WARN("InternetCrackUrlW failed: %u\n", GetLastError());
 +        return FALSE;
 +    }
 +
@@ -86,7 +84,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +        url_comp.dwPasswordLength + 1 +
 +        url_comp.dwUrlPathLength + url_comp.dwExtraInfoLength + 1) > temp_buffer_size)
 +    {
-+        WARN("temp_buffer is too small\n", GetLastError());
++        WARN("temp_buffer is too small\n");
 +        return FALSE;
 +    }
 +
@@ -104,14 +102,14 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +
 +    if (!(hinternet = InternetOpenW(L"wininet", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0)))
 +    {
-+        WARN("InternetOpenW failed: %d\n", GetLastError());
++        WARN("InternetOpenW failed: %u\n", GetLastError());
 +        return FALSE;
 +    }
 +
 +    if (!(hconnect = InternetConnectW(hinternet, url_comp.lpszHostName, url_comp.nPort,
 +        url_comp.lpszUserName, url_comp.lpszPassword, INTERNET_SERVICE_HTTP, 0, 0)))
 +    {
-+        WARN("InternetConnectW failed: %d\n", GetLastError());
++        WARN("InternetConnectW failed: %u\n", GetLastError());
 +        InternetCloseHandle(hinternet);
 +        return FALSE;
 +    }
@@ -121,7 +119,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +        acccept_types,
 +        INTERNET_FLAG_NO_CACHE_WRITE|INTERNET_FLAG_NO_COOKIES|INTERNET_FLAG_NO_UI|INTERNET_FLAG_RELOAD, 0)))
 +    {
-+        WARN("InternetConnectW failed: %d\n", GetLastError());
++        WARN("HttpOpenRequestW failed: %u\n", GetLastError());
 +        InternetCloseHandle(hconnect);
 +        InternetCloseHandle(hinternet);
 +        return FALSE;
@@ -129,7 +127,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +
 +    if (!HttpSendRequestW(hrequest, NULL, 0, NULL, 0))
 +    {
-+        WARN("HttpSendRequestW failed: %d\n", GetLastError());
++        WARN("HttpSendRequestW failed: %u\n", GetLastError());
 +        InternetCloseHandle(hrequest);
 +        InternetCloseHandle(hconnect);
 +        InternetCloseHandle(hinternet);
@@ -138,7 +136,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +
 +    if (!HttpQueryInfoW(hrequest, HTTP_QUERY_CONTENT_LENGTH, content_length, &content_length_size, NULL))
 +    {
-+        WARN("HttpQueryInfoW failed: %d\n", GetLastError());
++        WARN("HttpQueryInfoW failed: %u\n", GetLastError());
 +        InternetCloseHandle(hrequest);
 +        InternetCloseHandle(hconnect);
 +        InternetCloseHandle(hinternet);
@@ -163,7 +161,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +    /* Retrieve the current running application path */
 +    if (!GetModuleFileNameW(NULL, temp_buffer, temp_buffer_size))
 +    {
-+        WARN("GetModuleFileNameW failed: %d\n", GetLastError());
++        WARN("GetModuleFileNameW failed: %u\n", GetLastError());
 +        return FALSE;
 +    }
 +
@@ -174,7 +172,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +    if ((hfind = FindFirstFileExW(temp_buffer, FindExInfoBasic, &find_file_data,
 +        FindExSearchNameMatch, NULL, 0)) == INVALID_HANDLE_VALUE)
 +    {
-+        WARN("FindFirstFileExW failed: %d\n", GetLastError());
++        WARN("FindFirstFileExW failed: %u\n", GetLastError());
 +        return FALSE;
 +    }
 +
@@ -197,7 +195,7 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +    while (FindNextFileW(hfind, &find_file_data));
 +    if (GetLastError() != ERROR_NO_MORE_FILES)
 +    {
-+        WARN("FindNextFileW failed: %d\n", GetLastError());
++        WARN("FindNextFileW failed: %u\n", GetLastError());
 +    }
 +    FindClose(hfind);
 +
@@ -210,13 +208,13 @@ index 519fa23cd23..b4ce5e14a0e 100644
 + */
 +static BOOL thegoodlife_workaround_scheme_check(const WCHAR *url, WCHAR *temp_buffer, DWORD temp_buffer_size)
 +{
-+    if (lstrlenW(url) < 5 || memcmp(url, L"http:", sizeof(WCHAR) * 5))
++    if (!url || lstrlenW(url) < 5 || memcmp(url, L"http:", sizeof(WCHAR) * 5))
 +        return FALSE;
 +
 +    /* Retrieve the current running application path */
 +    if (!GetModuleFileNameW(NULL, temp_buffer, temp_buffer_size))
 +    {
-+        WARN("GetModuleFileNameW failed: %d\n", GetLastError());
++        WARN("GetModuleFileNameW failed: %u\n", GetLastError());
 +        return FALSE;
 +    }
 +
@@ -226,90 +224,61 @@ index 519fa23cd23..b4ce5e14a0e 100644
 +    return PathFileExistsW(temp_buffer);
 +}
 +
++/* The Good Life (1452500) workaround macro */
++#define TGL_WORKAROUND(url) \
++    WCHAR __tgl_workaround_buffer[PATHCCH_MAX_CCH]; \
++    if (thegoodlife_workaround_scheme_check(url, __tgl_workaround_buffer, PATHCCH_MAX_CCH)) \
++    { \
++        TRACE("Applying The Good Life (1452500) workaround to %s.\n", debugstr_w(url)); \
++        if (!thegoodlife_workaround_url_matcher(url, __tgl_workaround_buffer, PATHCCH_MAX_CCH)) \
++        { \
++            WARN("Applying The Good Life (1452500) workaround to %s failed.\n", debugstr_w(url)); \
++        } \
++        else \
++        { \
++            url = __tgl_workaround_buffer; \
++        } \
++    }
++
  static HRESULT WINAPI source_resolver_CreateObjectFromURL(IMFSourceResolver *iface, const WCHAR *url,
          DWORD flags, IPropertyStore *props, MF_OBJECT_TYPE *obj_type, IUnknown **object)
  {
-@@ -6262,12 +6443,27 @@ static HRESULT WINAPI source_resolver_CreateObjectFromURL(IMFSourceResolver *ifa
+@@ -6594,6 +6790,8 @@ static HRESULT WINAPI source_resolver_CreateObjectFromURL(IMFSourceResolver *ifa
      IRtwqAsyncResult *result;
      RTWQASYNCRESULT *data;
      HRESULT hr;
-+    WCHAR tgl_workaround_buffer[PATHCCH_MAX_CCH];
++    /* The Good Life (1452500) workaround */
++    TGL_WORKAROUND(url)
  
      TRACE("%p, %s, %#lx, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, obj_type, object);
  
-     if (!url || !obj_type || !object)
-         return E_POINTER;
- 
-+    if (thegoodlife_workaround_scheme_check(url, tgl_workaround_buffer, PATHCCH_MAX_CCH))
-+    {
-+        TRACE("Applying The Good Life (1452500) workaround to %s.\n", debugstr_w(url));
-+        if (!thegoodlife_workaround_url_matcher(url, tgl_workaround_buffer, PATHCCH_MAX_CCH))
-+        {
-+            WARN("Applying The Good Life (1452500) workaround to %s failed.\n", debugstr_w(url));
-+        }
-+        else
-+        {
-+            url = tgl_workaround_buffer;
-+            TRACE("%p, %s, %#lx, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, obj_type, object);
-+        }
-+    }
-+
-     if (FAILED(hr = resolver_get_scheme_handler(url, flags, &handler)))
-         return hr;
- 
-@@ -6303,12 +6499,27 @@ static HRESULT WINAPI source_resolver_CreateObjectFromByteStream(IMFSourceResolv
+@@ -6635,6 +6833,8 @@ static HRESULT WINAPI source_resolver_CreateObjectFromByteStream(IMFSourceResolv
      IRtwqAsyncResult *result;
      RTWQASYNCRESULT *data;
      HRESULT hr;
-+    WCHAR tgl_workaround_buffer[PATHCCH_MAX_CCH];
++    /* The Good Life (1452500) workaround */
++    TGL_WORKAROUND(url)
  
      TRACE("%p, %p, %s, %#lx, %p, %p, %p.\n", iface, stream, debugstr_w(url), flags, props, obj_type, object);
  
-     if (!stream || !obj_type || !object)
-         return E_POINTER;
- 
-+    if (thegoodlife_workaround_scheme_check(url, tgl_workaround_buffer, PATHCCH_MAX_CCH))
-+    {
-+        TRACE("Applying The Good Life (1452500) workaround to %s.\n", debugstr_w(url));
-+        if (!thegoodlife_workaround_url_matcher(url, tgl_workaround_buffer, PATHCCH_MAX_CCH))
-+        {
-+            WARN("Applying The Good Life (1452500) workaround to %s failed.\n", debugstr_w(url));
-+        }
-+        else
-+        {
-+            url = tgl_workaround_buffer;
-+            TRACE("%p, %p, %s, %#lx, %p, %p, %p.\n", iface, stream, debugstr_w(url), flags, props, obj_type, object);
-+        }
-+    }
-+
-     if (FAILED(hr = resolver_get_bytestream_handler(stream, url, flags, &handler)))
-         return MF_E_UNSUPPORTED_BYTESTREAM_TYPE;
- 
-@@ -6344,9 +6555,24 @@ static HRESULT WINAPI source_resolver_BeginCreateObjectFromURL(IMFSourceResolver
+@@ -6676,6 +6876,8 @@ static HRESULT WINAPI source_resolver_BeginCreateObjectFromURL(IMFSourceResolver
      IUnknown *inner_cookie = NULL;
      IRtwqAsyncResult *result;
      HRESULT hr;
-+    WCHAR tgl_workaround_buffer[PATHCCH_MAX_CCH];
++    /* The Good Life (1452500) workaround */
++    TGL_WORKAROUND(url)
  
      TRACE("%p, %s, %#lx, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
  
-+    if (thegoodlife_workaround_scheme_check(url, tgl_workaround_buffer, PATHCCH_MAX_CCH))
-+    {
-+        TRACE("Applying The Good Life (1452500) workaround to %s.\n", debugstr_w(url));
-+        if (!thegoodlife_workaround_url_matcher(url, tgl_workaround_buffer, PATHCCH_MAX_CCH))
-+        {
-+            WARN("Applying The Good Life (1452500) workaround to %s failed.\n", debugstr_w(url));
-+        }
-+        else
-+        {
-+            url = tgl_workaround_buffer;
-+            TRACE("%p, %s, %#lx, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
-+        }
-+    }
-+
-     if (FAILED(hr = resolver_get_scheme_handler(url, flags, &handler)))
-         return hr;
+@@ -6720,6 +6922,8 @@ static HRESULT WINAPI source_resolver_BeginCreateObjectFromByteStream(IMFSourceR
+     IUnknown *inner_cookie = NULL;
+     IRtwqAsyncResult *result;
+     HRESULT hr;
++    /* The Good Life (1452500) workaround */
++    TGL_WORKAROUND(url)
  
+     TRACE("%p, %p, %s, %#lx, %p, %p, %p, %p.\n", iface, stream, debugstr_w(url), flags, props, cancel_cookie,
+             callback, state);
 -- 
-2.33.1
+2.35.1
 
