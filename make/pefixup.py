@@ -8,6 +8,10 @@ import pefile
 for path in sys.argv[1:]:
     pe = pefile.PE(path)
 
+    # Skip Resource only DLL's.
+    if (pe.OPTIONAL_HEADER.SizeOfCode == 0):
+        exit()
+
     for section in pe.sections:
         if section.Name.decode("utf-8")[0:5] == ".text":
             section.Characteristics &= ~pefile.SECTION_CHARACTERISTICS['IMAGE_SCN_CNT_INITIALIZED_DATA']

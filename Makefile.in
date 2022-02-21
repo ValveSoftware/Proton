@@ -583,31 +583,22 @@ $(eval $(call rules-meson,gst_good,64))
 
 
 ##
-## FFmpeg
-##
-
-FFMPEG_CONFIGURE_ARGS := \
-	--enable-shared \
-	--disable-static \
-	--disable-everything \
-	--disable-programs \
-	--disable-doc \
-
-$(eval $(call rules-source,ffmpeg,$(SRCDIR)/ffmpeg))
-$(eval $(call rules-configure,ffmpeg,32))
-$(eval $(call rules-configure,ffmpeg,64))
-
-## Only use ffmpeg to build gst-libav; we don't ship it.
-$(OBJ)/.ffmpeg-dist32:
-	touch $@
-$(OBJ)/.ffmpeg-dist64:
-	touch $@
-
-##
 ## gst-libav
 ##
 
-GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base ffmpeg
+GST_LIBAV_MESON_ARGS := \
+        -Ddoc=disabled \
+    $(GST_COMMON_MESON_ARGS)
+
+GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base
+
+$(OBJ)/.gst_libav-post-source:
+	mkdir -p $(GST_LIBAV_SRC)/subprojects
+	ln -s ../../$(SRCDIR)/ffmpeg $(GST_LIBAV_SRC)/subprojects/FFmpeg
+	sed -i 's/option\(\'libwebp\', type: \'feature\', value: \'auto\'\)/option\(\'libwebp\', type: \'feature\', value: \'disabled\'\)/g' $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson.build
+	sed -i 's/0.54/0.47/g' $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson.build
+	sed -i "s/libwebp', type: 'feature', value: 'auto'/libwebp', type: 'feature', value: 'disabled'/g" meson_options.txt
+	sed -i "s/libwebp_anim_encoder', type: 'feature', value: 'auto'/libwebp', type: 'feature', value: 'disabled'/g" meson_options.txt
 
 $(eval $(call rules-source,gst_libav,$(SRCDIR)/gst-libav))
 $(eval $(call rules-meson,gst_libav,32))
@@ -661,6 +652,7 @@ GST_BAD_MESON_ARGS := \
 	-Dsbc=disabled \
 	-Dopencv=disabled \
 	-Dvoamrwbenc=disabled \
+	-Dnvcodec=disabled \
 	-Dx265=disabled \
 	$(GST_COMMON_MESON_ARGS)
 

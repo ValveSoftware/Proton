@@ -1,0 +1,139 @@
+Patches listed in order they are applied:
+
+Reverted from upstream due to different version or pending rebase:
+-----------------
+Revert "winegstreamer: Create static pads on wg_transform
+Revert "winegstreamer: Introduce new wg_transform
+Revert "winegstreamer: Introduce new WG_MAJOR_TYPE_WMA
+Revert "winegstreamer: Move format helpers to a dedicated
+
+From proton (original Guy1524 mfplat patches):
+-----------------
+winegstreamer: Allow videoconvert to parallelize.
+HACK: winegstreamer: Use capssetter to ignore non-default YUV
+HACK: quartz: Keep a reference on the IMediaPosition
+mfplat: Stub out MFCreateDXGIDeviceManager, to avoid the d3d
+HACK: mfreadwrite: Ignore source reader flushes for The
+HACK: qasf: Implement ASF Reader filter as a simple file
+winegstreamer: Activate source pad in push mode if it isn't
+winegstreamer: Push stream-start and segment events in push
+winegstreamer: Introduce H.264 decoder transform.
+winegstreamer: Implement ::GetInputAvailableType for decode
+winegstreamer: Implement ::GetOutputAvailableType for decode
+winegstreamer: Implement ::SetInputType for decode transform.
+winegstreamer: Implement ::SetOutputType for decode
+winegstreamer: Implement ::Get(Input/Output)StreamInfo for
+winegstreamer: Semi-stub ::GetAttributes for decoder
+winegstreamer: Register the H.264 decoder transform.
+winegstreamer: Introduce AAC decoder transform.
+winegstreamer: Rename GStreamer objects to be more generic.
+winegstreamer: Report streams backwards in media source.
+winegstreamer: Implement ::Get(Input/Output)StreamInfo for
+winegstreamer: Semi-stub Get*Attributes functions for audio
+winegstreamer: Introduce color conversion transform.
+winegstreamer: Register the color conversion transform.
+winegstreamer: Implement ::GetInputAvailableType for color
+winegstreamer: Implement ::SetInputType for color conversion
+winegstreamer: Implement ::GetOutputAvailableType for color
+winegstreamer: Implement ::SetOutputType for color conversion
+winegstreamer: Implement ::ProcessMessage for color
+winegstreamer: Implement ::Get(Input/Output)StreamInfo for
+mf/topology: Forward failure from ::SetOutputType when
+winegstreamer: Handle flush command in audio converstion
+winegstreamer: In the default configuration, select one
+winegstreamer: Implement IMFTransform::GetOutputCurrentType
+winegstreamer: Implement stream draining support.
+winegstreamer: Add an explicit result to wg_parser_push_data.
+winegstreamer: Unblock wg_parser_get_next_read_offset on read
+winegstreamer: Update offset according to the size of the
+winegstreamer: Let src_getrange_cb allocate the buffer in
+winegstreamer: Implement unseekable stream support.
+winegstreamer: Implement ::Process(Input/Output) for decoder
+winegstreamer: Implement ::ProcessMessage for decoder
+winegstreamer: Implement ::Process(Input/Output) for audio
+winegstreamer: Implement ::Process(Input/Output) for color
+winegstreamer: Implement MF_SD_LANGUAGE.
+winegstreamer: Implement MFT_MESSAGE_COMMAND_FLUSH for media
+winegstreamer: Add videobox element and aperture support.
+winegstreamer: Only require videobox element for parser when
+winegstreamer: Feed full buffer in audio converter
+winegstreamer: Add MFVideoFormat_ARGB32 output for the
+
+Upstreamed (WMA):
+-----------------
+mfplat: Implement MFTGetInfo().
+include: Define MEDIASUBTYPE_MSAUDIO1 in wmcodecdsp.idl
+winegstreamer: Register WMA decoder transform stub.
+winegstreamer: Stub implement WMA decoder IMFTransform
+winegstreamer: Implement WMA decoder IMFTransform_SetInputType.
+winegstreamer: Implement WMA decoder GetOutputAvailableType.
+winegstreamer: Implement WMA decoder SetOutputType.
+winegstreamer: Implement WMA decoder GetOutputStreamInfo
+winegstreamer: Implement WMA decoder GetInputStreamInfo.
+
+From proton (WMA):
+-----------------
+winegstreamer: Return S_OK from WMA decoder ProcessMessage.
+winegstreamer: Introduce new wg_encoded_format struct.
+
+Replaced with rbernon/wine repo versions (WMA):
+-----------------
+winegstreamer: Introduce new wg_transform struct.
+winegstreamer: Introduce new wg_encoded_format struct.
+winegstreamer: Create static pads on wg_transform struct.
+winegstreamer: Lookup, create and link a decoder element.
+winegstreamer: Send stream-start and caps events on creation.
+winegstreamer: Add an audioconverter and audioresampler
+winegstreamer: Implement WMA decoder ProcessInput.
+winegstreamer: Implement WMA decoder ProcessOutput.
+winegstreamer: Support XMAudio2 input format in WMA decoder.
+
+From proton (h264):
+-----------------
+winegstreamer: Introduce new H264 decoder transform stub.
+
+Replaced with rbernon/wine repo versions (h264):
+-----------------
+winegstreamer: Return S_OK from H264 decoder GetAttributes.
+winegstreamer: Return S_OK from H264 decoder ProcessMessage.
+winegstreamer: Implement H264 decoder SetInputType.
+winegstreamer: Implement H264 decoder GetOutputAvailableType.
+winegstreamer: Implement H264 decoder GetInputAvailableType.
+winegstreamer: Implement H264 decoder SetOutputType.
+winegstreamer: Implement H264 decoder GetInputStreamInfo.
+winegstreamer: Implement H264 decoder GetOutputStreamInfo.
+winegstreamer: Add H264 encoded format support in
+winegstreamer: Implement H264 decoder ProcessInput.
+winegstreamer: Implement H264 decoder ProcessOutput.
+winegstreamer: Add timestamps and duration to H264 decoded
+winegstreamer: Support dynamic wg_transform video format
+winegstreamer: Fixup H264 decoder NV12 plane alignment.
+
+Additional rbernon patches not in proton (h264):
+-----------------
+winegstreamer: Use an optional h264parse wg_transform element.
+HACK: winegstreamer: Fake H264 timestamps if framerate cannot be trus
+winegstreamer: Reset internal format on BEGIN_STREAMING message.
+
+From proton (h264):
+-----------------
+winegstreamer: Reimplement AAC decoder using wg_transform.
+winegstreamer: After failing to create decodebin parser, try
+fixup! winegstreamer: After failing to create decodebin
+
+Upstreamed (misc. fixes):
+-----------------
+mfreadwrite/reader: Add m4v format magic.
+
+Upstreamed (WMA):
+-----------------
+winegstreamer: Support COM aggregation and IMediaObject on the WMA
+winegstreamer: Return S_OK from WMA IMediaObject_GetStreamCount
+
+From proton (misc. fixes):
+-----------------
+winegstreamer: Check if decoder plugin accepted our source
+winegstreamer: Release stream_cs on error in stream_thread().
+HACK: winegstreamer: Report BGRx for Persona 4 Golden.
+winegstreamer: Use unlimited buffering for the WM reader
+HACK: winegstreamer: Report streams in reverse order for
