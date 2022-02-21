@@ -38,16 +38,48 @@
     git clean -xdf
 
 ### (2-1) PROBLEMATIC COMMIT REVERT SECTION ###
-#    git revert --no-commit 381c2a9ae151f676a009e89b4b101679fd90b9ae
-#    git revert --no-commit 305a315a2588cc1f386d1bf6749ec940de55ced4
-#    git revert --no-commit 0b98026e2d0fb99aa551b0a171525eee9a6aa502
-#    git revert --no-commit 0a39066a85db6222843b6365d5f154b29dac3600
-#    git revert --no-commit 3a8bdf8bdc211ae8e8d38500d7a88fad1aef0d7d
+
+    echo "WINE: -REVERTS- revert --data-only commits"
+    # these were changed to build in data-only mode, however this causes these dlls not to load in proton
+    # revert the data-only mode changes for now.
+    # wmi.dll
+    git revert --no-commit 141be028802f1675366802d49af01982525c2e6d
+    # usp10.dll
+    git revert --no-commit d5fc074b9f2cf2e52711d832ca76eaaa5277bb8c
+    # tzres.dll
+    git revert --no-commit 457c5df7d33144e45e0b275cf3cd060ec8403f32
+    # stdole2.tlb
+    git revert --no-commit 5b7534e55adb59cddb7f0c8a337cc3c3954c8d8b
+    # shdoclc.dll
+    git revert --no-commit aa957a2db15942260864c50865f828adeccc12e8
+    # sfc.dll
+    git revert --no-commit 2abcdf08033334075a22e65b97a7f8874361e72a
+    # security.dll
+    git revert --no-commit 40611a65e73eee2ff8ff8ff647572f93a7ffd4ba
+    # normaliz.dll
+    git revert --no-commit 9b6253199ffb361557c53b1315263518cebc9871
+    # msimsg.dll
+    git revert --no-commit d3e2fa064f2efe0a9375df23ec141171b74efe40
+    # mshtml.tib
+    git revert --no-commit 1bb2d490f79743e9dac87d279e15f29bd359e715
+    # mferror.dll
+    git revert --no-commit 3584dd2900fbd3a11175d1b3f77a55315442c284
+    # lz32.dll
+    git revert --no-commit 2da8b64cfd5ed46f98d1fbfa5d56b680358a7a6b
+    # light.msstyles
+    git revert --no-commit 91db4290caa0bc4f0173e72296852de2d7ad699d
+    # icmp.dll
+    git revert --no-commit ace84eb6bccc490a563af19118da9e19ede970bb
+    # activeds.tlb
+    git revert --no-commit 91544ee3bb6c7cd2c056ae0d0eb626ade701d09f
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
 
 ### (2-2) WINE STAGING APPLY SECTION ###
+
+    # We manually apply this because reverting it in staging is being a pain in the ass despite it being just 4 lines.
+    # -W stdole32.tlb-SLTG_Typelib \
 
     # these cause window freezes/hangs with origin
     # -W winex11-_NET_ACTIVE_WINDOW \
@@ -85,6 +117,7 @@
     -W server-File_Permissions \
     -W server-Stored_ACLs \
     -W dbghelp-Debug_Symbols \
+    -W stdole32.tlb-SLTG_Typelib \
     -W dwrite-FontFallback
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
@@ -96,6 +129,9 @@
 
     echo "WINE: -STAGING- Manually apply modified ntdll-Serial_Port_Detection patch for proton, rebasing keeps complaining"
     patch -Np1 < ../patches/proton/64-ntdll-Do-a-device-check-before-returning-a-default-s.patch
+
+    echo "WINE: -STAGING- Manually apply reverted --data-only stdole32.tlb patch"
+    patch -Np1 < ../patches/wine-hotfixes/staging/0020-stdole32.tlb-Compile-typelib-with-oldtlb.patch
 
 
 ### END WINE STAGING APPLY SECTION ###
