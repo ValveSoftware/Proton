@@ -4031,11 +4031,11 @@ index 82bb534b938..f3db631d16d 100644
          } video;
          struct
          {
-diff --git a/dlls/winegstreamer/wg_format.c b/dlls/winegstreamer/wg_format.c
-index 40b9acfefff..b0216306e9b 100644
---- a/dlls/winegstreamer/wg_format.c
-+++ b/dlls/winegstreamer/wg_format.c
-@@ -337,12 +337,90 @@ static void wg_channel_mask_to_gst(GstAudioChannelPosition *positions, uint32_t
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 552184591e7..7a47ac9411f 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -387,6 +387,22 @@ static void wg_channel_mask_to_gst(GstAudioChannelPosition *positions, uint32_t
      }
  }
 
@@ -4050,13 +4050,6 @@ index 40b9acfefff..b0216306e9b 100644
 +            gst_caps_set_simple(caps, "framerate", GST_TYPE_FRACTION, format->u.video.fps_n, format->u.video.fps_d, NULL);
 +            break;
 +        }
-+        case WG_MAJOR_TYPE_AUDIO:
-+        {
-+            gst_caps_set_simple(caps, "rate", G_TYPE_INT, format->u.audio.rate, NULL);
-+            gst_caps_set_simple(caps, "channels", G_TYPE_INT, format->u.audio.channels, NULL);
-+            if (format->u.audio.channel_mask)
-+                gst_caps_set_simple(caps, "channel-mask", G_TYPE_INT, format->u.audio.channel_mask, NULL);
-+        }
 +        default:
 +            break;
 +    }
@@ -4065,72 +4058,73 @@ index 40b9acfefff..b0216306e9b 100644
  static GstCaps *wg_format_to_caps_audio(const struct wg_format *format)
  {
      GstAudioChannelPosition positions[32];
-     GstAudioFormat audio_format;
-     GstAudioInfo info;
+@@ -428,6 +444,65 @@ static GstCaps *wg_format_to_caps_video(const struct wg_format *format)
+     unsigned int i;
+     GstCaps *caps;
 
 +    /* compressed types */
 +
-+    if (format->u.audio.format == WG_AUDIO_FORMAT_AAC)
++    if (format->u.video.format == WG_VIDEO_FORMAT_H264)
 +    {
-+        const char *profile, *level;
-+        GstBuffer *audio_specific_config;
-+        GstCaps *caps = gst_caps_new_empty_simple("audio/mpeg");
++        const char *profile;
++        const char *level;
++
++        caps = gst_caps_new_empty_simple("video/x-h264");
 +        wg_set_caps_from_wg_format(caps, format);
 +
-+        gst_caps_set_simple(caps, "mpegversion", G_TYPE_INT, 4, NULL);
++        gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "byte-stream", NULL);
++        gst_caps_set_simple(caps, "alignment", G_TYPE_STRING, "au", NULL);
 +
-+        switch (format->u.audio.compressed.aac.payload_type)
++        switch (format->u.video.compressed.h264.profile)
 +        {
-+            case 0:
-+                gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "raw", NULL);
-+                break;
-+            case 1:
-+                gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "adts", NULL);
-+                break;
-+            case 2:
-+                gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "adif", NULL);
-+                break;
-+            case 3:
-+                gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "loas", NULL);
-+                break;
++            case /* eAVEncH264VProfile_Main */ 77:  profile = "main"; break;
++            case /* eAVEncH264VProfile_High */ 100: profile = "high"; break;
++            case /* eAVEncH264VProfile_444 */  244: profile = "high-4:4:4"; break;
 +            default:
-+                gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "raw", NULL);
-+        };
-+
-+        switch (format->u.audio.compressed.aac.indication)
-+        {
-+            case 0x29: profile = "lc"; level = "2";  break;
-+            case 0x2A: profile = "lc"; level = "4"; break;
-+            case 0x2B: profile = "lc"; level = "5"; break;
-+            default:
-+                GST_FIXME("Unrecognized profile-level-indication %u\n", format->u.audio.compressed.aac.indication);
++                GST_ERROR("Unrecognized H.264 profile attribute %u\n", format->u.video.compressed.h264.profile);
 +                /* fallthrough */
-+            case 0x00: case 0xFE: profile = level = NULL; break; /* unspecified */
++            case 0: profile = NULL;
++        }
++
++        switch (format->u.video.compressed.h264.level)
++        {
++            case /* eAVEncH264VLevel1 */   10: level = "1";   break;
++            case /* eAVEncH264VLevel1_1 */ 11: level = "1.1"; break;
++            case /* eAVEncH264VLevel1_2 */ 12: level = "1.2"; break;
++            case /* eAVEncH264VLevel1_3 */ 13: level = "1.3"; break;
++            case /* eAVEncH264VLevel2 */   20: level = "2";   break;
++            case /* eAVEncH264VLevel2_1 */ 21: level = "2.1"; break;
++            case /* eAVEncH264VLevel2_2 */ 22: level = "2.2"; break;
++            case /* eAVEncH264VLevel3 */   30: level = "3";   break;
++            case /* eAVEncH264VLevel3_1 */ 31: level = "3.1"; break;
++            case /* eAVEncH264VLevel3_2 */ 32: level = "3.2"; break;
++            case /* eAVEncH264VLevel4 */   40: level = "4";   break;
++            case /* eAVEncH264VLevel4_1 */ 41: level = "4.1"; break;
++            case /* eAVEncH264VLevel4_2 */ 42: level = "4.2"; break;
++            case /* eAVEncH264VLevel5 */   50: level = "5";   break;
++            case /* eAVEncH264VLevel5_1 */ 51: level = "5.1"; break;
++            case /* eAVEncH264VLevel5_2 */ 52: level = "5.2"; break;
++            default:
++                GST_ERROR("Unrecognized H.264 level attribute %u\n", format->u.video.compressed.h264.level);
++                /* fallthrough */
++            case 0: level = NULL;
 +        }
 +
 +        if (profile)
 +            gst_caps_set_simple(caps, "profile", G_TYPE_STRING, profile, NULL);
++
 +        if (level)
 +            gst_caps_set_simple(caps, "level", G_TYPE_STRING, level, NULL);
-+
-+        audio_specific_config = gst_buffer_new_allocate(NULL, format->u.audio.compressed.aac.asp_size, NULL);
-+        gst_buffer_fill(audio_specific_config, 0, format->u.audio.compressed.aac.audio_specifc_config, format->u.audio.compressed.aac.asp_size);
-+        gst_caps_set_simple(caps, "codec_data", GST_TYPE_BUFFER, audio_specific_config, NULL);
-+        gst_buffer_unref(audio_specific_config);
 +
 +        return caps;
 +    }
 +
-+    /* uncompressed_types */
++    /* uncompressed types */
 +
-     if ((audio_format = wg_audio_format_to_gst(format->u.audio.format)) == GST_AUDIO_FORMAT_UNKNOWN)
+     if ((video_format = wg_video_format_to_gst(format->u.video.format)) == GST_VIDEO_FORMAT_UNKNOWN)
          return NULL;
 
-diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
-index c6e8bbcb26b..c2141fae2af 100644
---- a/dlls/winegstreamer/wg_parser.c
-+++ b/dlls/winegstreamer/wg_parser.c
-@@ -655,6 +730,7 @@ static NTSTATUS wg_parser_stream_enable(void *args)
+@@ -587,6 +662,7 @@ static void CDECL wg_parser_stream_enable(struct wg_parser_stream *stream, const
              case WG_VIDEO_FORMAT_YVYU:
              case WG_VIDEO_FORMAT_UNKNOWN:
              case WG_VIDEO_FORMAT_CINEPAK:
