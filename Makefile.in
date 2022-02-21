@@ -592,9 +592,13 @@ GST_LIBAV_MESON_ARGS := \
 
 GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base
 
+# copying ffmpeg is temporary here, this assumes the build directory is in the same directory as proton-ge-custom
+# Ex.
+# somefolder/proton-ge-custom
+# somefolder/build
 $(OBJ)/.gst_libav-post-source:
 	mkdir -p $(GST_LIBAV_SRC)/subprojects
-	cp -R ../../$(SRCDIR)/ffmpeg $(GST_LIBAV_SRC)/subprojects/FFmpeg
+	cp -R ../$(SRCDIR)/ffmpeg $(GST_LIBAV_SRC)/subprojects/
 	sed -i 's/0.54/0.47/g' $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson.build
 	sed -i "s/libwebp', type: 'feature', value: 'auto'/libwebp', type: 'feature', value: 'disabled'/g" $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson_options.txt
 	sed -i "s/libwebp_anim_encoder', type: 'feature', value: 'auto'/libwebp_anim_encoder', type: 'feature', value: 'disabled'/g" $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson_options.txt
