@@ -1023,7 +1023,7 @@ class Session:
         except (OSError, IOError, TypeError, KeyError):
             pass
 
-    def setup_logging(self, append_forever=False):
+    def setup_logging(self, *, append_forever):
         basedir = self.env.get("PROTON_LOG_DIR", os.environ["HOME"])
 
         if append_forever:
