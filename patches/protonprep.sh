@@ -118,6 +118,7 @@
     -W server-Stored_ACLs \
     -W dbghelp-Debug_Symbols \
     -W stdole32.tlb-SLTG_Typelib \
+    -W mfplat-streaming-support \
     -W dwrite-FontFallback
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
