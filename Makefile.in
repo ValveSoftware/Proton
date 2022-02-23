@@ -186,6 +186,7 @@ COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 LICENSE := $(SRCDIR)/dist.LICENSE
 OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
 AV1_PATENTS := $(SRCDIR)/dav1d/doc/PATENTS
+STEAMPIPE_FIXUPS_PY := $(SRCDIR)/steampipe_fixups.py
 
 GECKO_VER := 2.47.2
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
@@ -279,8 +280,12 @@ DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DIST_FONTS)
 
 DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
-                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
+                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DST_DIR)
 REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
+BASE_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
+                     $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DST_DIR)
+DEPLOY_COPY_TARGETS := $(BASE_COPY_TARGETS) $(STEAMPIPE_FIXUPS_PY)
+REDIST_COPY_TARGETS := $(BASE_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
 	cp -a $< $@
@@ -377,6 +382,7 @@ dist: $(DIST_TARGETS) all-dist dist_wineopenxr | $(DST_DIR)
 deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
 	cp -a $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
+	python3 $(STEAMPIPE_FIXUPS_PY) process $(DEPLOY_DIR) && \
 	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
 	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
 
@@ -598,7 +604,7 @@ GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base
 # somefolder/build
 $(OBJ)/.gst_libav-post-source:
 	mkdir -p $(GST_LIBAV_SRC)/subprojects
-	cp -R $(SRCDIR)/ffmpeg $(GST_LIBAV_SRC)/subprojects/FFmpeg
+	cp -R $(SRCDIR)/FFmpeg $(GST_LIBAV_SRC)/subprojects/
 	sed -i 's/0.54/0.47/g' $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson.build
 	sed -i "s/libwebp', type: 'feature', value: 'auto'/libwebp', type: 'feature', value: 'disabled'/g" $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson_options.txt
 	sed -i "s/libwebp_anim_encoder', type: 'feature', value: 'auto'/libwebp_anim_encoder', type: 'feature', value: 'disabled'/g" $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson_options.txt

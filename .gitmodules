@@ -7,8 +7,8 @@
 [submodule "dxvk"]
 	path = dxvk
 	url = https://github.com/doitsujin/dxvk/
-[submodule "ffmpeg"]
-	path = ffmpeg
+[submodule "FFmpeg"]
+	path = FFmpeg
 	url = https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg/
 [submodule "openvr"]
 	path = openvr
