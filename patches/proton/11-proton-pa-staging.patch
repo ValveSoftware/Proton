@@ -454,24 +454,15 @@ diff --git a/dlls/winepulse.drv/pulse.c b/dlls/winepulse.drv/pulse.c
 index 356f68e0db2..1c77734cf1b 100644
 --- a/dlls/winepulse.drv/pulse.c
 +++ b/dlls/winepulse.drv/pulse.c
-@@ -475,7 +475,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
-         ret = -1;
-     else if (render)
-         ret = pa_stream_connect_playback(stream, NULL, &attr,
--        PA_STREAM_START_CORKED|PA_STREAM_FIX_RATE|PA_STREAM_FIX_CHANNELS|PA_STREAM_EARLY_REQUESTS, NULL, NULL);
-+        PA_STREAM_START_CORKED|PA_STREAM_FIX_RATE|PA_STREAM_FIX_CHANNELS|PA_STREAM_EARLY_REQUESTS|PA_STREAM_VARIABLE_RATE, NULL, NULL);
-     else
-         ret = pa_stream_connect_record(stream, NULL, &attr, PA_STREAM_START_CORKED|PA_STREAM_FIX_RATE|PA_STREAM_FIX_CHANNELS|PA_STREAM_EARLY_REQUESTS);
-     if (ret >= 0) {
-@@ -1018,7 +1018,7 @@ static HRESULT pulse_stream_connect(struct pulse_stream *stream, const char *dev
+@@ -925,7 +923,7 @@ static HRESULT pulse_spec_from_waveformat(struct pulse_stream *stream, const WAV
 
-     if (stream->dataflow == eRender)
-         ret = pa_stream_connect_playback(stream->stream, device, &attr,
--        PA_STREAM_START_CORKED|PA_STREAM_START_UNMUTED|PA_STREAM_ADJUST_LATENCY|moving, NULL, NULL);
-+        PA_STREAM_START_CORKED|PA_STREAM_START_UNMUTED|PA_STREAM_ADJUST_LATENCY|PA_STREAM_VARIABLE_RATE|moving, NULL, NULL);
-     else
-         ret = pa_stream_connect_record(stream->stream, device, &attr,
-         PA_STREAM_START_CORKED|PA_STREAM_START_UNMUTED|PA_STREAM_ADJUST_LATENCY|moving);
+ static HRESULT pulse_stream_connect(struct pulse_stream *stream, const char *pulse_name, UINT32 period_bytes)
+ {
+-    pa_stream_flags_t flags = PA_STREAM_START_CORKED | PA_STREAM_START_UNMUTED | PA_STREAM_ADJUST_LATENCY;
++    pa_stream_flags_t flags = PA_STREAM_START_CORKED | PA_STREAM_START_UNMUTED | PA_STREAM_ADJUST_LATENCY | PA_STREAM_VARIABLE_RATE;
+     int ret;
+     char buffer[64];
+     static LONG number;
 @@ -1949,6 +1949,41 @@ static NTSTATUS pulse_set_event_handle(void *args)
      return STATUS_SUCCESS;
  }

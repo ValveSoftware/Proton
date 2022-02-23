@@ -73,6 +73,15 @@
     # activeds.tlb
     git revert --no-commit 91544ee3bb6c7cd2c056ae0d0eb626ade701d09f
 
+
+    # mfplat
+    # once remi finishes upstreaming everything we will be able to get rid of a lot of these.
+    git revert --no-commit 4dd187b2227767524825e51eddd14f206ffd03dd
+    git revert --no-commit 0052ffbfa0e7672278b3d5fcdb767d604fa0f565
+    git revert --no-commit d84d9054f5466212e122fac70265eae841438764
+    git revert --no-commit 34a55c7b96c97b178ea1ab519eb0e847096f2076
+    git revert --no-commit 4d929972c341bff2da3616606b8cbeadf85dba26
+
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
 
@@ -118,7 +127,6 @@
     -W server-Stored_ACLs \
     -W dbghelp-Debug_Symbols \
     -W stdole32.tlb-SLTG_Typelib \
-    -W mfplat-streaming-support \
     -W dwrite-FontFallback
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"

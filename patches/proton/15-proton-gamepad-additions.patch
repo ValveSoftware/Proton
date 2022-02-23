@@ -649,9 +649,9 @@ index d06b56cbf8c..0943d44fd58 100644
          test_simple_joystick( 0x800 );
 +
 +        test_RegisterDeviceNotification();
-     }
-     CoUninitialize();
 
+         test_driving_wheel_axes();
+     }
 From 2f1fb676d8bc1ab64c1702988d44e8cf6ddaa2b0 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 24 Dec 2021 12:23:43 +0100
