@@ -700,7 +700,11 @@ $(eval $(call rules-autoconf,wine,64))
 
 $(OBJ)/.wine-post-source:
 	cd $(WINE_SRC) && tools/make_requests
-	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan && rm dlls/winevulkan/vk-*.xml
+	if [ -e $(WINE_SRC)/dlls/winevulkan/vk.xml ]; then \
+		cd $(WINE_SRC) && dlls/winevulkan/make_vulkan -x vk.xml; \
+	else \
+		cd $(WINE_SRC) && dlls/winevulkan/make_vulkan && rm dlls/winevulkan/vk-*.xml; \
+	fi
 	touch $@
 
 $(OBJ)/.wine-post-build64:
