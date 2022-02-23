@@ -932,6 +932,18 @@ def default_compat_config():
         elif appid == "105800": #PixelJunk Eden
             ret.add("noesync")
             ret.add("nofsync")
+        elif appid in [
+                #affected by CW bug 19126
+                "305620", #The Long Dark
+                "585420", #Trailmakers
+                "684450", #Surviving the Aftermath
+                "1075200", #TOHU
+                "1331440", #FUSER
+
+                #affected by CW bug 19741
+                "1017900", #Age of Empires: Definitive Edition
+                ]:
+            ret.add("nomfdxgiman")
     return ret
 
 class Session:
@@ -1138,6 +1150,9 @@ class Session:
 
         if "disablelibglesv2" in self.compat_config:
             self.dlloverrides["libglesv2"] = "d"
+
+        if "nomfdxgiman" in self.compat_config:
+            self.env["WINE_DO_NOT_CREATE_DXGI_DEVICE_MANAGER"] = "1"
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
