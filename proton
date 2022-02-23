@@ -350,6 +350,13 @@ class Proton:
     def path(self, d):
         return self.base_dir + d
 
+    def cleanup_legacy_dist(self):
+        old_dist_dir = self.path("dist/")
+        if file_exists(old_dist_dir, follow_symlinks=True):
+            with self.dist_lock:
+                if file_exists(old_dist_dir, follow_symlinks=True):
+                    shutil.rmtree(old_dist_dir)
+
     def need_tarball_extraction(self):
         '''Checks if the proton_dist tarball archive must be extracted. Returns true if extraction is needed, false otherwise'''
         return not file_exists(self.dist_dir, follow_symlinks=True) or \
@@ -1123,7 +1130,7 @@ class Session:
                 "beclient_x64.dll": "b,n",
         }
 
-        self.compat_config = default_compat_config()
+        self.compat_config = set()
         self.cmdlineappend = []
 
         if "STEAM_COMPAT_CONFIG" in os.environ:
@@ -1242,6 +1249,7 @@ class Session:
             self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
             self.env.setdefault("VKD3D_DEBUG", "warn")
+            self.env.setdefault("VKD3D_SHADER_DEBUG", "fixme")
             self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
 
         #for performance, logging is disabled by default; override with user_settings.py
@@ -1551,6 +1559,7 @@ if __name__ == "__main__":
 
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
+    g_proton.cleanup_legacy_dist()
     g_proton.do_steampipe_fixups()
 
     if g_proton.need_tarball_extraction():
