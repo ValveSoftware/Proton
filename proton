@@ -695,6 +695,22 @@ class CompatData:
                 os.remove(old)
                 os.symlink(src=link, dst=old)
 
+    def elden_ring_workaround(self):
+        if not "SteamGameId" in os.environ or \
+                os.environ["SteamGameId"] != "1245620":
+                    return
+
+        # the lower case version is burned into the Steam Depot and cannot be
+        # changed via new uploads but the game expects mixed case version
+        eos_file = "EOSSDK-Win64-Shipping"
+        for ext in [ 'so', 'dll']:
+            lower_case_path = f"{eos_file.lower()}.{ext}"
+            mixed_case_path = f"{eos_file}.{ext}"
+            if file_exists(lower_case_path, follow_symlinks=False) and \
+                    (not file_exists(mixed_case_path, follow_symlinks=False) or \
+                    not os.path.samefile(lower_case_path, mixed_case_path)):
+                        shutil.copyfile(lower_case_path, mixed_case_path)
+
     def ffxiv_workaround(self):
         if not "SteamGameId" in os.environ or \
                 os.environ["SteamGameId"] != "39210":
@@ -814,6 +830,7 @@ class CompatData:
             #create font files symlinks
             self.create_fonts_symlinks()
 
+            self.elden_ring_workaround()
             self.ffxiv_workaround()
 
             with open(self.tracked_files_file, "a") as tracked_files:
