@@ -14503,3 +14503,57 @@ index 594b16e318b..905ce7306c8 100644
          stream->reader = reader;
          stream->index = i;
          stream->selection = WMT_ON;
+From a85f7beb182e020211e653312c5b954b7c754b78 Mon Sep 17 00:00:00 2001
+From: Thomas Crider <gloriouseggroll@gmail.com>
+Date: Wed, 23 Feb 2022 01:30:09 -0700
+Subject: [PATCH] winegstreamer: remove WG_PARSER_EVENT_SEGMENT in colorconvert
+ due to removal in commit f51b2ca
+
+---
+ dlls/winegstreamer/colorconvert.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/dlls/winegstreamer/colorconvert.c b/dlls/winegstreamer/colorconvert.c
+index 476851fa43a..aeb103592e7 100644
+--- a/dlls/winegstreamer/colorconvert.c
++++ b/dlls/winegstreamer/colorconvert.c
+@@ -760,9 +760,6 @@ static HRESULT WINAPI color_converter_ProcessOutput(IMFTransform *iface, DWORD f
+             case WG_PARSER_EVENT_BUFFER:
+                 break;
+
+-            case WG_PARSER_EVENT_SEGMENT:
+-                continue;
+-
+             default:
+                 WARN("Unexpected event, %u\n", event.type);
+                 continue;
+--
+2.35.1
+
+From 3f6c3ed368ab02ef9f90a0bd2174d8c6e790b789 Mon Sep 17 00:00:00 2001
+From: Thomas Crider <gloriouseggroll@gmail.com>
+Date: Wed, 23 Feb 2022 01:40:23 -0700
+Subject: [PATCH] winegstreamer: remove WG_PARSER_EVENT_SEGMENT in audioconvert
+ due to removal in commit f51b2ca
+
+---
+ dlls/winegstreamer/audioconvert.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/dlls/winegstreamer/audioconvert.c b/dlls/winegstreamer/audioconvert.c
+index 58daf388a30..e8a4ad0a096 100644
+--- a/dlls/winegstreamer/audioconvert.c
++++ b/dlls/winegstreamer/audioconvert.c
+@@ -756,9 +756,6 @@ static HRESULT WINAPI audio_converter_ProcessOutput(IMFTransform *iface, DWORD f
+             case WG_PARSER_EVENT_BUFFER:
+                 break;
+
+-            case WG_PARSER_EVENT_SEGMENT:
+-                continue;
+-
+             default:
+                 WARN("Unexpected event, %lu\n", event.type);
+                 continue;
+--
+2.35.1
+
