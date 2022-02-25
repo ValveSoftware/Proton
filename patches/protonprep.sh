@@ -13,9 +13,6 @@
     # this needs to be the last patch in the list.. because reasons?
     echo "DXVK:add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
-
-    echo "DXVK:add pending Resident Evil games patch"
-    patch -Np1 < ../patches/dxvk/2466.patch
     cd ..
 
     #WINE STAGING
