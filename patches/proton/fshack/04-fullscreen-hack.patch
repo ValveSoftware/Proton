@@ -6991,9 +6991,9 @@ index b7e2e63dcb3..51f1c624ba6 100644
 --- a/include/ntuser.h
 +++ b/include/ntuser.h
 @@ -75,12 +75,10 @@ enum
- {
      NtUserGetClipCursor,
      NtUserGetCursorPos,
+     NtUserGetIconParam,
 -    NtUserGetPrimaryMonitorRect,
      NtUserGetSysColor,
      NtUserGetSysColorBrush,
