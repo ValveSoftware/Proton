@@ -174,6 +174,9 @@
     echo "WINE: -GAME FIXES- add halo infinite patches"
     patch -Np1 < ../patches/game-patches/halo-infinite-twinapi.appcore.dll.patch
 
+    echo "WINE: -GAME FIXES- add cities XXL patches"
+    patch -Np1 < ../patches/game-patches/v5-0001-windowscodecs-Correctly-handle-8bpp-custom-conver.patch
+
 ### END GAME PATCH SECTION ###
 
 ### (2-4) PROTON PATCH SECTION ###

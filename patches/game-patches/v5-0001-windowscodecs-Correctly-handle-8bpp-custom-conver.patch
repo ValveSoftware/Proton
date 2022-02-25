@@ -1,0 +1,184 @@
+From 7494282c536e6738d565e5be4913148db79f62fb Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Mon, 21 Feb 2022 18:21:34 +1100
+Subject: [PATCH v5] windowscodecs: Correctly handle 8bpp custom conversions
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ dlls/windowscodecs/converter.c       |  16 ++++-
+ dlls/windowscodecs/tests/converter.c | 104 +++++++++++++++++++++++++++
+ 2 files changed, 119 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/windowscodecs/converter.c b/dlls/windowscodecs/converter.c
+index c321627885b..3eded09bf6a 100644
+--- a/dlls/windowscodecs/converter.c
++++ b/dlls/windowscodecs/converter.c
+@@ -131,6 +131,17 @@ static void to_sRGB(BYTE *bgr)
+ }
+ #endif
+ 
++static BOOL is_indexed_format(const GUID *format)
++{
++    if (IsEqualGUID(format, &GUID_WICPixelFormat1bppIndexed) ||
++        IsEqualGUID(format, &GUID_WICPixelFormat2bppIndexed) ||
++        IsEqualGUID(format, &GUID_WICPixelFormat4bppIndexed) ||
++        IsEqualGUID(format, &GUID_WICPixelFormat8bppIndexed))
++        return TRUE;
++
++    return FALSE;
++}
++
+ static inline FormatConverter *impl_from_IWICFormatConverter(IWICFormatConverter *iface)
+ {
+     return CONTAINING_RECORD(iface, FormatConverter, IWICFormatConverter_iface);
+@@ -1703,7 +1714,10 @@ static HRESULT WINAPI FormatConverter_Initialize(IWICFormatConverter *iface,
+         case WICBitmapPaletteTypeCustom:
+             IWICPalette_Release(palette);
+             palette = NULL;
+-            if (bpp <= 8) return E_INVALIDARG;
++
++            /* Indexed types require a palette */
++            if (is_indexed_format(dstFormat))
++                return E_INVALIDARG;
+             break;
+ 
+         case WICBitmapPaletteTypeMedianCut:
+diff --git a/dlls/windowscodecs/tests/converter.c b/dlls/windowscodecs/tests/converter.c
+index f0672fceaf8..7857f7520cd 100644
+--- a/dlls/windowscodecs/tests/converter.c
++++ b/dlls/windowscodecs/tests/converter.c
+@@ -538,6 +538,18 @@ static const float bits_32bppGrayFloat[] = {
+ static const struct bitmap_data testdata_32bppGrayFloat = {
+     &GUID_WICPixelFormat32bppGrayFloat, 32, (const BYTE *)bits_32bppGrayFloat, 32, 2, 96.0, 96.0, &testdata_32bppGrayFloat_xp};
+ 
++static const BYTE bits_4bppGray_xp[] = {
++    77,112,77,112,77,112,77,112,77,112,77,112,77,112,77,112,249,
++    239,249,239,249,239,249,239,249,239,249,239,249,239,249,239};
++static const struct bitmap_data testdata_4bppGray_xp = {
++    &GUID_WICPixelFormat4bppGray, 4, bits_4bppGray_xp, 32, 2, 96.0, 96.0};
++
++static const BYTE bits_4bppGray[] = {
++    77,112,77,112,77,112,77,112,77,112,77,112,77,112,77,112,249,
++    239,249,239,249,239,249,239,249,239,249,239,249,239,249,239};
++static const struct bitmap_data testdata_4bppGray = {
++    &GUID_WICPixelFormat4bppGray, 4, bits_4bppGray, 32, 2, 96.0, 96.0, &testdata_4bppGray_xp};
++
+ static const BYTE bits_8bppGray_xp[] = {
+     29,150,76,0,29,150,76,0,29,150,76,0,29,150,76,0,
+     29,150,76,0,29,150,76,0,29,150,76,0,29,150,76,0,
+@@ -637,6 +649,72 @@ static void test_default_converter(void)
+     DeleteTestBitmap(src_obj);
+ }
+ 
++static void test_converter_4bppGray(void)
++{
++    BitmapTestSrc *src_obj;
++    IWICFormatConverter *converter;
++    BOOL can_convert = TRUE;
++    HRESULT hr;
++
++    CreateTestBitmap(&testdata_32bppBGRA, &src_obj);
++
++    hr = CoCreateInstance(&CLSID_WICDefaultFormatConverter, NULL, CLSCTX_INPROC_SERVER,
++        &IID_IWICFormatConverter, (void**)&converter);
++    ok(SUCCEEDED(hr), "CoCreateInstance failed, hr=%x\n", hr);
++    if (SUCCEEDED(hr))
++    {
++        hr = IWICFormatConverter_CanConvert(converter, &GUID_WICPixelFormat32bppBGRA,
++            &GUID_WICPixelFormat4bppGray, &can_convert);
++        ok(SUCCEEDED(hr), "CanConvert returned %x\n", hr);
++        todo_wine ok(can_convert, "expected TRUE, got %i\n", can_convert);
++
++        hr = IWICFormatConverter_Initialize(converter, &src_obj->IWICBitmapSource_iface,
++            &GUID_WICPixelFormat4bppGray, WICBitmapDitherTypeNone, NULL, 0.0,
++            WICBitmapPaletteTypeCustom);
++        todo_wine ok(SUCCEEDED(hr), "Initialize returned %x\n", hr);
++
++        if (SUCCEEDED(hr))
++            compare_bitmap_data(&testdata_32bppBGRA, &testdata_4bppGray, (IWICBitmapSource*)converter, "4bppGray converter");
++
++        IWICFormatConverter_Release(converter);
++    }
++
++    DeleteTestBitmap(src_obj);
++}
++
++static void test_converter_8bppGray(void)
++{
++    BitmapTestSrc *src_obj;
++    IWICFormatConverter *converter;
++    BOOL can_convert = TRUE;
++    HRESULT hr;
++
++    CreateTestBitmap(&testdata_32bppBGRA, &src_obj);
++
++    hr = CoCreateInstance(&CLSID_WICDefaultFormatConverter, NULL, CLSCTX_INPROC_SERVER,
++        &IID_IWICFormatConverter, (void**)&converter);
++    ok(SUCCEEDED(hr), "CoCreateInstance failed, hr=%x\n", hr);
++    if (SUCCEEDED(hr))
++    {
++        hr = IWICFormatConverter_CanConvert(converter, &GUID_WICPixelFormat32bppBGRA,
++            &GUID_WICPixelFormat8bppGray, &can_convert);
++        ok(SUCCEEDED(hr), "CanConvert returned %x\n", hr);
++        ok(can_convert, "expected TRUE, got %i\n", can_convert);
++
++        hr = IWICFormatConverter_Initialize(converter, &src_obj->IWICBitmapSource_iface,
++            &GUID_WICPixelFormat8bppGray, WICBitmapDitherTypeNone, NULL, 0.0,
++            WICBitmapPaletteTypeCustom);
++        ok(SUCCEEDED(hr), "Initialize returned %x\n", hr);
++
++        if (SUCCEEDED(hr))
++            compare_bitmap_data(&testdata_32bppBGRA, &testdata_8bppGray, (IWICBitmapSource*)converter, "8bppGray converter");
++
++        IWICFormatConverter_Release(converter);
++    }
++
++    DeleteTestBitmap(src_obj);
++}
++
+ typedef struct property_opt_test_data
+ {
+     LPCOLESTR name;
+@@ -1736,6 +1814,30 @@ static void test_converter_8bppIndexed(void)
+     ok(hr == WINCODEC_ERR_WRONGSTATE, "unexpected error %#x\n", hr);
+     IWICFormatConverter_Release(converter);
+ 
++    hr = IWICImagingFactory_CreateFormatConverter(factory, &converter);
++    ok(hr == S_OK, "CreateFormatConverter error %#x\n", hr);
++    hr = IWICFormatConverter_Initialize(converter, &src_obj->IWICBitmapSource_iface,
++                                        &GUID_WICPixelFormat4bppIndexed, WICBitmapDitherTypeNone,
++                                        NULL, 0.0, WICBitmapPaletteTypeCustom);
++    ok(hr == E_INVALIDARG, "unexpected error %#x\n", hr);
++    IWICFormatConverter_Release(converter);
++
++    hr = IWICImagingFactory_CreateFormatConverter(factory, &converter);
++    ok(hr == S_OK, "CreateFormatConverter error %#x\n", hr);
++    hr = IWICFormatConverter_Initialize(converter, &src_obj->IWICBitmapSource_iface,
++                                        &GUID_WICPixelFormat2bppIndexed, WICBitmapDitherTypeNone,
++                                        NULL, 0.0, WICBitmapPaletteTypeCustom);
++    ok(hr == E_INVALIDARG, "unexpected error %#x\n", hr);
++    IWICFormatConverter_Release(converter);
++
++    hr = IWICImagingFactory_CreateFormatConverter(factory, &converter);
++    ok(hr == S_OK, "CreateFormatConverter error %#x\n", hr);
++    hr = IWICFormatConverter_Initialize(converter, &src_obj->IWICBitmapSource_iface,
++                                        &GUID_WICPixelFormat1bppIndexed, WICBitmapDitherTypeNone,
++                                        NULL, 0.0, WICBitmapPaletteTypeCustom);
++    ok(hr == E_INVALIDARG, "unexpected error %#x\n", hr);
++    IWICFormatConverter_Release(converter);
++
+     /* empty palette + Custom type */
+     hr = IWICImagingFactory_CreateFormatConverter(factory, &converter);
+     ok(hr == S_OK, "CreateFormatConverter error %#x\n", hr);
+@@ -1906,6 +2008,8 @@ START_TEST(converter)
+ 
+     test_invalid_conversion();
+     test_default_converter();
++    test_converter_4bppGray();
++    test_converter_8bppGray();
+     test_converter_8bppIndexed();
+ 
+     test_encoder(&testdata_8bppIndexed, &CLSID_WICGifEncoder,
+-- 
+2.34.1
+
