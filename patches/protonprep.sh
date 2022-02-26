@@ -90,7 +90,12 @@
     git revert --no-commit 4d929972c341bff2da3616606b8cbeadf85dba26
 
     # mouse focus
+    git revert --no-commit bde39137cf4d8d392b8ca844b70b32d8ae922124
+    git revert --no-commit cb4c3b8d77d6f89e418cde3f3a4b7f9daea9d381
     git revert --no-commit d9f21fcca5376f47b842f3d061674898eb0db310
+    git revert --no-commit 088033cfb655123fb0daef2c0347e38c26801a19
+    git revert --no-commit 0c6d042cc3b1b2cbfb702bb3d199cc7a83e6cbd2
+    git revert --no-commit fcc1581938aa84aff86357ba3154775353ff8c9e
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
