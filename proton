@@ -1507,9 +1507,9 @@ class Session:
 
         # CoD: Black Ops 3 workaround
         if os.environ.get("SteamGameId", 0) == "311210":
-            rc = self.run_proc([g_proton.wine_bin, "start.exe", "/b", "c:\\Program Files (x86)\\Steam\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
+            rc = self.run_proc([g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
         else:
-            rc = self.run_proc([g_proton.wine64_bin, "start.exe", "/b", "c:\\windows\\system32\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
+            rc = self.run_proc([g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
             remote_debug_proc.kill()
