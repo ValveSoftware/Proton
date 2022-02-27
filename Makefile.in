@@ -402,8 +402,6 @@ redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	cp -Rf $(PROTONFIXES_TARGET)/cabextract $(DST_DIR)/bin/
 	cp -Rf $(PROTONFIXES_TARGET)/libmspack.so.0 $(DST_DIR)/lib64/
 	cp -Rf $(PROTONFIXES_TARGET)/libmspack.so.0.1.0 $(DST_DIR)/lib64/
-	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
-	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
 	mkdir -p $(BUILD_NAME)
 	cp -Rf $(REDIST_DIR)/* $(BUILD_NAME)
 	tar -cvzf $(BUILD_NAME).tar.gz $(BUILD_NAME)
