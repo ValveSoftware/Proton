@@ -130,9 +130,6 @@
     echo "WINE: -GAME FIXES- killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
 
-    echo "WINE: -GAME FIXES- Castlevania Advance fix"
-    patch -Np1 < ../patches/game-patches/castlevania-advance-collection.patch
-
     echo "WINE: -GAME FIXES- add cities XXL patches"
     patch -Np1 < ../patches/game-patches/v5-0001-windowscodecs-Correctly-handle-8bpp-custom-conver.patch
 
