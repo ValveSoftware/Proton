@@ -350,36 +350,6 @@ class Proton:
     def path(self, d):
         return self.base_dir + d
 
-    def cleanup_legacy_dist(self):
-        old_dist_dir = self.path("dist/")
-        if file_exists(old_dist_dir, follow_symlinks=True):
-            with self.dist_lock:
-                if file_exists(old_dist_dir, follow_symlinks=True):
-                    shutil.rmtree(old_dist_dir)
-
-    def need_tarball_extraction(self):
-        '''Checks if the proton_dist tarball archive must be extracted. Returns true if extraction is needed, false otherwise'''
-        return not file_exists(self.dist_dir, follow_symlinks=True) or \
-            not file_exists(self.path("dist/version"), follow_symlinks=True) or \
-            not filecmp.cmp(self.version_file, self.path("dist/version"))
-
-    def extract_tarball(self):
-        with self.dist_lock:
-            if self.need_tarball_extraction():
-                if file_exists(self.dist_dir, follow_symlinks=True):
-                    shutil.rmtree(self.dist_dir)
-                tar = None
-                for sf in ["", ".xz", ".bz2", ".gz"]:
-                    if file_exists(self.path("proton_dist.tar" + sf), follow_symlinks=True):
-                        tar = tarfile.open(self.path("proton_dist.tar" + sf), mode="r:*")
-                        break
-                if not tar:
-                    log("No proton_dist tarball??")
-                    sys.exit(1)
-                tar.extractall(path=self.dist_dir)
-                tar.close()
-                try_copy(self.version_file, self.dist_dir)
-
     def do_steampipe_fixups(self):
         fixups_json = self.path("steampipe_fixups.json")
         fixups_mtime = self.path("files/steampipe_fixups_mtime")
@@ -1559,11 +1529,7 @@ if __name__ == "__main__":
 
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
-    g_proton.cleanup_legacy_dist()
     g_proton.do_steampipe_fixups()
-
-    if g_proton.need_tarball_extraction():
-        g_proton.extract_tarball()
 
     g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
