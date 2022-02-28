@@ -332,15 +332,15 @@ def set_dir_casefold_bit(dir_path):
 class Proton:
     def __init__(self, base_dir):
         self.base_dir = base_dir + "/"
-        self.dist_dir = self.path("dist/")
-        self.bin_dir = self.path("dist/bin/")
-        self.lib_dir = self.path("dist/lib/")
-        self.lib64_dir = self.path("dist/lib64/")
-        self.fonts_dir = self.path("dist/share/fonts/")
-        self.wine_fonts_dir = self.path("dist/share/wine/fonts/")
-        self.wine_inf = self.path("dist/share/wine/wine.inf")
+        self.dist_dir = self.path("files/")
+        self.bin_dir = self.path("files/bin/")
+        self.lib_dir = self.path("files/lib/")
+        self.lib64_dir = self.path("files/lib64/")
+        self.fonts_dir = self.path("files/share/fonts/")
+        self.wine_fonts_dir = self.path("files/share/wine/fonts/")
+        self.wine_inf = self.path("files/share/wine/wine.inf")
         self.version_file = self.path("version")
-        self.default_pfx_dir = self.path("dist/share/default_pfx/")
+        self.default_pfx_dir = self.path("files/share/default_pfx/")
         self.user_settings_file = self.path("user_settings.py")
         self.wine_bin = self.bin_dir + "wine"
         self.wine64_bin = self.bin_dir + "wine64"
@@ -349,6 +349,13 @@ class Proton:
 
     def path(self, d):
         return self.base_dir + d
+
+    def cleanup_legacy_dist(self):
+        old_dist_dir = self.path("dist/")
+        if file_exists(old_dist_dir, follow_symlinks=True):
+            with self.dist_lock:
+                if file_exists(old_dist_dir, follow_symlinks=True):
+                    shutil.rmtree(old_dist_dir)
 
     def do_steampipe_fixups(self):
         fixups_json = self.path("steampipe_fixups.json")
@@ -1227,7 +1234,6 @@ class Session:
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
         self.env.setdefault("VKD3D_SHADER_DEBUG", "none")
-        self.env.setdefault("VKD3D_FEATURE_LEVEL", "12_0")
 
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
@@ -1251,20 +1257,19 @@ class Session:
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
         self.check_environment("PROTON_ENABLE_NVAPI", "enablenvapi")
-        self.check_environment("PROTON_VKD3D_BINDLESS", "vkd3dbindlesstb")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
         else:
-            self.env["WINEESYNC"] = "1" if "SteamGameId" in self.env else "0"
+            self.env["WINEESYNC"] = "1"
+
+        if not "noxim" in self.compat_config:
+            self.env.pop("WINE_ALLOW_XIM")
 
         if "nofsync" in self.compat_config:
             self.env.pop("WINEFSYNC", "")
         else:
-            self.env["WINEFSYNC"] = "1" if "SteamGameId" in self.env else "0"
-
-        if not "noxim" in self.compat_config:
-            self.env.pop("WINE_ALLOW_XIM")
+            self.env["WINEFSYNC"] = "1"
 
         if "nowritewatch" in self.compat_config:
             self.env["WINE_DISABLE_WRITE_WATCH"] = "1"
@@ -1284,6 +1289,10 @@ class Session:
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
+        if "vkd3dfl12" in self.compat_config:
+            if not "VKD3D_FEATURE_LEVEL" in self.env:
+                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
+
         if "hidenvgpu" in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
@@ -1292,6 +1301,9 @@ class Session:
 
         if "disablelibglesv2" in self.compat_config:
             self.dlloverrides["libglesv2"] = "d"
+
+        if "nomfdxgiman" in self.compat_config:
+            self.env["WINE_DO_NOT_CREATE_DXGI_DEVICE_MANAGER"] = "1"
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
@@ -1502,9 +1514,6 @@ class Session:
         else:
             remote_debug_proc = None
 
-        #commented out, used for debugging
-        #commandstring = str(sys.argv[2:] + self.cmdlineappend)
-
         # CoD: Black Ops 3 workaround
         if os.environ.get("SteamGameId", 0) == "311210":
             rc = self.run_proc([g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
@@ -1529,15 +1538,12 @@ if __name__ == "__main__":
 
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
+    g_proton.cleanup_legacy_dist()
     g_proton.do_steampipe_fixups()
 
     g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
     g_session = Session()
-
-    #install stupid EA Origin if need.
-    if "link2ea" in str(sys.argv[2]):
-        os.environ["ORIGIN"] = "1"
 
     g_session.init_wine()
 

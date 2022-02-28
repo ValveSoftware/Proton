@@ -102,6 +102,7 @@ def make_default_pfx(default_pfx_dir, dist_dir, runtime):
 
         env=local_env, check=True)
     setup_dll_symlinks(default_pfx_dir, dist_dir)
+    fixup_drive_links(default_pfx_dir)
 
 if __name__ == '__main__':
     import sys
