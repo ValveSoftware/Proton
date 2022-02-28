@@ -115,6 +115,9 @@
 
 ### END WINE STAGING APPLY SECTION ###
 
+    echo "WINE: -STAGING- applying staging patches"
+    patch -Np1 < ../wine-staging/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
+
 ### (2-3) GAME PATCH SECTION ###
 
     echo "WINE: -GAME FIXES- mech warrior online fix"
