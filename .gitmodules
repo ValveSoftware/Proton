@@ -9,16 +9,10 @@
 	url = https://github.com/doitsujin/dxvk/
 [submodule "FFmpeg"]
 	path = FFmpeg
-	url = https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg/
+	url = https://github.com/ffmpeg/FFmpeg/
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr/
-[submodule "lsteamclient"]
-	path = lsteamclient
-	url = https://github.com/gloriouseggroll/lsteamclient/
-[submodule "vrclient_x64"]
-	path = vrclient_x64
-	url = https://github.com/gloriouseggroll/vrclient_x64
 [submodule "fonts/liberation-fonts"]
 	path = fonts/liberation-fonts
 	url = https://github.com/liberationfonts/liberation-fonts/
@@ -58,9 +52,6 @@
 [submodule "dxvk-nvapi"]
 	path = dxvk-nvapi
 	url = https://github.com/jp7677/dxvk-nvapi
-[submodule "xkbcommon"]
-	path = xkbcommon
-	url = https://github.com/xkbcommon/libxkbcommon
 [submodule "SPIRV-Headers"]
         path = SPIRV-Headers
 	url = https://github.com/KhronosGroup/SPIRV-Headers

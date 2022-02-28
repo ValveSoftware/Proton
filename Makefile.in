@@ -574,25 +574,34 @@ $(eval $(call rules-meson,gst_good,32))
 $(eval $(call rules-meson,gst_good,64))
 
 ##
+## FFmpeg
+##
+
+FFMPEG_CONFIGURE_ARGS := \
+	--enable-shared \
+	--disable-static \
+	--disable-everything \
+	--disable-programs \
+	--disable-doc \
+	--enable-decoder=mpeg4 \
+	--enable-decoder=wmapro \
+	--enable-decoder=wmav3 \
+	--enable-decoder=wmav2 \
+	--enable-decoder=wmav1 \
+	--enable-decoder=wmv3 \
+	--enable-decoder=wmv2 \
+	--enable-decoder=wmv1
+
+$(eval $(call rules-source,ffmpeg,$(SRCDIR)/FFmpeg))
+$(eval $(call rules-configure,ffmpeg,32))
+$(eval $(call rules-configure,ffmpeg,64))
+
+
+##
 ## gst-libav
 ##
 
-GST_LIBAV_MESON_ARGS := \
-        -Ddoc=disabled \
-    $(GST_COMMON_MESON_ARGS)
-
-GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base
-
-# copying ffmpeg is temporary here, this assumes the build directory is in the same directory as proton-ge-custom
-# Ex.
-# somefolder/proton-ge-custom
-# somefolder/build
-$(OBJ)/.gst_libav-post-source:
-	mkdir -p $(GST_LIBAV_SRC)/subprojects
-	cp -R $(SRCDIR)/FFmpeg $(GST_LIBAV_SRC)/subprojects/
-	sed -i 's/0.54/0.47/g' $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson.build
-	sed -i "s/libwebp', type: 'feature', value: 'auto'/libwebp', type: 'feature', value: 'disabled'/g" $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson_options.txt
-	sed -i "s/libwebp_anim_encoder', type: 'feature', value: 'auto'/libwebp_anim_encoder', type: 'feature', value: 'disabled'/g" $(GST_LIBAV_SRC)/subprojects/FFmpeg/meson_options.txt
+GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base ffmpeg
 
 $(eval $(call rules-source,gst_libav,$(SRCDIR)/gst-libav))
 $(eval $(call rules-meson,gst_libav,32))
