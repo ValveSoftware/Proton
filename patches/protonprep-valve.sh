@@ -174,6 +174,9 @@
     echo "WINE: -HOTFIX- unity crash hotfix"
     patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
 
+    echo "WINE: -HOTFIX- 32 bit compilation crashes with newer libldap, upstream patch fixes it"
+    patch -Np1 < ../patches/wine-hotfixes/upstream/32-bit-ldap-upstream-fix.patch
+
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
 
