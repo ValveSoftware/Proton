@@ -1,6 +1,6 @@
 # proton-ge-custom
 
-## (1) RUNNING NON-STEAM GAMES WITH PROTON IS NOT SUPPORTED. DO NOT ASK FOR HELP WITH THIS:
+## (1) RUNNING NON-STEAM GAMES WITH PROTON OUTSIDE OF STEAM IS NOT SUPPORTED. DO NOT ASK FOR HELP WITH THIS:
 
 Proton runs in a container, which uses a runtime environment and libraries specifically built for use within that container. Not running it as intended results in the container and therefore its runtime not being used, and severely breaks library compatibility.
 
