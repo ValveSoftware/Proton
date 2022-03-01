@@ -52,7 +52,7 @@ https://discord.gg/6y3BdzC
 
 This is my build of Proton with the most recent bleeding-edge proton experimental WINE.
 
-Things it contains the Valve's proton does not:
+Things it contains that Valve's proton does not:
 
 - DXVK patched with Async, which can be toggled with DXVK_ASYNC=1
 - Additional media foundation patches for better video playback support
