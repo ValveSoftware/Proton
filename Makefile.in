@@ -590,7 +590,9 @@ FFMPEG_CONFIGURE_ARGS := \
 	--enable-decoder=wmav1 \
 	--enable-decoder=wmv3 \
 	--enable-decoder=wmv2 \
-	--enable-decoder=wmv1
+	--enable-decoder=wmv1 \
+	--enable-decoder=h264 \
+	--enable-decoder=aac
 
 $(eval $(call rules-source,ffmpeg,$(SRCDIR)/FFmpeg))
 $(eval $(call rules-configure,ffmpeg,32))
