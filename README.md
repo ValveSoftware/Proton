@@ -337,8 +337,6 @@ Build will be placed within the build directory as SOME-BUILD-NAME-HERE.tar.gz.
 
 ## Modification
 
-Vagrant syncs the Proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch Vagrant again with `vagrant up`
-
 Environment variable options:
 
 | Compat config string  | Environment Variable           | Description  |
