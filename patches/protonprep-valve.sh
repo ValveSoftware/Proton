@@ -25,6 +25,7 @@
 
 ### (2-1) PROBLEMATIC COMMIT REVERT SECTION ###
 
+    # mfplat
     git revert --no-commit e618790bd251b618c60a9ad9eda0b55d89c039c5
     git revert --no-commit 48eb121da0c510d5dd4be8032142fc1d748dfb4c
     git revert --no-commit d40d8449e6aee3075493ead78e2b0e0f81687ab1
@@ -79,6 +80,9 @@
     git revert --no-commit 6e6760c8a06368dc0a0de69ea061318fe88edcf7
     git revert --no-commit 18134858af0b791774aef8bba34961f1b3cd1158
 
+    # nvapi
+    git revert --no-commit fdfb4b925f52fbec580dd30bef37fb22c219c667
+
 
 
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
@@ -116,7 +120,55 @@
 ### END WINE STAGING APPLY SECTION ###
 
     echo "WINE: -STAGING- applying staging patches"
+
+    # HideWineExports
     patch -Np1 < ../wine-staging/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
+
+    # nvapi/nvcuda
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0001-include-Add-cuda.h.h.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0002-nvcuda-Add-stub-dll.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0003-nvcuda-First-implementation.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0004-nvcuda-Implement-new-functions-added-in-CUDA-6.5.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0005-nvcuda-Properly-wrap-undocumented-ContextStorage-int.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0006-nvcuda-Emulate-two-d3d9-initialization-functions.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0007-nvcuda-Properly-wrap-stream-callbacks-by-forwarding-.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0008-nvcuda-Add-support-for-CUDA-7.0.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0009-nvcuda-Implement-cuModuleLoad-wrapper-function.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0010-nvcuda-Search-for-dylib-library-on-Mac-OS-X.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0011-nvcuda-Add-semi-stub-for-cuD3D10GetDevice.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0012-nvcuda-Add-semi-stub-for-cuD3D11GetDevice-and-cuGrap.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0013-nvcuda-Update-spec-file.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0014-nvcuda-Implement-cuDeviceGetUuid-and-cuDeviceGetLuid.patch
+    patch -Np1 < ../wine-staging/patches/nvcuda-CUDA_Support/0015-nvcuda-Expand-the-Unknown1-table.patch
+
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0001-nvapi-First-implementation.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0002-nvapi-Add-stubs-for-NvAPI_EnumLogicalGPUs-and-undocu.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0003-nvapi-Add-NvAPI_GetPhysicalGPUsFromLogicalGPU.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0004-nvapi-Add-stub-for-NvAPI_EnumPhysicalGPUs.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0005-nvapi-Add-stubs-for-NvAPI_GPU_GetFullName.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0006-nvapi-Explicity-return-NULL-for-0x33c7358c-and-0x593.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0007-nvapi-Add-stub-for-NvAPI_DISP_GetGDIPrimaryDisplayId.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0008-nvapi-Add-stub-for-EnumNvidiaDisplayHandle.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0009-nvapi-Add-stub-for-NvAPI_SYS_GetDriverAndBranchVersi.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0010-nvapi-Add-stub-for-NvAPI_Unload.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0011-nvapi-Add-stub-for-NvAPI_D3D_GetCurrentSLIState.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0012-nvapi-tests-Use-structure-to-list-imports.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0013-nvapi-Add-stub-for-NvAPI_GetLogicalGPUFromDisplay.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0014-nvapi-Add-stub-for-NvAPI_D3D_GetObjectHandleForResou.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0015-nvapi-Add-stub-for-NvAPI_D3D9_RegisterResource.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0016-nvapi-Improve-NvAPI_D3D_GetCurrentSLIState.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0017-nvapi-Implement-NvAPI_GPU_Get-Physical-Virtual-Frame.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0018-nvapi-Add-stub-for-NvAPI_GPU_GetGpuCoreCount.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0019-wined3d-Make-depth-bounds-test-into-a-proper-state.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0020-d3d11-Introduce-a-COM-interface-to-retrieve-the-wine.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0021-nvapi-Implement-NvAPI_D3D11_SetDepthBoundsTest.patch
+    patch -Np1 < ../wine-staging/patches/nvapi-Stub_DLL/0022-nvapi-Implement-NvAPI_D3D11_CreateDevice-and-NvAPI_D.patch
+
+    patch -Np1 < ../wine-staging/patches/nvcuvid-CUDA_Video_Support/0001-nvcuvid-First-implementation.patch
+
+    patch -Np1 < ../wine-staging/patches/nvencodeapi-Video_Encoder/0001-nvencodeapi-First-implementation.patch
+    patch -Np1 < ../wine-staging/patches/nvencodeapi-Video_Encoder/0002-nvencodeapi-Add-debian-specific-paths-to-native-libr.patch
+    patch -Np1 < ../wine-staging/patches/nvencodeapi-Video_Encoder/0003-nvencodeapi-Add-support-for-version-6.0.patch
 
 ### (2-3) GAME PATCH SECTION ###
 
