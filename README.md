@@ -24,7 +24,8 @@ https://discord.gg/6y3BdzC
 ## Table of contents
 
 - [Overview](#overview)
-	- [Patches](#patches)
+	- [Protonfixes](#protonfixes)
+	- [Media Foundation Fixes (fully working or playable)](#media-foundation-fixes-fully-working-or-playable)
 	- [Notes](#notes)
 - [Installation](#installation)
 	- [Native](#native)
@@ -67,7 +68,7 @@ Things it contains that Valve's proton does not:
 - various upstream WINE patches backported
 - various wine-staging patches applied as they become needed
 
-### Protonfixes
+## Protonfixes
 
 - Age of Empires II: DE
 - Batman Arkham Asylum
@@ -199,7 +200,7 @@ Things it contains that Valve's proton does not:
 - Gothic II: Gold Edition
 
 
-### Media Foundation fixes (Fully working or playable)
+## Media Foundation fixes (Fully working or playable)
 
 - Spyro Reignited Trilogy
 - Mortal Kombat 11
@@ -241,7 +242,7 @@ Things it contains that Valve's proton does not:
 - Monster Hunter Rise
 - Seven: Days Gone
 
-### Notes
+## Notes
 
 - Warframe is problematic with VSync. Turn it off or on in game, do not set to `Auto`
 - Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns
@@ -322,11 +323,7 @@ in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail
 
 ```sh
 	mkdir build && cd build
-	# This will take a while on the first run, as it prepares everything
 	../proton-ge-custom/configure.sh --enable-ccache --build-name=SOME-BUILD-NAME-HERE --container-engine=podman
-
-	# This will start the build and log everything to buildlog.txt
-	# so that you can review the log if something fails)
 	make redist &> log
 ```
 
