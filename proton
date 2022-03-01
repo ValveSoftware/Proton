@@ -937,6 +937,7 @@ def default_compat_config():
                 "305620", #The Long Dark
                 "585420", #Trailmakers
                 "684450", #Surviving the Aftermath
+                "844260", #Rustler
                 "1075200", #TOHU
                 "1331440", #FUSER
 
