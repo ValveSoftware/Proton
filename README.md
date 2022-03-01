@@ -69,134 +69,134 @@ Things it contains the Valve's proton does not:
 
 ### Protonfixes
 
-""" Game fix Age of Empires II: DE
-""" Game fix Batman Arkham Asylum
-""" Game fix Catherine Classic
-""" Game fix Dark Sould Prepare To Die Edition
-""" Game fix Dark Souls Remastered
-""" Game fix Destiny 2
-""" Game fix Dungeons & Dragons Online
-""" Game fix for Age Of Empire 3: Complete Collection
-""" Game fix for Age of Empires: DE
-""" Game fix for Age of Mythology: Extended Edition
-""" Game fix for AirMech Strike
-""" Game fix for Apex Legends
-""" Game fix for Arkania
-""" Game fix for Assetto Corsa
-""" Game fix for Baldur's Gate 3
-""" Game fix for Batman Arkham Knight
-""" Game fix for Battlefield: Bad Company 2
-""" Game fix for BeamNG.drive
-""" Game fix for Bejeweled 3
-""" Game fix for Beyond Good and Evil
-""" Game fix for BioShock 2 Remastered
-""" Game fix for BIT.TRIP BEAT
-""" Game fix for BIT.TRIP RUNNER
-""" Game fix for Blood and Bacon
-""" Game fix for Borderlands 2
-""" Game fix for Borderlands 3
-""" Game fix for Call of Duty (2003)
-""" Game fix for Chantelise - A Tale of Two Sisters
-""" Game fix for Chronophantasma Extend
-""" Game fix for Conan Exiles
-""" Game fix for Crashday Redline Edition
-""" Game fix for Cryostasis
-""" Game fix for Crysis
-""" Game fix for DEAD OR ALIVE 5 Last Round
-""" Game fix for Divinity Original Sin 2
-""" Game fix for Doom 2016
-""" Game fix for DRAGON BALL FighterZ
-""" Game fix for Duck Game
-""" Game fix for Dusty Revenge: Co-Op Edition
-""" Game fix for Endless Legend
-""" Game fix for Evil Genius 2
-""" Game fix for Fallout 3
-""" Game fix for Fallout 4
-""" Game fix for FarCry 5
-""" Game fix for FFXIV
-""" Game fix for FFX/X-2 HD Remaster
-""" Game fix for FINAL FANTASY IX
-""" Game fix for Final Fantasy XIII
-""" Game fix for Flight Simulator 2020
-""" Game fix for Forts
-""" Game fix for Gears 5
-""" Game fix for Gothic 1
-""" Game fix for Gothic 3
-""" Game fix for Gothic 3 Forsaken Gods Enhanced Edition
-""" Game fix for Grim Dawn
-""" Game fix for GT Legends
-""" Game fix for Guilty Gear Accent Core Plus R
-""" Game fix for Heavy Rain
-""" Game fix for IMSCARED
-""" Game fix for JUMP FORCE
-""" Game fix for L.A. Noire
-""" Game fix for LEGO Batman 2: DC Super Heroes
-""" Game fix for LEGO The Lord of the Rings
-""" Game fix for Little Nightmares
-""" Game fix for Lord of the Rings: War in the North
-""" Game fix for Mafia II Definitive Edition
-""" Game fix for Metro 2033
-""" Game fix for Mortal Kombat X
-""" Game fix for Naruto To Boruto
-""" Game fix for Oddworld: Munch's Oddysee
-""" Game fix for Order of Battle: World War II
-""" Game fix for Path of Exile
-""" Game fix for Persona 4 Golden
-""" Game fix for Pes 2021
-""" Game fix for PixARK
-""" Game fix for Plants vs. Zombies: Game of the Year
-""" Game fix for Potatoman Seeks the Troof
-""" Game fix for Progressbar95
-""" Game fix for Putt-Putt: Pep's Birthday Surprise
-""" Game fix for Recettear: An Item Shop's Tale
-""" Game fix for Red Dead Redemption 2
-""" Game fix for Resident Evil
-""" Game fix for Resident Evil 0
-""" Game fix for Resident Evil 5
-""" Game fix for Resident Evil 6
-""" Game fix for Resident Evil Revelations
-""" Game fix for Resident Evil Revelations 2
-""" Game fix for Rise of Nations: Extended Edition
-""" Game fix for Sacred 2 Gold
-""" Game fix for Serious Sam 4
-""" Game fix for Serious Sam: The Random Encounter
-""" Game fix for Skyrim
-""" Game fix for Skyrim SE
-""" Game fix for Sleeping Dogs: Definitive Edition
-""" Game fix for Sonic CD
-""" Game fix for Soulcalibur VI
-""" Game fix for Space Engineers
-""" Game fix for STAR WARS Galactic Battlegrounds Saga
-""" Game fix for Strange Brigade
-""" Game fix for SUGURI 2
-""" Game fix for Super Meat Boy
-""" Game fix for Syberia
-""" Game fix for Tesla Effect
-""" Game fix for The Bureau: XCOM Declassified
-""" Game fix for The Elder Scrolls Online
-""" Game fix for The Evil Within(268050)
-""" Game fix for Tomb Raider 2013
-""" Game fix for Tomb Raider I
-""" Game fix for Watch_Dogs
-""" Game fix for Watch_Dogs 2
-""" Game fix for WORLD OF HORROR
-""" Game fix for Yakuza 0
-""" Game fix for Yakuza Kiwami
-""" Game fix for Yesterday Origins
-""" Game fix for You Need a Budget 4
-""" Game fix Halo:MCC
-""" Game fix HighFleet
-""" Game fix Injustice 2
-""" Game fix Marvel's Avengers
-""" Game fix Mass Effect Legendary Edition
-""" Game fix Mortal Kombat 11
-""" Game fix Stealth Inc 2: A Game of Clones
-""" Game fix The Lord of the Rings Online
-""" Game fix Tree Of Savior
-""" Game fix Warframe
-""" Game fix for Oceanhorn: Monster of Uncharted Seas
-""" Game fix for Arkania
-""" Game fix for Gothic II: Gold Edition
+- Age of Empires II: DE
+- Batman Arkham Asylum
+- Catherine Classic
+- Dark Sould Prepare To Die Edition
+- Dark Souls Remastered
+- Destiny 2
+- Dungeons & Dragons Online
+- Age Of Empire 3: Complete Collection
+- Age of Empires: DE
+- Age of Mythology: Extended Edition
+- AirMech Strike
+- Apex Legends
+- Arkania
+- Assetto Corsa
+- Baldur's Gate 3
+- Batman Arkham Knight
+- Battlefield: Bad Company 2
+- BeamNG.drive
+- Bejeweled 3
+- Beyond Good and Evil
+- BioShock 2 Remastered
+- BIT.TRIP BEAT
+- BIT.TRIP RUNNER
+- Blood and Bacon
+- Borderlands 2
+- Borderlands 3
+- Call of Duty (2003)
+- Chantelise - A Tale of Two Sisters
+- Chronophantasma Extend
+- Conan Exiles
+- Crashday Redline Edition
+- Cryostasis
+- Crysis
+- DEAD OR ALIVE 5 Last Round
+- Divinity Original Sin 2
+- Doom 2016
+- DRAGON BALL FighterZ
+- Duck Game
+- Dusty Revenge: Co-Op Edition
+- Endless Legend
+- Evil Genius 2
+- Fallout 3
+- Fallout 4
+- FarCry 5
+- FFXIV
+- FFX/X-2 HD Remaster
+- FINAL FANTASY IX
+- Final Fantasy XIII
+- Flight Simulator 2020
+- Forts
+- Gears 5
+- Gothic 1
+- Gothic 3
+- Gothic 3 Forsaken Gods Enhanced Edition
+- Grim Dawn
+- GT Legends
+- Guilty Gear Accent Core Plus R
+- Heavy Rain
+- IMSCARED
+- JUMP FORCE
+- L.A. Noire
+- LEGO Batman 2: DC Super Heroes
+- LEGO The Lord of the Rings
+- Little Nightmares
+- Lord of the Rings: War in the North
+- Mafia II Definitive Edition
+- Metro 2033
+- Mortal Kombat X
+- Naruto To Boruto
+- Oddworld: Munch's Oddysee
+- Order of Battle: World War II
+- Path of Exile
+- Persona 4 Golden
+- Pes 2021
+- PixARK
+- Plants vs. Zombies: Game of the Year
+- Potatoman Seeks the Troof
+- Progressbar95
+- Putt-Putt: Pep's Birthday Surprise
+- Recettear: An Item Shop's Tale
+- Red Dead Redemption 2
+- Resident Evil
+- Resident Evil 0
+- Resident Evil 5
+- Resident Evil 6
+- Resident Evil Revelations
+- Resident Evil Revelations 2
+- Rise of Nations: Extended Edition
+- Sacred 2 Gold
+- Serious Sam 4
+- Serious Sam: The Random Encounter
+- Skyrim
+- Skyrim SE
+- Sleeping Dogs: Definitive Edition
+- Sonic CD
+- Soulcalibur VI
+- Space Engineers
+- STAR WARS Galactic Battlegrounds Saga
+- Strange Brigade
+- SUGURI 2
+- Super Meat Boy
+- Syberia
+- Tesla Effect
+- The Bureau: XCOM Declassified
+- The Elder Scrolls Online
+- The Evil Within(268050)
+- Tomb Raider 2013
+- Tomb Raider I
+- Watch_Dogs
+- Watch_Dogs 2
+- WORLD OF HORROR
+- Yakuza 0
+- Yakuza Kiwami
+- Yesterday Origins
+- You Need a Budget 4
+- Halo:MCC
+- HighFleet
+- Injustice 2
+- Marvel's Avengers
+- Mass Effect Legendary Edition
+- Mortal Kombat 11
+- Stealth Inc 2: A Game of Clones
+- The Lord of the Rings Online
+- Tree Of Savior
+- Warframe
+- Oceanhorn: Monster of Uncharted Seas
+- Arkania
+- Gothic II: Gold Edition
 
 
 ### Media Foundation fixes (Fully working or playable)
