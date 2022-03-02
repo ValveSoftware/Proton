@@ -59,6 +59,8 @@ Things it contains that Valve's proton does not:
 - Additional media foundation patches for better video playback support
 - AMD FSR patches added directly to fullscreen hack that can be toggled with WINE_FULLSCREEN_FSR=1
 - FSR Fake resolution patch (details here: https://github.com/GloriousEggroll/proton-ge-custom/pull/52)
+- Nvidia CUDA support for phsyx and nvapi
+- Raw input mouse support
 - fix for Mech Warrior Online
 - fix for Asseto Corsa HUD
 - fix for MK11 crash in single player
