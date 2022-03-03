@@ -867,9 +867,6 @@ $(OBJ)/.vkd3d-proton-post-build64:
 ## mediaconv
 ##
 
-MEDIACONV_SOURCE_ARGS = \
-    --exclude Cargo.lock \
-
 MEDIACONV_DEPENDS = gst_orc gstreamer gst_base
 
 $(eval $(call rules-source,mediaconv,$(SRCDIR)/media-converter))
