@@ -113,7 +113,6 @@ $(2)_LIBFLAGS$(3) = $$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \
 # native version doesn't exist.
 
 $(2)_ENV$(3) = \
-    CARGO_HOME=$$(OBJ)/.cargo \
     CARGO_TARGET_$$(call toupper,$$(CARGO_TARGET_$(3)))_LINKER="$$(TARGET_$(4)$(3))-gcc" \
     CCACHE_BASEDIR="$$(CCACHE_BASEDIR)" \
     STRIP="$$(STRIP)" \
