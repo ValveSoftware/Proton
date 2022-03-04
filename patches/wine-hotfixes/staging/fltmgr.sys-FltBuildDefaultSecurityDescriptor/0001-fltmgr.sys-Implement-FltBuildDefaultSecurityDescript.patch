@@ -1,0 +1,143 @@
+From f9da0ca4c7012918b5c8660ebe8a9ea0c74f05b0 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Sun, 29 Aug 2021 13:26:53 +1000
+Subject: [PATCH] fltmgr.sys: Implement FltBuildDefaultSecurityDescriptor
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ dlls/fltmgr.sys/Makefile.in     |  1 +
+ dlls/fltmgr.sys/fltmgr.sys.spec |  4 +-
+ dlls/fltmgr.sys/main.c          | 71 +++++++++++++++++++++++++++++++++
+ include/ddk/fltkernel.h         |  3 +-
+ 4 files changed, 76 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/fltmgr.sys/Makefile.in b/dlls/fltmgr.sys/Makefile.in
+index ba106a43831..bb1f34b4896 100644
+--- a/dlls/fltmgr.sys/Makefile.in
++++ b/dlls/fltmgr.sys/Makefile.in
+@@ -1,5 +1,6 @@
+ MODULE    = fltmgr.sys
+ EXTRADLLFLAGS = -Wl,--subsystem,native
++IMPORTS = ntoskrnl
+ 
+ C_SRCS = \
+ 	main.c
+diff --git a/dlls/fltmgr.sys/fltmgr.sys.spec b/dlls/fltmgr.sys/fltmgr.sys.spec
+index 39ce6798178..8943b9f85cf 100644
+--- a/dlls/fltmgr.sys/fltmgr.sys.spec
++++ b/dlls/fltmgr.sys/fltmgr.sys.spec
+@@ -10,7 +10,7 @@
+ @ stub FltAllocatePoolAlignedWithTag
+ @ stub FltAttachVolume
+ @ stub FltAttachVolumeAtAltitude
+-@ stub FltBuildDefaultSecurityDescriptor
++@ stdcall FltBuildDefaultSecurityDescriptor(ptr long)
+ @ stub FltCancelFileOpen
+ @ stub FltCancelIo
+ @ stub FltCbdqDisable
+@@ -60,7 +60,7 @@
+ @ stub FltFreeFileLock
+ @ stub FltFreeGenericWorkItem
+ @ stub FltFreePoolAlignedWithTag
+-@ stub FltFreeSecurityDescriptor
++@ stdcall FltFreeSecurityDescriptor(ptr)
+ @ stub FltFsControlFile
+ @ stub FltGetBottomInstance
+ @ stub FltGetContexts
+diff --git a/dlls/fltmgr.sys/main.c b/dlls/fltmgr.sys/main.c
+index e1016a4989c..ea9685b4308 100644
+--- a/dlls/fltmgr.sys/main.c
++++ b/dlls/fltmgr.sys/main.c
+@@ -93,3 +93,74 @@ void* WINAPI FltGetRoutineAddress(LPCSTR name)
+ 
+     return func;
+ }
++
++NTSTATUS WINAPI FltBuildDefaultSecurityDescriptor(PSECURITY_DESCRIPTOR *descriptor, ACCESS_MASK access)
++{
++    PACL dacl;
++    NTSTATUS ret = STATUS_INSUFFICIENT_RESOURCES;
++    ULONG sid_len;
++    PSID sid;
++    PSID sid_system;
++    PSECURITY_DESCRIPTOR sec_desc = NULL;
++    SID_IDENTIFIER_AUTHORITY auth = { SECURITY_NULL_SID_AUTHORITY };
++
++    *descriptor = NULL;
++
++    ret = RtlAllocateAndInitializeSid(&auth, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_GROUP_RID_ADMINS,
++                                         0, 0, 0, 0, 0, 0, &sid);
++    if (ret != STATUS_SUCCESS)
++        goto done;
++
++    ret = RtlAllocateAndInitializeSid(&auth, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, &sid_system);
++    if (ret != STATUS_SUCCESS)
++        goto done;
++
++    sid_len = SECURITY_DESCRIPTOR_MIN_LENGTH + sizeof(ACL) +
++            sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid(sid) +
++            sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid(sid_system);
++
++    sec_desc = RtlAllocateHeap(GetProcessHeap(), HEAP_ZERO_MEMORY, sid_len);
++    if (!sec_desc)
++    {
++        ret = STATUS_NO_MEMORY;
++        goto done;
++    }
++
++    ret = RtlCreateSecurityDescriptor(sec_desc, SECURITY_DESCRIPTOR_REVISION);
++    if (ret != STATUS_SUCCESS)
++        goto done;
++
++    dacl = (PACL)((char*)sec_desc + SECURITY_DESCRIPTOR_MIN_LENGTH);
++    ret = RtlCreateAcl(dacl, sid_len - SECURITY_DESCRIPTOR_MIN_LENGTH, ACL_REVISION);
++    if (ret != STATUS_SUCCESS)
++        goto done;
++
++    ret = RtlAddAccessAllowedAce(dacl, ACL_REVISION, access, sid);
++    if (ret != STATUS_SUCCESS)
++        goto done;
++
++    ret = RtlAddAccessAllowedAce(dacl, ACL_REVISION, access, sid_system);
++    if (ret != STATUS_SUCCESS)
++        goto done;
++
++    ret = RtlSetDaclSecurityDescriptor(sec_desc, 1, dacl, 0);
++    if (ret == STATUS_SUCCESS)
++        *descriptor = sec_desc;
++
++done:
++    if (ret != STATUS_SUCCESS && sec_desc != NULL)
++        RtlFreeHeap(GetProcessHeap(), 0, sec_desc);
++
++    if (sid != NULL)
++        RtlFreeHeap(GetProcessHeap(), 0, sid);
++
++    if (sid_system != NULL)
++        RtlFreeHeap(GetProcessHeap(), 0, sid_system);
++
++    return ret;
++}
++
++void WINAPI FltFreeSecurityDescriptor(PSECURITY_DESCRIPTOR descriptor)
++{
++    RtlFreeHeap(GetProcessHeap(), 0, descriptor);
++}
+\ No newline at end of file
+diff --git a/include/ddk/fltkernel.h b/include/ddk/fltkernel.h
+index 8ebebfa2e81..9ece0990810 100644
+--- a/include/ddk/fltkernel.h
++++ b/include/ddk/fltkernel.h
+@@ -653,7 +653,8 @@ typedef struct _FLT_REGISTRATION
+     PFLT_SECTION_CONFLICT_NOTIFICATION_CALLBACK SectionNotificationCallback;
+ } FLT_REGISTRATION, *PFLT_REGISTRATION;
+ 
+-
++NTSTATUS WINAPI FltBuildDefaultSecurityDescriptor(PSECURITY_DESCRIPTOR *, ACCESS_MASK);
++void     WINAPI FltFreeSecurityDescriptor(PSECURITY_DESCRIPTOR);
+ void*    WINAPI FltGetRoutineAddress(LPCSTR name);
+ NTSTATUS WINAPI FltRegisterFilter(PDRIVER_OBJECT, const FLT_REGISTRATION *, PFLT_FILTER *);
+ NTSTATUS WINAPI FltStartFiltering(PFLT_FILTER);
+-- 
+2.33.0
+

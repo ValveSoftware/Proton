@@ -1,0 +1,1 @@
+Fixes: [49905] wscript: return TRUE for /d and /u stub switches

@@ -1,0 +1,23 @@
+From 9c11f23079351f107a3bbcd3cd274f0a5656518f Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Thu, 1 Oct 2020 18:37:06 +1000
+Subject: [PATCH] x3daudio1_7: Create import library
+
+---
+ dlls/x3daudio1_7/Makefile.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/x3daudio1_7/Makefile.in b/dlls/x3daudio1_7/Makefile.in
+index c6a8ed5102a..323d3fad60a 100644
+--- a/dlls/x3daudio1_7/Makefile.in
++++ b/dlls/x3daudio1_7/Makefile.in
+@@ -1,5 +1,6 @@
+ EXTRADEFS = -DX3DAUDIO1_VER=7 -DXAUDIO2_VER=7
+ MODULE    = x3daudio1_7.dll
++IMPORTLIB = x3daudio1_7
+ PARENTSRC = ../xaudio2_7
+ IMPORTS   = $(FAUDIO_PE_LIBS)
+ EXTRAINCL = $(FAUDIO_PE_CFLAGS)
+-- 
+2.33.0
+

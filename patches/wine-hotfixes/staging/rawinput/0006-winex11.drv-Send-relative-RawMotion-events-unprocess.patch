@@ -93,9 +93,9 @@ index 727ba13bc31..fdf8eca93dd 100644
  
          input.type = INPUT_HARDWARE;
 @@ -2174,7 +2174,7 @@ static BOOL X11DRV_RawTouchEvent( XGenericEventCookie *xev )
-     DWORD flags = 0;
      POINT pos;
 
+     if (!thread_data->xi2_rawinput_only) return FALSE;
 -    if (!map_raw_event_coords( event, &input )) return FALSE;
 +    if (!map_raw_event_coords( event, &input, &rawinput )) return FALSE;
      if (!(input.u.mi.dwFlags & MOUSEEVENTF_ABSOLUTE)) return FALSE;
