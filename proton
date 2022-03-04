@@ -1096,6 +1096,32 @@ def comma_escaped(s):
         idx = idx - 1
     return escaped
 
+#hopefully short-lived, app-specific workarounds for Proton bugs
+def default_compat_config():
+    ret = set()
+    if "SteamAppId" in os.environ:
+        appid = os.environ["SteamAppId"]
+        if appid in [
+                #affected by CW bug 19126
+                "305620", #The Long Dark
+                "585420", #Trailmakers
+                "684450", #Surviving the Aftermath
+                "1075200", #TOHU
+                "1331440", #FUSER
+                "1110100", # Power Rangers: Battle for the Grid
+                "983970", # Haven
+                "844260", # Rustler
+                "252490", # Rust
+                "700580", # Rust Staging
+                "1452500", # The Good Life
+                "1741410", # The Good Life Demo
+
+                #affected by CW bug 19741
+                "1017900", #Age of Empires: Definitive Edition
+                ]:
+            ret.add("nomfdxgiman")
+    return ret
+
 class Session:
     def __init__(self):
         self.log_file = None
@@ -1107,7 +1133,7 @@ class Session:
                 "beclient_x64.dll": "b,n",
         }
 
-        self.compat_config = set()
+        self.compat_config = default_compat_config()
         self.cmdlineappend = []
 
         if "STEAM_COMPAT_CONFIG" in os.environ:
