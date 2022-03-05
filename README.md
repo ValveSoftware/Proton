@@ -24,7 +24,7 @@ https://discord.gg/6y3BdzC
 ## Table of contents
 
 - [Overview](#overview)
-	- [Supported Games](#supportedgames)
+	- [Supported Games](#supported-games)
 	- [Notes](#notes)
 - [Installation](#installation)
 	- [Native](#native)
