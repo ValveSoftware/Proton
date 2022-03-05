@@ -110,7 +110,7 @@
     # server-Key_State - replaced by proton shared memory patches
     # ** server-PeekMessage - applied manually
     # server-Realtime_Priority - replaced by proton's patches
-    # ** server-Signal_Thread - applied manually
+    # server-Signal_Thread - breaks steamclient for some games -- notably DBFZ
     # Pipelight - for MS Silverlight, not needed
     # loader-KeyboardLayouts - replaced by proton's keyboard patches
     # msxml3-FreeThreadedXMLHTTP60 - already applied
@@ -165,11 +165,7 @@
     # server-PeekMessage
     patch -Np1 < ../patches/wine-hotfixes/staging/server-PeekMessage/0001-server-Fix-handling-of-GetMessage-after-previous-Pee.patch
 
-    # server-Signal_Thread
-    patch -Np1 < ../patches/wine-hotfixes/staging/server-Signal_Thread/0001-server-Do-not-signal-thread-until-it-is-really-gone.patch
-
     # ntdll-CriticalSection
-    # needs rebase
     patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-CriticalSection/0002-ntdll-Add-inline-versions-of-RtlEnterCriticalSection.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-CriticalSection/0003-ntdll-Use-fast-CS-functions-for-heap-locking.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-CriticalSection/0004-ntdll-Use-fast-CS-functions-for-threadpool-locking.patch
