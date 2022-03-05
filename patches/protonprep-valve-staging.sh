@@ -117,7 +117,7 @@
     # ntdll-ForceBottomUpAlloc - already applied
     # ntdll-WRITECOPY - already applied
     # ntdll-Builtin_Prot - already applied
-    # ** ntdll-CriticalSection - applied manually
+    # ntdll-CriticalSection - breaks ffxiv and deep rock galactic
     # ** ntdll-Exception - applied manually
     # ** ntdll-Hide_Wine_Exports - applied manually
     # ** ntdll-Serial_Port_Detection - applied manually
@@ -164,11 +164,6 @@
 
     # server-PeekMessage
     patch -Np1 < ../patches/wine-hotfixes/staging/server-PeekMessage/0001-server-Fix-handling-of-GetMessage-after-previous-Pee.patch
-
-    # ntdll-CriticalSection
-    patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-CriticalSection/0002-ntdll-Add-inline-versions-of-RtlEnterCriticalSection.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-CriticalSection/0003-ntdll-Use-fast-CS-functions-for-heap-locking.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-CriticalSection/0004-ntdll-Use-fast-CS-functions-for-threadpool-locking.patch
 
     # ntdll-Exception
     patch -Np1 < ../wine-staging/patches/ntdll-Exception/0002-ntdll-OutputDebugString-should-throw-the-exception-a.patch
