@@ -129,9 +129,9 @@ Things it contains that Valve's proton does not:
 | Fallout 4                                           | [SteamDB](https://steamdb.info/app/377160)   | [ProtonDB](https://protondb.com/app/377160)  | :heavy_check_mark: | :x:                        |
 | Far Cry 5                                           | [SteamDB](https://steamdb.info/app/552520)   | [ProtonDB](https://protondb.com/app/552520)  | :heavy_check_mark: | :x:                        |
 | FINAL FANTASY X/X-2 HD Remaster                     | [SteamDB](https://steamdb.info/app/359870)   | [ProtonDB](https://protondb.com/app/359870)  | :heavy_check_mark: | :x:                        |
-| FINAL FANTASY IX                                    | [SteamDB](https://steamdb.info/app/377840/)) | [ProtonDB](https://protondb.com/app/377840)  | :heavy_check_mark: | :x:                        |
-| FINAL FANTASY XIII                                  | [SteamDB](https://steamdb.info/app/292120/)) | [ProtonDB](https://protondb.com/app/292120)  | :heavy_check_mark: | :x:                        |
-| FINAL FANTASY XIV Online                            | [SteamDB](https://steamdb.info/app/39210/))  | [ProtonDB](https://protondb.com/app/39210)   | :heavy_check_mark: | :x:                        |
+| FINAL FANTASY IX                                    | [SteamDB](https://steamdb.info/app/377840/) | [ProtonDB](https://protondb.com/app/377840)  | :heavy_check_mark: | :x:                        |
+| FINAL FANTASY XIII                                  | [SteamDB](https://steamdb.info/app/292120/) | [ProtonDB](https://protondb.com/app/292120)  | :heavy_check_mark: | :x:                        |
+| FINAL FANTASY XIV Online                            | [SteamDB](https://steamdb.info/app/39210/)  | [ProtonDB](https://protondb.com/app/39210)   | :heavy_check_mark: | :x:                        |
 | Forts                                               | [SteamDB](https://steamdb.info/app/410900)   | [ProtonDB](https://protondb.com/app/410900)  | :heavy_check_mark: | :x:                        |
 | Gears 5                                             | [SteamDB](https://steamdb.info/app/1097840)  | [ProtonDB](https://protondb.com/app/1097840) | :heavy_check_mark: | :x:                        |
 | Gothic 1                                            | [SteamDB](https://steamdb.info/app/65540)    | [ProtonDB](https://protondb.com/app/65540)   | :heavy_check_mark: | :x:                        |
