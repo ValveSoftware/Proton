@@ -28,6 +28,9 @@
     # nvapi
     git revert --no-commit fdfb4b925f52fbec580dd30bef37fb22c219c667
 
+    # this commit causes some FSR resolutions to be removed
+    git revert --no-commit ca3681631adc4723e672aacc0a25a109983781fa
+
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
 
