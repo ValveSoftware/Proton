@@ -1,0 +1,29 @@
+From: Christopher Egert <cme3000@gmail.com>
+Subject: [PATCH] libs: Enable WAV49 support in gsm.
+Message-Id: <20220306173302.1432353-1-cme3000@gmail.com>
+Date: Sun,  6 Mar 2022 18:33:02 +0100
+
+Fixes a regression introduced by 0e7fd41af953b2a9fa23cf6920fac229f2dd2e44
+causing missing audio elements in the 64k intros elysian by logicoma
+and clean state by conspiracy.
+
+Signed-off-by: Christopher Egert <cme3000@gmail.com>
+---
+ libs/gsm/Makefile.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libs/gsm/Makefile.in b/libs/gsm/Makefile.in
+index 482004cab8d..36c749aa60f 100644
+--- a/libs/gsm/Makefile.in
++++ b/libs/gsm/Makefile.in
+@@ -1,5 +1,6 @@
+ EXTLIB    = libgsm.a
+ EXTRAINCL = -I$(srcdir)/inc
++EXTRADEFS = -DWAV49
+ 
+ C_SRCS = \
+ 	src/add.c \
+
+-- 
+2.35.1
+
