@@ -1252,7 +1252,8 @@ class Session:
             self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
             self.env.setdefault("VKD3D_DEBUG", "warn")
-            self.env.setdefault("VKD3D_SHADER_DEBUG", "fixme")
+            self.env.setdefault("VKD3D_SHADER_DEBUG", "none")
+            self.env.setdefault("VKD3D_FEATURE_LEVEL", "12_0")
             self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
 
         #for performance, logging is disabled by default; override with user_settings.py
