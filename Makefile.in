@@ -67,9 +67,6 @@ else
 	override DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
-export CARGO_HOME := $(if $(CARGO_HOME),$(CARGO_HOME),$(HOME)/.cargo)
-override DOCKER_OPTS := -v $(CARGO_HOME):$(CARGO_HOME)$(CONTAINER_MOUNT_OPTS) -e CARGO_HOME=$(CARGO_HOME) $(DOCKER_OPTS)
-
 ifneq ($(ROOTLESS_CONTAINER),1)
 	override DOCKER_OPTS := -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) $(DOCKER_OPTS)
 endif
@@ -116,7 +113,6 @@ J := $(shell nproc)
 ifeq ($(ENABLE_CCACHE),1)
 container-build: $(shell mkdir -p $(CCACHE_DIR))
 endif
-container-build: $(shell mkdir -p $(CARGO_HOME))
 container-build: private SHELL := $(CONTAINER_SHELL)
 container-build:
 	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(CONTAINERGOALS)
@@ -990,6 +986,9 @@ $(OBJ)/.vkd3d-proton-post-build64:
 ##
 ## mediaconv
 ##
+
+MEDIACONV_SOURCE_ARGS = \
+    --exclude Cargo.lock \
 
 MEDIACONV_DEPENDS = gst_orc gstreamer gst_base
 
