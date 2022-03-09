@@ -938,6 +938,7 @@ def default_compat_config():
                 "585420", #Trailmakers
                 "684450", #Surviving the Aftermath
                 "844260", #Rustler
+                "983970", #Haven
                 "1075200", #TOHU
                 "1331440", #FUSER
 
