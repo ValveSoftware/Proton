@@ -689,26 +689,6 @@ class CompatData:
                 os.remove(old)
                 os.symlink(src=link, dst=old)
 
-    def ffxiv_workaround(self):
-        if not "SteamGameId" in os.environ or \
-                os.environ["SteamGameId"] != "39210":
-            return
-
-        config_dir = self.prefix_dir + "drive_c/users/steamuser/My Documents/My Games/FINAL FANTASY XIV - A Realm Reborn/"
-        config_file = config_dir + "FFXIV_BOOT.cfg"
-
-        if file_exists(config_file, follow_symlinks=True):
-            with open(config_file, "r") as file:
-                config_content = file.read()
-            config_content = config_content.replace("Browser\t2", "Browser\t1")
-            with open(config_file, "w") as file:
-                file.write(config_content)
-        else:
-            config_content = "<FINAL FANTASY XIV Boot Config File>\n\n<Version>\nBrowser\t1\n"
-            makedirs(config_dir)
-            with open(config_file, "w") as file:
-                file.write(config_content)
-
     def setup_prefix(self):
         with self.prefix_lock:
             if file_exists(self.version_file, follow_symlinks=True):
@@ -801,8 +781,6 @@ class CompatData:
 
             #create font files symlinks
             self.create_fonts_symlinks()
-
-            self.ffxiv_workaround()
 
             with open(self.tracked_files_file, "a") as tracked_files:
                 #copy steam files into place
