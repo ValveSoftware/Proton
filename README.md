@@ -250,7 +250,7 @@ Things it contains that Valve's proton does not:
 - Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns
 - Warframe on Nvidia: you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine
 
-Full patches can be viewed in [protonprep-valve.sh](patches/protonprep-valve.sh).
+Full patches can be viewed in [protonprep-valve-staging.sh](patches/protonprep-valve-staging.sh).
 
 ## Installation
 
@@ -304,12 +304,12 @@ This unofficial build isn't supported by GloriousEggroll nor Valve and wasn't te
 	git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
 ```
 
-4. Drop any custom patches into patches/, then open patches/protonprep-valve.sh and add a patch line for them under `#WINE CUSTOM PATCHES` in the same way the others are done.
+4. Drop any custom patches into patches/, then open patches/protonprep-valve-staging.sh and add a patch line for them under `#WINE CUSTOM PATCHES` in the same way the others are done.
 
 5. Apply all of the patches in patches/ by running:
 
 ```sh
-	./patches/protonprep-valve.sh &> patchlog.txt
+	./patches/protonprep-valve-staging.sh &> patchlog.txt
 ```
 
 in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured. An easy way to do this is like so:
