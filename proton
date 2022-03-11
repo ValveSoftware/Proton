@@ -211,23 +211,34 @@ def try_get_game_library_dir():
 
     return None
 
-def setup_game_dir_drive():
-        gamedrive_path = g_compatdata.prefix_dir + "dosdevices/s:"
-        if "gamedrive" in g_session.compat_config:
-            library_dir = try_get_game_library_dir()
-            if not library_dir:
-                if file_exists(gamedrive_path, follow_symlinks=False):
-                    os.remove(gamedrive_path)
+def try_get_steam_dir():
+    if not "STEAM_COMPAT_CLIENT_INSTALL_PATH" in g_session.env:
+        return None
+
+    return g_session.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
+
+def setup_dir_drive(compat_option, drive_name, dest_dir):
+        drive_path = g_compatdata.prefix_dir + "dosdevices/" + drive_name
+        if compat_option in g_session.compat_config:
+            if not dest_dir:
+                if file_exists(drive_path, follow_symlinks=False):
+                    os.remove(drive_path)
             else:
-                if file_exists(gamedrive_path, follow_symlinks=False):
-                    cur_tgt = os.readlink(gamedrive_path)
-                    if cur_tgt != library_dir:
-                        os.remove(gamedrive_path)
-                        os.symlink(library_dir, gamedrive_path)
+                if file_exists(drive_path, follow_symlinks=False):
+                    cur_tgt = os.readlink(drive_path)
+                    if cur_tgt != dest_dir:
+                        os.remove(drive_path)
+                        os.symlink(dest_dir, drive_path)
                 else:
-                    os.symlink(library_dir, gamedrive_path)
-        elif file_exists(gamedrive_path, follow_symlinks=False):
-            os.remove(gamedrive_path)
+                    os.symlink(dest_dir, drive_path)
+        elif file_exists(drive_path, follow_symlinks=False):
+            os.remove(drive_path)
+
+def setup_game_dir_drive():
+        setup_dir_drive("gamedrive", "s:", try_get_game_library_dir())
+
+def setup_steam_dir_drive():
+        setup_dir_drive("steamdrive", "t:", try_get_steam_dir())
 
 # Function to find the installed location of DLL files for use by Wine/Proton
 # from the NVIDIA Linux driver
@@ -887,6 +898,7 @@ class CompatData:
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
             setup_game_dir_drive()
+            setup_steam_dir_drive()
 
             # add Steam ffmpeg libraries to path
             prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/", ":")
@@ -1085,6 +1097,7 @@ class Session:
         self.check_environment("PROTON_NO_WRITE_WATCH", "nowritewatch")
         self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
         self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
+        self.check_environment("PROTON_SET_STEAM_DRIVE", "steamdrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
         self.check_environment("PROTON_ENABLE_NVAPI", "enablenvapi")
@@ -1379,6 +1392,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "run":
         #start target app
         setup_game_dir_drive()
+        setup_steam_dir_drive()
         rc = g_session.run()
     elif sys.argv[1] == "waitforexitandrun":
         #wait for wineserver to shut down
