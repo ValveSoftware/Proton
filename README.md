@@ -24,8 +24,7 @@ https://discord.gg/6y3BdzC
 ## Table of contents
 
 - [Overview](#overview)
-	- [Protonfixes](#protonfixes)
-	- [Media Foundation Fixes (fully working or playable)](#media-foundation-fixes-fully-working-or-playable)
+	- [Supported Games](#supported-games)
 	- [Notes](#notes)
 - [Installation](#installation)
 	- [Native](#native)
@@ -61,188 +60,174 @@ Things it contains that Valve's proton does not:
 - FSR Fake resolution patch (details here: https://github.com/GloriousEggroll/proton-ge-custom/pull/52)
 - Nvidia CUDA support for phsyx and nvapi
 - Raw input mouse support
-- fix for Mech Warrior Online
-- fix for Asseto Corsa HUD
-- fix for MK11 crash in single player
-- fix for Killer Instinct Vulkan related crash
-- fix for Cities XXL patches
+- Fix for Mech Warrior Online
+- Fix for Asseto Corsa HUD
+- Fix for MK11 crash in single player
+- Fix for Killer Instinct Vulkan related crash
+- Fix for Cities XXL patches
 - 'protonfixes' system -- this is an automated system that applies per-game fixes (such as winetricks, envvars, EAC workarounds, overrides, etc).
-- various upstream WINE patches backported
-- various wine-staging patches applied as they become needed
+- Various upstream WINE patches backported
+- Various wine-staging patches applied as they become needed
 
-## Protonfixes
+## Tested Games
 
-- Age of Empires II: DE
-- Batman Arkham Asylum
-- Catherine Classic
-- Dark Sould Prepare To Die Edition
-- Dark Souls Remastered
-- Destiny 2
-- Dungeons & Dragons Online
-- Age Of Empire 3: Complete Collection
-- Age of Empires: DE
-- Age of Mythology: Extended Edition
-- AirMech Strike
-- Apex Legends
-- Arkania
-- Assetto Corsa
-- Baldur's Gate 3
-- Batman Arkham Knight
-- Battlefield: Bad Company 2
-- BeamNG.drive
-- Bejeweled 3
-- Beyond Good and Evil
-- BioShock 2 Remastered
-- BIT.TRIP BEAT
-- BIT.TRIP RUNNER
-- Blood and Bacon
-- Borderlands 2
-- Borderlands 3
-- Call of Duty (2003)
-- Chantelise - A Tale of Two Sisters
-- Chronophantasma Extend
-- Conan Exiles
-- Crashday Redline Edition
-- Cryostasis
-- Crysis
-- DEAD OR ALIVE 5 Last Round
-- Divinity Original Sin 2
-- Doom 2016
-- DRAGON BALL FighterZ
-- Duck Game
-- Dusty Revenge: Co-Op Edition
-- Endless Legend
-- Evil Genius 2
-- Fallout 3
-- Fallout 4
-- FarCry 5
-- FFXIV
-- FFX/X-2 HD Remaster
-- FINAL FANTASY IX
-- Final Fantasy XIII
-- Flight Simulator 2020
-- Forts
-- Gears 5
-- Gothic 1
-- Gothic 3
-- Gothic 3 Forsaken Gods Enhanced Edition
-- Grim Dawn
-- GT Legends
-- Guilty Gear Accent Core Plus R
-- Heavy Rain
-- IMSCARED
-- JUMP FORCE
-- L.A. Noire
-- LEGO Batman 2: DC Super Heroes
-- LEGO The Lord of the Rings
-- Little Nightmares
-- Lord of the Rings: War in the North
-- Mafia II Definitive Edition
-- Metro 2033
-- Mortal Kombat X
-- Naruto To Boruto
-- Oddworld: Munch's Oddysee
-- Order of Battle: World War II
-- Path of Exile
-- Persona 4 Golden
-- Pes 2021
-- PixARK
-- Plants vs. Zombies: Game of the Year
-- Potatoman Seeks the Troof
-- Progressbar95
-- Putt-Putt: Pep's Birthday Surprise
-- Recettear: An Item Shop's Tale
-- Red Dead Redemption 2
-- Resident Evil
-- Resident Evil 0
-- Resident Evil 5
-- Resident Evil 6
-- Resident Evil Revelations
-- Resident Evil Revelations 2
-- Rise of Nations: Extended Edition
-- Sacred 2 Gold
-- Serious Sam 4
-- Serious Sam: The Random Encounter
-- Skyrim
-- Skyrim SE
-- Sleeping Dogs: Definitive Edition
-- Sonic CD
-- Soulcalibur VI
-- Space Engineers
-- STAR WARS Galactic Battlegrounds Saga
-- Strange Brigade
-- SUGURI 2
-- Super Meat Boy
-- Syberia
-- Tesla Effect
-- The Bureau: XCOM Declassified
-- The Elder Scrolls Online
-- The Evil Within(268050)
-- Tomb Raider 2013
-- Tomb Raider I
-- Watch_Dogs
-- Watch_Dogs 2
-- WORLD OF HORROR
-- Yakuza 0
-- Yakuza Kiwami
-- Yesterday Origins
-- You Need a Budget 4
-- Halo:MCC
-- HighFleet
-- Injustice 2
-- Marvel's Avengers
-- Mass Effect Legendary Edition
-- Mortal Kombat 11
-- Stealth Inc 2: A Game of Clones
-- The Lord of the Rings Online
-- Tree Of Savior
-- Warframe
-- Oceanhorn: Monster of Uncharted Seas
-- Arkania
-- Gothic II: Gold Edition
-
-
-## Media Foundation fixes (Fully working or playable)
-
-- Spyro Reignited Trilogy
-- Mortal Kombat 11
-- Injustice 2
-- Power Rangers: Battle for the Grid
-- Borderlands 3
-- Resident Evil 0
-- Resident Evil
-- Resident Evil 2 Remastered
-- Resident Evil 3 Remastered
-- Resident Evil 5
-- Resident Evil 6
-- Resident Evil 7
-- Resident Evil 8
-- Resident Evil Revalations
-- Resident Evil Revalations 2
-- Persona 4 Golden
-- PC Building Simulator
-- Dangonronpa V3
-- Super Lucky's Tale
-- Remnant: From the Ashes
-- BlazBlue Centralfiction
-- Bloodstained: Ritual of the Night
-- Crazy Machines 3
-- Devil May Cry 5
-- Wasteland 3
-- Mutant Year Zero
-- Ultimate Marvel Vs. Capcom 3
-- Industry of Titan
-- Call of Duty Black Ops III
-- Tokyo Xanadu eX+
-- Haven
-- Nier Replicant
-- Scrap Mechanic
-- Aven Colony
-- American Fugitive
-- Asrtonner
-- Soul Caliber VI
-- Monster Hunter Rise
-- Seven: Days Gone
+| Name                                                | SteamDB Link                                 | ProntonDB Link                               | Has Protonfixes    | Has Media Foundation fixes |
+| --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | ------------------ | -------------------------- |
+| Acceleration of SUGURI 2                            | [SteamDB](https://steamdb.info/app/390710)   | [ProtonDB](https://protondb.com/app/390710)  | :x:                | :heavy_check_mark:         |
+| Age of Empires: Definitive Edition                  | [SteamDB](https://steamdb.info/app/1017900)  | [ProtonDB](https://protondb.com/app/1017900) | :heavy_check_mark: | :x:                        |
+| Age of Empires II: Definitive Edition               | [SteamDB](https://steamdb.info/app/813780)   | [ProtonDB](https://protondb.com/app/813780)  | :heavy_check_mark: | :x:                        |
+| Age of Empires III: Definitive Edition              | [SteamDB](https://steamdb.info/app/933110)   | [ProtonDB](https://protondb.com/app/933110)  | :heavy_check_mark: | :x:                        |
+| Age of Mythology: Extended Edition                  | [SteamDB](https://steamdb.info/app/266840)   | [ProtonDB](https://protondb.com/app/266840)  | :heavy_check_mark: | :x:                        |
+| AirMech Strike                                      | [SteamDB](https://steamdb.info/app/206500)   | [ProtonDB](https://protondb.com/app/206500)  | :heavy_check_mark: | :x:                        |
+| American Fugitive                                   | [SteamDB](https://steamdb.info/app/934780)   | [ProtonDB](https://protondb.com/app/934780)  | :x:                | :heavy_check_mark:         |
+| Apex Legends                                        | [SteamDB](https://steamdb.info/app/1172470)  | [ProtonDB](https://protondb.com/app/1172470) | :heavy_check_mark: | :x:                        |
+| Arkania                                             |                                              |                                              | :heavy_check_mark: | :x:                        |
+| Assetto Corsa                                       | [SteamDB](https://steamdb.info/app/244210)   | [ProtonDB](https://protondb.com/app/244210)  | :heavy_check_mark: | :x:                        |
+| Astroneer                                           | [SteamDB](https://steamdb.info/app/361420)   | [ProtonDB](https://protondb.com/app/361420)  | :x:                | :heavy_check_mark:         |
+| Aven Colony                                         | [SteamDB](https://steamdb.info/app/484900)   | [ProtonDB](https://protondb.com/app/484900)  | :x:                | :heavy_check_mark:         |
+| Baldur's Gate 3                                     | [SteamDB](https://steamdb.info/app/1086940)  | [ProtonDB](https://protondb.com/app/1086940) | :heavy_check_mark: | :x:                        |
+| Batman Arkham Asylum                                | [SteamDB](https://steamdb.info/app/35140)    | [ProtonDB](https://protondb.com/app/35140)   | :heavy_check_mark: | :x:                        |
+| Batman Arkham Knight                                | [SteamDB](https://steamdb.info/app/208650)   | [ProtonDB](https://protondb.com/app/208650)  | :heavy_check_mark: | :x:                        |
+| Battlefield: Bad Company 2                          | [SteamDB](https://steamdb.info/app/24960)    | [ProtonDB](https://protondb.com/app/24960)   | :heavy_check_mark: | :x:                        |
+| BeamNG.drive                                        | [SteamDB](https://steamdb.info/app/284160)   | [ProtonDB](https://protondb.com/app/284160)  | :heavy_check_mark: | :x:                        |
+| Bejeweled 3                                         | [SteamDB](https://steamdb.info/app/78000)    | [ProtonDB](https://protondb.com/app/78000)   | :heavy_check_mark: | :x:                        |
+| Beyond Good and Evil                                | [SteamDB](https://steamdb.info/app/15130)    | [ProtonDB](https://protondb.com/app/15130)   | :heavy_check_mark: | :x:                        |
+| BioShock 2 Remastered                               | [SteamDB](https://steamdb.info/app/409720)   | [ProtonDB](https://protondb.com/app/409720)  | :heavy_check_mark: | :x:                        |
+| BIT.TRIP BEAT                                       | [SteamDB](https://steamdb.info/app/205070)   | [ProtonDB](https://protondb.com/app/205070)  | :heavy_check_mark: | :x:                        |
+| BIT.TRIP RUNNER                                     | [SteamDB](https://steamdb.info/app/63710)    | [ProtonDB](https://protondb.com/app/63710)   | :heavy_check_mark: | :x:                        |
+| BlazBlue Centralfiction                             | [SteamDB](https://steamdb.info/app/586140)   | [ProtonDB](https://protondb.com/app/586140)  | :x:                | :heavy_check_mark:         |
+| BlazBlue: Chronophantasma Extend                    | [SteamDB](https://steamdb.info/app/388750)   | [ProtonDB](https://protondb.com/app/388750)  | :heavy_check_mark: | :x:                        |
+| Blood and Bacon                                     | [SteamDB](https://steamdb.info/app/434570)   | [ProtonDB](https://protondb.com/app/434570)  | :heavy_check_mark: | :x:                        |
+| Bloodstained: Ritual of the Night                   | [SteamDB](https://steamdb.info/app/692850)   | [ProtonDB](https://protondb.com/app/692850)  | :x:                | :heavy_check_mark:         |
+| Borderlands 2                                       | [SteamDB](https://steamdb.info/app/49520)    | [ProtonDB](https://protondb.com/app/49520)   | :heavy_check_mark: | :x:                        |
+| Borderlands 3                                       | [SteamDB](https://steamdb.info/app/397540)   | [ProtonDB](https://protondb.com/app/397540)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Call of Duty (2003)                                 | [SteamDB](https://steamdb.info/app/2620)     | [ProtonDB](https://protondb.com/app/2620)    | :heavy_check_mark: | :x:                        |
+| Call of Duty: Black Ops III                         | [SteamDB](https://steamdb.info/app/311210)   | [ProtonDB](https://protondb.com/app/311210)  | :x:                | :heavy_check_mark:         |
+| Catherine Classic                                   | [SteamDB](https://steamdb.info/app/893180)   | [ProtonDB](https://protondb.com/app/893180)  | :heavy_check_mark: | :x:                        |
+| Chantelise - A Tale of Two Sisters                  | [SteamDB](https://steamdb.info/app/70420)    | [ProtonDB](https://protondb.com/app/70420)   | :heavy_check_mark: | :x:                        |
+| Conan Exiles                                        | [SteamDB](https://steamdb.info/app/440900)   | [ProtonDB](https://protondb.com/app/440900)  | :heavy_check_mark: | :x:                        |
+| Crashday Redline Edition                            | [SteamDB](https://steamdb.info/app/508980)   | [ProtonDB](https://protondb.com/app/508980)  | :heavy_check_mark: | :x:                        |
+| Crazy Machines 3                                    | [SteamDB](https://steamdb.info/app/351920)   | [ProtonDB](https://protondb.com/app/351920)  | :x:                | :heavy_check_mark:         |
+| Cryostasis                                          | [SteamDB](https://steamdb.info/app/7850)     | [ProtonDB](https://protondb.com/app/7850)    | :heavy_check_mark: | :x:                        |
+| Crysis                                              | [SteamDB](https://steamdb.info/app/17300)    | [ProtonDB](https://protondb.com/app/17300)   | :heavy_check_mark: | :x:                        |
+| Danganronpa V3: Killing Harmony                     | [SteamDB](https://steamdb.info/app/567640)   | [ProtonDB](https://protondb.com/app/567640)  | :x:                | :heavy_check_mark:         |
+| Dark Souls: Prepare To Die Edition                  | [SteamDB](https://steamdb.info/app/211420)   | [ProtonDB](https://protondb.com/app/211420)  | :heavy_check_mark: | :x:                        |
+| Dark Souls: Remastered                              | [SteamDB](https://steamdb.info/app/570940)   | [ProtonDB](https://protondb.com/app/570940)  | :heavy_check_mark: | :x:                        |
+| DEAD OR ALIVE 5 Last Round: Core Fighters           | [SteamDB](https://steamdb.info/app/311730)   | [ProtonDB](https://protondb.com/app/311730)  | :heavy_check_mark: | :x:                        |
+| Destiny 2                                           | [SteamDB](https://steamdb.info/app/1085660)  | [ProtonDB](https://protondb.com/app/1085660) | :heavy_check_mark: | :x:                        |
+| Devil May Cry 5                                     | [SteamDB](https://steamdb.info/app/601150)   | [ProtonDB](https://protondb.com/app/601150)  | :x:                | :heavy_check_mark:         |
+| Divinity Original Sin 2 - Definitive Edition        | [SteamDB](https://steamdb.info/app/435150)   | [ProtonDB](https://protondb.com/app/435150)  | :heavy_check_mark: | :x:                        |
+| Doom (2016)                                         | [SteamDB](https://steamdb.info/app/379720)   | [ProtonDB](https://protondb.com/app/379720)  | :heavy_check_mark: | :x:                        |
+| DRAGON BALL FighterZ                                | [SteamDB](https://steamdb.info/app/678950)   | [ProtonDB](https://protondb.com/app/678950)  | :heavy_check_mark: | :x:                        |
+| Duck Game                                           | [SteamDB](https://steamdb.info/app/312530)   | [ProtonDB](https://protondb.com/app/312530)  | :heavy_check_mark: | :x:                        |
+| Dungeons & Dragons Online                           | [SteamDB](https://steamdb.info/app/206480)   | [ProtonDB](https://protondb.com/app/206480)  | :heavy_check_mark: | :x:                        |
+| Dusty Revenge: Co-Op Edition                        | [SteamDB](https://steamdb.info/app/252430)   | [ProtonDB](https://protondb.com/app/252430)  | :heavy_check_mark: | :x:                        |
+| eFootball PES 2021 SEASON UPDATE                    | [SteamDB](https://steamdb.info/app/1259970)  | [ProtonDB](https://protondb.com/app/1259970) | :heavy_check_mark: | :x:                        |
+| Endless Legend                                      | [SteamDB](https://steamdb.info/app/289130)   | [ProtonDB](https://protondb.com/app/289130)  | :heavy_check_mark: | :x:                        |
+| Evil Genius 2: World Domination                     | [SteamDB](https://steamdb.info/app/700600)   | [ProtonDB](https://protondb.com/app/700600)  | :heavy_check_mark: | :x:                        |
+| Fallout 3                                           | [SteamDB](https://steamdb.info/app/22300)    | [ProtonDB](https://protondb.com/app/22300)   | :heavy_check_mark: | :x:                        |
+| Fallout 4                                           | [SteamDB](https://steamdb.info/app/377160)   | [ProtonDB](https://protondb.com/app/377160)  | :heavy_check_mark: | :x:                        |
+| Far Cry 5                                           | [SteamDB](https://steamdb.info/app/552520)   | [ProtonDB](https://protondb.com/app/552520)  | :heavy_check_mark: | :x:                        |
+| FINAL FANTASY X/X-2 HD Remaster                     | [SteamDB](https://steamdb.info/app/359870)   | [ProtonDB](https://protondb.com/app/359870)  | :heavy_check_mark: | :x:                        |
+| FINAL FANTASY IX                                    | [SteamDB](https://steamdb.info/app/377840/) | [ProtonDB](https://protondb.com/app/377840)  | :heavy_check_mark: | :x:                        |
+| FINAL FANTASY XIII                                  | [SteamDB](https://steamdb.info/app/292120/) | [ProtonDB](https://protondb.com/app/292120)  | :heavy_check_mark: | :x:                        |
+| FINAL FANTASY XIV Online                            | [SteamDB](https://steamdb.info/app/39210/)  | [ProtonDB](https://protondb.com/app/39210)   | :heavy_check_mark: | :x:                        |
+| Forts                                               | [SteamDB](https://steamdb.info/app/410900)   | [ProtonDB](https://protondb.com/app/410900)  | :heavy_check_mark: | :x:                        |
+| Gears 5                                             | [SteamDB](https://steamdb.info/app/1097840)  | [ProtonDB](https://protondb.com/app/1097840) | :heavy_check_mark: | :x:                        |
+| Gothic 1                                            | [SteamDB](https://steamdb.info/app/65540)    | [ProtonDB](https://protondb.com/app/65540)   | :heavy_check_mark: | :x:                        |
+| Gothic II: Gold Edition                             | [SteamDB](https://steamdb.info/app/39510)    | [ProtonDB](https://protondb.com/app/39510)   | :heavy_check_mark: | :x:                        |
+| Gothic 3                                            | [SteamDB](https://steamdb.info/app/39500)    | [ProtonDB](https://protondb.com/app/39500)   | :heavy_check_mark: | :x:                        |
+| Gothic 3: Forsaken Gods Enhanced Edition            | [SteamDB](https://steamdb.info/app/65600)    | [ProtonDB](https://protondb.com/app/65600)   | :heavy_check_mark: | :x:                        |
+| Grim Dawn                                           | [SteamDB](https://steamdb.info/app/219990)   | [ProtonDB](https://protondb.com/app/219990)  | :heavy_check_mark: | :x:                        |
+| GT Legends                                          | [SteamDB](https://steamdb.info/app/44690)    | [ProtonDB](https://protondb.com/app/44690)   | :heavy_check_mark: | :x:                        |
+| GUILTY GEAR XX ACCENT CORE PLUS R                   | [SteamDB](https://steamdb.info/app/348550)   | [ProtonDB](https://protondb.com/app/348550)  | :heavy_check_mark: | :x:                        |
+| Halo: The Master Chief Collection                   | [SteamDB](https://steamdb.info/app/976730)   | [ProtonDB](https://protondb.com/app/976730)  | :heavy_check_mark: | :x:                        |
+| Haven                                               | [SteamDB](https://steamdb.info/app/983970)   | [ProtonDB](https://protondb.com/app/983970)  | :x:                | :heavy_check_mark:         |
+| Heavy Rain                                          | [SteamDB](https://steamdb.info/app/960910)   | [ProtonDB](https://protondb.com/app/960910)  | :heavy_check_mark: | :x:                        |
+| HighFleet                                           | [SteamDB](https://steamdb.info/app/1434950)  | [ProtonDB](https://protondb.com/app/1434950) | :heavy_check_mark: | :x:                        |
+| IMSCARED                                            | [SteamDB](https://steamdb.info/app/429720)   | [ProtonDB](https://protondb.com/app/429720)  | :heavy_check_mark: | :x:                        |
+| Industries of Titan                                 | [SteamDB](https://steamdb.info/app/427940)   | [ProtonDB](https://protondb.com/app/427940)  | :x:                | :heavy_check_mark:         |
+| Injustice 2                                         | [SteamDB](https://steamdb.info/app/627270)   | [ProtonDB](https://protondb.com/app/627270)  | :heavy_check_mark: | :heavy_check_mark:         |
+| JUMP FORCE                                          | [SteamDB](https://steamdb.info/app/816020)   | [ProtonDB](https://protondb.com/app/816020)  | :heavy_check_mark: | :x:                        |
+| L.A. Noire                                          | [SteamDB](https://steamdb.info/app/110800)   | [ProtonDB](https://protondb.com/app/110800)  | :heavy_check_mark: | :x:                        |
+| LEGO Batman 2: DC Super Heroes                      | [SteamDB](https://steamdb.info/app/213330)   | [ProtonDB](https://protondb.com/app/213330)  | :heavy_check_mark: | :x:                        |
+| LEGO The Lord of the Rings                          | [SteamDB](https://steamdb.info/app/214510)   | [ProtonDB](https://protondb.com/app/214510)  | :heavy_check_mark: | :x:                        |
+| Little Nightmares                                   | [SteamDB](https://steamdb.info/app/424840)   | [ProtonDB](https://protondb.com/app/424840)  | :heavy_check_mark: | :x:                        |
+| Lord of the Rings: War in the North                 | [SteamDB](https://steamdb.info/app/32800)    | [ProtonDB](https://protondb.com/app/32800)   | :heavy_check_mark: | :x:                        |
+| Mafia II Definitive Edition                         | [SteamDB](https://steamdb.info/app/1030830)  | [ProtonDB](https://protondb.com/app/1030830) | :heavy_check_mark: | :x:                        |
+| Marvel's Avengers                                   | [SteamDB](https://steamdb.info/app/997070)   | [ProtonDB](https://protondb.com/app/997070)  | :heavy_check_mark: | :x:                        |
+| Mass Effect Legendary Edition                       | [SteamDB](https://steamdb.info/app/1328670)  | [ProtonDB](https://protondb.com/app/1328670) | :heavy_check_mark: | :x:                        |
+| Metro 2033                                          | [SteamDB](https://steamdb.info/app/43110)    | [ProtonDB](https://protondb.com/app/43110)   | :heavy_check_mark: | :x:                        |
+| Microsoft Flight Simulator Game of the Year Edition | [SteamDB](https://steamdb.info/app/1250410)  | [ProtonDB](https://protondb.com/app/1250410) | :heavy_check_mark: | :x:                        |
+| Monster Hunter Rise                                 | [SteamDB](https://steamdb.info/app/1446780)  | [ProtonDB](https://protondb.com/app/1446780) | :x:                | :heavy_check_mark:         |
+| Mortal Kombat 11                                    | [SteamDB](https://steamdb.info/app/976310)   | [ProtonDB](https://protondb.com/app/976310)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Mortal Kombat X                                     | [SteamDB](https://steamdb.info/app/307780)   | [ProtonDB](https://protondb.com/app/307780)  | :heavy_check_mark: | :x:                        |
+| Mutant Year Zero: Road to Eden                      | [SteamDB](https://steamdb.info/app/760060)   | [ProtonDB](https://protondb.com/app/760060)  | :x:                | :heavy_check_mark:         |
+| NARUTO TO BORUTO: SHINOBI STRIKER                   | [SteamDB](https://steamdb.info/app/633230)   | [ProtonDB](https://protondb.com/app/633230)  | :heavy_check_mark: | :x:                        |
+| Nier Replicant                                      | [SteamDB](https://steamdb.info/app/1113560)  | [ProtonDB](https://protondb.com/app/1113560) | :x:                | :heavy_check_mark:         |
+| Oceanhorn: Monster of Uncharted Seas                | [SteamDB](https://steamdb.info/app/339200)   | [ProtonDB](https://protondb.com/app/339200)  | :heavy_check_mark: | :x:                        |
+| Oddworld: Munch's Oddysee                           | [SteamDB](https://steamdb.info/app/15740)    | [ProtonDB](https://protondb.com/app/15740)   | :heavy_check_mark: | :x:                        |
+| Order of Battle: World War II                       | [SteamDB](https://steamdb.info/app/312450)   | [ProtonDB](https://protondb.com/app/312450)  | :heavy_check_mark: | :x:                        |
+| Path of Exile                                       | [SteamDB](https://steamdb.info/app/238960)   | [ProtonDB](https://protondb.com/app/238960)  | :heavy_check_mark: | :x:                        |
+| PC Building Simulator                               | [SteamDB](https://steamdb.info/app/621060)   | [ProtonDB](https://protondb.com/app/621060)  | :x:                | :heavy_check_mark:         |
+| Persona 4 Golden                                    | [SteamDB](https://steamdb.info/app/1113000)  | [ProtonDB](https://protondb.com/app/1113000) | :heavy_check_mark: | :heavy_check_mark:         |
+| PixARK                                              | [SteamDB](https://steamdb.info/app/593600)   | [ProtonDB](https://protondb.com/app/593600)  | :heavy_check_mark: | :x:                        |
+| Plants vs. Zombies GOTY Edition                     | [SteamDB](https://steamdb.info/app/3590)     | [ProtonDB](https://protondb.com/app/3590)    | :heavy_check_mark: | :x:                        |
+| Potatoman Seeks the Troof                           | [SteamDB](https://steamdb.info/app/328500)   | [ProtonDB](https://protondb.com/app/328500)  | :heavy_check_mark: | :x:                        |
+| Power Rangers: Battle for the Grid                  | [SteamDB](https://steamdb.info/app/1110100)  | [ProtonDB](https://protondb.com/app/1110100) | :x:                | :heavy_check_mark:         |
+| Progressbar95                                       | [SteamDB](https://steamdb.info/app/1304550)  | [ProtonDB](https://protondb.com/app/1304550) | :heavy_check_mark: | :x:                        |
+| Putt-Putt: Pep's Birthday Surprise                  | [SteamDB](https://steamdb.info/app/294700)   | [ProtonDB](https://protondb.com/app/294700)  | :heavy_check_mark: | :x:                        |
+| Recettear: An Item Shop's Tale                      | [SteamDB](https://steamdb.info/app/70400)    | [ProtonDB](https://protondb.com/app/70400)   | :heavy_check_mark: | :x:                        |
+| Red Dead Redemption 2                               | [SteamDB](https://steamdb.info/app/1174180)  | [ProtonDB](https://protondb.com/app/1174180) | :heavy_check_mark: | :x:                        |
+| Remnant: From the Ashes                             | [SteamDB](https://steamdb.info/app/617290)   | [ProtonDB](https://protondb.com/app/617290)  | :x:                | :heavy_check_mark:         |
+| Resident Evil 0                                     | [SteamDB](https://steamdb.info/app/339340)   | [ProtonDB](https://protondb.com/app/339340)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Resident Evil                                       | [SteamDB](https://steamdb.info/app/304240)   | [ProtonDB](https://protondb.com/app/304240)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Resident Evil 2 Remastered                          | [SteamDB](https://steamdb.info/app/883710)   | [ProtonDB](https://protondb.com/app/883710)  | :x:                | :heavy_check_mark:         |
+| Resident Evil 3 Remastered                          | [SteamDB](https://steamdb.info/app/952060)   | [ProtonDB](https://protondb.com/app/952060)  | :x:                | :heavy_check_mark:         |
+| Resident Evil 5                                     | [SteamDB](https://steamdb.info/app/21690)    | [ProtonDB](https://protondb.com/app/21690)   | :heavy_check_mark: | :heavy_check_mark:         |
+| Resident Evil 6                                     | [SteamDB](https://steamdb.info/app/221040)   | [ProtonDB](https://protondb.com/app/221040)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Resident Evil 7 Biohazard                           | [SteamDB](https://steamdb.info/app/418370)   | [ProtonDB](https://protondb.com/app/418370)  | :x:                | :heavy_check_mark:         |
+| Resident Evil 8 Village                             | [SteamDB](https://steamdb.info/app/1196590)  | [ProtonDB](https://protondb.com/app/1196590) | :x:                | :heavy_check_mark:         |
+| Resident Evil Revelations                           | [SteamDB](https://steamdb.info/app/222480)   | [ProtonDB](https://protondb.com/app/222480)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Resident Evil Revelations 2                         | [SteamDB](https://steamdb.info/app/287290)   | [ProtonDB](https://protondb.com/app/287290)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Rise of Nations: Extended Edition                   | [SteamDB](https://steamdb.info/app/287450)   | [ProtonDB](https://protondb.com/app/287450)  | :heavy_check_mark: | :x:                        |
+| Sacred 2 Gold                                       | [SteamDB](https://steamdb.info/app/225640)   | [ProtonDB](https://protondb.com/app/225640)  | :x:                | :heavy_check_mark:         |
+| Scrap Mechanic                                      | [SteamDB](https://steamdb.info/app/387990)   | [ProtonDB](https://protondb.com/app/387990)  | :x:                | :heavy_check_mark:         |
+| Serious Sam 4                                       | [SteamDB](https://steamdb.info/app/257420)   | [ProtonDB](https://protondb.com/app/257420)  | :x:                | :heavy_check_mark:         |
+| Serious Sam: The Random Encounter                   | [SteamDB](https://steamdb.info/app/201480)   | [ProtonDB](https://protondb.com/app/201480)  | :x:                | :heavy_check_mark:         |
+| Seven: Enhanced Edition                             | [SteamDB](https://steamdb.info/app/471010)   | [ProtonDB](https://protondb.com/app/471010)  | :x:                | :heavy_check_mark:         |
+| Sleeping Dogs: Definitive Edition                   | [SteamDB](https://steamdb.info/app/307690)   | [ProtonDB](https://protondb.com/app/307690)  | :x:                | :heavy_check_mark:         |
+| Sonic CD                                            | [SteamDB](https://steamdb.info/app/200940)   | [ProtonDB](https://protondb.com/app/200940)  | :x:                | :heavy_check_mark:         |
+| SOULCALIBUR VI                                      | [SteamDB](https://steamdb.info/app/544750)   | [ProtonDB](https://protondb.com/app/544750)  | :heavy_check_mark: | :heavy_check_mark:         |
+| Space Engineers                                     | [SteamDB](https://steamdb.info/app/244850)   | [ProtonDB](https://protondb.com/app/244850)  | :x:                | :heavy_check_mark:         |
+| Spyro Reignited Trilogy                             | [SteamDB](https://steamdb.info/app/996580)   | [ProtonDB](https://protondb.com/app/996580)  | :x:                | :heavy_check_mark:         |
+| STAR WARS Galactic Battlegrounds Saga               | [SteamDB](https://steamdb.info/app/356500)   | [ProtonDB](https://protondb.com/app/356500)  | :heavy_check_mark: | :x:                        |
+| Stealth Inc 2: A Game of Clones                     | [SteamDB](https://steamdb.info/app/329380)   | [ProtonDB](https://protondb.com/app/329380)  | :x:                | :heavy_check_mark:         |
+| Strange Brigade                                     | [SteamDB](https://steamdb.info/app/312670)   | [ProtonDB](https://protondb.com/app/312670)  | :x:                | :heavy_check_mark:         |
+| Super Lucky's Tale                                  | [SteamDB](https://steamdb.info/app/847360)   | [ProtonDB](https://protondb.com/app/847360)  | :x:                | :heavy_check_mark:         |
+| Super Meat Boy                                      | [SteamDB](https://steamdb.info/app/40800)    | [ProtonDB](https://protondb.com/app/40800)   | :x:                | :heavy_check_mark:         |
+| Syberia                                             | [SteamDB](https://steamdb.info/app/46500)    | [ProtonDB](https://protondb.com/app/46500)   | :x:                | :heavy_check_mark:         |
+| Tesla Effect: A Tex Murphy Adventure                | [SteamDB](https://steamdb.info/app/261510)   | [ProtonDB](https://protondb.com/app/261510)  | :x:                | :heavy_check_mark:         |
+| The Bureau: XCOM Declassified                       | [SteamDB](https://steamdb.info/app/65930)    | [ProtonDB](https://protondb.com/app/65930)   | :x:                | :heavy_check_mark:         |
+| The Elder Scrolls Online                            | [SteamDB](https://steamdb.info/app/306130)   | [ProtonDB](https://protondb.com/app/306130)  | :x:                | :heavy_check_mark:         |
+| The Elder Scrolls V: Skyrim                         | [SteamDB](https://steamdb.info/app/72850)    | [ProtonDB](https://protondb.com/app/72850)   | :x:                | :heavy_check_mark:         |
+| The Elder Scrolls V: Skyrim Special Edition         | [SteamDB](https://steamdb.info/app/489830)   | [ProtonDB](https://protondb.com/app/489830)  | :x:                | :heavy_check_mark:         |
+| The Evil Within                                     | [SteamDB](https://steamdb.info/app/268050)   | [ProtonDB](https://protondb.com/app/268050)  | :x:                | :heavy_check_mark:         |
+| The Lord of the Rings Online                        | [SteamDB](https://steamdb.info/app/212500)   | [ProtonDB](https://protondb.com/app/212500)  | :x:                | :heavy_check_mark:         |
+| Tokyo Xanadu eX+                                    | [SteamDB](https://steamdb.info/app/587260)   | [ProtonDB](https://protondb.com/app/587260)  | :x:                | :heavy_check_mark:         |
+| Tomb Raider                                         | [SteamDB](https://steamdb.info/app/203160)   | [ProtonDB](https://protondb.com/app/203160)  | :x:                | :heavy_check_mark:         |
+| Tomb Raider I                                       | [SteamDB](https://steamdb.info/app/224960)   | [ProtonDB](https://protondb.com/app/224960)  | :x:                | :heavy_check_mark:         |
+| Tree of Savior                                      | [SteamDB](https://steamdb.info/app/372000)   | [ProtonDB](https://protondb.com/app/372000)  | :x:                | :heavy_check_mark:         |
+| Ultimate Marvel VS. Capcom 3                        | [SteamDB](https://steamdb.info/app/357190)   | [ProtonDB](https://protondb.com/app/357190)  | :x:                | :heavy_check_mark:         |
+| Warframe                                            | [SteamDB](https://steamdb.info/app/230410)   | [ProtonDB](https://protondb.com/app/230410)  | :x:                | :heavy_check_mark:         |
+| Wasteland 3                                         | [SteamDB](https://steamdb.info/app/719040)   | [ProtonDB](https://protondb.com/app/719040)  | :x:                | :heavy_check_mark:         |
+| Watch_Dogs                                          | [SteamDB](https://steamdb.info/app/243470)   | [ProtonDB](https://protondb.com/app/243470)  | :x:                | :heavy_check_mark:         |
+| Watch_Dogs 2                                        | [SteamDB](https://steamdb.info/app/447040)   | [ProtonDB](https://protondb.com/app/447040)  | :x:                | :heavy_check_mark:         |
+| WORLD OF HORROR                                     | [SteamDB](https://steamdb.info/app/913740)   | [ProtonDB](https://protondb.com/app/913740)  | :x:                | :heavy_check_mark:         |
+| Yakuza 0                                            | [SteamDB](https://steamdb.info/app/638970)   | [ProtonDB](https://protondb.com/app/638970)  | :x:                | :heavy_check_mark:         |
+| Yakuza Kiwami                                       | [SteamDB](https://steamdb.info/app/834530)   | [ProtonDB](https://protondb.com/app/834530)  | :x:                | :heavy_check_mark:         |
+| Yesterday Origins                                   | [SteamDB](https://steamdb.info/app/465280)   | [ProtonDB](https://protondb.com/app/465280)  | :x:                | :heavy_check_mark:         |
+| You Need A Budget 4 (YNAB)                          | [SteamDB](https://steamdb.info/app/227320)   | [ProtonDB](https://protondb.com/app/227320)  | :x:                | :heavy_check_mark:         |
 
 ## Notes
 
