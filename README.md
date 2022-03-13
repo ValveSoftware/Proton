@@ -69,7 +69,7 @@ Things it contains that Valve's proton does not:
 - Various upstream WINE patches backported
 - Various wine-staging patches applied as they become needed
 
-## Supported Games
+## Tested Games
 
 | Name                                                | SteamDB Link                                 | ProntonDB Link                               | Has Protonfixes    | Has Media Foundation fixes |
 | --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | ------------------ | -------------------------- |
