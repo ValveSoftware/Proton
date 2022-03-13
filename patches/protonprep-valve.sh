@@ -28,6 +28,9 @@
     # nvapi
     git revert --no-commit fdfb4b925f52fbec580dd30bef37fb22c219c667
 
+    # this commit causes some FSR resolutions to be removed
+    git revert --no-commit ca3681631adc4723e672aacc0a25a109983781fa
+
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
 
@@ -121,6 +124,11 @@
     # this was added in 7.1, so it's not in the 7.0 tree
     patch -Np1 < ../patches/wine-hotfixes/staging/nvcuda/0016-nvcuda-Make-nvcuda-attempt-to-load-libcuda.so.1.patch
 
+    # loader-KeyboardLayouts
+    # needed to prevent big FPS hit in overwatch
+    patch -Np1 < ../wine-staging/patches/loader-KeyboardLayouts/0001-loader-Add-Keyboard-Layouts-registry-enteries.patch
+    patch -Np1 < ../wine-staging/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
+
 ### (2-3) GAME PATCH SECTION ###
 
     echo "WINE: -GAME FIXES- mech warrior online fix"
@@ -179,6 +187,9 @@
 
     echo "WINE: -HOTFIX- 32 bit compilation crashes with newer libldap, upstream patch fixes it"
     patch -Np1 < ../patches/wine-hotfixes/upstream/32-bit-ldap-upstream-fix.patch
+
+    echo "WINE: -HOTFIX- fix audio regression caused by 0e7fd41"
+    patch -Np1 < ../patches/wine-hotfixes/upstream/Fix-regression-introduced-by-0e7fd41.patch
 
 #    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
 #    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch

@@ -3,8 +3,8 @@ index d191b05d..25cbba7c 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -1,4 +1,4 @@
--project('dxvk', ['c', 'cpp'], version : 'v1.9.4', meson_version : '>= 0.47')
-+project('dxvk', ['c', 'cpp'], version : 'v1.9.4-async', meson_version : '>= 0.47')
+-project('dxvk', ['c', 'cpp'], version : 'v1.10', meson_version : '>= 0.47')
++project('dxvk', ['c', 'cpp'], version : 'v1.10-async', meson_version : '>= 0.47')
 
  cpu_family = target_machine.cpu_family()
 
