@@ -327,9 +327,6 @@
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
 
-    echo "WINE: -HOTFIX- mshtml"
-    patch -Np1 < ../patches/wine-hotfixes/testing/229496
-
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
