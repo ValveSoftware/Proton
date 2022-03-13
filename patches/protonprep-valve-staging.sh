@@ -28,9 +28,6 @@
     # nvapi
     git revert --no-commit fdfb4b925f52fbec580dd30bef37fb22c219c667
 
-    # this commit causes some FSR resolutions to be removed
-    git revert --no-commit ca3681631adc4723e672aacc0a25a109983781fa
-
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
 
@@ -53,6 +50,7 @@
     -W dwrite-FontFallback \
     -W ntdll-DOS_Attributes \
     -W Pipelight \
+    -W dinput-joy-mappings \
     -W server-Key_State \
     -W server-PeekMessage \
     -W server-Realtime_Priority \
@@ -115,6 +113,7 @@
     # server-Realtime_Priority - replaced by proton's patches
     # server-Signal_Thread - breaks steamclient for some games -- notably DBFZ
     # Pipelight - for MS Silverlight, not needed
+    # dinput-joy-mappings - disabled in favor of proton's gamepad patches
     # ** loader-KeyboardLayouts - applied manually -- needed to prevent Overwatch huge FPS drop
     # msxml3-FreeThreadedXMLHTTP60 - already applied
     # ntdll-ForceBottomUpAlloc - already applied
@@ -327,6 +326,9 @@
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
+
+    echo "WINE: -HOTFIX- mshtml"
+    patch -Np1 < ../patches/wine-hotfixes/testing/229496
 
 
 ### END WINE PENDING UPSTREAM SECTION ###
