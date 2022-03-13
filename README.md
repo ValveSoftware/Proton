@@ -321,11 +321,11 @@ in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail
 
 6. Navigate to the parent directory containing the proton-ge-custom folder.
 
-7. Type the following (note: if using docker instead of podman, change to --container-engine=podman):
+7. Type the following (note: if using docker instead of podman, change to --container-engine=docker):
 
 ```sh
 	mkdir build && cd build
-	../proton-ge-custom/configure.sh --enable-ccache --build-name=SOME-BUILD-NAME-HERE --container-engine=podman
+	../configure.sh --enable-ccache --build-name=SOME-BUILD-NAME-HERE --container-engine=podman
 	make redist &> log
 ```
 
