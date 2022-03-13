@@ -233,7 +233,7 @@ Things it contains that Valve's proton does not:
 - Ultimate Marvel Vs. Capcom 3
 - Industry of Titan
 - Call of Duty Black Ops III
-- Tokyo Xanady Xe+
+- Tokyo Xanadu eX+
 - Haven
 - Nier Replicant
 - Scrap Mechanic
