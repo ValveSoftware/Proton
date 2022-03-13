@@ -28,39 +28,8 @@
     # nvapi
     git revert --no-commit fdfb4b925f52fbec580dd30bef37fb22c219c667
 
-    # this commit causes some FSR resolutions to be removed
-    git revert --no-commit ca3681631adc4723e672aacc0a25a109983781fa
-
 ### END PROBLEMATIC COMMIT REVERT SECTION ###
 
-
-### (2-2) WINE STAGING APPLY SECTION ###
-
-    # these cause window freezes/hangs with origin
-    # -W winex11-_NET_ACTIVE_WINDOW \
-    # -W winex11-WM_WINDOWPOSCHANGING \
-
-    # this interferes with fshack
-    #-W winex11-MWM_Decorations \
-
-    # this interferes with protons keyboard translation patches
-    #-W winex11-key_translation \
-
-    # ntdll-Junction_Points breaks Valve's CEG drm
-    # the other two rely on it.
-    # note: we also have to manually remove the ntdll-Junction_Points patchset from esync in staging.
-    # we also disable esync and apply it manually instead
-    # -W ntdll-Junction_Points \
-    # -W server-File_Permissions \
-    # -W server-Stored_ACLs \
-    # -W eventfd_synchronization \
-
-    # Sancreed — 11/21/2021
-    # Heads up, it appears that a bunch of Ubisoft Connect games (3/3 I had installed and could test) will crash
-    # almost immediately on newer Wine Staging/TKG inside pe_load_debug_info function unless the dbghelp-Debug_Symbols staging # patchset is disabled.
-    # -W dbghelp-Debug_Symbols \
-
-### END WINE STAGING APPLY SECTION ###
 
     echo "WINE: -STAGING- applying staging patches"
 
