@@ -211,7 +211,7 @@ impl AudioConverterDumpFozdb {
                 return self;
             }
 
-            match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(create), AUDIOCONV_FOZ_NUM_TAGS) {
+            match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(create), false /* read-only? */, AUDIOCONV_FOZ_NUM_TAGS) {
                 Ok(newdb) => {
                     self.fozdb = Some(newdb);
                 },
@@ -237,7 +237,7 @@ impl AudioConverterDumpFozdb {
         }
         if let Some(fozdb) = &mut self.open(false).fozdb {
             if let Ok(read_fozdb_path) = std::env::var("MEDIACONV_AUDIO_TRANSCODED_FILE") {
-                if let Ok(read_fozdb) = fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), AUDIOCONV_FOZ_NUM_TAGS) {
+                if let Ok(read_fozdb) = fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), true /* read-only? */, AUDIOCONV_FOZ_NUM_TAGS) {
                     let mut chunks_to_discard = HashSet::<(u32, u128)>::new();
                     let mut chunks_to_keep = HashSet::<(u32, u128)>::new();
 
@@ -559,7 +559,7 @@ impl AudioConvState {
             loggable_error!(CAT, "MEDIACONV_AUDIO_TRANSCODED_FILE is not set!")
         })?;
 
-        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), AUDIOCONV_FOZ_NUM_TAGS) {
+        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), true /* read-only? */, AUDIOCONV_FOZ_NUM_TAGS) {
             Ok(s) => Some(s),
             Err(_) => None,
         };
