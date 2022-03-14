@@ -138,7 +138,7 @@ impl VideoConverterDumpFozdb {
                 return self;
             }
 
-            match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(create), VIDEOCONV_FOZ_NUM_TAGS) {
+            match fossilize::StreamArchive::new(&dump_file_path, OpenOptions::new().write(true).read(true).create(create), false /* read-only? */, VIDEOCONV_FOZ_NUM_TAGS) {
                 Ok(newdb) => {
                     self.fozdb = Some(newdb);
                 },
@@ -164,7 +164,7 @@ impl VideoConverterDumpFozdb {
         }
         if let Some(fozdb) = &mut self.open(false).fozdb {
             if let Ok(read_fozdb_path) = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE") {
-                if let Ok(read_fozdb) = fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), VIDEOCONV_FOZ_NUM_TAGS) {
+                if let Ok(read_fozdb) = fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), true /* read-only? */,  VIDEOCONV_FOZ_NUM_TAGS) {
                     let mut chunks = Vec::<(u32, u128)>::new();
 
                     for stream_id in fozdb.iter_tag(VIDEOCONV_FOZ_TAG_STREAM).cloned().collect::<Vec<u128>>() {
@@ -306,7 +306,7 @@ impl VideoConvState {
             loggable_error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
         })?;
 
-        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), VIDEOCONV_FOZ_NUM_TAGS) {
+        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), true /* read-only? */, VIDEOCONV_FOZ_NUM_TAGS) {
             Ok(s) => Some(s),
             Err(_) => None,
         };
