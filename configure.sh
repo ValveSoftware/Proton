@@ -141,20 +141,26 @@ function configure() {
     CONTAINER_MOUNT_OPTS=:Z
   fi
 
-  if [[ -n "$arg_container_engine" ]]; then
-    check_container_engine "$arg_container_engine" || die "Specified container engine \"$arg_container_engine\" doesn't work"
-  else
-    stat "Trying to find usable container engine."
-    if check_container_engine docker; then
-      arg_container_engine="docker"
-    elif check_container_engine podman; then
-      arg_container_engine="podman"
+  if [[ -n "$steamrt_image" ]]; then
+    if [[ -n "$arg_container_engine" ]]; then
+      check_container_engine "$arg_container_engine" || die "Specified container engine \"$arg_container_engine\" doesn't work"
     else
-        die "${arg_container_engine:-Container engine discovery} has failed. Please fix your setup."
+      stat "Trying to find usable container engine."
+      if check_container_engine docker; then
+        arg_container_engine="docker"
+      elif check_container_engine podman; then
+        arg_container_engine="podman"
+      else
+          die "${arg_container_engine:-Container engine discovery} has failed. Please fix your setup."
+      fi
     fi
-  fi
 
-  stat "Using $arg_container_engine."
+    stat "Using $arg_container_engine."
+  elif [[ "$(id -u)" -eq 0 ]]; then
+    ROOTLESS_CONTAINER=1
+  else
+    ROOTLESS_CONTAINER=0
+  fi
 
   ## Write out config
   # Don't die after this point or we'll have rather unhelpfully deleted the Makefile
