@@ -131,7 +131,7 @@ index 00000000..3e207d9b
 +  install             : true,
 +  objects             : not dxvk_is_msvc ? 'dxvk_config'+def_spec_ext : [],
 +  vs_module_defs      : 'dxvk_config'+def_spec_ext,
-+  override_options    : ['cpp_std='+dxvk_cpp_std])
++)
 +
 +install_headers('dxvk_config.h',
 +  subdir              : 'dxvk')
