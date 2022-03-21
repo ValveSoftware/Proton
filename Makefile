@@ -34,7 +34,7 @@ ifneq ($(module),)
         MODULE_SOFILE := $(subst .sys,.so,$(module))
     else
         MODULE_PEFILE := $(module).dll
-        MODULE_SOFILE := $(module).dll.so
+        MODULE_SOFILE := $(module).so
     endif
 endif
 
@@ -159,6 +159,10 @@ module: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) module=$(module) module && \
 	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib/wine/i386-windows/ && \
 	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows/ && \
+	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE).so ]; then \
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE).so $(BUILD_ROOT)/$(module)/lib/wine/i386-unix/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_PEFILE).so $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix/; \
+	fi
 	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_SOFILE) ]; then \
 		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_SOFILE) $(BUILD_ROOT)/$(module)/lib/wine/i386-unix/ && \
 		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_SOFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix/; \
