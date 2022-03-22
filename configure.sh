@@ -127,7 +127,6 @@ function configure() {
   dependency_command wget
   dependency_command xz
   dependency_command patch
-  dependency_command autoconf
   dependency_command git
   dependency_command python3
 
