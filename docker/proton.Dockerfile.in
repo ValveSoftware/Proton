@@ -53,6 +53,7 @@ ENV PATH=/usr/lib/ccache:$PATH
 
 RUN apt-get install -y \
   fontforge \
+  fonttools \
   libxpresent-dev \
   libxpresent-dev:i386 \
   python3-pefile \
