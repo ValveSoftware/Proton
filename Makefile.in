@@ -705,7 +705,7 @@ $(eval $(call rules-autoconf,wine,64))
 
 $(OBJ)/.wine-post-source:
 	cd $(WINE_SRC) && tools/make_requests
-	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan && rm dlls/winevulkan/vk-*.xml
+	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan -x vk.xml
 	touch $@
 
 $(OBJ)/.wine-post-build64:
