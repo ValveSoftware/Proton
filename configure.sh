@@ -46,18 +46,6 @@ dependency_command() {
     fi
 }
 
-dependency_afdko() {
-    if command -v makeotf &> /dev/null; then
-        AFDKO_VERB=
-    elif command -v afdko &> /dev/null; then
-        AFDKO_VERB=afdko
-    else
-        err "Couldn't find 'afdko'. Install it and make sure that 'makeotf' is in your PATH or 'afdko makeotf' works."
-        err "Some distributions don't package afdko correctly, you may need to 'pip install afdko'."
-        MISSING_DEPENDENCIES=1
-    fi
-}
-
 CONTAINER_MOUNT_OPTS=""
 
 check_container_engine() {
@@ -130,8 +118,6 @@ function configure() {
   dependency_command git
   dependency_command python3
 
-  dependency_afdko
-
   if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
       die "Missing dependencies, cannot continue."
   fi
@@ -182,8 +168,6 @@ function configure() {
       echo "ENABLE_CCACHE := 1"
     fi
 
-    echo "AFDKO_VERB := $AFDKO_VERB"
-
     # Include base
     echo ""
     echo "include \$(SRCDIR)/Makefile.in"
@@ -198,7 +182,7 @@ function configure() {
 #
 
 arg_steamrt="soldier"
-arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20211207.0-1"
+arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20220119.0-1"
 arg_no_protonsdk=""
 arg_build_name=""
 arg_container_engine=""
