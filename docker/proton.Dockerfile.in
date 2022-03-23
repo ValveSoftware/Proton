@@ -61,6 +61,7 @@ RUN apt-get install -y \
   libcapstone-dev:i386 \
   libutfcpp-dev \
   yasm \
+  nasm \
 && rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
 && rm -rf /var/lib/apt/lists/*
 
