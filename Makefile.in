@@ -100,9 +100,9 @@ endif
 
 MAKECMDGOALS32 := $(filter-out all32,$(filter %32,$(MAKECMDGOALS)))
 MAKECMDGOALS64 := $(filter-out all64,$(filter %64,$(MAKECMDGOALS)))
-CONTAINERGOALS := $(MAKECMDGOALS32) $(MAKECMDGOALS64)
+CONTAINERGOALS := $(MAKECMDGOALS32) $(MAKECMDGOALS64) $(filter fonts,$(MAKECMDGOALS))
 
-all: all32 all64
+all: all32 all64 fonts
 .PHONY: all
 
 all32 $(MAKECMDGOALS32):
@@ -960,7 +960,6 @@ $(OBJ)/.eac-build32:
 
 endif
 
-ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts
 GOAL_TARGETS += fonts
 
@@ -974,7 +973,6 @@ LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
 SOURCE_HAN_SANS_SRCDIR = $(FONTS)/source-han-sans
 UME_DIR = $(FONTS)/ume
 
-msyh.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
 msyh.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
 msyh.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
 msyh.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
@@ -982,7 +980,6 @@ msyh.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 msyh.ttf_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
 msyh.ttf = $(FONTS_OBJ)/source-han/msyh.ttf
 
-simsun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
 simsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
 simsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
 simsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
@@ -990,7 +987,6 @@ simsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 simsun.ttf_MENUNAMEDB = $(FONTS)/patches/SimSun-FontMenuNameDB
 simsun.ttf = $(FONTS_OBJ)/source-han/simsun.ttf
 
-nsimsun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
 nsimsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
 nsimsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
 nsimsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
@@ -1010,7 +1006,6 @@ msuigothic.ttf_FONT = $(UME_DIR)/ume-ugo4.ttf
 msuigothic.ttf_NAMETABLE_PATCH = $(FONTS)/patches/UmeUIGothic-nametable.patch
 msuigothic.ttf = $(FONTS_OBJ)/ume-gothic/msuigothic.ttf
 
-malgun.ttf_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.K
 malgun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.K
 malgun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.K
 malgun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_KR_sequences.txt
@@ -1065,26 +1060,35 @@ LiberationMono-Bold_NAMES := "CourierNewPS-BoldMT" "Courier New" "Courier New Bo
 $(FONTS_OBJ):
 	mkdir -p $@
 
+ifeq ($(CONTAINER),)
+fonts: container-build # trigger container build
+
 $(FONTS_OBJ)/%.ttf: $(FONTS_OBJ)/%.sfd $(FONTSCRIPT) | $(FONTS_OBJ)
 	$(FONTFORGE) -script $(FONTSCRIPT) $< $($(*)_NAMES)
 
 $(FONTS_OBJ)/%.sfd: $(LIBERATION_SRCDIR)/%.sfd | $(FONTS_OBJ)
 	patch $< -o $@ $(firstword $($(*)_PATCH) /dev/null)
 
+# fonts below need a newer fontforge version then the one in the container
+fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
+fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
+fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
+fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
+fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
+else # ifeq ($(CONTAINER),)
 #The use of "YaHei" for compatibility with programs that require that exact string. This font is not Microsoft YaHei.
-$(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONTINFO) $$(%.ttf_CIDFONT) \
-		$$(%.ttf_FEATURES) $$(%.ttf_SEQUENCES) $$(%.ttf_UNISOURCE) $$(%.ttf_MENUNAMEDB)
+$(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONT) $$(%.ttf_FEATURES) $$(%.ttf_SEQUENCES) $$(%.ttf_UNISOURCE) $$(%.ttf_MENUNAMEDB)
 	mkdir -p $(FONTS_OBJ)/source-han
 	# Do not immediately create the target file, so that make is interrupted
 	# it will restart again
-	$(AFDKO_VERB) makeotf -f $($(notdir $@)_CIDFONT) -omitMacNames -ff $($(notdir $@)_FEATURES) \
-		-fi $($(notdir $@)_CIDFONTINFO) -mf $($(notdir $@)_MENUNAMEDB) -r -nS -cs 25 -ch $($(notdir $@)_UNISOURCE) \
+	afdko makeotfexe -f $($(notdir $@)_CIDFONT) -omitMacNames -ff $($(notdir $@)_FEATURES) \
+		-lic ADOBE -mf $($(notdir $@)_MENUNAMEDB) -r -nS -cs 25 -ch $($(notdir $@)_UNISOURCE) \
 		-ci $($(notdir $@)_SEQUENCES) -o $@.tmp
-	$(AFDKO_VERB) tx -cff +S -no_futile $($(notdir $@)_CIDFONT) $@.cff
+	afdko tx -cff +S -no_futile $($(notdir $@)_CIDFONT) $@.cff
 	# sftnedit uses a hardcoded temporary file in the local directory, so we have
 	# to run it in a dedicated temporary directory to prevent concurrent instances
 	# to step onto each other's feet
-	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && $(AFDKO_VERB) sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
+	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && afdko sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
 	mv $@.tmp $@
 
 $(FONTS_OBJ)/ume-gothic/%.ttf: $$(%.ttf_FONT) $$(%.ttf_NAMETABLE_PATCH)
@@ -1094,10 +1098,10 @@ $(FONTS_OBJ)/ume-gothic/%.ttf: $$(%.ttf_FONT) $$(%.ttf_NAMETABLE_PATCH)
 	ttx -o $@ -m $($(notdir $@)_FONT) $(FONTS_OBJ)/ume-gothic/$(notdir $(basename $($(notdir $@)_NAMETABLE_PATCH))).ttx
 
 $(simsun.ttc): $(simsun.ttf) $(nsimsun.ttf)
-	$(AFDKO_VERB) otf2otc -o $@ $^
+	afdko otf2otc -o $@ $^
 
 $(msgothic.ttc): $(msgothic.ttf) $(mspgothic.ttf) $(msuigothic.ttf)
-	$(AFDKO_VERB) otf2otc -o $@ $^
+	afdko otf2otc -o $@ $^
 
 $(micross.ttf): $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_armenian.ttf) $(noto_sans_bengali.ttf) $(noto_sans_coptic.ttf) \
 		$(noto_sans_georgian.ttf) $(noto_sans_gujarati.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_khmer.ttf) $(noto_sans_tamil.ttf) \
@@ -1114,22 +1118,19 @@ $(nirmala.ttf): $(noto_sans.ttf) $(noto_sans_bengaliui.ttf) $(noto_sans_devanaga
 		$(noto_sans_oriyaui.ttf) $(noto_sans_sinhalaui.ttf) $(noto_sans_sorasompeng.ttf) $(noto_sans_tamilui.ttf) $(noto_sans_teluguui.ttf) \
 		"NirmalaUI" "Nirmala UI" "Regular" $(nirmala.ttf)
 
-fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
-fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
-fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
-fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
-fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
 fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
 fonts: $(malgun.ttf)
 fonts: $(micross.ttf)
 fonts: $(nirmala.ttf)
+endif # ifeq ($(CONTAINER),)
 
 ##
 ## Targets
 ##
 
+ifeq ($(CONTAINER),)
 .PHONY: all all64 all32 default help targets
 
 # Produce a working dist directory by default
