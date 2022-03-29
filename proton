@@ -930,6 +930,7 @@ def default_compat_config():
                 "684450", #Surviving the Aftermath
                 "780290", #Gloomhaven
                 "844260", #Rustler
+                "960170", #DJMAX RESPECT V
                 "983970", #Haven
                 "1075200", #TOHU
                 "1331440", #FUSER
