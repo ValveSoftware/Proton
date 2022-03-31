@@ -25,11 +25,6 @@ CSteamID cppISteamUser_SteamUser008_GetSteamID(void *linux_side)
     return ((ISteamUser*)linux_side)->GetSteamID();
 }
 
-int cppISteamUser_SteamUser008_InitiateGameConnection(void *linux_side, void * pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure, void * pvSteam2GetEncryptionKey, int cbSteam2GetEncryptionKey)
-{
-    return ((ISteamUser*)linux_side)->InitiateGameConnection((void *)pBlob, (int)cbMaxBlob, (CSteamID)steamID, (CGameID)gameID, (uint32)unIPServer, (uint16)usPortServer, (bool)bSecure, (void *)pvSteam2GetEncryptionKey, (int)cbSteam2GetEncryptionKey);
-}
-
 void cppISteamUser_SteamUser008_TerminateGameConnection(void *linux_side, uint32 unIPServer, uint16 usPortServer)
 {
     ((ISteamUser*)linux_side)->TerminateGameConnection((uint32)unIPServer, (uint16)usPortServer);

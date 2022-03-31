@@ -266,6 +266,9 @@ manually_handled_methods = {
             "DestroyFakeUDPPort",
             "ReceiveMessages"
         ],
+        "cppISteamUser_SteamUser008": [
+            "InitiateGameConnection"
+        ],
 }
 
 # manual converters for simple types (function pointers)
