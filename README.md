@@ -241,7 +241,7 @@ Full patches can be viewed in [protonprep-valve-staging.sh](patches/protonprep-v
 
 PLEASE NOTE: There are prerequisites for using this version of proton:
 
-1. You must have vulkan gpu drivers/packages installed properly on your system. See https://github.com/lutris/docs/blob/master/InstallingDrivers.md
+1. You must have vulkan gpu drivers/packages installed properly on your system. VKD3D on AMD requires Mesa 22.0.0 or higher for VK_KHR_dynamic_rendering extension. See https://github.com/lutris/docs/blob/master/InstallingDrivers.md for general driver installation guidance.
 
 ### Manual
 
