@@ -683,6 +683,7 @@ bool CDECL Steam_BGetCallback(HSteamPipe pipe, struct winCallbackMsg_t *win_msg,
     if(!load_steamclient())
         return 0;
 
+next_event:
     ret = steamclient_BGetCallback(pipe, &lin_msg, ignored);
 
     if(ret){
@@ -701,7 +702,16 @@ bool CDECL Steam_BGetCallback(HSteamPipe pipe, struct winCallbackMsg_t *win_msg,
                 keybd_event(VK_RSHIFT, 0x36 /* rshift scancode */, KEYEVENTF_KEYUP, 0);
                 keybd_event(VK_TAB, 0x0f /* tab scancode */, KEYEVENTF_KEYUP, 0);
             }
-            else ResetEvent(steam_overlay_event);
+            else
+            {
+                if (WaitForSingleObject(steam_overlay_event, 0) == WAIT_TIMEOUT)
+                {
+                    FIXME("Spurious steam overlay deactivate event, skipping.\n");
+                    steamclient_FreeLastCallback(pipe);
+                    goto next_event;
+                }
+                ResetEvent(steam_overlay_event);
+            }
         }
 
         switch(win_msg->m_iCallback | (lin_msg.m_cubParam << 16)){
