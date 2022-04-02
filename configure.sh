@@ -19,9 +19,9 @@ if [[ $(tput colors 2>/dev/null || echo 0) -gt 0 ]]; then
   COLOR_CLEAR=$'\e[0m'
 fi
 
-sh_quote() { 
+sh_quote() {
         local quoted
-        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}"; 
+        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}";
 }
 err()      { echo >&2 "${COLOR_ERR}!!${COLOR_CLEAR} $*"; }
 stat()     { echo >&2 "${COLOR_STAT}::${COLOR_CLEAR} $*"; }
@@ -42,18 +42,6 @@ dependency_command() {
     shift
     if ! command -v "$COMMAND" &> /dev/null; then
         err "Couldn't find command '$COMMAND'. Please install ${@:-$COMMAND}."
-        MISSING_DEPENDENCIES=1
-    fi
-}
-
-dependency_afdko() {
-    if command -v makeotf &> /dev/null; then
-        AFDKO_VERB=
-    elif command -v afdko &> /dev/null; then
-        AFDKO_VERB=afdko
-    else
-        err "Couldn't find 'afdko'. Install it and make sure that 'makeotf' is in your PATH or 'afdko makeotf' works."
-        err "Some distributions don't package afdko correctly, you may need to 'pip install afdko'."
         MISSING_DEPENDENCIES=1
     fi
 }
@@ -127,11 +115,8 @@ function configure() {
   dependency_command wget
   dependency_command xz
   dependency_command patch
-  dependency_command autoconf
   dependency_command git
   dependency_command python3
-
-  dependency_afdko
 
   if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
       die "Missing dependencies, cannot continue."
@@ -183,8 +168,6 @@ function configure() {
       echo "ENABLE_CCACHE := 1"
     fi
 
-    echo "AFDKO_VERB := $AFDKO_VERB"
-
     # Include base
     echo ""
     echo "include \$(SRCDIR)/Makefile.in"
@@ -199,7 +182,7 @@ function configure() {
 #
 
 arg_steamrt="soldier"
-arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20211207.0-1"
+arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20220119.0-1"
 arg_no_protonsdk=""
 arg_build_name=""
 arg_container_engine=""
