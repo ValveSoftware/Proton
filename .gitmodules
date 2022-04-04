@@ -70,3 +70,6 @@
 [submodule "gst-plugins-rs"]
 	path = gst-plugins-rs
 	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs.git
+[submodule "gamemode"]
+	path = gamemode
+	url = https://github.com/FeralInteractive/gamemode

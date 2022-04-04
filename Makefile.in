@@ -422,6 +422,25 @@ module: module32 module64
 
 endif # ifeq ($(CONTAINER),)
 
+##
+## gamemode
+##
+
+GAMEMODE_MESON_ARGS = \
+	-Dwith-sd-bus-provider=no-daemon \
+	-Dwith-util=false \
+
+$(eval $(call rules-source,gamemode,$(SRCDIR)/gamemode))
+$(eval $(call rules-meson,gamemode,32))
+$(eval $(call rules-meson,gamemode,64))
+
+$(OBJ)/.gamemode-post-build32:
+	mkdir -p $(DST_DIR)/bin
+	cp -f $(SRCDIR)/gamemode/data/gamemoderun $(DST_DIR)/bin
+
+$(OBJ)/.gamemode-post-build64:
+	mkdir -p $(DST_DIR)/bin
+	cp -f $(SRCDIR)/gamemode/data/gamemoderun $(DST_DIR)/bin
 
 ##
 ## dav1d
