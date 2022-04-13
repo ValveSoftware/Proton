@@ -110,7 +110,7 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 protonsdk:
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C proton/docker $(UNSTRIPPED) PROTONSDK_VERSION=$(protonsdk_version) proton
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C docker $(UNSTRIPPED) PROTONSDK_VERSION=$(protonsdk_version) proton
 
 configure: | $(BUILD_DIR)
 	if [ ! -e $(BUILD_DIR)/Makefile ]; then \
