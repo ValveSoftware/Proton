@@ -7,8 +7,8 @@ PROTONSDK_VERSION = $(STEAMRT_VERSION)-0-dev
 # this is just for building toolchain, as we do static builds it should
 # not have any impact on the end result, but changing it will invalidate
 # docker caches, so we need something that don't change much
-BASE_IMAGE_i686 = i386/ubuntu:18.04
-BASE_IMAGE_x86_64 = ubuntu:18.04
+BASE_IMAGE_i686 = docker.io/i386/ubuntu:18.04
+BASE_IMAGE_x86_64 = docker.io/amd64/ubuntu:18.04
 
 BINUTILS_VERSION = 2.37
 GCC_VERSION = 10.3.0
