@@ -200,8 +200,8 @@ def copy_file_range_ctypes(fd_in, fd_out, count):
     if __syscall__copy_file_range is None:
         c_int64_p = POINTER(c_int64)
         prototype = CFUNCTYPE(c_ssize_t, c_long, c_int, c_int64_p,
-            c_int, c_int64_p, c_size_t, c_uint)
-        __syscall__copy_file_range = prototype(('syscall', CDLL(None)))
+            c_int, c_int64_p, c_size_t, c_uint, use_errno=True)
+        __syscall__copy_file_range = prototype(('syscall', CDLL(None, use_errno=True)))
 
     while True:
         ret = __syscall__copy_file_range(__NR_copy_file_range, fd_in, None, fd_out, None, count, 0)
