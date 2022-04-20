@@ -26,11 +26,16 @@ else
 endif
 
 ifneq ($(module),)
-    ifneq ($(findstring .,$(module)),)
-		MODULE_SFX :=
-	else
-		MODULE_SFX := .dll
-	endif
+    ifneq ($(findstring .drv,$(module)),)
+        MODULE_PEFILE := $(module)
+        MODULE_SOFILE := $(subst .drv,.so,$(module))
+    else ifneq ($(findstring .sys,$(module)),)
+        MODULE_PEFILE := $(module)
+        MODULE_SOFILE := $(subst .sys,.so,$(module))
+    else
+        MODULE_PEFILE := $(module).dll
+        MODULE_SOFILE := $(module).so
+    endif
 endif
 
 ifneq ($(unstripped),)
@@ -153,11 +158,15 @@ module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows
 module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix
 module: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) module=$(module) module && \
-	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* $(BUILD_ROOT)/$(module)/lib/wine/i386-windows/ && \
-	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows/ && \
-	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so ]; then \
-		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so $(BUILD_ROOT)/$(module)/lib/wine/i386-unix/ && \
-		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix/; \
+	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib/wine/i386-windows/ && \
+	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows/ && \
+	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE).so ]; then \
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE).so $(BUILD_ROOT)/$(module)/lib/wine/i386-unix/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_PEFILE).so $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix/; \
+	fi
+	if [ -e $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_SOFILE) ]; then \
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_SOFILE) $(BUILD_ROOT)/$(module)/lib/wine/i386-unix/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_SOFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix/; \
 	fi
 
 dxvk: | $(BUILD_ROOT)/dxvk/lib/wine/dxvk

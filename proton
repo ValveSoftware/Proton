@@ -31,7 +31,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-14"
+CURRENT_PREFIX_VERSION="GE-Proton7-15"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1115,15 +1115,20 @@ def default_compat_config():
         appid = os.environ["SteamAppId"]
         if appid in [
                 #affected by CW bug 19126
+                "252490", #Rust
                 "305620", #The Long Dark
                 "585420", #Trailmakers
                 "684450", #Surviving the Aftermath
+                "780290", #Gloomhaven
+                "844260", #Rustler
+                "960170", #DJMAX RESPECT V
+                "983970", #Haven
                 "1075200", #TOHU
+                "1102190", #Monster Train
+                "1107790", #The Complex
                 "1331440", #FUSER
+                "1523720", #Cook-Out
                 "1110100", # Power Rangers: Battle for the Grid
-                "983970", # Haven
-                "844260", # Rustler
-                "252490", # Rust
                 "700580", # Rust Staging
                 "1452500", # The Good Life
                 "1741410", # The Good Life Demo
