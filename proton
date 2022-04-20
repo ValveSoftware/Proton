@@ -1006,7 +1006,7 @@ def default_compat_config():
                 "1190000", #Car Mechanic Simulator 2021
                 "1331440", #FUSER
                 "1523720", #Cook-Out
-                "1809540", #Nine Sols Demo
+                "1913910", #Nine Sols Demo
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
