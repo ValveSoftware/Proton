@@ -1133,7 +1133,9 @@ def default_compat_config():
                 "1452500", # The Good Life
                 "1741410", # The Good Life Demo
                 "1096530", # Solasta
-                "1190000", # Car Mechanic 2021
+                "1190000", # Car Mechanic Simulator 2021
+                "1161580", # Hardspace: Shipbreaker
+                "1913910", #Nine Sols Demo
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
