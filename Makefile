@@ -128,13 +128,8 @@ proton: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dist && \
 	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
 
-install-internal: | $(BUILD_ROOT)/compatibilitytools.d/$(_build_name)
-install-internal: downloads
+install: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) install
-
-install: install-internal
-	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
-	cp -Rf --no-dereference --preserve=mode,links $(BUILD_ROOT)/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
 	echo "Proton installed to your local Steam installation"
 
 redist: | $(BUILD_ROOT)/$(DEPLOY_DIR)
