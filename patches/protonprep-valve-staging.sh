@@ -15,6 +15,12 @@
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
+    cd vkd3d-proton
+    git reset --hard HEAD
+    git clean -xdf
+    patch -Np1 < ../patches/vkd3d-proton/119e00ed45a3592d51f4ceed37b7ce10f31b6410.patch
+    cd ..
+
 ### END PREP SECTION ###
 
 ### (2) WINE PATCHING ###
