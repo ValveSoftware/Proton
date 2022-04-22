@@ -20,9 +20,9 @@ index 7ea0d824cee..e8d0d8a9023 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -3775,6 +3775,7 @@ WINE_CONFIG_MAKEFILE(dlls/windows.media.devices)
- WINE_CONFIG_MAKEFILE(dlls/windows.media.devices/tests)
  WINE_CONFIG_MAKEFILE(dlls/windows.media.speech)
  WINE_CONFIG_MAKEFILE(dlls/windows.media.speech/tests)
+ WINE_CONFIG_MAKEFILE(dlls/windows.networking)
 +WINE_CONFIG_MAKEFILE(dlls/windows.networking.connectivity)
  WINE_CONFIG_MAKEFILE(dlls/windowscodecs)
  WINE_CONFIG_MAKEFILE(dlls/windowscodecs/tests)
