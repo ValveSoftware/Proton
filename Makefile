@@ -126,7 +126,7 @@ downloads: configure
 
 proton: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dist && \
-	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
+	echo "Proton built locally. Use 'install', 'deploy' or 'redist' targets."
 
 install: downloads
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) install
