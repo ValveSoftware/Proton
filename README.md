@@ -125,6 +125,7 @@ Things it contains that Valve's proton does not:
 | eFootball PES 2021 SEASON UPDATE                    | [SteamDB](https://steamdb.info/app/1259970)  | [ProtonDB](https://protondb.com/app/1259970) | :heavy_check_mark: | :x:                        |
 | Endless Legend                                      | [SteamDB](https://steamdb.info/app/289130)   | [ProtonDB](https://protondb.com/app/289130)  | :heavy_check_mark: | :x:                        |
 | Evil Genius 2: World Domination                     | [SteamDB](https://steamdb.info/app/700600)   | [ProtonDB](https://protondb.com/app/700600)  | :heavy_check_mark: | :x:                        |
+| Fall Guys: Ultimate Knockout                        | [SteamDB](https://steamdb.info/app/1097150)  | [ProtonDB](https://protondb.com/app/1097150) | :heavy_check_mark: | :x:                        |
 | Fallout 3                                           | [SteamDB](https://steamdb.info/app/22300)    | [ProtonDB](https://protondb.com/app/22300)   | :heavy_check_mark: | :x:                        |
 | Fallout 4                                           | [SteamDB](https://steamdb.info/app/377160)   | [ProtonDB](https://protondb.com/app/377160)  | :heavy_check_mark: | :x:                        |
 | Far Cry 5                                           | [SteamDB](https://steamdb.info/app/552520)   | [ProtonDB](https://protondb.com/app/552520)  | :heavy_check_mark: | :x:                        |
