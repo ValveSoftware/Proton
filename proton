@@ -1132,6 +1132,8 @@ def default_compat_config():
                 "700580", # Rust Staging
                 "1452500", # The Good Life
                 "1741410", # The Good Life Demo
+                "1096530", # Solasta
+                "1190000", # Car Mechanic 2021
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
