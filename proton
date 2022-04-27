@@ -1004,6 +1004,7 @@ def default_compat_config():
                 "1075200", #TOHU
                 "1102190", #Monster Train
                 "1107790", #The Complex
+                "1135230", #Ember Knights
                 "1161580", #Hardspace: Shipbreaker
                 "1190000", #Car Mechanic Simulator 2021
                 "1331440", #FUSER
