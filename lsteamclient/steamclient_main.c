@@ -59,12 +59,9 @@ void sync_environment(void)
 
     for (unsigned int i = 0; i < ARRAY_SIZE(steamapi_envs); i++)
     {
-        const char *env_str;
-
         if (!GetEnvironmentVariableA(steamapi_envs[i], value, ARRAY_SIZE(value)))
         {
-            if (GetLastError() == ERROR_ENVVAR_NOT_FOUND
-                    && !((env_str = getenv("SteamAppId")) && !strcmp(env_str, "677620")))
+            if (GetLastError() == ERROR_ENVVAR_NOT_FOUND)
             {
                 TRACE("unsetenv(\"%s\")\n", steamapi_envs[i]);
                 unsetenv(steamapi_envs[i]);
