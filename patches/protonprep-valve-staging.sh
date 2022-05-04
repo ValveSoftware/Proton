@@ -85,7 +85,8 @@
     -W ntdll-RtlQueryPackageIdentity \
     -W packager-DllMain \
     -W winemenubuilder-Desktop_Icon_Path \
-    -W wscript-support-d-u-switches
+    -W wscript-support-d-u-switches \
+    -W sapi-iteration-tokens
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
@@ -146,6 +147,7 @@
     # ** packager-DllMain - applied manually
     # ** winemenubuilder-Desktop_Icon_Path - applied manually
     # ** wscript-support-d-u-switches - applied manually
+    # sapi-iteration-tokens - breaks Bless Unleashed launcher.
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
