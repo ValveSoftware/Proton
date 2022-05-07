@@ -1,0 +1,30 @@
+From 7c650212c2e33820d9436875c6987fca3579151c Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Wed, 22 Sep 2021 19:01:44 +1000
+Subject: [PATCH 8/8] sapi: Add default voice registry key
+
+---
+ dlls/sapi/sapi.rgs | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/sapi/sapi.rgs b/dlls/sapi/sapi.rgs
+index 331e115ae71..33b720784cd 100644
+--- a/dlls/sapi/sapi.rgs
++++ b/dlls/sapi/sapi.rgs
+@@ -19,6 +19,13 @@ HKLM
+                 }
+                 NoRemove Voices
+                 {
++                    NoRemove Tokens
++                    {
++                        NoRemove 'Wine Default Voice'
++                        {
++                            NoRemove Attributes
++                        }
++                    }
+                 }
+             }
+         }
+-- 
+2.33.0
+

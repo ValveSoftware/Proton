@@ -1,0 +1,74 @@
+From dad59a707bbb8a8d7be8132743f47465f235c929 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 28 Sep 2021 14:41:16 +1000
+Subject: [PATCH] sapi: Return dump object in ISpObjectTokenEnumBuilder Next
+
+---
+ dlls/sapi/token.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/sapi/token.c b/dlls/sapi/token.c
+index c9c17a58589..55194feab22 100644
+--- a/dlls/sapi/token.c
++++ b/dlls/sapi/token.c
+@@ -57,6 +57,7 @@ struct token_enum
+     WCHAR *req, *opt;
+     ULONG count;
+     HKEY key;
++    DWORD index;
+ };
+
+ static struct token_enum *impl_from_ISpObjectTokenEnumBuilder( ISpObjectTokenEnumBuilder *iface )
+@@ -705,6 +706,12 @@ static HRESULT WINAPI token_enum_Next( ISpObjectTokenEnumBuilder *iface,
+                                        ULONG *fetched )
+ {
+     struct token_enum *This = impl_from_ISpObjectTokenEnumBuilder( iface );
++    struct object_token *object;
++    HRESULT hr;
++    DWORD retCode;
++    WCHAR subKeyName[128];
++    DWORD size_sub = sizeof(subKeyName);
++    HKEY sub_key;
+
+     TRACE( "(%p)->(%u %p %p)\n", This, num, tokens, fetched );
+
+@@ -713,7 +720,27 @@ static HRESULT WINAPI token_enum_Next( ISpObjectTokenEnumBuilder *iface,
+     FIXME( "semi-stub: Returning an empty enumerator\n" );
+
+     if (fetched) *fetched = 0;
+-    return S_FALSE;
++    *tokens = NULL;
++
++    retCode = RegEnumKeyExW(This->key, This->index, subKeyName, &size_sub, NULL, NULL, NULL, NULL);
++    if (retCode != ERROR_SUCCESS)
++        return S_FALSE;
++
++    This->index++;
++
++    if( RegOpenKeyExW( This->key, subKeyName, 0, KEY_READ, &sub_key ) != ERROR_SUCCESS )
++        return E_FAIL;
++
++    hr = token_create( NULL, &IID_ISpObjectToken, (void**)tokens );
++    if (FAILED(hr))
++        return hr;
++
++    object = impl_from_ISpObjectToken( *tokens );
++    object->token_key = sub_key;
++    object->token_id = heap_strdupW( subKeyName );
++
++    if (fetched) *fetched = 1;
++    return hr;
+ }
+
+ static HRESULT WINAPI token_enum_Skip( ISpObjectTokenEnumBuilder *iface,
+@@ -882,6 +909,7 @@ HRESULT token_enum_create( IUnknown *outer, REFIID iid, void **obj )
+     This->init = FALSE;
+     This->count = 0;
+     This->key = NULL;
++    This->index = 0;
+
+     hr = ISpObjectTokenEnumBuilder_QueryInterface( &This->ISpObjectTokenEnumBuilder_iface, iid, obj );
+
+--
+2.35.1
+

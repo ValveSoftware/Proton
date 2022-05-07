@@ -1,0 +1,2 @@
+Fixes: [51775] sapi: Allow iteration of Token objects.
+Depends: sapi-ISpObjectToken-CreateInstance

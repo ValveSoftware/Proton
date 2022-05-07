@@ -1,0 +1,51 @@
+From c6d5ef9803d17e35a3ee1a006be1a9b21d838ac9 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Wed, 22 Sep 2021 19:01:44 +1000
+Subject: [PATCH 3/8] sapi: Implement ISpRegDataKey GetStringValue
+
+---
+ dlls/sapi/token.c | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/sapi/token.c b/dlls/sapi/token.c
+index ffdf62008f5..0a160455d2b 100644
+--- a/dlls/sapi/token.c
++++ b/dlls/sapi/token.c
+@@ -117,8 +117,32 @@ static HRESULT WINAPI data_key_SetStringValue( ISpRegDataKey *iface,
+ static HRESULT WINAPI data_key_GetStringValue( ISpRegDataKey *iface,
+                                                LPCWSTR name, LPWSTR *value )
+ {
+-    FIXME( "stub\n" );
+-    return E_NOTIMPL;
++    struct data_key *This = impl_from_ISpRegDataKey( iface );
++    DWORD ret, size;
++    WCHAR *content;
++
++    FIXME( "%p, %s, %p\n", This, debugstr_w(name), value);
++
++    if (!This->key) return E_INVALIDARG; /* FIXME */
++
++    size = 0;
++    ret = RegGetValueW( This->key, NULL, name, RRF_RT_REG_SZ, NULL, NULL, &size );
++    if (ret == ERROR_FILE_NOT_FOUND)
++        return SPERR_NOT_FOUND;
++
++    content = CoTaskMemAlloc(size);
++    if (!content)
++        return E_OUTOFMEMORY;
++
++    ret = RegGetValueW( This->key, NULL, name, RRF_RT_REG_SZ, NULL, content, &size );
++    if (ret != ERROR_SUCCESS)
++    {
++        CoTaskMemFree(content);
++        return HRESULT_FROM_WIN32(ret);
++    }
++
++    *value = content;
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI data_key_SetDWORD( ISpRegDataKey *iface,
+-- 
+2.33.0
+
