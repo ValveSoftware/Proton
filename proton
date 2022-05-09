@@ -920,6 +920,7 @@ def default_compat_config():
                 #affected by CW bug 19126
                 "252490", #Rust
                 "305620", #The Long Dark
+                "536280", #Disintegration
                 "585420", #Trailmakers
                 "684450", #Surviving the Aftermath
                 "780290", #Gloomhaven
