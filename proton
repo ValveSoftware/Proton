@@ -996,6 +996,7 @@ def default_compat_config():
                 "536280", #Disintegration
                 "585420", #Trailmakers
                 "684450", #Surviving the Aftermath
+                "707030", #POSTAL 4: No Regerts
                 "780290", #Gloomhaven
                 "844260", #Rustler
                 "960170", #DJMAX RESPECT V
