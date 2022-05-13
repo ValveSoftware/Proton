@@ -690,7 +690,7 @@ bool CDECL Steam_BGetCallback(HSteamPipe pipe, struct winCallbackMsg_t *win_msg,
         if (win_msg->m_iCallback == 0x14b) /* GameOverlayActivated_t::k_iCallback */
         {
             uint8 activated = *(uint8 *)lin_msg.m_pubParam;
-            TRACE("steam overlay %sactivated, %sabling all X11 events.\n", activated ? "" : "de", activated ? "dis" : "en");
+            FIXME("HACK: Steam overlay %sactivated, %sabling all input events.\n", activated ? "" : "de", activated ? "dis" : "en");
             if (activated)
             {
                 SetEvent(steam_overlay_event);
