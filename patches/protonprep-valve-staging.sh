@@ -86,6 +86,7 @@
     -W packager-DllMain \
     -W winemenubuilder-Desktop_Icon_Path \
     -W wscript-support-d-u-switches \
+    -W sapi-ISpObjectToken-CreateInstance \
     -W sapi-iteration-tokens
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
@@ -147,6 +148,7 @@
     # ** packager-DllMain - applied manually
     # ** winemenubuilder-Desktop_Icon_Path - applied manually
     # ** wscript-support-d-u-switches - applied manually
+    # sapi-ISpObjectToken-CreateInstance - already applied
     # sapi-iteration-tokens - already applied
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
