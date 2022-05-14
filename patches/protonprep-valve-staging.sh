@@ -301,9 +301,6 @@
     echo "WINE: -PROTON- fake current res patches"
     patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
 
-    echo "WINE: -PROTON- add fsync patch to fix Elden Ring crashes"
-    patch -Np1 < ../patches/proton/0001-fsync-Reuse-shared-mem-indices.patch
-
 ### END PROTON PATCH SECTION ###
 
 ### START MFPLAT PATCH SECTION ###
