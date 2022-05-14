@@ -31,7 +31,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-17"
+CURRENT_PREFIX_VERSION="GE-Proton7-18"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1117,8 +1117,10 @@ def default_compat_config():
                 #affected by CW bug 19126
                 "252490", #Rust
                 "305620", #The Long Dark
+                "536280", #Disintegration
                 "585420", #Trailmakers
                 "684450", #Surviving the Aftermath
+                "707030", #POSTAL 4: No Regerts
                 "780290", #Gloomhaven
                 "844260", #Rustler
                 "960170", #DJMAX RESPECT V
