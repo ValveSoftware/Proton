@@ -996,14 +996,17 @@ def default_compat_config():
                 "536280", #Disintegration
                 "585420", #Trailmakers
                 "684450", #Surviving the Aftermath
+                "700580", #Rust Staging
                 "707030", #POSTAL 4: No Regerts
                 "780290", #Gloomhaven
                 "844260", #Rustler
                 "960170", #DJMAX RESPECT V
                 "983970", #Haven
                 "1075200", #TOHU
+                "1096530", #Solasta: Crown of the Magister
                 "1102190", #Monster Train
                 "1107790", #The Complex
+                "1110100", #Power Rangers: Battle for the Grid
                 "1135230", #Ember Knights
                 "1161580", #Hardspace: Shipbreaker
                 "1190000", #Car Mechanic Simulator 2021
