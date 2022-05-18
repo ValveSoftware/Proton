@@ -56,6 +56,7 @@
     -W server-Realtime_Priority \
     -W server-Signal_Thread \
     -W loader-KeyboardLayouts \
+    -W mshtml-HTMLLocation_put_hash \
     -W msxml3-FreeThreadedXMLHTTP60 \
     -W ntdll-ForceBottomUpAlloc \
     -W ntdll-WRITECOPY \
@@ -117,6 +118,7 @@
     # Pipelight - for MS Silverlight, not needed
     # dinput-joy-mappings - disabled in favor of proton's gamepad patches
     # ** loader-KeyboardLayouts - applied manually -- needed to prevent Overwatch huge FPS drop
+    # mshtml-HTMLLocation_put_hash  - already applied
     # msxml3-FreeThreadedXMLHTTP60 - already applied
     # ntdll-ForceBottomUpAlloc - already applied
     # ntdll-WRITECOPY - already applied
