@@ -1011,6 +1011,8 @@ def default_compat_config():
                 "1161580", #Hardspace: Shipbreaker
                 "1190000", #Car Mechanic Simulator 2021
                 "1331440", #FUSER
+                "1341290", #We Were Here Forever
+                "1361320", #The Room 4: Old Sins
                 "1523720", #Cook-Out
                 "1913910", #Nine Sols Demo
 
