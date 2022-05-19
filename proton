@@ -934,6 +934,7 @@ def default_compat_config():
                 "1161580", #Hardspace: Shipbreaker
                 "1190000", #Car Mechanic Simulator 2021
                 "1331440", #FUSER
+                "1477590", #EZ2ON REBOOT : R
                 "1523720", #Cook-Out
                 "1913910", #Nine Sols Demo
 
