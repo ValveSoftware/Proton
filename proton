@@ -1016,6 +1016,7 @@ def default_compat_config():
                 "1361320", #The Room 4: Old Sins
                 "1477590", #EZ2ON REBOOT : R
                 "1523720", #Cook-Out
+                "1604030", #V Rising
                 "1913910", #Nine Sols Demo
 
                 #affected by CW bug 19741
