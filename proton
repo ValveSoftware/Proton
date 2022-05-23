@@ -1014,6 +1014,7 @@ def default_compat_config():
                 "1341290", #We Were Here Forever
                 "1361320", #The Room 4: Old Sins
                 "1523720", #Cook-Out
+                "1604030", #V Rising
                 "1913910", #Nine Sols Demo
 
                 #affected by CW bug 19741
