@@ -293,13 +293,19 @@ void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
     return ret;
 }
 
-
 /***** FSteamNetworkingSocketsDebugOutput *****/
 static void (__attribute__((ms_abi)) *stored_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
 
 static void lin_FSteamNetworkingSocketsDebugOutput(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg)
 {
-    stored_FSteamNetworkingSocketsDebugOutput(nType, pszMsg);
+    struct callback_data cb_data = { 0 };
+    /* Only Unix native calls from here (not even TRACE):
+     * this is native Unix thread which is not initialized by Wine. */
+    cb_data.type = SOCKET_DEBUG_OUTPUT;
+    cb_data.func = stored_FSteamNetworkingSocketsDebugOutput;
+    cb_data.sockets_debug_output.type = nType;
+    cb_data.sockets_debug_output.msg = pszMsg;
+    execute_callback(&cb_data);
 }
 
 void *manual_convert_FSteamNetworkingSocketsDebugOutput(void *win_func)
