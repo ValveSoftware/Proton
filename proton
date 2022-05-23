@@ -1117,6 +1117,7 @@ def default_compat_config():
                 "1190000", # Car Mechanic Simulator 2021
                 "1161580", # Hardspace: Shipbreaker
                 "1913910", #Nine Sols Demo
+                "1604030", #V Rising
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
