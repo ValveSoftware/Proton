@@ -926,6 +926,7 @@ def default_compat_config():
                 "707030", #POSTAL 4: No Regerts
                 "780290", #Gloomhaven
                 "844260", #Rustler
+                "853050", #El Hijo - A Wild West Tale
                 "960170", #DJMAX RESPECT V
                 "983970", #Haven
                 "1075200", #TOHU
