@@ -61,6 +61,29 @@ bool do_cb_wrap(HSteamPipe pipe, void *linux_side, bool (*cpp_func)(void *, Stea
 
 void *alloc_mem_for_iface(size_t size, const char *iface_version);
 
+enum callback_type
+{
+    SOCKET_DEBUG_OUTPUT = 1,
+};
+
+struct callback_data
+{
+    enum callback_type type;
+    void *func;
+    int complete;
+    union
+    {
+        struct
+        {
+            unsigned int type;
+            const char *msg;
+        }
+        sockets_debug_output;
+    };
+};
+
+void execute_callback(struct callback_data *cb_data);
+
 #ifdef __cplusplus
 }
 #endif
