@@ -266,9 +266,6 @@
 
 ### (2-3) GAME PATCH SECTION ###
 
-    echo "WINE: -GAME FIXES- mech warrior online fix"
-    patch -Np1 < ../patches/game-patches/mwo.patch
-
     echo "WINE: -GAME FIXES- assetto corsa hud fix"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
