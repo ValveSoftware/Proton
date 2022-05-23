@@ -4,6 +4,8 @@
 #include <dlfcn.h>
 #include <limits.h>
 #include <stdint.h>
+#include <pthread.h>
+#include <assert.h>
 
 #include "windef.h"
 #include "winbase.h"
@@ -28,6 +30,9 @@ char g_tmppath[PATH_MAX];
 
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;
+static HANDLE callback_thread_handle;
+
+static void callback_queue_finish(void);
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
@@ -40,6 +45,11 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             steam_overlay_event = CreateEventA(NULL, TRUE, FALSE, "__wine_steamclient_GameOverlayActivated");
             break;
         case DLL_PROCESS_DETACH:
+            callback_queue_finish();
+            TRACE("Waiting for callback thread.\n");
+            WaitForSingleObject(callback_thread_handle, INFINITE);
+            TRACE("Queue thread finished.\n");
+            CloseHandle(callback_thread_handle);
             CloseHandle(steam_overlay_event);
             break;
     }
@@ -573,6 +583,104 @@ done:
     return ret;
 }
 
+#define MAX_CALLBACK_QUEUE_SIZE 4
+struct callback_data *callback_queue[MAX_CALLBACK_QUEUE_SIZE];
+static unsigned int callback_queue_size;
+static BOOL callback_queue_done;
+static UINT64 callback_queue_current_seq_number;
+static pthread_mutex_t callback_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t callback_queue_callback_event = PTHREAD_COND_INITIALIZER;
+static pthread_cond_t callback_queue_ready_event = PTHREAD_COND_INITIALIZER;
+static pthread_cond_t callback_queue_complete_event = PTHREAD_COND_INITIALIZER;
+
+void execute_callback(struct callback_data *cb_data)
+{
+    /* No TRACEs or other Wine calls here, this is executed from Unix native thread
+     * which is not initialized by Wine. */
+    cb_data->complete = FALSE;
+    pthread_mutex_lock(&callback_queue_mutex);
+    while (!callback_queue_done && callback_queue_size == MAX_CALLBACK_QUEUE_SIZE)
+        pthread_cond_wait(&callback_queue_ready_event, &callback_queue_mutex);
+    if (callback_queue_done)
+    {
+        pthread_mutex_unlock(&callback_queue_mutex);
+        return;
+    }
+    callback_queue[callback_queue_size++] = cb_data;
+    pthread_cond_broadcast(&callback_queue_callback_event);
+    while (!callback_queue_done && !cb_data->complete)
+        pthread_cond_wait(&callback_queue_complete_event, &callback_queue_mutex);
+    pthread_mutex_unlock(&callback_queue_mutex);
+}
+
+static BOOL get_next_callback(struct callback_data *cb_data, UINT64 *cookie)
+{
+    BOOL ret;
+
+    pthread_mutex_lock(&callback_queue_mutex);
+    while (!callback_queue_done && !callback_queue_size)
+        pthread_cond_wait(&callback_queue_callback_event, &callback_queue_mutex);
+
+    if ((ret = !callback_queue_done))
+    {
+        assert(callback_queue_size);
+        --callback_queue_size;
+        *cookie = (UINT64)(ULONG_PTR)callback_queue[callback_queue_size];
+        *cb_data = *callback_queue[callback_queue_size];
+    }
+    pthread_cond_broadcast(&callback_queue_ready_event);
+    pthread_mutex_unlock(&callback_queue_mutex);
+    return ret;
+}
+
+static void callback_complete(UINT64 cookie)
+{
+    struct callback_data *cb_data = (struct callback_data *)(ULONG_PTR)cookie;
+
+    pthread_mutex_lock(&callback_queue_mutex);
+    cb_data->complete = TRUE;
+    pthread_cond_broadcast(&callback_queue_complete_event);
+    pthread_mutex_unlock(&callback_queue_mutex);
+}
+
+static void callback_queue_finish(void)
+{
+    pthread_mutex_lock(&callback_queue_mutex);
+    callback_queue_done = TRUE;
+    pthread_cond_broadcast(&callback_queue_callback_event);
+    pthread_cond_broadcast(&callback_queue_ready_event);
+    pthread_cond_broadcast(&callback_queue_complete_event);
+    pthread_mutex_unlock(&callback_queue_mutex);
+}
+
+typedef void (WINAPI *win_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType,
+        const char *pszMsg);
+
+static DWORD WINAPI callback_thread(void *dummy)
+{
+    struct callback_data cb_data;
+    UINT64 cookie;
+
+    while (get_next_callback( &cb_data, &cookie))
+    {
+        switch (cb_data.type)
+        {
+            case SOCKET_DEBUG_OUTPUT:
+                TRACE("SOCKET_DEBUG_OUTPUT func %p, type %u, msg %s.\n",
+                        cb_data.func, cb_data.sockets_debug_output.type,
+                        wine_dbgstr_a(cb_data.sockets_debug_output.msg));
+                ((win_FSteamNetworkingSocketsDebugOutput)cb_data.func)(cb_data.sockets_debug_output.type,
+                        cb_data.sockets_debug_output.msg);
+                callback_complete(cookie);
+                break;
+            default:
+                ERR("Unexpected callback type %u.\n", cb_data.type);
+                break;
+        }
+    }
+    return 0;
+}
+
 static void *steamclient_lib;
 static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
 static bool (*steamclient_BGetCallback)(HSteamPipe a, CallbackMsg_t *b, int32 *c);
@@ -583,6 +691,7 @@ static void (*steamclient_ReleaseThreadLocalMemory)(int);
 static int load_steamclient(void)
 {
     char path[PATH_MAX], resolved_path[PATH_MAX];
+    DWORD callback_thread_id;
 
     if(steamclient_lib)
         return 1;
@@ -643,6 +752,9 @@ static int load_steamclient(void)
         return 0;
     }
 
+    callback_thread_handle = CreateThread(NULL, 0, callback_thread, NULL, 0, &callback_thread_id);
+    TRACE("Created callback thread 0x%04x.\n", callback_thread_id);
+
     return 1;
 }
 
@@ -691,7 +803,7 @@ next_event:
         if (win_msg->m_iCallback == 0x14b) /* GameOverlayActivated_t::k_iCallback */
         {
             uint8 activated = *(uint8 *)lin_msg.m_pubParam;
-            TRACE("steam overlay %sactivated, %sabling all X11 events.\n", activated ? "" : "de", activated ? "dis" : "en");
+            FIXME("HACK: Steam overlay %sactivated, %sabling all input events.\n", activated ? "" : "de", activated ? "dis" : "en");
             if (activated)
             {
                 SetEvent(steam_overlay_event);
