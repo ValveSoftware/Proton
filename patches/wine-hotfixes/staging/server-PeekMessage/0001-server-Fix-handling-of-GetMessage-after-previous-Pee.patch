@@ -109,9 +109,9 @@ index d79add56fba..15c4b21ea50 100644
          queue->esync_fd        = -1;
          queue->esync_in_msgwait = 0;
          queue->fsync_idx       = 0;
-@@ -576,13 +578,21 @@ static inline struct msg_queue *get_current_queue(void)
+@@ -578,13 +580,21 @@ static inline struct msg_queue *get_current_queue(void)
  }
- 
+
  /* get a (pseudo-)unique id to tag hardware messages */
 -static inline unsigned int get_unique_id(void)
 +static inline unsigned int get_unique_hw_id(void)
@@ -120,7 +120,7 @@ index d79add56fba..15c4b21ea50 100644
      if (!++id) id = 1;  /* avoid an id of 0 */
      return id;
  }
- 
+
 +/* get unique increasing id to tag post messages */
 +static inline unsigned int get_unique_post_id(void)
 +{
@@ -129,9 +129,9 @@ index d79add56fba..15c4b21ea50 100644
 +    return id;
 +}
 +
- /* try to merge a message with the last in the list; return 1 if successful */
- static int merge_message( struct thread_input *input, const struct message *msg )
+ static int merge_pointer_update_message( struct thread_input *input, const struct message *msg )
  {
+     struct hardware_msg_data *prev_data, *msg_data = msg->data;
 @@ -860,7 +870,7 @@ static int match_window( user_handle_t win, user_handle_t msg_win )
  }
  
