@@ -18,33 +18,9 @@ jobs:
         
       - name: Display version
         run: echo ${{ env.RELEASE_VERSION }}
-      
-      - name: Test sha512sum availability
-        run: echo "hello" | sha512sum
-
-      - name: Add architecture i386
-        run: sudo dpkg --add-architecture i386
-
-      - name: Add update repos
-        run: sudo apt update
 
       - name: Install dependencies apt
-        run: sudo apt-get install -y ccache texinfo gpgv2 gnupg2 git fontforge-nox python-debian python3-pip apt-transport-https ca-certificates curl gnupg2 software-properties-common
-
-      - name: Install dependencies pip
-        run: pip install afdko singledispatch==3.4.0.4
-
-      - name: Allow user to run stuff in steamrt
-        run: sudo sysctl kernel.unprivileged_userns_clone=1
-
-      - name: Allow user to run stuff in steamrt
-        run: sudo mkdir -p /etc/sysctl.d/
-
-      - name: Allow user to run stuff in steamrt
-        run: echo 'kernel.unprivileged_userns_clone=1' | sudo tee /etc/sysctl.d/docker_user.conf
-
-      - name: Ensure we use only the mingw-w64 that we built
-        run: sudo apt-get remove -y '*mingw-w64*'
+        run: sudo apt update && sudo apt-get install -y ccache fontforge-nox
 
       - name: apply patches
         run: ./patches/protonprep-valve-staging.sh  || true
@@ -52,7 +28,7 @@ jobs:
       - name: Create dir structure
         run: mkdir build
 
-      - name: Cache ccache
+      - name: Create/Download ccache
         uses: actions/cache@v2
         with:
           path: ~/.ccache
