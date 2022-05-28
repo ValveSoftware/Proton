@@ -290,9 +290,9 @@ This unofficial build isn't supported by GloriousEggroll nor Valve and wasn't te
 	git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
 ```
 
-4. Drop any custom patches into patches/, then open patches/protonprep-valve-staging.sh and add a patch line for them under `#WINE CUSTOM PATCHES` in the same way the others are done.
+2. Drop any custom patches into patches/, then open patches/protonprep-valve-staging.sh and add a patch line for them under `#WINE CUSTOM PATCHES` in the same way the others are done.
 
-5. Apply all of the patches in patches/ by running:
+3. Apply all of the patches in patches/ by running:
 
 ```sh
 	./patches/protonprep-valve-staging.sh &> patchlog.txt
@@ -305,9 +305,9 @@ in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail
 	grep -i error patchlog.txt 
 ```
 
-6. Navigate to the parent directory containing the proton-ge-custom folder.
+4. Navigate to the parent directory containing the proton-ge-custom folder.
 
-7. Type the following (note: if using docker instead of podman, change to --container-engine=docker):
+5. Type the following (note: if using docker instead of podman, change to --container-engine=docker):
 
 ```sh
 	mkdir build && cd build
