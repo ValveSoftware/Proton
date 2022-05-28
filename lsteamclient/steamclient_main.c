@@ -32,7 +32,15 @@ static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;
 static HANDLE callback_thread_handle;
 
-static void callback_queue_finish(void);
+#define MAX_CALLBACK_QUEUE_SIZE 4
+struct callback_data *callback_queue[MAX_CALLBACK_QUEUE_SIZE];
+static unsigned int callback_queue_size;
+static BOOL callback_queue_done;
+static UINT64 callback_queue_current_seq_number;
+static pthread_mutex_t callback_queue_mutex;
+static pthread_cond_t callback_queue_callback_event;
+static pthread_cond_t callback_queue_ready_event;
+static pthread_cond_t callback_queue_complete_event;
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
@@ -45,11 +53,22 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
             steam_overlay_event = CreateEventA(NULL, TRUE, FALSE, "__wine_steamclient_GameOverlayActivated");
             break;
         case DLL_PROCESS_DETACH:
-            callback_queue_finish();
-            TRACE("Waiting for callback thread.\n");
-            WaitForSingleObject(callback_thread_handle, INFINITE);
-            TRACE("Queue thread finished.\n");
-            CloseHandle(callback_thread_handle);
+            if (callback_thread_handle)
+            {
+                /* Unfortunately we don't have a clear place to shutdown the thread so just kill it. */
+                /* An explicit sync events and handle cleanup is to protect from unloading and loading
+                 * .so again which may end up not actually reloading anyting and leaving the values of our static
+                 * variables. */
+                TerminateThread(callback_thread_handle, -1);
+                WaitForSingleObject(callback_thread_handle, INFINITE);
+                pthread_mutex_destroy(&callback_queue_mutex);
+                pthread_cond_destroy(&callback_queue_callback_event);
+                pthread_cond_destroy(&callback_queue_ready_event);
+                pthread_cond_destroy(&callback_queue_complete_event);
+                CloseHandle(callback_thread_handle);
+                callback_thread_handle = NULL;
+                TRACE("Terminated callback thread.\n");
+            }
             CloseHandle(steam_overlay_event);
             break;
     }
@@ -583,16 +602,6 @@ done:
     return ret;
 }
 
-#define MAX_CALLBACK_QUEUE_SIZE 4
-struct callback_data *callback_queue[MAX_CALLBACK_QUEUE_SIZE];
-static unsigned int callback_queue_size;
-static BOOL callback_queue_done;
-static UINT64 callback_queue_current_seq_number;
-static pthread_mutex_t callback_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t callback_queue_callback_event = PTHREAD_COND_INITIALIZER;
-static pthread_cond_t callback_queue_ready_event = PTHREAD_COND_INITIALIZER;
-static pthread_cond_t callback_queue_complete_event = PTHREAD_COND_INITIALIZER;
-
 void execute_callback(struct callback_data *cb_data)
 {
     /* No TRACEs or other Wine calls here, this is executed from Unix native thread
@@ -639,16 +648,6 @@ static void callback_complete(UINT64 cookie)
 
     pthread_mutex_lock(&callback_queue_mutex);
     cb_data->complete = TRUE;
-    pthread_cond_broadcast(&callback_queue_complete_event);
-    pthread_mutex_unlock(&callback_queue_mutex);
-}
-
-static void callback_queue_finish(void)
-{
-    pthread_mutex_lock(&callback_queue_mutex);
-    callback_queue_done = TRUE;
-    pthread_cond_broadcast(&callback_queue_callback_event);
-    pthread_cond_broadcast(&callback_queue_ready_event);
     pthread_cond_broadcast(&callback_queue_complete_event);
     pthread_mutex_unlock(&callback_queue_mutex);
 }
@@ -751,6 +750,11 @@ static int load_steamclient(void)
         ERR("unable to load ReleaseThreadLocalMemory method\n");
         return 0;
     }
+
+    pthread_mutex_init(&callback_queue_mutex, NULL);
+    pthread_cond_init(&callback_queue_callback_event, NULL);
+    pthread_cond_init(&callback_queue_ready_event, NULL);
+    pthread_cond_init(&callback_queue_complete_event, NULL);
 
     callback_thread_handle = CreateThread(NULL, 0, callback_thread, NULL, 0, &callback_thread_id);
     TRACE("Created callback thread 0x%04x.\n", callback_thread_id);
