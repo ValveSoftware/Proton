@@ -112,7 +112,7 @@
     # dwrite-FontFallback - replaced by proton's font patches
     # ** ntdll-DOS_Attributes - applied manually
     # server-Key_State - replaced by proton shared memory patches
-    # ** server-PeekMessage - applied manually
+    # server-PeekMessage - eplaced by proton's version
     # server-Realtime_Priority - replaced by proton's patches
     # server-Signal_Thread - breaks steamclient for some games -- notably DBFZ
     # Pipelight - for MS Silverlight, not needed
@@ -169,9 +169,6 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-DOS_Attributes/0006-libport-Add-support-for-FreeBSD-style-extended-attri.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-DOS_Attributes/0007-ntdll-Perform-the-Unix-style-hidden-file-check-withi.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/ntdll-DOS_Attributes/0008-ntdll-Always-store-SAMBA_XATTR_DOS_ATTRIB-when-path-.patch
-
-    # server-PeekMessage
-    patch -Np1 < ../patches/wine-hotfixes/staging/server-PeekMessage/0001-server-Fix-handling-of-GetMessage-after-previous-Pee.patch
 
     # loader-KeyboardLayouts
     patch -Np1 < ../wine-staging/patches/loader-KeyboardLayouts/0001-loader-Add-Keyboard-Layouts-registry-enteries.patch

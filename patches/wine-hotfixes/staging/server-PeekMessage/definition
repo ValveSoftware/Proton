@@ -1,2 +1,0 @@
-Fixes: [28884] GetMessage should remove already seen messages with higher priority
-Depends: server-Key_State
