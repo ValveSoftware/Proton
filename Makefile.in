@@ -589,8 +589,20 @@ FFMPEG_CONFIGURE_ARGS := \
 	--disable-programs \
 	--disable-doc \
 	--enable-decoder=mpeg4 \
+	--enable-decoder=vc1 \
+	--enable-decoder=wmav1 \
+	--enable-decoder=wmav2 \
+	--enable-decoder=wmapro \
+	--enable-decoder=wmalossless \
+	--enable-decoder=xma1 \
+	--enable-decoder=xma2 \
+	--enable-decoder=wmv3image \
+	--enable-decoder=wmv3 \
+	--enable-decoder=wmv2 \
+	--enable-decoder=wmv1 \
 	--enable-decoder=h264 \
-	--enable-decoder=aac
+	--enable-decoder=aac \
+	--enable-demuxer=xwma
 
 $(eval $(call rules-source,ffmpeg,$(SRCDIR)/FFmpeg))
 $(eval $(call rules-configure,ffmpeg,32))
