@@ -56,6 +56,8 @@ RUN apt-get install -y \
   fonttools \
   libxpresent-dev \
   libxpresent-dev:i386 \
+  libopenblas-dev \
+  libopenblas-dev:i386 \
   python3-pefile \
   libcapstone-dev \
   libcapstone-dev:i386 \
