@@ -873,6 +873,7 @@ VKD3D_SOURCE_ARGS = \
   --exclude m4/lt~obsolete.m4 \
 
 VKD3D_CONFIGURE_ARGS = \
+  --enable-silent-rules \
   --disable-doxygen-doc \
   --disable-tests \
   --disable-demos \
