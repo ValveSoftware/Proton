@@ -1654,9 +1654,9 @@ if __name__ == "__main__":
     if g_proton.missing_default_prefix():
         g_proton.make_default_prefix()
 
-    import protonfixes
-
     g_session.init_session(sys.argv[1] != "runinprefix")
+
+    import protonfixes
 
     #determine mode
     rc = 0
