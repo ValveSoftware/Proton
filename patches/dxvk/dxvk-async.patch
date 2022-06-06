@@ -113,12 +113,12 @@ index 98f5b2ed..e741f59d 100644
      if (unlikely(!instance)) {
 @@ -71,34 +72,41 @@ namespace dxvk {
          return VK_NULL_HANDLE;
- 
+
        // Prevent other threads from adding new instances and check again
 -      std::lock_guard<dxvk::mutex> lock(m_mutex);
 +      //std::lock_guard<dxvk::mutex> lock(m_mutex);
        instance = this->findInstance(state, renderPass);
- 
+
        if (!instance) {
          // Keep pipeline object locked, at worst we're going to stall
          // a state cache worker and the current thread needs priority.
@@ -132,34 +132,34 @@ index 98f5b2ed..e741f59d 100644
 +        }
        }
      }
- 
+
 +    if (!instance)
 +      return VK_NULL_HANDLE;
 +
      return instance->pipeline();
    }
- 
- 
+
+
 -  void DxvkGraphicsPipeline::compilePipeline(
 +  bool DxvkGraphicsPipeline::compilePipeline(
      const DxvkGraphicsPipelineStateInfo& state,
      const DxvkRenderPass*                renderPass) {
      // Exit early if the state vector is invalid
-     if (!this->validatePipelineState(state))
+     if (!this->validatePipelineState(state, false))
 -      return;
 +      return false;
- 
+
      // Keep the object locked while compiling a pipeline since compiling
      // similar pipelines concurrently is fragile on some drivers
      std::lock_guard<dxvk::mutex> lock(m_mutex);
- 
+
 -    if (!this->findInstance(state, renderPass))
 -      this->createInstance(state, renderPass);
 +    return (this->findInstance(state, renderPass) == nullptr) &&
 +           (this->createInstance(state, renderPass) != nullptr);
    }
- 
- 
+
+
 @@ -107,6 +115,7 @@ namespace dxvk {
      const DxvkRenderPass*                renderPass) {
      VkPipeline pipeline = this->createPipeline(state, renderPass);
