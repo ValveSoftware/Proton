@@ -249,6 +249,7 @@ manually_handled_methods = {
             "GetGlyphForXboxOrigin"
         ],
         "cppISteamInput_SteamInput006": [
+            "EnableActionEventCallbacks",
             "GetGlyphPNGForActionOrigin",
             "GetGlyphSVGForActionOrigin",
             "GetGlyphForActionOrigin_Legacy",

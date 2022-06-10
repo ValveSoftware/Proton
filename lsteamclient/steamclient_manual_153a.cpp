@@ -27,6 +27,16 @@ extern "C" {
 
 #include "queue.h"
 
+/***** manual fn wrapper for ISteamInput::EnableActionEventCallbacks *****/
+extern win_SteamInputActionEventCallbackPointer win_EnableActionEventCallbacks;
+
+void cppISteamInput_SteamInput006_EnableActionEventCallbacks(void *linux_side, win_SteamInputActionEventCallbackPointer pCallback)
+{
+    win_EnableActionEventCallbacks = pCallback;
+    ((ISteamInput*)linux_side)->EnableActionEventCallbacks(pCallback ? &lin_SteamInputActionEventCallbackPointer : NULL);
+}
+
+
 /***** manual struct converter for SteamNetworkingMessage_t *****/
 
 struct msg_wrapper {
