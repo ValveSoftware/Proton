@@ -429,12 +429,8 @@ $(eval $(call rules-meson,dav1d,64))
 ## gst-orc
 ##
 
-GST_COMMON_MESON_ARGS := \
-	-Dorc=enabled
-
 GST_ORC_MESON_ARGS := \
-	-Dorc-test=disabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dorc-test=disabled
 
 $(eval $(call rules-source,gst_orc,$(SRCDIR)/gst-orc))
 $(eval $(call rules-meson,gst_orc,32))
@@ -449,8 +445,7 @@ GSTREAMER_MESON_ARGS := \
 	-Dgst_parse=false \
 	-Dbenchmarks=disabled \
 	-Dtools=disabled \
-	-Dbash-completion=disabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dbash-completion=disabled
 
 GSTREAMER_DEPENDS = gst_orc
 
@@ -478,7 +473,7 @@ GST_BASE_MESON_ARGS := \
 	-Dvideoconvert=enabled \
 	-Dvideoscale=enabled \
 	-Dvorbis=enabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dorc=enabled
 
 GST_BASE_DEPENDS = gst_orc gstreamer
 
@@ -505,7 +500,7 @@ GST_GOOD_MESON_ARGS := \
 	-Dvideofilter=enabled \
 	-Dvpx=enabled \
 	-Dwavparse=enabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dorc=enabled
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
 
@@ -840,7 +835,6 @@ VKD3D_PROTON_SOURCE_ARGS = \
   --exclude vkd3d_build.h.in \
   --exclude vkd3d_version.h.in \
 
-VKD3D_PROTON_MESON_ARGS = -Denable_standalone_d3d12=true
 VKD3D_PROTON_MESON_ARGS32 = --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton
 VKD3D_PROTON_MESON_ARGS64 = --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton
 
