@@ -47,7 +47,7 @@ static std::unordered_map<int /*EInputActionOrigin*/, char *> cached_input_glyph
 static std::unordered_map<int /*flags*/, std::unordered_map<int /*EInputActionOrigin*/, char *> > cached_input_glyphs_svg;
 static std::unordered_map<int /*flags*/, std::unordered_map<int /*EInputActionOrigin*/, char *> > cached_input_glyphs_png[ESteamInputGlyphSize_count];
 
-static const char *steamclient_isteaminput_getglyph_png(int origin, int flags, int size, const char *lin_path)
+const char *steamclient_isteaminput_getglyph_png(int origin, int flags, int size, const char *lin_path)
 {
     if(!lin_path)
         return NULL;
@@ -68,7 +68,7 @@ static const char *steamclient_isteaminput_getglyph_png(int origin, int flags, i
     return cached_input_glyphs_png[size][flags][origin];
 }
 
-static const char *steamclient_isteaminput_getglyph_svg(int origin, int flags, const char *lin_path)
+const char *steamclient_isteaminput_getglyph_svg(int origin, int flags, const char *lin_path)
 {
     if(!lin_path)
         return NULL;

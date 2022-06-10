@@ -46,6 +46,8 @@ void steamclient_free_stringlist(const char **out);
 const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph_xbox(int origin, const char *lin_path);
+const char *steamclient_isteaminput_getglyph_png(int origin, int flags, int size, const char *lin_path);
+const char *steamclient_isteaminput_getglyph_svg(int origin, int flags, const char *lin_path);
 uint32 manual_convert_nNativeKeyCode(uint32 win_vk);
 void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version);
