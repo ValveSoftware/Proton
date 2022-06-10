@@ -51,11 +51,6 @@ void cppISteamInput_SteamInput006_EnableDeviceCallbacks(void *linux_side)
     ((ISteamInput*)linux_side)->EnableDeviceCallbacks();
 }
 
-void cppISteamInput_SteamInput006_EnableActionEventCallbacks(void *linux_side, SteamInputActionEventCallbackPointer pCallback)
-{
-    ((ISteamInput*)linux_side)->EnableActionEventCallbacks((SteamInputActionEventCallbackPointer)pCallback);
-}
-
 InputActionSetHandle_t cppISteamInput_SteamInput006_GetActionSetHandle(void *linux_side, const char * pszActionSetName)
 {
     return ((ISteamInput*)linux_side)->GetActionSetHandle((const char *)pszActionSetName);
