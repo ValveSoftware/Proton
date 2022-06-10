@@ -4,6 +4,8 @@
 extern "C" {
 #endif
 
+#include "windef.h"
+
 typedef struct __winISteamClient winISteamClient;
 typedef struct __winISteamUser winISteamUser;
 typedef struct __winISteamGameServer winISteamGameServer;
@@ -37,6 +39,10 @@ typedef struct __winISteamParties winISteamParties;
 typedef struct __winISteamRemotePlay winISteamRemotePlay;
 typedef struct __winISteamNetworkingFakeUDPPort winISteamNetworkingFakeUDPPort;
 typedef struct __winX winX;
+
+struct SteamInputActionEvent_t;
+typedef void (*CDECL win_SteamInputActionEventCallbackPointer)(SteamInputActionEvent_t *);
+void lin_SteamInputActionEventCallbackPointer(SteamInputActionEvent_t *dat);
 
 void *create_win_interface(const char *name, void *linux_side);
 unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url);

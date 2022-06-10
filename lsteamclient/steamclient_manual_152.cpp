@@ -24,7 +24,6 @@ extern "C" {
 #include "cb_converters.h"
 
 /***** manual fn wrapper for ISteamInput::EnableActionEventCallbacks *****/
-typedef void (*CDECL win_SteamInputActionEventCallbackPointer)(SteamInputActionEvent_t *);
 win_SteamInputActionEventCallbackPointer win_EnableActionEventCallbacks;
 
 void lin_SteamInputActionEventCallbackPointer(SteamInputActionEvent_t *dat)
