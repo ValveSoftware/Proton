@@ -322,4 +322,32 @@ SteamNetworkingMessage_t *cppISteamNetworkingUtils_SteamNetworkingUtils004_Alloc
     return (SteamNetworkingMessage_t*)&msg->win_msg;
 }
 
+const char * cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(void *linux_side, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphPNGForActionOrigin((EInputActionOrigin)eOrigin, eSize, unFlags);
+    return steamclient_isteaminput_getglyph_png(eOrigin, eSize, unFlags, path_result);
+}
+
+const char * cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(void *linux_side, EInputActionOrigin eOrigin, uint32 unFlags)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphSVGForActionOrigin((EInputActionOrigin)eOrigin, unFlags);
+    return steamclient_isteaminput_getglyph_svg(eOrigin, unFlags, path_result);
+}
+
+const char * cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(void *linux_side, EInputActionOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphForActionOrigin_Legacy((EInputActionOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph(eOrigin, path_result);
+}
+
+const char * cppISteamInput_SteamInput006_GetGlyphForXboxOrigin(void *linux_side, EXboxOrigin eOrigin)
+{
+    const char *path_result;
+    path_result = ((ISteamInput*)linux_side)->GetGlyphForXboxOrigin((EXboxOrigin)eOrigin);
+    return steamclient_isteaminput_getglyph_xbox(eOrigin, path_result);
+}
+
 }
