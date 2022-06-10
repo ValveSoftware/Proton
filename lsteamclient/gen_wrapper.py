@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/13.0.0'
+CLANG_PATH='/usr/lib/clang/13.0.1'
 
 from clang.cindex import CursorKind, Index, Type, TypeKind
 import pprint
