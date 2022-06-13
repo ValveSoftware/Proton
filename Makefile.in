@@ -515,6 +515,7 @@ GST_GOOD_MESON_ARGS := \
 	-Dwavparse=enabled \
 	-Did3demux=enabled \
 	-Dmpg123=enabled \
+	-Dsoup=enabled \
 	-Dorc=enabled
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
