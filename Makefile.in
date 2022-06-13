@@ -500,6 +500,8 @@ GST_GOOD_MESON_ARGS := \
 	-Dvideofilter=enabled \
 	-Dvpx=enabled \
 	-Dwavparse=enabled \
+	-Did3demux=enabled \
+	-Dmpg123=enabled \
 	-Dorc=enabled
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
