@@ -950,6 +950,7 @@ def default_compat_config():
                 "1604030", #V Rising
                 "1766430", #POSTAL Brain Damaged Demo
                 "1913910", #Nine Sols Demo
+                "2001540", #Slayers X Demo
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
