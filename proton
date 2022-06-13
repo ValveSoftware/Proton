@@ -935,7 +935,8 @@ def default_compat_config():
                 "1331440", #FUSER
                 "1523720", #Cook-Out
                 "1913910", #Nine Sols Demo
-            
+                "2001540", #Slayers X Demo
+
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
                 ]:
