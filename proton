@@ -931,10 +931,11 @@ def default_compat_config():
                 "1107790", #The Complex
                 "1161580", #Hardspace: Shipbreaker
                 "1190000", #Car Mechanic Simulator 2021
+                "1328350", #Turbo Overkill
                 "1331440", #FUSER
                 "1523720", #Cook-Out
                 "1913910", #Nine Sols Demo
-
+            
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
                 ]:
