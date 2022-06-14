@@ -315,6 +315,29 @@ void *manual_convert_FSteamNetworkingSocketsDebugOutput(void *win_func)
 }
 
 
+static void *stored_SteamAPIWarningMessageHook_t;
+
+static void lin_SteamAPIWarningMessageHook_t(int severity, const char *msg)
+{
+    struct callback_data cb_data = { 0 };
+    /* Only Unix native calls from here (not even TRACE):
+     * this is native Unix thread which is not initialized by Wine. */
+    cb_data.type = STEAM_API_WARNING_HOOK;
+    cb_data.func = stored_SteamAPIWarningMessageHook_t;
+    cb_data.steam_api_warning_hook.severity = severity;
+    cb_data.steam_api_warning_hook.msg = msg;
+    execute_callback(&cb_data);
+}
+
+void *manual_convert_SteamAPIWarningMessageHook_t(void *win_func)
+{
+    TRACE("win_func %p, returning %p.\n", win_func, lin_SteamAPIWarningMessageHook_t);
+
+    stored_SteamAPIWarningMessageHook_t = win_func;
+
+    return &lin_SteamAPIWarningMessageHook_t;
+}
+
 /***** SteamAPI_CheckCallbackRegistered_t *****/
 static uint32 (__attribute__((ms_abi)) *stored_SteamAPI_CheckCallbackRegistered_t)(int cb);
 

@@ -245,6 +245,7 @@ def method_needs_manual_handling(interface_with_version, method_name):
 # manual converters for simple types (function pointers)
 manual_type_converters = [
         "FSteamNetworkingSocketsDebugOutput",
+        "SteamAPIWarningMessageHook_t",
         "SteamAPI_CheckCallbackRegistered_t"
 ]
 
