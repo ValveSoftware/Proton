@@ -4,6 +4,8 @@
 extern "C" {
 #endif
 
+#include "windef.h"
+
 typedef struct __winISteamClient winISteamClient;
 typedef struct __winISteamUser winISteamUser;
 typedef struct __winISteamGameServer winISteamGameServer;
@@ -38,6 +40,10 @@ typedef struct __winISteamRemotePlay winISteamRemotePlay;
 typedef struct __winISteamNetworkingFakeUDPPort winISteamNetworkingFakeUDPPort;
 typedef struct __winX winX;
 
+struct SteamInputActionEvent_t;
+typedef void (*CDECL win_SteamInputActionEventCallbackPointer)(SteamInputActionEvent_t *);
+void lin_SteamInputActionEventCallbackPointer(SteamInputActionEvent_t *dat);
+
 void *create_win_interface(const char *name, void *linux_side);
 unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url);
 bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url);
@@ -46,6 +52,8 @@ void steamclient_free_stringlist(const char **out);
 const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph_xbox(int origin, const char *lin_path);
+const char *steamclient_isteaminput_getglyph_png(int origin, int size, int flags, const char *lin_path);
+const char *steamclient_isteaminput_getglyph_svg(int origin, int flags, const char *lin_path);
 uint32 manual_convert_nNativeKeyCode(uint32 win_vk);
 void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version);
