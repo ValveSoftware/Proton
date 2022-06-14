@@ -988,6 +988,7 @@ def default_compat_config():
                 "1359980", #POSTAL: Brain Damaged
                 "1361320", #The Room 4: Old Sins
                 "1569550", #Dread X Collection: The Hunt
+                "1642370", #Terra Nil Demo
                 "1766430", #POSTAL Brain Damaged Demo
                 "1913910", #Nine Sols Demo
 
