@@ -948,6 +948,7 @@ def default_compat_config():
                 "1523720", #Cook-Out
                 "1569550", #Dread X Collection: The Hunt
                 "1604030", #V Rising
+                "1642370", #Terra Nil Demo
                 "1766430", #POSTAL Brain Damaged Demo
                 "1913910", #Nine Sols Demo
                 "2001540", #Slayers X Demo
