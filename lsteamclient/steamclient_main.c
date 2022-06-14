@@ -692,6 +692,7 @@ static void callback_complete(UINT64 cookie)
 
 typedef void (WINAPI *win_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType,
         const char *pszMsg);
+typedef void (CDECL *win_SteamAPIWarningMessageHook_t)(int, const char *pszMsg);
 
 static DWORD WINAPI callback_thread(void *dummy)
 {
@@ -710,6 +711,15 @@ static DWORD WINAPI callback_thread(void *dummy)
                         cb_data.sockets_debug_output.msg);
                 callback_complete(cookie);
                 break;
+            case STEAM_API_WARNING_HOOK:
+                TRACE("STEAM_API_WARNING_HOOK func %p, type %u, msg %s.\n",
+                        cb_data.func, cb_data.steam_api_warning_hook.severity,
+                        wine_dbgstr_a(cb_data.steam_api_warning_hook.msg));
+                ((win_SteamAPIWarningMessageHook_t)cb_data.func)(cb_data.steam_api_warning_hook.severity,
+                        cb_data.steam_api_warning_hook.msg);
+                callback_complete(cookie);
+                break;
+
             default:
                 ERR("Unexpected callback type %u.\n", cb_data.type);
                 break;
