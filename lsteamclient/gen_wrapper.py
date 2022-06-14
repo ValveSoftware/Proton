@@ -8,6 +8,7 @@ from __future__ import print_function
 CLANG_PATH='/usr/lib/clang/13.0.1'
 
 from clang.cindex import CursorKind, Index, Type, TypeKind
+from collections import namedtuple
 import pprint
 import sys
 import os
@@ -188,95 +189,58 @@ manually_handled_structs = [
         "SteamNetworkingMessage_t"
 ]
 
+Method = namedtuple('Method', ['name', 'version_func'], defaults=[lambda _: True])
+
 manually_handled_methods = {
-        #TODO: 001
-        "cppISteamNetworkingSockets_SteamNetworkingSockets002": [
-            "ReceiveMessagesOnConnection",
-            "ReceiveMessagesOnListenSocket"
+        #TODO: 001 005 007
+        #NOTE: 003 never appeared in a public SDK, but is an alias for 002 (the version in SDK 1.45 is actually 004 but incorrectly versioned as 003)
+        "cppISteamNetworkingSockets_SteamNetworkingSockets": [
+            Method("ReceiveMessagesOnConnection"),
+            Method("ReceiveMessagesOnListenSocket"),
+            Method("ReceiveMessagesOnPollGroup"),
+            Method("SendMessages"),
+            Method("CreateFakeUDPPort"),
         ],
-        # 003 never appeared in a public SDK, but is an alias for 002 (the version in SDK 1.45 is actually 004 but incorrectly versioned as 003)
-        "cppISteamNetworkingSockets_SteamNetworkingSockets004": [
-            "ReceiveMessagesOnConnection",
-            "ReceiveMessagesOnListenSocket",
+        "cppISteamNetworkingUtils_SteamNetworkingUtils": [
+            Method("AllocateMessage"),
+            Method("SetConfigValue", lambda version: version >= 3)
         ],
-        #TODO: 005
-        "cppISteamNetworkingSockets_SteamNetworkingSockets006": [
-            "ReceiveMessagesOnConnection",
-            "ReceiveMessagesOnListenSocket",
-            "SendMessages"
+        "cppISteamNetworkingMessages_SteamNetworkingMessages": [
+            Method("ReceiveMessagesOnChannel"),
         ],
-        #TODO: 007
-        "cppISteamNetworkingSockets_SteamNetworkingSockets008": [
-            "ReceiveMessagesOnConnection",
-            "ReceiveMessagesOnPollGroup",
-            "SendMessages"
+        "cppISteamInput_SteamInput": [
+            Method("EnableActionEventCallbacks"),
+            Method("GetGlyphForActionOrigin"),
+            Method("GetGlyphPNGForActionOrigin"),
+            Method("GetGlyphSVGForActionOrigin"),
+            Method("GetGlyphForActionOrigin_Legacy"),
+            Method("GetGlyphForXboxOrigin"),
         ],
-        "cppISteamNetworkingSockets_SteamNetworkingSockets009": [
-            "ReceiveMessagesOnConnection",
-            "ReceiveMessagesOnPollGroup",
-            "SendMessages"
+        "cppISteamController_SteamController": [
+            Method("GetGlyphForActionOrigin"),
+            Method("GetGlyphForXboxOrigin"),
         ],
-        "cppISteamNetworkingSockets_SteamNetworkingSockets012": [
-            "ReceiveMessagesOnConnection",
-            "ReceiveMessagesOnPollGroup",
-            "SendMessages",
-            "CreateFakeUDPPort"
+        "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort": [
+            Method("DestroyFakeUDPPort"),
+            Method("ReceiveMessages"),
         ],
-        "cppISteamNetworkingUtils_SteamNetworkingUtils003": [
-            "AllocateMessage",
-            "SetConfigValue",
-        ],
-        "cppISteamNetworkingUtils_SteamNetworkingUtils004": [
-            "AllocateMessage",
-            "SetConfigValue",
-        ],
-        "cppISteamNetworkingMessages_SteamNetworkingMessages002": [
-            "ReceiveMessagesOnChannel"
-        ],
-        "cppISteamInput_SteamInput001": [
-            "GetGlyphForActionOrigin",
-            "GetGlyphForXboxOrigin"
-        ],
-        "cppISteamInput_SteamInput002": [
-            "GetGlyphForActionOrigin",
-            "GetGlyphForXboxOrigin"
-        ],
-        "cppISteamInput_SteamInput005": [
-            "EnableActionEventCallbacks",
-            "GetGlyphPNGForActionOrigin",
-            "GetGlyphSVGForActionOrigin",
-            "GetGlyphForActionOrigin_Legacy",
-            "GetGlyphForXboxOrigin"
-        ],
-        "cppISteamInput_SteamInput006": [
-            "EnableActionEventCallbacks",
-            "GetGlyphPNGForActionOrigin",
-            "GetGlyphSVGForActionOrigin",
-            "GetGlyphForActionOrigin_Legacy",
-            "GetGlyphForXboxOrigin"
-        ],
-        "cppISteamController_SteamController005": [
-            "GetGlyphForActionOrigin"
-        ],
-        "cppISteamController_SteamController006": [
-            "GetGlyphForActionOrigin"
-        ],
-        "cppISteamController_SteamController007": [
-            "GetGlyphForActionOrigin",
-            "GetGlyphForXboxOrigin"
-        ],
-        "cppISteamController_SteamController008": [
-            "GetGlyphForActionOrigin",
-            "GetGlyphForXboxOrigin"
-        ],
-        "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001": [
-            "DestroyFakeUDPPort",
-            "ReceiveMessages"
-        ],
-        "cppISteamUser_SteamUser008": [
-            "InitiateGameConnection"
+        "cppISteamUser_SteamUser": [
+            #TODO: Do we need the the value -> pointer conversion for other versions of the interface?
+            Method("InitiateGameConnection", lambda version: version == 8),
         ],
 }
+
+INTERFACE_NAME_VERSION = re.compile(r'^(?P<name>.+?)(?P<version>\d*)$')
+
+def method_needs_manual_handling(interface_with_version, method_name):
+    match_dict = INTERFACE_NAME_VERSION.match(interface_with_version).groupdict()
+    interface = match_dict['name']
+    version = int(match_dict['version']) if match_dict['version'] else None
+
+    method_list = manually_handled_methods.get(interface, [])
+    method = next(filter(lambda m: m.name == method_name, method_list), None)
+
+    return method and method.version_func(version)
 
 # manual converters for simple types (function pointers)
 manual_type_converters = [
@@ -728,10 +692,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 parambytes += 4
             else:
                 parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
-    if cppname in manually_handled_methods and \
-            used_name in manually_handled_methods[cppname]:
-        #just don't write the cpp function
-        cpp = dummy_writer
+    if method_needs_manual_handling(cppname, used_name):
+        cpp = dummy_writer #just don't write the cpp function
     cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_{used_name}, {parambytes})\n")
     cpp_h.write("extern ")
     if method.result_type.spelling.startswith("ISteam"):
