@@ -6,7 +6,7 @@ priority levels. However, most default Linux configurations don't allow
 individual threads to raise their priority, so some system configuration is
 likely required.
 
-It can be configured as a priviledged user by editing the
+It can be configured as a privileged user by editing the
 `/etc/security/limits.conf` file, or using the `/etc/security/limits.d/` conf
 directory, and adding the following line at the end:
 

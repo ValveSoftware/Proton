@@ -14,7 +14,7 @@ hid is a layer above rawinput, where Windows will talk HID to the controller on
 the game's behalf. This turns the raw HID protocol data into usable things like
 buttons and joysticks.
 
-dinput is a "legacy" API that allows applictions to talk to any type of
+dinput is a "legacy" API that allows applications to talk to any type of
 joystick. On Windows, it is implemented on top of HID. Notably, dinput allows
 easy access to controllers that no other API does, so it is still used by
 modern games despite being "legacy."

@@ -4,7 +4,7 @@ Some games rely on ICMP ECHO requests to detect network connectivity,
 or to measure connection ping.
 
 Proton supports sending ICMP ECHO requests using RAW sockets or DGRAM
-ICMP sockets, but the former requires elevated priviledges, and the
+ICMP sockets, but the former requires elevated privileges, and the
 latter may also be disabled by default.
 
 DGRAM ICMP sockets can be enabled for a given set of user groups by
