@@ -87,6 +87,7 @@
     -W packager-DllMain \
     -W winemenubuilder-Desktop_Icon_Path \
     -W wscript-support-d-u-switches \
+    -W wininet-Cleanup \
     -W sapi-ISpObjectToken-CreateInstance \
     -W sapi-iteration-tokens
 
@@ -150,6 +151,7 @@
     # ** packager-DllMain - applied manually
     # ** winemenubuilder-Desktop_Icon_Path - applied manually
     # ** wscript-support-d-u-switches - applied manually
+    # ** wininet-Cleanup - applied manually
     # sapi-ISpObjectToken-CreateInstance - already applied
     # sapi-iteration-tokens - already applied
 
@@ -254,6 +256,15 @@
 
     # wscript-support-d-u-switches
     patch -Np1 < ../patches/wine-hotfixes/staging/wscript-support-d-u-switches/0001-wscript-return-TRUE-for-d-and-u-stub-switches.patch
+
+    # wininet-Cleanup
+    patch -Np1 < ../patches/wine-hotfixes/staging/wscript-support-d-u-switches/0001-wscript-return-TRUE-for-d-and-u-stub-switches.patch
+
+    patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0001-wininet-tests-Add-more-tests-for-cookies.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0002-wininet-tests-Test-auth-credential-reusage-with-host.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0003-wininet-tests-Check-cookie-behaviour-when-overriding.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0004-wininet-Strip-filename-if-no-path-is-set-in-cookie.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0005-wininet-Replacing-header-fields-should-fail-if-they-.patch
 
     # nvapi/nvcuda
     # this was added in 7.1, so it's not in the 7.0 tree
