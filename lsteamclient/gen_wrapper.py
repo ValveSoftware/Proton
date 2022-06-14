@@ -281,6 +281,7 @@ manually_handled_methods = {
 # manual converters for simple types (function pointers)
 manual_type_converters = [
         "FSteamNetworkingSocketsDebugOutput",
+        "SteamAPIWarningMessageHook_t",
         "SteamAPI_CheckCallbackRegistered_t"
 ]
 
