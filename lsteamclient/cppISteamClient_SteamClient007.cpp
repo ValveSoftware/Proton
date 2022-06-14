@@ -112,6 +112,7 @@ void *cppISteamClient_SteamClient007_GetISteamNetworking(void *linux_side, HStea
 
 void cppISteamClient_SteamClient007_SetWarningMessageHook(void *linux_side, SteamAPIWarningMessageHook_t pFunction)
 {
+    pFunction = (SteamAPIWarningMessageHook_t)manual_convert_SteamAPIWarningMessageHook_t((void*)pFunction);
     ((ISteamClient*)linux_side)->SetWarningMessageHook((SteamAPIWarningMessageHook_t)pFunction);
 }
 
