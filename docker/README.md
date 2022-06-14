@@ -35,7 +35,7 @@ To update the official Proton SDK images:
    repository to point to the new commit, commit and push to trigger a
    new build of "-dev" images.
 
-3) Once the images are satifying, tag the version in Proton SDK
+3) Once the images are satisfying, tag the version in Proton SDK
    repository and push the tag, this will trigger a new build of the
    images and version them with the same tag as the Git tag.
 
