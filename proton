@@ -991,38 +991,14 @@ def default_compat_config():
         appid = os.environ["SteamAppId"]
         if appid in [
                 #affected by CW bug 19126
-                "252490", #Rust
-                "305620", #The Long Dark
                 "536280", #Disintegration
-                "585420", #Trailmakers
-                "684450", #Surviving the Aftermath
-                "700580", #Rust Staging
                 "707030", #POSTAL 4: No Regerts
-                "780290", #Gloomhaven
                 "794260", #Outward: Definitive Edition
-                "844260", #Rustler
-                "853050", #El Hijo - A Wild West Tale
-                "960170", #DJMAX RESPECT V
-                "983970", #Haven
-                "1075200", #TOHU
-                "1096530", #Solasta: Crown of the Magister
                 "1102190", #Monster Train
-                "1107790", #The Complex
-                "1110100", #Power Rangers: Battle for the Grid
-                "1135230", #Ember Knights
-                "1161580", #Hardspace: Shipbreaker
-                "1190000", #Car Mechanic Simulator 2021
                 "1328350", #Turbo Overkill
                 "1331440", #FUSER
-                "1341290", #We Were Here Forever
                 "1359980", #POSTAL: Brain Damaged
-                "1361320", #The Room 4: Old Sins
-                "1477590", #EZ2ON REBOOT : R
-                "1523720", #Cook-Out
-                "1569550", #Dread X Collection: The Hunt
-                "1604030", #V Rising
-                "1766430", #POSTAL Brain Damaged Demo
-                "1913910", #Nine Sols Demo
+                "1766429", #POSTAL Brain Damaged Demo
                 "2001540", #Slayers X Demo
 
                 #affected by CW bug 19741
