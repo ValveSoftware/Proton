@@ -4801,7 +4801,7 @@ index 13307cdb..f7ff0829 100644
      suballocate = !info->pNext && !info->host_ptr &&
              info->memory_requirements.size < VKD3D_VA_BLOCK_SIZE &&
 -            !(info->heap_flags & (D3D12_HEAP_FLAG_DENY_BUFFERS | D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH));
-+            !(info->heap_flags & (D3D12_HEAP_FLAG_DENY_BUFFERS | D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH)) &&
++            !(info->heap_flags & (D3D12_HEAP_FLAG_DENY_BUFFERS | D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH) &&
 +            !(info->flags & VKD3D_ALLOCATION_FLAG_INTERNAL_SCRATCH));
  
      if (suballocate)
