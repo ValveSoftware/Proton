@@ -10,9 +10,31 @@
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
 
+    # https://github.com/doitsujin/dxvk/pull/2608
+    echo "DXVK: Add support for shared ID3D11Fence object"
+    patch -Np1 < ../patches/dxvk/2608.patch
+
+    # https://github.com/doitsujin/dxvk/pull/2675
+    echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
+    patch -Np1 < ../patches/dxvk/2675.patch
+
     # this needs to be the last patch in the list.. because reasons?
     echo "DXVK:add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
+    cd ..
+
+    cd vkd3d-proton
+    git reset --hard HEAD
+    git clean -xdf
+
+    echo "VKD3D: Add Halo Infinite patches"
+    # https://github.com/HansKristian-Work/vkd3d-proton/tree/execute-indirect-advanced-index-lut
+    patch -Np1 < ../patches/vkd3d-proton/foo.patch
+
+    # https://github.com/HansKristian-Work/vkd3d-proton/pull/1070
+    echo "VKD3D: Add support for shared ID3D12Resource and ID3D12Fence objects"
+    patch -Np1 < ../patches/vkd3d-proton/1070.patch
+
     cd ..
 
 ### END PREP SECTION ###
@@ -74,6 +96,7 @@
     -W wineboot-ProxySettings \
     -W winex11-UpdateLayeredWindow \
     -W winex11-Vulkan_support \
+    -W winex11-wglShareLists \
     -W wintab32-improvements \
     -W xactengine3_7-PrepareWave \
     -W xactengine3_7-Notification \
@@ -98,6 +121,7 @@
     # winex11-WM_WINDOWPOSCHANGING - Causes origin to freeze
     # winex11-MWM_Decorations - not compatible with fullscreen hack
     # winex11-key_translation - replaced by proton's keyboard patches
+    # winex11-wglShareLists - applied manually
     # ntdll-Syscall_Emulation - already applied
     # ntdll-Junction_Points - breaks CEG drm
     # server-File_Permissions - requires ntdll-Junction_Points
@@ -258,13 +282,14 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/wscript-support-d-u-switches/0001-wscript-return-TRUE-for-d-and-u-stub-switches.patch
 
     # wininet-Cleanup
-    patch -Np1 < ../patches/wine-hotfixes/staging/wscript-support-d-u-switches/0001-wscript-return-TRUE-for-d-and-u-stub-switches.patch
-
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0001-wininet-tests-Add-more-tests-for-cookies.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0002-wininet-tests-Test-auth-credential-reusage-with-host.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0003-wininet-tests-Check-cookie-behaviour-when-overriding.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0004-wininet-Strip-filename-if-no-path-is-set-in-cookie.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0005-wininet-Replacing-header-fields-should-fail-if-they-.patch
+
+    # winex11-wglShareLists
+    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-wglShareLists/0001-winex11.drv-Only-warn-about-used-contexts-in-wglShar.patch
 
     # nvapi/nvcuda
     # this was added in 7.1, so it's not in the 7.0 tree
@@ -334,12 +359,6 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/0001-winex11.drv-Define-ControlMask-when-not-available.patch
     patch -Np1 < ../patches/wine-hotfixes/pending/0002-include-Add-THREAD_POWER_THROTTLING_STATE-type.patch
     patch -Np1 < ../patches/wine-hotfixes/pending/0003-ntdll-Fake-success-for-ThreadPowerThrottlingState.patch
-
-#    disabled, not compatible with fshack, not compatible with fsr, missing dependencies inside proton.
-#    patch -Np1 < ../patches/wine-hotfixes/testing/wine_wayland_driver.patch
-
-#    # https://bugs.winehq.org/show_bug.cgi?id=51687
-#    patch -Np1 < ../patches/wine-hotfixes/pending/Return_nt_filename_and_resolve_DOS_drive_path.patch
 
 ### END WINE HOTFIX SECTION ###
 
