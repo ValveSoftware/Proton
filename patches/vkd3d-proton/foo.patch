@@ -4796,16 +4796,16 @@ index 13307cdb..f7ff0829 100644
      }
  
      if (allocation->resource.view_map)
-@@ -1398,7 +1405,8 @@ HRESULT vkd3d_allocate_memory(struct d3d12_device *device, struct vkd3d_memory_a
-     HRESULT hr;
+@@ -1417,7 +1424,8 @@ HRESULT vkd3d_allocate_memory(struct d3d12_device *device, struct vkd3d_memory_a
  
-     if (!info->pNext && !info->host_ptr && info->memory_requirements.size < VKD3D_VA_BLOCK_SIZE &&
--            !(info->heap_flags & (D3D12_HEAP_FLAG_DENY_BUFFERS | D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH)))
+     suballocate = !info->pNext && !info->host_ptr &&
+             info->memory_requirements.size < VKD3D_VA_BLOCK_SIZE &&
+-            !(info->heap_flags & (D3D12_HEAP_FLAG_DENY_BUFFERS | D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH));
 +            !(info->heap_flags & (D3D12_HEAP_FLAG_DENY_BUFFERS | D3D12_HEAP_FLAG_ALLOW_WRITE_WATCH)) &&
-+            !(info->flags & VKD3D_ALLOCATION_FLAG_INTERNAL_SCRATCH))
++            !(info->flags & VKD3D_ALLOCATION_FLAG_INTERNAL_SCRATCH));
+ 
+     if (suballocate)
          hr = vkd3d_suballocate_memory(device, allocator, info, allocation);
-     else
-         hr = vkd3d_memory_allocation_init(allocation, device, allocator, info);
 @@ -1447,6 +1455,7 @@ HRESULT vkd3d_allocate_heap_memory(struct d3d12_device *device, struct vkd3d_mem
      alloc_info.heap_flags = info->heap_desc.Flags;
      alloc_info.host_ptr = info->host_ptr;
