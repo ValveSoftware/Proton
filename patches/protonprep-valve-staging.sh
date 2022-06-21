@@ -29,7 +29,7 @@
 
     echo "VKD3D: Add Halo Infinite patches"
     # https://github.com/HansKristian-Work/vkd3d-proton/tree/execute-indirect-advanced-index-lut
-    patch -Np1 < ../patches/vkd3d-proton/foo.patch
+    patch -Np1 < ../patches/vkd3d-proton/halo_infinite_wip.patch
 
     # https://github.com/HansKristian-Work/vkd3d-proton/pull/1070
     echo "VKD3D: Add support for shared ID3D12Resource and ID3D12Fence objects"
