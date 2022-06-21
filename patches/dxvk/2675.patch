@@ -1,0 +1,41 @@
+From c2385db78148f122d8f0296d2a6462fa2656a047 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <gofmanp@gmail.com>
+Date: Thu, 9 Jun 2022 16:34:39 -0500
+Subject: [PATCH] [dxgi] Leave fullscreen mode when window looses focus
+
+---
+ src/dxgi/dxgi_swapchain.cpp | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/src/dxgi/dxgi_swapchain.cpp b/src/dxgi/dxgi_swapchain.cpp
+index 09ebd69724..2ecfc507f0 100644
+--- a/src/dxgi/dxgi_swapchain.cpp
++++ b/src/dxgi/dxgi_swapchain.cpp
+@@ -189,7 +189,9 @@ namespace dxvk {
+           BOOL*         pFullscreen,
+           IDXGIOutput** ppTarget) {
+     HRESULT hr = S_OK;
+-    
++
++    if (!m_descFs.Windowed && GetForegroundWindow() != m_window)
++      SetFullscreenState(FALSE, nullptr);
+     if (pFullscreen != nullptr)
+       *pFullscreen = !m_descFs.Windowed;
+     
+@@ -262,6 +264,16 @@ namespace dxvk {
+     if (SyncInterval > 4)
+       return DXGI_ERROR_INVALID_CALL;
+ 
++    if (GetWindowLongW(m_window, GWL_STYLE) & WS_MINIMIZE)
++      return DXGI_STATUS_OCCLUDED;
++
++    if (!m_descFs.Windowed && GetForegroundWindow() != m_window)
++    {
++      if (!(PresentFlags & DXGI_PRESENT_TEST))
++        SetFullscreenState(FALSE, nullptr);
++      return DXGI_STATUS_OCCLUDED;
++    }
++
+     std::lock_guard<dxvk::recursive_mutex> lockWin(m_lockWindow);
+     std::lock_guard<dxvk::mutex> lockBuf(m_lockBuffer);
+ 
