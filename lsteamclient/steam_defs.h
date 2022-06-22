@@ -235,7 +235,7 @@ typedef struct SteamNetConnectionRealTimeLaneStatus_t SteamNetConnectionRealTime
 typedef struct SteamNetworkingFakeIPResult_t SteamNetworkingFakeIPResult_t;
 
 typedef uint32 (*SteamAPI_CheckCallbackRegistered_t)(int cb);
-typedef void *SteamAPIWarningMessageHook_t; //already cdecl, no need for conversion(?)
+typedef void *SteamAPIWarningMessageHook_t;
 typedef void *SteamAPI_PostAPIResultInProcess_t; //unused
 typedef void (*FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
 

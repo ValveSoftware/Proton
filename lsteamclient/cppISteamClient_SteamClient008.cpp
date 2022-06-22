@@ -112,6 +112,7 @@ uint32 cppISteamClient_SteamClient008_GetIPCCallCount(void *linux_side)
 
 void cppISteamClient_SteamClient008_SetWarningMessageHook(void *linux_side, SteamAPIWarningMessageHook_t pFunction)
 {
+    pFunction = (SteamAPIWarningMessageHook_t)manual_convert_SteamAPIWarningMessageHook_t((void*)pFunction);
     ((ISteamClient*)linux_side)->SetWarningMessageHook((SteamAPIWarningMessageHook_t)pFunction);
 }
 
