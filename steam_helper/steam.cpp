@@ -412,7 +412,12 @@ static bool convert_linux_vrpaths(void)
     }
 
     /* pass original runtime path into Wine */
-    if(root.isMember("runtime") && root["runtime"].isArray() && root["runtime"].size() > 0)
+    const char *vr_override = getenv("VR_OVERRIDE");
+    if(vr_override)
+    {
+        set_env_from_unix(L"PROTON_VR_RUNTIME", vr_override);
+    }
+    else if(root.isMember("runtime") && root["runtime"].isArray() && root["runtime"].size() > 0)
     {
         set_env_from_unix(L"PROTON_VR_RUNTIME", root["runtime"][0].asString());
     }
