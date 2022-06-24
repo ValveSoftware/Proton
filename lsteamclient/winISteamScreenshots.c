@@ -117,7 +117,7 @@ winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *create_winISteamScre
 {
     winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003), "STEAMSCREENSHOTS_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_vtable;
+    r->vtable = alloc_vtable(&winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_vtable, 9, "STEAMSCREENSHOTS_INTERFACE_VERSION003");
     r->linux_side = linux_side;
     return r;
 }
@@ -204,7 +204,7 @@ winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *create_winISteamScre
 {
     winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002), "STEAMSCREENSHOTS_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_vtable;
+    r->vtable = alloc_vtable(&winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_vtable, 7, "STEAMSCREENSHOTS_INTERFACE_VERSION002");
     r->linux_side = linux_side;
     return r;
 }
@@ -283,7 +283,7 @@ winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *create_winISteamScre
 {
     winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001), "STEAMSCREENSHOTS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_vtable, 6, "STEAMSCREENSHOTS_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

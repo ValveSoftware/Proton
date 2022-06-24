@@ -133,7 +133,7 @@ winISteamParties_SteamParties002 *create_winISteamParties_SteamParties002(void *
 {
     winISteamParties_SteamParties002 *r = alloc_mem_for_iface(sizeof(winISteamParties_SteamParties002), "SteamParties002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamParties_SteamParties002_vtable;
+    r->vtable = alloc_vtable(&winISteamParties_SteamParties002_vtable, 12, "SteamParties002");
     r->linux_side = linux_side;
     return r;
 }
