@@ -571,6 +571,7 @@ GST_GOOD_MESON_ARGS := \
 	-Dmpg123=enabled \
 	-Dximagesrc=disabled \
 	-Dy4m=enabled \
+	-Dsoup=enabled \
 	-Ddoc='disabled' \
 	$(GST_COMMON_MESON_ARGS)
 
