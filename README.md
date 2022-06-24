@@ -150,6 +150,20 @@ is only useful after building Proton.
 `make dxvk` / `make vkd3d-proton` - rebuild DXVK / vkd3d-proton.
 
 
+### Debug Builds
+
+To prevent symbol stripping add `UNSTRIPPED_BUILD=1` to the `make`
+invocation. This should be used only with a clean build directory.
+
+E.g.:
+
+```
+mkdir ../debug-proton-build && cd ../debug-proton-build
+../proton/configure.sh --enable-ccache --build-name=debug_build
+make UNSTRIPPED_BUILD=1 install`
+```
+
+
 Install Proton locally
 ----------------------
 
