@@ -94,7 +94,7 @@ winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *create_winISteamRemote
 {
     winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001), "STEAMREMOTEPLAY_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_vtable, 7, "STEAMREMOTEPLAY_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

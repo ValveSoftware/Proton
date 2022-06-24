@@ -80,7 +80,7 @@ winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *create_winISteamAppList_STEA
 {
     winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001), "STEAMAPPLIST_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_vtable, 5, "STEAMAPPLIST_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }
