@@ -173,7 +173,7 @@ winISteamMatchmakingServers_SteamMatchMakingServers002 *create_winISteamMatchmak
 {
     winISteamMatchmakingServers_SteamMatchMakingServers002 *r = alloc_mem_for_iface(sizeof(winISteamMatchmakingServers_SteamMatchMakingServers002), "SteamMatchMakingServers002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmakingServers_SteamMatchMakingServers002_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmakingServers_SteamMatchMakingServers002_vtable, 17, "SteamMatchMakingServers002");
     r->linux_side = linux_side;
     return r;
 }
@@ -328,7 +328,7 @@ winISteamMatchmakingServers_SteamMatchMakingServers001 *create_winISteamMatchmak
 {
     winISteamMatchmakingServers_SteamMatchMakingServers001 *r = alloc_mem_for_iface(sizeof(winISteamMatchmakingServers_SteamMatchMakingServers001), "SteamMatchMakingServers001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmakingServers_SteamMatchMakingServers001_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmakingServers_SteamMatchMakingServers001_vtable, 16, "SteamMatchMakingServers001");
     r->linux_side = linux_side;
     return r;
 }

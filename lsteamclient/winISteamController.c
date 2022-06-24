@@ -312,7 +312,7 @@ winISteamController_SteamController008 *create_winISteamController_SteamControll
 {
     winISteamController_SteamController008 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController008), "SteamController008");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamController_SteamController008_vtable;
+    r->vtable = alloc_vtable(&winISteamController_SteamController008_vtable, 34, "SteamController008");
     r->linux_side = linux_side;
     return r;
 }
@@ -614,7 +614,7 @@ winISteamController_SteamController007 *create_winISteamController_SteamControll
 {
     winISteamController_SteamController007 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController007), "SteamController007");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamController_SteamController007_vtable;
+    r->vtable = alloc_vtable(&winISteamController_SteamController007_vtable, 34, "SteamController007");
     r->linux_side = linux_side;
     return r;
 }
@@ -892,7 +892,7 @@ winISteamController_SteamController006 *create_winISteamController_SteamControll
 {
     winISteamController_SteamController006 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController006), "SteamController006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamController_SteamController006_vtable;
+    r->vtable = alloc_vtable(&winISteamController_SteamController006_vtable, 31, "SteamController006");
     r->linux_side = linux_side;
     return r;
 }
@@ -1130,7 +1130,7 @@ winISteamController_SteamController005 *create_winISteamController_SteamControll
 {
     winISteamController_SteamController005 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController005), "SteamController005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamController_SteamController005_vtable;
+    r->vtable = alloc_vtable(&winISteamController_SteamController005_vtable, 26, "SteamController005");
     r->linux_side = linux_side;
     return r;
 }
@@ -1336,7 +1336,7 @@ winISteamController_SteamController004 *create_winISteamController_SteamControll
 {
     winISteamController_SteamController004 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController004), "SteamController004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamController_SteamController004_vtable;
+    r->vtable = alloc_vtable(&winISteamController_SteamController004_vtable, 22, "SteamController004");
     r->linux_side = linux_side;
     return r;
 }
@@ -1501,7 +1501,7 @@ winISteamController_SteamController003 *create_winISteamController_SteamControll
 {
     winISteamController_SteamController003 *r = alloc_mem_for_iface(sizeof(winISteamController_SteamController003), "SteamController003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamController_SteamController003_vtable;
+    r->vtable = alloc_vtable(&winISteamController_SteamController003_vtable, 17, "SteamController003");
     r->linux_side = linux_side;
     return r;
 }
@@ -1578,7 +1578,7 @@ winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *create_winISteamControlle
 {
     winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *r = alloc_mem_for_iface(sizeof(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION), "STEAMCONTROLLER_INTERFACE_VERSION");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_vtable;
+    r->vtable = alloc_vtable(&winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_vtable, 6, "STEAMCONTROLLER_INTERFACE_VERSION");
     r->linux_side = linux_side;
     return r;
 }

@@ -344,7 +344,7 @@ winISteamMatchmaking_SteamMatchMaking009 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking009 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking009), "SteamMatchMaking009");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking009_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking009_vtable, 38, "SteamMatchMaking009");
     r->linux_side = linux_side;
     return r;
 }
@@ -662,7 +662,7 @@ winISteamMatchmaking_SteamMatchMaking008 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking008 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking008), "SteamMatchMaking008");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking008_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking008_vtable, 36, "SteamMatchMaking008");
     r->linux_side = linux_side;
     return r;
 }
@@ -964,7 +964,7 @@ winISteamMatchmaking_SteamMatchMaking007 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking007 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking007), "SteamMatchMaking007");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking007_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking007_vtable, 34, "SteamMatchMaking007");
     r->linux_side = linux_side;
     return r;
 }
@@ -1218,7 +1218,7 @@ winISteamMatchmaking_SteamMatchMaking006 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking006 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking006), "SteamMatchMaking006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking006_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking006_vtable, 28, "SteamMatchMaking006");
     r->linux_side = linux_side;
     return r;
 }
@@ -1496,7 +1496,7 @@ winISteamMatchmaking_SteamMatchMaking005 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking005 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking005), "SteamMatchMaking005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking005_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking005_vtable, 31, "SteamMatchMaking005");
     r->linux_side = linux_side;
     return r;
 }
@@ -1741,7 +1741,7 @@ winISteamMatchmaking_SteamMatchMaking004 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking004 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking004), "SteamMatchMaking004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking004_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking004_vtable, 27, "SteamMatchMaking004");
     r->linux_side = linux_side;
     return r;
 }
@@ -1994,7 +1994,7 @@ winISteamMatchmaking_SteamMatchMaking003 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking003 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking003), "SteamMatchMaking003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking003_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking003_vtable, 28, "SteamMatchMaking003");
     r->linux_side = linux_side;
     return r;
 }
@@ -2183,7 +2183,7 @@ winISteamMatchmaking_SteamMatchMaking002 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking002 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking002), "SteamMatchMaking002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking002_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking002_vtable, 20, "SteamMatchMaking002");
     r->linux_side = linux_side;
     return r;
 }
@@ -2388,7 +2388,7 @@ winISteamMatchmaking_SteamMatchMaking001 *create_winISteamMatchmaking_SteamMatch
 {
     winISteamMatchmaking_SteamMatchMaking001 *r = alloc_mem_for_iface(sizeof(winISteamMatchmaking_SteamMatchMaking001), "SteamMatchMaking001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMatchmaking_SteamMatchMaking001_vtable;
+    r->vtable = alloc_vtable(&winISteamMatchmaking_SteamMatchMaking001_vtable, 22, "SteamMatchMaking001");
     r->linux_side = linux_side;
     return r;
 }

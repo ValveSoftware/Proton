@@ -77,7 +77,7 @@ winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001 *create_winIS
 {
     winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001), "STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_vtable, 5, "STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

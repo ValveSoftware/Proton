@@ -342,7 +342,7 @@ winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *create_winISteamHTM
 {
     winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005), "STEAMHTMLSURFACE_INTERFACE_VERSION_005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtable;
+    r->vtable = alloc_vtable(&winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtable, 38, "STEAMHTMLSURFACE_INTERFACE_VERSION_005");
     r->linux_side = linux_side;
     return r;
 }
@@ -666,7 +666,7 @@ winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *create_winISteamHTM
 {
     winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004), "STEAMHTMLSURFACE_INTERFACE_VERSION_004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtable;
+    r->vtable = alloc_vtable(&winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtable, 37, "STEAMHTMLSURFACE_INTERFACE_VERSION_004");
     r->linux_side = linux_side;
     return r;
 }
@@ -982,7 +982,7 @@ winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *create_winISteamHTM
 {
     winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003), "STEAMHTMLSURFACE_INTERFACE_VERSION_003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtable;
+    r->vtable = alloc_vtable(&winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtable, 36, "STEAMHTMLSURFACE_INTERFACE_VERSION_003");
     r->linux_side = linux_side;
     return r;
 }
@@ -1290,7 +1290,7 @@ winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *create_winISteamHTM
 {
     winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002), "STEAMHTMLSURFACE_INTERFACE_VERSION_002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtable;
+    r->vtable = alloc_vtable(&winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtable, 35, "STEAMHTMLSURFACE_INTERFACE_VERSION_002");
     r->linux_side = linux_side;
     return r;
 }
@@ -1582,7 +1582,7 @@ winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *create_winISteamHTM
 {
     winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *r = alloc_mem_for_iface(sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001), "STEAMHTMLSURFACE_INTERFACE_VERSION_001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
+    r->vtable = alloc_vtable(&winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable, 33, "STEAMHTMLSURFACE_INTERFACE_VERSION_001");
     r->linux_side = linux_side;
     return r;
 }

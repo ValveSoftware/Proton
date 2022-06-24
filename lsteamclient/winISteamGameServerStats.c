@@ -117,7 +117,7 @@ winISteamGameServerStats_SteamGameServerStats001 *create_winISteamGameServerStat
 {
     winISteamGameServerStats_SteamGameServerStats001 *r = alloc_mem_for_iface(sizeof(winISteamGameServerStats_SteamGameServerStats001), "SteamGameServerStats001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServerStats_SteamGameServerStats001_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServerStats_SteamGameServerStats001_vtable, 10, "SteamGameServerStats001");
     r->linux_side = linux_side;
     return r;
 }

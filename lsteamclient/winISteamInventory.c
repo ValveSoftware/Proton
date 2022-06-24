@@ -341,7 +341,7 @@ winISteamInventory_STEAMINVENTORY_INTERFACE_V003 *create_winISteamInventory_STEA
 {
     winISteamInventory_STEAMINVENTORY_INTERFACE_V003 *r = alloc_mem_for_iface(sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V003), "STEAMINVENTORY_INTERFACE_V003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamInventory_STEAMINVENTORY_INTERFACE_V003_vtable;
+    r->vtable = alloc_vtable(&winISteamInventory_STEAMINVENTORY_INTERFACE_V003_vtable, 38, "STEAMINVENTORY_INTERFACE_V003");
     r->linux_side = linux_side;
     return r;
 }
@@ -664,7 +664,7 @@ winISteamInventory_STEAMINVENTORY_INTERFACE_V002 *create_winISteamInventory_STEA
 {
     winISteamInventory_STEAMINVENTORY_INTERFACE_V002 *r = alloc_mem_for_iface(sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V002), "STEAMINVENTORY_INTERFACE_V002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamInventory_STEAMINVENTORY_INTERFACE_V002_vtable;
+    r->vtable = alloc_vtable(&winISteamInventory_STEAMINVENTORY_INTERFACE_V002_vtable, 37, "STEAMINVENTORY_INTERFACE_V002");
     r->linux_side = linux_side;
     return r;
 }
@@ -883,7 +883,7 @@ winISteamInventory_STEAMINVENTORY_INTERFACE_V001 *create_winISteamInventory_STEA
 {
     winISteamInventory_STEAMINVENTORY_INTERFACE_V001 *r = alloc_mem_for_iface(sizeof(winISteamInventory_STEAMINVENTORY_INTERFACE_V001), "STEAMINVENTORY_INTERFACE_V001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamInventory_STEAMINVENTORY_INTERFACE_V001_vtable;
+    r->vtable = alloc_vtable(&winISteamInventory_STEAMINVENTORY_INTERFACE_V001_vtable, 24, "STEAMINVENTORY_INTERFACE_V001");
     r->linux_side = linux_side;
     return r;
 }

@@ -266,17 +266,18 @@ static BOOL allocated_from_steamclient_dll( void *ptr )
     return (BYTE *)ptr >= alloc_start && (BYTE *)ptr < alloc_end;
 }
 
-static void *get_mem_from_steamclient_dll(size_t size, unsigned int version)
+static void *get_mem_from_steamclient_dll(size_t size, unsigned int version, void *vtbl)
 {
     static BYTE * const error_ptr = (BYTE *)~(ULONG_PTR)0;
     static const unsigned int magic = 0x53ba947a;
     static struct
     {
         unsigned int version;
+        void *vtbl;
         size_t size;
         void *ptr;
     }
-    allocated[32];
+    allocated[256];
     static unsigned int allocated_count;
     static BYTE *alloc_base;
     unsigned int i;
@@ -296,7 +297,7 @@ static void *get_mem_from_steamclient_dll(size_t size, unsigned int version)
 
     for (i = 0; i < allocated_count; ++i)
     {
-        if (allocated[i].version == version)
+        if ((vtbl && allocated[i].vtbl == vtbl) || (!vtbl && allocated[i].version == version))
         {
             if (allocated[i].size != size)
             {
@@ -365,6 +366,7 @@ static void *get_mem_from_steamclient_dll(size_t size, unsigned int version)
         return NULL;
     }
     allocated[allocated_count].version = version;
+    allocated[allocated_count].vtbl = vtbl;
     allocated[allocated_count].size = size;
     allocated[allocated_count].ptr = alloc_base;
     alloc_base += size;
@@ -390,11 +392,41 @@ void *alloc_mem_for_iface(size_t size, const char *iface_version)
         goto fallback;
     }
 
-    if ((ret = get_mem_from_steamclient_dll(size, version)))
+    if ((ret = get_mem_from_steamclient_dll(size, version, NULL)))
         return ret;
 
 fallback:
     return HeapAlloc(GetProcessHeap(), 0, size);
+}
+
+void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_version)
+{
+    static const char *iface_names[] =
+    {
+        "SteamUser",
+        "SteamFriends",
+        "SteamUtils",
+        "STEAMUSERSTATS",
+        "STEAMAPPS",
+        "SteamNetworking",
+    };
+    unsigned int i;
+    char *ret;
+
+    for (i = 0; i < ARRAY_SIZE(iface_names); ++i)
+        if (!strncmp(iface_version, iface_names[i], strlen(iface_names[i]) - 1))
+            break;
+
+    if (i == ARRAY_SIZE(iface_names))
+        return vtable;
+
+    if (!(ret = get_mem_from_steamclient_dll(method_count * sizeof(void *), 0, vtable)))
+        return vtable;
+
+    TRACE("iface %s, method_count %d, allocating from module.\n", iface_version, method_count);
+
+    memcpy(ret, vtable, method_count * sizeof(void *));
+    return ret;
 }
 
 #ifdef __linux__

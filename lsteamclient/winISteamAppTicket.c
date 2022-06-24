@@ -45,7 +45,7 @@ winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *create_winISteamAppTicke
 {
     winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001), "STEAMAPPTICKET_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_vtable, 1, "STEAMAPPTICKET_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

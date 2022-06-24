@@ -652,7 +652,7 @@ winISteamFriends_SteamFriends017 *create_winISteamFriends_SteamFriends017(void *
 {
     winISteamFriends_SteamFriends017 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends017), "SteamFriends017");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends017_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends017_vtable, 76, "SteamFriends017");
     r->linux_side = linux_side;
     return r;
 }
@@ -1262,7 +1262,7 @@ winISteamFriends_SteamFriends015 *create_winISteamFriends_SteamFriends015(void *
 {
     winISteamFriends_SteamFriends015 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends015), "SteamFriends015");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends015_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends015_vtable, 72, "SteamFriends015");
     r->linux_side = linux_side;
     return r;
 }
@@ -1808,7 +1808,7 @@ winISteamFriends_SteamFriends014 *create_winISteamFriends_SteamFriends014(void *
 {
     winISteamFriends_SteamFriends014 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends014), "SteamFriends014");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends014_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends014_vtable, 64, "SteamFriends014");
     r->linux_side = linux_side;
     return r;
 }
@@ -2346,7 +2346,7 @@ winISteamFriends_SteamFriends013 *create_winISteamFriends_SteamFriends013(void *
 {
     winISteamFriends_SteamFriends013 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends013), "SteamFriends013");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends013_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends013_vtable, 63, "SteamFriends013");
     r->linux_side = linux_side;
     return r;
 }
@@ -2884,7 +2884,7 @@ winISteamFriends_SteamFriends012 *create_winISteamFriends_SteamFriends012(void *
 {
     winISteamFriends_SteamFriends012 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends012), "SteamFriends012");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends012_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends012_vtable, 63, "SteamFriends012");
     r->linux_side = linux_side;
     return r;
 }
@@ -3422,7 +3422,7 @@ winISteamFriends_SteamFriends011 *create_winISteamFriends_SteamFriends011(void *
 {
     winISteamFriends_SteamFriends011 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends011), "SteamFriends011");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends011_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends011_vtable, 63, "SteamFriends011");
     r->linux_side = linux_side;
     return r;
 }
@@ -3928,7 +3928,7 @@ winISteamFriends_SteamFriends010 *create_winISteamFriends_SteamFriends010(void *
 {
     winISteamFriends_SteamFriends010 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends010), "SteamFriends010");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends010_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends010_vtable, 59, "SteamFriends010");
     r->linux_side = linux_side;
     return r;
 }
@@ -4313,7 +4313,7 @@ winISteamFriends_SteamFriends009 *create_winISteamFriends_SteamFriends009(void *
 {
     winISteamFriends_SteamFriends009 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends009), "SteamFriends009");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends009_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends009_vtable, 44, "SteamFriends009");
     r->linux_side = linux_side;
     return r;
 }
@@ -4617,7 +4617,7 @@ winISteamFriends_SteamFriends008 *create_winISteamFriends_SteamFriends008(void *
 {
     winISteamFriends_SteamFriends008 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends008), "SteamFriends008");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends008_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends008_vtable, 34, "SteamFriends008");
     r->linux_side = linux_side;
     return r;
 }
@@ -4871,7 +4871,7 @@ winISteamFriends_SteamFriends007 *create_winISteamFriends_SteamFriends007(void *
 {
     winISteamFriends_SteamFriends007 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends007), "SteamFriends007");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends007_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends007_vtable, 28, "SteamFriends007");
     r->linux_side = linux_side;
     return r;
 }
@@ -5109,7 +5109,7 @@ winISteamFriends_SteamFriends006 *create_winISteamFriends_SteamFriends006(void *
 {
     winISteamFriends_SteamFriends006 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends006), "SteamFriends006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends006_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends006_vtable, 26, "SteamFriends006");
     r->linux_side = linux_side;
     return r;
 }
@@ -5331,7 +5331,7 @@ winISteamFriends_SteamFriends005 *create_winISteamFriends_SteamFriends005(void *
 {
     winISteamFriends_SteamFriends005 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends005), "SteamFriends005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends005_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends005_vtable, 24, "SteamFriends005");
     r->linux_side = linux_side;
     return r;
 }
@@ -5521,7 +5521,7 @@ winISteamFriends_SteamFriends004 *create_winISteamFriends_SteamFriends004(void *
 {
     winISteamFriends_SteamFriends004 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends004), "SteamFriends004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends004_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends004_vtable, 20, "SteamFriends004");
     r->linux_side = linux_side;
     return r;
 }
@@ -5711,7 +5711,7 @@ winISteamFriends_SteamFriends003 *create_winISteamFriends_SteamFriends003(void *
 {
     winISteamFriends_SteamFriends003 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends003), "SteamFriends003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends003_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends003_vtable, 20, "SteamFriends003");
     r->linux_side = linux_side;
     return r;
 }
@@ -5981,7 +5981,7 @@ winISteamFriends_SteamFriends002 *create_winISteamFriends_SteamFriends002(void *
 {
     winISteamFriends_SteamFriends002 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends002), "SteamFriends002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends002_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends002_vtable, 30, "SteamFriends002");
     r->linux_side = linux_side;
     return r;
 }
@@ -6225,7 +6225,7 @@ winISteamFriends_SteamFriends001 *create_winISteamFriends_SteamFriends001(void *
 {
     winISteamFriends_SteamFriends001 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends001), "SteamFriends001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamFriends_SteamFriends001_vtable;
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends001_vtable, 27, "SteamFriends001");
     r->linux_side = linux_side;
     return r;
 }

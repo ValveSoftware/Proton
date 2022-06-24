@@ -109,7 +109,7 @@ winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *create_winISteamMusic_STEAMMUSIC
 {
     winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001), "STEAMMUSIC_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_vtable, 9, "STEAMMUSIC_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }
