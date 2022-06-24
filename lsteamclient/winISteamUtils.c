@@ -343,7 +343,7 @@ winISteamUtils_SteamUtils010 *create_winISteamUtils_SteamUtils010(void *linux_si
 {
     winISteamUtils_SteamUtils010 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils010), "SteamUtils010");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils010_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils010_vtable, 38, "SteamUtils010");
     r->linux_side = linux_side;
     return r;
 }
@@ -644,7 +644,7 @@ winISteamUtils_SteamUtils009 *create_winISteamUtils_SteamUtils009(void *linux_si
 {
     winISteamUtils_SteamUtils009 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils009), "SteamUtils009");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils009_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils009_vtable, 34, "SteamUtils009");
     r->linux_side = linux_side;
     return r;
 }
@@ -897,7 +897,7 @@ winISteamUtils_SteamUtils008 *create_winISteamUtils_SteamUtils008(void *linux_si
 {
     winISteamUtils_SteamUtils008 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils008), "SteamUtils008");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils008_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils008_vtable, 28, "SteamUtils008");
     r->linux_side = linux_side;
     return r;
 }
@@ -1134,7 +1134,7 @@ winISteamUtils_SteamUtils007 *create_winISteamUtils_SteamUtils007(void *linux_si
 {
     winISteamUtils_SteamUtils007 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils007), "SteamUtils007");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils007_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils007_vtable, 26, "SteamUtils007");
     r->linux_side = linux_side;
     return r;
 }
@@ -1363,7 +1363,7 @@ winISteamUtils_SteamUtils006 *create_winISteamUtils_SteamUtils006(void *linux_si
 {
     winISteamUtils_SteamUtils006 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils006), "SteamUtils006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils006_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils006_vtable, 25, "SteamUtils006");
     r->linux_side = linux_side;
     return r;
 }
@@ -1576,7 +1576,7 @@ winISteamUtils_SteamUtils005 *create_winISteamUtils_SteamUtils005(void *linux_si
 {
     winISteamUtils_SteamUtils005 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils005), "SteamUtils005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils005_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils005_vtable, 23, "SteamUtils005");
     r->linux_side = linux_side;
     return r;
 }
@@ -1747,7 +1747,7 @@ winISteamUtils_SteamUtils004 *create_winISteamUtils_SteamUtils004(void *linux_si
 {
     winISteamUtils_SteamUtils004 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils004), "SteamUtils004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils004_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils004_vtable, 18, "SteamUtils004");
     r->linux_side = linux_side;
     return r;
 }
@@ -1886,7 +1886,7 @@ winISteamUtils_SteamUtils002 *create_winISteamUtils_SteamUtils002(void *linux_si
 {
     winISteamUtils_SteamUtils002 *r = alloc_mem_for_iface(sizeof(winISteamUtils_SteamUtils002), "SteamUtils002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamUtils_SteamUtils002_vtable;
+    r->vtable = alloc_vtable(&winISteamUtils_SteamUtils002_vtable, 14, "SteamUtils002");
     r->linux_side = linux_side;
     return r;
 }

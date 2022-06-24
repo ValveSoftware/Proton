@@ -418,7 +418,7 @@ winISteamInput_SteamInput006 *create_winISteamInput_SteamInput006(void *linux_si
 {
     winISteamInput_SteamInput006 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput006), "SteamInput006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamInput_SteamInput006_vtable;
+    r->vtable = alloc_vtable(&winISteamInput_SteamInput006_vtable, 47, "SteamInput006");
     r->linux_side = linux_side;
     return r;
 }
@@ -826,7 +826,7 @@ winISteamInput_SteamInput005 *create_winISteamInput_SteamInput005(void *linux_si
 {
     winISteamInput_SteamInput005 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput005), "SteamInput005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamInput_SteamInput005_vtable;
+    r->vtable = alloc_vtable(&winISteamInput_SteamInput005_vtable, 47, "SteamInput005");
     r->linux_side = linux_side;
     return r;
 }
@@ -1136,7 +1136,7 @@ winISteamInput_SteamInput002 *create_winISteamInput_SteamInput002(void *linux_si
 {
     winISteamInput_SteamInput002 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput002), "SteamInput002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamInput_SteamInput002_vtable;
+    r->vtable = alloc_vtable(&winISteamInput_SteamInput002_vtable, 35, "SteamInput002");
     r->linux_side = linux_side;
     return r;
 }
@@ -1446,7 +1446,7 @@ winISteamInput_SteamInput001 *create_winISteamInput_SteamInput001(void *linux_si
 {
     winISteamInput_SteamInput001 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput001), "SteamInput001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamInput_SteamInput001_vtable;
+    r->vtable = alloc_vtable(&winISteamInput_SteamInput001_vtable, 35, "SteamInput001");
     r->linux_side = linux_side;
     return r;
 }

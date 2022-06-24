@@ -276,7 +276,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION008), "STEAMAPPS_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable, 29, "STEAMAPPS_INTERFACE_VERSION008");
     r->linux_side = linux_side;
     return r;
 }
@@ -499,7 +499,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION007), "STEAMAPPS_INTERFACE_VERSION007");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION007_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION007_vtable, 24, "STEAMAPPS_INTERFACE_VERSION007");
     r->linux_side = linux_side;
     return r;
 }
@@ -706,7 +706,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION006), "STEAMAPPS_INTERFACE_VERSION006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION006_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION006_vtable, 22, "STEAMAPPS_INTERFACE_VERSION006");
     r->linux_side = linux_side;
     return r;
 }
@@ -896,7 +896,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION005), "STEAMAPPS_INTERFACE_VERSION005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION005_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION005_vtable, 20, "STEAMAPPS_INTERFACE_VERSION005");
     r->linux_side = linux_side;
     return r;
 }
@@ -1035,7 +1035,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION004 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION004), "STEAMAPPS_INTERFACE_VERSION004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION004_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION004_vtable, 14, "STEAMAPPS_INTERFACE_VERSION004");
     r->linux_side = linux_side;
     return r;
 }
@@ -1126,7 +1126,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION003), "STEAMAPPS_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION003_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION003_vtable, 8, "STEAMAPPS_INTERFACE_VERSION003");
     r->linux_side = linux_side;
     return r;
 }
@@ -1209,7 +1209,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION002), "STEAMAPPS_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION002_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION002_vtable, 7, "STEAMAPPS_INTERFACE_VERSION002");
     r->linux_side = linux_side;
     return r;
 }
@@ -1244,7 +1244,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION001), "STEAMAPPS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamApps_STEAMAPPS_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION001_vtable, 1, "STEAMAPPS_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

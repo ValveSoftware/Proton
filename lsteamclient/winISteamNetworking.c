@@ -213,7 +213,7 @@ winISteamNetworking_SteamNetworking006 *create_winISteamNetworking_SteamNetworki
 {
     winISteamNetworking_SteamNetworking006 *r = alloc_mem_for_iface(sizeof(winISteamNetworking_SteamNetworking006), "SteamNetworking006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworking_SteamNetworking006_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworking_SteamNetworking006_vtable, 22, "SteamNetworking006");
     r->linux_side = linux_side;
     return r;
 }
@@ -416,7 +416,7 @@ winISteamNetworking_SteamNetworking005 *create_winISteamNetworking_SteamNetworki
 {
     winISteamNetworking_SteamNetworking005 *r = alloc_mem_for_iface(sizeof(winISteamNetworking_SteamNetworking005), "SteamNetworking005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworking_SteamNetworking005_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworking_SteamNetworking005_vtable, 22, "SteamNetworking005");
     r->linux_side = linux_side;
     return r;
 }
@@ -603,7 +603,7 @@ winISteamNetworking_SteamNetworking004 *create_winISteamNetworking_SteamNetworki
 {
     winISteamNetworking_SteamNetworking004 *r = alloc_mem_for_iface(sizeof(winISteamNetworking_SteamNetworking004), "SteamNetworking004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworking_SteamNetworking004_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworking_SteamNetworking004_vtable, 20, "SteamNetworking004");
     r->linux_side = linux_side;
     return r;
 }
@@ -790,7 +790,7 @@ winISteamNetworking_SteamNetworking003 *create_winISteamNetworking_SteamNetworki
 {
     winISteamNetworking_SteamNetworking003 *r = alloc_mem_for_iface(sizeof(winISteamNetworking_SteamNetworking003), "SteamNetworking003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworking_SteamNetworking003_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworking_SteamNetworking003_vtable, 20, "SteamNetworking003");
     r->linux_side = linux_side;
     return r;
 }
@@ -929,7 +929,7 @@ winISteamNetworking_SteamNetworking002 *create_winISteamNetworking_SteamNetworki
 {
     winISteamNetworking_SteamNetworking002 *r = alloc_mem_for_iface(sizeof(winISteamNetworking_SteamNetworking002), "SteamNetworking002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworking_SteamNetworking002_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworking_SteamNetworking002_vtable, 14, "SteamNetworking002");
     r->linux_side = linux_side;
     return r;
 }
@@ -1052,7 +1052,7 @@ winISteamNetworking_SteamNetworking001 *create_winISteamNetworking_SteamNetworki
 {
     winISteamNetworking_SteamNetworking001 *r = alloc_mem_for_iface(sizeof(winISteamNetworking_SteamNetworking001), "SteamNetworking001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworking_SteamNetworking001_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworking_SteamNetworking001_vtable, 12, "SteamNetworking001");
     r->linux_side = linux_side;
     return r;
 }
