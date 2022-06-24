@@ -85,7 +85,7 @@ winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *create_win
 {
     winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001), "STEAMPARENTALSETTINGS_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_vtable, 6, "STEAMPARENTALSETTINGS_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

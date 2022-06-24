@@ -293,7 +293,7 @@ winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *create_winISteamMusi
 {
     winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001), "STEAMMUSICREMOTE_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_vtable, 32, "STEAMMUSICREMOTE_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

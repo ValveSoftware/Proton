@@ -149,7 +149,7 @@ winISteamMasterServerUpdater_SteamMasterServerUpdater001 *create_winISteamMaster
 {
     winISteamMasterServerUpdater_SteamMasterServerUpdater001 *r = alloc_mem_for_iface(sizeof(winISteamMasterServerUpdater_SteamMasterServerUpdater001), "SteamMasterServerUpdater001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamMasterServerUpdater_SteamMasterServerUpdater001_vtable;
+    r->vtable = alloc_vtable(&winISteamMasterServerUpdater_SteamMasterServerUpdater001_vtable, 14, "SteamMasterServerUpdater001");
     r->linux_side = linux_side;
     return r;
 }

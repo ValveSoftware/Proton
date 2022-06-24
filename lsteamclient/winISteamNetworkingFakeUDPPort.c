@@ -69,7 +69,7 @@ winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *create_winISteamNe
 {
     winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001));
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_vtable, 4, "SteamNetworkingFakeUDPPort001");
     r->linux_side = linux_side;
     return r;
 }

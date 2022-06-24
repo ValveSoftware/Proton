@@ -61,7 +61,7 @@ winISteamGameCoordinator_SteamGameCoordinator001 *create_winISteamGameCoordinato
 {
     winISteamGameCoordinator_SteamGameCoordinator001 *r = alloc_mem_for_iface(sizeof(winISteamGameCoordinator_SteamGameCoordinator001), "SteamGameCoordinator001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameCoordinator_SteamGameCoordinator001_vtable;
+    r->vtable = alloc_vtable(&winISteamGameCoordinator_SteamGameCoordinator001_vtable, 3, "SteamGameCoordinator001");
     r->linux_side = linux_side;
     return r;
 }

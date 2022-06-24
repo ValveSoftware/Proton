@@ -85,7 +85,7 @@ winISteamNetworkingMessages_SteamNetworkingMessages002 *create_winISteamNetworki
 {
     winISteamNetworkingMessages_SteamNetworkingMessages002 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingMessages_SteamNetworkingMessages002), "SteamNetworkingMessages002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingMessages_SteamNetworkingMessages002_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingMessages_SteamNetworkingMessages002_vtable, 6, "SteamNetworkingMessages002");
     r->linux_side = linux_side;
     return r;
 }

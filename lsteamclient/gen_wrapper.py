@@ -985,7 +985,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     else:
         cfile.write(f"    {winclassname} *r = alloc_mem_for_iface(sizeof({winclassname}), \"{iface_version}\");\n")
     cfile.write("    TRACE(\"-> %p\\n\", r);\n")
-    cfile.write(f"    r->vtable = &{winclassname}_vtable;\n")
+    cfile.write(f"    r->vtable = alloc_vtable(&{winclassname}_vtable, {len(methods)}, \"{iface_version}\");\n")
     cfile.write("    r->linux_side = linux_side;\n")
     cfile.write("    return r;\n}\n\n")
 
