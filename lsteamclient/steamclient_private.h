@@ -69,6 +69,7 @@ typedef uint64 SteamAPICall_t; //for ancient SDKs
 bool do_cb_wrap(HSteamPipe pipe, void *linux_side, bool (*cpp_func)(void *, SteamAPICall_t, void *, int, int, bool *), SteamAPICall_t call, void *callback, int callback_len, int cb_expected, bool *failed);
 
 void *alloc_mem_for_iface(size_t size, const char *iface_version);
+void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_version);
 
 enum callback_type
 {

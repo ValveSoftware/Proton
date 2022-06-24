@@ -101,7 +101,7 @@ winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *create
 {
     winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003), "SteamNetworkingSocketsSerialized003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_vtable, 8, "SteamNetworkingSocketsSerialized003");
     r->linux_side = linux_side;
     return r;
 }
@@ -192,7 +192,7 @@ winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *create
 {
     winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002), "SteamNetworkingSocketsSerialized002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_vtable, 8, "SteamNetworkingSocketsSerialized002");
     r->linux_side = linux_side;
     return r;
 }

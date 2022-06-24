@@ -521,7 +521,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016), "STEAMREMOTESTORAGE_INTERFACE_VERSION016");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_vtable, 59, "STEAMREMOTESTORAGE_INTERFACE_VERSION016");
     r->linux_side = linux_side;
     return r;
 }
@@ -1000,7 +1000,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014), "STEAMREMOTESTORAGE_INTERFACE_VERSION014");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_vtable, 55, "STEAMREMOTESTORAGE_INTERFACE_VERSION014");
     r->linux_side = linux_side;
     return r;
 }
@@ -1479,7 +1479,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013), "STEAMREMOTESTORAGE_INTERFACE_VERSION013");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_vtable, 55, "STEAMREMOTESTORAGE_INTERFACE_VERSION013");
     r->linux_side = linux_side;
     return r;
 }
@@ -1934,7 +1934,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012), "STEAMREMOTESTORAGE_INTERFACE_VERSION012");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_vtable, 52, "STEAMREMOTESTORAGE_INTERFACE_VERSION012");
     r->linux_side = linux_side;
     return r;
 }
@@ -2389,7 +2389,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011), "STEAMREMOTESTORAGE_INTERFACE_VERSION011");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_vtable, 52, "STEAMREMOTESTORAGE_INTERFACE_VERSION011");
     r->linux_side = linux_side;
     return r;
 }
@@ -2844,7 +2844,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010), "STEAMREMOTESTORAGE_INTERFACE_VERSION010");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_vtable, 52, "STEAMREMOTESTORAGE_INTERFACE_VERSION010");
     r->linux_side = linux_side;
     return r;
 }
@@ -3289,7 +3289,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009), "STEAMREMOTESTORAGE_INTERFACE_VERSION009");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_vtable, 51, "STEAMREMOTESTORAGE_INTERFACE_VERSION009");
     r->linux_side = linux_side;
     return r;
 }
@@ -3734,7 +3734,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008), "STEAMREMOTESTORAGE_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_vtable, 51, "STEAMREMOTESTORAGE_INTERFACE_VERSION008");
     r->linux_side = linux_side;
     return r;
 }
@@ -4147,7 +4147,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007), "STEAMREMOTESTORAGE_INTERFACE_VERSION007");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_vtable, 47, "STEAMREMOTESTORAGE_INTERFACE_VERSION007");
     r->linux_side = linux_side;
     return r;
 }
@@ -4560,7 +4560,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006), "STEAMREMOTESTORAGE_INTERFACE_VERSION006");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_vtable, 47, "STEAMREMOTESTORAGE_INTERFACE_VERSION006");
     r->linux_side = linux_side;
     return r;
 }
@@ -4839,7 +4839,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005), "STEAMREMOTESTORAGE_INTERFACE_VERSION005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_vtable, 31, "STEAMREMOTESTORAGE_INTERFACE_VERSION005");
     r->linux_side = linux_side;
     return r;
 }
@@ -5042,7 +5042,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004), "STEAMREMOTESTORAGE_INTERFACE_VERSION004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_vtable, 22, "STEAMREMOTESTORAGE_INTERFACE_VERSION004");
     r->linux_side = linux_side;
     return r;
 }
@@ -5229,7 +5229,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003), "STEAMREMOTESTORAGE_INTERFACE_VERSION003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_vtable, 20, "STEAMREMOTESTORAGE_INTERFACE_VERSION003");
     r->linux_side = linux_side;
     return r;
 }
@@ -5312,7 +5312,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002), "STEAMREMOTESTORAGE_INTERFACE_VERSION002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_vtable, 7, "STEAMREMOTESTORAGE_INTERFACE_VERSION002");
     r->linux_side = linux_side;
     return r;
 }
@@ -5403,7 +5403,7 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *create_winISteam
 {
     winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *r = alloc_mem_for_iface(sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001), "STEAMREMOTESTORAGE_INTERFACE_VERSION001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_vtable;
+    r->vtable = alloc_vtable(&winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_vtable, 8, "STEAMREMOTESTORAGE_INTERFACE_VERSION001");
     r->linux_side = linux_side;
     return r;
 }

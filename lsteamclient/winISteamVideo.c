@@ -69,7 +69,7 @@ winISteamVideo_STEAMVIDEO_INTERFACE_V002 *create_winISteamVideo_STEAMVIDEO_INTER
 {
     winISteamVideo_STEAMVIDEO_INTERFACE_V002 *r = alloc_mem_for_iface(sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V002), "STEAMVIDEO_INTERFACE_V002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtable;
+    r->vtable = alloc_vtable(&winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtable, 4, "STEAMVIDEO_INTERFACE_V002");
     r->linux_side = linux_side;
     return r;
 }
@@ -112,7 +112,7 @@ winISteamVideo_STEAMVIDEO_INTERFACE_V001 *create_winISteamVideo_STEAMVIDEO_INTER
 {
     winISteamVideo_STEAMVIDEO_INTERFACE_V001 *r = alloc_mem_for_iface(sizeof(winISteamVideo_STEAMVIDEO_INTERFACE_V001), "STEAMVIDEO_INTERFACE_V001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtable;
+    r->vtable = alloc_vtable(&winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtable, 2, "STEAMVIDEO_INTERFACE_V001");
     r->linux_side = linux_side;
     return r;
 }

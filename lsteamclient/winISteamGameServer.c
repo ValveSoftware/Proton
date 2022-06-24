@@ -392,7 +392,7 @@ winISteamGameServer_SteamGameServer014 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer014 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer014), "SteamGameServer014");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer014_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer014_vtable, 44, "SteamGameServer014");
     r->linux_side = linux_side;
     return r;
 }
@@ -774,7 +774,7 @@ winISteamGameServer_SteamGameServer013 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer013 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer013), "SteamGameServer013");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer013_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer013_vtable, 44, "SteamGameServer013");
     r->linux_side = linux_side;
     return r;
 }
@@ -1155,7 +1155,7 @@ winISteamGameServer_SteamGameServer012 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer012 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer012), "SteamGameServer012");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer012_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer012_vtable, 44, "SteamGameServer012");
     r->linux_side = linux_side;
     return r;
 }
@@ -1536,7 +1536,7 @@ winISteamGameServer_SteamGameServer011 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer011 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer011), "SteamGameServer011");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer011_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer011_vtable, 44, "SteamGameServer011");
     r->linux_side = linux_side;
     return r;
 }
@@ -1749,7 +1749,7 @@ winISteamGameServer_SteamGameServer010 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer010 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer010), "SteamGameServer010");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer010_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer010_vtable, 23, "SteamGameServer010");
     r->linux_side = linux_side;
     return r;
 }
@@ -1930,7 +1930,7 @@ winISteamGameServer_SteamGameServer009 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer009 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer009), "SteamGameServer009");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer009_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer009_vtable, 19, "SteamGameServer009");
     r->linux_side = linux_side;
     return r;
 }
@@ -2095,7 +2095,7 @@ winISteamGameServer_SteamGameServer008 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer008 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer008), "SteamGameServer008");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer008_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer008_vtable, 17, "SteamGameServer008");
     r->linux_side = linux_side;
     return r;
 }
@@ -2236,7 +2236,7 @@ winISteamGameServer_SteamGameServer005 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer005 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer005), "SteamGameServer005");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer005_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer005_vtable, 14, "SteamGameServer005");
     r->linux_side = linux_side;
     return r;
 }
@@ -2377,7 +2377,7 @@ winISteamGameServer_SteamGameServer004 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer004 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer004), "SteamGameServer004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer004_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer004_vtable, 14, "SteamGameServer004");
     r->linux_side = linux_side;
     return r;
 }
@@ -2541,7 +2541,7 @@ winISteamGameServer_SteamGameServer003 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer003 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer003), "SteamGameServer003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer003_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer003_vtable, 17, "SteamGameServer003");
     r->linux_side = linux_side;
     return r;
 }
@@ -2737,7 +2737,7 @@ winISteamGameServer_SteamGameServer002 *create_winISteamGameServer_SteamGameServ
 {
     winISteamGameServer_SteamGameServer002 *r = alloc_mem_for_iface(sizeof(winISteamGameServer_SteamGameServer002), "SteamGameServer002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameServer_SteamGameServer002_vtable;
+    r->vtable = alloc_vtable(&winISteamGameServer_SteamGameServer002_vtable, 21, "SteamGameServer002");
     r->linux_side = linux_side;
     return r;
 }

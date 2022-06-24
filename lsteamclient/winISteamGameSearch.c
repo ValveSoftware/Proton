@@ -149,7 +149,7 @@ winISteamGameSearch_SteamMatchGameSearch001 *create_winISteamGameSearch_SteamMat
 {
     winISteamGameSearch_SteamMatchGameSearch001 *r = alloc_mem_for_iface(sizeof(winISteamGameSearch_SteamMatchGameSearch001), "SteamMatchGameSearch001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamGameSearch_SteamMatchGameSearch001_vtable;
+    r->vtable = alloc_vtable(&winISteamGameSearch_SteamMatchGameSearch001_vtable, 14, "SteamMatchGameSearch001");
     r->linux_side = linux_side;
     return r;
 }

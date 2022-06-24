@@ -242,7 +242,7 @@ winISteamNetworkingUtils_SteamNetworkingUtils004 *create_winISteamNetworkingUtil
 {
     winISteamNetworkingUtils_SteamNetworkingUtils004 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingUtils_SteamNetworkingUtils004), "SteamNetworkingUtils004");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingUtils_SteamNetworkingUtils004_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingUtils_SteamNetworkingUtils004_vtable, 26, "SteamNetworkingUtils004");
     r->linux_side = linux_side;
     return r;
 }
@@ -450,7 +450,7 @@ winISteamNetworkingUtils_SteamNetworkingUtils003 *create_winISteamNetworkingUtil
 {
     winISteamNetworkingUtils_SteamNetworkingUtils003 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingUtils_SteamNetworkingUtils003), "SteamNetworkingUtils003");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingUtils_SteamNetworkingUtils003_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingUtils_SteamNetworkingUtils003_vtable, 23, "SteamNetworkingUtils003");
     r->linux_side = linux_side;
     return r;
 }
@@ -650,7 +650,7 @@ winISteamNetworkingUtils_SteamNetworkingUtils002 *create_winISteamNetworkingUtil
 {
     winISteamNetworkingUtils_SteamNetworkingUtils002 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingUtils_SteamNetworkingUtils002), "SteamNetworkingUtils002");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingUtils_SteamNetworkingUtils002_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingUtils_SteamNetworkingUtils002_vtable, 22, "SteamNetworkingUtils002");
     r->linux_side = linux_side;
     return r;
 }
@@ -850,7 +850,7 @@ winISteamNetworkingUtils_SteamNetworkingUtils001 *create_winISteamNetworkingUtil
 {
     winISteamNetworkingUtils_SteamNetworkingUtils001 *r = alloc_mem_for_iface(sizeof(winISteamNetworkingUtils_SteamNetworkingUtils001), "SteamNetworkingUtils001");
     TRACE("-> %p\n", r);
-    r->vtable = &winISteamNetworkingUtils_SteamNetworkingUtils001_vtable;
+    r->vtable = alloc_vtable(&winISteamNetworkingUtils_SteamNetworkingUtils001_vtable, 22, "SteamNetworkingUtils001");
     r->linux_side = linux_side;
     return r;
 }
