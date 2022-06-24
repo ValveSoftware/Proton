@@ -27,9 +27,9 @@
     git reset --hard HEAD
     git clean -xdf
 
-    echo "VKD3D: Add Halo Infinite patches"
+#    echo "VKD3D: Add Halo Infinite patches"
     # https://github.com/HansKristian-Work/vkd3d-proton/tree/execute-indirect-advanced-index-lut
-    patch -Np1 < ../patches/vkd3d-proton/halo_infinite_wip.patch
+#    patch -Np1 < ../patches/vkd3d-proton/halo_infinite_wip.patch
 
     # https://github.com/HansKristian-Work/vkd3d-proton/pull/1070
     echo "VKD3D: Add support for shared ID3D12Resource and ID3D12Fence objects"
@@ -81,6 +81,7 @@
     -W mshtml-HTMLLocation_put_hash \
     -W msxml3-FreeThreadedXMLHTTP60 \
     -W ntdll-ForceBottomUpAlloc \
+    -W ntdll-ApiSetMap \
     -W ntdll-WRITECOPY \
     -W ntdll-Builtin_Prot \
     -W ntdll-CriticalSection \
@@ -146,6 +147,7 @@
     # mshtml-HTMLLocation_put_hash  - already applied
     # msxml3-FreeThreadedXMLHTTP60 - already applied
     # ntdll-ForceBottomUpAlloc - already applied
+    # ntdll-ApiSetMap - applied manually
     # ntdll-WRITECOPY - already applied
     # ntdll-Builtin_Prot - already applied
     # ntdll-CriticalSection - breaks ffxiv and deep rock galactic
@@ -199,6 +201,9 @@
     # loader-KeyboardLayouts
     patch -Np1 < ../wine-staging/patches/loader-KeyboardLayouts/0001-loader-Add-Keyboard-Layouts-registry-enteries.patch
     patch -Np1 < ../wine-staging/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
+
+    # ntdll-ApiSetMap
+    patch -Np1 < ../wine-staging/patches/ntdll-ApiSetMap/0001-ntdll-Add-dummy-apiset-to-PEB.patch
 
     # ntdll-Exception
     patch -Np1 < ../wine-staging/patches/ntdll-Exception/0002-ntdll-OutputDebugString-should-throw-the-exception-a.patch
