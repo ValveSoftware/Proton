@@ -205,6 +205,20 @@ version of Proton to other users, you must adhere to the terms of these
 licenses.
 
 
+Debugging
+---------
+
+Proton builds have their symbols stripped by default. You can switch to
+"debug" beta branch in Steam (search for Proton in your library,
+Properties... -> BETAS -> select "debug") or build without stripping (see
+[Debug Builds section](#debug-builds)).
+
+The symbols are provided through the accompanying `.debug` files which may
+need to be explicitly loaded by the debugging tools. For GDB there's a helper
+script `wine/tools/gdbinit.py` (source it) that provides `load-symbol-files`
+(or `lsf` for short) command which loads the symbols for all the mapped files.
+
+
 Runtime Config Options
 ----------------------
 
