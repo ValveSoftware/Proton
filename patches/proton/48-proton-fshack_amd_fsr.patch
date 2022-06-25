@@ -2361,15 +2361,15 @@ index 913c37dee68..2c9ff7900c2 100644
 +    switch (current_mode.dmPelsWidth) {
 +        /* 4k FSR resolutions */
 +        case 3840:
-+            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
++            memcpy(fs_monitor_sizes+sizeof(fsr4k_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
 +            break;
 +        /* ultrawide FSR resolutions */
 +        case 3440:
-+            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsruw_sizes,sizeof(fsruw_sizes));
++            memcpy(fs_monitor_sizes+sizeof(fsruw_sizes),fsruw_sizes,sizeof(fsruw_sizes));
 +            break;
 +        /* 1440p FSR resolutions */
 +        case 2160:
-+            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr2k_sizes,sizeof(fsr2k_sizes));
++            memcpy(fs_monitor_sizes+sizeof(fsr2k_sizes),fsr2k_sizes,sizeof(fsr2k_sizes));
 +            break;
 +        /* 1080p FSR resolutions */
 +        case 1920:
