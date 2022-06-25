@@ -2368,7 +2368,7 @@ index 913c37dee68..2c9ff7900c2 100644
 +            memcpy(fs_monitor_sizes+sizeof(fsruw_sizes),fsruw_sizes,sizeof(fsruw_sizes));
 +            break;
 +        /* 1440p FSR resolutions */
-+        case 2160:
++        case 2560:
 +            memcpy(fs_monitor_sizes+sizeof(fsr2k_sizes),fsr2k_sizes,sizeof(fsr2k_sizes));
 +            break;
 +        /* 1080p FSR resolutions */
