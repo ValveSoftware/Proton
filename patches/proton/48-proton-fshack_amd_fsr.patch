@@ -2292,105 +2292,6 @@ index 8bb5b7c04a3..7f538f90b43 100644
                          res = VK_ERROR_DEVICE_LOST;
                      }
                  }
-From 6cdad4ea774347ddbb14d695784ea62641b69c96 Mon Sep 17 00:00:00 2001
-From: Tk-Glitch <ti3nou@gmail.com>
-Date: Sat, 17 Jul 2021 23:54:42 +0200
-Subject: fractional resolutions
-
-
-diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 282d9dbe5ca..2a1242cb5c5 100644
---- a/dlls/winex11.drv/fs.c
-+++ b/dlls/winex11.drv/fs.c
-@@ -67,6 +67,8 @@ static struct fs_monitor_size fs_monitor_sizes[] =
-     {1600, 900},  /* 16:9 */
-     {1920, 1080}, /* 16:9 */
-     {2560, 1440}, /* 16:9 */
-+    {2304, 1296}, /* 16:9 */
-+    {2048, 1152}, /* 16:9 */
-     {2880, 1620}, /* 16:9 */
-     {3200, 1800}, /* 16:9 */
-     {1440, 900},  /*  8:5 */
-From c7f9f832e966649b232316557653d69a8fa5947b Mon Sep 17 00:00:00 2001
-From: Thomas Crider <gloriouseggroll@gmail.com>
-Date: Wed, 21 Jul 2021 00:34:52 -0600
-Subject: [PATCH] FSR: Add fshack input resolutions
-
-https://www.tomshardware.com/news/amd-fidelityfx-super-resolution-fsr-performance-tested
----
- dlls/winex11.drv/fs.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 2a1242cb5c5..756964fe714 100644
---- a/dlls/winex11.drv/fs.c
-+++ b/dlls/winex11.drv/fs.c
-@@ -62,14 +62,21 @@ static struct fs_monitor_size fs_monitor_sizes[] =
-     {800, 600},   /*  4:3 */
-     {1024, 768},  /*  4:3 */
-     {1600, 1200}, /*  4:3 */
--    {960, 540},   /* 16:9 */
--    {1280, 720},  /* 16:9 */
-+    {960, 540},   /* 16:9 - 'FSR 1080p Performance' */
-+    {1130, 635},  /* 16:9 - 'FSR 1080p Balanced' */
-+    {1280, 720},  /* 16:9 - 'FSR 1440p Performance, 1080p Quality' */
-+    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality' */
-+    {1506, 847},  /* 16:9 - 'FSR 1440p Balanced' */
-     {1600, 900},  /* 16:9 */
--    {1920, 1080}, /* 16:9 */
--    {2560, 1440}, /* 16:9 */
-+    {1706, 960},  /* 16:9 - 'FSR 1440p Quality' */
-+    {1920, 1080}, /* 16:9 - 'FSR 2160p Performance' */
-+    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality' */
-+    {2259, 1270}, /* 16:9 - 'FSR 2160p Balanced' */
-+    {2560, 1440}, /* 16:9 - 'FSR 2160p Quality' */
-     {2304, 1296}, /* 16:9 */
-     {2048, 1152}, /* 16:9 */
-     {2880, 1620}, /* 16:9 */
-+    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra Quality' */
-     {3200, 1800}, /* 16:9 */
-     {1440, 900},  /*  8:5 */
-     {1680, 1050}, /*  8:5 */
---
-2.31.1
-
-From c760fe3301802efffc966ff8b4a99326a76f07ec Mon Sep 17 00:00:00 2001
-From: Thomas Crider <gloriouseggroll@gmail.com>
-Date: Thu, 22 Jul 2021 00:03:31 -0600
-Subject: [PATCH] =?UTF-8?q?fsr:=20add=20ultra-wide=20input=20resolutions?=
- =?UTF-8?q?=20=1B[200~?=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-https://gpuopen.com/fidelityfx-superresolution/#quality
----
- dlls/winex11.drv/fs.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 756964fe714..6151f43bacf 100644
---- a/dlls/winex11.drv/fs.c
-+++ b/dlls/winex11.drv/fs.c
-@@ -84,9 +84,14 @@ static struct fs_monitor_size fs_monitor_sizes[] =
-     {2560, 1600}, /*  8:5 */
-     {1440, 960},  /*  3:2 */
-     {1920, 1280}, /*  3:2 */
--    {2560, 1080}, /* 21:9 ultra-wide */
-     {1920, 800},  /* 12:5 */
-     {3840, 1600}, /* 12:5 */
-+    {1720, 720}, /* 21:9 - 'FSR ultra-wide Performance' */
-+    {2024, 847}, /* 21:9 - 'FSR ultra-wide Balanced' */
-+    {2293, 960}, /* 21:9 - 'FSR ultra-wide Quality' */
-+    {2560, 1080}, /* 21:9 ultra-wide */
-+    {2646, 1108}, /* 21:9 - 'FSR ultra-wide Ultra Quality' */
-+    {3440, 1440}, /* 21:9 ultra-wide */
-     {1280, 1024}, /*  5:4 */
- };
-
---
-2.31.1
-
 diff --git a/dlls/winevulkan/Makefile.in b/dlls/winevulkan/Makefile.in
 index 38809211308..f7ca282921f 100644
 --- a/dlls/winevulkan/Makefile.in
@@ -2404,3 +2305,80 @@ index 38809211308..f7ca282921f 100644
 
  C_SRCS = \
  	loader.c \
+diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
+index 913c37dee68..2c9ff7900c2 100644
+--- a/dlls/winex11.drv/fs.c
++++ b/dlls/winex11.drv/fs.c
+@@ -85,6 +85,42 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+     {1280, 1024}, /*  5:4 */
+ };
+ 
++
++/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
++static struct fs_monitor_size fsr4k_sizes[] =
++{
++    {2259, 1270}, /* 16:9 - 'FSR 2160p Balanced' */
++    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra Quality' */
++};
++
++/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
++static struct fs_monitor_size fsruw_sizes[] =
++{
++    {1720, 720}, /* 21:9 - 'FSR ultra-wide Performance' */
++    {2024, 847}, /* 21:9 - 'FSR ultra-wide Balanced' */
++    {2293, 960}, /* 21:9 - 'FSR ultra-wide Quality' */
++    {2646, 1108}, /* 21:9 - 'FSR ultra-wide Ultra Quality' */
++};
++
++/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
++static struct fs_monitor_size fsr2k_sizes[] =
++{
++    {1506, 847},  /* 16:9 - 'FSR 1440p Balanced' */
++    {1706, 960},  /* 16:9 - 'FSR 1440p Quality' */
++    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality' */
++};
++
++/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
++static struct fs_monitor_size fsr1080_sizes[] =
++{
++    {1130, 635},  /* 16:9 - 'FSR 1080p Balanced' */
++    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality' */
++};
++
++
++
++static struct fs_monitor_size fake_current_resolution;
++
+ /* A fake monitor for the fullscreen hack */
+ struct fs_monitor
+ {
+@@ -178,7 +214,28 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+     /* Fullscreen hack doesn't support changing display orientations */
+     if (!real_settings_handler.get_modes(real_id, 0, &real_modes, &real_mode_count))
+         return FALSE;
+-
++    
++    switch (current_mode.dmPelsWidth) {
++        /* 4k FSR resolutions */
++        case 3840:
++            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
++            break;
++        /* ultrawide FSR resolutions */
++        case 3440:
++            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsruw_sizes,sizeof(fsruw_sizes));
++            break;
++        /* 1440p FSR resolutions */
++        case 2160:
++            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr2k_sizes,sizeof(fsr2k_sizes));
++            break;
++        /* 1080p FSR resolutions */
++        case 1920:
++            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr1080_sizes,sizeof(fsr1080_sizes));
++            break;
++        default:
++            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr1080_sizes,sizeof(fsr1080_sizes));
++    }    
++        
+     fs_monitor->mode_count = 0;
+     fs_monitor->unique_resolutions = 0;
+     fs_monitor->modes = heap_calloc(ARRAY_SIZE(fs_monitor_sizes) * DEPTH_COUNT + real_mode_count,
