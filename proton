@@ -1123,7 +1123,7 @@ class CompatData:
                     if file_exists(nvapi32_dll + '.debug', follow_symlinks=False):
                         os.unlink(nvapi32_dll + '.debug')
 
-                # Try to detect known DLLs that ship with the NVIDIA Linux Driver
+                # Try to detect known DLLs that ship with the NVIDIA Linux Driver 
                 # and add them into the prefix
                 nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
                 if nvidia_wine_dll_dir:
@@ -1452,6 +1452,12 @@ class Session:
 
         if "enablenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
+
+        #if fsr patch is applied, apex legends fails to set 1080p fullscreen unless fsr is enabled
+        if "SteamAppId" in os.environ:
+	        appid = os.environ["SteamAppId"]
+	        if appid == "1172470":
+		        self.env["WINE_FULLSCREEN_FSR"] = "1"
 
         s = ""
         for dll in self.dlloverrides:
