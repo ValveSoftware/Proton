@@ -332,19 +332,6 @@
 
 ### END PROTON PATCH SECTION ###
 
-### START MFPLAT PATCH SECTION ###
-
-    # missing http: scheme workaround see: https://github.com/ValveSoftware/Proton/issues/5195
-#    echo "WINE: -MFPLAT- The Good Life (1452500) workaround"
-#    patch -Np1 < ../patches/wine-hotfixes/mfplat/thegoodlife-mfplat-http-scheme-workaround.patch
-
-    # Needed for godfall intro
-#    echo "mfplat godfall fix"
-#    patch -Np1 < ../patches/wine-hotfixes/mfplat/mfplat-godfall-hotfix.patch
-
-
-### END MFPLAT PATCH SECTION ###
-
 
 ### (2-5) WINE HOTFIX SECTION ###
 
@@ -364,6 +351,14 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/0001-winex11.drv-Define-ControlMask-when-not-available.patch
     patch -Np1 < ../patches/wine-hotfixes/pending/0002-include-Add-THREAD_POWER_THROTTLING_STATE-type.patch
     patch -Np1 < ../patches/wine-hotfixes/pending/0003-ntdll-Fake-success-for-ThreadPowerThrottlingState.patch
+    
+    # fixes blops II zombies and multiplayer freeze in proton-only due to DRM check
+    echo "WINE: -HOTFIX- fix blops II zombies and multiplayer crash"
+    patch -Np1 < ../patches/wine-hotfixes/pending/blopsII_proton_hang_fix.patch
+    
+    # currently broken
+    #echo "WINE: -HOTFIX- fix the good life videos"
+    #patch -Np1 < ../patches/wine-hotfixes/pending/mfplat_http_schemas.patch
 
 ### END WINE HOTFIX SECTION ###
 

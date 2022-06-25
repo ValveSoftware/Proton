@@ -1,0 +1,1063 @@
+From 39020f7413dd01e258947520418953e216e53487 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Wed, 23 Feb 2022 12:23:34 +0300
+Subject: [PATCH 1/3] mfplat: Correctly calculate url scheme length.
+
+When a url is passed in, for example "http://..."
+We need to include the : in the scheme string not exclude it.
+
+Cherry picked from: 4662dbd796a8feac494de1ae26c6ab6005e829da
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplat/main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
+index 83fc8549e24..8eeaaea4899 100644
+--- a/dlls/mfplat/main.c
++++ b/dlls/mfplat/main.c
+@@ -6260,10 +6260,11 @@ static HRESULT resolver_get_scheme_handler(const WCHAR *url, DWORD flags, IMFSch
+     if (ptr == url || *ptr != ':')
+     {
+         url = fileschemeW;
+-        ptr = fileschemeW + ARRAY_SIZE(fileschemeW) - 1;
++        len = ARRAY_SIZE(fileschemeW) - 1;
+     }
++    else
++        len = ptr - url + 1;
+ 
+-    len = ptr - url;
+     scheme = malloc((len + 1) * sizeof(WCHAR));
+     if (!scheme)
+         return E_OUTOFMEMORY;
+
+From 5f5489267945f24caedc615a0d506eb74b88aacc Mon Sep 17 00:00:00 2001
+From: Yuxuan Shui <yshuiv7@gmail.com>
+Date: Wed, 13 Apr 2022 02:09:06 +0100
+Subject: [PATCH 2/3] winegstreamer: create media source from uri
+
+Supported by gstreamer's uridecodebin.
+
+Signed-off-by: Yuxuan Shui <yshuiv7@gmail.com>
+---
+ dlls/winegstreamer/gst_private.h   |   2 +-
+ dlls/winegstreamer/main.c          |   3 +-
+ dlls/winegstreamer/media_source.c  | 146 +++++++++++++++++++----------
+ dlls/winegstreamer/quartz_parser.c |   2 +-
+ dlls/winegstreamer/unixlib.h       |   2 +
+ dlls/winegstreamer/wg_parser.c     |  80 +++++++++++++---
+ dlls/winegstreamer/wm_reader.c     |   2 +-
+ 7 files changed, 168 insertions(+), 69 deletions(-)
+
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index c6b256b4fdd..5ecf4e4cefe 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -67,7 +67,7 @@ static inline const char *debugstr_time(REFERENCE_TIME time)
+ struct wg_parser *wg_parser_create(enum wg_parser_type type, bool unlimited_buffering) DECLSPEC_HIDDEN;
+ void wg_parser_destroy(struct wg_parser *parser) DECLSPEC_HIDDEN;
+ 
+-HRESULT wg_parser_connect(struct wg_parser *parser, uint64_t file_size) DECLSPEC_HIDDEN;
++HRESULT wg_parser_connect(struct wg_parser *parser, uint64_t file_size, const WCHAR *uri) DECLSPEC_HIDDEN;
+ HRESULT wg_parser_connect_unseekable(struct wg_parser *parser, const struct wg_format *in_format,
+             uint32_t stream_count, const struct wg_format *out_formats, const struct wg_rect *apertures) DECLSPEC_HIDDEN;
+ void wg_parser_disconnect(struct wg_parser *parser) DECLSPEC_HIDDEN;
+diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
+index 219fde82dc6..d7fd3c893ba 100644
+--- a/dlls/winegstreamer/main.c
++++ b/dlls/winegstreamer/main.c
+@@ -78,12 +78,13 @@ void wg_parser_destroy(struct wg_parser *parser)
+     __wine_unix_call(unix_handle, unix_wg_parser_destroy, parser);
+ }
+ 
+-HRESULT wg_parser_connect(struct wg_parser *parser, uint64_t file_size)
++HRESULT wg_parser_connect(struct wg_parser *parser, uint64_t file_size, const WCHAR *uri)
+ {
+     struct wg_parser_connect_params params =
+     {
+         .parser = parser,
+         .file_size = file_size,
++        .uri = uri,
+     };
+ 
+     return __wine_unix_call(unix_handle, unix_wg_parser_connect, &params);
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 6e5610d933e..4f0be64fce6 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -1324,13 +1324,17 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+ 
+     wg_parser_disconnect(source->wg_parser);
+ 
+-    source->read_thread_shutdown = true;
+-    WaitForSingleObject(source->read_thread, INFINITE);
+-    CloseHandle(source->read_thread);
++    if (source->read_thread != NULL)
++    {
++        source->read_thread_shutdown = true;
++        WaitForSingleObject(source->read_thread, INFINITE);
++        CloseHandle(source->read_thread);
++    }
+ 
+     IMFPresentationDescriptor_Release(source->pres_desc);
+     IMFMediaEventQueue_Shutdown(source->event_queue);
+-    IMFByteStream_Release(source->byte_stream);
++    if (source->byte_stream)
++        IMFByteStream_Release(source->byte_stream);
+ 
+     for (i = 0; i < source->stream_count; i++)
+     {
+@@ -1371,70 +1375,32 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+     media_source_Shutdown,
+ };
+ 
+-static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
++static HRESULT media_source_init_from_parser(struct wg_parser *parser, uint64_t file_size, const WCHAR *uri, struct media_source *object)
+ {
+     BOOL video_selected = FALSE, audio_selected = FALSE;
+     IMFStreamDescriptor **descriptors = NULL;
+     unsigned int stream_count = UINT_MAX;
+-    struct media_source *object;
+     UINT64 total_pres_time = 0;
+-    struct wg_parser *parser;
+-    DWORD bytestream_caps;
+-    uint64_t file_size;
+     unsigned int i;
+     HRESULT hr;
+ 
+-    if (FAILED(hr = IMFByteStream_GetCapabilities(bytestream, &bytestream_caps)))
+-        return hr;
+-
+-    if (!(bytestream_caps & MFBYTESTREAM_IS_SEEKABLE))
+-    {
+-        FIXME("Non-seekable bytestreams not supported.\n");
+-        return MF_E_BYTESTREAM_NOT_SEEKABLE;
+-    }
+-
+-    if (FAILED(hr = IMFByteStream_GetLength(bytestream, &file_size)))
+-    {
+-        FIXME("Failed to get byte stream length, hr %#x.\n", hr);
+-        return hr;
+-    }
+-
+-    if (!(object = calloc(1, sizeof(*object))))
+-        return E_OUTOFMEMORY;
+-
+     object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
+     object->IMFGetService_iface.lpVtbl = &media_source_get_service_vtbl;
+     object->IMFRateSupport_iface.lpVtbl = &media_source_rate_support_vtbl;
+     object->IMFRateControl_iface.lpVtbl = &media_source_rate_control_vtbl;
+     object->async_commands_callback.lpVtbl = &source_async_commands_callback_vtbl;
+     object->ref = 1;
+-    object->byte_stream = bytestream;
+-    IMFByteStream_AddRef(bytestream);
+ 
+     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
+         goto fail;
+ 
+     if (FAILED(hr = MFAllocateWorkQueue(&object->async_commands_queue)))
+         goto fail;
+-
+-    /* In Media Foundation, sources may read from any media source stream
+-     * without fear of blocking due to buffering limits on another. Trailmakers,
+-     * a Unity3D Engine game, only reads one sample from the audio stream (and
+-     * never deselects it). Remove buffering limits from decodebin in order to
+-     * account for this. Note that this does leak memory, but the same memory
+-     * leak occurs with native. */
+-    if (!(parser = wg_parser_create(WG_PARSER_DECODEBIN, true)))
+-    {
+-        hr = E_OUTOFMEMORY;
+-        goto fail;
+-    }
+     object->wg_parser = parser;
+ 
+-    object->read_thread = CreateThread(NULL, 0, read_thread, object, 0, NULL);
+-
+     object->state = SOURCE_OPENING;
+ 
+-    if (FAILED(hr = wg_parser_connect(parser, file_size)))
++    if (FAILED(hr = wg_parser_connect(parser, file_size, uri)))
+         goto fail;
+ 
+     stream_count = wg_parser_get_stream_count(parser);
+@@ -1527,7 +1493,6 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+ 
+     object->state = SOURCE_STOPPED;
+ 
+-    *out_media_source = object;
+     return S_OK;
+ 
+     fail:
+@@ -1552,18 +1517,97 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+     free(object->streams);
+     if (stream_count != UINT_MAX)
+         wg_parser_disconnect(object->wg_parser);
+-    if (object->read_thread)
+-    {
+-        object->read_thread_shutdown = true;
+-        WaitForSingleObject(object->read_thread, INFINITE);
+-        CloseHandle(object->read_thread);
+-    }
+     if (object->wg_parser)
+         wg_parser_destroy(object->wg_parser);
+     if (object->async_commands_queue)
+         MFUnlockWorkQueue(object->async_commands_queue);
+     if (object->event_queue)
+         IMFMediaEventQueue_Release(object->event_queue);
++    return hr;
++}
++
++HRESULT winegstreamer_create_media_source_from_uri(const WCHAR *uri, IUnknown **out_media_source)
++{
++    struct media_source *object;
++    struct wg_parser *parser;
++    HRESULT hr;
++
++    if (!(object = calloc(1, sizeof(*object))))
++        return E_OUTOFMEMORY;
++
++    if (!(parser = wg_parser_create(WG_PARSER_URIDECODEBIN, true)))
++    {
++        hr = E_OUTOFMEMORY;
++        goto fail;
++    }
++
++    if (FAILED(hr = media_source_init_from_parser(parser, 0, uri, object)))
++        goto fail;
++
++    *out_media_source = (IUnknown *)&object->IMFMediaSource_iface;
++    return S_OK;
++    fail:
++    free(object);
++    return hr;
++}
++
++static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
++{
++    struct wg_parser *parser;
++    struct media_source *object;
++    DWORD bytestream_caps;
++    uint64_t file_size;
++    HRESULT hr;
++
++    if (!(object = calloc(1, sizeof(*object))))
++        return E_OUTOFMEMORY;
++
++    if (FAILED(hr = IMFByteStream_GetCapabilities(bytestream, &bytestream_caps)))
++        return hr;
++
++    if (!(bytestream_caps & MFBYTESTREAM_IS_SEEKABLE))
++    {
++        FIXME("Non-seekable bytestreams not supported.\n");
++        return MF_E_BYTESTREAM_NOT_SEEKABLE;
++    }
++
++    if (FAILED(hr = IMFByteStream_GetLength(bytestream, &file_size)))
++    {
++        FIXME("Failed to get byte stream length, hr %#lx.\n", hr);
++        return hr;
++    }
++
++    /* In Media Foundation, sources may read from any media source stream
++     * without fear of blocking due to buffering limits on another. Trailmakers,
++     * a Unity3D Engine game, only reads one sample from the audio stream (and
++     * never deselects it). Remove buffering limits from decodebin in order to
++     * account for this. Note that this does leak memory, but the same memory
++     * leak occurs with native. */
++    if (!(parser = wg_parser_create(WG_PARSER_DECODEBIN, true)))
++    {
++        hr = E_OUTOFMEMORY;
++        goto fail;
++    }
++
++    object->byte_stream = bytestream;
++    IMFByteStream_AddRef(bytestream);
++
++    object->read_thread = CreateThread(NULL, 0, read_thread, object, 0, NULL);
++
++    if (FAILED(hr = media_source_init_from_parser(parser, file_size, NULL, object)))
++    {
++        goto fail;
++    }
++    *out_media_source = object;
++
++    return S_OK;
++    fail:
++    if (object->read_thread)
++    {
++        object->read_thread_shutdown = true;
++        WaitForSingleObject(object->read_thread, INFINITE);
++        CloseHandle(object->read_thread);
++    }
+     IMFByteStream_Release(object->byte_stream);
+     free(object);
+     return hr;
+diff --git a/dlls/winegstreamer/quartz_parser.c b/dlls/winegstreamer/quartz_parser.c
+index d1051fbc127..bdeb09b0702 100644
+--- a/dlls/winegstreamer/quartz_parser.c
++++ b/dlls/winegstreamer/quartz_parser.c
+@@ -1054,7 +1054,7 @@ static HRESULT parser_sink_connect(struct strmbase_sink *iface, IPin *peer, cons
+     filter->sink_connected = true;
+     filter->read_thread = CreateThread(NULL, 0, read_thread, filter, 0, NULL);
+ 
+-    if (FAILED(hr = wg_parser_connect(filter->wg_parser, file_size)))
++    if (FAILED(hr = wg_parser_connect(filter->wg_parser, file_size, NULL)))
+         goto err;
+ 
+     if (!filter->init_gst(filter))
+diff --git a/dlls/winegstreamer/unixlib.h b/dlls/winegstreamer/unixlib.h
+index 2624da64014..3bc6d58736b 100644
+--- a/dlls/winegstreamer/unixlib.h
++++ b/dlls/winegstreamer/unixlib.h
+@@ -166,6 +166,7 @@ enum wg_parser_type
+     WG_PARSER_WAVPARSE,
+     WG_PARSER_AUDIOCONV,
+     WG_PARSER_VIDEOCONV,
++    WG_PARSER_URIDECODEBIN,
+ };
+ 
+ struct wg_parser_create_params
+@@ -178,6 +179,7 @@ struct wg_parser_create_params
+ struct wg_parser_connect_params
+ {
+     struct wg_parser *parser;
++    const WCHAR *uri;
+     UINT64 file_size;
+ };
+ 
+diff --git a/dlls/winegstreamer/wg_parser.c b/dlls/winegstreamer/wg_parser.c
+index 197ca451c95..d281dd66054 100644
+--- a/dlls/winegstreamer/wg_parser.c
++++ b/dlls/winegstreamer/wg_parser.c
+@@ -70,6 +70,7 @@ struct wg_parser
+ 
+     guint64 file_size, start_offset, next_offset, stop_offset;
+     guint64 next_pull_offset;
++    gchar *uri;
+ 
+     pthread_t push_thread;
+ 
+@@ -1919,12 +1920,31 @@ static gchar *query_language(GstPad *pad)
+     return ret;
+ }
+ 
+-static HRESULT wg_parser_connect_inner(struct wg_parser *parser)
++static void wg_parser_create_my_src(struct wg_parser *parser)
+ {
+     GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("wine_src",
+             GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS_ANY);
+ 
++    parser->my_src = gst_pad_new_from_static_template(&src_template, "wine-src");
++    gst_pad_set_getrange_function(parser->my_src, src_getrange_cb);
++    gst_pad_set_query_function(parser->my_src, src_query_cb);
++    gst_pad_set_activatemode_function(parser->my_src, src_activate_mode_cb);
++    gst_pad_set_event_function(parser->my_src, src_event_cb);
++    gst_pad_set_element_private(parser->my_src, parser);
++}
++
++static HRESULT wg_parser_connect_inner(struct wg_parser *parser, const WCHAR *uri)
++{
+     parser->sink_connected = true;
++    if (uri)
++    {
++        parser->uri = malloc(wcslen(uri) * 3 + 1);
++        ntdll_wcstoumbs(uri, wcslen(uri) + 1, parser->uri, wcslen(uri) * 3 + 1, FALSE);
++    }
++    else
++    {
++        parser->uri = NULL;
++    }
+ 
+     if (!parser->bus)
+     {
+@@ -1935,13 +1955,6 @@ static HRESULT wg_parser_connect_inner(struct wg_parser *parser)
+     parser->container = gst_bin_new(NULL);
+     gst_element_set_bus(parser->container, parser->bus);
+ 
+-    parser->my_src = gst_pad_new_from_static_template(&src_template, "wine-src");
+-    gst_pad_set_getrange_function(parser->my_src, src_getrange_cb);
+-    gst_pad_set_query_function(parser->my_src, src_query_cb);
+-    gst_pad_set_activatemode_function(parser->my_src, src_activate_mode_cb);
+-    gst_pad_set_event_function(parser->my_src, src_event_cb);
+-    gst_pad_set_element_private(parser->my_src, parser);
+-
+     parser->start_offset = parser->next_offset = parser->stop_offset = 0;
+     parser->next_pull_offset = 0;
+     parser->error = false;
+@@ -1961,14 +1974,14 @@ static NTSTATUS wg_parser_connect(void *args)
+     parser->seekable = true;
+     parser->file_size = params->file_size;
+ 
+-    if ((hr = wg_parser_connect_inner(parser)))
++    if ((hr = wg_parser_connect_inner(parser, params->uri)))
+         return hr;
+ 
+     if (!parser->init_gst(parser))
+         goto out;
+ 
+     gst_element_set_state(parser->container, GST_STATE_PAUSED);
+-    if (!parser->pull_mode)
++    if (!parser->pull_mode && parser->my_src)
+         gst_pad_set_active(parser->my_src, 1);
+     ret = gst_element_get_state(parser->container, NULL, NULL, -1);
+ 
+@@ -2126,7 +2139,7 @@ static NTSTATUS wg_parser_connect_unseekable(void *args)
+     /* since typefind is not available here, we must have an input_format */
+     parser->input_format = *in_format;
+ 
+-    if ((hr = wg_parser_connect_inner(parser)))
++    if ((hr = wg_parser_connect_inner(parser, NULL)))
+         return hr;
+ 
+     parser->stop_offset = -1;
+@@ -2172,9 +2185,12 @@ static NTSTATUS wg_parser_disconnect(void *args)
+     gst_element_set_state(parser->container, GST_STATE_NULL);
+     if (!parser->pull_mode)
+         gst_pad_set_active(parser->my_src, 0);
+-    gst_pad_unlink(parser->my_src, parser->their_sink);
+-    gst_object_unref(parser->my_src);
+-    gst_object_unref(parser->their_sink);
++    if (parser->my_src && parser->their_sink)
++        gst_pad_unlink(parser->my_src, parser->their_sink);
++    if (parser->my_src)
++        gst_object_unref(parser->my_src);
++    if (parser->their_sink)
++        gst_object_unref(parser->their_sink);
+     parser->my_src = parser->their_sink = NULL;
+ 
+     pthread_mutex_lock(&parser->mutex);
+@@ -2229,6 +2245,8 @@ static BOOL decodebin_parser_init_gst(struct wg_parser *parser)
+     parser->no_more_pads = false;
+     pthread_mutex_unlock(&parser->mutex);
+ 
++    wg_parser_create_my_src(parser);
++
+     if ((ret = gst_pad_link(parser->my_src, parser->their_sink)) < 0)
+     {
+         GST_ERROR("Failed to link pads, error %d.\n", ret);
+@@ -2238,6 +2256,34 @@ static BOOL decodebin_parser_init_gst(struct wg_parser *parser)
+     return TRUE;
+ }
+ 
++static BOOL uridecodebin_parser_init_gst(struct wg_parser *parser)
++{
++    GstElement *element;
++
++    if (!(element = create_element("uridecodebin", "base")))
++        return FALSE;
++
++    gst_bin_add(GST_BIN(parser->container), element);
++    parser->decodebin = element;
++
++    if (parser->unlimited_buffering)
++    {
++        g_object_set(parser->decodebin, "buffer-duration", G_MAXINT64, NULL);
++        g_object_set(parser->decodebin, "buffer-size", G_MAXINT, NULL);
++    }
++    g_object_set(parser->decodebin, "uri", parser->uri, NULL);
++
++    parser->no_more_pads = false;
++
++    g_signal_connect(element, "pad-added", G_CALLBACK(pad_added_cb), parser);
++    g_signal_connect(element, "pad-removed", G_CALLBACK(pad_removed_cb), parser);
++    g_signal_connect(element, "autoplug-select", G_CALLBACK(autoplug_select_cb), parser);
++    g_signal_connect(element, "autoplug-sort", G_CALLBACK(autoplug_sort_cb), parser);
++    g_signal_connect(element, "no-more-pads", G_CALLBACK(no_more_pads_cb), parser);
++
++    return TRUE;
++}
++
+ static BOOL avi_parser_init_gst(struct wg_parser *parser)
+ {
+     GstElement *element;
+@@ -2258,6 +2304,8 @@ static BOOL avi_parser_init_gst(struct wg_parser *parser)
+     parser->no_more_pads = false;
+     pthread_mutex_unlock(&parser->mutex);
+ 
++    wg_parser_create_my_src(parser);
++
+     if ((ret = gst_pad_link(parser->my_src, parser->their_sink)) < 0)
+     {
+         GST_ERROR("Failed to link pads, error %d.\n", ret);
+@@ -2278,6 +2326,7 @@ static BOOL mpeg_audio_parser_init_gst(struct wg_parser *parser)
+ 
+     gst_bin_add(GST_BIN(parser->container), element);
+ 
++    wg_parser_create_my_src(parser);
+     parser->their_sink = gst_element_get_static_pad(element, "sink");
+     if ((ret = gst_pad_link(parser->my_src, parser->their_sink)) < 0)
+     {
+@@ -2312,6 +2361,7 @@ static BOOL wave_parser_init_gst(struct wg_parser *parser)
+ 
+     gst_bin_add(GST_BIN(parser->container), element);
+ 
++    wg_parser_create_my_src(parser);
+     parser->their_sink = gst_element_get_static_pad(element, "sink");
+     if ((ret = gst_pad_link(parser->my_src, parser->their_sink)) < 0)
+     {
+@@ -2507,6 +2557,7 @@ static NTSTATUS wg_parser_create(void *args)
+         [WG_PARSER_WAVPARSE] = wave_parser_init_gst,
+         [WG_PARSER_AUDIOCONV] = audio_convert_init_gst,
+         [WG_PARSER_VIDEOCONV] = video_convert_init_gst,
++        [WG_PARSER_URIDECODEBIN] = uridecodebin_parser_init_gst,
+     };
+ 
+     struct wg_parser_create_params *params = args;
+@@ -2545,6 +2596,7 @@ static NTSTATUS wg_parser_destroy(void *args)
+     pthread_cond_destroy(&parser->read_cond);
+     pthread_cond_destroy(&parser->read_done_cond);
+ 
++    free(parser->uri);
+     free(parser);
+     return S_OK;
+ }
+diff --git a/dlls/winegstreamer/wm_reader.c b/dlls/winegstreamer/wm_reader.c
+index cb667c957b4..cf79ecd356f 100644
+--- a/dlls/winegstreamer/wm_reader.c
++++ b/dlls/winegstreamer/wm_reader.c
+@@ -1466,7 +1466,7 @@ static HRESULT init_stream(struct wm_reader *reader, QWORD file_size)
+         goto out_destroy_parser;
+     }
+ 
+-    if (FAILED(hr = wg_parser_connect(reader->wg_parser, file_size)))
++    if (FAILED(hr = wg_parser_connect(reader->wg_parser, file_size, NULL)))
+     {
+         ERR("Failed to connect parser, hr %#x.\n", hr);
+         goto out_shutdown_thread;
+
+From 01e0ef894f4e1ab1b3970dd334e46ee68835dcba Mon Sep 17 00:00:00 2001
+From: Yuxuan Shui <yshuiv7@gmail.com>
+Date: Sun, 17 Apr 2022 16:56:50 +0100
+Subject: [PATCH 3/3] winegstreamer: add http/https/rtsp scheme handler
+
+Signed-off-by: Yuxuan Shui <yshuiv7@gmail.com>
+---
+ dlls/winegstreamer/Makefile.in               |   1 +
+ dlls/winegstreamer/gst_private.h             |   2 +
+ dlls/winegstreamer/mfplat.c                  |   3 +
+ dlls/winegstreamer/scheme_handler.c          | 409 +++++++++++++++++++
+ dlls/winegstreamer/winegstreamer.rgs         |  28 ++
+ dlls/winegstreamer/winegstreamer_classes.idl |   7 +
+ 6 files changed, 450 insertions(+)
+ create mode 100644 dlls/winegstreamer/scheme_handler.c
+
+diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
+index 1b7caa769eb..cf9ecd6399a 100644
+--- a/dlls/winegstreamer/Makefile.in
++++ b/dlls/winegstreamer/Makefile.in
+@@ -17,6 +17,7 @@ C_SRCS = \
+ 	media_source.c \
+ 	mfplat.c \
+ 	quartz_parser.c \
++	scheme_handler.c \
+ 	wg_parser.c \
+ 	wg_transform.c \
+ 	wm_asyncreader.c \
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index 5ecf4e4cefe..6b71ffde74b 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -124,11 +124,13 @@ void mf_media_type_to_wg_format(IMFMediaType *type, struct wg_format *format) DE
+ void mf_media_type_to_wg_encoded_format(IMFMediaType *type, struct wg_encoded_format *format) DECLSPEC_HIDDEN;
+ 
+ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
++HRESULT winegstreamer_create_media_source_from_uri(const WCHAR *uri, IUnknown **out_media_source) DECLSPEC_HIDDEN;
+ 
+ HRESULT aac_decoder_create(REFIID riid, void **ret) DECLSPEC_HIDDEN;
+ HRESULT h264_decoder_create(REFIID riid, void **ret) DECLSPEC_HIDDEN;
+ HRESULT audio_converter_create(REFIID riid, void **ret) DECLSPEC_HIDDEN;
+ HRESULT color_converter_create(REFIID riid, void **ret) DECLSPEC_HIDDEN;
++HRESULT gstreamer_scheme_handler_construct(REFIID riid, void **obj) DECLSPEC_HIDDEN;
+ 
+ enum decoder_type
+ {
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index fe55a45f61e..3c96bdd89d9 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -398,6 +398,8 @@ static HRESULT video_processor_create(REFIID riid, void **ret)
+ 
+ static const GUID CLSID_GStreamerByteStreamHandler = {0x317df618, 0x5e5a, 0x468a, {0x9f, 0x15, 0xd8, 0x27, 0xa9, 0xa0, 0x81, 0x62}};
+ 
++static const GUID CLSID_GStreamerSchemePlugin = {0x587eeb6a,0x7336,0x4ebd,{0xa4,0xf2,0x91,0xc9,0x48,0xde,0x62,0x2c}};
++
+ static const GUID CLSID_WINEAudioConverter = {0x6a170414,0xaad9,0x4693,{0xb8,0x06,0x3a,0x0c,0x47,0xc5,0x70,0xd6}};
+ 
+ static const struct class_object
+@@ -413,6 +415,7 @@ class_objects[] =
+     { &CLSID_CColorConvertDMO, &color_converter_create },
+     { &CLSID_MSH264DecoderMFT, &h264_decoder_create },
+     { &CLSID_MSAACDecMFT, &aac_decoder_create },
++    { &CLSID_GStreamerSchemePlugin, &gstreamer_scheme_handler_construct },
+ };
+ 
+ HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
+diff --git a/dlls/winegstreamer/scheme_handler.c b/dlls/winegstreamer/scheme_handler.c
+new file mode 100644
+index 00000000000..8fb3e9461a3
+--- /dev/null
++++ b/dlls/winegstreamer/scheme_handler.c
+@@ -0,0 +1,409 @@
++#include <stdarg.h>
++
++#define COBJMACROS
++
++#include "windef.h"
++#include "winbase.h"
++#include "mfidl.h"
++#include "mferror.h"
++#include "mfapi.h"
++#include "gst_private.h"
++
++#include "wine/debug.h"
++#include "wine/list.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
++
++struct gstreamer_scheme_handler_result
++{
++    struct list entry;
++    IMFAsyncResult *result;
++    IUnknown *object;
++};
++
++struct gstreamer_scheme_handler
++{
++    IMFSchemeHandler IMFSchemeHandler_iface;
++    IMFAsyncCallback IMFAsyncCallback_iface;
++    LONG refcount;
++    struct list results;
++    CRITICAL_SECTION cs;
++};
++
++static struct gstreamer_scheme_handler *impl_from_IMFSchemeHandler(IMFSchemeHandler *iface)
++{
++    return CONTAINING_RECORD(iface, struct gstreamer_scheme_handler, IMFSchemeHandler_iface);
++}
++
++static struct gstreamer_scheme_handler *impl_from_IMFAsyncCallback(IMFAsyncCallback *iface)
++{
++    return CONTAINING_RECORD(iface, struct gstreamer_scheme_handler, IMFAsyncCallback_iface);
++}
++
++static HRESULT WINAPI gstreamer_scheme_handler_QueryIntace(IMFSchemeHandler *iface, REFIID riid, void **obj)
++{
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
++
++    if (IsEqualIID(riid, &IID_IMFSchemeHandler) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFSchemeHandler_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI gstreamer_scheme_handler_AddRef(IMFSchemeHandler *iface)
++{
++    struct gstreamer_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
++    ULONG refcount = InterlockedIncrement(&handler->refcount);
++
++    TRACE("%p, refcount %u.\n", handler, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI gstreamer_scheme_handler_Release(IMFSchemeHandler *iface)
++{
++    struct gstreamer_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
++    ULONG refcount = InterlockedDecrement(&handler->refcount);
++    struct gstreamer_scheme_handler_result *result, *next;
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++    {
++        LIST_FOR_EACH_ENTRY_SAFE(result, next, &handler->results, struct gstreamer_scheme_handler_result, entry)
++        {
++            list_remove(&result->entry);
++            IMFAsyncResult_Release(result->result);
++            if (result->object)
++                IUnknown_Release(result->object);
++            free(result);
++        }
++        DeleteCriticalSection(&handler->cs);
++        free(handler);
++    }
++
++    return refcount;
++}
++
++struct create_object_context
++{
++    IUnknown IUnknown_iface;
++    LONG refcount;
++
++    IPropertyStore *props;
++    WCHAR *url;
++    DWORD flags;
++};
++
++static struct create_object_context *impl_from_IUnknown(IUnknown *iface)
++{
++    return CONTAINING_RECORD(iface, struct create_object_context, IUnknown_iface);
++}
++
++static HRESULT WINAPI create_object_context_QueryInterface(IUnknown *iface, REFIID riid, void **obj)
++{
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
++
++    if (IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IUnknown_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI create_object_context_AddRef(IUnknown *iface)
++{
++    struct create_object_context *context = impl_from_IUnknown(iface);
++    ULONG refcount = InterlockedIncrement(&context->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI create_object_context_Release(IUnknown *iface)
++{
++    struct create_object_context *context = impl_from_IUnknown(iface);
++    ULONG refcount = InterlockedDecrement(&context->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++    {
++        if (context->props)
++            IPropertyStore_Release(context->props);
++        free(context->url);
++        free(context);
++    }
++
++    return refcount;
++}
++
++static const IUnknownVtbl create_object_context_vtbl =
++{
++    create_object_context_QueryInterface,
++    create_object_context_AddRef,
++    create_object_context_Release,
++};
++
++static HRESULT WINAPI gstreamer_scheme_handler_BeginCreateObject(IMFSchemeHandler *iface, const WCHAR *url, DWORD flags,
++        IPropertyStore *props, IUnknown **cancel_cookie, IMFAsyncCallback *callback, IUnknown *state)
++{
++    struct gstreamer_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
++    struct create_object_context *context;
++    IMFAsyncResult *caller, *item;
++    HRESULT hr;
++
++    TRACE("%p, %s, %#x, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
++
++    if (cancel_cookie)
++        *cancel_cookie = NULL;
++
++    if (FAILED(hr = MFCreateAsyncResult(NULL, callback, state, &caller)))
++        return hr;
++
++    if (!(context = malloc(sizeof(*context))))
++    {
++        IMFAsyncResult_Release(caller);
++        return E_OUTOFMEMORY;
++    }
++
++    context->IUnknown_iface.lpVtbl = &create_object_context_vtbl;
++    context->refcount = 1;
++    context->props = props;
++    if (context->props)
++        IPropertyStore_AddRef(context->props);
++    context->flags = flags;
++    context->url = wcsdup(url);
++    if (!context->url)
++    {
++        IMFAsyncResult_Release(caller);
++        IUnknown_Release(&context->IUnknown_iface);
++        return E_OUTOFMEMORY;
++    }
++
++    hr = MFCreateAsyncResult(&context->IUnknown_iface, &handler->IMFAsyncCallback_iface, (IUnknown *)caller, &item);
++    IUnknown_Release(&context->IUnknown_iface);
++    if (SUCCEEDED(hr))
++    {
++        if (SUCCEEDED(hr = MFPutWorkItemEx(MFASYNC_CALLBACK_QUEUE_IO, item)))
++        {
++            if (cancel_cookie)
++            {
++                *cancel_cookie = (IUnknown *)caller;
++                IUnknown_AddRef(*cancel_cookie);
++            }
++        }
++
++        IMFAsyncResult_Release(item);
++    }
++    IMFAsyncResult_Release(caller);
++
++    return hr;
++}
++
++static HRESULT WINAPI gstreamer_scheme_handler_EndCreateObject(IMFSchemeHandler *iface, IMFAsyncResult *result,
++        MF_OBJECT_TYPE *obj_type, IUnknown **object)
++{
++    struct gstreamer_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
++    struct gstreamer_scheme_handler_result *found = NULL, *cur;
++    HRESULT hr;
++
++    TRACE("%p, %p, %p, %p.\n", iface, result, obj_type, object);
++
++    EnterCriticalSection(&handler->cs);
++
++    LIST_FOR_EACH_ENTRY(cur, &handler->results, struct gstreamer_scheme_handler_result, entry)
++    {
++        if (result == cur->result)
++        {
++            list_remove(&cur->entry);
++            found = cur;
++            break;
++        }
++    }
++
++    LeaveCriticalSection(&handler->cs);
++
++    if (found)
++    {
++        *obj_type = MF_OBJECT_MEDIASOURCE;
++        *object = found->object;
++        hr = IMFAsyncResult_GetStatus(found->result);
++        IMFAsyncResult_Release(found->result);
++        free(found);
++    }
++    else
++    {
++        *obj_type = MF_OBJECT_INVALID;
++        *object = NULL;
++        hr = MF_E_UNEXPECTED;
++    }
++
++    return hr;
++}
++
++static HRESULT WINAPI gstreamer_scheme_handler_CancelObjectCreation(IMFSchemeHandler *iface, IUnknown *cancel_cookie)
++{
++    struct gstreamer_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
++    struct gstreamer_scheme_handler_result *found = NULL, *cur;
++
++    TRACE("%p, %p.\n", iface, cancel_cookie);
++
++    EnterCriticalSection(&handler->cs);
++
++    LIST_FOR_EACH_ENTRY(cur, &handler->results, struct gstreamer_scheme_handler_result, entry)
++    {
++        if (cancel_cookie == (IUnknown *)cur->result)
++        {
++            list_remove(&cur->entry);
++            found = cur;
++            break;
++        }
++    }
++
++    LeaveCriticalSection(&handler->cs);
++
++    if (found)
++    {
++        IMFAsyncResult_Release(found->result);
++        if (found->object)
++            IUnknown_Release(found->object);
++        free(found);
++    }
++
++    return found ? S_OK : MF_E_UNEXPECTED;
++}
++
++static const IMFSchemeHandlerVtbl gstreamer_scheme_handler_vtbl =
++{
++    gstreamer_scheme_handler_QueryIntace,
++    gstreamer_scheme_handler_AddRef,
++    gstreamer_scheme_handler_Release,
++    gstreamer_scheme_handler_BeginCreateObject,
++    gstreamer_scheme_handler_EndCreateObject,
++    gstreamer_scheme_handler_CancelObjectCreation,
++};
++
++static HRESULT WINAPI gstreamer_scheme_handler_callback_QueryIntace(IMFAsyncCallback *iface, REFIID riid, void **obj)
++{
++    if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFAsyncCallback_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI gstreamer_scheme_handler_callback_AddRef(IMFAsyncCallback *iface)
++{
++    struct gstreamer_scheme_handler *handler = impl_from_IMFAsyncCallback(iface);
++    return IMFSchemeHandler_AddRef(&handler->IMFSchemeHandler_iface);
++}
++
++static ULONG WINAPI gstreamer_scheme_handler_callback_Release(IMFAsyncCallback *iface)
++{
++    struct gstreamer_scheme_handler *handler = impl_from_IMFAsyncCallback(iface);
++    return IMFSchemeHandler_Release(&handler->IMFSchemeHandler_iface);
++}
++
++static HRESULT WINAPI gstreamer_scheme_handler_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags, DWORD *queue)
++{
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI gstreamer_scheme_handler_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
++{
++    IMFAsyncResult *caller;
++    struct gstreamer_scheme_handler *handler = impl_from_IMFAsyncCallback(iface);
++    struct gstreamer_scheme_handler_result *handler_result;
++    IUnknown *object = NULL, *context_object;
++    struct create_object_context *context;
++    HRESULT hr;
++
++    caller = (IMFAsyncResult *)IMFAsyncResult_GetStateNoAddRef(result);
++
++    if (FAILED(hr = IMFAsyncResult_GetObject(result, &context_object)))
++    {
++        WARN("Expected context set for callee result.\n");
++        return hr;
++    }
++
++    context = impl_from_IUnknown(context_object);
++
++    hr = winegstreamer_create_media_source_from_uri(context->url, &object);
++
++    handler_result = malloc(sizeof(*handler_result));
++    if (handler_result)
++    {
++        handler_result->result = caller;
++        IMFAsyncResult_AddRef(handler_result->result);
++
++        // We only know how to create media source
++        handler_result->object = object;
++
++        EnterCriticalSection(&handler->cs);
++        list_add_tail(&handler->results, &handler_result->entry);
++        LeaveCriticalSection(&handler->cs);
++    }
++    else
++    {
++        if (object)
++            IUnknown_Release(object);
++        hr = E_OUTOFMEMORY;
++    }
++
++    IMFAsyncResult_SetStatus(caller, hr);
++    MFInvokeCallback(caller);
++
++    return S_OK;
++}
++
++static const IMFAsyncCallbackVtbl gstreamer_scheme_handler_callback_vtbl =
++{
++    gstreamer_scheme_handler_callback_QueryIntace,
++    gstreamer_scheme_handler_callback_AddRef,
++    gstreamer_scheme_handler_callback_Release,
++    gstreamer_scheme_handler_callback_GetParameters,
++    gstreamer_scheme_handler_callback_Invoke,
++};
++
++HRESULT gstreamer_scheme_handler_construct(REFIID riid, void **obj)
++{
++    struct gstreamer_scheme_handler *handler;
++    HRESULT hr;
++
++    TRACE("%s, %p.\n", debugstr_guid(riid), obj);
++
++    if (!(handler = calloc(1, sizeof(*handler))))
++        return E_OUTOFMEMORY;
++
++    handler->IMFSchemeHandler_iface.lpVtbl = &gstreamer_scheme_handler_vtbl;
++    handler->IMFAsyncCallback_iface.lpVtbl = &gstreamer_scheme_handler_callback_vtbl;
++    handler->refcount = 1;
++    list_init(&handler->results);
++    InitializeCriticalSection(&handler->cs);
++
++    hr = IMFSchemeHandler_QueryInterface(&handler->IMFSchemeHandler_iface, riid, obj);
++    IMFSchemeHandler_Release(&handler->IMFSchemeHandler_iface);
++
++    return hr;
++}
++
+diff --git a/dlls/winegstreamer/winegstreamer.rgs b/dlls/winegstreamer/winegstreamer.rgs
+index 923ba673f8c..c50d3a05747 100644
+--- a/dlls/winegstreamer/winegstreamer.rgs
++++ b/dlls/winegstreamer/winegstreamer.rgs
+@@ -12,3 +12,31 @@ HKCR
+         }
+     }
+ }
++
++HKLM
++{
++    NoRemove 'Software'
++    {
++        NoRemove 'Microsoft'
++        {
++            NoRemove 'Windows Media Foundation'
++            {
++                NoRemove 'SchemeHandlers'
++                {
++                    'http:'
++                    {
++                        val '{587eeb6a-7336-4ebd-a4f2-91c948de622c}' = s 'GStreamer Scheme Handler'
++                    }
++                    'https:'
++                    {
++                        val '{587eeb6a-7336-4ebd-a4f2-91c948de622c}' = s 'GStreamer Scheme Handler'
++                    }
++                    'rtsp:'
++                    {
++                        val '{587eeb6a-7336-4ebd-a4f2-91c948de622c}' = s 'GStreamer Scheme Handler'
++                    }
++                }
++            }
++        }
++    }
++}
+diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
+index 5762430a5cd..16699bcd3be 100644
+--- a/dlls/winegstreamer/winegstreamer_classes.idl
++++ b/dlls/winegstreamer/winegstreamer_classes.idl
+@@ -91,3 +91,10 @@ coclass CMSAACDecMFT { }
+     uuid(98230571-0087-4204-b020-3282538e57d3)
+ ]
+ coclass CColorConvertDMO { }
++
++[
++    helpstring("GStreamer scheme handler"),
++    threading(both),
++    uuid(587eeb6a-7336-4ebd-a4f2-91c948de622c)
++]
++coclass GStreamerSchemePlugin { }
