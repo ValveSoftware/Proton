@@ -440,20 +440,13 @@ $(eval $(call rules-meson,dav1d,64))
 ## gst-orc
 ##
 
-GST_COMMON_MESON_ARGS := \
-	-Dexamples=disabled \
-	-Dtests=disabled \
-	-Dgtk_doc=disabled \
-	-Dintrospection=disabled \
-	-Dgobject-cast-checks=disabled \
-	-Dglib-asserts=disabled \
-	-Dglib-checks=disabled \
-	-Dnls=disabled \
-	-Dbenchmarks=disabled
 
 GST_ORC_MESON_ARGS := \
 	-Dorc-test=disabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Dgtk_doc=disabled \
+	-Dbenchmarks=disabled
 
 $(eval $(call rules-source,gst_orc,$(SRCDIR)/gst-orc))
 $(eval $(call rules-meson,gst_orc,32))
@@ -469,7 +462,15 @@ GSTREAMER_MESON_ARGS := \
 	-Dbenchmarks=disabled \
 	-Dtools=disabled \
 	-Dbash-completion=disabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Dgtk_doc=disabled \
+	-Dintrospection=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled \
+	-Dbenchmarks=disabled
 
 GSTREAMER_DEPENDS = gst_orc
 
@@ -483,7 +484,6 @@ $(eval $(call rules-meson,gstreamer,64))
 ##
 
 GST_BASE_MESON_ARGS := \
-	-Daddr=disabled \
 	-Dalsa=disabled \
 	-Daudiomixer=disabled \
 	-Daudiorate=disabled \
@@ -505,7 +505,13 @@ GST_BASE_MESON_ARGS := \
 	-Dx11=disabled \
 	-Dxshm=disabled \
 	-Dxvideo=disabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Dintrospection=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled
 
 GST_BASE_DEPENDS = gst_orc gstreamer
 
@@ -571,9 +577,13 @@ GST_GOOD_MESON_ARGS := \
 	-Dmpg123=enabled \
 	-Dximagesrc=disabled \
 	-Dy4m=enabled \
-	-Dsoup=enabled \
 	-Ddoc='disabled' \
-	$(GST_COMMON_MESON_ARGS)
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
 
@@ -658,8 +668,6 @@ GST_BAD_MESON_ARGS := \
 	-Ddecklink=disabled \
 	-Dcurl=disabled \
 	-Dcurl-ssh2=disabled \
-	-Dlinksys=disabled \
-	-Dstatic=disabled \
 	-Ddts=disabled \
 	-Dfaac=disabled \
 	-Dfaad=disabled \
@@ -675,7 +683,11 @@ GST_BAD_MESON_ARGS := \
 	-Dvoamrwbenc=disabled \
 	-Dnvcodec=disabled \
 	-Dx265=disabled \
-	$(GST_COMMON_MESON_ARGS)
+	-Dtests=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled
 
 GST_BAD_DEPENDS = gst_orc gstreamer gst_base
 
@@ -689,7 +701,11 @@ $(eval $(call rules-meson,gst_bad,64))
 
 GST_UGLY_MESON_ARGS := \
         -Ddoc='disabled' \
-	$(GST_COMMON_MESON_ARGS)
+	-Dtests=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled
 
 GST_UGLY_DEPENDS = gst_orc gstreamer gst_base
 
@@ -968,7 +984,6 @@ VKD3D_PROTON_SOURCE_ARGS = \
   --exclude vkd3d_build.h.in \
   --exclude vkd3d_version.h.in \
 
-VKD3D_PROTON_MESON_ARGS = -Denable_standalone_d3d12=true
 VKD3D_PROTON_MESON_ARGS32 = --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton
 VKD3D_PROTON_MESON_ARGS64 = --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton
 
@@ -1326,3 +1341,4 @@ all64_configure: $(GOAL_TARGETS_CONFIGURE64)
 
 endif # ifeq ($(CONTAINER),)
 endif # End of NESTED_MAKE from beginning
+
