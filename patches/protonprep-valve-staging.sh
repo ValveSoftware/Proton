@@ -27,6 +27,7 @@
     git reset --hard HEAD
     git clean -xdf
 
+#    disabled for now, waiting on a rebase
 #    echo "VKD3D: Add Halo Infinite patches"
     # https://github.com/HansKristian-Work/vkd3d-proton/tree/execute-indirect-advanced-index-lut
 #    patch -Np1 < ../patches/vkd3d-proton/halo_infinite_wip.patch
