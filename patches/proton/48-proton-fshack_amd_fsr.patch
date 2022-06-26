@@ -2306,10 +2306,10 @@ index 38809211308..f7ca282921f 100644
  C_SRCS = \
  	loader.c \
 diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 913c37dee68..2c9ff7900c2 100644
+index 913c37dee68..92beb28d1fe 100644
 --- a/dlls/winex11.drv/fs.c
 +++ b/dlls/winex11.drv/fs.c
-@@ -85,6 +85,42 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+@@ -85,6 +85,45 @@ static struct fs_monitor_size fs_monitor_sizes[] =
      {1280, 1024}, /*  5:4 */
  };
  
@@ -2317,7 +2317,9 @@ index 913c37dee68..2c9ff7900c2 100644
 +/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
 +static struct fs_monitor_size fsr4k_sizes[] =
 +{
++    //{1920, 1080},  /* 16:9 - 'FSR 2160p Performance' -- already a default 16:9 resolution */
 +    {2259, 1270}, /* 16:9 - 'FSR 2160p Balanced' */
++    //{2560, 1440},  /* 16:9 - 'FSR 2160p Quality' -- already a default 16:9 resolution */
 +    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra Quality' */
 +};
 +
@@ -2333,6 +2335,7 @@ index 913c37dee68..2c9ff7900c2 100644
 +/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
 +static struct fs_monitor_size fsr2k_sizes[] =
 +{
++    //{1280, 720},  /* 16:9 - 'FSR 1440p Performance' -- already a default 16:9 resolution */
 +    {1506, 847},  /* 16:9 - 'FSR 1440p Balanced' */
 +    {1706, 960},  /* 16:9 - 'FSR 1440p Quality' */
 +    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality' */
@@ -2341,43 +2344,39 @@ index 913c37dee68..2c9ff7900c2 100644
 +/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
 +static struct fs_monitor_size fsr1080_sizes[] =
 +{
-+    {1130, 635},  /* 16:9 - 'FSR 1080p Balanced' */
++    //{960, 640},  /* 16:9 - 'FSR 1080p Performance' */
++    {1129, 635},  /* 16:9 - 'FSR 1080p Balanced' */
++    //{1280, 720},  /* 16:9 - 'FSR 1080p Quality' -- already a default 16:9 resolution */    
 +    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality' */
 +};
-+
-+
 +
 +static struct fs_monitor_size fake_current_resolution;
 +
  /* A fake monitor for the fullscreen hack */
  struct fs_monitor
  {
-@@ -178,7 +214,28 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -178,7 +217,24 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
      /* Fullscreen hack doesn't support changing display orientations */
      if (!real_settings_handler.get_modes(real_id, 0, &real_modes, &real_mode_count))
          return FALSE;
 -
 +    
-+    switch (current_mode.dmPelsWidth) {
-+        /* 4k FSR resolutions */
-+        case 3840:
-+            memcpy(fs_monitor_sizes+sizeof(fsr4k_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
-+            break;
-+        /* ultrawide FSR resolutions */
-+        case 3440:
-+            memcpy(fs_monitor_sizes+sizeof(fsruw_sizes),fsruw_sizes,sizeof(fsruw_sizes));
-+            break;
-+        /* 1440p FSR resolutions */
-+        case 2560:
-+            memcpy(fs_monitor_sizes+sizeof(fsr2k_sizes),fsr2k_sizes,sizeof(fsr2k_sizes));
-+            break;
++    if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
 +        /* 1080p FSR resolutions */
-+        case 1920:
-+            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr1080_sizes,sizeof(fsr1080_sizes));
-+            break;
-+        default:
-+            memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr1080_sizes,sizeof(fsr1080_sizes));
-+    }    
++        memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr1080_sizes,sizeof(fsr1080_sizes));
++    } else if (current_mode.dmPelsWidth <= 2560) {
++        /* 1440p FSR resolutions */
++        memcpy(fs_monitor_sizes+sizeof(fsr2k_sizes),fsr2k_sizes,sizeof(fsr2k_sizes));
++    } else if (current_mode.dmPelsWidth <= 3440) {
++        /* ultrawide FSR resolutions */
++        memcpy(fs_monitor_sizes+sizeof(fsruw_sizes),fsruw_sizes,sizeof(fsruw_sizes));
++    } else if (current_mode.dmPelsWidth <= 3840) {
++        /* 4k FSR resolutions */
++        memcpy(fs_monitor_sizes+sizeof(fsr4k_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
++    } else {
++        /* Provide largetst available fsr resolutions for monitors with larget than 4k width */
++        memcpy(fs_monitor_sizes+sizeof(fsr4k_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
++    }
 +        
      fs_monitor->mode_count = 0;
      fs_monitor->unique_resolutions = 0;
