@@ -2306,77 +2306,90 @@ index 38809211308..f7ca282921f 100644
  C_SRCS = \
  	loader.c \
 diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 913c37dee68..92beb28d1fe 100644
+index 913c37dee68..2d5699efb1e 100644
 --- a/dlls/winex11.drv/fs.c
 +++ b/dlls/winex11.drv/fs.c
-@@ -85,6 +85,45 @@ static struct fs_monitor_size fs_monitor_sizes[] =
-     {1280, 1024}, /*  5:4 */
+@@ -59,6 +59,51 @@ struct fs_monitor_size
+     DWORD height;
  };
  
++/* Some games have a limit on the number of entries allowed in the resolution list, 
++for example, Elden Ring's limit is 26. Therefore we cannot add all of the FSR 
++resolutions to the list without hitting the limit, which causes missing resolutions
++within the game's resolution list. You can use WINE_FULLSCREEN_FAKE_CURRENT_RES to 
++set the resolution used to scale up from. 
 +
-+/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
-+static struct fs_monitor_size fsr4k_sizes[] =
-+{
-+    //{1920, 1080},  /* 16:9 - 'FSR 2160p Performance' -- already a default 16:9 resolution */
-+    {2259, 1270}, /* 16:9 - 'FSR 2160p Balanced' */
-+    //{2560, 1440},  /* 16:9 - 'FSR 2160p Quality' -- already a default 16:9 resolution */
-+    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra Quality' */
-+};
++Example: 
++Your monitor is 3440x1440
++You want to use FSR to scale up using ""Ultra Quality" FSR mode.
 +
-+/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
-+static struct fs_monitor_size fsruw_sizes[] =
-+{
-+    {1720, 720}, /* 21:9 - 'FSR ultra-wide Performance' */
-+    {2024, 847}, /* 21:9 - 'FSR ultra-wide Balanced' */
-+    {2293, 960}, /* 21:9 - 'FSR ultra-wide Quality' */
-+    {2646, 1108}, /* 21:9 - 'FSR ultra-wide Ultra Quality' */
-+};
++You use:
 +
-+/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
-+static struct fs_monitor_size fsr2k_sizes[] =
-+{
-+    //{1280, 720},  /* 16:9 - 'FSR 1440p Performance' -- already a default 16:9 resolution */
-+    {1506, 847},  /* 16:9 - 'FSR 1440p Balanced' */
-+    {1706, 960},  /* 16:9 - 'FSR 1440p Quality' */
-+    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality' */
-+};
++WINE_FULLSCREEN_FAKE_CURRENT_RES=2646x1108
 +
-+/* NOTE: THESE RESOLUTIONS WILL ONLY SHOW UP IN *FULLSCREEN* MODE */
-+static struct fs_monitor_size fsr1080_sizes[] =
-+{
-+    //{960, 640},  /* 16:9 - 'FSR 1080p Performance' */
-+    {1129, 635},  /* 16:9 - 'FSR 1080p Balanced' */
-+    //{1280, 720},  /* 16:9 - 'FSR 1080p Quality' -- already a default 16:9 resolution */    
-+    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality' */
-+};
++This allows you to use the custom resolution that is not in the games fullscreen
++resolution list to scale up.
 +
++Below is a table of FSR values allowed that are not part of the fullscreen
++resolution list:
++
++    4K:
++    //{1920, 1080},  /* 16:9 - 'FSR 2160p Performance' -- already in resolution list
++    {2259, 1270}, /* 16:9 - 'FSR 2160p Balanced'
++    //{2560, 1440},  /* 16:9 - 'FSR 2160p Quality' -- already in resolution list
++    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra Quality'
++
++    Ultra-wide:
++    {1720, 720}, /* 21:9 - 'FSR ultra-wide Performance'
++    {2024, 847}, /* 21:9 - 'FSR ultra-wide Balanced'
++    {2293, 960}, /* 21:9 - 'FSR ultra-wide Quality'
++    {2646, 1108}, /* 21:9 - 'FSR ultra-wide Ultra Quality'
++
++    2K:
++    //{1280, 720},  /* 16:9 - 'FSR 1440p Performance' -- already in resolution list
++    {1506, 847},  /* 16:9 - 'FSR 1440p Balanced'
++    {1706, 960},  /* 16:9 - 'FSR 1440p Quality'
++    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality'
++
++    1080p:
++    //{960, 640},  /* 16:9 - 'FSR 1080p Performance'
++    {1129, 635},  /* 16:9 - 'FSR 1080p Balanced'
++    //{1280, 720},  /* 16:9 - 'FSR 1080p Quality' -- already in resolution list
++    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality'
++*/
++
+ /* A table of resolutions some games expect but host system may not report */
+ static struct fs_monitor_size fs_monitor_sizes[] =
+ {
+@@ -71,8 +116,11 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+     {1600, 900},  /* 16:9 */
+     {1920, 1080}, /* 16:9 */
+     {2560, 1440}, /* 16:9 */
++    {2048, 1152}, /* 16:9 */
++    {2304, 1296}, /* 16:9 */
+     {2880, 1620}, /* 16:9 */
+     {3200, 1800}, /* 16:9 */
++    {3840, 2160}, /* 16:9 */
+     {1440, 900},  /*  8:5 */
+     {1680, 1050}, /*  8:5 */
+     {1920, 1200}, /*  8:5 */
+@@ -83,8 +131,11 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+     {1920, 800},  /* 12:5 */
+     {3840, 1600}, /* 12:5 */
+     {1280, 1024}, /*  5:4 */
++    {3440, 1440}, /* 21:9 ultra-wide */
+ };
+ 
 +static struct fs_monitor_size fake_current_resolution;
 +
  /* A fake monitor for the fullscreen hack */
  struct fs_monitor
  {
-@@ -178,7 +217,24 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -178,7 +229,7 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
      /* Fullscreen hack doesn't support changing display orientations */
      if (!real_settings_handler.get_modes(real_id, 0, &real_modes, &real_mode_count))
          return FALSE;
 -
-+    
-+    if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
-+        /* 1080p FSR resolutions */
-+        memcpy(fs_monitor_sizes+sizeof(fsr1080_sizes),fsr1080_sizes,sizeof(fsr1080_sizes));
-+    } else if (current_mode.dmPelsWidth <= 2560) {
-+        /* 1440p FSR resolutions */
-+        memcpy(fs_monitor_sizes+sizeof(fsr2k_sizes),fsr2k_sizes,sizeof(fsr2k_sizes));
-+    } else if (current_mode.dmPelsWidth <= 3440) {
-+        /* ultrawide FSR resolutions */
-+        memcpy(fs_monitor_sizes+sizeof(fsruw_sizes),fsruw_sizes,sizeof(fsruw_sizes));
-+    } else if (current_mode.dmPelsWidth <= 3840) {
-+        /* 4k FSR resolutions */
-+        memcpy(fs_monitor_sizes+sizeof(fsr4k_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
-+    } else {
-+        /* Provide largetst available fsr resolutions for monitors with larget than 4k width */
-+        memcpy(fs_monitor_sizes+sizeof(fsr4k_sizes),fsr4k_sizes,sizeof(fsr4k_sizes));
-+    }
 +        
      fs_monitor->mode_count = 0;
      fs_monitor->unique_resolutions = 0;
