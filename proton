@@ -1459,6 +1459,13 @@ class Session:
             if os.environ["SteamAppId"] == "1172470":
                 self.env["WINE_FULLSCREEN_FSR"] = "1"
 
+        #Phantasy Star Online 2 has terrible stutters on case-sensitive filesystems due to a bad search mechanism within the game engine
+        #https://github.com/ValveSoftware/wine/pull/151
+        if "SteamAppId" in os.environ:
+            appid = os.environ["SteamAppId"]
+            if os.environ["SteamAppId"] == "1056640":
+                self.env["WINE_CASE_SENSITIVE_OPEN_FILES"] = "1"
+
         s = ""
         for dll in self.dlloverrides:
             setting = self.dlloverrides[dll]
