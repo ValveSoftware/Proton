@@ -328,11 +328,11 @@
 
 ### (2-4) PROTON PATCH SECTION ###
 
-#    echo "WINE: -PROTON- fullscreen hack fsr patch"
-#    patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
+    echo "WINE: -PROTON- fullscreen hack fsr patch"
+    patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
 
-#    echo "WINE: -PROTON- fake current res patches"
-#    patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
+    echo "WINE: -PROTON- fake current res patches"
+    patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
 
 ### END PROTON PATCH SECTION ###
 
