@@ -328,11 +328,11 @@
 
 ### (2-4) PROTON PATCH SECTION ###
 
-    echo "WINE: -PROTON- fullscreen hack fsr patch"
-    patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
+#    echo "WINE: -PROTON- fullscreen hack fsr patch"
+#    patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
 
-    echo "WINE: -PROTON- fake current res patches"
-    patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
+#    echo "WINE: -PROTON- fake current res patches"
+#    patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
 
 ### END PROTON PATCH SECTION ###
 
@@ -359,7 +359,11 @@
     # fixes blops II zombies and multiplayer freeze in proton-only due to DRM check
     echo "WINE: -HOTFIX- fix blops II zombies and multiplayer crash"
     patch -Np1 < ../patches/wine-hotfixes/pending/blopsII_proton_hang_fix.patch
-    
+
+    # pending upstream
+    patch -Np1 < ../patches/wine-hotfixes/pending/5a4a35389becdd9b0c17516888273f0ef41a5040.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/467625c6a3c879207f80bb579634e84f8754eb0f.patch
+
     # currently broken
     #echo "WINE: -HOTFIX- fix the good life videos"
     #patch -Np1 < ../patches/wine-hotfixes/pending/mfplat_http_schemas.patch
