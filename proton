@@ -990,6 +990,46 @@ def default_compat_config():
                 "1017900", #Age of Empires: Definitive Edition
                 ]:
             ret.add("nomfdxgiman")
+
+        if appid in [
+                # OPWR may be causing text input delays in login windows in these games on Wayland due to
+                # blit happening before presentation
+                "1172620", #Sea of Thieves
+                "962130", #Grounded
+                "495420", #State of Decay 2: Juggernaut Edition
+                "976730", #Halo: The Master Chief Collection
+                "1017900", #Age of Empires: Definitive Edition
+                "1056090", #Ori and the Will of the Wisps
+                "1293830", #Forza Horizon 4
+                "1551360", #Forza Horizon 5
+                "271590", #Grand Theft Auto V
+                "5699", #Grand Theft Auto V Premium Edition
+                "1174180", #Red Dead Redemption 2
+                "1404210", #Red Dead Online
+                "12210", #Grand Theft Auto IV: Complete Edition
+                "204100", #Max Payne 3
+                "110800", #L.A. Noire
+                "12200", #Bully: Scholarship Edition
+                "12120", #Grand Theft Auto: San Andreas
+                "12110", #Grand Theft Auto: Vice City
+                "12100", #Grand Theft Auto III
+                "722230", #L.A. Noire: The VR Case Files
+                "813780", #Age of Empires II: Definitive Edition
+                "933110", #Age of Empires III: Definitive Edition
+                "1466860", #Age of Empires IV
+                "1097840", #Gears 5
+                "1244950", #Battletoads
+                "1189800", #Bleeding Edge
+                "1184050", #Gears Tactics
+                "1240440", #Halo Infinite
+                "1250410", #Microsoft Flight Simulator
+                "1672970", #Minecraft Dungeons
+                "1180660", #Tell Me Why
+                "1238430", #Tell Me Why Chapter 2
+                "1266670", #Tell Me Why Chapter 3
+                ]:
+            ret.add("noopwr")
+
     return ret
 
 class Session:
@@ -1203,6 +1243,9 @@ class Session:
 
         if "nomfdxgiman" in self.compat_config:
             self.env["WINE_DO_NOT_CREATE_DXGI_DEVICE_MANAGER"] = "1"
+
+        if "noopwr" in self.compat_config:
+            self.env["WINE_DISABLE_VULKAN_OPWR"] = "1"
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
