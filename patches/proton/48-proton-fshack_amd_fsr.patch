@@ -2306,7 +2306,7 @@ index 38809211308..f7ca282921f 100644
  C_SRCS = \
  	loader.c \
 diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 913c37dee68..fccafb5633a 100644
+index 913c37dee68..67aa69d8d2a 100644
 --- a/dlls/winex11.drv/fs.c
 +++ b/dlls/winex11.drv/fs.c
 @@ -59,6 +59,51 @@ struct fs_monitor_size
@@ -2361,7 +2361,7 @@ index 913c37dee68..fccafb5633a 100644
  /* A table of resolutions some games expect but host system may not report */
  static struct fs_monitor_size fs_monitor_sizes[] =
  {
-@@ -71,20 +116,103 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+@@ -71,20 +116,101 @@ static struct fs_monitor_size fs_monitor_sizes[] =
      {1600, 900},  /* 16:9 */
      {1920, 1080}, /* 16:9 */
      {2560, 1440}, /* 16:9 */
@@ -2464,12 +2464,10 @@ index 913c37dee68..fccafb5633a 100644
 +    {1920, 1080},  /* 16:9 - 'FSR 2160p Performance' */
 +};
 +
-+static struct fs_monitor_size fake_current_resolution;
-+
  /* A fake monitor for the fullscreen hack */
  struct fs_monitor
  {
-@@ -163,6 +291,7 @@ static void add_fs_mode(struct fs_monitor *fs_monitor, DWORD depth, DWORD width,
+@@ -163,6 +289,7 @@ static void add_fs_mode(struct fs_monitor *fs_monitor, DWORD depth, DWORD width,
  static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
  {
      DEVMODEW *real_modes, *real_mode, current_mode;
@@ -2477,7 +2475,7 @@ index 913c37dee68..fccafb5633a 100644
      UINT real_mode_count;
      DWORD width, height;
      ULONG_PTR real_id;
-@@ -178,7 +307,86 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -178,7 +305,86 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
      /* Fullscreen hack doesn't support changing display orientations */
      if (!real_settings_handler.get_modes(real_id, 0, &real_modes, &real_mode_count))
          return FALSE;
