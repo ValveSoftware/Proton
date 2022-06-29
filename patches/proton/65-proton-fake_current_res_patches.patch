@@ -28,7 +28,7 @@ index 9b781a729e5..0c8db02f06c 100644
 +{
 +    fixed_size->width = 0;
 +    fixed_size->height = 0;
-+    const char *e = getenv("WINE_FULLSCREEN_FAKE_CURRENT_RES");
++    const char *e = getenv("WINE_FULLSCREEN_FSR_CUSTOM_MODE");
 +    if (e) 
 +    {
 +        const int n = sscanf(e,"%dx%d",&(fixed_size->width),&(fixed_size->height));
@@ -102,7 +102,7 @@ index 9b781a729e5..0c8db02f06c 100644
          return TRUE;
      }
 diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 79f1e030baa..b9b6b6503a0 100644
+index 79f1e030baa..89614b2c8eb 100644
 --- a/dlls/winex11.drv/fs.c
 +++ b/dlls/winex11.drv/fs.c
 @@ -211,6 +211,11 @@ static struct fs_monitor_size fsr4k_performance[] =
@@ -111,31 +111,37 @@ index 79f1e030baa..b9b6b6503a0 100644
  
 +static struct fs_monitor_size fsr_fake_res[] =
 +{
-+    {1920, 1080},  /* Custom resolution, replaced by WINE_FULLSCREEN_FAKE_CURRENT_RES */
++    {1920, 1080},  /* Custom resolution, replaced by WINE_FULLSCREEN_FSR_CUSTOM_MODE */
 +};
 +
  static struct fs_monitor_size fake_current_resolution;
  
  /* A fake monitor for the fullscreen hack */
-@@ -310,7 +315,7 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -310,8 +315,12 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
      
      if (fsr_flag = getenv("WINE_FULLSCREEN_FSR")) 
      {
 -        if (fsr_mode = getenv("WINE_FULLSCREEN_FSR_MODE"))
-+        if (fsr_mode = getenv("WINE_FULLSCREEN_FSR_MODE") && !(fs_hack_is_fake_current_res(&fake_current_resolution)))
++        if (fs_hack_is_fake_current_res(&fake_current_resolution))
          {
++            /* Custom Resolution */
++            memcpy(fs_monitor_sizes+sizeof(fsr_fake_res),fsr_fake_res,sizeof(fsr_fake_res));
++        } 
++        else if (fsr_mode = getenv("WINE_FULLSCREEN_FSR_MODE")) {
              if (!strcmp(fsr_mode, "ultra")) {
                  if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
-@@ -370,6 +375,8 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+                     /* 1080p FSR resolutions */
+@@ -370,7 +379,8 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
                  }
              }
          /* If no mode specified, default to balanced */
-+        } else if (fs_hack_is_fake_current_res(&fake_current_resolution)) {
-+            memcpy(fs_monitor_sizes+sizeof(fsr_fake_res),fsr_fake_res,sizeof(fsr_fake_res));
-         } else {
+-        } else {
++        } 
++        else {
              if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
                  /* 1080p FSR resolutions */
-@@ -457,6 +464,7 @@ BOOL fs_hack_is_fake_current_res(struct fs_monitor_size* fixed_size)
+                 memcpy(fs_monitor_sizes+sizeof(fsr1080_balanced),fsr1080_balanced,sizeof(fsr1080_balanced));
+@@ -457,6 +467,7 @@ BOOL fs_hack_is_fake_current_res(struct fs_monitor_size* fixed_size)
          const int n = sscanf(e,"%dx%d",&(fixed_size->width),&(fixed_size->height));
          if (n==2) 
          {

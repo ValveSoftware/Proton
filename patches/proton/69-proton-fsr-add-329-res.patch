@@ -140,19 +140,13 @@ index b9b6b6503a0..b54aeda7602 100644
                  }
              } else if (!strcmp(fsr_mode, "performance")) {
                  if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
-@@ -372,11 +415,14 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -419,6 +419,9 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
                  } else if (current_mode.dmPelsWidth <= 3840) {
                      /* 4k FSR resolutions */
                      memcpy(fs_monitor_sizes+sizeof(fsr4k_performance),fsr4k_performance,sizeof(fsr4k_performance));
 +                } else if (current_mode.dmPelsWidth <= 5120) {
-+                    /* 4k FSR resolutions */
++                    /* 32:9 FSR resolutions */
 +                    memcpy(fs_monitor_sizes+sizeof(fsr329_performance),fsr329_performance,sizeof(fsr329_performance));
                  }
              }
--        /* If no mode specified, default to balanced */
-         } else if (fs_hack_is_fake_current_res(&fake_current_resolution)) {
-             memcpy(fs_monitor_sizes+sizeof(fsr_fake_res),fsr_fake_res,sizeof(fsr_fake_res));
-+        /* If no mode specified, default to balanced */
-         } else {
-             if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
-                 /* 1080p FSR resolutions */
+         /* If no mode specified, default to balanced */
