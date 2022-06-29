@@ -360,14 +360,6 @@
     echo "WINE: -HOTFIX- fix blops II zombies and multiplayer crash"
     patch -Np1 < ../patches/wine-hotfixes/pending/blopsII_proton_hang_fix.patch
 
-    # pending upstream
-    patch -Np1 < ../patches/wine-hotfixes/pending/5a4a35389becdd9b0c17516888273f0ef41a5040.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/467625c6a3c879207f80bb579634e84f8754eb0f.patch
-
-    # currently broken
-    #echo "WINE: -HOTFIX- fix the good life videos"
-    #patch -Np1 < ../patches/wine-hotfixes/pending/mfplat_http_schemas.patch
-
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
