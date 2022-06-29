@@ -334,6 +334,9 @@
     echo "WINE: -PROTON- fake current res patches"
     patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
 
+    echo "WINE: -PROTON- add 32:9 FSR resolutions"
+    patch -Np1 < ../patches/proton/69-proton-fsr-add-329-res.patch
+
 ### END PROTON PATCH SECTION ###
 
 
