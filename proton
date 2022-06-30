@@ -346,7 +346,8 @@ class Proton:
 
 class CompatData:
     def __init__(self, compatdata):
-        self.base_dir = compatdata + "/"
+        self.base_dir = compatdata + "/" + str(os.getuid()) + "/"
+        os.makedirs(self.base_dir, exist_ok=True)
         self.prefix_dir = self.path("pfx/")
         self.version_file = self.path("version")
         self.config_info_file = self.path("config_info")
