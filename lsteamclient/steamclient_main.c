@@ -615,8 +615,14 @@ void *create_win_interface(const char *name, void *linux_side)
         if (!strcmp(name, constructors[i].iface_version))
         {
             ret = constructors[i].ctor(linux_side);
-            if (allocated_from_steamclient_dll(ret))
+            if (allocated_from_steamclient_dll(ret)
+                    || allocated_from_steamclient_dll(*(void **)ret) /* vtable */)
+            {
+                /* Don't cache interfaces allocated from steamclient.dll space.
+                 * steamclient may get reloaded by the app, miss the previous
+                 * data and potentially have different load address. */
                 break;
+            }
 
             e = HeapAlloc(GetProcessHeap(), 0, sizeof(*e));
             e->name = constructors[i].iface_version;
