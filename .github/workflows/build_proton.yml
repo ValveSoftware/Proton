@@ -1,0 +1,52 @@
+name: Build Proton
+
+# Allows manual runs, and runs on each commit or release
+on: [workflow_dispatch, push, release]
+
+jobs:
+  make:
+    runs-on: ubuntu-latest
+    name: Make
+    strategy:
+      matrix:
+        build_type: ['redistributable', 'deployment']
+        build_strip: ['stripped', 'unstripped']
+    steps:
+      - name: Checkout the repository
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Install build dependencies
+        id: dependencies
+        run: sudo apt-get -y install fontforge
+
+      - name: Build proton and generate a ${{ matrix.build_type }} package
+        id: make
+        run: |
+          if [[ "${{ matrix.build_strip }}" == "unstripped" ]]; then
+            export UNSTRIPPED_BUILD=1
+          fi
+          
+          if [[ "${{ matrix.build_type }}" == "redistributable" ]]; then
+            make redist
+          elif [[ "${{ matrix.build_type }}" == "deployment" ]]; then
+            make deploy
+          else
+            exit 1
+          fi
+
+      - name: Recursively list directory contents for debugging
+        id: ls
+        run: ls -Rlah .
+
+      - name: Upload ${{ matrix.build_type }} package artifact
+        id: upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: Proton ${{ matrix.build_type }} ${{ matrix.build_strip }}
+          path: |
+            ./build/*/deploy
+            ./build/*/redist
