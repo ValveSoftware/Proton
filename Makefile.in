@@ -191,7 +191,7 @@ LICENSE := $(SRCDIR)/dist.LICENSE
 OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
 AV1_PATENTS := $(SRCDIR)/dav1d/doc/PATENTS
 
-GECKO_VER := 2.47.2
+GECKO_VER := 2.47.3
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 
