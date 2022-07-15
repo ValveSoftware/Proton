@@ -84,6 +84,7 @@ Things it contains that Valve's proton does not:
 | Arkania                                             |                                              |                                              | :heavy_check_mark: | :x:                        |
 | Assetto Corsa                                       | [SteamDB](https://steamdb.info/app/244210)   | [ProtonDB](https://protondb.com/app/244210)  | :heavy_check_mark: | :x:                        |
 | Astroneer                                           | [SteamDB](https://steamdb.info/app/361420)   | [ProtonDB](https://protondb.com/app/361420)  | :x:                | :heavy_check_mark:         |
+| Atelier Ryza: Ever Darkness & the Secret Hideout    | [SteamDB](https://steamdb.info/app/1121560)  | [ProtonDB](https://protondb.com/app/1121560) | :x:                | :heavy_check_mark:         |
 | Aven Colony                                         | [SteamDB](https://steamdb.info/app/484900)   | [ProtonDB](https://protondb.com/app/484900)  | :x:                | :heavy_check_mark:         |
 | Baldur's Gate 3                                     | [SteamDB](https://steamdb.info/app/1086940)  | [ProtonDB](https://protondb.com/app/1086940) | :heavy_check_mark: | :x:                        |
 | Batman Arkham Asylum                                | [SteamDB](https://steamdb.info/app/35140)    | [ProtonDB](https://protondb.com/app/35140)   | :heavy_check_mark: | :x:                        |
