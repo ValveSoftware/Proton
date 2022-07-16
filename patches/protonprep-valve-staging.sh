@@ -10,15 +10,10 @@
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
 
-    # https://github.com/doitsujin/dxvk/pull/2608
-#    echo "DXVK: Add support for shared ID3D11Fence object"
-#    patch -Np1 < ../patches/dxvk/2608.patch
-
     # https://github.com/doitsujin/dxvk/pull/2675
     echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
     patch -Np1 < ../patches/dxvk/2675.patch
 
-    # this needs to be the last patch in the list.. because reasons?
     echo "DXVK:add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
@@ -27,14 +22,8 @@
     git reset --hard HEAD
     git clean -xdf
 
-#    disabled for now, waiting on a rebase
-#    echo "VKD3D: Add Halo Infinite patches"
-    # https://github.com/HansKristian-Work/vkd3d-proton/tree/execute-indirect-advanced-index-lut
-#    patch -Np1 < ../patches/vkd3d-proton/halo_infinite_wip.patch
-
-    # https://github.com/HansKristian-Work/vkd3d-proton/pull/1070
-#    echo "VKD3D: Add support for shared ID3D12Resource and ID3D12Fence objects"
-#    patch -Np1 < ../patches/vkd3d-proton/1070.patch
+    echo "VKD3D: Add Halo Infinite patches"
+    patch -Np1 < ../patches/vkd3d-proton/1155.patch
 
     cd ..
 
@@ -321,6 +310,9 @@
     echo "WINE: -GAME FIXES- add powerprof patches for FFVII Remake and SpecialK"
     patch -Np1 < ../patches/game-patches/FFVII-and-SpecialK-powerprof.patch
 
+    echo "WINE: -GAME FIXES- add halo infinite pointer fix"
+    patch -Np1 < ../patches/game-patches/halo-infinite-pointer.patch
+
 ### END GAME PATCH SECTION ###
 
 ### (2-4) PROTON PATCH SECTION ###
@@ -333,6 +325,10 @@
 
     echo "WINE: -PROTON- add 32:9 FSR resolutions"
     patch -Np1 < ../patches/proton/69-proton-fsr-add-329-res.patch
+
+    echo "WINE: -PROTON- add FSR resolutions by aspect ratio instead of current screen width"
+    patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
+    
 
 ### END PROTON PATCH SECTION ###
 
@@ -356,7 +352,8 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/0002-include-Add-THREAD_POWER_THROTTLING_STATE-type.patch
     patch -Np1 < ../patches/wine-hotfixes/pending/0003-ntdll-Fake-success-for-ThreadPowerThrottlingState.patch
     
-
+    echo "WINE: -PROTON- apply revert to allow gallium nine functionality"
+    patch -Np1 < ../patches/wine-hotfixes/pending/0001-revert-96b82203f192eade6910f4ac2ecb188e27d22feb-to-k.patch
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
