@@ -1204,6 +1204,9 @@ def default_compat_config():
                 "1180660", #Tell Me Why
                 "1238430", #Tell Me Why Chapter 2
                 "1266670", #Tell Me Why Chapter 3
+                # Other issues arising from OWPR code path in apps, e. g., hitting unimplemented bits in
+                # d3dcompiler.
+                "230410", #Warframe
                 ]:
             ret.add("noopwr")
 
