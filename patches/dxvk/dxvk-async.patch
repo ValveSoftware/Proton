@@ -3,25 +3,25 @@ index d191b05d..25cbba7c 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -1,4 +1,4 @@
--project('dxvk', ['c', 'cpp'], version : 'v1.10.1', meson_version : '>= 0.49', default_options : [ 'cpp_std=c++17' ])
-+project('dxvk', ['c', 'cpp'], version : 'v1.10.1-async', meson_version : '>= 0.49', default_options : [ 'cpp_std=c++17' ])
+-project('dxvk', ['c', 'cpp'], version : 'v1.10.2', meson_version : '>= 0.49', default_options : [ 'cpp_std=c++17' ])
++project('dxvk', ['c', 'cpp'], version : 'v1.10.2-async', meson_version : '>= 0.49', default_options : [ 'cpp_std=c++17' ])
 
  cpu_family = target_machine.cpu_family()
 
-@@ -129,7 +129,7 @@ else
+@@ -108,7 +108,7 @@ else
  endif
  
  dxvk_version = vcs_tag(
 -  command: ['git', 'describe', '--dirty=+'],
 +  command: ['git', 'describe', '--dirty=-async'],
    input:  'version.h.in',
-   output: 'version.h')
- 
+   output: 'version.h',
+ )
 diff --git a/src/dxvk/dxvk_context.cpp b/src/dxvk/dxvk_context.cpp
-index 6462e4d2..08e18a78 100644
+index ac85428b..7dc80740 100644
 --- a/src/dxvk/dxvk_context.cpp
 +++ b/src/dxvk/dxvk_context.cpp
-@@ -4117,7 +4117,7 @@ namespace dxvk {
+@@ -4138,7 +4138,7 @@ namespace dxvk {
      
      // Retrieve and bind actual Vulkan pipeline handle
      m_gpActivePipeline = m_state.gp.pipeline->getPipelineHandle(
@@ -30,7 +30,7 @@ index 6462e4d2..08e18a78 100644
  
      if (unlikely(!m_gpActivePipeline))
        return false;
-@@ -4358,7 +4358,7 @@ namespace dxvk {
+@@ -4379,7 +4379,7 @@ namespace dxvk {
    }
  
  
@@ -39,7 +39,7 @@ index 6462e4d2..08e18a78 100644
      if (m_flags.test(DxvkContextFlag::GpDirtyFramebuffer)) {
        m_flags.clr(DxvkContextFlag::GpDirtyFramebuffer);
  
-@@ -4380,6 +4380,11 @@ namespace dxvk {
+@@ -4401,6 +4401,11 @@ namespace dxvk {
          m_state.gp.state.omSwizzle[i] = DxvkOmAttachmentSwizzle(mapping);
        }
  
@@ -51,7 +51,7 @@ index 6462e4d2..08e18a78 100644
        m_flags.set(DxvkContextFlag::GpDirtyPipelineState);
      }
    }
-@@ -4783,7 +4788,7 @@ namespace dxvk {
+@@ -4804,7 +4809,7 @@ namespace dxvk {
      }
  
      if (m_flags.test(DxvkContextFlag::GpDirtyFramebuffer))
@@ -60,7 +60,7 @@ index 6462e4d2..08e18a78 100644
  
      if (!m_flags.test(DxvkContextFlag::GpRenderPassBound))
        this->startRenderPass();
-@@ -5197,6 +5202,14 @@ namespace dxvk {
+@@ -5218,6 +5223,14 @@ namespace dxvk {
      return true;
    }
    
@@ -98,7 +98,7 @@ index 39c5b989..78ef3b02 100644
        const DxvkGraphicsPipelineShaders&  shaders);
  
 diff --git a/src/dxvk/dxvk_graphics.cpp b/src/dxvk/dxvk_graphics.cpp
-index 98f5b2ed..e741f59d 100644
+index 66c4131e..a820502e 100644
 --- a/src/dxvk/dxvk_graphics.cpp
 +++ b/src/dxvk/dxvk_graphics.cpp
 @@ -62,7 +62,8 @@ namespace dxvk {
@@ -113,12 +113,12 @@ index 98f5b2ed..e741f59d 100644
      if (unlikely(!instance)) {
 @@ -71,34 +72,41 @@ namespace dxvk {
          return VK_NULL_HANDLE;
-
+ 
        // Prevent other threads from adding new instances and check again
 -      std::lock_guard<dxvk::mutex> lock(m_mutex);
 +      //std::lock_guard<dxvk::mutex> lock(m_mutex);
        instance = this->findInstance(state, renderPass);
-
+ 
        if (!instance) {
          // Keep pipeline object locked, at worst we're going to stall
          // a state cache worker and the current thread needs priority.
@@ -132,14 +132,14 @@ index 98f5b2ed..e741f59d 100644
 +        }
        }
      }
-
+ 
 +    if (!instance)
 +      return VK_NULL_HANDLE;
 +
      return instance->pipeline();
    }
-
-
+ 
+ 
 -  void DxvkGraphicsPipeline::compilePipeline(
 +  bool DxvkGraphicsPipeline::compilePipeline(
      const DxvkGraphicsPipelineStateInfo& state,
@@ -148,18 +148,18 @@ index 98f5b2ed..e741f59d 100644
      if (!this->validatePipelineState(state, false))
 -      return;
 +      return false;
-
+ 
      // Keep the object locked while compiling a pipeline since compiling
      // similar pipelines concurrently is fragile on some drivers
      std::lock_guard<dxvk::mutex> lock(m_mutex);
-
+ 
 -    if (!this->findInstance(state, renderPass))
 -      this->createInstance(state, renderPass);
 +    return (this->findInstance(state, renderPass) == nullptr) &&
 +           (this->createInstance(state, renderPass) != nullptr);
    }
-
-
+ 
+ 
 @@ -107,6 +115,7 @@ namespace dxvk {
      const DxvkRenderPass*                renderPass) {
      VkPipeline pipeline = this->createPipeline(state, renderPass);
@@ -177,10 +177,10 @@ index 98f5b2ed..e741f59d 100644
        if (instance.isCompatible(state, renderPass))
          return &instance;
 diff --git a/src/dxvk/dxvk_graphics.h b/src/dxvk/dxvk_graphics.h
-index 3a4d93f3..e169d8f1 100644
+index 50d16b1e..21274fd6 100644
 --- a/src/dxvk/dxvk_graphics.h
 +++ b/src/dxvk/dxvk_graphics.h
-@@ -187,11 +187,13 @@ namespace dxvk {
+@@ -199,11 +199,13 @@ namespace dxvk {
       * state. If necessary, a new pipeline will be created.
       * \param [in] state Pipeline state vector
       * \param [in] renderPass The render pass
@@ -195,7 +195,7 @@ index 3a4d93f3..e169d8f1 100644
      
      /**
       * \brief Compiles a pipeline
-@@ -200,11 +202,16 @@ namespace dxvk {
+@@ -212,11 +214,16 @@ namespace dxvk {
       * and stores the result for future use.
       * \param [in] state Pipeline state vector
       * \param [in] renderPass The render pass
@@ -213,7 +213,7 @@ index 3a4d93f3..e169d8f1 100644
    private:
      
      Rc<vk::DeviceFn>            m_vkd;
-@@ -224,6 +231,8 @@ namespace dxvk {
+@@ -236,6 +243,8 @@ namespace dxvk {
      // List of pipeline instances, shared between threads
      alignas(CACHE_LINE_SIZE)
      dxvk::mutex                               m_mutex;
@@ -222,9 +222,9 @@ index 3a4d93f3..e169d8f1 100644
      sync::List<DxvkGraphicsPipelineInstance>  m_pipelines;
      
      DxvkGraphicsPipelineInstance* createInstance(
-@@ -251,10 +260,6 @@ namespace dxvk {
-     bool validatePipelineState(
-       const DxvkGraphicsPipelineStateInfo& state) const;
+@@ -264,10 +273,6 @@ namespace dxvk {
+       const DxvkGraphicsPipelineStateInfo& state,
+             bool                           trusted) const;
      
 -    void writePipelineStateToCache(
 -      const DxvkGraphicsPipelineStateInfo& state,
@@ -234,10 +234,10 @@ index 3a4d93f3..e169d8f1 100644
              LogLevel                       level,
        const DxvkGraphicsPipelineStateInfo& state) const;
 diff --git a/src/dxvk/dxvk_image.h b/src/dxvk/dxvk_image.h
-index 5b1a8b15..e68f2eb1 100644
+index b3b8a58e..922e1f21 100644
 --- a/src/dxvk/dxvk_image.h
 +++ b/src/dxvk/dxvk_image.h
-@@ -539,6 +539,37 @@ namespace dxvk {
+@@ -552,6 +552,37 @@ namespace dxvk {
          view->imageSubresources());
      }
  
@@ -275,7 +275,7 @@ index 5b1a8b15..e68f2eb1 100644
    private:
      
      Rc<vk::DeviceFn>  m_vkd;
-@@ -551,6 +582,9 @@ namespace dxvk {
+@@ -564,6 +595,9 @@ namespace dxvk {
  
      static std::atomic<uint64_t> s_cookie;
  
@@ -286,10 +286,10 @@ index 5b1a8b15..e68f2eb1 100644
      
    };
 diff --git a/src/dxvk/dxvk_options.cpp b/src/dxvk/dxvk_options.cpp
-index 39e9a820..1b320e08 100644
+index ea82eedc..46f9ff48 100644
 --- a/src/dxvk/dxvk_options.cpp
 +++ b/src/dxvk/dxvk_options.cpp
-@@ -8,6 +8,8 @@ namespace dxvk {
+@@ -9,6 +9,8 @@ namespace dxvk {
      useRawSsbo            = config.getOption<Tristate>("dxvk.useRawSsbo",             Tristate::Auto);
      shrinkNvidiaHvvHeap   = config.getOption<Tristate>("dxvk.shrinkNvidiaHvvHeap",    Tristate::Auto);
      hud                   = config.getOption<std::string>("dxvk.hud", "");
@@ -299,10 +299,10 @@ index 39e9a820..1b320e08 100644
  
  }
 diff --git a/src/dxvk/dxvk_options.h b/src/dxvk/dxvk_options.h
-index 2fb0163a..d7a6719c 100644
+index 992ec764..6398e9d1 100644
 --- a/src/dxvk/dxvk_options.h
 +++ b/src/dxvk/dxvk_options.h
-@@ -15,6 +15,13 @@ namespace dxvk {
+@@ -18,6 +18,13 @@ namespace dxvk {
      /// when using the state cache
      int32_t numCompilerThreads;
  
@@ -502,7 +502,7 @@ index f32a8913..533042ca 100644
      std::atomic<uint32_t>     m_numComputePipelines  = { 0 };
      std::atomic<uint32_t>     m_numGraphicsPipelines = { 0 };
 diff --git a/src/dxvk/meson.build b/src/dxvk/meson.build
-index a68d0e11..9915d88f 100644
+index 3153c8cf..9cfd681b 100644
 --- a/src/dxvk/meson.build
 +++ b/src/dxvk/meson.build
 @@ -90,6 +90,7 @@ dxvk_src = files([
