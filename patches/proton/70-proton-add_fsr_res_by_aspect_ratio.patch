@@ -1,0 +1,411 @@
+From c4c25c56fd167fc6353162ff68539162757dcc20 Mon Sep 17 00:00:00 2001
+From: Stelios Tsampas <loathingkernel@gmail.com>
+Date: Wed, 29 Jun 2022 14:33:07 +0300
+Subject: [PATCH] fshack - Generate FSR resolutions based on native aspect
+ ratio
+
+The base list of resolutions remains unchanged.
+If FSR is enabled it adds FSR resolutions for that.
+If the user specifed a custom resolution, adds that to the list too.
+---
+ dlls/winex11.drv/fs.c | 293 +++++++++++++-----------------------------
+ 1 file changed, 87 insertions(+), 206 deletions(-)
+
+diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
+index 70e6b84ffad..b8943b946ef 100644
+--- a/dlls/winex11.drv/fs.c
++++ b/dlls/winex11.drv/fs.c
+@@ -83,18 +83,18 @@ resolution list:
+     {2560, 720},  // 32:9 - 'FSR 32:9 Performance'
+     {3012, 847},  // 32:9 - 'FSR 32:9 Balanced'
+     {3413, 960},  // 32:9 - 'FSR 32:9 Quality'
+-    {3938, 1108},  // 32:9 - 'FSR 32:9 Ultra Quality'
++    {3938, 1108}, // 32:9 - 'FSR 32:9 Ultra Quality'
+ 
+     4K:
+-    {1920, 1080},  // 16:9 - 'FSR 2160p Performance'
++    {1920, 1080}, // 16:9 - 'FSR 2160p Performance'
+     {2259, 1270}, // 16:9 - 'FSR 2160p Balanced'
+-    {2560, 1440},  // 16:9 - 'FSR 2160p Quality'
++    {2560, 1440}, // 16:9 - 'FSR 2160p Quality'
+     {2954, 1662}, // 16:9 - 'FSR 2160p Ultra Quality'
+ 
+     Ultra-wide:
+-    {1720, 720}, // 21:9 - 'FSR ultra-wide Performance'
+-    {2024, 847}, // 21:9 - 'FSR ultra-wide Balanced'
+-    {2293, 960}, // 21:9 - 'FSR ultra-wide Quality'
++    {1720, 720},  // 21:9 - 'FSR ultra-wide Performance'
++    {2024, 847},  // 21:9 - 'FSR ultra-wide Balanced'
++    {2293, 960},  // 21:9 - 'FSR ultra-wide Quality'
+     {2646, 1108}, // 21:9 - 'FSR ultra-wide Ultra Quality'
+ 
+     2K:
+@@ -104,7 +104,7 @@ resolution list:
+     {1970, 1108}, // 16:9 - 'FSR 1440p Ultra Quality'
+ 
+     1080p:
+-    {960, 640},  // 16:9 - 'FSR 1080p Performance'
++    {960, 640},   // 16:9 - 'FSR 1080p Performance'
+     {1129, 635},  // 16:9 - 'FSR 1080p Balanced'
+     {1280, 720},  // 16:9 - 'FSR 1080p Quality'
+     {1477, 831},  // 16:9 - 'FSR 1080p Ultra Quality'
+@@ -119,7 +119,7 @@ The formula for FSR resolutions is as follows:
+ */
+ 
+ /* A table of resolutions some games expect but host system may not report */
+-static struct fs_monitor_size fs_monitor_sizes[] =
++static struct fs_monitor_size fs_monitor_sizes_base[] =
+ {
+     {640, 480},   /*  4:3 */
+     {800, 600},   /*  4:3 */
+@@ -141,117 +141,30 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+     {1280, 1024}, /*  5:4 */
+ };
+ 
+-/* Ultra FSR */
+-static struct fs_monitor_size fsr1080_ultra[] =
++/* Dynamically assigned FSR resolutions */
++static struct fs_monitor_size fs_monitor_sizes_fsr[] =
+ {
+-    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality' */
++    {0, 0}, /* FSR Performance */
++    {0, 0}, /* FSR Balanced */
++    {0, 0}, /* FSR Quality */
++    {0, 0}, /* FSR Ultra Quality */
+ };
+ 
+-static struct fs_monitor_size fsr2k_ultra[] =
+-{
+-    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality' */
+-};
+-
+-static struct fs_monitor_size fsruw_ultra[] =
+-{
+-    {2646, 1108}, /* 21:9 - 'FSR ultra-wide Ultra Quality' */
+-};
+-
+-static struct fs_monitor_size fsr4k_ultra[] =
+-{
+-    {2954, 1662}, /* 16:9 - 'FSR 2160p Ultra Quality' */
+-};
+-
+-static struct fs_monitor_size fsr329_ultra[] =
+-{
+-    {3938, 1108},  // 32:9 - 'FSR 32:9 Ultra Quality'
+-};
+-
+-/* Quality FSR */
+-static struct fs_monitor_size fsr1080_quality[] =
+-{
+-    {1280, 720},  /* 16:9 - 'FSR 1080p Quality' */
+-};
+-
+-static struct fs_monitor_size fsr2k_quality[] =
+-{
+-    {1706, 960},  /* 16:9 - 'FSR 1440p Quality' */
+-};
+-
+-static struct fs_monitor_size fsruw_quality[] =
+-{
+-    {2293, 960}, /* 21:9 - 'FSR ultra-wide Quality' */
+-};
+-
+-static struct fs_monitor_size fsr4k_quality[] =
+-{
+-    {2560, 1440},  /* 16:9 - 'FSR 2160p Quality' */
+-};
+-
+-static struct fs_monitor_size fsr329_quality[] =
+-{
+-    {3413, 960},  // 32:9 - 'FSR 32:9 Quality'
+-};
+-
+-/* Balanced FSR */
+-static struct fs_monitor_size fsr1080_balanced[] =
+-{
+-    {1129, 635},  /* 16:9 - 'FSR 1080p Balanced' */
+-};
+-
+-static struct fs_monitor_size fsr2k_balanced[] =
+-{
+-    {1506, 847},  /* 16:9 - 'FSR 1440p Balanced' */
+-};
+-
+-static struct fs_monitor_size fsruw_balanced[] =
+-{
+-    {2024, 847}, /* 21:9 - 'FSR ultra-wide Balanced' */
+-};
+-
+-static struct fs_monitor_size fsr4k_balanced[] =
+-{
+-    {2259, 1270}, /* 16:9 - 'FSR 2160p Balanced' */
+-};
+-
+-static struct fs_monitor_size fsr329_balanced[] =
+-{
+-    {3012, 847},  // 32:9 - 'FSR 32:9 Balanced'
+-};
+-
+-/* Performance FSR */
+-static struct fs_monitor_size fsr1080_performance[] =
+-{
+-    {960, 640},  /* 16:9 - 'FSR 1080p Performance' */
+-};
+-
+-static struct fs_monitor_size fsr2k_performance[] =
+-{
+-    {1280, 720},  /* 16:9 - 'FSR 1440p Performance' */
+-};
+-
+-static struct fs_monitor_size fsruw_performance[] =
+-{
+-    {1720, 720}, /* 21:9 - 'FSR ultra-wide Performance' */
+-};
+-
+-static struct fs_monitor_size fsr4k_performance[] =
+-{
+-    {1920, 1080},  /* 16:9 - 'FSR 2160p Performance' */
+-};
+-
+-static struct fs_monitor_size fsr329_performance[] =
+-{
+-    {2560, 720},  // 32:9 - 'FSR 32:9 Performance'
++static float fsr_ratios[] = {
++    2.0f, 1.7f, 1.5f, 1.3f,
+ };
+ 
+ static struct fs_monitor_size fsr_fake_res[] =
+ {
+-    {1920, 1080},  /* Custom resolution, replaced by WINE_FULLSCREEN_FSR_CUSTOM_MODE */
++    {0, 0},
+ };
+ 
+ static struct fs_monitor_size fake_current_resolution;
+ 
++struct fs_monitor_size *fs_monitor_sizes = NULL;
++INT fs_monitor_sizes_offset = 0;
++
++
+ /* A fake monitor for the fullscreen hack */
+ struct fs_monitor
+ {
+@@ -266,6 +179,9 @@ struct fs_monitor
+     UINT unique_resolutions;    /* Number of unique resolutions in terms of WxH */
+ };
+ 
++BOOL fs_hack_is_fsr(float *sharpness);
++BOOL fs_hack_is_fake_current_res(struct fs_monitor_size*);
++
+ static void add_fs_mode(struct fs_monitor *fs_monitor, DWORD depth, DWORD width, DWORD height,
+                         DWORD frequency, DWORD orientation)
+ {
+@@ -330,13 +246,15 @@ static void add_fs_mode(struct fs_monitor *fs_monitor, DWORD depth, DWORD width,
+ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+ {
+     DEVMODEW *real_modes, *real_mode, current_mode;
+-    const char *fsr_flag, *fsr_mode;
+     UINT real_mode_count;
+     DWORD width, height;
+     ULONG_PTR real_id;
+     ULONG offset;
+     UINT i, j;
+ 
++    INT h_factor;
++    float sharpness, real_w_ratio, h_ratio;
++
+     if (!real_settings_handler.get_id(fs_monitor->user_mode.dmDeviceName, &real_id))
+         return FALSE;
+ 
+@@ -347,105 +265,66 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+     if (!real_settings_handler.get_modes(real_id, 0, &real_modes, &real_mode_count))
+         return FALSE;
+     
+-    if (fsr_flag = getenv("WINE_FULLSCREEN_FSR")) 
+-    {
+-        if (fs_hack_is_fake_current_res(&fake_current_resolution))
+-        {
+-            /* Custom Resolution */
+-            memcpy(fs_monitor_sizes+sizeof(fsr_fake_res),fsr_fake_res,sizeof(fsr_fake_res));
+-        } 
+-        else if (fsr_mode = getenv("WINE_FULLSCREEN_FSR_MODE")) {
+-            if (!strcmp(fsr_mode, "ultra")) {
+-                if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
+-                    /* 1080p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr1080_ultra),fsr1080_ultra,sizeof(fsr1080_ultra));
+-                } else if (current_mode.dmPelsWidth <= 2560) {
+-                    /* 1440p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr2k_ultra),fsr2k_ultra,sizeof(fsr2k_ultra));
+-                } else if (current_mode.dmPelsWidth <= 3440) {
+-                    /* ultrawide FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsruw_ultra),fsruw_ultra,sizeof(fsruw_ultra));
+-                } else if (current_mode.dmPelsWidth <= 3840) {
+-                    /* 4k FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr4k_ultra),fsr4k_ultra,sizeof(fsr4k_ultra));
+-                } else if (current_mode.dmPelsWidth <= 5120) {
+-                    /* 4k FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr329_ultra),fsr329_ultra,sizeof(fsr329_ultra));
+-                }
+-            } else if (!strcmp(fsr_mode, "quality")) {
+-                if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
+-                    /* 1080p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr1080_quality),fsr1080_quality,sizeof(fsr1080_quality));
+-                } else if (current_mode.dmPelsWidth <= 2560) {
+-                    /* 1440p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr2k_quality),fsr2k_quality,sizeof(fsr2k_quality));
+-                } else if (current_mode.dmPelsWidth <= 3440) {
+-                    /* ultrawide FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsruw_quality),fsruw_quality,sizeof(fsruw_quality));
+-                } else if (current_mode.dmPelsWidth <= 3840) {
+-                    /* 4k FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr4k_quality),fsr4k_quality,sizeof(fsr4k_quality));
+-                } else if (current_mode.dmPelsWidth <= 5120) {
+-                    /* 4k FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr329_quality),fsr329_quality,sizeof(fsr329_quality));
+-                }
+-            } else if (!strcmp(fsr_mode, "balanced")) {
+-                if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
+-                    /* 1080p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr1080_balanced),fsr1080_balanced,sizeof(fsr1080_balanced));
+-                } else if (current_mode.dmPelsWidth <= 2560) {
+-                    /* 1440p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr2k_balanced),fsr2k_balanced,sizeof(fsr2k_balanced));
+-                } else if (current_mode.dmPelsWidth <= 3440) {
+-                    /* ultrawide FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsruw_balanced),fsruw_balanced,sizeof(fsruw_balanced));
+-                } else if (current_mode.dmPelsWidth <= 3840) {
+-                    /* 4k FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr4k_balanced),fsr4k_balanced,sizeof(fsr4k_balanced));
+-                } else if (current_mode.dmPelsWidth <= 5120) {
+-                    /* 4k FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr329_balanced),fsr329_balanced,sizeof(fsr329_balanced));
+-                }
+-            } else if (!strcmp(fsr_mode, "performance")) {
+-                if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
+-                    /* 1080p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr1080_performance),fsr1080_performance,sizeof(fsr1080_performance));
+-                } else if (current_mode.dmPelsWidth <= 2560) {
+-                    /* 1440p FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr2k_performance),fsr2k_performance,sizeof(fsr2k_performance));
+-                } else if (current_mode.dmPelsWidth <= 3440) {
+-                    /* ultrawide FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsruw_performance),fsruw_performance,sizeof(fsruw_performance));
+-                } else if (current_mode.dmPelsWidth <= 3840) {
+-                    /* 4k FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr4k_performance),fsr4k_performance,sizeof(fsr4k_performance));
+-                } else if (current_mode.dmPelsWidth <= 5120) {
+-                    /* 32:9 FSR resolutions */
+-                    memcpy(fs_monitor_sizes+sizeof(fsr329_performance),fsr329_performance,sizeof(fsr329_performance));
+-                }
+-            }
+-        /* If no mode specified, default to balanced */
+-        } 
+-        else {
+-            if (current_mode.dmPelsWidth >= 1129 && current_mode.dmPelsWidth <= 1920) {
+-                /* 1080p FSR resolutions */
+-                memcpy(fs_monitor_sizes+sizeof(fsr1080_balanced),fsr1080_balanced,sizeof(fsr1080_balanced));
+-            } else if (current_mode.dmPelsWidth <= 2560) {
+-                /* 1440p FSR resolutions */
+-                memcpy(fs_monitor_sizes+sizeof(fsr2k_balanced),fsr2k_balanced,sizeof(fsr2k_balanced));
+-            } else if (current_mode.dmPelsWidth <= 3440) {
+-                /* ultrawide FSR resolutions */
+-                memcpy(fs_monitor_sizes+sizeof(fsruw_balanced),fsruw_balanced,sizeof(fsruw_balanced));
+-            } else if (current_mode.dmPelsWidth <= 3840) {
+-                /* 4k FSR resolutions */
+-                 memcpy(fs_monitor_sizes+sizeof(fsr4k_balanced),fsr4k_balanced,sizeof(fsr4k_balanced));
++    if (fs_monitor_sizes)
++        heap_free(fs_monitor_sizes);
++    fs_monitor_sizes = NULL;
++    fs_monitor_sizes_offset = 0;
++    fs_monitor_sizes = heap_alloc(sizeof(fs_monitor_sizes_base)
++                                  + sizeof(fs_monitor_sizes_fsr)
++                                  + sizeof(fsr_fake_res));
++
++    /* Copy the default list */
++    memcpy(fs_monitor_sizes+fs_monitor_sizes_offset, fs_monitor_sizes_base, sizeof(fs_monitor_sizes_base));
++    fs_monitor_sizes_offset += ARRAY_SIZE(fs_monitor_sizes_base);
++
++    /* If FSR is enabled, generate and add FSR resolutions */
++    if (fs_hack_is_fsr(&sharpness)) {
++        if (current_mode.dmPelsWidth / 16.0f == current_mode.dmPelsHeight / 9.0f) {
++            /* 16:9 resolutions */
++            h_ratio = 9.0f;
++        } else if ((INT)(current_mode.dmPelsWidth / 210.0f) == (INT)(current_mode.dmPelsHeight / 90.0f)) {
++            /* 21:9 ultra-wide FSR resolutions */
++            h_ratio = 9.0f;
++        } else if (current_mode.dmPelsWidth / 32.0f == current_mode.dmPelsHeight / 9.0f) {
++            /* 32:9 "duper-ultra-wide" resolutions - Also adds the base resolutions from 16:9 and 21:9 */
++            h_ratio = 9.0f;
++        } else if (current_mode.dmPelsWidth / 8.0f == current_mode.dmPelsHeight / 5.0f) {
++            /* 16:10 resolutions */
++            h_ratio = 10.0f;
++        } else if (current_mode.dmPelsWidth / 12.0f == current_mode.dmPelsHeight / 5.0f) {
++            /* 24:10 resolutions - Also adds the base resolutions from 16:10*/
++            h_ratio = 10.0f;
++        } else {
++            /* In case of unknown ratio, naively create FSR resolutions */
++            h_ratio = 1.0f;
++        }
++
++        real_w_ratio = current_mode.dmPelsWidth/(current_mode.dmPelsHeight / h_ratio);
++        for (i = 0; i < ARRAY_SIZE(fs_monitor_sizes_fsr); ++i) {
++            if (h_ratio == 1.0f) {
++                /* naive generation and hope for the best */
++                fs_monitor_sizes_fsr[i].width = (INT)(current_mode.dmPelsWidth / fsr_ratios[i] + 0.5f);
++                fs_monitor_sizes_fsr[i].height = (INT)(current_mode.dmPelsHeight / fsr_ratios[i] + 0.5f);
++            } else {
++                h_factor = (INT)(current_mode.dmPelsHeight/h_ratio / fsr_ratios[i] + 0.5f);
++                fs_monitor_sizes_fsr[i].width = (INT)(real_w_ratio * h_factor + 0.5f);
++                fs_monitor_sizes_fsr[i].height = (INT)(h_ratio * h_factor + 0.5f);
+             }
++            TRACE("created fsr res: %dx%d\n", fs_monitor_sizes_fsr[i].width, fs_monitor_sizes_fsr[i].height);
++        }
++        memcpy(fs_monitor_sizes+fs_monitor_sizes_offset, fs_monitor_sizes_fsr, sizeof(fs_monitor_sizes_fsr));
++        fs_monitor_sizes_offset += ARRAY_SIZE(fs_monitor_sizes_fsr);
++
++        /* Add the custom resolution to the list */
++        if (fs_hack_is_fake_current_res(&fake_current_resolution)) {
++            memcpy(fs_monitor_sizes+fs_monitor_sizes_offset, fsr_fake_res, sizeof(fsr_fake_res));
++            fs_monitor_sizes_offset += ARRAY_SIZE(fsr_fake_res);
+         }
+     }
+-        
++
+     fs_monitor->mode_count = 0;
+     fs_monitor->unique_resolutions = 0;
+-    fs_monitor->modes = heap_calloc(ARRAY_SIZE(fs_monitor_sizes) * DEPTH_COUNT + real_mode_count,
++    fs_monitor->modes = heap_calloc(fs_monitor_sizes_offset * DEPTH_COUNT + real_mode_count,
+                                     sizeof(*fs_monitor->modes));
+     if (!fs_monitor->modes)
+     {
+@@ -459,7 +338,7 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+                 current_mode.u1.s2.dmDisplayOrientation);
+ 
+     /* Linux reports far fewer resolutions than Windows. Add modes that some games may expect. */
+-    for (i = 0; i < ARRAY_SIZE(fs_monitor_sizes); ++i)
++    for (i = 0; i < fs_monitor_sizes_offset; ++i)
+     {
+         if (current_mode.u1.s2.dmDisplayOrientation == DMDO_DEFAULT ||
+             current_mode.u1.s2.dmDisplayOrientation == DMDO_180)
+@@ -505,15 +384,17 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+ 
+ BOOL fs_hack_is_fake_current_res(struct fs_monitor_size* fixed_size)
+ {
++    const char *e;
++
+     fixed_size->width = 0;
+     fixed_size->height = 0;
+-    const char *e = getenv("WINE_FULLSCREEN_FSR_CUSTOM_MODE");
++    e = getenv("WINE_FULLSCREEN_FSR_CUSTOM_MODE");
+     if (e) 
+     {
+         const int n = sscanf(e,"%dx%d",&(fixed_size->width),&(fixed_size->height));
+         if (n==2) 
+         {
+-            memcpy(fsr_fake_res+sizeof(fixed_size),fixed_size,sizeof(fixed_size));
++            memcpy(fsr_fake_res, fixed_size, sizeof(*fixed_size));
+             return TRUE;
+         }
+     }
+-- 
+2.37.0
+
