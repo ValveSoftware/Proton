@@ -785,7 +785,9 @@ class CompatData:
                 self.copy_pfx()
 
             self.migrate_user_paths()
-
+            
+            makedirs(self.prefix_dir + "/dosdevices/")
+            
             if not file_exists(self.prefix_dir + "/dosdevices/c:", follow_symlinks=False):
                 os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
 
