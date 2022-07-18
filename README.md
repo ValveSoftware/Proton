@@ -354,6 +354,8 @@ Environment variable options:
 |                       | <tt>WINE_FULLSCREEN_FAKE_CURRENT_RES</tt> | Set fake resolution of the screen. This can be useful in games that render in native resolution regardless of the selected resolution. Parameter `WIDTHxHEIGHT` |
 |                       | <tt>WINE_DO_NOT_CREATE_DXGI_DEVICE_MANAGER</tt> | Set to 1 to enable. Required for video playback in some games to not be miscolored (usually tinted pink) |
 | <tt>noopwr</tt>       | <tt>WINE_DISABLE_VULKAN_OPWR</tt> | Enable hack to disable Vulkan other process window rendering which sometimes causes issues on Wayland due to blit being one frame behind. |
+|                       | <tt>MODS</tt> | Launch Skyrim with SKSE if it's installed. Usage: MODS=1 %command% |
+|                       | <tt>NOSTEAM</tt> | Launch FFXIV client as standalone for non-steam accounts. Usage: NOSTEAM=1 %command% |
 ## Credits
 
 As many of you may or may not already know, there is a Credits section in the README for this Git repository. My proton-ge project contains some of my personal tweaks to Proton, but a large amount of the patches, rebases and fixes come from numerous people's projects. While I tend to get credited for my builds, a lot of the work that goes into it are from other people as well. I'd like to take some time to point a few of these people out of recognition. In future builds, I plan to make clearer and more informative Git commits, as well as attempt to give these people further crediting, as my README may not be sufficient in doing so.
