@@ -1,18 +1,22 @@
-From 7b2cc9030f2b1f99c5c7b01cebf8c65093bb829f Mon Sep 17 00:00:00 2001
+From 6323331827c24be4e3401c10e3e4c53d0e492520 Mon Sep 17 00:00:00 2001
 From: Stelios Tsampas <loathingkernel@gmail.com>
 Date: Wed, 29 Jun 2022 14:33:07 +0300
 Subject: [PATCH] fshack - Generate FSR resolutions based on native aspect
  ratio
 
 The base list of resolutions remains unchanged.
-If FSR is enabled it adds FSR resolutions for that.
-If the user specifed a custom resolution, adds that to the list too.
+If FSR is enabled it adds FSR resolutions for the native resolution.
+If FSR_MODE is specified, it adds only the corresponding mode.
+If FSR_CUSTOM_MODE is specified, adds that to the list too.
+
+The FSR_MODE and FSR_CUSTOM_MODE options limit resolutions to their
+respective values, with FSR_CUSTOM_MODE taking precedence.
 ---
- dlls/winex11.drv/fs.c | 396 +++++++++++++++---------------------------
- 1 file changed, 143 insertions(+), 253 deletions(-)
+ dlls/winex11.drv/fs.c | 438 ++++++++++++++++++------------------------
+ 1 file changed, 185 insertions(+), 253 deletions(-)
 
 diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 70e6b84ffad..73dde902261 100644
+index 70e6b84ffad..b4549687b5d 100644
 --- a/dlls/winex11.drv/fs.c
 +++ b/dlls/winex11.drv/fs.c
 @@ -83,18 +83,18 @@ resolution list:
@@ -58,7 +62,7 @@ index 70e6b84ffad..73dde902261 100644
  {
      {640, 480},   /*  4:3 */
      {800, 600},   /*  4:3 */
-@@ -141,116 +141,28 @@ static struct fs_monitor_size fs_monitor_sizes[] =
+@@ -141,116 +141,29 @@ static struct fs_monitor_size fs_monitor_sizes[] =
      {1280, 1024}, /*  5:4 */
  };
  
@@ -92,6 +96,7 @@ index 70e6b84ffad..73dde902261 100644
 -static struct fs_monitor_size fsr329_ultra[] =
 -{
 -    {3938, 1108},  // 32:9 - 'FSR 32:9 Ultra Quality'
++/* The order should be in sync with the values in 'fs_hack_is_fsr_single_mode'*/
 +static float fsr_ratios[] = {
 +    2.0f, /* FSR Performance */
 +    1.7f, /* FSR Balanced */
@@ -105,7 +110,7 @@ index 70e6b84ffad..73dde902261 100644
 -    {1280, 720},  /* 16:9 - 'FSR 1080p Quality' */
 -};
 +/* Fake resolution container */
-+static struct fs_monitor_size fsr_fake_res = {0, 0};
++static struct fs_monitor_size fsr_custom_size = {0, 0};
  
 -static struct fs_monitor_size fsr2k_quality[] =
 -{
@@ -190,11 +195,35 @@ index 70e6b84ffad..73dde902261 100644
  
  /* A fake monitor for the fullscreen hack */
  struct fs_monitor
-@@ -327,16 +239,41 @@ static void add_fs_mode(struct fs_monitor *fs_monitor, DWORD depth, DWORD width,
+@@ -327,16 +240,65 @@ static void add_fs_mode(struct fs_monitor *fs_monitor, DWORD depth, DWORD width,
      mode->dmDisplayFrequency = frequency;
  }
  
-+BOOL fs_hack_is_fake_current_res(void)
++BOOL fs_hack_is_fsr_single_mode(INT *mode)
++{
++    const char *e;
++
++    e = getenv("WINE_FULLSCREEN_FSR_MODE");
++    if (e)
++    {
++        /* The 'mode' values should be in sync with the order in 'fsr_ratios' */
++        if (!strcmp(e, "Ultra") || !strcmp(e, "ultra"))
++            *mode = 3;
++        else if (!strcmp(e, "Quality") || !strcmp(e, "quality"))
++            *mode = 2;
++        else if (!strcmp(e, "Balanced") || !strcmp(e, "balanced"))
++            *mode = 1;
++        else if (!strcmp(e, "Performance") || !strcmp(e, "performance"))
++            *mode = 0;
++        /* If the user mistyped the mode, return 'balanced' */
++        else
++            *mode = 1;
++        return TRUE;
++    }
++    return FALSE;
++}
++
++BOOL fs_hack_is_fsr_custom_mode(void)
 +{
 +    DWORD width, height;
 +    const char *e;
@@ -207,9 +236,9 @@ index 70e6b84ffad..73dde902261 100644
 +        const int n = sscanf(e, "%dx%d", &width, &height);
 +        if (n==2)
 +        {
-+            fsr_fake_res.width = width;
-+            fsr_fake_res.height = height;
-+            TRACE("found custom resolution: %dx%d\n", fsr_fake_res.width, fsr_fake_res.height);
++            fsr_custom_size.width = width;
++            fsr_custom_size.height = height;
++            TRACE("found custom resolution: %dx%d\n", fsr_custom_size.width, fsr_custom_size.height);
 +            return TRUE;
 +        }
 +    }
@@ -226,26 +255,27 @@ index 70e6b84ffad..73dde902261 100644
      ULONG offset;
      UINT i, j;
  
-+    INT h_factor;
++    INT h_factor, fsr_mode;
 +    float sharpness, real_w_ratio, h_ratio;
-+    BOOL is_fsr, is_custom_res;
++    BOOL is_fsr, is_fsr_single_mode, is_fsr_custom_mode;
 +
      if (!real_settings_handler.get_id(fs_monitor->user_mode.dmDeviceName, &real_id))
          return FALSE;
  
-@@ -347,105 +284,91 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -347,105 +309,108 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
      if (!real_settings_handler.get_modes(real_id, 0, &real_modes, &real_mode_count))
          return FALSE;
      
 -    if (fsr_flag = getenv("WINE_FULLSCREEN_FSR")) 
 +    is_fsr = fs_hack_is_fsr(&sharpness);
-+    is_custom_res = fs_hack_is_fake_current_res();
++    is_fsr_single_mode = FALSE;
++    is_fsr_custom_mode = FALSE;
 +
 +    if (fs_monitor_sizes)
 +        heap_free(fs_monitor_sizes);
 +    fs_monitor_sizes = NULL;
 +    fs_monitor_sizes_count = 0;
-+    if (!(fs_monitor_sizes = heap_alloc(sizeof(fs_monitor_sizes_base) + sizeof(fs_monitor_sizes_fsr) + sizeof(fsr_fake_res))))
++    if (!(fs_monitor_sizes = heap_alloc(sizeof(fs_monitor_sizes_base) + sizeof(fs_monitor_sizes_fsr) + sizeof(fsr_custom_size))))
 +        return FALSE;
 +
 +    /* Copy the default list */
@@ -262,6 +292,21 @@ index 70e6b84ffad..73dde902261 100644
 +            h_ratio = 9.0f;
 +        }
 +        else if ((DWORD)(current_mode.dmPelsWidth / 210.0f) == (DWORD)(current_mode.dmPelsHeight / 90.0f))
++        {
++            /* 21:9 ultra-wide resolutions */
++            h_ratio = 9.0f;
++        }
++        else if (current_mode.dmPelsWidth / 32.0f == current_mode.dmPelsHeight / 9.0f)
++        {
++            /* 32:9 "duper-ultra-wide" resolutions */
++            h_ratio = 9.0f;
++        }
++        else if (current_mode.dmPelsWidth / 8.0f == current_mode.dmPelsHeight / 5.0f)
++        {
++            /* 16:10 resolutions */
++            h_ratio = 10.0f;
++        }
++        else if (current_mode.dmPelsWidth / 12.0f == current_mode.dmPelsHeight / 5.0f)
          {
 -            /* Custom Resolution */
 -            memcpy(fs_monitor_sizes+sizeof(fsr_fake_res),fsr_fake_res,sizeof(fsr_fake_res));
@@ -335,21 +380,6 @@ index 70e6b84ffad..73dde902261 100644
 -                    /* 32:9 FSR resolutions */
 -                    memcpy(fs_monitor_sizes+sizeof(fsr329_performance),fsr329_performance,sizeof(fsr329_performance));
 -                }
-+            /* 21:9 ultra-wide FSR resolutions */
-+            h_ratio = 9.0f;
-+        }
-+        else if (current_mode.dmPelsWidth / 32.0f == current_mode.dmPelsHeight / 9.0f)
-+        {
-+            /* 32:9 "duper-ultra-wide" resolutions */
-+            h_ratio = 9.0f;
-+        }
-+        else if (current_mode.dmPelsWidth / 8.0f == current_mode.dmPelsHeight / 5.0f)
-+        {
-+            /* 16:10 resolutions */
-+            h_ratio = 10.0f;
-+        }
-+        else if (current_mode.dmPelsWidth / 12.0f == current_mode.dmPelsHeight / 5.0f)
-+        {
 +            /* 24:10 resolutions */
 +            h_ratio = 10.0f;
 +        }
@@ -396,15 +426,31 @@ index 70e6b84ffad..73dde902261 100644
 +                  fs_monitor_sizes_fsr[i].height,
 +                  fsr_ratios[i]);
 +        }
-+        memcpy(fs_monitor_sizes+fs_monitor_sizes_count, fs_monitor_sizes_fsr, sizeof(fs_monitor_sizes_fsr));
-+        fs_monitor_sizes_count += ARRAY_SIZE(fs_monitor_sizes_fsr);
++
++        is_fsr_single_mode = fs_hack_is_fsr_single_mode(&fsr_mode);
++        /* If the user requested a single mode, only add that to the list */
++        if (is_fsr_single_mode)
++        {
++            memcpy(fs_monitor_sizes+fs_monitor_sizes_count, &fs_monitor_sizes_fsr[fsr_mode], sizeof(fs_monitor_sizes_fsr[fsr_mode]));
++            fs_monitor_sizes_count += 1;
++            /* Also place it in the custom resolution container, so we can limit resolutions later on */
++            fsr_custom_size.width = fs_monitor_sizes_fsr[fsr_mode].width;
++            fsr_custom_size.height = fs_monitor_sizes_fsr[fsr_mode].height;
++        }
++        /* If a single mode was not specified, add all FSR resolutions */
++        else
++        {
++            memcpy(fs_monitor_sizes+fs_monitor_sizes_count, fs_monitor_sizes_fsr, sizeof(fs_monitor_sizes_fsr));
++            fs_monitor_sizes_count += ARRAY_SIZE(fs_monitor_sizes_fsr);
++        }
 +
 +        /* Add the custom resolution to the list */
-+        if (is_custom_res)
++        is_fsr_custom_mode = fs_hack_is_fsr_custom_mode();
++        if (is_fsr_custom_mode)
 +        {
-+            memcpy(fs_monitor_sizes+fs_monitor_sizes_count, &fsr_fake_res, sizeof(fsr_fake_res));
++            memcpy(fs_monitor_sizes+fs_monitor_sizes_count, &fsr_custom_size, sizeof(fsr_custom_size));
 +            fs_monitor_sizes_count += 1;
-+            TRACE("added custom resolution: %dx%d\n", fsr_fake_res.width, fsr_fake_res.height);
++            TRACE("added custom resolution: %dx%d\n", fsr_custom_size.width, fsr_custom_size.height);
          }
      }
 -        
@@ -416,7 +462,7 @@ index 70e6b84ffad..73dde902261 100644
                                      sizeof(*fs_monitor->modes));
      if (!fs_monitor->modes)
      {
-@@ -459,7 +382,7 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -459,7 +424,7 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
                  current_mode.u1.s2.dmDisplayOrientation);
  
      /* Linux reports far fewer resolutions than Windows. Add modes that some games may expect. */
@@ -425,32 +471,32 @@ index 70e6b84ffad..73dde902261 100644
      {
          if (current_mode.u1.s2.dmDisplayOrientation == DMDO_DEFAULT ||
              current_mode.u1.s2.dmDisplayOrientation == DMDO_180)
-@@ -477,6 +400,11 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -477,6 +442,11 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
          if (width > current_mode.dmPelsWidth || height > current_mode.dmPelsHeight)
              continue;
  
-+        /* Don't report modes that are larger than the custom mode */
-+        if(is_fsr && is_custom_res)
-+            if (width > fsr_fake_res.width || height > fsr_fake_res.height)
++        /* Don't report modes that are larger than the requested fsr mode or the custom mode */
++        if(is_fsr && (is_fsr_custom_mode || is_fsr_single_mode))
++            if (width > fsr_custom_size.width || height > fsr_custom_size.height)
 +                continue;
 +
          for (j = 0; j < DEPTH_COUNT; ++j)
              add_fs_mode(fs_monitor, depths[j], width, height, 60,
                          current_mode.u1.s2.dmDisplayOrientation);
-@@ -492,6 +420,12 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -492,6 +462,12 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
              real_mode->dmPelsHeight > current_mode.dmPelsHeight)
              continue;
  
-+        /* Don't report modes that are larger than the custom mode */
-+        if(is_fsr && is_custom_res)
-+            if (real_mode->dmPelsWidth > fsr_fake_res.width ||
-+                real_mode->dmPelsHeight > fsr_fake_res.height)
++        /* Don't report modes that are larger than the requested fsr mode or the custom mode */
++        if(is_fsr && (is_fsr_custom_mode || is_fsr_single_mode))
++            if (real_mode->dmPelsWidth > fsr_custom_size.width ||
++                real_mode->dmPelsHeight > fsr_custom_size.height)
 +                continue;
 +
          add_fs_mode(fs_monitor, real_mode->dmBitsPerPel, real_mode->dmPelsWidth,
                      real_mode->dmPelsHeight, real_mode->dmDisplayFrequency,
                      real_mode->u1.s2.dmDisplayOrientation);
-@@ -503,31 +437,13 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
+@@ -503,31 +479,13 @@ static BOOL fs_monitor_add_modes(struct fs_monitor *fs_monitor)
      return TRUE;
  }
  
@@ -483,7 +529,7 @@ index 70e6b84ffad..73dde902261 100644
  
      if (!real_settings_handler.get_id(device_name, &real_id))
          return FALSE;
-@@ -538,33 +454,11 @@ static BOOL fs_add_monitor(const WCHAR *device_name)
+@@ -538,33 +496,11 @@ static BOOL fs_add_monitor(const WCHAR *device_name)
      if (!(fs_monitor = heap_alloc(sizeof(*fs_monitor))))
          return FALSE;
  
@@ -521,7 +567,7 @@ index 70e6b84ffad..73dde902261 100644
      lstrcpyW(fs_monitor->user_mode.dmDeviceName, device_name);
      if (!fs_monitor_add_modes(fs_monitor))
      {
-@@ -667,10 +561,6 @@ static BOOL fs_get_current_mode(ULONG_PTR id, DEVMODEW *mode)
+@@ -667,10 +603,6 @@ static BOOL fs_get_current_mode(ULONG_PTR id, DEVMODEW *mode)
      if (fs_monitor)
      {
          *mode = fs_monitor->user_mode;
@@ -534,4 +580,3 @@ index 70e6b84ffad..73dde902261 100644
      }
 -- 
 2.37.1
-
