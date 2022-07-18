@@ -14,6 +14,9 @@
     echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
     patch -Np1 < ../patches/dxvk/2675.patch
 
+    echo "VKD3D: Add shared fence patches"
+    patch -Np1 < ../patches/dxvk/2608.patch
+
     echo "DXVK:add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
@@ -23,6 +26,7 @@
     git clean -xdf
 
     echo "VKD3D: Add Halo Infinite patches"
+    #patch -Np1 < ../patches/vkd3d-proton/1070.patch
     patch -Np1 < ../patches/vkd3d-proton/1155.patch
 
     cd ..
