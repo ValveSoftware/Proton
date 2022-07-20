@@ -25,10 +25,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    echo "VKD3D: Add Halo Infinite patches"
-    #patch -Np1 < ../patches/vkd3d-proton/1070.patch
-    patch -Np1 < ../patches/vkd3d-proton/1155.patch
-
     cd ..
 
 ### END PREP SECTION ###
