@@ -900,9 +900,11 @@ class CompatData:
 
                 if use_wined3d:
                     dxvkfiles = []
-                    wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
+                    vkd3d_protonfiles = []
+                    wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
                     dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
+                    vkd3d_protonfiles = ["d3d12"]
                     wined3dfiles = []
 
                 if use_dxvk_dxgi:
@@ -920,6 +922,13 @@ class CompatData:
                     try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/system32",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/syswow64",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                    g_session.dlloverrides[f] = "n"
+
+                for f in vkd3d_protonfiles:
+                    try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                    try_copy(g_proton.lib_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides[f] = "n"
 
@@ -952,11 +961,6 @@ class CompatData:
                     for dll in ["_nvngx.dll", "nvngx.dll"]:
                         try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
                                  prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-
-                try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/syswow64",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
             setup_game_dir_drive()
             setup_steam_dir_drive()
