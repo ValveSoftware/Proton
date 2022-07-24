@@ -2352,7 +2352,7 @@ index 913c37dee68..67aa69d8d2a 100644
 +    {1970, 1108}, /* 16:9 - 'FSR 1440p Ultra Quality'
 +
 +    1080p:
-+    //{960, 640},  /* 16:9 - 'FSR 1080p Performance'
++    //{960, 540},  /* 16:9 - 'FSR 1080p Performance'
 +    {1129, 635},  /* 16:9 - 'FSR 1080p Balanced'
 +    //{1280, 720},  /* 16:9 - 'FSR 1080p Quality' -- already in resolution list
 +    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality'
@@ -2446,7 +2446,7 @@ index 913c37dee68..67aa69d8d2a 100644
 +/* Performance FSR */
 +static struct fs_monitor_size fsr1080_performance[] =
 +{
-+    {960, 640},  /* 16:9 - 'FSR 1080p Performance' */
++    {960, 540},  /* 16:9 - 'FSR 1080p Performance' */
 +};
 +
 +static struct fs_monitor_size fsr2k_performance[] =
