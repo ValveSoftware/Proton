@@ -9,10 +9,10 @@ description = "Proton media converter"
 
 [dependencies]
 glib = "0.14"
-gstreamer = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
-gstreamer-base = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
-gstreamer-video = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
-gstreamer-audio = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.17.4" }
+gstreamer = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
+gstreamer-base = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
+gstreamer-video = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
+gstreamer-audio = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
 once_cell = "1.9"
 crc32fast = "1.3"
 array-init = "2.0"
@@ -23,7 +23,7 @@ crate-type = ["cdylib"]
 path = "src/lib.rs"
 
 [build-dependencies]
-gst-plugin-version-helper = { git = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs", tag = "0.7.2" }
+gst-plugin-version-helper = { git = "https://github.com/sdroege/gst-plugin-rs", tag = "0.7.2" }
 
 [profile.release]
 lto = true
@@ -35,7 +35,7 @@ panic = 'unwind'
 opt-level = 1
 
 #if you need local modifications to gstreamer-rs you can point to it here
-#[patch.'https://gitlab.freedesktop.org/gstreamer/gstreamer-rs']
+#[patch.'https://github.com/sdroege/gstreamer-rs']
 #gstreamer = { path = "../gstreamer-rs/gstreamer" }
 #gstreamer-base = { path = "../gstreamer-rs/gstreamer-base" }
 #gstreamer-video = { path = "../gstreamer-rs/gstreamer-video" }

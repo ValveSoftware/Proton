@@ -172,7 +172,7 @@ dependencies = [
 [[package]]
 name = "gst-plugin-version-helper"
 version = "0.7.2"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs?tag=0.7.2#d0466b3eee114207f851b37cae0015c0e718f021"
+source = "git+https://github.com/sdroege/gst-plugin-rs?tag=0.7.2#d0466b3eee114207f851b37cae0015c0e718f021"
 dependencies = [
  "chrono",
 ]
@@ -180,7 +180,7 @@ dependencies = [
 [[package]]
 name = "gstreamer"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -202,7 +202,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-audio"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "array-init",
  "bitflags",
@@ -218,7 +218,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-audio-sys"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -231,7 +231,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-base"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -244,7 +244,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-base-sys"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -256,7 +256,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-sys"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -267,7 +267,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-video"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -283,7 +283,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-video-sys"
 version = "0.17.4"
-source = "git+https://gitlab.freedesktop.org/gstreamer/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
+source = "git+https://github.com/sdroege/gstreamer-rs?tag=0.17.4#6c9815f0594045ef668bf3fefbaf5e0846516d4b"
 dependencies = [
  "glib-sys",
  "gobject-sys",
