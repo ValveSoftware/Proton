@@ -828,6 +828,7 @@ done:
 
 static void setup_vr_registry(void)
 {
+    WCHAR pathW[PATH_MAX];
     LSTATUS status;
     HANDLE thread;
     HKEY vr_key;
@@ -842,6 +843,25 @@ static void setup_vr_registry(void)
     if (disp != REG_CREATED_NEW_KEY)
     {
         WINE_ERR("VR key already exists, disp %#x.\n", disp);
+        RegCloseKey(vr_key);
+        return;
+    }
+
+    if(GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
+    {
+        if ((status = RegSetValueExW(vr_key, L"PROTON_VR_RUNTIME", 0, REG_SZ,
+                (BYTE *)pathW, (lstrlenW(pathW) + 1) * sizeof(WCHAR))))
+        {
+            WINE_ERR("Could not set PROTON_VR_RUNTIME value, status %#x.\n", status);
+            set_vr_status(vr_key, ~0u);
+            RegCloseKey(vr_key);
+            return;
+        }
+    }
+    else
+    {
+        WINE_TRACE("Linux OpenVR runtime is not available\n");
+        set_vr_status(vr_key, ~0u);
         RegCloseKey(vr_key);
         return;
     }
