@@ -272,8 +272,30 @@ static int load_vrclient(void)
     /* PROTON_VR_RUNTIME is provided by the proton setup script */
     if(!GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
     {
-        TRACE("Linux OpenVR runtime is not available\n");
-        return 0;
+        DWORD type, size;
+        LSTATUS status;
+        HKEY vr_key;
+
+        if ((status = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Wine\\VR", 0, KEY_READ, &vr_key)))
+        {
+            WINE_WARN("Could not create key, status %#x.\n", status);
+            return 0;
+        }
+
+        size = sizeof(pathW);
+        if ((status = RegQueryValueExW(vr_key, L"PROTON_VR_RUNTIME", NULL, &type, (BYTE *)pathW, &size)))
+        {
+            WINE_WARN("Could not query value, status %#x.\n", status);
+            RegCloseKey(vr_key);
+            return 0;
+        }
+        if (type != REG_SZ)
+        {
+            WINE_ERR("Unexpected value type %#x.\n", type);
+            RegCloseKey(vr_key);
+            return 0;
+        }
+        RegCloseKey(vr_key);
     }
 
     sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, NULL, 0, NULL, NULL);
@@ -289,6 +311,7 @@ static int load_vrclient(void)
     if(!sz)
     {
         ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
+        HeapFree(GetProcessHeap(), 0, pathU);
         return 0;
     }
 
@@ -299,21 +322,25 @@ static int load_vrclient(void)
     vrclient_lib = dlopen(pathU, RTLD_NOW);
     if(!vrclient_lib){
         TRACE("unable to load vrclient.so\n");
+        HeapFree(GetProcessHeap(), 0, pathU);
         return 0;
     }
 
     vrclient_HmdSystemFactory = dlsym(vrclient_lib, "HmdSystemFactory");
     if(!vrclient_HmdSystemFactory){
         ERR("unable to load HmdSystemFactory method\n");
+        HeapFree(GetProcessHeap(), 0, pathU);
         return 0;
     }
 
     vrclient_VRClientCoreFactory = dlsym(vrclient_lib, "VRClientCoreFactory");
     if(!vrclient_VRClientCoreFactory){
         ERR("unable to load VRClientCoreFactory method\n");
+        HeapFree(GetProcessHeap(), 0, pathU);
         return 0;
     }
 
+    HeapFree(GetProcessHeap(), 0, pathU);
     return 1;
 }
 
