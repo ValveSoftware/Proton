@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-27"
+CURRENT_PREFIX_VERSION="GE-Proton7-28"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1080,9 +1080,11 @@ class CompatData:
 
                 if use_wined3d:
                     dxvkfiles = []
-                    wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
+                    vkd3d_protonfiles = []
+                    wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
                     dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
+                    vkd3d_protonfiles = ["d3d12"]
                     wined3dfiles = []
 
                 if use_dxvk_dxgi:
@@ -1100,6 +1102,13 @@ class CompatData:
                     try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/system32",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/syswow64",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                    g_session.dlloverrides[f] = "n"
+
+                for f in vkd3d_protonfiles:
+                    try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                    try_copy(g_proton.lib_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides[f] = "n"
 
@@ -1132,11 +1141,6 @@ class CompatData:
                     for dll in ["_nvngx.dll", "nvngx.dll"]:
                         try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
                                  prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-
-                try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll", "drive_c/windows/syswow64",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
             setup_game_dir_drive()
             setup_steam_dir_drive()
@@ -1636,6 +1640,11 @@ class Session:
         return subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
 
     def run(self):
+        if shutil.which('steam-runtime-launcher-interface-0') is not None:
+            adverb = ['steam-runtime-launcher-interface-0', 'proton']
+        else:
+            adverb = []
+
         if "PROTON_DUMP_DEBUG_COMMANDS" in self.env and nonzero(self.env["PROTON_DUMP_DEBUG_COMMANDS"]):
             try:
                 self.dump_dbg_scripts()
@@ -1653,9 +1662,11 @@ class Session:
 
         # CoD: Black Ops 3 workaround
         if os.environ.get("SteamGameId", 0) == "311210":
-            rc = self.run_proc([g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
+            argv = [g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"]
         else:
-            rc = self.run_proc([g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"] + sys.argv[2:] + self.cmdlineappend)
+            argv = [g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"]
+
+        rc = self.run_proc(adverb + argv + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
             remote_debug_proc.kill()
