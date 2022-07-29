@@ -15,7 +15,7 @@
     patch -Np1 < ../patches/dxvk/2675.patch
 
     echo "DXVK:add dxvk async patch"
-    patch -Np1 < ../patches/dxvk/dxvk-async.patch
+    patch -Np1 < ../patches/dxvk/dxvk-async.patch   
     cd ..
 
     cd vkd3d-proton
@@ -319,8 +319,8 @@
     echo "WINE: -PROTON- add 32:9 FSR resolutions"
     patch -Np1 < ../patches/proton/69-proton-fsr-add-329-res.patch
 
-    echo "WINE: -PROTON- add FSR resolutions by aspect ratio instead of current screen width"
-    patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
+    #echo "WINE: -PROTON- add FSR resolutions by aspect ratio instead of current screen width"
+    #patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
     
 
 ### END PROTON PATCH SECTION ###
