@@ -1,7 +1,7 @@
-From d3cbd8edf537c88ab76d40136d387515b8b90df1 Mon Sep 17 00:00:00 2001
+From 35b63987abc10028d64ae714d670bf24971d2488 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 22 Apr 2022 11:53:02 -0400
-Subject: [PATCH 01/12] winevulkan: Implement VK_KHR_external_semaphore_win32
+Subject: [PATCH 01/11] winevulkan: Implement VK_KHR_external_semaphore_win32
  for OPAQUE_WIN32 handleType.
 
 ---
@@ -330,16 +330,16 @@ index d9073bd1045..e065c0bc253 100644
 -- 
 2.37.1
 
-From 9321e9c4edaa27516448b5378d638131e2b1b389 Mon Sep 17 00:00:00 2001
+From f087eff48edaa348023442bb4bfc6e455f348639 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 13 Jul 2022 13:08:41 -0400
-Subject: [PATCH 02/12] ntoskrnl, server: Support referencing section objects.
+Subject: [PATCH 02/11] ntoskrnl, server: Support referencing section objects.
 
 Needed for the shared resource manager to track the shared memory object for shared fences.
 ---
  dlls/ntoskrnl.exe/ntoskrnl.c | 12 +++++++++++-
- server/mapping.c             | 12 +++++++++++-
- 2 files changed, 22 insertions(+), 2 deletions(-)
+ server/mapping.c             | 14 +++++++++++++-
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
 index 38a25bc5092..1802d483bbf 100644
@@ -372,7 +372,7 @@ index 38a25bc5092..1802d483bbf 100644
  
  DECLARE_CRITICAL_SECTION(handle_map_cs);
 diff --git a/server/mapping.c b/server/mapping.c
-index 4c90673a5c5..873e52fc239 100644
+index 4c90673a5c5..67896165048 100644
 --- a/server/mapping.c
 +++ b/server/mapping.c
 @@ -160,6 +160,7 @@ struct type_descr mapping_type =
@@ -409,7 +409,16 @@ index 4c90673a5c5..873e52fc239 100644
      mapping->size        = size;
      mapping->fd          = NULL;
      mapping->shared      = NULL;
-@@ -1101,6 +1105,12 @@ static struct fd *mapping_get_fd( struct object *obj )
+@@ -995,6 +999,8 @@ struct mapping *create_fd_mapping( struct object *root, const struct unicode_str
+     if (!(mapping = create_named_object( root, &mapping_ops, name, attr, sd ))) return NULL;
+     if (get_error() == STATUS_OBJECT_NAME_EXISTS) return mapping;  /* Nothing else to do */
+ 
++    list_init( &mapping->kernel_object );
++
+     mapping->shared    = NULL;
+     mapping->committed = NULL;
+     mapping->flags     = SEC_FILE;
+@@ -1101,6 +1107,12 @@ static struct fd *mapping_get_fd( struct object *obj )
      return (struct fd *)grab_object( mapping->fd );
  }
  
@@ -425,10 +434,10 @@ index 4c90673a5c5..873e52fc239 100644
 -- 
 2.37.1
 
-From 1622e1b4aa47a3385cfe4f5fcbbd9a3c3b58252b Mon Sep 17 00:00:00 2001
+From 6dd3ddc6616da23f5ffb97fd6f2ca1dfe82dc434 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 13 Jul 2022 13:11:22 -0400
-Subject: [PATCH 03/12] sharedgpures.sys: Keep index into resource pool in
+Subject: [PATCH 03/11] sharedgpures.sys: Keep index into resource pool in
  FsContext instead of direct pointer to resource.
 
 This fixes the errors due to the pointers in FsContext becoming invalid when the resource pool was expanded.
@@ -517,10 +526,10 @@ index b0a2aebdb01..0cd30c4a256 100644
 -- 
 2.37.1
 
-From aba4d7bc360ff483ef17739fbd5da09d66168dfe Mon Sep 17 00:00:00 2001
+From 75c1de0ab3df00acb0dfaafb62bac357f8900521 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 13 Jul 2022 13:14:04 -0400
-Subject: [PATCH 04/12] sharedgpures.sys: Add support for associating
+Subject: [PATCH 04/11] sharedgpures.sys: Add support for associating
  additional NT objects with shared resources.
 
 This is then used to share a shared memory section for shared fences
@@ -654,10 +663,10 @@ index 0cd30c4a256..ce0e778166f 100644
 -- 
 2.37.1
 
-From 7e8174555b9af64efa7c067b03359919c5508bc7 Mon Sep 17 00:00:00 2001
+From a7e316219f5d714ffe7639cec608f37b7869ca11 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 14 Jul 2022 15:44:46 -0400
-Subject: [PATCH 05/12] winevulkan: NULL check optional parameters when
+Subject: [PATCH 05/11] winevulkan: NULL check optional parameters when
  accessing host object.
 
 ---
@@ -716,17 +725,17 @@ index 5404912aa14..31b83ac40c1 100755
 -- 
 2.37.1
 
-From 865d06c050c91d565844f10c8abfa3cb0299fefb Mon Sep 17 00:00:00 2001
+From be06dfb6a67d30efb3defe7a794371da9bed578b Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 14 Jul 2022 15:36:52 -0400
-Subject: [PATCH 06/12] winevulkan: Add initial support for D3D12-Fence
+Subject: [PATCH 06/11] winevulkan: Add initial support for D3D12-Fence
  compatible timeline semaphores.
 
 ---
  dlls/winevulkan/make_vulkan      |  24 +-
- dlls/winevulkan/vulkan.c         | 706 +++++++++++++++++++++++++++----
+ dlls/winevulkan/vulkan.c         | 712 ++++++++++++++++++++++++++++---
  dlls/winevulkan/vulkan_private.h |  27 ++
- 3 files changed, 680 insertions(+), 77 deletions(-)
+ 3 files changed, 703 insertions(+), 60 deletions(-)
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
 index 31b83ac40c1..408910fab10 100755
@@ -805,7 +814,7 @@ index 31b83ac40c1..408910fab10 100755
                      continue
  
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index e065c0bc253..38ad8bc482d 100644
+index e065c0bc253..ec344287017 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -26,6 +26,7 @@
@@ -916,11 +925,7 @@ index e065c0bc253..38ad8bc482d 100644
 +    VkSemaphoreTypeCreateInfo semaphore_type_info, *p_semaphore_type_info;
 +    unsigned int i;
 +    VkResult res;
- 
--    wine_vk_normalize_semaphore_handle_types_win(&semaphore_info_dup.handleType);
--    if (semaphore_info_dup.handleType == VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT)
--        semaphore_info_dup.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT;
--    wine_vk_normalize_semaphore_handle_types_host(&semaphore_info_dup.handleType);
++
 +    if ((res = convert_VkPhysicalDeviceExternalSemaphoreInfo_struct_chain(semaphore_info->pNext, &semaphore_info_dup)) < 0)
 +    {
 +        WARN("Failed to convert VkPhysicalDeviceExternalSemaphoreInfo pNext chain, res=%d.\n", res);
@@ -957,7 +962,11 @@ index e065c0bc253..38ad8bc482d 100644
 +                    return;
 +                }
 +            }
-+
+ 
+-    wine_vk_normalize_semaphore_handle_types_win(&semaphore_info_dup.handleType);
+-    if (semaphore_info_dup.handleType == VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT)
+-        semaphore_info_dup.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT;
+-    wine_vk_normalize_semaphore_handle_types_host(&semaphore_info_dup.handleType);
 +            if ((p_semaphore_type_info = wine_vk_find_struct(&semaphore_info_host, SEMAPHORE_TYPE_CREATE_INFO)))
 +            {
 +                p_semaphore_type_info->semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE;
@@ -1007,11 +1016,34 @@ index e065c0bc253..38ad8bc482d 100644
      wine_vk_normalize_semaphore_handle_types_win(&properties->compatibleHandleTypes);
  }
  
-@@ -3338,14 +3410,10 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+@@ -3338,11 +3410,31 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
      return VK_SUCCESS;
  }
  
 -NTSTATUS wine_vkQueuePresentKHR(void *args)
++static inline VkSemaphore *convert_VkSemaphore_array_win_to_host(const VkSemaphore *in, uint32_t count)
++{
++    VkSemaphore *out;
++    unsigned int i;
++
++    if (!in || !count) return NULL;
++
++    out = malloc(count * sizeof(*out));
++    for (i = 0; i < count; i++)
++    {
++        out[i] = in[i] ? wine_semaphore_from_handle(in[i])->semaphore : VK_NULL_HANDLE;
++    }
++
++    return out;
++}
++
++static inline void free_VkSemaphore_array(VkSemaphore *in, uint32_t count)
++{
++    if (!in) return;
++
++    free(in);
++}
++
 +static VkResult fshack_vk_queue_present(VkQueue queue, const VkPresentInfoKHR *pPresentInfo)
  {
 -    struct vkQueuePresentKHR_params *params = args;
@@ -1019,44 +1051,25 @@ index e065c0bc253..38ad8bc482d 100644
 -    const VkPresentInfoKHR *pPresentInfo = params->pPresentInfo;
      VkResult res;
      VkPresentInfoKHR our_presentInfo;
--    VkSwapchainKHR *arr;
-     VkCommandBuffer *blit_cmds = NULL;
-     VkSubmitInfo submitInfo = {0};
-     VkSemaphore blit_sema;
-@@ -3431,7 +3499,7 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
-         submitInfo.signalSemaphoreCount = 1;
-         submitInfo.pSignalSemaphores = &blit_sema;
- 
--        res = queue->device->funcs.p_vkQueueSubmit(queue->queue, 1, &submitInfo, VK_NULL_HANDLE);
-+        res = thunk_vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
+     VkSwapchainKHR *arr;
+@@ -3424,7 +3516,7 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
+         /* blit user image to real image */
+         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+         submitInfo.waitSemaphoreCount = pPresentInfo->waitSemaphoreCount;
+-        submitInfo.pWaitSemaphores = pPresentInfo->pWaitSemaphores;
++        submitInfo.pWaitSemaphores = convert_VkSemaphore_array_win_to_host(pPresentInfo->pWaitSemaphores, pPresentInfo->waitSemaphoreCount);
+         submitInfo.pWaitDstStageMask = waitStages;
+         submitInfo.commandBufferCount = n_hacks;
+         submitInfo.pCommandBuffers = blit_cmds;
+@@ -3435,6 +3527,7 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
          if(res != VK_SUCCESS)
              ERR("vkQueueSubmit: %d\n", res);
  
-@@ -3442,22 +3510,7 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
-         our_presentInfo.pWaitSemaphores = &blit_sema;
-     }
++        free_VkSemaphore_array(submitInfo.pWaitSemaphores, pPresentInfo->waitSemaphoreCount);
+         free(waitStages_arr);
+         free(blit_cmds);
  
--    arr = malloc(our_presentInfo.swapchainCount * sizeof(VkSwapchainKHR));
--    if(!arr){
--        ERR("Failed to allocate memory for swapchain array\n");
--        return VK_ERROR_OUT_OF_HOST_MEMORY;
--    }
--
--    for(i = 0; i < our_presentInfo.swapchainCount; ++i)
--        arr[i] = ((struct VkSwapchainKHR_T *)(UINT_PTR)our_presentInfo.pSwapchains[i])->swapchain;
--
--    our_presentInfo.pSwapchains = arr;
--
--    res = queue->device->funcs.p_vkQueuePresentKHR(queue->queue, &our_presentInfo);
--
--    free(arr);
--
--    return res;
-+    return thunk_vkQueuePresentKHR(queue, &our_presentInfo);
- }
- 
- static void fixup_pipeline_feedback(VkPipelineCreationFeedback *feedback, uint32_t count)
-@@ -4084,6 +4137,50 @@ NTSTATUS wine_vkCreateImage(void *args)
+@@ -4084,6 +4177,50 @@ NTSTATUS wine_vkCreateImage(void *args)
      return res;
  }
  
@@ -1107,7 +1120,7 @@ index e065c0bc253..38ad8bc482d 100644
  NTSTATUS wine_vkCreateSemaphore(void *args)
  {
      struct vkCreateSemaphore_params *params = args;
-@@ -4092,11 +4189,21 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
+@@ -4092,11 +4229,21 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
      const VkAllocationCallbacks *allocator = params->pAllocator;
      VkSemaphore *semaphore = params->pSemaphore;
  
@@ -1130,7 +1143,7 @@ index e065c0bc253..38ad8bc482d 100644
  
      if (allocator)
          FIXME("Support for allocation callbacks not implemented yet\n");
-@@ -4107,9 +4214,19 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
+@@ -4107,9 +4254,19 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
          return res;
      }
  
@@ -1151,7 +1164,7 @@ index e065c0bc253..38ad8bc482d 100644
              export_semaphore_info->handleTypes |= VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT;
          wine_vk_normalize_semaphore_handle_types_host(&export_semaphore_info->handleTypes);
      }
-@@ -4117,7 +4234,84 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
+@@ -4117,7 +4274,84 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
      if (wine_vk_find_struct(&create_info_host,  EXPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR))
          FIXME("VkExportSemaphoreWin32HandleInfoKHR unhandled.\n");
  
@@ -1237,7 +1250,7 @@ index e065c0bc253..38ad8bc482d 100644
  
      free_VkSemaphoreCreateInfo_struct_chain(&create_info_host);
  
-@@ -4127,33 +4321,49 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
+@@ -4127,33 +4361,49 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
  NTSTATUS wine_vkGetSemaphoreWin32HandleKHR(void *args)
  {
      struct vkGetSemaphoreWin32HandleKHR_params *params = args;
@@ -1275,7 +1288,8 @@ index e065c0bc253..38ad8bc482d 100644
 +    VkDevice device = params->device;
 +    VkSemaphore handle = params->semaphore;
 +    const VkAllocationCallbacks *allocator = params->pAllocator;
-+
+ 
+-    if (wine_server_fd_to_handle(fd, GENERIC_ALL, 0, handle) != STATUS_SUCCESS)
 +    struct wine_semaphore *semaphore = wine_semaphore_from_handle(handle);
 +
 +    TRACE("%p 0x%s, %p\n", device, wine_dbgstr_longlong(handle), allocator);
@@ -1285,8 +1299,7 @@ index e065c0bc253..38ad8bc482d 100644
 +
 +    if (!handle)
 +        return VK_SUCCESS;
- 
--    if (wine_server_fd_to_handle(fd, GENERIC_ALL, 0, handle) != STATUS_SUCCESS)
++
 +    if (semaphore->handle_types & VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT)
      {
 -        close(fd);
@@ -1304,7 +1317,7 @@ index e065c0bc253..38ad8bc482d 100644
      return VK_SUCCESS;
  }
  
-@@ -4163,17 +4373,26 @@ NTSTATUS wine_vkImportSemaphoreWin32HandleKHR(void *args)
+@@ -4163,17 +4413,26 @@ NTSTATUS wine_vkImportSemaphoreWin32HandleKHR(void *args)
      VkDevice device = params->device;
      const VkImportSemaphoreWin32HandleInfoKHR *handle_info = params->pImportSemaphoreWin32HandleInfo;
  
@@ -1334,7 +1347,7 @@ index e065c0bc253..38ad8bc482d 100644
      {
          if (handle_info->name)
          {
-@@ -4181,10 +4400,53 @@ NTSTATUS wine_vkImportSemaphoreWin32HandleKHR(void *args)
+@@ -4181,10 +4440,53 @@ NTSTATUS wine_vkImportSemaphoreWin32HandleKHR(void *args)
              return VK_ERROR_INVALID_EXTERNAL_HANDLE;
          }
  
@@ -1389,7 +1402,7 @@ index e065c0bc253..38ad8bc482d 100644
      wine_vk_normalize_semaphore_handle_types_host(&fd_info.handleType);
  
      if (!fd_info.handleType)
-@@ -4195,7 +4457,307 @@ NTSTATUS wine_vkImportSemaphoreWin32HandleKHR(void *args)
+@@ -4195,7 +4497,307 @@ NTSTATUS wine_vkImportSemaphoreWin32HandleKHR(void *args)
  
      /* importing FDs transfers ownership, importing NT handles does not  */
      if ((res = device->funcs.p_vkImportSemaphoreFdKHR(device->device, &fd_info)) != VK_SUCCESS)
@@ -1739,10 +1752,10 @@ index 88a87dd4317..1aa43fdb92e 100644
 -- 
 2.37.1
 
-From ffd9976ba5680b901d4031dd159129107ebdf977 Mon Sep 17 00:00:00 2001
+From c6064c393bea4e02822ab63a8a99df0784e849aa Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 14 Jul 2022 16:40:17 -0400
-Subject: [PATCH 07/12] winevulkan: Implement vkWaitForFences and
+Subject: [PATCH 07/11] winevulkan: Implement vkWaitForFences and
  vkSignalSemaphore for D3D12-Fence compatible timeline semaphores.
 
 ---
@@ -1751,7 +1764,7 @@ Subject: [PATCH 07/12] winevulkan: Implement vkWaitForFences and
  2 files changed, 242 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 38ad8bc482d..02a41af3787 100644
+index ec344287017..532d33d29b4 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -27,6 +27,8 @@
@@ -1763,7 +1776,7 @@ index 38ad8bc482d..02a41af3787 100644
  
  #include "ntstatus.h"
  #define WIN32_NO_STATUS
-@@ -4181,6 +4183,73 @@ static void d3d12_semaphore_unlock(struct wine_semaphore *semaphore)
+@@ -4221,6 +4223,73 @@ static void d3d12_semaphore_unlock(struct wine_semaphore *semaphore)
      pthread_mutex_unlock(&semaphore->d3d12_fence_shm->mutex);
  }
  
@@ -1837,7 +1850,7 @@ index 38ad8bc482d..02a41af3787 100644
  NTSTATUS wine_vkCreateSemaphore(void *args)
  {
      struct vkCreateSemaphore_params *params = args;
-@@ -4199,6 +4268,7 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
+@@ -4239,6 +4308,7 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
      OBJECT_ATTRIBUTES attr;
      HANDLE section_handle;
      LARGE_INTEGER li;
@@ -1845,7 +1858,7 @@ index 38ad8bc482d..02a41af3787 100644
      VkResult res;
      SIZE_T size;
      int fd;
-@@ -4292,6 +4362,14 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
+@@ -4332,6 +4402,14 @@ NTSTATUS wine_vkCreateSemaphore(void *args)
                      goto done;
                  }
                  pthread_mutexattr_destroy(&mutex_attr);
@@ -1860,7 +1873,7 @@ index 38ad8bc482d..02a41af3787 100644
              }
          }
  
-@@ -4510,14 +4588,40 @@ NTSTATUS wine_vkGetSemaphoreCounterValueKHR(void *args)
+@@ -4550,14 +4628,40 @@ NTSTATUS wine_vkGetSemaphoreCounterValueKHR(void *args)
  static NTSTATUS vk_signal_semaphore(VkDevice device, const VkSemaphoreSignalInfo *signal_info, bool khr);
  static NTSTATUS wine_vk_signal_semaphore(VkDevice device, const VkSemaphoreSignalInfo *signal_info, bool khr)
  {
@@ -1903,7 +1916,7 @@ index 38ad8bc482d..02a41af3787 100644
      }
  
      return vk_signal_semaphore(device, signal_info, khr);
-@@ -4552,22 +4656,144 @@ NTSTATUS wine_vkSignalSemaphoreKHR(void *args)
+@@ -4592,22 +4696,144 @@ NTSTATUS wine_vkSignalSemaphoreKHR(void *args)
  static NTSTATUS vk_wait_semaphores(VkDevice device, const VkSemaphoreWaitInfo *wait_info, uint64_t timeout, bool khr);
  static NTSTATUS wine_vk_wait_semaphores(VkDevice device, const VkSemaphoreWaitInfo *wait_info, uint64_t timeout, bool khr)
  {
@@ -2084,10 +2097,10 @@ index 1aa43fdb92e..80675863656 100644
 -- 
 2.37.1
 
-From fec1eae4c3daae703232481bbeb89173fcd89521 Mon Sep 17 00:00:00 2001
+From ebc2af2aac4edf7445b9ddeff69aec7e640a9275 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 14 Jul 2022 16:43:04 -0400
-Subject: [PATCH 08/12] winevulkan: Copy VkSubmitInfo structs so that they
+Subject: [PATCH 08/11] winevulkan: Copy VkSubmitInfo structs so that they
  don't contain pointers to the source object.
 
 ---
@@ -2189,17 +2202,17 @@ index 80675863656..9c9022ac333 100644
 -- 
 2.37.1
 
-From e44c31f0ce47b475a15f8c78b1b807ee569114f9 Mon Sep 17 00:00:00 2001
+From 5afdbd1c6d25cd07afb15568faca958b90fda225 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 15 Jul 2022 11:35:28 -0400
-Subject: [PATCH 09/12] winevulkan: Support waiting for and signalling
+Subject: [PATCH 09/11] winevulkan: Support waiting for and signalling
  D3D12-Fence style timeline semaphores in Vulkan Queues.
 
 ---
  dlls/winevulkan/make_vulkan      |   1 +
- dlls/winevulkan/vulkan.c         | 793 +++++++++++++++++++++++++++++--
+ dlls/winevulkan/vulkan.c         | 795 +++++++++++++++++++++++++++++--
  dlls/winevulkan/vulkan_private.h |  29 ++
- 3 files changed, 791 insertions(+), 32 deletions(-)
+ 3 files changed, 793 insertions(+), 32 deletions(-)
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
 index 831a4433b27..d7228171b30 100755
@@ -2214,7 +2227,7 @@ index 831a4433b27..d7228171b30 100755
      # VK_KHR_surface
      "vkDestroySurfaceKHR" : {"dispatch" : True, "driver" : True, "thunk" : ThunkType.NONE},
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 02a41af3787..3d22df54644 100644
+index 532d33d29b4..f5dbe8b59c7 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -36,6 +36,7 @@
@@ -2262,17 +2275,31 @@ index 02a41af3787..3d22df54644 100644
          /* The Vulkan spec says:
           *
           * "vkGetDeviceQueue must only be used to get queues that were created
-@@ -580,6 +597,20 @@ static void wine_vk_device_free(struct VkDevice_T *device)
+@@ -563,6 +580,10 @@ static void wine_vk_device_free_create_info_extensions(VkDeviceCreateInfo *creat
+     free((void*)create_info->ppEnabledExtensionNames);
+ }
+ 
++static bool is_virtual_queue(struct VkQueue_T *queue)
++{
++    return !__sync_bool_compare_and_swap(&queue->virtual_queue, 0, 0);
++}
+ 
+ /* Helper function used for freeing a device structure. This function supports full
+  * and partial object cleanups and can thus be used for vkCreateDevice failures.
+@@ -580,6 +601,23 @@ static void wine_vk_device_free(struct VkDevice_T *device)
          for (i = 0; i < device->queue_count; i++)
          {
              queue = &device->queues[i];
 +
-+            queue->stop = true;
-+            pthread_cond_signal(&queue->submissions_cond);
-+            pthread_cond_signal(&queue->signaller_cond);
++            if (is_virtual_queue(queue))
++            {
++                queue->stop = true;
++                pthread_cond_signal(&queue->submissions_cond);
++                pthread_cond_signal(&queue->signaller_cond);
 +
-+            pthread_join(queue->virtual_queue_thread, NULL);
-+            pthread_join(queue->signal_thread, NULL);
++                pthread_join(queue->virtual_queue_thread, NULL);
++                pthread_join(queue->signal_thread, NULL);
++            }
 +
 +            pthread_mutex_destroy(&queue->submissions_mutex);
 +            pthread_mutex_destroy(&queue->signaller_mutex);
@@ -2283,7 +2310,7 @@ index 02a41af3787..3d22df54644 100644
              if (queue && queue->queue)
                  WINE_VK_REMOVE_HANDLE_MAPPING(device->phys_dev->instance, queue);
          }
-@@ -1047,6 +1078,8 @@ VkResult WINAPI __wine_create_vk_instance_with_callback(const VkInstanceCreateIn
+@@ -1047,6 +1085,8 @@ VkResult WINAPI __wine_create_vk_instance_with_callback(const VkInstanceCreateIn
                  app_info->engineVersion);
          TRACE("API version %#x.\n", app_info->apiVersion);
  
@@ -2292,7 +2319,7 @@ index 02a41af3787..3d22df54644 100644
          if (app_info->pEngineName && !strcmp(app_info->pEngineName, "idTech"))
              object->quirks |= WINEVULKAN_QUIRK_GET_DEVICE_PROC_ADDR;
      }
-@@ -4194,6 +4227,19 @@ static uint64_t d3d12_semaphore_try_get_wait_value_locked(struct wine_semaphore
+@@ -4234,6 +4274,19 @@ static uint64_t d3d12_semaphore_try_get_wait_value_locked(struct wine_semaphore
      if (semaphore->d3d12_fence_shm->virtual_value >= virtual_value)
          return 0;
  
@@ -2312,7 +2339,7 @@ index 02a41af3787..3d22df54644 100644
      return ret;
  }
  
-@@ -4250,6 +4296,68 @@ static void d3d12_semaphore_satisfy_waits_locked(struct wine_semaphore *semaphor
+@@ -4290,6 +4343,68 @@ static void d3d12_semaphore_satisfy_waits_locked(struct wine_semaphore *semaphor
      }
  }
  
@@ -2381,7 +2408,7 @@ index 02a41af3787..3d22df54644 100644
  NTSTATUS wine_vkCreateSemaphore(void *args)
  {
      struct vkCreateSemaphore_params *params = args;
-@@ -4588,6 +4696,7 @@ NTSTATUS wine_vkGetSemaphoreCounterValueKHR(void *args)
+@@ -4628,6 +4743,7 @@ NTSTATUS wine_vkGetSemaphoreCounterValueKHR(void *args)
  static NTSTATUS vk_signal_semaphore(VkDevice device, const VkSemaphoreSignalInfo *signal_info, bool khr);
  static NTSTATUS wine_vk_signal_semaphore(VkDevice device, const VkSemaphoreSignalInfo *signal_info, bool khr)
  {
@@ -2389,7 +2416,7 @@ index 02a41af3787..3d22df54644 100644
      VkResult vr;
  
      struct wine_semaphore *semaphore = wine_semaphore_from_handle(signal_info->semaphore);
-@@ -4596,27 +4705,41 @@ static NTSTATUS wine_vk_signal_semaphore(VkDevice device, const VkSemaphoreSigna
+@@ -4636,27 +4752,41 @@ static NTSTATUS wine_vk_signal_semaphore(VkDevice device, const VkSemaphoreSigna
  
      if (semaphore->handle_types & VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT)
      {
@@ -2445,7 +2472,7 @@ index 02a41af3787..3d22df54644 100644
          d3d12_semaphore_satisfy_waits_locked(semaphore, signal_info->value, 0);
          semaphore->d3d12_fence_shm->virtual_value = signal_info->value;
  
-@@ -4824,6 +4947,514 @@ NTSTATUS wine_vkWaitSemaphoresKHR(void *args)
+@@ -4864,6 +4994,509 @@ NTSTATUS wine_vkWaitSemaphoresKHR(void *args)
      return wine_vk_wait_semaphores(device, wait_info, timeout, true);
  }
  
@@ -2837,11 +2864,6 @@ index 02a41af3787..3d22df54644 100644
 +    return NULL;
 +}
 +
-+static bool is_virtual_queue(struct VkQueue_T *queue)
-+{
-+    return !__sync_bool_compare_and_swap(&queue->virtual_queue, 0, 0);
-+}
-+
 +static void init_virtual_queue(struct VkQueue_T *queue)
 +{
 +    if (is_virtual_queue(queue))
@@ -2960,7 +2982,7 @@ index 02a41af3787..3d22df54644 100644
  NTSTATUS wine_vkQueueSubmit(void *args)
  {
      struct vkQueueSubmit_params *params = args;
-@@ -4836,58 +5467,122 @@ NTSTATUS wine_vkQueueSubmit(void *args)
+@@ -4876,58 +5509,122 @@ NTSTATUS wine_vkQueueSubmit(void *args)
  
      TRACE("(%p %u %p 0x%s)\n", queue, submit_count, submits, wine_dbgstr_longlong(fence));
  
@@ -3099,7 +3121,7 @@ index 02a41af3787..3d22df54644 100644
          }
      }
  
-@@ -4930,9 +5625,9 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
+@@ -4970,9 +5667,9 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
  
      TRACE("%p %p\n", queue, present_info);
  
@@ -3111,7 +3133,7 @@ index 02a41af3787..3d22df54644 100644
  
          if (semaphore->handle_types & VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT)
          {
-@@ -4941,6 +5636,13 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
+@@ -4981,6 +5678,13 @@ NTSTATUS wine_vkQueuePresentKHR(void *args)
          }
      }
  
@@ -3125,7 +3147,7 @@ index 02a41af3787..3d22df54644 100644
      return fshack_vk_queue_present(queue, present_info);
  }
  
-@@ -4958,6 +5660,15 @@ NTSTATUS wine_vkQueueBindSparse(void *args)
+@@ -4998,6 +5702,15 @@ NTSTATUS wine_vkQueueBindSparse(void *args)
  
      TRACE("(%p, %u, %p, 0x%s)\n", queue, bind_info_count, bind_info, wine_dbgstr_longlong(fence));
  
@@ -3141,7 +3163,7 @@ index 02a41af3787..3d22df54644 100644
      for (i = 0; i < bind_info_count; i++)
      {
          batch = &bind_info[i];
-@@ -4987,3 +5698,21 @@ NTSTATUS wine_vkQueueBindSparse(void *args)
+@@ -5027,3 +5740,21 @@ NTSTATUS wine_vkQueueBindSparse(void *args)
  
      return thunk_vkQueueBindSparse(queue, bind_info_count, bind_info, fence);
  }
@@ -3227,10 +3249,10 @@ index 9c9022ac333..22a66d09f0e 100644
 -- 
 2.37.1
 
-From 4345054a0cff35dc269c93a16d81863b30f3619a Mon Sep 17 00:00:00 2001
+From b320b907595dfba2af88a5931e65220cf8dd01b5 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 15 Jul 2022 11:41:10 -0400
-Subject: [PATCH 10/12] winevulkan: Add support for signalling VkFence from
+Subject: [PATCH 10/11] winevulkan: Add support for signalling VkFence from
  virtualized VkQueues.
 
 ---
@@ -3279,7 +3301,7 @@ index d7228171b30..6f82a831baa 100755
          native_handle_name = None
  
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 3d22df54644..475888d37d9 100644
+index f5dbe8b59c7..1b8bfa061ee 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -29,6 +29,9 @@
@@ -3292,7 +3314,7 @@ index 3d22df54644..475888d37d9 100644
  
  #include "ntstatus.h"
  #define WIN32_NO_STATUS
-@@ -4952,6 +4955,7 @@ struct signal_op
+@@ -4999,6 +5002,7 @@ struct signal_op
      enum
      {
          SIGNAL_TYPE_SEMAPHORE,
@@ -3300,7 +3322,7 @@ index 3d22df54644..475888d37d9 100644
      } signal_type;
  
      union
-@@ -4963,6 +4967,8 @@ struct signal_op
+@@ -5010,6 +5014,8 @@ struct signal_op
  
              bool khr;
          } semaphore;
@@ -3309,7 +3331,7 @@ index 3d22df54644..475888d37d9 100644
      };
  
      struct list entry;
-@@ -4974,6 +4980,8 @@ static void *queue_signaller_worker(void *arg)
+@@ -5021,6 +5027,8 @@ static void *queue_signaller_worker(void *arg)
      VkSemaphoreWaitInfo wait_info;
      struct signal_op *signal_op;
      VkSemaphore sem_handle;
@@ -3318,7 +3340,7 @@ index 3d22df54644..475888d37d9 100644
      VkResult vr;
  
      while (!queue->stop)
-@@ -5008,6 +5016,20 @@ static void *queue_signaller_worker(void *arg)
+@@ -5055,6 +5063,20 @@ static void *queue_signaller_worker(void *arg)
              d3d12_semaphore_update_phys_val_locked(signal_op->semaphore.obj, signal_op->semaphore.phys_val);
              d3d12_semaphore_unlock(signal_op->semaphore.obj);
          }
@@ -3339,7 +3361,7 @@ index 3d22df54644..475888d37d9 100644
  
          free(signal_op);
      }
-@@ -5132,6 +5154,7 @@ struct queue_submit_unit
+@@ -5179,6 +5201,7 @@ struct queue_submit_unit
      uint32_t submit_count;
      VkSubmitInfo *submits;
      VkSubmitInfo2 *submits2;
@@ -3347,7 +3369,7 @@ index 3d22df54644..475888d37d9 100644
      bool khr;
  
      struct pending_wait **waits;
-@@ -5220,6 +5243,7 @@ static void *virtual_queue_worker(void *arg)
+@@ -5267,6 +5290,7 @@ static void *virtual_queue_worker(void *arg)
      struct signal_op *signal_op;
      struct wine_semaphore *sem;
      struct pending_wait *wait;
@@ -3355,7 +3377,7 @@ index 3d22df54644..475888d37d9 100644
      bool device_lost = false;
      uint64_t *timeline_value;
      unsigned int i;
-@@ -5265,13 +5289,13 @@ static void *virtual_queue_worker(void *arg)
+@@ -5312,13 +5336,13 @@ static void *virtual_queue_worker(void *arg)
          }
  
          if (submit_unit->submits)
@@ -3372,7 +3394,7 @@ index 3d22df54644..475888d37d9 100644
          }
  
          pthread_mutex_lock(&queue->signaller_mutex);
-@@ -5299,6 +5323,15 @@ static void *virtual_queue_worker(void *arg)
+@@ -5346,6 +5370,15 @@ static void *virtual_queue_worker(void *arg)
              d3d12_semaphore_unlock(sem);
          }
  
@@ -3388,7 +3410,7 @@ index 3d22df54644..475888d37d9 100644
          pthread_cond_signal(&queue->signaller_cond);
          pthread_mutex_unlock(&queue->signaller_mutex);
  
-@@ -5308,6 +5341,12 @@ static void *virtual_queue_worker(void *arg)
+@@ -5355,6 +5388,12 @@ static void *virtual_queue_worker(void *arg)
              pthread_mutex_lock(&queue->submissions_mutex);
              queue->device_lost = device_lost = true;
              pthread_mutex_unlock(&queue->submissions_mutex);
@@ -3401,7 +3423,7 @@ index 3d22df54644..475888d37d9 100644
          }
  
  free_submit_unit:
-@@ -5371,12 +5410,6 @@ static NTSTATUS virtual_queue_submit(struct VkQueue_T *queue, uint32_t submit_co
+@@ -5413,12 +5452,6 @@ static NTSTATUS virtual_queue_submit(struct VkQueue_T *queue, uint32_t submit_co
      uint64_t wait_value;
      bool device_lost;
  
@@ -3414,7 +3436,7 @@ index 3d22df54644..475888d37d9 100644
      init_virtual_queue(queue);
  
      pthread_mutex_lock(&queue->submissions_mutex);
-@@ -5389,6 +5422,7 @@ static NTSTATUS virtual_queue_submit(struct VkQueue_T *queue, uint32_t submit_co
+@@ -5431,6 +5464,7 @@ static NTSTATUS virtual_queue_submit(struct VkQueue_T *queue, uint32_t submit_co
      submit_unit->submit_count = submit_count;
      submit_unit->submits = copy_VkSubmitInfo(submits, submit_count);
      submit_unit->submits2 = NULL;
@@ -3422,7 +3444,7 @@ index 3d22df54644..475888d37d9 100644
      submit_unit->waits = NULL;
      submit_unit->khr = queue->device->phys_dev->api_version < VK_API_VERSION_1_2 ||
                         queue->device->phys_dev->instance->api_version < VK_API_VERSION_1_2;
-@@ -5448,6 +5482,11 @@ static NTSTATUS virtual_queue_submit(struct VkQueue_T *queue, uint32_t submit_co
+@@ -5490,6 +5524,11 @@ static NTSTATUS virtual_queue_submit(struct VkQueue_T *queue, uint32_t submit_co
  
      pthread_mutex_lock(&queue->submissions_mutex);
      queue->processing = true;
@@ -3434,7 +3456,7 @@ index 3d22df54644..475888d37d9 100644
      list_add_tail(&queue->submissions, &submit_unit->entry);
      pthread_cond_signal(&queue->submissions_cond);
      pthread_mutex_unlock(&queue->submissions_mutex);
-@@ -5487,6 +5526,9 @@ NTSTATUS wine_vkQueueSubmit(void *args)
+@@ -5529,6 +5568,9 @@ NTSTATUS wine_vkQueueSubmit(void *args)
          }
      }
  
@@ -3444,7 +3466,7 @@ index 3d22df54644..475888d37d9 100644
      return thunk_vkQueueSubmit(queue, submit_count, submits, fence);
  }
  
-@@ -5586,6 +5628,9 @@ static NTSTATUS vk_queue_submit_2(VkQueue queue, uint32_t submit_count, const Vk
+@@ -5628,6 +5670,9 @@ static NTSTATUS vk_queue_submit_2(VkQueue queue, uint32_t submit_count, const Vk
          }
      }
  
@@ -3454,7 +3476,7 @@ index 3d22df54644..475888d37d9 100644
      if (khr)
          return thunk_vkQueueSubmit2KHR(queue, submit_count, submits, fence);
      else
-@@ -5699,6 +5744,190 @@ NTSTATUS wine_vkQueueBindSparse(void *args)
+@@ -5741,6 +5786,190 @@ NTSTATUS wine_vkQueueBindSparse(void *args)
      return thunk_vkQueueBindSparse(queue, bind_info_count, bind_info, fence);
  }
  
@@ -3679,69 +3701,10 @@ index 22a66d09f0e..b62256517f0 100644
 -- 
 2.37.1
 
-From 391d04869429b2c0cf994926b7c7a197098db4d4 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Fri, 15 Jul 2022 15:11:18 -0400
-Subject: [PATCH 11/12] mfreadwrite: Don't ignore source reader attributes when
- output stream attributes are available.
-
----
- dlls/mfreadwrite/reader.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index cdc3a1712ad..a67d53ec33b 100644
---- a/dlls/mfreadwrite/reader.c
-+++ b/dlls/mfreadwrite/reader.c
-@@ -2154,7 +2154,9 @@ static HRESULT source_reader_setup_sample_allocator(struct source_reader *reader
-     struct media_stream *stream = &reader->streams[index];
-     IMFVideoSampleAllocatorCallback *callback;
-     IMFAttributes *attributes;
--    GUID major = { 0 };
-+    GUID major = { 0 }, key;
-+    PROPVARIANT attr_item;
-+    unsigned int i;
-     HRESULT hr;
- 
-     IMFMediaType_GetMajorType(stream->current, &major);
-@@ -2202,10 +2204,28 @@ static HRESULT source_reader_setup_sample_allocator(struct source_reader *reader
-         }
-         else
-         {
--            if (FAILED(hr = IMFAttributes_CopyAllItems(output_attributes, attributes)))
--                WARN("Failed to copy transform output attributes, hr %#x.\n", hr);
-+            UINT32 item_count = 0;
-+
-+            if (SUCCEEDED(hr = IMFAttributes_LockStore(output_attributes)))
-+            {
-+                IMFAttributes_GetCount(output_attributes, &item_count);
-+                for (i = 0; i < item_count; i++)
-+                {
-+                    if (FAILED(hr = IMFAttributes_GetItemByIndex(output_attributes, i, &key, &attr_item)))
-+                        break;
-+
-+                    IMFAttributes_SetItem(output_attributes, &key, &attr_item);
-+                    PropVariantClear(&attr_item);
-+                }
-+
-+                IMFAttributes_UnlockStore(output_attributes);
-+            }
- 
-             IMFAttributes_Release(output_attributes);
-+            if (FAILED(hr))
-+            {
-+                WARN("Failed to copy output stream attributes, hr %#x.\n");
-+            }
-         }
-     }
- 
--- 
-2.37.1
-
-From afeebb9afcc1616a8f20c6cec648a7a27bea2cee Mon Sep 17 00:00:00 2001
+From bb21d7d502c180762e765a628cd63a7c2cf85853 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 15 Jul 2022 15:12:52 -0400
-Subject: [PATCH 12/12] winegstreamer: Add MF_MT_VIDEO_NOMINAL_RANGE attribute
+Subject: [PATCH 11/11] winegstreamer: Add MF_MT_VIDEO_NOMINAL_RANGE attribute
  to base video output type.
 
 ---
