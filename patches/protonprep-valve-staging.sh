@@ -348,8 +348,8 @@
     echo "WINE: -PROTON- apply revert to allow gallium nine functionality"
     patch -Np1 < ../patches/wine-hotfixes/pending/0001-revert-96b82203f192eade6910f4ac2ecb188e27d22feb-to-k.patch
 
-    echo "WINE: -PROTON- pending Halo Infinite patches"
-    patch -Np1 < ../patches/wine-hotfixes/pending/halo-infinite-fixes-1.patch
+    #echo "WINE: -PROTON- pending Halo Infinite patches"
+    #patch -Np1 < ../patches/wine-hotfixes/pending/halo-infinite-fixes-1.patch
 
 ### END WINE HOTFIX SECTION ###
 
