@@ -455,6 +455,15 @@ $(eval $(call rules-meson,gstreamer,64))
 
 
 ##
+## graphene
+##
+
+$(eval $(call rules-source,graphene,$(SRCDIR)/graphene))
+$(eval $(call rules-meson,graphene,32))
+$(eval $(call rules-meson,graphene,64))
+
+
+##
 ## gst-plugins-base
 ##
 
@@ -473,9 +482,12 @@ GST_BASE_MESON_ARGS := \
 	-Dvideoconvert=enabled \
 	-Dvideoscale=enabled \
 	-Dvorbis=enabled \
-	-Dorc=enabled
+	-Dorc=enabled \
+	-Dgl=enabled \
+	-Dgl-graphene=enabled \
+	--wrap-mode nodownload \
 
-GST_BASE_DEPENDS = gst_orc gstreamer
+GST_BASE_DEPENDS = gst_orc graphene gstreamer
 
 $(eval $(call rules-source,gst_base,$(SRCDIR)/gst-plugins-base))
 $(eval $(call rules-meson,gst_base,32))

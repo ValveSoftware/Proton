@@ -55,3 +55,6 @@
 [submodule "gst-plugins-rs"]
 	path = gst-plugins-rs
 	url = https://github.com/sdroege/gst-plugin-rs
+[submodule "graphene"]
+	path = graphene
+	url = https://github.com/ebassi/graphene
