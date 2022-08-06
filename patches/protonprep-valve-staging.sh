@@ -322,6 +322,9 @@
     echo "WINE: -PROTON- add FSR resolutions by aspect ratio instead of current screen width"
     patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
     
+    echo "WINE: -PROTON- enable FSR flag by default (fixes broken fs hack scaling in some games like Apex and FFXIV"
+    patch -Np1 < ../patches/proton/71-invert-fsr-logic.patch
+    
 
 ### END PROTON PATCH SECTION ###
 
@@ -351,6 +354,9 @@
     # https://bugs.winehq.org/show_bug.cgi?id=51683
     echo "WINE: -HOTFIX- Guild Wars 2 patch"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-guild_wars_2.patch
+    
+    echo "WINE: -HOTFIX- fix upside down videos"
+    patch -Np1 < ../patches/wine-hotfixes/pending/157.patch
 
 ### END WINE HOTFIX SECTION ###
 
