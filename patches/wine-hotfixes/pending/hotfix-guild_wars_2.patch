@@ -1,0 +1,42 @@
+From 7bc7829db283134946d1c7ae0468ddc1bbf993a0 Mon Sep 17 00:00:00 2001
+From: deltaconnected <deltaconnected@gmail.com>
+Date: Thu, 26 Aug 2021 03:06:23 +0200
+Subject: [PATCH] ntdll: Use a critical section for setting the newly created timer in RtlCreateTimer
+
+In RtlCreateTimer, NewTimer is being set after RtlLeaveCriticalSection, which
+seems to allow callbacks created with DueTime == 0 to execute and finish and
+delete an invalid timer before the scheduling thread is switched back.
+
+Fixes crashes inside DeleteTimerQueueEx and DeleteTimerQueueTimer for 
+Guild Wars 2 with Arcdps (https://www.deltaconnected.com/arcdps/)
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=51683
+---
+ dlls/ntdll/threadpool.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/threadpool.c b/dlls/ntdll/threadpool.c
+index ca323919d05..20096573c2b 100644
+--- a/dlls/ntdll/threadpool.c
++++ b/dlls/ntdll/threadpool.c
+@@ -936,12 +936,13 @@ NTSTATUS WINAPI RtlCreateTimer(PHANDLE NewTimer, HANDLE TimerQueue,
+     if (q->quit)
+         status = STATUS_INVALID_HANDLE;
+     else
++    {
++        *NewTimer = t;
+         queue_add_timer(t, queue_current_time() + DueTime, TRUE);
++    }
+     RtlLeaveCriticalSection(&q->cs);
+ 
+-    if (status == STATUS_SUCCESS)
+-        *NewTimer = t;
+-    else
++    if (status != STATUS_SUCCESS)
+         RtlFreeHeap(GetProcessHeap(), 0, t);
+ 
+     return status;
+-- 
+2.33.0
+
+
