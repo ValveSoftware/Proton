@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-28"
+CURRENT_PREFIX_VERSION="GE-Proton7-29"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1134,7 +1134,7 @@ class CompatData:
                     if file_exists(nvapi32_dll + '.debug', follow_symlinks=False):
                         os.unlink(nvapi32_dll + '.debug')
 
-                # Try to detect known DLLs that ship with the NVIDIA Linux Driver 
+                # Try to detect known DLLs that ship with the NVIDIA Linux Driver
                 # and add them into the prefix
                 nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
                 if nvidia_wine_dll_dir:
@@ -1162,6 +1162,7 @@ def default_compat_config():
                 #affected by CW bug 19126
                 "536280", #Disintegration
                 "707030", #POSTAL 4: No Regerts
+                "794260", #Outward: Definitive Edition
                 "1102190", #Monster Train
                 "1328350", #Turbo Overkill
                 "1331440", #FUSER
@@ -1504,12 +1505,6 @@ class Session:
 
         if "enablenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
-
-        #if fsr patch is applied, apex legends fails to set 1080p fullscreen unless fsr is enabled
-        if "SteamAppId" in os.environ:
-            appid = os.environ["SteamAppId"]
-            if os.environ["SteamAppId"] == "1172470":
-                self.env["WINE_FULLSCREEN_FSR"] = "1"
 
         s = ""
         for dll in self.dlloverrides:
