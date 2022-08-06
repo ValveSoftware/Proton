@@ -319,8 +319,8 @@
     echo "WINE: -PROTON- add 32:9 FSR resolutions"
     patch -Np1 < ../patches/proton/69-proton-fsr-add-329-res.patch
 
-    #echo "WINE: -PROTON- add FSR resolutions by aspect ratio instead of current screen width"
-    #patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
+    echo "WINE: -PROTON- add FSR resolutions by aspect ratio instead of current screen width"
+    patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
     
 
 ### END PROTON PATCH SECTION ###
@@ -347,9 +347,10 @@
     
     echo "WINE: -PROTON- apply revert to allow gallium nine functionality"
     patch -Np1 < ../patches/wine-hotfixes/pending/0001-revert-96b82203f192eade6910f4ac2ecb188e27d22feb-to-k.patch
-
-    #echo "WINE: -PROTON- pending Halo Infinite patches"
-    #patch -Np1 < ../patches/wine-hotfixes/pending/halo-infinite-fixes-1.patch
+    
+    # https://bugs.winehq.org/show_bug.cgi?id=51683
+    echo "WINE: -HOTFIX- Guild Wars 2 patch"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-guild_wars_2.patch
 
 ### END WINE HOTFIX SECTION ###
 
