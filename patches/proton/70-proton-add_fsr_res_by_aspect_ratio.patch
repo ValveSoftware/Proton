@@ -43,15 +43,6 @@ index 70e6b84ffad..315711c65c1 100644
      {2646, 1108}, // 21:9 - 'FSR ultra-wide Ultra Quality'
  
      2K:
-@@ -104,7 +104,7 @@ resolution list:
-     {1970, 1108}, // 16:9 - 'FSR 1440p Ultra Quality'
- 
-     1080p:
--    {960, 640},  // 16:9 - 'FSR 1080p Performance'
-+    {960, 640},   // 16:9 - 'FSR 1080p Performance'
-     {1129, 635},  // 16:9 - 'FSR 1080p Balanced'
-     {1280, 720},  // 16:9 - 'FSR 1080p Quality'
-     {1477, 831},  // 16:9 - 'FSR 1080p Ultra Quality'
 @@ -119,7 +119,7 @@ The formula for FSR resolutions is as follows:
  */
  

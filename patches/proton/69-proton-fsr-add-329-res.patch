@@ -47,7 +47,7 @@ index b9b6b6503a0..b54aeda7602 100644
 -    {1129, 635},  /* 16:9 - 'FSR 1080p Balanced'
 -    //{1280, 720},  /* 16:9 - 'FSR 1080p Quality' -- already in resolution list
 -    {1477, 831},  /* 16:9 - 'FSR 1080p Ultra Quality'
-+    {960, 540},  // 16:9 - 'FSR 1080p Performance'
++    {960, 640},   // 16:9 - 'FSR 1080p Performance'
 +    {1129, 635},  // 16:9 - 'FSR 1080p Balanced'
 +    {1280, 720},  // 16:9 - 'FSR 1080p Quality'
 +    {1477, 831},  // 16:9 - 'FSR 1080p Ultra Quality'

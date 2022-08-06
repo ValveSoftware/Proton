@@ -1987,10 +1987,14 @@ index bcd0dfb9823..8bb5b7c04a3 100644
  NTSTATUS wine_vkQueuePresentKHR(void *args)
  {
      struct vkQueuePresentKHR_params *params = args;
-@@ -3709,13 +4562,22 @@ VkResult WINAPI wine_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pP
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 7ef6bc915b0..78d033cc01b 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -4239,13 +4239,26 @@ static VkResult fshack_vk_queue_present(VkQueue queue, const VkPresentInfoKHR *p
                      return VK_ERROR_DEVICE_LOST;
                  }
-
+ 
 -                if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 -                    res = record_graphics_cmd(queue->device, swapchain, hack);
 -                else if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_COMPUTE_BIT)
@@ -2002,20 +2006,24 @@ index bcd0dfb9823..8bb5b7c04a3 100644
 +                {
 +                    if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_COMPUTE_BIT)
 +                        res = record_fsr_cmd(queue->device, swapchain, hack);
++                    else
++                    {
++                        ERR("Present queue is not a compute queue!\n");
++                        res = VK_ERROR_DEVICE_LOST;
++                    }
 +                }
 +                else
 +                {
 +                    if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 +                        res = record_graphics_cmd(queue->device, swapchain, hack);
-+                    if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_COMPUTE_BIT)
++                    if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_COMPUTE_BIT && !is_srgb(swapchain->format))
 +                        res = record_compute_cmd(queue->device, swapchain, hack);
-+                    else
-+                    {
-+                        ERR("Present queue is neither graphics nor compute queue!\n");
++                    else{
++                        ERR("Present queue is neither graphics nor compute queue with unorm format!\n");
 +                        res = VK_ERROR_DEVICE_LOST;
 +                    }
                  }
-
+ 
                  if(res != VK_SUCCESS){
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
 index 9a03c5f6046..e4365466ff4 100644
@@ -2268,30 +2276,6 @@ index 8bb5b7c04a3..7f538f90b43 100644
          if(native_info.imageFormat != VK_FORMAT_B8G8R8A8_UNORM &&
                  native_info.imageFormat != VK_FORMAT_B8G8R8A8_SRGB){
              FIXME("swapchain image format is not BGRA8 UNORM/SRGB. Things may go badly. %d\n", native_info.imageFormat);
-@@ -4566,16 +4594,21 @@ VkResult WINAPI wine_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pP
-                 {
-                     if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_COMPUTE_BIT)
-                         res = record_fsr_cmd(queue->device, swapchain, hack);
-+                    else
-+                    {
-+                        ERR("Present queue is not a compute queue!\n");
-+                        res = VK_ERROR_DEVICE_LOST;
-+                    }
-                 }
-                 else
-                 {
-                     if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_GRAPHICS_BIT)
-                         res = record_graphics_cmd(queue->device, swapchain, hack);
--                    if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_COMPUTE_BIT)
-+                    if(queue->device->queue_props[queue_idx].queueFlags & VK_QUEUE_COMPUTE_BIT && !is_srgb(swapchain->format))
-                         res = record_compute_cmd(queue->device, swapchain, hack);
-                     else
-                     {
--                        ERR("Present queue is neither graphics nor compute queue!\n");
-+                        ERR("Present queue is neither graphics nor compute queue with unorm format!\n");
-                         res = VK_ERROR_DEVICE_LOST;
-                     }
-                 }
 diff --git a/dlls/winevulkan/Makefile.in b/dlls/winevulkan/Makefile.in
 index 38809211308..f7ca282921f 100644
 --- a/dlls/winevulkan/Makefile.in
@@ -2446,7 +2430,7 @@ index 913c37dee68..67aa69d8d2a 100644
 +/* Performance FSR */
 +static struct fs_monitor_size fsr1080_performance[] =
 +{
-+    {960, 540},  /* 16:9 - 'FSR 1080p Performance' */
++    {960, 640},  /* 16:9 - 'FSR 1080p Performance' */
 +};
 +
 +static struct fs_monitor_size fsr2k_performance[] =
