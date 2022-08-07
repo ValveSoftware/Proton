@@ -1,0 +1,21 @@
+diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
+index d689bddb327..2be7bac053c 100644
+--- a/dlls/winex11.drv/fs.c
++++ b/dlls/winex11.drv/fs.c
+@@ -769,12 +769,12 @@ BOOL fs_hack_is_integer(void)
+ 
+ BOOL fs_hack_is_fsr(float *sharpness)
+ {
+-    static int is_fsr = -1;
++    static int is_fsr = 1;
+     int sharpness_int = 2;
+-    if (is_fsr < 0)
++    const char *e = getenv("WINE_FULLSCREEN_FSR");
++    if (e && !strcmp(e, "0"))
+     {
+-        const char *e = getenv("WINE_FULLSCREEN_FSR");
+-        is_fsr = e && strcmp(e, "0");
++        is_fsr = 0;
+     }
+     if (sharpness)
+     {

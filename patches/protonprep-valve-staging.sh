@@ -310,20 +310,23 @@
 
 ### (2-4) PROTON PATCH SECTION ###
 
-    echo "WINE: -PROTON- fullscreen hack fsr patch"
+    echo "WINE: -FSR- fullscreen hack fsr patch"
     patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
 
-    echo "WINE: -PROTON- fake current res patches"
+    echo "WINE: -FSR- fake current res patches"
     patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
 
-    echo "WINE: -PROTON- add 32:9 FSR resolutions"
+    echo "WINE: -FSR- add 32:9 FSR resolutions"
     patch -Np1 < ../patches/proton/69-proton-fsr-add-329-res.patch
 
-    echo "WINE: -PROTON- add FSR resolutions by aspect ratio instead of current screen width"
+    echo "WINE: -FSR- add FSR resolutions by aspect ratio instead of current screen width"
     patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
     
-    echo "WINE: -PROTON- enable FSR flag by default (fixes broken fs hack scaling in some games like Apex and FFXIV"
+    echo "WINE: -FSR- enable FSR flag by default (fixes broken fs hack scaling in some games like Apex and FFXIV)"
     patch -Np1 < ../patches/proton/71-invert-fsr-logic.patch
+    
+    echo "WINE: -FSR- set 'balanced' default mode if no mode is set, and dont set any default mode if a custom mode is set"
+    patch -Np1 < ../patches/proton/72-fsr-use-balanced-default-mode.patch
     
 
 ### END PROTON PATCH SECTION ###
