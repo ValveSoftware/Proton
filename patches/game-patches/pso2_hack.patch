@@ -1,0 +1,18 @@
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index ad66954eb8b..70d73eb4557 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -3350,6 +3350,13 @@ static NTSTATUS lookup_unix_name( const WCHAR *name, int name_len, char **buffer
+     if (is_unix && (disposition == FILE_OPEN || disposition == FILE_OVERWRITE))
+         return STATUS_OBJECT_NAME_NOT_FOUND;
+ 
++    static char *skip_search = "_na";
++    const char *sgi = getenv("SteamGameId");
++    if ((!sgi) | (sgi && !strcmp(sgi, "1056640"))) {
++        if (strcasestr(unix_name, skip_search) && disposition == FILE_OPEN)
++            return STATUS_OBJECT_NAME_NOT_FOUND;
++    }
++
+     /* now do it component by component */
+ 
+     while (name_len)
