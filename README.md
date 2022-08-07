@@ -321,7 +321,7 @@ Build will be placed within the build directory as SOME-BUILD-NAME-HERE.tar.gz.
 ## Enabling
 
 1. Right click any game in Steam and click `Properties`.
-2. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
+2. At the top of the `Compatibility` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
 3. Launch the game.
 
 ## Modification
