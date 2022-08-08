@@ -1911,24 +1911,41 @@ XrResult WINAPI wine_xrEnumerateSwapchainFormats(XrSession session, uint32_t for
     wine_XrSession *wine_session = (wine_XrSession *)session;
     XrResult res;
     uint32_t i, o;
+    int64_t *real_formats = NULL;
+    uint32_t real_formats_count = 0;
 
     WINE_TRACE("%p, %u, %p, %p\n", session, formatCapacityInput, formatCountOutput, formats);
 
-    res = xrEnumerateSwapchainFormats(wine_session->session, formatCapacityInput, formatCountOutput, formats);
+    res = xrEnumerateSwapchainFormats(wine_session->session, 0, &real_formats_count, real_formats);
+	if (res != XR_SUCCESS) return res;
+
+    real_formats = heap_alloc(sizeof(int64_t) * real_formats_count);
+    res = xrEnumerateSwapchainFormats(wine_session->session, real_formats_count, formatCountOutput, real_formats);
 
     if(wine_session->wine_instance->instance_type == INSTANCE_TYPE_D3D11){
-        if(res == XR_SUCCESS && formatCapacityInput && formats){
+        if(res == XR_SUCCESS){
             o = 0;
-            for(i = 0; i < *formatCountOutput; ++i){
-                int64_t mapped = map_format_vulkan_to_dxgi(formats[i]);
+            for(i = 0; i < real_formats_count; ++i){
+                int64_t mapped = map_format_vulkan_to_dxgi(real_formats[i]);
                 if(mapped != DXGI_FORMAT_UNKNOWN){
-                    formats[o++] = mapped;
+                    if (formatCapacityInput && formats)
+                    {
+                        if (o+1 > formatCapacityInput)
+                        {
+                            res = XR_ERROR_SIZE_INSUFFICIENT;
+                            formatCapacityInput = 0;
+                        }
+                        else
+                            formats[o] = mapped;
+                    }
+                    o++;
                 }
             }
             *formatCountOutput = o;
         }
     }
 
+    heap_free(real_formats);
     return res;
 }
 
