@@ -998,6 +998,7 @@ def default_compat_config():
         if appid in [
                 #affected by CW bug 19126
                 "536280", #Disintegration
+                "563840", #LOST EMBER
                 "707030", #POSTAL 4: No Regerts
                 "794260", #Outward: Definitive Edition
                 "1102190", #Monster Train
