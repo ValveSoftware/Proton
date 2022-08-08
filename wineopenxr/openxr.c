@@ -1909,26 +1909,46 @@ int64_t map_format_vulkan_to_dxgi(int64_t format)
 XrResult WINAPI wine_xrEnumerateSwapchainFormats(XrSession session, uint32_t formatCapacityInput, uint32_t *formatCountOutput, int64_t *formats)
 {
     wine_XrSession *wine_session = (wine_XrSession *)session;
-    XrResult res;
+    uint32_t real_format_count;
+    int64_t *real_formats;
     uint32_t i, o;
+    XrResult res;
 
     WINE_TRACE("%p, %u, %p, %p\n", session, formatCapacityInput, formatCountOutput, formats);
 
-    res = xrEnumerateSwapchainFormats(wine_session->session, formatCapacityInput, formatCountOutput, formats);
+    if (wine_session->wine_instance->instance_type != INSTANCE_TYPE_D3D11)
+        return xrEnumerateSwapchainFormats(wine_session->session, formatCapacityInput, formatCountOutput, formats);
 
-    if(wine_session->wine_instance->instance_type == INSTANCE_TYPE_D3D11){
-        if(res == XR_SUCCESS && formatCapacityInput && formats){
-            o = 0;
-            for(i = 0; i < *formatCountOutput; ++i){
-                int64_t mapped = map_format_vulkan_to_dxgi(formats[i]);
-                if(mapped != DXGI_FORMAT_UNKNOWN){
-                    formats[o++] = mapped;
-                }
-            }
-            *formatCountOutput = o;
+    res = xrEnumerateSwapchainFormats(wine_session->session, 0, &real_format_count, NULL);
+    if (res != XR_SUCCESS) return res;
+
+    real_formats = heap_alloc(sizeof(*real_formats) * real_format_count);
+    res = xrEnumerateSwapchainFormats(wine_session->session, real_format_count, formatCountOutput, real_formats);
+
+    if (res != XR_SUCCESS)
+        goto done;
+
+    o = 0;
+    for(i = 0; i < real_format_count; ++i)
+    {
+        int64_t mapped = map_format_vulkan_to_dxgi(real_formats[i]);
+
+        if (mapped == DXGI_FORMAT_UNKNOWN)
+            continue;
+
+        if (formatCapacityInput && formats)
+        {
+            if (o < formatCapacityInput)
+                formats[o] = mapped;
+            else
+                res = XR_ERROR_SIZE_INSUFFICIENT;
         }
+        ++o;
     }
+    *formatCountOutput = o;
 
+done:
+    heap_free(real_formats);
     return res;
 }
 
