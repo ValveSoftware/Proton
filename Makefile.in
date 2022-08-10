@@ -196,7 +196,7 @@ GECKO_VER := 2.47.3
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 
-WINEMONO_VER := 7.3.0
+WINEMONO_VER := 7.3.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
 FONTS := $(SRCDIR)/fonts
