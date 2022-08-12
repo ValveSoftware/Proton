@@ -500,7 +500,6 @@ GST_BASE_MESON_ARGS := \
 	-Dcompositor=disabled \
 	-Dencoding=disabled \
 	-Dgio=disabled \
-	-Dgl=disabled \
 	-Dlibvisual=disabled \
 	-Doverlaycomposition=disabled \
 	-Dpango=disabled \
@@ -519,7 +518,10 @@ GST_BASE_MESON_ARGS := \
 	-Dgobject-cast-checks=disabled \
 	-Dglib-asserts=disabled \
 	-Dglib-checks=disabled \
-	-Dnls=disabled
+	-Dnls=disabled \
+	-Dorc=enabled \
+	-Dgl=enabled \
+	-Dgl-graphene=enabled
 
 GST_BASE_DEPENDS = gst_orc graphene gstreamer
 
