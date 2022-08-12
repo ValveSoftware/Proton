@@ -1,0 +1,12 @@
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index db727912508..9851ccf95b8 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -5930,6 +5930,7 @@ HKCU,Software\Wine\AppDefaults\ForzaHorizon4.exe\DllOverrides,"amd_ags_x64",0x2,
+ HKCU,Software\Wine\AppDefaults\Deathloop.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+ HKCU,Software\Wine\AppDefaults\ForzaHorizon5.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+ HKCU,Software\Wine\AppDefaults\MonsterHunterRise.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
++HKCU,Software\Wine\AppDefaults\Spider-Man.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+ HKCU,Software\Wine\AppDefaults\Sam4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+ HKCU,Software\Wine\AppDefaults\Sam4_Unrestricted.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+ ;;App-specific overrides for atiadlxx.dll.

@@ -363,6 +363,9 @@
     
     echo "WINE: -HOTFIX- fix upside down videos"
     patch -Np1 < ../patches/wine-hotfixes/pending/157.patch
+    
+    echo "WINE: -HOTFIX- add spider-man to amd amgs override list"
+    patch -Np1 < ../patches/wine-hotfixes/pending/spider-man-amd-ags.patch
 
 ### END WINE HOTFIX SECTION ###
 
