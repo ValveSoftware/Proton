@@ -14,8 +14,8 @@
     echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
     patch -Np1 < ../patches/dxvk/2675.patch
 
-    echo "DXVK:add dxvk async patch"
-    patch -Np1 < ../patches/dxvk/dxvk-async.patch   
+    #echo "DXVK:add dxvk async patch"
+    #patch -Np1 < ../patches/dxvk/dxvk-async.patch   
     cd ..
 
     cd vkd3d-proton
@@ -364,9 +364,6 @@
     echo "WINE: -HOTFIX- fix upside down videos"
     patch -Np1 < ../patches/wine-hotfixes/pending/157.patch
     
-    echo "WINE: -HOTFIX- add spider-man to amd amgs override list"
-    patch -Np1 < ../patches/wine-hotfixes/pending/spider-man-amd-ags.patch
-
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
