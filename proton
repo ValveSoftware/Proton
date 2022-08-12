@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-29"
+CURRENT_PREFIX_VERSION="GE-Proton7-30"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1161,6 +1161,7 @@ def default_compat_config():
         if appid in [
                 #affected by CW bug 19126
                 "536280", #Disintegration
+                "563840", #LOST EMBER
                 "707030", #POSTAL 4: No Regerts
                 "794260", #Outward: Definitive Edition
                 "1102190", #Monster Train
