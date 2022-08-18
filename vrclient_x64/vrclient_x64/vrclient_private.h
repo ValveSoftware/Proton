@@ -7,6 +7,7 @@ extern "C" {
 
 char *json_convert_paths(const char *input);
 char *json_convert_startup_info(const char *startup_info);
+bool  json_convert_action_manifest(const char *manifest_file);
 
 bool vrclient_dos_path_to_unix_path(const char *src, char *dst);
 

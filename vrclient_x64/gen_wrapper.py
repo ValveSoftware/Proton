@@ -133,6 +133,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchActionManifestPath"],
         "w2l_arrays": [False],
+        "file_converter": "json_convert_action_manifest",
         "return_is_size": False
     },
     {
@@ -141,6 +142,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchFilePath"],
         "w2l_arrays": [False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -149,6 +151,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchApplicationManifestFullPath"],
         "w2l_arrays": [False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -157,6 +160,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchApplicationManifestFullPath"],
         "w2l_arrays": [False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -165,6 +169,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
         "w2l_arrays": [False, False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -173,6 +178,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
         "w2l_arrays": [False, False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -181,6 +187,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchSourcePreviewFilename", "pchSourceVRFilename"],
         "w2l_arrays": [False, False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -189,6 +196,7 @@ path_conversions = [
         "l2w_lens":["cchFilename"],
         "w2l_names": [],
         "w2l_arrays": [],
+        "file_converter": None,
         "return_is_size": True
     },
     {
@@ -197,6 +205,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["a"],
         "w2l_arrays": [False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -205,6 +214,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["a"],
         "w2l_arrays": [False],
+        "file_converter": None,
         "return_is_size": False
     },
     {
@@ -213,6 +223,7 @@ path_conversions = [
         "l2w_lens":[],
         "w2l_names": ["pchRenderModelPath"],
         "w2l_arrays": [False],
+        "file_converter": None,
         "return_is_size": False
     },
 
@@ -530,6 +541,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             else:
                 cfile.write("    char lin_%s[PATH_MAX];\n" % path_conv["w2l_names"][i])
                 cfile.write("    vrclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                if path_conv["file_converter"] is not None:
+                    cfile.write("    %s(lin_%s);\n" % (path_conv["file_converter"], path_conv["w2l_names"][i]))
         if None in path_conv["l2w_names"]:
             cfile.write("    const char *path_result;\n")
         elif path_conv["return_is_size"]:
