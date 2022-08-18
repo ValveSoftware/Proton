@@ -484,8 +484,10 @@ GST_BASE_MESON_ARGS := \
 	-Dvideoscale=enabled \
 	-Dvorbis=enabled \
 	-Dorc=enabled \
+	-Dx11=enabled \
 	-Dgl=enabled \
 	-Dgl-graphene=enabled \
+	-Dgl_platform=glx,egl \
 	--wrap-mode nodownload \
 
 GST_BASE_DEPENDS = gst_orc graphene gstreamer
