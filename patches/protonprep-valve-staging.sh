@@ -14,8 +14,8 @@
     echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
     patch -Np1 < ../patches/dxvk/2675.patch
 
-    #echo "DXVK:add dxvk async patch"
-    #patch -Np1 < ../patches/dxvk/dxvk-async.patch   
+    echo "DXVK:add dxvk async patch"
+    patch -Np1 < ../patches/dxvk/dxvk-async.patch   
     cd ..
 
     cd vkd3d-proton
@@ -55,6 +55,8 @@
     -W eventfd_synchronization \
     -W d3dx11_43-D3DX11CreateTextureFromMemory \
     -W dbghelp-Debug_Symbols \
+    -W ddraw-Device_Caps \
+    -W ddraw-version-check \
     -W dwrite-FontFallback \
     -W ntdll-DOS_Attributes \
     -W Pipelight \
@@ -115,6 +117,8 @@
     # server-Stored_ACLs - requires ntdll-Junction_Points
     # eventfd_synchronization - already applied
     # d3dx11_43-D3DX11CreateTextureFromMemory - manually applied
+    # ddraw-Device_Caps - conflicts with proton's changes
+    # ddraw-version-check - conflicts with proton's changes
 
     # dbghelp-Debug_Symbols - see below:
     # Sancreed — 11/21/2021
@@ -281,7 +285,7 @@
 
     # winex11-wglShareLists
     patch -Np1 < ../patches/wine-hotfixes/staging/winex11-wglShareLists/0001-winex11.drv-Only-warn-about-used-contexts-in-wglShar.patch
-
+    
     # nvapi/nvcuda
     # this was added in 7.1, so it's not in the 7.0 tree
     patch -Np1 < ../patches/wine-hotfixes/staging/nvcuda/0016-nvcuda-Make-nvcuda-attempt-to-load-libcuda.so.1.patch
@@ -363,6 +367,9 @@
     
     echo "WINE: -HOTFIX- fix upside down videos"
     patch -Np1 < ../patches/wine-hotfixes/pending/157.patch
+    
+    echo "WINE: -HOTFIX- fix Amazon Games launcher"
+    patch -Np1 < ../patches/wine-hotfixes/upstream/481.patch
     
 ### END WINE HOTFIX SECTION ###
 
