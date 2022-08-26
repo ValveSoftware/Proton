@@ -1058,6 +1058,12 @@ def default_compat_config():
                 ]:
             ret.add("noopwr")
 
+        if appid in [
+                "271590", #Grand Theft Auto V (bug 21194: not loading textures)
+                ]:
+            ret.add("noesync")
+            ret.add("nofsync")
+
     return ret
 
 class Session:
