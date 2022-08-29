@@ -140,36 +140,6 @@ index 3b106a8f633..200293f5214 100644
  };
  
  HRESULT WINAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void **out)
-diff --git a/dlls/dsdmo/tests/dsdmo.c b/dlls/dsdmo/tests/dsdmo.c
-index 31f4dc6a473..2b3c3ef6772 100644
---- a/dlls/dsdmo/tests/dsdmo.c
-+++ b/dlls/dsdmo/tests/dsdmo.c
-@@ -385,12 +385,14 @@ static void test_echo_parameters(void)
- 
-     hr = CoCreateInstance(&GUID_DSFX_STANDARD_ECHO, NULL, CLSCTX_INPROC_SERVER,
-             &IID_IDirectSoundFXEcho, (void **)&echo);
--    todo_wine ok(hr == S_OK, "Got hr %#lx.\n", hr);
-+    ok(hr == S_OK, "Got hr %#lx.\n", hr);
-     if (hr != S_OK)
-         return;
- 
-     hr = IDirectSoundFXEcho_GetAllParameters(echo, &params);
--    ok(hr == S_OK, "Got hr %#lx.\n", hr);
-+    todo_wine ok(hr == S_OK, "Got hr %#lx.\n", hr);
-+    if (hr != S_OK)
-+        return;
-     ok(params.fWetDryMix == 50.0f, "Got %.8e%% wetness.\n", params.fWetDryMix);
-     ok(params.fFeedback == 50.0f, "Got %.8e%% feedback.\n", params.fFeedback);
-     ok(params.fLeftDelay == 500.0f, "Got left delay %.8e ms.\n", params.fLeftDelay);
-@@ -545,7 +547,7 @@ START_TEST(dsdmo)
-         {&GUID_DSFX_STANDARD_CHORUS,        &IID_IDirectSoundFXChorus, TRUE},
-         {&GUID_DSFX_STANDARD_COMPRESSOR,    &IID_IDirectSoundFXCompressor, TRUE},
-         {&GUID_DSFX_STANDARD_DISTORTION,    &IID_IDirectSoundFXDistortion, TRUE},
--        {&GUID_DSFX_STANDARD_ECHO,          &IID_IDirectSoundFXEcho, TRUE},
-+        {&GUID_DSFX_STANDARD_ECHO,          &IID_IDirectSoundFXEcho},
-         {&GUID_DSFX_STANDARD_FLANGER,       &IID_IDirectSoundFXFlanger, TRUE},
-         {&GUID_DSFX_STANDARD_GARGLE,        &IID_IDirectSoundFXGargle, TRUE},
-         {&GUID_DSFX_STANDARD_I3DL2REVERB,   &IID_IDirectSoundFXI3DL2Reverb},
 From 39889f19c3db917703a8b42167ee4084dfa091d7 Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Sat, 13 Aug 2022 15:03:46 +1000
@@ -312,33 +282,4 @@ index 200293f5214..bb19b7b7e2e 100644
  };
  
  HRESULT WINAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void **out)
-diff --git a/dlls/dsdmo/tests/dsdmo.c b/dlls/dsdmo/tests/dsdmo.c
-index 2b3c3ef6772..9296ad29168 100644
---- a/dlls/dsdmo/tests/dsdmo.c
-+++ b/dlls/dsdmo/tests/dsdmo.c
-@@ -335,12 +335,12 @@ static void test_compressor_parameters(void)
- 
-     hr = CoCreateInstance(&GUID_DSFX_STANDARD_COMPRESSOR, NULL, CLSCTX_INPROC_SERVER,
-             &IID_IDirectSoundFXCompressor, (void **)&compressor);
-+    ok(hr == S_OK, "Got hr %#lx.\n", hr);
-+
-+    hr = IDirectSoundFXCompressor_GetAllParameters(compressor, &params);
-     todo_wine ok(hr == S_OK, "Got hr %#lx.\n", hr);
-     if (hr != S_OK)
-         return;
--
--    hr = IDirectSoundFXCompressor_GetAllParameters(compressor, &params);
--    ok(hr == S_OK, "Got hr %#lx.\n", hr);
-     ok(params.fGain == 0.0f, "Got gain %.8e dB.\n", params.fGain);
-     ok(params.fAttack == 10.0f, "Got attack time %.8e ms.\n", params.fAttack);
-     ok(params.fThreshold == -20.0f, "Got threshold %.8e dB.\n", params.fThreshold);
-@@ -545,7 +545,7 @@ START_TEST(dsdmo)
-     tests[] =
-     {
-         {&GUID_DSFX_STANDARD_CHORUS,        &IID_IDirectSoundFXChorus, TRUE},
--        {&GUID_DSFX_STANDARD_COMPRESSOR,    &IID_IDirectSoundFXCompressor, TRUE},
-+        {&GUID_DSFX_STANDARD_COMPRESSOR,    &IID_IDirectSoundFXCompressor},
-         {&GUID_DSFX_STANDARD_DISTORTION,    &IID_IDirectSoundFXDistortion, TRUE},
-         {&GUID_DSFX_STANDARD_ECHO,          &IID_IDirectSoundFXEcho},
-         {&GUID_DSFX_STANDARD_FLANGER,       &IID_IDirectSoundFXFlanger, TRUE},
 
