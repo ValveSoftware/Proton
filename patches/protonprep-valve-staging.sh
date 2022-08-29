@@ -371,6 +371,9 @@
     echo "WINE: -HOTFIX- fix Amazon Games launcher"
     patch -Np1 < ../patches/wine-hotfixes/upstream/481.patch
     
+    echo "WINE: -HOTFIX- fix Visual Novel Doukyuusei"
+    patch -Np1 < ../patches/wine-hotfixes/upstream/visual-novel-doukyuusei.patch
+    
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
