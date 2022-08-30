@@ -76,7 +76,7 @@ Full patches can be viewed in [protonprep-valve-staging.sh](patches/protonprep-v
 
 PLEASE NOTE: There are prerequisites for using this version of proton:
 
-1. You must have the proper Vulkan drivers/packages installed properly on your system. VKD3D on AMD requires Mesa 22.0.0 or higher for the VK_KHR_dynamic_rendering extension. See https://github.com/lutris/docs/blob/master/InstallingDrivers.md for general driver installation guidance.
+1. You must have the proper Vulkan drivers/packages installed on your system. VKD3D on AMD requires Mesa 22.0.0 or higher for the VK_KHR_dynamic_rendering extension. See https://github.com/lutris/docs/blob/master/InstallingDrivers.md for general driver installation guidance.
 
 ### Manual
 
@@ -154,7 +154,7 @@ Build will be placed within the build directory as SOME-BUILD-NAME-HERE.tar.gz.
 ## Enabling
 
 1. Right click any game in Steam and click `Properties`.
-2. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
+2. At the bottom of the `Compatibility` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
 3. Launch the game.
 
 ## Modification
