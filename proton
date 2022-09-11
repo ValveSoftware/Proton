@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-30"
+CURRENT_PREFIX_VERSION="GE-Proton7-32"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1217,12 +1217,6 @@ def default_compat_config():
                 "230410", #Warframe
                 ]:
             ret.add("noopwr")
-
-        if appid in [
-                "271590", #Grand Theft Auto V (bug 21194: not loading textures)
-                ]:
-            ret.add("noesync")
-            ret.add("nofsync")
 
     return ret
 
