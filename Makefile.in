@@ -893,7 +893,7 @@ VKD3D_PROTON_SOURCE_ARGS = \
 
 VKD3D_PROTON_MESON_ARGS32 = --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton
 VKD3D_PROTON_MESON_ARGS64 = --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton
-VKD3D_DEPENDS = glslang
+VKD3D_PROTON_DEPENDS = glslang
 
 $(eval $(call rules-source,vkd3d-proton,$(SRCDIR)/vkd3d-proton))
 $(eval $(call rules-meson,vkd3d-proton,32,CROSS))
