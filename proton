@@ -1042,6 +1042,9 @@ def default_compat_config():
                 ]:
             ret.add("noopwr")
 
+        if appid == "1621680":
+            ret.add("noforcelgadd")
+
     return ret
 
 class Session:
