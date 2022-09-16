@@ -348,6 +348,8 @@ static uint32 lin_SteamAPI_CheckCallbackRegistered_t(int cb)
 
 void *manual_convert_SteamAPI_CheckCallbackRegistered_t(void *win_func)
 {
-    stored_SteamAPI_CheckCallbackRegistered_t = (void*)win_func;
+    if (!(stored_SteamAPI_CheckCallbackRegistered_t = (void*)win_func))
+        return NULL;
+
     return &lin_SteamAPI_CheckCallbackRegistered_t;
 }
