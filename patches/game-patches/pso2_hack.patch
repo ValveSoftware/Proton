@@ -6,7 +6,7 @@ index ad66954eb8b..70d73eb4557 100644
      if (is_unix && (disposition == FILE_OPEN || disposition == FILE_OVERWRITE))
          return STATUS_OBJECT_NAME_NOT_FOUND;
  
-+    static char *skip_search = "_na";
++    static char *skip_search = "pso2_bin/data";
 +    const char *sgi = getenv("SteamGameId");
 +    if ((!sgi) | (sgi && !strcmp(sgi, "1056640"))) {
 +        if (strcasestr(unix_name, skip_search) && disposition == FILE_OPEN)
