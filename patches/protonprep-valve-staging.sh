@@ -373,7 +373,10 @@
     
     echo "WINE: -HOTFIX- fix Visual Novel Doukyuusei"
     patch -Np1 < ../patches/wine-hotfixes/upstream/visual-novel-doukyuusei.patch
-    
+
+    echo "WINE: -HOTFIX- fix Persona 4 Golden"
+    patch -Np1 < ../patches/wine-hotfixes/upstream/381c2a9ae151f676a009e89b4b101679fd90b9ae.patch
+
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
