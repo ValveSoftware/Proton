@@ -1,0 +1,6 @@
+spv.demoteDisabled.frag
+ERROR: 0:9: 'demote' : undeclared identifier 
+ERROR: 1 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

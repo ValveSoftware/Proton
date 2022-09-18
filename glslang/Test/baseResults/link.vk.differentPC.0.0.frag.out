@@ -1,0 +1,97 @@
+link.vk.differentPC.0.0.frag
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp highp 4-component vector of float)
+0:17        'color' (layout( location=0) out highp 4-component vector of float)
+0:17        add ( temp highp 4-component vector of float)
+0:17          color: direct index for structure (layout( column_major std430 offset=0) uniform highp 4-component vector of float)
+0:17            'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:17            Constant:
+0:17              0 (const int)
+0:17          vector-scale ( temp highp 4-component vector of float)
+0:17            Function Call: getColor2( ( global highp 4-component vector of float)
+0:17            Function Call: getScale( ( global highp float)
+0:?   Linker Objects
+0:?     'color' (layout( location=0) out highp 4-component vector of float)
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+
+link.vk.differentPC.0.1.frag
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:11  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        color2: direct index for structure (layout( column_major std430 offset=16) uniform highp 4-component vector of float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:13          Constant:
+0:13            1 (const int)
+0:?   Linker Objects
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+
+link.vk.differentPC.0.2.frag
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:11  Function Definition: getScale( ( global highp float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        scale2: direct index for structure (layout( column_major std430 offset=32) uniform highp float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale2})
+0:13          Constant:
+0:13            2 (const int)
+0:?   Linker Objects
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale2})
+
+
+Linked fragment stage:
+
+ERROR: Linking fragment and fragment stages: Member names and types must match:
+    Block: PushConstantBlock
+        fragment stage: " float scale"
+        fragment stage: " float scale2"
+
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp highp 4-component vector of float)
+0:17        'color' (layout( location=0) out highp 4-component vector of float)
+0:17        add ( temp highp 4-component vector of float)
+0:17          color: direct index for structure (layout( column_major std430 offset=0) uniform highp 4-component vector of float)
+0:17            'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:17            Constant:
+0:17              0 (const int)
+0:17          vector-scale ( temp highp 4-component vector of float)
+0:17            Function Call: getColor2( ( global highp 4-component vector of float)
+0:17            Function Call: getScale( ( global highp float)
+0:11  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        color2: direct index for structure (layout( column_major std430 offset=16) uniform highp 4-component vector of float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:13          Constant:
+0:13            1 (const int)
+0:11  Function Definition: getScale( ( global highp float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        scale2: direct index for structure (layout( column_major std430 offset=32) uniform highp float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale2})
+0:13          Constant:
+0:13            2 (const int)
+0:?   Linker Objects
+0:?     'color' (layout( location=0) out highp 4-component vector of float)
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+
+Validation failed
+SPIR-V is not generated for failed compile or link

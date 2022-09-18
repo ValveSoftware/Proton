@@ -1,0 +1,6 @@
+spv.specConstArrayCheck.vert
+ERROR: 0:13: '[' :  array index out of range '6'
+ERROR: 1 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

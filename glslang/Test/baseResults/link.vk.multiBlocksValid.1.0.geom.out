@@ -1,0 +1,460 @@
+link.vk.multiBlocksValid.1.0.geom
+Shader version: 430
+invocations = -1
+max_vertices = 3
+input primitive = triangles
+output primitive = triangle_strip
+0:? Sequence
+0:48  Function Definition: main( ( global void)
+0:48    Function Parameters: 
+0:50    Sequence
+0:50      move second child to first child ( temp highp 4-component vector of float)
+0:50        'oColor' (layout( stream=0) out highp 4-component vector of float)
+0:50        component-wise multiply ( temp highp 4-component vector of float)
+0:50          color1: direct index for structure (layout( column_major std140 offset=0) uniform highp 4-component vector of float)
+0:50            'uC' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:50            Constant:
+0:50              0 (const int)
+0:50          Function Call: getColor2( ( global highp 4-component vector of float)
+0:52      move second child to first child ( temp highp float)
+0:52        'globalF' ( global highp float)
+0:52        Constant:
+0:52          1.000000
+0:54      Sequence
+0:54        Sequence
+0:54          move second child to first child ( temp highp int)
+0:54            'i' ( temp highp int)
+0:54            Constant:
+0:54              0 (const int)
+0:54        Loop with condition tested first
+0:54          Loop Condition
+0:54          Compare Less Than ( temp bool)
+0:54            'i' ( temp highp int)
+0:54            Constant:
+0:54              3 (const int)
+0:54          Loop Body
+0:56          Sequence
+0:56            move second child to first child ( temp highp 4-component vector of float)
+0:56              gl_Position: direct index for structure (layout( stream=0) gl_Position highp 4-component vector of float Position)
+0:56                'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:56                Constant:
+0:56                  0 (const uint)
+0:56              matrix-times-vector ( temp highp 4-component vector of float)
+0:56                uProj: direct index for structure (layout( column_major std140 offset=0) uniform highp 4X4 matrix of float)
+0:56                  'uM' (layout( binding=0 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform highp 4X4 matrix of float uWorld})
+0:56                  Constant:
+0:56                    0 (const int)
+0:56                Function Call: getWorld(i1; ( global highp 4-component vector of float)
+0:56                  'i' ( temp highp int)
+0:57            move second child to first child ( temp highp 4-component vector of float)
+0:57              val1: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:57                'oV' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float val1})
+0:57                Constant:
+0:57                  0 (const int)
+0:57              add ( temp highp 4-component vector of float)
+0:57                color1: direct index for structure (layout( column_major std140 offset=0) uniform highp 4-component vector of float)
+0:57                  'uC' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:57                  Constant:
+0:57                    0 (const int)
+0:57                vector-scale ( temp highp 4-component vector of float)
+0:57                  v2: direct index for structure ( in highp 4-component vector of float)
+0:57                    indirect index ( temp block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:57                      'iV' ( in 3-element array of block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:57                      'i' ( temp highp int)
+0:57                    Constant:
+0:57                      1 (const int)
+0:57                  'globalF' ( global highp float)
+0:58            EmitVertex ( global void)
+0:54          Loop Terminal Expression
+0:54          Post-Increment ( temp highp int)
+0:54            'i' ( temp highp int)
+0:61      EndPrimitive ( global void)
+0:?   Linker Objects
+0:?     'uM' (layout( binding=0 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform highp 4X4 matrix of float uWorld})
+0:?     'iV' ( in 3-element array of block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:?     'oV' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float val1})
+0:?     'uC' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:?     'uBuf' (layout( binding=1 column_major std430) buffer block{layout( column_major std430 offset=0) buffer highp 4X4 matrix of float p})
+0:?     'oColor' (layout( stream=0) out highp 4-component vector of float)
+0:?     'globalF' ( global highp float)
+0:?     'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out unsized 1-element array of float ClipDistance gl_ClipDistance})
+
+link.vk.multiBlocksValid.1.1.geom
+Shader version: 430
+invocations = -1
+max_vertices = 3
+input primitive = triangles
+output primitive = triangle_strip
+0:? Sequence
+0:44  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:44    Function Parameters: 
+0:46    Sequence
+0:46      Branch: Return with expression
+0:46        color2: direct index for structure (layout( column_major std140 offset=32) uniform highp 4-component vector of float)
+0:46          'uColor' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:46          Constant:
+0:46            2 (const int)
+0:49  Function Definition: getWorld(i1; ( global highp 4-component vector of float)
+0:49    Function Parameters: 
+0:49      'i' ( in highp int)
+0:51    Sequence
+0:51      move second child to first child ( temp highp 4-component vector of float)
+0:51        val1: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:51          'anon@0' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float val1})
+0:51          Constant:
+0:51            0 (const uint)
+0:51        Constant:
+0:51          1.000000
+0:51          1.000000
+0:51          1.000000
+0:51          1.000000
+0:52      Branch: Return with expression
+0:52        matrix-times-vector ( temp highp 4-component vector of float)
+0:52          uWorld: direct index for structure (layout( column_major std140 offset=64) uniform highp 4X4 matrix of float)
+0:52            'uMatrix' (layout( binding=0 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform highp 4X4 matrix of float uWorld})
+0:52            Constant:
+0:52              1 (const int)
+0:52          v1: direct index for structure ( in highp 4-component vector of float)
+0:52            indirect index ( temp block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:52              'iVV' ( in 3-element array of block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:52              'i' ( in highp int)
+0:52            Constant:
+0:52              0 (const int)
+0:?   Linker Objects
+0:?     'uColor' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:?     'uBuffer' (layout( binding=1 column_major std430) buffer block{layout( column_major std430 offset=0) buffer highp 4X4 matrix of float p})
+0:?     'uMatrix' (layout( binding=0 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform highp 4X4 matrix of float uWorld})
+0:?     'anon@0' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float val1})
+0:?     'iVV' ( in 3-element array of block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:?     'P' ( in 3-element array of highp 4-component vector of float)
+
+
+Linked geometry stage:
+
+WARNING: Linking geometry and geometry stages: Matched shader interfaces are using different instance names.
+    geometry stage: Block: ColorBlock Instance: uC: ""
+    geometry stage: Block: ColorBlock Instance: uColor: ""
+WARNING: Linking geometry and geometry stages: Matched shader interfaces are using different instance names.
+    geometry stage: Block: BufferBlock Instance: uBuf: ""
+    geometry stage: Block: BufferBlock Instance: uBuffer: ""
+WARNING: Linking geometry and geometry stages: Matched shader interfaces are using different instance names.
+    geometry stage: Block: MatrixBlock Instance: uM: ""
+    geometry stage: Block: MatrixBlock Instance: uMatrix: ""
+WARNING: Linking geometry and geometry stages: Matched shader interfaces are using different instance names.
+    geometry stage: Block: Vertex Instance: oV: ""
+    geometry stage: Block: Vertex Instance: anon@0: ""
+WARNING: Linking geometry and geometry stages: Matched shader interfaces are using different instance names.
+    geometry stage: Block: Vertex Instance: iV: ""
+    geometry stage: Block: Vertex Instance: iVV: ""
+
+Shader version: 430
+invocations = 1
+max_vertices = 3
+input primitive = triangles
+output primitive = triangle_strip
+0:? Sequence
+0:48  Function Definition: main( ( global void)
+0:48    Function Parameters: 
+0:50    Sequence
+0:50      move second child to first child ( temp highp 4-component vector of float)
+0:50        'oColor' (layout( stream=0) out highp 4-component vector of float)
+0:50        component-wise multiply ( temp highp 4-component vector of float)
+0:50          color1: direct index for structure (layout( column_major std140 offset=0) uniform highp 4-component vector of float)
+0:50            'uC' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:50            Constant:
+0:50              0 (const int)
+0:50          Function Call: getColor2( ( global highp 4-component vector of float)
+0:52      move second child to first child ( temp highp float)
+0:52        'globalF' ( global highp float)
+0:52        Constant:
+0:52          1.000000
+0:54      Sequence
+0:54        Sequence
+0:54          move second child to first child ( temp highp int)
+0:54            'i' ( temp highp int)
+0:54            Constant:
+0:54              0 (const int)
+0:54        Loop with condition tested first
+0:54          Loop Condition
+0:54          Compare Less Than ( temp bool)
+0:54            'i' ( temp highp int)
+0:54            Constant:
+0:54              3 (const int)
+0:54          Loop Body
+0:56          Sequence
+0:56            move second child to first child ( temp highp 4-component vector of float)
+0:56              gl_Position: direct index for structure (layout( stream=0) gl_Position highp 4-component vector of float Position)
+0:56                'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out 1-element array of float ClipDistance gl_ClipDistance})
+0:56                Constant:
+0:56                  0 (const uint)
+0:56              matrix-times-vector ( temp highp 4-component vector of float)
+0:56                uProj: direct index for structure (layout( column_major std140 offset=0) uniform highp 4X4 matrix of float)
+0:56                  'uM' (layout( binding=0 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform highp 4X4 matrix of float uWorld})
+0:56                  Constant:
+0:56                    0 (const int)
+0:56                Function Call: getWorld(i1; ( global highp 4-component vector of float)
+0:56                  'i' ( temp highp int)
+0:57            move second child to first child ( temp highp 4-component vector of float)
+0:57              val1: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:57                'oV' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float val1})
+0:57                Constant:
+0:57                  0 (const int)
+0:57              add ( temp highp 4-component vector of float)
+0:57                color1: direct index for structure (layout( column_major std140 offset=0) uniform highp 4-component vector of float)
+0:57                  'uC' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:57                  Constant:
+0:57                    0 (const int)
+0:57                vector-scale ( temp highp 4-component vector of float)
+0:57                  v2: direct index for structure ( in highp 4-component vector of float)
+0:57                    indirect index ( temp block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:57                      'iV' ( in 3-element array of block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:57                      'i' ( temp highp int)
+0:57                    Constant:
+0:57                      1 (const int)
+0:57                  'globalF' ( global highp float)
+0:58            EmitVertex ( global void)
+0:54          Loop Terminal Expression
+0:54          Post-Increment ( temp highp int)
+0:54            'i' ( temp highp int)
+0:61      EndPrimitive ( global void)
+0:44  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:44    Function Parameters: 
+0:46    Sequence
+0:46      Branch: Return with expression
+0:46        color2: direct index for structure (layout( column_major std140 offset=32) uniform highp 4-component vector of float)
+0:46          'uColor' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:46          Constant:
+0:46            2 (const int)
+0:49  Function Definition: getWorld(i1; ( global highp 4-component vector of float)
+0:49    Function Parameters: 
+0:49      'i' ( in highp int)
+0:51    Sequence
+0:51      move second child to first child ( temp highp 4-component vector of float)
+0:51        val1: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:51          'anon@0' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float val1})
+0:51          Constant:
+0:51            0 (const uint)
+0:51        Constant:
+0:51          1.000000
+0:51          1.000000
+0:51          1.000000
+0:51          1.000000
+0:52      Branch: Return with expression
+0:52        matrix-times-vector ( temp highp 4-component vector of float)
+0:52          uWorld: direct index for structure (layout( column_major std140 offset=64) uniform highp 4X4 matrix of float)
+0:52            'uMatrix' (layout( binding=0 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform highp 4X4 matrix of float uWorld})
+0:52            Constant:
+0:52              1 (const int)
+0:52          v1: direct index for structure ( in highp 4-component vector of float)
+0:52            indirect index ( temp block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:52              'iVV' ( in 3-element array of block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:52              'i' ( in highp int)
+0:52            Constant:
+0:52              0 (const int)
+0:?   Linker Objects
+0:?     'uM' (layout( binding=0 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform highp 4X4 matrix of float uWorld})
+0:?     'iV' ( in 3-element array of block{ in highp 4-component vector of float v1,  in highp 4-component vector of float v2})
+0:?     'oV' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float val1})
+0:?     'uC' (layout( binding=1 column_major std140) uniform block{layout( column_major std140 offset=0) uniform highp 4-component vector of float color1, layout( column_major std140 offset=16) uniform bool b, layout( column_major std140 offset=32) uniform highp 4-component vector of float color2, layout( column_major std140 offset=48) uniform highp 4-component vector of float color3})
+0:?     'uBuf' (layout( binding=1 column_major std430) buffer block{layout( column_major std430 offset=0) buffer highp 4X4 matrix of float p})
+0:?     'oColor' (layout( stream=0) out highp 4-component vector of float)
+0:?     'globalF' ( global highp float)
+0:?     'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'P' ( in 3-element array of highp 4-component vector of float)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 101
+
+                              Capability Geometry
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Geometry 4  "main" 18 46 61 68 100
+                              ExecutionMode 4 Triangles
+                              ExecutionMode 4 Invocations 1
+                              ExecutionMode 4 OutputTriangleStrip
+                              ExecutionMode 4 OutputVertices 3
+                              Source GLSL 430
+                              Name 4  "main"
+                              Name 9  "getColor2("
+                              Name 15  "getWorld(i1;"
+                              Name 14  "i"
+                              Name 18  "oColor"
+                              Name 20  "ColorBlock"
+                              MemberName 20(ColorBlock) 0  "color1"
+                              MemberName 20(ColorBlock) 1  "b"
+                              MemberName 20(ColorBlock) 2  "color2"
+                              MemberName 20(ColorBlock) 3  "color3"
+                              Name 22  "uC"
+                              Name 30  "globalF"
+                              Name 32  "i"
+                              Name 44  "gl_PerVertex"
+                              MemberName 44(gl_PerVertex) 0  "gl_Position"
+                              MemberName 44(gl_PerVertex) 1  "gl_PointSize"
+                              MemberName 44(gl_PerVertex) 2  "gl_ClipDistance"
+                              Name 46  ""
+                              Name 48  "MatrixBlock"
+                              MemberName 48(MatrixBlock) 0  "uProj"
+                              MemberName 48(MatrixBlock) 1  "uWorld"
+                              Name 50  "uM"
+                              Name 54  "param"
+                              Name 59  "Vertex"
+                              MemberName 59(Vertex) 0  "val1"
+                              Name 61  "oV"
+                              Name 64  "Vertex"
+                              MemberName 64(Vertex) 0  "v1"
+                              MemberName 64(Vertex) 1  "v2"
+                              Name 68  "iV"
+                              Name 95  "BufferBlock"
+                              MemberName 95(BufferBlock) 0  "p"
+                              Name 97  "uBuf"
+                              Name 100  "P"
+                              Decorate 18(oColor) Location 1
+                              MemberDecorate 20(ColorBlock) 0 Offset 0
+                              MemberDecorate 20(ColorBlock) 1 Offset 16
+                              MemberDecorate 20(ColorBlock) 2 Offset 32
+                              MemberDecorate 20(ColorBlock) 3 Offset 48
+                              Decorate 20(ColorBlock) Block
+                              Decorate 22(uC) DescriptorSet 0
+                              Decorate 22(uC) Binding 1
+                              MemberDecorate 44(gl_PerVertex) 0 BuiltIn Position
+                              MemberDecorate 44(gl_PerVertex) 1 BuiltIn PointSize
+                              MemberDecorate 44(gl_PerVertex) 2 BuiltIn ClipDistance
+                              Decorate 44(gl_PerVertex) Block
+                              MemberDecorate 48(MatrixBlock) 0 ColMajor
+                              MemberDecorate 48(MatrixBlock) 0 Offset 0
+                              MemberDecorate 48(MatrixBlock) 0 MatrixStride 16
+                              MemberDecorate 48(MatrixBlock) 1 ColMajor
+                              MemberDecorate 48(MatrixBlock) 1 Offset 64
+                              MemberDecorate 48(MatrixBlock) 1 MatrixStride 16
+                              Decorate 48(MatrixBlock) Block
+                              Decorate 50(uM) DescriptorSet 0
+                              Decorate 50(uM) Binding 0
+                              Decorate 59(Vertex) Block
+                              Decorate 61(oV) Location 0
+                              Decorate 64(Vertex) Block
+                              Decorate 68(iV) Location 0
+                              MemberDecorate 95(BufferBlock) 0 ColMajor
+                              MemberDecorate 95(BufferBlock) 0 Offset 0
+                              MemberDecorate 95(BufferBlock) 0 MatrixStride 16
+                              Decorate 95(BufferBlock) BufferBlock
+                              Decorate 97(uBuf) DescriptorSet 0
+                              Decorate 97(uBuf) Binding 1
+                              Decorate 100(P) Location 2
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypeFunction 7(fvec4)
+              11:             TypeInt 32 1
+              12:             TypePointer Function 11(int)
+              13:             TypeFunction 7(fvec4) 12(ptr)
+              17:             TypePointer Output 7(fvec4)
+      18(oColor):     17(ptr) Variable Output
+              19:             TypeInt 32 0
+  20(ColorBlock):             TypeStruct 7(fvec4) 19(int) 7(fvec4) 7(fvec4)
+              21:             TypePointer Uniform 20(ColorBlock)
+          22(uC):     21(ptr) Variable Uniform
+              23:     11(int) Constant 0
+              24:             TypePointer Uniform 7(fvec4)
+              29:             TypePointer Private 6(float)
+     30(globalF):     29(ptr) Variable Private
+              31:    6(float) Constant 1065353216
+              39:     11(int) Constant 3
+              40:             TypeBool
+              42:     19(int) Constant 1
+              43:             TypeArray 6(float) 42
+44(gl_PerVertex):             TypeStruct 7(fvec4) 6(float) 43
+              45:             TypePointer Output 44(gl_PerVertex)
+              46:     45(ptr) Variable Output
+              47:             TypeMatrix 7(fvec4) 4
+ 48(MatrixBlock):             TypeStruct 47 47
+              49:             TypePointer Uniform 48(MatrixBlock)
+          50(uM):     49(ptr) Variable Uniform
+              51:             TypePointer Uniform 47
+      59(Vertex):             TypeStruct 7(fvec4)
+              60:             TypePointer Output 59(Vertex)
+          61(oV):     60(ptr) Variable Output
+      64(Vertex):             TypeStruct 7(fvec4) 7(fvec4)
+              65:     19(int) Constant 3
+              66:             TypeArray 64(Vertex) 65
+              67:             TypePointer Input 66
+          68(iV):     67(ptr) Variable Input
+              70:     11(int) Constant 1
+              71:             TypePointer Input 7(fvec4)
+              80:     11(int) Constant 2
+              85:    7(fvec4) ConstantComposite 31 31 31 31
+ 95(BufferBlock):             TypeStruct 47
+              96:             TypePointer Uniform 95(BufferBlock)
+        97(uBuf):     96(ptr) Variable Uniform
+              98:             TypeArray 7(fvec4) 65
+              99:             TypePointer Input 98
+          100(P):     99(ptr) Variable Input
+         4(main):           2 Function None 3
+               5:             Label
+           32(i):     12(ptr) Variable Function
+       54(param):     12(ptr) Variable Function
+              25:     24(ptr) AccessChain 22(uC) 23
+              26:    7(fvec4) Load 25
+              27:    7(fvec4) FunctionCall 9(getColor2()
+              28:    7(fvec4) FMul 26 27
+                              Store 18(oColor) 28
+                              Store 30(globalF) 31
+                              Store 32(i) 23
+                              Branch 33
+              33:             Label
+                              LoopMerge 35 36 None
+                              Branch 37
+              37:             Label
+              38:     11(int) Load 32(i)
+              41:    40(bool) SLessThan 38 39
+                              BranchConditional 41 34 35
+              34:               Label
+              52:     51(ptr)   AccessChain 50(uM) 23
+              53:          47   Load 52
+              55:     11(int)   Load 32(i)
+                                Store 54(param) 55
+              56:    7(fvec4)   FunctionCall 15(getWorld(i1;) 54(param)
+              57:    7(fvec4)   MatrixTimesVector 53 56
+              58:     17(ptr)   AccessChain 46 23
+                                Store 58 57
+              62:     24(ptr)   AccessChain 22(uC) 23
+              63:    7(fvec4)   Load 62
+              69:     11(int)   Load 32(i)
+              72:     71(ptr)   AccessChain 68(iV) 69 70
+              73:    7(fvec4)   Load 72
+              74:    6(float)   Load 30(globalF)
+              75:    7(fvec4)   VectorTimesScalar 73 74
+              76:    7(fvec4)   FAdd 63 75
+              77:     17(ptr)   AccessChain 61(oV) 23
+                                Store 77 76
+                                EmitVertex
+                                Branch 36
+              36:               Label
+              78:     11(int)   Load 32(i)
+              79:     11(int)   IAdd 78 70
+                                Store 32(i) 79
+                                Branch 33
+              35:             Label
+                              EndPrimitive
+                              Return
+                              FunctionEnd
+   9(getColor2():    7(fvec4) Function None 8
+              10:             Label
+              81:     24(ptr) AccessChain 22(uC) 80
+              82:    7(fvec4) Load 81
+                              ReturnValue 82
+                              FunctionEnd
+15(getWorld(i1;):    7(fvec4) Function None 13
+           14(i):     12(ptr) FunctionParameter
+              16:             Label
+              86:     17(ptr) AccessChain 61(oV) 23
+                              Store 86 85
+              87:     51(ptr) AccessChain 50(uM) 70
+              88:          47 Load 87
+              89:     11(int) Load 14(i)
+              90:     71(ptr) AccessChain 68(iV) 89 23
+              91:    7(fvec4) Load 90
+              92:    7(fvec4) MatrixTimesVector 88 91
+                              ReturnValue 92
+                              FunctionEnd

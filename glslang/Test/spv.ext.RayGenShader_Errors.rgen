@@ -1,0 +1,42 @@
+#version 460
+#extension GL_EXT_ray_tracing : enable
+hitAttributeEXT vec4 payload;                                // ERROR, hitattributeEXT unsupported in this stage 
+rayPayloadInEXT vec4 payloadIn;                              // ERROR, rayPayloadIn unsupported in this stage
+layout(shaderRecordEXT) uniform ublock                       // ERROR, shaderRecordEXT unsupported on uniform blocks
+{
+    float a;
+};
+layout(binding = 0, shaderRecordEXT) buffer bblock {         // ERROR, binding unsupported on shaderRecordEXT blocks
+    float b;
+};
+layout(set = 0, shaderRecordEXT) buffer bblock2 {            // ERROR, set unsupported on shaderRecordEXT blocks
+    float c;
+};
+layout(shaderRecordEXT) buffer bblock3 {
+    float d;
+};
+layout(shaderRecordEXT) buffer bblock4 {                     // ERROR, cannot have more than one shaderRecordEXTX block
+    float e;
+};
+void main()
+{
+    accelerationStructureEXT a = accelerationStructureEXT(c);
+    int e0 = gl_PrimitiveID;                                // ERROR, unsupported builtin in stage
+    int e1 = gl_InstanceID;                                 // ERROR, unsupported builtin in stage
+    int e3 = gl_InstanceCustomIndexEXT;                      // ERROR, unsupported builtin in stage
+    vec3 e4 = gl_WorldRayOriginEXT;                          // ERROR, unsupported builtin in stage
+    vec3 e5 = gl_WorldRayDirectionEXT;                       // ERROR, unsupported builtin in stage
+    vec3 e6 = gl_ObjectRayOriginEXT;                         // ERROR, unsupported builtin in stage
+    vec3 e7 = gl_ObjectRayDirectionEXT;                      // ERROR, unsupported builtin in stage
+    float e8 = gl_RayTminEXT;                                // ERROR, unsupported builtin in stage
+    float e9 = gl_RayTmaxEXT;                                // ERROR, unsupported builtin in stage
+    mat4x3 e10 = gl_ObjectToWorldEXT;                        // ERROR, unsupported builtin in stage
+    mat4x3 e11 = gl_WorldToObjectEXT;                        // ERROR, unsupported builtin in stage
+    float e12 = gl_HitTEXT;                                  // ERROR, unsupported builtin in stage
+    float e13 = gl_HitKindEXT;                               // ERROR, unsupported builtin in stage
+    int e14 = gl_RayFlagsSkipAABBEXT;                        // ERROR, unsupported builtin in stage
+    reportIntersectionEXT(1.0, 1U);                          // ERROR, unsupported builtin in stage
+    ignoreIntersectionEXT;                                   // ERROR, unsupported builtin in stage
+    terminateRayEXT;                                         // ERROR, unsupported builtin in stage
+    d = 1.0f;                                                // ERROR, can't modify shaderRecordEXT block
+}

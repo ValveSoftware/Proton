@@ -1,0 +1,24 @@
+terminate.frag
+ERROR: 0:3: 'terminateInvocation' : undeclared identifier 
+ERROR: 0:9: '' :  syntax error, unexpected TERMINATE_INVOCATION, expecting COMMA or SEMICOLON
+ERROR: 2 compilation errors.  No code generated.
+
+
+Shader version: 400
+Requested GL_EXT_terminate_invocation
+ERROR: node is still EOpNull!
+0:3  Function Definition: foo( ( global void)
+0:3    Function Parameters: 
+0:3    Sequence
+0:3      'terminateInvocation' ( temp float)
+0:?   Linker Objects
+
+
+Linked fragment stage:
+
+
+Shader version: 400
+Requested GL_EXT_terminate_invocation
+ERROR: node is still EOpNull!
+0:?   Linker Objects
+

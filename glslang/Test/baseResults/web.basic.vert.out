@@ -1,0 +1,65 @@
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 8
+; Bound: 38
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Vertex %main "main" %outv4 %inv4
+               OpSource ESSL 310
+               OpName %main "main"
+               OpName %outv4 "outv4"
+               OpName %inv4 "inv4"
+               OpName %uBlock "uBlock"
+               OpMemberName %uBlock 0 "a"
+               OpMemberName %uBlock 1 "b"
+               OpMemberName %uBlock 2 "c"
+               OpName %uInst "uInst"
+               OpDecorate %outv4 Location 1
+               OpDecorate %inv4 Location 2
+               OpMemberDecorate %uBlock 0 Offset 0
+               OpMemberDecorate %uBlock 1 Offset 16
+               OpMemberDecorate %uBlock 2 Offset 32
+               OpDecorate %uBlock Block
+               OpDecorate %uInst DescriptorSet 0
+               OpDecorate %uInst Binding 3
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+    %v4float = OpTypeVector %float 4
+%_ptr_Output_v4float = OpTypePointer Output %v4float
+      %outv4 = OpVariable %_ptr_Output_v4float Output
+%_ptr_Input_v4float = OpTypePointer Input %v4float
+       %inv4 = OpVariable %_ptr_Input_v4float Input
+        %int = OpTypeInt 32 1
+      %v4int = OpTypeVector %int 4
+       %uint = OpTypeInt 32 0
+     %v4uint = OpTypeVector %uint 4
+     %uBlock = OpTypeStruct %v4float %v4int %v4uint
+%_ptr_Uniform_uBlock = OpTypePointer Uniform %uBlock
+      %uInst = OpVariable %_ptr_Uniform_uBlock Uniform
+      %int_0 = OpConstant %int 0
+%_ptr_Uniform_v4float = OpTypePointer Uniform %v4float
+      %int_1 = OpConstant %int 1
+%_ptr_Uniform_v4int = OpTypePointer Uniform %v4int
+      %int_2 = OpConstant %int 2
+%_ptr_Uniform_v4uint = OpTypePointer Uniform %v4uint
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+         %12 = OpLoad %v4float %inv4
+         %13 = OpExtInst %v4float %1 Normalize %12
+         %23 = OpAccessChain %_ptr_Uniform_v4float %uInst %int_0
+         %24 = OpLoad %v4float %23
+         %25 = OpFMul %v4float %13 %24
+         %28 = OpAccessChain %_ptr_Uniform_v4int %uInst %int_1
+         %29 = OpLoad %v4int %28
+         %30 = OpConvertSToF %v4float %29
+         %31 = OpFMul %v4float %25 %30
+         %34 = OpAccessChain %_ptr_Uniform_v4uint %uInst %int_2
+         %35 = OpLoad %v4uint %34
+         %36 = OpConvertUToF %v4float %35
+         %37 = OpFMul %v4float %31 %36
+               OpStore %outv4 %37
+               OpReturn
+               OpFunctionEnd

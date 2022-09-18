@@ -1,0 +1,62 @@
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 8
+; Bound: 33
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Vertex %main "main" %gl_Position %ps %gl_VertexIndex %gl_PointSize %gl_InstanceIndex
+               OpSource ESSL 310
+               OpName %main "main"
+               OpName %gl_Position "gl_Position"
+               OpName %ps "ps"
+               OpName %gl_VertexIndex "gl_VertexIndex"
+               OpName %gl_PointSize "gl_PointSize"
+               OpName %gl_InstanceIndex "gl_InstanceIndex"
+               OpDecorate %gl_Position Invariant
+               OpDecorate %gl_Position BuiltIn Position
+               OpDecorate %ps RelaxedPrecision
+               OpDecorate %ps Location 0
+               OpDecorate %12 RelaxedPrecision
+               OpDecorate %gl_VertexIndex BuiltIn VertexIndex
+               OpDecorate %gl_PointSize BuiltIn PointSize
+               OpDecorate %25 RelaxedPrecision
+               OpDecorate %gl_InstanceIndex BuiltIn InstanceIndex
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+    %v4float = OpTypeVector %float 4
+%_ptr_Output_v4float = OpTypePointer Output %v4float
+%gl_Position = OpVariable %_ptr_Output_v4float Output
+%_ptr_Input_float = OpTypePointer Input %float
+         %ps = OpVariable %_ptr_Input_float Input
+        %int = OpTypeInt 32 1
+      %int_4 = OpConstant %int 4
+%_ptr_Input_int = OpTypePointer Input %int
+%gl_VertexIndex = OpVariable %_ptr_Input_int Input
+%_ptr_Output_float = OpTypePointer Output %float
+%gl_PointSize = OpVariable %_ptr_Output_float Output
+      %int_5 = OpConstant %int 5
+%gl_InstanceIndex = OpVariable %_ptr_Input_int Input
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+         %12 = OpLoad %float %ps
+         %13 = OpCompositeConstruct %v4float %12 %12 %12 %12
+               OpStore %gl_Position %13
+         %18 = OpLoad %int %gl_VertexIndex
+         %19 = OpISub %int %int_4 %18
+         %20 = OpConvertSToF %float %19
+         %21 = OpLoad %v4float %gl_Position
+         %22 = OpVectorTimesScalar %v4float %21 %20
+               OpStore %gl_Position %22
+         %25 = OpLoad %float %ps
+               OpStore %gl_PointSize %25
+         %28 = OpLoad %int %gl_InstanceIndex
+         %29 = OpISub %int %int_5 %28
+         %30 = OpConvertSToF %float %29
+         %31 = OpLoad %float %gl_PointSize
+         %32 = OpFMul %float %31 %30
+               OpStore %gl_PointSize %32
+               OpReturn
+               OpFunctionEnd

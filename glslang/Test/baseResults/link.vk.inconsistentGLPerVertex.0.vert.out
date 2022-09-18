@@ -1,0 +1,315 @@
+link.vk.inconsistentGLPerVertex.0.vert
+Shader version: 460
+0:? Sequence
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp highp 4-component vector of float)
+0:17        color: direct index for structure ( out highp 4-component vector of float)
+0:17          'vs_out' ( out block{ out highp 4-component vector of float color})
+0:17          Constant:
+0:17            0 (const int)
+0:17        Constant:
+0:17          1.000000
+0:17          1.000000
+0:17          1.000000
+0:17          1.000000
+0:18      move second child to first child ( temp float)
+0:18        gl_PointSize: direct index for structure ( gl_PointSize float PointSize)
+0:18          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance,  out unsized 1-element array of float CullDistance gl_CullDistance})
+0:18          Constant:
+0:18            1 (const uint)
+0:18        Constant:
+0:18          1.000000
+0:19      move second child to first child ( temp highp 4-component vector of float)
+0:19        gl_Position: direct index for structure ( gl_Position highp 4-component vector of float Position)
+0:19          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance,  out unsized 1-element array of float CullDistance gl_CullDistance})
+0:19          Constant:
+0:19            0 (const uint)
+0:19        'P' ( in highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'vs_out' ( out block{ out highp 4-component vector of float color})
+0:?     'P' ( in highp 4-component vector of float)
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance,  out unsized 1-element array of float CullDistance gl_CullDistance})
+
+link.vk.inconsistentGLPerVertex.0.geom
+Shader version: 460
+invocations = -1
+max_vertices = 50
+input primitive = lines_adjacency
+output primitive = triangle_strip
+0:? Sequence
+0:16  Function Definition: main( ( global void)
+0:16    Function Parameters: 
+0:18    Sequence
+0:18      move second child to first child ( temp 4-component vector of float)
+0:18        gl_Position: direct index for structure (layout( stream=0) gl_Position 4-component vector of float Position)
+0:18          'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out unsized 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out unsized 1-element array of float CullDistance gl_CullDistance})
+0:18          Constant:
+0:18            0 (const uint)
+0:18        gl_Position: direct index for structure ( in 4-component vector of float Position)
+0:18          direct index ( temp block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in unsized 1-element array of float ClipDistance gl_ClipDistance,  in unsized 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in unsized 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:18            'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in unsized 1-element array of float ClipDistance gl_ClipDistance,  in unsized 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in unsized 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:18            Constant:
+0:18              0 (const int)
+0:18          Constant:
+0:18            0 (const int)
+0:19      move second child to first child ( temp highp 4-component vector of float)
+0:19        color: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:19          'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:19          Constant:
+0:19            0 (const int)
+0:19        color: direct index for structure ( in highp 4-component vector of float)
+0:19          direct index ( temp block{ in highp 4-component vector of float color})
+0:19            'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:19            Constant:
+0:19              0 (const int)
+0:19          Constant:
+0:19            0 (const int)
+0:20      EmitVertex ( global void)
+0:21      move second child to first child ( temp highp 4-component vector of float)
+0:21        color: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:21          'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:21          Constant:
+0:21            0 (const int)
+0:21        color: direct index for structure ( in highp 4-component vector of float)
+0:21          direct index ( temp block{ in highp 4-component vector of float color})
+0:21            'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:21            Constant:
+0:21              1 (const int)
+0:21          Constant:
+0:21            0 (const int)
+0:22      move second child to first child ( temp 4-component vector of float)
+0:22        gl_Position: direct index for structure (layout( stream=0) gl_Position 4-component vector of float Position)
+0:22          'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out unsized 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out unsized 1-element array of float CullDistance gl_CullDistance})
+0:22          Constant:
+0:22            0 (const uint)
+0:22        gl_Position: direct index for structure ( in 4-component vector of float Position)
+0:22          direct index ( temp block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in unsized 1-element array of float ClipDistance gl_ClipDistance,  in unsized 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in unsized 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:22            'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in unsized 1-element array of float ClipDistance gl_ClipDistance,  in unsized 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in unsized 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:22            Constant:
+0:22              1 (const int)
+0:22          Constant:
+0:22            0 (const int)
+0:23      EmitVertex ( global void)
+0:24      move second child to first child ( temp highp 4-component vector of float)
+0:24        color: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:24          'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:24          Constant:
+0:24            0 (const int)
+0:24        color: direct index for structure ( in highp 4-component vector of float)
+0:24          direct index ( temp block{ in highp 4-component vector of float color})
+0:24            'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:24            Constant:
+0:24              0 (const int)
+0:24          Constant:
+0:24            0 (const int)
+0:25      move second child to first child ( temp 4-component vector of float)
+0:25        gl_Position: direct index for structure (layout( stream=0) gl_Position 4-component vector of float Position)
+0:25          'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out unsized 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out unsized 1-element array of float CullDistance gl_CullDistance})
+0:25          Constant:
+0:25            0 (const uint)
+0:25        gl_Position: direct index for structure ( in 4-component vector of float Position)
+0:25          direct index ( temp block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in unsized 1-element array of float ClipDistance gl_ClipDistance,  in unsized 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in unsized 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:25            'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in unsized 1-element array of float ClipDistance gl_ClipDistance,  in unsized 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in unsized 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:25            Constant:
+0:25              0 (const int)
+0:25          Constant:
+0:25            0 (const int)
+0:26      EmitVertex ( global void)
+0:?   Linker Objects
+0:?     'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:?     'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:?     'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out unsized 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out unsized 1-element array of float CullDistance gl_CullDistance})
+0:?     'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in unsized 1-element array of float ClipDistance gl_ClipDistance,  in unsized 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in unsized 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+
+
+Linked vertex stage:
+
+
+Linked geometry stage:
+
+
+Shader version: 460
+0:? Sequence
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp highp 4-component vector of float)
+0:17        color: direct index for structure ( out highp 4-component vector of float)
+0:17          'vs_out' ( out block{ out highp 4-component vector of float color})
+0:17          Constant:
+0:17            0 (const int)
+0:17        Constant:
+0:17          1.000000
+0:17          1.000000
+0:17          1.000000
+0:17          1.000000
+0:18      move second child to first child ( temp float)
+0:18        gl_PointSize: direct index for structure ( gl_PointSize float PointSize)
+0:18          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance,  out 1-element array of float CullDistance gl_CullDistance})
+0:18          Constant:
+0:18            1 (const uint)
+0:18        Constant:
+0:18          1.000000
+0:19      move second child to first child ( temp highp 4-component vector of float)
+0:19        gl_Position: direct index for structure ( gl_Position highp 4-component vector of float Position)
+0:19          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance,  out 1-element array of float CullDistance gl_CullDistance})
+0:19          Constant:
+0:19            0 (const uint)
+0:19        'P' ( in highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'vs_out' ( out block{ out highp 4-component vector of float color})
+0:?     'P' ( in highp 4-component vector of float)
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance,  out 1-element array of float CullDistance gl_CullDistance})
+Shader version: 460
+invocations = 1
+max_vertices = 50
+input primitive = lines_adjacency
+output primitive = triangle_strip
+0:? Sequence
+0:16  Function Definition: main( ( global void)
+0:16    Function Parameters: 
+0:18    Sequence
+0:18      move second child to first child ( temp 4-component vector of float)
+0:18        gl_Position: direct index for structure (layout( stream=0) gl_Position 4-component vector of float Position)
+0:18          'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out 1-element array of float CullDistance gl_CullDistance})
+0:18          Constant:
+0:18            0 (const uint)
+0:18        gl_Position: direct index for structure ( in 4-component vector of float Position)
+0:18          direct index ( temp block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in 1-element array of float ClipDistance gl_ClipDistance,  in 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:18            'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in 1-element array of float ClipDistance gl_ClipDistance,  in 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:18            Constant:
+0:18              0 (const int)
+0:18          Constant:
+0:18            0 (const int)
+0:19      move second child to first child ( temp highp 4-component vector of float)
+0:19        color: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:19          'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:19          Constant:
+0:19            0 (const int)
+0:19        color: direct index for structure ( in highp 4-component vector of float)
+0:19          direct index ( temp block{ in highp 4-component vector of float color})
+0:19            'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:19            Constant:
+0:19              0 (const int)
+0:19          Constant:
+0:19            0 (const int)
+0:20      EmitVertex ( global void)
+0:21      move second child to first child ( temp highp 4-component vector of float)
+0:21        color: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:21          'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:21          Constant:
+0:21            0 (const int)
+0:21        color: direct index for structure ( in highp 4-component vector of float)
+0:21          direct index ( temp block{ in highp 4-component vector of float color})
+0:21            'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:21            Constant:
+0:21              1 (const int)
+0:21          Constant:
+0:21            0 (const int)
+0:22      move second child to first child ( temp 4-component vector of float)
+0:22        gl_Position: direct index for structure (layout( stream=0) gl_Position 4-component vector of float Position)
+0:22          'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out 1-element array of float CullDistance gl_CullDistance})
+0:22          Constant:
+0:22            0 (const uint)
+0:22        gl_Position: direct index for structure ( in 4-component vector of float Position)
+0:22          direct index ( temp block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in 1-element array of float ClipDistance gl_ClipDistance,  in 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:22            'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in 1-element array of float ClipDistance gl_ClipDistance,  in 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:22            Constant:
+0:22              1 (const int)
+0:22          Constant:
+0:22            0 (const int)
+0:23      EmitVertex ( global void)
+0:24      move second child to first child ( temp highp 4-component vector of float)
+0:24        color: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:24          'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:24          Constant:
+0:24            0 (const int)
+0:24        color: direct index for structure ( in highp 4-component vector of float)
+0:24          direct index ( temp block{ in highp 4-component vector of float color})
+0:24            'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:24            Constant:
+0:24              0 (const int)
+0:24          Constant:
+0:24            0 (const int)
+0:25      move second child to first child ( temp 4-component vector of float)
+0:25        gl_Position: direct index for structure (layout( stream=0) gl_Position 4-component vector of float Position)
+0:25          'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out 1-element array of float CullDistance gl_CullDistance})
+0:25          Constant:
+0:25            0 (const uint)
+0:25        gl_Position: direct index for structure ( in 4-component vector of float Position)
+0:25          direct index ( temp block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in 1-element array of float ClipDistance gl_ClipDistance,  in 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:25            'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in 1-element array of float ClipDistance gl_ClipDistance,  in 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+0:25            Constant:
+0:25              0 (const int)
+0:25          Constant:
+0:25            0 (const int)
+0:26      EmitVertex ( global void)
+0:?   Linker Objects
+0:?     'gs_in' ( in 4-element array of block{ in highp 4-component vector of float color})
+0:?     'gs_out' (layout( stream=0) out block{layout( stream=0) out highp 4-component vector of float color})
+0:?     'anon@0' (layout( stream=0) out block{layout( stream=0) gl_Position 4-component vector of float Position gl_Position, layout( stream=0) gl_PointSize float PointSize gl_PointSize, layout( stream=0) out 1-element array of float ClipDistance gl_ClipDistance, layout( stream=0) out 1-element array of float CullDistance gl_CullDistance})
+0:?     'gl_in' ( in 4-element array of block{ in 4-component vector of float Position gl_Position,  in float PointSize gl_PointSize,  in 1-element array of float ClipDistance gl_ClipDistance,  in 1-element array of float CullDistance gl_CullDistance,  in 4-component vector of float SecondaryPositionNV gl_SecondaryPositionNV,  in 1-element array of 4-component vector of float PositionPerViewNV gl_PositionPerViewNV})
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 30
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Vertex 4  "main" 10 22 27
+                              Source GLSL 460
+                              Name 4  "main"
+                              Name 8  "vs_output"
+                              MemberName 8(vs_output) 0  "color"
+                              Name 10  "vs_out"
+                              Name 20  "gl_PerVertex"
+                              MemberName 20(gl_PerVertex) 0  "gl_Position"
+                              MemberName 20(gl_PerVertex) 1  "gl_PointSize"
+                              MemberName 20(gl_PerVertex) 2  "gl_ClipDistance"
+                              MemberName 20(gl_PerVertex) 3  "gl_CullDistance"
+                              Name 22  ""
+                              Name 27  "P"
+                              Decorate 8(vs_output) Block
+                              Decorate 10(vs_out) Location 0
+                              MemberDecorate 20(gl_PerVertex) 0 BuiltIn Position
+                              MemberDecorate 20(gl_PerVertex) 1 BuiltIn PointSize
+                              MemberDecorate 20(gl_PerVertex) 2 BuiltIn ClipDistance
+                              MemberDecorate 20(gl_PerVertex) 3 BuiltIn CullDistance
+                              Decorate 20(gl_PerVertex) Block
+                              Decorate 27(P) Location 0
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+    8(vs_output):             TypeStruct 7(fvec4)
+               9:             TypePointer Output 8(vs_output)
+      10(vs_out):      9(ptr) Variable Output
+              11:             TypeInt 32 1
+              12:     11(int) Constant 0
+              13:    6(float) Constant 1065353216
+              14:    7(fvec4) ConstantComposite 13 13 13 13
+              15:             TypePointer Output 7(fvec4)
+              17:             TypeInt 32 0
+              18:     17(int) Constant 1
+              19:             TypeArray 6(float) 18
+20(gl_PerVertex):             TypeStruct 7(fvec4) 6(float) 19 19
+              21:             TypePointer Output 20(gl_PerVertex)
+              22:     21(ptr) Variable Output
+              23:     11(int) Constant 1
+              24:             TypePointer Output 6(float)
+              26:             TypePointer Input 7(fvec4)
+           27(P):     26(ptr) Variable Input
+         4(main):           2 Function None 3
+               5:             Label
+              16:     15(ptr) AccessChain 10(vs_out) 12
+                              Store 16 14
+              25:     24(ptr) AccessChain 22 23
+                              Store 25 13
+              28:    7(fvec4) Load 27(P)
+              29:     15(ptr) AccessChain 22 12
+                              Store 29 28
+                              Return
+                              FunctionEnd

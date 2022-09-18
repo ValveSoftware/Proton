@@ -1,0 +1,95 @@
+#version 450
+
+#extension GL_KHR_shader_subgroup_shuffle: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int8: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int16: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int64: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_float16: enable
+
+layout (local_size_x = 8) in;
+
+layout(binding = 0) buffer Buffers
+{
+    i8vec4 i8;
+    u8vec4 u8;
+    i16vec4 i16;
+    u16vec4 u16;
+    i64vec4 i64;
+    u64vec4 u64;
+    f16vec4 f16;
+} data[4];
+
+void main()
+{
+    uint invocation = (gl_SubgroupInvocationID + gl_SubgroupSize) % 4;
+
+    data[invocation].i8.x   = subgroupShuffle(data[0].i8.x,    invocation);
+    data[invocation].i8.xy  = subgroupShuffle(data[1].i8.xy,   invocation);
+    data[invocation].i8.xyz = subgroupShuffle(data[2].i8.xyz,  invocation);
+    data[invocation].i8     = subgroupShuffle(data[3].i8,      invocation);
+
+    data[invocation].i8.x   = subgroupShuffleXor(data[0].i8.x,    invocation);
+    data[invocation].i8.xy  = subgroupShuffleXor(data[1].i8.xy,   invocation);
+    data[invocation].i8.xyz = subgroupShuffleXor(data[2].i8.xyz,  invocation);
+    data[invocation].i8     = subgroupShuffleXor(data[3].i8,      invocation);
+
+    data[invocation].u8.x   = subgroupShuffle(data[0].u8.x,    invocation);
+    data[invocation].u8.xy  = subgroupShuffle(data[1].u8.xy,   invocation);
+    data[invocation].u8.xyz = subgroupShuffle(data[2].u8.xyz,  invocation);
+    data[invocation].u8     = subgroupShuffle(data[3].u8,      invocation);
+
+    data[invocation].u8.x   = subgroupShuffleXor(data[0].u8.x,    invocation);
+    data[invocation].u8.xy  = subgroupShuffleXor(data[1].u8.xy,   invocation);
+    data[invocation].u8.xyz = subgroupShuffleXor(data[2].u8.xyz,  invocation);
+    data[invocation].u8     = subgroupShuffleXor(data[3].u8,      invocation);
+
+    data[invocation].i16.x   = subgroupShuffle(data[0].i16.x,    invocation);
+    data[invocation].i16.xy  = subgroupShuffle(data[1].i16.xy,   invocation);
+    data[invocation].i16.xyz = subgroupShuffle(data[2].i16.xyz,  invocation);
+    data[invocation].i16     = subgroupShuffle(data[3].i16,      invocation);
+
+    data[invocation].i16.x   = subgroupShuffleXor(data[0].i16.x,    invocation);
+    data[invocation].i16.xy  = subgroupShuffleXor(data[1].i16.xy,   invocation);
+    data[invocation].i16.xyz = subgroupShuffleXor(data[2].i16.xyz,  invocation);
+    data[invocation].i16     = subgroupShuffleXor(data[3].i16,      invocation);
+
+    data[invocation].u16.x   = subgroupShuffle(data[0].u16.x,    invocation);
+    data[invocation].u16.xy  = subgroupShuffle(data[1].u16.xy,   invocation);
+    data[invocation].u16.xyz = subgroupShuffle(data[2].u16.xyz,  invocation);
+    data[invocation].u16     = subgroupShuffle(data[3].u16,      invocation);
+
+    data[invocation].u16.x   = subgroupShuffleXor(data[0].u16.x,    invocation);
+    data[invocation].u16.xy  = subgroupShuffleXor(data[1].u16.xy,   invocation);
+    data[invocation].u16.xyz = subgroupShuffleXor(data[2].u16.xyz,  invocation);
+    data[invocation].u16     = subgroupShuffleXor(data[3].u16,      invocation);
+
+    data[invocation].i64.x   = subgroupShuffle(data[0].i64.x,    invocation);
+    data[invocation].i64.xy  = subgroupShuffle(data[1].i64.xy,   invocation);
+    data[invocation].i64.xyz = subgroupShuffle(data[2].i64.xyz,  invocation);
+    data[invocation].i64     = subgroupShuffle(data[3].i64,      invocation);
+
+    data[invocation].i64.x   = subgroupShuffleXor(data[0].i64.x,    invocation);
+    data[invocation].i64.xy  = subgroupShuffleXor(data[1].i64.xy,   invocation);
+    data[invocation].i64.xyz = subgroupShuffleXor(data[2].i64.xyz,  invocation);
+    data[invocation].i64     = subgroupShuffleXor(data[3].i64,      invocation);
+
+    data[invocation].u64.x   = subgroupShuffle(data[0].u64.x,    invocation);
+    data[invocation].u64.xy  = subgroupShuffle(data[1].u64.xy,   invocation);
+    data[invocation].u64.xyz = subgroupShuffle(data[2].u64.xyz,  invocation);
+    data[invocation].u64     = subgroupShuffle(data[3].u64,      invocation);
+
+    data[invocation].u64.x   = subgroupShuffleXor(data[0].u64.x,    invocation);
+    data[invocation].u64.xy  = subgroupShuffleXor(data[1].u64.xy,   invocation);
+    data[invocation].u64.xyz = subgroupShuffleXor(data[2].u64.xyz,  invocation);
+    data[invocation].u64     = subgroupShuffleXor(data[3].u64,      invocation);
+
+    data[invocation].f16.x   = subgroupShuffle(data[0].f16.x,    invocation);
+    data[invocation].f16.xy  = subgroupShuffle(data[1].f16.xy,   invocation);
+    data[invocation].f16.xyz = subgroupShuffle(data[2].f16.xyz,  invocation);
+    data[invocation].f16     = subgroupShuffle(data[3].f16,      invocation);
+
+    data[invocation].f16.x   = subgroupShuffleXor(data[0].f16.x,    invocation);
+    data[invocation].f16.xy  = subgroupShuffleXor(data[1].f16.xy,   invocation);
+    data[invocation].f16.xyz = subgroupShuffleXor(data[2].f16.xyz,  invocation);
+    data[invocation].f16     = subgroupShuffleXor(data[3].f16,      invocation);
+}

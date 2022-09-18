@@ -1,0 +1,94 @@
+link.tesselation.vert
+Shader version: 440
+0:? Sequence
+0:11  Function Definition: main( ( global void)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:13          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:13          Constant:
+0:13            0 (const uint)
+0:13        'i_Pos' (layout( location=0) in 4-component vector of float)
+0:14      move second child to first child ( temp 2-component vector of float)
+0:14        texCoord: direct index for structure ( out 2-component vector of float)
+0:14          'OUT' (layout( location=0) out block{ out 2-component vector of float texCoord})
+0:14          Constant:
+0:14            0 (const int)
+0:14        'i_Tex' (layout( location=1) in 2-component vector of float)
+0:?   Linker Objects
+0:?     'i_Pos' (layout( location=0) in 4-component vector of float)
+0:?     'i_Tex' (layout( location=1) in 2-component vector of float)
+0:?     'OUT' (layout( location=0) out block{ out 2-component vector of float texCoord})
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+link.tesselation.frag
+Shader version: 440
+0:? Sequence
+0:12  Function Definition: main( ( global void)
+0:12    Function Parameters: 
+0:14    Sequence
+0:14      move second child to first child ( temp 4-component vector of float)
+0:14        'oColor' (layout( location=0) out 4-component vector of float)
+0:14        texture ( global 4-component vector of float)
+0:14          'mytex' (layout( binding=0) uniform sampler2D)
+0:14          texCoord: direct index for structure ( in 2-component vector of float)
+0:14            'IN' (layout( location=0) in block{ in 2-component vector of float texCoord})
+0:14            Constant:
+0:14              0 (const int)
+0:?   Linker Objects
+0:?     'IN' (layout( location=0) in block{ in 2-component vector of float texCoord})
+0:?     'oColor' (layout( location=0) out 4-component vector of float)
+0:?     'mytex' (layout( binding=0) uniform sampler2D)
+
+
+Linked vertex stage:
+
+
+Linked fragment stage:
+
+
+Shader version: 440
+0:? Sequence
+0:11  Function Definition: main( ( global void)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:13          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:13          Constant:
+0:13            0 (const uint)
+0:13        'i_Pos' (layout( location=0) in 4-component vector of float)
+0:14      move second child to first child ( temp 2-component vector of float)
+0:14        texCoord: direct index for structure ( out 2-component vector of float)
+0:14          'OUT' (layout( location=0) out block{ out 2-component vector of float texCoord})
+0:14          Constant:
+0:14            0 (const int)
+0:14        'i_Tex' (layout( location=1) in 2-component vector of float)
+0:?   Linker Objects
+0:?     'i_Pos' (layout( location=0) in 4-component vector of float)
+0:?     'i_Tex' (layout( location=1) in 2-component vector of float)
+0:?     'OUT' (layout( location=0) out block{ out 2-component vector of float texCoord})
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+Shader version: 440
+0:? Sequence
+0:12  Function Definition: main( ( global void)
+0:12    Function Parameters: 
+0:14    Sequence
+0:14      move second child to first child ( temp 4-component vector of float)
+0:14        'oColor' (layout( location=0) out 4-component vector of float)
+0:14        texture ( global 4-component vector of float)
+0:14          'mytex' (layout( binding=0) uniform sampler2D)
+0:14          texCoord: direct index for structure ( in 2-component vector of float)
+0:14            'IN' (layout( location=0) in block{ in 2-component vector of float texCoord})
+0:14            Constant:
+0:14              0 (const int)
+0:?   Linker Objects
+0:?     'IN' (layout( location=0) in block{ in 2-component vector of float texCoord})
+0:?     'oColor' (layout( location=0) out 4-component vector of float)
+0:?     'mytex' (layout( binding=0) uniform sampler2D)
+

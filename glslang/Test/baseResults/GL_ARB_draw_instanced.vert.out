@@ -1,0 +1,189 @@
+GL_ARB_draw_instanced.vert
+Shader version: 150
+Requested GL_ARB_draw_instanced
+0:? Sequence
+0:10  Function Definition: main( ( global void)
+0:10    Function Parameters: 
+0:12    Sequence
+0:12      Sequence
+0:12        move second child to first child ( temp 4-component vector of float)
+0:12          'vertex' ( temp 4-component vector of float)
+0:12          add ( temp 4-component vector of float)
+0:12            Construct vec4 ( temp 4-component vector of float)
+0:12              divide ( temp 2-component vector of float)
+0:12                vector swizzle ( temp 2-component vector of float)
+0:12                  direct index ( temp 4-component vector of float)
+0:12                    'va' ( in 64-element array of 4-component vector of float)
+0:12                    Constant:
+0:12                      0 (const int)
+0:12                  Sequence
+0:12                    Constant:
+0:12                      0 (const int)
+0:12                    Constant:
+0:12                      1 (const int)
+0:12                Constant:
+0:12                  3.000000
+0:12              vector swizzle ( temp 2-component vector of float)
+0:12                direct index ( temp 4-component vector of float)
+0:12                  'va' ( in 64-element array of 4-component vector of float)
+0:12                  Constant:
+0:12                    0 (const int)
+0:12                Sequence
+0:12                  Constant:
+0:12                    2 (const int)
+0:12                  Constant:
+0:12                    3 (const int)
+0:12            Construct vec4 ( temp 4-component vector of float)
+0:12              indirect index ( temp 3-component vector of float)
+0:12                'instanceOffsets' ( uniform 3-element array of 3-component vector of float)
+0:12                'gl_InstanceID' ( gl_InstanceId int InstanceId)
+0:12              Constant:
+0:12                1.000000
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        'color' ( smooth out 4-component vector of float)
+0:13        Constant:
+0:13          0.000000
+0:13          0.000000
+0:13          0.000000
+0:13          0.000000
+0:14      Sequence
+0:14        Sequence
+0:14          move second child to first child ( temp int)
+0:14            'i' ( temp int)
+0:14            Constant:
+0:14              1 (const int)
+0:14        Loop with condition tested first
+0:14          Loop Condition
+0:14          Compare Less Than ( temp bool)
+0:14            'i' ( temp int)
+0:14            Constant:
+0:14              64 (const int)
+0:14          Loop Body
+0:15          add second child into first child ( temp 4-component vector of float)
+0:15            'color' ( smooth out 4-component vector of float)
+0:15            indirect index ( temp 4-component vector of float)
+0:15              'va' ( in 64-element array of 4-component vector of float)
+0:15              'i' ( temp int)
+0:14          Loop Terminal Expression
+0:14          Post-Increment ( temp int)
+0:14            'i' ( temp int)
+0:16      move second child to first child ( temp 4-component vector of float)
+0:16        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:16          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:16          Constant:
+0:16            0 (const uint)
+0:16        matrix-times-vector ( temp 4-component vector of float)
+0:16          'gtf_ModelViewProjectionMatrix' ( uniform 4X4 matrix of float)
+0:16          'vertex' ( temp 4-component vector of float)
+0:17      move second child to first child ( temp float)
+0:17        gl_PointSize: direct index for structure ( gl_PointSize float PointSize)
+0:17          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:17          Constant:
+0:17            1 (const uint)
+0:17        Constant:
+0:17          1.000000
+0:?   Linker Objects
+0:?     'gtf_ModelViewProjectionMatrix' ( uniform 4X4 matrix of float)
+0:?     'instanceOffsets' ( uniform 3-element array of 3-component vector of float)
+0:?     'va' ( in 64-element array of 4-component vector of float)
+0:?     'color' ( smooth out 4-component vector of float)
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 150
+Requested GL_ARB_draw_instanced
+0:? Sequence
+0:10  Function Definition: main( ( global void)
+0:10    Function Parameters: 
+0:12    Sequence
+0:12      Sequence
+0:12        move second child to first child ( temp 4-component vector of float)
+0:12          'vertex' ( temp 4-component vector of float)
+0:12          add ( temp 4-component vector of float)
+0:12            Construct vec4 ( temp 4-component vector of float)
+0:12              divide ( temp 2-component vector of float)
+0:12                vector swizzle ( temp 2-component vector of float)
+0:12                  direct index ( temp 4-component vector of float)
+0:12                    'va' ( in 64-element array of 4-component vector of float)
+0:12                    Constant:
+0:12                      0 (const int)
+0:12                  Sequence
+0:12                    Constant:
+0:12                      0 (const int)
+0:12                    Constant:
+0:12                      1 (const int)
+0:12                Constant:
+0:12                  3.000000
+0:12              vector swizzle ( temp 2-component vector of float)
+0:12                direct index ( temp 4-component vector of float)
+0:12                  'va' ( in 64-element array of 4-component vector of float)
+0:12                  Constant:
+0:12                    0 (const int)
+0:12                Sequence
+0:12                  Constant:
+0:12                    2 (const int)
+0:12                  Constant:
+0:12                    3 (const int)
+0:12            Construct vec4 ( temp 4-component vector of float)
+0:12              indirect index ( temp 3-component vector of float)
+0:12                'instanceOffsets' ( uniform 3-element array of 3-component vector of float)
+0:12                'gl_InstanceID' ( gl_InstanceId int InstanceId)
+0:12              Constant:
+0:12                1.000000
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        'color' ( smooth out 4-component vector of float)
+0:13        Constant:
+0:13          0.000000
+0:13          0.000000
+0:13          0.000000
+0:13          0.000000
+0:14      Sequence
+0:14        Sequence
+0:14          move second child to first child ( temp int)
+0:14            'i' ( temp int)
+0:14            Constant:
+0:14              1 (const int)
+0:14        Loop with condition tested first
+0:14          Loop Condition
+0:14          Compare Less Than ( temp bool)
+0:14            'i' ( temp int)
+0:14            Constant:
+0:14              64 (const int)
+0:14          Loop Body
+0:15          add second child into first child ( temp 4-component vector of float)
+0:15            'color' ( smooth out 4-component vector of float)
+0:15            indirect index ( temp 4-component vector of float)
+0:15              'va' ( in 64-element array of 4-component vector of float)
+0:15              'i' ( temp int)
+0:14          Loop Terminal Expression
+0:14          Post-Increment ( temp int)
+0:14            'i' ( temp int)
+0:16      move second child to first child ( temp 4-component vector of float)
+0:16        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:16          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:16          Constant:
+0:16            0 (const uint)
+0:16        matrix-times-vector ( temp 4-component vector of float)
+0:16          'gtf_ModelViewProjectionMatrix' ( uniform 4X4 matrix of float)
+0:16          'vertex' ( temp 4-component vector of float)
+0:17      move second child to first child ( temp float)
+0:17        gl_PointSize: direct index for structure ( gl_PointSize float PointSize)
+0:17          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:17          Constant:
+0:17            1 (const uint)
+0:17        Constant:
+0:17          1.000000
+0:?   Linker Objects
+0:?     'gtf_ModelViewProjectionMatrix' ( uniform 4X4 matrix of float)
+0:?     'instanceOffsets' ( uniform 3-element array of 3-component vector of float)
+0:?     'va' ( in 64-element array of 4-component vector of float)
+0:?     'color' ( smooth out 4-component vector of float)
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+

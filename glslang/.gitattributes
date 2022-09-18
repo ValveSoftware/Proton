@@ -1,0 +1,17 @@
+# test files have a mix of lf/crlf, and that's a good thing, for testing, don't mess with it
+# bash scripts need lines ending with lf, and that's correct for Windows too, e.g., under Cygwin
+# (scripts often don't have a suffix)
+* -text
+*.sh text eof=lf
+
+# txt files should be native and normalized
+*.txt text
+
+# source code can be native and normalized, but simpler if lf everywhere; will try that way
+*.h text eol=lf
+*.c text eol=lf
+*.cpp text eol=lf
+*.y text eol=lf
+*.out text eol=lf
+*.conf text eol=lf
+*.err text eol=lf

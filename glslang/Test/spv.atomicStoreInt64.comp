@@ -1,0 +1,11 @@
+#version 450
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : enable
+#extension GL_EXT_shader_atomic_int64 : enable
+#extension GL_KHR_memory_scope_semantics : enable
+
+layout(set = 0, binding = 0) buffer ssbo { uint64_t y; };
+layout(set = 0, binding = 1) uniform ubo { uint64_t z; };
+
+void main() {
+    atomicStore(y, z, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+}

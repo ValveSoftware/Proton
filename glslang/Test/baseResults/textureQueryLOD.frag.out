@@ -1,0 +1,115 @@
+textureQueryLOD.frag
+WARNING: 0:7: '#extension' : extension is only partially supported: GL_ARB_gpu_shader5
+
+Shader version: 150
+Requested GL_ARB_gpu_shader5
+Requested GL_ARB_texture_query_lod
+0:? Sequence
+0:24  Function Definition: main( ( global void)
+0:24    Function Parameters: 
+0:26    Sequence
+0:26      switch
+0:26      condition
+0:26        'funct' ( uniform int)
+0:26      body
+0:26        Sequence
+0:28          case:  with expression
+0:28            Constant:
+0:28              0 (const int)
+0:?           Sequence
+0:29            Sequence
+0:29              move second child to first child ( temp 2-component vector of int)
+0:29                'iv2' ( temp 2-component vector of int)
+0:29                textureSize ( global 2-component vector of int)
+0:29                  'sampler' ( uniform sampler2DShadow)
+0:29                  Constant:
+0:29                    0 (const int)
+0:31            Sequence
+0:31              move second child to first child ( temp 2-component vector of float)
+0:31                'fv2' ( temp 2-component vector of float)
+0:31                textureQueryLod ( global 2-component vector of float)
+0:31                  'sampler' ( uniform sampler2DShadow)
+0:31                  Constant:
+0:31                    0.000000
+0:31                    0.000000
+0:33            move second child to first child ( temp 4-component vector of float)
+0:33              'color' ( out 4-component vector of float)
+0:33              Construct vec4 ( temp 4-component vector of float)
+0:33                Convert int to float ( temp 2-component vector of float)
+0:33                  'iv2' ( temp 2-component vector of int)
+0:33                'fv2' ( temp 2-component vector of float)
+0:34            Branch: Break
+0:35          default: 
+0:?           Sequence
+0:36            move second child to first child ( temp 4-component vector of float)
+0:36              'color' ( out 4-component vector of float)
+0:36              Constant:
+0:36                1.000000
+0:36                1.000000
+0:36                1.000000
+0:36                1.000000
+0:37            Branch: Break
+0:?   Linker Objects
+0:?     'vUV' ( smooth in 2-component vector of float)
+0:?     'color' ( out 4-component vector of float)
+0:?     'sampler' ( uniform sampler2DShadow)
+0:?     'funct' ( uniform int)
+
+
+Linked fragment stage:
+
+
+Shader version: 150
+Requested GL_ARB_gpu_shader5
+Requested GL_ARB_texture_query_lod
+0:? Sequence
+0:24  Function Definition: main( ( global void)
+0:24    Function Parameters: 
+0:26    Sequence
+0:26      switch
+0:26      condition
+0:26        'funct' ( uniform int)
+0:26      body
+0:26        Sequence
+0:28          case:  with expression
+0:28            Constant:
+0:28              0 (const int)
+0:?           Sequence
+0:29            Sequence
+0:29              move second child to first child ( temp 2-component vector of int)
+0:29                'iv2' ( temp 2-component vector of int)
+0:29                textureSize ( global 2-component vector of int)
+0:29                  'sampler' ( uniform sampler2DShadow)
+0:29                  Constant:
+0:29                    0 (const int)
+0:31            Sequence
+0:31              move second child to first child ( temp 2-component vector of float)
+0:31                'fv2' ( temp 2-component vector of float)
+0:31                textureQueryLod ( global 2-component vector of float)
+0:31                  'sampler' ( uniform sampler2DShadow)
+0:31                  Constant:
+0:31                    0.000000
+0:31                    0.000000
+0:33            move second child to first child ( temp 4-component vector of float)
+0:33              'color' ( out 4-component vector of float)
+0:33              Construct vec4 ( temp 4-component vector of float)
+0:33                Convert int to float ( temp 2-component vector of float)
+0:33                  'iv2' ( temp 2-component vector of int)
+0:33                'fv2' ( temp 2-component vector of float)
+0:34            Branch: Break
+0:35          default: 
+0:?           Sequence
+0:36            move second child to first child ( temp 4-component vector of float)
+0:36              'color' ( out 4-component vector of float)
+0:36              Constant:
+0:36                1.000000
+0:36                1.000000
+0:36                1.000000
+0:36                1.000000
+0:37            Branch: Break
+0:?   Linker Objects
+0:?     'vUV' ( smooth in 2-component vector of float)
+0:?     'color' ( out 4-component vector of float)
+0:?     'sampler' ( uniform sampler2DShadow)
+0:?     'funct' ( uniform int)
+

@@ -1,0 +1,27 @@
+#version 460
+#extension GL_EXT_ray_tracing : enable
+#extension GL_ARB_gpu_shader_int64 : enable
+layout(location = 1) rayPayloadEXT vec4 payload;
+layout(shaderRecordEXT, std430) buffer block
+{
+    vec3 dir;
+    vec3 origin;
+    int i;
+    uvec2 aHandle32;
+    uint64_t aHandle64;
+    vec2 arr[2];
+    float a;
+    vec3 arr3[2];
+    float packme;
+    vec2 b;
+    float c;
+};
+void main()
+{
+    uint lx = gl_LaunchIDEXT.x;
+    uint ly = gl_LaunchIDEXT.y;
+    uint sx = gl_LaunchSizeEXT.x;
+    uint sy = gl_LaunchSizeEXT.y;
+    traceRayEXT(accelerationStructureEXT(aHandle32), lx, ly, sx, sy, 0u, origin, 0.5f, dir, 0.75f, 1);
+    traceRayEXT(accelerationStructureEXT(aHandle64), lx, ly, sx, sy, 0u, origin, 0.5f, dir, 0.75f, 1);
+}

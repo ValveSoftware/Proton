@@ -1,0 +1,170 @@
+140.frag
+WARNING: 0:3: varying deprecated in version 130; may be removed in future release
+ERROR: 0:17: '#error' : GL_ES is not set  
+ERROR: 0:21: 'fragment-shader struct input' : not supported for this version or the enabled extensions 
+ERROR: 0:25: 'location' : not supported for this version or the enabled extensions 
+ERROR: 0:25: 'location qualifier on input' : not supported for this version or the enabled extensions 
+ERROR: 0:27: 'location' : not supported for this version or the enabled extensions 
+ERROR: 0:27: 'location qualifier on output' : not supported for this version or the enabled extensions 
+ERROR: 0:41: 'assign' :  l-value required "v" (can't modify shader input)
+ERROR: 0:41: 'out' : Non-L-value cannot be passed for 'out' or 'inout' parameters. 
+ERROR: 0:56: '' :  syntax error, unexpected IDENTIFIER, expecting LEFT_BRACE or COMMA or SEMICOLON
+ERROR: 9 compilation errors.  No code generated.
+
+
+Shader version: 140
+Requested GL_ARB_explicit_attrib_location
+Requested GL_ARB_separate_shader_objects
+ERROR: node is still EOpNull!
+0:10  Function Definition: main( ( global void)
+0:10    Function Parameters: 
+0:12    Sequence
+0:12      Sequence
+0:12        move second child to first child ( temp float)
+0:12          'clip' ( temp float)
+0:12          direct index ( smooth temp float ClipDistance)
+0:12            'gl_ClipDistance' ( smooth in 5-element array of float ClipDistance)
+0:12            Constant:
+0:12              2 (const int)
+0:23  Sequence
+0:23    move second child to first child ( temp float)
+0:23      'patch' ( global float)
+0:23      Constant:
+0:23        3.100000
+0:39  Function Definition: foo( ( global void)
+0:39    Function Parameters: 
+0:41    Sequence
+0:41      Sequence
+0:41        move second child to first child ( temp 2-component vector of float)
+0:41          'r1' ( temp 2-component vector of float)
+0:41          modf ( global 2-component vector of float)
+0:41            vector swizzle ( temp 2-component vector of float)
+0:41              'v' ( smooth in 4-component vector of float)
+0:41              Sequence
+0:41                Constant:
+0:41                  0 (const int)
+0:41                Constant:
+0:41                  1 (const int)
+0:41            vector swizzle ( temp 2-component vector of float)
+0:41              'v' ( smooth in 4-component vector of float)
+0:41              Sequence
+0:41                Constant:
+0:41                  2 (const int)
+0:41                Constant:
+0:41                  3 (const int)
+0:42      Sequence
+0:42        move second child to first child ( temp 2-component vector of float)
+0:42          'r2' ( temp 2-component vector of float)
+0:42          modf ( global 2-component vector of float)
+0:42            vector swizzle ( temp 2-component vector of float)
+0:42              'o' ( out 4-component vector of float)
+0:42              Sequence
+0:42                Constant:
+0:42                  0 (const int)
+0:42                Constant:
+0:42                  1 (const int)
+0:42            vector swizzle ( temp 2-component vector of float)
+0:42              'o' ( out 4-component vector of float)
+0:42              Sequence
+0:42                Constant:
+0:42                  2 (const int)
+0:42                Constant:
+0:42                  3 (const int)
+0:43      move second child to first child ( temp float)
+0:43        direct index ( temp float)
+0:43          'o' ( out 4-component vector of float)
+0:43          Constant:
+0:43            2 (const int)
+0:43        Function Call: fooi( ( global float)
+0:48  Sequence
+0:48    move second child to first child ( temp float)
+0:48      'i1' ( global float)
+0:48      Test condition and select ( temp float)
+0:48        Condition
+0:48        'gl_FrontFacing' ( gl_FrontFacing bool Face)
+0:48        true case
+0:48        Constant:
+0:48          -2.000000
+0:48        false case
+0:48        Constant:
+0:48          2.000000
+0:49  Sequence
+0:49    move second child to first child ( temp float)
+0:49      'i2' ( global float)
+0:49      Constant:
+0:49        102.000000
+0:51  Function Definition: fooi( ( global float)
+0:51    Function Parameters: 
+0:53    Sequence
+0:53      Branch: Return with expression
+0:53        add ( temp float)
+0:53          'i1' ( global float)
+0:53          'i2' ( global float)
+0:?   Linker Objects
+0:?     'v' ( smooth in 4-component vector of float)
+0:?     'i' ( smooth in 4-component vector of float)
+0:?     'o' ( out 4-component vector of float)
+0:?     'gl_ClipDistance' ( smooth in 5-element array of float ClipDistance)
+0:?     's' ( smooth in structure{ global float f})
+0:?     'patch' ( global float)
+0:?     'vl' (layout( location=3) smooth in 4-component vector of float)
+0:?     'factorBad' (layout( location=3) out 4-component vector of float)
+0:?     'factor' (layout( location=5) out 4-component vector of float)
+0:?     'vl2' (layout( location=4) smooth in 4-component vector of float)
+0:?     'i1' ( global float)
+0:?     'i2' ( global float)
+
+
+Linked fragment stage:
+
+
+Shader version: 140
+Requested GL_ARB_explicit_attrib_location
+Requested GL_ARB_separate_shader_objects
+ERROR: node is still EOpNull!
+0:10  Function Definition: main( ( global void)
+0:10    Function Parameters: 
+0:12    Sequence
+0:12      Sequence
+0:12        move second child to first child ( temp float)
+0:12          'clip' ( temp float)
+0:12          direct index ( smooth temp float ClipDistance)
+0:12            'gl_ClipDistance' ( smooth in 5-element array of float ClipDistance)
+0:12            Constant:
+0:12              2 (const int)
+0:23  Sequence
+0:23    move second child to first child ( temp float)
+0:23      'patch' ( global float)
+0:23      Constant:
+0:23        3.100000
+0:48  Sequence
+0:48    move second child to first child ( temp float)
+0:48      'i1' ( global float)
+0:48      Test condition and select ( temp float)
+0:48        Condition
+0:48        'gl_FrontFacing' ( gl_FrontFacing bool Face)
+0:48        true case
+0:48        Constant:
+0:48          -2.000000
+0:48        false case
+0:48        Constant:
+0:48          2.000000
+0:49  Sequence
+0:49    move second child to first child ( temp float)
+0:49      'i2' ( global float)
+0:49      Constant:
+0:49        102.000000
+0:?   Linker Objects
+0:?     'v' ( smooth in 4-component vector of float)
+0:?     'i' ( smooth in 4-component vector of float)
+0:?     'o' ( out 4-component vector of float)
+0:?     'gl_ClipDistance' ( smooth in 5-element array of float ClipDistance)
+0:?     's' ( smooth in structure{ global float f})
+0:?     'patch' ( global float)
+0:?     'vl' (layout( location=3) smooth in 4-component vector of float)
+0:?     'factorBad' (layout( location=3) out 4-component vector of float)
+0:?     'factor' (layout( location=5) out 4-component vector of float)
+0:?     'vl2' (layout( location=4) smooth in 4-component vector of float)
+0:?     'i1' ( global float)
+0:?     'i2' ( global float)
+

@@ -1,0 +1,66 @@
+#version 450
+
+#extension GL_KHR_shader_subgroup_vote: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16: enable
+
+layout (local_size_x = 8) in;
+
+layout(binding = 0) buffer Buffers
+{
+    i8vec4 i8;
+    u8vec4 u8;
+    i16vec4 i16;
+    u16vec4 u16;
+    i64vec4 i64;
+    u64vec4 u64;
+    f16vec4 f16;
+    int r;
+} data[4];
+
+void main()
+{
+    uint invocation = (gl_SubgroupInvocationID + gl_SubgroupSize) % 4;
+
+    if (subgroupAll(data[invocation].r < 0))
+    {
+        data[invocation].r = int(subgroupAllEqual(data[0].i8.x));
+        data[invocation].r = int(subgroupAllEqual(data[1].i8.xy));
+        data[invocation].r = int(subgroupAllEqual(data[2].i8.xyz));
+        data[invocation].r = int(subgroupAllEqual(data[3].i8));
+
+        data[invocation].r = int(subgroupAllEqual(data[0].u8.x));
+        data[invocation].r = int(subgroupAllEqual(data[1].u8.xy));
+        data[invocation].r = int(subgroupAllEqual(data[2].u8.xyz));
+        data[invocation].r = int(subgroupAllEqual(data[3].u8));
+
+        data[invocation].r = int(subgroupAllEqual(data[0].i16.x));
+        data[invocation].r = int(subgroupAllEqual(data[1].i16.xy));
+        data[invocation].r = int(subgroupAllEqual(data[2].i16.xyz));
+        data[invocation].r = int(subgroupAllEqual(data[3].i16));
+
+        data[invocation].r = int(subgroupAllEqual(data[0].u16.x));
+        data[invocation].r = int(subgroupAllEqual(data[1].u16.xy));
+        data[invocation].r = int(subgroupAllEqual(data[2].u16.xyz));
+        data[invocation].r = int(subgroupAllEqual(data[3].u16));
+    }
+    else if (subgroupAny(data[invocation].r < 0))
+    {
+        data[invocation].r = int(subgroupAllEqual(data[0].i64.x));
+        data[invocation].r = int(subgroupAllEqual(data[1].i64.xy));
+        data[invocation].r = int(subgroupAllEqual(data[2].i64.xyz));
+        data[invocation].r = int(subgroupAllEqual(data[3].i64));
+        
+        data[invocation].r = int(subgroupAllEqual(data[0].u64.x));
+        data[invocation].r = int(subgroupAllEqual(data[1].u64.xy));
+        data[invocation].r = int(subgroupAllEqual(data[2].u64.xyz));
+        data[invocation].r = int(subgroupAllEqual(data[3].u64));
+        
+        data[invocation].r = int(subgroupAllEqual(data[0].f16.x));
+        data[invocation].r = int(subgroupAllEqual(data[1].f16.xy));
+        data[invocation].r = int(subgroupAllEqual(data[2].f16.xyz));
+        data[invocation].r = int(subgroupAllEqual(data[3].f16));
+    }
+}

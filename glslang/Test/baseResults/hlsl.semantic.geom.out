@@ -1,0 +1,421 @@
+hlsl.semantic.geom
+Shader version: 500
+invocations = -1
+max_vertices = 4
+input primitive = triangles
+output primitive = line_strip
+0:? Sequence
+0:13  Function Definition: @main(u1[3];struct-S-f1-f1-f1-u1-u1-i11; ( temp void)
+0:13    Function Parameters: 
+0:13      'VertexID' ( in 3-element array of uint)
+0:13      'OutputStream' ( out structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:?     Sequence
+0:15      Sequence
+0:15        Sequence
+0:15          move second child to first child ( temp float)
+0:?             'OutputStream.clip0' ( out float Position)
+0:15            clip0: direct index for structure ( temp float)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                0 (const int)
+0:?           Sequence
+0:15            move second child to first child ( temp float)
+0:15              direct index ( out float ClipDistance)
+0:?                 'OutputStream.clip0' ( out 1-element array of float ClipDistance)
+0:15                Constant:
+0:15                  0 (const int)
+0:15              clip0: direct index for structure ( temp float)
+0:15                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15                Constant:
+0:15                  1 (const int)
+0:?           Sequence
+0:15            move second child to first child ( temp float)
+0:15              direct index ( out float CullDistance)
+0:?                 'OutputStream.cull0' ( out 1-element array of float CullDistance)
+0:15                Constant:
+0:15                  0 (const int)
+0:15              cull0: direct index for structure ( temp float)
+0:15                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15                Constant:
+0:15                  2 (const int)
+0:15          move second child to first child ( temp uint)
+0:?             'OutputStream.vpai' ( out uint ViewportIndex)
+0:15            vpai: direct index for structure ( temp uint)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                3 (const int)
+0:15          move second child to first child ( temp uint)
+0:?             'OutputStream.rtai' ( out uint Layer)
+0:15            rtai: direct index for structure ( temp uint)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                4 (const int)
+0:15          move second child to first child ( temp int)
+0:?             'OutputStream.ii' (layout( location=0) out int)
+0:15            ii: direct index for structure ( temp int)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                5 (const int)
+0:15        EmitVertex ( temp void)
+0:13  Function Definition: main( ( temp void)
+0:13    Function Parameters: 
+0:?     Sequence
+0:13      move second child to first child ( temp 3-element array of uint)
+0:?         'VertexID' ( temp 3-element array of uint)
+0:?         'VertexID' (layout( location=0) in 3-element array of uint)
+0:13      Function Call: @main(u1[3];struct-S-f1-f1-f1-u1-u1-i11; ( temp void)
+0:?         'VertexID' ( temp 3-element array of uint)
+0:?         'OutputStream' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:21  Function Definition: notmain(u1[2];struct-S-f1-f1-f1-u1-u1-i11; ( temp void)
+0:21    Function Parameters: 
+0:21      'VertexID' ( in 2-element array of uint)
+0:21      'OutputStream' ( out structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:?     Sequence
+0:23      Sequence
+0:23        Sequence
+0:23          move second child to first child ( temp float)
+0:?             'OutputStream.clip0' ( out float Position)
+0:23            clip0: direct index for structure ( temp float)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                0 (const int)
+0:?           Sequence
+0:23            move second child to first child ( temp float)
+0:23              direct index ( out float ClipDistance)
+0:?                 'OutputStream.clip0' ( out 1-element array of float ClipDistance)
+0:23                Constant:
+0:23                  0 (const int)
+0:23              clip0: direct index for structure ( temp float)
+0:23                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23                Constant:
+0:23                  1 (const int)
+0:?           Sequence
+0:23            move second child to first child ( temp float)
+0:23              direct index ( out float CullDistance)
+0:?                 'OutputStream.cull0' ( out 1-element array of float CullDistance)
+0:23                Constant:
+0:23                  0 (const int)
+0:23              cull0: direct index for structure ( temp float)
+0:23                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23                Constant:
+0:23                  2 (const int)
+0:23          move second child to first child ( temp uint)
+0:?             'OutputStream.vpai' ( out uint ViewportIndex)
+0:23            vpai: direct index for structure ( temp uint)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                3 (const int)
+0:23          move second child to first child ( temp uint)
+0:?             'OutputStream.rtai' ( out uint Layer)
+0:23            rtai: direct index for structure ( temp uint)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                4 (const int)
+0:23          move second child to first child ( temp int)
+0:?             'OutputStream.ii' (layout( location=0) out int)
+0:23            ii: direct index for structure ( temp int)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                5 (const int)
+0:23        EmitVertex ( temp void)
+0:?   Linker Objects
+0:?     'VertexID' (layout( location=0) in 3-element array of uint)
+0:?     'OutputStream.clip0' ( out float Position)
+0:?     'OutputStream.vpai' ( out uint ViewportIndex)
+0:?     'OutputStream.rtai' ( out uint Layer)
+0:?     'OutputStream.ii' (layout( location=0) out int)
+0:?     'OutputStream.clip0' ( out 1-element array of float ClipDistance)
+0:?     'OutputStream.cull0' ( out 1-element array of float CullDistance)
+
+
+Linked geometry stage:
+
+
+Shader version: 500
+invocations = 1
+max_vertices = 4
+input primitive = triangles
+output primitive = line_strip
+0:? Sequence
+0:13  Function Definition: @main(u1[3];struct-S-f1-f1-f1-u1-u1-i11; ( temp void)
+0:13    Function Parameters: 
+0:13      'VertexID' ( in 3-element array of uint)
+0:13      'OutputStream' ( out structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:?     Sequence
+0:15      Sequence
+0:15        Sequence
+0:15          move second child to first child ( temp float)
+0:?             'OutputStream.clip0' ( out float Position)
+0:15            clip0: direct index for structure ( temp float)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                0 (const int)
+0:?           Sequence
+0:15            move second child to first child ( temp float)
+0:15              direct index ( out float ClipDistance)
+0:?                 'OutputStream.clip0' ( out 1-element array of float ClipDistance)
+0:15                Constant:
+0:15                  0 (const int)
+0:15              clip0: direct index for structure ( temp float)
+0:15                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15                Constant:
+0:15                  1 (const int)
+0:?           Sequence
+0:15            move second child to first child ( temp float)
+0:15              direct index ( out float CullDistance)
+0:?                 'OutputStream.cull0' ( out 1-element array of float CullDistance)
+0:15                Constant:
+0:15                  0 (const int)
+0:15              cull0: direct index for structure ( temp float)
+0:15                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15                Constant:
+0:15                  2 (const int)
+0:15          move second child to first child ( temp uint)
+0:?             'OutputStream.vpai' ( out uint ViewportIndex)
+0:15            vpai: direct index for structure ( temp uint)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                3 (const int)
+0:15          move second child to first child ( temp uint)
+0:?             'OutputStream.rtai' ( out uint Layer)
+0:15            rtai: direct index for structure ( temp uint)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                4 (const int)
+0:15          move second child to first child ( temp int)
+0:?             'OutputStream.ii' (layout( location=0) out int)
+0:15            ii: direct index for structure ( temp int)
+0:15              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:15              Constant:
+0:15                5 (const int)
+0:15        EmitVertex ( temp void)
+0:13  Function Definition: main( ( temp void)
+0:13    Function Parameters: 
+0:?     Sequence
+0:13      move second child to first child ( temp 3-element array of uint)
+0:?         'VertexID' ( temp 3-element array of uint)
+0:?         'VertexID' (layout( location=0) in 3-element array of uint)
+0:13      Function Call: @main(u1[3];struct-S-f1-f1-f1-u1-u1-i11; ( temp void)
+0:?         'VertexID' ( temp 3-element array of uint)
+0:?         'OutputStream' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:21  Function Definition: notmain(u1[2];struct-S-f1-f1-f1-u1-u1-i11; ( temp void)
+0:21    Function Parameters: 
+0:21      'VertexID' ( in 2-element array of uint)
+0:21      'OutputStream' ( out structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:?     Sequence
+0:23      Sequence
+0:23        Sequence
+0:23          move second child to first child ( temp float)
+0:?             'OutputStream.clip0' ( out float Position)
+0:23            clip0: direct index for structure ( temp float)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                0 (const int)
+0:?           Sequence
+0:23            move second child to first child ( temp float)
+0:23              direct index ( out float ClipDistance)
+0:?                 'OutputStream.clip0' ( out 1-element array of float ClipDistance)
+0:23                Constant:
+0:23                  0 (const int)
+0:23              clip0: direct index for structure ( temp float)
+0:23                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23                Constant:
+0:23                  1 (const int)
+0:?           Sequence
+0:23            move second child to first child ( temp float)
+0:23              direct index ( out float CullDistance)
+0:?                 'OutputStream.cull0' ( out 1-element array of float CullDistance)
+0:23                Constant:
+0:23                  0 (const int)
+0:23              cull0: direct index for structure ( temp float)
+0:23                's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23                Constant:
+0:23                  2 (const int)
+0:23          move second child to first child ( temp uint)
+0:?             'OutputStream.vpai' ( out uint ViewportIndex)
+0:23            vpai: direct index for structure ( temp uint)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                3 (const int)
+0:23          move second child to first child ( temp uint)
+0:?             'OutputStream.rtai' ( out uint Layer)
+0:23            rtai: direct index for structure ( temp uint)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                4 (const int)
+0:23          move second child to first child ( temp int)
+0:?             'OutputStream.ii' (layout( location=0) out int)
+0:23            ii: direct index for structure ( temp int)
+0:23              's' ( temp structure{ temp float clip0,  temp float clip0,  temp float cull0,  temp uint vpai,  temp uint rtai,  temp int ii})
+0:23              Constant:
+0:23                5 (const int)
+0:23        EmitVertex ( temp void)
+0:?   Linker Objects
+0:?     'VertexID' (layout( location=0) in 3-element array of uint)
+0:?     'OutputStream.clip0' ( out float Position)
+0:?     'OutputStream.vpai' ( out uint ViewportIndex)
+0:?     'OutputStream.rtai' ( out uint Layer)
+0:?     'OutputStream.ii' (layout( location=0) out int)
+0:?     'OutputStream.clip0' ( out 1-element array of float ClipDistance)
+0:?     'OutputStream.cull0' ( out 1-element array of float CullDistance)
+
+Validation failed
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 88
+
+                              Capability Geometry
+                              Capability ClipDistance
+                              Capability CullDistance
+                              Capability MultiViewport
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Geometry 4  "main" 28 37 42 48 53 58 65
+                              ExecutionMode 4 Triangles
+                              ExecutionMode 4 Invocations 1
+                              ExecutionMode 4 OutputLineStrip
+                              ExecutionMode 4 OutputVertices 4
+                              Source HLSL 500
+                              Name 4  "main"
+                              Name 12  "S"
+                              MemberName 12(S) 0  "clip0"
+                              MemberName 12(S) 1  "clip0"
+                              MemberName 12(S) 2  "cull0"
+                              MemberName 12(S) 3  "vpai"
+                              MemberName 12(S) 4  "rtai"
+                              MemberName 12(S) 5  "ii"
+                              Name 17  "@main(u1[3];struct-S-f1-f1-f1-u1-u1-i11;"
+                              Name 15  "VertexID"
+                              Name 16  "OutputStream"
+                              Name 25  "notmain(u1[2];struct-S-f1-f1-f1-u1-u1-i11;"
+                              Name 23  "VertexID"
+                              Name 24  "OutputStream"
+                              Name 28  "OutputStream.clip0"
+                              Name 29  "s"
+                              Name 37  "OutputStream.clip0"
+                              Name 42  "OutputStream.cull0"
+                              Name 48  "OutputStream.vpai"
+                              Name 53  "OutputStream.rtai"
+                              Name 58  "OutputStream.ii"
+                              Name 63  "VertexID"
+                              Name 65  "VertexID"
+                              Name 67  "OutputStream"
+                              Name 68  "param"
+                              Name 70  "param"
+                              Name 73  "s"
+                              Decorate 28(OutputStream.clip0) BuiltIn Position
+                              Decorate 37(OutputStream.clip0) BuiltIn ClipDistance
+                              Decorate 42(OutputStream.cull0) BuiltIn CullDistance
+                              Decorate 48(OutputStream.vpai) BuiltIn ViewportIndex
+                              Decorate 53(OutputStream.rtai) BuiltIn Layer
+                              Decorate 58(OutputStream.ii) Location 0
+                              Decorate 65(VertexID) Location 0
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeInt 32 0
+               7:      6(int) Constant 3
+               8:             TypeArray 6(int) 7
+               9:             TypePointer Function 8
+              10:             TypeFloat 32
+              11:             TypeInt 32 1
+           12(S):             TypeStruct 10(float) 10(float) 10(float) 6(int) 6(int) 11(int)
+              13:             TypePointer Function 12(S)
+              14:             TypeFunction 2 9(ptr) 13(ptr)
+              19:      6(int) Constant 2
+              20:             TypeArray 6(int) 19
+              21:             TypePointer Function 20
+              22:             TypeFunction 2 21(ptr) 13(ptr)
+              27:             TypePointer Output 10(float)
+28(OutputStream.clip0):     27(ptr) Variable Output
+              30:     11(int) Constant 0
+              31:             TypePointer Function 10(float)
+              34:      6(int) Constant 1
+              35:             TypeArray 10(float) 34
+              36:             TypePointer Output 35
+37(OutputStream.clip0):     36(ptr) Variable Output
+              38:     11(int) Constant 1
+42(OutputStream.cull0):     36(ptr) Variable Output
+              43:     11(int) Constant 2
+              47:             TypePointer Output 6(int)
+48(OutputStream.vpai):     47(ptr) Variable Output
+              49:     11(int) Constant 3
+              50:             TypePointer Function 6(int)
+53(OutputStream.rtai):     47(ptr) Variable Output
+              54:     11(int) Constant 4
+              57:             TypePointer Output 11(int)
+58(OutputStream.ii):     57(ptr) Variable Output
+              59:     11(int) Constant 5
+              60:             TypePointer Function 11(int)
+              64:             TypePointer Input 8
+    65(VertexID):     64(ptr) Variable Input
+         4(main):           2 Function None 3
+               5:             Label
+    63(VertexID):      9(ptr) Variable Function
+67(OutputStream):     13(ptr) Variable Function
+       68(param):      9(ptr) Variable Function
+       70(param):     13(ptr) Variable Function
+              66:           8 Load 65(VertexID)
+                              Store 63(VertexID) 66
+              69:           8 Load 63(VertexID)
+                              Store 68(param) 69
+              71:           2 FunctionCall 17(@main(u1[3];struct-S-f1-f1-f1-u1-u1-i11;) 68(param) 70(param)
+              72:       12(S) Load 70(param)
+                              Store 67(OutputStream) 72
+                              Return
+                              FunctionEnd
+17(@main(u1[3];struct-S-f1-f1-f1-u1-u1-i11;):           2 Function None 14
+    15(VertexID):      9(ptr) FunctionParameter
+16(OutputStream):     13(ptr) FunctionParameter
+              18:             Label
+           29(s):     13(ptr) Variable Function
+              32:     31(ptr) AccessChain 29(s) 30
+              33:   10(float) Load 32
+                              Store 28(OutputStream.clip0) 33
+              39:     31(ptr) AccessChain 29(s) 38
+              40:   10(float) Load 39
+              41:     27(ptr) AccessChain 37(OutputStream.clip0) 30
+                              Store 41 40
+              44:     31(ptr) AccessChain 29(s) 43
+              45:   10(float) Load 44
+              46:     27(ptr) AccessChain 42(OutputStream.cull0) 30
+                              Store 46 45
+              51:     50(ptr) AccessChain 29(s) 49
+              52:      6(int) Load 51
+                              Store 48(OutputStream.vpai) 52
+              55:     50(ptr) AccessChain 29(s) 54
+              56:      6(int) Load 55
+                              Store 53(OutputStream.rtai) 56
+              61:     60(ptr) AccessChain 29(s) 59
+              62:     11(int) Load 61
+                              Store 58(OutputStream.ii) 62
+                              EmitVertex
+                              Return
+                              FunctionEnd
+25(notmain(u1[2];struct-S-f1-f1-f1-u1-u1-i11;):           2 Function None 22
+    23(VertexID):     21(ptr) FunctionParameter
+24(OutputStream):     13(ptr) FunctionParameter
+              26:             Label
+           73(s):     13(ptr) Variable Function
+              74:     31(ptr) AccessChain 73(s) 30
+              75:   10(float) Load 74
+                              Store 28(OutputStream.clip0) 75
+              76:     31(ptr) AccessChain 73(s) 38
+              77:   10(float) Load 76
+              78:     27(ptr) AccessChain 37(OutputStream.clip0) 30
+                              Store 78 77
+              79:     31(ptr) AccessChain 73(s) 43
+              80:   10(float) Load 79
+              81:     27(ptr) AccessChain 42(OutputStream.cull0) 30
+                              Store 81 80
+              82:     50(ptr) AccessChain 73(s) 49
+              83:      6(int) Load 82
+                              Store 48(OutputStream.vpai) 83
+              84:     50(ptr) AccessChain 73(s) 54
+              85:      6(int) Load 84
+                              Store 53(OutputStream.rtai) 85
+              86:     60(ptr) AccessChain 73(s) 59
+              87:     11(int) Load 86
+                              Store 58(OutputStream.ii) 87
+                              EmitVertex
+                              Return
+                              FunctionEnd

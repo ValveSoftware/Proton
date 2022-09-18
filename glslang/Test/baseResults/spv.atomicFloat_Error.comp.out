@@ -1,0 +1,57 @@
+spv.atomicFloat_Error.comp
+ERROR: 0:25: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:26: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:27: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:28: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:31: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:32: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:33: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:34: 'atomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:37: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:38: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:39: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:40: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:43: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:44: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:45: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:46: 'atomicExchange' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:50: 'atomicLoad' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:51: 'atomicStore' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:52: 'atomicLoad' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:53: 'atomicStore' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:56: 'atomicLoad' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:57: 'atomicStore' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:58: 'atomicLoad' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:59: 'atomicStore' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:63: 'imageAtomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:64: 'imageAtomicAdd' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:66: 'imageAtomicLoad' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:67: 'imageAtomicStore' : required extension not requested: GL_EXT_shader_atomic_float
+ERROR: 0:80: 'atomicAdd' : no matching overloaded function found 
+ERROR: 0:81: 'atomicAdd' : no matching overloaded function found 
+ERROR: 0:82: 'atomicAdd' : no matching overloaded function found 
+ERROR: 0:83: 'atomicAdd' : no matching overloaded function found 
+ERROR: 0:86: 'atomicExchange' : no matching overloaded function found 
+ERROR: 0:87: 'atomicExchange' : no matching overloaded function found 
+ERROR: 0:88: 'atomicExchange' : no matching overloaded function found 
+ERROR: 0:89: 'atomicExchange' : no matching overloaded function found 
+ERROR: 0:90: 'atomicExchange' : no matching overloaded function found 
+ERROR: 0:91: 'atomicExchange' : no matching overloaded function found 
+ERROR: 0:95: 'atomicLoad' : no matching overloaded function found 
+ERROR: 0:96: 'atomicStore' : no matching overloaded function found 
+ERROR: 0:99: 'imageAtomicAdd' : no matching overloaded function found 
+ERROR: 0:100: 'imageAtomicAdd' : no matching overloaded function found 
+ERROR: 0:101: 'imageAtomicAdd' : no matching overloaded function found 
+ERROR: 0:102: 'imageAtomicExchange' : no matching overloaded function found 
+ERROR: 0:103: 'imageAtomicExchange' : no matching overloaded function found 
+ERROR: 0:104: 'imageAtomicExchange' : no matching overloaded function found 
+ERROR: 0:105: 'imageAtomicLoad' : no matching overloaded function found 
+ERROR: 0:106: 'imageAtomicLoad' : no matching overloaded function found 
+ERROR: 0:107: 'imageAtomicLoad' : no matching overloaded function found 
+ERROR: 0:108: 'imageAtomicStore' : no matching overloaded function found 
+ERROR: 0:109: 'imageAtomicStore' : no matching overloaded function found 
+ERROR: 0:110: 'imageAtomicStore' : no matching overloaded function found 
+ERROR: 52 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

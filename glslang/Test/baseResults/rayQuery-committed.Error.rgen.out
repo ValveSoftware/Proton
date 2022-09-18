@@ -1,0 +1,19 @@
+rayQuery-committed.Error.rgen
+ERROR: 0:48: 'committed' : argument must be compile-time constant 
+ERROR: 0:53: 'committed' : argument must be compile-time constant 
+ERROR: 0:54: 'committed' : argument must be compile-time constant 
+ERROR: 0:58: 'committed' : argument must be compile-time constant 
+ERROR: 0:62: 'committed' : argument must be compile-time constant 
+ERROR: 0:66: 'committed' : argument must be compile-time constant 
+ERROR: 0:70: 'committed' : argument must be compile-time constant 
+ERROR: 0:74: 'committed' : argument must be compile-time constant 
+ERROR: 0:78: 'committed' : argument must be compile-time constant 
+ERROR: 0:82: 'committed' : argument must be compile-time constant 
+ERROR: 0:86: 'committed' : argument must be compile-time constant 
+ERROR: 0:90: 'committed' : argument must be compile-time constant 
+ERROR: 0:97: 'committed' : argument must be compile-time constant 
+ERROR: 0:100: 'committed' : argument must be compile-time constant 
+ERROR: 14 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

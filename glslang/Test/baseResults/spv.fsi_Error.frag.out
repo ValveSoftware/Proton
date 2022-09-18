@@ -1,0 +1,14 @@
+spv.fsi_Error.frag
+ERROR: 0:4: 'pixel_interlock_ordered' : can only apply to 'in' 
+ERROR: 0:7: 'pixel_interlock_unordered' : cannot change previously set fragment shader interlock ordering 
+ERROR: 0:11: '' : beginInvocationInterlockARB() must be in main() 
+ERROR: 0:12: '' : endInvocationInterlockARB() must be in main() 
+ERROR: 0:17: '' : endInvocationInterlockARB() must only be called once 
+ERROR: 0:18: '' : beginInvocationInterlockARB() must only be called once 
+ERROR: 0:18: '' : beginInvocationInterlockARB() must be called before endInvocationInterlockARB() 
+ERROR: 0:22: '' : endInvocationInterlockARB() cannot be placed after a return from main() 
+ERROR: 0:22: '' : endInvocationInterlockARB() must only be called once 
+ERROR: 9 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

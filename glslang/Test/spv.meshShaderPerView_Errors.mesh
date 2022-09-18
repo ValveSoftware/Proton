@@ -1,0 +1,32 @@
+#version 450
+
+#define MAX_VER  81
+#define MAX_PRIM 32
+#define MAX_VIEWS gl_MaxMeshViewCountNV
+
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x = 32) in;
+
+layout(max_vertices=MAX_VER) out;
+layout(max_primitives=MAX_PRIM) out;
+layout(triangles) out;
+
+// test error checks for use of incorrect per-view attributes
+
+// per-view block attributes
+perviewNV layout(location=0) out perviewBlock {
+    vec4 missingInnermostDimSize1[][];
+    vec4 incorrectViewDimSize1[MAX_VIEWS+1];
+    vec4 missingViewDim1;
+} b2[];
+
+// per-view non-block attributes
+perviewNV layout(location=10) out vec4 missingInnermostDimSize2[][][];
+perviewNV layout(location=11) out vec4 incorrectViewDimSize2[][MAX_VIEWS-1];
+perviewNV layout(location=12) out vec4 missingViewDim2[];
+
+void main()
+{
+}
+

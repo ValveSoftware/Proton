@@ -1,0 +1,39 @@
+#version 430 core
+
+#extension GL_EXT_scalar_block_layout : enable
+#extension GL_EXT_shared_memory_block : enable
+
+layout(local_size_x = 8) in;
+
+struct T
+{
+    float t[3];
+};
+
+struct S
+{
+    float f;
+    vec2 v2;
+    vec3 v3;
+    vec4 v4;
+    T t;
+
+    float f_array[6];
+    vec2 v2_array[6];
+    vec3 v3_array[6];
+    vec4 v4_array[6];
+    T t_array[6];
+};
+
+// Use a default qualifier.
+layout(scalar) shared;
+
+shared Block
+{
+    S s;
+    S s_array[6];
+};
+
+void main()
+{
+}

@@ -1,0 +1,281 @@
+vk.relaxed.changeSet.vert
+Shader version: 460
+0:? Sequence
+0:11  Function Definition: main( ( global void)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      move second child to first child ( temp highp 4-component vector of float)
+0:13        'Color' ( smooth out highp 4-component vector of float)
+0:13        'aColor' ( in highp 4-component vector of float)
+0:14      move second child to first child ( temp highp 2-component vector of float)
+0:14        'UV' ( smooth out highp 2-component vector of float)
+0:14        'aUV' ( in highp 2-component vector of float)
+0:15      move second child to first child ( temp highp 4-component vector of float)
+0:15        gl_Position: direct index for structure ( gl_Position highp 4-component vector of float Position)
+0:15          'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance,  out unsized 1-element array of float CullDistance gl_CullDistance})
+0:15          Constant:
+0:15            0 (const uint)
+0:15        matrix-times-vector ( temp highp 4-component vector of float)
+0:15          projectionMatrix: direct index for structure ( uniform highp 4X4 matrix of float)
+0:15            'anon@0' (layout( column_major std140) uniform block{ uniform highp 4X4 matrix of float projectionMatrix})
+0:15            Constant:
+0:15              0 (const uint)
+0:15          Construct vec4 ( temp highp 4-component vector of float)
+0:15            'aPos' ( in highp 2-component vector of float)
+0:15            Constant:
+0:15              0.000000
+0:15            Constant:
+0:15              1.000000
+0:?   Linker Objects
+0:?     'aPos' ( in highp 2-component vector of float)
+0:?     'aUV' ( in highp 2-component vector of float)
+0:?     'aColor' ( in highp 4-component vector of float)
+0:?     'anon@0' (layout( column_major std140) uniform block{ uniform highp 4X4 matrix of float projectionMatrix})
+0:?     'Color' ( smooth out highp 4-component vector of float)
+0:?     'UV' ( smooth out highp 2-component vector of float)
+0:?     'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance,  out unsized 1-element array of float CullDistance gl_CullDistance})
+0:?     'gl_VertexIndex' ( in int VertexIndex)
+0:?     'gl_InstanceIndex' ( in int InstanceIndex)
+
+vk.relaxed.changeSet.frag
+Shader version: 460
+gl_FragCoord origin is upper left
+0:? Sequence
+0:10  Function Definition: main( ( global void)
+0:10    Function Parameters: 
+0:12    Sequence
+0:12      move second child to first child ( temp highp 4-component vector of float)
+0:12        'fragColor' (layout( location=0) out highp 4-component vector of float)
+0:12        vector-scale ( temp highp 4-component vector of float)
+0:12          'Color' ( smooth in highp 4-component vector of float)
+0:12          direct index ( temp highp float)
+0:12            texture ( global highp 4-component vector of float)
+0:12              'sTexture' ( uniform highp sampler2D)
+0:12              vector swizzle ( temp highp 2-component vector of float)
+0:12                'UV' ( smooth in highp 2-component vector of float)
+0:12                Sequence
+0:12                  Constant:
+0:12                    0 (const int)
+0:12                  Constant:
+0:12                    1 (const int)
+0:12            Constant:
+0:12              0 (const int)
+0:?   Linker Objects
+0:?     'fragColor' (layout( location=0) out highp 4-component vector of float)
+0:?     'sTexture' ( uniform highp sampler2D)
+0:?     'Color' ( smooth in highp 4-component vector of float)
+0:?     'UV' ( smooth in highp 2-component vector of float)
+
+
+Linked vertex stage:
+
+
+Linked fragment stage:
+
+
+Shader version: 460
+0:? Sequence
+0:11  Function Definition: main( ( global void)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      move second child to first child ( temp highp 4-component vector of float)
+0:13        'Color' ( smooth out highp 4-component vector of float)
+0:13        'aColor' ( in highp 4-component vector of float)
+0:14      move second child to first child ( temp highp 2-component vector of float)
+0:14        'UV' ( smooth out highp 2-component vector of float)
+0:14        'aUV' ( in highp 2-component vector of float)
+0:15      move second child to first child ( temp highp 4-component vector of float)
+0:15        gl_Position: direct index for structure ( gl_Position highp 4-component vector of float Position)
+0:15          'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance,  out 1-element array of float CullDistance gl_CullDistance})
+0:15          Constant:
+0:15            0 (const uint)
+0:15        matrix-times-vector ( temp highp 4-component vector of float)
+0:15          projectionMatrix: direct index for structure ( uniform highp 4X4 matrix of float)
+0:15            'anon@0' (layout( column_major std140) uniform block{ uniform highp 4X4 matrix of float projectionMatrix})
+0:15            Constant:
+0:15              0 (const uint)
+0:15          Construct vec4 ( temp highp 4-component vector of float)
+0:15            'aPos' ( in highp 2-component vector of float)
+0:15            Constant:
+0:15              0.000000
+0:15            Constant:
+0:15              1.000000
+0:?   Linker Objects
+0:?     'aPos' ( in highp 2-component vector of float)
+0:?     'aUV' ( in highp 2-component vector of float)
+0:?     'aColor' ( in highp 4-component vector of float)
+0:?     'anon@0' (layout( column_major std140) uniform block{ uniform highp 4X4 matrix of float projectionMatrix})
+0:?     'Color' ( smooth out highp 4-component vector of float)
+0:?     'UV' ( smooth out highp 2-component vector of float)
+0:?     'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance,  out 1-element array of float CullDistance gl_CullDistance})
+0:?     'gl_VertexIndex' ( in int VertexIndex)
+0:?     'gl_InstanceIndex' ( in int InstanceIndex)
+Shader version: 460
+gl_FragCoord origin is upper left
+0:? Sequence
+0:10  Function Definition: main( ( global void)
+0:10    Function Parameters: 
+0:12    Sequence
+0:12      move second child to first child ( temp highp 4-component vector of float)
+0:12        'fragColor' (layout( location=0) out highp 4-component vector of float)
+0:12        vector-scale ( temp highp 4-component vector of float)
+0:12          'Color' ( smooth in highp 4-component vector of float)
+0:12          direct index ( temp highp float)
+0:12            texture ( global highp 4-component vector of float)
+0:12              'sTexture' ( uniform highp sampler2D)
+0:12              vector swizzle ( temp highp 2-component vector of float)
+0:12                'UV' ( smooth in highp 2-component vector of float)
+0:12                Sequence
+0:12                  Constant:
+0:12                    0 (const int)
+0:12                  Constant:
+0:12                    1 (const int)
+0:12            Constant:
+0:12              0 (const int)
+0:?   Linker Objects
+0:?     'fragColor' (layout( location=0) out highp 4-component vector of float)
+0:?     'sTexture' ( uniform highp sampler2D)
+0:?     'Color' ( smooth in highp 4-component vector of float)
+0:?     'UV' ( smooth in highp 2-component vector of float)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 46
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Vertex 4  "main" 9 11 15 17 24 34 44 45
+                              Source GLSL 460
+                              Name 4  "main"
+                              Name 9  "Color"
+                              Name 11  "aColor"
+                              Name 15  "UV"
+                              Name 17  "aUV"
+                              Name 22  "gl_PerVertex"
+                              MemberName 22(gl_PerVertex) 0  "gl_Position"
+                              MemberName 22(gl_PerVertex) 1  "gl_PointSize"
+                              MemberName 22(gl_PerVertex) 2  "gl_ClipDistance"
+                              MemberName 22(gl_PerVertex) 3  "gl_CullDistance"
+                              Name 24  ""
+                              Name 28  "gl_DefaultUniformBlock"
+                              MemberName 28(gl_DefaultUniformBlock) 0  "projectionMatrix"
+                              Name 30  ""
+                              Name 34  "aPos"
+                              Name 44  "gl_VertexIndex"
+                              Name 45  "gl_InstanceIndex"
+                              Decorate 9(Color) Location 0
+                              Decorate 11(aColor) Location 2
+                              Decorate 15(UV) Location 1
+                              Decorate 17(aUV) Location 1
+                              MemberDecorate 22(gl_PerVertex) 0 BuiltIn Position
+                              MemberDecorate 22(gl_PerVertex) 1 BuiltIn PointSize
+                              MemberDecorate 22(gl_PerVertex) 2 BuiltIn ClipDistance
+                              MemberDecorate 22(gl_PerVertex) 3 BuiltIn CullDistance
+                              Decorate 22(gl_PerVertex) Block
+                              MemberDecorate 28(gl_DefaultUniformBlock) 0 ColMajor
+                              MemberDecorate 28(gl_DefaultUniformBlock) 0 Offset 0
+                              MemberDecorate 28(gl_DefaultUniformBlock) 0 MatrixStride 16
+                              Decorate 28(gl_DefaultUniformBlock) Block
+                              Decorate 30 DescriptorSet 0
+                              Decorate 30 Binding 0
+                              Decorate 34(aPos) Location 0
+                              Decorate 44(gl_VertexIndex) BuiltIn VertexIndex
+                              Decorate 45(gl_InstanceIndex) BuiltIn InstanceIndex
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypePointer Output 7(fvec4)
+        9(Color):      8(ptr) Variable Output
+              10:             TypePointer Input 7(fvec4)
+      11(aColor):     10(ptr) Variable Input
+              13:             TypeVector 6(float) 2
+              14:             TypePointer Output 13(fvec2)
+          15(UV):     14(ptr) Variable Output
+              16:             TypePointer Input 13(fvec2)
+         17(aUV):     16(ptr) Variable Input
+              19:             TypeInt 32 0
+              20:     19(int) Constant 1
+              21:             TypeArray 6(float) 20
+22(gl_PerVertex):             TypeStruct 7(fvec4) 6(float) 21 21
+              23:             TypePointer Output 22(gl_PerVertex)
+              24:     23(ptr) Variable Output
+              25:             TypeInt 32 1
+              26:     25(int) Constant 0
+              27:             TypeMatrix 7(fvec4) 4
+28(gl_DefaultUniformBlock):             TypeStruct 27
+              29:             TypePointer Uniform 28(gl_DefaultUniformBlock)
+              30:     29(ptr) Variable Uniform
+              31:             TypePointer Uniform 27
+        34(aPos):     16(ptr) Variable Input
+              36:    6(float) Constant 0
+              37:    6(float) Constant 1065353216
+              43:             TypePointer Input 25(int)
+44(gl_VertexIndex):     43(ptr) Variable Input
+45(gl_InstanceIndex):     43(ptr) Variable Input
+         4(main):           2 Function None 3
+               5:             Label
+              12:    7(fvec4) Load 11(aColor)
+                              Store 9(Color) 12
+              18:   13(fvec2) Load 17(aUV)
+                              Store 15(UV) 18
+              32:     31(ptr) AccessChain 30 26
+              33:          27 Load 32
+              35:   13(fvec2) Load 34(aPos)
+              38:    6(float) CompositeExtract 35 0
+              39:    6(float) CompositeExtract 35 1
+              40:    7(fvec4) CompositeConstruct 38 39 36 37
+              41:    7(fvec4) MatrixTimesVector 33 40
+              42:      8(ptr) AccessChain 24 26
+                              Store 42 41
+                              Return
+                              FunctionEnd
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 27
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "main" 9 11 20
+                              ExecutionMode 4 OriginUpperLeft
+                              Source GLSL 460
+                              Name 4  "main"
+                              Name 9  "fragColor"
+                              Name 11  "Color"
+                              Name 16  "sTexture"
+                              Name 20  "UV"
+                              Decorate 9(fragColor) Location 0
+                              Decorate 11(Color) Location 0
+                              Decorate 16(sTexture) DescriptorSet 1
+                              Decorate 16(sTexture) Binding 0
+                              Decorate 20(UV) Location 1
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypePointer Output 7(fvec4)
+    9(fragColor):      8(ptr) Variable Output
+              10:             TypePointer Input 7(fvec4)
+       11(Color):     10(ptr) Variable Input
+              13:             TypeImage 6(float) 2D sampled format:Unknown
+              14:             TypeSampledImage 13
+              15:             TypePointer UniformConstant 14
+    16(sTexture):     15(ptr) Variable UniformConstant
+              18:             TypeVector 6(float) 2
+              19:             TypePointer Input 18(fvec2)
+          20(UV):     19(ptr) Variable Input
+              23:             TypeInt 32 0
+              24:     23(int) Constant 0
+         4(main):           2 Function None 3
+               5:             Label
+              12:    7(fvec4) Load 11(Color)
+              17:          14 Load 16(sTexture)
+              21:   18(fvec2) Load 20(UV)
+              22:    7(fvec4) ImageSampleImplicitLod 17 21
+              25:    6(float) CompositeExtract 22 0
+              26:    7(fvec4) VectorTimesScalar 12 25
+                              Store 9(fragColor) 26
+                              Return
+                              FunctionEnd

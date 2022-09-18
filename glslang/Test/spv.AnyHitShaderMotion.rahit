@@ -1,0 +1,6 @@
+#version 460
+#extension GL_NV_ray_tracing_motion_blur : enable
+void main()
+{
+	float time = gl_CurrentRayTimeNV + 0.5f;
+}

@@ -1,0 +1,667 @@
+glsl.450.subgroup.frag
+ERROR: 0:6: 'gl_SubgroupSize' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:7: 'gl_SubgroupInvocationID' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:8: 'subgroupBarrier' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:9: 'subgroupMemoryBarrier' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:10: 'subgroupMemoryBarrierBuffer' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:11: 'subgroupMemoryBarrierImage' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:12: 'subgroupElect' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:13: 'gl_NumSubgroups' : undeclared identifier 
+ERROR: 0:14: 'gl_SubgroupID' : undeclared identifier 
+ERROR: 0:15: 'subgroupMemoryBarrierShared' : no matching overloaded function found 
+ERROR: 0:17: 'subgroupAll' : required extension not requested: GL_KHR_shader_subgroup_vote
+ERROR: 0:18: 'subgroupAny' : required extension not requested: GL_KHR_shader_subgroup_vote
+ERROR: 0:19: 'subgroupAllEqual' : required extension not requested: GL_KHR_shader_subgroup_vote
+ERROR: 0:21: 'gl_SubgroupEqMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:22: 'gl_SubgroupGeMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:23: 'gl_SubgroupGtMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:24: 'gl_SubgroupLeMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:25: 'gl_SubgroupLtMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:26: 'subgroupBroadcast' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:27: 'subgroupBroadcastFirst' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:28: 'subgroupBallot' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:29: 'subgroupInverseBallot' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:30: 'subgroupBallotBitExtract' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:31: 'subgroupBallotBitCount' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:32: 'subgroupBallotInclusiveBitCount' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:33: 'subgroupBallotExclusiveBitCount' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:34: 'subgroupBallotFindLSB' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:35: 'subgroupBallotFindMSB' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:37: 'subgroupShuffle' : required extension not requested: GL_KHR_shader_subgroup_shuffle
+ERROR: 0:38: 'subgroupShuffleXor' : required extension not requested: GL_KHR_shader_subgroup_shuffle
+ERROR: 0:39: 'subgroupShuffleUp' : required extension not requested: GL_KHR_shader_subgroup_shuffle_relative
+ERROR: 0:40: 'subgroupShuffleDown' : required extension not requested: GL_KHR_shader_subgroup_shuffle_relative
+ERROR: 0:42: 'subgroupAdd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:43: 'subgroupMul' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:44: 'subgroupMin' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:45: 'subgroupMax' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:46: 'subgroupAnd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:47: 'subgroupOr' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:48: 'subgroupXor' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:49: 'subgroupInclusiveAdd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:50: 'subgroupInclusiveMul' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:51: 'subgroupInclusiveMin' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:52: 'subgroupInclusiveMax' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:53: 'subgroupInclusiveAnd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:54: 'subgroupInclusiveOr' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:55: 'subgroupInclusiveXor' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:56: 'subgroupExclusiveAdd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:57: 'subgroupExclusiveMul' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:58: 'subgroupExclusiveMin' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:59: 'subgroupExclusiveMax' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:60: 'subgroupExclusiveAnd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:61: 'subgroupExclusiveOr' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:62: 'subgroupExclusiveXor' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:64: 'subgroupClusteredAdd' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:65: 'subgroupClusteredMul' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:66: 'subgroupClusteredMin' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:67: 'subgroupClusteredMax' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:68: 'subgroupClusteredAnd' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:69: 'subgroupClusteredOr' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:70: 'subgroupClusteredXor' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:72: 'subgroupQuadBroadcast' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 0:73: 'subgroupQuadSwapHorizontal' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 0:74: 'subgroupQuadSwapVertical' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 0:75: 'subgroupQuadSwapDiagonal' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 0:77: 'subgroupPartitionNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:78: 'subgroupPartitionedAddNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:79: 'subgroupPartitionedMulNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:80: 'subgroupPartitionedMinNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:81: 'subgroupPartitionedMaxNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:82: 'subgroupPartitionedAndNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:83: 'subgroupPartitionedOrNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:84: 'subgroupPartitionedXorNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:85: 'subgroupPartitionedInclusiveAddNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:86: 'subgroupPartitionedInclusiveMulNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:87: 'subgroupPartitionedInclusiveMinNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:88: 'subgroupPartitionedInclusiveMaxNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:89: 'subgroupPartitionedInclusiveAndNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:90: 'subgroupPartitionedInclusiveOrNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:91: 'subgroupPartitionedInclusiveXorNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:92: 'subgroupPartitionedExclusiveAddNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:93: 'subgroupPartitionedExclusiveMulNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:94: 'subgroupPartitionedExclusiveMinNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:95: 'subgroupPartitionedExclusiveMaxNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:96: 'subgroupPartitionedExclusiveAndNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:97: 'subgroupPartitionedExclusiveOrNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:98: 'subgroupPartitionedExclusiveXorNV' : required extension not requested: GL_NV_shader_subgroup_partitioned
+ERROR: 0:124: 'id' : argument must be compile-time constant 
+ERROR: 0:199: 'id' : argument must be compile-time constant 
+ERROR: 0:236: 'gl_WarpsPerSMNV' : required extension not requested: GL_NV_shader_sm_builtins
+ERROR: 0:237: 'gl_SMCountNV' : required extension not requested: GL_NV_shader_sm_builtins
+ERROR: 0:238: 'gl_WarpIDNV' : required extension not requested: GL_NV_shader_sm_builtins
+ERROR: 0:239: 'gl_SMIDNV' : required extension not requested: GL_NV_shader_sm_builtins
+ERROR: 92 compilation errors.  No code generated.
+
+
+Shader version: 450
+Requested GL_KHR_shader_subgroup_arithmetic
+Requested GL_KHR_shader_subgroup_ballot
+Requested GL_KHR_shader_subgroup_basic
+Requested GL_KHR_shader_subgroup_clustered
+Requested GL_KHR_shader_subgroup_quad
+Requested GL_KHR_shader_subgroup_shuffle
+Requested GL_KHR_shader_subgroup_shuffle_relative
+Requested GL_KHR_shader_subgroup_vote
+Requested GL_NV_shader_sm_builtins
+Requested GL_NV_shader_subgroup_partitioned
+ERROR: node is still EOpNull!
+0:3  Function Definition: undeclared_errors(vf4; ( global 4-component vector of float)
+0:3    Function Parameters: 
+0:3      'f4' ( in 4-component vector of float)
+0:?     Sequence
+0:6      'gl_SubgroupSize' ( flat in uint SubgroupSize)
+0:7      'gl_SubgroupInvocationID' ( flat in uint SubgroupInvocationID)
+0:8      subgroupBarrier ( global void)
+0:9      subgroupMemoryBarrier ( global void)
+0:10      subgroupMemoryBarrierBuffer ( global void)
+0:11      subgroupMemoryBarrierImage ( global void)
+0:12      subgroupElect ( global bool)
+0:13      'gl_NumSubgroups' ( temp float)
+0:14      'gl_SubgroupID' ( temp float)
+0:15      Constant:
+0:15        0.000000
+0:17      subgroupAll ( global bool)
+0:17        Constant:
+0:17          true (const bool)
+0:18      subgroupAny ( global bool)
+0:18        Constant:
+0:18          false (const bool)
+0:19      subgroupAllEqual ( global bool)
+0:19        'f4' ( in 4-component vector of float)
+0:21      'gl_SubgroupEqMask' ( flat in 4-component vector of uint SubgroupEqMask)
+0:22      'gl_SubgroupGeMask' ( flat in 4-component vector of uint SubgroupGeMask)
+0:23      'gl_SubgroupGtMask' ( flat in 4-component vector of uint SubgroupGtMask)
+0:24      'gl_SubgroupLeMask' ( flat in 4-component vector of uint SubgroupLeMask)
+0:25      'gl_SubgroupLtMask' ( flat in 4-component vector of uint SubgroupLtMask)
+0:26      subgroupBroadcast ( global 4-component vector of float)
+0:26        'f4' ( in 4-component vector of float)
+0:26        Constant:
+0:26          0 (const uint)
+0:27      subgroupBroadcastFirst ( global 4-component vector of float)
+0:27        'f4' ( in 4-component vector of float)
+0:28      Sequence
+0:28        move second child to first child ( temp 4-component vector of uint)
+0:28          'ballot' ( temp 4-component vector of uint)
+0:28          subgroupBallot ( global 4-component vector of uint)
+0:28            Constant:
+0:28              false (const bool)
+0:29      subgroupInverseBallot ( global bool)
+0:29        Constant:
+0:29          1 (const uint)
+0:29          1 (const uint)
+0:29          1 (const uint)
+0:29          1 (const uint)
+0:30      subgroupBallotBitExtract ( global bool)
+0:30        'ballot' ( temp 4-component vector of uint)
+0:30        Constant:
+0:30          0 (const uint)
+0:31      subgroupBallotBitCount ( global uint)
+0:31        'ballot' ( temp 4-component vector of uint)
+0:32      subgroupBallotInclusiveBitCount ( global uint)
+0:32        'ballot' ( temp 4-component vector of uint)
+0:33      subgroupBallotExclusiveBitCount ( global uint)
+0:33        'ballot' ( temp 4-component vector of uint)
+0:34      subgroupBallotFindLSB ( global uint)
+0:34        'ballot' ( temp 4-component vector of uint)
+0:35      subgroupBallotFindMSB ( global uint)
+0:35        'ballot' ( temp 4-component vector of uint)
+0:37      subgroupShuffle ( global 4-component vector of float)
+0:37        'f4' ( in 4-component vector of float)
+0:37        Constant:
+0:37          0 (const uint)
+0:38      subgroupShuffleXor ( global 4-component vector of float)
+0:38        'f4' ( in 4-component vector of float)
+0:38        Constant:
+0:38          1 (const uint)
+0:39      subgroupShuffleUp ( global 4-component vector of float)
+0:39        'f4' ( in 4-component vector of float)
+0:39        Constant:
+0:39          1 (const uint)
+0:40      subgroupShuffleDown ( global 4-component vector of float)
+0:40        'f4' ( in 4-component vector of float)
+0:40        Constant:
+0:40          1 (const uint)
+0:42      move second child to first child ( temp 4-component vector of float)
+0:42        'result' ( temp 4-component vector of float)
+0:42        subgroupAdd ( global 4-component vector of float)
+0:42          'f4' ( in 4-component vector of float)
+0:43      subgroupMul ( global 4-component vector of float)
+0:43        'f4' ( in 4-component vector of float)
+0:44      subgroupMin ( global 4-component vector of float)
+0:44        'f4' ( in 4-component vector of float)
+0:45      subgroupMax ( global 4-component vector of float)
+0:45        'f4' ( in 4-component vector of float)
+0:46      subgroupAnd ( global 4-component vector of uint)
+0:46        'ballot' ( temp 4-component vector of uint)
+0:47      subgroupOr ( global 4-component vector of uint)
+0:47        'ballot' ( temp 4-component vector of uint)
+0:48      subgroupXor ( global 4-component vector of uint)
+0:48        'ballot' ( temp 4-component vector of uint)
+0:49      subgroupInclusiveAdd ( global 4-component vector of float)
+0:49        'f4' ( in 4-component vector of float)
+0:50      subgroupInclusiveMul ( global 4-component vector of float)
+0:50        'f4' ( in 4-component vector of float)
+0:51      subgroupInclusiveMin ( global 4-component vector of float)
+0:51        'f4' ( in 4-component vector of float)
+0:52      subgroupInclusiveMax ( global 4-component vector of float)
+0:52        'f4' ( in 4-component vector of float)
+0:53      subgroupInclusiveAnd ( global 4-component vector of uint)
+0:53        'ballot' ( temp 4-component vector of uint)
+0:54      subgroupInclusiveOr ( global 4-component vector of uint)
+0:54        'ballot' ( temp 4-component vector of uint)
+0:55      subgroupInclusiveXor ( global 4-component vector of uint)
+0:55        'ballot' ( temp 4-component vector of uint)
+0:56      subgroupExclusiveAdd ( global 4-component vector of float)
+0:56        'f4' ( in 4-component vector of float)
+0:57      subgroupExclusiveMul ( global 4-component vector of float)
+0:57        'f4' ( in 4-component vector of float)
+0:58      subgroupExclusiveMin ( global 4-component vector of float)
+0:58        'f4' ( in 4-component vector of float)
+0:59      subgroupExclusiveMax ( global 4-component vector of float)
+0:59        'f4' ( in 4-component vector of float)
+0:60      subgroupExclusiveAnd ( global 4-component vector of uint)
+0:60        'ballot' ( temp 4-component vector of uint)
+0:61      subgroupExclusiveOr ( global 4-component vector of uint)
+0:61        'ballot' ( temp 4-component vector of uint)
+0:62      subgroupExclusiveXor ( global 4-component vector of uint)
+0:62        'ballot' ( temp 4-component vector of uint)
+0:64      subgroupClusteredAdd ( global 4-component vector of float)
+0:64        'f4' ( in 4-component vector of float)
+0:64        Constant:
+0:64          2 (const uint)
+0:65      subgroupClusteredMul ( global 4-component vector of float)
+0:65        'f4' ( in 4-component vector of float)
+0:65        Constant:
+0:65          2 (const uint)
+0:66      subgroupClusteredMin ( global 4-component vector of float)
+0:66        'f4' ( in 4-component vector of float)
+0:66        Constant:
+0:66          2 (const uint)
+0:67      subgroupClusteredMax ( global 4-component vector of float)
+0:67        'f4' ( in 4-component vector of float)
+0:67        Constant:
+0:67          2 (const uint)
+0:68      subgroupClusteredAnd ( global 4-component vector of uint)
+0:68        'ballot' ( temp 4-component vector of uint)
+0:68        Constant:
+0:68          2 (const uint)
+0:69      subgroupClusteredOr ( global 4-component vector of uint)
+0:69        'ballot' ( temp 4-component vector of uint)
+0:69        Constant:
+0:69          2 (const uint)
+0:70      subgroupClusteredXor ( global 4-component vector of uint)
+0:70        'ballot' ( temp 4-component vector of uint)
+0:70        Constant:
+0:70          2 (const uint)
+0:72      subgroupQuadBroadcast ( global 4-component vector of float)
+0:72        'f4' ( in 4-component vector of float)
+0:72        Constant:
+0:72          0 (const uint)
+0:73      subgroupQuadSwapHorizontal ( global 4-component vector of float)
+0:73        'f4' ( in 4-component vector of float)
+0:74      subgroupQuadSwapVertical ( global 4-component vector of float)
+0:74        'f4' ( in 4-component vector of float)
+0:75      subgroupQuadSwapDiagonal ( global 4-component vector of float)
+0:75        'f4' ( in 4-component vector of float)
+0:77      Sequence
+0:77        move second child to first child ( temp 4-component vector of uint)
+0:77          'parti' ( temp 4-component vector of uint)
+0:77          subgroupPartitionNV ( global 4-component vector of uint)
+0:77            'f4' ( in 4-component vector of float)
+0:78      subgroupPartitionedAddNV ( global 4-component vector of float)
+0:78        'f4' ( in 4-component vector of float)
+0:78        'parti' ( temp 4-component vector of uint)
+0:79      subgroupPartitionedMulNV ( global 4-component vector of float)
+0:79        'f4' ( in 4-component vector of float)
+0:79        'parti' ( temp 4-component vector of uint)
+0:80      subgroupPartitionedMinNV ( global 4-component vector of float)
+0:80        'f4' ( in 4-component vector of float)
+0:80        'parti' ( temp 4-component vector of uint)
+0:81      subgroupPartitionedMaxNV ( global 4-component vector of float)
+0:81        'f4' ( in 4-component vector of float)
+0:81        'parti' ( temp 4-component vector of uint)
+0:82      subgroupPartitionedAndNV ( global 4-component vector of uint)
+0:82        'ballot' ( temp 4-component vector of uint)
+0:82        'parti' ( temp 4-component vector of uint)
+0:83      subgroupPartitionedOrNV ( global 4-component vector of uint)
+0:83        'ballot' ( temp 4-component vector of uint)
+0:83        'parti' ( temp 4-component vector of uint)
+0:84      subgroupPartitionedXorNV ( global 4-component vector of uint)
+0:84        'ballot' ( temp 4-component vector of uint)
+0:84        'parti' ( temp 4-component vector of uint)
+0:85      subgroupPartitionedInclusiveAddNV ( global 4-component vector of float)
+0:85        'f4' ( in 4-component vector of float)
+0:85        'parti' ( temp 4-component vector of uint)
+0:86      subgroupPartitionedInclusiveMulNV ( global 4-component vector of float)
+0:86        'f4' ( in 4-component vector of float)
+0:86        'parti' ( temp 4-component vector of uint)
+0:87      subgroupPartitionedInclusiveMinNV ( global 4-component vector of float)
+0:87        'f4' ( in 4-component vector of float)
+0:87        'parti' ( temp 4-component vector of uint)
+0:88      subgroupPartitionedInclusiveMaxNV ( global 4-component vector of float)
+0:88        'f4' ( in 4-component vector of float)
+0:88        'parti' ( temp 4-component vector of uint)
+0:89      subgroupPartitionedInclusiveAndNV ( global 4-component vector of uint)
+0:89        'ballot' ( temp 4-component vector of uint)
+0:89        'parti' ( temp 4-component vector of uint)
+0:90      subgroupPartitionedInclusiveOrNV ( global 4-component vector of uint)
+0:90        'ballot' ( temp 4-component vector of uint)
+0:90        'parti' ( temp 4-component vector of uint)
+0:91      subgroupPartitionedInclusiveXorNV ( global 4-component vector of uint)
+0:91        'ballot' ( temp 4-component vector of uint)
+0:91        'parti' ( temp 4-component vector of uint)
+0:92      subgroupPartitionedExclusiveAddNV ( global 4-component vector of float)
+0:92        'f4' ( in 4-component vector of float)
+0:92        'parti' ( temp 4-component vector of uint)
+0:93      subgroupPartitionedExclusiveMulNV ( global 4-component vector of float)
+0:93        'f4' ( in 4-component vector of float)
+0:93        'parti' ( temp 4-component vector of uint)
+0:94      subgroupPartitionedExclusiveMinNV ( global 4-component vector of float)
+0:94        'f4' ( in 4-component vector of float)
+0:94        'parti' ( temp 4-component vector of uint)
+0:95      subgroupPartitionedExclusiveMaxNV ( global 4-component vector of float)
+0:95        'f4' ( in 4-component vector of float)
+0:95        'parti' ( temp 4-component vector of uint)
+0:96      subgroupPartitionedExclusiveAndNV ( global 4-component vector of uint)
+0:96        'ballot' ( temp 4-component vector of uint)
+0:96        'parti' ( temp 4-component vector of uint)
+0:97      subgroupPartitionedExclusiveOrNV ( global 4-component vector of uint)
+0:97        'ballot' ( temp 4-component vector of uint)
+0:97        'parti' ( temp 4-component vector of uint)
+0:98      subgroupPartitionedExclusiveXorNV ( global 4-component vector of uint)
+0:98        'ballot' ( temp 4-component vector of uint)
+0:98        'parti' ( temp 4-component vector of uint)
+0:100      Branch: Return with expression
+0:100        'result' ( temp 4-component vector of float)
+0:105  Function Definition: main( ( global void)
+0:105    Function Parameters: 
+0:107    Sequence
+0:107      move second child to first child ( temp 4-component vector of uint)
+0:107        'data' (layout( location=0) out 4-component vector of uint)
+0:107        Construct uvec4 ( temp 4-component vector of uint)
+0:107          'gl_SubgroupSize' ( flat in uint SubgroupSize)
+0:107          'gl_SubgroupInvocationID' ( flat in uint SubgroupInvocationID)
+0:107          Constant:
+0:107            0 (const uint)
+0:107          Constant:
+0:107            0 (const uint)
+0:108      subgroupBarrier ( global void)
+0:109      subgroupMemoryBarrier ( global void)
+0:110      subgroupMemoryBarrierBuffer ( global void)
+0:111      subgroupMemoryBarrierImage ( global void)
+0:112      subgroupElect ( global bool)
+0:116  Function Definition: ballot_works(vf4; ( global void)
+0:116    Function Parameters: 
+0:116      'f4' ( in 4-component vector of float)
+0:?     Sequence
+0:118      'gl_SubgroupEqMask' ( flat in 4-component vector of uint SubgroupEqMask)
+0:119      'gl_SubgroupGeMask' ( flat in 4-component vector of uint SubgroupGeMask)
+0:120      'gl_SubgroupGtMask' ( flat in 4-component vector of uint SubgroupGtMask)
+0:121      'gl_SubgroupLeMask' ( flat in 4-component vector of uint SubgroupLeMask)
+0:122      'gl_SubgroupLtMask' ( flat in 4-component vector of uint SubgroupLtMask)
+0:123      subgroupBroadcast ( global 4-component vector of float)
+0:123        'f4' ( in 4-component vector of float)
+0:123        Constant:
+0:123          0 (const uint)
+0:124      subgroupBroadcast ( global 4-component vector of float)
+0:124        'f4' ( in 4-component vector of float)
+0:124        Convert int to uint ( temp uint)
+0:124          'i' ( temp int)
+0:125      subgroupBroadcastFirst ( global 4-component vector of float)
+0:125        'f4' ( in 4-component vector of float)
+0:126      Sequence
+0:126        move second child to first child ( temp 4-component vector of uint)
+0:126          'ballot' ( temp 4-component vector of uint)
+0:126          subgroupBallot ( global 4-component vector of uint)
+0:126            Constant:
+0:126              false (const bool)
+0:127      subgroupInverseBallot ( global bool)
+0:127        Constant:
+0:127          1 (const uint)
+0:127          1 (const uint)
+0:127          1 (const uint)
+0:127          1 (const uint)
+0:128      subgroupBallotBitExtract ( global bool)
+0:128        'ballot' ( temp 4-component vector of uint)
+0:128        Constant:
+0:128          0 (const uint)
+0:129      subgroupBallotBitCount ( global uint)
+0:129        'ballot' ( temp 4-component vector of uint)
+0:130      subgroupBallotInclusiveBitCount ( global uint)
+0:130        'ballot' ( temp 4-component vector of uint)
+0:131      subgroupBallotExclusiveBitCount ( global uint)
+0:131        'ballot' ( temp 4-component vector of uint)
+0:132      subgroupBallotFindLSB ( global uint)
+0:132        'ballot' ( temp 4-component vector of uint)
+0:133      subgroupBallotFindMSB ( global uint)
+0:133        'ballot' ( temp 4-component vector of uint)
+0:137  Function Definition: vote_works(vf4; ( global void)
+0:137    Function Parameters: 
+0:137      'f4' ( in 4-component vector of float)
+0:139    Sequence
+0:139      subgroupAll ( global bool)
+0:139        Constant:
+0:139          true (const bool)
+0:140      subgroupAny ( global bool)
+0:140        Constant:
+0:140          false (const bool)
+0:141      subgroupAllEqual ( global bool)
+0:141        'f4' ( in 4-component vector of float)
+0:146  Function Definition: shuffle_works(vf4; ( global void)
+0:146    Function Parameters: 
+0:146      'f4' ( in 4-component vector of float)
+0:148    Sequence
+0:148      subgroupShuffle ( global 4-component vector of float)
+0:148        'f4' ( in 4-component vector of float)
+0:148        Constant:
+0:148          0 (const uint)
+0:149      subgroupShuffleXor ( global 4-component vector of float)
+0:149        'f4' ( in 4-component vector of float)
+0:149        Constant:
+0:149          1 (const uint)
+0:150      subgroupShuffleUp ( global 4-component vector of float)
+0:150        'f4' ( in 4-component vector of float)
+0:150        Constant:
+0:150          1 (const uint)
+0:151      subgroupShuffleDown ( global 4-component vector of float)
+0:151        'f4' ( in 4-component vector of float)
+0:151        Constant:
+0:151          1 (const uint)
+0:155  Function Definition: arith_works(vf4; ( global void)
+0:155    Function Parameters: 
+0:155      'f4' ( in 4-component vector of float)
+0:?     Sequence
+0:158      subgroupAdd ( global 4-component vector of float)
+0:158        'f4' ( in 4-component vector of float)
+0:159      subgroupMul ( global 4-component vector of float)
+0:159        'f4' ( in 4-component vector of float)
+0:160      subgroupMin ( global 4-component vector of float)
+0:160        'f4' ( in 4-component vector of float)
+0:161      subgroupMax ( global 4-component vector of float)
+0:161        'f4' ( in 4-component vector of float)
+0:162      subgroupAnd ( global 4-component vector of uint)
+0:162        'ballot' ( temp 4-component vector of uint)
+0:163      subgroupOr ( global 4-component vector of uint)
+0:163        'ballot' ( temp 4-component vector of uint)
+0:164      subgroupXor ( global 4-component vector of uint)
+0:164        'ballot' ( temp 4-component vector of uint)
+0:165      subgroupInclusiveAdd ( global 4-component vector of float)
+0:165        'f4' ( in 4-component vector of float)
+0:166      subgroupInclusiveMul ( global 4-component vector of float)
+0:166        'f4' ( in 4-component vector of float)
+0:167      subgroupInclusiveMin ( global 4-component vector of float)
+0:167        'f4' ( in 4-component vector of float)
+0:168      subgroupInclusiveMax ( global 4-component vector of float)
+0:168        'f4' ( in 4-component vector of float)
+0:169      subgroupInclusiveAnd ( global 4-component vector of uint)
+0:169        'ballot' ( temp 4-component vector of uint)
+0:170      subgroupInclusiveOr ( global 4-component vector of uint)
+0:170        'ballot' ( temp 4-component vector of uint)
+0:171      subgroupInclusiveXor ( global 4-component vector of uint)
+0:171        'ballot' ( temp 4-component vector of uint)
+0:172      subgroupExclusiveAdd ( global 4-component vector of float)
+0:172        'f4' ( in 4-component vector of float)
+0:173      subgroupExclusiveMul ( global 4-component vector of float)
+0:173        'f4' ( in 4-component vector of float)
+0:174      subgroupExclusiveMin ( global 4-component vector of float)
+0:174        'f4' ( in 4-component vector of float)
+0:175      subgroupExclusiveMax ( global 4-component vector of float)
+0:175        'f4' ( in 4-component vector of float)
+0:176      subgroupExclusiveAnd ( global 4-component vector of uint)
+0:176        'ballot' ( temp 4-component vector of uint)
+0:177      subgroupExclusiveOr ( global 4-component vector of uint)
+0:177        'ballot' ( temp 4-component vector of uint)
+0:178      subgroupExclusiveXor ( global 4-component vector of uint)
+0:178        'ballot' ( temp 4-component vector of uint)
+0:182  Function Definition: clustered_works(vf4; ( global void)
+0:182    Function Parameters: 
+0:182      'f4' ( in 4-component vector of float)
+0:184    Sequence
+0:184      Sequence
+0:184        move second child to first child ( temp 4-component vector of uint)
+0:184          'ballot' ( temp 4-component vector of uint)
+0:184          Constant:
+0:184            85 (const uint)
+0:184            0 (const uint)
+0:184            0 (const uint)
+0:184            0 (const uint)
+0:185      subgroupClusteredAdd ( global 4-component vector of float)
+0:185        'f4' ( in 4-component vector of float)
+0:185        Constant:
+0:185          2 (const uint)
+0:186      subgroupClusteredMul ( global 4-component vector of float)
+0:186        'f4' ( in 4-component vector of float)
+0:186        Constant:
+0:186          2 (const uint)
+0:187      subgroupClusteredMin ( global 4-component vector of float)
+0:187        'f4' ( in 4-component vector of float)
+0:187        Constant:
+0:187          2 (const uint)
+0:188      subgroupClusteredMax ( global 4-component vector of float)
+0:188        'f4' ( in 4-component vector of float)
+0:188        Constant:
+0:188          2 (const uint)
+0:189      subgroupClusteredAnd ( global 4-component vector of uint)
+0:189        'ballot' ( temp 4-component vector of uint)
+0:189        Constant:
+0:189          2 (const uint)
+0:190      subgroupClusteredOr ( global 4-component vector of uint)
+0:190        'ballot' ( temp 4-component vector of uint)
+0:190        Constant:
+0:190          2 (const uint)
+0:191      subgroupClusteredXor ( global 4-component vector of uint)
+0:191        'ballot' ( temp 4-component vector of uint)
+0:191        Constant:
+0:191          2 (const uint)
+0:195  Function Definition: quad_works(vf4; ( global void)
+0:195    Function Parameters: 
+0:195      'f4' ( in 4-component vector of float)
+0:?     Sequence
+0:198      subgroupQuadBroadcast ( global 4-component vector of float)
+0:198        'f4' ( in 4-component vector of float)
+0:198        Constant:
+0:198          0 (const uint)
+0:199      subgroupQuadBroadcast ( global 4-component vector of float)
+0:199        'f4' ( in 4-component vector of float)
+0:199        Convert int to uint ( temp uint)
+0:199          'i' ( temp int)
+0:200      subgroupQuadSwapHorizontal ( global 4-component vector of float)
+0:200        'f4' ( in 4-component vector of float)
+0:201      subgroupQuadSwapVertical ( global 4-component vector of float)
+0:201        'f4' ( in 4-component vector of float)
+0:202      subgroupQuadSwapDiagonal ( global 4-component vector of float)
+0:202        'f4' ( in 4-component vector of float)
+0:206  Function Definition: partitioned_works(vf4; ( global void)
+0:206    Function Parameters: 
+0:206      'f4' ( in 4-component vector of float)
+0:208    Sequence
+0:208      Sequence
+0:208        move second child to first child ( temp 4-component vector of uint)
+0:208          'parti' ( temp 4-component vector of uint)
+0:208          subgroupPartitionNV ( global 4-component vector of uint)
+0:208            'f4' ( in 4-component vector of float)
+0:209      Sequence
+0:209        move second child to first child ( temp 4-component vector of uint)
+0:209          'ballot' ( temp 4-component vector of uint)
+0:209          Constant:
+0:209            85 (const uint)
+0:209            0 (const uint)
+0:209            0 (const uint)
+0:209            0 (const uint)
+0:210      subgroupPartitionedAddNV ( global 4-component vector of float)
+0:210        'f4' ( in 4-component vector of float)
+0:210        'parti' ( temp 4-component vector of uint)
+0:211      subgroupPartitionedMulNV ( global 4-component vector of float)
+0:211        'f4' ( in 4-component vector of float)
+0:211        'parti' ( temp 4-component vector of uint)
+0:212      subgroupPartitionedMinNV ( global 4-component vector of float)
+0:212        'f4' ( in 4-component vector of float)
+0:212        'parti' ( temp 4-component vector of uint)
+0:213      subgroupPartitionedMaxNV ( global 4-component vector of float)
+0:213        'f4' ( in 4-component vector of float)
+0:213        'parti' ( temp 4-component vector of uint)
+0:214      subgroupPartitionedAndNV ( global 4-component vector of uint)
+0:214        'ballot' ( temp 4-component vector of uint)
+0:214        'parti' ( temp 4-component vector of uint)
+0:215      subgroupPartitionedOrNV ( global 4-component vector of uint)
+0:215        'ballot' ( temp 4-component vector of uint)
+0:215        'parti' ( temp 4-component vector of uint)
+0:216      subgroupPartitionedXorNV ( global 4-component vector of uint)
+0:216        'ballot' ( temp 4-component vector of uint)
+0:216        'parti' ( temp 4-component vector of uint)
+0:217      subgroupPartitionedInclusiveAddNV ( global 4-component vector of float)
+0:217        'f4' ( in 4-component vector of float)
+0:217        'parti' ( temp 4-component vector of uint)
+0:218      subgroupPartitionedInclusiveMulNV ( global 4-component vector of float)
+0:218        'f4' ( in 4-component vector of float)
+0:218        'parti' ( temp 4-component vector of uint)
+0:219      subgroupPartitionedInclusiveMinNV ( global 4-component vector of float)
+0:219        'f4' ( in 4-component vector of float)
+0:219        'parti' ( temp 4-component vector of uint)
+0:220      subgroupPartitionedInclusiveMaxNV ( global 4-component vector of float)
+0:220        'f4' ( in 4-component vector of float)
+0:220        'parti' ( temp 4-component vector of uint)
+0:221      subgroupPartitionedInclusiveAndNV ( global 4-component vector of uint)
+0:221        'ballot' ( temp 4-component vector of uint)
+0:221        'parti' ( temp 4-component vector of uint)
+0:222      subgroupPartitionedInclusiveOrNV ( global 4-component vector of uint)
+0:222        'ballot' ( temp 4-component vector of uint)
+0:222        'parti' ( temp 4-component vector of uint)
+0:223      subgroupPartitionedInclusiveXorNV ( global 4-component vector of uint)
+0:223        'ballot' ( temp 4-component vector of uint)
+0:223        'parti' ( temp 4-component vector of uint)
+0:224      subgroupPartitionedExclusiveAddNV ( global 4-component vector of float)
+0:224        'f4' ( in 4-component vector of float)
+0:224        'parti' ( temp 4-component vector of uint)
+0:225      subgroupPartitionedExclusiveMulNV ( global 4-component vector of float)
+0:225        'f4' ( in 4-component vector of float)
+0:225        'parti' ( temp 4-component vector of uint)
+0:226      subgroupPartitionedExclusiveMinNV ( global 4-component vector of float)
+0:226        'f4' ( in 4-component vector of float)
+0:226        'parti' ( temp 4-component vector of uint)
+0:227      subgroupPartitionedExclusiveMaxNV ( global 4-component vector of float)
+0:227        'f4' ( in 4-component vector of float)
+0:227        'parti' ( temp 4-component vector of uint)
+0:228      subgroupPartitionedExclusiveAndNV ( global 4-component vector of uint)
+0:228        'ballot' ( temp 4-component vector of uint)
+0:228        'parti' ( temp 4-component vector of uint)
+0:229      subgroupPartitionedExclusiveOrNV ( global 4-component vector of uint)
+0:229        'ballot' ( temp 4-component vector of uint)
+0:229        'parti' ( temp 4-component vector of uint)
+0:230      subgroupPartitionedExclusiveXorNV ( global 4-component vector of uint)
+0:230        'ballot' ( temp 4-component vector of uint)
+0:230        'parti' ( temp 4-component vector of uint)
+0:234  Function Definition: sm_builtins_err( ( global void)
+0:234    Function Parameters: 
+0:236    Sequence
+0:236      'gl_WarpsPerSMNV' ( flat in uint WarpsPerSMNV)
+0:237      'gl_SMCountNV' ( flat in uint SMCountNV)
+0:238      'gl_WarpIDNV' ( flat in uint WarpIDNV)
+0:239      'gl_SMIDNV' ( flat in uint SMIDNV)
+0:246  Function Definition: sm_builtins( ( global void)
+0:246    Function Parameters: 
+0:248    Sequence
+0:248      'gl_WarpsPerSMNV' ( flat in uint WarpsPerSMNV)
+0:249      'gl_SMCountNV' ( flat in uint SMCountNV)
+0:250      'gl_WarpIDNV' ( flat in uint WarpIDNV)
+0:251      'gl_SMIDNV' ( flat in uint SMIDNV)
+0:?   Linker Objects
+0:?     'data' (layout( location=0) out 4-component vector of uint)
+
+
+Linked fragment stage:
+
+
+Shader version: 450
+Requested GL_KHR_shader_subgroup_arithmetic
+Requested GL_KHR_shader_subgroup_ballot
+Requested GL_KHR_shader_subgroup_basic
+Requested GL_KHR_shader_subgroup_clustered
+Requested GL_KHR_shader_subgroup_quad
+Requested GL_KHR_shader_subgroup_shuffle
+Requested GL_KHR_shader_subgroup_shuffle_relative
+Requested GL_KHR_shader_subgroup_vote
+Requested GL_NV_shader_sm_builtins
+Requested GL_NV_shader_subgroup_partitioned
+ERROR: node is still EOpNull!
+0:105  Function Definition: main( ( global void)
+0:105    Function Parameters: 
+0:107    Sequence
+0:107      move second child to first child ( temp 4-component vector of uint)
+0:107        'data' (layout( location=0) out 4-component vector of uint)
+0:107        Construct uvec4 ( temp 4-component vector of uint)
+0:107          'gl_SubgroupSize' ( flat in uint SubgroupSize)
+0:107          'gl_SubgroupInvocationID' ( flat in uint SubgroupInvocationID)
+0:107          Constant:
+0:107            0 (const uint)
+0:107          Constant:
+0:107            0 (const uint)
+0:108      subgroupBarrier ( global void)
+0:109      subgroupMemoryBarrier ( global void)
+0:110      subgroupMemoryBarrierBuffer ( global void)
+0:111      subgroupMemoryBarrierImage ( global void)
+0:112      subgroupElect ( global bool)
+0:?   Linker Objects
+0:?     'data' (layout( location=0) out 4-component vector of uint)
+

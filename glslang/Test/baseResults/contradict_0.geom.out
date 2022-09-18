@@ -1,0 +1,63 @@
+contradict_0.geom
+Shader version: 330
+invocations = -1
+max_vertices = 4
+input primitive = points
+output primitive = triangle_strip
+0:? Sequence
+0:8  Function Definition: main( ( global void)
+0:8    Function Parameters: 
+0:10    Sequence
+0:10      Sequence
+0:10        move second child to first child ( temp float)
+0:10          'v' ( temp float)
+0:10          Function Call: getV( ( global float)
+0:11      EndPrimitive ( global void)
+0:12      EndPrimitive ( global void)
+0:?   Linker Objects
+
+contradict_1.geom
+Shader version: 330
+invocations = -1
+max_vertices = 6
+input primitive = lines
+output primitive = line_strip
+0:? Sequence
+0:6  Function Definition: getV( ( global float)
+0:6    Function Parameters: 
+0:8    Sequence
+0:8      Branch: Return with expression
+0:8        Constant:
+0:8          1.000000
+0:?   Linker Objects
+
+
+Linked geometry stage:
+
+ERROR: Linking geometry stage: Contradictory layout max_vertices values
+ERROR: Linking geometry stage: Contradictory input layout primitives
+ERROR: Linking geometry stage: Contradictory output layout primitives
+
+Shader version: 330
+invocations = 1
+max_vertices = 4
+input primitive = points
+output primitive = triangle_strip
+0:? Sequence
+0:8  Function Definition: main( ( global void)
+0:8    Function Parameters: 
+0:10    Sequence
+0:10      Sequence
+0:10        move second child to first child ( temp float)
+0:10          'v' ( temp float)
+0:10          Function Call: getV( ( global float)
+0:11      EndPrimitive ( global void)
+0:12      EndPrimitive ( global void)
+0:6  Function Definition: getV( ( global float)
+0:6    Function Parameters: 
+0:8    Sequence
+0:8      Branch: Return with expression
+0:8        Constant:
+0:8          1.000000
+0:?   Linker Objects
+

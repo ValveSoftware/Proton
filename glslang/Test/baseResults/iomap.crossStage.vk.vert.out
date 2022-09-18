@@ -1,0 +1,721 @@
+iomap.crossStage.vk.vert
+Shader version: 460
+0:? Sequence
+0:26  Function Definition: main( ( global void)
+0:26    Function Parameters: 
+0:28    Sequence
+0:28      move second child to first child ( temp highp 4-component vector of float)
+0:28        'vgo1' ( smooth out highp 4-component vector of float)
+0:28        Constant:
+0:28          0.000000
+0:28          0.000000
+0:28          0.000000
+0:28          0.000000
+0:29      move second child to first child ( temp highp 2-component vector of float)
+0:29        'vgo2' ( smooth out highp 2-component vector of float)
+0:29        Constant:
+0:29          0.000000
+0:29          0.000000
+0:30      move second child to first child ( temp highp 4-component vector of float)
+0:30        o3: direct index for structure ( out highp 4-component vector of float)
+0:30          'anon@0' (layout( location=5) out block{ out highp 4-component vector of float o3})
+0:30          Constant:
+0:30            0 (const uint)
+0:30        Constant:
+0:30          0.000000
+0:30          0.000000
+0:30          0.000000
+0:30          0.000000
+0:?   Linker Objects
+0:?     'vgo1' ( smooth out highp 4-component vector of float)
+0:?     'vgo2' ( smooth out highp 2-component vector of float)
+0:?     'anon@0' (layout( location=5) out block{ out highp 4-component vector of float o3})
+0:?     'glass' (layout( binding=0) uniform highp sampler2D)
+0:?     'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:?     'anon@2' (layout( column_major std430) readonly buffer block{layout( column_major std430) readonly buffer highp 2-component vector of float vb1})
+0:?     'blockName1' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+
+iomap.crossStage.vk.geom
+Shader version: 460
+invocations = -1
+max_vertices = 3
+input primitive = points
+output primitive = triangle_strip
+0:? Sequence
+0:25  Function Definition: main( ( global void)
+0:25    Function Parameters: 
+0:27    Sequence
+0:27      Sequence
+0:27        Sequence
+0:27          move second child to first child ( temp highp int)
+0:27            'i' ( temp highp int)
+0:27            Constant:
+0:27              0 (const int)
+0:27        Loop with condition tested first
+0:27          Loop Condition
+0:27          Compare Less Than ( temp bool)
+0:27            'i' ( temp highp int)
+0:27            Constant:
+0:27              3 (const int)
+0:27          Loop Body
+0:28          Sequence
+0:28            move second child to first child ( temp highp 4-component vector of float)
+0:28              'gfo1' (layout( stream=0) out highp 4-component vector of float)
+0:28              Constant:
+0:28                0.000000
+0:28                0.000000
+0:28                0.000000
+0:28                0.000000
+0:29            move second child to first child ( temp highp 2-component vector of float)
+0:29              'gfo2' (layout( stream=0) out highp 2-component vector of float)
+0:29              Constant:
+0:29                0.000000
+0:29                0.000000
+0:30            move second child to first child ( temp highp 4-component vector of float)
+0:30              o3: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:30                'gf_out' (layout( location=5 stream=0) out block{layout( stream=0) out highp 4-component vector of float o3})
+0:30                Constant:
+0:30                  0 (const int)
+0:30              o3: direct index for structure ( in highp 4-component vector of float)
+0:30                indirect index (layout( location=5) temp block{ in highp 4-component vector of float o3})
+0:30                  'inBlock' (layout( location=5) in 1-element array of block{ in highp 4-component vector of float o3})
+0:30                  'i' ( temp highp int)
+0:30                Constant:
+0:30                  0 (const int)
+0:31            EmitVertex ( global void)
+0:27          Loop Terminal Expression
+0:27          Post-Increment ( temp highp int)
+0:27            'i' ( temp highp int)
+0:33      EndPrimitive ( global void)
+0:?   Linker Objects
+0:?     'vgo1' ( in 1-element array of highp 4-component vector of float)
+0:?     'vgo2' ( in 1-element array of highp 2-component vector of float)
+0:?     'inBlock' (layout( location=5) in 1-element array of block{ in highp 4-component vector of float o3})
+0:?     'gfo1' (layout( stream=0) out highp 4-component vector of float)
+0:?     'gfo2' (layout( stream=0) out highp 2-component vector of float)
+0:?     'gf_out' (layout( location=5 stream=0) out block{layout( stream=0) out highp 4-component vector of float o3})
+0:?     'blockName1' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+
+iomap.crossStage.vk.frag
+Shader version: 460
+gl_FragCoord origin is upper left
+0:? Sequence
+0:30  Function Definition: Bar( ( global highp 2-component vector of float)
+0:30    Function Parameters: 
+0:31    Sequence
+0:31      Branch: Return with expression
+0:32        add ( temp highp 2-component vector of float)
+0:31          add ( temp highp 2-component vector of float)
+0:31            fb1: direct index for structure (layout( column_major std430) readonly buffer highp 2-component vector of float)
+0:31              'anon@2' (layout( column_major std430) readonly buffer block{layout( column_major std430) readonly buffer highp 2-component vector of float fb1})
+0:31              Constant:
+0:31                0 (const uint)
+0:32            b: direct index for structure (layout( column_major std140) uniform highp 2-component vector of float)
+0:32              direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:32                'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:32                Constant:
+0:32                  0 (const int)
+0:32              Constant:
+0:32                1 (const int)
+0:33          b: direct index for structure (layout( column_major std140) uniform highp 2-component vector of float)
+0:33            direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:33              'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:33              Constant:
+0:33                1 (const int)
+0:33            Constant:
+0:33              1 (const int)
+0:36  Function Definition: Foo( ( global highp 4-component vector of float)
+0:36    Function Parameters: 
+0:37    Sequence
+0:37      Branch: Return with expression
+0:40        add ( temp highp 4-component vector of float)
+0:39          add ( temp highp 4-component vector of float)
+0:38            add ( temp highp 4-component vector of float)
+0:37              add ( temp highp 4-component vector of float)
+0:37                a: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:37                  'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:37                  Constant:
+0:37                    0 (const uint)
+0:38                b: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:38                  'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:38                  Constant:
+0:38                    1 (const uint)
+0:39              a: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:39                direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:39                  'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:39                  Constant:
+0:39                    0 (const int)
+0:39                Constant:
+0:39                  0 (const int)
+0:40            a: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:40              direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:40                'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:40                Constant:
+0:40                  1 (const int)
+0:40              Constant:
+0:40                0 (const int)
+0:41          Construct vec4 ( temp highp 4-component vector of float)
+0:41            Function Call: Bar( ( global highp 2-component vector of float)
+0:41            Constant:
+0:41              0.000000
+0:41            Constant:
+0:41              0.000000
+0:44  Function Definition: main( ( global void)
+0:44    Function Parameters: 
+0:46    Sequence
+0:46      Sequence
+0:46        move second child to first child ( temp highp 4-component vector of float)
+0:46          'color' ( temp highp 4-component vector of float)
+0:46          'gfo1' ( smooth in highp 4-component vector of float)
+0:47      move second child to first child ( temp highp 4-component vector of float)
+0:47        'color' ( temp highp 4-component vector of float)
+0:47        add ( temp highp 4-component vector of float)
+0:47          'color' ( temp highp 4-component vector of float)
+0:47          Function Call: Foo( ( global highp 4-component vector of float)
+0:48      move second child to first child ( temp highp 4-component vector of float)
+0:48        'outColor' ( out highp 4-component vector of float)
+0:48        'color' ( temp highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'anon@0' (layout( location=5) in block{ in highp 4-component vector of float o3})
+0:?     'gfo1' ( smooth in highp 4-component vector of float)
+0:?     'gfo2' ( smooth in highp 2-component vector of float)
+0:?     'outColor' ( out highp 4-component vector of float)
+0:?     'glass' (layout( binding=0) uniform highp sampler2D)
+0:?     'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:?     'anon@2' (layout( column_major std430) readonly buffer block{layout( column_major std430) readonly buffer highp 2-component vector of float fb1})
+0:?     'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+
+
+Linked vertex stage:
+
+
+Linked geometry stage:
+
+
+Linked fragment stage:
+
+WARNING: Linking unknown stage and fragment stages: Matched shader interfaces are using different instance names.
+    unknown stage stage: Block: crossStageBlock2 Instance: blockName1: ""
+    fragment stage: Block: crossStageBlock2 Instance: blockName2: ""
+
+Shader version: 460
+0:? Sequence
+0:26  Function Definition: main( ( global void)
+0:26    Function Parameters: 
+0:28    Sequence
+0:28      move second child to first child ( temp highp 4-component vector of float)
+0:28        'vgo1' ( smooth out highp 4-component vector of float)
+0:28        Constant:
+0:28          0.000000
+0:28          0.000000
+0:28          0.000000
+0:28          0.000000
+0:29      move second child to first child ( temp highp 2-component vector of float)
+0:29        'vgo2' ( smooth out highp 2-component vector of float)
+0:29        Constant:
+0:29          0.000000
+0:29          0.000000
+0:30      move second child to first child ( temp highp 4-component vector of float)
+0:30        o3: direct index for structure ( out highp 4-component vector of float)
+0:30          'anon@0' (layout( location=5) out block{ out highp 4-component vector of float o3})
+0:30          Constant:
+0:30            0 (const uint)
+0:30        Constant:
+0:30          0.000000
+0:30          0.000000
+0:30          0.000000
+0:30          0.000000
+0:?   Linker Objects
+0:?     'vgo1' ( smooth out highp 4-component vector of float)
+0:?     'vgo2' ( smooth out highp 2-component vector of float)
+0:?     'anon@0' (layout( location=5) out block{ out highp 4-component vector of float o3})
+0:?     'glass' (layout( binding=0) uniform highp sampler2D)
+0:?     'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:?     'anon@2' (layout( column_major std430) readonly buffer block{layout( column_major std430) readonly buffer highp 2-component vector of float vb1})
+0:?     'blockName1' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+Shader version: 460
+invocations = 1
+max_vertices = 3
+input primitive = points
+output primitive = triangle_strip
+0:? Sequence
+0:25  Function Definition: main( ( global void)
+0:25    Function Parameters: 
+0:27    Sequence
+0:27      Sequence
+0:27        Sequence
+0:27          move second child to first child ( temp highp int)
+0:27            'i' ( temp highp int)
+0:27            Constant:
+0:27              0 (const int)
+0:27        Loop with condition tested first
+0:27          Loop Condition
+0:27          Compare Less Than ( temp bool)
+0:27            'i' ( temp highp int)
+0:27            Constant:
+0:27              3 (const int)
+0:27          Loop Body
+0:28          Sequence
+0:28            move second child to first child ( temp highp 4-component vector of float)
+0:28              'gfo1' (layout( stream=0) out highp 4-component vector of float)
+0:28              Constant:
+0:28                0.000000
+0:28                0.000000
+0:28                0.000000
+0:28                0.000000
+0:29            move second child to first child ( temp highp 2-component vector of float)
+0:29              'gfo2' (layout( stream=0) out highp 2-component vector of float)
+0:29              Constant:
+0:29                0.000000
+0:29                0.000000
+0:30            move second child to first child ( temp highp 4-component vector of float)
+0:30              o3: direct index for structure (layout( stream=0) out highp 4-component vector of float)
+0:30                'gf_out' (layout( location=5 stream=0) out block{layout( stream=0) out highp 4-component vector of float o3})
+0:30                Constant:
+0:30                  0 (const int)
+0:30              o3: direct index for structure ( in highp 4-component vector of float)
+0:30                indirect index (layout( location=5) temp block{ in highp 4-component vector of float o3})
+0:30                  'inBlock' (layout( location=5) in 1-element array of block{ in highp 4-component vector of float o3})
+0:30                  'i' ( temp highp int)
+0:30                Constant:
+0:30                  0 (const int)
+0:31            EmitVertex ( global void)
+0:27          Loop Terminal Expression
+0:27          Post-Increment ( temp highp int)
+0:27            'i' ( temp highp int)
+0:33      EndPrimitive ( global void)
+0:?   Linker Objects
+0:?     'vgo1' ( in 1-element array of highp 4-component vector of float)
+0:?     'vgo2' ( in 1-element array of highp 2-component vector of float)
+0:?     'inBlock' (layout( location=5) in 1-element array of block{ in highp 4-component vector of float o3})
+0:?     'gfo1' (layout( stream=0) out highp 4-component vector of float)
+0:?     'gfo2' (layout( stream=0) out highp 2-component vector of float)
+0:?     'gf_out' (layout( location=5 stream=0) out block{layout( stream=0) out highp 4-component vector of float o3})
+0:?     'blockName1' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+Shader version: 460
+gl_FragCoord origin is upper left
+0:? Sequence
+0:30  Function Definition: Bar( ( global highp 2-component vector of float)
+0:30    Function Parameters: 
+0:31    Sequence
+0:31      Branch: Return with expression
+0:32        add ( temp highp 2-component vector of float)
+0:31          add ( temp highp 2-component vector of float)
+0:31            fb1: direct index for structure (layout( column_major std430) readonly buffer highp 2-component vector of float)
+0:31              'anon@2' (layout( column_major std430) readonly buffer block{layout( column_major std430) readonly buffer highp 2-component vector of float fb1})
+0:31              Constant:
+0:31                0 (const uint)
+0:32            b: direct index for structure (layout( column_major std140) uniform highp 2-component vector of float)
+0:32              direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:32                'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:32                Constant:
+0:32                  0 (const int)
+0:32              Constant:
+0:32                1 (const int)
+0:33          b: direct index for structure (layout( column_major std140) uniform highp 2-component vector of float)
+0:33            direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:33              'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:33              Constant:
+0:33                1 (const int)
+0:33            Constant:
+0:33              1 (const int)
+0:36  Function Definition: Foo( ( global highp 4-component vector of float)
+0:36    Function Parameters: 
+0:37    Sequence
+0:37      Branch: Return with expression
+0:40        add ( temp highp 4-component vector of float)
+0:39          add ( temp highp 4-component vector of float)
+0:38            add ( temp highp 4-component vector of float)
+0:37              add ( temp highp 4-component vector of float)
+0:37                a: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:37                  'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:37                  Constant:
+0:37                    0 (const uint)
+0:38                b: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:38                  'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:38                  Constant:
+0:38                    1 (const uint)
+0:39              a: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:39                direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:39                  'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:39                  Constant:
+0:39                    0 (const int)
+0:39                Constant:
+0:39                  0 (const int)
+0:40            a: direct index for structure (layout( column_major std140) uniform highp 4-component vector of float)
+0:40              direct index (layout( column_major std140) temp block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:40                'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+0:40                Constant:
+0:40                  1 (const int)
+0:40              Constant:
+0:40                0 (const int)
+0:41          Construct vec4 ( temp highp 4-component vector of float)
+0:41            Function Call: Bar( ( global highp 2-component vector of float)
+0:41            Constant:
+0:41              0.000000
+0:41            Constant:
+0:41              0.000000
+0:44  Function Definition: main( ( global void)
+0:44    Function Parameters: 
+0:46    Sequence
+0:46      Sequence
+0:46        move second child to first child ( temp highp 4-component vector of float)
+0:46          'color' ( temp highp 4-component vector of float)
+0:46          'gfo1' ( smooth in highp 4-component vector of float)
+0:47      move second child to first child ( temp highp 4-component vector of float)
+0:47        'color' ( temp highp 4-component vector of float)
+0:47        add ( temp highp 4-component vector of float)
+0:47          'color' ( temp highp 4-component vector of float)
+0:47          Function Call: Foo( ( global highp 4-component vector of float)
+0:48      move second child to first child ( temp highp 4-component vector of float)
+0:48        'outColor' ( out highp 4-component vector of float)
+0:48        'color' ( temp highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'anon@0' (layout( location=5) in block{ in highp 4-component vector of float o3})
+0:?     'gfo1' ( smooth in highp 4-component vector of float)
+0:?     'gfo2' ( smooth in highp 2-component vector of float)
+0:?     'outColor' ( out highp 4-component vector of float)
+0:?     'glass' (layout( binding=0) uniform highp sampler2D)
+0:?     'anon@1' (layout( column_major std140) uniform block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 4-component vector of float b})
+0:?     'anon@2' (layout( column_major std430) readonly buffer block{layout( column_major std430) readonly buffer highp 2-component vector of float fb1})
+0:?     'blockName2' (layout( column_major std140) uniform 2-element array of block{layout( column_major std140) uniform highp 4-component vector of float a, layout( column_major std140) uniform highp 2-component vector of float b})
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 38
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Vertex 4  "main" 9 14 18
+                              Source GLSL 460
+                              Name 4  "main"
+                              Name 9  "vgo1"
+                              Name 14  "vgo2"
+                              Name 16  "outBlock"
+                              MemberName 16(outBlock) 0  "o3"
+                              Name 18  ""
+                              Name 25  "glass"
+                              Name 26  "crossStageBlock1"
+                              MemberName 26(crossStageBlock1) 0  "a"
+                              MemberName 26(crossStageBlock1) 1  "b"
+                              Name 28  ""
+                              Name 29  "vertOnlyBlock"
+                              MemberName 29(vertOnlyBlock) 0  "vb1"
+                              Name 31  ""
+                              Name 32  "crossStageBlock2"
+                              MemberName 32(crossStageBlock2) 0  "a"
+                              MemberName 32(crossStageBlock2) 1  "b"
+                              Name 37  "blockName1"
+                              Decorate 9(vgo1) Location 0
+                              Decorate 14(vgo2) Location 1
+                              Decorate 16(outBlock) Block
+                              Decorate 18 Location 5
+                              Decorate 25(glass) DescriptorSet 0
+                              Decorate 25(glass) Binding 0
+                              MemberDecorate 26(crossStageBlock1) 0 Offset 0
+                              MemberDecorate 26(crossStageBlock1) 1 Offset 16
+                              Decorate 26(crossStageBlock1) Block
+                              Decorate 28 DescriptorSet 0
+                              Decorate 28 Binding 1
+                              MemberDecorate 29(vertOnlyBlock) 0 NonWritable
+                              MemberDecorate 29(vertOnlyBlock) 0 Offset 0
+                              Decorate 29(vertOnlyBlock) BufferBlock
+                              Decorate 31 DescriptorSet 0
+                              Decorate 31 Binding 0
+                              MemberDecorate 32(crossStageBlock2) 0 Offset 0
+                              MemberDecorate 32(crossStageBlock2) 1 Offset 16
+                              Decorate 32(crossStageBlock2) Block
+                              Decorate 37(blockName1) DescriptorSet 0
+                              Decorate 37(blockName1) Binding 3
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypePointer Output 7(fvec4)
+         9(vgo1):      8(ptr) Variable Output
+              10:    6(float) Constant 0
+              11:    7(fvec4) ConstantComposite 10 10 10 10
+              12:             TypeVector 6(float) 2
+              13:             TypePointer Output 12(fvec2)
+        14(vgo2):     13(ptr) Variable Output
+              15:   12(fvec2) ConstantComposite 10 10
+    16(outBlock):             TypeStruct 7(fvec4)
+              17:             TypePointer Output 16(outBlock)
+              18:     17(ptr) Variable Output
+              19:             TypeInt 32 1
+              20:     19(int) Constant 0
+              22:             TypeImage 6(float) 2D sampled format:Unknown
+              23:             TypeSampledImage 22
+              24:             TypePointer UniformConstant 23
+       25(glass):     24(ptr) Variable UniformConstant
+26(crossStageBlock1):             TypeStruct 7(fvec4) 7(fvec4)
+              27:             TypePointer Uniform 26(crossStageBlock1)
+              28:     27(ptr) Variable Uniform
+29(vertOnlyBlock):             TypeStruct 12(fvec2)
+              30:             TypePointer Uniform 29(vertOnlyBlock)
+              31:     30(ptr) Variable Uniform
+32(crossStageBlock2):             TypeStruct 7(fvec4) 12(fvec2)
+              33:             TypeInt 32 0
+              34:     33(int) Constant 2
+              35:             TypeArray 32(crossStageBlock2) 34
+              36:             TypePointer Uniform 35
+  37(blockName1):     36(ptr) Variable Uniform
+         4(main):           2 Function None 3
+               5:             Label
+                              Store 9(vgo1) 11
+                              Store 14(vgo2) 15
+              21:      8(ptr) AccessChain 18 20
+                              Store 21 11
+                              Return
+                              FunctionEnd
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 57
+
+                              Capability Geometry
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Geometry 4  "main" 22 27 31 37 48 51
+                              ExecutionMode 4 InputPoints
+                              ExecutionMode 4 Invocations 1
+                              ExecutionMode 4 OutputTriangleStrip
+                              ExecutionMode 4 OutputVertices 3
+                              Source GLSL 460
+                              Name 4  "main"
+                              Name 8  "i"
+                              Name 22  "gfo1"
+                              Name 27  "gfo2"
+                              Name 29  "outBlock"
+                              MemberName 29(outBlock) 0  "o3"
+                              Name 31  "gf_out"
+                              Name 32  "outBlock"
+                              MemberName 32(outBlock) 0  "o3"
+                              Name 37  "inBlock"
+                              Name 48  "vgo1"
+                              Name 51  "vgo2"
+                              Name 52  "crossStageBlock2"
+                              MemberName 52(crossStageBlock2) 0  "a"
+                              MemberName 52(crossStageBlock2) 1  "b"
+                              Name 56  "blockName1"
+                              Decorate 22(gfo1) Location 0
+                              Decorate 27(gfo2) Location 1
+                              Decorate 29(outBlock) Block
+                              Decorate 31(gf_out) Location 5
+                              Decorate 32(outBlock) Block
+                              Decorate 37(inBlock) Location 5
+                              Decorate 48(vgo1) Location 0
+                              Decorate 51(vgo2) Location 1
+                              MemberDecorate 52(crossStageBlock2) 0 Offset 0
+                              MemberDecorate 52(crossStageBlock2) 1 Offset 16
+                              Decorate 52(crossStageBlock2) Block
+                              Decorate 56(blockName1) DescriptorSet 0
+                              Decorate 56(blockName1) Binding 3
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeInt 32 1
+               7:             TypePointer Function 6(int)
+               9:      6(int) Constant 0
+              16:      6(int) Constant 3
+              17:             TypeBool
+              19:             TypeFloat 32
+              20:             TypeVector 19(float) 4
+              21:             TypePointer Output 20(fvec4)
+        22(gfo1):     21(ptr) Variable Output
+              23:   19(float) Constant 0
+              24:   20(fvec4) ConstantComposite 23 23 23 23
+              25:             TypeVector 19(float) 2
+              26:             TypePointer Output 25(fvec2)
+        27(gfo2):     26(ptr) Variable Output
+              28:   25(fvec2) ConstantComposite 23 23
+    29(outBlock):             TypeStruct 20(fvec4)
+              30:             TypePointer Output 29(outBlock)
+      31(gf_out):     30(ptr) Variable Output
+    32(outBlock):             TypeStruct 20(fvec4)
+              33:             TypeInt 32 0
+              34:     33(int) Constant 1
+              35:             TypeArray 32(outBlock) 34
+              36:             TypePointer Input 35
+     37(inBlock):     36(ptr) Variable Input
+              39:             TypePointer Input 20(fvec4)
+              44:      6(int) Constant 1
+              46:             TypeArray 20(fvec4) 34
+              47:             TypePointer Input 46
+        48(vgo1):     47(ptr) Variable Input
+              49:             TypeArray 25(fvec2) 34
+              50:             TypePointer Input 49
+        51(vgo2):     50(ptr) Variable Input
+52(crossStageBlock2):             TypeStruct 20(fvec4) 25(fvec2)
+              53:     33(int) Constant 2
+              54:             TypeArray 52(crossStageBlock2) 53
+              55:             TypePointer Uniform 54
+  56(blockName1):     55(ptr) Variable Uniform
+         4(main):           2 Function None 3
+               5:             Label
+            8(i):      7(ptr) Variable Function
+                              Store 8(i) 9
+                              Branch 10
+              10:             Label
+                              LoopMerge 12 13 None
+                              Branch 14
+              14:             Label
+              15:      6(int) Load 8(i)
+              18:    17(bool) SLessThan 15 16
+                              BranchConditional 18 11 12
+              11:               Label
+                                Store 22(gfo1) 24
+                                Store 27(gfo2) 28
+              38:      6(int)   Load 8(i)
+              40:     39(ptr)   AccessChain 37(inBlock) 38 9
+              41:   20(fvec4)   Load 40
+              42:     21(ptr)   AccessChain 31(gf_out) 9
+                                Store 42 41
+                                EmitVertex
+                                Branch 13
+              13:               Label
+              43:      6(int)   Load 8(i)
+              45:      6(int)   IAdd 43 44
+                                Store 8(i) 45
+                                Branch 10
+              12:             Label
+                              EndPrimitive
+                              Return
+                              FunctionEnd
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 81
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "main" 64 70 74 76
+                              ExecutionMode 4 OriginUpperLeft
+                              Source GLSL 460
+                              Name 4  "main"
+                              Name 9  "Bar("
+                              Name 13  "Foo("
+                              Name 15  "fragOnlyBlock"
+                              MemberName 15(fragOnlyBlock) 0  "fb1"
+                              Name 17  ""
+                              Name 23  "crossStageBlock2"
+                              MemberName 23(crossStageBlock2) 0  "a"
+                              MemberName 23(crossStageBlock2) 1  "b"
+                              Name 28  "blockName2"
+                              Name 38  "crossStageBlock1"
+                              MemberName 38(crossStageBlock1) 0  "a"
+                              MemberName 38(crossStageBlock1) 1  "b"
+                              Name 40  ""
+                              Name 62  "color"
+                              Name 64  "gfo1"
+                              Name 70  "outColor"
+                              Name 72  "outBlock"
+                              MemberName 72(outBlock) 0  "o3"
+                              Name 74  ""
+                              Name 76  "gfo2"
+                              Name 80  "glass"
+                              MemberDecorate 15(fragOnlyBlock) 0 NonWritable
+                              MemberDecorate 15(fragOnlyBlock) 0 Offset 0
+                              Decorate 15(fragOnlyBlock) BufferBlock
+                              Decorate 17 DescriptorSet 0
+                              Decorate 17 Binding 2
+                              MemberDecorate 23(crossStageBlock2) 0 Offset 0
+                              MemberDecorate 23(crossStageBlock2) 1 Offset 16
+                              Decorate 23(crossStageBlock2) Block
+                              Decorate 28(blockName2) DescriptorSet 0
+                              Decorate 28(blockName2) Binding 3
+                              MemberDecorate 38(crossStageBlock1) 0 Offset 0
+                              MemberDecorate 38(crossStageBlock1) 1 Offset 16
+                              Decorate 38(crossStageBlock1) Block
+                              Decorate 40 DescriptorSet 0
+                              Decorate 40 Binding 1
+                              Decorate 64(gfo1) Location 0
+                              Decorate 70(outColor) Location 0
+                              Decorate 72(outBlock) Block
+                              Decorate 74 Location 5
+                              Decorate 76(gfo2) Location 1
+                              Decorate 80(glass) DescriptorSet 0
+                              Decorate 80(glass) Binding 0
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 2
+               8:             TypeFunction 7(fvec2)
+              11:             TypeVector 6(float) 4
+              12:             TypeFunction 11(fvec4)
+15(fragOnlyBlock):             TypeStruct 7(fvec2)
+              16:             TypePointer Uniform 15(fragOnlyBlock)
+              17:     16(ptr) Variable Uniform
+              18:             TypeInt 32 1
+              19:     18(int) Constant 0
+              20:             TypePointer Uniform 7(fvec2)
+23(crossStageBlock2):             TypeStruct 11(fvec4) 7(fvec2)
+              24:             TypeInt 32 0
+              25:     24(int) Constant 2
+              26:             TypeArray 23(crossStageBlock2) 25
+              27:             TypePointer Uniform 26
+  28(blockName2):     27(ptr) Variable Uniform
+              29:     18(int) Constant 1
+38(crossStageBlock1):             TypeStruct 11(fvec4) 11(fvec4)
+              39:             TypePointer Uniform 38(crossStageBlock1)
+              40:     39(ptr) Variable Uniform
+              41:             TypePointer Uniform 11(fvec4)
+              54:    6(float) Constant 0
+              61:             TypePointer Function 11(fvec4)
+              63:             TypePointer Input 11(fvec4)
+        64(gfo1):     63(ptr) Variable Input
+              69:             TypePointer Output 11(fvec4)
+    70(outColor):     69(ptr) Variable Output
+    72(outBlock):             TypeStruct 11(fvec4)
+              73:             TypePointer Input 72(outBlock)
+              74:     73(ptr) Variable Input
+              75:             TypePointer Input 7(fvec2)
+        76(gfo2):     75(ptr) Variable Input
+              77:             TypeImage 6(float) 2D sampled format:Unknown
+              78:             TypeSampledImage 77
+              79:             TypePointer UniformConstant 78
+       80(glass):     79(ptr) Variable UniformConstant
+         4(main):           2 Function None 3
+               5:             Label
+       62(color):     61(ptr) Variable Function
+              65:   11(fvec4) Load 64(gfo1)
+                              Store 62(color) 65
+              66:   11(fvec4) Load 62(color)
+              67:   11(fvec4) FunctionCall 13(Foo()
+              68:   11(fvec4) FAdd 66 67
+                              Store 62(color) 68
+              71:   11(fvec4) Load 62(color)
+                              Store 70(outColor) 71
+                              Return
+                              FunctionEnd
+         9(Bar():    7(fvec2) Function None 8
+              10:             Label
+              21:     20(ptr) AccessChain 17 19
+              22:    7(fvec2) Load 21
+              30:     20(ptr) AccessChain 28(blockName2) 19 29
+              31:    7(fvec2) Load 30
+              32:    7(fvec2) FAdd 22 31
+              33:     20(ptr) AccessChain 28(blockName2) 29 29
+              34:    7(fvec2) Load 33
+              35:    7(fvec2) FAdd 32 34
+                              ReturnValue 35
+                              FunctionEnd
+        13(Foo():   11(fvec4) Function None 12
+              14:             Label
+              42:     41(ptr) AccessChain 40 19
+              43:   11(fvec4) Load 42
+              44:     41(ptr) AccessChain 40 29
+              45:   11(fvec4) Load 44
+              46:   11(fvec4) FAdd 43 45
+              47:     41(ptr) AccessChain 28(blockName2) 19 19
+              48:   11(fvec4) Load 47
+              49:   11(fvec4) FAdd 46 48
+              50:     41(ptr) AccessChain 28(blockName2) 29 19
+              51:   11(fvec4) Load 50
+              52:   11(fvec4) FAdd 49 51
+              53:    7(fvec2) FunctionCall 9(Bar()
+              55:    6(float) CompositeExtract 53 0
+              56:    6(float) CompositeExtract 53 1
+              57:   11(fvec4) CompositeConstruct 55 56 54 54
+              58:   11(fvec4) FAdd 52 57
+                              ReturnValue 58
+                              FunctionEnd

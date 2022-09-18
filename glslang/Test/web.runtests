@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+TESTLIST=web.testlist
+TARGETDIR=localResults
+BASEDIR=baseResults
+EXE=../build/install/bin/glslangValidator.exe
+HASERROR=0
+mkdir -p $TARGETDIR
+
+if [ -a $TESTLIST ]
+  then
+    while read t; do
+      echo Running $t...
+      b=`basename $t`
+      $EXE -V -o webtest.spv $t
+      spirv-dis webtest.spv > $TARGETDIR/$b.out
+      rm -f webtest.spv
+      diff -b $BASEDIR/$b.out $TARGETDIR/$b.out || HASERROR=1
+    done < $TESTLIST
+else
+  echo $TESTLIST is missing
+fi
+
+wc --bytes $EXE > $TARGETDIR/size
+echo "base size was" `cat $BASEDIR/size`
+echo "new  size  is" `cat $TARGETDIR/size`
+
+#
+# Final checking
+#
+if [ $HASERROR -eq 0 ]
+then
+    echo Tests Succeeded.
+else
+    echo Tests Failed.
+fi
+
+exit $HASERROR

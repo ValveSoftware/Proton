@@ -1,0 +1,221 @@
+310.inheritMemory.frag
+Shader version: 310
+0:? Sequence
+0:18  Function Definition: non_ro_fun(f1[10]; ( global void)
+0:18    Function Parameters: 
+0:18      'buff' ( in 10-element array of mediump float)
+0:19  Function Definition: non_ro_funf(f1; ( global void)
+0:19    Function Parameters: 
+0:19      'el' ( in mediump float)
+0:20  Function Definition: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:20    Function Parameters: 
+0:20      's' ( in structure{ global 10-element array of mediump float buff})
+0:24  Function Definition: main( ( global void)
+0:24    Function Parameters: 
+0:?     Sequence
+0:28      Function Call: non_ro_fun(f1[10]; ( global void)
+0:28        buff: direct index for structure ( global 10-element array of mediump float)
+0:28          's' ( temp structure{ global 10-element array of mediump float buff})
+0:28          Constant:
+0:28            0 (const int)
+0:29      Function Call: non_ro_funf(f1; ( global void)
+0:29        direct index ( temp mediump float)
+0:29          buff: direct index for structure ( global 10-element array of mediump float)
+0:29            's' ( temp structure{ global 10-element array of mediump float buff})
+0:29            Constant:
+0:29              0 (const int)
+0:29          Constant:
+0:29            3 (const int)
+0:30      Function Call: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:30        's' ( temp structure{ global 10-element array of mediump float buff})
+0:32      Function Call: non_ro_fun(f1[10]; ( global void)
+0:32        buff: direct index for structure (layout( column_major std430 offset=0) buffer 10-element array of mediump float)
+0:32          'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:32          Constant:
+0:32            0 (const int)
+0:33      Function Call: non_ro_fun(f1[10]; ( global void)
+0:33        buff: direct index for structure (layout( std430) global 10-element array of mediump float)
+0:33          s: direct index for structure (layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:33            'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:33            Constant:
+0:33              1 (const int)
+0:33          Constant:
+0:33            0 (const int)
+0:34      Function Call: non_ro_funf(f1; ( global void)
+0:34        direct index (layout( column_major std430 offset=0) temp mediump float)
+0:34          buff: direct index for structure (layout( column_major std430 offset=0) buffer 10-element array of mediump float)
+0:34            'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:34            Constant:
+0:34              0 (const int)
+0:34          Constant:
+0:34            3 (const int)
+0:35      Function Call: non_ro_funf(f1; ( global void)
+0:35        direct index (layout( std430) temp mediump float)
+0:35          buff: direct index for structure (layout( std430) global 10-element array of mediump float)
+0:35            s: direct index for structure (layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:35              'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:35              Constant:
+0:35                1 (const int)
+0:35            Constant:
+0:35              0 (const int)
+0:35          Constant:
+0:35            3 (const int)
+0:36      Function Call: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:36        s: direct index for structure (layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:36          'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:36          Constant:
+0:36            1 (const int)
+0:38      Function Call: non_ro_fun(f1[10]; ( global void)
+0:38        buff_ro: direct index for structure (layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float)
+0:38          'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:38          Constant:
+0:38            0 (const int)
+0:39      Function Call: non_ro_fun(f1[10]; ( global void)
+0:39        buff: direct index for structure (layout( std430) readonly global 10-element array of mediump float)
+0:39          s_ro: direct index for structure (layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:39            'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:39            Constant:
+0:39              1 (const int)
+0:39          Constant:
+0:39            0 (const int)
+0:40      Function Call: non_ro_funf(f1; ( global void)
+0:40        direct index (layout( column_major std430 offset=0) readonly temp mediump float)
+0:40          buff_ro: direct index for structure (layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float)
+0:40            'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:40            Constant:
+0:40              0 (const int)
+0:40          Constant:
+0:40            3 (const int)
+0:41      Function Call: non_ro_funf(f1; ( global void)
+0:41        direct index (layout( std430) readonly temp mediump float)
+0:41          buff: direct index for structure (layout( std430) readonly global 10-element array of mediump float)
+0:41            s_ro: direct index for structure (layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:41              'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:41              Constant:
+0:41                1 (const int)
+0:41            Constant:
+0:41              0 (const int)
+0:41          Constant:
+0:41            3 (const int)
+0:42      Function Call: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:42        s_ro: direct index for structure (layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:42          'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:42          Constant:
+0:42            1 (const int)
+0:?   Linker Objects
+0:?     'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:?     'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:?     'fragColor' ( out mediump 4-component vector of float)
+
+
+Linked fragment stage:
+
+
+Shader version: 310
+0:? Sequence
+0:18  Function Definition: non_ro_fun(f1[10]; ( global void)
+0:18    Function Parameters: 
+0:18      'buff' ( in 10-element array of mediump float)
+0:19  Function Definition: non_ro_funf(f1; ( global void)
+0:19    Function Parameters: 
+0:19      'el' ( in mediump float)
+0:20  Function Definition: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:20    Function Parameters: 
+0:20      's' ( in structure{ global 10-element array of mediump float buff})
+0:24  Function Definition: main( ( global void)
+0:24    Function Parameters: 
+0:?     Sequence
+0:28      Function Call: non_ro_fun(f1[10]; ( global void)
+0:28        buff: direct index for structure ( global 10-element array of mediump float)
+0:28          's' ( temp structure{ global 10-element array of mediump float buff})
+0:28          Constant:
+0:28            0 (const int)
+0:29      Function Call: non_ro_funf(f1; ( global void)
+0:29        direct index ( temp mediump float)
+0:29          buff: direct index for structure ( global 10-element array of mediump float)
+0:29            's' ( temp structure{ global 10-element array of mediump float buff})
+0:29            Constant:
+0:29              0 (const int)
+0:29          Constant:
+0:29            3 (const int)
+0:30      Function Call: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:30        's' ( temp structure{ global 10-element array of mediump float buff})
+0:32      Function Call: non_ro_fun(f1[10]; ( global void)
+0:32        buff: direct index for structure (layout( column_major std430 offset=0) buffer 10-element array of mediump float)
+0:32          'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:32          Constant:
+0:32            0 (const int)
+0:33      Function Call: non_ro_fun(f1[10]; ( global void)
+0:33        buff: direct index for structure (layout( std430) global 10-element array of mediump float)
+0:33          s: direct index for structure (layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:33            'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:33            Constant:
+0:33              1 (const int)
+0:33          Constant:
+0:33            0 (const int)
+0:34      Function Call: non_ro_funf(f1; ( global void)
+0:34        direct index (layout( column_major std430 offset=0) temp mediump float)
+0:34          buff: direct index for structure (layout( column_major std430 offset=0) buffer 10-element array of mediump float)
+0:34            'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:34            Constant:
+0:34              0 (const int)
+0:34          Constant:
+0:34            3 (const int)
+0:35      Function Call: non_ro_funf(f1; ( global void)
+0:35        direct index (layout( std430) temp mediump float)
+0:35          buff: direct index for structure (layout( std430) global 10-element array of mediump float)
+0:35            s: direct index for structure (layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:35              'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:35              Constant:
+0:35                1 (const int)
+0:35            Constant:
+0:35              0 (const int)
+0:35          Constant:
+0:35            3 (const int)
+0:36      Function Call: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:36        s: direct index for structure (layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:36          'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:36          Constant:
+0:36            1 (const int)
+0:38      Function Call: non_ro_fun(f1[10]; ( global void)
+0:38        buff_ro: direct index for structure (layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float)
+0:38          'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:38          Constant:
+0:38            0 (const int)
+0:39      Function Call: non_ro_fun(f1[10]; ( global void)
+0:39        buff: direct index for structure (layout( std430) readonly global 10-element array of mediump float)
+0:39          s_ro: direct index for structure (layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:39            'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:39            Constant:
+0:39              1 (const int)
+0:39          Constant:
+0:39            0 (const int)
+0:40      Function Call: non_ro_funf(f1; ( global void)
+0:40        direct index (layout( column_major std430 offset=0) readonly temp mediump float)
+0:40          buff_ro: direct index for structure (layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float)
+0:40            'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:40            Constant:
+0:40              0 (const int)
+0:40          Constant:
+0:40            3 (const int)
+0:41      Function Call: non_ro_funf(f1; ( global void)
+0:41        direct index (layout( std430) readonly temp mediump float)
+0:41          buff: direct index for structure (layout( std430) readonly global 10-element array of mediump float)
+0:41            s_ro: direct index for structure (layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:41              'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:41              Constant:
+0:41                1 (const int)
+0:41            Constant:
+0:41              0 (const int)
+0:41          Constant:
+0:41            3 (const int)
+0:42      Function Call: non_ro_funS(struct-S-f1[10]1; ( global void)
+0:42        s_ro: direct index for structure (layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff})
+0:42          'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:42          Constant:
+0:42            1 (const int)
+0:?   Linker Objects
+0:?     'ro_buffer' (layout( binding=2 column_major std430) readonly buffer block{layout( column_major std430 offset=0) readonly buffer 10-element array of mediump float buff_ro, layout( column_major std430 offset=40) readonly buffer structure{layout( std430) global 10-element array of mediump float buff} s_ro})
+0:?     'non_ro_buffer' (layout( binding=2 column_major std430) buffer block{layout( column_major std430 offset=0) buffer 10-element array of mediump float buff, layout( column_major std430 offset=40) buffer structure{layout( std430) global 10-element array of mediump float buff} s})
+0:?     'fragColor' ( out mediump 4-component vector of float)
+

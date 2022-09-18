@@ -1,0 +1,11 @@
+
+void ComputeShaderFunction()
+{
+    AllMemoryBarrier();
+    AllMemoryBarrierWithGroupSync();
+    DeviceMemoryBarrier();
+    DeviceMemoryBarrierWithGroupSync();
+    GroupMemoryBarrier();
+    GroupMemoryBarrierWithGroupSync();
+}
+

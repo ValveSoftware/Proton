@@ -1,0 +1,157 @@
+# NOTE: This workflow was ported from Travis.
+# Travis was using Ubuntu 14.04. Ubuntu 14.04 is not supportted by GitHub workflows. Ubuntu 20.04 is recommended.
+# Travis was using Clang 3.6. The earliest version support by Ubuntu 20.04 is Clang 6.0.
+# Travis was caching the clang package. APT package caching is not natively supported by GitHub actions/cache.
+# Travis was using Mac OS X 10.13.6 / Xcode 9.4.1 / LLVM 9.1.0
+#
+name: Continuous Integration
+
+on:
+    workflow_dispatch:
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    linux:
+        runs-on: ${{matrix.os}}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-20.04]
+                compiler: [{cc: clang, cxx: clang++}, {cc: gcc, cxx: g++}]
+                cmake_build_type: [Debug, Release]
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: '3.7'
+            - name: Install Ubuntu Package Dependencies
+              run: |
+                  sudo apt-get -qq update
+                  sudo apt-get install -y clang-6.0
+            - name: Install GoogleTest
+              run: |
+                  # check out pre-breakage version of googletest; can be deleted when
+                  # issue 3128 is fixed
+                  # git clone --depth=1 https://github.com/google/googletest.git External/googletest
+                  mkdir -p External/googletest
+                  cd External/googletest
+                  git init
+                  git remote add origin https://github.com/google/googletest.git
+                  git fetch --depth 1 origin 0c400f67fcf305869c5fb113dd296eca266c9725
+                  git reset --hard FETCH_HEAD
+                  cd ../..
+            - name: Update Glslang Sources
+              run: |
+                  ./update_glslang_sources.py
+            - name: Build
+              env:
+                  CC: ${{matrix.compiler.cc}}
+                  CXX: ${{matrix.compiler.cxx}}
+              run: |
+                  mkdir build && cd build
+                  cmake -DCMAKE_BUILD_TYPE=${{matrix.cmake_build_type}} -DCMAKE_INSTALL_PREFIX=`pwd`/install ..
+                  make -j4 install
+            - name: Test
+              run: |
+                  cd build
+                  ctest --output-on-failure &&
+                  cd ../Test && ./runtests
+
+    macos:
+        runs-on: ${{matrix.os}}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [macos-11]
+                compiler: [{cc: clang, cxx: clang++}]
+                cmake_build_type: [Debug, Release]
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: '3.7'
+            - name: Install GoogleTest
+              run: |
+                  # check out pre-breakage version of googletest; can be deleted when
+                  # issue 3128 is fixed
+                  # git clone --depth=1 https://github.com/google/googletest.git External/googletest
+                  mkdir -p External/googletest
+                  cd External/googletest
+                  git init
+                  git remote add origin https://github.com/google/googletest.git
+                  git fetch --depth 1 origin 0c400f67fcf305869c5fb113dd296eca266c9725
+                  git reset --hard FETCH_HEAD
+                  cd ../..
+            - name: Update Glslang Sources
+              run: |
+                  ./update_glslang_sources.py
+            - name: Build
+              env:
+                  CC: ${{matrix.compiler.cc}}
+                  CXX: ${{matrix.compiler.cxx}}
+              run: |
+                  mkdir build && cd build
+                  cmake -DCMAKE_BUILD_TYPE=${{matrix.cmake_build_type}} -DCMAKE_INSTALL_PREFIX=`pwd`/install ..
+                  make -j4 install
+            - name: Test
+              run: |
+                  cd build
+                  ctest --output-on-failure &&
+                  cd ../Test && ./runtests
+
+    android:
+        runs-on: ${{matrix.os}}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-20.04]
+                compiler: [{cc: clang, cxx: clang++}]
+                cmake_build_type: [Release]
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: '3.7'
+            - name: Install Ubuntu Package Dependencies
+              if: ${{matrix.os == 'ubuntu-20.04'}}
+              run: |
+                  sudo apt-get -qq update
+                  sudo apt-get install -y clang-6.0
+            - name: Install Android NDK
+              run: |
+                  export ANDROID_NDK=$HOME/android-ndk
+                  git init $ANDROID_NDK
+                  pushd $ANDROID_NDK
+                  git remote add dneto0 https://github.com/dneto0/android-ndk.git
+                  git fetch --depth=1 dneto0 r17b-strip
+                  git checkout FETCH_HEAD
+                  popd
+            - name: Install GoogleTest
+              run: |
+                  # check out pre-breakage version of googletest; can be deleted when
+                  # issue 3128 is fixed
+                  # git clone --depth=1 https://github.com/google/googletest.git External/googletest
+                  mkdir -p External/googletest
+                  cd External/googletest
+                  git init
+                  git remote add origin https://github.com/google/googletest.git
+                  git fetch --depth 1 origin 0c400f67fcf305869c5fb113dd296eca266c9725
+                  git reset --hard FETCH_HEAD
+                  cd ../..
+            - name: Update Glslang Sources
+              run: |
+                  ./update_glslang_sources.py
+            - name: Build
+              env:
+                  CC: ${{matrix.compiler.cc}}
+                  CXX: ${{matrix.compiler.cxx}}
+              run: |
+                  export ANDROID_NDK=$HOME/android-ndk
+                  export TOOLCHAIN_PATH=$ANDROID_NDK/build/cmake/android.toolchain.cmake
+                  echo $ANDROID_NDK
+                  echo $TOOLCHAIN_PATH
+                  mkdir build && cd build
+                  cmake -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_PATH} -DANDROID_NATIVE_API_LEVEL=android-14 -DCMAKE_BUILD_TYPE=${{matrix.cmake_build_type}} -DANDROID_ABI="armeabi-v7a with NEON" -DBUILD_TESTING=OFF ..
+                  make -j4

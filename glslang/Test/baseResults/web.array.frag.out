@@ -1,0 +1,102 @@
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 8
+; Bound: 74
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Fragment %main "main" %colorOut
+               OpExecutionMode %main OriginUpperLeft
+               OpSource ESSL 310
+               OpName %main "main"
+               OpName %foo_f1_5__ "foo(f1[5];"
+               OpName %a "a"
+               OpName %g4 "g4"
+               OpName %g5 "g5"
+               OpName %param "param"
+               OpName %u "u"
+               OpName %param_0 "param"
+               OpName %colorOut "colorOut"
+               OpDecorate %colorOut Location 0
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+       %uint = OpTypeInt 32 0
+     %uint_5 = OpConstant %uint 5
+%_arr_float_uint_5 = OpTypeArray %float %uint_5
+%_ptr_Function__arr_float_uint_5 = OpTypePointer Function %_arr_float_uint_5
+     %uint_4 = OpConstant %uint 4
+%_arr_float_uint_4 = OpTypeArray %float %uint_4
+         %13 = OpTypeFunction %_arr_float_uint_4 %_ptr_Function__arr_float_uint_5
+        %int = OpTypeInt 32 1
+      %int_0 = OpConstant %int 0
+%_ptr_Function_float = OpTypePointer Function %float
+      %int_1 = OpConstant %int 1
+      %int_2 = OpConstant %int 2
+      %int_3 = OpConstant %int 3
+%_ptr_Private__arr_float_uint_4 = OpTypePointer Private %_arr_float_uint_4
+         %g4 = OpVariable %_ptr_Private__arr_float_uint_4 Private
+%_ptr_Private__arr_float_uint_5 = OpTypePointer Private %_arr_float_uint_5
+         %g5 = OpVariable %_ptr_Private__arr_float_uint_5 Private
+    %float_1 = OpConstant %float 1
+    %float_2 = OpConstant %float 2
+    %float_3 = OpConstant %float 3
+    %float_4 = OpConstant %float 4
+         %45 = OpConstantComposite %_arr_float_uint_4 %float_1 %float_2 %float_3 %float_4
+       %bool = OpTypeBool
+    %v2float = OpTypeVector %float 2
+%_ptr_Output_v2float = OpTypePointer Output %v2float
+   %colorOut = OpVariable %_ptr_Output_v2float Output
+    %float_5 = OpConstant %float 5
+         %73 = OpConstantComposite %v2float %float_4 %float_5
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+      %param = OpVariable %_ptr_Function__arr_float_uint_5 Function
+          %u = OpVariable %_ptr_Function__arr_float_uint_5 Function
+    %param_0 = OpVariable %_ptr_Function__arr_float_uint_5 Function
+         %39 = OpLoad %_arr_float_uint_5 %g5
+               OpStore %param %39
+         %40 = OpFunctionCall %_arr_float_uint_4 %foo_f1_5__ %param
+               OpStore %g4 %40
+         %46 = OpLoad %_arr_float_uint_4 %g4
+         %48 = OpCompositeExtract %float %45 0
+         %49 = OpCompositeExtract %float %46 0
+         %50 = OpFOrdEqual %bool %48 %49
+         %51 = OpCompositeExtract %float %45 1
+         %52 = OpCompositeExtract %float %46 1
+         %53 = OpFOrdEqual %bool %51 %52
+         %54 = OpLogicalAnd %bool %50 %53
+         %55 = OpCompositeExtract %float %45 2
+         %56 = OpCompositeExtract %float %46 2
+         %57 = OpFOrdEqual %bool %55 %56
+         %58 = OpLogicalAnd %bool %54 %57
+         %59 = OpCompositeExtract %float %45 3
+         %60 = OpCompositeExtract %float %46 3
+         %61 = OpFOrdEqual %bool %59 %60
+         %62 = OpLogicalAnd %bool %58 %61
+               OpSelectionMerge %64 None
+               OpBranchConditional %62 %63 %64
+         %63 = OpLabel
+               OpBranch %64
+         %64 = OpLabel
+         %67 = OpLoad %_arr_float_uint_5 %u
+               OpStore %param_0 %67
+         %68 = OpFunctionCall %_arr_float_uint_4 %foo_f1_5__ %param_0
+               OpStore %colorOut %73
+               OpReturn
+               OpFunctionEnd
+ %foo_f1_5__ = OpFunction %_arr_float_uint_4 None %13
+          %a = OpFunctionParameter %_ptr_Function__arr_float_uint_5
+         %16 = OpLabel
+         %20 = OpAccessChain %_ptr_Function_float %a %int_0
+         %21 = OpLoad %float %20
+         %23 = OpAccessChain %_ptr_Function_float %a %int_1
+         %24 = OpLoad %float %23
+         %26 = OpAccessChain %_ptr_Function_float %a %int_2
+         %27 = OpLoad %float %26
+         %29 = OpAccessChain %_ptr_Function_float %a %int_3
+         %30 = OpLoad %float %29
+         %31 = OpCompositeConstruct %_arr_float_uint_4 %21 %24 %27 %30
+               OpReturnValue %31
+               OpFunctionEnd

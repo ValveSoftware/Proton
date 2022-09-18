@@ -1,0 +1,9 @@
+spv.subgroupExtendedTypesBasic.comp
+ERROR: #version: compute shaders require es profile with version 310 or above, or non-es profile with version 420 or above
+ERROR: #version: statement must appear first in es-profile shader; before comments or newlines
+ERROR: 1 compilation errors.  No code generated.
+
+
+ERROR: Linking compute stage: Missing entry point: Each stage requires one entry point
+
+SPIR-V is not generated for failed compile or link

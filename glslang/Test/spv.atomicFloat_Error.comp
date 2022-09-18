@@ -1,0 +1,112 @@
+#version 450 core
+#extension GL_KHR_memory_scope_semantics : enable
+#pragma use_vulkan_memory_model
+
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(binding = 0) buffer Buffer
+{
+    int    datai;
+    float  dataf;
+    double datad;
+} buf;
+
+shared int    atomi;
+shared float  atomf;
+shared double atomd;
+
+layout(binding = 0, r32f) volatile coherent uniform image1D fimage1D;
+layout(binding = 1, r32f) volatile coherent uniform image2D fimage2D;
+
+void undeclared_errors()
+{
+    //atomicAdd
+    float resultf = 0;
+    resultf = atomicAdd(atomf, 3.0);
+    resultf = atomicAdd(atomf, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resultf = atomicAdd(buf.dataf, 3.0);
+    resultf = atomicAdd(buf.dataf, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    double resultd = 0;
+    resultd = atomicAdd(atomd, 3.0);
+    resultd = atomicAdd(atomd, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resultd = atomicAdd(buf.datad, 3.0);
+    resultd = atomicAdd(buf.datad, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    //atomicExchange
+    resultf = atomicExchange(buf.dataf, resultf);
+    resultf = atomicExchange(buf.dataf, resultf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    resultf = atomicExchange(atomf, resultf);
+    resultf = atomicExchange(atomf, resultf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.dataf += resultf;
+
+    resultd = atomicExchange(buf.datad, resultd);
+    resultd = atomicExchange(buf.datad, resultd, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    resultd = atomicExchange(atomd, resultd);
+    resultd = atomicExchange(atomd, resultd, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.datad += resultd;
+
+    //atomic load/store
+    resultf = atomicLoad(buf.dataf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    atomicStore(buf.dataf, resultf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    resultf = atomicLoad(atomf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    atomicStore(atomf, resultf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.dataf += resultf;
+
+    resultd = atomicLoad(buf.datad, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    atomicStore(buf.datad, resultd, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    resultd = atomicLoad(atomd, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    atomicStore(atomd, resultd, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.datad += resultd;
+
+    // image atomics:
+    atomf = imageAtomicAdd(fimage2D, ivec2(0,0), 2.0);
+    atomf = imageAtomicAdd(fimage2D, ivec2(1,1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    atomf = imageAtomicExchange(fimage2D, ivec2(1,0), 4.0, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    atomf = imageAtomicLoad(fimage2D, ivec2(1,1), gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    imageAtomicStore(fimage2D, ivec2(2,2), atomf, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+}
+
+#extension GL_EXT_shader_atomic_float: enable
+
+void main()
+{
+    float resultf = 0;
+    double resultd = 0;
+    int resulti = 0;
+
+    //atomicAdd
+    resultf = atomicAdd(atomi);
+    resultf = atomicAdd(atomi, 3.0);
+    resultf = atomicAdd(atomi, resultf, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resultf = atomicAdd(atomi, resultf, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    //atomicExchange
+    resultf = atomicExchange(buf.datai);
+    resultf = atomicExchange(buf.datai, resultf);
+    resultf = atomicExchange(buf.datai, resultf, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    resultf = atomicExchange(buf.datai, resultf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    resultf = atomicExchange(atomi, resultf);
+    resultf = atomicExchange(atomi, resultf, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.dataf += resultf;
+
+    //atomic load/store
+    resultf = atomicLoad(buf.datai, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    atomicStore(buf.datai, resulti, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+
+    // image atomics:
+    atomf = imageAtomicAdd(fimage1D, ivec2(0,0), 2.0);
+    atomf = imageAtomicAdd(fimage2D, ivec3(0,0,0), 2.0);
+    atomf = imageAtomicAdd(fimage2D, 2.0);
+    atomf = imageAtomicExchange(fimage1D, ivec2(1,0), 4.0, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    atomf = imageAtomicExchange(fimage2D, 4.0, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    atomf = imageAtomicExchange(fimage2D, ivec3(1,0,1), 4.0, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    atomf = imageAtomicLoad(fimage1D, ivec2(1,1), gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    atomf = imageAtomicLoad(fimage2D, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    atomf = imageAtomicLoad(fimage2D, ivec3(1,1,1), gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    imageAtomicStore(fimage1D, ivec2(2,2), atomf, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    imageAtomicStore(fimage2D, atomf, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    imageAtomicStore(fimage2D, ivec3(2,2,1), atomf, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+}

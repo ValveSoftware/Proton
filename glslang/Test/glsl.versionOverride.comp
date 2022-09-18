@@ -1,0 +1,11 @@
+/*
+
+glslangValidator.exe --glsl-version 460 -V -S comp -o glsl.versionOverride.comp.out glsl.versionOverride.comp
+
+*/
+
+#version 110
+
+void main() 
+{
+}  

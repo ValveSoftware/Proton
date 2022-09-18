@@ -1,0 +1,10 @@
+spv.ext.IntersectShader_Errors.rint
+ERROR: 0:3: 'rayPayloadInEXT' : not supported in this stage: intersection
+ERROR: 0:4: 'rayPayloadEXT' : not supported in this stage: intersection
+ERROR: 0:8: 'gl_HitTEXT' : undeclared identifier 
+ERROR: 0:9: 'gl_HitKindEXT' : undeclared identifier 
+ERROR: 0:10: 'traceRayEXT' : no matching overloaded function found 
+ERROR: 5 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

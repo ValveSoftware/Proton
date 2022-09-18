@@ -1,0 +1,149 @@
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 8
+; Bound: 69
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Fragment %main "main" %gl_FragCoord %gl_FragDepth %sc %s2 %sf %c1D %c2D %c4D %c3D %ic1D %ic3D %ic4D
+               OpExecutionMode %main OriginUpperLeft
+               OpExecutionMode %main DepthReplacing
+               OpSource ESSL 310
+               OpName %main "main"
+               OpName %f "f"
+               OpName %gl_FragCoord "gl_FragCoord"
+               OpName %gl_FragDepth "gl_FragDepth"
+               OpName %sc "sc"
+               OpName %S2 "S2"
+               OpMemberName %S2 0 "c"
+               OpMemberName %S2 1 "f"
+               OpName %s2 "s2"
+               OpName %sf "sf"
+               OpName %c1D "c1D"
+               OpName %c2D "c2D"
+               OpName %c4D "c4D"
+               OpName %c3D "c3D"
+               OpName %ic1D "ic1D"
+               OpName %ic3D "ic3D"
+               OpName %ic4D "ic4D"
+               OpDecorate %f RelaxedPrecision
+               OpDecorate %gl_FragCoord BuiltIn FragCoord
+               OpDecorate %gl_FragDepth BuiltIn FragDepth
+               OpDecorate %19 RelaxedPrecision
+               OpDecorate %sc RelaxedPrecision
+               OpDecorate %sc Location 0
+               OpMemberDecorate %S2 0 RelaxedPrecision
+               OpMemberDecorate %S2 1 RelaxedPrecision
+               OpDecorate %s2 Location 8
+               OpDecorate %30 RelaxedPrecision
+               OpDecorate %sf RelaxedPrecision
+               OpDecorate %sf Location 1
+               OpDecorate %34 RelaxedPrecision
+               OpDecorate %c1D RelaxedPrecision
+               OpDecorate %c1D Location 4
+               OpDecorate %36 RelaxedPrecision
+               OpDecorate %37 RelaxedPrecision
+               OpDecorate %38 RelaxedPrecision
+               OpDecorate %39 RelaxedPrecision
+               OpDecorate %c2D RelaxedPrecision
+               OpDecorate %c2D Location 5
+               OpDecorate %43 RelaxedPrecision
+               OpDecorate %44 RelaxedPrecision
+               OpDecorate %45 RelaxedPrecision
+               OpDecorate %46 RelaxedPrecision
+               OpDecorate %47 RelaxedPrecision
+               OpDecorate %c4D RelaxedPrecision
+               OpDecorate %c4D Location 7
+               OpDecorate %49 RelaxedPrecision
+               OpDecorate %50 RelaxedPrecision
+               OpDecorate %51 RelaxedPrecision
+               OpDecorate %52 RelaxedPrecision
+               OpDecorate %53 RelaxedPrecision
+               OpDecorate %c3D RelaxedPrecision
+               OpDecorate %c3D Location 6
+               OpDecorate %55 RelaxedPrecision
+               OpDecorate %56 RelaxedPrecision
+               OpDecorate %ic1D RelaxedPrecision
+               OpDecorate %ic1D Flat
+               OpDecorate %ic1D Location 1
+               OpDecorate %ic3D RelaxedPrecision
+               OpDecorate %ic3D Flat
+               OpDecorate %ic3D Location 2
+               OpDecorate %ic4D RelaxedPrecision
+               OpDecorate %ic4D Flat
+               OpDecorate %ic4D Location 3
+               OpDecorate %68 RelaxedPrecision
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+%_ptr_Function_float = OpTypePointer Function %float
+    %v4float = OpTypeVector %float 4
+%_ptr_Input_v4float = OpTypePointer Input %v4float
+%gl_FragCoord = OpVariable %_ptr_Input_v4float Input
+       %uint = OpTypeInt 32 0
+     %uint_1 = OpConstant %uint 1
+%_ptr_Input_float = OpTypePointer Input %float
+%_ptr_Output_float = OpTypePointer Output %float
+%gl_FragDepth = OpVariable %_ptr_Output_float Output
+    %v3float = OpTypeVector %float 3
+%_ptr_Output_v3float = OpTypePointer Output %v3float
+         %sc = OpVariable %_ptr_Output_v3float Output
+         %S2 = OpTypeStruct %v3float %float
+%_ptr_Input_S2 = OpTypePointer Input %S2
+         %s2 = OpVariable %_ptr_Input_S2 Input
+        %int = OpTypeInt 32 1
+      %int_0 = OpConstant %int 0
+%_ptr_Input_v3float = OpTypePointer Input %v3float
+         %sf = OpVariable %_ptr_Output_float Output
+      %int_1 = OpConstant %int 1
+        %c1D = OpVariable %_ptr_Input_float Input
+    %v2float = OpTypeVector %float 2
+%_ptr_Input_v2float = OpTypePointer Input %v2float
+        %c2D = OpVariable %_ptr_Input_v2float Input
+        %c4D = OpVariable %_ptr_Input_v4float Input
+        %c3D = OpVariable %_ptr_Input_v3float Input
+%_ptr_Input_int = OpTypePointer Input %int
+       %ic1D = OpVariable %_ptr_Input_int Input
+      %v3int = OpTypeVector %int 3
+%_ptr_Input_v3int = OpTypePointer Input %v3int
+       %ic3D = OpVariable %_ptr_Input_v3int Input
+      %v4int = OpTypeVector %int 4
+%_ptr_Input_v4int = OpTypePointer Input %v4int
+       %ic4D = OpVariable %_ptr_Input_v4int Input
+      %v2int = OpTypeVector %int 2
+      %int_2 = OpConstant %int 2
+      %int_3 = OpConstant %int 3
+         %68 = OpConstantComposite %v2int %int_2 %int_3
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+          %f = OpVariable %_ptr_Function_float Function
+         %15 = OpAccessChain %_ptr_Input_float %gl_FragCoord %uint_1
+         %16 = OpLoad %float %15
+               OpStore %f %16
+         %19 = OpLoad %float %f
+               OpStore %gl_FragDepth %19
+         %29 = OpAccessChain %_ptr_Input_v3float %s2 %int_0
+         %30 = OpLoad %v3float %29
+               OpStore %sc %30
+         %33 = OpAccessChain %_ptr_Input_float %s2 %int_1
+         %34 = OpLoad %float %33
+               OpStore %sf %34
+         %36 = OpLoad %float %c1D
+         %37 = OpExtInst %float %1 Sinh %36
+         %38 = OpLoad %float %c1D
+         %39 = OpExtInst %float %1 Cosh %38
+         %43 = OpLoad %v2float %c2D
+         %44 = OpExtInst %v2float %1 Tanh %43
+         %45 = OpVectorTimesScalar %v2float %44 %39
+         %46 = OpCompositeConstruct %v2float %37 %37
+         %47 = OpFAdd %v2float %46 %45
+         %49 = OpLoad %v4float %c4D
+         %50 = OpExtInst %v4float %1 Asinh %49
+         %51 = OpLoad %v4float %c4D
+         %52 = OpExtInst %v4float %1 Acosh %51
+         %53 = OpFAdd %v4float %50 %52
+         %55 = OpLoad %v3float %c3D
+         %56 = OpExtInst %v3float %1 Atanh %55
+               OpReturn
+               OpFunctionEnd

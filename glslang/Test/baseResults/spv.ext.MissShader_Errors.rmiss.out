@@ -1,0 +1,21 @@
+spv.ext.MissShader_Errors.rmiss
+ERROR: 0:3: 'hitAttributeEXT' : not supported in this stage: miss
+ERROR: 0:6: 'gl_PrimitiveID' : undeclared identifier 
+ERROR: 0:6: '=' :  cannot convert from ' temp float' to ' temp highp int'
+ERROR: 0:7: 'gl_InstanceID' : undeclared identifier (Did you mean gl_InstanceIndex?)
+ERROR: 0:7: '=' :  cannot convert from ' temp float' to ' temp highp int'
+ERROR: 0:8: 'gl_InstanceCustomIndexEXT' : undeclared identifier 
+ERROR: 0:8: '=' :  cannot convert from ' temp float' to ' temp highp int'
+ERROR: 0:9: 'gl_ObjectToWorldEXT' : undeclared identifier 
+ERROR: 0:9: '=' :  cannot convert from ' temp float' to ' temp highp 4X3 matrix of float'
+ERROR: 0:10: 'gl_WorldToObjectEXT' : undeclared identifier 
+ERROR: 0:10: '=' :  cannot convert from ' temp float' to ' temp highp 4X3 matrix of float'
+ERROR: 0:11: 'gl_HitTEXT' : undeclared identifier 
+ERROR: 0:12: 'gl_HitKindEXT' : undeclared identifier 
+ERROR: 0:13: 'reportIntersectionEXT' : no matching overloaded function found 
+ERROR: 0:14: 'ignoreIntersectionEXT' : not supported in this stage: miss
+ERROR: 0:15: 'terminateRayEXT' : not supported in this stage: miss
+ERROR: 16 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

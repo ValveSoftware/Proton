@@ -1,0 +1,12 @@
+#version 450
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : enable
+#extension GL_EXT_shader_image_int64 : enable
+#extension GL_KHR_memory_scope_semantics : enable
+
+layout(set = 0, binding = 0) buffer ssbo { uint64_t y; };
+layout(set = 0, binding = 1, r64ui) uniform u64image2D z;
+
+void main() {
+    // Test imageAtomicStore exclusively. Do NOT add other atomic operations to this test.
+    imageAtomicStore(z, ivec2(1, 1), y, gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsRelaxed);
+}

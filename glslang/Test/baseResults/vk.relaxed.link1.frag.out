@@ -1,0 +1,515 @@
+vk.relaxed.link1.frag
+Shader version: 460
+gl_FragCoord origin is upper left
+0:? Sequence
+0:19  Function Definition: bar( ( global highp 4-component vector of float)
+0:19    Function Parameters: 
+0:20    Sequence
+0:20      Sequence
+0:20        move second child to first child ( temp highp uint)
+0:20          'j' ( temp highp uint)
+0:20          add ( temp highp uint)
+0:20            AtomicAdd ( global highp uint)
+0:20              counter1: direct index for structure ( coherent volatile buffer highp uint)
+0:20                'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2})
+0:20                Constant:
+0:20                  0 (const uint)
+0:20              Constant:
+0:20                1 (const uint)
+0:20            subtract ( temp highp uint)
+0:20              AtomicAdd ( global highp uint)
+0:20                counter2: direct index for structure ( coherent volatile buffer highp uint)
+0:20                  'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2})
+0:20                  Constant:
+0:20                    1 (const uint)
+0:20                Constant:
+0:20                  4294967295 (const uint)
+0:20              Constant:
+0:20                1 (const uint)
+0:21      Sequence
+0:21        move second child to first child ( temp highp 4-component vector of float)
+0:21          'v' ( temp highp 4-component vector of float)
+0:21          add ( temp highp 4-component vector of float)
+0:21            add ( temp highp 4-component vector of float)
+0:21              add ( temp highp 4-component vector of float)
+0:21                a: direct index for structure ( uniform highp 4-component vector of float)
+0:21                  'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:21                  Constant:
+0:21                    0 (const uint)
+0:21                Construct vec4 ( temp highp 4-component vector of float)
+0:21                  direct index ( temp highp float)
+0:21                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:21                      Constant:
+0:21                        1 (const uint)
+0:21                    Constant:
+0:21                      0 (const int)
+0:21                  direct index ( temp highp float)
+0:21                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:21                      Constant:
+0:21                        1 (const uint)
+0:21                    Constant:
+0:21                      1 (const int)
+0:21                  direct index ( temp highp float)
+0:21                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:21                      Constant:
+0:21                        2 (const uint)
+0:21                    Constant:
+0:21                      0 (const int)
+0:21                  direct index ( temp highp float)
+0:21                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:21                      Constant:
+0:21                        2 (const uint)
+0:21                    Constant:
+0:21                      1 (const int)
+0:21              c1: direct index for structure ( uniform highp 4-component vector of float)
+0:21                'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:21                Constant:
+0:21                  3 (const uint)
+0:21            d: direct index for structure ( uniform highp 4-component vector of float)
+0:21              'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:21              Constant:
+0:21                4 (const uint)
+0:23      Branch: Return with expression
+0:23        vector-scale ( temp highp 4-component vector of float)
+0:23          Convert uint to float ( temp highp float)
+0:23            'j' ( temp highp uint)
+0:23          'v' ( temp highp 4-component vector of float)
+0:26  Function Definition: main( ( global void)
+0:26    Function Parameters: 
+0:27    Sequence
+0:27      move second child to first child ( temp highp 4-component vector of float)
+0:27        'o' ( out highp 4-component vector of float)
+0:27        add ( temp highp 4-component vector of float)
+0:27          Function Call: foo( ( global highp 4-component vector of float)
+0:27          Function Call: bar( ( global highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'o' ( out highp 4-component vector of float)
+0:?     'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d})
+0:?     'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2})
+
+vk.relaxed.link2.frag
+Shader version: 460
+gl_FragCoord origin is upper left
+0:? Sequence
+0:14  Function Definition: foo( ( global highp 4-component vector of float)
+0:14    Function Parameters: 
+0:15    Sequence
+0:15      Sequence
+0:15        move second child to first child ( temp highp uint)
+0:15          'j' ( temp highp uint)
+0:15          add ( temp highp uint)
+0:15            AtomicAdd ( global highp uint)
+0:15              counter2: direct index for structure ( coherent volatile buffer highp uint)
+0:15                'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter3,  coherent volatile buffer highp uint counter2})
+0:15                Constant:
+0:15                  1 (const uint)
+0:15              Constant:
+0:15                1 (const uint)
+0:15            subtract ( temp highp uint)
+0:15              AtomicAdd ( global highp uint)
+0:15                counter3: direct index for structure ( coherent volatile buffer highp uint)
+0:15                  'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter3,  coherent volatile buffer highp uint counter2})
+0:15                  Constant:
+0:15                    0 (const uint)
+0:15                Constant:
+0:15                  4294967295 (const uint)
+0:15              Constant:
+0:15                1 (const uint)
+0:16      Sequence
+0:16        move second child to first child ( temp highp 4-component vector of float)
+0:16          'v' ( temp highp 4-component vector of float)
+0:16          add ( temp highp 4-component vector of float)
+0:16            add ( temp highp 4-component vector of float)
+0:16              add ( temp highp 4-component vector of float)
+0:16                a: direct index for structure ( uniform highp 4-component vector of float)
+0:16                  'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:16                  Constant:
+0:16                    0 (const uint)
+0:16                Construct vec4 ( temp highp 4-component vector of float)
+0:16                  direct index ( temp highp float)
+0:16                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:16                      Constant:
+0:16                        2 (const uint)
+0:16                    Constant:
+0:16                      0 (const int)
+0:16                  direct index ( temp highp float)
+0:16                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:16                      Constant:
+0:16                        2 (const uint)
+0:16                    Constant:
+0:16                      1 (const int)
+0:16                  direct index ( temp highp float)
+0:16                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:16                      Constant:
+0:16                        1 (const uint)
+0:16                    Constant:
+0:16                      0 (const int)
+0:16                  direct index ( temp highp float)
+0:16                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:16                      Constant:
+0:16                        1 (const uint)
+0:16                    Constant:
+0:16                      1 (const int)
+0:16              c2: direct index for structure ( uniform highp 4-component vector of float)
+0:16                'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:16                Constant:
+0:16                  3 (const uint)
+0:16            d: direct index for structure ( uniform highp 4-component vector of float)
+0:16              'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:16              Constant:
+0:16                4 (const uint)
+0:18      Branch: Return with expression
+0:18        vector-scale ( temp highp 4-component vector of float)
+0:18          Convert uint to float ( temp highp float)
+0:18            'j' ( temp highp uint)
+0:18          'v' ( temp highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b2,  uniform highp 2-component vector of float b1,  uniform highp 4-component vector of float c2,  uniform highp 4-component vector of float d})
+0:?     'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter3,  coherent volatile buffer highp uint counter2})
+
+
+Linked fragment stage:
+
+
+Shader version: 460
+gl_FragCoord origin is upper left
+0:? Sequence
+0:19  Function Definition: bar( ( global highp 4-component vector of float)
+0:19    Function Parameters: 
+0:20    Sequence
+0:20      Sequence
+0:20        move second child to first child ( temp highp uint)
+0:20          'j' ( temp highp uint)
+0:20          add ( temp highp uint)
+0:20            AtomicAdd ( global highp uint)
+0:20              counter1: direct index for structure ( coherent volatile buffer highp uint)
+0:20                'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2,  coherent volatile buffer highp uint counter3})
+0:20                Constant:
+0:20                  0 (const uint)
+0:20              Constant:
+0:20                1 (const uint)
+0:20            subtract ( temp highp uint)
+0:20              AtomicAdd ( global highp uint)
+0:20                counter2: direct index for structure ( coherent volatile buffer highp uint)
+0:20                  'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2,  coherent volatile buffer highp uint counter3})
+0:20                  Constant:
+0:20                    1 (const uint)
+0:20                Constant:
+0:20                  4294967295 (const uint)
+0:20              Constant:
+0:20                1 (const uint)
+0:21      Sequence
+0:21        move second child to first child ( temp highp 4-component vector of float)
+0:21          'v' ( temp highp 4-component vector of float)
+0:21          add ( temp highp 4-component vector of float)
+0:21            add ( temp highp 4-component vector of float)
+0:21              add ( temp highp 4-component vector of float)
+0:21                a: direct index for structure ( uniform highp 4-component vector of float)
+0:21                  'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:21                  Constant:
+0:21                    0 (const uint)
+0:21                Construct vec4 ( temp highp 4-component vector of float)
+0:21                  direct index ( temp highp float)
+0:21                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:21                      Constant:
+0:21                        1 (const uint)
+0:21                    Constant:
+0:21                      0 (const int)
+0:21                  direct index ( temp highp float)
+0:21                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:21                      Constant:
+0:21                        1 (const uint)
+0:21                    Constant:
+0:21                      1 (const int)
+0:21                  direct index ( temp highp float)
+0:21                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:21                      Constant:
+0:21                        2 (const uint)
+0:21                    Constant:
+0:21                      0 (const int)
+0:21                  direct index ( temp highp float)
+0:21                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:21                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:21                      Constant:
+0:21                        2 (const uint)
+0:21                    Constant:
+0:21                      1 (const int)
+0:21              c1: direct index for structure ( uniform highp 4-component vector of float)
+0:21                'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:21                Constant:
+0:21                  3 (const uint)
+0:21            d: direct index for structure ( uniform highp 4-component vector of float)
+0:21              'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:21              Constant:
+0:21                4 (const uint)
+0:23      Branch: Return with expression
+0:23        vector-scale ( temp highp 4-component vector of float)
+0:23          Convert uint to float ( temp highp float)
+0:23            'j' ( temp highp uint)
+0:23          'v' ( temp highp 4-component vector of float)
+0:26  Function Definition: main( ( global void)
+0:26    Function Parameters: 
+0:27    Sequence
+0:27      move second child to first child ( temp highp 4-component vector of float)
+0:27        'o' ( out highp 4-component vector of float)
+0:27        add ( temp highp 4-component vector of float)
+0:27          Function Call: foo( ( global highp 4-component vector of float)
+0:27          Function Call: bar( ( global highp 4-component vector of float)
+0:14  Function Definition: foo( ( global highp 4-component vector of float)
+0:14    Function Parameters: 
+0:15    Sequence
+0:15      Sequence
+0:15        move second child to first child ( temp highp uint)
+0:15          'j' ( temp highp uint)
+0:15          add ( temp highp uint)
+0:15            AtomicAdd ( global highp uint)
+0:15              counter2: direct index for structure ( coherent volatile buffer highp uint)
+0:15                'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2,  coherent volatile buffer highp uint counter3})
+0:15                Constant:
+0:15                  1 (const uint)
+0:15              Constant:
+0:15                1 (const uint)
+0:15            subtract ( temp highp uint)
+0:15              AtomicAdd ( global highp uint)
+0:15                counter3: direct index for structure ( coherent volatile buffer highp uint)
+0:15                  'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2,  coherent volatile buffer highp uint counter3})
+0:15                  Constant:
+0:15                    2 (const uint)
+0:15                Constant:
+0:15                  4294967295 (const uint)
+0:15              Constant:
+0:15                1 (const uint)
+0:16      Sequence
+0:16        move second child to first child ( temp highp 4-component vector of float)
+0:16          'v' ( temp highp 4-component vector of float)
+0:16          add ( temp highp 4-component vector of float)
+0:16            add ( temp highp 4-component vector of float)
+0:16              add ( temp highp 4-component vector of float)
+0:16                a: direct index for structure ( uniform highp 4-component vector of float)
+0:16                  'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:16                  Constant:
+0:16                    0 (const uint)
+0:16                Construct vec4 ( temp highp 4-component vector of float)
+0:16                  direct index ( temp highp float)
+0:16                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:16                      Constant:
+0:16                        1 (const uint)
+0:16                    Constant:
+0:16                      0 (const int)
+0:16                  direct index ( temp highp float)
+0:16                    b1: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:16                      Constant:
+0:16                        1 (const uint)
+0:16                    Constant:
+0:16                      1 (const int)
+0:16                  direct index ( temp highp float)
+0:16                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:16                      Constant:
+0:16                        2 (const uint)
+0:16                    Constant:
+0:16                      0 (const int)
+0:16                  direct index ( temp highp float)
+0:16                    b2: direct index for structure ( uniform highp 2-component vector of float)
+0:16                      'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:16                      Constant:
+0:16                        2 (const uint)
+0:16                    Constant:
+0:16                      1 (const int)
+0:16              c2: direct index for structure ( uniform highp 4-component vector of float)
+0:16                'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:16                Constant:
+0:16                  5 (const uint)
+0:16            d: direct index for structure ( uniform highp 4-component vector of float)
+0:16              'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:16              Constant:
+0:16                4 (const uint)
+0:18      Branch: Return with expression
+0:18        vector-scale ( temp highp 4-component vector of float)
+0:18          Convert uint to float ( temp highp float)
+0:18            'j' ( temp highp uint)
+0:18          'v' ( temp highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'o' ( out highp 4-component vector of float)
+0:?     'anon@0' (layout( column_major std140) uniform block{ uniform highp 4-component vector of float a,  uniform highp 2-component vector of float b1,  uniform highp 2-component vector of float b2,  uniform highp 4-component vector of float c1,  uniform highp 4-component vector of float d,  uniform highp 4-component vector of float c2})
+0:?     'anon@1' (layout( column_major std430) buffer block{ coherent volatile buffer highp uint counter1,  coherent volatile buffer highp uint counter2,  coherent volatile buffer highp uint counter3})
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 105
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "main" 68
+                              ExecutionMode 4 OriginUpperLeft
+                              Source GLSL 460
+                              Name 4  "main"
+                              Name 9  "bar("
+                              Name 11  "foo("
+                              Name 15  "j"
+                              Name 16  "gl_AtomicCounterBlock_0"
+                              MemberName 16(gl_AtomicCounterBlock_0) 0  "counter1"
+                              MemberName 16(gl_AtomicCounterBlock_0) 1  "counter2"
+                              MemberName 16(gl_AtomicCounterBlock_0) 2  "counter3"
+                              Name 18  ""
+                              Name 33  "v"
+                              Name 35  "gl_DefaultUniformBlock"
+                              MemberName 35(gl_DefaultUniformBlock) 0  "a"
+                              MemberName 35(gl_DefaultUniformBlock) 1  "b1"
+                              MemberName 35(gl_DefaultUniformBlock) 2  "b2"
+                              MemberName 35(gl_DefaultUniformBlock) 3  "c1"
+                              MemberName 35(gl_DefaultUniformBlock) 4  "d"
+                              MemberName 35(gl_DefaultUniformBlock) 5  "c2"
+                              Name 37  ""
+                              Name 68  "o"
+                              Name 72  "j"
+                              Name 79  "v"
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 0 Coherent
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 0 Volatile
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 0 Coherent
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 0 Offset 0
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 1 Coherent
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 1 Volatile
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 1 Coherent
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 1 Offset 4
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 2 Coherent
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 2 Volatile
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 2 Coherent
+                              MemberDecorate 16(gl_AtomicCounterBlock_0) 2 Offset 8
+                              Decorate 16(gl_AtomicCounterBlock_0) BufferBlock
+                              Decorate 18 DescriptorSet 0
+                              Decorate 18 Binding 1
+                              MemberDecorate 35(gl_DefaultUniformBlock) 0 Offset 0
+                              MemberDecorate 35(gl_DefaultUniformBlock) 1 Offset 16
+                              MemberDecorate 35(gl_DefaultUniformBlock) 2 Offset 24
+                              MemberDecorate 35(gl_DefaultUniformBlock) 3 Offset 32
+                              MemberDecorate 35(gl_DefaultUniformBlock) 4 Offset 48
+                              MemberDecorate 35(gl_DefaultUniformBlock) 5 Offset 64
+                              Decorate 35(gl_DefaultUniformBlock) Block
+                              Decorate 37 DescriptorSet 0
+                              Decorate 37 Binding 0
+                              Decorate 68(o) Location 0
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypeFunction 7(fvec4)
+              13:             TypeInt 32 0
+              14:             TypePointer Function 13(int)
+16(gl_AtomicCounterBlock_0):             TypeStruct 13(int) 13(int) 13(int)
+              17:             TypePointer Uniform 16(gl_AtomicCounterBlock_0)
+              18:     17(ptr) Variable Uniform
+              19:             TypeInt 32 1
+              20:     19(int) Constant 0
+              21:             TypePointer Uniform 13(int)
+              23:     13(int) Constant 1
+              24:     13(int) Constant 0
+              26:     19(int) Constant 1
+              28:     13(int) Constant 4294967295
+              32:             TypePointer Function 7(fvec4)
+              34:             TypeVector 6(float) 2
+35(gl_DefaultUniformBlock):             TypeStruct 7(fvec4) 34(fvec2) 34(fvec2) 7(fvec4) 7(fvec4) 7(fvec4)
+              36:             TypePointer Uniform 35(gl_DefaultUniformBlock)
+              37:     36(ptr) Variable Uniform
+              38:             TypePointer Uniform 7(fvec4)
+              41:             TypePointer Uniform 6(float)
+              46:     19(int) Constant 2
+              53:     19(int) Constant 3
+              57:     19(int) Constant 4
+              67:             TypePointer Output 7(fvec4)
+           68(o):     67(ptr) Variable Output
+              92:     19(int) Constant 5
+         4(main):           2 Function None 3
+               5:             Label
+              69:    7(fvec4) FunctionCall 11(foo()
+              70:    7(fvec4) FunctionCall 9(bar()
+              71:    7(fvec4) FAdd 69 70
+                              Store 68(o) 71
+                              Return
+                              FunctionEnd
+         9(bar():    7(fvec4) Function None 8
+              10:             Label
+           15(j):     14(ptr) Variable Function
+           33(v):     32(ptr) Variable Function
+              22:     21(ptr) AccessChain 18 20
+              25:     13(int) AtomicIAdd 22 23 24 23
+              27:     21(ptr) AccessChain 18 26
+              29:     13(int) AtomicIAdd 27 23 24 28
+              30:     13(int) ISub 29 23
+              31:     13(int) IAdd 25 30
+                              Store 15(j) 31
+              39:     38(ptr) AccessChain 37 20
+              40:    7(fvec4) Load 39
+              42:     41(ptr) AccessChain 37 26 24
+              43:    6(float) Load 42
+              44:     41(ptr) AccessChain 37 26 23
+              45:    6(float) Load 44
+              47:     41(ptr) AccessChain 37 46 24
+              48:    6(float) Load 47
+              49:     41(ptr) AccessChain 37 46 23
+              50:    6(float) Load 49
+              51:    7(fvec4) CompositeConstruct 43 45 48 50
+              52:    7(fvec4) FAdd 40 51
+              54:     38(ptr) AccessChain 37 53
+              55:    7(fvec4) Load 54
+              56:    7(fvec4) FAdd 52 55
+              58:     38(ptr) AccessChain 37 57
+              59:    7(fvec4) Load 58
+              60:    7(fvec4) FAdd 56 59
+                              Store 33(v) 60
+              61:     13(int) Load 15(j)
+              62:    6(float) ConvertUToF 61
+              63:    7(fvec4) Load 33(v)
+              64:    7(fvec4) VectorTimesScalar 63 62
+                              ReturnValue 64
+                              FunctionEnd
+        11(foo():    7(fvec4) Function None 8
+              12:             Label
+           72(j):     14(ptr) Variable Function
+           79(v):     32(ptr) Variable Function
+              73:     21(ptr) AccessChain 18 26
+              74:     13(int) AtomicIAdd 73 23 24 23
+              75:     21(ptr) AccessChain 18 46
+              76:     13(int) AtomicIAdd 75 23 24 28
+              77:     13(int) ISub 76 23
+              78:     13(int) IAdd 74 77
+                              Store 72(j) 78
+              80:     38(ptr) AccessChain 37 20
+              81:    7(fvec4) Load 80
+              82:     41(ptr) AccessChain 37 26 24
+              83:    6(float) Load 82
+              84:     41(ptr) AccessChain 37 26 23
+              85:    6(float) Load 84
+              86:     41(ptr) AccessChain 37 46 24
+              87:    6(float) Load 86
+              88:     41(ptr) AccessChain 37 46 23
+              89:    6(float) Load 88
+              90:    7(fvec4) CompositeConstruct 83 85 87 89
+              91:    7(fvec4) FAdd 81 90
+              93:     38(ptr) AccessChain 37 92
+              94:    7(fvec4) Load 93
+              95:    7(fvec4) FAdd 91 94
+              96:     38(ptr) AccessChain 37 57
+              97:    7(fvec4) Load 96
+              98:    7(fvec4) FAdd 95 97
+                              Store 79(v) 98
+              99:     13(int) Load 72(j)
+             100:    6(float) ConvertUToF 99
+             101:    7(fvec4) Load 79(v)
+             102:    7(fvec4) VectorTimesScalar 101 100
+                              ReturnValue 102
+                              FunctionEnd

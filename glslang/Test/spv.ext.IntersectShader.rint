@@ -1,0 +1,25 @@
+#version 460
+#extension GL_EXT_ray_tracing : enable
+#extension GL_EXT_ray_cull_mask : enable
+hitAttributeEXT vec4 iAttr;
+void main()
+{
+	uvec3 v0 = gl_LaunchIDEXT;
+	uvec3 v1 = gl_LaunchSizeEXT;
+	int v2 = gl_PrimitiveID;
+	int v3 = gl_InstanceID;
+	int v4 = gl_InstanceCustomIndexEXT;
+	vec3 v5 = gl_WorldRayOriginEXT;
+	vec3 v6 = gl_WorldRayDirectionEXT;
+	vec3 v7 = gl_ObjectRayOriginEXT;
+	vec3 v8 = gl_ObjectRayDirectionEXT;
+	float v9 = gl_RayTminEXT;
+	float v10 = gl_RayTmaxEXT;
+	mat4x3 v11 = gl_ObjectToWorldEXT;
+	mat4x3 v12 = gl_WorldToObjectEXT;
+    mat3x4 v13 = gl_ObjectToWorld3x4EXT;
+    mat3x4 v14 = gl_WorldToObject3x4EXT;
+	uint v15 = gl_CullMaskEXT;
+	iAttr = vec4(0.5f,0.5f,0.0f,1.0f);
+	reportIntersectionEXT(0.5, 1U);
+}

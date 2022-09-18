@@ -1,0 +1,153 @@
+#version 460
+
+
+#define BARRIER() \
+    memoryBarrierShared(); \
+    barrier();
+
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x = 32, local_size_y=1, local_size_z=1) in;
+
+// test use of shared memory in task shaders:
+layout(binding=0) writeonly uniform image2D uni_image;
+uniform block0 {
+    uint uni_value;
+};
+shared vec4 mem[10];
+
+// test use of task memory in task shaders:
+struct Task {
+    vec2 dummy;
+    vec2 submesh[3];
+};
+
+taskPayloadSharedEXT Task mytask;
+void main()
+{
+    uint iid = gl_LocalInvocationID.x;
+    uint gid = gl_WorkGroupID.x;
+
+    // 1. shared memory load and stores
+    for (uint i = 0; i < 10; ++i) {
+        mem[i] = vec4(i + uni_value);
+    }
+    imageStore(uni_image, ivec2(iid), mem[gid]);
+    imageStore(uni_image, ivec2(iid), mem[gid+1]);
+
+    BARRIER();
+
+    // 2. task memory stores
+
+    mytask.dummy      = vec2(30.0, 31.0);
+    mytask.submesh[0] = vec2(32.0, 33.0);
+    mytask.submesh[1] = vec2(34.0, 35.0);
+    mytask.submesh[2] = mytask.submesh[gid%2];
+
+    BARRIER();
+
+    // 3. emit task count under uniform control flow
+    EmitMeshTasksEXT(3U, 1U, 1U);
+}
+
+#extension GL_KHR_shader_subgroup_basic: enable
+void basic_works (void)
+{
+  gl_SubgroupSize;
+  gl_SubgroupInvocationID;
+  subgroupBarrier();
+  subgroupMemoryBarrier();
+  subgroupMemoryBarrierBuffer();
+  subgroupMemoryBarrierImage();
+  subgroupElect();
+  gl_NumSubgroups;                  // allowed in task
+  gl_SubgroupID;                    // allowed in task
+  subgroupMemoryBarrierShared();    // allowed in task
+}
+
+#extension GL_KHR_shader_subgroup_ballot: enable
+void ballot_works(vec4 f4) {
+  gl_SubgroupEqMask;
+  gl_SubgroupGeMask;
+  gl_SubgroupGtMask;
+  gl_SubgroupLeMask;
+  gl_SubgroupLtMask;
+  subgroupBroadcast(f4, 0);
+  subgroupBroadcastFirst(f4);
+  uvec4 ballot = subgroupBallot(false);
+  subgroupInverseBallot(uvec4(0x1));
+  subgroupBallotBitExtract(ballot, 0);
+  subgroupBallotBitCount(ballot);
+  subgroupBallotInclusiveBitCount(ballot);
+  subgroupBallotExclusiveBitCount(ballot);
+  subgroupBallotFindLSB(ballot);
+  subgroupBallotFindMSB(ballot);
+}
+
+#extension GL_KHR_shader_subgroup_vote: enable
+void vote_works(vec4 f4)
+{
+  subgroupAll(true);
+  subgroupAny(false);
+  subgroupAllEqual(f4);
+}
+
+#extension GL_KHR_shader_subgroup_shuffle: enable
+#extension GL_KHR_shader_subgroup_shuffle_relative: enable
+void shuffle_works(vec4 f4)
+{
+  subgroupShuffle(f4, 0);
+  subgroupShuffleXor(f4, 0x1);
+  subgroupShuffleUp(f4, 1);
+  subgroupShuffleDown(f4, 1);
+}
+
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+void arith_works(vec4 f4)
+{
+  uvec4 ballot;
+  subgroupAdd(f4);
+  subgroupMul(f4);
+  subgroupMin(f4);
+  subgroupMax(f4);
+  subgroupAnd(ballot);
+  subgroupOr(ballot);
+  subgroupXor(ballot);
+  subgroupInclusiveAdd(f4);
+  subgroupInclusiveMul(f4);
+  subgroupInclusiveMin(f4);
+  subgroupInclusiveMax(f4);
+  subgroupInclusiveAnd(ballot);
+  subgroupInclusiveOr(ballot);
+  subgroupInclusiveXor(ballot);
+  subgroupExclusiveAdd(f4);
+  subgroupExclusiveMul(f4);
+  subgroupExclusiveMin(f4);
+  subgroupExclusiveMax(f4);
+  subgroupExclusiveAnd(ballot);
+  subgroupExclusiveOr(ballot);
+  subgroupExclusiveXor(ballot);
+}
+
+#extension GL_KHR_shader_subgroup_clustered: enable
+void clustered_works(vec4 f4)
+{
+  uvec4 ballot = uvec4(0x55,0,0,0);
+  subgroupClusteredAdd(f4, 2);
+  subgroupClusteredMul(f4, 2);
+  subgroupClusteredMin(f4, 2);
+  subgroupClusteredMax(f4, 2);
+  subgroupClusteredAnd(ballot, 2);
+  subgroupClusteredOr(ballot, 2);
+  subgroupClusteredXor(ballot, 2);
+}
+
+#extension GL_KHR_shader_subgroup_quad: enable
+void quad_works(vec4 f4)
+{
+  subgroupQuadBroadcast(f4, 0);
+  subgroupQuadSwapHorizontal(f4);
+  subgroupQuadSwapVertical(f4);
+  subgroupQuadSwapDiagonal(f4);
+}
+

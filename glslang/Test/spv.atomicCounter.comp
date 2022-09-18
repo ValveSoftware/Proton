@@ -1,0 +1,26 @@
+#version 450
+
+
+
+layout(binding = 0) uniform atomic_uint counter;
+
+layout(binding = 0, offset = 4) uniform atomic_uint countArr[4];
+shared uint value;
+
+int arrX[gl_WorkGroupSize.x];
+int arrY[gl_WorkGroupSize.y];
+int arrZ[gl_WorkGroupSize.z];
+
+uint func(atomic_uint c)
+{
+    return atomicCounterIncrement(c);
+}
+
+void main()
+{
+    memoryBarrierAtomicCounter();
+    func(counter);
+    uint val = atomicCounter(countArr[2]);
+    atomicCounterDecrement(counter);
+    atomicCounterIncrement(counter);
+}

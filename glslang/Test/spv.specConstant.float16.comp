@@ -1,0 +1,18 @@
+#version 450
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : require
+
+layout(constant_id = 1) const float16_t sc0 = 9.5hf;
+layout(constant_id = 2) const float16_t sc1 = -14.25hf;
+
+layout (set = 0, binding = 0, std430) writeonly buffer Output {
+    float16_t r0;
+    float16_t r1;
+} sb_out;
+
+
+void main (void)
+{
+    sb_out.r0 = sc0;
+    sb_out.r1 = sc1;
+}
+

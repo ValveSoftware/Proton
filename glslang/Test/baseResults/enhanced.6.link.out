@@ -1,0 +1,7 @@
+enhanced.6.vert
+enhanced.6.frag
+ERROR: Linking vertex and fragment stages: Array sizes must be compatible:
+    vertex stage: " VS_OUT{ vec2 TexCoords} vs_out[2]"
+    fragment stage: " VS_OUT{ vec2 TexCoords} fs_in[1]"
+
+SPIR-V is not generated for failed compile or link

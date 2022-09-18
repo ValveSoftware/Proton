@@ -1,0 +1,269 @@
+gl_FragCoord.frag
+Shader version: 150
+Requested GL_ARB_explicit_attrib_location
+gl_FragCoord pixel center is integer
+gl_FragCoord origin is upper left
+0:? Sequence
+0:9  Sequence
+0:9    move second child to first child ( temp float)
+0:9      'myGlobalVar' ( global float)
+0:9      direct index ( temp float)
+0:9        'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:9        Constant:
+0:9          0 (const int)
+0:16  Function Definition: main( ( global void)
+0:16    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp 4-component vector of float)
+0:17        'myColor' (layout( location=0) out 4-component vector of float)
+0:17        Constant:
+0:17          0.200000
+0:17          0.200000
+0:17          0.200000
+0:17          0.200000
+0:18      Test condition and select ( temp void)
+0:18        Condition
+0:18        Compare Greater Than or Equal ( temp bool)
+0:18          direct index ( temp float)
+0:18            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:18            Constant:
+0:18              1 (const int)
+0:18          Constant:
+0:18            10.000000
+0:18        true case
+0:19        Sequence
+0:19          move second child to first child ( temp float)
+0:19            direct index ( temp float)
+0:19              'myColor' (layout( location=0) out 4-component vector of float)
+0:19              Constant:
+0:19                2 (const int)
+0:19            Constant:
+0:19              0.800000
+0:21      Test condition and select ( temp void)
+0:21        Condition
+0:21        Compare Equal ( temp bool)
+0:21          direct index ( temp float)
+0:21            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:21            Constant:
+0:21              1 (const int)
+0:21          trunc ( global float)
+0:21            direct index ( temp float)
+0:21              'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:21              Constant:
+0:21                1 (const int)
+0:21        true case
+0:22        Sequence
+0:22          move second child to first child ( temp float)
+0:22            direct index ( temp float)
+0:22              'myColor' (layout( location=0) out 4-component vector of float)
+0:22              Constant:
+0:22                1 (const int)
+0:22            Constant:
+0:22              0.800000
+0:24      Test condition and select ( temp void)
+0:24        Condition
+0:24        Compare Equal ( temp bool)
+0:24          direct index ( temp float)
+0:24            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:24            Constant:
+0:24              0 (const int)
+0:24          trunc ( global float)
+0:24            direct index ( temp float)
+0:24              'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:24              Constant:
+0:24                0 (const int)
+0:24        true case
+0:25        Sequence
+0:25          move second child to first child ( temp float)
+0:25            direct index ( temp float)
+0:25              'myColor' (layout( location=0) out 4-component vector of float)
+0:25              Constant:
+0:25                0 (const int)
+0:25            Constant:
+0:25              0.800000
+0:28      Sequence
+0:28        move second child to first child ( temp 4-component vector of float)
+0:28          'diff' ( temp 4-component vector of float)
+0:28          subtract ( temp 4-component vector of float)
+0:28            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:28            'i' ( smooth in 4-component vector of float)
+0:29      Test condition and select ( temp void)
+0:29        Condition
+0:29        Compare Greater Than ( temp bool)
+0:29          Absolute value ( global float)
+0:29            direct index ( temp float)
+0:29              'diff' ( temp 4-component vector of float)
+0:29              Constant:
+0:29                2 (const int)
+0:29          Constant:
+0:29            0.001000
+0:29        true case
+0:29        move second child to first child ( temp float)
+0:29          direct index ( temp float)
+0:29            'myColor' (layout( location=0) out 4-component vector of float)
+0:29            Constant:
+0:29              2 (const int)
+0:29          Constant:
+0:29            0.500000
+0:30      Test condition and select ( temp void)
+0:30        Condition
+0:30        Compare Greater Than ( temp bool)
+0:30          Absolute value ( global float)
+0:30            direct index ( temp float)
+0:30              'diff' ( temp 4-component vector of float)
+0:30              Constant:
+0:30                3 (const int)
+0:30          Constant:
+0:30            0.001000
+0:30        true case
+0:30        move second child to first child ( temp float)
+0:30          direct index ( temp float)
+0:30            'myColor' (layout( location=0) out 4-component vector of float)
+0:30            Constant:
+0:30              3 (const int)
+0:30          Constant:
+0:30            0.500000
+0:?   Linker Objects
+0:?     'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:?     'myGlobalVar' ( global float)
+0:?     'i' ( smooth in 4-component vector of float)
+0:?     'myColor' (layout( location=0) out 4-component vector of float)
+0:?     'eps' ( const float)
+0:?       0.001000
+
+
+Linked fragment stage:
+
+
+Shader version: 150
+Requested GL_ARB_explicit_attrib_location
+gl_FragCoord pixel center is integer
+gl_FragCoord origin is upper left
+0:? Sequence
+0:9  Sequence
+0:9    move second child to first child ( temp float)
+0:9      'myGlobalVar' ( global float)
+0:9      direct index ( temp float)
+0:9        'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:9        Constant:
+0:9          0 (const int)
+0:16  Function Definition: main( ( global void)
+0:16    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp 4-component vector of float)
+0:17        'myColor' (layout( location=0) out 4-component vector of float)
+0:17        Constant:
+0:17          0.200000
+0:17          0.200000
+0:17          0.200000
+0:17          0.200000
+0:18      Test condition and select ( temp void)
+0:18        Condition
+0:18        Compare Greater Than or Equal ( temp bool)
+0:18          direct index ( temp float)
+0:18            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:18            Constant:
+0:18              1 (const int)
+0:18          Constant:
+0:18            10.000000
+0:18        true case
+0:19        Sequence
+0:19          move second child to first child ( temp float)
+0:19            direct index ( temp float)
+0:19              'myColor' (layout( location=0) out 4-component vector of float)
+0:19              Constant:
+0:19                2 (const int)
+0:19            Constant:
+0:19              0.800000
+0:21      Test condition and select ( temp void)
+0:21        Condition
+0:21        Compare Equal ( temp bool)
+0:21          direct index ( temp float)
+0:21            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:21            Constant:
+0:21              1 (const int)
+0:21          trunc ( global float)
+0:21            direct index ( temp float)
+0:21              'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:21              Constant:
+0:21                1 (const int)
+0:21        true case
+0:22        Sequence
+0:22          move second child to first child ( temp float)
+0:22            direct index ( temp float)
+0:22              'myColor' (layout( location=0) out 4-component vector of float)
+0:22              Constant:
+0:22                1 (const int)
+0:22            Constant:
+0:22              0.800000
+0:24      Test condition and select ( temp void)
+0:24        Condition
+0:24        Compare Equal ( temp bool)
+0:24          direct index ( temp float)
+0:24            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:24            Constant:
+0:24              0 (const int)
+0:24          trunc ( global float)
+0:24            direct index ( temp float)
+0:24              'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:24              Constant:
+0:24                0 (const int)
+0:24        true case
+0:25        Sequence
+0:25          move second child to first child ( temp float)
+0:25            direct index ( temp float)
+0:25              'myColor' (layout( location=0) out 4-component vector of float)
+0:25              Constant:
+0:25                0 (const int)
+0:25            Constant:
+0:25              0.800000
+0:28      Sequence
+0:28        move second child to first child ( temp 4-component vector of float)
+0:28          'diff' ( temp 4-component vector of float)
+0:28          subtract ( temp 4-component vector of float)
+0:28            'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:28            'i' ( smooth in 4-component vector of float)
+0:29      Test condition and select ( temp void)
+0:29        Condition
+0:29        Compare Greater Than ( temp bool)
+0:29          Absolute value ( global float)
+0:29            direct index ( temp float)
+0:29              'diff' ( temp 4-component vector of float)
+0:29              Constant:
+0:29                2 (const int)
+0:29          Constant:
+0:29            0.001000
+0:29        true case
+0:29        move second child to first child ( temp float)
+0:29          direct index ( temp float)
+0:29            'myColor' (layout( location=0) out 4-component vector of float)
+0:29            Constant:
+0:29              2 (const int)
+0:29          Constant:
+0:29            0.500000
+0:30      Test condition and select ( temp void)
+0:30        Condition
+0:30        Compare Greater Than ( temp bool)
+0:30          Absolute value ( global float)
+0:30            direct index ( temp float)
+0:30              'diff' ( temp 4-component vector of float)
+0:30              Constant:
+0:30                3 (const int)
+0:30          Constant:
+0:30            0.001000
+0:30        true case
+0:30        move second child to first child ( temp float)
+0:30          direct index ( temp float)
+0:30            'myColor' (layout( location=0) out 4-component vector of float)
+0:30            Constant:
+0:30              3 (const int)
+0:30          Constant:
+0:30            0.500000
+0:?   Linker Objects
+0:?     'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:?     'myGlobalVar' ( global float)
+0:?     'i' ( smooth in 4-component vector of float)
+0:?     'myColor' (layout( location=0) out 4-component vector of float)
+0:?     'eps' ( const float)
+0:?       0.001000
+

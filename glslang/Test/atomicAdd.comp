@@ -1,0 +1,19 @@
+#version 320 es
+layout(local_size_x = 1) in;
+
+struct structType{
+    int y[3];
+};
+
+layout(std430) buffer t2 {
+    structType f;
+} t;
+
+buffer coherent Buffer { int x; };
+int z;
+
+void main() {
+  atomicAdd(x, 1);
+  atomicAdd(t.f.y[1], 1);
+  atomicAdd(z, 1);
+}

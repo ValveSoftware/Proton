@@ -1,0 +1,201 @@
+atomicCounterARBOps.vert
+Shader version: 450
+Requested GL_ARB_shader_atomic_counter_ops
+Requested GL_ARB_shader_atomic_counters
+0:? Sequence
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:10    Sequence
+0:10      Sequence
+0:10        move second child to first child ( temp 4-component vector of float)
+0:10          'outColor' ( temp 4-component vector of float)
+0:10          Constant:
+0:10            1.000000
+0:10            1.000000
+0:10            1.000000
+0:10            1.000000
+0:13      move second child to first child ( temp uint)
+0:13        'ret' ( temp uint)
+0:13        AtomicCounterAdd ( global uint)
+0:13          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:13          Constant:
+0:13            4 (const uint)
+0:14      move second child to first child ( temp uint)
+0:14        'ret' ( temp uint)
+0:14        AtomicCounterSubtract ( global uint)
+0:14          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:14          Constant:
+0:14            4 (const uint)
+0:15      move second child to first child ( temp uint)
+0:15        'ret' ( temp uint)
+0:15        AtomicCounterMin ( global uint)
+0:15          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:15          Constant:
+0:15            4 (const uint)
+0:16      move second child to first child ( temp uint)
+0:16        'ret' ( temp uint)
+0:16        AtomicCounterMax ( global uint)
+0:16          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:16          Constant:
+0:16            4 (const uint)
+0:17      move second child to first child ( temp uint)
+0:17        'ret' ( temp uint)
+0:17        AtomicCounterAnd ( global uint)
+0:17          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:17          Constant:
+0:17            4 (const uint)
+0:18      move second child to first child ( temp uint)
+0:18        'ret' ( temp uint)
+0:18        AtomicCounterOr ( global uint)
+0:18          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:18          Constant:
+0:18            4 (const uint)
+0:19      move second child to first child ( temp uint)
+0:19        'ret' ( temp uint)
+0:19        AtomicCounterXor ( global uint)
+0:19          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:19          Constant:
+0:19            4 (const uint)
+0:20      move second child to first child ( temp uint)
+0:20        'ret' ( temp uint)
+0:20        AtomicCounterExchange ( global uint)
+0:20          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:20          Constant:
+0:20            4 (const uint)
+0:21      move second child to first child ( temp uint)
+0:21        'ret' ( temp uint)
+0:21        AtomicCounterCompSwap ( global uint)
+0:21          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:21          Constant:
+0:21            4 (const uint)
+0:21          Constant:
+0:21            4 (const uint)
+0:23      Sequence
+0:23        move second child to first child ( temp uint)
+0:23          'after' ( temp uint)
+0:23          AtomicCounter ( global uint)
+0:23            'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:24      Test condition and select ( temp void)
+0:24        Condition
+0:24        Compare Equal ( temp bool)
+0:24          'after' ( temp uint)
+0:24          'ret' ( temp uint)
+0:24        true case
+0:25        move second child to first child ( temp 4-component vector of float)
+0:25          'outColor' ( temp 4-component vector of float)
+0:25          Constant:
+0:25            0.000000
+0:25            0.000000
+0:25            0.000000
+0:25            0.000000
+0:27      move second child to first child ( temp 4-component vector of float)
+0:27        'vsColor' ( smooth out 4-component vector of float)
+0:27        'outColor' ( temp 4-component vector of float)
+0:?   Linker Objects
+0:?     'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:?     'vsColor' ( smooth out 4-component vector of float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 450
+Requested GL_ARB_shader_atomic_counter_ops
+Requested GL_ARB_shader_atomic_counters
+0:? Sequence
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:10    Sequence
+0:10      Sequence
+0:10        move second child to first child ( temp 4-component vector of float)
+0:10          'outColor' ( temp 4-component vector of float)
+0:10          Constant:
+0:10            1.000000
+0:10            1.000000
+0:10            1.000000
+0:10            1.000000
+0:13      move second child to first child ( temp uint)
+0:13        'ret' ( temp uint)
+0:13        AtomicCounterAdd ( global uint)
+0:13          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:13          Constant:
+0:13            4 (const uint)
+0:14      move second child to first child ( temp uint)
+0:14        'ret' ( temp uint)
+0:14        AtomicCounterSubtract ( global uint)
+0:14          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:14          Constant:
+0:14            4 (const uint)
+0:15      move second child to first child ( temp uint)
+0:15        'ret' ( temp uint)
+0:15        AtomicCounterMin ( global uint)
+0:15          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:15          Constant:
+0:15            4 (const uint)
+0:16      move second child to first child ( temp uint)
+0:16        'ret' ( temp uint)
+0:16        AtomicCounterMax ( global uint)
+0:16          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:16          Constant:
+0:16            4 (const uint)
+0:17      move second child to first child ( temp uint)
+0:17        'ret' ( temp uint)
+0:17        AtomicCounterAnd ( global uint)
+0:17          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:17          Constant:
+0:17            4 (const uint)
+0:18      move second child to first child ( temp uint)
+0:18        'ret' ( temp uint)
+0:18        AtomicCounterOr ( global uint)
+0:18          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:18          Constant:
+0:18            4 (const uint)
+0:19      move second child to first child ( temp uint)
+0:19        'ret' ( temp uint)
+0:19        AtomicCounterXor ( global uint)
+0:19          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:19          Constant:
+0:19            4 (const uint)
+0:20      move second child to first child ( temp uint)
+0:20        'ret' ( temp uint)
+0:20        AtomicCounterExchange ( global uint)
+0:20          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:20          Constant:
+0:20            4 (const uint)
+0:21      move second child to first child ( temp uint)
+0:21        'ret' ( temp uint)
+0:21        AtomicCounterCompSwap ( global uint)
+0:21          'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:21          Constant:
+0:21            4 (const uint)
+0:21          Constant:
+0:21            4 (const uint)
+0:23      Sequence
+0:23        move second child to first child ( temp uint)
+0:23          'after' ( temp uint)
+0:23          AtomicCounter ( global uint)
+0:23            'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:24      Test condition and select ( temp void)
+0:24        Condition
+0:24        Compare Equal ( temp bool)
+0:24          'after' ( temp uint)
+0:24          'ret' ( temp uint)
+0:24        true case
+0:25        move second child to first child ( temp 4-component vector of float)
+0:25          'outColor' ( temp 4-component vector of float)
+0:25          Constant:
+0:25            0.000000
+0:25            0.000000
+0:25            0.000000
+0:25            0.000000
+0:27      move second child to first child ( temp 4-component vector of float)
+0:27        'vsColor' ( smooth out 4-component vector of float)
+0:27        'outColor' ( temp 4-component vector of float)
+0:?   Linker Objects
+0:?     'counter' (layout( binding=0 offset=0) uniform atomic_uint)
+0:?     'vsColor' ( smooth out 4-component vector of float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+

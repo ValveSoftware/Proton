@@ -1,0 +1,7 @@
+enhanced.4.vert
+enhanced.4.frag
+ERROR: Linking vertex and fragment stages: Layout location qualifier must match:
+    vertex stage: Block: VS_OUT Instance: vs_out: "layout( location=0) out"
+    fragment stage: Block: VS_OUT Instance: fs_in: "layout( location=1) in"
+
+SPIR-V is not generated for failed compile or link

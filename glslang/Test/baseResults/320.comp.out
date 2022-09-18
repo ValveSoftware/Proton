@@ -1,0 +1,73 @@
+320.comp
+ERROR: 0:8: 'dFdx' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:9: 'dFdy' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:10: 'fwidth' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:11: 'dFdxCoarse' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:12: 'dFdyCoarse' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:13: 'fwidthCoarse' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:14: 'dFdxFine' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:15: 'dFdyFine' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 0:16: 'fwidthFine' : required extension not requested: GL_NV_compute_shader_derivatives
+ERROR: 9 compilation errors.  No code generated.
+
+
+Shader version: 320
+local_size = (1, 1, 1)
+ERROR: node is still EOpNull!
+0:6  Function Definition: main( ( global void)
+0:6    Function Parameters: 
+0:8    Sequence
+0:8      dPdx ( global highp float)
+0:8        'fX' ( global highp float)
+0:9      dPdy ( global highp float)
+0:9        'fY' ( global highp float)
+0:10      fwidth ( global highp float)
+0:10        'fX' ( global highp float)
+0:11      dPdxCoarse ( global highp float)
+0:11        'fX' ( global highp float)
+0:12      dPdyCoarse ( global highp float)
+0:12        'fY' ( global highp float)
+0:13      fwidthCoarse ( global highp float)
+0:13        'fX' ( global highp float)
+0:14      dPdxFine ( global highp float)
+0:14        'fX' ( global highp float)
+0:15      dPdyFine ( global highp float)
+0:15        'fY' ( global highp float)
+0:16      fwidthFine ( global highp float)
+0:16        'fX' ( global highp float)
+0:?   Linker Objects
+0:?     'fX' ( global highp float)
+0:?     'fY' ( global highp float)
+
+
+Linked compute stage:
+
+
+Shader version: 320
+local_size = (1, 1, 1)
+ERROR: node is still EOpNull!
+0:6  Function Definition: main( ( global void)
+0:6    Function Parameters: 
+0:8    Sequence
+0:8      dPdx ( global highp float)
+0:8        'fX' ( global highp float)
+0:9      dPdy ( global highp float)
+0:9        'fY' ( global highp float)
+0:10      fwidth ( global highp float)
+0:10        'fX' ( global highp float)
+0:11      dPdxCoarse ( global highp float)
+0:11        'fX' ( global highp float)
+0:12      dPdyCoarse ( global highp float)
+0:12        'fY' ( global highp float)
+0:13      fwidthCoarse ( global highp float)
+0:13        'fX' ( global highp float)
+0:14      dPdxFine ( global highp float)
+0:14        'fX' ( global highp float)
+0:15      dPdyFine ( global highp float)
+0:15        'fY' ( global highp float)
+0:16      fwidthFine ( global highp float)
+0:16        'fX' ( global highp float)
+0:?   Linker Objects
+0:?     'fX' ( global highp float)
+0:?     'fY' ( global highp float)
+

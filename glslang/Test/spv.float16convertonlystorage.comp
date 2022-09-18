@@ -1,0 +1,11 @@
+#version 450 core
+
+#extension GL_EXT_shader_16bit_storage : require
+
+layout(local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+
+void main()
+{
+    vec4 v = vec4(0.0);
+    vec4(f16vec4(v));
+}

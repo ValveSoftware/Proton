@@ -1,0 +1,157 @@
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 8
+; Bound: 108
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %main "main" %gl_NumWorkGroups %gl_WorkGroupID %gl_LocalInvocationID %gl_GlobalInvocationID %gl_LocalInvocationIndex
+               OpExecutionMode %main LocalSize 2 5 7
+               OpSource ESSL 310
+               OpName %main "main"
+               OpName %bName "bName"
+               OpMemberName %bName 0 "size"
+               OpMemberName %bName 1 "count"
+               OpMemberName %bName 2 "data"
+               OpName %bInst "bInst"
+               OpName %s "s"
+               OpName %arrX "arrX"
+               OpName %arrY "arrY"
+               OpName %arrZ "arrZ"
+               OpName %gl_NumWorkGroups "gl_NumWorkGroups"
+               OpName %gl_WorkGroupID "gl_WorkGroupID"
+               OpName %gl_LocalInvocationID "gl_LocalInvocationID"
+               OpName %gl_GlobalInvocationID "gl_GlobalInvocationID"
+               OpName %gl_LocalInvocationIndex "gl_LocalInvocationIndex"
+               OpDecorate %_runtimearr_v4float ArrayStride 16
+               OpMemberDecorate %bName 0 Offset 0
+               OpMemberDecorate %bName 1 Offset 16
+               OpMemberDecorate %bName 2 Offset 32
+               OpDecorate %bName BufferBlock
+               OpDecorate %bInst DescriptorSet 0
+               OpDecorate %bInst Binding 0
+               OpDecorate %39 SpecId 18
+               OpDecorate %41 SpecId 19
+               OpDecorate %gl_WorkGroupSize BuiltIn WorkgroupSize
+               OpDecorate %gl_NumWorkGroups BuiltIn NumWorkgroups
+               OpDecorate %gl_WorkGroupID BuiltIn WorkgroupId
+               OpDecorate %gl_LocalInvocationID BuiltIn LocalInvocationId
+               OpDecorate %gl_GlobalInvocationID BuiltIn GlobalInvocationId
+               OpDecorate %gl_LocalInvocationIndex BuiltIn LocalInvocationIndex
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+       %uint = OpTypeInt 32 0
+     %uint_2 = OpConstant %uint 2
+   %uint_264 = OpConstant %uint 264
+        %int = OpTypeInt 32 1
+     %v3uint = OpTypeVector %uint 3
+      %float = OpTypeFloat 32
+    %v4float = OpTypeVector %float 4
+%_runtimearr_v4float = OpTypeRuntimeArray %v4float
+      %bName = OpTypeStruct %int %v3uint %_runtimearr_v4float
+%_ptr_Uniform_bName = OpTypePointer Uniform %bName
+      %bInst = OpVariable %_ptr_Uniform_bName Uniform
+      %int_2 = OpConstant %int 2
+      %int_0 = OpConstant %int 0
+%_ptr_Uniform_int = OpTypePointer Uniform %int
+    %float_7 = OpConstant %float 7
+         %24 = OpConstantComposite %v4float %float_7 %float_7 %float_7 %float_7
+%_ptr_Uniform_v4float = OpTypePointer Uniform %v4float
+     %uint_1 = OpConstant %uint 1
+  %uint_3400 = OpConstant %uint 3400
+    %uint_72 = OpConstant %uint 72
+%uint_197645 = OpConstant %uint 197645
+%_arr_v4float_uint_197645 = OpTypeArray %v4float %uint_197645
+%_ptr_Workgroup__arr_v4float_uint_197645 = OpTypePointer Workgroup %_arr_v4float_uint_197645
+          %s = OpVariable %_ptr_Workgroup__arr_v4float_uint_197645 Workgroup
+      %int_3 = OpConstant %int 3
+    %float_0 = OpConstant %float 0
+         %39 = OpSpecConstant %uint 2
+     %uint_5 = OpConstant %uint 5
+         %41 = OpSpecConstant %uint 7
+%gl_WorkGroupSize = OpSpecConstantComposite %v3uint %39 %uint_5 %41
+     %uint_0 = OpConstant %uint 0
+%_arr_int_44 = OpTypeArray %int %44
+%_ptr_Private__arr_int_44 = OpTypePointer Private %_arr_int_44
+       %arrX = OpVariable %_ptr_Private__arr_int_44 Private
+%_ptr_Private_int = OpTypePointer Private %int
+%_arr_int_52 = OpTypeArray %int %52
+%_ptr_Private__arr_int_52 = OpTypePointer Private %_arr_int_52
+       %arrY = OpVariable %_ptr_Private__arr_int_52 Private
+%_arr_int_59 = OpTypeArray %int %59
+%_ptr_Private__arr_int_59 = OpTypePointer Private %_arr_int_59
+       %arrZ = OpVariable %_ptr_Private__arr_int_59 Private
+%_ptr_Workgroup_v4float = OpTypePointer Workgroup %v4float
+      %int_1 = OpConstant %int 1
+%_ptr_Input_v3uint = OpTypePointer Input %v3uint
+%gl_NumWorkGroups = OpVariable %_ptr_Input_v3uint Input
+%gl_WorkGroupID = OpVariable %_ptr_Input_v3uint Input
+%gl_LocalInvocationID = OpVariable %_ptr_Input_v3uint Input
+%gl_GlobalInvocationID = OpVariable %_ptr_Input_v3uint Input
+%_ptr_Input_uint = OpTypePointer Input %uint
+%gl_LocalInvocationIndex = OpVariable %_ptr_Input_uint Input
+%_ptr_Uniform_v3uint = OpTypePointer Uniform %v3uint
+      %int_5 = OpConstant %int 5
+ %int_197645 = OpConstant %int 197645
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+               OpControlBarrier %uint_2 %uint_2 %uint_264
+         %20 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+         %21 = OpLoad %int %20
+         %22 = OpSDiv %int %21 %int_2
+         %26 = OpAccessChain %_ptr_Uniform_v4float %bInst %int_2 %22
+         %27 = OpLoad %v4float %26
+         %28 = OpFMul %v4float %27 %24
+         %29 = OpAccessChain %_ptr_Uniform_v4float %bInst %int_2 %22
+               OpStore %29 %28
+               OpMemoryBarrier %uint_1 %uint_3400
+               OpMemoryBarrier %uint_2 %uint_3400
+               OpMemoryBarrier %uint_1 %uint_264
+               OpMemoryBarrier %uint_1 %uint_72
+         %44 = OpCompositeExtract %uint %gl_WorkGroupSize 0
+         %49 = OpAccessChain %_ptr_Private_int %arrX %int_0
+         %50 = OpLoad %int %49
+         %51 = OpConvertSToF %float %50
+         %52 = OpCompositeExtract %uint %gl_WorkGroupSize 1
+         %56 = OpAccessChain %_ptr_Private_int %arrY %int_0
+         %57 = OpLoad %int %56
+         %58 = OpConvertSToF %float %57
+         %59 = OpCompositeExtract %uint %gl_WorkGroupSize 2
+         %63 = OpAccessChain %_ptr_Private_int %arrZ %int_0
+         %64 = OpLoad %int %63
+         %65 = OpConvertSToF %float %64
+         %66 = OpCompositeConstruct %v4float %float_0 %51 %58 %65
+         %68 = OpAccessChain %_ptr_Workgroup_v4float %s %int_3
+               OpStore %68 %66
+         %72 = OpLoad %v3uint %gl_NumWorkGroups
+         %73 = OpIAdd %v3uint %72 %gl_WorkGroupSize
+         %75 = OpLoad %v3uint %gl_WorkGroupID
+         %76 = OpIAdd %v3uint %73 %75
+         %78 = OpLoad %v3uint %gl_LocalInvocationID
+         %79 = OpIAdd %v3uint %76 %78
+         %81 = OpLoad %v3uint %gl_GlobalInvocationID
+         %84 = OpLoad %uint %gl_LocalInvocationIndex
+         %85 = OpCompositeConstruct %v3uint %84 %84 %84
+         %86 = OpIMul %v3uint %81 %85
+         %87 = OpIAdd %v3uint %79 %86
+         %89 = OpAccessChain %_ptr_Uniform_v3uint %bInst %int_1
+               OpStore %89 %87
+         %90 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+         %91 = OpAtomicIAdd %int %90 %uint_1 %uint_0 %int_2
+         %92 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+         %93 = OpAtomicSMin %int %92 %uint_1 %uint_0 %int_2
+         %94 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+         %95 = OpAtomicSMax %int %94 %uint_1 %uint_0 %int_2
+         %96 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+         %97 = OpAtomicAnd %int %96 %uint_1 %uint_0 %int_2
+         %98 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+         %99 = OpAtomicOr %int %98 %uint_1 %uint_0 %int_2
+        %100 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+        %101 = OpAtomicXor %int %100 %uint_1 %uint_0 %int_2
+        %102 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+        %103 = OpAtomicExchange %int %102 %uint_1 %uint_0 %int_2
+        %104 = OpAccessChain %_ptr_Uniform_int %bInst %int_0
+        %106 = OpAtomicCompareExchange %int %104 %uint_1 %uint_0 %uint_0 %int_2 %int_5
+               OpReturn
+               OpFunctionEnd

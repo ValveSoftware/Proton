@@ -1,0 +1,10 @@
+RWStructuredBuffer<uint> g_sbuf;
+RWByteAddressBuffer g_bbuf;
+
+
+void main()
+{   
+    uint f = g_bbuf.Load(16);
+    g_sbuf[0] = f;
+}
+

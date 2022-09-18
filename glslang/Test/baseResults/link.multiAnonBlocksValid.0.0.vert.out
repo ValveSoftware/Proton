@@ -1,0 +1,157 @@
+link.multiAnonBlocksValid.0.0.vert
+Shader version: 430
+0:? Sequence
+0:32  Function Definition: main( ( global void)
+0:32    Function Parameters: 
+0:34    Sequence
+0:34      move second child to first child ( temp 4-component vector of float)
+0:34        'oColor' ( smooth out 4-component vector of float)
+0:34        component-wise multiply ( temp 4-component vector of float)
+0:34          color1: direct index for structure (layout( column_major std140 offset=0) uniform 4-component vector of float)
+0:34            'anon@2' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:34            Constant:
+0:34              0 (const uint)
+0:34          Function Call: getColor2( ( global 4-component vector of float)
+0:35      move second child to first child ( temp 4-component vector of float)
+0:35        v1: direct index for structure ( out 4-component vector of float)
+0:35          'anon@1' ( out block{ out 4-component vector of float v1,  out 4-component vector of float v2})
+0:35          Constant:
+0:35            0 (const uint)
+0:35        color1: direct index for structure (layout( column_major std140 offset=0) uniform 4-component vector of float)
+0:35          'anon@2' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:35          Constant:
+0:35            0 (const uint)
+0:37      move second child to first child ( temp 4-component vector of float)
+0:37        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:37          'anon@3' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:37          Constant:
+0:37            0 (const uint)
+0:37        matrix-times-vector ( temp 4-component vector of float)
+0:37          uProj: direct index for structure (layout( column_major std140 offset=0) uniform 4X4 matrix of float)
+0:37            'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform 4X4 matrix of float uWorld})
+0:37            Constant:
+0:37              0 (const uint)
+0:37          Function Call: getWorld( ( global 4-component vector of float)
+0:?   Linker Objects
+0:?     'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform 4X4 matrix of float uWorld})
+0:?     'anon@1' ( out block{ out 4-component vector of float v1,  out 4-component vector of float v2})
+0:?     'anon@2' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:?     'oColor' ( smooth out 4-component vector of float)
+0:?     'anon@3' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+link.multiAnonBlocksValid.0.1.vert
+Shader version: 430
+0:? Sequence
+0:24  Function Definition: getColor2( ( global 4-component vector of float)
+0:24    Function Parameters: 
+0:26    Sequence
+0:26      Branch: Return with expression
+0:26        color2: direct index for structure (layout( column_major std140 offset=16) uniform 4-component vector of float)
+0:26          'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:26          Constant:
+0:26            1 (const uint)
+0:29  Function Definition: getWorld( ( global 4-component vector of float)
+0:29    Function Parameters: 
+0:31    Sequence
+0:31      Branch: Return with expression
+0:31        matrix-times-vector ( temp 4-component vector of float)
+0:31          uWorld: direct index for structure (layout( column_major std140 offset=64) uniform 4X4 matrix of float)
+0:31            'anon@1' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform 4X4 matrix of float uWorld})
+0:31            Constant:
+0:31              1 (const uint)
+0:31          'P' ( in 4-component vector of float)
+0:32      move second child to first child ( temp 4-component vector of float)
+0:32        v2: direct index for structure ( out 4-component vector of float)
+0:32          'anon@2' ( out block{ out 4-component vector of float v1,  out 4-component vector of float v2})
+0:32          Constant:
+0:32            1 (const uint)
+0:32        Constant:
+0:32          1.000000
+0:32          1.000000
+0:32          1.000000
+0:32          1.000000
+0:?   Linker Objects
+0:?     'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:?     'anon@1' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform 4X4 matrix of float uWorld})
+0:?     'anon@2' ( out block{ out 4-component vector of float v1,  out 4-component vector of float v2})
+0:?     'P' ( in 4-component vector of float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 430
+0:? Sequence
+0:32  Function Definition: main( ( global void)
+0:32    Function Parameters: 
+0:34    Sequence
+0:34      move second child to first child ( temp 4-component vector of float)
+0:34        'oColor' ( smooth out 4-component vector of float)
+0:34        component-wise multiply ( temp 4-component vector of float)
+0:34          color1: direct index for structure (layout( column_major std140 offset=0) uniform 4-component vector of float)
+0:34            'anon@2' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:34            Constant:
+0:34              0 (const uint)
+0:34          Function Call: getColor2( ( global 4-component vector of float)
+0:35      move second child to first child ( temp 4-component vector of float)
+0:35        v1: direct index for structure ( out 4-component vector of float)
+0:35          'anon@1' ( out block{ out 4-component vector of float v1,  out 4-component vector of float v2})
+0:35          Constant:
+0:35            0 (const uint)
+0:35        color1: direct index for structure (layout( column_major std140 offset=0) uniform 4-component vector of float)
+0:35          'anon@2' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:35          Constant:
+0:35            0 (const uint)
+0:37      move second child to first child ( temp 4-component vector of float)
+0:37        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:37          'anon@3' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:37          Constant:
+0:37            0 (const uint)
+0:37        matrix-times-vector ( temp 4-component vector of float)
+0:37          uProj: direct index for structure (layout( column_major std140 offset=0) uniform 4X4 matrix of float)
+0:37            'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform 4X4 matrix of float uWorld})
+0:37            Constant:
+0:37              0 (const uint)
+0:37          Function Call: getWorld( ( global 4-component vector of float)
+0:24  Function Definition: getColor2( ( global 4-component vector of float)
+0:24    Function Parameters: 
+0:26    Sequence
+0:26      Branch: Return with expression
+0:26        color2: direct index for structure (layout( column_major std140 offset=16) uniform 4-component vector of float)
+0:26          'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:26          Constant:
+0:26            1 (const uint)
+0:29  Function Definition: getWorld( ( global 4-component vector of float)
+0:29    Function Parameters: 
+0:31    Sequence
+0:31      Branch: Return with expression
+0:31        matrix-times-vector ( temp 4-component vector of float)
+0:31          uWorld: direct index for structure (layout( column_major std140 offset=64) uniform 4X4 matrix of float)
+0:31            'anon@1' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform 4X4 matrix of float uWorld})
+0:31            Constant:
+0:31              1 (const uint)
+0:31          'P' ( in 4-component vector of float)
+0:32      move second child to first child ( temp 4-component vector of float)
+0:32        v2: direct index for structure ( out 4-component vector of float)
+0:32          'anon@2' ( out block{ out 4-component vector of float v1,  out 4-component vector of float v2})
+0:32          Constant:
+0:32            1 (const uint)
+0:32        Constant:
+0:32          1.000000
+0:32          1.000000
+0:32          1.000000
+0:32          1.000000
+0:?   Linker Objects
+0:?     'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4X4 matrix of float uProj, layout( column_major std140 offset=64) uniform 4X4 matrix of float uWorld})
+0:?     'anon@1' ( out block{ out 4-component vector of float v1,  out 4-component vector of float v2})
+0:?     'anon@2' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float color1, layout( column_major std140 offset=16) uniform 4-component vector of float color2})
+0:?     'oColor' ( smooth out 4-component vector of float)
+0:?     'anon@3' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+0:?     'P' ( in 4-component vector of float)
+

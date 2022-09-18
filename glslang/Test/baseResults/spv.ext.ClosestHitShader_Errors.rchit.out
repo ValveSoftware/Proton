@@ -1,0 +1,12 @@
+spv.ext.ClosestHitShader_Errors.rchit
+ERROR: 0:6: 'location' : overlapping use of location 2
+ERROR: 0:9: 'assign' :  l-value required "payload" (cannot modify hitAttributeNV in this stage)
+ERROR: 0:10: 'reportIntersectionEXT' : no matching overloaded function found 
+ERROR: 0:11: 'terminateRayEXT' : not supported in this stage: closest-hit
+ERROR: 0:12: 'ignoreIntersectionEXT' : not supported in this stage: closest-hit
+ERROR: 0:13: 'gl_RayFlagsSkipAABBEXT' : required extension not requested: GL_EXT_ray_flags_primitive_culling
+ERROR: 0:14: 'no rayPayloadEXT/rayPayloadInEXT declared' : with layout(location = 0)
+ERROR: 7 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

@@ -1,0 +1,13 @@
+spv.bufferhandle17_Errors.frag
+ERROR: 0:11: 'qualifier' : variables with reference type can't have qualifier 'const' 
+ERROR: 0:16: 'qualifier' : variables with reference type can't have qualifier 'const' 
+ERROR: 0:18: '==' : can't use with reference types 
+ERROR: 0:18: 'buffer reference math' : required extension not requested: GL_EXT_buffer_reference2
+ERROR: 0:18: '==' :  wrong operand types: no operation '==' exists that takes a left-hand operand of type ' temp reference' and a right operand of type ' temp reference' (or there is no acceptable conversion)
+ERROR: 0:19: '!=' : can't use with reference types 
+ERROR: 0:19: 'buffer reference math' : required extension not requested: GL_EXT_buffer_reference2
+ERROR: 0:19: '!=' :  wrong operand types: no operation '!=' exists that takes a left-hand operand of type ' temp reference' and a right operand of type ' temp reference' (or there is no acceptable conversion)
+ERROR: 8 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

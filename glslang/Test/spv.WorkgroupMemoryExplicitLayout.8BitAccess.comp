@@ -1,0 +1,16 @@
+#version 430 core
+
+#extension GL_EXT_shared_memory_block : enable
+#extension GL_EXT_shader_explicit_arithmetic_types: enable
+
+layout(local_size_x = 2) in;
+
+shared first
+{
+    int8_t a;
+};
+
+void main()
+{
+    a = int8_t(2);
+}

@@ -1,0 +1,50 @@
+#version 450 core
+#pragma use_vulkan_memory_model
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_shader_subgroup_shuffle : enable
+#extension GL_KHR_shader_subgroup_ballot : enable
+#extension GL_KHR_memory_scope_semantics : enable
+#extension GL_ARB_gpu_shader_int64 : enable
+#extension GL_EXT_buffer_reference : enable
+// DIM/NUM_WORKGROUP_EACH_DIM overriden by spec constants
+layout(constant_id = 0) const int DIM = 1;
+layout(constant_id = 1) const int NUM_WORKGROUP_EACH_DIM = 1;
+shared bool sharedSkip;
+layout(local_size_x_id = 0, local_size_y_id = 0, local_size_z = 1) in;
+layout(buffer_reference) buffer PayloadRef { uint x[]; };
+layout(buffer_reference) buffer GuardRef { uint x[]; };
+layout(set=0, binding=2) buffer Fail { uint x[]; } fail;
+layout (push_constant, std430) uniform PC {
+   layout(offset = 0) PayloadRef payloadref;
+layout(offset = 8) GuardRef guard;
+};
+void main()
+{
+   bool pass = true;
+   bool skip = false;
+   sharedSkip = false;
+   nonprivate PayloadRef payload = payloadref;
+   ivec2 globalId          = ivec2(gl_GlobalInvocationID.xy);
+   ivec2 partnerGlobalId   = ivec2(DIM*NUM_WORKGROUP_EACH_DIM-1) - ivec2(gl_GlobalInvocationID.xy);
+   uint bufferCoord        = globalId.y * DIM*NUM_WORKGROUP_EACH_DIM + globalId.x;
+   uint partnerBufferCoord = partnerGlobalId.y * DIM*NUM_WORKGROUP_EACH_DIM + partnerGlobalId.x;
+   ivec2 imageCoord        = globalId;
+   ivec2 partnerImageCoord = partnerGlobalId;
+   ivec2 globalId00          = ivec2(DIM) * ivec2(gl_WorkGroupID.xy);
+   ivec2 partnerGlobalId00   = ivec2(DIM) * (ivec2(NUM_WORKGROUP_EACH_DIM-1) - ivec2(gl_WorkGroupID.xy));
+   uint bufferCoord00        = globalId00.y * DIM*NUM_WORKGROUP_EACH_DIM + globalId00.x;
+   uint partnerBufferCoord00 = partnerGlobalId00.y * DIM*NUM_WORKGROUP_EACH_DIM + partnerGlobalId00.x;
+   ivec2 imageCoord00        = globalId00;
+   ivec2 partnerImageCoord00 = partnerGlobalId00;
+   payload.x[bufferCoord] = bufferCoord + (payload.x[partnerBufferCoord]>>31);
+   controlBarrier(gl_ScopeWorkgroup, gl_ScopeWorkgroup, gl_StorageSemanticsBuffer | gl_StorageSemanticsShared, gl_SemanticsAcquireRelease | gl_SemanticsMakeAvailable);
+   if (all(equal(gl_LocalInvocationID.xy, ivec2(0,0)))) {
+       atomicStore(guard.x[bufferCoord], uint(1u), gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelease | gl_SemanticsMakeAvailable);
+       skip = atomicLoad(guard.x[partnerBufferCoord00], gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsAcquire | gl_SemanticsMakeVisible) == 0;
+       sharedSkip = skip;
+   }
+   controlBarrier(gl_ScopeWorkgroup, gl_ScopeWorkgroup, gl_StorageSemanticsBuffer | gl_StorageSemanticsShared, gl_SemanticsAcquireRelease | gl_SemanticsMakeVisible);
+   skip = sharedSkip;
+   uint r = payload.x[partnerBufferCoord];
+   if (!skip && r != uint(partnerBufferCoord)) { fail.x[bufferCoord] = 1; }
+}

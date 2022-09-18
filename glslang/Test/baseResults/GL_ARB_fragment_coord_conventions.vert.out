@@ -1,0 +1,143 @@
+GL_ARB_fragment_coord_conventions.vert
+Shader version: 140
+Requested GL_ARB_explicit_attrib_location
+Requested GL_ARB_fragment_coord_conventions
+0:? Sequence
+0:22  Function Definition: main( ( global void)
+0:22    Function Parameters: 
+0:24    Sequence
+0:24      move second child to first child ( temp 4-component vector of float)
+0:24        'gl_Position' ( gl_Position 4-component vector of float Position)
+0:24        'pos' (layout( location=0) in 4-component vector of float)
+0:25      move second child to first child ( temp 4-component vector of float)
+0:25        'i' ( smooth out 4-component vector of float)
+0:25        Construct vec4 ( temp 4-component vector of float)
+0:25          component-wise multiply ( temp float)
+0:25            component-wise multiply ( temp float)
+0:25              add ( temp float)
+0:25                direct index ( temp float)
+0:25                  'pos' (layout( location=0) in 4-component vector of float)
+0:25                  Constant:
+0:25                    0 (const int)
+0:25                Constant:
+0:25                  1.000000
+0:25              Constant:
+0:25                0.500000
+0:25            'gtf_windowWidth' ( uniform float)
+0:25          component-wise multiply ( temp float)
+0:25            component-wise multiply ( temp float)
+0:25              add ( temp float)
+0:25                direct index ( temp float)
+0:25                  'pos' (layout( location=0) in 4-component vector of float)
+0:25                  Constant:
+0:25                    1 (const int)
+0:25                Constant:
+0:25                  1.000000
+0:25              Constant:
+0:25                0.500000
+0:25            'gtf_windowHeight' ( uniform float)
+0:25          add ( temp float)
+0:25            component-wise multiply ( temp float)
+0:25              component-wise multiply ( temp float)
+0:25                subtract ( temp float)
+0:25                  'f' ( uniform float)
+0:25                  'n' ( uniform float)
+0:25                Constant:
+0:25                  0.500000
+0:25              direct index ( temp float)
+0:25                'pos' (layout( location=0) in 4-component vector of float)
+0:25                Constant:
+0:25                  2 (const int)
+0:25            component-wise multiply ( temp float)
+0:25              add ( temp float)
+0:25                'f' ( uniform float)
+0:25                'n' ( uniform float)
+0:25              Constant:
+0:25                0.500000
+0:25          direct index ( temp float)
+0:25            'pos' (layout( location=0) in 4-component vector of float)
+0:25            Constant:
+0:25              3 (const int)
+0:?   Linker Objects
+0:?     'pos' (layout( location=0) in 4-component vector of float)
+0:?     'i' ( smooth out 4-component vector of float)
+0:?     'gtf_windowWidth' ( uniform float)
+0:?     'gtf_windowHeight' ( uniform float)
+0:?     'n' ( uniform float)
+0:?     'f' ( uniform float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 140
+Requested GL_ARB_explicit_attrib_location
+Requested GL_ARB_fragment_coord_conventions
+0:? Sequence
+0:22  Function Definition: main( ( global void)
+0:22    Function Parameters: 
+0:24    Sequence
+0:24      move second child to first child ( temp 4-component vector of float)
+0:24        'gl_Position' ( gl_Position 4-component vector of float Position)
+0:24        'pos' (layout( location=0) in 4-component vector of float)
+0:25      move second child to first child ( temp 4-component vector of float)
+0:25        'i' ( smooth out 4-component vector of float)
+0:25        Construct vec4 ( temp 4-component vector of float)
+0:25          component-wise multiply ( temp float)
+0:25            component-wise multiply ( temp float)
+0:25              add ( temp float)
+0:25                direct index ( temp float)
+0:25                  'pos' (layout( location=0) in 4-component vector of float)
+0:25                  Constant:
+0:25                    0 (const int)
+0:25                Constant:
+0:25                  1.000000
+0:25              Constant:
+0:25                0.500000
+0:25            'gtf_windowWidth' ( uniform float)
+0:25          component-wise multiply ( temp float)
+0:25            component-wise multiply ( temp float)
+0:25              add ( temp float)
+0:25                direct index ( temp float)
+0:25                  'pos' (layout( location=0) in 4-component vector of float)
+0:25                  Constant:
+0:25                    1 (const int)
+0:25                Constant:
+0:25                  1.000000
+0:25              Constant:
+0:25                0.500000
+0:25            'gtf_windowHeight' ( uniform float)
+0:25          add ( temp float)
+0:25            component-wise multiply ( temp float)
+0:25              component-wise multiply ( temp float)
+0:25                subtract ( temp float)
+0:25                  'f' ( uniform float)
+0:25                  'n' ( uniform float)
+0:25                Constant:
+0:25                  0.500000
+0:25              direct index ( temp float)
+0:25                'pos' (layout( location=0) in 4-component vector of float)
+0:25                Constant:
+0:25                  2 (const int)
+0:25            component-wise multiply ( temp float)
+0:25              add ( temp float)
+0:25                'f' ( uniform float)
+0:25                'n' ( uniform float)
+0:25              Constant:
+0:25                0.500000
+0:25          direct index ( temp float)
+0:25            'pos' (layout( location=0) in 4-component vector of float)
+0:25            Constant:
+0:25              3 (const int)
+0:?   Linker Objects
+0:?     'pos' (layout( location=0) in 4-component vector of float)
+0:?     'i' ( smooth out 4-component vector of float)
+0:?     'gtf_windowWidth' ( uniform float)
+0:?     'gtf_windowHeight' ( uniform float)
+0:?     'n' ( uniform float)
+0:?     'f' ( uniform float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+

@@ -1,0 +1,61 @@
+spv.subgroupExtendedTypesShuffleRelativeNeg.comp
+ERROR: 0:26: ' temp int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:27: ' temp 2-component vector of int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:28: ' temp 3-component vector of int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:29: 'layout( column_major std430) buffer 4-component vector of int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:31: ' temp int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:32: ' temp 2-component vector of int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:33: ' temp 3-component vector of int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:34: 'layout( column_major std430) buffer 4-component vector of int8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:36: ' temp uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:37: ' temp 2-component vector of uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:38: ' temp 3-component vector of uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:39: 'layout( column_major std430) buffer 4-component vector of uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:41: ' temp uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:42: ' temp 2-component vector of uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:43: ' temp 3-component vector of uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:44: 'layout( column_major std430) buffer 4-component vector of uint8_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int8
+ERROR: 0:46: ' temp int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:47: ' temp 2-component vector of int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:48: ' temp 3-component vector of int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:49: 'layout( column_major std430) buffer 4-component vector of int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:51: ' temp int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:52: ' temp 2-component vector of int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:53: ' temp 3-component vector of int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:54: 'layout( column_major std430) buffer 4-component vector of int16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:56: ' temp uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:57: ' temp 2-component vector of uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:58: ' temp 3-component vector of uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:59: 'layout( column_major std430) buffer 4-component vector of uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:61: ' temp uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:62: ' temp 2-component vector of uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:63: ' temp 3-component vector of uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:64: 'layout( column_major std430) buffer 4-component vector of uint16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int16
+ERROR: 0:66: ' temp int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:67: ' temp 2-component vector of int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:68: ' temp 3-component vector of int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:69: 'layout( column_major std430) buffer 4-component vector of int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:71: ' temp int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:72: ' temp 2-component vector of int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:73: ' temp 3-component vector of int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:74: 'layout( column_major std430) buffer 4-component vector of int64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:76: ' temp uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:77: ' temp 2-component vector of uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:78: ' temp 3-component vector of uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:79: 'layout( column_major std430) buffer 4-component vector of uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:81: ' temp uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:82: ' temp 2-component vector of uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:83: ' temp 3-component vector of uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:84: 'layout( column_major std430) buffer 4-component vector of uint64_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_int64
+ERROR: 0:86: ' temp highp float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 0:87: ' temp highp 2-component vector of float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 0:88: ' temp highp 3-component vector of float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 0:89: 'layout( column_major std430) buffer highp 4-component vector of float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 0:91: ' temp highp float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 0:92: ' temp highp 2-component vector of float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 0:93: ' temp highp 3-component vector of float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 0:94: 'layout( column_major std430) buffer highp 4-component vector of float16_t' : required extension not requested: GL_EXT_shader_subgroup_extended_types_float16
+ERROR: 56 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

@@ -1,0 +1,43 @@
+hlsl.inoutquals.negative.frag
+ERROR: 0:1: 'invalid1' : in/out qualifiers are only valid on parameters 
+ERROR: 0:2: 'invalid2' : in/out qualifiers are only valid on parameters 
+ERROR: 0:3: 'invalid3' : in/out qualifiers are only valid on parameters 
+ERROR: 0:4: 'invalid4' : in/out qualifiers are only valid on parameters 
+ERROR: 4 compilation errors.  No code generated.
+
+
+Shader version: 500
+gl_FragCoord origin is upper left
+ERROR: node is still EOpNull!
+0:6  Function Definition: @main( ( temp void)
+0:6    Function Parameters: 
+0:6  Function Definition: main( ( temp void)
+0:6    Function Parameters: 
+0:?     Sequence
+0:6      Function Call: @main( ( temp void)
+0:?   Linker Objects
+0:?     'invalid1' ( in float)
+0:?     'invalid2' ( inout float)
+0:?     'invalid3' ( inout float)
+0:?     'invalid4' ( out float)
+
+
+Linked fragment stage:
+
+
+Shader version: 500
+gl_FragCoord origin is upper left
+ERROR: node is still EOpNull!
+0:6  Function Definition: @main( ( temp void)
+0:6    Function Parameters: 
+0:6  Function Definition: main( ( temp void)
+0:6    Function Parameters: 
+0:?     Sequence
+0:6      Function Call: @main( ( temp void)
+0:?   Linker Objects
+0:?     'invalid1' ( in float)
+0:?     'invalid2' ( inout float)
+0:?     'invalid3' ( inout float)
+0:?     'invalid4' ( out float)
+
+SPIR-V is not generated for failed compile or link

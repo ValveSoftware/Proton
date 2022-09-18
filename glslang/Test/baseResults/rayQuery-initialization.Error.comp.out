@@ -1,0 +1,6 @@
+rayQuery-initialization.Error.comp
+ERROR: 0:7: '=' : ray queries can only be initialized by using the rayQueryInitializeEXT intrinsic: bar
+ERROR: 1 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

@@ -1,0 +1,321 @@
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 8
+; Bound: 207
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Fragment %main "main"
+               OpExecutionMode %main OriginUpperLeft
+               OpSource ESSL 310
+               OpName %main "main"
+               OpName %f "f"
+               OpName %v4 "v4"
+               OpName %u "u"
+               OpName %uv4 "uv4"
+               OpName %iv3 "iv3"
+               OpName %i "i"
+               OpName %uv3 "uv3"
+               OpName %m2 "m2"
+               OpName %iv4 "iv4"
+               OpName %m4 "m4"
+               OpName %a "a"
+               OpName %S "S"
+               OpMemberName %S 0 "i"
+               OpName %s "s"
+               OpName %b "b"
+               OpName %arr "arr"
+               OpName %arr2 "arr2"
+               OpName %block "block"
+               OpMemberName %block 0 "f"
+               OpName %instanceName "instanceName"
+               OpDecorate %u RelaxedPrecision
+               OpDecorate %18 RelaxedPrecision
+               OpDecorate %19 RelaxedPrecision
+               OpDecorate %20 RelaxedPrecision
+               OpDecorate %uv4 RelaxedPrecision
+               OpDecorate %24 RelaxedPrecision
+               OpDecorate %25 RelaxedPrecision
+               OpDecorate %26 RelaxedPrecision
+               OpDecorate %27 RelaxedPrecision
+               OpDecorate %iv3 RelaxedPrecision
+               OpDecorate %32 RelaxedPrecision
+               OpDecorate %33 RelaxedPrecision
+               OpDecorate %34 RelaxedPrecision
+               OpDecorate %i RelaxedPrecision
+               OpDecorate %38 RelaxedPrecision
+               OpDecorate %39 RelaxedPrecision
+               OpDecorate %uv3 RelaxedPrecision
+               OpDecorate %43 RelaxedPrecision
+               OpDecorate %45 RelaxedPrecision
+               OpDecorate %46 RelaxedPrecision
+               OpDecorate %iv4 RelaxedPrecision
+               OpDecorate %62 RelaxedPrecision
+               OpDecorate %64 RelaxedPrecision
+               OpDecorate %65 RelaxedPrecision
+               OpDecorate %104 RelaxedPrecision
+               OpDecorate %105 RelaxedPrecision
+               OpMemberDecorate %S 0 RelaxedPrecision
+               OpDecorate %153 RelaxedPrecision
+               OpDecorate %154 RelaxedPrecision
+               OpDecorate %155 RelaxedPrecision
+               OpDecorate %156 RelaxedPrecision
+               OpDecorate %157 RelaxedPrecision
+               OpDecorate %158 RelaxedPrecision
+               OpDecorate %159 RelaxedPrecision
+               OpDecorate %160 RelaxedPrecision
+               OpDecorate %161 RelaxedPrecision
+               OpDecorate %162 RelaxedPrecision
+               OpDecorate %163 RelaxedPrecision
+               OpDecorate %164 RelaxedPrecision
+               OpDecorate %165 RelaxedPrecision
+               OpDecorate %166 RelaxedPrecision
+               OpDecorate %167 RelaxedPrecision
+               OpDecorate %168 RelaxedPrecision
+               OpDecorate %169 RelaxedPrecision
+               OpDecorate %170 RelaxedPrecision
+               OpDecorate %171 RelaxedPrecision
+               OpDecorate %172 RelaxedPrecision
+               OpDecorate %173 RelaxedPrecision
+               OpDecorate %174 RelaxedPrecision
+               OpDecorate %175 RelaxedPrecision
+               OpDecorate %176 RelaxedPrecision
+               OpDecorate %177 RelaxedPrecision
+               OpDecorate %178 RelaxedPrecision
+               OpDecorate %179 RelaxedPrecision
+               OpDecorate %180 RelaxedPrecision
+               OpDecorate %181 RelaxedPrecision
+               OpDecorate %182 RelaxedPrecision
+               OpDecorate %183 RelaxedPrecision
+               OpDecorate %184 RelaxedPrecision
+               OpDecorate %185 RelaxedPrecision
+               OpDecorate %186 RelaxedPrecision
+               OpDecorate %187 RelaxedPrecision
+               OpDecorate %188 RelaxedPrecision
+               OpDecorate %189 RelaxedPrecision
+               OpDecorate %190 RelaxedPrecision
+               OpDecorate %191 RelaxedPrecision
+               OpDecorate %192 RelaxedPrecision
+               OpDecorate %193 RelaxedPrecision
+               OpDecorate %194 RelaxedPrecision
+               OpDecorate %arr RelaxedPrecision
+               OpDecorate %arr2 RelaxedPrecision
+               OpMemberDecorate %block 0 RelaxedPrecision
+               OpMemberDecorate %block 0 Offset 0
+               OpDecorate %block Block
+               OpDecorate %instanceName DescriptorSet 0
+               OpDecorate %instanceName Binding 0
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+%_ptr_Function_float = OpTypePointer Function %float
+    %v4float = OpTypeVector %float 4
+%_ptr_Function_v4float = OpTypePointer Function %v4float
+       %uint = OpTypeInt 32 0
+%_ptr_Function_uint = OpTypePointer Function %uint
+     %v4uint = OpTypeVector %uint 4
+%_ptr_Function_v4uint = OpTypePointer Function %v4uint
+        %int = OpTypeInt 32 1
+      %v3int = OpTypeVector %int 3
+%_ptr_Function_v3int = OpTypePointer Function %v3int
+%_ptr_Function_int = OpTypePointer Function %int
+      %int_3 = OpConstant %int 3
+     %v3uint = OpTypeVector %uint 3
+%_ptr_Function_v3uint = OpTypePointer Function %v3uint
+     %uint_4 = OpConstant %uint 4
+    %v2float = OpTypeVector %float 2
+%mat2v2float = OpTypeMatrix %v2float 2
+%_ptr_Function_mat2v2float = OpTypePointer Function %mat2v2float
+    %float_1 = OpConstant %float 1
+      %v4int = OpTypeVector %int 4
+%_ptr_Function_v4int = OpTypePointer Function %v4int
+      %int_1 = OpConstant %int 1
+%mat4v4float = OpTypeMatrix %v4float 4
+%_ptr_Function_mat4v4float = OpTypePointer Function %mat4v4float
+       %bool = OpTypeBool
+     %v4bool = OpTypeVector %bool 4
+     %v2bool = OpTypeVector %bool 2
+     %uint_5 = OpConstant %uint 5
+%_arr_float_uint_5 = OpTypeArray %float %uint_5
+%_ptr_Private__arr_float_uint_5 = OpTypePointer Private %_arr_float_uint_5
+          %a = OpVariable %_ptr_Private__arr_float_uint_5 Private
+          %S = OpTypeStruct %int
+%_ptr_Private_S = OpTypePointer Private %S
+          %s = OpVariable %_ptr_Private_S Private
+%_ptr_Function_bool = OpTypePointer Function %bool
+     %uint_2 = OpConstant %uint 2
+%_arr_int_uint_2 = OpTypeArray %int %uint_2
+%_ptr_Function__arr_int_uint_2 = OpTypePointer Function %_arr_int_uint_2
+     %uint_3 = OpConstant %uint 3
+%_arr_int_uint_3 = OpTypeArray %int %uint_3
+%_ptr_Function__arr_int_uint_3 = OpTypePointer Function %_arr_int_uint_3
+      %int_2 = OpConstant %int 2
+      %block = OpTypeStruct %float
+%_ptr_Uniform_block = OpTypePointer Uniform %block
+%instanceName = OpVariable %_ptr_Uniform_block Uniform
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+          %f = OpVariable %_ptr_Function_float Function
+         %v4 = OpVariable %_ptr_Function_v4float Function
+          %u = OpVariable %_ptr_Function_uint Function
+        %uv4 = OpVariable %_ptr_Function_v4uint Function
+        %iv3 = OpVariable %_ptr_Function_v3int Function
+          %i = OpVariable %_ptr_Function_int Function
+        %uv3 = OpVariable %_ptr_Function_v3uint Function
+         %m2 = OpVariable %_ptr_Function_mat2v2float Function
+        %iv4 = OpVariable %_ptr_Function_v4int Function
+         %m4 = OpVariable %_ptr_Function_mat4v4float Function
+          %b = OpVariable %_ptr_Function_bool Function
+        %arr = OpVariable %_ptr_Function__arr_int_uint_2 Function
+       %arr2 = OpVariable %_ptr_Function__arr_int_uint_3 Function
+          %9 = OpLoad %float %f
+         %13 = OpLoad %v4float %v4
+         %14 = OpVectorTimesScalar %v4float %13 %9
+         %18 = OpLoad %uint %u
+         %19 = OpLoad %uint %u
+         %20 = OpIAdd %uint %18 %19
+         %24 = OpLoad %v4uint %uv4
+         %25 = OpLoad %uint %u
+         %26 = OpCompositeConstruct %v4uint %25 %25 %25 %25
+         %27 = OpUDiv %v4uint %24 %26
+         %32 = OpLoad %v3int %iv3
+         %33 = OpLoad %v3int %iv3
+         %34 = OpISub %v3int %33 %32
+               OpStore %iv3 %34
+         %38 = OpLoad %int %i
+         %39 = OpSMod %int %38 %int_3
+               OpStore %i %39
+         %43 = OpLoad %v3uint %uv3
+         %45 = OpCompositeConstruct %v3uint %uint_4 %uint_4 %uint_4
+         %46 = OpUMod %v3uint %43 %45
+         %51 = OpLoad %mat2v2float %m2
+         %53 = OpCompositeConstruct %v2float %float_1 %float_1
+         %54 = OpCompositeExtract %v2float %51 0
+         %55 = OpFSub %v2float %54 %53
+         %56 = OpCompositeExtract %v2float %51 1
+         %57 = OpFSub %v2float %56 %53
+         %58 = OpCompositeConstruct %mat2v2float %55 %57
+               OpStore %m2 %58
+         %62 = OpLoad %v4int %iv4
+         %64 = OpCompositeConstruct %v4int %int_1 %int_1 %int_1 %int_1
+         %65 = OpIAdd %v4int %62 %64
+               OpStore %iv4 %65
+         %69 = OpLoad %mat4v4float %m4
+         %70 = OpLoad %mat4v4float %m4
+         %72 = OpCompositeExtract %v4float %69 0
+         %73 = OpCompositeExtract %v4float %70 0
+         %75 = OpFUnordNotEqual %v4bool %72 %73
+         %76 = OpAny %bool %75
+         %77 = OpCompositeExtract %v4float %69 1
+         %78 = OpCompositeExtract %v4float %70 1
+         %79 = OpFUnordNotEqual %v4bool %77 %78
+         %80 = OpAny %bool %79
+         %81 = OpLogicalOr %bool %76 %80
+         %82 = OpCompositeExtract %v4float %69 2
+         %83 = OpCompositeExtract %v4float %70 2
+         %84 = OpFUnordNotEqual %v4bool %82 %83
+         %85 = OpAny %bool %84
+         %86 = OpLogicalOr %bool %81 %85
+         %87 = OpCompositeExtract %v4float %69 3
+         %88 = OpCompositeExtract %v4float %70 3
+         %89 = OpFUnordNotEqual %v4bool %87 %88
+         %90 = OpAny %bool %89
+         %91 = OpLogicalOr %bool %86 %90
+         %92 = OpLoad %mat2v2float %m2
+         %93 = OpLoad %mat2v2float %m2
+         %94 = OpCompositeExtract %v2float %92 0
+         %95 = OpCompositeExtract %v2float %93 0
+         %97 = OpFOrdEqual %v2bool %94 %95
+         %98 = OpAll %bool %97
+         %99 = OpCompositeExtract %v2float %92 1
+        %100 = OpCompositeExtract %v2float %93 1
+        %101 = OpFOrdEqual %v2bool %99 %100
+        %102 = OpAll %bool %101
+        %103 = OpLogicalAnd %bool %98 %102
+        %104 = OpLoad %int %i
+        %105 = OpLoad %int %i
+        %106 = OpSLessThanEqual %bool %104 %105
+        %111 = OpLoad %_arr_float_uint_5 %a
+        %112 = OpLoad %_arr_float_uint_5 %a
+        %113 = OpCompositeExtract %float %111 0
+        %114 = OpCompositeExtract %float %112 0
+        %115 = OpFOrdEqual %bool %113 %114
+        %116 = OpCompositeExtract %float %111 1
+        %117 = OpCompositeExtract %float %112 1
+        %118 = OpFOrdEqual %bool %116 %117
+        %119 = OpLogicalAnd %bool %115 %118
+        %120 = OpCompositeExtract %float %111 2
+        %121 = OpCompositeExtract %float %112 2
+        %122 = OpFOrdEqual %bool %120 %121
+        %123 = OpLogicalAnd %bool %119 %122
+        %124 = OpCompositeExtract %float %111 3
+        %125 = OpCompositeExtract %float %112 3
+        %126 = OpFOrdEqual %bool %124 %125
+        %127 = OpLogicalAnd %bool %123 %126
+        %128 = OpCompositeExtract %float %111 4
+        %129 = OpCompositeExtract %float %112 4
+        %130 = OpFOrdEqual %bool %128 %129
+        %131 = OpLogicalAnd %bool %127 %130
+        %135 = OpLoad %S %s
+        %136 = OpLoad %S %s
+        %137 = OpCompositeExtract %int %135 0
+        %138 = OpCompositeExtract %int %136 0
+        %139 = OpINotEqual %bool %137 %138
+        %142 = OpLoad %bool %b
+        %143 = OpLoad %bool %b
+        %144 = OpLogicalAnd %bool %142 %143
+        %145 = OpLoad %bool %b
+        %146 = OpLoad %bool %b
+        %147 = OpLogicalOr %bool %145 %146
+        %148 = OpLoad %bool %b
+        %149 = OpLoad %bool %b
+        %150 = OpLogicalNotEqual %bool %148 %149
+        %151 = OpLoad %bool %b
+        %152 = OpLogicalNot %bool %151
+        %153 = OpLoad %int %i
+        %154 = OpNot %int %153
+        %155 = OpLoad %uint %u
+        %156 = OpNot %uint %155
+        %157 = OpLoad %v3uint %uv3
+        %158 = OpNot %v3uint %157
+        %159 = OpLoad %v3int %iv3
+        %160 = OpNot %v3int %159
+        %161 = OpLoad %int %i
+        %162 = OpLoad %v3uint %uv3
+        %163 = OpCompositeConstruct %v3int %161 %161 %161
+        %164 = OpShiftLeftLogical %v3uint %162 %163
+               OpStore %uv3 %164
+        %165 = OpLoad %int %i
+        %166 = OpLoad %int %i
+        %167 = OpShiftRightArithmetic %int %165 %166
+        %168 = OpLoad %uint %u
+        %169 = OpLoad %uint %u
+        %170 = OpShiftLeftLogical %uint %168 %169
+        %171 = OpLoad %v3int %iv3
+        %172 = OpLoad %v3int %iv3
+        %173 = OpShiftRightArithmetic %v3int %171 %172
+        %174 = OpLoad %int %i
+        %175 = OpLoad %int %i
+        %176 = OpBitwiseAnd %int %174 %175
+        %177 = OpLoad %uint %u
+        %178 = OpLoad %uint %u
+        %179 = OpBitwiseOr %uint %177 %178
+        %180 = OpLoad %v3int %iv3
+        %181 = OpLoad %v3int %iv3
+        %182 = OpBitwiseXor %v3int %180 %181
+        %183 = OpLoad %uint %u
+        %184 = OpLoad %v3uint %uv3
+        %185 = OpCompositeConstruct %v3uint %183 %183 %183
+        %186 = OpBitwiseAnd %v3uint %185 %184
+        %187 = OpLoad %v3uint %uv3
+        %188 = OpLoad %uint %u
+        %189 = OpCompositeConstruct %v3uint %188 %188 %188
+        %190 = OpBitwiseOr %v3uint %187 %189
+        %191 = OpLoad %uint %u
+        %192 = OpLoad %v3uint %uv3
+        %193 = OpCompositeConstruct %v3uint %191 %191 %191
+        %194 = OpBitwiseAnd %v3uint %192 %193
+               OpStore %uv3 %194
+               OpReturn
+               OpFunctionEnd

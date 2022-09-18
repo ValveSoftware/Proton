@@ -1,0 +1,170 @@
+# NOTE: This workflow was ported from Travis.
+# Travis was using Ubuntu 14.04. Ubuntu 14.04 is not supportted by GitHub workflows. Ubuntu 20.04 is recommended.
+# Travis was using Clang 3.6. The earliest version support by Ubuntu 20.04 is Clang 6.0.
+# Travis was caching the clang package. APT package caching is not natively supported by GitHub actions/cache.
+# Travis was using Mac OS X 10.13.6 / Xcode 9.4.1 / LLVM 9.1.0
+
+# NOTE: The following documentation may be useful to maintainers of this workflow.
+# Github actions: https://docs.github.com/en/actions
+# Github github-script action: https://github.com/actions/github-script
+# GitHub REST API: https://docs.github.com/en/rest
+# Octokit front-end to the GitHub REST API: https://octokit.github.io/rest.js/v18
+# Octokit endpoint methods: https://github.com/octokit/plugin-rest-endpoint-methods.js/tree/master/docs/repos
+
+# TODO: Use actions/upload-artifact and actions/download-artifact to simplify deployment.
+# TODO: Use composite actions to refactor redundant code.
+
+name: Continuous Deployment
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - master
+
+jobs:
+    linux:
+        runs-on: ${{matrix.os.genus}}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [{genus: ubuntu-20.04, family: linux}]
+                compiler: [{cc: clang, cxx: clang++}, {cc: gcc, cxx: g++}]
+                cmake_build_type: [Debug, Release]
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: '3.7'
+            - name: Install Ubuntu Package Dependencies
+              run: |
+                  sudo apt-get -qq update
+                  sudo apt-get install -y clang-6.0
+            - name: Install GoogleTest
+              run: |
+                  # check out pre-breakage version of googletest; can be deleted when
+                  # issue 3128 is fixed
+                  # git clone --depth=1 https://github.com/google/googletest.git External/googletest
+                  mkdir -p External/googletest
+                  cd External/googletest
+                  git init
+                  git remote add origin https://github.com/google/googletest.git
+                  git fetch --depth 1 origin 0c400f67fcf305869c5fb113dd296eca266c9725
+                  git reset --hard FETCH_HEAD
+                  cd ../..
+            - name: Update Glslang Sources
+              run: |
+                  ./update_glslang_sources.py
+            - name: Build
+              env:
+                  CC: ${{matrix.compiler.cc}}
+                  CXX: ${{matrix.compiler.cxx}}
+              run: |
+                  mkdir build && cd build
+                  cmake -DCMAKE_BUILD_TYPE=${{matrix.cmake_build_type}} -DCMAKE_INSTALL_PREFIX=`pwd`/install ..
+                  make -j4 install
+            - name: Test
+              run: |
+                  cd build
+                  ctest --output-on-failure &&
+                  cd ../Test && ./runtests
+            - name: Zip
+              if: ${{ matrix.compiler.cc == 'clang' }}
+              env:
+                  ARCHIVE: glslang-master-${{matrix.os.family}}-${{matrix.cmake_build_type}}.zip
+              run: |
+                  cd build/install
+                  zip ${ARCHIVE} \
+                      bin/glslangValidator \
+                      include/glslang/* \
+                      include/glslang/**/* \
+                      lib/libGenericCodeGen.a \
+                      lib/libglslang.a \
+                      lib/libglslang-default-resource-limits.a \
+                      lib/libHLSL.a \
+                      lib/libMachineIndependent.a \
+                      lib/libOGLCompiler.a \
+                      lib/libOSDependent.a \
+                      lib/libSPIRV.a \
+                      lib/libSPVRemapper.a \
+                      lib/libSPIRV-Tools.a \
+                      lib/libSPIRV-Tools-opt.a
+            - name: Deploy
+              if: ${{ matrix.compiler.cc == 'clang' }}
+              env:
+                  ARCHIVE: glslang-master-${{matrix.os.family}}-${{matrix.cmake_build_type}}.zip
+              uses: actions/github-script@v5
+              with:
+                  script: |
+                      const script = require('.github/workflows/deploy.js')
+                      await script({github, context, core})
+
+    macos:
+        runs-on: ${{matrix.os.genus}}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [{genus: macos-11, family: osx}]
+                compiler: [{cc: clang, cxx: clang++}]
+                cmake_build_type: [Debug, Release]
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: '3.7'
+            - name: Install GoogleTest
+              run: |
+                  # check out pre-breakage version of googletest; can be deleted when
+                  # issue 3128 is fixed
+                  # git clone --depth=1 https://github.com/google/googletest.git External/googletest
+                  mkdir -p External/googletest
+                  cd External/googletest
+                  git init
+                  git remote add origin https://github.com/google/googletest.git
+                  git fetch --depth 1 origin 0c400f67fcf305869c5fb113dd296eca266c9725
+                  git reset --hard FETCH_HEAD
+                  cd ../..
+            - name: Update Glslang Sources
+              run: |
+                  ./update_glslang_sources.py
+            - name: Build
+              env:
+                  CC: ${{matrix.compiler.cc}}
+                  CXX: ${{matrix.compiler.cxx}}
+              run: |
+                  mkdir build && cd build
+                  cmake -DCMAKE_BUILD_TYPE=${{matrix.cmake_build_type}} -DCMAKE_INSTALL_PREFIX=`pwd`/install ..
+                  make -j4 install
+            - name: Test
+              run: |
+                  cd build
+                  ctest --output-on-failure &&
+                  cd ../Test && ./runtests
+            - name: Zip
+              env:
+                  ARCHIVE: glslang-master-${{matrix.os.family}}-${{matrix.cmake_build_type}}.zip
+              run: |
+                  cd build/install
+                  zip ${ARCHIVE} \
+                      bin/glslangValidator \
+                      include/glslang/* \
+                      include/glslang/**/* \
+                      lib/libGenericCodeGen.a \
+                      lib/libglslang.a \
+                      lib/libglslang-default-resource-limits.a \
+                      lib/libHLSL.a \
+                      lib/libMachineIndependent.a \
+                      lib/libOGLCompiler.a \
+                      lib/libOSDependent.a \
+                      lib/libSPIRV.a \
+                      lib/libSPVRemapper.a \
+                      lib/libSPIRV-Tools.a \
+                      lib/libSPIRV-Tools-opt.a
+            - name: Deploy
+              env:
+                  ARCHIVE: glslang-master-${{matrix.os.family}}-${{matrix.cmake_build_type}}.zip
+              uses: actions/github-script@v5
+              with:
+                  script: |
+                      const script = require('.github/workflows/deploy.js')
+                      await script({github, context, core})

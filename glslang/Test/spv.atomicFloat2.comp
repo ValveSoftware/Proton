@@ -1,0 +1,179 @@
+#version 450 core
+
+#extension GL_KHR_memory_scope_semantics : enable
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : enable
+#extension GL_EXT_shader_atomic_float2: enable
+#pragma use_vulkan_memory_model
+
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(binding = 0) buffer Buffer
+{
+    float16_t datah;
+    float dataf;
+    double datad;
+} buf;
+
+shared float16_t    atomh;
+shared float        atomf;
+shared double       atomd;
+
+layout(binding = 0, r32f) volatile coherent uniform image1D        fimage1D;
+layout(binding = 1, r32f) volatile coherent uniform image1DArray   fimage1DArray;
+layout(binding = 2, r32f) volatile coherent uniform image2D        fimage2D;
+layout(binding = 3, r32f) volatile coherent uniform image2DArray   fimage2DArray;
+layout(binding = 4, r32f) volatile coherent uniform image2DRect    fimage2DRect;
+layout(binding = 5, r32f) volatile coherent uniform imageCube      fimageCube;
+layout(binding = 6, r32f) volatile coherent uniform imageCubeArray fimageCubeArray;
+layout(binding = 9, r32f) volatile coherent uniform image3D        fimage3D;
+
+void main()
+{
+    //atomicAdd
+    float16_t resulth = float16_t(0.0);
+    resulth = atomicAdd(atomh, float16_t(3.0));
+    resulth = atomicAdd(atomh, float16_t(4.5), gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resulth = atomicAdd(buf.datah, float16_t(3.0));
+    resulth = atomicAdd(buf.datah, float16_t(4.5), gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    //atomicMin
+    resulth = atomicMin(atomh, float16_t(3.0));
+    resulth = atomicMin(atomh, float16_t(4.5), gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resulth = atomicMin(buf.datah, float16_t(3.0));
+    resulth = atomicMin(buf.datah, float16_t(4.5), gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    float resultf = 0.0;
+    resultf = atomicMin(atomf, 3.0);
+    resultf = atomicMin(atomf, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resultf = atomicMin(buf.dataf, 3.0);
+    resultf = atomicMin(buf.dataf, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    double resultd = 0.0;
+    resultd = atomicMin(atomd, 3.0);
+    resultd = atomicMin(atomd, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resultd = atomicMin(buf.datad, 3.0);
+    resultd = atomicMin(buf.datad, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    //atomicMax
+    resulth = atomicMax(atomh, float16_t(3.0));
+    resulth = atomicMax(atomh, float16_t(4.5), gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resulth = atomicMax(buf.datah, float16_t(3.0));
+    resulth = atomicMax(buf.datah, float16_t(4.5), gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    resultf = atomicMax(atomf, 3.0);
+    resultf = atomicMax(atomf, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resultf = atomicMax(buf.dataf, 3.0);
+    resultf = atomicMax(buf.dataf, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    resultd = atomicMax(atomd, 3.0);
+    resultd = atomicMax(atomd, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+    resultd = atomicMax(buf.datad, 3.0);
+    resultd = atomicMax(buf.datad, 4.5, gl_ScopeDevice, gl_StorageSemanticsBuffer, gl_SemanticsRelaxed);
+
+    //atomicExchange
+    resulth = atomicExchange(buf.datah, resulth);
+    buf.datah += resulth;
+    resulth = atomicExchange(buf.datah, resulth, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.datah += resulth;
+    resulth = atomicExchange(atomh, resulth);
+    buf.datah += resulth;
+    resulth = atomicExchange(atomh, resulth, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.datah += resulth;
+
+    //atomic load/store
+    resulth = atomicLoad(buf.datah, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    atomicStore(buf.datah, resulth, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.datah += resulth;
+
+    resulth = atomicLoad(atomh, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    atomicStore(atomh, resulth, gl_ScopeDevice, gl_StorageSemanticsShared, gl_SemanticsRelaxed);
+    buf.datah += resulth;
+
+    // image atomics on 1D:
+    atomf = imageAtomicMin(fimage1D, int(0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimage1D, int(1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimage1D, int(0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimage1D, int(1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    // image atomics on 1D Array:
+    atomf = imageAtomicMin(fimage1DArray, ivec2(0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimage1DArray, ivec2(1,1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimage1DArray, ivec2(0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimage1DArray, ivec2(1,1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    // image atomics on 2D:
+    atomf = imageAtomicMin(fimage2D, ivec2(0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimage2D, ivec2(1,1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimage2D, ivec2(0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimage2D, ivec2(1,1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    // image atomics on 2D Rect:
+    atomf = imageAtomicMin(fimage2DRect, ivec2(0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimage2DRect, ivec2(1,1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimage2DRect, ivec2(0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimage2DRect, ivec2(1,1), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    // image atomics on 2D Array:
+    atomf = imageAtomicMin(fimage2DArray, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimage2DArray, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimage2DArray, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimage2DArray, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    // image atomics on Cube:
+    atomf = imageAtomicMin(fimageCube, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimageCube, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimageCube, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimageCube, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    // image atomics on Cube Array:
+    atomf = imageAtomicMin(fimageCubeArray, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimageCubeArray, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimageCubeArray, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimageCubeArray, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    // image atomics on 3D:
+    atomf = imageAtomicMin(fimage3D, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMin(fimage3D, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+
+    atomf = imageAtomicMax(fimage3D, ivec3(0,0,0), 2.0);
+    buf.dataf += atomf;
+    atomf = imageAtomicMax(fimage3D, ivec3(1,1,0), 3.0, gl_ScopeDevice, gl_StorageSemanticsImage , gl_SemanticsRelaxed);
+    buf.dataf += atomf;
+}

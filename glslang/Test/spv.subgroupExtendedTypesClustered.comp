@@ -1,0 +1,255 @@
+#version 450
+
+#extension GL_KHR_shader_subgroup_clustered: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16: enable
+
+layout (local_size_x = 8) in;
+
+layout(binding = 0) buffer Buffers
+{
+    i8vec4 i8;
+    u8vec4 u8;
+    i16vec4 i16;
+    u16vec4 u16;
+    i64vec4 i64;
+    u64vec4 u64;
+    f16vec4 f16;
+} data[4];
+
+void main()
+{
+    uint invocation = (gl_SubgroupInvocationID + gl_SubgroupSize) % 4;
+
+    data[invocation].i8.x   = subgroupClusteredAdd(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupClusteredAdd(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupClusteredAdd(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupClusteredAdd(data[3].i8, 1);
+
+    data[invocation].i8.x   = subgroupClusteredMul(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupClusteredMul(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupClusteredMul(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupClusteredMul(data[3].i8, 1);
+
+    data[invocation].i8.x   = subgroupClusteredMin(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupClusteredMin(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupClusteredMin(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupClusteredMin(data[3].i8, 1);
+
+    data[invocation].i8.x   = subgroupClusteredMax(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupClusteredMax(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupClusteredMax(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupClusteredMax(data[3].i8, 1);
+
+    data[invocation].i8.x   = subgroupClusteredAnd(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupClusteredAnd(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupClusteredAnd(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupClusteredAnd(data[3].i8, 1);
+
+    data[invocation].i8.x   = subgroupClusteredOr(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupClusteredOr(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupClusteredOr(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupClusteredOr(data[3].i8, 1);
+
+    data[invocation].i8.x   = subgroupClusteredXor(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupClusteredXor(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupClusteredXor(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupClusteredXor(data[3].i8, 1);
+
+    data[invocation].u8.x   = subgroupClusteredAdd(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupClusteredAdd(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupClusteredAdd(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupClusteredAdd(data[3].u8, 1);
+
+    data[invocation].u8.x   = subgroupClusteredMul(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupClusteredMul(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupClusteredMul(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupClusteredMul(data[3].u8, 1);
+
+    data[invocation].u8.x   = subgroupClusteredMin(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupClusteredMin(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupClusteredMin(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupClusteredMin(data[3].u8, 1);
+
+    data[invocation].u8.x   = subgroupClusteredMax(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupClusteredMax(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupClusteredMax(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupClusteredMax(data[3].u8, 1);
+
+    data[invocation].u8.x   = subgroupClusteredAnd(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupClusteredAnd(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupClusteredAnd(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupClusteredAnd(data[3].u8, 1);
+
+    data[invocation].u8.x   = subgroupClusteredOr(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupClusteredOr(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupClusteredOr(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupClusteredOr(data[3].u8, 1);
+
+    data[invocation].u8.x   = subgroupClusteredXor(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupClusteredXor(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupClusteredXor(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupClusteredXor(data[3].u8, 1);
+
+    data[invocation].i16.x   = subgroupClusteredAdd(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupClusteredAdd(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupClusteredAdd(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupClusteredAdd(data[3].i16, 1);
+
+    data[invocation].i16.x   = subgroupClusteredMul(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupClusteredMul(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupClusteredMul(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupClusteredMul(data[3].i16, 1);
+
+    data[invocation].i16.x   = subgroupClusteredMin(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupClusteredMin(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupClusteredMin(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupClusteredMin(data[3].i16, 1);
+
+    data[invocation].i16.x   = subgroupClusteredMax(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupClusteredMax(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupClusteredMax(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupClusteredMax(data[3].i16, 1);
+
+    data[invocation].i16.x   = subgroupClusteredAnd(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupClusteredAnd(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupClusteredAnd(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupClusteredAnd(data[3].i16, 1);
+
+    data[invocation].i16.x   = subgroupClusteredOr(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupClusteredOr(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupClusteredOr(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupClusteredOr(data[3].i16, 1);
+
+    data[invocation].i16.x   = subgroupClusteredXor(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupClusteredXor(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupClusteredXor(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupClusteredXor(data[3].i16, 1);
+
+    data[invocation].u16.x   = subgroupClusteredAdd(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupClusteredAdd(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupClusteredAdd(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupClusteredAdd(data[3].u16, 1);
+
+    data[invocation].u16.x   = subgroupClusteredMul(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupClusteredMul(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupClusteredMul(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupClusteredMul(data[3].u16, 1);
+
+    data[invocation].u16.x   = subgroupClusteredMin(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupClusteredMin(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupClusteredMin(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupClusteredMin(data[3].u16, 1);
+
+    data[invocation].u16.x   = subgroupClusteredMax(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupClusteredMax(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupClusteredMax(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupClusteredMax(data[3].u16, 1);
+
+    data[invocation].u16.x   = subgroupClusteredAnd(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupClusteredAnd(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupClusteredAnd(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupClusteredAnd(data[3].u16, 1);
+
+    data[invocation].u16.x   = subgroupClusteredOr(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupClusteredOr(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupClusteredOr(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupClusteredOr(data[3].u16, 1);
+
+    data[invocation].u16.x   = subgroupClusteredXor(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupClusteredXor(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupClusteredXor(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupClusteredXor(data[3].u16, 1);
+
+    data[invocation].i64.x   = subgroupClusteredAdd(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupClusteredAdd(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupClusteredAdd(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupClusteredAdd(data[3].i64, 1);
+
+    data[invocation].i64.x   = subgroupClusteredMul(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupClusteredMul(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupClusteredMul(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupClusteredMul(data[3].i64, 1);
+
+    data[invocation].i64.x   = subgroupClusteredMin(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupClusteredMin(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupClusteredMin(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupClusteredMin(data[3].i64, 1);
+
+    data[invocation].i64.x   = subgroupClusteredMax(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupClusteredMax(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupClusteredMax(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupClusteredMax(data[3].i64, 1);
+
+    data[invocation].i64.x   = subgroupClusteredAnd(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupClusteredAnd(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupClusteredAnd(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupClusteredAnd(data[3].i64, 1);
+
+    data[invocation].i64.x   = subgroupClusteredOr(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupClusteredOr(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupClusteredOr(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupClusteredOr(data[3].i64, 1);
+
+    data[invocation].i64.x   = subgroupClusteredXor(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupClusteredXor(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupClusteredXor(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupClusteredXor(data[3].i64, 1);
+
+    data[invocation].u64.x   = subgroupClusteredAdd(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupClusteredAdd(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupClusteredAdd(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupClusteredAdd(data[3].u64, 1);
+
+    data[invocation].u64.x   = subgroupClusteredMul(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupClusteredMul(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupClusteredMul(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupClusteredMul(data[3].u64, 1);
+
+    data[invocation].u64.x   = subgroupClusteredMin(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupClusteredMin(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupClusteredMin(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupClusteredMin(data[3].u64, 1);
+
+    data[invocation].u64.x   = subgroupClusteredMax(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupClusteredMax(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupClusteredMax(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupClusteredMax(data[3].u64, 1);
+
+    data[invocation].u64.x   = subgroupClusteredAnd(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupClusteredAnd(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupClusteredAnd(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupClusteredAnd(data[3].u64, 1);
+
+    data[invocation].u64.x   = subgroupClusteredOr(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupClusteredOr(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupClusteredOr(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupClusteredOr(data[3].u64, 1);
+
+    data[invocation].u64.x   = subgroupClusteredXor(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupClusteredXor(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupClusteredXor(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupClusteredXor(data[3].u64, 1);
+
+    data[invocation].f16.x   = subgroupClusteredAdd(data[0].f16.x, 1);
+    data[invocation].f16.xy  = subgroupClusteredAdd(data[1].f16.xy, 1);
+    data[invocation].f16.xyz = subgroupClusteredAdd(data[2].f16.xyz, 1);
+    data[invocation].f16     = subgroupClusteredAdd(data[3].f16, 1);
+
+    data[invocation].f16.x   = subgroupClusteredMul(data[0].f16.x, 1);
+    data[invocation].f16.xy  = subgroupClusteredMul(data[1].f16.xy, 1);
+    data[invocation].f16.xyz = subgroupClusteredMul(data[2].f16.xyz, 1);
+    data[invocation].f16     = subgroupClusteredMul(data[3].f16, 1);
+
+    data[invocation].f16.x   = subgroupClusteredMin(data[0].f16.x, 1);
+    data[invocation].f16.xy  = subgroupClusteredMin(data[1].f16.xy, 1);
+    data[invocation].f16.xyz = subgroupClusteredMin(data[2].f16.xyz, 1);
+    data[invocation].f16     = subgroupClusteredMin(data[3].f16, 1);
+
+    data[invocation].f16.x   = subgroupClusteredMax(data[0].f16.x, 1);
+    data[invocation].f16.xy  = subgroupClusteredMax(data[1].f16.xy, 1);
+    data[invocation].f16.xyz = subgroupClusteredMax(data[2].f16.xyz, 1);
+    data[invocation].f16     = subgroupClusteredMax(data[3].f16, 1);
+}

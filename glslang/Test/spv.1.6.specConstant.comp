@@ -1,0 +1,18 @@
+#version 450
+
+layout(local_size_x_id = 18, local_size_z_id = 19) in;
+layout(local_size_x = 32, local_size_y = 32) in;
+
+buffer bn {
+    uint a;
+} bi;
+
+void foo(uvec3 wgs)
+{
+    bi.a = wgs.x * gl_WorkGroupSize.y * wgs.z;
+}
+
+void main()
+{
+    foo(gl_WorkGroupSize);
+}

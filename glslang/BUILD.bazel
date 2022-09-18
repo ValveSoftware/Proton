@@ -1,0 +1,311 @@
+# Copyright (C) 2020 The Khronos Group Inc.
+#
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#    Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#    Redistributions in binary form must reproduce the above
+#    copyright notice, this list of conditions and the following
+#    disclaimer in the documentation and/or other materials provided
+#    with the distribution.
+#
+#    Neither the name of The Khronos Group Inc. nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+# Description:
+#
+# Khronos reference front-end for GLSL and ESSL, and sample SPIR-V generator.
+
+licenses(["notice"])
+
+exports_files(["LICENSE"])
+
+# Build information generation script
+py_binary(
+    name = "build_info",
+    srcs = ["build_info.py"],
+)
+
+py_binary(
+    name = "gen_extension_headers",
+    srcs = ["gen_extension_headers.py"],
+)
+
+genrule(
+    name = "gen_build_info_h",
+    srcs = ["CHANGES.md", "build_info.h.tmpl"],
+    outs = ["glslang/build_info.h"],
+    cmd_bash = "$(location build_info) $$(dirname $(location CHANGES.md)) -i $(location build_info.h.tmpl) -o $(location glslang/build_info.h)",
+    cmd_bat = "for %F in ($(location CHANGES.md)) do $(location build_info) %~dpF -i $(location build_info.h.tmpl) -o $(location glslang/build_info.h)",
+    tools = [":build_info"],
+)
+
+genrule(
+    name = "gen_extension_headers_h",
+    srcs = ["glslang/ExtensionHeaders", "gen_extension_headers.py"],
+    outs = ["glslang/glsl_intrinsic_header.h"],
+    cmd_bash = "$(location gen_extension_headers) -i  $(location glslang/ExtensionHeaders) -o $(location glslang/glsl_intrinsic_header.h)",
+    tools = [":gen_extension_headers"],
+)
+
+COMMON_COPTS = select({
+    "@bazel_tools//src/conditions:windows": [""],
+    "//conditions:default": [
+        "-Wall",
+        "-Wuninitialized",
+        "-Wunused",
+        "-Wunused-local-typedefs",
+        "-Wunused-parameter",
+        "-Wunused-value",
+        "-Wunused-variable",
+        "-Wno-reorder",
+        "-std=c++11",
+        "-fvisibility=hidden",
+        "-fvisibility-inlines-hidden",
+        "-fno-exceptions",
+        "-fno-rtti",
+    ],
+})
+
+cc_library(
+    name = "glslang",
+    srcs = glob(
+        [
+            "glslang/GenericCodeGen/*.cpp",
+            "glslang/HLSL/*.cpp",
+            "glslang/MachineIndependent/*.cpp",
+            "glslang/MachineIndependent/preprocessor/*.cpp",
+        ],
+        exclude = [
+            "glslang/HLSL/pch.h",
+            "glslang/MachineIndependent/pch.h",
+        ],
+    ) + [
+        "OGLCompilersDLL/InitializeDll.cpp",
+    ] + select({
+        "@bazel_tools//src/conditions:windows":
+            ["glslang/OSDependent/Windows/ossource.cpp"],
+        "//conditions:default":
+            ["glslang/OSDependent/Unix/ossource.cpp"],
+    }),
+    hdrs = glob([
+        "glslang/HLSL/*.h",
+        "glslang/Include/*.h",
+        "glslang/MachineIndependent/*.h",
+        "glslang/MachineIndependent/preprocessor/*.h",
+    ]) + [
+        "OGLCompilersDLL/InitializeDll.h",
+        "StandAlone/DirStackFileIncluder.h",
+        "glslang/OSDependent/osinclude.h",
+        "glslang/Public/ShaderLang.h",
+        ":gen_build_info_h",
+    ],
+    copts = COMMON_COPTS,
+    defines = [
+        "AMD_EXTENSIONS",
+        "ENABLE_HLSL=0",
+        "ENABLE_OPT=0",
+        "NV_EXTENSIONS",
+    ],
+    linkopts = select({
+        "@bazel_tools//src/conditions:windows": [""],
+        "//conditions:default": ["-lm", "-lpthread"],
+    }),
+    linkstatic = 1,
+)
+
+genrule(
+    name = "export_spirv_headers",
+    srcs = [
+        "SPIRV/GLSL.ext.AMD.h",
+        "SPIRV/GLSL.ext.EXT.h",
+        "SPIRV/GLSL.ext.KHR.h",
+        "SPIRV/GLSL.ext.NV.h",
+        "SPIRV/GLSL.std.450.h",
+        "SPIRV/NonSemanticDebugPrintf.h",
+        "SPIRV/NonSemanticShaderDebugInfo100.h",
+        "SPIRV/spirv.hpp",
+    ],
+    outs = [
+        "include/SPIRV/GLSL.ext.AMD.h",
+        "include/SPIRV/GLSL.ext.EXT.h",
+        "include/SPIRV/GLSL.ext.KHR.h",
+        "include/SPIRV/GLSL.ext.NV.h",
+        "include/SPIRV/GLSL.std.450.h",
+        "include/SPIRV/NonSemanticDebugPrintf.h",
+        "include/SPIRV/NonSemanticShaderDebugInfo100.h",
+        "include/SPIRV/spirv.hpp",
+    ],
+    cmd_bash = "mkdir -p $(@D)/include/SPIRV && cp $(SRCS) $(@D)/include/SPIRV/",
+    cmd_bat = "(if not exist $(@D)\\include\\SPIRV mkdir $(@D)\\include\\SPIRV) && (for %S in ($(SRCS)) do @xcopy /q %S $(@D)\\include\\SPIRV\\ >NUL)",
+)
+
+cc_library(
+    name = "SPIRV_headers",
+    hdrs = [":export_spirv_headers"],
+    copts = COMMON_COPTS,
+    includes = [
+        "include",
+        "include/SPIRV",
+    ],
+    linkstatic = 1,
+)
+
+cc_library(
+    name = "SPIRV",
+    srcs = glob(
+        ["SPIRV/*.cpp"],
+        exclude = [
+            "SPIRV/SpvTools.cpp",
+        ],
+    ),
+    hdrs = [
+        "SPIRV/GlslangToSpv.h",
+        "SPIRV/Logger.h",
+        "SPIRV/SPVRemapper.h",
+        "SPIRV/SpvBuilder.h",
+        "SPIRV/SpvTools.h",
+        "SPIRV/bitutils.h",
+        "SPIRV/disassemble.h",
+        "SPIRV/doc.h",
+        "SPIRV/hex_float.h",
+        "SPIRV/spvIR.h",
+    ],
+    copts = COMMON_COPTS,
+    includes = ["SPIRV"],
+    linkopts = select({
+        "@bazel_tools//src/conditions:windows": [""],
+        "//conditions:default": ["-lm"],
+    }),
+    linkstatic = 1,
+    deps = [
+        ":SPIRV_headers",
+        ":glslang",
+    ],
+)
+
+cc_library(
+    name = "glslang-default-resource-limits",
+    srcs = ["StandAlone/ResourceLimits.cpp"],
+    hdrs = ["StandAlone/ResourceLimits.h"],
+    copts = COMMON_COPTS,
+    linkstatic = 1,
+    deps = [":glslang"],
+)
+
+cc_binary(
+    name = "glslangValidator",
+    srcs = [
+        "StandAlone/StandAlone.cpp",
+        "StandAlone/Worklist.h",
+        ":glslang/glsl_intrinsic_header.h"
+    ],
+    copts = COMMON_COPTS,
+    deps = [
+        ":SPIRV",
+        ":glslang",
+        ":glslang-default-resource-limits",
+    ],
+)
+
+cc_binary(
+    name = "spirv-remap",
+    srcs = ["StandAlone/spirv-remap.cpp"],
+    copts = COMMON_COPTS,
+    deps = [
+        ":SPIRV",
+        ":glslang",
+        ":glslang-default-resource-limits",
+    ],
+)
+
+filegroup(
+    name = "test_files",
+    srcs = glob(
+        ["Test/**"],
+        exclude = [
+            "Test/bump",
+            "Test/glslangValidator",
+            "Test/runtests",
+        ],
+    ),
+)
+
+cc_library(
+    name = "glslang_test_lib",
+    testonly = 1,
+    srcs = [
+        "gtests/HexFloat.cpp",
+        "gtests/Initializer.h",
+        "gtests/Settings.cpp",
+        "gtests/Settings.h",
+        "gtests/TestFixture.cpp",
+        "gtests/TestFixture.h",
+        "gtests/main.cpp",
+    ],
+    copts = COMMON_COPTS,
+    data = [":test_files"],
+    defines = select({
+        # Unfortunately we can't use $(location) in cc_library at the moment.
+        # See https://github.com/bazelbuild/bazel/issues/1023
+        # So we'll specify the path manually.
+        "@bazel_tools//src/conditions:windows":
+            ["GLSLANG_TEST_DIRECTORY='\"../../../../../Test\"'"],
+        "//conditions:default":
+            ["GLSLANG_TEST_DIRECTORY='\"Test\"'"],
+    }),
+    linkstatic = 1,
+    deps = [
+        ":SPIRV",
+        ":glslang",
+        ":glslang-default-resource-limits",
+        "@com_google_googletest//:gtest",
+    ],
+)
+
+GLSLANG_TESTS = glob(
+    ["gtests/*.FromFile.cpp"],
+    # Since we are not building the SPIRV-Tools dependency, the following tests
+    # cannot be performed.
+    exclude = [
+        "gtests/Hlsl.FromFile.cpp",
+        "gtests/Spv.FromFile.cpp",
+    ],
+)
+
+[cc_test(
+    name = test_file.replace("gtests/", "").replace(".FromFile.cpp", "") + "_test",
+    srcs = [test_file],
+    copts = COMMON_COPTS,
+    data = [
+        ":test_files",
+    ],
+    deps = [
+        ":SPIRV",
+        ":glslang",
+        ":glslang_test_lib",
+    ],
+) for test_file in GLSLANG_TESTS]

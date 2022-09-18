@@ -1,0 +1,41 @@
+Texture1D<float>            i1D:            register(t0);
+Texture2D<float>            i2D:            register(t1);
+Texture3D<float>            i3D:            register(t2);
+Texture1DArray<float>       i1DArray:       register(t3);
+Texture2DArray<float>       i2DArray:       register(t4);
+Texture2DMS<float>          i2DMS:          register(t5);
+Texture2DMSArray<float>     i2DMSArray:     register(t6);
+
+Texture1D<int>              ii1D:           register(t7);
+Texture2D<int>              ii2D:           register(t8);
+Texture3D<int>              ii3D:           register(t9);
+Texture1DArray<int>         ii1DArray:      register(t10);
+Texture2DArray<int>         ii2DArray:      register(t11);
+Texture2DMS<int>            ii2DMS:         register(t12);
+Texture2DMSArray<int>       ii2DMSArray:    register(t13);
+
+RWTexture3D<float> OUT: register(u0);
+
+[numthreads(8,8,8)]
+void main(uint3 tid: SV_DispatchThreadID)
+{
+    float f = 0.0;
+    f += i1D[tid.x];
+    f += i2D[tid.xy];
+    f += i3D[tid];
+    f += i1DArray[tid.xy];
+    f += i2DArray[tid];
+    f += i2DMS.Load(tid.xy, 1);
+    f += i2DMSArray.Load(tid, 3);
+
+    int i = 0.0;
+    i += ii1D[tid.x];
+    i += ii2D[tid.xy];
+    i += ii3D[tid];
+    i += ii1DArray[tid.xy];
+    i += ii2DArray[tid];
+    i += ii2DMS.Load(tid.xy, 1);
+    i += ii2DMSArray.Load(tid, 3);
+
+    OUT[tid] = f + float(i);
+}

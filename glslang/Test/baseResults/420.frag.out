@@ -1,0 +1,124 @@
+420.frag
+ERROR: 0:4: 'redeclaration' : all redeclarations must use the same depth layout on gl_FragDepth
+ERROR: 0:11: 'layout qualifier' : can only apply depth layout to gl_FragDepth 
+ERROR: 0:12: 'gl_FragDepth' : cannot redeclare after use 
+ERROR: 0:14: 'atomic_uint' : array must be explicitly sized 
+ERROR: 0:17: 'imageSize' : required extension not requested: GL_ARB_shader_image_size
+ERROR: 0:54: 'std430' : not supported for this version or the enabled extensions 
+ERROR: 0:54: '' :  syntax error, unexpected IDENTIFIER, expecting LEFT_BRACE or COMMA or SEMICOLON
+ERROR: 7 compilation errors.  No code generated.
+
+
+Shader version: 420
+Requested GL_ARB_shader_image_size
+Requested GL_ARB_shader_storage_buffer_object
+using depth_any
+ERROR: node is still EOpNull!
+0:6  Function Definition: main( ( global void)
+0:6    Function Parameters: 
+0:8    Sequence
+0:8      move second child to first child ( temp float)
+0:8        'gl_FragDepth' ( gl_FragDepth float FragDepth)
+0:8        Constant:
+0:8          0.300000
+0:17  Sequence
+0:17    move second child to first child ( temp 2-component vector of int)
+0:17      'iv2dim' ( global 2-component vector of int)
+0:17      imageQuerySize ( global 2-component vector of int)
+0:17        'i2D' ( writeonly uniform image2D)
+0:19  Sequence
+0:19    move second child to first child ( temp 2-component vector of int)
+0:19      'iv2dim1' ( global 2-component vector of int)
+0:19      imageQuerySize ( global 2-component vector of int)
+0:19        'i2D' ( writeonly uniform image2D)
+0:29  Function Definition: atomicOpPass( ( global void)
+0:29    Function Parameters: 
+0:31    Sequence
+0:31      Sequence
+0:31        move second child to first child ( temp int)
+0:31          'origi' ( temp int)
+0:31          AtomicAdd ( global int)
+0:31            atomi: direct index for structure (layout( column_major std430 offset=0) buffer int)
+0:31              'anon@0' (layout( binding=0 column_major std430) buffer block{layout( column_major std430 offset=0) buffer int atomi, layout( column_major std430 offset=4) buffer uint atomu})
+0:31              Constant:
+0:31                0 (const uint)
+0:31            Constant:
+0:31              3 (const int)
+0:32      Sequence
+0:32        move second child to first child ( temp uint)
+0:32          'origu' ( temp uint)
+0:32          AtomicAnd ( global uint)
+0:32            atomu: direct index for structure (layout( column_major std430 offset=4) buffer uint)
+0:32              'anon@0' (layout( binding=0 column_major std430) buffer block{layout( column_major std430 offset=0) buffer int atomi, layout( column_major std430 offset=4) buffer uint atomu})
+0:32              Constant:
+0:32                1 (const uint)
+0:32            Constant:
+0:32              7 (const uint)
+0:33      move second child to first child ( temp int)
+0:33        'origi' ( temp int)
+0:33        AtomicExchange ( global int)
+0:33          atomi: direct index for structure (layout( column_major std430 offset=0) buffer int)
+0:33            'anon@0' (layout( binding=0 column_major std430) buffer block{layout( column_major std430 offset=0) buffer int atomi, layout( column_major std430 offset=4) buffer uint atomu})
+0:33            Constant:
+0:33              0 (const uint)
+0:33          Constant:
+0:33            4 (const int)
+0:34      move second child to first child ( temp uint)
+0:34        'origu' ( temp uint)
+0:34        AtomicCompSwap ( global uint)
+0:34          atomu: direct index for structure (layout( column_major std430 offset=4) buffer uint)
+0:34            'anon@0' (layout( binding=0 column_major std430) buffer block{layout( column_major std430 offset=0) buffer int atomi, layout( column_major std430 offset=4) buffer uint atomu})
+0:34            Constant:
+0:34              1 (const uint)
+0:34          Constant:
+0:34            10 (const uint)
+0:34          Constant:
+0:34            8 (const uint)
+0:?   Linker Objects
+0:?     'gl_FragDepth' ( gl_FragDepth float FragDepth)
+0:?     'depth' ( smooth in float)
+0:?     'a' (layout( binding=0 offset=0) uniform unsized 1-element array of atomic_uint)
+0:?     'i2D' ( writeonly uniform image2D)
+0:?     'iv2dim' ( global 2-component vector of int)
+0:?     'iv2dim1' ( global 2-component vector of int)
+0:?     'anon@0' (layout( binding=0 column_major std430) buffer block{layout( column_major std430 offset=0) buffer int atomi, layout( column_major std430 offset=4) buffer uint atomu})
+0:?     'ssboStd430Arr' (layout( binding=2 column_major std430) buffer 2-element array of block{layout( column_major std430 offset=0) buffer int member01, layout( column_major std430 offset=4) buffer 2-element array of int memberArr01, layout( column_major std430 offset=12) buffer unsized 1-element array of int memberUnsizedArr01})
+0:?     'ssboSharedArr' (layout( binding=3 column_major shared) buffer 2-element array of block{layout( column_major shared) buffer int member02, layout( column_major shared) buffer 2-element array of int memberArr02, layout( column_major shared) buffer unsized 1-element array of int memberUnsizedArr02})
+
+
+Linked fragment stage:
+
+
+Shader version: 420
+Requested GL_ARB_shader_image_size
+Requested GL_ARB_shader_storage_buffer_object
+using depth_any
+ERROR: node is still EOpNull!
+0:6  Function Definition: main( ( global void)
+0:6    Function Parameters: 
+0:8    Sequence
+0:8      move second child to first child ( temp float)
+0:8        'gl_FragDepth' ( gl_FragDepth float FragDepth)
+0:8        Constant:
+0:8          0.300000
+0:17  Sequence
+0:17    move second child to first child ( temp 2-component vector of int)
+0:17      'iv2dim' ( global 2-component vector of int)
+0:17      imageQuerySize ( global 2-component vector of int)
+0:17        'i2D' ( writeonly uniform image2D)
+0:19  Sequence
+0:19    move second child to first child ( temp 2-component vector of int)
+0:19      'iv2dim1' ( global 2-component vector of int)
+0:19      imageQuerySize ( global 2-component vector of int)
+0:19        'i2D' ( writeonly uniform image2D)
+0:?   Linker Objects
+0:?     'gl_FragDepth' ( gl_FragDepth float FragDepth)
+0:?     'depth' ( smooth in float)
+0:?     'a' (layout( binding=0 offset=0) uniform 1-element array of atomic_uint)
+0:?     'i2D' ( writeonly uniform image2D)
+0:?     'iv2dim' ( global 2-component vector of int)
+0:?     'iv2dim1' ( global 2-component vector of int)
+0:?     'anon@0' (layout( binding=0 column_major std430) buffer block{layout( column_major std430 offset=0) buffer int atomi, layout( column_major std430 offset=4) buffer uint atomu})
+0:?     'ssboStd430Arr' (layout( binding=2 column_major std430) buffer 2-element array of block{layout( column_major std430 offset=0) buffer int member01, layout( column_major std430 offset=4) buffer 2-element array of int memberArr01, layout( column_major std430 offset=12) buffer unsized 1-element array of int memberUnsizedArr01})
+0:?     'ssboSharedArr' (layout( binding=3 column_major shared) buffer 2-element array of block{layout( column_major shared) buffer int member02, layout( column_major shared) buffer 2-element array of int memberArr02, layout( column_major shared) buffer unsized 1-element array of int memberUnsizedArr02})
+

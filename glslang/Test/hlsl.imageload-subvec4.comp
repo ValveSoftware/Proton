@@ -1,0 +1,33 @@
+RWTexture1D<float>          i1D:            register(u0);
+RWTexture2D<float>          i2D:            register(u1);
+RWTexture3D<float>          i3D:            register(u2);
+RWTexture1DArray<float>     i1DArray:       register(u3);
+RWTexture2DArray<float>     i2DArray:       register(u4);
+
+RWTexture1D<int>            ii1D:           register(u5);
+RWTexture2D<int>            ii2D:           register(u6);
+RWTexture3D<int>            ii3D:           register(u7);
+RWTexture1DArray<int>       ii1DArray:      register(u8);
+RWTexture2DArray<int>       ii2DArray:      register(u9);
+
+RWTexture3D<float> OUT: register(u10);
+
+[numthreads(8,8,8)]
+void main(uint3 tid: SV_DispatchThreadID)
+{
+    float f = 0.0;
+    f += i1D[tid.x];
+    f += i2D[tid.xy];
+    f += i3D[tid];
+    f += i1DArray[tid.xy];
+    f += i2DArray[tid];
+
+    int i = 0.0;
+    i += ii1D[tid.x];
+    i += ii2D[tid.xy];
+    i += ii3D[tid];
+    i += ii1DArray[tid.xy];
+    i += ii2DArray[tid];
+
+    OUT[tid] = f + float(i);
+}

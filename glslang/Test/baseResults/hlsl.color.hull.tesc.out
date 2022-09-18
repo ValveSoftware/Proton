@@ -1,0 +1,790 @@
+hlsl.color.hull.tesc
+Shader version: 500
+vertices = 3
+vertex spacing = equal_spacing
+triangle order = cw
+0:? Sequence
+0:37  Function Definition: ColorPatchConstantFunction(struct-HullInputType-vf3-vf41[3];u1; ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:37    Function Parameters: 
+0:37      'inputPatch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:37      'patchId' ( in uint)
+0:?     Sequence
+0:42      move second child to first child ( temp float)
+0:42        direct index ( temp float)
+0:42          edges: direct index for structure ( temp 3-element array of float)
+0:42            'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:42            Constant:
+0:42              0 (const int)
+0:42          Constant:
+0:42            0 (const int)
+0:42        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:42          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:42          Constant:
+0:42            0 (const uint)
+0:43      move second child to first child ( temp float)
+0:43        direct index ( temp float)
+0:43          edges: direct index for structure ( temp 3-element array of float)
+0:43            'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:43            Constant:
+0:43              0 (const int)
+0:43          Constant:
+0:43            1 (const int)
+0:43        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:43          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:43          Constant:
+0:43            0 (const uint)
+0:44      move second child to first child ( temp float)
+0:44        direct index ( temp float)
+0:44          edges: direct index for structure ( temp 3-element array of float)
+0:44            'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:44            Constant:
+0:44              0 (const int)
+0:44          Constant:
+0:44            2 (const int)
+0:44        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:44          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:44          Constant:
+0:44            0 (const uint)
+0:47      move second child to first child ( temp float)
+0:47        inside: direct index for structure ( temp float)
+0:47          'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:47          Constant:
+0:47            1 (const int)
+0:47        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:47          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:47          Constant:
+0:47            0 (const uint)
+0:49      Branch: Return with expression
+0:49        'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:63  Function Definition: @main(struct-HullInputType-vf3-vf41[3];u1;u1; ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63    Function Parameters: 
+0:63      'patch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63      'pointId' ( in uint)
+0:63      'patchId' ( in uint)
+0:?     Sequence
+0:67      move second child to first child ( temp 3-component vector of float)
+0:67        position: direct index for structure ( temp 3-component vector of float)
+0:67          'output' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:67          Constant:
+0:67            0 (const int)
+0:67        position: direct index for structure ( temp 3-component vector of float)
+0:67          indirect index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:67            'patch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:67            'pointId' ( in uint)
+0:67          Constant:
+0:67            0 (const int)
+0:70      move second child to first child ( temp 4-component vector of float)
+0:70        color: direct index for structure ( temp 4-component vector of float)
+0:70          'output' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:70          Constant:
+0:70            1 (const int)
+0:70        color: direct index for structure ( temp 4-component vector of float)
+0:70          indirect index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:70            'patch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:70            'pointId' ( in uint)
+0:70          Constant:
+0:70            1 (const int)
+0:72      Branch: Return with expression
+0:72        'output' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63  Function Definition: main( ( temp void)
+0:63    Function Parameters: 
+0:?     Sequence
+0:63      Sequence
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                0 (const int)
+0:63            Constant:
+0:63              0 (const int)
+0:63          direct index (layout( location=0) in 3-component vector of float)
+0:?             'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:63            Constant:
+0:63              0 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                0 (const int)
+0:63            Constant:
+0:63              1 (const int)
+0:63          direct index (layout( location=1) in 4-component vector of float)
+0:?             'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:63            Constant:
+0:63              0 (const int)
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                1 (const int)
+0:63            Constant:
+0:63              0 (const int)
+0:63          direct index (layout( location=0) in 3-component vector of float)
+0:?             'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:63            Constant:
+0:63              1 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                1 (const int)
+0:63            Constant:
+0:63              1 (const int)
+0:63          direct index (layout( location=1) in 4-component vector of float)
+0:?             'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:63            Constant:
+0:63              1 (const int)
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                2 (const int)
+0:63            Constant:
+0:63              0 (const int)
+0:63          direct index (layout( location=0) in 3-component vector of float)
+0:?             'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:63            Constant:
+0:63              2 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                2 (const int)
+0:63            Constant:
+0:63              1 (const int)
+0:63          direct index (layout( location=1) in 4-component vector of float)
+0:?             'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:63            Constant:
+0:63              2 (const int)
+0:63      move second child to first child ( temp uint)
+0:?         'pointId' ( temp uint)
+0:?         'pointId' ( in uint InvocationID)
+0:63      move second child to first child ( temp uint)
+0:?         'patchId' ( temp uint)
+0:?         'patchId' ( in uint PrimitiveID)
+0:63      Sequence
+0:63        move second child to first child ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63          'flattenTemp' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63          Function Call: @main(struct-HullInputType-vf3-vf41[3];u1;u1; ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?             'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?             'pointId' ( temp uint)
+0:?             'patchId' ( temp uint)
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          indirect index (layout( location=0) out 3-component vector of float)
+0:?             '@entryPointOutput.position' (layout( location=0) out 3-element array of 3-component vector of float)
+0:?             'pointId' ( in uint InvocationID)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            'flattenTemp' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63            Constant:
+0:63              0 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          indirect index (layout( location=1) out 4-component vector of float)
+0:?             '@entryPointOutput.color' (layout( location=1) out 3-element array of 4-component vector of float)
+0:?             'pointId' ( in uint InvocationID)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            'flattenTemp' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63            Constant:
+0:63              1 (const int)
+0:?       Barrier ( temp void)
+0:?       Test condition and select ( temp void)
+0:?         Condition
+0:?         Compare Equal ( temp bool)
+0:?           'pointId' ( in uint InvocationID)
+0:?           Constant:
+0:?             0 (const int)
+0:?         true case
+0:?         Sequence
+0:?           move second child to first child ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?             '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?             Function Call: ColorPatchConstantFunction(struct-HullInputType-vf3-vf41[3];u1; ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patchId' ( in uint PrimitiveID)
+0:?           Sequence
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 3-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 3-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 3-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelInner)
+0:?                 '@patchConstantOutput.inside' ( patch out 2-element array of float TessLevelInner)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               inside: direct index for structure ( temp float)
+0:?                 '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                 Constant:
+0:?                   1 (const int)
+0:?   Linker Objects
+0:?     'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:?     '@entryPointOutput.position' (layout( location=0) out 3-element array of 3-component vector of float)
+0:?     '@entryPointOutput.color' (layout( location=1) out 3-element array of 4-component vector of float)
+0:?     'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:?     'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:?     'pointId' ( in uint InvocationID)
+0:?     'patchId' ( in uint PrimitiveID)
+0:?     '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?     '@patchConstantOutput.inside' ( patch out 2-element array of float TessLevelInner)
+
+
+Linked tessellation control stage:
+
+
+Shader version: 500
+vertices = 3
+vertex spacing = equal_spacing
+triangle order = cw
+0:? Sequence
+0:37  Function Definition: ColorPatchConstantFunction(struct-HullInputType-vf3-vf41[3];u1; ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:37    Function Parameters: 
+0:37      'inputPatch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:37      'patchId' ( in uint)
+0:?     Sequence
+0:42      move second child to first child ( temp float)
+0:42        direct index ( temp float)
+0:42          edges: direct index for structure ( temp 3-element array of float)
+0:42            'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:42            Constant:
+0:42              0 (const int)
+0:42          Constant:
+0:42            0 (const int)
+0:42        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:42          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:42          Constant:
+0:42            0 (const uint)
+0:43      move second child to first child ( temp float)
+0:43        direct index ( temp float)
+0:43          edges: direct index for structure ( temp 3-element array of float)
+0:43            'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:43            Constant:
+0:43              0 (const int)
+0:43          Constant:
+0:43            1 (const int)
+0:43        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:43          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:43          Constant:
+0:43            0 (const uint)
+0:44      move second child to first child ( temp float)
+0:44        direct index ( temp float)
+0:44          edges: direct index for structure ( temp 3-element array of float)
+0:44            'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:44            Constant:
+0:44              0 (const int)
+0:44          Constant:
+0:44            2 (const int)
+0:44        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:44          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:44          Constant:
+0:44            0 (const uint)
+0:47      move second child to first child ( temp float)
+0:47        inside: direct index for structure ( temp float)
+0:47          'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:47          Constant:
+0:47            1 (const int)
+0:47        tessellationAmount: direct index for structure (layout( row_major std140) uniform float)
+0:47          'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:47          Constant:
+0:47            0 (const uint)
+0:49      Branch: Return with expression
+0:49        'output' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:63  Function Definition: @main(struct-HullInputType-vf3-vf41[3];u1;u1; ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63    Function Parameters: 
+0:63      'patch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63      'pointId' ( in uint)
+0:63      'patchId' ( in uint)
+0:?     Sequence
+0:67      move second child to first child ( temp 3-component vector of float)
+0:67        position: direct index for structure ( temp 3-component vector of float)
+0:67          'output' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:67          Constant:
+0:67            0 (const int)
+0:67        position: direct index for structure ( temp 3-component vector of float)
+0:67          indirect index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:67            'patch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:67            'pointId' ( in uint)
+0:67          Constant:
+0:67            0 (const int)
+0:70      move second child to first child ( temp 4-component vector of float)
+0:70        color: direct index for structure ( temp 4-component vector of float)
+0:70          'output' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:70          Constant:
+0:70            1 (const int)
+0:70        color: direct index for structure ( temp 4-component vector of float)
+0:70          indirect index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:70            'patch' ( in 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:70            'pointId' ( in uint)
+0:70          Constant:
+0:70            1 (const int)
+0:72      Branch: Return with expression
+0:72        'output' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63  Function Definition: main( ( temp void)
+0:63    Function Parameters: 
+0:?     Sequence
+0:63      Sequence
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                0 (const int)
+0:63            Constant:
+0:63              0 (const int)
+0:63          direct index (layout( location=0) in 3-component vector of float)
+0:?             'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:63            Constant:
+0:63              0 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                0 (const int)
+0:63            Constant:
+0:63              1 (const int)
+0:63          direct index (layout( location=1) in 4-component vector of float)
+0:?             'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:63            Constant:
+0:63              0 (const int)
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                1 (const int)
+0:63            Constant:
+0:63              0 (const int)
+0:63          direct index (layout( location=0) in 3-component vector of float)
+0:?             'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:63            Constant:
+0:63              1 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                1 (const int)
+0:63            Constant:
+0:63              1 (const int)
+0:63          direct index (layout( location=1) in 4-component vector of float)
+0:?             'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:63            Constant:
+0:63              1 (const int)
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                2 (const int)
+0:63            Constant:
+0:63              0 (const int)
+0:63          direct index (layout( location=0) in 3-component vector of float)
+0:?             'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:63            Constant:
+0:63              2 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            direct index ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63              Constant:
+0:63                2 (const int)
+0:63            Constant:
+0:63              1 (const int)
+0:63          direct index (layout( location=1) in 4-component vector of float)
+0:?             'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:63            Constant:
+0:63              2 (const int)
+0:63      move second child to first child ( temp uint)
+0:?         'pointId' ( temp uint)
+0:?         'pointId' ( in uint InvocationID)
+0:63      move second child to first child ( temp uint)
+0:?         'patchId' ( temp uint)
+0:?         'patchId' ( in uint PrimitiveID)
+0:63      Sequence
+0:63        move second child to first child ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63          'flattenTemp' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63          Function Call: @main(struct-HullInputType-vf3-vf41[3];u1;u1; ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?             'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?             'pointId' ( temp uint)
+0:?             'patchId' ( temp uint)
+0:63        move second child to first child ( temp 3-component vector of float)
+0:63          indirect index (layout( location=0) out 3-component vector of float)
+0:?             '@entryPointOutput.position' (layout( location=0) out 3-element array of 3-component vector of float)
+0:?             'pointId' ( in uint InvocationID)
+0:63          position: direct index for structure ( temp 3-component vector of float)
+0:63            'flattenTemp' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63            Constant:
+0:63              0 (const int)
+0:63        move second child to first child ( temp 4-component vector of float)
+0:63          indirect index (layout( location=1) out 4-component vector of float)
+0:?             '@entryPointOutput.color' (layout( location=1) out 3-element array of 4-component vector of float)
+0:?             'pointId' ( in uint InvocationID)
+0:63          color: direct index for structure ( temp 4-component vector of float)
+0:63            'flattenTemp' ( temp structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:63            Constant:
+0:63              1 (const int)
+0:?       Barrier ( temp void)
+0:?       Test condition and select ( temp void)
+0:?         Condition
+0:?         Compare Equal ( temp bool)
+0:?           'pointId' ( in uint InvocationID)
+0:?           Constant:
+0:?             0 (const int)
+0:?         true case
+0:?         Sequence
+0:?           move second child to first child ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?             '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?             Function Call: ColorPatchConstantFunction(struct-HullInputType-vf3-vf41[3];u1; ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?               'patch' ( temp 3-element array of structure{ temp 3-component vector of float position,  temp 4-component vector of float color})
+0:?               'patchId' ( in uint PrimitiveID)
+0:?           Sequence
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 3-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 3-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 3-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelInner)
+0:?                 '@patchConstantOutput.inside' ( patch out 2-element array of float TessLevelInner)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               inside: direct index for structure ( temp float)
+0:?                 '@patchConstantResult' ( temp structure{ temp 3-element array of float edges,  temp float inside})
+0:?                 Constant:
+0:?                   1 (const int)
+0:?   Linker Objects
+0:?     'anon@0' (layout( binding=0 row_major std140) uniform block{layout( row_major std140) uniform float tessellationAmount, layout( row_major std140) uniform 3-component vector of float padding})
+0:?     '@entryPointOutput.position' (layout( location=0) out 3-element array of 3-component vector of float)
+0:?     '@entryPointOutput.color' (layout( location=1) out 3-element array of 4-component vector of float)
+0:?     'patch.position' (layout( location=0) in 3-element array of 3-component vector of float)
+0:?     'patch.color' (layout( location=1) in 3-element array of 4-component vector of float)
+0:?     'pointId' ( in uint InvocationID)
+0:?     'patchId' ( in uint PrimitiveID)
+0:?     '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?     '@patchConstantOutput.inside' ( patch out 2-element array of float TessLevelInner)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 159
+
+                              Capability Tessellation
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint TessellationControl 4  "main" 73 80 99 102 113 120 142 155
+                              ExecutionMode 4 OutputVertices 3
+                              ExecutionMode 4 Triangles
+                              ExecutionMode 4 SpacingEqual
+                              ExecutionMode 4 VertexOrderCw
+                              Source HLSL 500
+                              Name 4  "main"
+                              Name 9  "HullInputType"
+                              MemberName 9(HullInputType) 0  "position"
+                              MemberName 9(HullInputType) 1  "color"
+                              Name 16  "ConstantOutputType"
+                              MemberName 16(ConstantOutputType) 0  "edges"
+                              MemberName 16(ConstantOutputType) 1  "inside"
+                              Name 20  "ColorPatchConstantFunction(struct-HullInputType-vf3-vf41[3];u1;"
+                              Name 18  "inputPatch"
+                              Name 19  "patchId"
+                              Name 22  "HullOutputType"
+                              MemberName 22(HullOutputType) 0  "position"
+                              MemberName 22(HullOutputType) 1  "color"
+                              Name 27  "@main(struct-HullInputType-vf3-vf41[3];u1;u1;"
+                              Name 24  "patch"
+                              Name 25  "pointId"
+                              Name 26  "patchId"
+                              Name 30  "output"
+                              Name 33  "TessellationBuffer"
+                              MemberName 33(TessellationBuffer) 0  "tessellationAmount"
+                              MemberName 33(TessellationBuffer) 1  "padding"
+                              Name 35  ""
+                              Name 56  "output"
+                              Name 70  "patch"
+                              Name 73  "patch.position"
+                              Name 80  "patch.color"
+                              Name 97  "pointId"
+                              Name 99  "pointId"
+                              Name 101  "patchId"
+                              Name 102  "patchId"
+                              Name 104  "flattenTemp"
+                              Name 105  "param"
+                              Name 107  "param"
+                              Name 109  "param"
+                              Name 113  "@entryPointOutput.position"
+                              Name 120  "@entryPointOutput.color"
+                              Name 134  "@patchConstantResult"
+                              Name 135  "param"
+                              Name 137  "param"
+                              Name 142  "@patchConstantOutput.edges"
+                              Name 155  "@patchConstantOutput.inside"
+                              MemberDecorate 33(TessellationBuffer) 0 Offset 0
+                              MemberDecorate 33(TessellationBuffer) 1 Offset 4
+                              Decorate 33(TessellationBuffer) Block
+                              Decorate 35 DescriptorSet 0
+                              Decorate 35 Binding 0
+                              Decorate 73(patch.position) Location 0
+                              Decorate 80(patch.color) Location 1
+                              Decorate 99(pointId) BuiltIn InvocationId
+                              Decorate 102(patchId) BuiltIn PrimitiveId
+                              Decorate 113(@entryPointOutput.position) Location 0
+                              Decorate 120(@entryPointOutput.color) Location 1
+                              Decorate 142(@patchConstantOutput.edges) Patch
+                              Decorate 142(@patchConstantOutput.edges) BuiltIn TessLevelOuter
+                              Decorate 155(@patchConstantOutput.inside) Patch
+                              Decorate 155(@patchConstantOutput.inside) BuiltIn TessLevelInner
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 3
+               8:             TypeVector 6(float) 4
+9(HullInputType):             TypeStruct 7(fvec3) 8(fvec4)
+              10:             TypeInt 32 0
+              11:     10(int) Constant 3
+              12:             TypeArray 9(HullInputType) 11
+              13:             TypePointer Function 12
+              14:             TypePointer Function 10(int)
+              15:             TypeArray 6(float) 11
+16(ConstantOutputType):             TypeStruct 15 6(float)
+              17:             TypeFunction 16(ConstantOutputType) 13(ptr) 14(ptr)
+22(HullOutputType):             TypeStruct 7(fvec3) 8(fvec4)
+              23:             TypeFunction 22(HullOutputType) 13(ptr) 14(ptr) 14(ptr)
+              29:             TypePointer Function 16(ConstantOutputType)
+              31:             TypeInt 32 1
+              32:     31(int) Constant 0
+33(TessellationBuffer):             TypeStruct 6(float) 7(fvec3)
+              34:             TypePointer Uniform 33(TessellationBuffer)
+              35:     34(ptr) Variable Uniform
+              36:             TypePointer Uniform 6(float)
+              39:             TypePointer Function 6(float)
+              41:     31(int) Constant 1
+              45:     31(int) Constant 2
+              55:             TypePointer Function 22(HullOutputType)
+              58:             TypePointer Function 7(fvec3)
+              63:             TypePointer Function 8(fvec4)
+              71:             TypeArray 7(fvec3) 11
+              72:             TypePointer Input 71
+73(patch.position):     72(ptr) Variable Input
+              74:             TypePointer Input 7(fvec3)
+              78:             TypeArray 8(fvec4) 11
+              79:             TypePointer Input 78
+ 80(patch.color):     79(ptr) Variable Input
+              81:             TypePointer Input 8(fvec4)
+              98:             TypePointer Input 10(int)
+     99(pointId):     98(ptr) Variable Input
+    102(patchId):     98(ptr) Variable Input
+             112:             TypePointer Output 71
+113(@entryPointOutput.position):    112(ptr) Variable Output
+             117:             TypePointer Output 7(fvec3)
+             119:             TypePointer Output 78
+120(@entryPointOutput.color):    119(ptr) Variable Output
+             124:             TypePointer Output 8(fvec4)
+             126:     10(int) Constant 2
+             127:     10(int) Constant 4
+             128:     10(int) Constant 0
+             130:             TypeBool
+             140:             TypeArray 6(float) 127
+             141:             TypePointer Output 140
+142(@patchConstantOutput.edges):    141(ptr) Variable Output
+             145:             TypePointer Output 6(float)
+             153:             TypeArray 6(float) 126
+             154:             TypePointer Output 153
+155(@patchConstantOutput.inside):    154(ptr) Variable Output
+         4(main):           2 Function None 3
+               5:             Label
+       70(patch):     13(ptr) Variable Function
+     97(pointId):     14(ptr) Variable Function
+    101(patchId):     14(ptr) Variable Function
+104(flattenTemp):     55(ptr) Variable Function
+      105(param):     13(ptr) Variable Function
+      107(param):     14(ptr) Variable Function
+      109(param):     14(ptr) Variable Function
+134(@patchConstantResult):     29(ptr) Variable Function
+      135(param):     13(ptr) Variable Function
+      137(param):     14(ptr) Variable Function
+              75:     74(ptr) AccessChain 73(patch.position) 32
+              76:    7(fvec3) Load 75
+              77:     58(ptr) AccessChain 70(patch) 32 32
+                              Store 77 76
+              82:     81(ptr) AccessChain 80(patch.color) 32
+              83:    8(fvec4) Load 82
+              84:     63(ptr) AccessChain 70(patch) 32 41
+                              Store 84 83
+              85:     74(ptr) AccessChain 73(patch.position) 41
+              86:    7(fvec3) Load 85
+              87:     58(ptr) AccessChain 70(patch) 41 32
+                              Store 87 86
+              88:     81(ptr) AccessChain 80(patch.color) 41
+              89:    8(fvec4) Load 88
+              90:     63(ptr) AccessChain 70(patch) 41 41
+                              Store 90 89
+              91:     74(ptr) AccessChain 73(patch.position) 45
+              92:    7(fvec3) Load 91
+              93:     58(ptr) AccessChain 70(patch) 45 32
+                              Store 93 92
+              94:     81(ptr) AccessChain 80(patch.color) 45
+              95:    8(fvec4) Load 94
+              96:     63(ptr) AccessChain 70(patch) 45 41
+                              Store 96 95
+             100:     10(int) Load 99(pointId)
+                              Store 97(pointId) 100
+             103:     10(int) Load 102(patchId)
+                              Store 101(patchId) 103
+             106:          12 Load 70(patch)
+                              Store 105(param) 106
+             108:     10(int) Load 97(pointId)
+                              Store 107(param) 108
+             110:     10(int) Load 101(patchId)
+                              Store 109(param) 110
+             111:22(HullOutputType) FunctionCall 27(@main(struct-HullInputType-vf3-vf41[3];u1;u1;) 105(param) 107(param) 109(param)
+                              Store 104(flattenTemp) 111
+             114:     10(int) Load 99(pointId)
+             115:     58(ptr) AccessChain 104(flattenTemp) 32
+             116:    7(fvec3) Load 115
+             118:    117(ptr) AccessChain 113(@entryPointOutput.position) 114
+                              Store 118 116
+             121:     10(int) Load 99(pointId)
+             122:     63(ptr) AccessChain 104(flattenTemp) 41
+             123:    8(fvec4) Load 122
+             125:    124(ptr) AccessChain 120(@entryPointOutput.color) 121
+                              Store 125 123
+                              ControlBarrier 126 127 128
+             129:     10(int) Load 99(pointId)
+             131:   130(bool) IEqual 129 32
+                              SelectionMerge 133 None
+                              BranchConditional 131 132 133
+             132:               Label
+             136:          12   Load 70(patch)
+                                Store 135(param) 136
+             138:     10(int)   Load 102(patchId)
+                                Store 137(param) 138
+             139:16(ConstantOutputType)   FunctionCall 20(ColorPatchConstantFunction(struct-HullInputType-vf3-vf41[3];u1;) 135(param) 137(param)
+                                Store 134(@patchConstantResult) 139
+             143:     39(ptr)   AccessChain 134(@patchConstantResult) 32 32
+             144:    6(float)   Load 143
+             146:    145(ptr)   AccessChain 142(@patchConstantOutput.edges) 32
+                                Store 146 144
+             147:     39(ptr)   AccessChain 134(@patchConstantResult) 32 41
+             148:    6(float)   Load 147
+             149:    145(ptr)   AccessChain 142(@patchConstantOutput.edges) 41
+                                Store 149 148
+             150:     39(ptr)   AccessChain 134(@patchConstantResult) 32 45
+             151:    6(float)   Load 150
+             152:    145(ptr)   AccessChain 142(@patchConstantOutput.edges) 45
+                                Store 152 151
+             156:     39(ptr)   AccessChain 134(@patchConstantResult) 41
+             157:    6(float)   Load 156
+             158:    145(ptr)   AccessChain 155(@patchConstantOutput.inside) 32
+                                Store 158 157
+                                Branch 133
+             133:             Label
+                              Return
+                              FunctionEnd
+20(ColorPatchConstantFunction(struct-HullInputType-vf3-vf41[3];u1;):16(ConstantOutputType) Function None 17
+  18(inputPatch):     13(ptr) FunctionParameter
+     19(patchId):     14(ptr) FunctionParameter
+              21:             Label
+      30(output):     29(ptr) Variable Function
+              37:     36(ptr) AccessChain 35 32
+              38:    6(float) Load 37
+              40:     39(ptr) AccessChain 30(output) 32 32
+                              Store 40 38
+              42:     36(ptr) AccessChain 35 32
+              43:    6(float) Load 42
+              44:     39(ptr) AccessChain 30(output) 32 41
+                              Store 44 43
+              46:     36(ptr) AccessChain 35 32
+              47:    6(float) Load 46
+              48:     39(ptr) AccessChain 30(output) 32 45
+                              Store 48 47
+              49:     36(ptr) AccessChain 35 32
+              50:    6(float) Load 49
+              51:     39(ptr) AccessChain 30(output) 41
+                              Store 51 50
+              52:16(ConstantOutputType) Load 30(output)
+                              ReturnValue 52
+                              FunctionEnd
+27(@main(struct-HullInputType-vf3-vf41[3];u1;u1;):22(HullOutputType) Function None 23
+       24(patch):     13(ptr) FunctionParameter
+     25(pointId):     14(ptr) FunctionParameter
+     26(patchId):     14(ptr) FunctionParameter
+              28:             Label
+      56(output):     55(ptr) Variable Function
+              57:     10(int) Load 25(pointId)
+              59:     58(ptr) AccessChain 24(patch) 57 32
+              60:    7(fvec3) Load 59
+              61:     58(ptr) AccessChain 56(output) 32
+                              Store 61 60
+              62:     10(int) Load 25(pointId)
+              64:     63(ptr) AccessChain 24(patch) 62 41
+              65:    8(fvec4) Load 64
+              66:     63(ptr) AccessChain 56(output) 41
+                              Store 66 65
+              67:22(HullOutputType) Load 56(output)
+                              ReturnValue 67
+                              FunctionEnd

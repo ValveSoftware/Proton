@@ -1,0 +1,7 @@
+enhanced.7.vert
+enhanced.7.frag
+ERROR: Linking vertex and fragment stages: vertex block member has no corresponding member in fragment block:
+    vertex stage: Block: Vertex, Member: ii
+    fragment stage: Block: Vertex, Member: n/a 
+
+SPIR-V is not generated for failed compile or link

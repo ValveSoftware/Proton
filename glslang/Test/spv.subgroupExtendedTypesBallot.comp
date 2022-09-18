@@ -1,0 +1,88 @@
+#version 450
+
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16: enable
+
+layout (local_size_x = 8) in;
+
+layout(binding = 0) buffer Buffers
+{
+    i8vec4 i8;
+    u8vec4 u8;
+    i16vec4 i16;
+    u16vec4 u16;
+    i64vec4 i64;
+    u64vec4 u64;
+    f16vec4 f16;
+} data[4];
+
+void main()
+{
+    uint invocation = (gl_SubgroupInvocationID + gl_SubgroupSize) % 4;
+
+    data[invocation].i8.x   = subgroupBroadcast(data[0].i8.x,    3);
+    data[invocation].i8.xy  = subgroupBroadcast(data[1].i8.xy,   3);
+    data[invocation].i8.xyz = subgroupBroadcast(data[2].i8.xyz,  3);
+    data[invocation].i8     = subgroupBroadcast(data[3].i8,      3);
+    data[invocation].i8.x   = subgroupBroadcastFirst(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupBroadcastFirst(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupBroadcastFirst(data[2].i8.xyz);
+    data[invocation].i8     = subgroupBroadcastFirst(data[3].i8);
+
+    data[invocation].u8.x   = subgroupBroadcast(data[0].u8.x,    3);
+    data[invocation].u8.xy  = subgroupBroadcast(data[1].u8.xy,   3);
+    data[invocation].u8.xyz = subgroupBroadcast(data[2].u8.xyz,  3);
+    data[invocation].u8     = subgroupBroadcast(data[3].u8,      3);
+    data[invocation].u8.x   = subgroupBroadcastFirst(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupBroadcastFirst(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupBroadcastFirst(data[2].u8.xyz);
+    data[invocation].u8     = subgroupBroadcastFirst(data[3].u8);
+
+    data[invocation].i16.x   = subgroupBroadcast(data[0].i16.x,    3);
+    data[invocation].i16.xy  = subgroupBroadcast(data[1].i16.xy,   3);
+    data[invocation].i16.xyz = subgroupBroadcast(data[2].i16.xyz,  3);
+    data[invocation].i16     = subgroupBroadcast(data[3].i16,      3);
+    data[invocation].i16.x   = subgroupBroadcastFirst(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupBroadcastFirst(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupBroadcastFirst(data[2].i16.xyz);
+    data[invocation].i16     = subgroupBroadcastFirst(data[3].i16);
+
+    data[invocation].u16.x   = subgroupBroadcast(data[0].u16.x,    3);
+    data[invocation].u16.xy  = subgroupBroadcast(data[1].u16.xy,   3);
+    data[invocation].u16.xyz = subgroupBroadcast(data[2].u16.xyz,  3);
+    data[invocation].u16     = subgroupBroadcast(data[3].u16,      3);
+    data[invocation].u16.x   = subgroupBroadcastFirst(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupBroadcastFirst(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupBroadcastFirst(data[2].u16.xyz);
+    data[invocation].u16     = subgroupBroadcastFirst(data[3].u16);
+
+    data[invocation].i64.x   = subgroupBroadcast(data[0].i64.x,    3);
+    data[invocation].i64.xy  = subgroupBroadcast(data[1].i64.xy,   3);
+    data[invocation].i64.xyz = subgroupBroadcast(data[2].i64.xyz,  3);
+    data[invocation].i64     = subgroupBroadcast(data[3].i64,      3);
+    data[invocation].i64.x   = subgroupBroadcastFirst(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupBroadcastFirst(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupBroadcastFirst(data[2].i64.xyz);
+    data[invocation].i64     = subgroupBroadcastFirst(data[3].i64);
+
+    data[invocation].u64.x   = subgroupBroadcast(data[0].u64.x,    3);
+    data[invocation].u64.xy  = subgroupBroadcast(data[1].u64.xy,   3);
+    data[invocation].u64.xyz = subgroupBroadcast(data[2].u64.xyz,  3);
+    data[invocation].u64     = subgroupBroadcast(data[3].u64,      3);
+    data[invocation].u64.x   = subgroupBroadcastFirst(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupBroadcastFirst(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupBroadcastFirst(data[2].u64.xyz);
+    data[invocation].u64     = subgroupBroadcastFirst(data[3].u64);
+
+    data[invocation].f16.x   = subgroupBroadcast(data[0].f16.x,    3);
+    data[invocation].f16.xy  = subgroupBroadcast(data[1].f16.xy,   3);
+    data[invocation].f16.xyz = subgroupBroadcast(data[2].f16.xyz,  3);
+    data[invocation].f16     = subgroupBroadcast(data[3].f16,      3);
+    data[invocation].f16.x   = subgroupBroadcastFirst(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupBroadcastFirst(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupBroadcastFirst(data[2].f16.xyz);
+    data[invocation].f16     = subgroupBroadcastFirst(data[3].f16);
+}

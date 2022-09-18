@@ -1,0 +1,305 @@
+hlsl.w-recip2.frag
+Shader version: 500
+gl_FragCoord origin is upper left
+0:? Sequence
+0:13  Function Definition: @main(struct-VSOutput-vf4-vf3-vf3-vf21; ( temp 4-component vector of float)
+0:13    Function Parameters: 
+0:13      'VSOut' ( in structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:?     Sequence
+0:14      Test condition and select ( temp void)
+0:14        Condition
+0:14        Compare Less Than ( temp bool)
+0:14          direct index ( temp float)
+0:14            PositionPS: direct index for structure ( temp 4-component vector of float)
+0:14              'VSOut' ( in structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:14              Constant:
+0:14                0 (const int)
+0:14            Constant:
+0:14              0 (const int)
+0:14          Constant:
+0:14            400.000000
+0:14        true case
+0:15        Branch: Return with expression
+0:15          AmbientColor: direct index for structure ( uniform 4-component vector of float)
+0:15            'anon@0' (layout( row_major std140) uniform block{ uniform 4-component vector of float AmbientColor,  uniform 4-component vector of float AmbientColor2})
+0:15            Constant:
+0:15              0 (const uint)
+0:14        false case
+0:17        Branch: Return with expression
+0:17          AmbientColor2: direct index for structure ( uniform 4-component vector of float)
+0:17            'anon@0' (layout( row_major std140) uniform block{ uniform 4-component vector of float AmbientColor,  uniform 4-component vector of float AmbientColor2})
+0:17            Constant:
+0:17              1 (const uint)
+0:13  Function Definition: main( ( temp void)
+0:13    Function Parameters: 
+0:?     Sequence
+0:13      Sequence
+0:13        Sequence
+0:13          move second child to first child ( temp 4-component vector of float)
+0:13            '@fragcoord' ( temp 4-component vector of float)
+0:?             'VSOut.PositionPS' ( in 4-component vector of float FragCoord)
+0:13          move second child to first child ( temp float)
+0:13            direct index ( in float FragCoord)
+0:13              '@fragcoord' ( temp 4-component vector of float)
+0:13              Constant:
+0:13                3 (const int)
+0:13            divide ( temp float)
+0:13              Constant:
+0:13                1.000000
+0:13              direct index ( in float FragCoord)
+0:13                '@fragcoord' ( temp 4-component vector of float)
+0:13                Constant:
+0:13                  3 (const int)
+0:13          move second child to first child ( temp 4-component vector of float)
+0:13            PositionPS: direct index for structure ( temp 4-component vector of float)
+0:?               'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13              Constant:
+0:13                0 (const int)
+0:13            '@fragcoord' ( temp 4-component vector of float)
+0:13        move second child to first child ( temp 3-component vector of float)
+0:13          PosInLightViewSpace: direct index for structure ( temp 3-component vector of float)
+0:?             'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13            Constant:
+0:13              1 (const int)
+0:?           'VSOut.PosInLightViewSpace' (layout( location=0) in 3-component vector of float)
+0:13        move second child to first child ( temp 3-component vector of float)
+0:13          NormalWS: direct index for structure ( temp 3-component vector of float)
+0:?             'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13            Constant:
+0:13              2 (const int)
+0:?           'VSOut.NormalWS' (layout( location=1) in 3-component vector of float)
+0:13        move second child to first child ( temp 2-component vector of float)
+0:13          TexCoord: direct index for structure ( temp 2-component vector of float)
+0:?             'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13            Constant:
+0:13              3 (const int)
+0:?           'VSOut.TexCoord' (layout( location=2) in 2-component vector of float)
+0:13      move second child to first child ( temp 4-component vector of float)
+0:?         '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:13        Function Call: @main(struct-VSOutput-vf4-vf3-vf3-vf21; ( temp 4-component vector of float)
+0:?           'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:?   Linker Objects
+0:?     'anon@0' (layout( row_major std140) uniform block{ uniform 4-component vector of float AmbientColor,  uniform 4-component vector of float AmbientColor2})
+0:?     '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:?     'VSOut.PositionPS' ( in 4-component vector of float FragCoord)
+0:?     'VSOut.PosInLightViewSpace' (layout( location=0) in 3-component vector of float)
+0:?     'VSOut.NormalWS' (layout( location=1) in 3-component vector of float)
+0:?     'VSOut.TexCoord' (layout( location=2) in 2-component vector of float)
+
+
+Linked fragment stage:
+
+
+Shader version: 500
+gl_FragCoord origin is upper left
+0:? Sequence
+0:13  Function Definition: @main(struct-VSOutput-vf4-vf3-vf3-vf21; ( temp 4-component vector of float)
+0:13    Function Parameters: 
+0:13      'VSOut' ( in structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:?     Sequence
+0:14      Test condition and select ( temp void)
+0:14        Condition
+0:14        Compare Less Than ( temp bool)
+0:14          direct index ( temp float)
+0:14            PositionPS: direct index for structure ( temp 4-component vector of float)
+0:14              'VSOut' ( in structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:14              Constant:
+0:14                0 (const int)
+0:14            Constant:
+0:14              0 (const int)
+0:14          Constant:
+0:14            400.000000
+0:14        true case
+0:15        Branch: Return with expression
+0:15          AmbientColor: direct index for structure ( uniform 4-component vector of float)
+0:15            'anon@0' (layout( row_major std140) uniform block{ uniform 4-component vector of float AmbientColor,  uniform 4-component vector of float AmbientColor2})
+0:15            Constant:
+0:15              0 (const uint)
+0:14        false case
+0:17        Branch: Return with expression
+0:17          AmbientColor2: direct index for structure ( uniform 4-component vector of float)
+0:17            'anon@0' (layout( row_major std140) uniform block{ uniform 4-component vector of float AmbientColor,  uniform 4-component vector of float AmbientColor2})
+0:17            Constant:
+0:17              1 (const uint)
+0:13  Function Definition: main( ( temp void)
+0:13    Function Parameters: 
+0:?     Sequence
+0:13      Sequence
+0:13        Sequence
+0:13          move second child to first child ( temp 4-component vector of float)
+0:13            '@fragcoord' ( temp 4-component vector of float)
+0:?             'VSOut.PositionPS' ( in 4-component vector of float FragCoord)
+0:13          move second child to first child ( temp float)
+0:13            direct index ( in float FragCoord)
+0:13              '@fragcoord' ( temp 4-component vector of float)
+0:13              Constant:
+0:13                3 (const int)
+0:13            divide ( temp float)
+0:13              Constant:
+0:13                1.000000
+0:13              direct index ( in float FragCoord)
+0:13                '@fragcoord' ( temp 4-component vector of float)
+0:13                Constant:
+0:13                  3 (const int)
+0:13          move second child to first child ( temp 4-component vector of float)
+0:13            PositionPS: direct index for structure ( temp 4-component vector of float)
+0:?               'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13              Constant:
+0:13                0 (const int)
+0:13            '@fragcoord' ( temp 4-component vector of float)
+0:13        move second child to first child ( temp 3-component vector of float)
+0:13          PosInLightViewSpace: direct index for structure ( temp 3-component vector of float)
+0:?             'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13            Constant:
+0:13              1 (const int)
+0:?           'VSOut.PosInLightViewSpace' (layout( location=0) in 3-component vector of float)
+0:13        move second child to first child ( temp 3-component vector of float)
+0:13          NormalWS: direct index for structure ( temp 3-component vector of float)
+0:?             'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13            Constant:
+0:13              2 (const int)
+0:?           'VSOut.NormalWS' (layout( location=1) in 3-component vector of float)
+0:13        move second child to first child ( temp 2-component vector of float)
+0:13          TexCoord: direct index for structure ( temp 2-component vector of float)
+0:?             'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:13            Constant:
+0:13              3 (const int)
+0:?           'VSOut.TexCoord' (layout( location=2) in 2-component vector of float)
+0:13      move second child to first child ( temp 4-component vector of float)
+0:?         '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:13        Function Call: @main(struct-VSOutput-vf4-vf3-vf3-vf21; ( temp 4-component vector of float)
+0:?           'VSOut' ( temp structure{ temp 4-component vector of float PositionPS,  temp 3-component vector of float PosInLightViewSpace,  temp 3-component vector of float NormalWS,  temp 2-component vector of float TexCoord})
+0:?   Linker Objects
+0:?     'anon@0' (layout( row_major std140) uniform block{ uniform 4-component vector of float AmbientColor,  uniform 4-component vector of float AmbientColor2})
+0:?     '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:?     'VSOut.PositionPS' ( in 4-component vector of float FragCoord)
+0:?     'VSOut.PosInLightViewSpace' (layout( location=0) in 3-component vector of float)
+0:?     'VSOut.NormalWS' (layout( location=1) in 3-component vector of float)
+0:?     'VSOut.TexCoord' (layout( location=2) in 2-component vector of float)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 75
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "main" 44 56 61 66 71
+                              ExecutionMode 4 OriginUpperLeft
+                              Source HLSL 500
+                              Name 4  "main"
+                              Name 10  "VSOutput"
+                              MemberName 10(VSOutput) 0  "PositionPS"
+                              MemberName 10(VSOutput) 1  "PosInLightViewSpace"
+                              MemberName 10(VSOutput) 2  "NormalWS"
+                              MemberName 10(VSOutput) 3  "TexCoord"
+                              Name 14  "@main(struct-VSOutput-vf4-vf3-vf3-vf21;"
+                              Name 13  "VSOut"
+                              Name 28  "$Global"
+                              MemberName 28($Global) 0  "AmbientColor"
+                              MemberName 28($Global) 1  "AmbientColor2"
+                              Name 30  ""
+                              Name 42  "@fragcoord"
+                              Name 44  "VSOut.PositionPS"
+                              Name 52  "VSOut"
+                              Name 56  "VSOut.PosInLightViewSpace"
+                              Name 61  "VSOut.NormalWS"
+                              Name 66  "VSOut.TexCoord"
+                              Name 71  "@entryPointOutput"
+                              Name 72  "param"
+                              MemberDecorate 28($Global) 0 Offset 0
+                              MemberDecorate 28($Global) 1 Offset 16
+                              Decorate 28($Global) Block
+                              Decorate 30 DescriptorSet 0
+                              Decorate 30 Binding 0
+                              Decorate 44(VSOut.PositionPS) BuiltIn FragCoord
+                              Decorate 56(VSOut.PosInLightViewSpace) Location 0
+                              Decorate 61(VSOut.NormalWS) Location 1
+                              Decorate 66(VSOut.TexCoord) Location 2
+                              Decorate 71(@entryPointOutput) Location 0
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypeVector 6(float) 3
+               9:             TypeVector 6(float) 2
+    10(VSOutput):             TypeStruct 7(fvec4) 8(fvec3) 8(fvec3) 9(fvec2)
+              11:             TypePointer Function 10(VSOutput)
+              12:             TypeFunction 7(fvec4) 11(ptr)
+              16:             TypeInt 32 1
+              17:     16(int) Constant 0
+              18:             TypeInt 32 0
+              19:     18(int) Constant 0
+              20:             TypePointer Function 6(float)
+              23:    6(float) Constant 1137180672
+              24:             TypeBool
+     28($Global):             TypeStruct 7(fvec4) 7(fvec4)
+              29:             TypePointer Uniform 28($Global)
+              30:     29(ptr) Variable Uniform
+              31:             TypePointer Uniform 7(fvec4)
+              36:     16(int) Constant 1
+              41:             TypePointer Function 7(fvec4)
+              43:             TypePointer Input 7(fvec4)
+44(VSOut.PositionPS):     43(ptr) Variable Input
+              46:    6(float) Constant 1065353216
+              47:     18(int) Constant 3
+              55:             TypePointer Input 8(fvec3)
+56(VSOut.PosInLightViewSpace):     55(ptr) Variable Input
+              58:             TypePointer Function 8(fvec3)
+              60:     16(int) Constant 2
+61(VSOut.NormalWS):     55(ptr) Variable Input
+              64:     16(int) Constant 3
+              65:             TypePointer Input 9(fvec2)
+66(VSOut.TexCoord):     65(ptr) Variable Input
+              68:             TypePointer Function 9(fvec2)
+              70:             TypePointer Output 7(fvec4)
+71(@entryPointOutput):     70(ptr) Variable Output
+         4(main):           2 Function None 3
+               5:             Label
+  42(@fragcoord):     41(ptr) Variable Function
+       52(VSOut):     11(ptr) Variable Function
+       72(param):     11(ptr) Variable Function
+              45:    7(fvec4) Load 44(VSOut.PositionPS)
+                              Store 42(@fragcoord) 45
+              48:     20(ptr) AccessChain 42(@fragcoord) 47
+              49:    6(float) Load 48
+              50:    6(float) FDiv 46 49
+              51:     20(ptr) AccessChain 42(@fragcoord) 47
+                              Store 51 50
+              53:    7(fvec4) Load 42(@fragcoord)
+              54:     41(ptr) AccessChain 52(VSOut) 17
+                              Store 54 53
+              57:    8(fvec3) Load 56(VSOut.PosInLightViewSpace)
+              59:     58(ptr) AccessChain 52(VSOut) 36
+                              Store 59 57
+              62:    8(fvec3) Load 61(VSOut.NormalWS)
+              63:     58(ptr) AccessChain 52(VSOut) 60
+                              Store 63 62
+              67:    9(fvec2) Load 66(VSOut.TexCoord)
+              69:     68(ptr) AccessChain 52(VSOut) 64
+                              Store 69 67
+              73:10(VSOutput) Load 52(VSOut)
+                              Store 72(param) 73
+              74:    7(fvec4) FunctionCall 14(@main(struct-VSOutput-vf4-vf3-vf3-vf21;) 72(param)
+                              Store 71(@entryPointOutput) 74
+                              Return
+                              FunctionEnd
+14(@main(struct-VSOutput-vf4-vf3-vf3-vf21;):    7(fvec4) Function None 12
+       13(VSOut):     11(ptr) FunctionParameter
+              15:             Label
+              21:     20(ptr) AccessChain 13(VSOut) 17 19
+              22:    6(float) Load 21
+              25:    24(bool) FOrdLessThan 22 23
+                              SelectionMerge 27 None
+                              BranchConditional 25 26 35
+              26:               Label
+              32:     31(ptr)   AccessChain 30 17
+              33:    7(fvec4)   Load 32
+                                ReturnValue 33
+              35:               Label
+              37:     31(ptr)   AccessChain 30 36
+              38:    7(fvec4)   Load 37
+                                ReturnValue 38
+              27:             Label
+                              Unreachable
+                              FunctionEnd

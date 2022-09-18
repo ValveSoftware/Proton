@@ -1,0 +1,4 @@
+spv.WorkgroupMemoryExplicitLayout.MixBlockNonBlock_Errors.comp
+ERROR: Linking compute stage: cannot mix use of shared variables inside and outside blocks
+
+SPIR-V is not generated for failed compile or link

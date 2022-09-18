@@ -73,3 +73,6 @@
 [submodule "graphene"]
 	path = graphene
 	url = https://github.com/ebassi/graphene
+[submodule "glslang"]
+	path = glslang
+	url = https://github.com/KhronosGroup/glslang

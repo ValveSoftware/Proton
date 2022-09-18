@@ -1,0 +1,63 @@
+textureoffset_sampler2darrayshadow.vert
+ERROR: 0:9: 'sampler' : TextureOffset does not support sampler2DArrayShadow :  ES Profile
+ERROR: 1 compilation errors.  No code generated.
+
+
+Shader version: 300
+ERROR: node is still EOpNull!
+0:7  Function Definition: main( ( global void)
+0:7    Function Parameters: 
+0:9    Sequence
+0:9      move second child to first child ( temp highp 4-component vector of float)
+0:9        'gl_Position' ( gl_Position highp 4-component vector of float Position)
+0:9        Construct vec4 ( temp highp 4-component vector of float)
+0:9          textureOffset ( global mediump float)
+0:9            's' ( uniform mediump sampler2DArrayShadow)
+0:9            Constant:
+0:9              0.000000
+0:9              0.000000
+0:9              0.000000
+0:9              0.000000
+0:9            Constant:
+0:9              0 (const int)
+0:9              0 (const int)
+0:10      move second child to first child ( temp highp 4-component vector of float)
+0:10        'gl_Position' ( gl_Position highp 4-component vector of float Position)
+0:10        'dEQP_Position' ( in highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'dEQP_Position' ( in highp 4-component vector of float)
+0:?     's' ( uniform mediump sampler2DArrayShadow)
+0:?     'gl_VertexID' ( gl_VertexId highp int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId highp int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 300
+ERROR: node is still EOpNull!
+0:7  Function Definition: main( ( global void)
+0:7    Function Parameters: 
+0:9    Sequence
+0:9      move second child to first child ( temp highp 4-component vector of float)
+0:9        'gl_Position' ( gl_Position highp 4-component vector of float Position)
+0:9        Construct vec4 ( temp highp 4-component vector of float)
+0:9          textureOffset ( global mediump float)
+0:9            's' ( uniform mediump sampler2DArrayShadow)
+0:9            Constant:
+0:9              0.000000
+0:9              0.000000
+0:9              0.000000
+0:9              0.000000
+0:9            Constant:
+0:9              0 (const int)
+0:9              0 (const int)
+0:10      move second child to first child ( temp highp 4-component vector of float)
+0:10        'gl_Position' ( gl_Position highp 4-component vector of float Position)
+0:10        'dEQP_Position' ( in highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'dEQP_Position' ( in highp 4-component vector of float)
+0:?     's' ( uniform mediump sampler2DArrayShadow)
+0:?     'gl_VertexID' ( gl_VertexId highp int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId highp int InstanceId)
+

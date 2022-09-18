@@ -1,0 +1,477 @@
+hlsl.imageload-subvec4.comp
+Shader version: 500
+local_size = (8, 8, 8)
+0:? Sequence
+0:17  Function Definition: @main(vu3; ( temp void)
+0:17    Function Parameters: 
+0:17      'tid' ( in 3-component vector of uint)
+0:?     Sequence
+0:18      Sequence
+0:18        move second child to first child ( temp float)
+0:18          'f' ( temp float)
+0:18          Constant:
+0:18            0.000000
+0:19      add second child into first child ( temp float)
+0:19        'f' ( temp float)
+0:19        imageLoad ( temp float)
+0:19          'i1D' (layout( binding=0 r32f) uniform image1D)
+0:19          direct index ( temp uint)
+0:19            'tid' ( in 3-component vector of uint)
+0:19            Constant:
+0:19              0 (const int)
+0:20      add second child into first child ( temp float)
+0:20        'f' ( temp float)
+0:20        imageLoad ( temp float)
+0:20          'i2D' (layout( binding=1 r32f) uniform image2D)
+0:20          vector swizzle ( temp 2-component vector of uint)
+0:20            'tid' ( in 3-component vector of uint)
+0:20            Sequence
+0:20              Constant:
+0:20                0 (const int)
+0:20              Constant:
+0:20                1 (const int)
+0:21      add second child into first child ( temp float)
+0:21        'f' ( temp float)
+0:21        imageLoad ( temp float)
+0:21          'i3D' (layout( binding=2 r32f) uniform image3D)
+0:21          'tid' ( in 3-component vector of uint)
+0:22      add second child into first child ( temp float)
+0:22        'f' ( temp float)
+0:22        imageLoad ( temp float)
+0:22          'i1DArray' (layout( binding=3 r32f) uniform image1DArray)
+0:22          vector swizzle ( temp 2-component vector of uint)
+0:22            'tid' ( in 3-component vector of uint)
+0:22            Sequence
+0:22              Constant:
+0:22                0 (const int)
+0:22              Constant:
+0:22                1 (const int)
+0:23      add second child into first child ( temp float)
+0:23        'f' ( temp float)
+0:23        imageLoad ( temp float)
+0:23          'i2DArray' (layout( binding=4 r32f) uniform image2DArray)
+0:23          'tid' ( in 3-component vector of uint)
+0:25      Sequence
+0:25        move second child to first child ( temp int)
+0:25          'i' ( temp int)
+0:25          Constant:
+0:25            0 (const int)
+0:26      add second child into first child ( temp int)
+0:26        'i' ( temp int)
+0:26        imageLoad ( temp int)
+0:26          'ii1D' (layout( binding=5 r32i) uniform iimage1D)
+0:26          direct index ( temp uint)
+0:26            'tid' ( in 3-component vector of uint)
+0:26            Constant:
+0:26              0 (const int)
+0:27      add second child into first child ( temp int)
+0:27        'i' ( temp int)
+0:27        imageLoad ( temp int)
+0:27          'ii2D' (layout( binding=6 r32i) uniform iimage2D)
+0:27          vector swizzle ( temp 2-component vector of uint)
+0:27            'tid' ( in 3-component vector of uint)
+0:27            Sequence
+0:27              Constant:
+0:27                0 (const int)
+0:27              Constant:
+0:27                1 (const int)
+0:28      add second child into first child ( temp int)
+0:28        'i' ( temp int)
+0:28        imageLoad ( temp int)
+0:28          'ii3D' (layout( binding=7 r32i) uniform iimage3D)
+0:28          'tid' ( in 3-component vector of uint)
+0:29      add second child into first child ( temp int)
+0:29        'i' ( temp int)
+0:29        imageLoad ( temp int)
+0:29          'ii1DArray' (layout( binding=8 r32i) uniform iimage1DArray)
+0:29          vector swizzle ( temp 2-component vector of uint)
+0:29            'tid' ( in 3-component vector of uint)
+0:29            Sequence
+0:29              Constant:
+0:29                0 (const int)
+0:29              Constant:
+0:29                1 (const int)
+0:30      add second child into first child ( temp int)
+0:30        'i' ( temp int)
+0:30        imageLoad ( temp int)
+0:30          'ii2DArray' (layout( binding=9 r32i) uniform iimage2DArray)
+0:30          'tid' ( in 3-component vector of uint)
+0:32      Sequence
+0:32        move second child to first child ( temp float)
+0:32          'storeTemp' ( temp float)
+0:32          add ( temp float)
+0:32            'f' ( temp float)
+0:32            Convert int to float ( temp float)
+0:32              'i' ( temp int)
+0:32        imageStore ( temp void)
+0:32          'OUT' (layout( binding=10 r32f) uniform image3D)
+0:32          'tid' ( in 3-component vector of uint)
+0:32          'storeTemp' ( temp float)
+0:32        'storeTemp' ( temp float)
+0:17  Function Definition: main( ( temp void)
+0:17    Function Parameters: 
+0:?     Sequence
+0:17      move second child to first child ( temp 3-component vector of uint)
+0:?         'tid' ( temp 3-component vector of uint)
+0:?         'tid' ( in 3-component vector of uint GlobalInvocationID)
+0:17      Function Call: @main(vu3; ( temp void)
+0:?         'tid' ( temp 3-component vector of uint)
+0:?   Linker Objects
+0:?     'i1D' (layout( binding=0 r32f) uniform image1D)
+0:?     'i2D' (layout( binding=1 r32f) uniform image2D)
+0:?     'i3D' (layout( binding=2 r32f) uniform image3D)
+0:?     'i1DArray' (layout( binding=3 r32f) uniform image1DArray)
+0:?     'i2DArray' (layout( binding=4 r32f) uniform image2DArray)
+0:?     'ii1D' (layout( binding=5 r32i) uniform iimage1D)
+0:?     'ii2D' (layout( binding=6 r32i) uniform iimage2D)
+0:?     'ii3D' (layout( binding=7 r32i) uniform iimage3D)
+0:?     'ii1DArray' (layout( binding=8 r32i) uniform iimage1DArray)
+0:?     'ii2DArray' (layout( binding=9 r32i) uniform iimage2DArray)
+0:?     'OUT' (layout( binding=10 r32f) uniform image3D)
+0:?     'tid' ( in 3-component vector of uint GlobalInvocationID)
+
+
+Linked compute stage:
+
+
+Shader version: 500
+local_size = (8, 8, 8)
+0:? Sequence
+0:17  Function Definition: @main(vu3; ( temp void)
+0:17    Function Parameters: 
+0:17      'tid' ( in 3-component vector of uint)
+0:?     Sequence
+0:18      Sequence
+0:18        move second child to first child ( temp float)
+0:18          'f' ( temp float)
+0:18          Constant:
+0:18            0.000000
+0:19      add second child into first child ( temp float)
+0:19        'f' ( temp float)
+0:19        imageLoad ( temp float)
+0:19          'i1D' (layout( binding=0 r32f) uniform image1D)
+0:19          direct index ( temp uint)
+0:19            'tid' ( in 3-component vector of uint)
+0:19            Constant:
+0:19              0 (const int)
+0:20      add second child into first child ( temp float)
+0:20        'f' ( temp float)
+0:20        imageLoad ( temp float)
+0:20          'i2D' (layout( binding=1 r32f) uniform image2D)
+0:20          vector swizzle ( temp 2-component vector of uint)
+0:20            'tid' ( in 3-component vector of uint)
+0:20            Sequence
+0:20              Constant:
+0:20                0 (const int)
+0:20              Constant:
+0:20                1 (const int)
+0:21      add second child into first child ( temp float)
+0:21        'f' ( temp float)
+0:21        imageLoad ( temp float)
+0:21          'i3D' (layout( binding=2 r32f) uniform image3D)
+0:21          'tid' ( in 3-component vector of uint)
+0:22      add second child into first child ( temp float)
+0:22        'f' ( temp float)
+0:22        imageLoad ( temp float)
+0:22          'i1DArray' (layout( binding=3 r32f) uniform image1DArray)
+0:22          vector swizzle ( temp 2-component vector of uint)
+0:22            'tid' ( in 3-component vector of uint)
+0:22            Sequence
+0:22              Constant:
+0:22                0 (const int)
+0:22              Constant:
+0:22                1 (const int)
+0:23      add second child into first child ( temp float)
+0:23        'f' ( temp float)
+0:23        imageLoad ( temp float)
+0:23          'i2DArray' (layout( binding=4 r32f) uniform image2DArray)
+0:23          'tid' ( in 3-component vector of uint)
+0:25      Sequence
+0:25        move second child to first child ( temp int)
+0:25          'i' ( temp int)
+0:25          Constant:
+0:25            0 (const int)
+0:26      add second child into first child ( temp int)
+0:26        'i' ( temp int)
+0:26        imageLoad ( temp int)
+0:26          'ii1D' (layout( binding=5 r32i) uniform iimage1D)
+0:26          direct index ( temp uint)
+0:26            'tid' ( in 3-component vector of uint)
+0:26            Constant:
+0:26              0 (const int)
+0:27      add second child into first child ( temp int)
+0:27        'i' ( temp int)
+0:27        imageLoad ( temp int)
+0:27          'ii2D' (layout( binding=6 r32i) uniform iimage2D)
+0:27          vector swizzle ( temp 2-component vector of uint)
+0:27            'tid' ( in 3-component vector of uint)
+0:27            Sequence
+0:27              Constant:
+0:27                0 (const int)
+0:27              Constant:
+0:27                1 (const int)
+0:28      add second child into first child ( temp int)
+0:28        'i' ( temp int)
+0:28        imageLoad ( temp int)
+0:28          'ii3D' (layout( binding=7 r32i) uniform iimage3D)
+0:28          'tid' ( in 3-component vector of uint)
+0:29      add second child into first child ( temp int)
+0:29        'i' ( temp int)
+0:29        imageLoad ( temp int)
+0:29          'ii1DArray' (layout( binding=8 r32i) uniform iimage1DArray)
+0:29          vector swizzle ( temp 2-component vector of uint)
+0:29            'tid' ( in 3-component vector of uint)
+0:29            Sequence
+0:29              Constant:
+0:29                0 (const int)
+0:29              Constant:
+0:29                1 (const int)
+0:30      add second child into first child ( temp int)
+0:30        'i' ( temp int)
+0:30        imageLoad ( temp int)
+0:30          'ii2DArray' (layout( binding=9 r32i) uniform iimage2DArray)
+0:30          'tid' ( in 3-component vector of uint)
+0:32      Sequence
+0:32        move second child to first child ( temp float)
+0:32          'storeTemp' ( temp float)
+0:32          add ( temp float)
+0:32            'f' ( temp float)
+0:32            Convert int to float ( temp float)
+0:32              'i' ( temp int)
+0:32        imageStore ( temp void)
+0:32          'OUT' (layout( binding=10 r32f) uniform image3D)
+0:32          'tid' ( in 3-component vector of uint)
+0:32          'storeTemp' ( temp float)
+0:32        'storeTemp' ( temp float)
+0:17  Function Definition: main( ( temp void)
+0:17    Function Parameters: 
+0:?     Sequence
+0:17      move second child to first child ( temp 3-component vector of uint)
+0:?         'tid' ( temp 3-component vector of uint)
+0:?         'tid' ( in 3-component vector of uint GlobalInvocationID)
+0:17      Function Call: @main(vu3; ( temp void)
+0:?         'tid' ( temp 3-component vector of uint)
+0:?   Linker Objects
+0:?     'i1D' (layout( binding=0 r32f) uniform image1D)
+0:?     'i2D' (layout( binding=1 r32f) uniform image2D)
+0:?     'i3D' (layout( binding=2 r32f) uniform image3D)
+0:?     'i1DArray' (layout( binding=3 r32f) uniform image1DArray)
+0:?     'i2DArray' (layout( binding=4 r32f) uniform image2DArray)
+0:?     'ii1D' (layout( binding=5 r32i) uniform iimage1D)
+0:?     'ii2D' (layout( binding=6 r32i) uniform iimage2D)
+0:?     'ii3D' (layout( binding=7 r32i) uniform iimage3D)
+0:?     'ii1DArray' (layout( binding=8 r32i) uniform iimage1DArray)
+0:?     'ii2DArray' (layout( binding=9 r32i) uniform iimage2DArray)
+0:?     'OUT' (layout( binding=10 r32f) uniform image3D)
+0:?     'tid' ( in 3-component vector of uint GlobalInvocationID)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 138
+
+                              Capability Shader
+                              Capability Image1D
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint GLCompute 4  "main" 133
+                              ExecutionMode 4 LocalSize 8 8 8
+                              Source HLSL 500
+                              Name 4  "main"
+                              Name 11  "@main(vu3;"
+                              Name 10  "tid"
+                              Name 15  "f"
+                              Name 19  "i1D"
+                              Name 32  "i2D"
+                              Name 43  "i3D"
+                              Name 52  "i1DArray"
+                              Name 62  "i2DArray"
+                              Name 71  "i"
+                              Name 75  "ii1D"
+                              Name 86  "ii2D"
+                              Name 96  "ii3D"
+                              Name 105  "ii1DArray"
+                              Name 115  "ii2DArray"
+                              Name 122  "storeTemp"
+                              Name 127  "OUT"
+                              Name 131  "tid"
+                              Name 133  "tid"
+                              Name 135  "param"
+                              Decorate 19(i1D) DescriptorSet 0
+                              Decorate 19(i1D) Binding 0
+                              Decorate 32(i2D) DescriptorSet 0
+                              Decorate 32(i2D) Binding 1
+                              Decorate 43(i3D) DescriptorSet 0
+                              Decorate 43(i3D) Binding 2
+                              Decorate 52(i1DArray) DescriptorSet 0
+                              Decorate 52(i1DArray) Binding 3
+                              Decorate 62(i2DArray) DescriptorSet 0
+                              Decorate 62(i2DArray) Binding 4
+                              Decorate 75(ii1D) DescriptorSet 0
+                              Decorate 75(ii1D) Binding 5
+                              Decorate 86(ii2D) DescriptorSet 0
+                              Decorate 86(ii2D) Binding 6
+                              Decorate 96(ii3D) DescriptorSet 0
+                              Decorate 96(ii3D) Binding 7
+                              Decorate 105(ii1DArray) DescriptorSet 0
+                              Decorate 105(ii1DArray) Binding 8
+                              Decorate 115(ii2DArray) DescriptorSet 0
+                              Decorate 115(ii2DArray) Binding 9
+                              Decorate 127(OUT) DescriptorSet 0
+                              Decorate 127(OUT) Binding 10
+                              Decorate 133(tid) BuiltIn GlobalInvocationId
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeInt 32 0
+               7:             TypeVector 6(int) 3
+               8:             TypePointer Function 7(ivec3)
+               9:             TypeFunction 2 8(ptr)
+              13:             TypeFloat 32
+              14:             TypePointer Function 13(float)
+              16:   13(float) Constant 0
+              17:             TypeImage 13(float) 1D nonsampled format:R32f
+              18:             TypePointer UniformConstant 17
+         19(i1D):     18(ptr) Variable UniformConstant
+              21:      6(int) Constant 0
+              22:             TypePointer Function 6(int)
+              25:             TypeVector 13(float) 4
+              30:             TypeImage 13(float) 2D nonsampled format:R32f
+              31:             TypePointer UniformConstant 30
+         32(i2D):     31(ptr) Variable UniformConstant
+              34:             TypeVector 6(int) 2
+              41:             TypeImage 13(float) 3D nonsampled format:R32f
+              42:             TypePointer UniformConstant 41
+         43(i3D):     42(ptr) Variable UniformConstant
+              50:             TypeImage 13(float) 1D array nonsampled format:R32f
+              51:             TypePointer UniformConstant 50
+    52(i1DArray):     51(ptr) Variable UniformConstant
+              60:             TypeImage 13(float) 2D array nonsampled format:R32f
+              61:             TypePointer UniformConstant 60
+    62(i2DArray):     61(ptr) Variable UniformConstant
+              69:             TypeInt 32 1
+              70:             TypePointer Function 69(int)
+              72:     69(int) Constant 0
+              73:             TypeImage 69(int) 1D nonsampled format:R32i
+              74:             TypePointer UniformConstant 73
+        75(ii1D):     74(ptr) Variable UniformConstant
+              79:             TypeVector 69(int) 4
+              84:             TypeImage 69(int) 2D nonsampled format:R32i
+              85:             TypePointer UniformConstant 84
+        86(ii2D):     85(ptr) Variable UniformConstant
+              94:             TypeImage 69(int) 3D nonsampled format:R32i
+              95:             TypePointer UniformConstant 94
+        96(ii3D):     95(ptr) Variable UniformConstant
+             103:             TypeImage 69(int) 1D array nonsampled format:R32i
+             104:             TypePointer UniformConstant 103
+  105(ii1DArray):    104(ptr) Variable UniformConstant
+             113:             TypeImage 69(int) 2D array nonsampled format:R32i
+             114:             TypePointer UniformConstant 113
+  115(ii2DArray):    114(ptr) Variable UniformConstant
+        127(OUT):     42(ptr) Variable UniformConstant
+             132:             TypePointer Input 7(ivec3)
+        133(tid):    132(ptr) Variable Input
+         4(main):           2 Function None 3
+               5:             Label
+        131(tid):      8(ptr) Variable Function
+      135(param):      8(ptr) Variable Function
+             134:    7(ivec3) Load 133(tid)
+                              Store 131(tid) 134
+             136:    7(ivec3) Load 131(tid)
+                              Store 135(param) 136
+             137:           2 FunctionCall 11(@main(vu3;) 135(param)
+                              Return
+                              FunctionEnd
+  11(@main(vu3;):           2 Function None 9
+         10(tid):      8(ptr) FunctionParameter
+              12:             Label
+           15(f):     14(ptr) Variable Function
+           71(i):     70(ptr) Variable Function
+  122(storeTemp):     14(ptr) Variable Function
+                              Store 15(f) 16
+              20:          17 Load 19(i1D)
+              23:     22(ptr) AccessChain 10(tid) 21
+              24:      6(int) Load 23
+              26:   25(fvec4) ImageRead 20 24
+              27:   13(float) CompositeExtract 26 0
+              28:   13(float) Load 15(f)
+              29:   13(float) FAdd 28 27
+                              Store 15(f) 29
+              33:          30 Load 32(i2D)
+              35:    7(ivec3) Load 10(tid)
+              36:   34(ivec2) VectorShuffle 35 35 0 1
+              37:   25(fvec4) ImageRead 33 36
+              38:   13(float) CompositeExtract 37 0
+              39:   13(float) Load 15(f)
+              40:   13(float) FAdd 39 38
+                              Store 15(f) 40
+              44:          41 Load 43(i3D)
+              45:    7(ivec3) Load 10(tid)
+              46:   25(fvec4) ImageRead 44 45
+              47:   13(float) CompositeExtract 46 0
+              48:   13(float) Load 15(f)
+              49:   13(float) FAdd 48 47
+                              Store 15(f) 49
+              53:          50 Load 52(i1DArray)
+              54:    7(ivec3) Load 10(tid)
+              55:   34(ivec2) VectorShuffle 54 54 0 1
+              56:   25(fvec4) ImageRead 53 55
+              57:   13(float) CompositeExtract 56 0
+              58:   13(float) Load 15(f)
+              59:   13(float) FAdd 58 57
+                              Store 15(f) 59
+              63:          60 Load 62(i2DArray)
+              64:    7(ivec3) Load 10(tid)
+              65:   25(fvec4) ImageRead 63 64
+              66:   13(float) CompositeExtract 65 0
+              67:   13(float) Load 15(f)
+              68:   13(float) FAdd 67 66
+                              Store 15(f) 68
+                              Store 71(i) 72
+              76:          73 Load 75(ii1D)
+              77:     22(ptr) AccessChain 10(tid) 21
+              78:      6(int) Load 77
+              80:   79(ivec4) ImageRead 76 78
+              81:     69(int) CompositeExtract 80 0
+              82:     69(int) Load 71(i)
+              83:     69(int) IAdd 82 81
+                              Store 71(i) 83
+              87:          84 Load 86(ii2D)
+              88:    7(ivec3) Load 10(tid)
+              89:   34(ivec2) VectorShuffle 88 88 0 1
+              90:   79(ivec4) ImageRead 87 89
+              91:     69(int) CompositeExtract 90 0
+              92:     69(int) Load 71(i)
+              93:     69(int) IAdd 92 91
+                              Store 71(i) 93
+              97:          94 Load 96(ii3D)
+              98:    7(ivec3) Load 10(tid)
+              99:   79(ivec4) ImageRead 97 98
+             100:     69(int) CompositeExtract 99 0
+             101:     69(int) Load 71(i)
+             102:     69(int) IAdd 101 100
+                              Store 71(i) 102
+             106:         103 Load 105(ii1DArray)
+             107:    7(ivec3) Load 10(tid)
+             108:   34(ivec2) VectorShuffle 107 107 0 1
+             109:   79(ivec4) ImageRead 106 108
+             110:     69(int) CompositeExtract 109 0
+             111:     69(int) Load 71(i)
+             112:     69(int) IAdd 111 110
+                              Store 71(i) 112
+             116:         113 Load 115(ii2DArray)
+             117:    7(ivec3) Load 10(tid)
+             118:   79(ivec4) ImageRead 116 117
+             119:     69(int) CompositeExtract 118 0
+             120:     69(int) Load 71(i)
+             121:     69(int) IAdd 120 119
+                              Store 71(i) 121
+             123:   13(float) Load 15(f)
+             124:     69(int) Load 71(i)
+             125:   13(float) ConvertSToF 124
+             126:   13(float) FAdd 123 125
+                              Store 122(storeTemp) 126
+             128:          41 Load 127(OUT)
+             129:    7(ivec3) Load 10(tid)
+             130:   13(float) Load 122(storeTemp)
+                              ImageWrite 128 129 130
+                              Return
+                              FunctionEnd

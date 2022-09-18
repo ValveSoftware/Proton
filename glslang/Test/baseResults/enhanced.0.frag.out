@@ -1,0 +1,6 @@
+enhanced.0.frag
+ERROR: enhanced.0.frag:7: ' vec4 constructor' : not enough data provided for construction 
+ERROR: 1 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

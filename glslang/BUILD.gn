@@ -1,0 +1,354 @@
+# Copyright (C) 2018 Google, Inc.
+#
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#    Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#    Redistributions in binary form must reproduce the above
+#    copyright notice, this list of conditions and the following
+#    disclaimer in the documentation and/or other materials provided
+#    with the distribution.
+#
+#    Neither the name of Google Inc. nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+import("//build_overrides/glslang.gni")
+
+# Both Chromium and Fuchsia use by default a set of warning errors
+# that is far too strict to compile this project. These are also
+# typically appended after |cflags|, overriding target-specific
+# definitions. To work around this, determine which configs to
+# add and remove in order to succesfully build the project.
+if (defined(is_fuchsia_tree) && is_fuchsia_tree) {
+  _configs_to_remove = [ "//build/config:default_warnings" ]
+  _configs_to_add = []
+} else {
+  _configs_to_remove = [ "//build/config/compiler:chromium_code" ]
+  _configs_to_add = [ "//build/config/compiler:no_chromium_code" ]
+}
+
+action("glslang_build_info") {
+  script = "build_info.py"
+
+  src_dir = "."
+  changes_file = "CHANGES.md"
+  template_file = "build_info.h.tmpl"
+  out_file = "${target_gen_dir}/include/glslang/build_info.h"
+
+  inputs = [
+    changes_file,
+    script,
+    template_file,
+  ]
+  outputs = [ out_file ]
+  args = [
+    rebase_path(src_dir, root_build_dir),
+    "-i",
+    rebase_path(template_file, root_build_dir),
+    "-o",
+    rebase_path(out_file, root_build_dir),
+  ]
+}
+
+action("glslang_extension_headers") {
+  script = "gen_extension_headers.py"
+
+  out_file = "${target_gen_dir}/include/glslang/glsl_intrinsic_header.h"
+
+  # Fuchsia GN build rules require all GN actions to be hermetic and they
+  # should correctly and fully state their inputs and outpus (see
+  # https://fuchsia.dev/fuchsia-src/development/build/hermetic_actions
+  # for details). All input files of the script should be added to the
+  # |sources| list.
+  sources = [
+    "glslang/ExtensionHeaders/GL_EXT_shader_realtime_clock.glsl",
+  ]
+
+  inputs = [
+    script
+  ]
+  outputs = [ out_file ]
+  args = [
+    "-i",
+    rebase_path("glslang/ExtensionHeaders", root_build_dir),
+    "-o",
+    rebase_path(out_file, root_build_dir),
+  ]
+}
+
+spirv_tools_dir = glslang_spirv_tools_dir
+if (!defined(glslang_angle)) {
+  glslang_angle = false
+}
+
+config("glslang_public") {
+  include_dirs = [ "." ]
+  if (!is_win || is_clang) {
+    cflags = [ "-Wno-conversion" ]
+  }
+}
+
+config("glslang_hlsl") {
+  defines = [ "ENABLE_HLSL=1" ]
+}
+
+template("glslang_sources_common") {
+  source_set(target_name) {
+    public_configs = [ ":glslang_public" ]
+
+    if (invoker.enable_hlsl) {
+      public_configs += [ ":glslang_hlsl" ]
+    }
+
+    sources = [
+      "OGLCompilersDLL/InitializeDll.cpp",
+      "OGLCompilersDLL/InitializeDll.h",
+      "SPIRV/GLSL.ext.AMD.h",
+      "SPIRV/GLSL.ext.EXT.h",
+      "SPIRV/GLSL.ext.KHR.h",
+      "SPIRV/GLSL.ext.NV.h",
+      "SPIRV/GLSL.std.450.h",
+      "SPIRV/GlslangToSpv.cpp",
+      "SPIRV/GlslangToSpv.h",
+      "SPIRV/InReadableOrder.cpp",
+      "SPIRV/Logger.cpp",
+      "SPIRV/Logger.h",
+      "SPIRV/NonSemanticDebugPrintf.h",
+      "SPIRV/NonSemanticShaderDebugInfo100.h",
+      "SPIRV/SPVRemapper.cpp",
+      "SPIRV/SPVRemapper.h",
+      "SPIRV/SpvBuilder.cpp",
+      "SPIRV/SpvBuilder.h",
+      "SPIRV/SpvPostProcess.cpp",
+      "SPIRV/SpvTools.h",
+      "SPIRV/bitutils.h",
+      "SPIRV/disassemble.cpp",
+      "SPIRV/disassemble.h",
+      "SPIRV/doc.cpp",
+      "SPIRV/doc.h",
+      "SPIRV/hex_float.h",
+      "SPIRV/spirv.hpp",
+      "SPIRV/spvIR.h",
+      "glslang/GenericCodeGen/CodeGen.cpp",
+      "glslang/GenericCodeGen/Link.cpp",
+      "glslang/Include/BaseTypes.h",
+      "glslang/Include/Common.h",
+      "glslang/Include/ConstantUnion.h",
+      "glslang/Include/InfoSink.h",
+      "glslang/Include/InitializeGlobals.h",
+      "glslang/Include/PoolAlloc.h",
+      "glslang/Include/ResourceLimits.h",
+      "glslang/Include/ShHandle.h",
+      "glslang/Include/SpirvIntrinsics.h",
+      "glslang/Include/Types.h",
+      "glslang/Include/arrays.h",
+      "glslang/Include/intermediate.h",
+      "glslang/MachineIndependent/Constant.cpp",
+      "glslang/MachineIndependent/InfoSink.cpp",
+      "glslang/MachineIndependent/Initialize.cpp",
+      "glslang/MachineIndependent/Initialize.h",
+      "glslang/MachineIndependent/IntermTraverse.cpp",
+      "glslang/MachineIndependent/Intermediate.cpp",
+      "glslang/MachineIndependent/LiveTraverser.h",
+      "glslang/MachineIndependent/ParseContextBase.cpp",
+      "glslang/MachineIndependent/ParseHelper.cpp",
+      "glslang/MachineIndependent/ParseHelper.h",
+      "glslang/MachineIndependent/PoolAlloc.cpp",
+      "glslang/MachineIndependent/RemoveTree.cpp",
+      "glslang/MachineIndependent/RemoveTree.h",
+      "glslang/MachineIndependent/Scan.cpp",
+      "glslang/MachineIndependent/Scan.h",
+      "glslang/MachineIndependent/ScanContext.h",
+      "glslang/MachineIndependent/ShaderLang.cpp",
+      "glslang/MachineIndependent/SpirvIntrinsics.cpp",
+      "glslang/MachineIndependent/SymbolTable.cpp",
+      "glslang/MachineIndependent/SymbolTable.h",
+      "glslang/MachineIndependent/Versions.cpp",
+      "glslang/MachineIndependent/Versions.h",
+      "glslang/MachineIndependent/attribute.cpp",
+      "glslang/MachineIndependent/attribute.h",
+      "glslang/MachineIndependent/gl_types.h",
+      "glslang/MachineIndependent/glslang_tab.cpp",
+      "glslang/MachineIndependent/glslang_tab.cpp.h",
+      "glslang/MachineIndependent/intermOut.cpp",
+      "glslang/MachineIndependent/iomapper.cpp",
+      "glslang/MachineIndependent/iomapper.h",
+      "glslang/MachineIndependent/limits.cpp",
+      "glslang/MachineIndependent/linkValidate.cpp",
+      "glslang/MachineIndependent/localintermediate.h",
+      "glslang/MachineIndependent/parseConst.cpp",
+      "glslang/MachineIndependent/parseVersions.h",
+      "glslang/MachineIndependent/preprocessor/Pp.cpp",
+      "glslang/MachineIndependent/preprocessor/PpAtom.cpp",
+      "glslang/MachineIndependent/preprocessor/PpContext.cpp",
+      "glslang/MachineIndependent/preprocessor/PpContext.h",
+      "glslang/MachineIndependent/preprocessor/PpScanner.cpp",
+      "glslang/MachineIndependent/preprocessor/PpTokens.cpp",
+      "glslang/MachineIndependent/preprocessor/PpTokens.h",
+      "glslang/MachineIndependent/propagateNoContraction.cpp",
+      "glslang/MachineIndependent/propagateNoContraction.h",
+      "glslang/MachineIndependent/reflection.cpp",
+      "glslang/MachineIndependent/reflection.h",
+      "glslang/OSDependent/osinclude.h",
+      "glslang/Public/ShaderLang.h",
+    ]
+
+    # Workaround gn issue complaining about these not being allowed even though GLSLANG_HLSL is not
+    # defined.
+    sources += [
+      "glslang/HLSL/hlslParseHelper.h",
+      "glslang/HLSL/hlslParseables.h",
+      "glslang/HLSL/hlslScanContext.h",
+      "glslang/HLSL/hlslTokens.h",
+    ]
+
+    if (invoker.enable_hlsl) {
+      sources += [
+        "glslang/HLSL/hlslAttributes.cpp",
+        "glslang/HLSL/hlslAttributes.h",
+        "glslang/HLSL/hlslGrammar.cpp",
+        "glslang/HLSL/hlslGrammar.h",
+        "glslang/HLSL/hlslOpMap.cpp",
+        "glslang/HLSL/hlslOpMap.h",
+        "glslang/HLSL/hlslParseHelper.cpp",
+        "glslang/HLSL/hlslParseables.cpp",
+        "glslang/HLSL/hlslScanContext.cpp",
+        "glslang/HLSL/hlslTokenStream.cpp",
+        "glslang/HLSL/hlslTokenStream.h",
+      ]
+    }
+
+    defines = []
+    if (invoker.enable_opt) {
+      sources += [ "SPIRV/SpvTools.cpp" ]
+      defines += [ "ENABLE_OPT=1" ]
+    }
+    if (invoker.is_angle) {
+      defines += [ "GLSLANG_ANGLE" ]
+    }
+
+    if (is_win) {
+      sources += [ "glslang/OSDependent/Windows/ossource.cpp" ]
+      defines += [ "GLSLANG_OSINCLUDE_WIN32" ]
+    } else {
+      sources += [ "glslang/OSDependent/Unix/ossource.cpp" ]
+      defines += [ "GLSLANG_OSINCLUDE_UNIX" ]
+    }
+
+    if (is_clang) {
+      cflags = [
+        "-Wno-extra-semi",
+        "-Wno-ignored-qualifiers",
+        "-Wno-implicit-fallthrough",
+        "-Wno-inconsistent-missing-override",
+        "-Wno-missing-field-initializers",
+        "-Wno-newline-eof",
+        "-Wno-sign-compare",
+        "-Wno-suggest-destructor-override",
+        "-Wno-suggest-override",
+        "-Wno-unused-variable",
+      ]
+    }
+    if (is_win && !is_clang) {
+      cflags = [
+        "/wd4018",  # signed/unsigned mismatch
+        "/wd4189",  # local variable is initialized but not referenced
+      ]
+    }
+
+    include_dirs = [ "${target_gen_dir}/include" ]
+
+    deps = [ ":glslang_build_info" ]
+
+    if (invoker.enable_opt) {
+      deps += [
+        "${spirv_tools_dir}:spvtools_opt",
+        "${spirv_tools_dir}:spvtools_val",
+      ]
+      include_dirs += [ "${spirv_tools_dir}/include" ]
+    }
+
+    configs -= _configs_to_remove
+    configs += _configs_to_add
+  }
+}
+
+glslang_sources_common("glslang_lib_sources") {
+  enable_opt = !glslang_angle
+  enable_hlsl = !glslang_angle
+  is_angle = glslang_angle
+}
+
+glslang_sources_common("glslang_sources") {
+  enable_opt = true
+  enable_hlsl = true
+  is_angle = false
+}
+
+source_set("glslang_default_resource_limits_sources") {
+  sources = [
+    "StandAlone/ResourceLimits.cpp",
+    "StandAlone/ResourceLimits.h",
+    "glslang/Include/ResourceLimits.h",
+  ]
+  public_configs = [ ":glslang_public" ]
+
+  configs -= _configs_to_remove
+  configs += _configs_to_add
+}
+
+executable("glslang_validator") {
+  sources = [
+    "StandAlone/DirStackFileIncluder.h",
+    "StandAlone/StandAlone.cpp",
+  ]
+  if (!is_win) {
+    cflags = [ "-Woverflow" ]
+  }
+  defines = [ "ENABLE_OPT=1" ]
+  deps = [
+    ":glslang_build_info",
+    ":glslang_default_resource_limits_sources",
+    ":glslang_sources",
+    ":glslang_extension_headers",
+  ]
+  public_configs = [ ":glslang_hlsl" ]
+
+  include_dirs = [
+    "${target_gen_dir}/include",
+    "${spirv_tools_dir}/include",
+  ]
+
+  configs -= _configs_to_remove
+  configs += _configs_to_add
+}
+
+executable("spirv-remap") {
+  sources = [ "StandAlone/spirv-remap.cpp" ]
+  defines = [ "ENABLE_OPT=1" ]
+  deps = [ ":glslang_sources" ]
+
+  include_dirs = [ "${spirv_tools_dir}/include" ]
+
+  configs -= _configs_to_remove
+  configs += _configs_to_add
+}

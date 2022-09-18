@@ -1,0 +1,32 @@
+#version 460
+
+#extension GL_EXT_null_initializer : enable
+
+#ifdef GL_EXT_null_initializer
+
+struct S {
+    vec3[4] v;
+    int a;
+};
+
+struct T {
+    int b;
+    S s;
+};
+
+shared float f = { };
+shared T t1 = { };
+shared T t2 = { };
+shared S s = { };
+shared float g = { };
+shared int i = { };
+
+void main()
+{
+    S local = { };
+    ++local.a;
+}
+
+S global = { };
+
+#endif

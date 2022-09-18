@@ -1,0 +1,111 @@
+link.vk.pcNamingInvalid.0.0.vert
+Shader version: 450
+0:? Sequence
+0:16  Function Definition: main( ( global void)
+0:16    Function Parameters: 
+0:18    Sequence
+0:18      move second child to first child ( temp highp 4-component vector of float)
+0:18        'oColor' ( smooth out highp 4-component vector of float)
+0:18        component-wise multiply ( temp highp 4-component vector of float)
+0:18          color1: direct index for structure (layout( column_major std430 offset=128) uniform highp 4-component vector of float)
+0:18            'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:18            Constant:
+0:18              2 (const int)
+0:18          Function Call: getColor2( ( global highp 4-component vector of float)
+0:20      move second child to first child ( temp highp 4-component vector of float)
+0:20        gl_Position: direct index for structure ( gl_Position highp 4-component vector of float Position)
+0:20          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance,  out unsized 1-element array of float CullDistance gl_CullDistance})
+0:20          Constant:
+0:20            0 (const uint)
+0:20        matrix-times-vector ( temp highp 4-component vector of float)
+0:20          uProj: direct index for structure (layout( column_major std430 offset=64) uniform highp 4X4 matrix of float)
+0:20            'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:20            Constant:
+0:20              1 (const int)
+0:20          Function Call: getWorld( ( global highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:?     'oColor' ( smooth out highp 4-component vector of float)
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance,  out unsized 1-element array of float CullDistance gl_CullDistance})
+
+link.vk.pcNamingInvalid.0.1.vert
+Shader version: 450
+0:? Sequence
+0:13  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:13    Function Parameters: 
+0:15    Sequence
+0:15      Branch: Return with expression
+0:15        color2: direct index for structure (layout( column_major std430 offset=144) uniform highp 4-component vector of float)
+0:15          'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:15          Constant:
+0:15            3 (const int)
+0:18  Function Definition: getWorld( ( global highp 4-component vector of float)
+0:18    Function Parameters: 
+0:20    Sequence
+0:20      Branch: Return with expression
+0:20        matrix-times-vector ( temp highp 4-component vector of float)
+0:20          uWorld: direct index for structure (layout( column_major std430 offset=0) uniform highp 4X4 matrix of float)
+0:20            'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:20            Constant:
+0:20              0 (const int)
+0:20          'P' ( in highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:?     'P' ( in highp 4-component vector of float)
+
+
+Linked vertex stage:
+
+ERROR: Linking vertex stage: Only one push_constant block is allowed per stage
+
+Shader version: 450
+0:? Sequence
+0:16  Function Definition: main( ( global void)
+0:16    Function Parameters: 
+0:18    Sequence
+0:18      move second child to first child ( temp highp 4-component vector of float)
+0:18        'oColor' ( smooth out highp 4-component vector of float)
+0:18        component-wise multiply ( temp highp 4-component vector of float)
+0:18          color1: direct index for structure (layout( column_major std430 offset=128) uniform highp 4-component vector of float)
+0:18            'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:18            Constant:
+0:18              2 (const int)
+0:18          Function Call: getColor2( ( global highp 4-component vector of float)
+0:20      move second child to first child ( temp highp 4-component vector of float)
+0:20        gl_Position: direct index for structure ( gl_Position highp 4-component vector of float Position)
+0:20          'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance,  out 1-element array of float CullDistance gl_CullDistance})
+0:20          Constant:
+0:20            0 (const uint)
+0:20        matrix-times-vector ( temp highp 4-component vector of float)
+0:20          uProj: direct index for structure (layout( column_major std430 offset=64) uniform highp 4X4 matrix of float)
+0:20            'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:20            Constant:
+0:20              1 (const int)
+0:20          Function Call: getWorld( ( global highp 4-component vector of float)
+0:13  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:13    Function Parameters: 
+0:15    Sequence
+0:15      Branch: Return with expression
+0:15        color2: direct index for structure (layout( column_major std430 offset=144) uniform highp 4-component vector of float)
+0:15          'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:15          Constant:
+0:15            3 (const int)
+0:18  Function Definition: getWorld( ( global highp 4-component vector of float)
+0:18    Function Parameters: 
+0:20    Sequence
+0:20      Branch: Return with expression
+0:20        matrix-times-vector ( temp highp 4-component vector of float)
+0:20          uWorld: direct index for structure (layout( column_major std430 offset=0) uniform highp 4X4 matrix of float)
+0:20            'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:20            Constant:
+0:20              0 (const int)
+0:20          'P' ( in highp 4-component vector of float)
+0:?   Linker Objects
+0:?     'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:?     'oColor' ( smooth out highp 4-component vector of float)
+0:?     'anon@0' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance,  out 1-element array of float CullDistance gl_CullDistance})
+0:?     'a' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4X4 matrix of float uWorld, layout( column_major std430 offset=64) uniform highp 4X4 matrix of float uProj, layout( column_major std430 offset=128) uniform highp 4-component vector of float color1, layout( column_major std430 offset=144) uniform highp 4-component vector of float color2})
+0:?     'P' ( in highp 4-component vector of float)
+
+Validation failed
+SPIR-V is not generated for failed compile or link

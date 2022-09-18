@@ -1,0 +1,234 @@
+iomap.blockOutVariableIn.vert
+Shader version: 440
+0:? Sequence
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:11    Sequence
+0:11      move second child to first child ( temp 4-component vector of float)
+0:11        a1: direct index for structure ( out 4-component vector of float)
+0:11          'anon@0' (layout( location=0) out block{ out 4-component vector of float a1,  out 2-component vector of float a2})
+0:11          Constant:
+0:11            0 (const uint)
+0:11        Constant:
+0:11          1.000000
+0:11          1.000000
+0:11          1.000000
+0:11          1.000000
+0:12      move second child to first child ( temp 2-component vector of float)
+0:12        a2: direct index for structure ( out 2-component vector of float)
+0:12          'anon@0' (layout( location=0) out block{ out 4-component vector of float a1,  out 2-component vector of float a2})
+0:12          Constant:
+0:12            1 (const uint)
+0:12        Constant:
+0:12          0.500000
+0:12          0.500000
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:13          'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:13          Constant:
+0:13            0 (const uint)
+0:13        Constant:
+0:13          1.000000
+0:13          1.000000
+0:13          1.000000
+0:13          1.000000
+0:?   Linker Objects
+0:?     'anon@0' (layout( location=0) out block{ out 4-component vector of float a1,  out 2-component vector of float a2})
+0:?     'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out unsized 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+iomap.blockOutVariableIn.frag
+Shader version: 440
+0:? Sequence
+0:8  Function Definition: main( ( global void)
+0:8    Function Parameters: 
+0:10    Sequence
+0:10      move second child to first child ( temp 4-component vector of float)
+0:10        'color' (layout( location=0) out 4-component vector of float)
+0:10        Construct vec4 ( temp 4-component vector of float)
+0:10          vector swizzle ( temp 2-component vector of float)
+0:10            'a1' (layout( location=0) smooth in 4-component vector of float)
+0:10            Sequence
+0:10              Constant:
+0:10                0 (const int)
+0:10              Constant:
+0:10                1 (const int)
+0:10          'a2' (layout( location=1) smooth in 2-component vector of float)
+0:?   Linker Objects
+0:?     'a1' (layout( location=0) smooth in 4-component vector of float)
+0:?     'a2' (layout( location=1) smooth in 2-component vector of float)
+0:?     'color' (layout( location=0) out 4-component vector of float)
+
+
+Linked vertex stage:
+
+
+Linked fragment stage:
+
+
+Shader version: 440
+0:? Sequence
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:11    Sequence
+0:11      move second child to first child ( temp 4-component vector of float)
+0:11        a1: direct index for structure ( out 4-component vector of float)
+0:11          'anon@0' (layout( location=0) out block{ out 4-component vector of float a1,  out 2-component vector of float a2})
+0:11          Constant:
+0:11            0 (const uint)
+0:11        Constant:
+0:11          1.000000
+0:11          1.000000
+0:11          1.000000
+0:11          1.000000
+0:12      move second child to first child ( temp 2-component vector of float)
+0:12        a2: direct index for structure ( out 2-component vector of float)
+0:12          'anon@0' (layout( location=0) out block{ out 4-component vector of float a1,  out 2-component vector of float a2})
+0:12          Constant:
+0:12            1 (const uint)
+0:12        Constant:
+0:12          0.500000
+0:12          0.500000
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        gl_Position: direct index for structure ( gl_Position 4-component vector of float Position)
+0:13          'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:13          Constant:
+0:13            0 (const uint)
+0:13        Constant:
+0:13          1.000000
+0:13          1.000000
+0:13          1.000000
+0:13          1.000000
+0:?   Linker Objects
+0:?     'anon@0' (layout( location=0) out block{ out 4-component vector of float a1,  out 2-component vector of float a2})
+0:?     'anon@1' ( out block{ gl_Position 4-component vector of float Position gl_Position,  gl_PointSize float PointSize gl_PointSize,  out 1-element array of float ClipDistance gl_ClipDistance})
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+Shader version: 440
+0:? Sequence
+0:8  Function Definition: main( ( global void)
+0:8    Function Parameters: 
+0:10    Sequence
+0:10      move second child to first child ( temp 4-component vector of float)
+0:10        'color' (layout( location=0) out 4-component vector of float)
+0:10        Construct vec4 ( temp 4-component vector of float)
+0:10          vector swizzle ( temp 2-component vector of float)
+0:10            'a1' (layout( location=0) smooth in 4-component vector of float)
+0:10            Sequence
+0:10              Constant:
+0:10                0 (const int)
+0:10              Constant:
+0:10                1 (const int)
+0:10          'a2' (layout( location=1) smooth in 2-component vector of float)
+0:?   Linker Objects
+0:?     'a1' (layout( location=0) smooth in 4-component vector of float)
+0:?     'a2' (layout( location=1) smooth in 2-component vector of float)
+0:?     'color' (layout( location=0) out 4-component vector of float)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 33
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Vertex 4  "main" 11 28 31 32
+                              Source GLSL 440
+                              Name 4  "main"
+                              Name 9  "Block"
+                              MemberName 9(Block) 0  "a1"
+                              MemberName 9(Block) 1  "a2"
+                              Name 11  ""
+                              Name 26  "gl_PerVertex"
+                              MemberName 26(gl_PerVertex) 0  "gl_Position"
+                              MemberName 26(gl_PerVertex) 1  "gl_PointSize"
+                              MemberName 26(gl_PerVertex) 2  "gl_ClipDistance"
+                              Name 28  ""
+                              Name 31  "gl_VertexID"
+                              Name 32  "gl_InstanceID"
+                              Decorate 9(Block) Block
+                              Decorate 11 Location 0
+                              MemberDecorate 26(gl_PerVertex) 0 BuiltIn Position
+                              MemberDecorate 26(gl_PerVertex) 1 BuiltIn PointSize
+                              MemberDecorate 26(gl_PerVertex) 2 BuiltIn ClipDistance
+                              Decorate 26(gl_PerVertex) Block
+                              Decorate 31(gl_VertexID) BuiltIn VertexId
+                              Decorate 32(gl_InstanceID) BuiltIn InstanceId
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypeVector 6(float) 2
+        9(Block):             TypeStruct 7(fvec4) 8(fvec2)
+              10:             TypePointer Output 9(Block)
+              11:     10(ptr) Variable Output
+              12:             TypeInt 32 1
+              13:     12(int) Constant 0
+              14:    6(float) Constant 1065353216
+              15:    7(fvec4) ConstantComposite 14 14 14 14
+              16:             TypePointer Output 7(fvec4)
+              18:     12(int) Constant 1
+              19:    6(float) Constant 1056964608
+              20:    8(fvec2) ConstantComposite 19 19
+              21:             TypePointer Output 8(fvec2)
+              23:             TypeInt 32 0
+              24:     23(int) Constant 1
+              25:             TypeArray 6(float) 24
+26(gl_PerVertex):             TypeStruct 7(fvec4) 6(float) 25
+              27:             TypePointer Output 26(gl_PerVertex)
+              28:     27(ptr) Variable Output
+              30:             TypePointer Input 12(int)
+ 31(gl_VertexID):     30(ptr) Variable Input
+32(gl_InstanceID):     30(ptr) Variable Input
+         4(main):           2 Function None 3
+               5:             Label
+              17:     16(ptr) AccessChain 11 13
+                              Store 17 15
+              22:     21(ptr) AccessChain 11 18
+                              Store 22 20
+              29:     16(ptr) AccessChain 28 13
+                              Store 29 15
+                              Return
+                              FunctionEnd
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 23
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "main" 9 11 16
+                              ExecutionMode 4 OriginLowerLeft
+                              Source GLSL 440
+                              Name 4  "main"
+                              Name 9  "color"
+                              Name 11  "a1"
+                              Name 16  "a2"
+                              Decorate 9(color) Location 0
+                              Decorate 11(a1) Location 0
+                              Decorate 16(a2) Location 1
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypePointer Output 7(fvec4)
+        9(color):      8(ptr) Variable Output
+              10:             TypePointer Input 7(fvec4)
+          11(a1):     10(ptr) Variable Input
+              12:             TypeVector 6(float) 2
+              15:             TypePointer Input 12(fvec2)
+          16(a2):     15(ptr) Variable Input
+         4(main):           2 Function None 3
+               5:             Label
+              13:    7(fvec4) Load 11(a1)
+              14:   12(fvec2) VectorShuffle 13 13 0 1
+              17:   12(fvec2) Load 16(a2)
+              18:    6(float) CompositeExtract 14 0
+              19:    6(float) CompositeExtract 14 1
+              20:    6(float) CompositeExtract 17 0
+              21:    6(float) CompositeExtract 17 1
+              22:    7(fvec4) CompositeConstruct 18 19 20 21
+                              Store 9(color) 22
+                              Return
+                              FunctionEnd

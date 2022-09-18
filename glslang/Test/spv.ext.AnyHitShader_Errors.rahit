@@ -1,0 +1,11 @@
+#version 460
+#extension GL_EXT_ray_tracing : enable
+hitAttributeEXT vec4 payload;                               
+layout(binding = 0, set = 0) uniform accelerationStructureEXT accEXT;
+
+void main()
+{
+    payload.x = 1.0f;                                       // ERROR, cannot write to hitattributeEXT in stage
+    reportIntersectionEXT(1.0, 1U);                          // ERROR, unsupported builtin in stage
+    traceRayEXT(accEXT, 0, 0, 1, 1, 0, vec3(0.0f), 0.5f, vec3(1.0f), 0.75f, 0); // ERROR, unsupported builtin in stage
+}

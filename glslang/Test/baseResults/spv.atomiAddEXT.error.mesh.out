@@ -1,0 +1,7 @@
+spv.atomiAddEXT.error.mesh
+ERROR: 0:21: 'assign' :  l-value required "mytask" (can't modify variable with storage qualifier taskPayloadSharedEXT in mesh shaders)
+ERROR: 0:21: 'out' : Non-L-value cannot be passed for 'out' or 'inout' parameters. 
+ERROR: 2 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

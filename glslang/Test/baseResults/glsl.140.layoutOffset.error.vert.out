@@ -1,0 +1,50 @@
+glsl.140.layoutOffset.error.vert
+ERROR: 0:5: 'offset' : not supported with this profile: none
+ERROR: 0:5: '"offset" on block member' : not supported for this version or the enabled extensions 
+ERROR: 2 compilation errors.  No code generated.
+
+
+Shader version: 140
+ERROR: node is still EOpNull!
+0:11  Function Definition: main( ( global void)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        'out_vs' ( smooth out 4-component vector of float)
+0:13        add ( temp 4-component vector of float)
+0:13          'in_vs' ( in 4-component vector of float)
+0:13          a: direct index for structure (layout( column_major std140 offset=0) uniform 4-component vector of float)
+0:13            'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float a})
+0:13            Constant:
+0:13              0 (const uint)
+0:?   Linker Objects
+0:?     'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float a})
+0:?     'in_vs' ( in 4-component vector of float)
+0:?     'out_vs' ( smooth out 4-component vector of float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 140
+ERROR: node is still EOpNull!
+0:11  Function Definition: main( ( global void)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      move second child to first child ( temp 4-component vector of float)
+0:13        'out_vs' ( smooth out 4-component vector of float)
+0:13        add ( temp 4-component vector of float)
+0:13          'in_vs' ( in 4-component vector of float)
+0:13          a: direct index for structure (layout( column_major std140 offset=0) uniform 4-component vector of float)
+0:13            'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float a})
+0:13            Constant:
+0:13              0 (const uint)
+0:?   Linker Objects
+0:?     'anon@0' (layout( column_major std140) uniform block{layout( column_major std140 offset=0) uniform 4-component vector of float a})
+0:?     'in_vs' ( in 4-component vector of float)
+0:?     'out_vs' ( smooth out 4-component vector of float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+

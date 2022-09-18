@@ -1,0 +1,9 @@
+#version 450
+
+layout(local_size_x_id = 18, local_size_y_id=10,local_size_z_id = 19) in;
+
+shared uint keys[gl_WorkGroupSize.z][gl_WorkGroupSize.x * gl_WorkGroupSize.y];
+
+void main()
+{
+}

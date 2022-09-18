@@ -1,0 +1,291 @@
+#version 450
+
+#extension GL_NV_shader_subgroup_partitioned: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int8: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int16: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int64: enable
+#extension GL_EXT_shader_explicit_arithmetic_types_float16: enable
+
+layout (local_size_x = 8) in;
+
+layout(binding = 0) buffer Buffers
+{
+    i8vec4 i8;
+    u8vec4 u8;
+    i16vec4 i16;
+    u16vec4 u16;
+    i64vec4 i64;
+    u64vec4 u64;
+    f16vec4 f16;
+} data[4];
+
+void main()
+{
+    uint invocation = (gl_SubgroupInvocationID + gl_SubgroupSize) % 4;
+
+    uvec4 ballot;
+    ballot = subgroupPartitionNV(data[0].i8.x);
+    ballot = subgroupPartitionNV(data[1].i8.xy);
+    ballot = subgroupPartitionNV(data[2].i8.xyz);
+    ballot = subgroupPartitionNV(data[3].i8);
+
+    ballot = subgroupPartitionNV(data[0].u8.x);
+    ballot = subgroupPartitionNV(data[1].u8.xy);
+    ballot = subgroupPartitionNV(data[2].u8.xyz);
+    ballot = subgroupPartitionNV(data[3].u8);
+
+    ballot = subgroupPartitionNV(data[0].i16.x);
+    ballot = subgroupPartitionNV(data[1].i16.xy);
+    ballot = subgroupPartitionNV(data[2].i16.xyz);
+    ballot = subgroupPartitionNV(data[3].i16);
+
+    ballot = subgroupPartitionNV(data[0].u16.x);
+    ballot = subgroupPartitionNV(data[1].u16.xy);
+    ballot = subgroupPartitionNV(data[2].u16.xyz);
+    ballot = subgroupPartitionNV(data[3].u16);
+
+    ballot = subgroupPartitionNV(data[0].i64.x);
+    ballot = subgroupPartitionNV(data[1].i64.xy);
+    ballot = subgroupPartitionNV(data[2].i64.xyz);
+    ballot = subgroupPartitionNV(data[3].i64);
+
+    ballot = subgroupPartitionNV(data[0].u64.x);
+    ballot = subgroupPartitionNV(data[1].u64.xy);
+    ballot = subgroupPartitionNV(data[2].u64.xyz);
+    ballot = subgroupPartitionNV(data[3].u64);
+
+    ballot = subgroupPartitionNV(data[0].f16.x);
+    ballot = subgroupPartitionNV(data[1].f16.xy);
+    ballot = subgroupPartitionNV(data[2].f16.xyz);
+    ballot = subgroupPartitionNV(data[3].f16);
+
+    data[invocation].i8.x   = subgroupPartitionedAddNV(data[0].i8.x, ballot);
+    data[invocation].i8.xy  = subgroupPartitionedAddNV(data[1].i8.xy, ballot);
+    data[invocation].i8.xyz = subgroupPartitionedAddNV(data[2].i8.xyz, ballot);
+    data[invocation].i8     = subgroupPartitionedAddNV(data[3].i8, ballot);
+
+    data[invocation].i8.x   = subgroupPartitionedMulNV(data[0].i8.x, ballot);
+    data[invocation].i8.xy  = subgroupPartitionedMulNV(data[1].i8.xy, ballot);
+    data[invocation].i8.xyz = subgroupPartitionedMulNV(data[2].i8.xyz, ballot);
+    data[invocation].i8     = subgroupPartitionedMulNV(data[3].i8, ballot);
+
+    data[invocation].i8.x   = subgroupPartitionedMinNV(data[0].i8.x, ballot);
+    data[invocation].i8.xy  = subgroupPartitionedMinNV(data[1].i8.xy, ballot);
+    data[invocation].i8.xyz = subgroupPartitionedMinNV(data[2].i8.xyz, ballot);
+    data[invocation].i8     = subgroupPartitionedMinNV(data[3].i8, ballot);
+
+    data[invocation].i8.x   = subgroupPartitionedMaxNV(data[0].i8.x, ballot);
+    data[invocation].i8.xy  = subgroupPartitionedMaxNV(data[1].i8.xy, ballot);
+    data[invocation].i8.xyz = subgroupPartitionedMaxNV(data[2].i8.xyz, ballot);
+    data[invocation].i8     = subgroupPartitionedMaxNV(data[3].i8, ballot);
+
+    data[invocation].i8.x   = subgroupPartitionedAndNV(data[0].i8.x, ballot);
+    data[invocation].i8.xy  = subgroupPartitionedAndNV(data[1].i8.xy, ballot);
+    data[invocation].i8.xyz = subgroupPartitionedAndNV(data[2].i8.xyz, ballot);
+    data[invocation].i8     = subgroupPartitionedAndNV(data[3].i8, ballot);
+
+    data[invocation].i8.x   = subgroupPartitionedOrNV(data[0].i8.x, ballot);
+    data[invocation].i8.xy  = subgroupPartitionedOrNV(data[1].i8.xy, ballot);
+    data[invocation].i8.xyz = subgroupPartitionedOrNV(data[2].i8.xyz, ballot);
+    data[invocation].i8     = subgroupPartitionedOrNV(data[3].i8, ballot);
+
+    data[invocation].i8.x   = subgroupPartitionedXorNV(data[0].i8.x, ballot);
+    data[invocation].i8.xy  = subgroupPartitionedXorNV(data[1].i8.xy, ballot);
+    data[invocation].i8.xyz = subgroupPartitionedXorNV(data[2].i8.xyz, ballot);
+    data[invocation].i8     = subgroupPartitionedXorNV(data[3].i8, ballot);
+
+    data[invocation].u8.x   = subgroupPartitionedAddNV(data[0].u8.x, ballot);
+    data[invocation].u8.xy  = subgroupPartitionedAddNV(data[1].u8.xy, ballot);
+    data[invocation].u8.xyz = subgroupPartitionedAddNV(data[2].u8.xyz, ballot);
+    data[invocation].u8     = subgroupPartitionedAddNV(data[3].u8, ballot);
+
+    data[invocation].u8.x   = subgroupPartitionedMulNV(data[0].u8.x, ballot);
+    data[invocation].u8.xy  = subgroupPartitionedMulNV(data[1].u8.xy, ballot);
+    data[invocation].u8.xyz = subgroupPartitionedMulNV(data[2].u8.xyz, ballot);
+    data[invocation].u8     = subgroupPartitionedMulNV(data[3].u8, ballot);
+
+    data[invocation].u8.x   = subgroupPartitionedMinNV(data[0].u8.x, ballot);
+    data[invocation].u8.xy  = subgroupPartitionedMinNV(data[1].u8.xy, ballot);
+    data[invocation].u8.xyz = subgroupPartitionedMinNV(data[2].u8.xyz, ballot);
+    data[invocation].u8     = subgroupPartitionedMinNV(data[3].u8, ballot);
+
+    data[invocation].u8.x   = subgroupPartitionedMaxNV(data[0].u8.x, ballot);
+    data[invocation].u8.xy  = subgroupPartitionedMaxNV(data[1].u8.xy, ballot);
+    data[invocation].u8.xyz = subgroupPartitionedMaxNV(data[2].u8.xyz, ballot);
+    data[invocation].u8     = subgroupPartitionedMaxNV(data[3].u8, ballot);
+
+    data[invocation].u8.x   = subgroupPartitionedAndNV(data[0].u8.x, ballot);
+    data[invocation].u8.xy  = subgroupPartitionedAndNV(data[1].u8.xy, ballot);
+    data[invocation].u8.xyz = subgroupPartitionedAndNV(data[2].u8.xyz, ballot);
+    data[invocation].u8     = subgroupPartitionedAndNV(data[3].u8, ballot);
+
+    data[invocation].u8.x   = subgroupPartitionedOrNV(data[0].u8.x, ballot);
+    data[invocation].u8.xy  = subgroupPartitionedOrNV(data[1].u8.xy, ballot);
+    data[invocation].u8.xyz = subgroupPartitionedOrNV(data[2].u8.xyz, ballot);
+    data[invocation].u8     = subgroupPartitionedOrNV(data[3].u8, ballot);
+
+    data[invocation].u8.x   = subgroupPartitionedXorNV(data[0].u8.x, ballot);
+    data[invocation].u8.xy  = subgroupPartitionedXorNV(data[1].u8.xy, ballot);
+    data[invocation].u8.xyz = subgroupPartitionedXorNV(data[2].u8.xyz, ballot);
+    data[invocation].u8     = subgroupPartitionedXorNV(data[3].u8, ballot);
+
+    data[invocation].i16.x   = subgroupPartitionedAddNV(data[0].i16.x, ballot);
+    data[invocation].i16.xy  = subgroupPartitionedAddNV(data[1].i16.xy, ballot);
+    data[invocation].i16.xyz = subgroupPartitionedAddNV(data[2].i16.xyz, ballot);
+    data[invocation].i16     = subgroupPartitionedAddNV(data[3].i16, ballot);
+
+    data[invocation].i16.x   = subgroupPartitionedMulNV(data[0].i16.x, ballot);
+    data[invocation].i16.xy  = subgroupPartitionedMulNV(data[1].i16.xy, ballot);
+    data[invocation].i16.xyz = subgroupPartitionedMulNV(data[2].i16.xyz, ballot);
+    data[invocation].i16     = subgroupPartitionedMulNV(data[3].i16, ballot);
+
+    data[invocation].i16.x   = subgroupPartitionedMinNV(data[0].i16.x, ballot);
+    data[invocation].i16.xy  = subgroupPartitionedMinNV(data[1].i16.xy, ballot);
+    data[invocation].i16.xyz = subgroupPartitionedMinNV(data[2].i16.xyz, ballot);
+    data[invocation].i16     = subgroupPartitionedMinNV(data[3].i16, ballot);
+
+    data[invocation].i16.x   = subgroupPartitionedMaxNV(data[0].i16.x, ballot);
+    data[invocation].i16.xy  = subgroupPartitionedMaxNV(data[1].i16.xy, ballot);
+    data[invocation].i16.xyz = subgroupPartitionedMaxNV(data[2].i16.xyz, ballot);
+    data[invocation].i16     = subgroupPartitionedMaxNV(data[3].i16, ballot);
+
+    data[invocation].i16.x   = subgroupPartitionedAndNV(data[0].i16.x, ballot);
+    data[invocation].i16.xy  = subgroupPartitionedAndNV(data[1].i16.xy, ballot);
+    data[invocation].i16.xyz = subgroupPartitionedAndNV(data[2].i16.xyz, ballot);
+    data[invocation].i16     = subgroupPartitionedAndNV(data[3].i16, ballot);
+
+    data[invocation].i16.x   = subgroupPartitionedOrNV(data[0].i16.x, ballot);
+    data[invocation].i16.xy  = subgroupPartitionedOrNV(data[1].i16.xy, ballot);
+    data[invocation].i16.xyz = subgroupPartitionedOrNV(data[2].i16.xyz, ballot);
+    data[invocation].i16     = subgroupPartitionedOrNV(data[3].i16, ballot);
+
+    data[invocation].i16.x   = subgroupPartitionedXorNV(data[0].i16.x, ballot);
+    data[invocation].i16.xy  = subgroupPartitionedXorNV(data[1].i16.xy, ballot);
+    data[invocation].i16.xyz = subgroupPartitionedXorNV(data[2].i16.xyz, ballot);
+    data[invocation].i16     = subgroupPartitionedXorNV(data[3].i16, ballot);
+
+    data[invocation].u16.x   = subgroupPartitionedAddNV(data[0].u16.x, ballot);
+    data[invocation].u16.xy  = subgroupPartitionedAddNV(data[1].u16.xy, ballot);
+    data[invocation].u16.xyz = subgroupPartitionedAddNV(data[2].u16.xyz, ballot);
+    data[invocation].u16     = subgroupPartitionedAddNV(data[3].u16, ballot);
+
+    data[invocation].u16.x   = subgroupPartitionedMulNV(data[0].u16.x, ballot);
+    data[invocation].u16.xy  = subgroupPartitionedMulNV(data[1].u16.xy, ballot);
+    data[invocation].u16.xyz = subgroupPartitionedMulNV(data[2].u16.xyz, ballot);
+    data[invocation].u16     = subgroupPartitionedMulNV(data[3].u16, ballot);
+
+    data[invocation].u16.x   = subgroupPartitionedMinNV(data[0].u16.x, ballot);
+    data[invocation].u16.xy  = subgroupPartitionedMinNV(data[1].u16.xy, ballot);
+    data[invocation].u16.xyz = subgroupPartitionedMinNV(data[2].u16.xyz, ballot);
+    data[invocation].u16     = subgroupPartitionedMinNV(data[3].u16, ballot);
+
+    data[invocation].u16.x   = subgroupPartitionedMaxNV(data[0].u16.x, ballot);
+    data[invocation].u16.xy  = subgroupPartitionedMaxNV(data[1].u16.xy, ballot);
+    data[invocation].u16.xyz = subgroupPartitionedMaxNV(data[2].u16.xyz, ballot);
+    data[invocation].u16     = subgroupPartitionedMaxNV(data[3].u16, ballot);
+
+    data[invocation].u16.x   = subgroupPartitionedAndNV(data[0].u16.x, ballot);
+    data[invocation].u16.xy  = subgroupPartitionedAndNV(data[1].u16.xy, ballot);
+    data[invocation].u16.xyz = subgroupPartitionedAndNV(data[2].u16.xyz, ballot);
+    data[invocation].u16     = subgroupPartitionedAndNV(data[3].u16, ballot);
+
+    data[invocation].u16.x   = subgroupPartitionedOrNV(data[0].u16.x, ballot);
+    data[invocation].u16.xy  = subgroupPartitionedOrNV(data[1].u16.xy, ballot);
+    data[invocation].u16.xyz = subgroupPartitionedOrNV(data[2].u16.xyz, ballot);
+    data[invocation].u16     = subgroupPartitionedOrNV(data[3].u16, ballot);
+
+    data[invocation].u16.x   = subgroupPartitionedXorNV(data[0].u16.x, ballot);
+    data[invocation].u16.xy  = subgroupPartitionedXorNV(data[1].u16.xy, ballot);
+    data[invocation].u16.xyz = subgroupPartitionedXorNV(data[2].u16.xyz, ballot);
+    data[invocation].u16     = subgroupPartitionedXorNV(data[3].u16, ballot);
+
+    data[invocation].i64.x   = subgroupPartitionedAddNV(data[0].i64.x, ballot);
+    data[invocation].i64.xy  = subgroupPartitionedAddNV(data[1].i64.xy, ballot);
+    data[invocation].i64.xyz = subgroupPartitionedAddNV(data[2].i64.xyz, ballot);
+    data[invocation].i64     = subgroupPartitionedAddNV(data[3].i64, ballot);
+
+    data[invocation].i64.x   = subgroupPartitionedMulNV(data[0].i64.x, ballot);
+    data[invocation].i64.xy  = subgroupPartitionedMulNV(data[1].i64.xy, ballot);
+    data[invocation].i64.xyz = subgroupPartitionedMulNV(data[2].i64.xyz, ballot);
+    data[invocation].i64     = subgroupPartitionedMulNV(data[3].i64, ballot);
+
+    data[invocation].i64.x   = subgroupPartitionedMinNV(data[0].i64.x, ballot);
+    data[invocation].i64.xy  = subgroupPartitionedMinNV(data[1].i64.xy, ballot);
+    data[invocation].i64.xyz = subgroupPartitionedMinNV(data[2].i64.xyz, ballot);
+    data[invocation].i64     = subgroupPartitionedMinNV(data[3].i64, ballot);
+
+    data[invocation].i64.x   = subgroupPartitionedMaxNV(data[0].i64.x, ballot);
+    data[invocation].i64.xy  = subgroupPartitionedMaxNV(data[1].i64.xy, ballot);
+    data[invocation].i64.xyz = subgroupPartitionedMaxNV(data[2].i64.xyz, ballot);
+    data[invocation].i64     = subgroupPartitionedMaxNV(data[3].i64, ballot);
+
+    data[invocation].i64.x   = subgroupPartitionedAndNV(data[0].i64.x, ballot);
+    data[invocation].i64.xy  = subgroupPartitionedAndNV(data[1].i64.xy, ballot);
+    data[invocation].i64.xyz = subgroupPartitionedAndNV(data[2].i64.xyz, ballot);
+    data[invocation].i64     = subgroupPartitionedAndNV(data[3].i64, ballot);
+
+    data[invocation].i64.x   = subgroupPartitionedOrNV(data[0].i64.x, ballot);
+    data[invocation].i64.xy  = subgroupPartitionedOrNV(data[1].i64.xy, ballot);
+    data[invocation].i64.xyz = subgroupPartitionedOrNV(data[2].i64.xyz, ballot);
+    data[invocation].i64     = subgroupPartitionedOrNV(data[3].i64, ballot);
+
+    data[invocation].i64.x   = subgroupPartitionedXorNV(data[0].i64.x, ballot);
+    data[invocation].i64.xy  = subgroupPartitionedXorNV(data[1].i64.xy, ballot);
+    data[invocation].i64.xyz = subgroupPartitionedXorNV(data[2].i64.xyz, ballot);
+    data[invocation].i64     = subgroupPartitionedXorNV(data[3].i64, ballot);
+
+    data[invocation].u64.x   = subgroupPartitionedAddNV(data[0].u64.x, ballot);
+    data[invocation].u64.xy  = subgroupPartitionedAddNV(data[1].u64.xy, ballot);
+    data[invocation].u64.xyz = subgroupPartitionedAddNV(data[2].u64.xyz, ballot);
+    data[invocation].u64     = subgroupPartitionedAddNV(data[3].u64, ballot);
+
+    data[invocation].u64.x   = subgroupPartitionedMulNV(data[0].u64.x, ballot);
+    data[invocation].u64.xy  = subgroupPartitionedMulNV(data[1].u64.xy, ballot);
+    data[invocation].u64.xyz = subgroupPartitionedMulNV(data[2].u64.xyz, ballot);
+    data[invocation].u64     = subgroupPartitionedMulNV(data[3].u64, ballot);
+
+    data[invocation].u64.x   = subgroupPartitionedMinNV(data[0].u64.x, ballot);
+    data[invocation].u64.xy  = subgroupPartitionedMinNV(data[1].u64.xy, ballot);
+    data[invocation].u64.xyz = subgroupPartitionedMinNV(data[2].u64.xyz, ballot);
+    data[invocation].u64     = subgroupPartitionedMinNV(data[3].u64, ballot);
+
+    data[invocation].u64.x   = subgroupPartitionedMaxNV(data[0].u64.x, ballot);
+    data[invocation].u64.xy  = subgroupPartitionedMaxNV(data[1].u64.xy, ballot);
+    data[invocation].u64.xyz = subgroupPartitionedMaxNV(data[2].u64.xyz, ballot);
+    data[invocation].u64     = subgroupPartitionedMaxNV(data[3].u64, ballot);
+
+    data[invocation].u64.x   = subgroupPartitionedAndNV(data[0].u64.x, ballot);
+    data[invocation].u64.xy  = subgroupPartitionedAndNV(data[1].u64.xy, ballot);
+    data[invocation].u64.xyz = subgroupPartitionedAndNV(data[2].u64.xyz, ballot);
+    data[invocation].u64     = subgroupPartitionedAndNV(data[3].u64, ballot);
+
+    data[invocation].u64.x   = subgroupPartitionedOrNV(data[0].u64.x, ballot);
+    data[invocation].u64.xy  = subgroupPartitionedOrNV(data[1].u64.xy, ballot);
+    data[invocation].u64.xyz = subgroupPartitionedOrNV(data[2].u64.xyz, ballot);
+    data[invocation].u64     = subgroupPartitionedOrNV(data[3].u64, ballot);
+
+    data[invocation].u64.x   = subgroupPartitionedXorNV(data[0].u64.x, ballot);
+    data[invocation].u64.xy  = subgroupPartitionedXorNV(data[1].u64.xy, ballot);
+    data[invocation].u64.xyz = subgroupPartitionedXorNV(data[2].u64.xyz, ballot);
+    data[invocation].u64     = subgroupPartitionedXorNV(data[3].u64, ballot);
+
+    data[invocation].f16.x   = subgroupPartitionedAddNV(data[0].f16.x, ballot);
+    data[invocation].f16.xy  = subgroupPartitionedAddNV(data[1].f16.xy, ballot);
+    data[invocation].f16.xyz = subgroupPartitionedAddNV(data[2].f16.xyz, ballot);
+    data[invocation].f16     = subgroupPartitionedAddNV(data[3].f16, ballot);
+
+    data[invocation].f16.x   = subgroupPartitionedMulNV(data[0].f16.x, ballot);
+    data[invocation].f16.xy  = subgroupPartitionedMulNV(data[1].f16.xy, ballot);
+    data[invocation].f16.xyz = subgroupPartitionedMulNV(data[2].f16.xyz, ballot);
+    data[invocation].f16     = subgroupPartitionedMulNV(data[3].f16, ballot);
+
+    data[invocation].f16.x   = subgroupPartitionedMinNV(data[0].f16.x, ballot);
+    data[invocation].f16.xy  = subgroupPartitionedMinNV(data[1].f16.xy, ballot);
+    data[invocation].f16.xyz = subgroupPartitionedMinNV(data[2].f16.xyz, ballot);
+    data[invocation].f16     = subgroupPartitionedMinNV(data[3].f16, ballot);
+
+    data[invocation].f16.x   = subgroupPartitionedMaxNV(data[0].f16.x, ballot);
+    data[invocation].f16.xy  = subgroupPartitionedMaxNV(data[1].f16.xy, ballot);
+    data[invocation].f16.xyz = subgroupPartitionedMaxNV(data[2].f16.xyz, ballot);
+    data[invocation].f16     = subgroupPartitionedMaxNV(data[3].f16, ballot);
+}

@@ -1,0 +1,20 @@
+#version 430 core
+
+#extension GL_EXT_shared_memory_block : enable
+
+layout(local_size_x = 8) in;
+
+shared first
+{
+    int a;
+};
+
+shared int b;
+
+// Cannot mix shared block and shared non-block, will fail at linking.
+
+void main()
+{
+    a = 2;
+    b = 3;
+}

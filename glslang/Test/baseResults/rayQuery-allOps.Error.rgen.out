@@ -1,0 +1,26 @@
+rayQuery-allOps.Error.rgen
+ERROR: 0:47: '==' :  wrong operand types: no operation '==' exists that takes a left-hand operand of type ' global bool' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:49: '=' :  cannot convert from ' global uint' to ' temp highp int'
+ERROR: 0:59: '==' :  wrong operand types: no operation '==' exists that takes a left-hand operand of type ' global bool' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:64: '==' :  wrong operand types: no operation '==' exists that takes a left-hand operand of type ' global 2-component vector of float' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:69: '' : boolean expression expected 
+ERROR: 0:74: '' : boolean expression expected 
+ERROR: 0:79: '>' :  wrong operand types: no operation '>' exists that takes a left-hand operand of type ' global 3-component vector of float' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:84: '>' :  wrong operand types: no operation '>' exists that takes a left-hand operand of type ' global 3-component vector of float' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:89: '' : boolean expression expected 
+ERROR: 0:94: '' : boolean expression expected 
+ERROR: 0:99: '' : boolean expression expected 
+ERROR: 0:127: '=' :  cannot convert from ' global uint' to ' temp highp int'
+ERROR: 0:145: '==' :  wrong operand types: no operation '==' exists that takes a left-hand operand of type ' global 2-component vector of float' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:158: '' : boolean expression expected 
+ERROR: 0:163: '' : boolean expression expected 
+ERROR: 0:168: '>' :  wrong operand types: no operation '>' exists that takes a left-hand operand of type ' global 3-component vector of float' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:173: '>' :  wrong operand types: no operation '>' exists that takes a left-hand operand of type ' global 3-component vector of float' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:178: '' : boolean expression expected 
+ERROR: 0:183: '' : boolean expression expected 
+ERROR: 0:195: '' : boolean expression expected 
+ERROR: 0:200: '' : boolean expression expected 
+ERROR: 21 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

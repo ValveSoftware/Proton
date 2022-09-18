@@ -1,0 +1,1039 @@
+glsl.460.subgroupEXT.mesh
+ERROR: 0:6: 'gl_SubgroupSize' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:7: 'gl_SubgroupInvocationID' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:8: 'subgroupBarrier' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:9: 'subgroupMemoryBarrier' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:10: 'subgroupMemoryBarrierBuffer' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:11: 'subgroupMemoryBarrierImage' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:12: 'subgroupElect' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:13: 'gl_NumSubgroups' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:14: 'gl_SubgroupID' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:15: 'subgroupMemoryBarrierShared' : required extension not requested: GL_KHR_shader_subgroup_basic
+ERROR: 0:17: 'subgroupAll' : required extension not requested: GL_KHR_shader_subgroup_vote
+ERROR: 0:18: 'subgroupAny' : required extension not requested: GL_KHR_shader_subgroup_vote
+ERROR: 0:19: 'subgroupAllEqual' : required extension not requested: GL_KHR_shader_subgroup_vote
+ERROR: 0:21: 'gl_SubgroupEqMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:22: 'gl_SubgroupGeMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:23: 'gl_SubgroupGtMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:24: 'gl_SubgroupLeMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:25: 'gl_SubgroupLtMask' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:26: 'subgroupBroadcast' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:27: 'subgroupBroadcastFirst' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:28: 'subgroupBallot' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:29: 'subgroupInverseBallot' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:30: 'subgroupBallotBitExtract' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:31: 'subgroupBallotBitCount' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:32: 'subgroupBallotInclusiveBitCount' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:33: 'subgroupBallotExclusiveBitCount' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:34: 'subgroupBallotFindLSB' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:35: 'subgroupBallotFindMSB' : required extension not requested: GL_KHR_shader_subgroup_ballot
+ERROR: 0:37: 'subgroupShuffle' : required extension not requested: GL_KHR_shader_subgroup_shuffle
+ERROR: 0:38: 'subgroupShuffleXor' : required extension not requested: GL_KHR_shader_subgroup_shuffle
+ERROR: 0:39: 'subgroupShuffleUp' : required extension not requested: GL_KHR_shader_subgroup_shuffle_relative
+ERROR: 0:40: 'subgroupShuffleDown' : required extension not requested: GL_KHR_shader_subgroup_shuffle_relative
+ERROR: 0:42: 'subgroupAdd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:43: 'subgroupMul' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:44: 'subgroupMin' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:45: 'subgroupMax' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:46: 'subgroupAnd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:47: 'subgroupOr' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:48: 'subgroupXor' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:49: 'subgroupInclusiveAdd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:50: 'subgroupInclusiveMul' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:51: 'subgroupInclusiveMin' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:52: 'subgroupInclusiveMax' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:53: 'subgroupInclusiveAnd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:54: 'subgroupInclusiveOr' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:55: 'subgroupInclusiveXor' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:56: 'subgroupExclusiveAdd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:57: 'subgroupExclusiveMul' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:58: 'subgroupExclusiveMin' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:59: 'subgroupExclusiveMax' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:60: 'subgroupExclusiveAnd' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:61: 'subgroupExclusiveOr' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:62: 'subgroupExclusiveXor' : required extension not requested: GL_KHR_shader_subgroup_arithmetic
+ERROR: 0:64: 'subgroupClusteredAdd' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:65: 'subgroupClusteredMul' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:66: 'subgroupClusteredMin' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:67: 'subgroupClusteredMax' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:68: 'subgroupClusteredAnd' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:69: 'subgroupClusteredOr' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:70: 'subgroupClusteredXor' : required extension not requested: GL_KHR_shader_subgroup_clustered
+ERROR: 0:72: 'subgroupQuadBroadcast' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 0:73: 'subgroupQuadSwapHorizontal' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 0:74: 'subgroupQuadSwapVertical' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 0:75: 'subgroupQuadSwapDiagonal' : required extension not requested: GL_KHR_shader_subgroup_quad
+ERROR: 64 compilation errors.  No code generated.
+
+
+Shader version: 460
+Requested GL_EXT_mesh_shader
+Requested GL_KHR_shader_subgroup_arithmetic
+Requested GL_KHR_shader_subgroup_ballot
+Requested GL_KHR_shader_subgroup_basic
+Requested GL_KHR_shader_subgroup_clustered
+Requested GL_KHR_shader_subgroup_quad
+Requested GL_KHR_shader_subgroup_shuffle
+Requested GL_KHR_shader_subgroup_shuffle_relative
+Requested GL_KHR_shader_subgroup_vote
+max_vertices = 81
+max_primitives = 32
+output primitive = triangles
+local_size = (32, 1, 1)
+ERROR: node is still EOpNull!
+0:3  Function Definition: undeclared_errors(vf4; ( global 4-component vector of float)
+0:3    Function Parameters: 
+0:3      'f4' ( in 4-component vector of float)
+0:?     Sequence
+0:6      'gl_SubgroupSize' ( in uint SubgroupSize)
+0:7      'gl_SubgroupInvocationID' ( in uint SubgroupInvocationID)
+0:8      subgroupBarrier ( global void)
+0:9      subgroupMemoryBarrier ( global void)
+0:10      subgroupMemoryBarrierBuffer ( global void)
+0:11      subgroupMemoryBarrierImage ( global void)
+0:12      subgroupElect ( global bool)
+0:13      'gl_NumSubgroups' ( in uint NumSubgroups)
+0:14      'gl_SubgroupID' ( in uint SubgroupID)
+0:15      subgroupMemoryBarrierShared ( global void)
+0:17      subgroupAll ( global bool)
+0:17        Constant:
+0:17          true (const bool)
+0:18      subgroupAny ( global bool)
+0:18        Constant:
+0:18          false (const bool)
+0:19      subgroupAllEqual ( global bool)
+0:19        'f4' ( in 4-component vector of float)
+0:21      'gl_SubgroupEqMask' ( in 4-component vector of uint SubgroupEqMask)
+0:22      'gl_SubgroupGeMask' ( in 4-component vector of uint SubgroupGeMask)
+0:23      'gl_SubgroupGtMask' ( in 4-component vector of uint SubgroupGtMask)
+0:24      'gl_SubgroupLeMask' ( in 4-component vector of uint SubgroupLeMask)
+0:25      'gl_SubgroupLtMask' ( in 4-component vector of uint SubgroupLtMask)
+0:26      subgroupBroadcast ( global 4-component vector of float)
+0:26        'f4' ( in 4-component vector of float)
+0:26        Constant:
+0:26          0 (const uint)
+0:27      subgroupBroadcastFirst ( global 4-component vector of float)
+0:27        'f4' ( in 4-component vector of float)
+0:28      Sequence
+0:28        move second child to first child ( temp 4-component vector of uint)
+0:28          'ballot' ( temp 4-component vector of uint)
+0:28          subgroupBallot ( global 4-component vector of uint)
+0:28            Constant:
+0:28              false (const bool)
+0:29      subgroupInverseBallot ( global bool)
+0:29        Constant:
+0:29          1 (const uint)
+0:29          1 (const uint)
+0:29          1 (const uint)
+0:29          1 (const uint)
+0:30      subgroupBallotBitExtract ( global bool)
+0:30        'ballot' ( temp 4-component vector of uint)
+0:30        Constant:
+0:30          0 (const uint)
+0:31      subgroupBallotBitCount ( global uint)
+0:31        'ballot' ( temp 4-component vector of uint)
+0:32      subgroupBallotInclusiveBitCount ( global uint)
+0:32        'ballot' ( temp 4-component vector of uint)
+0:33      subgroupBallotExclusiveBitCount ( global uint)
+0:33        'ballot' ( temp 4-component vector of uint)
+0:34      subgroupBallotFindLSB ( global uint)
+0:34        'ballot' ( temp 4-component vector of uint)
+0:35      subgroupBallotFindMSB ( global uint)
+0:35        'ballot' ( temp 4-component vector of uint)
+0:37      subgroupShuffle ( global 4-component vector of float)
+0:37        'f4' ( in 4-component vector of float)
+0:37        Constant:
+0:37          0 (const uint)
+0:38      subgroupShuffleXor ( global 4-component vector of float)
+0:38        'f4' ( in 4-component vector of float)
+0:38        Constant:
+0:38          1 (const uint)
+0:39      subgroupShuffleUp ( global 4-component vector of float)
+0:39        'f4' ( in 4-component vector of float)
+0:39        Constant:
+0:39          1 (const uint)
+0:40      subgroupShuffleDown ( global 4-component vector of float)
+0:40        'f4' ( in 4-component vector of float)
+0:40        Constant:
+0:40          1 (const uint)
+0:42      move second child to first child ( temp 4-component vector of float)
+0:42        'result' ( temp 4-component vector of float)
+0:42        subgroupAdd ( global 4-component vector of float)
+0:42          'f4' ( in 4-component vector of float)
+0:43      subgroupMul ( global 4-component vector of float)
+0:43        'f4' ( in 4-component vector of float)
+0:44      subgroupMin ( global 4-component vector of float)
+0:44        'f4' ( in 4-component vector of float)
+0:45      subgroupMax ( global 4-component vector of float)
+0:45        'f4' ( in 4-component vector of float)
+0:46      subgroupAnd ( global 4-component vector of uint)
+0:46        'ballot' ( temp 4-component vector of uint)
+0:47      subgroupOr ( global 4-component vector of uint)
+0:47        'ballot' ( temp 4-component vector of uint)
+0:48      subgroupXor ( global 4-component vector of uint)
+0:48        'ballot' ( temp 4-component vector of uint)
+0:49      subgroupInclusiveAdd ( global 4-component vector of float)
+0:49        'f4' ( in 4-component vector of float)
+0:50      subgroupInclusiveMul ( global 4-component vector of float)
+0:50        'f4' ( in 4-component vector of float)
+0:51      subgroupInclusiveMin ( global 4-component vector of float)
+0:51        'f4' ( in 4-component vector of float)
+0:52      subgroupInclusiveMax ( global 4-component vector of float)
+0:52        'f4' ( in 4-component vector of float)
+0:53      subgroupInclusiveAnd ( global 4-component vector of uint)
+0:53        'ballot' ( temp 4-component vector of uint)
+0:54      subgroupInclusiveOr ( global 4-component vector of uint)
+0:54        'ballot' ( temp 4-component vector of uint)
+0:55      subgroupInclusiveXor ( global 4-component vector of uint)
+0:55        'ballot' ( temp 4-component vector of uint)
+0:56      subgroupExclusiveAdd ( global 4-component vector of float)
+0:56        'f4' ( in 4-component vector of float)
+0:57      subgroupExclusiveMul ( global 4-component vector of float)
+0:57        'f4' ( in 4-component vector of float)
+0:58      subgroupExclusiveMin ( global 4-component vector of float)
+0:58        'f4' ( in 4-component vector of float)
+0:59      subgroupExclusiveMax ( global 4-component vector of float)
+0:59        'f4' ( in 4-component vector of float)
+0:60      subgroupExclusiveAnd ( global 4-component vector of uint)
+0:60        'ballot' ( temp 4-component vector of uint)
+0:61      subgroupExclusiveOr ( global 4-component vector of uint)
+0:61        'ballot' ( temp 4-component vector of uint)
+0:62      subgroupExclusiveXor ( global 4-component vector of uint)
+0:62        'ballot' ( temp 4-component vector of uint)
+0:64      subgroupClusteredAdd ( global 4-component vector of float)
+0:64        'f4' ( in 4-component vector of float)
+0:64        Constant:
+0:64          2 (const uint)
+0:65      subgroupClusteredMul ( global 4-component vector of float)
+0:65        'f4' ( in 4-component vector of float)
+0:65        Constant:
+0:65          2 (const uint)
+0:66      subgroupClusteredMin ( global 4-component vector of float)
+0:66        'f4' ( in 4-component vector of float)
+0:66        Constant:
+0:66          2 (const uint)
+0:67      subgroupClusteredMax ( global 4-component vector of float)
+0:67        'f4' ( in 4-component vector of float)
+0:67        Constant:
+0:67          2 (const uint)
+0:68      subgroupClusteredAnd ( global 4-component vector of uint)
+0:68        'ballot' ( temp 4-component vector of uint)
+0:68        Constant:
+0:68          2 (const uint)
+0:69      subgroupClusteredOr ( global 4-component vector of uint)
+0:69        'ballot' ( temp 4-component vector of uint)
+0:69        Constant:
+0:69          2 (const uint)
+0:70      subgroupClusteredXor ( global 4-component vector of uint)
+0:70        'ballot' ( temp 4-component vector of uint)
+0:70        Constant:
+0:70          2 (const uint)
+0:72      subgroupQuadBroadcast ( global 4-component vector of float)
+0:72        'f4' ( in 4-component vector of float)
+0:72        Constant:
+0:72          0 (const uint)
+0:73      subgroupQuadSwapHorizontal ( global 4-component vector of float)
+0:73        'f4' ( in 4-component vector of float)
+0:74      subgroupQuadSwapVertical ( global 4-component vector of float)
+0:74        'f4' ( in 4-component vector of float)
+0:75      subgroupQuadSwapDiagonal ( global 4-component vector of float)
+0:75        'f4' ( in 4-component vector of float)
+0:77      Branch: Return with expression
+0:77        'result' ( temp 4-component vector of float)
+0:97  Function Definition: main( ( global void)
+0:97    Function Parameters: 
+0:99    Sequence
+0:99      Sequence
+0:99        move second child to first child ( temp uint)
+0:99          'iid' ( temp uint)
+0:99          direct index ( temp uint)
+0:99            'gl_LocalInvocationID' ( in 3-component vector of uint LocalInvocationID)
+0:99            Constant:
+0:99              0 (const int)
+0:100      Sequence
+0:100        move second child to first child ( temp uint)
+0:100          'gid' ( temp uint)
+0:100          direct index ( temp uint)
+0:100            'gl_WorkGroupID' ( in 3-component vector of uint WorkGroupID)
+0:100            Constant:
+0:100              0 (const int)
+0:101      Sequence
+0:101        move second child to first child ( temp uint)
+0:101          'vertexCount' ( temp uint)
+0:101          Constant:
+0:101            81 (const uint)
+0:102      Sequence
+0:102        move second child to first child ( temp uint)
+0:102          'primitiveCount' ( temp uint)
+0:102          Constant:
+0:102            32 (const uint)
+0:103      SetMeshOutputsEXT ( global void)
+0:103        'vertexCount' ( temp uint)
+0:103        'primitiveCount' ( temp uint)
+0:105      move second child to first child ( temp 4-component vector of float)
+0:105        gl_Position: direct index for structure ( out 4-component vector of float Position)
+0:105          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:105            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:105            'iid' ( temp uint)
+0:105          Constant:
+0:105            0 (const int)
+0:105        Constant:
+0:105          1.000000
+0:105          1.000000
+0:105          1.000000
+0:105          1.000000
+0:106      move second child to first child ( temp float)
+0:106        gl_PointSize: direct index for structure ( out float PointSize)
+0:106          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:106            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:106            'iid' ( temp uint)
+0:106          Constant:
+0:106            1 (const int)
+0:106        Constant:
+0:106          2.000000
+0:107      move second child to first child ( temp float)
+0:107        direct index ( temp float ClipDistance)
+0:107          gl_ClipDistance: direct index for structure ( out unsized 4-element array of float ClipDistance)
+0:107            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:107              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:107              'iid' ( temp uint)
+0:107            Constant:
+0:107              2 (const int)
+0:107          Constant:
+0:107            3 (const int)
+0:107        Constant:
+0:107          3.000000
+0:108      move second child to first child ( temp float)
+0:108        direct index ( temp float CullDistance)
+0:108          gl_CullDistance: direct index for structure ( out unsized 3-element array of float CullDistance)
+0:108            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:108              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:108              'iid' ( temp uint)
+0:108            Constant:
+0:108              3 (const int)
+0:108          Constant:
+0:108            2 (const int)
+0:108        Constant:
+0:108          4.000000
+0:110      MemoryBarrierShared ( global void)
+0:110      Barrier ( global void)
+0:112      move second child to first child ( temp 4-component vector of float)
+0:112        gl_Position: direct index for structure ( out 4-component vector of float Position)
+0:112          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:112            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:112            add ( temp uint)
+0:112              'iid' ( temp uint)
+0:112              Constant:
+0:112                1 (const uint)
+0:112          Constant:
+0:112            0 (const int)
+0:112        gl_Position: direct index for structure ( out 4-component vector of float Position)
+0:112          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:112            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:112            'iid' ( temp uint)
+0:112          Constant:
+0:112            0 (const int)
+0:113      move second child to first child ( temp float)
+0:113        gl_PointSize: direct index for structure ( out float PointSize)
+0:113          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:113            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:113            add ( temp uint)
+0:113              'iid' ( temp uint)
+0:113              Constant:
+0:113                1 (const uint)
+0:113          Constant:
+0:113            1 (const int)
+0:113        gl_PointSize: direct index for structure ( out float PointSize)
+0:113          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:113            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:113            'iid' ( temp uint)
+0:113          Constant:
+0:113            1 (const int)
+0:114      move second child to first child ( temp float)
+0:114        direct index ( temp float ClipDistance)
+0:114          gl_ClipDistance: direct index for structure ( out unsized 4-element array of float ClipDistance)
+0:114            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:114              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:114              add ( temp uint)
+0:114                'iid' ( temp uint)
+0:114                Constant:
+0:114                  1 (const uint)
+0:114            Constant:
+0:114              2 (const int)
+0:114          Constant:
+0:114            3 (const int)
+0:114        direct index ( temp float ClipDistance)
+0:114          gl_ClipDistance: direct index for structure ( out unsized 4-element array of float ClipDistance)
+0:114            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:114              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:114              'iid' ( temp uint)
+0:114            Constant:
+0:114              2 (const int)
+0:114          Constant:
+0:114            3 (const int)
+0:115      move second child to first child ( temp float)
+0:115        direct index ( temp float CullDistance)
+0:115          gl_CullDistance: direct index for structure ( out unsized 3-element array of float CullDistance)
+0:115            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:115              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:115              add ( temp uint)
+0:115                'iid' ( temp uint)
+0:115                Constant:
+0:115                  1 (const uint)
+0:115            Constant:
+0:115              3 (const int)
+0:115          Constant:
+0:115            2 (const int)
+0:115        direct index ( temp float CullDistance)
+0:115          gl_CullDistance: direct index for structure ( out unsized 3-element array of float CullDistance)
+0:115            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:115              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:115              'iid' ( temp uint)
+0:115            Constant:
+0:115              3 (const int)
+0:115          Constant:
+0:115            2 (const int)
+0:117      MemoryBarrierShared ( global void)
+0:117      Barrier ( global void)
+0:119      move second child to first child ( temp int)
+0:119        gl_PrimitiveID: direct index for structure ( perprimitiveNV out int PrimitiveID)
+0:119          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:119            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:119            'iid' ( temp uint)
+0:119          Constant:
+0:119            0 (const int)
+0:119        Constant:
+0:119          6 (const int)
+0:120      move second child to first child ( temp int)
+0:120        gl_Layer: direct index for structure ( perprimitiveNV out int Layer)
+0:120          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:120            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:120            'iid' ( temp uint)
+0:120          Constant:
+0:120            1 (const int)
+0:120        Constant:
+0:120          7 (const int)
+0:121      move second child to first child ( temp int)
+0:121        gl_ViewportIndex: direct index for structure ( perprimitiveNV out int ViewportIndex)
+0:121          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:121            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:121            'iid' ( temp uint)
+0:121          Constant:
+0:121            2 (const int)
+0:121        Constant:
+0:121          8 (const int)
+0:122      move second child to first child ( temp bool)
+0:122        gl_CullPrimitiveEXT: direct index for structure ( perprimitiveNV out bool CullPrimitiveEXT)
+0:122          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:122            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:122            'iid' ( temp uint)
+0:122          Constant:
+0:122            3 (const int)
+0:122        Constant:
+0:122          false (const bool)
+0:124      MemoryBarrierShared ( global void)
+0:124      Barrier ( global void)
+0:126      move second child to first child ( temp int)
+0:126        gl_PrimitiveID: direct index for structure ( perprimitiveNV out int PrimitiveID)
+0:126          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            add ( temp uint)
+0:126              'iid' ( temp uint)
+0:126              Constant:
+0:126                1 (const uint)
+0:126          Constant:
+0:126            0 (const int)
+0:126        gl_PrimitiveID: direct index for structure ( perprimitiveNV out int PrimitiveID)
+0:126          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            'iid' ( temp uint)
+0:126          Constant:
+0:126            0 (const int)
+0:127      move second child to first child ( temp int)
+0:127        gl_Layer: direct index for structure ( perprimitiveNV out int Layer)
+0:127          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            add ( temp uint)
+0:127              'iid' ( temp uint)
+0:127              Constant:
+0:127                1 (const uint)
+0:127          Constant:
+0:127            1 (const int)
+0:127        gl_Layer: direct index for structure ( perprimitiveNV out int Layer)
+0:127          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            'iid' ( temp uint)
+0:127          Constant:
+0:127            1 (const int)
+0:128      move second child to first child ( temp int)
+0:128        gl_ViewportIndex: direct index for structure ( perprimitiveNV out int ViewportIndex)
+0:128          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            add ( temp uint)
+0:128              'iid' ( temp uint)
+0:128              Constant:
+0:128                1 (const uint)
+0:128          Constant:
+0:128            2 (const int)
+0:128        gl_ViewportIndex: direct index for structure ( perprimitiveNV out int ViewportIndex)
+0:128          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            'iid' ( temp uint)
+0:128          Constant:
+0:128            2 (const int)
+0:129      move second child to first child ( temp bool)
+0:129        gl_CullPrimitiveEXT: direct index for structure ( perprimitiveNV out bool CullPrimitiveEXT)
+0:129          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:129            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:129            add ( temp uint)
+0:129              'iid' ( temp uint)
+0:129              Constant:
+0:129                1 (const uint)
+0:129          Constant:
+0:129            3 (const int)
+0:129        Constant:
+0:129          false (const bool)
+0:131      MemoryBarrierShared ( global void)
+0:131      Barrier ( global void)
+0:134      move second child to first child ( temp 3-component vector of uint)
+0:134        direct index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:134          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:134          Constant:
+0:134            0 (const int)
+0:134        Constant:
+0:134          1 (const uint)
+0:134          1 (const uint)
+0:134          1 (const uint)
+0:135      move second child to first child ( temp 3-component vector of uint)
+0:135        indirect index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:135          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:135          subtract ( temp uint)
+0:135            'primitiveCount' ( temp uint)
+0:135            Constant:
+0:135              1 (const uint)
+0:135        Constant:
+0:135          2 (const uint)
+0:135          2 (const uint)
+0:135          2 (const uint)
+0:136      move second child to first child ( temp 3-component vector of uint)
+0:136        indirect index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          'gid' ( temp uint)
+0:136        indirect index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          subtract ( temp uint)
+0:136            'gid' ( temp uint)
+0:136            Constant:
+0:136              1 (const uint)
+0:139      MemoryBarrierShared ( global void)
+0:139      Barrier ( global void)
+0:143  Function Definition: basic_works( ( global void)
+0:143    Function Parameters: 
+0:145    Sequence
+0:145      'gl_SubgroupSize' ( in uint SubgroupSize)
+0:146      'gl_SubgroupInvocationID' ( in uint SubgroupInvocationID)
+0:147      subgroupBarrier ( global void)
+0:148      subgroupMemoryBarrier ( global void)
+0:149      subgroupMemoryBarrierBuffer ( global void)
+0:150      subgroupMemoryBarrierImage ( global void)
+0:151      subgroupElect ( global bool)
+0:152      'gl_NumSubgroups' ( in uint NumSubgroups)
+0:153      'gl_SubgroupID' ( in uint SubgroupID)
+0:154      subgroupMemoryBarrierShared ( global void)
+0:158  Function Definition: ballot_works(vf4; ( global void)
+0:158    Function Parameters: 
+0:158      'f4' ( in 4-component vector of float)
+0:159    Sequence
+0:159      'gl_SubgroupEqMask' ( in 4-component vector of uint SubgroupEqMask)
+0:160      'gl_SubgroupGeMask' ( in 4-component vector of uint SubgroupGeMask)
+0:161      'gl_SubgroupGtMask' ( in 4-component vector of uint SubgroupGtMask)
+0:162      'gl_SubgroupLeMask' ( in 4-component vector of uint SubgroupLeMask)
+0:163      'gl_SubgroupLtMask' ( in 4-component vector of uint SubgroupLtMask)
+0:164      subgroupBroadcast ( global 4-component vector of float)
+0:164        'f4' ( in 4-component vector of float)
+0:164        Constant:
+0:164          0 (const uint)
+0:165      subgroupBroadcastFirst ( global 4-component vector of float)
+0:165        'f4' ( in 4-component vector of float)
+0:166      Sequence
+0:166        move second child to first child ( temp 4-component vector of uint)
+0:166          'ballot' ( temp 4-component vector of uint)
+0:166          subgroupBallot ( global 4-component vector of uint)
+0:166            Constant:
+0:166              false (const bool)
+0:167      subgroupInverseBallot ( global bool)
+0:167        Constant:
+0:167          1 (const uint)
+0:167          1 (const uint)
+0:167          1 (const uint)
+0:167          1 (const uint)
+0:168      subgroupBallotBitExtract ( global bool)
+0:168        'ballot' ( temp 4-component vector of uint)
+0:168        Constant:
+0:168          0 (const uint)
+0:169      subgroupBallotBitCount ( global uint)
+0:169        'ballot' ( temp 4-component vector of uint)
+0:170      subgroupBallotInclusiveBitCount ( global uint)
+0:170        'ballot' ( temp 4-component vector of uint)
+0:171      subgroupBallotExclusiveBitCount ( global uint)
+0:171        'ballot' ( temp 4-component vector of uint)
+0:172      subgroupBallotFindLSB ( global uint)
+0:172        'ballot' ( temp 4-component vector of uint)
+0:173      subgroupBallotFindMSB ( global uint)
+0:173        'ballot' ( temp 4-component vector of uint)
+0:177  Function Definition: vote_works(vf4; ( global void)
+0:177    Function Parameters: 
+0:177      'f4' ( in 4-component vector of float)
+0:179    Sequence
+0:179      subgroupAll ( global bool)
+0:179        Constant:
+0:179          true (const bool)
+0:180      subgroupAny ( global bool)
+0:180        Constant:
+0:180          false (const bool)
+0:181      subgroupAllEqual ( global bool)
+0:181        'f4' ( in 4-component vector of float)
+0:186  Function Definition: shuffle_works(vf4; ( global void)
+0:186    Function Parameters: 
+0:186      'f4' ( in 4-component vector of float)
+0:188    Sequence
+0:188      subgroupShuffle ( global 4-component vector of float)
+0:188        'f4' ( in 4-component vector of float)
+0:188        Constant:
+0:188          0 (const uint)
+0:189      subgroupShuffleXor ( global 4-component vector of float)
+0:189        'f4' ( in 4-component vector of float)
+0:189        Constant:
+0:189          1 (const uint)
+0:190      subgroupShuffleUp ( global 4-component vector of float)
+0:190        'f4' ( in 4-component vector of float)
+0:190        Constant:
+0:190          1 (const uint)
+0:191      subgroupShuffleDown ( global 4-component vector of float)
+0:191        'f4' ( in 4-component vector of float)
+0:191        Constant:
+0:191          1 (const uint)
+0:195  Function Definition: arith_works(vf4; ( global void)
+0:195    Function Parameters: 
+0:195      'f4' ( in 4-component vector of float)
+0:?     Sequence
+0:198      subgroupAdd ( global 4-component vector of float)
+0:198        'f4' ( in 4-component vector of float)
+0:199      subgroupMul ( global 4-component vector of float)
+0:199        'f4' ( in 4-component vector of float)
+0:200      subgroupMin ( global 4-component vector of float)
+0:200        'f4' ( in 4-component vector of float)
+0:201      subgroupMax ( global 4-component vector of float)
+0:201        'f4' ( in 4-component vector of float)
+0:202      subgroupAnd ( global 4-component vector of uint)
+0:202        'ballot' ( temp 4-component vector of uint)
+0:203      subgroupOr ( global 4-component vector of uint)
+0:203        'ballot' ( temp 4-component vector of uint)
+0:204      subgroupXor ( global 4-component vector of uint)
+0:204        'ballot' ( temp 4-component vector of uint)
+0:205      subgroupInclusiveAdd ( global 4-component vector of float)
+0:205        'f4' ( in 4-component vector of float)
+0:206      subgroupInclusiveMul ( global 4-component vector of float)
+0:206        'f4' ( in 4-component vector of float)
+0:207      subgroupInclusiveMin ( global 4-component vector of float)
+0:207        'f4' ( in 4-component vector of float)
+0:208      subgroupInclusiveMax ( global 4-component vector of float)
+0:208        'f4' ( in 4-component vector of float)
+0:209      subgroupInclusiveAnd ( global 4-component vector of uint)
+0:209        'ballot' ( temp 4-component vector of uint)
+0:210      subgroupInclusiveOr ( global 4-component vector of uint)
+0:210        'ballot' ( temp 4-component vector of uint)
+0:211      subgroupInclusiveXor ( global 4-component vector of uint)
+0:211        'ballot' ( temp 4-component vector of uint)
+0:212      subgroupExclusiveAdd ( global 4-component vector of float)
+0:212        'f4' ( in 4-component vector of float)
+0:213      subgroupExclusiveMul ( global 4-component vector of float)
+0:213        'f4' ( in 4-component vector of float)
+0:214      subgroupExclusiveMin ( global 4-component vector of float)
+0:214        'f4' ( in 4-component vector of float)
+0:215      subgroupExclusiveMax ( global 4-component vector of float)
+0:215        'f4' ( in 4-component vector of float)
+0:216      subgroupExclusiveAnd ( global 4-component vector of uint)
+0:216        'ballot' ( temp 4-component vector of uint)
+0:217      subgroupExclusiveOr ( global 4-component vector of uint)
+0:217        'ballot' ( temp 4-component vector of uint)
+0:218      subgroupExclusiveXor ( global 4-component vector of uint)
+0:218        'ballot' ( temp 4-component vector of uint)
+0:222  Function Definition: clustered_works(vf4; ( global void)
+0:222    Function Parameters: 
+0:222      'f4' ( in 4-component vector of float)
+0:224    Sequence
+0:224      Sequence
+0:224        move second child to first child ( temp 4-component vector of uint)
+0:224          'ballot' ( temp 4-component vector of uint)
+0:224          Constant:
+0:224            85 (const uint)
+0:224            0 (const uint)
+0:224            0 (const uint)
+0:224            0 (const uint)
+0:225      subgroupClusteredAdd ( global 4-component vector of float)
+0:225        'f4' ( in 4-component vector of float)
+0:225        Constant:
+0:225          2 (const uint)
+0:226      subgroupClusteredMul ( global 4-component vector of float)
+0:226        'f4' ( in 4-component vector of float)
+0:226        Constant:
+0:226          2 (const uint)
+0:227      subgroupClusteredMin ( global 4-component vector of float)
+0:227        'f4' ( in 4-component vector of float)
+0:227        Constant:
+0:227          2 (const uint)
+0:228      subgroupClusteredMax ( global 4-component vector of float)
+0:228        'f4' ( in 4-component vector of float)
+0:228        Constant:
+0:228          2 (const uint)
+0:229      subgroupClusteredAnd ( global 4-component vector of uint)
+0:229        'ballot' ( temp 4-component vector of uint)
+0:229        Constant:
+0:229          2 (const uint)
+0:230      subgroupClusteredOr ( global 4-component vector of uint)
+0:230        'ballot' ( temp 4-component vector of uint)
+0:230        Constant:
+0:230          2 (const uint)
+0:231      subgroupClusteredXor ( global 4-component vector of uint)
+0:231        'ballot' ( temp 4-component vector of uint)
+0:231        Constant:
+0:231          2 (const uint)
+0:235  Function Definition: quad_works(vf4; ( global void)
+0:235    Function Parameters: 
+0:235      'f4' ( in 4-component vector of float)
+0:237    Sequence
+0:237      subgroupQuadBroadcast ( global 4-component vector of float)
+0:237        'f4' ( in 4-component vector of float)
+0:237        Constant:
+0:237          0 (const uint)
+0:238      subgroupQuadSwapHorizontal ( global 4-component vector of float)
+0:238        'f4' ( in 4-component vector of float)
+0:239      subgroupQuadSwapVertical ( global 4-component vector of float)
+0:239        'f4' ( in 4-component vector of float)
+0:240      subgroupQuadSwapDiagonal ( global 4-component vector of float)
+0:240        'f4' ( in 4-component vector of float)
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const 3-component vector of uint WorkGroupSize)
+0:?       32 (const uint)
+0:?       1 (const uint)
+0:?       1 (const uint)
+0:?     'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out unsized 4-element array of float ClipDistance gl_ClipDistance,  out unsized 3-element array of float CullDistance gl_CullDistance})
+0:?     'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:?     'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+
+
+Linked mesh stage:
+
+
+Shader version: 460
+Requested GL_EXT_mesh_shader
+Requested GL_KHR_shader_subgroup_arithmetic
+Requested GL_KHR_shader_subgroup_ballot
+Requested GL_KHR_shader_subgroup_basic
+Requested GL_KHR_shader_subgroup_clustered
+Requested GL_KHR_shader_subgroup_quad
+Requested GL_KHR_shader_subgroup_shuffle
+Requested GL_KHR_shader_subgroup_shuffle_relative
+Requested GL_KHR_shader_subgroup_vote
+max_vertices = 81
+max_primitives = 32
+output primitive = triangles
+local_size = (32, 1, 1)
+ERROR: node is still EOpNull!
+0:97  Function Definition: main( ( global void)
+0:97    Function Parameters: 
+0:99    Sequence
+0:99      Sequence
+0:99        move second child to first child ( temp uint)
+0:99          'iid' ( temp uint)
+0:99          direct index ( temp uint)
+0:99            'gl_LocalInvocationID' ( in 3-component vector of uint LocalInvocationID)
+0:99            Constant:
+0:99              0 (const int)
+0:100      Sequence
+0:100        move second child to first child ( temp uint)
+0:100          'gid' ( temp uint)
+0:100          direct index ( temp uint)
+0:100            'gl_WorkGroupID' ( in 3-component vector of uint WorkGroupID)
+0:100            Constant:
+0:100              0 (const int)
+0:101      Sequence
+0:101        move second child to first child ( temp uint)
+0:101          'vertexCount' ( temp uint)
+0:101          Constant:
+0:101            81 (const uint)
+0:102      Sequence
+0:102        move second child to first child ( temp uint)
+0:102          'primitiveCount' ( temp uint)
+0:102          Constant:
+0:102            32 (const uint)
+0:103      SetMeshOutputsEXT ( global void)
+0:103        'vertexCount' ( temp uint)
+0:103        'primitiveCount' ( temp uint)
+0:105      move second child to first child ( temp 4-component vector of float)
+0:105        gl_Position: direct index for structure ( out 4-component vector of float Position)
+0:105          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:105            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:105            'iid' ( temp uint)
+0:105          Constant:
+0:105            0 (const int)
+0:105        Constant:
+0:105          1.000000
+0:105          1.000000
+0:105          1.000000
+0:105          1.000000
+0:106      move second child to first child ( temp float)
+0:106        gl_PointSize: direct index for structure ( out float PointSize)
+0:106          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:106            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:106            'iid' ( temp uint)
+0:106          Constant:
+0:106            1 (const int)
+0:106        Constant:
+0:106          2.000000
+0:107      move second child to first child ( temp float)
+0:107        direct index ( temp float ClipDistance)
+0:107          gl_ClipDistance: direct index for structure ( out 4-element array of float ClipDistance)
+0:107            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:107              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:107              'iid' ( temp uint)
+0:107            Constant:
+0:107              2 (const int)
+0:107          Constant:
+0:107            3 (const int)
+0:107        Constant:
+0:107          3.000000
+0:108      move second child to first child ( temp float)
+0:108        direct index ( temp float CullDistance)
+0:108          gl_CullDistance: direct index for structure ( out 3-element array of float CullDistance)
+0:108            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:108              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:108              'iid' ( temp uint)
+0:108            Constant:
+0:108              3 (const int)
+0:108          Constant:
+0:108            2 (const int)
+0:108        Constant:
+0:108          4.000000
+0:110      MemoryBarrierShared ( global void)
+0:110      Barrier ( global void)
+0:112      move second child to first child ( temp 4-component vector of float)
+0:112        gl_Position: direct index for structure ( out 4-component vector of float Position)
+0:112          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:112            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:112            add ( temp uint)
+0:112              'iid' ( temp uint)
+0:112              Constant:
+0:112                1 (const uint)
+0:112          Constant:
+0:112            0 (const int)
+0:112        gl_Position: direct index for structure ( out 4-component vector of float Position)
+0:112          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:112            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:112            'iid' ( temp uint)
+0:112          Constant:
+0:112            0 (const int)
+0:113      move second child to first child ( temp float)
+0:113        gl_PointSize: direct index for structure ( out float PointSize)
+0:113          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:113            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:113            add ( temp uint)
+0:113              'iid' ( temp uint)
+0:113              Constant:
+0:113                1 (const uint)
+0:113          Constant:
+0:113            1 (const int)
+0:113        gl_PointSize: direct index for structure ( out float PointSize)
+0:113          indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:113            'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:113            'iid' ( temp uint)
+0:113          Constant:
+0:113            1 (const int)
+0:114      move second child to first child ( temp float)
+0:114        direct index ( temp float ClipDistance)
+0:114          gl_ClipDistance: direct index for structure ( out 4-element array of float ClipDistance)
+0:114            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:114              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:114              add ( temp uint)
+0:114                'iid' ( temp uint)
+0:114                Constant:
+0:114                  1 (const uint)
+0:114            Constant:
+0:114              2 (const int)
+0:114          Constant:
+0:114            3 (const int)
+0:114        direct index ( temp float ClipDistance)
+0:114          gl_ClipDistance: direct index for structure ( out 4-element array of float ClipDistance)
+0:114            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:114              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:114              'iid' ( temp uint)
+0:114            Constant:
+0:114              2 (const int)
+0:114          Constant:
+0:114            3 (const int)
+0:115      move second child to first child ( temp float)
+0:115        direct index ( temp float CullDistance)
+0:115          gl_CullDistance: direct index for structure ( out 3-element array of float CullDistance)
+0:115            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:115              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:115              add ( temp uint)
+0:115                'iid' ( temp uint)
+0:115                Constant:
+0:115                  1 (const uint)
+0:115            Constant:
+0:115              3 (const int)
+0:115          Constant:
+0:115            2 (const int)
+0:115        direct index ( temp float CullDistance)
+0:115          gl_CullDistance: direct index for structure ( out 3-element array of float CullDistance)
+0:115            indirect index ( temp block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:115              'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:115              'iid' ( temp uint)
+0:115            Constant:
+0:115              3 (const int)
+0:115          Constant:
+0:115            2 (const int)
+0:117      MemoryBarrierShared ( global void)
+0:117      Barrier ( global void)
+0:119      move second child to first child ( temp int)
+0:119        gl_PrimitiveID: direct index for structure ( perprimitiveNV out int PrimitiveID)
+0:119          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:119            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:119            'iid' ( temp uint)
+0:119          Constant:
+0:119            0 (const int)
+0:119        Constant:
+0:119          6 (const int)
+0:120      move second child to first child ( temp int)
+0:120        gl_Layer: direct index for structure ( perprimitiveNV out int Layer)
+0:120          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:120            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:120            'iid' ( temp uint)
+0:120          Constant:
+0:120            1 (const int)
+0:120        Constant:
+0:120          7 (const int)
+0:121      move second child to first child ( temp int)
+0:121        gl_ViewportIndex: direct index for structure ( perprimitiveNV out int ViewportIndex)
+0:121          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:121            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:121            'iid' ( temp uint)
+0:121          Constant:
+0:121            2 (const int)
+0:121        Constant:
+0:121          8 (const int)
+0:122      move second child to first child ( temp bool)
+0:122        gl_CullPrimitiveEXT: direct index for structure ( perprimitiveNV out bool CullPrimitiveEXT)
+0:122          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:122            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:122            'iid' ( temp uint)
+0:122          Constant:
+0:122            3 (const int)
+0:122        Constant:
+0:122          false (const bool)
+0:124      MemoryBarrierShared ( global void)
+0:124      Barrier ( global void)
+0:126      move second child to first child ( temp int)
+0:126        gl_PrimitiveID: direct index for structure ( perprimitiveNV out int PrimitiveID)
+0:126          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            add ( temp uint)
+0:126              'iid' ( temp uint)
+0:126              Constant:
+0:126                1 (const uint)
+0:126          Constant:
+0:126            0 (const int)
+0:126        gl_PrimitiveID: direct index for structure ( perprimitiveNV out int PrimitiveID)
+0:126          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:126            'iid' ( temp uint)
+0:126          Constant:
+0:126            0 (const int)
+0:127      move second child to first child ( temp int)
+0:127        gl_Layer: direct index for structure ( perprimitiveNV out int Layer)
+0:127          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            add ( temp uint)
+0:127              'iid' ( temp uint)
+0:127              Constant:
+0:127                1 (const uint)
+0:127          Constant:
+0:127            1 (const int)
+0:127        gl_Layer: direct index for structure ( perprimitiveNV out int Layer)
+0:127          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:127            'iid' ( temp uint)
+0:127          Constant:
+0:127            1 (const int)
+0:128      move second child to first child ( temp int)
+0:128        gl_ViewportIndex: direct index for structure ( perprimitiveNV out int ViewportIndex)
+0:128          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            add ( temp uint)
+0:128              'iid' ( temp uint)
+0:128              Constant:
+0:128                1 (const uint)
+0:128          Constant:
+0:128            2 (const int)
+0:128        gl_ViewportIndex: direct index for structure ( perprimitiveNV out int ViewportIndex)
+0:128          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:128            'iid' ( temp uint)
+0:128          Constant:
+0:128            2 (const int)
+0:129      move second child to first child ( temp bool)
+0:129        gl_CullPrimitiveEXT: direct index for structure ( perprimitiveNV out bool CullPrimitiveEXT)
+0:129          indirect index ( perprimitiveNV temp block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:129            'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:129            add ( temp uint)
+0:129              'iid' ( temp uint)
+0:129              Constant:
+0:129                1 (const uint)
+0:129          Constant:
+0:129            3 (const int)
+0:129        Constant:
+0:129          false (const bool)
+0:131      MemoryBarrierShared ( global void)
+0:131      Barrier ( global void)
+0:134      move second child to first child ( temp 3-component vector of uint)
+0:134        direct index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:134          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:134          Constant:
+0:134            0 (const int)
+0:134        Constant:
+0:134          1 (const uint)
+0:134          1 (const uint)
+0:134          1 (const uint)
+0:135      move second child to first child ( temp 3-component vector of uint)
+0:135        indirect index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:135          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:135          subtract ( temp uint)
+0:135            'primitiveCount' ( temp uint)
+0:135            Constant:
+0:135              1 (const uint)
+0:135        Constant:
+0:135          2 (const uint)
+0:135          2 (const uint)
+0:135          2 (const uint)
+0:136      move second child to first child ( temp 3-component vector of uint)
+0:136        indirect index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          'gid' ( temp uint)
+0:136        indirect index ( temp 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+0:136          subtract ( temp uint)
+0:136            'gid' ( temp uint)
+0:136            Constant:
+0:136              1 (const uint)
+0:139      MemoryBarrierShared ( global void)
+0:139      Barrier ( global void)
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const 3-component vector of uint WorkGroupSize)
+0:?       32 (const uint)
+0:?       1 (const uint)
+0:?       1 (const uint)
+0:?     'gl_MeshVerticesEXT' ( out 81-element array of block{ out 4-component vector of float Position gl_Position,  out float PointSize gl_PointSize,  out 4-element array of float ClipDistance gl_ClipDistance,  out 3-element array of float CullDistance gl_CullDistance})
+0:?     'gl_MeshPrimitivesEXT' ( perprimitiveNV out 32-element array of block{ perprimitiveNV out int PrimitiveID gl_PrimitiveID,  perprimitiveNV out int Layer gl_Layer,  perprimitiveNV out int ViewportIndex gl_ViewportIndex,  perprimitiveNV out bool CullPrimitiveEXT gl_CullPrimitiveEXT,  perprimitiveNV out int PrimitiveShadingRateKHR gl_PrimitiveShadingRateEXT})
+0:?     'gl_PrimitiveTriangleIndicesEXT' ( out 96-element array of 3-component vector of uint PrimitiveTriangleIndicesEXT)
+

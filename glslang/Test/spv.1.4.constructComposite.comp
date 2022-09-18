@@ -1,0 +1,25 @@
+#version 460 core
+
+layout(local_size_x=64) in;
+
+struct sA {
+  int x, y;
+};
+
+struct sB {
+  sA a;
+};
+
+layout(binding=0,set=0) uniform ubo {
+  sB  b;
+};
+
+struct sC {
+  sA state;
+} c = {
+  b.a,
+};
+
+void main()
+{
+}

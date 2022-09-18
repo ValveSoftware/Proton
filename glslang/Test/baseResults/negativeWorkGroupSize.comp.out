@@ -1,0 +1,69 @@
+negativeWorkGroupSize.comp
+ERROR: 0:4: 'initializer' : can't read from gl_WorkGroupSize before a fixed workgroup size has been declared 
+ERROR: 1 compilation errors.  No code generated.
+
+
+Shader version: 460
+local_size = (64, 1, 1)
+ERROR: node is still EOpNull!
+0:3  Function Definition: fn( ( global void)
+0:3    Function Parameters: 
+0:4    Sequence
+0:4      Sequence
+0:4        move second child to first child ( temp 3-component vector of uint)
+0:4          'wgs' ( temp 3-component vector of uint)
+0:4          Constant:
+0:4            1 (const uint)
+0:4            1 (const uint)
+0:4            1 (const uint)
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:10    Sequence
+0:10      Function Call: fn( ( global void)
+0:11      Sequence
+0:11        move second child to first child ( temp 3-component vector of uint)
+0:11          'wgs' ( temp 3-component vector of uint)
+0:11          Constant:
+0:11            64 (const uint)
+0:11            1 (const uint)
+0:11            1 (const uint)
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const 3-component vector of uint WorkGroupSize)
+0:?       64 (const uint)
+0:?       1 (const uint)
+0:?       1 (const uint)
+
+
+Linked compute stage:
+
+
+Shader version: 460
+local_size = (64, 1, 1)
+ERROR: node is still EOpNull!
+0:3  Function Definition: fn( ( global void)
+0:3    Function Parameters: 
+0:4    Sequence
+0:4      Sequence
+0:4        move second child to first child ( temp 3-component vector of uint)
+0:4          'wgs' ( temp 3-component vector of uint)
+0:4          Constant:
+0:4            1 (const uint)
+0:4            1 (const uint)
+0:4            1 (const uint)
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:10    Sequence
+0:10      Function Call: fn( ( global void)
+0:11      Sequence
+0:11        move second child to first child ( temp 3-component vector of uint)
+0:11          'wgs' ( temp 3-component vector of uint)
+0:11          Constant:
+0:11            64 (const uint)
+0:11            1 (const uint)
+0:11            1 (const uint)
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const 3-component vector of uint WorkGroupSize)
+0:?       64 (const uint)
+0:?       1 (const uint)
+0:?       1 (const uint)
+

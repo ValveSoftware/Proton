@@ -1,0 +1,36 @@
+terminate.vert
+ERROR: 0:3: 'terminateInvocation' : undeclared identifier 
+ERROR: 0:9: 'terminateInvocation' : not supported in this stage: vertex
+ERROR: 2 compilation errors.  No code generated.
+
+
+Shader version: 400
+Requested GL_EXT_terminate_invocation
+ERROR: node is still EOpNull!
+0:3  Function Definition: foo( ( global void)
+0:3    Function Parameters: 
+0:3    Sequence
+0:3      'terminateInvocation' ( temp float)
+0:7  Function Definition: main( ( global void)
+0:7    Function Parameters: 
+0:9    Sequence
+0:9      Branch: TerminateInvocation
+0:?   Linker Objects
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 400
+Requested GL_EXT_terminate_invocation
+ERROR: node is still EOpNull!
+0:7  Function Definition: main( ( global void)
+0:7    Function Parameters: 
+0:9    Sequence
+0:9      Branch: TerminateInvocation
+0:?   Linker Objects
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+

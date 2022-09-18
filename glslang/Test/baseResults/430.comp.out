@@ -1,0 +1,220 @@
+430.comp
+ERROR: 0:4: 'local_size' : cannot change previously set size 
+ERROR: 0:5: 'local_size' : too large; see gl_MaxComputeWorkGroupSize 
+ERROR: 0:43: 'in' : global storage input qualifier cannot be used in a compute shader 
+ERROR: 0:43: 'location qualifier on input' : not supported in this stage: compute
+ERROR: 0:44: 'in' : global storage input qualifier cannot be used in a compute shader 
+ERROR: 0:45: 'out' : global storage output qualifier cannot be used in a compute shader 
+ERROR: 0:48: 'shared block' : not supported for this version or the enabled extensions 
+ERROR: 0:48: 'location' : can only apply to uniform, buffer, in, or out storage qualifiers 
+ERROR: 0:49: 'shared' : initializer can only be a null initializer ('{}') 
+ERROR: 0:52: 'local_size' : cannot change previously set size 
+ERROR: 0:54: 'local_size' : can only apply to 'in' 
+ERROR: 0:54: 'local_size' : can only apply to 'in' 
+ERROR: 0:54: 'local_size' : can only apply to 'in' 
+ERROR: 0:68: 'assign' :  l-value required "ro" (can't modify a readonly buffer)
+ERROR: 0:80: '=' :  cannot convert from ' temp double' to ' temp int'
+ERROR: 0:84: 'input block' : not supported in this stage: compute
+ERROR: 0:88: 'output block' : not supported in this stage: compute
+ERROR: 17 compilation errors.  No code generated.
+
+
+Shader version: 430
+local_size = (2, 1, 4096)
+ERROR: node is still EOpNull!
+0:27  Function Definition: main( ( global void)
+0:27    Function Parameters: 
+0:29    Sequence
+0:29      Barrier ( global void)
+0:30      MemoryBarrier ( global void)
+0:31      MemoryBarrierAtomicCounter ( global void)
+0:32      MemoryBarrierBuffer ( global void)
+0:33      MemoryBarrierShared ( global void)
+0:34      MemoryBarrierImage ( global void)
+0:35      GroupMemoryBarrier ( global void)
+0:36      move second child to first child ( temp int)
+0:36        value: direct index for structure (layout( column_major shared) buffer int)
+0:36          'anon@0' (layout( column_major shared) buffer block{layout( column_major shared) buffer int value, layout( column_major shared) buffer runtime-sized array of float values})
+0:36          Constant:
+0:36            0 (const uint)
+0:36        Convert float to int ( temp int)
+0:36          indirect index (layout( column_major shared) temp float)
+0:36            values: direct index for structure (layout( column_major shared) buffer runtime-sized array of float)
+0:36              'anon@0' (layout( column_major shared) buffer block{layout( column_major shared) buffer int value, layout( column_major shared) buffer runtime-sized array of float values})
+0:36              Constant:
+0:36                1 (const uint)
+0:36            'gl_LocalInvocationIndex' ( in uint LocalInvocationIndex)
+0:39      Test condition and select ( temp void)
+0:39        Condition
+0:39        Compare Greater Than ( temp bool)
+0:39          'a' ( temp int)
+0:39          Constant:
+0:39            10 (const int)
+0:39        true case
+0:40        Barrier ( global void)
+0:49  Sequence
+0:49    move second child to first child ( temp float)
+0:49      'fs' ( shared float)
+0:49      Constant:
+0:49        4.200000
+0:66  Function Definition: foo( ( global void)
+0:66    Function Parameters: 
+0:68    Sequence
+0:68      move second child to first child ( temp float)
+0:68        direct index (layout( column_major shared) readonly temp float)
+0:68          values: direct index for structure (layout( column_major shared) readonly buffer unsized 3-element array of float)
+0:68            'ro' (layout( column_major shared) readonly buffer block{layout( column_major shared) readonly buffer int value, layout( column_major shared) readonly buffer unsized 3-element array of float values})
+0:68            Constant:
+0:68              1 (const int)
+0:68          Constant:
+0:68            2 (const int)
+0:68        Constant:
+0:68          4.700000
+0:69      array length ( temp int)
+0:69        values: direct index for structure (layout( column_major shared) readonly buffer unsized 3-element array of float)
+0:69          'ro' (layout( column_major shared) readonly buffer block{layout( column_major shared) readonly buffer int value, layout( column_major shared) readonly buffer unsized 3-element array of float values})
+0:69          Constant:
+0:69            1 (const int)
+0:70      Barrier ( global void)
+0:75  Function Definition: fooaoeu( ( global void)
+0:75    Function Parameters: 
+0:76    Sequence
+0:76      Sequence
+0:76        move second child to first child ( temp 2-component vector of int)
+0:76          'storePos' ( temp 2-component vector of int)
+0:76          Convert uint to int ( temp 2-component vector of int)
+0:76            vector swizzle ( temp 2-component vector of uint)
+0:76              'gl_GlobalInvocationID' ( in 3-component vector of uint GlobalInvocationID)
+0:76              Sequence
+0:76                Constant:
+0:76                  0 (const int)
+0:76                Constant:
+0:76                  1 (const int)
+0:77      Sequence
+0:77        move second child to first child ( temp double)
+0:77          'localCoef' ( temp double)
+0:77          Convert float to double ( temp double)
+0:77            length ( global float)
+0:77              divide ( temp 2-component vector of float)
+0:77                Convert int to float ( temp 2-component vector of float)
+0:77                  subtract ( temp 2-component vector of int)
+0:77                    Convert uint to int ( temp 2-component vector of int)
+0:77                      vector swizzle ( temp 2-component vector of uint)
+0:77                        'gl_LocalInvocationID' ( in 3-component vector of uint LocalInvocationID)
+0:77                        Sequence
+0:77                          Constant:
+0:77                            0 (const int)
+0:77                          Constant:
+0:77                            1 (const int)
+0:77                    Constant:
+0:77                      8 (const int)
+0:77                Constant:
+0:77                  8.000000
+0:78      Sequence
+0:78        move second child to first child ( temp 4-component vector of double)
+0:78          'aa' ( temp 4-component vector of double)
+0:78          Constant:
+0:78            0.400000
+0:78            0.200000
+0:78            0.300000
+0:78            0.400000
+0:79      Sequence
+0:79        move second child to first child ( temp double)
+0:79          'globalCoef' ( temp double)
+0:79          Constant:
+0:79            1.000000
+0:81      Sequence
+0:81        move second child to first child ( temp double)
+0:81          'di' ( temp double)
+0:81          Convert int to double ( temp double)
+0:81            'i' ( temp int)
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const 3-component vector of uint WorkGroupSize)
+0:?       2 (const uint)
+0:?       1 (const uint)
+0:?       4096 (const uint)
+0:?     'total' ( const int)
+0:?       66592 (const int)
+0:?     'anon@0' (layout( column_major shared) buffer block{layout( column_major shared) buffer int value, layout( column_major shared) buffer runtime-sized array of float values})
+0:?     'invalid' (layout( column_major shared) buffer block{layout( column_major shared) buffer unsized 1-element array of float values, layout( column_major shared) buffer int value})
+0:?     'v3' (layout( location=2) in 3-component vector of float)
+0:?     'f' ( in float)
+0:?     'fo' ( out float)
+0:?     's' ( shared 4-component vector of float)
+0:?     'sl' (layout( location=2) shared 4-component vector of float)
+0:?     'fs' ( shared float)
+0:?     'arrX' ( global 2-element array of int)
+0:?     'arrY' ( global 1-element array of int)
+0:?     'arrZ' ( global 4096-element array of int)
+0:?     'ro' (layout( column_major shared) readonly buffer block{layout( column_major shared) readonly buffer int value, layout( column_major shared) readonly buffer unsized 3-element array of float values})
+0:?     'roll' ( uniform double)
+0:?     'destTex' ( writeonly uniform image2D)
+0:?     'inbi' ( in block{ in int a})
+0:?     'outbi' ( out block{ out int a})
+
+
+Linked compute stage:
+
+
+Shader version: 430
+local_size = (2, 1, 4096)
+ERROR: node is still EOpNull!
+0:27  Function Definition: main( ( global void)
+0:27    Function Parameters: 
+0:29    Sequence
+0:29      Barrier ( global void)
+0:30      MemoryBarrier ( global void)
+0:31      MemoryBarrierAtomicCounter ( global void)
+0:32      MemoryBarrierBuffer ( global void)
+0:33      MemoryBarrierShared ( global void)
+0:34      MemoryBarrierImage ( global void)
+0:35      GroupMemoryBarrier ( global void)
+0:36      move second child to first child ( temp int)
+0:36        value: direct index for structure (layout( column_major shared) buffer int)
+0:36          'anon@0' (layout( column_major shared) buffer block{layout( column_major shared) buffer int value, layout( column_major shared) buffer runtime-sized array of float values})
+0:36          Constant:
+0:36            0 (const uint)
+0:36        Convert float to int ( temp int)
+0:36          indirect index (layout( column_major shared) temp float)
+0:36            values: direct index for structure (layout( column_major shared) buffer runtime-sized array of float)
+0:36              'anon@0' (layout( column_major shared) buffer block{layout( column_major shared) buffer int value, layout( column_major shared) buffer runtime-sized array of float values})
+0:36              Constant:
+0:36                1 (const uint)
+0:36            'gl_LocalInvocationIndex' ( in uint LocalInvocationIndex)
+0:39      Test condition and select ( temp void)
+0:39        Condition
+0:39        Compare Greater Than ( temp bool)
+0:39          'a' ( temp int)
+0:39          Constant:
+0:39            10 (const int)
+0:39        true case
+0:40        Barrier ( global void)
+0:49  Sequence
+0:49    move second child to first child ( temp float)
+0:49      'fs' ( shared float)
+0:49      Constant:
+0:49        4.200000
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const 3-component vector of uint WorkGroupSize)
+0:?       2 (const uint)
+0:?       1 (const uint)
+0:?       4096 (const uint)
+0:?     'total' ( const int)
+0:?       66592 (const int)
+0:?     'anon@0' (layout( column_major shared) buffer block{layout( column_major shared) buffer int value, layout( column_major shared) buffer runtime-sized array of float values})
+0:?     'invalid' (layout( column_major shared) buffer block{layout( column_major shared) buffer 1-element array of float values, layout( column_major shared) buffer int value})
+0:?     'v3' (layout( location=2) in 3-component vector of float)
+0:?     'f' ( in float)
+0:?     'fo' ( out float)
+0:?     's' ( shared 4-component vector of float)
+0:?     'sl' (layout( location=2) shared 4-component vector of float)
+0:?     'fs' ( shared float)
+0:?     'arrX' ( global 2-element array of int)
+0:?     'arrY' ( global 1-element array of int)
+0:?     'arrZ' ( global 4096-element array of int)
+0:?     'ro' (layout( column_major shared) readonly buffer block{layout( column_major shared) readonly buffer int value, layout( column_major shared) readonly buffer unsized 3-element array of float values})
+0:?     'roll' ( uniform double)
+0:?     'destTex' ( writeonly uniform image2D)
+0:?     'inbi' ( in block{ in int a})
+0:?     'outbi' ( out block{ out int a})
+

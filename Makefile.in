@@ -761,6 +761,15 @@ $(eval $(call rules-cmake,vulkan-loader,64,CROSS))
 
 
 ##
+## glslang
+##
+
+$(eval $(call rules-source,glslang,$(SRCDIR)/glslang))
+$(eval $(call rules-cmake,glslang,32))
+$(eval $(call rules-cmake,glslang,64))
+
+
+##
 ## lsteamclient
 ##
 
@@ -941,6 +950,7 @@ $(OBJ)/.vrclient-post-source:
 
 DXVK_MESON_ARGS32 = --bindir=$(DXVK_DST32)/lib/wine/dxvk
 DXVK_MESON_ARGS64 = --bindir=$(DXVK_DST64)/lib64/wine/dxvk
+DXVK_DEPENDS = glslang
 
 $(eval $(call rules-source,dxvk,$(SRCDIR)/dxvk))
 $(eval $(call rules-meson,dxvk,32,CROSS))

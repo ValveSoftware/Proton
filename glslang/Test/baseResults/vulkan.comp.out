@@ -1,0 +1,17 @@
+vulkan.comp
+ERROR: 0:5: 'local_size' : cannot change previously set size 
+ERROR: 0:10: 'empty { } initializer' : not supported for this version or the enabled extensions 
+ERROR: 0:15: 'empty { } initializer' : not supported for this version or the enabled extensions 
+ERROR: 0:15: 'initialization with shared qualifier' : not supported for this version or the enabled extensions 
+ERROR: 0:16: 'empty { } initializer' : not supported for this version or the enabled extensions 
+ERROR: 0:26: '{}' : null initializers can't size unsized arrays 
+ERROR: 0:31: 'structure' : non-uniform struct contains a sampler or image: sampVar
+ERROR: 0:31: '{}' : null initializers can't be used on opaque values 
+ERROR: 0:33: 'atomic counter types' : not allowed when using GLSL for Vulkan 
+ERROR: 0:33: 'atomic_uint' : atomic_uints can only be used in uniform variables or function parameters: a
+ERROR: 0:33: '{}' : null initializers can't be used on opaque values 
+ERROR: 0:33: 'atomic_uint' : layout(binding=X) is required 
+ERROR: 12 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

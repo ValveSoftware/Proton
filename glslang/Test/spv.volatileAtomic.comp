@@ -1,0 +1,8 @@
+#version 450 core
+
+layout(set=0, binding=3) volatile buffer D { uint d[]; } d;
+
+void main()
+{
+    atomicExchange(d.d[0], 0);
+}

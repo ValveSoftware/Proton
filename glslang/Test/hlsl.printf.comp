@@ -1,0 +1,11 @@
+const string first = "first string";
+
+[numthreads(1,1,1)]
+void main() {
+    printf(first);
+    printf("please print this message.");
+    printf("Variables are: %d %d %.2f", 1u, 2u, 1.5f);
+    printf("Integers are: %d %d %d", 1, 2, 3);
+    printf("More: %d %d %d %d %d %d %d %d %d %d", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+}
+

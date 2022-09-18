@@ -1,0 +1,11 @@
+spv.meshShaderPerView_Errors.mesh
+ERROR: 0:19: '[]' : only outermost dimension of an array of arrays can be implicitly sized 
+ERROR: 0:20: '[]' : mesh view output array size must be gl_MaxMeshViewCountNV or implicitly sized 
+ERROR: 0:21: 'perviewNV' : requires a view array dimension 
+ERROR: 0:25: '[]' : only outermost dimension of an array of arrays can be implicitly sized 
+ERROR: 0:26: '[]' : mesh view output array size must be gl_MaxMeshViewCountNV or implicitly sized 
+ERROR: 0:27: 'perviewNV' : requires a view array dimension 
+ERROR: 6 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

@@ -1,0 +1,715 @@
+#version 450
+
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16: enable
+
+layout (local_size_x = 8) in;
+
+layout(binding = 0) buffer Buffers
+{
+    i8vec4 i8;
+    u8vec4 u8;
+    i16vec4 i16;
+    u16vec4 u16;
+    i64vec4 i64;
+    u64vec4 u64;
+    f16vec4 f16;
+} data[4];
+
+void main()
+{
+    uint invocation = (gl_SubgroupInvocationID + gl_SubgroupSize) % 4;
+
+    data[invocation].i8.x   = subgroupAdd(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupAdd(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupAdd(data[2].i8.xyz);
+    data[invocation].i8     = subgroupAdd(data[3].i8);
+
+    data[invocation].i8.x   = subgroupMul(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupMul(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupMul(data[2].i8.xyz);
+    data[invocation].i8     = subgroupMul(data[3].i8);
+
+    data[invocation].i8.x   = subgroupMin(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupMin(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupMin(data[2].i8.xyz);
+    data[invocation].i8     = subgroupMin(data[3].i8);
+
+    data[invocation].i8.x   = subgroupMax(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupMax(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupMax(data[2].i8.xyz);
+    data[invocation].i8     = subgroupMax(data[3].i8);
+
+    data[invocation].i8.x   = subgroupAnd(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupAnd(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupAnd(data[2].i8.xyz);
+    data[invocation].i8     = subgroupAnd(data[3].i8);
+
+    data[invocation].i8.x   = subgroupOr(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupOr(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupOr(data[2].i8.xyz);
+    data[invocation].i8     = subgroupOr(data[3].i8);
+
+    data[invocation].i8.x   = subgroupXor(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupXor(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupXor(data[2].i8.xyz);
+    data[invocation].i8     = subgroupXor(data[3].i8);
+
+    data[invocation].i8.x   = subgroupInclusiveAdd(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupInclusiveAdd(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupInclusiveAdd(data[2].i8.xyz);
+    data[invocation].i8     = subgroupInclusiveAdd(data[3].i8);
+
+    data[invocation].i8.x   = subgroupInclusiveMul(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupInclusiveMul(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupInclusiveMul(data[2].i8.xyz);
+    data[invocation].i8     = subgroupInclusiveMul(data[3].i8);
+
+    data[invocation].i8.x   = subgroupInclusiveMin(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupInclusiveMin(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupInclusiveMin(data[2].i8.xyz);
+    data[invocation].i8     = subgroupInclusiveMin(data[3].i8);
+
+    data[invocation].i8.x   = subgroupInclusiveMax(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupInclusiveMax(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupInclusiveMax(data[2].i8.xyz);
+    data[invocation].i8     = subgroupInclusiveMax(data[3].i8);
+
+    data[invocation].i8.x   = subgroupInclusiveAnd(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupInclusiveAnd(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupInclusiveAnd(data[2].i8.xyz);
+    data[invocation].i8     = subgroupInclusiveAnd(data[3].i8);
+
+    data[invocation].i8.x   = subgroupInclusiveOr(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupInclusiveOr(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupInclusiveOr(data[2].i8.xyz);
+    data[invocation].i8     = subgroupInclusiveOr(data[3].i8);
+
+    data[invocation].i8.x   = subgroupInclusiveXor(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupInclusiveXor(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupInclusiveXor(data[2].i8.xyz);
+    data[invocation].i8     = subgroupInclusiveXor(data[3].i8);
+
+    data[invocation].i8.x   = subgroupExclusiveAdd(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupExclusiveAdd(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupExclusiveAdd(data[2].i8.xyz);
+    data[invocation].i8     = subgroupExclusiveAdd(data[3].i8);
+
+    data[invocation].i8.x   = subgroupExclusiveMul(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupExclusiveMul(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupExclusiveMul(data[2].i8.xyz);
+    data[invocation].i8     = subgroupExclusiveMul(data[3].i8);
+
+    data[invocation].i8.x   = subgroupExclusiveMin(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupExclusiveMin(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupExclusiveMin(data[2].i8.xyz);
+    data[invocation].i8     = subgroupExclusiveMin(data[3].i8);
+
+    data[invocation].i8.x   = subgroupExclusiveMax(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupExclusiveMax(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupExclusiveMax(data[2].i8.xyz);
+    data[invocation].i8     = subgroupExclusiveMax(data[3].i8);
+
+    data[invocation].i8.x   = subgroupExclusiveAnd(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupExclusiveAnd(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupExclusiveAnd(data[2].i8.xyz);
+    data[invocation].i8     = subgroupExclusiveAnd(data[3].i8);
+
+    data[invocation].i8.x   = subgroupExclusiveOr(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupExclusiveOr(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupExclusiveOr(data[2].i8.xyz);
+    data[invocation].i8     = subgroupExclusiveOr(data[3].i8);
+
+    data[invocation].i8.x   = subgroupExclusiveXor(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupExclusiveXor(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupExclusiveXor(data[2].i8.xyz);
+    data[invocation].i8     = subgroupExclusiveXor(data[3].i8);
+
+    data[invocation].u8.x   = subgroupAdd(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupAdd(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupAdd(data[2].u8.xyz);
+    data[invocation].u8     = subgroupAdd(data[3].u8);
+
+    data[invocation].u8.x   = subgroupMul(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupMul(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupMul(data[2].u8.xyz);
+    data[invocation].u8     = subgroupMul(data[3].u8);
+
+    data[invocation].u8.x   = subgroupMin(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupMin(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupMin(data[2].u8.xyz);
+    data[invocation].u8     = subgroupMin(data[3].u8);
+
+    data[invocation].u8.x   = subgroupMax(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupMax(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupMax(data[2].u8.xyz);
+    data[invocation].u8     = subgroupMax(data[3].u8);
+
+    data[invocation].u8.x   = subgroupAnd(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupAnd(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupAnd(data[2].u8.xyz);
+    data[invocation].u8     = subgroupAnd(data[3].u8);
+
+    data[invocation].u8.x   = subgroupOr(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupOr(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupOr(data[2].u8.xyz);
+    data[invocation].u8     = subgroupOr(data[3].u8);
+
+    data[invocation].u8.x   = subgroupXor(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupXor(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupXor(data[2].u8.xyz);
+    data[invocation].u8     = subgroupXor(data[3].u8);
+
+    data[invocation].u8.x   = subgroupInclusiveAdd(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupInclusiveAdd(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupInclusiveAdd(data[2].u8.xyz);
+    data[invocation].u8     = subgroupInclusiveAdd(data[3].u8);
+
+    data[invocation].u8.x   = subgroupInclusiveMul(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupInclusiveMul(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupInclusiveMul(data[2].u8.xyz);
+    data[invocation].u8     = subgroupInclusiveMul(data[3].u8);
+
+    data[invocation].u8.x   = subgroupInclusiveMin(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupInclusiveMin(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupInclusiveMin(data[2].u8.xyz);
+    data[invocation].u8     = subgroupInclusiveMin(data[3].u8);
+
+    data[invocation].u8.x   = subgroupInclusiveMax(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupInclusiveMax(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupInclusiveMax(data[2].u8.xyz);
+    data[invocation].u8     = subgroupInclusiveMax(data[3].u8);
+
+    data[invocation].u8.x   = subgroupInclusiveAnd(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupInclusiveAnd(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupInclusiveAnd(data[2].u8.xyz);
+    data[invocation].u8     = subgroupInclusiveAnd(data[3].u8);
+
+    data[invocation].u8.x   = subgroupInclusiveOr(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupInclusiveOr(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupInclusiveOr(data[2].u8.xyz);
+    data[invocation].u8     = subgroupInclusiveOr(data[3].u8);
+
+    data[invocation].u8.x   = subgroupInclusiveXor(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupInclusiveXor(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupInclusiveXor(data[2].u8.xyz);
+    data[invocation].u8     = subgroupInclusiveXor(data[3].u8);
+
+    data[invocation].u8.x   = subgroupExclusiveAdd(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupExclusiveAdd(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupExclusiveAdd(data[2].u8.xyz);
+    data[invocation].u8     = subgroupExclusiveAdd(data[3].u8);
+
+    data[invocation].u8.x   = subgroupExclusiveMul(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupExclusiveMul(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupExclusiveMul(data[2].u8.xyz);
+    data[invocation].u8     = subgroupExclusiveMul(data[3].u8);
+
+    data[invocation].u8.x   = subgroupExclusiveMin(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupExclusiveMin(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupExclusiveMin(data[2].u8.xyz);
+    data[invocation].u8     = subgroupExclusiveMin(data[3].u8);
+
+    data[invocation].u8.x   = subgroupExclusiveMax(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupExclusiveMax(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupExclusiveMax(data[2].u8.xyz);
+    data[invocation].u8     = subgroupExclusiveMax(data[3].u8);
+
+    data[invocation].u8.x   = subgroupExclusiveAnd(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupExclusiveAnd(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupExclusiveAnd(data[2].u8.xyz);
+    data[invocation].u8     = subgroupExclusiveAnd(data[3].u8);
+
+    data[invocation].u8.x   = subgroupExclusiveOr(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupExclusiveOr(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupExclusiveOr(data[2].u8.xyz);
+    data[invocation].u8     = subgroupExclusiveOr(data[3].u8);
+
+    data[invocation].u8.x   = subgroupExclusiveXor(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupExclusiveXor(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupExclusiveXor(data[2].u8.xyz);
+    data[invocation].u8     = subgroupExclusiveXor(data[3].u8);
+
+    data[invocation].i16.x   = subgroupAdd(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupAdd(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupAdd(data[2].i16.xyz);
+    data[invocation].i16     = subgroupAdd(data[3].i16);
+
+    data[invocation].i16.x   = subgroupMul(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupMul(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupMul(data[2].i16.xyz);
+    data[invocation].i16     = subgroupMul(data[3].i16);
+
+    data[invocation].i16.x   = subgroupMin(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupMin(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupMin(data[2].i16.xyz);
+    data[invocation].i16     = subgroupMin(data[3].i16);
+
+    data[invocation].i16.x   = subgroupMax(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupMax(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupMax(data[2].i16.xyz);
+    data[invocation].i16     = subgroupMax(data[3].i16);
+
+    data[invocation].i16.x   = subgroupAnd(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupAnd(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupAnd(data[2].i16.xyz);
+    data[invocation].i16     = subgroupAnd(data[3].i16);
+
+    data[invocation].i16.x   = subgroupOr(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupOr(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupOr(data[2].i16.xyz);
+    data[invocation].i16     = subgroupOr(data[3].i16);
+
+    data[invocation].i16.x   = subgroupXor(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupXor(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupXor(data[2].i16.xyz);
+    data[invocation].i16     = subgroupXor(data[3].i16);
+
+    data[invocation].i16.x   = subgroupInclusiveAdd(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupInclusiveAdd(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupInclusiveAdd(data[2].i16.xyz);
+    data[invocation].i16     = subgroupInclusiveAdd(data[3].i16);
+
+    data[invocation].i16.x   = subgroupInclusiveMul(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupInclusiveMul(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupInclusiveMul(data[2].i16.xyz);
+    data[invocation].i16     = subgroupInclusiveMul(data[3].i16);
+
+    data[invocation].i16.x   = subgroupInclusiveMin(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupInclusiveMin(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupInclusiveMin(data[2].i16.xyz);
+    data[invocation].i16     = subgroupInclusiveMin(data[3].i16);
+
+    data[invocation].i16.x   = subgroupInclusiveMax(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupInclusiveMax(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupInclusiveMax(data[2].i16.xyz);
+    data[invocation].i16     = subgroupInclusiveMax(data[3].i16);
+
+    data[invocation].i16.x   = subgroupInclusiveAnd(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupInclusiveAnd(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupInclusiveAnd(data[2].i16.xyz);
+    data[invocation].i16     = subgroupInclusiveAnd(data[3].i16);
+
+    data[invocation].i16.x   = subgroupInclusiveOr(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupInclusiveOr(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupInclusiveOr(data[2].i16.xyz);
+    data[invocation].i16     = subgroupInclusiveOr(data[3].i16);
+
+    data[invocation].i16.x   = subgroupInclusiveXor(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupInclusiveXor(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupInclusiveXor(data[2].i16.xyz);
+    data[invocation].i16     = subgroupInclusiveXor(data[3].i16);
+
+    data[invocation].i16.x   = subgroupExclusiveAdd(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupExclusiveAdd(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupExclusiveAdd(data[2].i16.xyz);
+    data[invocation].i16     = subgroupExclusiveAdd(data[3].i16);
+
+    data[invocation].i16.x   = subgroupExclusiveMul(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupExclusiveMul(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupExclusiveMul(data[2].i16.xyz);
+    data[invocation].i16     = subgroupExclusiveMul(data[3].i16);
+
+    data[invocation].i16.x   = subgroupExclusiveMin(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupExclusiveMin(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupExclusiveMin(data[2].i16.xyz);
+    data[invocation].i16     = subgroupExclusiveMin(data[3].i16);
+
+    data[invocation].i16.x   = subgroupExclusiveMax(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupExclusiveMax(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupExclusiveMax(data[2].i16.xyz);
+    data[invocation].i16     = subgroupExclusiveMax(data[3].i16);
+
+    data[invocation].i16.x   = subgroupExclusiveAnd(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupExclusiveAnd(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupExclusiveAnd(data[2].i16.xyz);
+    data[invocation].i16     = subgroupExclusiveAnd(data[3].i16);
+
+    data[invocation].i16.x   = subgroupExclusiveOr(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupExclusiveOr(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupExclusiveOr(data[2].i16.xyz);
+    data[invocation].i16     = subgroupExclusiveOr(data[3].i16);
+
+    data[invocation].i16.x   = subgroupExclusiveXor(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupExclusiveXor(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupExclusiveXor(data[2].i16.xyz);
+    data[invocation].i16     = subgroupExclusiveXor(data[3].i16);
+
+    data[invocation].u16.x   = subgroupAdd(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupAdd(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupAdd(data[2].u16.xyz);
+    data[invocation].u16     = subgroupAdd(data[3].u16);
+
+    data[invocation].u16.x   = subgroupMul(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupMul(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupMul(data[2].u16.xyz);
+    data[invocation].u16     = subgroupMul(data[3].u16);
+
+    data[invocation].u16.x   = subgroupMin(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupMin(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupMin(data[2].u16.xyz);
+    data[invocation].u16     = subgroupMin(data[3].u16);
+
+    data[invocation].u16.x   = subgroupMax(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupMax(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupMax(data[2].u16.xyz);
+    data[invocation].u16     = subgroupMax(data[3].u16);
+
+    data[invocation].u16.x   = subgroupAnd(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupAnd(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupAnd(data[2].u16.xyz);
+    data[invocation].u16     = subgroupAnd(data[3].u16);
+
+    data[invocation].u16.x   = subgroupOr(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupOr(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupOr(data[2].u16.xyz);
+    data[invocation].u16     = subgroupOr(data[3].u16);
+
+    data[invocation].u16.x   = subgroupXor(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupXor(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupXor(data[2].u16.xyz);
+    data[invocation].u16     = subgroupXor(data[3].u16);
+
+    data[invocation].u16.x   = subgroupInclusiveAdd(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupInclusiveAdd(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupInclusiveAdd(data[2].u16.xyz);
+    data[invocation].u16     = subgroupInclusiveAdd(data[3].u16);
+
+    data[invocation].u16.x   = subgroupInclusiveMul(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupInclusiveMul(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupInclusiveMul(data[2].u16.xyz);
+    data[invocation].u16     = subgroupInclusiveMul(data[3].u16);
+
+    data[invocation].u16.x   = subgroupInclusiveMin(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupInclusiveMin(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupInclusiveMin(data[2].u16.xyz);
+    data[invocation].u16     = subgroupInclusiveMin(data[3].u16);
+
+    data[invocation].u16.x   = subgroupInclusiveMax(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupInclusiveMax(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupInclusiveMax(data[2].u16.xyz);
+    data[invocation].u16     = subgroupInclusiveMax(data[3].u16);
+
+    data[invocation].u16.x   = subgroupInclusiveAnd(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupInclusiveAnd(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupInclusiveAnd(data[2].u16.xyz);
+    data[invocation].u16     = subgroupInclusiveAnd(data[3].u16);
+
+    data[invocation].u16.x   = subgroupInclusiveOr(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupInclusiveOr(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupInclusiveOr(data[2].u16.xyz);
+    data[invocation].u16     = subgroupInclusiveOr(data[3].u16);
+
+    data[invocation].u16.x   = subgroupInclusiveXor(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupInclusiveXor(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupInclusiveXor(data[2].u16.xyz);
+    data[invocation].u16     = subgroupInclusiveXor(data[3].u16);
+
+    data[invocation].u16.x   = subgroupExclusiveAdd(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupExclusiveAdd(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupExclusiveAdd(data[2].u16.xyz);
+    data[invocation].u16     = subgroupExclusiveAdd(data[3].u16);
+
+    data[invocation].u16.x   = subgroupExclusiveMul(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupExclusiveMul(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupExclusiveMul(data[2].u16.xyz);
+    data[invocation].u16     = subgroupExclusiveMul(data[3].u16);
+
+    data[invocation].u16.x   = subgroupExclusiveMin(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupExclusiveMin(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupExclusiveMin(data[2].u16.xyz);
+    data[invocation].u16     = subgroupExclusiveMin(data[3].u16);
+
+    data[invocation].u16.x   = subgroupExclusiveMax(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupExclusiveMax(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupExclusiveMax(data[2].u16.xyz);
+    data[invocation].u16     = subgroupExclusiveMax(data[3].u16);
+
+    data[invocation].u16.x   = subgroupExclusiveAnd(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupExclusiveAnd(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupExclusiveAnd(data[2].u16.xyz);
+    data[invocation].u16     = subgroupExclusiveAnd(data[3].u16);
+
+    data[invocation].u16.x   = subgroupExclusiveOr(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupExclusiveOr(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupExclusiveOr(data[2].u16.xyz);
+    data[invocation].u16     = subgroupExclusiveOr(data[3].u16);
+
+    data[invocation].u16.x   = subgroupExclusiveXor(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupExclusiveXor(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupExclusiveXor(data[2].u16.xyz);
+    data[invocation].u16     = subgroupExclusiveXor(data[3].u16);
+
+    data[invocation].i64.x   = subgroupAdd(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupAdd(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupAdd(data[2].i64.xyz);
+    data[invocation].i64     = subgroupAdd(data[3].i64);
+
+    data[invocation].i64.x   = subgroupMul(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupMul(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupMul(data[2].i64.xyz);
+    data[invocation].i64     = subgroupMul(data[3].i64);
+
+    data[invocation].i64.x   = subgroupMin(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupMin(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupMin(data[2].i64.xyz);
+    data[invocation].i64     = subgroupMin(data[3].i64);
+
+    data[invocation].i64.x   = subgroupMax(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupMax(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupMax(data[2].i64.xyz);
+    data[invocation].i64     = subgroupMax(data[3].i64);
+
+    data[invocation].i64.x   = subgroupAnd(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupAnd(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupAnd(data[2].i64.xyz);
+    data[invocation].i64     = subgroupAnd(data[3].i64);
+
+    data[invocation].i64.x   = subgroupOr(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupOr(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupOr(data[2].i64.xyz);
+    data[invocation].i64     = subgroupOr(data[3].i64);
+
+    data[invocation].i64.x   = subgroupXor(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupXor(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupXor(data[2].i64.xyz);
+    data[invocation].i64     = subgroupXor(data[3].i64);
+
+    data[invocation].i64.x   = subgroupInclusiveAdd(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupInclusiveAdd(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupInclusiveAdd(data[2].i64.xyz);
+    data[invocation].i64     = subgroupInclusiveAdd(data[3].i64);
+
+    data[invocation].i64.x   = subgroupInclusiveMul(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupInclusiveMul(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupInclusiveMul(data[2].i64.xyz);
+    data[invocation].i64     = subgroupInclusiveMul(data[3].i64);
+
+    data[invocation].i64.x   = subgroupInclusiveMin(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupInclusiveMin(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupInclusiveMin(data[2].i64.xyz);
+    data[invocation].i64     = subgroupInclusiveMin(data[3].i64);
+
+    data[invocation].i64.x   = subgroupInclusiveMax(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupInclusiveMax(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupInclusiveMax(data[2].i64.xyz);
+    data[invocation].i64     = subgroupInclusiveMax(data[3].i64);
+
+    data[invocation].i64.x   = subgroupInclusiveAnd(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupInclusiveAnd(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupInclusiveAnd(data[2].i64.xyz);
+    data[invocation].i64     = subgroupInclusiveAnd(data[3].i64);
+
+    data[invocation].i64.x   = subgroupInclusiveOr(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupInclusiveOr(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupInclusiveOr(data[2].i64.xyz);
+    data[invocation].i64     = subgroupInclusiveOr(data[3].i64);
+
+    data[invocation].i64.x   = subgroupInclusiveXor(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupInclusiveXor(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupInclusiveXor(data[2].i64.xyz);
+    data[invocation].i64     = subgroupInclusiveXor(data[3].i64);
+
+    data[invocation].i64.x   = subgroupExclusiveAdd(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupExclusiveAdd(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupExclusiveAdd(data[2].i64.xyz);
+    data[invocation].i64     = subgroupExclusiveAdd(data[3].i64);
+
+    data[invocation].i64.x   = subgroupExclusiveMul(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupExclusiveMul(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupExclusiveMul(data[2].i64.xyz);
+    data[invocation].i64     = subgroupExclusiveMul(data[3].i64);
+
+    data[invocation].i64.x   = subgroupExclusiveMin(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupExclusiveMin(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupExclusiveMin(data[2].i64.xyz);
+    data[invocation].i64     = subgroupExclusiveMin(data[3].i64);
+
+    data[invocation].i64.x   = subgroupExclusiveMax(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupExclusiveMax(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupExclusiveMax(data[2].i64.xyz);
+    data[invocation].i64     = subgroupExclusiveMax(data[3].i64);
+
+    data[invocation].i64.x   = subgroupExclusiveAnd(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupExclusiveAnd(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupExclusiveAnd(data[2].i64.xyz);
+    data[invocation].i64     = subgroupExclusiveAnd(data[3].i64);
+
+    data[invocation].i64.x   = subgroupExclusiveOr(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupExclusiveOr(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupExclusiveOr(data[2].i64.xyz);
+    data[invocation].i64     = subgroupExclusiveOr(data[3].i64);
+
+    data[invocation].i64.x   = subgroupExclusiveXor(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupExclusiveXor(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupExclusiveXor(data[2].i64.xyz);
+    data[invocation].i64     = subgroupExclusiveXor(data[3].i64);
+
+    data[invocation].u64.x   = subgroupAdd(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupAdd(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupAdd(data[2].u64.xyz);
+    data[invocation].u64     = subgroupAdd(data[3].u64);
+
+    data[invocation].u64.x   = subgroupMul(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupMul(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupMul(data[2].u64.xyz);
+    data[invocation].u64     = subgroupMul(data[3].u64);
+
+    data[invocation].u64.x   = subgroupMin(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupMin(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupMin(data[2].u64.xyz);
+    data[invocation].u64     = subgroupMin(data[3].u64);
+
+    data[invocation].u64.x   = subgroupMax(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupMax(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupMax(data[2].u64.xyz);
+    data[invocation].u64     = subgroupMax(data[3].u64);
+
+    data[invocation].u64.x   = subgroupAnd(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupAnd(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupAnd(data[2].u64.xyz);
+    data[invocation].u64     = subgroupAnd(data[3].u64);
+
+    data[invocation].u64.x   = subgroupOr(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupOr(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupOr(data[2].u64.xyz);
+    data[invocation].u64     = subgroupOr(data[3].u64);
+
+    data[invocation].u64.x   = subgroupXor(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupXor(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupXor(data[2].u64.xyz);
+    data[invocation].u64     = subgroupXor(data[3].u64);
+
+    data[invocation].u64.x   = subgroupInclusiveAdd(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupInclusiveAdd(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupInclusiveAdd(data[2].u64.xyz);
+    data[invocation].u64     = subgroupInclusiveAdd(data[3].u64);
+
+    data[invocation].u64.x   = subgroupInclusiveMul(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupInclusiveMul(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupInclusiveMul(data[2].u64.xyz);
+    data[invocation].u64     = subgroupInclusiveMul(data[3].u64);
+
+    data[invocation].u64.x   = subgroupInclusiveMin(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupInclusiveMin(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupInclusiveMin(data[2].u64.xyz);
+    data[invocation].u64     = subgroupInclusiveMin(data[3].u64);
+
+    data[invocation].u64.x   = subgroupInclusiveMax(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupInclusiveMax(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupInclusiveMax(data[2].u64.xyz);
+    data[invocation].u64     = subgroupInclusiveMax(data[3].u64);
+
+    data[invocation].u64.x   = subgroupInclusiveAnd(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupInclusiveAnd(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupInclusiveAnd(data[2].u64.xyz);
+    data[invocation].u64     = subgroupInclusiveAnd(data[3].u64);
+
+    data[invocation].u64.x   = subgroupInclusiveOr(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupInclusiveOr(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupInclusiveOr(data[2].u64.xyz);
+    data[invocation].u64     = subgroupInclusiveOr(data[3].u64);
+
+    data[invocation].u64.x   = subgroupInclusiveXor(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupInclusiveXor(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupInclusiveXor(data[2].u64.xyz);
+    data[invocation].u64     = subgroupInclusiveXor(data[3].u64);
+
+    data[invocation].u64.x   = subgroupExclusiveAdd(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupExclusiveAdd(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupExclusiveAdd(data[2].u64.xyz);
+    data[invocation].u64     = subgroupExclusiveAdd(data[3].u64);
+
+    data[invocation].u64.x   = subgroupExclusiveMul(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupExclusiveMul(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupExclusiveMul(data[2].u64.xyz);
+    data[invocation].u64     = subgroupExclusiveMul(data[3].u64);
+
+    data[invocation].u64.x   = subgroupExclusiveMin(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupExclusiveMin(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupExclusiveMin(data[2].u64.xyz);
+    data[invocation].u64     = subgroupExclusiveMin(data[3].u64);
+
+    data[invocation].u64.x   = subgroupExclusiveMax(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupExclusiveMax(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupExclusiveMax(data[2].u64.xyz);
+    data[invocation].u64     = subgroupExclusiveMax(data[3].u64);
+
+    data[invocation].u64.x   = subgroupExclusiveAnd(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupExclusiveAnd(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupExclusiveAnd(data[2].u64.xyz);
+    data[invocation].u64     = subgroupExclusiveAnd(data[3].u64);
+
+    data[invocation].u64.x   = subgroupExclusiveOr(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupExclusiveOr(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupExclusiveOr(data[2].u64.xyz);
+    data[invocation].u64     = subgroupExclusiveOr(data[3].u64);
+
+    data[invocation].u64.x   = subgroupExclusiveXor(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupExclusiveXor(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupExclusiveXor(data[2].u64.xyz);
+    data[invocation].u64     = subgroupExclusiveXor(data[3].u64);
+
+    data[invocation].f16.x   = subgroupAdd(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupAdd(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupAdd(data[2].f16.xyz);
+    data[invocation].f16     = subgroupAdd(data[3].f16);
+
+    data[invocation].f16.x   = subgroupMul(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupMul(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupMul(data[2].f16.xyz);
+    data[invocation].f16     = subgroupMul(data[3].f16);
+
+    data[invocation].f16.x   = subgroupMin(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupMin(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupMin(data[2].f16.xyz);
+    data[invocation].f16     = subgroupMin(data[3].f16);
+
+    data[invocation].f16.x   = subgroupMax(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupMax(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupMax(data[2].f16.xyz);
+    data[invocation].f16     = subgroupMax(data[3].f16);
+
+    data[invocation].f16.x   = subgroupInclusiveAdd(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupInclusiveAdd(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupInclusiveAdd(data[2].f16.xyz);
+    data[invocation].f16     = subgroupInclusiveAdd(data[3].f16);
+
+    data[invocation].f16.x   = subgroupInclusiveMul(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupInclusiveMul(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupInclusiveMul(data[2].f16.xyz);
+    data[invocation].f16     = subgroupInclusiveMul(data[3].f16);
+
+    data[invocation].f16.x   = subgroupInclusiveMin(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupInclusiveMin(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupInclusiveMin(data[2].f16.xyz);
+    data[invocation].f16     = subgroupInclusiveMin(data[3].f16);
+
+    data[invocation].f16.x   = subgroupInclusiveMax(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupInclusiveMax(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupInclusiveMax(data[2].f16.xyz);
+    data[invocation].f16     = subgroupInclusiveMax(data[3].f16);
+
+    data[invocation].f16.x   = subgroupExclusiveAdd(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupExclusiveAdd(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupExclusiveAdd(data[2].f16.xyz);
+    data[invocation].f16     = subgroupExclusiveAdd(data[3].f16);
+
+    data[invocation].f16.x   = subgroupExclusiveMul(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupExclusiveMul(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupExclusiveMul(data[2].f16.xyz);
+    data[invocation].f16     = subgroupExclusiveMul(data[3].f16);
+
+    data[invocation].f16.x   = subgroupExclusiveMin(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupExclusiveMin(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupExclusiveMin(data[2].f16.xyz);
+    data[invocation].f16     = subgroupExclusiveMin(data[3].f16);
+
+    data[invocation].f16.x   = subgroupExclusiveMax(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupExclusiveMax(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupExclusiveMax(data[2].f16.xyz);
+    data[invocation].f16     = subgroupExclusiveMax(data[3].f16);
+}

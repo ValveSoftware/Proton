@@ -1,0 +1,57 @@
+GL_ARB_gpu_shader5.u2i.vert
+WARNING: 0:2: '#extension' : extension is only partially supported: GL_ARB_gpu_shader5
+
+Shader version: 150
+Requested GL_ARB_gpu_shader5
+0:? Sequence
+0:7  Function Definition: main( ( global void)
+0:7    Function Parameters: 
+0:9    Sequence
+0:9      Sequence
+0:9        move second child to first child ( temp uint)
+0:9          'v' ( temp uint)
+0:9          Constant:
+0:9            0 (const uint)
+0:10      move second child to first child ( temp uint)
+0:10        'v' ( temp uint)
+0:10        subtract ( temp uint)
+0:10          Convert int to uint ( temp uint)
+0:10            'u2' ( uniform int)
+0:10          Convert int to uint ( temp uint)
+0:10            'u1' ( uniform int)
+0:?   Linker Objects
+0:?     'u1' ( uniform int)
+0:?     'u2' ( uniform int)
+0:?     'result' ( smooth out 4-component vector of float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+
+
+Linked vertex stage:
+
+
+Shader version: 150
+Requested GL_ARB_gpu_shader5
+0:? Sequence
+0:7  Function Definition: main( ( global void)
+0:7    Function Parameters: 
+0:9    Sequence
+0:9      Sequence
+0:9        move second child to first child ( temp uint)
+0:9          'v' ( temp uint)
+0:9          Constant:
+0:9            0 (const uint)
+0:10      move second child to first child ( temp uint)
+0:10        'v' ( temp uint)
+0:10        subtract ( temp uint)
+0:10          Convert int to uint ( temp uint)
+0:10            'u2' ( uniform int)
+0:10          Convert int to uint ( temp uint)
+0:10            'u1' ( uniform int)
+0:?   Linker Objects
+0:?     'u1' ( uniform int)
+0:?     'u2' ( uniform int)
+0:?     'result' ( smooth out 4-component vector of float)
+0:?     'gl_VertexID' ( gl_VertexId int VertexId)
+0:?     'gl_InstanceID' ( gl_InstanceId int InstanceId)
+

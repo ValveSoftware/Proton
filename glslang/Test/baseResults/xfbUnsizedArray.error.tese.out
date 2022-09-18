@@ -1,0 +1,35 @@
+xfbUnsizedArray.error.tese
+ERROR: 0:4: 'xfb_offset' : unsized array in buffer 0
+ERROR: 1 compilation errors.  No code generated.
+
+
+Shader version: 430
+Requested GL_ARB_enhanced_layouts
+in xfb mode
+input primitive = isolines
+vertex spacing = none
+triangle order = none
+using point mode
+ERROR: node is still EOpNull!
+0:6  Function Definition: main( ( global void)
+0:6    Function Parameters: 
+0:?   Linker Objects
+0:?     'unsized' (layout( xfb_buffer=0 xfb_offset=0) out unsized 1-element array of 4-component vector of float)
+
+
+Linked tessellation evaluation stage:
+
+
+Shader version: 430
+Requested GL_ARB_enhanced_layouts
+in xfb mode
+input primitive = isolines
+vertex spacing = equal_spacing
+triangle order = ccw
+using point mode
+ERROR: node is still EOpNull!
+0:6  Function Definition: main( ( global void)
+0:6    Function Parameters: 
+0:?   Linker Objects
+0:?     'unsized' (layout( xfb_buffer=0 xfb_offset=0) out 1-element array of 4-component vector of float)
+

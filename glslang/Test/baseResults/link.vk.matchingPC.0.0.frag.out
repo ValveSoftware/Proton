@@ -1,0 +1,155 @@
+link.vk.matchingPC.0.0.frag
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp highp 4-component vector of float)
+0:17        'color' (layout( location=0) out highp 4-component vector of float)
+0:17        add ( temp highp 4-component vector of float)
+0:17          color: direct index for structure (layout( column_major std430 offset=0) uniform highp 4-component vector of float)
+0:17            'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:17            Constant:
+0:17              0 (const int)
+0:17          vector-scale ( temp highp 4-component vector of float)
+0:17            Function Call: getColor2( ( global highp 4-component vector of float)
+0:17            Function Call: getScale( ( global highp float)
+0:?   Linker Objects
+0:?     'color' (layout( location=0) out highp 4-component vector of float)
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+
+link.vk.matchingPC.0.1.frag
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:11  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        color2: direct index for structure (layout( column_major std430 offset=16) uniform highp 4-component vector of float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:13          Constant:
+0:13            1 (const int)
+0:?   Linker Objects
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+
+link.vk.matchingPC.0.2.frag
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:11  Function Definition: getScale( ( global highp float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        scale: direct index for structure (layout( column_major std430 offset=32) uniform highp float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:13          Constant:
+0:13            2 (const int)
+0:?   Linker Objects
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+
+
+Linked fragment stage:
+
+
+Shader version: 450
+gl_FragCoord origin is upper left
+0:? Sequence
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:17    Sequence
+0:17      move second child to first child ( temp highp 4-component vector of float)
+0:17        'color' (layout( location=0) out highp 4-component vector of float)
+0:17        add ( temp highp 4-component vector of float)
+0:17          color: direct index for structure (layout( column_major std430 offset=0) uniform highp 4-component vector of float)
+0:17            'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:17            Constant:
+0:17              0 (const int)
+0:17          vector-scale ( temp highp 4-component vector of float)
+0:17            Function Call: getColor2( ( global highp 4-component vector of float)
+0:17            Function Call: getScale( ( global highp float)
+0:11  Function Definition: getColor2( ( global highp 4-component vector of float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        color2: direct index for structure (layout( column_major std430 offset=16) uniform highp 4-component vector of float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:13          Constant:
+0:13            1 (const int)
+0:11  Function Definition: getScale( ( global highp float)
+0:11    Function Parameters: 
+0:13    Sequence
+0:13      Branch: Return with expression
+0:13        scale: direct index for structure (layout( column_major std430 offset=32) uniform highp float)
+0:13          'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+0:13          Constant:
+0:13            2 (const int)
+0:?   Linker Objects
+0:?     'color' (layout( location=0) out highp 4-component vector of float)
+0:?     'uPC' (layout( column_major std430 push_constant) uniform block{layout( column_major std430 offset=0) uniform highp 4-component vector of float color, layout( column_major std430 offset=16) uniform highp 4-component vector of float color2, layout( column_major std430 offset=32) uniform highp float scale})
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 39
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "main" 15
+                              ExecutionMode 4 OriginUpperLeft
+                              Source GLSL 450
+                              Name 4  "main"
+                              Name 9  "getColor2("
+                              Name 12  "getScale("
+                              Name 15  "color"
+                              Name 16  "PushConstantBlock"
+                              MemberName 16(PushConstantBlock) 0  "color"
+                              MemberName 16(PushConstantBlock) 1  "color2"
+                              MemberName 16(PushConstantBlock) 2  "scale"
+                              Name 18  "uPC"
+                              Decorate 15(color) Location 0
+                              MemberDecorate 16(PushConstantBlock) 0 Offset 0
+                              MemberDecorate 16(PushConstantBlock) 1 Offset 16
+                              MemberDecorate 16(PushConstantBlock) 2 Offset 32
+                              Decorate 16(PushConstantBlock) Block
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypeFunction 7(fvec4)
+              11:             TypeFunction 6(float)
+              14:             TypePointer Output 7(fvec4)
+       15(color):     14(ptr) Variable Output
+16(PushConstantBlock):             TypeStruct 7(fvec4) 7(fvec4) 6(float)
+              17:             TypePointer PushConstant 16(PushConstantBlock)
+         18(uPC):     17(ptr) Variable PushConstant
+              19:             TypeInt 32 1
+              20:     19(int) Constant 0
+              21:             TypePointer PushConstant 7(fvec4)
+              28:     19(int) Constant 1
+              33:     19(int) Constant 2
+              34:             TypePointer PushConstant 6(float)
+         4(main):           2 Function None 3
+               5:             Label
+              22:     21(ptr) AccessChain 18(uPC) 20
+              23:    7(fvec4) Load 22
+              24:    7(fvec4) FunctionCall 9(getColor2()
+              25:    6(float) FunctionCall 12(getScale()
+              26:    7(fvec4) VectorTimesScalar 24 25
+              27:    7(fvec4) FAdd 23 26
+                              Store 15(color) 27
+                              Return
+                              FunctionEnd
+   9(getColor2():    7(fvec4) Function None 8
+              10:             Label
+              29:     21(ptr) AccessChain 18(uPC) 28
+              30:    7(fvec4) Load 29
+                              ReturnValue 30
+                              FunctionEnd
+   12(getScale():    6(float) Function None 11
+              13:             Label
+              35:     34(ptr) AccessChain 18(uPC) 33
+              36:    6(float) Load 35
+                              ReturnValue 36
+                              FunctionEnd

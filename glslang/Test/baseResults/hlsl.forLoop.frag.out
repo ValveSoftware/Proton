@@ -1,0 +1,912 @@
+hlsl.forLoop.frag
+Shader version: 500
+gl_FragCoord origin is upper left
+0:? Sequence
+0:1  Function Definition: f0( ( temp void)
+0:1    Function Parameters: 
+0:?     Sequence
+0:?       Sequence
+0:2        Loop with condition tested first
+0:2          No loop condition
+0:2          No loop body
+0:5  Function Definition: f1(vf4; ( temp void)
+0:5    Function Parameters: 
+0:5      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:6      Sequence
+0:6        Pre-Increment ( temp 4-component vector of float)
+0:6          'input' ( in 4-component vector of float)
+0:6        Loop with condition tested first
+0:6          No loop condition
+0:6          No loop body
+0:9  Function Definition: f2(vf4; ( temp void)
+0:9    Function Parameters: 
+0:9      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:10        Loop with condition tested first: Unroll
+0:10          Loop Condition
+0:10          any ( temp bool)
+0:10            NotEqual ( temp 4-component vector of bool)
+0:10              'input' ( in 4-component vector of float)
+0:10              'input' ( in 4-component vector of float)
+0:10          No loop body
+0:13  Function Definition: f3(vf4; ( temp float)
+0:13    Function Parameters: 
+0:13      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:14        Loop with condition tested first
+0:14          Loop Condition
+0:14          any ( temp bool)
+0:14            NotEqual ( temp 4-component vector of bool)
+0:14              'input' ( in 4-component vector of float)
+0:14              'input' ( in 4-component vector of float)
+0:14          Loop Body
+0:?           Sequence
+0:14            Branch: Return with expression
+0:14              Construct float ( temp float)
+0:14                Negate value ( temp 4-component vector of float)
+0:14                  'input' ( in 4-component vector of float)
+0:17  Function Definition: f4(vf4; ( temp float)
+0:17    Function Parameters: 
+0:17      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:18      Sequence
+0:18        Pre-Decrement ( temp 4-component vector of float)
+0:18          'input' ( in 4-component vector of float)
+0:18        Loop with condition tested first
+0:18          Loop Condition
+0:18          any ( temp bool)
+0:18            NotEqual ( temp 4-component vector of bool)
+0:18              'input' ( in 4-component vector of float)
+0:18              'input' ( in 4-component vector of float)
+0:18          Loop Body
+0:?           Sequence
+0:18            Branch: Return with expression
+0:18              Construct float ( temp float)
+0:18                Negate value ( temp 4-component vector of float)
+0:18                  'input' ( in 4-component vector of float)
+0:18          Loop Terminal Expression
+0:18          add second child into first child ( temp 4-component vector of float)
+0:18            'input' ( in 4-component vector of float)
+0:18            Constant:
+0:18              2.000000
+0:21  Function Definition: f5(vf4; ( temp void)
+0:21    Function Parameters: 
+0:21      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:22        Loop with condition tested first
+0:22          No loop condition
+0:22          Loop Body
+0:22          Test condition and select ( temp void)
+0:22            Condition
+0:22            Compare Greater Than ( temp bool)
+0:22              direct index ( temp float)
+0:22                'input' ( in 4-component vector of float)
+0:22                Constant:
+0:22                  0 (const int)
+0:22              Constant:
+0:22                2.000000
+0:22            true case
+0:22            Branch: Break
+0:25  Function Definition: f6(vf4; ( temp void)
+0:25    Function Parameters: 
+0:25      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:26        Loop with condition tested first
+0:26          No loop condition
+0:26          Loop Body
+0:26          Test condition and select ( temp void)
+0:26            Condition
+0:26            Compare Greater Than ( temp bool)
+0:26              direct index ( temp float)
+0:26                'input' ( in 4-component vector of float)
+0:26                Constant:
+0:26                  0 (const int)
+0:26              Constant:
+0:26                2.000000
+0:26            true case
+0:26            Branch: Continue
+0:29  Function Definition: f99( ( temp void)
+0:29    Function Parameters: 
+0:?     Sequence
+0:30      Sequence
+0:30        move second child to first child ( temp int)
+0:30          'first' ( temp int)
+0:30          Constant:
+0:30            0 (const int)
+0:30        move second child to first child ( temp int)
+0:30          'second' ( temp int)
+0:30          Constant:
+0:30            1 (const int)
+0:30        Loop with condition tested first
+0:30          No loop condition
+0:30          Loop Body
+0:30          add ( temp int)
+0:30            'first' ( temp int)
+0:30            'second' ( temp int)
+0:33  Function Definition: f100(f1; ( temp void)
+0:33    Function Parameters: 
+0:33      'ii' ( in float)
+0:?     Sequence
+0:?       Sequence
+0:34        Comma ( temp float)
+0:34          Comma ( temp float)
+0:34            Pre-Decrement ( temp float)
+0:34              'ii' ( in float)
+0:34            Pre-Decrement ( temp float)
+0:34              'ii' ( in float)
+0:34          Pre-Decrement ( temp float)
+0:34            'ii' ( in float)
+0:34        Loop with condition tested first
+0:34          No loop condition
+0:34          Loop Body
+0:34          'ii' ( in float)
+0:38  Function Definition: @PixelShaderFunction(vf4; ( temp 4-component vector of float)
+0:38    Function Parameters: 
+0:38      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:39      Function Call: f0( ( temp void)
+0:40      Function Call: f1(vf4; ( temp void)
+0:40        'input' ( in 4-component vector of float)
+0:41      Function Call: f2(vf4; ( temp void)
+0:41        'input' ( in 4-component vector of float)
+0:42      Function Call: f3(vf4; ( temp float)
+0:42        'input' ( in 4-component vector of float)
+0:43      Function Call: f4(vf4; ( temp float)
+0:43        'input' ( in 4-component vector of float)
+0:44      Function Call: f5(vf4; ( temp void)
+0:44        'input' ( in 4-component vector of float)
+0:45      Function Call: f6(vf4; ( temp void)
+0:45        'input' ( in 4-component vector of float)
+0:48      Sequence
+0:48        move second child to first child ( temp int)
+0:48          'ii' ( temp int)
+0:48          Constant:
+0:48            -1 (const int)
+0:48        Loop with condition tested first
+0:48          Loop Condition
+0:48          Compare Less Than ( temp bool)
+0:48            'ii' ( temp int)
+0:48            Constant:
+0:48              3 (const int)
+0:48          Loop Body
+0:48          Test condition and select ( temp void)
+0:48            Condition
+0:48            Compare Equal ( temp bool)
+0:48              'ii' ( temp int)
+0:48              Constant:
+0:48                2 (const int)
+0:48            true case
+0:48            Branch: Continue
+0:48          Loop Terminal Expression
+0:48          Pre-Increment ( temp int)
+0:48            'ii' ( temp int)
+0:49      Pre-Decrement ( temp float)
+0:49        'ii' ( temp float)
+0:51      Function Call: f99( ( temp void)
+0:53      Sequence
+0:53        move second child to first child ( temp int)
+0:53          'i' ( temp int)
+0:53          Constant:
+0:53            0 (const int)
+0:53        move second child to first child ( temp int)
+0:53          'count' ( temp int)
+0:53          Convert float to int ( temp int)
+0:53            'ii' ( temp float)
+0:53        Loop with condition tested first
+0:53          Loop Condition
+0:53          Compare Less Than ( temp bool)
+0:53            'i' ( temp int)
+0:53            'count' ( temp int)
+0:53          No loop body
+0:53          Loop Terminal Expression
+0:53          Post-Increment ( temp int)
+0:53            'i' ( temp int)
+0:54      Sequence
+0:54        move second child to first child ( temp float)
+0:54          'first' ( temp float)
+0:54          Constant:
+0:54            0.000000
+0:54        Loop with condition tested first
+0:54          Loop Condition
+0:54          Compare Less Than ( temp bool)
+0:54            'first' ( temp float)
+0:54            direct index ( temp float)
+0:54              'second' ( temp 2-element array of float)
+0:54              Constant:
+0:54                0 (const int)
+0:54          Loop Body
+0:54          add ( temp float)
+0:54            add ( temp float)
+0:54              'first' ( temp float)
+0:54              direct index ( temp float)
+0:54                'second' ( temp 2-element array of float)
+0:54                Constant:
+0:54                  1 (const int)
+0:54            'third' ( temp float)
+0:54          Loop Terminal Expression
+0:54          Pre-Increment ( temp float)
+0:54            direct index ( temp float)
+0:54              'second' ( temp 2-element array of float)
+0:54              Constant:
+0:54                1 (const int)
+0:56      Function Call: f100(f1; ( temp void)
+0:56        'ii' ( temp float)
+0:58      Branch: Return with expression
+0:58        'input' ( in 4-component vector of float)
+0:38  Function Definition: PixelShaderFunction( ( temp void)
+0:38    Function Parameters: 
+0:?     Sequence
+0:38      move second child to first child ( temp 4-component vector of float)
+0:?         'input' ( temp 4-component vector of float)
+0:?         'input' (layout( location=0) in 4-component vector of float)
+0:38      move second child to first child ( temp 4-component vector of float)
+0:?         '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:38        Function Call: @PixelShaderFunction(vf4; ( temp 4-component vector of float)
+0:?           'input' ( temp 4-component vector of float)
+0:?   Linker Objects
+0:?     '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:?     'input' (layout( location=0) in 4-component vector of float)
+
+
+Linked fragment stage:
+
+
+Shader version: 500
+gl_FragCoord origin is upper left
+0:? Sequence
+0:1  Function Definition: f0( ( temp void)
+0:1    Function Parameters: 
+0:?     Sequence
+0:?       Sequence
+0:2        Loop with condition tested first
+0:2          No loop condition
+0:2          No loop body
+0:5  Function Definition: f1(vf4; ( temp void)
+0:5    Function Parameters: 
+0:5      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:6      Sequence
+0:6        Pre-Increment ( temp 4-component vector of float)
+0:6          'input' ( in 4-component vector of float)
+0:6        Loop with condition tested first
+0:6          No loop condition
+0:6          No loop body
+0:9  Function Definition: f2(vf4; ( temp void)
+0:9    Function Parameters: 
+0:9      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:10        Loop with condition tested first: Unroll
+0:10          Loop Condition
+0:10          any ( temp bool)
+0:10            NotEqual ( temp 4-component vector of bool)
+0:10              'input' ( in 4-component vector of float)
+0:10              'input' ( in 4-component vector of float)
+0:10          No loop body
+0:13  Function Definition: f3(vf4; ( temp float)
+0:13    Function Parameters: 
+0:13      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:14        Loop with condition tested first
+0:14          Loop Condition
+0:14          any ( temp bool)
+0:14            NotEqual ( temp 4-component vector of bool)
+0:14              'input' ( in 4-component vector of float)
+0:14              'input' ( in 4-component vector of float)
+0:14          Loop Body
+0:?           Sequence
+0:14            Branch: Return with expression
+0:14              Construct float ( temp float)
+0:14                Negate value ( temp 4-component vector of float)
+0:14                  'input' ( in 4-component vector of float)
+0:17  Function Definition: f4(vf4; ( temp float)
+0:17    Function Parameters: 
+0:17      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:18      Sequence
+0:18        Pre-Decrement ( temp 4-component vector of float)
+0:18          'input' ( in 4-component vector of float)
+0:18        Loop with condition tested first
+0:18          Loop Condition
+0:18          any ( temp bool)
+0:18            NotEqual ( temp 4-component vector of bool)
+0:18              'input' ( in 4-component vector of float)
+0:18              'input' ( in 4-component vector of float)
+0:18          Loop Body
+0:?           Sequence
+0:18            Branch: Return with expression
+0:18              Construct float ( temp float)
+0:18                Negate value ( temp 4-component vector of float)
+0:18                  'input' ( in 4-component vector of float)
+0:18          Loop Terminal Expression
+0:18          add second child into first child ( temp 4-component vector of float)
+0:18            'input' ( in 4-component vector of float)
+0:18            Constant:
+0:18              2.000000
+0:21  Function Definition: f5(vf4; ( temp void)
+0:21    Function Parameters: 
+0:21      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:22        Loop with condition tested first
+0:22          No loop condition
+0:22          Loop Body
+0:22          Test condition and select ( temp void)
+0:22            Condition
+0:22            Compare Greater Than ( temp bool)
+0:22              direct index ( temp float)
+0:22                'input' ( in 4-component vector of float)
+0:22                Constant:
+0:22                  0 (const int)
+0:22              Constant:
+0:22                2.000000
+0:22            true case
+0:22            Branch: Break
+0:25  Function Definition: f6(vf4; ( temp void)
+0:25    Function Parameters: 
+0:25      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:?       Sequence
+0:26        Loop with condition tested first
+0:26          No loop condition
+0:26          Loop Body
+0:26          Test condition and select ( temp void)
+0:26            Condition
+0:26            Compare Greater Than ( temp bool)
+0:26              direct index ( temp float)
+0:26                'input' ( in 4-component vector of float)
+0:26                Constant:
+0:26                  0 (const int)
+0:26              Constant:
+0:26                2.000000
+0:26            true case
+0:26            Branch: Continue
+0:29  Function Definition: f99( ( temp void)
+0:29    Function Parameters: 
+0:?     Sequence
+0:30      Sequence
+0:30        move second child to first child ( temp int)
+0:30          'first' ( temp int)
+0:30          Constant:
+0:30            0 (const int)
+0:30        move second child to first child ( temp int)
+0:30          'second' ( temp int)
+0:30          Constant:
+0:30            1 (const int)
+0:30        Loop with condition tested first
+0:30          No loop condition
+0:30          Loop Body
+0:30          add ( temp int)
+0:30            'first' ( temp int)
+0:30            'second' ( temp int)
+0:33  Function Definition: f100(f1; ( temp void)
+0:33    Function Parameters: 
+0:33      'ii' ( in float)
+0:?     Sequence
+0:?       Sequence
+0:34        Comma ( temp float)
+0:34          Comma ( temp float)
+0:34            Pre-Decrement ( temp float)
+0:34              'ii' ( in float)
+0:34            Pre-Decrement ( temp float)
+0:34              'ii' ( in float)
+0:34          Pre-Decrement ( temp float)
+0:34            'ii' ( in float)
+0:34        Loop with condition tested first
+0:34          No loop condition
+0:34          Loop Body
+0:34          'ii' ( in float)
+0:38  Function Definition: @PixelShaderFunction(vf4; ( temp 4-component vector of float)
+0:38    Function Parameters: 
+0:38      'input' ( in 4-component vector of float)
+0:?     Sequence
+0:39      Function Call: f0( ( temp void)
+0:40      Function Call: f1(vf4; ( temp void)
+0:40        'input' ( in 4-component vector of float)
+0:41      Function Call: f2(vf4; ( temp void)
+0:41        'input' ( in 4-component vector of float)
+0:42      Function Call: f3(vf4; ( temp float)
+0:42        'input' ( in 4-component vector of float)
+0:43      Function Call: f4(vf4; ( temp float)
+0:43        'input' ( in 4-component vector of float)
+0:44      Function Call: f5(vf4; ( temp void)
+0:44        'input' ( in 4-component vector of float)
+0:45      Function Call: f6(vf4; ( temp void)
+0:45        'input' ( in 4-component vector of float)
+0:48      Sequence
+0:48        move second child to first child ( temp int)
+0:48          'ii' ( temp int)
+0:48          Constant:
+0:48            -1 (const int)
+0:48        Loop with condition tested first
+0:48          Loop Condition
+0:48          Compare Less Than ( temp bool)
+0:48            'ii' ( temp int)
+0:48            Constant:
+0:48              3 (const int)
+0:48          Loop Body
+0:48          Test condition and select ( temp void)
+0:48            Condition
+0:48            Compare Equal ( temp bool)
+0:48              'ii' ( temp int)
+0:48              Constant:
+0:48                2 (const int)
+0:48            true case
+0:48            Branch: Continue
+0:48          Loop Terminal Expression
+0:48          Pre-Increment ( temp int)
+0:48            'ii' ( temp int)
+0:49      Pre-Decrement ( temp float)
+0:49        'ii' ( temp float)
+0:51      Function Call: f99( ( temp void)
+0:53      Sequence
+0:53        move second child to first child ( temp int)
+0:53          'i' ( temp int)
+0:53          Constant:
+0:53            0 (const int)
+0:53        move second child to first child ( temp int)
+0:53          'count' ( temp int)
+0:53          Convert float to int ( temp int)
+0:53            'ii' ( temp float)
+0:53        Loop with condition tested first
+0:53          Loop Condition
+0:53          Compare Less Than ( temp bool)
+0:53            'i' ( temp int)
+0:53            'count' ( temp int)
+0:53          No loop body
+0:53          Loop Terminal Expression
+0:53          Post-Increment ( temp int)
+0:53            'i' ( temp int)
+0:54      Sequence
+0:54        move second child to first child ( temp float)
+0:54          'first' ( temp float)
+0:54          Constant:
+0:54            0.000000
+0:54        Loop with condition tested first
+0:54          Loop Condition
+0:54          Compare Less Than ( temp bool)
+0:54            'first' ( temp float)
+0:54            direct index ( temp float)
+0:54              'second' ( temp 2-element array of float)
+0:54              Constant:
+0:54                0 (const int)
+0:54          Loop Body
+0:54          add ( temp float)
+0:54            add ( temp float)
+0:54              'first' ( temp float)
+0:54              direct index ( temp float)
+0:54                'second' ( temp 2-element array of float)
+0:54                Constant:
+0:54                  1 (const int)
+0:54            'third' ( temp float)
+0:54          Loop Terminal Expression
+0:54          Pre-Increment ( temp float)
+0:54            direct index ( temp float)
+0:54              'second' ( temp 2-element array of float)
+0:54              Constant:
+0:54                1 (const int)
+0:56      Function Call: f100(f1; ( temp void)
+0:56        'ii' ( temp float)
+0:58      Branch: Return with expression
+0:58        'input' ( in 4-component vector of float)
+0:38  Function Definition: PixelShaderFunction( ( temp void)
+0:38    Function Parameters: 
+0:?     Sequence
+0:38      move second child to first child ( temp 4-component vector of float)
+0:?         'input' ( temp 4-component vector of float)
+0:?         'input' (layout( location=0) in 4-component vector of float)
+0:38      move second child to first child ( temp 4-component vector of float)
+0:?         '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:38        Function Call: @PixelShaderFunction(vf4; ( temp 4-component vector of float)
+0:?           'input' ( temp 4-component vector of float)
+0:?   Linker Objects
+0:?     '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:?     'input' (layout( location=0) in 4-component vector of float)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 240
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "PixelShaderFunction" 233 236
+                              ExecutionMode 4 OriginUpperLeft
+                              Source HLSL 500
+                              Name 4  "PixelShaderFunction"
+                              Name 6  "f0("
+                              Name 13  "f1(vf4;"
+                              Name 12  "input"
+                              Name 16  "f2(vf4;"
+                              Name 15  "input"
+                              Name 20  "f3(vf4;"
+                              Name 19  "input"
+                              Name 23  "f4(vf4;"
+                              Name 22  "input"
+                              Name 26  "f5(vf4;"
+                              Name 25  "input"
+                              Name 29  "f6(vf4;"
+                              Name 28  "input"
+                              Name 31  "f99("
+                              Name 36  "f100(f1;"
+                              Name 35  "ii"
+                              Name 40  "@PixelShaderFunction(vf4;"
+                              Name 39  "input"
+                              Name 124  "first"
+                              Name 126  "second"
+                              Name 146  "param"
+                              Name 149  "param"
+                              Name 152  "param"
+                              Name 155  "param"
+                              Name 158  "param"
+                              Name 161  "param"
+                              Name 164  "ii"
+                              Name 182  "ii"
+                              Name 186  "i"
+                              Name 187  "count"
+                              Name 200  "first"
+                              Name 211  "second"
+                              Name 219  "third"
+                              Name 225  "param"
+                              Name 231  "input"
+                              Name 233  "input"
+                              Name 236  "@entryPointOutput"
+                              Name 237  "param"
+                              Decorate 233(input) Location 0
+                              Decorate 236(@entryPointOutput) Location 0
+               2:             TypeVoid
+               3:             TypeFunction 2
+               8:             TypeFloat 32
+               9:             TypeVector 8(float) 4
+              10:             TypePointer Function 9(fvec4)
+              11:             TypeFunction 2 10(ptr)
+              18:             TypeFunction 8(float) 10(ptr)
+              33:             TypePointer Function 8(float)
+              34:             TypeFunction 2 33(ptr)
+              38:             TypeFunction 9(fvec4) 10(ptr)
+              47:    8(float) Constant 1065353216
+              61:             TypeBool
+              62:             TypeVector 61(bool) 4
+              95:    8(float) Constant 1073741824
+             104:             TypeInt 32 0
+             105:    104(int) Constant 0
+             122:             TypeInt 32 1
+             123:             TypePointer Function 122(int)
+             125:    122(int) Constant 0
+             127:    122(int) Constant 1
+             165:    122(int) Constant 4294967295
+             172:    122(int) Constant 3
+             175:    122(int) Constant 2
+             201:    8(float) Constant 0
+             208:    104(int) Constant 2
+             209:             TypeArray 8(float) 208
+             210:             TypePointer Function 209
+             232:             TypePointer Input 9(fvec4)
+      233(input):    232(ptr) Variable Input
+             235:             TypePointer Output 9(fvec4)
+236(@entryPointOutput):    235(ptr) Variable Output
+4(PixelShaderFunction):           2 Function None 3
+               5:             Label
+      231(input):     10(ptr) Variable Function
+      237(param):     10(ptr) Variable Function
+             234:    9(fvec4) Load 233(input)
+                              Store 231(input) 234
+             238:    9(fvec4) Load 231(input)
+                              Store 237(param) 238
+             239:    9(fvec4) FunctionCall 40(@PixelShaderFunction(vf4;) 237(param)
+                              Store 236(@entryPointOutput) 239
+                              Return
+                              FunctionEnd
+          6(f0():           2 Function None 3
+               7:             Label
+                              Branch 42
+              42:             Label
+                              LoopMerge 44 45 None
+                              Branch 43
+              43:             Label
+                              Branch 45
+              45:             Label
+                              Branch 42
+              44:             Label
+                              Unreachable
+                              FunctionEnd
+     13(f1(vf4;):           2 Function None 11
+       12(input):     10(ptr) FunctionParameter
+              14:             Label
+              46:    9(fvec4) Load 12(input)
+              48:    9(fvec4) CompositeConstruct 47 47 47 47
+              49:    9(fvec4) FAdd 46 48
+                              Store 12(input) 49
+                              Branch 50
+              50:             Label
+                              LoopMerge 52 53 None
+                              Branch 51
+              51:             Label
+                              Branch 53
+              53:             Label
+                              Branch 50
+              52:             Label
+                              Unreachable
+                              FunctionEnd
+     16(f2(vf4;):           2 Function None 11
+       15(input):     10(ptr) FunctionParameter
+              17:             Label
+                              Branch 54
+              54:             Label
+                              LoopMerge 56 57 Unroll 
+                              Branch 58
+              58:             Label
+              59:    9(fvec4) Load 15(input)
+              60:    9(fvec4) Load 15(input)
+              63:   62(bvec4) FUnordNotEqual 59 60
+              64:    61(bool) Any 63
+                              BranchConditional 64 55 56
+              55:               Label
+                                Branch 57
+              57:               Label
+                                Branch 54
+              56:             Label
+                              Return
+                              FunctionEnd
+     20(f3(vf4;):    8(float) Function None 18
+       19(input):     10(ptr) FunctionParameter
+              21:             Label
+                              Branch 65
+              65:             Label
+                              LoopMerge 67 68 None
+                              Branch 69
+              69:             Label
+              70:    9(fvec4) Load 19(input)
+              71:    9(fvec4) Load 19(input)
+              72:   62(bvec4) FUnordNotEqual 70 71
+              73:    61(bool) Any 72
+                              BranchConditional 73 66 67
+              66:               Label
+              74:    9(fvec4)   Load 19(input)
+              75:    9(fvec4)   FNegate 74
+              76:    8(float)   CompositeExtract 75 0
+                                ReturnValue 76
+              68:               Label
+                                Branch 65
+              67:             Label
+              78:    8(float) Undef
+                              ReturnValue 78
+                              FunctionEnd
+     23(f4(vf4;):    8(float) Function None 18
+       22(input):     10(ptr) FunctionParameter
+              24:             Label
+              79:    9(fvec4) Load 22(input)
+              80:    9(fvec4) CompositeConstruct 47 47 47 47
+              81:    9(fvec4) FSub 79 80
+                              Store 22(input) 81
+                              Branch 82
+              82:             Label
+                              LoopMerge 84 85 None
+                              Branch 86
+              86:             Label
+              87:    9(fvec4) Load 22(input)
+              88:    9(fvec4) Load 22(input)
+              89:   62(bvec4) FUnordNotEqual 87 88
+              90:    61(bool) Any 89
+                              BranchConditional 90 83 84
+              83:               Label
+              91:    9(fvec4)   Load 22(input)
+              92:    9(fvec4)   FNegate 91
+              93:    8(float)   CompositeExtract 92 0
+                                ReturnValue 93
+              85:               Label
+                                Branch 82
+              84:             Label
+              99:    8(float) Undef
+                              ReturnValue 99
+                              FunctionEnd
+     26(f5(vf4;):           2 Function None 11
+       25(input):     10(ptr) FunctionParameter
+              27:             Label
+                              Branch 100
+             100:             Label
+                              LoopMerge 102 103 None
+                              Branch 101
+             101:             Label
+             106:     33(ptr) AccessChain 25(input) 105
+             107:    8(float) Load 106
+             108:    61(bool) FOrdGreaterThan 107 95
+                              SelectionMerge 110 None
+                              BranchConditional 108 109 110
+             109:               Label
+                                Branch 102
+             110:             Label
+                              Branch 103
+             103:             Label
+                              Branch 100
+             102:             Label
+                              Return
+                              FunctionEnd
+     29(f6(vf4;):           2 Function None 11
+       28(input):     10(ptr) FunctionParameter
+              30:             Label
+                              Branch 112
+             112:             Label
+                              LoopMerge 114 115 None
+                              Branch 113
+             113:             Label
+             116:     33(ptr) AccessChain 28(input) 105
+             117:    8(float) Load 116
+             118:    61(bool) FOrdGreaterThan 117 95
+                              SelectionMerge 120 None
+                              BranchConditional 118 119 120
+             119:               Label
+                                Branch 115
+             120:             Label
+                              Branch 115
+             115:             Label
+                              Branch 112
+             114:             Label
+                              Unreachable
+                              FunctionEnd
+        31(f99():           2 Function None 3
+              32:             Label
+      124(first):    123(ptr) Variable Function
+     126(second):    123(ptr) Variable Function
+                              Store 124(first) 125
+                              Store 126(second) 127
+                              Branch 128
+             128:             Label
+                              LoopMerge 130 131 None
+                              Branch 129
+             129:             Label
+             132:    122(int) Load 124(first)
+             133:    122(int) Load 126(second)
+             134:    122(int) IAdd 132 133
+                              Branch 131
+             131:             Label
+                              Branch 128
+             130:             Label
+                              Unreachable
+                              FunctionEnd
+    36(f100(f1;):           2 Function None 34
+          35(ii):     33(ptr) FunctionParameter
+              37:             Label
+             135:    8(float) Load 35(ii)
+             136:    8(float) FSub 135 47
+                              Store 35(ii) 136
+             137:    8(float) Load 35(ii)
+             138:    8(float) FSub 137 47
+                              Store 35(ii) 138
+             139:    8(float) Load 35(ii)
+             140:    8(float) FSub 139 47
+                              Store 35(ii) 140
+                              Branch 141
+             141:             Label
+                              LoopMerge 143 144 None
+                              Branch 142
+             142:             Label
+                              Branch 144
+             144:             Label
+                              Branch 141
+             143:             Label
+                              Unreachable
+                              FunctionEnd
+40(@PixelShaderFunction(vf4;):    9(fvec4) Function None 38
+       39(input):     10(ptr) FunctionParameter
+              41:             Label
+      146(param):     10(ptr) Variable Function
+      149(param):     10(ptr) Variable Function
+      152(param):     10(ptr) Variable Function
+      155(param):     10(ptr) Variable Function
+      158(param):     10(ptr) Variable Function
+      161(param):     10(ptr) Variable Function
+         164(ii):    123(ptr) Variable Function
+         182(ii):     33(ptr) Variable Function
+          186(i):    123(ptr) Variable Function
+      187(count):    123(ptr) Variable Function
+      200(first):     33(ptr) Variable Function
+     211(second):    210(ptr) Variable Function
+      219(third):     33(ptr) Variable Function
+      225(param):     33(ptr) Variable Function
+             145:           2 FunctionCall 6(f0()
+             147:    9(fvec4) Load 39(input)
+                              Store 146(param) 147
+             148:           2 FunctionCall 13(f1(vf4;) 146(param)
+             150:    9(fvec4) Load 39(input)
+                              Store 149(param) 150
+             151:           2 FunctionCall 16(f2(vf4;) 149(param)
+             153:    9(fvec4) Load 39(input)
+                              Store 152(param) 153
+             154:    8(float) FunctionCall 20(f3(vf4;) 152(param)
+             156:    9(fvec4) Load 39(input)
+                              Store 155(param) 156
+             157:    8(float) FunctionCall 23(f4(vf4;) 155(param)
+             159:    9(fvec4) Load 39(input)
+                              Store 158(param) 159
+             160:           2 FunctionCall 26(f5(vf4;) 158(param)
+             162:    9(fvec4) Load 39(input)
+                              Store 161(param) 162
+             163:           2 FunctionCall 29(f6(vf4;) 161(param)
+                              Store 164(ii) 165
+                              Branch 166
+             166:             Label
+                              LoopMerge 168 169 None
+                              Branch 170
+             170:             Label
+             171:    122(int) Load 164(ii)
+             173:    61(bool) SLessThan 171 172
+                              BranchConditional 173 167 168
+             167:               Label
+             174:    122(int)   Load 164(ii)
+             176:    61(bool)   IEqual 174 175
+                                SelectionMerge 178 None
+                                BranchConditional 176 177 178
+             177:                 Label
+                                  Branch 169
+             178:               Label
+                                Branch 169
+             169:               Label
+             180:    122(int)   Load 164(ii)
+             181:    122(int)   IAdd 180 127
+                                Store 164(ii) 181
+                                Branch 166
+             168:             Label
+             183:    8(float) Load 182(ii)
+             184:    8(float) FSub 183 47
+                              Store 182(ii) 184
+             185:           2 FunctionCall 31(f99()
+                              Store 186(i) 125
+             188:    8(float) Load 182(ii)
+             189:    122(int) ConvertFToS 188
+                              Store 187(count) 189
+                              Branch 190
+             190:             Label
+                              LoopMerge 192 193 None
+                              Branch 194
+             194:             Label
+             195:    122(int) Load 186(i)
+             196:    122(int) Load 187(count)
+             197:    61(bool) SLessThan 195 196
+                              BranchConditional 197 191 192
+             191:               Label
+                                Branch 193
+             193:               Label
+             198:    122(int)   Load 186(i)
+             199:    122(int)   IAdd 198 127
+                                Store 186(i) 199
+                                Branch 190
+             192:             Label
+                              Store 200(first) 201
+                              Branch 202
+             202:             Label
+                              LoopMerge 204 205 None
+                              Branch 206
+             206:             Label
+             207:    8(float) Load 200(first)
+             212:     33(ptr) AccessChain 211(second) 125
+             213:    8(float) Load 212
+             214:    61(bool) FOrdLessThan 207 213
+                              BranchConditional 214 203 204
+             203:               Label
+             215:    8(float)   Load 200(first)
+             216:     33(ptr)   AccessChain 211(second) 127
+             217:    8(float)   Load 216
+             218:    8(float)   FAdd 215 217
+             220:    8(float)   Load 219(third)
+             221:    8(float)   FAdd 218 220
+                                Branch 205
+             205:               Label
+             222:     33(ptr)   AccessChain 211(second) 127
+             223:    8(float)   Load 222
+             224:    8(float)   FAdd 223 47
+                                Store 222 224
+                                Branch 202
+             204:             Label
+             226:    8(float) Load 182(ii)
+                              Store 225(param) 226
+             227:           2 FunctionCall 36(f100(f1;) 225(param)
+             228:    9(fvec4) Load 39(input)
+                              ReturnValue 228
+                              FunctionEnd

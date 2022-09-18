@@ -1,0 +1,178 @@
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 8
+; Bound: 99
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Fragment %main "main" %color %i
+               OpExecutionMode %main OriginUpperLeft
+               OpSource ESSL 310
+               OpName %main "main"
+               OpName %color "color"
+               OpName %t2d "t2d"
+               OpName %s "s"
+               OpName %t3d "t3d"
+               OpName %sA "sA"
+               OpName %sShadow "sShadow"
+               OpName %i "i"
+               OpName %tex2D "tex2D"
+               OpName %texCube "texCube"
+               OpName %tex2DArray "tex2DArray"
+               OpName %itex2D "itex2D"
+               OpName %itex3D "itex3D"
+               OpName %itexCube "itexCube"
+               OpName %itex2DArray "itex2DArray"
+               OpName %utex2D "utex2D"
+               OpName %utex3D "utex3D"
+               OpName %utexCube "utexCube"
+               OpName %utex2DArray "utex2DArray"
+               OpName %tex3D "tex3D"
+               OpDecorate %color Location 0
+               OpDecorate %t2d RelaxedPrecision
+               OpDecorate %t2d DescriptorSet 0
+               OpDecorate %t2d Binding 3
+               OpDecorate %14 RelaxedPrecision
+               OpDecorate %s DescriptorSet 0
+               OpDecorate %s Binding 0
+               OpDecorate %23 RelaxedPrecision
+               OpDecorate %t3d DescriptorSet 0
+               OpDecorate %t3d Binding 4
+               OpDecorate %sA DescriptorSet 0
+               OpDecorate %sA Binding 2
+               OpDecorate %48 RelaxedPrecision
+               OpDecorate %51 RelaxedPrecision
+               OpDecorate %sShadow DescriptorSet 0
+               OpDecorate %sShadow Binding 1
+               OpDecorate %i RelaxedPrecision
+               OpDecorate %i Flat
+               OpDecorate %i Location 0
+               OpDecorate %tex2D RelaxedPrecision
+               OpDecorate %tex2D DescriptorSet 0
+               OpDecorate %tex2D Binding 5
+               OpDecorate %texCube RelaxedPrecision
+               OpDecorate %texCube DescriptorSet 0
+               OpDecorate %texCube Binding 6
+               OpDecorate %tex2DArray DescriptorSet 0
+               OpDecorate %tex2DArray Binding 15
+               OpDecorate %itex2D DescriptorSet 0
+               OpDecorate %itex2D Binding 16
+               OpDecorate %itex3D DescriptorSet 0
+               OpDecorate %itex3D Binding 17
+               OpDecorate %itexCube DescriptorSet 0
+               OpDecorate %itexCube Binding 18
+               OpDecorate %itex2DArray DescriptorSet 0
+               OpDecorate %itex2DArray Binding 19
+               OpDecorate %utex2D DescriptorSet 0
+               OpDecorate %utex2D Binding 20
+               OpDecorate %utex3D DescriptorSet 0
+               OpDecorate %utex3D Binding 21
+               OpDecorate %utexCube DescriptorSet 0
+               OpDecorate %utexCube Binding 22
+               OpDecorate %utex2DArray DescriptorSet 0
+               OpDecorate %utex2DArray Binding 23
+               OpDecorate %tex3D DescriptorSet 0
+               OpDecorate %tex3D Binding 36
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+    %v4float = OpTypeVector %float 4
+%_ptr_Output_v4float = OpTypePointer Output %v4float
+      %color = OpVariable %_ptr_Output_v4float Output
+         %10 = OpTypeImage %float 2D 0 0 0 1 Unknown
+         %11 = OpTypeSampledImage %10
+%_ptr_UniformConstant_11 = OpTypePointer UniformConstant %11
+        %t2d = OpVariable %_ptr_UniformConstant_11 UniformConstant
+         %15 = OpTypeSampler
+%_ptr_UniformConstant_15 = OpTypePointer UniformConstant %15
+          %s = OpVariable %_ptr_UniformConstant_15 UniformConstant
+    %v2float = OpTypeVector %float 2
+  %float_0_5 = OpConstant %float 0.5
+         %22 = OpConstantComposite %v2float %float_0_5 %float_0_5
+         %24 = OpTypeImage %float 3D 0 0 0 1 Unknown
+         %25 = OpTypeSampledImage %24
+       %uint = OpTypeInt 32 0
+     %uint_4 = OpConstant %uint 4
+%_arr_25_uint_4 = OpTypeArray %25 %uint_4
+%_ptr_UniformConstant__arr_25_uint_4 = OpTypePointer UniformConstant %_arr_25_uint_4
+        %t3d = OpVariable %_ptr_UniformConstant__arr_25_uint_4 UniformConstant
+        %int = OpTypeInt 32 1
+      %int_1 = OpConstant %int 1
+%_ptr_UniformConstant_25 = OpTypePointer UniformConstant %25
+%_arr_15_uint_4 = OpTypeArray %15 %uint_4
+%_ptr_UniformConstant__arr_15_uint_4 = OpTypePointer UniformConstant %_arr_15_uint_4
+         %sA = OpVariable %_ptr_UniformConstant__arr_15_uint_4 UniformConstant
+      %int_2 = OpConstant %int 2
+    %v3float = OpTypeVector %float 3
+         %44 = OpConstantComposite %v3float %float_0_5 %float_0_5 %float_0_5
+    %sShadow = OpVariable %_ptr_UniformConstant_15 UniformConstant
+%_ptr_Input_int = OpTypePointer Input %int
+          %i = OpVariable %_ptr_Input_int Input
+      %tex2D = OpVariable %_ptr_UniformConstant_11 UniformConstant
+         %58 = OpTypeImage %float Cube 0 0 0 1 Unknown
+         %59 = OpTypeSampledImage %58
+%_ptr_UniformConstant_59 = OpTypePointer UniformConstant %59
+    %texCube = OpVariable %_ptr_UniformConstant_59 UniformConstant
+         %62 = OpTypeImage %float 2D 0 1 0 1 Unknown
+         %63 = OpTypeSampledImage %62
+%_ptr_UniformConstant_63 = OpTypePointer UniformConstant %63
+ %tex2DArray = OpVariable %_ptr_UniformConstant_63 UniformConstant
+         %66 = OpTypeImage %int 2D 0 0 0 1 Unknown
+         %67 = OpTypeSampledImage %66
+%_ptr_UniformConstant_67 = OpTypePointer UniformConstant %67
+     %itex2D = OpVariable %_ptr_UniformConstant_67 UniformConstant
+         %70 = OpTypeImage %int 3D 0 0 0 1 Unknown
+         %71 = OpTypeSampledImage %70
+%_ptr_UniformConstant_71 = OpTypePointer UniformConstant %71
+     %itex3D = OpVariable %_ptr_UniformConstant_71 UniformConstant
+         %74 = OpTypeImage %int Cube 0 0 0 1 Unknown
+         %75 = OpTypeSampledImage %74
+%_ptr_UniformConstant_75 = OpTypePointer UniformConstant %75
+   %itexCube = OpVariable %_ptr_UniformConstant_75 UniformConstant
+         %78 = OpTypeImage %int 2D 0 1 0 1 Unknown
+         %79 = OpTypeSampledImage %78
+%_ptr_UniformConstant_79 = OpTypePointer UniformConstant %79
+%itex2DArray = OpVariable %_ptr_UniformConstant_79 UniformConstant
+         %82 = OpTypeImage %uint 2D 0 0 0 1 Unknown
+         %83 = OpTypeSampledImage %82
+%_ptr_UniformConstant_83 = OpTypePointer UniformConstant %83
+     %utex2D = OpVariable %_ptr_UniformConstant_83 UniformConstant
+         %86 = OpTypeImage %uint 3D 0 0 0 1 Unknown
+         %87 = OpTypeSampledImage %86
+%_ptr_UniformConstant_87 = OpTypePointer UniformConstant %87
+     %utex3D = OpVariable %_ptr_UniformConstant_87 UniformConstant
+         %90 = OpTypeImage %uint Cube 0 0 0 1 Unknown
+         %91 = OpTypeSampledImage %90
+%_ptr_UniformConstant_91 = OpTypePointer UniformConstant %91
+   %utexCube = OpVariable %_ptr_UniformConstant_91 UniformConstant
+         %94 = OpTypeImage %uint 2D 0 1 0 1 Unknown
+         %95 = OpTypeSampledImage %94
+%_ptr_UniformConstant_95 = OpTypePointer UniformConstant %95
+%utex2DArray = OpVariable %_ptr_UniformConstant_95 UniformConstant
+      %tex3D = OpVariable %_ptr_UniformConstant_25 UniformConstant
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+         %14 = OpLoad %11 %t2d
+         %18 = OpLoad %15 %s
+         %19 = OpSampledImage %11 %14 %18
+         %23 = OpImageSampleImplicitLod %v4float %19 %22
+               OpStore %color %23
+         %34 = OpAccessChain %_ptr_UniformConstant_25 %t3d %int_1
+         %35 = OpLoad %25 %34
+         %40 = OpAccessChain %_ptr_UniformConstant_15 %sA %int_2
+         %41 = OpLoad %15 %40
+         %42 = OpSampledImage %25 %35 %41
+         %45 = OpImageSampleImplicitLod %v4float %42 %44
+         %46 = OpLoad %v4float %color
+         %47 = OpFAdd %v4float %46 %45
+               OpStore %color %47
+         %48 = OpLoad %11 %t2d
+         %49 = OpLoad %15 %s
+         %50 = OpSampledImage %11 %48 %49
+         %51 = OpImageSampleImplicitLod %v4float %50 %22
+         %52 = OpLoad %v4float %color
+         %53 = OpFAdd %v4float %52 %51
+               OpStore %color %53
+               OpReturn
+               OpFunctionEnd

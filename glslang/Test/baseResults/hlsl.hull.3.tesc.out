@@ -1,0 +1,490 @@
+hlsl.hull.3.tesc
+Shader version: 500
+vertices = 4
+vertex spacing = equal_spacing
+0:? Sequence
+0:26  Function Definition: @main(struct-VS_OUT-vf31[4]; ( temp structure{ temp 3-component vector of float cpoint})
+0:26    Function Parameters: 
+0:26      'ip' ( in 4-element array of structure{ temp 3-component vector of float cpoint})
+0:?     Sequence
+0:28      move second child to first child ( temp 3-component vector of float)
+0:28        cpoint: direct index for structure ( temp 3-component vector of float)
+0:28          'output' ( temp structure{ temp 3-component vector of float cpoint})
+0:28          Constant:
+0:28            0 (const int)
+0:28        cpoint: direct index for structure ( temp 3-component vector of float)
+0:28          direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:28            'ip' ( in 4-element array of structure{ temp 3-component vector of float cpoint})
+0:28            Constant:
+0:28              0 (const int)
+0:28          Constant:
+0:28            0 (const int)
+0:29      Branch: Return with expression
+0:29        'output' ( temp structure{ temp 3-component vector of float cpoint})
+0:26  Function Definition: main( ( temp void)
+0:26    Function Parameters: 
+0:?     Sequence
+0:26      Sequence
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                0 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              0 (const int)
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                1 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              1 (const int)
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                2 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              2 (const int)
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                3 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              3 (const int)
+0:26      Sequence
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          indirect index (layout( location=0) out 3-component vector of float)
+0:?             '@entryPointOutput.cpoint' (layout( location=0) out 4-element array of 3-component vector of float)
+0:?             'InvocationId' ( in uint InvocationID)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            Function Call: @main(struct-VS_OUT-vf31[4]; ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26            Constant:
+0:26              0 (const int)
+0:?       Barrier ( temp void)
+0:?       Test condition and select ( temp void)
+0:?         Condition
+0:?         Compare Equal ( temp bool)
+0:?           'InvocationId' ( in uint InvocationID)
+0:?           Constant:
+0:?             0 (const int)
+0:?         true case
+0:?         Sequence
+0:?           move second child to first child ( temp structure{ temp 2-element array of float edges})
+0:?             '@patchConstantResult' ( temp structure{ temp 2-element array of float edges})
+0:?             Function Call: PCF(u1;vf4; ( temp structure{ temp 2-element array of float edges})
+0:?               'pid' ( in uint PrimitiveID)
+0:?               'pos' ( in 4-component vector of float Position)
+0:?           Sequence
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 2-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 2-element array of float edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 2-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 2-element array of float edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   1 (const int)
+0:33  Function Definition: PCF(u1;vf4; ( temp structure{ temp 2-element array of float edges})
+0:33    Function Parameters: 
+0:33      'pid' ( in uint)
+0:33      'pos' ( in 4-component vector of float)
+0:?     Sequence
+0:36      move second child to first child ( temp float)
+0:36        direct index ( temp float)
+0:36          edges: direct index for structure ( temp 2-element array of float)
+0:36            'output' ( temp structure{ temp 2-element array of float edges})
+0:36            Constant:
+0:36              0 (const int)
+0:36          Constant:
+0:36            0 (const int)
+0:36        Constant:
+0:36          2.000000
+0:37      move second child to first child ( temp float)
+0:37        direct index ( temp float)
+0:37          edges: direct index for structure ( temp 2-element array of float)
+0:37            'output' ( temp structure{ temp 2-element array of float edges})
+0:37            Constant:
+0:37              0 (const int)
+0:37          Constant:
+0:37            1 (const int)
+0:37        Constant:
+0:37          8.000000
+0:38      Branch: Return with expression
+0:38        'output' ( temp structure{ temp 2-element array of float edges})
+0:?   Linker Objects
+0:?     '@entryPointOutput.cpoint' (layout( location=0) out 4-element array of 3-component vector of float)
+0:?     'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:?     'InvocationId' ( in uint InvocationID)
+0:?     'pid' ( in uint PrimitiveID)
+0:?     'pos' ( in 4-component vector of float Position)
+0:?     '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+
+
+Linked tessellation control stage:
+
+
+Shader version: 500
+vertices = 4
+vertex spacing = equal_spacing
+0:? Sequence
+0:26  Function Definition: @main(struct-VS_OUT-vf31[4]; ( temp structure{ temp 3-component vector of float cpoint})
+0:26    Function Parameters: 
+0:26      'ip' ( in 4-element array of structure{ temp 3-component vector of float cpoint})
+0:?     Sequence
+0:28      move second child to first child ( temp 3-component vector of float)
+0:28        cpoint: direct index for structure ( temp 3-component vector of float)
+0:28          'output' ( temp structure{ temp 3-component vector of float cpoint})
+0:28          Constant:
+0:28            0 (const int)
+0:28        cpoint: direct index for structure ( temp 3-component vector of float)
+0:28          direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:28            'ip' ( in 4-element array of structure{ temp 3-component vector of float cpoint})
+0:28            Constant:
+0:28              0 (const int)
+0:28          Constant:
+0:28            0 (const int)
+0:29      Branch: Return with expression
+0:29        'output' ( temp structure{ temp 3-component vector of float cpoint})
+0:26  Function Definition: main( ( temp void)
+0:26    Function Parameters: 
+0:?     Sequence
+0:26      Sequence
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                0 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              0 (const int)
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                1 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              1 (const int)
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                2 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              2 (const int)
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            direct index ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26              Constant:
+0:26                3 (const int)
+0:26            Constant:
+0:26              0 (const int)
+0:26          direct index (layout( location=0) in 3-component vector of float)
+0:?             'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:26            Constant:
+0:26              3 (const int)
+0:26      Sequence
+0:26        move second child to first child ( temp 3-component vector of float)
+0:26          indirect index (layout( location=0) out 3-component vector of float)
+0:?             '@entryPointOutput.cpoint' (layout( location=0) out 4-element array of 3-component vector of float)
+0:?             'InvocationId' ( in uint InvocationID)
+0:26          cpoint: direct index for structure ( temp 3-component vector of float)
+0:26            Function Call: @main(struct-VS_OUT-vf31[4]; ( temp structure{ temp 3-component vector of float cpoint})
+0:?               'ip' ( temp 4-element array of structure{ temp 3-component vector of float cpoint})
+0:26            Constant:
+0:26              0 (const int)
+0:?       Barrier ( temp void)
+0:?       Test condition and select ( temp void)
+0:?         Condition
+0:?         Compare Equal ( temp bool)
+0:?           'InvocationId' ( in uint InvocationID)
+0:?           Constant:
+0:?             0 (const int)
+0:?         true case
+0:?         Sequence
+0:?           move second child to first child ( temp structure{ temp 2-element array of float edges})
+0:?             '@patchConstantResult' ( temp structure{ temp 2-element array of float edges})
+0:?             Function Call: PCF(u1;vf4; ( temp structure{ temp 2-element array of float edges})
+0:?               'pid' ( in uint PrimitiveID)
+0:?               'pos' ( in 4-component vector of float Position)
+0:?           Sequence
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 2-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 2-element array of float edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?               direct index ( temp float)
+0:?                 edges: direct index for structure ( temp 2-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 2-element array of float edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   1 (const int)
+0:33  Function Definition: PCF(u1;vf4; ( temp structure{ temp 2-element array of float edges})
+0:33    Function Parameters: 
+0:33      'pid' ( in uint)
+0:33      'pos' ( in 4-component vector of float)
+0:?     Sequence
+0:36      move second child to first child ( temp float)
+0:36        direct index ( temp float)
+0:36          edges: direct index for structure ( temp 2-element array of float)
+0:36            'output' ( temp structure{ temp 2-element array of float edges})
+0:36            Constant:
+0:36              0 (const int)
+0:36          Constant:
+0:36            0 (const int)
+0:36        Constant:
+0:36          2.000000
+0:37      move second child to first child ( temp float)
+0:37        direct index ( temp float)
+0:37          edges: direct index for structure ( temp 2-element array of float)
+0:37            'output' ( temp structure{ temp 2-element array of float edges})
+0:37            Constant:
+0:37              0 (const int)
+0:37          Constant:
+0:37            1 (const int)
+0:37        Constant:
+0:37          8.000000
+0:38      Branch: Return with expression
+0:38        'output' ( temp structure{ temp 2-element array of float edges})
+0:?   Linker Objects
+0:?     '@entryPointOutput.cpoint' (layout( location=0) out 4-element array of 3-component vector of float)
+0:?     'ip.cpoint' (layout( location=0) in 4-element array of 3-component vector of float)
+0:?     'InvocationId' ( in uint InvocationID)
+0:?     'pid' ( in uint PrimitiveID)
+0:?     'pos' ( in 4-component vector of float Position)
+0:?     '@patchConstantOutput.edges' ( patch out 4-element array of float TessLevelOuter)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 106
+
+                              Capability Tessellation
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint TessellationControl 4  "main" 43 61 63 79 81 89
+                              ExecutionMode 4 OutputVertices 4
+                              ExecutionMode 4 Triangles
+                              ExecutionMode 4 SpacingEqual
+                              ExecutionMode 4 PointMode
+                              Source HLSL 500
+                              Name 4  "main"
+                              Name 8  "VS_OUT"
+                              MemberName 8(VS_OUT) 0  "cpoint"
+                              Name 13  "HS_OUT"
+                              MemberName 13(HS_OUT) 0  "cpoint"
+                              Name 16  "@main(struct-VS_OUT-vf31[4];"
+                              Name 15  "ip"
+                              Name 23  "HS_CONSTANT_OUT"
+                              MemberName 23(HS_CONSTANT_OUT) 0  "edges"
+                              Name 27  "PCF(u1;vf4;"
+                              Name 25  "pid"
+                              Name 26  "pos"
+                              Name 30  "output"
+                              Name 40  "ip"
+                              Name 43  "ip.cpoint"
+                              Name 61  "@entryPointOutput.cpoint"
+                              Name 63  "InvocationId"
+                              Name 65  "param"
+                              Name 78  "@patchConstantResult"
+                              Name 79  "pid"
+                              Name 81  "pos"
+                              Name 82  "param"
+                              Name 84  "param"
+                              Name 89  "@patchConstantOutput.edges"
+                              Name 98  "output"
+                              Decorate 43(ip.cpoint) Location 0
+                              Decorate 61(@entryPointOutput.cpoint) Location 0
+                              Decorate 63(InvocationId) BuiltIn InvocationId
+                              Decorate 79(pid) BuiltIn PrimitiveId
+                              Decorate 81(pos) BuiltIn Position
+                              Decorate 89(@patchConstantOutput.edges) Patch
+                              Decorate 89(@patchConstantOutput.edges) BuiltIn TessLevelOuter
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 3
+       8(VS_OUT):             TypeStruct 7(fvec3)
+               9:             TypeInt 32 0
+              10:      9(int) Constant 4
+              11:             TypeArray 8(VS_OUT) 10
+              12:             TypePointer Function 11
+      13(HS_OUT):             TypeStruct 7(fvec3)
+              14:             TypeFunction 13(HS_OUT) 12(ptr)
+              18:             TypePointer Function 9(int)
+              19:             TypeVector 6(float) 4
+              20:             TypePointer Function 19(fvec4)
+              21:      9(int) Constant 2
+              22:             TypeArray 6(float) 21
+23(HS_CONSTANT_OUT):             TypeStruct 22
+              24:             TypeFunction 23(HS_CONSTANT_OUT) 18(ptr) 20(ptr)
+              29:             TypePointer Function 13(HS_OUT)
+              31:             TypeInt 32 1
+              32:     31(int) Constant 0
+              33:             TypePointer Function 7(fvec3)
+              41:             TypeArray 7(fvec3) 10
+              42:             TypePointer Input 41
+   43(ip.cpoint):     42(ptr) Variable Input
+              44:             TypePointer Input 7(fvec3)
+              48:     31(int) Constant 1
+              52:     31(int) Constant 2
+              56:     31(int) Constant 3
+              60:             TypePointer Output 41
+61(@entryPointOutput.cpoint):     60(ptr) Variable Output
+              62:             TypePointer Input 9(int)
+63(InvocationId):     62(ptr) Variable Input
+              69:             TypePointer Output 7(fvec3)
+              71:      9(int) Constant 0
+              73:             TypeBool
+              77:             TypePointer Function 23(HS_CONSTANT_OUT)
+         79(pid):     62(ptr) Variable Input
+              80:             TypePointer Input 19(fvec4)
+         81(pos):     80(ptr) Variable Input
+              87:             TypeArray 6(float) 10
+              88:             TypePointer Output 87
+89(@patchConstantOutput.edges):     88(ptr) Variable Output
+              90:             TypePointer Function 6(float)
+              93:             TypePointer Output 6(float)
+              99:    6(float) Constant 1073741824
+             101:    6(float) Constant 1090519040
+         4(main):           2 Function None 3
+               5:             Label
+          40(ip):     12(ptr) Variable Function
+       65(param):     12(ptr) Variable Function
+78(@patchConstantResult):     77(ptr) Variable Function
+       82(param):     18(ptr) Variable Function
+       84(param):     20(ptr) Variable Function
+              45:     44(ptr) AccessChain 43(ip.cpoint) 32
+              46:    7(fvec3) Load 45
+              47:     33(ptr) AccessChain 40(ip) 32 32
+                              Store 47 46
+              49:     44(ptr) AccessChain 43(ip.cpoint) 48
+              50:    7(fvec3) Load 49
+              51:     33(ptr) AccessChain 40(ip) 48 32
+                              Store 51 50
+              53:     44(ptr) AccessChain 43(ip.cpoint) 52
+              54:    7(fvec3) Load 53
+              55:     33(ptr) AccessChain 40(ip) 52 32
+                              Store 55 54
+              57:     44(ptr) AccessChain 43(ip.cpoint) 56
+              58:    7(fvec3) Load 57
+              59:     33(ptr) AccessChain 40(ip) 56 32
+                              Store 59 58
+              64:      9(int) Load 63(InvocationId)
+              66:          11 Load 40(ip)
+                              Store 65(param) 66
+              67:  13(HS_OUT) FunctionCall 16(@main(struct-VS_OUT-vf31[4];) 65(param)
+              68:    7(fvec3) CompositeExtract 67 0
+              70:     69(ptr) AccessChain 61(@entryPointOutput.cpoint) 64
+                              Store 70 68
+                              ControlBarrier 21 10 71
+              72:      9(int) Load 63(InvocationId)
+              74:    73(bool) IEqual 72 32
+                              SelectionMerge 76 None
+                              BranchConditional 74 75 76
+              75:               Label
+              83:      9(int)   Load 79(pid)
+                                Store 82(param) 83
+              85:   19(fvec4)   Load 81(pos)
+                                Store 84(param) 85
+              86:23(HS_CONSTANT_OUT)   FunctionCall 27(PCF(u1;vf4;) 82(param) 84(param)
+                                Store 78(@patchConstantResult) 86
+              91:     90(ptr)   AccessChain 78(@patchConstantResult) 32 32
+              92:    6(float)   Load 91
+              94:     93(ptr)   AccessChain 89(@patchConstantOutput.edges) 32
+                                Store 94 92
+              95:     90(ptr)   AccessChain 78(@patchConstantResult) 32 48
+              96:    6(float)   Load 95
+              97:     93(ptr)   AccessChain 89(@patchConstantOutput.edges) 48
+                                Store 97 96
+                                Branch 76
+              76:             Label
+                              Return
+                              FunctionEnd
+16(@main(struct-VS_OUT-vf31[4];):  13(HS_OUT) Function None 14
+          15(ip):     12(ptr) FunctionParameter
+              17:             Label
+      30(output):     29(ptr) Variable Function
+              34:     33(ptr) AccessChain 15(ip) 32 32
+              35:    7(fvec3) Load 34
+              36:     33(ptr) AccessChain 30(output) 32
+                              Store 36 35
+              37:  13(HS_OUT) Load 30(output)
+                              ReturnValue 37
+                              FunctionEnd
+ 27(PCF(u1;vf4;):23(HS_CONSTANT_OUT) Function None 24
+         25(pid):     18(ptr) FunctionParameter
+         26(pos):     20(ptr) FunctionParameter
+              28:             Label
+      98(output):     77(ptr) Variable Function
+             100:     90(ptr) AccessChain 98(output) 32 32
+                              Store 100 99
+             102:     90(ptr) AccessChain 98(output) 32 48
+                              Store 102 101
+             103:23(HS_CONSTANT_OUT) Load 98(output)
+                              ReturnValue 103
+                              FunctionEnd

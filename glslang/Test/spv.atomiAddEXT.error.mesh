@@ -1,0 +1,22 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+#define MAX_VER  81
+#define MAX_PRIM 32
+
+layout(local_size_x = 1) in;
+
+layout(max_vertices=MAX_VER) out;
+layout(max_primitives=MAX_PRIM) out;
+layout(triangles) out;
+
+// use of storage qualifier "taskPayloadSharedEXT" in mesh shaders:
+struct taskBlock {
+    int atom1;
+};
+taskPayloadSharedEXT taskBlock mytask;
+
+
+void main() {
+  atomicAdd(mytask.atom1, 1);
+}

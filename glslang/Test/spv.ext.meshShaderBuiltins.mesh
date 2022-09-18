@@ -1,0 +1,74 @@
+#version 460
+
+#define MAX_VER  81
+#define MAX_PRIM 32
+
+#define BARRIER() \
+    memoryBarrierShared(); \
+    barrier();
+
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x = 32, local_size_y=1, local_size_z=1) in;
+
+layout(max_vertices=MAX_VER) out;
+layout(max_primitives=MAX_PRIM) out;
+layout(triangles) out;
+
+// test use of builtins in mesh shaders:
+
+void main()
+{
+    uint iid = gl_LocalInvocationID.x;
+    uint gid = gl_WorkGroupID.x;
+    uvec3 numWorkGrous = gl_NumWorkGroups;
+    uint vertexCount = MAX_VER; // vertexCount <= max_vertices
+    uint primitiveCount = MAX_PRIM; // primitiveCount <= max_primtives
+    SetMeshOutputsEXT(vertexCount, primitiveCount);
+
+    gl_MeshVerticesEXT[iid].gl_Position = vec4(1.0);
+    gl_MeshVerticesEXT[iid].gl_PointSize = 2.0;
+    gl_MeshVerticesEXT[iid].gl_ClipDistance[3] = 3.0;
+    gl_MeshVerticesEXT[iid].gl_CullDistance[2] = 4.0;
+
+    BARRIER();
+
+    gl_MeshVerticesEXT[iid+1].gl_Position = gl_MeshVerticesEXT[iid].gl_Position;
+    gl_MeshVerticesEXT[iid+1].gl_PointSize = gl_MeshVerticesEXT[iid].gl_PointSize;
+    gl_MeshVerticesEXT[iid+1].gl_ClipDistance[3] = gl_MeshVerticesEXT[iid].gl_ClipDistance[3];
+    gl_MeshVerticesEXT[iid+1].gl_CullDistance[2] = gl_MeshVerticesEXT[iid].gl_CullDistance[2];
+
+    BARRIER();
+
+    gl_MeshPrimitivesEXT[iid].gl_PrimitiveID = 6;
+    gl_MeshPrimitivesEXT[iid].gl_Layer = 7;
+    gl_MeshPrimitivesEXT[iid].gl_ViewportIndex = 8;
+    gl_MeshPrimitivesEXT[iid].gl_CullPrimitiveEXT = false;
+
+    BARRIER();
+
+    gl_MeshPrimitivesEXT[iid+1].gl_PrimitiveID = gl_MeshPrimitivesEXT[iid].gl_PrimitiveID;
+    gl_MeshPrimitivesEXT[iid+1].gl_Layer = gl_MeshPrimitivesEXT[iid].gl_Layer;
+    gl_MeshPrimitivesEXT[iid+1].gl_ViewportIndex = gl_MeshPrimitivesEXT[iid].gl_ViewportIndex;
+    gl_MeshPrimitivesEXT[iid+1].gl_CullPrimitiveEXT = gl_MeshPrimitivesEXT[iid].gl_CullPrimitiveEXT;
+
+    BARRIER();
+
+    // check bound limits
+    gl_PrimitiveTriangleIndicesEXT[0] = uvec3(257); // should truncate 257 -> 1, range is between [0, vertexCount-1]
+    gl_PrimitiveTriangleIndicesEXT[primitiveCount - 1] = uvec3(2); // array size is primitiveCount*3 for triangle
+    gl_PrimitiveTriangleIndicesEXT[gid] = gl_PrimitiveTriangleIndicesEXT[gid-1];
+
+    BARRIER();
+}
+
+// test use of builtins enabled by other extensions
+#extension GL_ARB_shader_draw_parameters : enable
+#extension GL_EXT_multiview : enable
+
+void testAdditionalBuiltins()
+{
+    int id = gl_DrawIDARB; // GL_ARB_shader_draw_parameters
+    int viewIdx = gl_ViewIndex; // GL_EXT_multiview
+   
+}

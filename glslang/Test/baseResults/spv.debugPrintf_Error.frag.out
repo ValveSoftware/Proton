@@ -1,0 +1,7 @@
+spv.debugPrintf_Error.frag
+ERROR: 0:7: 'string' : Expected hex value in escape sequence 
+ERROR: 0:10: 'string' : Invalid escape sequence 
+ERROR: 2 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

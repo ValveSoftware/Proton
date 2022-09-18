@@ -1,0 +1,559 @@
+150.frag
+ERROR: 0:4: 'redeclaration' : cannot redeclare with different qualification: gl_FragCoord
+ERROR: 0:5: 'redeclaration' : cannot redeclare with different qualification: gl_FragCoord
+ERROR: 0:6: 'layout qualifier' : can only apply origin_upper_left and pixel_center_origin to gl_FragCoord 
+ERROR: 0:50: 'gl_PerFragment' : undeclared identifier 
+ERROR: 0:53: 'double' : Reserved word. 
+ERROR: 0:53: 'double' : not supported for this version or the enabled extensions 
+ERROR: 0:53: 'double' : must be qualified as flat in
+ERROR: 0:57: '=' :  cannot convert from ' global double' to ' global int'
+ERROR: 0:80: 'floatBitsToInt' : required extension not requested: Possible extensions include:
+GL_ARB_shader_bit_encoding
+GL_ARB_gpu_shader5
+ERROR: 0:100: 'packSnorm2x16' : required extension not requested: GL_ARB_shading_language_packing
+ERROR: 0:114: 'textureQueryLOD' : required extension not requested: GL_ARB_texture_query_lod
+ERROR: 0:115: 'textureQueryLOD' : required extension not requested: GL_ARB_texture_query_lod
+ERROR: 0:154: 'textureQueryLOD' : no matching overloaded function found 
+ERROR: 0:154: 'assign' :  cannot convert from ' const float' to ' temp 2-component vector of float'
+ERROR: 0:155: 'textureQueryLOD' : no matching overloaded function found 
+ERROR: 0:155: 'assign' :  cannot convert from ' const float' to ' temp 2-component vector of float'
+ERROR: 0:183: 'mix' : required extension not requested: GL_EXT_shader_integer_mix
+ERROR: 17 compilation errors.  No code generated.
+
+
+Shader version: 150
+Requested GL_ARB_gpu_shader_fp64
+Requested GL_ARB_shader_bit_encoding
+Requested GL_ARB_shading_language_packing
+Requested GL_ARB_texture_query_lod
+Requested GL_EXT_shader_integer_mix
+gl_FragCoord pixel center is integer
+gl_FragCoord origin is upper left
+ERROR: node is still EOpNull!
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:11    Sequence
+0:11      Sequence
+0:11        move second child to first child ( temp 4-component vector of float)
+0:11          'c' ( temp 4-component vector of float)
+0:11          'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:18  Sequence
+0:18    move second child to first child ( temp float)
+0:18      'patch' ( global float)
+0:18      Constant:
+0:18        3.100000
+0:31  Function Definition: barWxyz( ( global void)
+0:31    Function Parameters: 
+0:33    Sequence
+0:33      Sequence
+0:33        move second child to first child ( temp 2-component vector of int)
+0:33          't11' ( temp 2-component vector of int)
+0:33          textureSize ( global 2-component vector of int)
+0:33            'sms' ( uniform sampler2DMS)
+0:34      Sequence
+0:34        move second child to first child ( temp 2-component vector of int)
+0:34          't12' ( temp 2-component vector of int)
+0:34          textureSize ( global 2-component vector of int)
+0:34            'isms' ( uniform isampler2DMS)
+0:35      Sequence
+0:35        move second child to first child ( temp 2-component vector of int)
+0:35          't13' ( temp 2-component vector of int)
+0:35          textureSize ( global 2-component vector of int)
+0:35            'usms' ( uniform usampler2DMS)
+0:36      Sequence
+0:36        move second child to first child ( temp 3-component vector of int)
+0:36          't21' ( temp 3-component vector of int)
+0:36          textureSize ( global 3-component vector of int)
+0:36            'smsa' ( uniform sampler2DMSArray)
+0:37      Sequence
+0:37        move second child to first child ( temp 3-component vector of int)
+0:37          't22' ( temp 3-component vector of int)
+0:37          textureSize ( global 3-component vector of int)
+0:37            'ismsa' ( uniform isampler2DMSArray)
+0:38      Sequence
+0:38        move second child to first child ( temp 3-component vector of int)
+0:38          't23' ( temp 3-component vector of int)
+0:38          textureSize ( global 3-component vector of int)
+0:38            'usmsa' ( uniform usampler2DMSArray)
+0:39      Sequence
+0:39        move second child to first child ( temp 4-component vector of float)
+0:39          't31' ( temp 4-component vector of float)
+0:39          textureFetch ( global 4-component vector of float)
+0:39            'sms' ( uniform sampler2DMS)
+0:39            'p2' ( flat in 2-component vector of int)
+0:39            'samp' ( flat in int)
+0:40      Sequence
+0:40        move second child to first child ( temp 4-component vector of int)
+0:40          't32' ( temp 4-component vector of int)
+0:40          textureFetch ( global 4-component vector of int)
+0:40            'isms' ( uniform isampler2DMS)
+0:40            'p2' ( flat in 2-component vector of int)
+0:40            'samp' ( flat in int)
+0:41      Sequence
+0:41        move second child to first child ( temp 4-component vector of uint)
+0:41          't33' ( temp 4-component vector of uint)
+0:41          textureFetch ( global 4-component vector of uint)
+0:41            'usms' ( uniform usampler2DMS)
+0:41            'p2' ( flat in 2-component vector of int)
+0:41            Constant:
+0:41              3 (const int)
+0:42      Sequence
+0:42        move second child to first child ( temp 4-component vector of float)
+0:42          't41' ( temp 4-component vector of float)
+0:42          textureFetch ( global 4-component vector of float)
+0:42            'smsa' ( uniform sampler2DMSArray)
+0:42            'p3' ( flat in 3-component vector of int)
+0:42            'samp' ( flat in int)
+0:43      Sequence
+0:43        move second child to first child ( temp 4-component vector of int)
+0:43          't42' ( temp 4-component vector of int)
+0:43          textureFetch ( global 4-component vector of int)
+0:43            'ismsa' ( uniform isampler2DMSArray)
+0:43            Constant:
+0:43              2 (const int)
+0:43              2 (const int)
+0:43              2 (const int)
+0:43            'samp' ( flat in int)
+0:44      Sequence
+0:44        move second child to first child ( temp 4-component vector of uint)
+0:44          't43' ( temp 4-component vector of uint)
+0:44          textureFetch ( global 4-component vector of uint)
+0:44            'usmsa' ( uniform usampler2DMSArray)
+0:44            'p3' ( flat in 3-component vector of int)
+0:44            'samp' ( flat in int)
+0:47  Function Definition: primitiveID( ( global int)
+0:47    Function Parameters: 
+0:49    Sequence
+0:49      Branch: Return with expression
+0:49        'gl_PrimitiveID' ( flat in int PrimitiveID)
+0:50      'gl_PerFragment' ( temp float)
+0:56  Sequence
+0:56    move second child to first child ( temp double)
+0:56      'type3' ( global double)
+0:56      Constant:
+0:56        2.000000
+0:58  Sequence
+0:58    move second child to first child ( temp double)
+0:58      'absTest2' ( global double)
+0:58      sqrt ( global double)
+0:58        'type3' ( global double)
+0:59  Sequence
+0:59    move second child to first child ( temp double)
+0:59      'absTest3' ( global double)
+0:59      Constant:
+0:59        1.414214
+0:60  Sequence
+0:60    move second child to first child ( temp float)
+0:60      'dk' ( global float)
+0:60      Constant:
+0:60        3.316625
+0:68  Function Definition: bitEncodingPass( ( global void)
+0:68    Function Parameters: 
+0:70    Sequence
+0:70      Sequence
+0:70        move second child to first child ( temp int)
+0:70          'i' ( temp int)
+0:70          floatBitsToInt ( global int)
+0:70            'f' ( global float)
+0:71      Sequence
+0:71        move second child to first child ( temp 4-component vector of uint)
+0:71          'uv11' ( temp 4-component vector of uint)
+0:71          floatBitsToUint ( global 4-component vector of uint)
+0:71            'v4' ( global 4-component vector of float)
+0:72      Sequence
+0:72        move second child to first child ( temp 4-component vector of float)
+0:72          'v14' ( temp 4-component vector of float)
+0:72          intBitsToFloat ( global 4-component vector of float)
+0:72            'iv4a' ( global 4-component vector of int)
+0:73      Sequence
+0:73        move second child to first child ( temp 2-component vector of float)
+0:73          'v15' ( temp 2-component vector of float)
+0:73          uintBitsToFloat ( global 2-component vector of float)
+0:73            'uv2c' ( global 2-component vector of uint)
+0:78  Function Definition: bitEncodingFail( ( global void)
+0:78    Function Parameters: 
+0:80    Sequence
+0:80      Sequence
+0:80        move second child to first child ( temp int)
+0:80          'i' ( temp int)
+0:80          floatBitsToInt ( global int)
+0:80            'f' ( global float)
+0:87  Function Definition: packingPass( ( global void)
+0:87    Function Parameters: 
+0:89    Sequence
+0:89      Sequence
+0:89        move second child to first child ( temp uint)
+0:89          'u19' ( temp uint)
+0:89          packSnorm2x16 ( global uint)
+0:89            'v2a' ( global 2-component vector of float)
+0:90      Sequence
+0:90        move second child to first child ( temp 2-component vector of float)
+0:90          'v20' ( temp 2-component vector of float)
+0:90          unpackSnorm2x16 ( global 2-component vector of float)
+0:90            'uy' ( global uint)
+0:91      Sequence
+0:91        move second child to first child ( temp uint)
+0:91          'u15' ( temp uint)
+0:91          packUnorm2x16 ( global uint)
+0:91            'v2a' ( global 2-component vector of float)
+0:92      Sequence
+0:92        move second child to first child ( temp 2-component vector of float)
+0:92          'v16' ( temp 2-component vector of float)
+0:92          unpackUnorm2x16 ( global 2-component vector of float)
+0:92            'uy' ( global uint)
+0:93      Sequence
+0:93        move second child to first child ( temp uint)
+0:93          'u17' ( temp uint)
+0:93          packHalf2x16 ( global uint)
+0:93            'v2a' ( global 2-component vector of float)
+0:94      Sequence
+0:94        move second child to first child ( temp 2-component vector of float)
+0:94          'v18' ( temp 2-component vector of float)
+0:94          unpackHalf2x16 ( global 2-component vector of float)
+0:94            'uy' ( global uint)
+0:98  Function Definition: packingFail( ( global void)
+0:98    Function Parameters: 
+0:100    Sequence
+0:100      Sequence
+0:100        move second child to first child ( temp uint)
+0:100          'u19' ( temp uint)
+0:100          packSnorm2x16 ( global uint)
+0:100            'v2a' ( global 2-component vector of float)
+0:107  Function Definition: qlodFail( ( global void)
+0:107    Function Parameters: 
+0:?     Sequence
+0:114      move second child to first child ( temp 2-component vector of float)
+0:114        'lod' ( temp 2-component vector of float)
+0:114        textureQueryLod ( global 2-component vector of float)
+0:114          'samp1D' ( uniform sampler1D)
+0:114          'pf' ( temp float)
+0:115      move second child to first child ( temp 2-component vector of float)
+0:115        'lod' ( temp 2-component vector of float)
+0:115        textureQueryLod ( global 2-component vector of float)
+0:115          'samp2Ds' ( uniform sampler2DShadow)
+0:115          'pf2' ( temp 2-component vector of float)
+0:134  Function Definition: qlodPass( ( global void)
+0:134    Function Parameters: 
+0:?     Sequence
+0:141      move second child to first child ( temp 2-component vector of float)
+0:141        'lod' ( temp 2-component vector of float)
+0:141        textureQueryLod ( global 2-component vector of float)
+0:141          'samp1D' ( uniform sampler1D)
+0:141          'pf' ( temp float)
+0:142      move second child to first child ( temp 2-component vector of float)
+0:142        'lod' ( temp 2-component vector of float)
+0:142        textureQueryLod ( global 2-component vector of float)
+0:142          'isamp2D' ( uniform isampler2D)
+0:142          'pf2' ( temp 2-component vector of float)
+0:143      move second child to first child ( temp 2-component vector of float)
+0:143        'lod' ( temp 2-component vector of float)
+0:143        textureQueryLod ( global 2-component vector of float)
+0:143          'usamp3D' ( uniform usampler3D)
+0:143          'pf3' ( temp 3-component vector of float)
+0:144      move second child to first child ( temp 2-component vector of float)
+0:144        'lod' ( temp 2-component vector of float)
+0:144        textureQueryLod ( global 2-component vector of float)
+0:144          'sampCube' ( uniform samplerCube)
+0:144          'pf3' ( temp 3-component vector of float)
+0:145      move second child to first child ( temp 2-component vector of float)
+0:145        'lod' ( temp 2-component vector of float)
+0:145        textureQueryLod ( global 2-component vector of float)
+0:145          'isamp1DA' ( uniform isampler1DArray)
+0:145          'pf' ( temp float)
+0:146      move second child to first child ( temp 2-component vector of float)
+0:146        'lod' ( temp 2-component vector of float)
+0:146        textureQueryLod ( global 2-component vector of float)
+0:146          'usamp2DA' ( uniform usampler2DArray)
+0:146          'pf2' ( temp 2-component vector of float)
+0:148      move second child to first child ( temp 2-component vector of float)
+0:148        'lod' ( temp 2-component vector of float)
+0:148        textureQueryLod ( global 2-component vector of float)
+0:148          'samp1Ds' ( uniform sampler1DShadow)
+0:148          'pf' ( temp float)
+0:149      move second child to first child ( temp 2-component vector of float)
+0:149        'lod' ( temp 2-component vector of float)
+0:149        textureQueryLod ( global 2-component vector of float)
+0:149          'samp2Ds' ( uniform sampler2DShadow)
+0:149          'pf2' ( temp 2-component vector of float)
+0:150      move second child to first child ( temp 2-component vector of float)
+0:150        'lod' ( temp 2-component vector of float)
+0:150        textureQueryLod ( global 2-component vector of float)
+0:150          'sampCubes' ( uniform samplerCubeShadow)
+0:150          'pf3' ( temp 3-component vector of float)
+0:151      move second child to first child ( temp 2-component vector of float)
+0:151        'lod' ( temp 2-component vector of float)
+0:151        textureQueryLod ( global 2-component vector of float)
+0:151          'samp1DAs' ( uniform sampler1DArrayShadow)
+0:151          'pf' ( temp float)
+0:152      move second child to first child ( temp 2-component vector of float)
+0:152        'lod' ( temp 2-component vector of float)
+0:152        textureQueryLod ( global 2-component vector of float)
+0:152          'samp2DAs' ( uniform sampler2DArrayShadow)
+0:152          'pf2' ( temp 2-component vector of float)
+0:154      'lod' ( temp 2-component vector of float)
+0:155      'lod' ( temp 2-component vector of float)
+0:164  Function Definition: testmix( ( global void)
+0:164    Function Parameters: 
+0:166    Sequence
+0:166      Sequence
+0:166        move second child to first child ( temp int)
+0:166          'ival' ( temp int)
+0:166          mix ( global int)
+0:166            'x' ( global int)
+0:166            'y' ( global int)
+0:166            'b' ( global bool)
+0:167      Sequence
+0:167        move second child to first child ( temp 2-component vector of int)
+0:167          'iv2' ( temp 2-component vector of int)
+0:167          mix ( global 2-component vector of int)
+0:167            Construct ivec2 ( temp 2-component vector of int)
+0:167              'x' ( global int)
+0:167            Construct ivec2 ( temp 2-component vector of int)
+0:167              'y' ( global int)
+0:167            Construct bvec2 ( temp 2-component vector of bool)
+0:167              'b' ( global bool)
+0:168      Sequence
+0:168        move second child to first child ( temp 3-component vector of int)
+0:168          'iv3' ( temp 3-component vector of int)
+0:168          mix ( global 3-component vector of int)
+0:168            Construct ivec3 ( temp 3-component vector of int)
+0:168              'x' ( global int)
+0:168            Construct ivec3 ( temp 3-component vector of int)
+0:168              'y' ( global int)
+0:168            Construct bvec3 ( temp 3-component vector of bool)
+0:168              'b' ( global bool)
+0:169      Sequence
+0:169        move second child to first child ( temp 4-component vector of int)
+0:169          'iv4' ( temp 4-component vector of int)
+0:169          mix ( global 4-component vector of int)
+0:169            Construct ivec4 ( temp 4-component vector of int)
+0:169              'x' ( global int)
+0:169            Construct ivec4 ( temp 4-component vector of int)
+0:169              'x' ( global int)
+0:169            Construct bvec4 ( temp 4-component vector of bool)
+0:169              'b' ( global bool)
+0:170      Sequence
+0:170        move second child to first child ( temp uint)
+0:170          'uiv' ( temp uint)
+0:170          mix ( global uint)
+0:170            'z' ( global uint)
+0:170            'w' ( global uint)
+0:170            'b' ( global bool)
+0:171      Sequence
+0:171        move second child to first child ( temp 2-component vector of uint)
+0:171          'uv2' ( temp 2-component vector of uint)
+0:171          mix ( global 2-component vector of uint)
+0:171            Construct uvec2 ( temp 2-component vector of uint)
+0:171              'z' ( global uint)
+0:171            Construct uvec2 ( temp 2-component vector of uint)
+0:171              'z' ( global uint)
+0:171            Construct bvec2 ( temp 2-component vector of bool)
+0:171              'b' ( global bool)
+0:172      Sequence
+0:172        move second child to first child ( temp 3-component vector of uint)
+0:172          'uv3' ( temp 3-component vector of uint)
+0:172          mix ( global 3-component vector of uint)
+0:172            Construct uvec3 ( temp 3-component vector of uint)
+0:172              'z' ( global uint)
+0:172            Construct uvec3 ( temp 3-component vector of uint)
+0:172              'z' ( global uint)
+0:172            Construct bvec3 ( temp 3-component vector of bool)
+0:172              'b' ( global bool)
+0:173      Sequence
+0:173        move second child to first child ( temp 4-component vector of uint)
+0:173          'uv4' ( temp 4-component vector of uint)
+0:173          mix ( global 4-component vector of uint)
+0:173            Construct uvec4 ( temp 4-component vector of uint)
+0:173              'z' ( global uint)
+0:173            Construct uvec4 ( temp 4-component vector of uint)
+0:173              'z' ( global uint)
+0:173            Construct bvec4 ( temp 4-component vector of bool)
+0:173              'b' ( global bool)
+0:174      Sequence
+0:174        move second child to first child ( temp bool)
+0:174          'bv' ( temp bool)
+0:174          mix ( global bool)
+0:174            'b1' ( global bool)
+0:174            'b2' ( global bool)
+0:174            'b' ( global bool)
+0:175      Sequence
+0:175        move second child to first child ( temp 2-component vector of bool)
+0:175          'bv2' ( temp 2-component vector of bool)
+0:175          mix ( global 2-component vector of bool)
+0:175            Construct bvec2 ( temp 2-component vector of bool)
+0:175              'b1' ( global bool)
+0:175            Construct bvec2 ( temp 2-component vector of bool)
+0:175              'b2' ( global bool)
+0:175            Construct bvec2 ( temp 2-component vector of bool)
+0:175              'b' ( global bool)
+0:176      Sequence
+0:176        move second child to first child ( temp 3-component vector of bool)
+0:176          'bv3' ( temp 3-component vector of bool)
+0:176          mix ( global 3-component vector of bool)
+0:176            Construct bvec3 ( temp 3-component vector of bool)
+0:176              'b1' ( global bool)
+0:176            Construct bvec3 ( temp 3-component vector of bool)
+0:176              'b2' ( global bool)
+0:176            Construct bvec3 ( temp 3-component vector of bool)
+0:176              'b' ( global bool)
+0:177      Sequence
+0:177        move second child to first child ( temp 4-component vector of bool)
+0:177          'bv4' ( temp 4-component vector of bool)
+0:177          mix ( global 4-component vector of bool)
+0:177            Construct bvec4 ( temp 4-component vector of bool)
+0:177              'b1' ( global bool)
+0:177            Construct bvec4 ( temp 4-component vector of bool)
+0:177              'b2' ( global bool)
+0:177            Construct bvec4 ( temp 4-component vector of bool)
+0:177              'b' ( global bool)
+0:181  Function Definition: testmixFail( ( global void)
+0:181    Function Parameters: 
+0:183    Sequence
+0:183      Sequence
+0:183        move second child to first child ( temp int)
+0:183          'ival' ( temp int)
+0:183          mix ( global int)
+0:183            'x' ( global int)
+0:183            'y' ( global int)
+0:183            'b' ( global bool)
+0:?   Linker Objects
+0:?     'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:?     'foo' ( smooth in 4-component vector of float)
+0:?     's' ( smooth in structure{ global float f})
+0:?     'patch' ( global float)
+0:?     'sms' ( uniform sampler2DMS)
+0:?     'isms' ( uniform isampler2DMS)
+0:?     'usms' ( uniform usampler2DMS)
+0:?     'smsa' ( uniform sampler2DMSArray)
+0:?     'ismsa' ( uniform isampler2DMSArray)
+0:?     'usmsa' ( uniform usampler2DMSArray)
+0:?     'p2' ( flat in 2-component vector of int)
+0:?     'p3' ( flat in 3-component vector of int)
+0:?     'samp' ( flat in int)
+0:?     'type1' ( smooth in double)
+0:?     'type2' ( global double)
+0:?     'type3' ( global double)
+0:?     'absTest' ( global int)
+0:?     'absTest2' ( global double)
+0:?     'absTest3' ( global double)
+0:?     'dk' ( global float)
+0:?     'f' ( global float)
+0:?     'v4' ( global 4-component vector of float)
+0:?     'iv4a' ( global 4-component vector of int)
+0:?     'uv2c' ( global 2-component vector of uint)
+0:?     'v2a' ( global 2-component vector of float)
+0:?     'uy' ( global uint)
+0:?     'samp1D' ( uniform sampler1D)
+0:?     'samp2Ds' ( uniform sampler2DShadow)
+0:?     'isamp2D' ( uniform isampler2D)
+0:?     'usamp3D' ( uniform usampler3D)
+0:?     'sampCube' ( uniform samplerCube)
+0:?     'isamp1DA' ( uniform isampler1DArray)
+0:?     'usamp2DA' ( uniform usampler2DArray)
+0:?     'samp1Ds' ( uniform sampler1DShadow)
+0:?     'sampCubes' ( uniform samplerCubeShadow)
+0:?     'samp1DAs' ( uniform sampler1DArrayShadow)
+0:?     'samp2DAs' ( uniform sampler2DArrayShadow)
+0:?     'sampBuf' ( uniform samplerBuffer)
+0:?     'sampRect' ( uniform sampler2DRect)
+0:?     'b1' ( global bool)
+0:?     'b2' ( global bool)
+0:?     'b' ( global bool)
+0:?     'x' ( global int)
+0:?     'y' ( global int)
+0:?     'z' ( global uint)
+0:?     'w' ( global uint)
+
+
+Linked fragment stage:
+
+
+Shader version: 150
+Requested GL_ARB_gpu_shader_fp64
+Requested GL_ARB_shader_bit_encoding
+Requested GL_ARB_shading_language_packing
+Requested GL_ARB_texture_query_lod
+Requested GL_EXT_shader_integer_mix
+gl_FragCoord pixel center is integer
+gl_FragCoord origin is upper left
+ERROR: node is still EOpNull!
+0:9  Function Definition: main( ( global void)
+0:9    Function Parameters: 
+0:11    Sequence
+0:11      Sequence
+0:11        move second child to first child ( temp 4-component vector of float)
+0:11          'c' ( temp 4-component vector of float)
+0:11          'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:18  Sequence
+0:18    move second child to first child ( temp float)
+0:18      'patch' ( global float)
+0:18      Constant:
+0:18        3.100000
+0:56  Sequence
+0:56    move second child to first child ( temp double)
+0:56      'type3' ( global double)
+0:56      Constant:
+0:56        2.000000
+0:58  Sequence
+0:58    move second child to first child ( temp double)
+0:58      'absTest2' ( global double)
+0:58      sqrt ( global double)
+0:58        'type3' ( global double)
+0:59  Sequence
+0:59    move second child to first child ( temp double)
+0:59      'absTest3' ( global double)
+0:59      Constant:
+0:59        1.414214
+0:60  Sequence
+0:60    move second child to first child ( temp float)
+0:60      'dk' ( global float)
+0:60      Constant:
+0:60        3.316625
+0:?   Linker Objects
+0:?     'gl_FragCoord' ( gl_FragCoord 4-component vector of float FragCoord)
+0:?     'foo' ( smooth in 4-component vector of float)
+0:?     's' ( smooth in structure{ global float f})
+0:?     'patch' ( global float)
+0:?     'sms' ( uniform sampler2DMS)
+0:?     'isms' ( uniform isampler2DMS)
+0:?     'usms' ( uniform usampler2DMS)
+0:?     'smsa' ( uniform sampler2DMSArray)
+0:?     'ismsa' ( uniform isampler2DMSArray)
+0:?     'usmsa' ( uniform usampler2DMSArray)
+0:?     'p2' ( flat in 2-component vector of int)
+0:?     'p3' ( flat in 3-component vector of int)
+0:?     'samp' ( flat in int)
+0:?     'type1' ( smooth in double)
+0:?     'type2' ( global double)
+0:?     'type3' ( global double)
+0:?     'absTest' ( global int)
+0:?     'absTest2' ( global double)
+0:?     'absTest3' ( global double)
+0:?     'dk' ( global float)
+0:?     'f' ( global float)
+0:?     'v4' ( global 4-component vector of float)
+0:?     'iv4a' ( global 4-component vector of int)
+0:?     'uv2c' ( global 2-component vector of uint)
+0:?     'v2a' ( global 2-component vector of float)
+0:?     'uy' ( global uint)
+0:?     'samp1D' ( uniform sampler1D)
+0:?     'samp2Ds' ( uniform sampler2DShadow)
+0:?     'isamp2D' ( uniform isampler2D)
+0:?     'usamp3D' ( uniform usampler3D)
+0:?     'sampCube' ( uniform samplerCube)
+0:?     'isamp1DA' ( uniform isampler1DArray)
+0:?     'usamp2DA' ( uniform usampler2DArray)
+0:?     'samp1Ds' ( uniform sampler1DShadow)
+0:?     'sampCubes' ( uniform samplerCubeShadow)
+0:?     'samp1DAs' ( uniform sampler1DArrayShadow)
+0:?     'samp2DAs' ( uniform sampler2DArrayShadow)
+0:?     'sampBuf' ( uniform samplerBuffer)
+0:?     'sampRect' ( uniform sampler2DRect)
+0:?     'b1' ( global bool)
+0:?     'b2' ( global bool)
+0:?     'b' ( global bool)
+0:?     'x' ( global int)
+0:?     'y' ( global int)
+0:?     'z' ( global uint)
+0:?     'w' ( global uint)
+

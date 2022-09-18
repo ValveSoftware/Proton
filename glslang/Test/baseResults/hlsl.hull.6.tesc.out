@@ -1,0 +1,679 @@
+hlsl.hull.6.tesc
+Shader version: 500
+vertices = 1
+vertex spacing = fractional_even_spacing
+triangle order = ccw
+0:? Sequence
+0:17  Function Definition: ConstantHS(struct-VSOutput-vf4-vf31[1];u1;f1[2]; ( temp structure{ temp 4-element array of float Edges})
+0:17    Function Parameters: 
+0:17      'p' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:17      'BlockID' ( in uint)
+0:17      'Inside' ( out 2-element array of float)
+0:?     Sequence
+0:19      move second child to first child ( temp float)
+0:19        direct index ( temp float)
+0:19          Edges: direct index for structure ( temp 4-element array of float)
+0:19            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:19            Constant:
+0:19              0 (const int)
+0:19          Constant:
+0:19            0 (const int)
+0:19        Constant:
+0:19          2.500000
+0:20      move second child to first child ( temp float)
+0:20        direct index ( temp float)
+0:20          Edges: direct index for structure ( temp 4-element array of float)
+0:20            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:20            Constant:
+0:20              0 (const int)
+0:20          Constant:
+0:20            1 (const int)
+0:20        Constant:
+0:20          4.250000
+0:21      move second child to first child ( temp float)
+0:21        direct index ( temp float)
+0:21          Edges: direct index for structure ( temp 4-element array of float)
+0:21            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:21            Constant:
+0:21              0 (const int)
+0:21          Constant:
+0:21            2 (const int)
+0:21        Constant:
+0:21          5.750000
+0:22      move second child to first child ( temp float)
+0:22        direct index ( temp float)
+0:22          Edges: direct index for structure ( temp 4-element array of float)
+0:22            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:22            Constant:
+0:22              0 (const int)
+0:22          Constant:
+0:22            3 (const int)
+0:22        Constant:
+0:22          7.500000
+0:24      move second child to first child ( temp float)
+0:24        direct index ( temp float)
+0:24          'Inside' ( out 2-element array of float)
+0:24          Constant:
+0:24            0 (const int)
+0:24        Constant:
+0:24          6.750000
+0:25      move second child to first child ( temp float)
+0:25        direct index ( temp float)
+0:25          'Inside' ( out 2-element array of float)
+0:25          Constant:
+0:25            1 (const int)
+0:25        Constant:
+0:25          7.250000
+0:27      Branch: Return with expression
+0:27        'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:42  Function Definition: @main(struct-VSOutput-vf4-vf31[1];u1; ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42    Function Parameters: 
+0:42      'inputPatch' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:42      'uCPID' ( in uint)
+0:?     Sequence
+0:44      move second child to first child ( temp 4-component vector of float)
+0:44        Position: direct index for structure ( temp 4-component vector of float)
+0:44          'Out' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:44          Constant:
+0:44            0 (const int)
+0:44        f4Position: direct index for structure ( temp 4-component vector of float)
+0:44          indirect index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:44            'inputPatch' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:44            'uCPID' ( in uint)
+0:44          Constant:
+0:44            0 (const int)
+0:45      move second child to first child ( temp 3-component vector of float)
+0:45        Color: direct index for structure ( temp 3-component vector of float)
+0:45          'Out' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:45          Constant:
+0:45            1 (const int)
+0:45        f3Color: direct index for structure ( temp 3-component vector of float)
+0:45          indirect index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:45            'inputPatch' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:45            'uCPID' ( in uint)
+0:45          Constant:
+0:45            1 (const int)
+0:46      Branch: Return with expression
+0:46        'Out' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42  Function Definition: main( ( temp void)
+0:42    Function Parameters: 
+0:?     Sequence
+0:42      Sequence
+0:42        move second child to first child ( temp 4-component vector of float)
+0:42          f4Position: direct index for structure ( temp 4-component vector of float)
+0:42            direct index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?               'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:42              Constant:
+0:42                0 (const int)
+0:42            Constant:
+0:42              0 (const int)
+0:42          direct index ( in 4-component vector of float Position)
+0:?             'inputPatch.f4Position' ( in 1-element array of 4-component vector of float Position)
+0:42            Constant:
+0:42              0 (const int)
+0:42        move second child to first child ( temp 3-component vector of float)
+0:42          f3Color: direct index for structure ( temp 3-component vector of float)
+0:42            direct index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?               'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:42              Constant:
+0:42                0 (const int)
+0:42            Constant:
+0:42              1 (const int)
+0:42          direct index (layout( location=0) in 3-component vector of float)
+0:?             'inputPatch.f3Color' (layout( location=0) in 1-element array of 3-component vector of float)
+0:42            Constant:
+0:42              0 (const int)
+0:42      move second child to first child ( temp uint)
+0:?         'uCPID' ( temp uint)
+0:?         'uCPID' ( in uint InvocationID)
+0:42      Sequence
+0:42        move second child to first child ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42          'flattenTemp' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42          Function Call: @main(struct-VSOutput-vf4-vf31[1];u1; ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:?             'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?             'uCPID' ( temp uint)
+0:42        move second child to first child ( temp 4-component vector of float)
+0:42          indirect index (layout( location=0) out 4-component vector of float)
+0:?             '@entryPointOutput.Position' (layout( location=0) out 1-element array of 4-component vector of float)
+0:?             'uCPID' ( in uint InvocationID)
+0:42          Position: direct index for structure ( temp 4-component vector of float)
+0:42            'flattenTemp' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42            Constant:
+0:42              0 (const int)
+0:42        move second child to first child ( temp 3-component vector of float)
+0:42          indirect index (layout( location=1) out 3-component vector of float)
+0:?             '@entryPointOutput.Color' (layout( location=1) out 1-element array of 3-component vector of float)
+0:?             'uCPID' ( in uint InvocationID)
+0:42          Color: direct index for structure ( temp 3-component vector of float)
+0:42            'flattenTemp' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42            Constant:
+0:42              1 (const int)
+0:?       Barrier ( temp void)
+0:?       Test condition and select ( temp void)
+0:?         Condition
+0:?         Compare Equal ( temp bool)
+0:?           'uCPID' ( in uint InvocationID)
+0:?           Constant:
+0:?             0 (const int)
+0:?         true case
+0:?         Sequence
+0:?           move second child to first child ( temp structure{ temp 4-element array of float Edges})
+0:?             '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?             Function Call: ConstantHS(struct-VSOutput-vf4-vf31[1];u1;f1[2]; ( temp structure{ temp 4-element array of float Edges})
+0:?               'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?               'BlockID' ( in uint PrimitiveID)
+0:?               'Inside' ( patch out 2-element array of float TessLevelInner)
+0:?           Sequence
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   3 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   3 (const int)
+0:?   Linker Objects
+0:?     '@entryPointOutput.Position' (layout( location=0) out 1-element array of 4-component vector of float)
+0:?     '@entryPointOutput.Color' (layout( location=1) out 1-element array of 3-component vector of float)
+0:?     'inputPatch.f4Position' ( in 1-element array of 4-component vector of float Position)
+0:?     'inputPatch.f3Color' (layout( location=0) in 1-element array of 3-component vector of float)
+0:?     'uCPID' ( in uint InvocationID)
+0:?     'BlockID' ( in uint PrimitiveID)
+0:?     'Inside' ( patch out 2-element array of float TessLevelInner)
+0:?     '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+
+
+Linked tessellation control stage:
+
+
+Shader version: 500
+vertices = 1
+vertex spacing = fractional_even_spacing
+triangle order = ccw
+0:? Sequence
+0:17  Function Definition: ConstantHS(struct-VSOutput-vf4-vf31[1];u1;f1[2]; ( temp structure{ temp 4-element array of float Edges})
+0:17    Function Parameters: 
+0:17      'p' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:17      'BlockID' ( in uint)
+0:17      'Inside' ( out 2-element array of float)
+0:?     Sequence
+0:19      move second child to first child ( temp float)
+0:19        direct index ( temp float)
+0:19          Edges: direct index for structure ( temp 4-element array of float)
+0:19            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:19            Constant:
+0:19              0 (const int)
+0:19          Constant:
+0:19            0 (const int)
+0:19        Constant:
+0:19          2.500000
+0:20      move second child to first child ( temp float)
+0:20        direct index ( temp float)
+0:20          Edges: direct index for structure ( temp 4-element array of float)
+0:20            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:20            Constant:
+0:20              0 (const int)
+0:20          Constant:
+0:20            1 (const int)
+0:20        Constant:
+0:20          4.250000
+0:21      move second child to first child ( temp float)
+0:21        direct index ( temp float)
+0:21          Edges: direct index for structure ( temp 4-element array of float)
+0:21            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:21            Constant:
+0:21              0 (const int)
+0:21          Constant:
+0:21            2 (const int)
+0:21        Constant:
+0:21          5.750000
+0:22      move second child to first child ( temp float)
+0:22        direct index ( temp float)
+0:22          Edges: direct index for structure ( temp 4-element array of float)
+0:22            'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:22            Constant:
+0:22              0 (const int)
+0:22          Constant:
+0:22            3 (const int)
+0:22        Constant:
+0:22          7.500000
+0:24      move second child to first child ( temp float)
+0:24        direct index ( temp float)
+0:24          'Inside' ( out 2-element array of float)
+0:24          Constant:
+0:24            0 (const int)
+0:24        Constant:
+0:24          6.750000
+0:25      move second child to first child ( temp float)
+0:25        direct index ( temp float)
+0:25          'Inside' ( out 2-element array of float)
+0:25          Constant:
+0:25            1 (const int)
+0:25        Constant:
+0:25          7.250000
+0:27      Branch: Return with expression
+0:27        'Factors' ( temp structure{ temp 4-element array of float Edges})
+0:42  Function Definition: @main(struct-VSOutput-vf4-vf31[1];u1; ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42    Function Parameters: 
+0:42      'inputPatch' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:42      'uCPID' ( in uint)
+0:?     Sequence
+0:44      move second child to first child ( temp 4-component vector of float)
+0:44        Position: direct index for structure ( temp 4-component vector of float)
+0:44          'Out' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:44          Constant:
+0:44            0 (const int)
+0:44        f4Position: direct index for structure ( temp 4-component vector of float)
+0:44          indirect index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:44            'inputPatch' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:44            'uCPID' ( in uint)
+0:44          Constant:
+0:44            0 (const int)
+0:45      move second child to first child ( temp 3-component vector of float)
+0:45        Color: direct index for structure ( temp 3-component vector of float)
+0:45          'Out' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:45          Constant:
+0:45            1 (const int)
+0:45        f3Color: direct index for structure ( temp 3-component vector of float)
+0:45          indirect index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:45            'inputPatch' ( in 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:45            'uCPID' ( in uint)
+0:45          Constant:
+0:45            1 (const int)
+0:46      Branch: Return with expression
+0:46        'Out' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42  Function Definition: main( ( temp void)
+0:42    Function Parameters: 
+0:?     Sequence
+0:42      Sequence
+0:42        move second child to first child ( temp 4-component vector of float)
+0:42          f4Position: direct index for structure ( temp 4-component vector of float)
+0:42            direct index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?               'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:42              Constant:
+0:42                0 (const int)
+0:42            Constant:
+0:42              0 (const int)
+0:42          direct index ( in 4-component vector of float Position)
+0:?             'inputPatch.f4Position' ( in 1-element array of 4-component vector of float Position)
+0:42            Constant:
+0:42              0 (const int)
+0:42        move second child to first child ( temp 3-component vector of float)
+0:42          f3Color: direct index for structure ( temp 3-component vector of float)
+0:42            direct index ( temp structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?               'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:42              Constant:
+0:42                0 (const int)
+0:42            Constant:
+0:42              1 (const int)
+0:42          direct index (layout( location=0) in 3-component vector of float)
+0:?             'inputPatch.f3Color' (layout( location=0) in 1-element array of 3-component vector of float)
+0:42            Constant:
+0:42              0 (const int)
+0:42      move second child to first child ( temp uint)
+0:?         'uCPID' ( temp uint)
+0:?         'uCPID' ( in uint InvocationID)
+0:42      Sequence
+0:42        move second child to first child ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42          'flattenTemp' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42          Function Call: @main(struct-VSOutput-vf4-vf31[1];u1; ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:?             'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?             'uCPID' ( temp uint)
+0:42        move second child to first child ( temp 4-component vector of float)
+0:42          indirect index (layout( location=0) out 4-component vector of float)
+0:?             '@entryPointOutput.Position' (layout( location=0) out 1-element array of 4-component vector of float)
+0:?             'uCPID' ( in uint InvocationID)
+0:42          Position: direct index for structure ( temp 4-component vector of float)
+0:42            'flattenTemp' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42            Constant:
+0:42              0 (const int)
+0:42        move second child to first child ( temp 3-component vector of float)
+0:42          indirect index (layout( location=1) out 3-component vector of float)
+0:?             '@entryPointOutput.Color' (layout( location=1) out 1-element array of 3-component vector of float)
+0:?             'uCPID' ( in uint InvocationID)
+0:42          Color: direct index for structure ( temp 3-component vector of float)
+0:42            'flattenTemp' ( temp structure{ temp 4-component vector of float Position,  temp 3-component vector of float Color})
+0:42            Constant:
+0:42              1 (const int)
+0:?       Barrier ( temp void)
+0:?       Test condition and select ( temp void)
+0:?         Condition
+0:?         Compare Equal ( temp bool)
+0:?           'uCPID' ( in uint InvocationID)
+0:?           Constant:
+0:?             0 (const int)
+0:?         true case
+0:?         Sequence
+0:?           move second child to first child ( temp structure{ temp 4-element array of float Edges})
+0:?             '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?             Function Call: ConstantHS(struct-VSOutput-vf4-vf31[1];u1;f1[2]; ( temp structure{ temp 4-element array of float Edges})
+0:?               'inputPatch' ( temp 1-element array of structure{ temp 4-component vector of float f4Position,  temp 3-component vector of float f3Color})
+0:?               'BlockID' ( in uint PrimitiveID)
+0:?               'Inside' ( patch out 2-element array of float TessLevelInner)
+0:?           Sequence
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   0 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   1 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   2 (const int)
+0:?             move second child to first child ( temp float)
+0:?               direct index ( patch out float TessLevelOuter)
+0:?                 '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+0:?                 Constant:
+0:?                   3 (const int)
+0:?               direct index ( temp float)
+0:?                 Edges: direct index for structure ( temp 4-element array of float)
+0:?                   '@patchConstantResult' ( temp structure{ temp 4-element array of float Edges})
+0:?                   Constant:
+0:?                     0 (const int)
+0:?                 Constant:
+0:?                   3 (const int)
+0:?   Linker Objects
+0:?     '@entryPointOutput.Position' (layout( location=0) out 1-element array of 4-component vector of float)
+0:?     '@entryPointOutput.Color' (layout( location=1) out 1-element array of 3-component vector of float)
+0:?     'inputPatch.f4Position' ( in 1-element array of 4-component vector of float Position)
+0:?     'inputPatch.f3Color' (layout( location=0) in 1-element array of 3-component vector of float)
+0:?     'uCPID' ( in uint InvocationID)
+0:?     'BlockID' ( in uint PrimitiveID)
+0:?     'Inside' ( patch out 2-element array of float TessLevelInner)
+0:?     '@patchConstantOutput.Edges' ( patch out 4-element array of float TessLevelOuter)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 142
+
+                              Capability Tessellation
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint TessellationControl 4  "main" 74 81 88 97 104 117 119 128
+                              ExecutionMode 4 OutputVertices 1
+                              ExecutionMode 4 Quads
+                              ExecutionMode 4 SpacingFractionalEven
+                              ExecutionMode 4 VertexOrderCcw
+                              Source HLSL 500
+                              Name 4  "main"
+                              Name 9  "VSOutput"
+                              MemberName 9(VSOutput) 0  "f4Position"
+                              MemberName 9(VSOutput) 1  "f3Color"
+                              Name 20  "HS_CONSTANT_DATA_OUTPUT"
+                              MemberName 20(HS_CONSTANT_DATA_OUTPUT) 0  "Edges"
+                              Name 25  "ConstantHS(struct-VSOutput-vf4-vf31[1];u1;f1[2];"
+                              Name 22  "p"
+                              Name 23  "BlockID"
+                              Name 24  "Inside"
+                              Name 27  "HSOutput"
+                              MemberName 27(HSOutput) 0  "Position"
+                              MemberName 27(HSOutput) 1  "Color"
+                              Name 31  "@main(struct-VSOutput-vf4-vf31[1];u1;"
+                              Name 29  "inputPatch"
+                              Name 30  "uCPID"
+                              Name 34  "Factors"
+                              Name 57  "Out"
+                              Name 71  "inputPatch"
+                              Name 74  "inputPatch.f4Position"
+                              Name 81  "inputPatch.f3Color"
+                              Name 86  "uCPID"
+                              Name 88  "uCPID"
+                              Name 90  "flattenTemp"
+                              Name 91  "param"
+                              Name 93  "param"
+                              Name 97  "@entryPointOutput.Position"
+                              Name 104  "@entryPointOutput.Color"
+                              Name 116  "@patchConstantResult"
+                              Name 117  "BlockID"
+                              Name 119  "Inside"
+                              Name 120  "param"
+                              Name 122  "param"
+                              Name 124  "param"
+                              Name 128  "@patchConstantOutput.Edges"
+                              Decorate 74(inputPatch.f4Position) BuiltIn Position
+                              Decorate 81(inputPatch.f3Color) Location 0
+                              Decorate 88(uCPID) BuiltIn InvocationId
+                              Decorate 97(@entryPointOutput.Position) Location 0
+                              Decorate 104(@entryPointOutput.Color) Location 1
+                              Decorate 117(BlockID) BuiltIn PrimitiveId
+                              Decorate 119(Inside) Patch
+                              Decorate 119(Inside) BuiltIn TessLevelInner
+                              Decorate 128(@patchConstantOutput.Edges) Patch
+                              Decorate 128(@patchConstantOutput.Edges) BuiltIn TessLevelOuter
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypeVector 6(float) 3
+     9(VSOutput):             TypeStruct 7(fvec4) 8(fvec3)
+              10:             TypeInt 32 0
+              11:     10(int) Constant 1
+              12:             TypeArray 9(VSOutput) 11
+              13:             TypePointer Function 12
+              14:             TypePointer Function 10(int)
+              15:     10(int) Constant 2
+              16:             TypeArray 6(float) 15
+              17:             TypePointer Function 16
+              18:     10(int) Constant 4
+              19:             TypeArray 6(float) 18
+20(HS_CONSTANT_DATA_OUTPUT):             TypeStruct 19
+              21:             TypeFunction 20(HS_CONSTANT_DATA_OUTPUT) 13(ptr) 14(ptr) 17(ptr)
+    27(HSOutput):             TypeStruct 7(fvec4) 8(fvec3)
+              28:             TypeFunction 27(HSOutput) 13(ptr) 14(ptr)
+              33:             TypePointer Function 20(HS_CONSTANT_DATA_OUTPUT)
+              35:             TypeInt 32 1
+              36:     35(int) Constant 0
+              37:    6(float) Constant 1075838976
+              38:             TypePointer Function 6(float)
+              40:     35(int) Constant 1
+              41:    6(float) Constant 1082654720
+              43:     35(int) Constant 2
+              44:    6(float) Constant 1085800448
+              46:     35(int) Constant 3
+              47:    6(float) Constant 1089470464
+              49:    6(float) Constant 1087897600
+              51:    6(float) Constant 1088946176
+              56:             TypePointer Function 27(HSOutput)
+              59:             TypePointer Function 7(fvec4)
+              64:             TypePointer Function 8(fvec3)
+              72:             TypeArray 7(fvec4) 11
+              73:             TypePointer Input 72
+74(inputPatch.f4Position):     73(ptr) Variable Input
+              75:             TypePointer Input 7(fvec4)
+              79:             TypeArray 8(fvec3) 11
+              80:             TypePointer Input 79
+81(inputPatch.f3Color):     80(ptr) Variable Input
+              82:             TypePointer Input 8(fvec3)
+              87:             TypePointer Input 10(int)
+       88(uCPID):     87(ptr) Variable Input
+              96:             TypePointer Output 72
+97(@entryPointOutput.Position):     96(ptr) Variable Output
+             101:             TypePointer Output 7(fvec4)
+             103:             TypePointer Output 79
+104(@entryPointOutput.Color):    103(ptr) Variable Output
+             108:             TypePointer Output 8(fvec3)
+             110:     10(int) Constant 0
+             112:             TypeBool
+    117(BlockID):     87(ptr) Variable Input
+             118:             TypePointer Output 16
+     119(Inside):    118(ptr) Variable Output
+             127:             TypePointer Output 19
+128(@patchConstantOutput.Edges):    127(ptr) Variable Output
+             131:             TypePointer Output 6(float)
+         4(main):           2 Function None 3
+               5:             Label
+  71(inputPatch):     13(ptr) Variable Function
+       86(uCPID):     14(ptr) Variable Function
+ 90(flattenTemp):     56(ptr) Variable Function
+       91(param):     13(ptr) Variable Function
+       93(param):     14(ptr) Variable Function
+116(@patchConstantResult):     33(ptr) Variable Function
+      120(param):     13(ptr) Variable Function
+      122(param):     14(ptr) Variable Function
+      124(param):     17(ptr) Variable Function
+              76:     75(ptr) AccessChain 74(inputPatch.f4Position) 36
+              77:    7(fvec4) Load 76
+              78:     59(ptr) AccessChain 71(inputPatch) 36 36
+                              Store 78 77
+              83:     82(ptr) AccessChain 81(inputPatch.f3Color) 36
+              84:    8(fvec3) Load 83
+              85:     64(ptr) AccessChain 71(inputPatch) 36 40
+                              Store 85 84
+              89:     10(int) Load 88(uCPID)
+                              Store 86(uCPID) 89
+              92:          12 Load 71(inputPatch)
+                              Store 91(param) 92
+              94:     10(int) Load 86(uCPID)
+                              Store 93(param) 94
+              95:27(HSOutput) FunctionCall 31(@main(struct-VSOutput-vf4-vf31[1];u1;) 91(param) 93(param)
+                              Store 90(flattenTemp) 95
+              98:     10(int) Load 88(uCPID)
+              99:     59(ptr) AccessChain 90(flattenTemp) 36
+             100:    7(fvec4) Load 99
+             102:    101(ptr) AccessChain 97(@entryPointOutput.Position) 98
+                              Store 102 100
+             105:     10(int) Load 88(uCPID)
+             106:     64(ptr) AccessChain 90(flattenTemp) 40
+             107:    8(fvec3) Load 106
+             109:    108(ptr) AccessChain 104(@entryPointOutput.Color) 105
+                              Store 109 107
+                              ControlBarrier 15 18 110
+             111:     10(int) Load 88(uCPID)
+             113:   112(bool) IEqual 111 36
+                              SelectionMerge 115 None
+                              BranchConditional 113 114 115
+             114:               Label
+             121:          12   Load 71(inputPatch)
+                                Store 120(param) 121
+             123:     10(int)   Load 117(BlockID)
+                                Store 122(param) 123
+             125:20(HS_CONSTANT_DATA_OUTPUT)   FunctionCall 25(ConstantHS(struct-VSOutput-vf4-vf31[1];u1;f1[2];) 120(param) 122(param) 124(param)
+             126:          16   Load 124(param)
+                                Store 119(Inside) 126
+                                Store 116(@patchConstantResult) 125
+             129:     38(ptr)   AccessChain 116(@patchConstantResult) 36 36
+             130:    6(float)   Load 129
+             132:    131(ptr)   AccessChain 128(@patchConstantOutput.Edges) 36
+                                Store 132 130
+             133:     38(ptr)   AccessChain 116(@patchConstantResult) 36 40
+             134:    6(float)   Load 133
+             135:    131(ptr)   AccessChain 128(@patchConstantOutput.Edges) 40
+                                Store 135 134
+             136:     38(ptr)   AccessChain 116(@patchConstantResult) 36 43
+             137:    6(float)   Load 136
+             138:    131(ptr)   AccessChain 128(@patchConstantOutput.Edges) 43
+                                Store 138 137
+             139:     38(ptr)   AccessChain 116(@patchConstantResult) 36 46
+             140:    6(float)   Load 139
+             141:    131(ptr)   AccessChain 128(@patchConstantOutput.Edges) 46
+                                Store 141 140
+                                Branch 115
+             115:             Label
+                              Return
+                              FunctionEnd
+25(ConstantHS(struct-VSOutput-vf4-vf31[1];u1;f1[2];):20(HS_CONSTANT_DATA_OUTPUT) Function None 21
+           22(p):     13(ptr) FunctionParameter
+     23(BlockID):     14(ptr) FunctionParameter
+      24(Inside):     17(ptr) FunctionParameter
+              26:             Label
+     34(Factors):     33(ptr) Variable Function
+              39:     38(ptr) AccessChain 34(Factors) 36 36
+                              Store 39 37
+              42:     38(ptr) AccessChain 34(Factors) 36 40
+                              Store 42 41
+              45:     38(ptr) AccessChain 34(Factors) 36 43
+                              Store 45 44
+              48:     38(ptr) AccessChain 34(Factors) 36 46
+                              Store 48 47
+              50:     38(ptr) AccessChain 24(Inside) 36
+                              Store 50 49
+              52:     38(ptr) AccessChain 24(Inside) 40
+                              Store 52 51
+              53:20(HS_CONSTANT_DATA_OUTPUT) Load 34(Factors)
+                              ReturnValue 53
+                              FunctionEnd
+31(@main(struct-VSOutput-vf4-vf31[1];u1;):27(HSOutput) Function None 28
+  29(inputPatch):     13(ptr) FunctionParameter
+       30(uCPID):     14(ptr) FunctionParameter
+              32:             Label
+         57(Out):     56(ptr) Variable Function
+              58:     10(int) Load 30(uCPID)
+              60:     59(ptr) AccessChain 29(inputPatch) 58 36
+              61:    7(fvec4) Load 60
+              62:     59(ptr) AccessChain 57(Out) 36
+                              Store 62 61
+              63:     10(int) Load 30(uCPID)
+              65:     64(ptr) AccessChain 29(inputPatch) 63 40
+              66:    8(fvec3) Load 65
+              67:     64(ptr) AccessChain 57(Out) 40
+                              Store 67 66
+              68:27(HSOutput) Load 57(Out)
+                              ReturnValue 68
+                              FunctionEnd

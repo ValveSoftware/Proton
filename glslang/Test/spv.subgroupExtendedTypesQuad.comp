@@ -1,0 +1,165 @@
+#version 450
+
+#extension GL_KHR_shader_subgroup_quad: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16: enable
+
+layout (local_size_x = 8) in;
+
+layout(binding = 0) buffer Buffers
+{
+    i8vec4 i8;
+    u8vec4 u8;
+    i16vec4 i16;
+    u16vec4 u16;
+    i64vec4 i64;
+    u64vec4 u64;
+    f16vec4 f16;
+} data[4];
+
+void main()
+{
+    uint invocation = (gl_SubgroupInvocationID + gl_SubgroupSize) % 4;
+
+    data[invocation].i8.x   = subgroupQuadBroadcast(data[0].i8.x, 1);
+    data[invocation].i8.xy  = subgroupQuadBroadcast(data[1].i8.xy, 1);
+    data[invocation].i8.xyz = subgroupQuadBroadcast(data[2].i8.xyz, 1);
+    data[invocation].i8     = subgroupQuadBroadcast(data[3].i8, 1);
+
+    data[invocation].i8.x   = subgroupQuadSwapHorizontal(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupQuadSwapHorizontal(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupQuadSwapHorizontal(data[2].i8.xyz);
+    data[invocation].i8     = subgroupQuadSwapHorizontal(data[3].i8);
+
+    data[invocation].i8.x   = subgroupQuadSwapVertical(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupQuadSwapVertical(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupQuadSwapVertical(data[2].i8.xyz);
+    data[invocation].i8     = subgroupQuadSwapVertical(data[3].i8);
+
+    data[invocation].i8.x   = subgroupQuadSwapDiagonal(data[0].i8.x);
+    data[invocation].i8.xy  = subgroupQuadSwapDiagonal(data[1].i8.xy);
+    data[invocation].i8.xyz = subgroupQuadSwapDiagonal(data[2].i8.xyz);
+    data[invocation].i8     = subgroupQuadSwapDiagonal(data[3].i8);
+
+    data[invocation].u8.x   = subgroupQuadBroadcast(data[0].u8.x, 1);
+    data[invocation].u8.xy  = subgroupQuadBroadcast(data[1].u8.xy, 1);
+    data[invocation].u8.xyz = subgroupQuadBroadcast(data[2].u8.xyz, 1);
+    data[invocation].u8     = subgroupQuadBroadcast(data[3].u8, 1);
+
+    data[invocation].u8.x   = subgroupQuadSwapHorizontal(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupQuadSwapHorizontal(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupQuadSwapHorizontal(data[2].u8.xyz);
+    data[invocation].u8     = subgroupQuadSwapHorizontal(data[3].u8);
+
+    data[invocation].u8.x   = subgroupQuadSwapVertical(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupQuadSwapVertical(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupQuadSwapVertical(data[2].u8.xyz);
+    data[invocation].u8     = subgroupQuadSwapVertical(data[3].u8);
+
+    data[invocation].u8.x   = subgroupQuadSwapDiagonal(data[0].u8.x);
+    data[invocation].u8.xy  = subgroupQuadSwapDiagonal(data[1].u8.xy);
+    data[invocation].u8.xyz = subgroupQuadSwapDiagonal(data[2].u8.xyz);
+    data[invocation].u8     = subgroupQuadSwapDiagonal(data[3].u8);
+
+    data[invocation].i16.x   = subgroupQuadBroadcast(data[0].i16.x, 1);
+    data[invocation].i16.xy  = subgroupQuadBroadcast(data[1].i16.xy, 1);
+    data[invocation].i16.xyz = subgroupQuadBroadcast(data[2].i16.xyz, 1);
+    data[invocation].i16     = subgroupQuadBroadcast(data[3].i16, 1);
+
+    data[invocation].i16.x   = subgroupQuadSwapHorizontal(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupQuadSwapHorizontal(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupQuadSwapHorizontal(data[2].i16.xyz);
+    data[invocation].i16     = subgroupQuadSwapHorizontal(data[3].i16);
+
+    data[invocation].i16.x   = subgroupQuadSwapVertical(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupQuadSwapVertical(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupQuadSwapVertical(data[2].i16.xyz);
+    data[invocation].i16     = subgroupQuadSwapVertical(data[3].i16);
+
+    data[invocation].i16.x   = subgroupQuadSwapDiagonal(data[0].i16.x);
+    data[invocation].i16.xy  = subgroupQuadSwapDiagonal(data[1].i16.xy);
+    data[invocation].i16.xyz = subgroupQuadSwapDiagonal(data[2].i16.xyz);
+    data[invocation].i16     = subgroupQuadSwapDiagonal(data[3].i16);
+
+    data[invocation].u16.x   = subgroupQuadBroadcast(data[0].u16.x, 1);
+    data[invocation].u16.xy  = subgroupQuadBroadcast(data[1].u16.xy, 1);
+    data[invocation].u16.xyz = subgroupQuadBroadcast(data[2].u16.xyz, 1);
+    data[invocation].u16     = subgroupQuadBroadcast(data[3].u16, 1);
+
+    data[invocation].u16.x   = subgroupQuadSwapHorizontal(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupQuadSwapHorizontal(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupQuadSwapHorizontal(data[2].u16.xyz);
+    data[invocation].u16     = subgroupQuadSwapHorizontal(data[3].u16);
+
+    data[invocation].u16.x   = subgroupQuadSwapVertical(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupQuadSwapVertical(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupQuadSwapVertical(data[2].u16.xyz);
+    data[invocation].u16     = subgroupQuadSwapVertical(data[3].u16);
+
+    data[invocation].u16.x   = subgroupQuadSwapDiagonal(data[0].u16.x);
+    data[invocation].u16.xy  = subgroupQuadSwapDiagonal(data[1].u16.xy);
+    data[invocation].u16.xyz = subgroupQuadSwapDiagonal(data[2].u16.xyz);
+    data[invocation].u16     = subgroupQuadSwapDiagonal(data[3].u16);
+
+    data[invocation].i64.x   = subgroupQuadBroadcast(data[0].i64.x, 1);
+    data[invocation].i64.xy  = subgroupQuadBroadcast(data[1].i64.xy, 1);
+    data[invocation].i64.xyz = subgroupQuadBroadcast(data[2].i64.xyz, 1);
+    data[invocation].i64     = subgroupQuadBroadcast(data[3].i64, 1);
+
+    data[invocation].i64.x   = subgroupQuadSwapHorizontal(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupQuadSwapHorizontal(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupQuadSwapHorizontal(data[2].i64.xyz);
+    data[invocation].i64     = subgroupQuadSwapHorizontal(data[3].i64);
+
+    data[invocation].i64.x   = subgroupQuadSwapVertical(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupQuadSwapVertical(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupQuadSwapVertical(data[2].i64.xyz);
+    data[invocation].i64     = subgroupQuadSwapVertical(data[3].i64);
+
+    data[invocation].i64.x   = subgroupQuadSwapDiagonal(data[0].i64.x);
+    data[invocation].i64.xy  = subgroupQuadSwapDiagonal(data[1].i64.xy);
+    data[invocation].i64.xyz = subgroupQuadSwapDiagonal(data[2].i64.xyz);
+    data[invocation].i64     = subgroupQuadSwapDiagonal(data[3].i64);
+
+    data[invocation].u64.x   = subgroupQuadBroadcast(data[0].u64.x, 1);
+    data[invocation].u64.xy  = subgroupQuadBroadcast(data[1].u64.xy, 1);
+    data[invocation].u64.xyz = subgroupQuadBroadcast(data[2].u64.xyz, 1);
+    data[invocation].u64     = subgroupQuadBroadcast(data[3].u64, 1);
+
+    data[invocation].u64.x   = subgroupQuadSwapHorizontal(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupQuadSwapHorizontal(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupQuadSwapHorizontal(data[2].u64.xyz);
+    data[invocation].u64     = subgroupQuadSwapHorizontal(data[3].u64);
+
+    data[invocation].u64.x   = subgroupQuadSwapVertical(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupQuadSwapVertical(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupQuadSwapVertical(data[2].u64.xyz);
+    data[invocation].u64     = subgroupQuadSwapVertical(data[3].u64);
+
+    data[invocation].u64.x   = subgroupQuadSwapDiagonal(data[0].u64.x);
+    data[invocation].u64.xy  = subgroupQuadSwapDiagonal(data[1].u64.xy);
+    data[invocation].u64.xyz = subgroupQuadSwapDiagonal(data[2].u64.xyz);
+    data[invocation].u64     = subgroupQuadSwapDiagonal(data[3].u64);
+
+    data[invocation].f16.x   = subgroupQuadBroadcast(data[0].f16.x, 1);
+    data[invocation].f16.xy  = subgroupQuadBroadcast(data[1].f16.xy, 1);
+    data[invocation].f16.xyz = subgroupQuadBroadcast(data[2].f16.xyz, 1);
+    data[invocation].f16     = subgroupQuadBroadcast(data[3].f16, 1);
+
+    data[invocation].f16.x   = subgroupQuadSwapHorizontal(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupQuadSwapHorizontal(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupQuadSwapHorizontal(data[2].f16.xyz);
+    data[invocation].f16     = subgroupQuadSwapHorizontal(data[3].f16);
+
+    data[invocation].f16.x   = subgroupQuadSwapVertical(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupQuadSwapVertical(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupQuadSwapVertical(data[2].f16.xyz);
+    data[invocation].f16     = subgroupQuadSwapVertical(data[3].f16);
+
+    data[invocation].f16.x   = subgroupQuadSwapDiagonal(data[0].f16.x);
+    data[invocation].f16.xy  = subgroupQuadSwapDiagonal(data[1].f16.xy);
+    data[invocation].f16.xyz = subgroupQuadSwapDiagonal(data[2].f16.xyz);
+    data[invocation].f16     = subgroupQuadSwapDiagonal(data[3].f16);
+}

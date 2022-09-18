@@ -1,0 +1,8 @@
+enhanced.3.vert
+enhanced.3.frag
+ERROR: Linking vertex and fragment stages: Member names and types must match:
+    Block: VS_OUT
+        vertex stage: " vec2 TexCoords"
+        fragment stage: " vec2 foobar"
+
+SPIR-V is not generated for failed compile or link

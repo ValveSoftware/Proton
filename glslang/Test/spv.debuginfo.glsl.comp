@@ -1,0 +1,177 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2022 Sascha Willems
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#version 450
+
+struct Particle {
+	vec4 pos;
+	vec4 vel;
+	vec4 uv;
+	vec4 normal;
+	float pinned;
+};
+
+layout(std430, binding = 0) buffer ParticleIn {
+	Particle particleIn[ ];
+};
+
+layout(std430, binding = 1) buffer ParticleOut {
+	Particle particleOut[ ];
+};
+
+// todo: use shared memory to speed up calculation
+
+layout (local_size_x = 10, local_size_y = 10) in;
+
+layout (binding = 2) uniform UBO
+{
+	float deltaT;
+	float particleMass;
+	float springStiffness;
+	float damping;
+	float restDistH;
+	float restDistV;
+	float restDistD;
+	float sphereRadius;
+	vec4 spherePos;
+	vec4 gravity;
+	ivec2 particleCount;
+} params;
+
+layout (push_constant) uniform PushConsts {
+	uint calculateNormals;
+} pushConsts;
+
+vec3 springForce(vec3 p0, vec3 p1, float restDist)
+{
+	vec3 dist = p0 - p1;
+	return normalize(dist) * params.springStiffness * (length(dist) - restDist);
+}
+
+void main()
+{
+	uvec3 id = gl_GlobalInvocationID;
+
+	uint index = id.y * params.particleCount.x + id.x;
+	if (index > params.particleCount.x * params.particleCount.y)
+		return;
+
+	// Pinned?
+	if (particleIn[index].pinned == 1.0) {
+		particleOut[index].pos = particleOut[index].pos;
+		particleOut[index].vel = vec4(0.0);
+		return;
+	}
+
+	// Initial force from gravity
+	vec3 force = params.gravity.xyz * params.particleMass;
+
+	vec3 pos = particleIn[index].pos.xyz;
+	vec3 vel = particleIn[index].vel.xyz;
+
+	// Spring forces from neighboring particles
+	// left
+	if (id.x > 0) {
+		force += springForce(particleIn[index-1].pos.xyz, pos, params.restDistH);
+	}
+	// right
+	if (id.x < params.particleCount.x - 1) {
+		force += springForce(particleIn[index + 1].pos.xyz, pos, params.restDistH);
+	}
+	// upper
+	if (id.y < params.particleCount.y - 1) {
+		force += springForce(particleIn[index + params.particleCount.x].pos.xyz, pos, params.restDistV);
+	}
+	// lower
+	if (id.y > 0) {
+		force += springForce(particleIn[index - params.particleCount.x].pos.xyz, pos, params.restDistV);
+	}
+	// upper-left
+	if ((id.x > 0) && (id.y < params.particleCount.y - 1)) {
+		force += springForce(particleIn[index + params.particleCount.x - 1].pos.xyz, pos, params.restDistD);
+	}
+	// lower-left
+	if ((id.x > 0) && (id.y > 0)) {
+		force += springForce(particleIn[index - params.particleCount.x - 1].pos.xyz, pos, params.restDistD);
+	}
+	// upper-right
+	if ((id.x < params.particleCount.x - 1) && (id.y < params.particleCount.y - 1)) {
+		force += springForce(particleIn[index + params.particleCount.x + 1].pos.xyz, pos, params.restDistD);
+	}
+	// lower-right
+	if ((id.x < params.particleCount.x - 1) && (id.y > 0)) {
+		force += springForce(particleIn[index - params.particleCount.x + 1].pos.xyz, pos, params.restDistD);
+	}
+
+	force += (-params.damping * vel);
+
+	// Integrate
+	vec3 f = force * (1.0 / params.particleMass);
+	particleOut[index].pos = vec4(pos + vel * params.deltaT + 0.5 * f * params.deltaT * params.deltaT, 1.0);
+	particleOut[index].vel = vec4(vel + f * params.deltaT, 0.0);
+
+	// Sphere collision
+	vec3 sphereDist = particleOut[index].pos.xyz - params.spherePos.xyz;
+	if (length(sphereDist) < params.sphereRadius + 0.01) {
+		// If the particle is inside the sphere, push it to the outer radius
+		particleOut[index].pos.xyz = params.spherePos.xyz + normalize(sphereDist) * (params.sphereRadius + 0.01);
+		// Cancel out velocity
+		particleOut[index].vel = vec4(0.0);
+	}
+
+	// Normals
+	if (pushConsts.calculateNormals == 1) {
+		vec3 normal = vec3(0.0);
+		vec3 a, b, c;
+		if (id.y > 0) {
+			if (id.x > 0) {
+				a = particleIn[index - 1].pos.xyz - pos;
+				b = particleIn[index - params.particleCount.x - 1].pos.xyz - pos;
+				c = particleIn[index - params.particleCount.x].pos.xyz - pos;
+				normal += cross(a,b) + cross(b,c);
+			}
+			if (id.x < params.particleCount.x - 1) {
+				a = particleIn[index - params.particleCount.x].pos.xyz - pos;
+				b = particleIn[index - params.particleCount.x + 1].pos.xyz - pos;
+				c = particleIn[index + 1].pos.xyz - pos;
+				normal += cross(a,b) + cross(b,c);
+			}
+		}
+		if (id.y < params.particleCount.y - 1) {
+			if (id.x > 0) {
+				a = particleIn[index + params.particleCount.x].pos.xyz - pos;
+				b = particleIn[index + params.particleCount.x - 1].pos.xyz - pos;
+				c = particleIn[index - 1].pos.xyz - pos;
+				normal += cross(a,b) + cross(b,c);
+			}
+			if (id.x < params.particleCount.x - 1) {
+				a = particleIn[index + 1].pos.xyz - pos;
+				b = particleIn[index + params.particleCount.x + 1].pos.xyz - pos;
+				c = particleIn[index + params.particleCount.x].pos.xyz - pos;
+				normal += cross(a,b) + cross(b,c);
+			}
+		}
+		particleOut[index].normal = vec4(normalize(normal), 0.0f);
+	}
+}

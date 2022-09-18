@@ -1,0 +1,6 @@
+spv.textureError.frag
+ERROR: spv.textureError.frag:8: 'texture*D*' : function not supported in this version; use texture() instead 
+ERROR: 1 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

@@ -1,0 +1,87 @@
+atomicAdd.comp
+ERROR: 0:18: 'atomicAdd' : Atomic memory function can only be used for shader storage block member or shared variable. 
+ERROR: 1 compilation errors.  No code generated.
+
+
+Shader version: 320
+local_size = (1, 1, 1)
+ERROR: node is still EOpNull!
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:16    Sequence
+0:16      AtomicAdd ( global highp int)
+0:16        x: direct index for structure (layout( column_major shared) coherent buffer highp int)
+0:16          'anon@0' (layout( column_major shared) coherent buffer block{layout( column_major shared) coherent buffer highp int x})
+0:16          Constant:
+0:16            0 (const uint)
+0:16        Constant:
+0:16          1 (const int)
+0:17      AtomicAdd ( global highp int)
+0:17        direct index (layout( std430) temp highp int)
+0:17          y: direct index for structure (layout( std430) global 3-element array of highp int)
+0:17            f: direct index for structure (layout( column_major std430 offset=0) buffer structure{layout( std430) global 3-element array of highp int y})
+0:17              't' (layout( column_major std430) buffer block{layout( column_major std430 offset=0) buffer structure{layout( std430) global 3-element array of highp int y} f})
+0:17              Constant:
+0:17                0 (const int)
+0:17            Constant:
+0:17              0 (const int)
+0:17          Constant:
+0:17            1 (const int)
+0:17        Constant:
+0:17          1 (const int)
+0:18      AtomicAdd ( global highp int)
+0:18        'z' ( global highp int)
+0:18        Constant:
+0:18          1 (const int)
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const highp 3-component vector of uint WorkGroupSize)
+0:?       1 (const uint)
+0:?       1 (const uint)
+0:?       1 (const uint)
+0:?     't' (layout( column_major std430) buffer block{layout( column_major std430 offset=0) buffer structure{layout( std430) global 3-element array of highp int y} f})
+0:?     'anon@0' (layout( column_major shared) coherent buffer block{layout( column_major shared) coherent buffer highp int x})
+0:?     'z' ( global highp int)
+
+
+Linked compute stage:
+
+
+Shader version: 320
+local_size = (1, 1, 1)
+ERROR: node is still EOpNull!
+0:15  Function Definition: main( ( global void)
+0:15    Function Parameters: 
+0:16    Sequence
+0:16      AtomicAdd ( global highp int)
+0:16        x: direct index for structure (layout( column_major shared) coherent buffer highp int)
+0:16          'anon@0' (layout( column_major shared) coherent buffer block{layout( column_major shared) coherent buffer highp int x})
+0:16          Constant:
+0:16            0 (const uint)
+0:16        Constant:
+0:16          1 (const int)
+0:17      AtomicAdd ( global highp int)
+0:17        direct index (layout( std430) temp highp int)
+0:17          y: direct index for structure (layout( std430) global 3-element array of highp int)
+0:17            f: direct index for structure (layout( column_major std430 offset=0) buffer structure{layout( std430) global 3-element array of highp int y})
+0:17              't' (layout( column_major std430) buffer block{layout( column_major std430 offset=0) buffer structure{layout( std430) global 3-element array of highp int y} f})
+0:17              Constant:
+0:17                0 (const int)
+0:17            Constant:
+0:17              0 (const int)
+0:17          Constant:
+0:17            1 (const int)
+0:17        Constant:
+0:17          1 (const int)
+0:18      AtomicAdd ( global highp int)
+0:18        'z' ( global highp int)
+0:18        Constant:
+0:18          1 (const int)
+0:?   Linker Objects
+0:?     'gl_WorkGroupSize' ( const highp 3-component vector of uint WorkGroupSize)
+0:?       1 (const uint)
+0:?       1 (const uint)
+0:?       1 (const uint)
+0:?     't' (layout( column_major std430) buffer block{layout( column_major std430 offset=0) buffer structure{layout( std430) global 3-element array of highp int y} f})
+0:?     'anon@0' (layout( column_major shared) coherent buffer block{layout( column_major shared) coherent buffer highp int x})
+0:?     'z' ( global highp int)
+

@@ -1,0 +1,22 @@
+#version 460 core
+
+#extension GL_EXT_spirv_intrinsics: enable
+
+#define rayQueryEXT spirv_type (extensions = ["SPV_KHR_ray_query"], capabilities = [4472], id = 4472)
+#define accelerationStructureEXT spirv_type (extensions = ["SPV_KHR_ray_query"], capabilities = [4472], id = 5341)
+
+spirv_instruction (extensions = ["SPV_KHR_ray_query"], capabilities = [4472, 4478], id = 4473)
+void rayQueryInitializeEXT(spirv_by_reference rayQueryEXT rayQuery, accelerationStructureEXT topLevel, uint rayFlags, uint cullMask, vec3 origin, float tMin, vec3 direction, float tMax);
+
+spirv_instruction (extensions = ["SPV_KHR_ray_query"], capabilities = [4478], id = 4474)
+void rayQueryTerminateEXT(spirv_by_reference rayQueryEXT rayQuery);
+
+layout(binding = 0) uniform accelerationStructureEXT as;
+
+void main()
+{
+    rayQueryEXT rq;
+
+    rayQueryInitializeEXT(rq, as, 0, 0, vec3(0.0), 0.0, vec3(1.0), 1.0);
+    rayQueryTerminateEXT(rq);
+}

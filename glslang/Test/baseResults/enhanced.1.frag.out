@@ -1,0 +1,6 @@
+enhanced.1.frag
+ERROR: enhanced.1.frag:9: 'v2' : no such field in structure 'vVert'
+ERROR: 1 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

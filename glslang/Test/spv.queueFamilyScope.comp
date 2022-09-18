@@ -1,0 +1,10 @@
+#version 450
+#extension GL_KHR_memory_scope_semantics : require
+
+layout (binding = 0) buffer Buffer { uint a; } A;
+
+void main()
+{
+    atomicLoad(A.a, gl_ScopeQueueFamily, gl_StorageSemanticsBuffer, gl_SemanticsAcquire);
+}
+

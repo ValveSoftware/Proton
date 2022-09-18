@@ -1,0 +1,13 @@
+#version 460
+#extension GL_EXT_ray_tracing : enable
+layout(location = 0) callableDataEXT vec4 data0;
+layout(location = 1) callableDataInEXT dataBlock {
+	uint data1;
+};
+void main()
+{
+	uvec3 id = gl_LaunchIDEXT;
+	uvec3 size = gl_LaunchSizeEXT;
+	data1 = 256U;
+	executeCallableEXT(2,1);
+}

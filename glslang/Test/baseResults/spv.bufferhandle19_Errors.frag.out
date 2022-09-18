@@ -1,0 +1,17 @@
+spv.bufferhandle19_Errors.frag
+ERROR: 0:18: '+' :  wrong operand types: no operation '+' exists that takes a left-hand operand of type ' temp reference' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:19: '-' :  wrong operand types: no operation '-' exists that takes a left-hand operand of type ' temp reference' and a right operand of type ' const int' (or there is no acceptable conversion)
+ERROR: 0:20: '+' :  wrong operand types: no operation '+' exists that takes a left-hand operand of type ' const int' and a right operand of type ' temp reference' (or there is no acceptable conversion)
+ERROR: 0:21: '-' :  wrong operand types: no operation '-' exists that takes a left-hand operand of type ' temp reference' and a right operand of type ' temp reference' (or there is no acceptable conversion)
+ERROR: 0:22: 'assign' :  cannot convert from ' const int' to ' temp reference'
+ERROR: 0:23: 'assign' :  cannot convert from ' const int' to ' temp reference'
+ERROR: 0:24: 'assign' :  cannot convert from ' temp reference' to ' temp reference'
+ERROR: 0:25: 'assign' :  cannot convert from ' temp reference' to ' temp reference'
+ERROR: 0:28: 'assign' :  cannot convert from ' temp reference' to ' temp reference'
+ERROR: 0:29: 'assign' :  cannot convert from ' temp reference' to ' temp reference'
+ERROR: 0:30: '+' :  wrong operand types: no operation '+' exists that takes a left-hand operand of type ' temp reference' and a right operand of type ' temp reference' (or there is no acceptable conversion)
+ERROR: 0:31: '-' :  wrong operand types: no operation '-' exists that takes a left-hand operand of type ' const int' and a right operand of type ' temp reference' (or there is no acceptable conversion)
+ERROR: 12 compilation errors.  No code generated.
+
+
+SPIR-V is not generated for failed compile or link

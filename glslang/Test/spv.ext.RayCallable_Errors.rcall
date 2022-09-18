@@ -1,0 +1,28 @@
+#version 460
+#extension GL_EXT_ray_tracing : enable
+hitAttributeEXT vec4 hitattr;                                // ERROR, hitattributeEXT unsupported in this stage 
+rayPayloadEXT vec4 payload;                                  // ERROR, rayPayloadEXT unsupported in this stage
+rayPayloadInEXT vec4 payloadIn;                              // ERROR, rayPayloadInEXT unsupported in this stage
+layout(location = 0) callableDataEXT vec4 cd0;
+layout(location = 0) callableDataEXT float cd1;              // ERROR, location already used
+void main()
+{
+    int e0 = gl_PrimitiveID;                                // ERROR, unsupported builtin in stage
+    int e1 = gl_InstanceID;                                 // ERROR, unsupported builtin in stage
+    int e3 = gl_InstanceCustomIndexEXT;                      // ERROR, unsupported builtin in stage
+    vec3 e4 = gl_WorldRayOriginEXT;                          // ERROR, unsupported builtin in stage
+    vec3 e5 = gl_WorldRayDirectionEXT;                       // ERROR, unsupported builtin in stage
+    vec3 e6 = gl_ObjectRayOriginEXT;                         // ERROR, unsupported builtin in stage
+    vec3 e7 = gl_ObjectRayDirectionEXT;                      // ERROR, unsupported builtin in stage
+    float e8 = gl_RayTminEXT;                                // ERROR, unsupported builtin in stage
+    float e9 = gl_RayTmaxEXT;                                // ERROR, unsupported builtin in stage
+    mat4x3 e10 = gl_ObjectToWorldEXT;                        // ERROR, unsupported builtin in stage
+    mat4x3 e11 = gl_WorldToObjectEXT;                        // ERROR, unsupported builtin in stage
+    float e12 = gl_HitTEXT;                                  // ERROR, unsupported builtin in stage
+    float e13 = gl_HitKindEXT;                               // ERROR, unsupported builtin in stage
+    uint curFlags = gl_IncomingRayFlagsEXT;                  // ERROR, unsupported builtin in stage
+    reportIntersectionEXT(1.0, 1U);                          // ERROR, unsupported builtin in stage
+    ignoreIntersectionEXT;                                   // ERROR, unsupported in stage
+    terminateRayEXT;                                         // ERROR, unsupported in stage
+    executeCallableEXT(1,1);                                 // ERROR, no callable data with location 1
+}

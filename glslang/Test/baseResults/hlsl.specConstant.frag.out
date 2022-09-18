@@ -1,0 +1,230 @@
+hlsl.specConstant.frag
+Shader version: 500
+gl_FragCoord origin is upper left
+0:? Sequence
+0:6  Function Definition: @main( ( temp 4-component vector of float)
+0:6    Function Parameters: 
+0:?     Sequence
+0:8      Sequence
+0:8        move second child to first child ( temp uint)
+0:8          'i' ( temp uint)
+0:8          Constant:
+0:8            0 (const uint)
+0:8        Loop with condition tested first
+0:8          Loop Condition
+0:8          Compare Less Than ( temp bool)
+0:8            'i' ( temp uint)
+0:8            indirect index ( const uint)
+0:8              Constant:
+0:8                10 (const uint)
+0:8                20 (const uint)
+0:8                30 (const uint)
+0:8                40 (const uint)
+0:8              'index' ( specialization-constant const uint)
+0:8                2 (const uint)
+0:8          Loop Body
+0:9          move second child to first child ( temp 4-component vector of float)
+0:9            'r' ( temp 4-component vector of float)
+0:9            Construct vec4 ( temp 4-component vector of float)
+0:9              Convert uint to float ( temp float)
+0:9                'i' ( temp uint)
+0:8          Loop Terminal Expression
+0:8          Post-Increment ( temp uint)
+0:8            'i' ( temp uint)
+0:11      add second child into first child ( temp 4-component vector of float)
+0:11        'r' ( temp 4-component vector of float)
+0:11        Convert uint to float ( temp float)
+0:11          add ( specialization-constant const uint)
+0:11            'index' ( specialization-constant const uint)
+0:11              2 (const uint)
+0:11            'index' ( specialization-constant const uint)
+0:11              2 (const uint)
+0:12      add second child into first child ( temp 4-component vector of float)
+0:12        'r' ( temp 4-component vector of float)
+0:12        Convert uint to float ( temp float)
+0:12          component-wise multiply ( specialization-constant const uint)
+0:12            Constant:
+0:12              2 (const uint)
+0:12            'index' ( specialization-constant const uint)
+0:12              2 (const uint)
+0:14      Branch: Return with expression
+0:14        'r' ( temp 4-component vector of float)
+0:6  Function Definition: main( ( temp void)
+0:6    Function Parameters: 
+0:?     Sequence
+0:6      move second child to first child ( temp 4-component vector of float)
+0:?         '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:6        Function Call: @main( ( temp 4-component vector of float)
+0:?   Linker Objects
+0:?     'index' ( specialization-constant const uint)
+0:?       2 (const uint)
+0:?     'array' ( const 4-element array of uint)
+0:?       10 (const uint)
+0:?       20 (const uint)
+0:?       30 (const uint)
+0:?       40 (const uint)
+0:?     '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+
+
+Linked fragment stage:
+
+
+Shader version: 500
+gl_FragCoord origin is upper left
+0:? Sequence
+0:6  Function Definition: @main( ( temp 4-component vector of float)
+0:6    Function Parameters: 
+0:?     Sequence
+0:8      Sequence
+0:8        move second child to first child ( temp uint)
+0:8          'i' ( temp uint)
+0:8          Constant:
+0:8            0 (const uint)
+0:8        Loop with condition tested first
+0:8          Loop Condition
+0:8          Compare Less Than ( temp bool)
+0:8            'i' ( temp uint)
+0:8            indirect index ( const uint)
+0:8              Constant:
+0:8                10 (const uint)
+0:8                20 (const uint)
+0:8                30 (const uint)
+0:8                40 (const uint)
+0:8              'index' ( specialization-constant const uint)
+0:8                2 (const uint)
+0:8          Loop Body
+0:9          move second child to first child ( temp 4-component vector of float)
+0:9            'r' ( temp 4-component vector of float)
+0:9            Construct vec4 ( temp 4-component vector of float)
+0:9              Convert uint to float ( temp float)
+0:9                'i' ( temp uint)
+0:8          Loop Terminal Expression
+0:8          Post-Increment ( temp uint)
+0:8            'i' ( temp uint)
+0:11      add second child into first child ( temp 4-component vector of float)
+0:11        'r' ( temp 4-component vector of float)
+0:11        Convert uint to float ( temp float)
+0:11          add ( specialization-constant const uint)
+0:11            'index' ( specialization-constant const uint)
+0:11              2 (const uint)
+0:11            'index' ( specialization-constant const uint)
+0:11              2 (const uint)
+0:12      add second child into first child ( temp 4-component vector of float)
+0:12        'r' ( temp 4-component vector of float)
+0:12        Convert uint to float ( temp float)
+0:12          component-wise multiply ( specialization-constant const uint)
+0:12            Constant:
+0:12              2 (const uint)
+0:12            'index' ( specialization-constant const uint)
+0:12              2 (const uint)
+0:14      Branch: Return with expression
+0:14        'r' ( temp 4-component vector of float)
+0:6  Function Definition: main( ( temp void)
+0:6    Function Parameters: 
+0:?     Sequence
+0:6      move second child to first child ( temp 4-component vector of float)
+0:?         '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+0:6        Function Call: @main( ( temp 4-component vector of float)
+0:?   Linker Objects
+0:?     'index' ( specialization-constant const uint)
+0:?       2 (const uint)
+0:?     'array' ( const 4-element array of uint)
+0:?       10 (const uint)
+0:?       20 (const uint)
+0:?       30 (const uint)
+0:?       40 (const uint)
+0:?     '@entryPointOutput' (layout( location=0) out 4-component vector of float)
+
+// Module Version 10000
+// Generated by (magic number): 8000a
+// Id's are bound by 61
+
+                              Capability Shader
+               1:             ExtInstImport  "GLSL.std.450"
+                              MemoryModel Logical GLSL450
+                              EntryPoint Fragment 4  "main" 59
+                              ExecutionMode 4 OriginUpperLeft
+                              Source HLSL 500
+                              Name 4  "main"
+                              Name 9  "@main("
+                              Name 13  "i"
+                              Name 28  "index"
+                              Name 30  "indexable"
+                              Name 36  "r"
+                              Name 59  "@entryPointOutput"
+                              Decorate 28(index) SpecId 0
+                              Decorate 59(@entryPointOutput) Location 0
+               2:             TypeVoid
+               3:             TypeFunction 2
+               6:             TypeFloat 32
+               7:             TypeVector 6(float) 4
+               8:             TypeFunction 7(fvec4)
+              11:             TypeInt 32 0
+              12:             TypePointer Function 11(int)
+              14:     11(int) Constant 0
+              21:     11(int) Constant 4
+              22:             TypeArray 11(int) 21
+              23:     11(int) Constant 10
+              24:     11(int) Constant 20
+              25:     11(int) Constant 30
+              26:     11(int) Constant 40
+              27:          22 ConstantComposite 23 24 25 26
+       28(index):     11(int) SpecConstant 2
+              29:             TypePointer Function 22
+              33:             TypeBool
+              35:             TypePointer Function 7(fvec4)
+              41:             TypeInt 32 1
+              42:     41(int) Constant 1
+              44:     11(int) SpecConstantOp 128 28(index) 28(index)
+              49:     11(int) Constant 2
+              50:     11(int) SpecConstantOp 132 49 28(index)
+              58:             TypePointer Output 7(fvec4)
+59(@entryPointOutput):     58(ptr) Variable Output
+         4(main):           2 Function None 3
+               5:             Label
+              60:    7(fvec4) FunctionCall 9(@main()
+                              Store 59(@entryPointOutput) 60
+                              Return
+                              FunctionEnd
+       9(@main():    7(fvec4) Function None 8
+              10:             Label
+           13(i):     12(ptr) Variable Function
+   30(indexable):     29(ptr) Variable Function
+           36(r):     35(ptr) Variable Function
+                              Store 13(i) 14
+                              Branch 15
+              15:             Label
+                              LoopMerge 17 18 None
+                              Branch 19
+              19:             Label
+              20:     11(int) Load 13(i)
+                              Store 30(indexable) 27
+              31:     12(ptr) AccessChain 30(indexable) 28(index)
+              32:     11(int) Load 31
+              34:    33(bool) ULessThan 20 32
+                              BranchConditional 34 16 17
+              16:               Label
+              37:     11(int)   Load 13(i)
+              38:    6(float)   ConvertUToF 37
+              39:    7(fvec4)   CompositeConstruct 38 38 38 38
+                                Store 36(r) 39
+                                Branch 18
+              18:               Label
+              40:     11(int)   Load 13(i)
+              43:     11(int)   IAdd 40 42
+                                Store 13(i) 43
+                                Branch 15
+              17:             Label
+              45:    6(float) ConvertUToF 44
+              46:    7(fvec4) Load 36(r)
+              47:    7(fvec4) CompositeConstruct 45 45 45 45
+              48:    7(fvec4) FAdd 46 47
+                              Store 36(r) 48
+              51:    6(float) ConvertUToF 50
+              52:    7(fvec4) Load 36(r)
+              53:    7(fvec4) CompositeConstruct 51 51 51 51
+              54:    7(fvec4) FAdd 52 53
+                              Store 36(r) 54
+              55:    7(fvec4) Load 36(r)
+                              ReturnValue 55
+                              FunctionEnd
