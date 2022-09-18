@@ -1218,6 +1218,9 @@ def default_compat_config():
                 ]:
             ret.add("noopwr")
 
+        if appid == "1621680":
+            ret.add("noforcelgadd")
+
     return ret
 
 class Session:
@@ -1252,6 +1255,12 @@ class Session:
         #turn forcelgadd on by default unless it is disabled in compat config
         if not "noforcelgadd" in self.compat_config:
             self.compat_config.add("forcelgadd")
+
+        if appid in [
+                "202990", #Call of Duty: Black Ops II - Multiplayer
+                "212910", #Call of Duty: Black Ops II - Zombies
+                ]:
+            ret.add("heapdelayfree")
 
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
