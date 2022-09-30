@@ -9,10 +9,14 @@ description = "Proton media converter"
 
 [dependencies]
 glib = "0.14"
-gstreamer = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
-gstreamer-base = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
-gstreamer-video = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
-gstreamer-audio = { git = "https://github.com/sdroege/gstreamer-rs", tag = "0.17.4" }
+gstreamer = "0.17.4"
+
+# the versions are not in sync, the submodules below haven't seen any changes
+# since 0.17.2 release so .3 and .4 releases haven't happened
+gstreamer-base = "0.17.2"
+gstreamer-video = "0.17.2"
+gstreamer-audio = "0.17.2"
+
 once_cell = "1.9"
 crc32fast = "1.3"
 array-init = "2.0"
@@ -23,7 +27,7 @@ crate-type = ["cdylib"]
 path = "src/lib.rs"
 
 [build-dependencies]
-gst-plugin-version-helper = { git = "https://github.com/sdroege/gst-plugin-rs", tag = "0.7.2" }
+gst-plugin-version-helper = "0.7.2"
 
 [profile.release]
 lto = true
