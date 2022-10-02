@@ -297,10 +297,6 @@
     echo "WINE: -GAME FIXES- assetto corsa hud fix"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
-    echo "WINE: -GAME FIXES- mk11 crash fix"
-    # this is needed so that online multi-player does not crash
-    patch -Np1 < ../patches/game-patches/mk11.patch
-
     echo "WINE: -GAME FIXES- killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
 
