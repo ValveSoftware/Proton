@@ -101,7 +101,9 @@
     -W wscript-support-d-u-switches \
     -W wininet-Cleanup \
     -W sapi-ISpObjectToken-CreateInstance \
-    -W sapi-iteration-tokens
+    -W sapi-iteration-tokens \
+    -W cryptext-CryptExtOpenCER \
+    -W wintrust-WTHelperGetProvCertFromChain
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
@@ -170,6 +172,8 @@
     # ** wininet-Cleanup - applied manually
     # sapi-ISpObjectToken-CreateInstance - already applied
     # sapi-iteration-tokens - already applied
+    # cryptext-CryptExtOpenCER - applied manually
+    # ** wintrust-WTHelperGetProvCertFromChain - applied manually
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -285,6 +289,12 @@
 
     # winex11-wglShareLists
     patch -Np1 < ../patches/wine-hotfixes/staging/winex11-wglShareLists/0001-winex11.drv-Only-warn-about-used-contexts-in-wglShar.patch
+
+    # cryptext-CryptExtOpenCER
+    patch -Np1 < ../patches/wine-hotfixes/staging/cryptext-CryptExtOpenCER/0001-cryptext-Implement-CryptExtOpenCER.patch
+
+    # wintrust-WTHelperGetProvCertFromChain
+    patch -Np1 < ../patches/wine-hotfixes/staging/wintrust-WTHelperGetProvCertFromChain/0001-wintrust-Add-parameter-check-in-WTHelperGetProvCertF.patch
     
     # nvapi/nvcuda
     # this was added in 7.1, so it's not in the 7.0 tree
@@ -313,23 +323,23 @@
 
 ### (2-4) PROTON PATCH SECTION ###
 
-    echo "WINE: -FSR- fullscreen hack fsr patch"
-    patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
+#    echo "WINE: -FSR- fullscreen hack fsr patch"
+#    patch -Np1 < ../patches/proton/48-proton-fshack_amd_fsr.patch
 
-    echo "WINE: -FSR- fake current res patches"
-    patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
+#    echo "WINE: -FSR- fake current res patches"
+#    patch -Np1 < ../patches/proton/65-proton-fake_current_res_patches.patch
 
-    echo "WINE: -FSR- add 32:9 FSR resolutions"
-    patch -Np1 < ../patches/proton/69-proton-fsr-add-329-res.patch
+#    echo "WINE: -FSR- add 32:9 FSR resolutions"
+#    patch -Np1 < ../patches/proton/69-proton-fsr-add-329-res.patch
 
-    echo "WINE: -FSR- add FSR resolutions by aspect ratio instead of current screen width"
-    patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
+#    echo "WINE: -FSR- add FSR resolutions by aspect ratio instead of current screen width"
+#    patch -Np1 < ../patches/proton/70-proton-add_fsr_res_by_aspect_ratio.patch
     
-    echo "WINE: -FSR- enable FSR flag by default (fixes broken fs hack scaling in some games like Apex and FFXIV)"
-    patch -Np1 < ../patches/proton/71-invert-fsr-logic.patch
+#    echo "WINE: -FSR- enable FSR flag by default (fixes broken fs hack scaling in some games like Apex and FFXIV)"
+#    patch -Np1 < ../patches/proton/71-invert-fsr-logic.patch
     
-    echo "WINE: -FSR- set 'balanced' default mode if no mode is set, and dont set any default mode if a custom mode is set"
-    patch -Np1 < ../patches/proton/72-fsr-use-balanced-default-mode.patch
+#    echo "WINE: -FSR- set 'balanced' default mode if no mode is set, and dont set any default mode if a custom mode is set"
+#    patch -Np1 < ../patches/proton/72-fsr-use-balanced-default-mode.patch
     
 
 ### END PROTON PATCH SECTION ###
@@ -360,9 +370,6 @@
     # https://bugs.winehq.org/show_bug.cgi?id=51683
     echo "WINE: -HOTFIX- Guild Wars 2 patch"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-guild_wars_2.patch
-    
-    echo "WINE: -HOTFIX- fix upside down videos"
-    patch -Np1 < ../patches/wine-hotfixes/pending/157.patch
     
     echo "WINE: -HOTFIX- fix Amazon Games launcher"
     patch -Np1 < ../patches/wine-hotfixes/upstream/481.patch
