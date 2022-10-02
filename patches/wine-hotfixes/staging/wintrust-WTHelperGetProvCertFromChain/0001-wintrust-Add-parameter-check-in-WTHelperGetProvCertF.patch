@@ -1,0 +1,52 @@
+From 563f0ccc4f47914e1e2952cc4bc5673cbb97a5ae Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Wed, 18 Apr 2018 03:55:16 +0000
+Subject: [PATCH] wintrust: Add parameter check in WTHelperGetProvCertFromChain
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ dlls/wintrust/tests/softpub.c | 9 +++++++++
+ dlls/wintrust/wintrust_main.c | 2 +-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/wintrust/tests/softpub.c b/dlls/wintrust/tests/softpub.c
+index 1f87234..8b02e77 100644
+--- a/dlls/wintrust/tests/softpub.c
++++ b/dlls/wintrust/tests/softpub.c
+@@ -1300,6 +1300,14 @@ static void test_get_known_usages(void)
+      "expected ERROR_INVALID_PARAMETER, got %ld\n", GetLastError());
+ }
+ 
++static void test_WTHelperGetProvCertFromChain(void)
++{
++    CRYPT_PROVIDER_CERT *cert;
++
++    cert = WTHelperGetProvCertFromChain(NULL, 0);
++    ok(!cert, "got certificate\n");
++}
++
+ START_TEST(softpub)
+ {
+     InitFunctionPtrs();
+@@ -1308,4 +1316,5 @@ START_TEST(softpub)
+     test_wintrust();
+     test_wintrust_digest();
+     test_get_known_usages();
++    test_WTHelperGetProvCertFromChain();
+ }
+diff --git a/dlls/wintrust/wintrust_main.c b/dlls/wintrust/wintrust_main.c
+index 58e3ac3..bb52282 100644
+--- a/dlls/wintrust/wintrust_main.c
++++ b/dlls/wintrust/wintrust_main.c
+@@ -787,7 +787,7 @@ CRYPT_PROVIDER_CERT * WINAPI WTHelperGetProvCertFromChain(
+ 
+     TRACE("(%p %ld)\n", pSgnr, idxCert);
+ 
+-    if (idxCert >= pSgnr->csCertChain || !pSgnr->pasCertChain)
++    if (!pSgnr || idxCert >= pSgnr->csCertChain || !pSgnr->pasCertChain)
+         return NULL;
+     cert = &pSgnr->pasCertChain[idxCert];
+     TRACE("returning %p\n", cert);
+-- 
+1.9.1
+

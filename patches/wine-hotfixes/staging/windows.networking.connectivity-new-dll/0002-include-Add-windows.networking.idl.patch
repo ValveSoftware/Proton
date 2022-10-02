@@ -19,8 +19,8 @@ index e379070caa9..043f1436216 100644
  	windows.media.speechsynthesis.idl \
 +	windows.networking.idl \
  	windows.networking.connectivity.idl \
- 	windows.storage.streams.idl \
- 	windows.system.idl \
+  	windows.security.cryptography.idl \
+  	windows.security.exchangeactivesyncprovisioning.idl \
 diff --git a/include/windows.networking.idl b/include/windows.networking.idl
 new file mode 100644
 index 00000000000..160cd78e540

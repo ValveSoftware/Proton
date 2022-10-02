@@ -1,0 +1,231 @@
+From a5045503cf3310058cc64814ff9626f4877a13bb Mon Sep 17 00:00:00 2001
+From: Dmitry Timoshkov <dmitry@baikal.ru>
+Date: Fri, 5 Jul 2019 13:20:23 +0800
+Subject: [PATCH] cryptext: Implement CryptExtOpenCER.
+
+Signed-off-by: Dmitry Timoshkov <dmitry@baikal.ru>
+---
+ configure                       |  1 +
+ configure.ac                    |  1 +
+ dlls/cryptext/Makefile.in       |  3 +-
+ dlls/cryptext/cryptext.spec     |  4 +--
+ dlls/cryptext/cryptext_main.c   | 64 +++++++++++++++++++++++++++++++++
+ dlls/cryptext/tests/Makefile.in |  4 +++
+ dlls/cryptext/tests/cryptext.c  | 61 +++++++++++++++++++++++++++++++
+ 7 files changed, 135 insertions(+), 3 deletions(-)
+ create mode 100644 dlls/cryptext/tests/Makefile.in
+ create mode 100644 dlls/cryptext/tests/cryptext.c
+
+diff --git a/configure b/configure
+index db592f0868d..ba13abacc46 100755
+--- a/configure
++++ b/configure
+@@ -20291,6 +20291,7 @@ wine_fn_config_makefile dlls/crypt32/tests enable_tests
+ wine_fn_config_makefile dlls/cryptdlg enable_cryptdlg
+ wine_fn_config_makefile dlls/cryptdll enable_cryptdll
+ wine_fn_config_makefile dlls/cryptext enable_cryptext
++wine_fn_config_makefile dlls/cryptext/tests enable_tests
+ wine_fn_config_makefile dlls/cryptnet enable_cryptnet
+ wine_fn_config_makefile dlls/cryptnet/tests enable_tests
+ wine_fn_config_makefile dlls/cryptsp enable_cryptsp
+diff --git a/configure.ac b/configure.ac
+index d449b88fb19..af75e0e80ab 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3029,6 +3029,7 @@ WINE_CONFIG_MAKEFILE(dlls/crypt32/tests)
+ WINE_CONFIG_MAKEFILE(dlls/cryptdlg)
+ WINE_CONFIG_MAKEFILE(dlls/cryptdll)
+ WINE_CONFIG_MAKEFILE(dlls/cryptext)
++WINE_CONFIG_MAKEFILE(dlls/cryptext/tests)
+ WINE_CONFIG_MAKEFILE(dlls/cryptnet)
+ WINE_CONFIG_MAKEFILE(dlls/cryptnet/tests)
+ WINE_CONFIG_MAKEFILE(dlls/cryptowinrt)
+diff --git a/dlls/cryptext/Makefile.in b/dlls/cryptext/Makefile.in
+index 0ec2b8a2045..76accca43eb 100644
+--- a/dlls/cryptext/Makefile.in
++++ b/dlls/cryptext/Makefile.in
+@@ -1,4 +1,5 @@
+-MODULE = cryptext.dll
++MODULE  = cryptext.dll
++IMPORTS = crypt32 cryptui user32
+ 
+ EXTRADLLFLAGS = -Wb,--prefer-native
+ 
+diff --git a/dlls/cryptext/cryptext.spec b/dlls/cryptext/cryptext.spec
+index ee3e155f457..24b4794c198 100644
+--- a/dlls/cryptext/cryptext.spec
++++ b/dlls/cryptext/cryptext.spec
+@@ -12,8 +12,8 @@
+ @ stub CryptExtAddSPCW
+ @ stub CryptExtOpenCAT
+ @ stub CryptExtOpenCATW
+-@ stub CryptExtOpenCER
+-@ stub CryptExtOpenCERW
++@ stdcall CryptExtOpenCER(long ptr str long)
++@ stdcall CryptExtOpenCERW(long ptr wstr long)
+ @ stub CryptExtOpenCRL
+ @ stub CryptExtOpenCRLW
+ @ stub CryptExtOpenCTL
+diff --git a/dlls/cryptext/cryptext_main.c b/dlls/cryptext/cryptext_main.c
+index 537ba66cd3b..f9e34d1f8c5 100644
+--- a/dlls/cryptext/cryptext_main.c
++++ b/dlls/cryptext/cryptext_main.c
+@@ -22,10 +22,29 @@
+ 
+ #include "windef.h"
+ #include "winbase.h"
++#include "winnls.h"
++#include "wincrypt.h"
++#include "winuser.h"
++#include "cryptuiapi.h"
++
++#include "wine/heap.h"
+ #include "wine/debug.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(cryptext);
+ 
++static WCHAR *heap_strdupAtoW(const char *str)
++{
++    WCHAR *ret;
++    INT len;
++
++    if (!str) return NULL;
++    len = MultiByteToWideChar(CP_ACP, 0, str, -1, NULL, 0);
++    ret = heap_alloc(len * sizeof(WCHAR));
++    if (ret)
++        MultiByteToWideChar(CP_ACP, 0, str, -1, ret, len);
++    return ret;
++}
++
+ /***********************************************************************
+  * CryptExtAddPFX (CRYPTEXT.@)
+  */
+@@ -43,3 +62,48 @@ HRESULT WINAPI CryptExtAddPFXW(LPCWSTR filename)
+     FIXME("stub: %s\n", debugstr_w(filename));
+     return E_NOTIMPL;
+ }
++
++/***********************************************************************
++ * CryptExtOpenCERW (CRYPTEXT.@)
++ */
++HRESULT WINAPI CryptExtOpenCERW(HWND hwnd, HINSTANCE hinst, LPCWSTR filename, DWORD showcmd)
++{
++    PCCERT_CONTEXT ctx;
++    CRYPTUI_VIEWCERTIFICATE_STRUCTW info;
++
++    TRACE("(%p, %p, %s, %u)\n", hwnd, hinst, debugstr_w(filename), showcmd);
++
++    if (!CryptQueryObject(CERT_QUERY_OBJECT_FILE, filename, CERT_QUERY_CONTENT_FLAG_CERT,
++                          CERT_QUERY_FORMAT_FLAG_ALL, 0, NULL, NULL, NULL, NULL, NULL,
++                          (const void **)&ctx))
++    {
++        /* FIXME: move to the resources */
++        static const WCHAR msg[] = {'T','h','i','s',' ','i','s',' ','n','o','t',' ','a',' ','v','a','l','i','d',' ','c','e','r','t','i','f','i','c','a','t','e',0};
++        MessageBoxW(NULL, msg, filename, MB_OK | MB_ICONERROR);
++        return S_OK; /* according to the tests */
++    }
++
++    memset(&info, 0, sizeof(info));
++    info.dwSize = sizeof(info);
++    info.pCertContext = ctx;
++    CryptUIDlgViewCertificateW(&info, NULL);
++    CertFreeCertificateContext(ctx);
++
++    return S_OK;
++}
++
++/***********************************************************************
++ * CryptExtOpenCER (CRYPTEXT.@)
++ */
++HRESULT WINAPI CryptExtOpenCER(HWND hwnd, HINSTANCE hinst, LPCSTR filename, DWORD showcmd)
++{
++    HRESULT hr;
++    LPWSTR filenameW;
++
++    TRACE("(%p, %p, %s, %u)\n", hwnd, hinst, debugstr_a(filename), showcmd);
++
++    filenameW = heap_strdupAtoW(filename);
++    hr = CryptExtOpenCERW(hwnd, hinst, filenameW, showcmd);
++    heap_free(filenameW);
++    return hr;
++}
+diff --git a/dlls/cryptext/tests/Makefile.in b/dlls/cryptext/tests/Makefile.in
+new file mode 100644
+index 00000000000..522fc60a4af
+--- /dev/null
++++ b/dlls/cryptext/tests/Makefile.in
+@@ -0,0 +1,4 @@
++TESTDLL = cryptext.dll
++
++C_SRCS = \
++	cryptext.c
+diff --git a/dlls/cryptext/tests/cryptext.c b/dlls/cryptext/tests/cryptext.c
+new file mode 100644
+index 00000000000..cc62a772b59
+--- /dev/null
++++ b/dlls/cryptext/tests/cryptext.c
+@@ -0,0 +1,61 @@
++/*
++ * Copyright 2019 Dmitry Timoshkov
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#include <stdarg.h>
++#include <assert.h>
++#include <windef.h>
++#include <winbase.h>
++#include <winuser.h>
++#include <winerror.h>
++
++#include "wine/test.h"
++
++static HRESULT (WINAPI *pCryptExtOpenCER)(HWND,HINSTANCE,LPCSTR,DWORD);
++
++static void test_CryptExtOpenCER(void)
++{
++    HRESULT hr;
++
++    if (!pCryptExtOpenCER)
++    {
++        win_skip("CryptExtOpenCER is not available on this platform\n");
++        return;
++    }
++
++    if (!winetest_interactive)
++    {
++        skip("CryptExtOpenCER test needs user interaction\n");
++        return;
++    }
++
++    SetLastError(0xdeadbeef);
++    hr = pCryptExtOpenCER(0, 0, "dead.beef", SW_HIDE);
++    ok(hr == S_OK, "got %#x\n", hr);
++
++    hr = pCryptExtOpenCER(0, 0, "VeriSign Class 3 Public Primary Certification Authority - G4.txt", SW_SHOW);
++    ok(hr == S_OK, "got %#x\n", hr);
++}
++
++START_TEST(cryptext)
++{
++    HMODULE hmod = LoadLibraryA("cryptext.dll");
++
++    pCryptExtOpenCER = (void *)GetProcAddress(hmod, "CryptExtOpenCER");
++
++    test_CryptExtOpenCER();
++}
+-- 
+2.33.0
+
