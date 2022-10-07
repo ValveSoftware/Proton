@@ -1045,6 +1045,7 @@ def default_compat_config():
         if appid in [
                 # enable dxvknvapi for titles verified to benefit (e.g. working DLSS)
                 "673130", #amid evil
+                "1182900", #A Plague Tale: Requiem
                 "1291680", #apocalypse: 2.0 edition
                 "979690", #the ascent
                 "805550", #assetto corsa competizione
