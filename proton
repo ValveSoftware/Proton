@@ -1058,6 +1058,7 @@ def default_compat_config():
                 "870780", #control ultimate edition
                 "1091500", #cyberpunk 2077
                 "1190460", #death stranding
+                "1850570", #Death Stranding Director's Cut
                 "1252330", #deathloop
                 "548430", #deep rock galactic
                 "428660", #deliver us the moon
@@ -1067,6 +1068,10 @@ def default_compat_config():
                 "1952070", #engine evolution 2022 demo
                 "1128920", #everspace 2
                 "1312800", #everspace 2 demo
+                "1330470", #F.I.S.T.: Forged In Shadow Torch
+                "1332390", #F.I.S.T.: Forged In Shadow Torch Demo
+                "1641960", #Forever Skies
+                "2141060", #Forever Skies Demo
                 "1080110", #f1 2020
                 "1098130", #get stuffed
                 "1139900", #ghostrunner
@@ -1079,6 +1084,8 @@ def default_compat_config():
                 "1987940", #island of the ancients demo
                 "1371480", #iron conflict
                 "1544360", #lego builder's journey
+                "1363080", #Manor Lords
+                "2122820", #Manor Lords Demo
                 "1817070", #marvel's spider-man remastered
                 "784080", #mechwarrior 5: mercenaries
                 "1170950", #mortal online 2
