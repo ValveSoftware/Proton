@@ -1069,6 +1069,7 @@ def default_compat_config():
         if appid in [
                 # enable dxvknvapi for titles verified to benefit (e.g. working DLSS)
                 "673130", #amid evil
+                "1182900", #A Plague Tale: Requiem
                 "1291680", #apocalypse: 2.0 edition
                 "979690", #the ascent
                 "805550", #assetto corsa competizione
@@ -1080,8 +1081,10 @@ def default_compat_config():
                 "1577240", #cions of vega
                 "1632760", #cions of vega demo
                 "870780", #control ultimate edition
+                "884660", #CRSED
                 "1091500", #cyberpunk 2077
                 "1190460", #death stranding
+                "1850570", #Death Stranding Director's Cut
                 "1252330", #deathloop
                 "548430", #deep rock galactic
                 "428660", #deliver us the moon
@@ -1091,11 +1094,17 @@ def default_compat_config():
                 "1952070", #engine evolution 2022 demo
                 "1128920", #everspace 2
                 "1312800", #everspace 2 demo
+                "1330470", #F.I.S.T.: Forged In Shadow Torch
+                "1332390", #F.I.S.T.: Forged In Shadow Torch Demo
+                "1641960", #Forever Skies
+                "2141060", #Forever Skies Demo
                 "1080110", #f1 2020
                 "1098130", #get stuffed
                 "1139900", #ghostrunner
                 "1249200", #ghostrunner demo
+                "1475810", #Ghostwire: Tokyo
                 "1593500", #god of war
+                "1496790", #Gotham Knights
                 "414340", #hellblade: senua's sacrifice
                 "1659040", #hitman 3
                 "1847520", #hitman 3 free starter pack
@@ -1103,11 +1112,15 @@ def default_compat_config():
                 "1987940", #island of the ancients demo
                 "1371480", #iron conflict
                 "1544360", #lego builder's journey
+                "1363080", #Manor Lords
+                "2122820", #Manor Lords Demo
                 "1817070", #marvel's spider-man remastered
                 "784080", #mechwarrior 5: mercenaries
                 "1170950", #mortal online 2
                 "261550", #mount & blade II: bannerlord
+                "1222370", #Necromunda: Hired Gun
                 "275850", #no man's sky
+                "1386900", #Observer: System Redux
                 "1140100", #the persistence
                 "1322170", #pluviophile
                 "1186640", #pumpkin jack
