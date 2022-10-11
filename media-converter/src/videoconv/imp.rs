@@ -297,6 +297,8 @@ struct VideoConvState {
     our_duration: Option<u64>,
 
     transcoded_tag: u32,
+
+    need_stream_start: bool,
 }
 
 impl VideoConvState {
@@ -320,6 +322,8 @@ impl VideoConvState {
             our_duration: None,
 
             transcoded_tag: VIDEOCONV_FOZ_TAG_MKVDATA,
+
+            need_stream_start: true,
         })
     }
 
@@ -794,15 +798,29 @@ impl VideoConv {
             .activate_mode(mode, active)?;
 
         if mode == gst::PadMode::Pull {
-            let mut state = self.state.lock().unwrap();
+            let need_stream_start;
+            let hash;
 
-            let mut state = match &mut *state {
-                Some(s) => s,
+            /* push_event, below, can also grab state and cause a deadlock, so make sure it's
+             * released before calling */
+            match &mut *self.state.lock().unwrap() {
+                Some(state) => {
+                    self.init_transcode(state)?;
+                    need_stream_start = state.need_stream_start;
+                    hash = state.transcode_hash;
+                },
                 None => { return Err(loggable_error!(CAT, "VideoConv not yet in READY state?")); }
             };
 
-            /* once we're initted in pull mode, we can start transcoding */
-            self.init_transcode(&mut state)?;
+            if need_stream_start && active && hash.is_some() {
+                let stream_id = format!("{:032x}", hash.unwrap());
+                self.srcpad.push_event(gst::event::StreamStart::new(&stream_id));
+
+                match &mut *self.state.lock().unwrap() {
+                    Some(state) => { state.need_stream_start = false },
+                    None => { return Err(loggable_error!(CAT, "VideoConv not yet in READY state?")); }
+                };
+            }
         }
 
         Ok(())
