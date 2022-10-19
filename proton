@@ -1123,6 +1123,7 @@ def default_compat_config():
                 "1386900", #Observer: System Redux
                 "1140100", #the persistence
                 "1322170", #pluviophile
+                "400", #Portal [RTX]
                 "1186640", #pumpkin jack
                 "391220", #rise of the tomb raider
                 "750920", #shadow of the tomb raider
