@@ -1127,6 +1127,8 @@ def default_compat_config():
                 "400", #Portal [RTX]
                 "1186640", #pumpkin jack
                 "1144200", #Ready Or Not
+                "1404210", #Red Dead Online
+                "1174180", #Red Dead Redemption 2
                 "391220", #rise of the tomb raider
                 "750920", #shadow of the tomb raider
                 "1602080", #soulstice
