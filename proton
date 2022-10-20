@@ -1426,7 +1426,7 @@ class Session:
         if "enablenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
             # enablenvapi beats hidenvgpu
-            self.env["PROTON_HIDE_NVIDIA_GPU"] = "0"
+            self.env["WINE_HIDE_NVIDIA_GPU"] = "0"
 
         s = ""
         for dll in self.dlloverrides:
