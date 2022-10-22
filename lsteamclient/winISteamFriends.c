@@ -374,9 +374,9 @@ bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed2(struct w_s
 
 extern vtable_ptr winISteamFriends_SteamFriends001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends001, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends001_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends001,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_SetPersonaName)
@@ -406,9 +406,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendGamePlayed)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendGamePlayed2)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends001(void *u_iface)
 {
@@ -830,9 +828,9 @@ CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendFromSourceByInde
 
 extern vtable_ptr winISteamFriends_SteamFriends002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends002, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends002_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends002,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_SetPersonaName)
@@ -865,9 +863,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendCountFromSource)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends002(void *u_iface)
 {
@@ -1150,9 +1146,9 @@ void __thiscall winISteamFriends_SteamFriends003_ActivateGameOverlay(struct w_st
 
 extern vtable_ptr winISteamFriends_SteamFriends003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends003, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends003_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends003,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends003_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends003_SetPersonaName)
@@ -1175,9 +1171,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends003_ActivateGameOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends003(void *u_iface)
 {
@@ -1461,9 +1455,9 @@ void __thiscall winISteamFriends_SteamFriends004_ActivateGameOverlay(struct w_st
 
 extern vtable_ptr winISteamFriends_SteamFriends004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends004, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends004_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends004,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends004_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends004_SetPersonaName)
@@ -1486,9 +1480,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends004_ActivateGameOverlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends004(void *u_iface)
 {
@@ -1818,9 +1810,9 @@ void __thiscall winISteamFriends_SteamFriends005_SetPlayedWith(struct w_steam_if
 
 extern vtable_ptr winISteamFriends_SteamFriends005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends005, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends005_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends005,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends005_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends005_SetPersonaName)
@@ -1847,9 +1839,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends005_ActivateGameOverlayToStore)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends005_SetPlayedWith)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends005(void *u_iface)
 {
@@ -2204,9 +2194,9 @@ void __thiscall winISteamFriends_SteamFriends006_ActivateGameOverlayInviteDialog
 
 extern vtable_ptr winISteamFriends_SteamFriends006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends006, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends006_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends006,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends006_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends006_SetPersonaName)
@@ -2235,9 +2225,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends006_SetPlayedWith)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends006_ActivateGameOverlayInviteDialog)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends006(void *u_iface)
 {
@@ -2617,9 +2605,9 @@ int32_t __thiscall winISteamFriends_SteamFriends007_GetLargeFriendAvatar(struct 
 
 extern vtable_ptr winISteamFriends_SteamFriends007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends007, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends007_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends007,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends007_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends007_SetPersonaName)
@@ -2650,9 +2638,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends007_GetMediumFriendAvatar)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends007_GetLargeFriendAvatar)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends007(void *u_iface)
 {
@@ -3113,9 +3099,9 @@ uint32_t __thiscall winISteamFriends_SteamFriends008_GetUserRestrictions(struct 
 
 extern vtable_ptr winISteamFriends_SteamFriends008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends008, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends008_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends008,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends008_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends008_SetPersonaName)
@@ -3152,9 +3138,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends008_GetClanOfficerByIndex)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends008_GetUserRestrictions)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends008(void *u_iface)
 {
@@ -3747,9 +3731,9 @@ uint32_t __thiscall winISteamFriends_SteamFriends009_GetFriendCoplayGame(struct 
 
 extern vtable_ptr winISteamFriends_SteamFriends009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends009, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends009_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends009,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends009_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends009_SetPersonaName)
@@ -3796,9 +3780,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends009_GetFriendCoplayTime)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends009_GetFriendCoplayGame)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends009(void *u_iface)
 {
@@ -4604,9 +4586,9 @@ int32_t __thiscall winISteamFriends_SteamFriends010_GetFriendMessage(struct w_st
 
 extern vtable_ptr winISteamFriends_SteamFriends010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends010, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends010_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends010,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_SetPersonaName)
@@ -4668,9 +4650,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ReplyToFriendMessage)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendMessage)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends010(void *u_iface)
 {
@@ -5527,9 +5507,9 @@ uint64_t __thiscall winISteamFriends_SteamFriends011_EnumerateFollowingList(stru
 
 extern vtable_ptr winISteamFriends_SteamFriends011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends011, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends011_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends011,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends011_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends011_SetPersonaName)
@@ -5595,9 +5575,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends011_IsFollowing)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends011_EnumerateFollowingList)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends011(void *u_iface)
 {
@@ -6455,9 +6433,9 @@ uint64_t __thiscall winISteamFriends_SteamFriends012_EnumerateFollowingList(stru
 
 extern vtable_ptr winISteamFriends_SteamFriends012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends012, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends012_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends012,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_SetPersonaName)
@@ -6523,9 +6501,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_IsFollowing)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_EnumerateFollowingList)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends012(void *u_iface)
 {
@@ -7384,9 +7360,9 @@ uint64_t __thiscall winISteamFriends_SteamFriends013_EnumerateFollowingList(stru
 
 extern vtable_ptr winISteamFriends_SteamFriends013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends013, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends013_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends013,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends013_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends013_SetPersonaName)
@@ -7452,9 +7428,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends013_IsFollowing)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends013_EnumerateFollowingList)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends013(void *u_iface)
 {
@@ -8326,9 +8300,9 @@ uint64_t __thiscall winISteamFriends_SteamFriends014_EnumerateFollowingList(stru
 
 extern vtable_ptr winISteamFriends_SteamFriends014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends014, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends014_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends014,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends014_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends014_SetPersonaName)
@@ -8395,9 +8369,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends014_IsFollowing)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends014_EnumerateFollowingList)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends014(void *u_iface)
 {
@@ -9373,9 +9345,9 @@ bool __thiscall winISteamFriends_SteamFriends015_IsClanOfficialGameGroup(struct 
 
 extern vtable_ptr winISteamFriends_SteamFriends015_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends015, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends015_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends015,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends015_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends015_SetPersonaName)
@@ -9450,9 +9422,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends015_IsClanPublic)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends015_IsClanOfficialGameGroup)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends015(void *u_iface)
 {
@@ -10535,9 +10505,9 @@ uint32_t __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyUint(
 
 extern vtable_ptr winISteamFriends_SteamFriends017_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamFriends_SteamFriends017, 0, ".?AVISteamFriends@@")
+
+__ASM_BLOCK_BEGIN(winISteamFriends_SteamFriends017_vtables)
     __ASM_VTABLE(winISteamFriends_SteamFriends017,
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetPersonaName)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_SetPersonaName)
@@ -10620,9 +10590,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetProfileItemPropertyString)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetProfileItemPropertyUint)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamFriends_SteamFriends017(void *u_iface)
 {
@@ -10633,3 +10601,24 @@ struct w_steam_iface *create_winISteamFriends_SteamFriends017(void *u_iface)
     return r;
 }
 
+void init_winISteamFriends_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamFriends_SteamFriends001_rtti( base );
+    init_winISteamFriends_SteamFriends002_rtti( base );
+    init_winISteamFriends_SteamFriends003_rtti( base );
+    init_winISteamFriends_SteamFriends004_rtti( base );
+    init_winISteamFriends_SteamFriends005_rtti( base );
+    init_winISteamFriends_SteamFriends006_rtti( base );
+    init_winISteamFriends_SteamFriends007_rtti( base );
+    init_winISteamFriends_SteamFriends008_rtti( base );
+    init_winISteamFriends_SteamFriends009_rtti( base );
+    init_winISteamFriends_SteamFriends010_rtti( base );
+    init_winISteamFriends_SteamFriends011_rtti( base );
+    init_winISteamFriends_SteamFriends012_rtti( base );
+    init_winISteamFriends_SteamFriends013_rtti( base );
+    init_winISteamFriends_SteamFriends014_rtti( base );
+    init_winISteamFriends_SteamFriends015_rtti( base );
+    init_winISteamFriends_SteamFriends017_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -210,9 +210,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION001, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest)
@@ -229,9 +229,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION001(void *u_iface)
 {
@@ -695,9 +693,9 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo(str
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION002, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION002,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryAllUGCRequest)
@@ -731,9 +729,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002(void *u_iface)
 {
@@ -1198,9 +1194,9 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo(str
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION003, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION003,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryAllUGCRequest)
@@ -1234,9 +1230,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION003(void *u_iface)
 {
@@ -1726,9 +1720,9 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_DownloadItem(struct w
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION004, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION004,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryAllUGCRequest)
@@ -1764,9 +1758,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_DownloadItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION004(void *u_iface)
 {
@@ -2451,9 +2443,9 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_DownloadItem(struct w
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION005, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION005,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryAllUGCRequest)
@@ -2502,9 +2494,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_DownloadItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION005(void *u_iface)
 {
@@ -3244,9 +3234,9 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem(struct w
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION006, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION006,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryAllUGCRequest)
@@ -3299,9 +3289,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION006(void *u_iface)
 {
@@ -4160,9 +4148,9 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SuspendDownloads(stru
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION007, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION007,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryAllUGCRequest)
@@ -4223,9 +4211,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SuspendDownloads)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION007(void *u_iface)
 {
@@ -5163,9 +5149,9 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SuspendDownloads(stru
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION008, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION008,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryAllUGCRequest)
@@ -5231,9 +5217,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SuspendDownloads)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION008(void *u_iface)
 {
@@ -6225,9 +6209,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTrack
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION009, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION009,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryAllUGCRequest)
@@ -6297,9 +6281,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTracking)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTrackingForAllItems)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION009(void *u_iface)
 {
@@ -7387,9 +7369,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DeleteItem(struct
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION010, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION010,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryAllUGCRequest)
@@ -7466,9 +7448,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetAppDependencies)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DeleteItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION010(void *u_iface)
 {
@@ -8587,9 +8567,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DeleteItem(struct
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION012, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION012,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest_2)
@@ -8668,9 +8648,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetAppDependencies)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DeleteItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION012(void *u_iface)
 {
@@ -9819,9 +9797,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DeleteItem(struct
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION013, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION013,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest_2)
@@ -9902,9 +9880,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetAppDependencies)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DeleteItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION013(void *u_iface)
 {
@@ -11067,9 +11043,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DeleteItem(struct
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION014, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION014,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest_2)
@@ -11151,9 +11127,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetAppDependencies)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DeleteItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION014(void *u_iface)
 {
@@ -12388,9 +12362,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULASt
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION015_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION015, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION015,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest_2)
@@ -12477,9 +12451,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION015(void *u_iface)
 {
@@ -13744,9 +13716,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetWorkshopEULASt
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION016_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION016, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION016,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest_2)
@@ -13835,9 +13807,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_ShowWorkshopEULA)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetWorkshopEULAStatus)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION016(void *u_iface)
 {
@@ -15146,9 +15116,9 @@ uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetWorkshopEULASt
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION017_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION017, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION017,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_2)
@@ -15240,9 +15210,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_ShowWorkshopEULA)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetWorkshopEULAStatus)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION017(void *u_iface)
 {
@@ -16566,9 +16534,9 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDes
 
 extern vtable_ptr winISteamUGC_STEAMUGC_INTERFACE_VERSION018_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUGC_STEAMUGC_INTERFACE_VERSION018, 0, ".?AVISteamUGC@@")
+
+__ASM_BLOCK_BEGIN(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_vtables)
     __ASM_VTABLE(winISteamUGC_STEAMUGC_INTERFACE_VERSION018,
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryUserUGCRequest)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest_2)
@@ -16661,9 +16629,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus)
         VTABLE_ADD_FUNC(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDescriptorPreferences)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION018(void *u_iface)
 {
@@ -16674,3 +16640,25 @@ struct w_steam_iface *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION018(void *u_
     return r;
 }
 
+void init_winISteamUGC_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION001_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION002_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION003_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION004_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION005_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION006_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION007_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION008_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION009_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION010_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION012_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION013_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION014_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION015_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION016_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION017_rtti( base );
+    init_winISteamUGC_STEAMUGC_INTERFACE_VERSION018_rtti( base );
+#endif /* __x86_64__ */
+}

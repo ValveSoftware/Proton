@@ -84,9 +84,9 @@ bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSIO
 
 extern vtable_ptr winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001, 0, ".?AVISteamParentalSettings@@")
+
+__ASM_BLOCK_BEGIN(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled)
         VTABLE_ADD_FUNC(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockLocked)
@@ -95,9 +95,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked)
         VTABLE_ADD_FUNC(winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001(void *u_iface)
 {
@@ -108,3 +106,9 @@ struct w_steam_iface *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INT
     return r;
 }
 
+void init_winISteamParentalSettings_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_rtti( base );
+#endif /* __x86_64__ */
+}

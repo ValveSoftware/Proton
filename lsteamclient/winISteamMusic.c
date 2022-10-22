@@ -112,9 +112,9 @@ float __thiscall winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume(struct
 
 extern vtable_ptr winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001, 0, ".?AVISteamMusic@@")
+
+__ASM_BLOCK_BEGIN(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsEnabled)
         VTABLE_ADD_FUNC(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying)
@@ -126,9 +126,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_SetVolume)
         VTABLE_ADD_FUNC(winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetVolume)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001(void *u_iface)
 {
@@ -139,3 +137,9 @@ struct w_steam_iface *create_winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001(void
     return r;
 }
 
+void init_winISteamMusic_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_rtti( base );
+#endif /* __x86_64__ */
+}

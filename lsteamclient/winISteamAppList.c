@@ -78,9 +78,9 @@ int32_t __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuil
 
 extern vtable_ptr winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001, 0, ".?AVISteamAppList@@")
+
+__ASM_BLOCK_BEGIN(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps)
         VTABLE_ADD_FUNC(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps)
@@ -88,9 +88,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir)
         VTABLE_ADD_FUNC(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001(void *u_iface)
 {
@@ -101,3 +99,9 @@ struct w_steam_iface *create_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001(
     return r;
 }
 
+void init_winISteamAppList_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_rtti( base );
+#endif /* __x86_64__ */
+}

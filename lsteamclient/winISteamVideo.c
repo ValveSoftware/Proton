@@ -33,16 +33,14 @@ bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting(struct w
 
 extern vtable_ptr winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamVideo_STEAMVIDEO_INTERFACE_V001, 0, ".?AVISteamVideo@@")
+
+__ASM_BLOCK_BEGIN(winISteamVideo_STEAMVIDEO_INTERFACE_V001_vtables)
     __ASM_VTABLE(winISteamVideo_STEAMVIDEO_INTERFACE_V001,
         VTABLE_ADD_FUNC(winISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL)
         VTABLE_ADD_FUNC(winISteamVideo_STEAMVIDEO_INTERFACE_V001_IsBroadcasting)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamVideo_STEAMVIDEO_INTERFACE_V001(void *u_iface)
 {
@@ -110,18 +108,16 @@ bool __thiscall winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp(stru
 
 extern vtable_ptr winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamVideo_STEAMVIDEO_INTERFACE_V002, 0, ".?AVISteamVideo@@")
+
+__ASM_BLOCK_BEGIN(winISteamVideo_STEAMVIDEO_INTERFACE_V002_vtables)
     __ASM_VTABLE(winISteamVideo_STEAMVIDEO_INTERFACE_V002,
         VTABLE_ADD_FUNC(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL)
         VTABLE_ADD_FUNC(winISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting)
         VTABLE_ADD_FUNC(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFSettings)
         VTABLE_ADD_FUNC(winISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamVideo_STEAMVIDEO_INTERFACE_V002(void *u_iface)
 {
@@ -132,3 +128,10 @@ struct w_steam_iface *create_winISteamVideo_STEAMVIDEO_INTERFACE_V002(void *u_if
     return r;
 }
 
+void init_winISteamVideo_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamVideo_STEAMVIDEO_INTERFACE_V001_rtti( base );
+    init_winISteamVideo_STEAMVIDEO_INTERFACE_V002_rtti( base );
+#endif /* __x86_64__ */
+}

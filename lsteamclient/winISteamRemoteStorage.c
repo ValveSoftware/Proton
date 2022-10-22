@@ -117,9 +117,9 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_G
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize)
@@ -130,9 +130,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001(void *u_iface)
 {
@@ -244,9 +242,9 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_G
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileSize)
@@ -256,9 +254,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetFileNameAndSize)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_GetQuota)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002(void *u_iface)
 {
@@ -541,9 +537,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_FileRead)
@@ -566,9 +562,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetCachedUGCCount)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_GetCachedUGCHandle)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003(void *u_iface)
 {
@@ -878,9 +872,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileRead)
@@ -905,9 +899,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCCount)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCHandle)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004(void *u_iface)
 {
@@ -1349,9 +1341,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_FileRead)
@@ -1385,9 +1377,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_EnumerateUserSubscribedFiles)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UnsubscribePublishedFile)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005(void *u_iface)
 {
@@ -2065,9 +2055,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_FileRead)
@@ -2117,9 +2107,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedFilesByUserAction)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedWorkshopFiles)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006(void *u_iface)
 {
@@ -2799,9 +2787,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_FileRead)
@@ -2851,9 +2839,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedFilesByUserAction)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_EnumeratePublishedWorkshopFiles)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007(void *u_iface)
 {
@@ -3587,9 +3573,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_FileRead)
@@ -3643,9 +3629,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedFilesByUserAction)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_EnumeratePublishedWorkshopFiles)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008(void *u_iface)
 {
@@ -4380,9 +4364,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_FileRead)
@@ -4436,9 +4420,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedFilesByUserAction)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedWorkshopFiles)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009(void *u_iface)
 {
@@ -5191,9 +5173,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_FileRead)
@@ -5248,9 +5230,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_EnumeratePublishedWorkshopFiles)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010(void *u_iface)
 {
@@ -6004,9 +5984,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead)
@@ -6061,9 +6041,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedWorkshopFiles)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011(void *u_iface)
 {
@@ -6818,9 +6796,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_FileRead)
@@ -6875,9 +6853,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_EnumeratePublishedWorkshopFiles)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012(void *u_iface)
 {
@@ -7677,9 +7653,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_FileRead)
@@ -7737,9 +7713,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_EnumeratePublishedWorkshopFiles)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013(void *u_iface)
 {
@@ -8539,9 +8513,9 @@ uint64_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_FileRead)
@@ -8599,9 +8573,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_EnumeratePublishedWorkshopFiles)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014(void *u_iface)
 {
@@ -9452,9 +9424,9 @@ bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_E
 
 extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016, 0, ".?AVISteamRemoteStorage@@")
+
+__ASM_BLOCK_BEGIN(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_vtables)
     __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016,
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileWrite)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_FileRead)
@@ -9516,9 +9488,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_BeginFileWriteBatch)
         VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_EndFileWriteBatch)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016(void *u_iface)
 {
@@ -9529,3 +9499,23 @@ struct w_steam_iface *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE
     return r;
 }
 
+void init_winISteamRemoteStorage_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_rtti( base );
+    init_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION016_rtti( base );
+#endif /* __x86_64__ */
+}

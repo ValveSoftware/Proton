@@ -191,9 +191,9 @@ bool __thiscall winISteamNetworking_SteamNetworking001_GetListenSocketInfo(struc
 
 extern vtable_ptr winISteamNetworking_SteamNetworking001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworking_SteamNetworking001, 0, ".?AVISteamNetworking@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworking_SteamNetworking001_vtables)
     __ASM_VTABLE(winISteamNetworking_SteamNetworking001,
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking001_CreateListenSocket)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking001_CreateP2PConnectionSocket)
@@ -208,9 +208,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking001_GetSocketInfo)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking001_GetListenSocketInfo)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworking_SteamNetworking001(void *u_iface)
 {
@@ -437,9 +435,9 @@ int32_t __thiscall winISteamNetworking_SteamNetworking002_GetMaxPacketSize(struc
 
 extern vtable_ptr winISteamNetworking_SteamNetworking002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworking_SteamNetworking002, 0, ".?AVISteamNetworking@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworking_SteamNetworking002_vtables)
     __ASM_VTABLE(winISteamNetworking_SteamNetworking002,
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking002_CreateListenSocket)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking002_CreateP2PConnectionSocket)
@@ -456,9 +454,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking002_GetSocketConnectionType)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking002_GetMaxPacketSize)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworking_SteamNetworking002(void *u_iface)
 {
@@ -770,9 +766,9 @@ int32_t __thiscall winISteamNetworking_SteamNetworking003_GetMaxPacketSize(struc
 
 extern vtable_ptr winISteamNetworking_SteamNetworking003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworking_SteamNetworking003, 0, ".?AVISteamNetworking@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworking_SteamNetworking003_vtables)
     __ASM_VTABLE(winISteamNetworking_SteamNetworking003,
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking003_SendP2PPacket)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking003_IsP2PPacketAvailable)
@@ -795,9 +791,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking003_GetSocketConnectionType)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking003_GetMaxPacketSize)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworking_SteamNetworking003(void *u_iface)
 {
@@ -1112,9 +1106,9 @@ int32_t __thiscall winISteamNetworking_SteamNetworking004_GetMaxPacketSize(struc
 
 extern vtable_ptr winISteamNetworking_SteamNetworking004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworking_SteamNetworking004, 0, ".?AVISteamNetworking@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworking_SteamNetworking004_vtables)
     __ASM_VTABLE(winISteamNetworking_SteamNetworking004,
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking004_SendP2PPacket)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking004_IsP2PPacketAvailable)
@@ -1137,9 +1131,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking004_GetSocketConnectionType)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking004_GetMaxPacketSize)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworking_SteamNetworking004(void *u_iface)
 {
@@ -1481,9 +1473,9 @@ int32_t __thiscall winISteamNetworking_SteamNetworking005_GetMaxPacketSize(struc
 
 extern vtable_ptr winISteamNetworking_SteamNetworking005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworking_SteamNetworking005, 0, ".?AVISteamNetworking@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworking_SteamNetworking005_vtables)
     __ASM_VTABLE(winISteamNetworking_SteamNetworking005,
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking005_SendP2PPacket)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking005_IsP2PPacketAvailable)
@@ -1508,9 +1500,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking005_GetSocketConnectionType)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking005_GetMaxPacketSize)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworking_SteamNetworking005(void *u_iface)
 {
@@ -1852,9 +1842,9 @@ int32_t __thiscall winISteamNetworking_SteamNetworking006_GetMaxPacketSize(struc
 
 extern vtable_ptr winISteamNetworking_SteamNetworking006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworking_SteamNetworking006, 0, ".?AVISteamNetworking@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworking_SteamNetworking006_vtables)
     __ASM_VTABLE(winISteamNetworking_SteamNetworking006,
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking006_SendP2PPacket)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking006_IsP2PPacketAvailable)
@@ -1879,9 +1869,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking006_GetSocketConnectionType)
         VTABLE_ADD_FUNC(winISteamNetworking_SteamNetworking006_GetMaxPacketSize)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworking_SteamNetworking006(void *u_iface)
 {
@@ -1892,3 +1880,14 @@ struct w_steam_iface *create_winISteamNetworking_SteamNetworking006(void *u_ifac
     return r;
 }
 
+void init_winISteamNetworking_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamNetworking_SteamNetworking001_rtti( base );
+    init_winISteamNetworking_SteamNetworking002_rtti( base );
+    init_winISteamNetworking_SteamNetworking003_rtti( base );
+    init_winISteamNetworking_SteamNetworking004_rtti( base );
+    init_winISteamNetworking_SteamNetworking005_rtti( base );
+    init_winISteamNetworking_SteamNetworking006_rtti( base );
+#endif /* __x86_64__ */
+}

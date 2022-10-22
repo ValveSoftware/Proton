@@ -193,9 +193,9 @@ int32_t __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetM
 
 extern vtable_ptr winISteamMasterServerUpdater_SteamMasterServerUpdater001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMasterServerUpdater_SteamMasterServerUpdater001, 0, ".?AVISteamMasterServerUpdater@@")
+
+__ASM_BLOCK_BEGIN(winISteamMasterServerUpdater_SteamMasterServerUpdater001_vtables)
     __ASM_VTABLE(winISteamMasterServerUpdater_SteamMasterServerUpdater001,
         VTABLE_ADD_FUNC(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive)
         VTABLE_ADD_FUNC(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval)
@@ -212,9 +212,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers)
         VTABLE_ADD_FUNC(winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMasterServerUpdater_SteamMasterServerUpdater001(void *u_iface)
 {
@@ -225,3 +223,9 @@ struct w_steam_iface *create_winISteamMasterServerUpdater_SteamMasterServerUpdat
     return r;
 }
 
+void init_winISteamMasterServerUpdater_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamMasterServerUpdater_SteamMasterServerUpdater001_rtti( base );
+#endif /* __x86_64__ */
+}

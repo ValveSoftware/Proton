@@ -153,9 +153,9 @@ uint64_t __thiscall winISteamGameServerStats_SteamGameServerStats001_StoreUserSt
 
 extern vtable_ptr winISteamGameServerStats_SteamGameServerStats001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServerStats_SteamGameServerStats001, 0, ".?AVISteamGameServerStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServerStats_SteamGameServerStats001_vtables)
     __ASM_VTABLE(winISteamGameServerStats_SteamGameServerStats001,
         VTABLE_ADD_FUNC(winISteamGameServerStats_SteamGameServerStats001_RequestUserStats)
         VTABLE_ADD_FUNC(winISteamGameServerStats_SteamGameServerStats001_GetUserStat_2)
@@ -168,9 +168,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement)
         VTABLE_ADD_FUNC(winISteamGameServerStats_SteamGameServerStats001_StoreUserStats)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServerStats_SteamGameServerStats001(void *u_iface)
 {
@@ -181,3 +179,9 @@ struct w_steam_iface *create_winISteamGameServerStats_SteamGameServerStats001(vo
     return r;
 }
 
+void init_winISteamGameServerStats_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamGameServerStats_SteamGameServerStats001_rtti( base );
+#endif /* __x86_64__ */
+}

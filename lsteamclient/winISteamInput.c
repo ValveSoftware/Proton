@@ -459,9 +459,9 @@ uint32_t __thiscall winISteamInput_SteamInput001_GetRemotePlaySessionID(struct w
 
 extern vtable_ptr winISteamInput_SteamInput001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamInput_SteamInput001, 0, ".?AVISteamInput@@")
+
+__ASM_BLOCK_BEGIN(winISteamInput_SteamInput001_vtables)
     __ASM_VTABLE(winISteamInput_SteamInput001,
         VTABLE_ADD_FUNC(winISteamInput_SteamInput001_Init)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput001_Shutdown)
@@ -499,9 +499,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInput_SteamInput001_GetDeviceBindingRevision)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput001_GetRemotePlaySessionID)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamInput_SteamInput001(void *u_iface)
 {
@@ -968,9 +966,9 @@ uint32_t __thiscall winISteamInput_SteamInput002_GetRemotePlaySessionID(struct w
 
 extern vtable_ptr winISteamInput_SteamInput002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamInput_SteamInput002, 0, ".?AVISteamInput@@")
+
+__ASM_BLOCK_BEGIN(winISteamInput_SteamInput002_vtables)
     __ASM_VTABLE(winISteamInput_SteamInput002,
         VTABLE_ADD_FUNC(winISteamInput_SteamInput002_Init)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput002_Shutdown)
@@ -1008,9 +1006,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInput_SteamInput002_GetDeviceBindingRevision)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput002_GetRemotePlaySessionID)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamInput_SteamInput002(void *u_iface)
 {
@@ -1616,9 +1612,9 @@ uint16_t __thiscall winISteamInput_SteamInput005_GetSessionInputConfigurationSet
 
 extern vtable_ptr winISteamInput_SteamInput005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamInput_SteamInput005, 0, ".?AVISteamInput@@")
+
+__ASM_BLOCK_BEGIN(winISteamInput_SteamInput005_vtables)
     __ASM_VTABLE(winISteamInput_SteamInput005,
         VTABLE_ADD_FUNC(winISteamInput_SteamInput005_Init)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput005_Shutdown)
@@ -1668,9 +1664,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInput_SteamInput005_GetRemotePlaySessionID)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput005_GetSessionInputConfigurationSettings)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamInput_SteamInput005(void *u_iface)
 {
@@ -2289,9 +2283,9 @@ void __thiscall winISteamInput_SteamInput006_SetDualSenseTriggerEffect(struct w_
 
 extern vtable_ptr winISteamInput_SteamInput006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamInput_SteamInput006, 0, ".?AVISteamInput@@")
+
+__ASM_BLOCK_BEGIN(winISteamInput_SteamInput006_vtables)
     __ASM_VTABLE(winISteamInput_SteamInput006,
         VTABLE_ADD_FUNC(winISteamInput_SteamInput006_Init)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput006_Shutdown)
@@ -2342,9 +2336,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInput_SteamInput006_GetSessionInputConfigurationSettings)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput006_SetDualSenseTriggerEffect)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamInput_SteamInput006(void *u_iface)
 {
@@ -2355,3 +2347,12 @@ struct w_steam_iface *create_winISteamInput_SteamInput006(void *u_iface)
     return r;
 }
 
+void init_winISteamInput_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamInput_SteamInput001_rtti( base );
+    init_winISteamInput_SteamInput002_rtti( base );
+    init_winISteamInput_SteamInput005_rtti( base );
+    init_winISteamInput_SteamInput006_rtti( base );
+#endif /* __x86_64__ */
+}

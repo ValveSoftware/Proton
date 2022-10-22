@@ -27,15 +27,13 @@ uint32_t __thiscall winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAp
 
 extern vtable_ptr winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001, 0, ".?AVISteamAppTicket@@")
+
+__ASM_BLOCK_BEGIN(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001(void *u_iface)
 {
@@ -46,3 +44,9 @@ struct w_steam_iface *create_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION
     return r;
 }
 
+void init_winISteamAppTicket_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -19,6 +19,8 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
+CREATE_TYPE_INFO_VTABLE;
+
 char g_tmppath[PATH_MAX];
 
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
@@ -33,6 +35,10 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(instance);
             steam_overlay_event = CreateEventA(NULL, TRUE, FALSE, "__wine_steamclient_GameOverlayActivated");
+#ifdef __x86_64__
+            init_type_info_rtti( (char *)instance );
+            init_rtti( (char *)instance );
+#endif /* __x86_64__ */
             break;
         case DLL_PROCESS_DETACH:
             CloseHandle(steam_overlay_event);

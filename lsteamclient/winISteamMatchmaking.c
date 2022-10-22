@@ -337,9 +337,9 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking001_RequestLobbyData(struct
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking001, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking001_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking001,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame)
@@ -364,9 +364,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking001_RequestLobbyData)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking001(void *u_iface)
 {
@@ -670,9 +668,9 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer(stru
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking002, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking002_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking002,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking002_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame)
@@ -695,9 +693,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking002_RequestLobbyData)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking002(void *u_iface)
 {
@@ -1107,9 +1103,9 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RequestFriendsLobbies(s
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking003, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking003_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking003,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame)
@@ -1140,9 +1136,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_RequestFriendsLobbies)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking003(void *u_iface)
 {
@@ -1539,9 +1533,9 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking004_RequestFriendsLobbies(s
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking004, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking004_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking004,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking004_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame)
@@ -1571,9 +1565,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking004_GetLobbyMemberLimit)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking004_RequestFriendsLobbies)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking004(void *u_iface)
 {
@@ -2024,9 +2016,9 @@ float __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyDistance(struc
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking005, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking005_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking005,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking005_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame)
@@ -2060,9 +2052,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking005_GetLobbyOwner)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking005_GetLobbyDistance)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking005(void *u_iface)
 {
@@ -2480,9 +2470,9 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyOwner(str
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking006, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking006_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking006,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking006_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame)
@@ -2513,9 +2503,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking006_SetLobbyType)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking006_GetLobbyOwner)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking006(void *u_iface)
 {
@@ -3020,9 +3008,9 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyOwner(struct w_
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking007, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking007_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking007,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking007_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame)
@@ -3059,9 +3047,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking007_GetLobbyOwner)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking007_SetLobbyOwner)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking007(void *u_iface)
 {
@@ -3590,9 +3576,9 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyOwner(struct w_
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking008, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking008_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking008,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking008_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame)
@@ -3631,9 +3617,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking008_GetLobbyOwner)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking008_SetLobbyOwner)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking008(void *u_iface)
 {
@@ -4188,9 +4172,9 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLinkedLobby(struct w
 
 extern vtable_ptr winISteamMatchmaking_SteamMatchMaking009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmaking_SteamMatchMaking009, 0, ".?AVISteamMatchmaking@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmaking_SteamMatchMaking009_vtables)
     __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking009,
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking009_GetFavoriteGameCount)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame)
@@ -4231,9 +4215,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking009_SetLobbyOwner)
         VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking009_SetLinkedLobby)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking009(void *u_iface)
 {
@@ -4244,3 +4226,17 @@ struct w_steam_iface *create_winISteamMatchmaking_SteamMatchMaking009(void *u_if
     return r;
 }
 
+void init_winISteamMatchmaking_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamMatchmaking_SteamMatchMaking001_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking002_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking003_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking004_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking005_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking006_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking007_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking008_rtti( base );
+    init_winISteamMatchmaking_SteamMatchMaking009_rtti( base );
+#endif /* __x86_64__ */
+}
