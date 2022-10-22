@@ -198,9 +198,9 @@ uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGame(struct w
 
 extern vtable_ptr winISteamGameSearch_SteamMatchGameSearch001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameSearch_SteamMatchGameSearch001, 0, ".?AVISteamGameSearch@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameSearch_SteamMatchGameSearch001_vtables)
     __ASM_VTABLE(winISteamGameSearch_SteamMatchGameSearch001,
         VTABLE_ADD_FUNC(winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams)
         VTABLE_ADD_FUNC(winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby)
@@ -217,9 +217,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult)
         VTABLE_ADD_FUNC(winISteamGameSearch_SteamMatchGameSearch001_EndGame)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameSearch_SteamMatchGameSearch001(void *u_iface)
 {
@@ -230,3 +228,9 @@ struct w_steam_iface *create_winISteamGameSearch_SteamMatchGameSearch001(void *u
     return r;
 }
 
+void init_winISteamGameSearch_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamGameSearch_SteamMatchGameSearch001_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -223,9 +223,9 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPo
 
 extern vtable_ptr winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001, 0, ".?AVISteamHTTP@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPRequest)
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestContextValue)
@@ -243,9 +243,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProgressPct)
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPostBody)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001(void *u_iface)
 {
@@ -618,9 +616,9 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPRequestWasTi
 
 extern vtable_ptr winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002, 0, ".?AVISteamHTTP@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_vtables)
     __ASM_VTABLE(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002,
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest)
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue)
@@ -648,9 +646,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS)
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPRequestWasTimedOut)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002(void *u_iface)
 {
@@ -1023,9 +1019,9 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPRequestWasTi
 
 extern vtable_ptr winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003, 0, ".?AVISteamHTTP@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_vtables)
     __ASM_VTABLE(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003,
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_CreateHTTPRequest)
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestContextValue)
@@ -1053,9 +1049,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_SetHTTPRequestAbsoluteTimeoutMS)
         VTABLE_ADD_FUNC(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_GetHTTPRequestWasTimedOut)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003(void *u_iface)
 {
@@ -1066,3 +1060,11 @@ struct w_steam_iface *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003(void *
     return r;
 }
 
+void init_winISteamHTTP_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_rtti( base );
+    init_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_rtti( base );
+    init_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003_rtti( base );
+#endif /* __x86_64__ */
+}

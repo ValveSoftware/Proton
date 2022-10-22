@@ -304,9 +304,9 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_destructor(stru
 
 extern vtable_ptr winISteamNetworkingUtils_SteamNetworkingUtils001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingUtils_SteamNetworkingUtils001, 0, ".?AVISteamNetworkingUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingUtils_SteamNetworkingUtils001_vtables)
     __ASM_VTABLE(winISteamNetworkingUtils_SteamNetworkingUtils001,
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils001_GetLocalPingLocation)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils001_EstimatePingTimeBetweenTwoLocations)
@@ -331,9 +331,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ParseString)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils001_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingUtils_SteamNetworkingUtils001(void *u_iface)
 {
@@ -646,9 +644,9 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_destructor(stru
 
 extern vtable_ptr winISteamNetworkingUtils_SteamNetworkingUtils002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingUtils_SteamNetworkingUtils002, 0, ".?AVISteamNetworkingUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingUtils_SteamNetworkingUtils002_vtables)
     __ASM_VTABLE(winISteamNetworkingUtils_SteamNetworkingUtils002,
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils002_GetLocalPingLocation)
@@ -673,9 +671,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ParseString)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils002_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingUtils_SteamNetworkingUtils002(void *u_iface)
 {
@@ -989,9 +985,9 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_destructor(stru
 
 extern vtable_ptr winISteamNetworkingUtils_SteamNetworkingUtils003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingUtils_SteamNetworkingUtils003, 0, ".?AVISteamNetworkingUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingUtils_SteamNetworkingUtils003_vtables)
     __ASM_VTABLE(winISteamNetworkingUtils_SteamNetworkingUtils003,
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils003_GetRelayNetworkStatus)
@@ -1017,9 +1013,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ParseString)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils003_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingUtils_SteamNetworkingUtils003(void *u_iface)
 {
@@ -1373,9 +1367,9 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_destructor(stru
 
 extern vtable_ptr winISteamNetworkingUtils_SteamNetworkingUtils004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingUtils_SteamNetworkingUtils004, 0, ".?AVISteamNetworkingUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingUtils_SteamNetworkingUtils004_vtables)
     __ASM_VTABLE(winISteamNetworkingUtils_SteamNetworkingUtils004,
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus)
@@ -1404,9 +1398,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ParseString)
         VTABLE_ADD_FUNC(winISteamNetworkingUtils_SteamNetworkingUtils004_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingUtils_SteamNetworkingUtils004(void *u_iface)
 {
@@ -1417,3 +1409,12 @@ struct w_steam_iface *create_winISteamNetworkingUtils_SteamNetworkingUtils004(vo
     return r;
 }
 
+void init_winISteamNetworkingUtils_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamNetworkingUtils_SteamNetworkingUtils001_rtti( base );
+    init_winISteamNetworkingUtils_SteamNetworkingUtils002_rtti( base );
+    init_winISteamNetworkingUtils_SteamNetworkingUtils003_rtti( base );
+    init_winISteamNetworkingUtils_SteamNetworkingUtils004_rtti( base );
+#endif /* __x86_64__ */
+}

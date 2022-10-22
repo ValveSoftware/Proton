@@ -432,9 +432,9 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_File
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001, 0, ".?AVISteamHTMLSurface@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtables)
     __ASM_VTABLE(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001,
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_destructor)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init)
@@ -470,9 +470,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001(void *u_iface)
 {
@@ -945,9 +943,9 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_File
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002, 0, ".?AVISteamHTMLSurface@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_vtables)
     __ASM_VTABLE(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002,
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_destructor)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init)
@@ -985,9 +983,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_FileLoadDialogResponse)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002(void *u_iface)
 {
@@ -1473,9 +1469,9 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_File
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003, 0, ".?AVISteamHTMLSurface@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_vtables)
     __ASM_VTABLE(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003,
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_destructor)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Init)
@@ -1514,9 +1510,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_FileLoadDialogResponse)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003(void *u_iface)
 {
@@ -2015,9 +2009,9 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_File
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004, 0, ".?AVISteamHTMLSurface@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_vtables)
     __ASM_VTABLE(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004,
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_destructor)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init)
@@ -2057,9 +2051,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004(void *u_iface)
 {
@@ -2571,9 +2563,9 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_File
 
 extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005, 0, ".?AVISteamHTMLSurface@@")
+
+__ASM_BLOCK_BEGIN(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_vtables)
     __ASM_VTABLE(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005,
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_destructor)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init)
@@ -2614,9 +2606,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDialogResponse)
         VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005(void *u_iface)
 {
@@ -2627,3 +2617,13 @@ struct w_steam_iface *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VER
     return r;
 }
 
+void init_winISteamHTMLSurface_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_rtti( base );
+    init_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_rtti( base );
+    init_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_rtti( base );
+    init_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_rtti( base );
+    init_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_rtti( base );
+#endif /* __x86_64__ */
+}

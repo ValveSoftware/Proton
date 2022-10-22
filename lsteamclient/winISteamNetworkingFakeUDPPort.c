@@ -38,18 +38,16 @@ void __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_Sch
 
 extern vtable_ptr winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001, 0, ".?AVISteamNetworkingFakeUDPPort@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_vtables)
     __ASM_VTABLE(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001,
         VTABLE_ADD_FUNC(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort)
         VTABLE_ADD_FUNC(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP)
         VTABLE_ADD_FUNC(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages)
         VTABLE_ADD_FUNC(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ScheduleCleanup)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001(void *u_iface)
 {
@@ -60,3 +58,9 @@ struct w_steam_iface *create_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeU
     return r;
 }
 
+void init_winISteamNetworkingFakeUDPPort_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_rtti( base );
+#endif /* __x86_64__ */
+}

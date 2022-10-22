@@ -55,6 +55,8 @@ void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_ve
 extern void start_callback_thread(void) DECLSPEC_HIDDEN;
 extern void stop_callback_thread(void) DECLSPEC_HIDDEN;
 
+void init_rtti( char *base );
+
 #include "steamclient_generated.h"
 
 #ifdef __cplusplus

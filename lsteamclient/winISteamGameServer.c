@@ -319,9 +319,9 @@ void __thiscall winISteamGameServer_SteamGameServer002_GSSetGameType(struct w_st
 
 extern vtable_ptr winISteamGameServer_SteamGameServer002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer002, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer002_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer002,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer002_LogOn)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer002_LogOff)
@@ -345,9 +345,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer002_GSUpdateSpectatorPort)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer002_GSSetGameType)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer002(void *u_iface)
 {
@@ -598,9 +596,9 @@ bool __thiscall winISteamGameServer_SteamGameServer003_GSGetUserAchievementStatu
 
 extern vtable_ptr winISteamGameServer_SteamGameServer003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer003, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer003_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer003,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_LogOn)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_LogOff)
@@ -620,9 +618,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSSetGameType)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer003(void *u_iface)
 {
@@ -828,9 +824,9 @@ bool __thiscall winISteamGameServer_SteamGameServer004_BGetUserAchievementStatus
 
 extern vtable_ptr winISteamGameServer_SteamGameServer004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer004, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer004_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer004,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer004_LogOn)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer004_LogOff)
@@ -847,9 +843,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer004_SetGameType)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer004_BGetUserAchievementStatus)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer004(void *u_iface)
 {
@@ -1055,9 +1049,9 @@ bool __thiscall winISteamGameServer_SteamGameServer005_BGetUserAchievementStatus
 
 extern vtable_ptr winISteamGameServer_SteamGameServer005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer005, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer005_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer005,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer005_LogOn)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer005_LogOff)
@@ -1074,9 +1068,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer005_SetGameType)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer005_BGetUserAchievementStatus)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer005(void *u_iface)
 {
@@ -1319,9 +1311,9 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer008_GetPublicIP(struct w_
 
 extern vtable_ptr winISteamGameServer_SteamGameServer008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer008, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer008_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer008,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer008_LogOn)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer008_LogOff)
@@ -1341,9 +1333,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer008_RequestUserGroupStatus)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer008_GetPublicIP)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer008(void *u_iface)
 {
@@ -1612,9 +1602,9 @@ uint32_t __thiscall winISteamGameServer_SteamGameServer009_UserHasLicenseForApp(
 
 extern vtable_ptr winISteamGameServer_SteamGameServer009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer009, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer009_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer009,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer009_LogOn)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer009_LogOff)
@@ -1636,9 +1626,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer009_SetGameData)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer009_UserHasLicenseForApp)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer009(void *u_iface)
 {
@@ -1959,9 +1947,9 @@ void __thiscall winISteamGameServer_SteamGameServer010_CancelAuthTicket(struct w
 
 extern vtable_ptr winISteamGameServer_SteamGameServer010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer010, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer010_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer010,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer010_LogOn)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer010_LogOff)
@@ -1987,9 +1975,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer010_EndAuthSession)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer010_CancelAuthTicket)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer010(void *u_iface)
 {
@@ -2565,9 +2551,9 @@ uint64_t __thiscall winISteamGameServer_SteamGameServer011_ComputeNewPlayerCompa
 
 extern vtable_ptr winISteamGameServer_SteamGameServer011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer011, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer011_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer011,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer011_InitGameServer)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer011_SetProduct)
@@ -2614,9 +2600,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer011_AssociateWithClan)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer011(void *u_iface)
 {
@@ -3191,9 +3175,9 @@ uint64_t __thiscall winISteamGameServer_SteamGameServer012_ComputeNewPlayerCompa
 
 extern vtable_ptr winISteamGameServer_SteamGameServer012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer012, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer012_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer012,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer012_InitGameServer)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer012_SetProduct)
@@ -3240,9 +3224,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer012_AssociateWithClan)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer012(void *u_iface)
 {
@@ -3818,9 +3800,9 @@ uint64_t __thiscall winISteamGameServer_SteamGameServer013_ComputeNewPlayerCompa
 
 extern vtable_ptr winISteamGameServer_SteamGameServer013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer013, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer013_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer013,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer013_InitGameServer)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer013_SetProduct)
@@ -3867,9 +3849,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer013_AssociateWithClan)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer013(void *u_iface)
 {
@@ -4445,9 +4425,9 @@ void __thiscall winISteamGameServer_SteamGameServer014_ForceMasterServerHeartbea
 
 extern vtable_ptr winISteamGameServer_SteamGameServer014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer014, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer014_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer014,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer014_InitGameServer)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer014_SetProduct)
@@ -4494,9 +4474,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer014_SetMasterServerHeartbeatInterval_DEPRECATED)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer014_ForceMasterServerHeartbeat_DEPRECATED)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer014(void *u_iface)
 {
@@ -5073,9 +5051,9 @@ void __thiscall winISteamGameServer_SteamGameServer015_ForceMasterServerHeartbea
 
 extern vtable_ptr winISteamGameServer_SteamGameServer015_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameServer_SteamGameServer015, 0, ".?AVISteamGameServer@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameServer_SteamGameServer015_vtables)
     __ASM_VTABLE(winISteamGameServer_SteamGameServer015,
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer015_InitGameServer)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer015_SetProduct)
@@ -5122,9 +5100,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer015_SetMasterServerHeartbeatInterval_DEPRECATED)
         VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer015_ForceMasterServerHeartbeat_DEPRECATED)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameServer_SteamGameServer015(void *u_iface)
 {
@@ -5135,3 +5111,20 @@ struct w_steam_iface *create_winISteamGameServer_SteamGameServer015(void *u_ifac
     return r;
 }
 
+void init_winISteamGameServer_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamGameServer_SteamGameServer002_rtti( base );
+    init_winISteamGameServer_SteamGameServer003_rtti( base );
+    init_winISteamGameServer_SteamGameServer004_rtti( base );
+    init_winISteamGameServer_SteamGameServer005_rtti( base );
+    init_winISteamGameServer_SteamGameServer008_rtti( base );
+    init_winISteamGameServer_SteamGameServer009_rtti( base );
+    init_winISteamGameServer_SteamGameServer010_rtti( base );
+    init_winISteamGameServer_SteamGameServer011_rtti( base );
+    init_winISteamGameServer_SteamGameServer012_rtti( base );
+    init_winISteamGameServer_SteamGameServer013_rtti( base );
+    init_winISteamGameServer_SteamGameServer014_rtti( base );
+    init_winISteamGameServer_SteamGameServer015_rtti( base );
+#endif /* __x86_64__ */
+}

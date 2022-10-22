@@ -81,9 +81,9 @@ uint32_t __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_GetSe
 
 extern vtable_ptr winISteamNetworkingMessages_SteamNetworkingMessages002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingMessages_SteamNetworkingMessages002, 0, ".?AVISteamNetworkingMessages@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingMessages_SteamNetworkingMessages002_vtables)
     __ASM_VTABLE(winISteamNetworkingMessages_SteamNetworkingMessages002,
         VTABLE_ADD_FUNC(winISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser)
         VTABLE_ADD_FUNC(winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel)
@@ -92,9 +92,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser)
         VTABLE_ADD_FUNC(winISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingMessages_SteamNetworkingMessages002(void *u_iface)
 {
@@ -105,3 +103,9 @@ struct w_steam_iface *create_winISteamNetworkingMessages_SteamNetworkingMessages
     return r;
 }
 
+void init_winISteamNetworkingMessages_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamNetworkingMessages_SteamNetworkingMessages002_rtti( base );
+#endif /* __x86_64__ */
+}

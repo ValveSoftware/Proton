@@ -192,9 +192,9 @@ bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(struct w_steam_ifa
 
 extern vtable_ptr winISteamUtils_SteamUtils002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils002, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils002_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils002,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils002_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils002_GetSecondsSinceComputerActive)
@@ -211,9 +211,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils002_GetAPICallFailureReason)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils002_GetAPICallResult)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils002(void *u_iface)
 {
@@ -460,9 +458,9 @@ bool __thiscall winISteamUtils_SteamUtils004_IsOverlayEnabled(struct w_steam_ifa
 
 extern vtable_ptr winISteamUtils_SteamUtils004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils004, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils004_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils004,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils004_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils004_GetSecondsSinceComputerActive)
@@ -483,9 +481,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils004_SetWarningMessageHook)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils004_IsOverlayEnabled)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils004(void *u_iface)
 {
@@ -801,9 +797,9 @@ bool __thiscall winISteamUtils_SteamUtils005_GetEnteredGamepadTextInput(struct w
 
 extern vtable_ptr winISteamUtils_SteamUtils005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils005, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils005_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils005,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils005_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils005_GetSecondsSinceComputerActive)
@@ -829,9 +825,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils005_GetEnteredGamepadTextLength)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils005_GetEnteredGamepadTextInput)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils005(void *u_iface)
 {
@@ -1171,9 +1165,9 @@ bool __thiscall winISteamUtils_SteamUtils006_IsSteamRunningInVR(struct w_steam_i
 
 extern vtable_ptr winISteamUtils_SteamUtils006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils006, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils006_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils006,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils006_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils006_GetSecondsSinceComputerActive)
@@ -1201,9 +1195,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils006_GetSteamUILanguage)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils006_IsSteamRunningInVR)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils006(void *u_iface)
 {
@@ -1557,9 +1549,9 @@ void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationInset(struct 
 
 extern vtable_ptr winISteamUtils_SteamUtils007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils007, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils007_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils007,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils007_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils007_GetSecondsSinceComputerActive)
@@ -1588,9 +1580,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils007_IsSteamRunningInVR)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils007_SetOverlayNotificationInset)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils007(void *u_iface)
 {
@@ -1967,9 +1957,9 @@ void __thiscall winISteamUtils_SteamUtils008_StartVRDashboard(struct w_steam_ifa
 
 extern vtable_ptr winISteamUtils_SteamUtils008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils008, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils008_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils008,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils008_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils008_GetSecondsSinceComputerActive)
@@ -2000,9 +1990,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils008_IsSteamInBigPictureMode)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils008_StartVRDashboard)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils008(void *u_iface)
 {
@@ -2456,9 +2444,9 @@ uint32_t __thiscall winISteamUtils_SteamUtils009_GetIPv6ConnectivityState(struct
 
 extern vtable_ptr winISteamUtils_SteamUtils009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils009, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils009_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils009,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_GetSecondsSinceComputerActive)
@@ -2495,9 +2483,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_FilterText)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_GetIPv6ConnectivityState)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils009(void *u_iface)
 {
@@ -3006,9 +2992,9 @@ bool __thiscall winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput(str
 
 extern vtable_ptr winISteamUtils_SteamUtils010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUtils_SteamUtils010, 0, ".?AVISteamUtils@@")
+
+__ASM_BLOCK_BEGIN(winISteamUtils_SteamUtils010_vtables)
     __ASM_VTABLE(winISteamUtils_SteamUtils010,
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_GetSecondsSinceAppActive)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_GetSecondsSinceComputerActive)
@@ -3049,9 +3035,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_SetGameLauncherMode)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUtils_SteamUtils010(void *u_iface)
 {
@@ -3062,3 +3046,16 @@ struct w_steam_iface *create_winISteamUtils_SteamUtils010(void *u_iface)
     return r;
 }
 
+void init_winISteamUtils_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamUtils_SteamUtils002_rtti( base );
+    init_winISteamUtils_SteamUtils004_rtti( base );
+    init_winISteamUtils_SteamUtils005_rtti( base );
+    init_winISteamUtils_SteamUtils006_rtti( base );
+    init_winISteamUtils_SteamUtils007_rtti( base );
+    init_winISteamUtils_SteamUtils008_rtti( base );
+    init_winISteamUtils_SteamUtils009_rtti( base );
+    init_winISteamUtils_SteamUtils010_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -86,9 +86,9 @@ void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrid
 
 extern vtable_ptr winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION, 0, ".?AVISteamController@@")
+
+__ASM_BLOCK_BEGIN(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_vtables)
     __ASM_VTABLE(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION,
         VTABLE_ADD_FUNC(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init)
         VTABLE_ADD_FUNC(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown)
@@ -97,9 +97,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse)
         VTABLE_ADD_FUNC(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_SetOverrideMode)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamController_STEAMCONTROLLER_INTERFACE_VERSION(void *u_iface)
 {
@@ -347,9 +345,9 @@ void __thiscall winISteamController_SteamController003_TriggerRepeatedHapticPuls
 
 extern vtable_ptr winISteamController_SteamController003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamController_SteamController003, 0, ".?AVISteamController@@")
+
+__ASM_BLOCK_BEGIN(winISteamController_SteamController003_vtables)
     __ASM_VTABLE(winISteamController_SteamController003,
         VTABLE_ADD_FUNC(winISteamController_SteamController003_Init)
         VTABLE_ADD_FUNC(winISteamController_SteamController003_Shutdown)
@@ -369,9 +367,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_SteamController003_TriggerHapticPulse)
         VTABLE_ADD_FUNC(winISteamController_SteamController003_TriggerRepeatedHapticPulse)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamController_SteamController003(void *u_iface)
 {
@@ -693,9 +689,9 @@ bool __thiscall winISteamController_SteamController004_ShowAnalogActionOrigins(s
 
 extern vtable_ptr winISteamController_SteamController004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamController_SteamController004, 0, ".?AVISteamController@@")
+
+__ASM_BLOCK_BEGIN(winISteamController_SteamController004_vtables)
     __ASM_VTABLE(winISteamController_SteamController004,
         VTABLE_ADD_FUNC(winISteamController_SteamController004_Init)
         VTABLE_ADD_FUNC(winISteamController_SteamController004_Shutdown)
@@ -720,9 +716,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_SteamController004_ShowDigitalActionOrigins)
         VTABLE_ADD_FUNC(winISteamController_SteamController004_ShowAnalogActionOrigins)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamController_SteamController004(void *u_iface)
 {
@@ -1088,9 +1082,9 @@ const char * __thiscall winISteamController_SteamController005_GetStringForActio
 
 extern vtable_ptr winISteamController_SteamController005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamController_SteamController005, 0, ".?AVISteamController@@")
+
+__ASM_BLOCK_BEGIN(winISteamController_SteamController005_vtables)
     __ASM_VTABLE(winISteamController_SteamController005,
         VTABLE_ADD_FUNC(winISteamController_SteamController005_Init)
         VTABLE_ADD_FUNC(winISteamController_SteamController005_Shutdown)
@@ -1119,9 +1113,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_SteamController005_GetStringForActionOrigin)
         VTABLE_ADD_FUNC(winISteamController_SteamController005_GetGlyphForActionOrigin)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamController_SteamController005(void *u_iface)
 {
@@ -1552,9 +1544,9 @@ uint32_t __thiscall winISteamController_SteamController006_GetInputTypeForHandle
 
 extern vtable_ptr winISteamController_SteamController006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamController_SteamController006, 0, ".?AVISteamController@@")
+
+__ASM_BLOCK_BEGIN(winISteamController_SteamController006_vtables)
     __ASM_VTABLE(winISteamController_SteamController006,
         VTABLE_ADD_FUNC(winISteamController_SteamController006_Init)
         VTABLE_ADD_FUNC(winISteamController_SteamController006_Shutdown)
@@ -1588,9 +1580,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_SteamController006_GetGlyphForActionOrigin)
         VTABLE_ADD_FUNC(winISteamController_SteamController006_GetInputTypeForHandle)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamController_SteamController006(void *u_iface)
 {
@@ -2044,9 +2034,9 @@ bool __thiscall winISteamController_SteamController007_GetControllerBindingRevis
 
 extern vtable_ptr winISteamController_SteamController007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamController_SteamController007, 0, ".?AVISteamController@@")
+
+__ASM_BLOCK_BEGIN(winISteamController_SteamController007_vtables)
     __ASM_VTABLE(winISteamController_SteamController007,
         VTABLE_ADD_FUNC(winISteamController_SteamController007_Init)
         VTABLE_ADD_FUNC(winISteamController_SteamController007_Shutdown)
@@ -2083,9 +2073,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_SteamController007_TranslateActionOrigin)
         VTABLE_ADD_FUNC(winISteamController_SteamController007_GetControllerBindingRevision)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamController_SteamController007(void *u_iface)
 {
@@ -2539,9 +2527,9 @@ bool __thiscall winISteamController_SteamController008_GetControllerBindingRevis
 
 extern vtable_ptr winISteamController_SteamController008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamController_SteamController008, 0, ".?AVISteamController@@")
+
+__ASM_BLOCK_BEGIN(winISteamController_SteamController008_vtables)
     __ASM_VTABLE(winISteamController_SteamController008,
         VTABLE_ADD_FUNC(winISteamController_SteamController008_Init)
         VTABLE_ADD_FUNC(winISteamController_SteamController008_Shutdown)
@@ -2578,9 +2566,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_SteamController008_TranslateActionOrigin)
         VTABLE_ADD_FUNC(winISteamController_SteamController008_GetControllerBindingRevision)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamController_SteamController008(void *u_iface)
 {
@@ -2591,3 +2577,15 @@ struct w_steam_iface *create_winISteamController_SteamController008(void *u_ifac
     return r;
 }
 
+void init_winISteamController_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_rtti( base );
+    init_winISteamController_SteamController003_rtti( base );
+    init_winISteamController_SteamController004_rtti( base );
+    init_winISteamController_SteamController005_rtti( base );
+    init_winISteamController_SteamController006_rtti( base );
+    init_winISteamController_SteamController007_rtti( base );
+    init_winISteamController_SteamController008_rtti( base );
+#endif /* __x86_64__ */
+}

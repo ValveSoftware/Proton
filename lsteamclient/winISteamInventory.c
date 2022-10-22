@@ -357,9 +357,9 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligibleProm
 
 extern vtable_ptr winISteamInventory_STEAMINVENTORY_INTERFACE_V001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamInventory_STEAMINVENTORY_INTERFACE_V001, 0, ".?AVISteamInventory@@")
+
+__ASM_BLOCK_BEGIN(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_vtables)
     __ASM_VTABLE(winISteamInventory_STEAMINVENTORY_INTERFACE_V001,
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems)
@@ -386,9 +386,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_RequestEligiblePromoItemDefinitionsIDs)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligiblePromoItemDefinitionIDs)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V001(void *u_iface)
 {
@@ -943,9 +941,9 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SubmitUpdatePro
 
 extern vtable_ptr winISteamInventory_STEAMINVENTORY_INTERFACE_V002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamInventory_STEAMINVENTORY_INTERFACE_V002, 0, ".?AVISteamInventory@@")
+
+__ASM_BLOCK_BEGIN(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_vtables)
     __ASM_VTABLE(winISteamInventory_STEAMINVENTORY_INTERFACE_V002,
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems)
@@ -985,9 +983,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SubmitUpdateProperties)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V002(void *u_iface)
 {
@@ -1558,9 +1554,9 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem(str
 
 extern vtable_ptr winISteamInventory_STEAMINVENTORY_INTERFACE_V003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamInventory_STEAMINVENTORY_INTERFACE_V003, 0, ".?AVISteamInventory@@")
+
+__ASM_BLOCK_BEGIN(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_vtables)
     __ASM_VTABLE(winISteamInventory_STEAMINVENTORY_INTERFACE_V003,
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems)
@@ -1601,9 +1597,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V003(void *u_iface)
 {
@@ -1614,3 +1608,11 @@ struct w_steam_iface *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V003(vo
     return r;
 }
 
+void init_winISteamInventory_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamInventory_STEAMINVENTORY_INTERFACE_V001_rtti( base );
+    init_winISteamInventory_STEAMINVENTORY_INTERFACE_V002_rtti( base );
+    init_winISteamInventory_STEAMINVENTORY_INTERFACE_V003_rtti( base );
+#endif /* __x86_64__ */
+}

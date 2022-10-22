@@ -374,9 +374,9 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_destructor(
 
 extern vtable_ptr winISteamNetworkingSockets_SteamNetworkingSockets002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingSockets_SteamNetworkingSockets002, 0, ".?AVISteamNetworkingSockets@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingSockets_SteamNetworkingSockets002_vtables)
     __ASM_VTABLE(winISteamNetworkingSockets_SteamNetworkingSockets002,
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets002_ConnectByIPAddress)
@@ -408,9 +408,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets002_CreateHostedDedicatedServerListenSocket)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets002_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingSockets_SteamNetworkingSockets002(void *u_iface)
 {
@@ -832,9 +830,9 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_destructor(
 
 extern vtable_ptr winISteamNetworkingSockets_SteamNetworkingSockets004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingSockets_SteamNetworkingSockets004, 0, ".?AVISteamNetworkingSockets@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingSockets_SteamNetworkingSockets004_vtables)
     __ASM_VTABLE(winISteamNetworkingSockets_SteamNetworkingSockets004,
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets004_CreateListenSocketIP)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets004_ConnectByIPAddress)
@@ -869,9 +867,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets004_GetGameCoordinatorServerLogin)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets004_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingSockets_SteamNetworkingSockets004(void *u_iface)
 {
@@ -1338,9 +1334,9 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_destructor(
 
 extern vtable_ptr winISteamNetworkingSockets_SteamNetworkingSockets006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingSockets_SteamNetworkingSockets006, 0, ".?AVISteamNetworkingSockets@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingSockets_SteamNetworkingSockets006_vtables)
     __ASM_VTABLE(winISteamNetworkingSockets_SteamNetworkingSockets006,
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets006_CreateListenSocketIP)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectByIPAddress)
@@ -1378,9 +1374,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets006_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingSockets_SteamNetworkingSockets006(void *u_iface)
 {
@@ -1916,9 +1910,9 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_destructor(
 
 extern vtable_ptr winISteamNetworkingSockets_SteamNetworkingSockets008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingSockets_SteamNetworkingSockets008, 0, ".?AVISteamNetworkingSockets@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingSockets_SteamNetworkingSockets008_vtables)
     __ASM_VTABLE(winISteamNetworkingSockets_SteamNetworkingSockets008,
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketIP)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectByIPAddress)
@@ -1961,9 +1955,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets008_SetCertificate)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets008_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingSockets_SteamNetworkingSockets008(void *u_iface)
 {
@@ -2511,9 +2503,9 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_destructor(
 
 extern vtable_ptr winISteamNetworkingSockets_SteamNetworkingSockets009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingSockets_SteamNetworkingSockets009, 0, ".?AVISteamNetworkingSockets@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingSockets_SteamNetworkingSockets009_vtables)
     __ASM_VTABLE(winISteamNetworkingSockets_SteamNetworkingSockets009,
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress)
@@ -2557,9 +2549,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets009_RunCallbacks)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets009_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingSockets_SteamNetworkingSockets009(void *u_iface)
 {
@@ -3206,9 +3196,9 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_destructor(
 
 extern vtable_ptr winISteamNetworkingSockets_SteamNetworkingSockets012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamNetworkingSockets_SteamNetworkingSockets012, 0, ".?AVISteamNetworkingSockets@@")
+
+__ASM_BLOCK_BEGIN(winISteamNetworkingSockets_SteamNetworkingSockets012_vtables)
     __ASM_VTABLE(winISteamNetworkingSockets_SteamNetworkingSockets012,
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketIP)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectByIPAddress)
@@ -3259,9 +3249,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort)
         VTABLE_ADD_FUNC(winISteamNetworkingSockets_SteamNetworkingSockets012_destructor)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamNetworkingSockets_SteamNetworkingSockets012(void *u_iface)
 {
@@ -3272,3 +3260,14 @@ struct w_steam_iface *create_winISteamNetworkingSockets_SteamNetworkingSockets01
     return r;
 }
 
+void init_winISteamNetworkingSockets_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamNetworkingSockets_SteamNetworkingSockets002_rtti( base );
+    init_winISteamNetworkingSockets_SteamNetworkingSockets004_rtti( base );
+    init_winISteamNetworkingSockets_SteamNetworkingSockets006_rtti( base );
+    init_winISteamNetworkingSockets_SteamNetworkingSockets008_rtti( base );
+    init_winISteamNetworkingSockets_SteamNetworkingSockets009_rtti( base );
+    init_winISteamNetworkingSockets_SteamNetworkingSockets012_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -230,9 +230,9 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_CancelSer
 
 extern vtable_ptr winISteamMatchmakingServers_SteamMatchMakingServers001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmakingServers_SteamMatchMakingServers001, 0, ".?AVISteamMatchmakingServers@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmakingServers_SteamMatchMakingServers001_vtables)
     __ASM_VTABLE(winISteamMatchmakingServers_SteamMatchMakingServers001,
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList)
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerList)
@@ -251,9 +251,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules)
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers001_CancelServerQuery)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmakingServers_SteamMatchMakingServers001(void *u_iface)
 {
@@ -509,9 +507,9 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_CancelSer
 
 extern vtable_ptr winISteamMatchmakingServers_SteamMatchMakingServers002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamMatchmakingServers_SteamMatchMakingServers002, 0, ".?AVISteamMatchmakingServers@@")
+
+__ASM_BLOCK_BEGIN(winISteamMatchmakingServers_SteamMatchMakingServers002_vtables)
     __ASM_VTABLE(winISteamMatchmakingServers_SteamMatchMakingServers002,
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList)
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList)
@@ -531,9 +529,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules)
         VTABLE_ADD_FUNC(winISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamMatchmakingServers_SteamMatchMakingServers002(void *u_iface)
 {
@@ -544,3 +540,10 @@ struct w_steam_iface *create_winISteamMatchmakingServers_SteamMatchMakingServers
     return r;
 }
 
+void init_winISteamMatchmakingServers_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamMatchmakingServers_SteamMatchMakingServers001_rtti( base );
+    init_winISteamMatchmakingServers_SteamMatchMakingServers002_rtti( base );
+#endif /* __x86_64__ */
+}

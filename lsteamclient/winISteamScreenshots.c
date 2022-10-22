@@ -95,9 +95,9 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUs
 
 extern vtable_ptr winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001, 0, ".?AVISteamScreenshots@@")
+
+__ASM_BLOCK_BEGIN(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot)
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary)
@@ -106,9 +106,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation)
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001(void *u_iface)
 {
@@ -225,9 +223,9 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPu
 
 extern vtable_ptr winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002, 0, ".?AVISteamScreenshots@@")
+
+__ASM_BLOCK_BEGIN(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_vtables)
     __ASM_VTABLE(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002,
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot)
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary)
@@ -237,9 +235,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser)
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002(void *u_iface)
 {
@@ -387,9 +383,9 @@ uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_A
 
 extern vtable_ptr winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003, 0, ".?AVISteamScreenshots@@")
+
+__ASM_BLOCK_BEGIN(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_vtables)
     __ASM_VTABLE(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003,
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot)
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary)
@@ -401,9 +397,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked)
         VTABLE_ADD_FUNC(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003(void *u_iface)
 {
@@ -414,3 +408,11 @@ struct w_steam_iface *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VER
     return r;
 }
 
+void init_winISteamScreenshots_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_rtti( base );
+    init_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_rtti( base );
+    init_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_rtti( base );
+#endif /* __x86_64__ */
+}
