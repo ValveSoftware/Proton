@@ -407,17 +407,70 @@ def get_path_converter(parent):
                     return conv
     return None
 
-def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods, iface_version):
+
+def method_unique_name(method, existing_methods):
     used_name = method.spelling
     if used_name in existing_methods:
-        number = '2'
+        number = 2
         while used_name in existing_methods:
             idx = existing_methods.index(used_name)
-            used_name = "%s_%s" % (method.spelling, number)
-            number = chr(ord(number) + 1)
+            used_name = f"{method.spelling}_{number}"
+            number = number + 1
         existing_methods.insert(idx, used_name)
     else:
         existing_methods.append(used_name)
+    return used_name
+
+
+def declspec(decl, name):
+    if type(decl) is Cursor:
+        decl = decl.type
+
+    const = 'const ' if decl.is_const_qualified() else ''
+    if decl.kind in (TypeKind.POINTER, TypeKind.LVALUEREFERENCE):
+        decl = decl.get_pointee()
+        return declspec(decl, f"*{const}{name}")
+    if decl.kind == TypeKind.CONSTANTARRAY:
+        decl, count = decl.element_type, decl.element_count
+        return declspec(decl, f"({const}{name})[{count}]")
+
+    if len(name):
+        name = f' {name}'
+
+    if decl.kind in (TypeKind.UNEXPOSED, TypeKind.FUNCTIONPROTO):
+        return f'void{name}'
+    if decl.kind == TypeKind.ENUM:
+        return f'{decl.spelling.split("::")[-1]}{name}'
+
+    real_name = canonical_typename(decl)
+    real_name = real_name.removeprefix("const ")
+    real_name = real_name.removeprefix("vr::")
+
+    if real_name in SDK_STRUCTS:
+        typename = f"win{real_name}_{display_sdkver(sdkver)}"
+    elif struct_needs_conversion(decl.get_canonical()) \
+         and not decl.is_const_qualified(): # FIXME
+        typename = f"win{real_name}_{display_sdkver(sdkver)}"
+    else:
+        typename = decl.spelling
+        typename = typename.removeprefix("const ")
+        typename = typename.removeprefix("vr::")
+
+    if decl.get_canonical().kind not in (TypeKind.RECORD, TypeKind.ENUM):
+        typename = f'{const}{typename}'
+    return f'{typename}{name}'
+
+
+def handle_method_hpp(method_name, cppname, method, cpp_h):
+    ret = f'{strip_ns(method.result_type.spelling)} '
+
+    params = [declspec(p, "") for p in method.get_arguments()]
+    params = ['void *'] + params
+
+    cpp_h.write(f'extern {ret}{cppname}_{method_name}({", ".join(params)});\n')
+
+
+def handle_method(used_name, cfile, classname, winclassname, cppname, method, cpp, iface_version):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
     if returns_record:
         parambytes = 8 #_this + return pointer
@@ -426,22 +479,17 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     for param in get_params(method):
         parambytes += param.type.get_size()
     cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, used_name, parambytes))
-    cpp_h.write("extern ")
     if strip_ns(method.result_type.spelling).startswith("IVR"):
         cfile.write("win%s " % (strip_ns(method.result_type.spelling)))
         cpp.write("void *")
-        cpp_h.write("void *")
     elif returns_record:
         cfile.write("%s *" % strip_ns(method.result_type.spelling))
         cpp.write("%s " % method.result_type.spelling)
-        cpp_h.write("%s " % strip_ns(method.result_type.spelling))
     else:
         cfile.write("%s " % strip_ns(method.result_type.spelling))
         cpp.write("%s " % method.result_type.spelling)
-        cpp_h.write("%s " % strip_ns(method.result_type.spelling))
     cfile.write('__thiscall %s_%s(%s *_this' % (winclassname, used_name, winclassname))
     cpp.write("%s_%s(void *linux_side" % (cppname, used_name))
-    cpp_h.write("%s_%s(void *" % (cppname, used_name))
     if returns_record:
         cfile.write(", %s *_r" % strip_ns(method.result_type.spelling))
     unnamed = 'a'
@@ -485,15 +533,12 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         if param.spelling == "":
             cfile.write(", %s _%s" % (typename, unnamed))
             cpp.write(", %s _%s" % (typename, unnamed))
-            cpp_h.write(", %s" % typename)
             unnamed = chr(ord(unnamed) + 1)
         else:
             cfile.write(", %s %s" % (typename, param.spelling))
             cpp.write(", %s %s" % (typename, param.spelling))
-            cpp_h.write(", %s" % (typename))
     cfile.write(")\n{\n")
     cpp.write(")\n{\n")
-    cpp_h.write(");\n")
 
     path_conv = get_path_converter(method)
 
@@ -737,7 +782,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     method_names = []
     for child in klass.get_children():
         if child.kind == CursorKind.CXX_METHOD:
-            handle_method(cfile, klass.spelling, winclassname, cppname, child, cpp, cpp_h, method_names, version)
+            method_name = method_unique_name(child, method_names)
+            handle_method_hpp(method_name, cppname, child, cpp_h)
+            handle_method(method_name, cfile, klass.spelling, winclassname, cppname, child, cpp, version)
             methods.append(child)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
