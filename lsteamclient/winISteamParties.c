@@ -175,9 +175,9 @@ bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(struct w_
 
 extern vtable_ptr winISteamParties_SteamParties002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamParties_SteamParties002, 0, ".?AVISteamParties@@")
+
+__ASM_BLOCK_BEGIN(winISteamParties_SteamParties002_vtables)
     __ASM_VTABLE(winISteamParties_SteamParties002,
         VTABLE_ADD_FUNC(winISteamParties_SteamParties002_GetNumActiveBeacons)
         VTABLE_ADD_FUNC(winISteamParties_SteamParties002_GetBeaconByIndex)
@@ -192,9 +192,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamParties_SteamParties002_DestroyBeacon)
         VTABLE_ADD_FUNC(winISteamParties_SteamParties002_GetBeaconLocationData)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamParties_SteamParties002(void *u_iface)
 {
@@ -205,3 +203,9 @@ struct w_steam_iface *create_winISteamParties_SteamParties002(void *u_iface)
     return r;
 }
 
+void init_winISteamParties_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamParties_SteamParties002_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -350,9 +350,9 @@ void __thiscall winISteamUser_SteamUser004_RequestLegacyCDKey(struct w_steam_ifa
 
 extern vtable_ptr winISteamUser_SteamUser004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser004, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser004_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser004,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser004_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser004_LogOn)
@@ -381,9 +381,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser004_IsPrimaryChatDestination)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser004_RequestLegacyCDKey)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser004(void *u_iface)
 {
@@ -925,9 +923,9 @@ void __thiscall winISteamUser_SteamUser005_SetAccountCreationTime(struct w_steam
 
 extern vtable_ptr winISteamUser_SteamUser005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser005, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser005_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser005,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser005_LogOn)
@@ -969,9 +967,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetPassword)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetAccountCreationTime)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser005(void *u_iface)
 {
@@ -1154,9 +1150,9 @@ void __thiscall winISteamUser_SteamUser006_TrackAppUsageEvent(struct w_steam_ifa
 
 extern vtable_ptr winISteamUser_SteamUser006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser006, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser006_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser006,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser006_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser006_LogOn)
@@ -1171,9 +1167,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser006_TerminateGameConnection)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser006_TrackAppUsageEvent)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser006(void *u_iface)
 {
@@ -1369,9 +1363,9 @@ void __thiscall winISteamUser_SteamUser007_RefreshSteam2Login(struct w_steam_ifa
 
 extern vtable_ptr winISteamUser_SteamUser007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser007, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser007_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser007,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser007_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser007_LogOn)
@@ -1387,9 +1381,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser007_TrackAppUsageEvent)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser007_RefreshSteam2Login)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser007(void *u_iface)
 {
@@ -1501,9 +1493,9 @@ void __thiscall winISteamUser_SteamUser008_RefreshSteam2Login(struct w_steam_ifa
 
 extern vtable_ptr winISteamUser_SteamUser008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser008, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser008_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser008,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser008_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser008_BLoggedOn)
@@ -1513,9 +1505,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser008_TrackAppUsageEvent)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser008_RefreshSteam2Login)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser008(void *u_iface)
 {
@@ -1625,9 +1615,9 @@ void __thiscall winISteamUser_SteamUser009_RefreshSteam2Login(struct w_steam_ifa
 
 extern vtable_ptr winISteamUser_SteamUser009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser009, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser009_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser009,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser009_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser009_BLoggedOn)
@@ -1637,9 +1627,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser009_TrackAppUsageEvent)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser009_RefreshSteam2Login)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser009(void *u_iface)
 {
@@ -1737,9 +1725,9 @@ void __thiscall winISteamUser_SteamUser010_TrackAppUsageEvent(struct w_steam_ifa
 
 extern vtable_ptr winISteamUser_SteamUser010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser010, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser010_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser010,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser010_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser010_BLoggedOn)
@@ -1748,9 +1736,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser010_TerminateGameConnection)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser010_TrackAppUsageEvent)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser010(void *u_iface)
 {
@@ -1917,9 +1903,9 @@ uint32_t __thiscall winISteamUser_SteamUser011_DecompressVoice(struct w_steam_if
 
 extern vtable_ptr winISteamUser_SteamUser011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser011, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser011_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser011,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser011_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser011_BLoggedOn)
@@ -1933,9 +1919,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser011_GetCompressedVoice)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser011_DecompressVoice)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser011(void *u_iface)
 {
@@ -2170,9 +2154,9 @@ uint32_t __thiscall winISteamUser_SteamUser012_UserHasLicenseForApp(struct w_ste
 
 extern vtable_ptr winISteamUser_SteamUser012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser012, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser012_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser012,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser012_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser012_BLoggedOn)
@@ -2191,9 +2175,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser012_CancelAuthTicket)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser012_UserHasLicenseForApp)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser012(void *u_iface)
 {
@@ -2447,9 +2429,9 @@ uint32_t __thiscall winISteamUser_SteamUser013_UserHasLicenseForApp(struct w_ste
 
 extern vtable_ptr winISteamUser_SteamUser013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser013, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser013_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser013,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser013_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser013_BLoggedOn)
@@ -2469,9 +2451,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser013_CancelAuthTicket)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser013_UserHasLicenseForApp)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser013(void *u_iface)
 {
@@ -2780,9 +2760,9 @@ bool __thiscall winISteamUser_SteamUser014_GetEncryptedAppTicket(struct w_steam_
 
 extern vtable_ptr winISteamUser_SteamUser014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser014, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser014_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser014,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser014_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser014_BLoggedOn)
@@ -2806,9 +2786,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser014_RequestEncryptedAppTicket)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser014_GetEncryptedAppTicket)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser014(void *u_iface)
 {
@@ -3130,9 +3108,9 @@ bool __thiscall winISteamUser_SteamUser015_GetEncryptedAppTicket(struct w_steam_
 
 extern vtable_ptr winISteamUser_SteamUser015_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser015, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser015_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser015,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser015_BLoggedOn)
@@ -3157,9 +3135,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser015_RequestEncryptedAppTicket)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetEncryptedAppTicket)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser015(void *u_iface)
 {
@@ -3483,9 +3459,9 @@ bool __thiscall winISteamUser_SteamUser016_GetEncryptedAppTicket(struct w_steam_
 
 extern vtable_ptr winISteamUser_SteamUser016_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser016, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser016_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser016,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser016_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser016_BLoggedOn)
@@ -3510,9 +3486,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser016_RequestEncryptedAppTicket)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser016_GetEncryptedAppTicket)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser016(void *u_iface)
 {
@@ -3862,9 +3836,9 @@ int32_t __thiscall winISteamUser_SteamUser017_GetPlayerSteamLevel(struct w_steam
 
 extern vtable_ptr winISteamUser_SteamUser017_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser017, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser017_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser017,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser017_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser017_BLoggedOn)
@@ -3891,9 +3865,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser017_GetGameBadgeLevel)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser017_GetPlayerSteamLevel)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser017(void *u_iface)
 {
@@ -4256,9 +4228,9 @@ uint64_t __thiscall winISteamUser_SteamUser018_RequestStoreAuthURL(struct w_stea
 
 extern vtable_ptr winISteamUser_SteamUser018_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser018, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser018_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser018,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser018_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser018_BLoggedOn)
@@ -4286,9 +4258,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser018_GetPlayerSteamLevel)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser018_RequestStoreAuthURL)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser018(void *u_iface)
 {
@@ -4699,9 +4669,9 @@ bool __thiscall winISteamUser_SteamUser019_BIsPhoneRequiringVerification(struct 
 
 extern vtable_ptr winISteamUser_SteamUser019_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser019, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser019_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser019,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser019_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser019_BLoggedOn)
@@ -4733,9 +4703,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser019_BIsPhoneIdentifying)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser019_BIsPhoneRequiringVerification)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser019(void *u_iface)
 {
@@ -5170,9 +5138,9 @@ uint64_t __thiscall winISteamUser_SteamUser020_GetDurationControl(struct w_steam
 
 extern vtable_ptr winISteamUser_SteamUser020_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser020, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser020_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser020,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser020_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser020_BLoggedOn)
@@ -5206,9 +5174,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser020_GetMarketEligibility)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser020_GetDurationControl)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser020(void *u_iface)
 {
@@ -5656,9 +5622,9 @@ bool __thiscall winISteamUser_SteamUser021_BSetDurationControlOnlineState(struct
 
 extern vtable_ptr winISteamUser_SteamUser021_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser021, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser021_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser021,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_BLoggedOn)
@@ -5693,9 +5659,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_GetDurationControl)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser021_BSetDurationControlOnlineState)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser021(void *u_iface)
 {
@@ -6144,9 +6108,9 @@ bool __thiscall winISteamUser_SteamUser022_BSetDurationControlOnlineState(struct
 
 extern vtable_ptr winISteamUser_SteamUser022_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser022, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser022_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser022,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser022_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser022_BLoggedOn)
@@ -6181,9 +6145,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser022_GetDurationControl)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser022_BSetDurationControlOnlineState)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser022(void *u_iface)
 {
@@ -6645,9 +6607,9 @@ bool __thiscall winISteamUser_SteamUser023_BSetDurationControlOnlineState(struct
 
 extern vtable_ptr winISteamUser_SteamUser023_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUser_SteamUser023, 0, ".?AVISteamUser@@")
+
+__ASM_BLOCK_BEGIN(winISteamUser_SteamUser023_vtables)
     __ASM_VTABLE(winISteamUser_SteamUser023,
         VTABLE_ADD_FUNC(winISteamUser_SteamUser023_GetHSteamUser)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser023_BLoggedOn)
@@ -6683,9 +6645,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser023_GetDurationControl)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser023_BSetDurationControlOnlineState)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUser_SteamUser023(void *u_iface)
 {
@@ -6696,3 +6656,28 @@ struct w_steam_iface *create_winISteamUser_SteamUser023(void *u_iface)
     return r;
 }
 
+void init_winISteamUser_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamUser_SteamUser004_rtti( base );
+    init_winISteamUser_SteamUser005_rtti( base );
+    init_winISteamUser_SteamUser006_rtti( base );
+    init_winISteamUser_SteamUser007_rtti( base );
+    init_winISteamUser_SteamUser008_rtti( base );
+    init_winISteamUser_SteamUser009_rtti( base );
+    init_winISteamUser_SteamUser010_rtti( base );
+    init_winISteamUser_SteamUser011_rtti( base );
+    init_winISteamUser_SteamUser012_rtti( base );
+    init_winISteamUser_SteamUser013_rtti( base );
+    init_winISteamUser_SteamUser014_rtti( base );
+    init_winISteamUser_SteamUser015_rtti( base );
+    init_winISteamUser_SteamUser016_rtti( base );
+    init_winISteamUser_SteamUser017_rtti( base );
+    init_winISteamUser_SteamUser018_rtti( base );
+    init_winISteamUser_SteamUser019_rtti( base );
+    init_winISteamUser_SteamUser020_rtti( base );
+    init_winISteamUser_SteamUser021_rtti( base );
+    init_winISteamUser_SteamUser022_rtti( base );
+    init_winISteamUser_SteamUser023_rtti( base );
+#endif /* __x86_64__ */
+}

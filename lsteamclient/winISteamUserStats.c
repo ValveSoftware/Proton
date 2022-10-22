@@ -320,9 +320,9 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_G
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName)
@@ -347,9 +347,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001(void *u_iface)
 {
@@ -623,9 +621,9 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateA
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetNumStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatName)
@@ -646,9 +644,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetAchievementDisplayAttribute)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_IndicateAchievementProgress)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002(void *u_iface)
 {
@@ -841,9 +837,9 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateA
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetStat_2)
@@ -859,9 +855,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_GetAchievementDisplayAttribute)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_IndicateAchievementProgress)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003(void *u_iface)
 {
@@ -1112,9 +1106,9 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAc
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_2)
@@ -1134,9 +1128,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserAchievement)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004(void *u_iface)
 {
@@ -1529,9 +1521,9 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_Uploa
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetStat_2)
@@ -1561,9 +1553,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005(void *u_iface)
 {
@@ -1969,9 +1959,9 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNu
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2)
@@ -2002,9 +1992,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006(void *u_iface)
 {
@@ -2441,9 +2429,9 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNu
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetStat_2)
@@ -2476,9 +2464,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007(void *u_iface)
 {
@@ -2929,9 +2915,9 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNu
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2)
@@ -2965,9 +2951,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008(void *u_iface)
 {
@@ -3433,9 +3417,9 @@ uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNu
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetStat_2)
@@ -3470,9 +3454,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009(void *u_iface)
 {
@@ -4068,9 +4050,9 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlo
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_2)
@@ -4114,9 +4096,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010(void *u_iface)
 {
@@ -4737,9 +4717,9 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlo
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2)
@@ -4785,9 +4765,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_2)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011(void *u_iface)
 {
@@ -5438,9 +5416,9 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchiev
 
 extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012, 0, ".?AVISteamUserStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_vtables)
     __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012,
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestCurrentStats)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetStat_2)
@@ -5488,9 +5466,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits_2)
         VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchievementProgressLimits)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012(void *u_iface)
 {
@@ -5501,3 +5477,20 @@ struct w_steam_iface *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION
     return r;
 }
 
+void init_winISteamUserStats_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_rtti( base );
+    init_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_rtti( base );
+#endif /* __x86_64__ */
+}

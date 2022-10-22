@@ -305,9 +305,9 @@ uint32_t __thiscall winISteamClient_SteamClient006_GetIPCCallCount(struct w_stea
 
 extern vtable_ptr winISteamClient_SteamClient006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient006, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient006_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient006,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient006_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient006_BReleaseSteamPipe)
@@ -331,9 +331,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient006_RunFrame)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetIPCCallCount)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient006(void *u_iface)
 {
@@ -668,9 +666,9 @@ void /*ISteamRemoteStorage*/ * __thiscall winISteamClient_SteamClient007_GetISte
 
 extern vtable_ptr winISteamClient_SteamClient007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient007, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient007_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient007,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient007_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient007_BReleaseSteamPipe)
@@ -695,9 +693,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient007_SetWarningMessageHook)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient007_GetISteamRemoteStorage)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient007(void *u_iface)
 {
@@ -1017,9 +1013,9 @@ void __thiscall winISteamClient_SteamClient008_SetWarningMessageHook(struct w_st
 
 extern vtable_ptr winISteamClient_SteamClient008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient008, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient008_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient008,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient008_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient008_BReleaseSteamPipe)
@@ -1043,9 +1039,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient008_GetIPCCallCount)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient008_SetWarningMessageHook)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient008(void *u_iface)
 {
@@ -1381,9 +1375,9 @@ void __thiscall winISteamClient_SteamClient009_SetWarningMessageHook(struct w_st
 
 extern vtable_ptr winISteamClient_SteamClient009_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient009, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient009_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient009,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient009_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient009_BReleaseSteamPipe)
@@ -1408,9 +1402,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient009_GetIPCCallCount)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient009_SetWarningMessageHook)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient009(void *u_iface)
 {
@@ -1774,9 +1766,9 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient010_GetISteamHTTP(st
 
 extern vtable_ptr winISteamClient_SteamClient010_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient010, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient010_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient010,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient010_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient010_BReleaseSteamPipe)
@@ -1803,9 +1795,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient010_BShutdownIfAllPipesClosed)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient010_GetISteamHTTP)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient010(void *u_iface)
 {
@@ -2185,9 +2175,9 @@ void /*ISteamHTTP*/ * __thiscall winISteamClient_SteamClient011_GetISteamHTTP(st
 
 extern vtable_ptr winISteamClient_SteamClient011_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient011, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient011_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient011,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient011_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient011_BReleaseSteamPipe)
@@ -2215,9 +2205,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient011_BShutdownIfAllPipesClosed)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient011_GetISteamHTTP)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient011(void *u_iface)
 {
@@ -2629,9 +2617,9 @@ void /*ISteamUGC*/ * __thiscall winISteamClient_SteamClient012_GetISteamUGC(stru
 
 extern vtable_ptr winISteamClient_SteamClient012_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient012, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient012_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient012,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient012_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient012_BReleaseSteamPipe)
@@ -2661,9 +2649,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient012_GetISteamController)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient012_GetISteamUGC)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient012(void *u_iface)
 {
@@ -3121,9 +3107,9 @@ void /*ISteamAppList*/ * __thiscall winISteamClient_SteamClient013_GetISteamAppL
 
 extern vtable_ptr winISteamClient_SteamClient013_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient013, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient013_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient013,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient013_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient013_BReleaseSteamPipe)
@@ -3156,9 +3142,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient013_GetISteamVideo)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient013_GetISteamAppList)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient013(void *u_iface)
 {
@@ -3602,9 +3586,9 @@ void /*ISteamMusic*/ * __thiscall winISteamClient_SteamClient014_GetISteamMusic(
 
 extern vtable_ptr winISteamClient_SteamClient014_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient014, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient014_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient014,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient014_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient014_BReleaseSteamPipe)
@@ -3636,9 +3620,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient014_GetISteamAppList)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient014_GetISteamMusic)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient014(void *u_iface)
 {
@@ -4098,9 +4080,9 @@ void /*ISteamMusicRemote*/ * __thiscall winISteamClient_SteamClient015_GetISteam
 
 extern vtable_ptr winISteamClient_SteamClient015_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient015, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient015_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient015,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient015_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient015_BReleaseSteamPipe)
@@ -4133,9 +4115,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient015_GetISteamMusic)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient015_GetISteamMusicRemote)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient015(void *u_iface)
 {
@@ -4647,9 +4627,9 @@ void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegist
 
 extern vtable_ptr winISteamClient_SteamClient016_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient016, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient016_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient016,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient016_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient016_BReleaseSteamPipe)
@@ -4686,9 +4666,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient016(void *u_iface)
 {
@@ -5247,9 +5225,9 @@ void /*ISteamParentalSettings*/ * __thiscall winISteamClient_SteamClient017_GetI
 
 extern vtable_ptr winISteamClient_SteamClient017_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient017, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient017_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient017,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient017_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient017_BReleaseSteamPipe)
@@ -5289,9 +5267,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient017_GetISteamVideo)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient017_GetISteamParentalSettings)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient017(void *u_iface)
 {
@@ -5898,9 +5874,9 @@ void /*ISteamParties*/ * __thiscall winISteamClient_SteamClient018_GetISteamPart
 
 extern vtable_ptr winISteamClient_SteamClient018_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient018, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient018_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient018,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient018_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient018_BReleaseSteamPipe)
@@ -5943,9 +5919,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient018_GetISteamInput)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient018_GetISteamParties)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient018(void *u_iface)
 {
@@ -6568,9 +6542,9 @@ void /*ISteamRemotePlay*/ * __thiscall winISteamClient_SteamClient019_GetISteamR
 
 extern vtable_ptr winISteamClient_SteamClient019_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient019, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient019_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient019,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient019_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient019_BReleaseSteamPipe)
@@ -6614,9 +6588,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient019_GetISteamParties)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient019_GetISteamRemotePlay)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient019(void *u_iface)
 {
@@ -7250,9 +7222,9 @@ void __thiscall winISteamClient_SteamClient020_DestroyAllInterfaces(struct w_ste
 
 extern vtable_ptr winISteamClient_SteamClient020_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamClient_SteamClient020, 0, ".?AVISteamClient@@")
+
+__ASM_BLOCK_BEGIN(winISteamClient_SteamClient020_vtables)
     __ASM_VTABLE(winISteamClient_SteamClient020,
         VTABLE_ADD_FUNC(winISteamClient_SteamClient020_CreateSteamPipe)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient020_BReleaseSteamPipe)
@@ -7297,9 +7269,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamClient_SteamClient020_GetISteamRemotePlay)
         VTABLE_ADD_FUNC(winISteamClient_SteamClient020_DestroyAllInterfaces)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamClient_SteamClient020(void *u_iface)
 {
@@ -7310,3 +7280,23 @@ struct w_steam_iface *create_winISteamClient_SteamClient020(void *u_iface)
     return r;
 }
 
+void init_winISteamClient_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamClient_SteamClient006_rtti( base );
+    init_winISteamClient_SteamClient007_rtti( base );
+    init_winISteamClient_SteamClient008_rtti( base );
+    init_winISteamClient_SteamClient009_rtti( base );
+    init_winISteamClient_SteamClient010_rtti( base );
+    init_winISteamClient_SteamClient011_rtti( base );
+    init_winISteamClient_SteamClient012_rtti( base );
+    init_winISteamClient_SteamClient013_rtti( base );
+    init_winISteamClient_SteamClient014_rtti( base );
+    init_winISteamClient_SteamClient015_rtti( base );
+    init_winISteamClient_SteamClient016_rtti( base );
+    init_winISteamClient_SteamClient017_rtti( base );
+    init_winISteamClient_SteamClient018_rtti( base );
+    init_winISteamClient_SteamClient019_rtti( base );
+    init_winISteamClient_SteamClient020_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -200,9 +200,9 @@ uint32_t __thiscall winISteamGameStats_SteamGameStats001_AddRowAttributeInt64(st
 
 extern vtable_ptr winISteamGameStats_SteamGameStats001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameStats_SteamGameStats001, 0, ".?AVISteamGameStats@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameStats_SteamGameStats001_vtables)
     __ASM_VTABLE(winISteamGameStats_SteamGameStats001,
         VTABLE_ADD_FUNC(winISteamGameStats_SteamGameStats001_GetNewSession)
         VTABLE_ADD_FUNC(winISteamGameStats_SteamGameStats001_EndSession)
@@ -218,9 +218,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamGameStats_SteamGameStats001_AddSessionAttributeInt64)
         VTABLE_ADD_FUNC(winISteamGameStats_SteamGameStats001_AddRowAttributeInt64)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameStats_SteamGameStats001(void *u_iface)
 {
@@ -231,3 +229,9 @@ struct w_steam_iface *create_winISteamGameStats_SteamGameStats001(void *u_iface)
     return r;
 }
 
+void init_winISteamGameStats_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamGameStats_SteamGameStats001_rtti( base );
+#endif /* __x86_64__ */
+}

@@ -24,15 +24,13 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(struc
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION001, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION001_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION001,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001(void *u_iface)
 {
@@ -133,9 +131,9 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp(st
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION002_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION002, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION002,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribed)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsLowViolence)
@@ -145,9 +143,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailableGameLanguages)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002(void *u_iface)
 {
@@ -261,9 +257,9 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled(str
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION003_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION003, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION003,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribed)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsLowViolence)
@@ -274,9 +270,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION003(void *u_iface)
 {
@@ -468,9 +462,9 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(struct
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION004_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION004, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION004,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence)
@@ -487,9 +481,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION004(void *u_iface)
 {
@@ -763,9 +755,9 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(str
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION005_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION005, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION005,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence)
@@ -788,9 +780,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION005(void *u_iface)
 {
@@ -1091,9 +1081,9 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQu
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION006_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION006, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION006,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribed)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsLowViolence)
@@ -1118,9 +1108,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppOwner)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetLaunchQueryParam)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION006(void *u_iface)
 {
@@ -1448,9 +1436,9 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId(st
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION007_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION007, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION007,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence)
@@ -1477,9 +1465,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION007(void *u_iface)
 {
@@ -1886,9 +1872,9 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(struc
 
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION008, 0, ".?AVISteamApps@@")
+
+__ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtables)
     __ASM_VTABLE(winISteamApps_STEAMAPPS_INTERFACE_VERSION008,
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence)
@@ -1921,9 +1907,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008(void *u_iface)
 {
@@ -1934,3 +1918,16 @@ struct w_steam_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008(void *
     return r;
 }
 
+void init_winISteamApps_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION001_rtti( base );
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION002_rtti( base );
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION003_rtti( base );
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION004_rtti( base );
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION005_rtti( base );
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION006_rtti( base );
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION007_rtti( base );
+    init_winISteamApps_STEAMAPPS_INTERFACE_VERSION008_rtti( base );
+#endif /* __x86_64__ */
+}

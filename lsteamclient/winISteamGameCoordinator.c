@@ -52,17 +52,15 @@ uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMes
 
 extern vtable_ptr winISteamGameCoordinator_SteamGameCoordinator001_vtable;
 
-#ifndef __GNUC__
-void __asm_dummy_vtables(void) {
-#endif
+DEFINE_RTTI_DATA0(winISteamGameCoordinator_SteamGameCoordinator001, 0, ".?AVISteamGameCoordinator@@")
+
+__ASM_BLOCK_BEGIN(winISteamGameCoordinator_SteamGameCoordinator001_vtables)
     __ASM_VTABLE(winISteamGameCoordinator_SteamGameCoordinator001,
         VTABLE_ADD_FUNC(winISteamGameCoordinator_SteamGameCoordinator001_SendMessage)
         VTABLE_ADD_FUNC(winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable)
         VTABLE_ADD_FUNC(winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage)
     );
-#ifndef __GNUC__
-}
-#endif
+__ASM_BLOCK_END
 
 struct w_steam_iface *create_winISteamGameCoordinator_SteamGameCoordinator001(void *u_iface)
 {
@@ -73,3 +71,9 @@ struct w_steam_iface *create_winISteamGameCoordinator_SteamGameCoordinator001(vo
     return r;
 }
 
+void init_winISteamGameCoordinator_rtti( char *base )
+{
+#ifdef __x86_64__
+    init_winISteamGameCoordinator_SteamGameCoordinator001_rtti( base );
+#endif /* __x86_64__ */
+}
