@@ -697,17 +697,63 @@ def to_c_bool(b):
 
 dummy_writer = DummyWriter()
 
-def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods):
+
+def method_unique_name(method, existing_methods):
     used_name = method.spelling
     if used_name in existing_methods:
-        number = '2'
+        number = 2
         while used_name in existing_methods:
             idx = existing_methods.index(used_name)
             used_name = f"{method.spelling}_{number}"
-            number = chr(ord(number) + 1)
+            number = number + 1
         existing_methods.insert(idx, used_name)
     else:
         existing_methods.append(used_name)
+    return used_name
+
+
+def param_needs_conversion(decl):
+    return decl.spelling not in WRAPPED_CLASSES and \
+           decl.kind == TypeKind.RECORD and \
+           struct_needs_conversion(decl)
+
+
+def declspec(decl, name):
+    if type(decl) is Cursor:
+        decl = decl.type
+
+    const = 'const ' if decl.is_const_qualified() else ''
+    if decl.kind in (TypeKind.POINTER, TypeKind.LVALUEREFERENCE):
+        decl = decl.get_pointee()
+        return declspec(decl, f"*{const}{name}")
+    if decl.kind == TypeKind.CONSTANTARRAY:
+        decl, count = decl.element_type, decl.element_count
+        return declspec(decl, f"({const}{name})[{count}]")
+
+    if len(name):
+        name = f' {name}'
+
+    if decl.kind in (TypeKind.UNEXPOSED, TypeKind.FUNCTIONPROTO):
+        return f'void{name}'
+    if decl.kind == TypeKind.ENUM:
+        return f'{decl.spelling.split("::")[-1]}{name}'
+
+    if param_needs_conversion(decl):
+        return f"win{decl.spelling}_{sdkver}{name}"
+    return f'{decl.spelling}{name}'
+
+
+def handle_method_hpp(method_name, cppname, method, cpp_h):
+    ret = f'{method.result_type.spelling} '
+    if ret.startswith("ISteam"): ret = 'void *'
+
+    params = [declspec(p, "") for p in method.get_arguments()]
+    params = ['void *'] + params
+
+    cpp_h.write(f'extern {ret}{cppname}_{method_name}({", ".join(params)});\n')
+
+
+def handle_method(used_name, cfile, classname, winclassname, cppname, method, cpp):
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
     if returns_record:
         parambytes = 8 #_this + return pointer
@@ -722,22 +768,17 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if method_needs_manual_handling(cppname, used_name):
         cpp = dummy_writer #just don't write the cpp function
     cfile.write(f"DEFINE_THISCALL_WRAPPER({winclassname}_{used_name}, {parambytes})\n")
-    cpp_h.write("extern ")
     if method.result_type.spelling.startswith("ISteam"):
         cfile.write(f"win{method.result_type.spelling} ")
         cpp.write("void *")
-        cpp_h.write("void *")
     elif returns_record:
         cfile.write(f"{method.result_type.spelling} *")
         cpp.write(f"{method.result_type.spelling} ")
-        cpp_h.write(f"{method.result_type.spelling} ")
     else:
         cfile.write(f"{method.result_type.spelling} ")
         cpp.write(f"{method.result_type.spelling} ")
-        cpp_h.write(f"{method.result_type.spelling} ")
     cfile.write(f'__thiscall {winclassname}_{used_name}({winclassname} *_this')
     cpp.write(f"{cppname}_{used_name}(void *linux_side")
-    cpp_h.write(f"{cppname}_{used_name}(void *")
     if returns_record:
         cfile.write(f", {method.result_type.spelling} *_r")
     unnamed = 'a'
@@ -745,42 +786,29 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     manual_convert = []
     for param in list(method.get_children()):
         if param.kind == CursorKind.PARM_DECL:
-            if param.type.kind == TypeKind.POINTER and \
-                (param.type.get_pointee().kind == TypeKind.UNEXPOSED or param.type.get_pointee().kind == TypeKind.FUNCTIONPROTO):
-                #unspecified function pointer
-                typename = "void *"
-            else:
-                typename = param.type.spelling.split("::")[-1]
-
             real_type = param.type
             while real_type.kind == TypeKind.POINTER:
                 real_type = real_type.get_pointee()
-            win_name = typename
             if real_type.kind == TypeKind.RECORD and \
                     not real_type.spelling in WRAPPED_CLASSES and \
                     struct_needs_conversion(real_type):
                 need_convert.append(param)
-                #preserve pointers
-                win_name = typename.replace(real_type.spelling, f"win{real_type.spelling}_{sdkver}")
             elif real_type.spelling in MANUAL_TYPES:
                 manual_convert.append(param)
             elif param.spelling in MANUAL_PARAMS:
                 manual_convert.append(param)
 
-            win_name = win_name.replace('&', '*')
+            win_name = declspec(param, "")
 
             if param.spelling == "":
                 cfile.write(f", {win_name} _{unnamed}")
                 cpp.write(f", {win_name} _{unnamed}")
-                cpp_h.write(f", {win_name}")
                 unnamed = chr(ord(unnamed) + 1)
             else:
                 cfile.write(f", {win_name} {param.spelling}")
                 cpp.write(f", {win_name} {param.spelling}")
-                cpp_h.write(f", {win_name}")
     cfile.write(")\n{\n")
     cpp.write(")\n{\n")
-    cpp_h.write(");\n")
 
     path_conv = get_path_converter(method)
 
@@ -977,7 +1005,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     for child in klass.get_children():
         if child.kind == CursorKind.CXX_METHOD and \
                 child.is_virtual_method():
-            handle_method(cfile, klass.spelling, winclassname, cppname, child, cpp, cpp_h, methods)
+            method_name = method_unique_name(child, methods)
+            handle_method_hpp(method_name, cppname, child, cpp_h)
+            handle_method(method_name, cfile, klass.spelling, winclassname, cppname, child, cpp)
         elif child.kind == CursorKind.DESTRUCTOR:
             methods.append(handle_destructor(cfile, klass.spelling, winclassname, child))
 
