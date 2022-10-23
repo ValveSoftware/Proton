@@ -103,6 +103,7 @@
     -W sapi-ISpObjectToken-CreateInstance \
     -W sapi-iteration-tokens \
     -W cryptext-CryptExtOpenCER \
+    -W shell32-NewMenu_Interface \
     -W wintrust-WTHelperGetProvCertFromChain
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
@@ -174,6 +175,7 @@
     # sapi-iteration-tokens - already applied
     # cryptext-CryptExtOpenCER - applied manually
     # ** wintrust-WTHelperGetProvCertFromChain - applied manually
+    # ** shell32-NewMenu_Interface - applied manually
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -295,6 +297,9 @@
 
     # wintrust-WTHelperGetProvCertFromChain
     patch -Np1 < ../patches/wine-hotfixes/staging/wintrust-WTHelperGetProvCertFromChain/0001-wintrust-Add-parameter-check-in-WTHelperGetProvCertF.patch
+
+    # shell32-NewMenu_Interface
+    patch -Np1 < ../patches/wine-hotfixes/staging/shell32-NewMenu_Interface/0001-shell32-Implement-NewMenu-with-new-folder-item.patch
     
     # nvapi/nvcuda
     # this was added in 7.1, so it's not in the 7.0 tree
