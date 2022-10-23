@@ -1,0 +1,358 @@
+From 9fa7cc2367c6c93051a32356f97982cd776cba61 Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
+Date: Sat, 22 Oct 2022 13:52:37 -0400
+Subject: [PATCH] kernelbase: Implement various transacted file APIs.
+
+fix missing new lines
+
+fix more formatting issues
+
+more formatting fixes
+---
+ dlls/kernel32/kernel32.spec     |  22 ++++---
+ dlls/kernelbase/file.c          | 112 ++++++++++++++++++++++++++++++++
+ dlls/kernelbase/kernelbase.spec |  12 ++++
+ 3 files changed, 136 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
+index a4bba1c6848..16999c24ebd 100644
+--- a/dlls/kernel32/kernel32.spec
++++ b/dlls/kernel32/kernel32.spec
+@@ -272,8 +272,8 @@
+ @ stdcall -import CreateDirectoryA(str ptr)
+ @ stdcall CreateDirectoryExA(str str ptr)
+ @ stdcall -import CreateDirectoryExW(wstr wstr ptr)
+-# @ stub CreateDirectoryTransactedA
+-# @ stub CreateDirectoryTransactedW
++@ stdcall -import CreateDirectoryTransactedA(str str ptr ptr)
++@ stdcall -import CreateDirectoryTransactedW(wstr wstr ptr ptr)
+ @ stdcall -import CreateDirectoryW(wstr ptr)
+ @ stdcall -import CreateEventA(ptr long long str)
+ @ stdcall -import CreateEventExA(ptr str long long)
+@@ -283,11 +283,13 @@
+ @ stdcall -import CreateFiberEx(long long long ptr ptr)
+ @ stdcall -import CreateFile2(wstr long long long ptr)
+ @ stdcall -import CreateFileA(str long long ptr long long long)
++@ stdcall -import CreateFileTransactedA(str long long ptr long long long ptr ptr ptr)
+ @ stdcall CreateFileMappingA(long ptr long long long str)
+ # @ stub CreateFileMappingNumaA
+ @ stdcall -import CreateFileMappingNumaW(long ptr long long long wstr long)
+ @ stdcall -import CreateFileMappingW(long ptr long long long wstr)
+ @ stdcall -import CreateFileW(wstr long long ptr long long long)
++@ stdcall -import CreateFileTransactedW(wstr long long ptr long long long ptr ptr ptr)
+ @ stdcall -import CreateHardLinkA(str str ptr)
+ @ stdcall CreateHardLinkTransactedA(str str ptr ptr)
+ @ stdcall CreateHardLinkTransactedW(wstr wstr ptr ptr)
+@@ -364,8 +366,8 @@
+ @ stdcall DeleteCriticalSection(ptr) NTDLL.RtlDeleteCriticalSection
+ @ stdcall -import DeleteFiber(ptr)
+ @ stdcall -import DeleteFileA(str)
+-# @ stub DeleteFileTransactedA
+-# @ stub DeleteFileTransactedW
++@ stdcall -import DeleteFileTransactedA(str ptr)
++@ stdcall -import DeleteFileTransactedW(wstr ptr)
+ @ stdcall -import DeleteFileW(wstr)
+ @ stdcall -import DeleteProcThreadAttributeList(ptr)
+ # @ stub DisableThreadProfiling
+@@ -486,8 +488,8 @@
+ @ stdcall -import FindFirstFileExW(wstr long ptr long ptr long)
+ # @ stub FindFirstFileNameTransactedW
+ # @ stub FindFirstFileNameW
+-# @ stub FindFirstFileTransactedA
+-# @ stub FindFirstFileTransactedW
++@ stdcall -import FindFirstFileTransactedA(str long ptr long ptr long ptr)
++@ stdcall -import FindFirstFileTransactedW(wstr long ptr long ptr long ptr)
+ @ stdcall -import FindFirstFileW(wstr ptr)
+ # @ stub FindFirstStreamTransactedW
+ @ stdcall -import FindFirstStreamW(wstr long ptr long)
+@@ -675,8 +677,8 @@
+ @ stdcall -import GetFileAttributesA(str)
+ @ stdcall -import GetFileAttributesExA(str long ptr)
+ @ stdcall -import GetFileAttributesExW(wstr long ptr)
+-# @ stub GetFileAttributesTransactedA
+-# @ stub GetFileAttributesTransactedW
++@ stdcall -import GetFileAttributesTransactedA(str long ptr ptr)
++@ stdcall -import GetFileAttributesTransactedW(wstr long ptr ptr)
+ @ stdcall -import GetFileAttributesW(wstr)
+ # @ stub GetFileBandwidthReservation
+ @ stdcall -import GetFileInformationByHandle(long ptr)
+@@ -1287,8 +1289,8 @@
+ @ stdcall -import ReplaceFile(wstr wstr wstr long ptr ptr) ReplaceFileW
+ @ stdcall ReplaceFileA(str str str long ptr ptr)
+ @ stdcall -import ReplaceFileW(wstr wstr wstr long ptr ptr)
+-# @ stub RemoveDirectoryTransactedA
+-# @ stub RemoveDirectoryTransactedW
++@ stdcall -import RemoveDirectoryTransactedA(str ptr)
++@ stdcall -import RemoveDirectoryTransactedW(wstr ptr)
+ @ stdcall -import RemoveDllDirectory(ptr)
+ # @ stub RemoveSecureMemoryCacheCallback
+ # @ stub ReplacePartitionUnit
+diff --git a/dlls/kernelbase/file.c b/dlls/kernelbase/file.c
+index 3e1fd5aec4e..fa12196f4d0 100644
+--- a/dlls/kernelbase/file.c
++++ b/dlls/kernelbase/file.c
+@@ -601,6 +601,14 @@ BOOL WINAPI DECLSPEC_HOTPATCH CopyFileW( const WCHAR *source, const WCHAR *dest,
+     return CopyFileExW( source, dest, NULL, NULL, NULL, fail_if_exists ? COPY_FILE_FAIL_IF_EXISTS : 0 );
+ }
+ 
++/***********************************************************************
++ *	CreateDirectoryTransactedA   (kernelbase.@)
++ */
++BOOL WINAPI DECLSPEC_HOTPATCH CreateDirectoryTransactedA(LPCSTR template, LPCSTR path, LPSECURITY_ATTRIBUTES sa, HANDLE hTransaction)
++{
++    FIXME("(%s %s %p %p), semi-stub\n", debugstr_a(template), debugstr_a(path), sa, hTransaction);
++    return CreateDirectoryA(path, sa);
++}
+ 
+ /***********************************************************************
+  *	CreateDirectoryA   (kernelbase.@)
+@@ -613,6 +621,14 @@ BOOL WINAPI DECLSPEC_HOTPATCH CreateDirectoryA( LPCSTR path, LPSECURITY_ATTRIBUT
+     return CreateDirectoryW( pathW, sa );
+ }
+ 
++/***********************************************************************
++ *	CreateDirectoryTransactedW   (kernelbase.@)
++ */
++BOOL WINAPI DECLSPEC_HOTPATCH CreateDirectoryTransactedW(LPCWSTR template, LPCWSTR path, LPSECURITY_ATTRIBUTES sa, HANDLE hTransaction)
++{
++    FIXME("(%s %s %p %p), semi-stub\n", debugstr_w(template), debugstr_w(path), sa, hTransaction);
++    return CreateDirectoryW(path, sa);
++}
+ 
+ /***********************************************************************
+  *	CreateDirectoryW   (kernelbase.@)
+@@ -700,6 +716,20 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFile2( LPCWSTR name, DWORD access, DWORD s
+     return CreateFileW( name, access, sharing, sa, creation, flags | attributes, template );
+ }
+ 
++/*************************************************************************
++ *	CreateFileTransactedA   (kernelbase.@)
++ */
++HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileTransactedA( LPCSTR name, DWORD access, DWORD sharing,
++                                                       LPSECURITY_ATTRIBUTES sa, DWORD creation,
++                                                       DWORD attributes, HANDLE template,
++                                                       HANDLE transaction, PUSHORT pusMiniVersion,
++                                                       PVOID pExtendedParameter )
++{
++    FIXME( "(%s %lx %lx %p %lx %lx %p %p %p %p), semi-stub\n", debugstr_a(name), access, sharing, sa,
++           creation, attributes, template, transaction, pusMiniVersion, pExtendedParameter );
++    
++    return CreateFileA( name, access, sharing, sa, creation, attributes, template );
++}
+ 
+ /*************************************************************************
+  *	CreateFileA   (kernelbase.@)
+@@ -738,6 +768,20 @@ static UINT get_nt_file_options( DWORD attributes )
+     return options;
+ }
+ 
++/*************************************************************************
++ *	CreateFileTransactedW   (kernelbase.@)
++ */
++HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileTransactedW( LPCWSTR name, DWORD access, DWORD sharing,
++                                                       LPSECURITY_ATTRIBUTES sa, DWORD creation,
++                                                       DWORD attributes, HANDLE template, HANDLE transaction,
++                                                       PUSHORT pusMiniVersion, PVOID pExtendedParameter )
++{
++    FIXME( "(%s %lx %lx %p %lx %lx %p %p %p %p), semi-stub\n", debugstr_w(name), access, sharing, sa,
++           creation, attributes, template, transaction, pusMiniVersion, pExtendedParameter );
++
++    return CreateFileW( name, access, sharing, sa, creation, attributes, template );
++}
++
+ /*************************************************************************
+  *	CreateFileW   (kernelbase.@)
+  */
+@@ -950,6 +994,14 @@ BOOLEAN WINAPI /* DECLSPEC_HOTPATCH */ CreateSymbolicLinkW( LPCWSTR link, LPCWST
+     return TRUE;
+ }
+ 
++/***********************************************************************
++ *	DeleteFileTransactedA   (kernelbase.@)
++ */
++BOOL WINAPI DECLSPEC_HOTPATCH DeleteFileTransactedA(LPCSTR path, HANDLE hTransaction)
++{
++    FIXME("(%s %p): semi-stub\n", debugstr_a(path), hTransaction);
++    return DeleteFileA(path);
++}
+ 
+ /***********************************************************************
+  *	DeleteFileA   (kernelbase.@)
+@@ -962,6 +1014,14 @@ BOOL WINAPI DECLSPEC_HOTPATCH DeleteFileA( LPCSTR path )
+     return DeleteFileW( pathW );
+ }
+ 
++/***********************************************************************
++ *	DeleteFileTransactedW   (kernelbase.@)
++ */
++BOOL WINAPI DECLSPEC_HOTPATCH DeleteFileTransactedW(LPCWSTR path, HANDLE hTransaction)
++{
++    FIXME("(%s %p): semi-stub\n", debugstr_w(path), hTransaction);
++    return DeleteFileW(path);
++}
+ 
+ /***********************************************************************
+  *	DeleteFileW   (kernelbase.@)
+@@ -1081,6 +1141,16 @@ BOOL WINAPI DECLSPEC_HOTPATCH FindNextChangeNotification( HANDLE handle )
+     return set_ntstatus( status );
+ }
+ 
++/******************************************************************************
++ *	FindFirstFileTransactedA   (kernelbase.@)
++ */
++HANDLE WINAPI DECLSPEC_HOTPATCH FindFirstFileTransactedA(LPCSTR filename, FINDEX_INFO_LEVELS level,
++                                                  LPVOID data, FINDEX_SEARCH_OPS search_op,
++                                                  LPVOID filter, DWORD flags, HANDLE hTransaction)
++{
++    FIXME( "(%s %d %p %d %p %lx %p): semi-stub\n", debugstr_a(filename), level, data, search_op, filter, flags, hTransaction );
++    return FindFirstFileExA(filename, level, data, search_op, filter, flags);
++}
+ 
+ /******************************************************************************
+  *	FindFirstFileExA   (kernelbase.@)
+@@ -1111,6 +1181,16 @@ HANDLE WINAPI DECLSPEC_HOTPATCH FindFirstFileExA( const char *filename, FINDEX_I
+     return handle;
+ }
+ 
++/******************************************************************************
++ *	FindFirstFileTransactedW   (kernelbase.@)
++ */
++HANDLE WINAPI DECLSPEC_HOTPATCH FindFirstFileTransactedW(LPCWSTR filename, FINDEX_INFO_LEVELS level,
++                                                  LPVOID data, FINDEX_SEARCH_OPS search_op,
++                                                  LPVOID filter, DWORD flags, HANDLE hTransaction)
++{
++    FIXME( "(%s %d %p %d %p %lx %p): semi-stub\n", debugstr_w(filename), level, data, search_op, filter, flags, hTransaction );
++    return FindFirstFileExW(filename, level, data, search_op, filter, flags);
++}
+ 
+ /******************************************************************************
+  *	FindFirstFileExW   (kernelbase.@)
+@@ -1570,6 +1650,14 @@ UINT WINAPI DECLSPEC_HOTPATCH GetCurrentDirectoryW( UINT buflen, LPWSTR buf )
+     return RtlGetCurrentDirectory_U( buflen * sizeof(WCHAR), buf ) / sizeof(WCHAR);
+ }
+ 
++/**************************************************************************
++ *	GetFileAttributesTransactedA   (kernelbase.@)
++ */
++DWORD WINAPI DECLSPEC_HOTPATCH GetFileAttributesTransactedA(LPCSTR name, GET_FILEEX_INFO_LEVELS level, void *ptr, HANDLE hTransaction)
++{
++    FIXME("(%s %p): semi-stub\n", debugstr_a(name), hTransaction);
++    return GetFileAttributesExA(name, level, ptr);
++}
+ 
+ /**************************************************************************
+  *	GetFileAttributesA   (kernelbase.@)
+@@ -1582,6 +1670,14 @@ DWORD WINAPI DECLSPEC_HOTPATCH GetFileAttributesA( LPCSTR name )
+     return GetFileAttributesW( nameW );
+ }
+ 
++/**************************************************************************
++ *	GetFileAttributesTransactedW   (kernelbase.@)
++ */
++DWORD WINAPI DECLSPEC_HOTPATCH GetFileAttributesTransactedW(LPCWSTR name, GET_FILEEX_INFO_LEVELS level, void *ptr, HANDLE hTransaction)
++{
++    FIXME("(%s %p): semi-stub\n", debugstr_w(name), hTransaction);
++    return GetFileAttributesExW(name, level, ptr);
++}
+ 
+ /**************************************************************************
+  *	GetFileAttributesW   (kernelbase.@)
+@@ -3459,6 +3555,14 @@ BOOL WINAPI DECLSPEC_HOTPATCH ReadFileScatter( HANDLE file, FILE_SEGMENT_ELEMENT
+                                             segments, count, &offset, NULL ));
+ }
+ 
++/***********************************************************************
++ *	RemoveDirectoryTransactedA   (kernelbase.@)
++ */
++BOOL WINAPI DECLSPEC_HOTPATCH RemoveDirectoryTransactedA( LPCSTR path, HANDLE hTransaction )
++{
++    FIXME("(%s %p), semi-stub\n", debugstr_a(path), hTransaction);
++    return RemoveDirectoryA(path);
++}
+ 
+ /***********************************************************************
+  *	RemoveDirectoryA   (kernelbase.@)
+@@ -3471,6 +3575,14 @@ BOOL WINAPI DECLSPEC_HOTPATCH RemoveDirectoryA( LPCSTR path )
+     return RemoveDirectoryW( pathW );
+ }
+ 
++/***********************************************************************
++ *	RemoveDirectoryTransactedW   (kernelbase.@)
++ */
++BOOL WINAPI DECLSPEC_HOTPATCH RemoveDirectoryTransactedW( LPCWSTR path, HANDLE hTransaction )
++{
++    FIXME("(%s %p), semi-stub\n", debugstr_w(path), hTransaction);
++    return RemoveDirectoryW(path);
++}
+ 
+ /***********************************************************************
+  *	RemoveDirectoryW   (kernelbase.@)
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index cbce448d3e9..ebabf8a6619 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -179,7 +179,9 @@
+ @ stdcall CreateBoundaryDescriptorW(wstr long)
+ @ stdcall CreateConsoleScreenBuffer(long long ptr long ptr)
+ @ stdcall CreateDirectoryA(str ptr)
++@ stdcall CreateDirectoryTransactedA(str str ptr ptr)
+ @ stdcall CreateDirectoryExW(wstr wstr ptr)
++@ stdcall CreateDirectoryTransactedW(wstr wstr ptr ptr)
+ @ stdcall CreateDirectoryW(wstr ptr)
+ # @ stub CreateEnclave
+ @ stdcall CreateEventA(ptr long long str)
+@@ -190,10 +192,12 @@
+ @ stdcall CreateFiberEx(long long long ptr ptr)
+ @ stdcall CreateFile2(wstr long long long ptr)
+ @ stdcall CreateFileA(str long long ptr long long long)
++@ stdcall CreateFileTransactedA(str long long ptr long long long ptr ptr ptr)
+ @ stdcall CreateFileMappingFromApp(long ptr long int64 wstr)
+ @ stdcall CreateFileMappingNumaW(long ptr long long long wstr long)
+ @ stdcall CreateFileMappingW(long ptr long long long wstr)
+ @ stdcall CreateFileW(wstr long long ptr long long long)
++@ stdcall CreateFileTransactedW(wstr long long ptr long long long ptr ptr ptr)
+ @ stdcall CreateHardLinkA(str str ptr)
+ @ stdcall CreateHardLinkW(wstr wstr ptr)
+ @ stdcall CreateIoCompletionPort(long long long long)
+@@ -255,7 +259,9 @@
+ @ stdcall DeleteCriticalSection(ptr) ntdll.RtlDeleteCriticalSection
+ @ stdcall DeleteFiber(ptr)
+ @ stdcall DeleteFileA(str)
++@ stdcall DeleteFileTransactedA(str ptr)
+ @ stdcall DeleteFileW(wstr)
++@ stdcall DeleteFileTransactedW(wstr ptr)
+ @ stdcall DeleteProcThreadAttributeList(ptr)
+ # @ stub DeleteStateAtomValue
+ # @ stub DeleteStateContainer
+@@ -362,7 +368,9 @@
+ @ stdcall FindFirstChangeNotificationW(wstr long long)
+ @ stdcall FindFirstFileA(str ptr)
+ @ stdcall FindFirstFileExA(str long ptr long ptr long)
++@ stdcall FindFirstFileTransactedA(str long ptr long ptr long ptr)
+ @ stdcall FindFirstFileExW(wstr long ptr long ptr long)
++@ stdcall FindFirstFileTransactedW(wstr long ptr long ptr long ptr)
+ # @ stub FindFirstFileNameW
+ @ stdcall FindFirstFileW(wstr ptr)
+ @ stdcall FindFirstFreeAce(ptr ptr)
+@@ -533,7 +541,9 @@
+ @ stub GetFallbackDisplayName
+ @ stdcall GetFileAttributesA(str)
+ @ stdcall GetFileAttributesExA(str long ptr)
++@ stdcall GetFileAttributesTransactedA(str long ptr ptr)
+ @ stdcall GetFileAttributesExW(wstr long ptr)
++@ stdcall GetFileAttributesTransactedW(wstr long ptr ptr)
+ @ stdcall GetFileAttributesW(wstr)
+ @ stdcall GetFileInformationByHandle(long ptr)
+ @ stdcall GetFileInformationByHandleEx(long long ptr long)
+@@ -1367,6 +1377,8 @@
+ @ stdcall RemapPredefinedHandleInternal(long long)
+ @ stdcall RemoveDirectoryA(str)
+ @ stdcall RemoveDirectoryW(wstr)
++@ stdcall RemoveDirectoryTransactedA(str ptr)
++@ stdcall RemoveDirectoryTransactedW(wstr ptr)
+ @ stdcall RemoveDllDirectory(ptr)
+ # @ stub RemovePackageStatus
+ # @ stub RemovePackageStatusForUser
+-- 
+GitLab
+

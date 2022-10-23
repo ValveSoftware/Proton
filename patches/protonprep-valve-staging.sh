@@ -380,6 +380,10 @@
     echo "WINE: -HOTFIX- fix Persona 4 Golden"
     patch -Np1 < ../patches/wine-hotfixes/upstream/381c2a9ae151f676a009e89b4b101679fd90b9ae.patch
 
+    echo "WINE: -HOTFIX- fix Persona 5 Strikers"
+    # https://gitlab.winehq.org/wine/wine/-/merge_requests/1145
+    patch -Np1 < ../patches/wine-hotfixes/pending/1145.patch
+
 ### END WINE HOTFIX SECTION ###
 
 ### (2-6) WINE PENDING UPSTREAM SECTION ###
