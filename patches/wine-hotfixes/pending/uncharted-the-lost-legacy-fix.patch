@@ -1,0 +1,12 @@
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index ac679b0e47d..c9a93a59ae1 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -5933,6 +5933,7 @@ HKCU,Software\Wine\AppDefaults\MonsterHunterRise.exe\DllOverrides,"amd_ags_x64",
+ HKCU,Software\Wine\AppDefaults\Sam4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+ HKCU,Software\Wine\AppDefaults\Sam4_Unrestricted.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+ HKCU,Software\Wine\AppDefaults\u4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
++HKCU,Software\Wine\AppDefaults\tll.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+ ;;App-specific overrides for atiadlxx.dll.
+ HKCU,Software\Wine\AppDefaults\s2_sp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
+ HKCU,Software\Wine\AppDefaults\s2_mp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
