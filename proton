@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tarfile
 import shlex
+import time
 
 from ctypes import CDLL
 from ctypes import CFUNCTYPE
@@ -40,7 +41,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="7.0-100"
+CURRENT_PREFIX_VERSION="7.0-101"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -475,6 +476,7 @@ class CompatData:
     def __init__(self, compatdata):
         self.base_dir = compatdata + "/"
         self.prefix_dir = self.path("pfx/")
+        self.creation_sync_guard = self.path("pfx/creation_sync_guard")
         self.version_file = self.path("version")
         self.config_info_file = self.path("config_info")
         self.tracked_files_file = self.path("tracked_files")
@@ -623,6 +625,13 @@ class CompatData:
                 except OSError:
                     log("Unable to write new registry file to " + sysreg_fp)
                     pass
+
+            if int(old_proton_maj) < 7 or (int(old_proton_maj) == 7 and
+                                           int(old_proton_min) == 0 and
+                                           int(old_prefix_ver) < 101):
+                with open(self.creation_sync_guard, "w"):
+                    pass
+                os.sync()
 
             stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
                               self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll" ]
@@ -783,12 +792,20 @@ class CompatData:
 
             self.upgrade_pfx(old_ver)
 
+            # not fully-created prefix, copy it for future investigation
+            if file_exists(self.prefix_dir, follow_symlinks=True) and not file_exists(self.creation_sync_guard, follow_symlinks=True):
+                shutil.move(self.prefix_dir, self.path(f"corrupted_pfx-{time.time()}.bak"))
+
             if not file_exists(self.prefix_dir, follow_symlinks=True):
                 makedirs(self.prefix_dir + "/drive_c")
                 set_dir_casefold_bit(self.prefix_dir + "/drive_c")
 
-            if not file_exists(self.prefix_dir + "/user.reg", follow_symlinks=True):
                 self.copy_pfx()
+                os.sync()
+
+                with open(self.creation_sync_guard, "x"):
+                    pass
+                os.sync()
 
             self.migrate_user_paths()
 
