@@ -1060,6 +1060,9 @@ def default_compat_config():
         if appid == "1621680":
             ret.add("noforcelgadd")
 
+        if appid == "1341820":
+            ret.add("gamedrive")
+
         if appid in [
                 "202990", #Call of Duty: Black Ops II - Multiplayer
                 "212910", #Call of Duty: Black Ops II - Zombies
@@ -1149,7 +1152,6 @@ def default_compat_config():
                 "1249800", #xuan-yuan sword VII
                 ]:
             ret.add("enablenvapi")
-
     return ret
 
 class Session:
