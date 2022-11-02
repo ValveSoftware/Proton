@@ -1162,7 +1162,6 @@ def default_compat_config():
                 "1249800", #xuan-yuan sword VII
                 ]:
             ret.add("enablenvapi")
-
     return ret
 
 class Session:
