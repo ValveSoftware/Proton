@@ -34,6 +34,8 @@ use crate::box_array;
 use crate::copy_into_array;
 use crate::BufferedReader;
 use crate::discarding_disabled;
+use crate::steam_compat_shader_path;
+use crate::touch_file;
 
 use gst::glib;
 use gst::prelude::*;
@@ -345,6 +347,14 @@ impl VideoConvState {
 
         self.transcode_hash = None;
         self.our_duration = Some(include_bytes!("../../blank.mkv").len() as u64);
+
+        match steam_compat_shader_path() {
+            None => gst::log!(CAT, "env STEAM_COMPAT_SHADER_PATH not set"),
+            Some(mut path) => {
+                path.push("placeholder-video-used");
+                if let Err(e) = touch_file(path) { gst::log!(CAT, "Failed to touch placeholder-video-used file: {:?}", e) }
+            },
+        };
 
         false
     }
