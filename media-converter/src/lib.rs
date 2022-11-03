@@ -35,8 +35,14 @@ extern crate gstreamer_video as gst_video;
 extern crate gstreamer_audio as gst_audio;
 extern crate once_cell;
 
+use std::fs::File;
 use std::io;
 use std::io::Read;
+use std::path::Path;
+use std::path::PathBuf;
+
+use filetime::FileTime;
+use filetime::set_file_handle_times;
 
 #[cfg(target_arch = "x86")]
 mod murmur3_x86_128;
@@ -74,6 +80,24 @@ where
     let mut a = A::default();
     <A as AsMut<[T]>>::as_mut(&mut a).copy_from_slice(slice);
     a
+}
+
+fn touch_file<P>(p: P) -> io::Result<()>
+where
+    P: AsRef<Path> + std::fmt::Debug
+{
+    let f = File::create(p)?;
+    let now = FileTime::now();
+    set_file_handle_times(&f, Some(now), Some(now))?;
+    Ok(())
+}
+
+fn steam_compat_shader_path() -> Option<PathBuf>
+{
+    match std::env::var("STEAM_COMPAT_SHADER_PATH") {
+        Err(_) => None,
+        Ok(c) => Some(Path::new(&c).to_path_buf()),
+    }
 }
 
 /* rust has a hard time with large heap allocations. below macro works around that.
