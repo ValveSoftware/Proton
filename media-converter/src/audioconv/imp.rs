@@ -31,6 +31,8 @@
 use crate::format_hash;
 use crate::HASH_SEED;
 use crate::discarding_disabled;
+use crate::steam_compat_shader_path;
+use crate::touch_file;
 
 use gst::glib;
 use gst::prelude::*;
@@ -632,6 +634,14 @@ impl AudioConvState {
         self.stream_state.needs_dump = true;
 
         let buf = Box::new(*include_bytes!("../../blank.ptna"));
+
+        match steam_compat_shader_path() {
+            None => gst::log!(CAT, "env STEAM_COMPAT_SHADER_PATH not set"),
+            Some(mut path) => {
+                path.push("placeholder-audio-used");
+                if let Err(e) = touch_file(path) { gst::log!(CAT, "Failed to touch placeholder-audio-used file: {:?}", e) }
+            },
+        };
 
         Ok(buf)
     }
