@@ -95,7 +95,7 @@ const _FOSSILIZE_COMPRESSION_DEFLATE: u32 = 2;
 #[derive(Debug)]
 pub enum Error {
     NotImplemented,
-    IOError(io::Error),
+    IO(io::Error),
     CorruptDatabase,
     DataTooLarge,
     InvalidTag,
@@ -105,7 +105,7 @@ pub enum Error {
 
 impl From<io::Error> for Error {
     fn from(e: io::Error) -> Error {
-        Error::IOError(e)
+        Error::IO(e)
     }
 }
 
@@ -240,9 +240,7 @@ impl StreamArchive {
 
             let version = magic_and_version[15];
 
-            if magic_and_version[0..12] != FOSSILIZE_MAGIC ||
-                    version < FOSSILIZE_MIN_COMPAT_VERSION ||
-                    version > FOSSILIZE_VERSION {
+            if magic_and_version[0..12] != FOSSILIZE_MAGIC || !(FOSSILIZE_MIN_COMPAT_VERSION..=FOSSILIZE_VERSION).contains(&version) {
                 return Err(Error::CorruptDatabase);
             }
 
@@ -256,7 +254,7 @@ impl StreamArchive {
                     if fail.kind() == io::ErrorKind::UnexpectedEof {
                         break;
                     }
-                    return Err(Error::IOError(fail));
+                    return Err(Error::IO(fail));
                 }
 
                 let name = &name_and_header[0..PAYLOAD_NAME_LEN_BYTES];
@@ -283,7 +281,7 @@ impl StreamArchive {
                     Err(e) => {
                         /* truncated chunk is not fatal */
                         if e.kind() != io::ErrorKind::UnexpectedEof {
-                            return Err(Error::IOError(e));
+                            return Err(Error::IO(e));
                         }
                     },
                 }
@@ -339,7 +337,7 @@ impl StreamArchive {
         let to_copy = std::cmp::min(entry.payload_info.full_size as usize - offset as usize, buf.len());
 
         self.file.read_exact(&mut buf[0..to_copy])
-            .map_err(Error::IOError)?;
+            .map_err(Error::IO)?;
 
         if entry.payload_info.crc != 0 {
             if let CRCCheck::WithCRC = crc_opt {
@@ -434,20 +432,18 @@ impl StreamArchive {
     }
 
     /* rewrites the database, discarding entries listed in 'to_discard' */
-    pub fn discard_entries(&mut self, to_discard: &Vec<(FossilizeTag, FossilizeHash)>) -> Result<(), Error> {
+    pub fn discard_entries(&mut self, to_discard: &[(FossilizeTag, FossilizeHash)]) -> Result<(), Error> {
         self.write_pos = self.file.seek(io::SeekFrom::Start(0))?;
         for v in self.seen_blobs.iter_mut() {
             v.clear();
         }
 
-        let mut magic_and_version = [0 as u8; MAGIC_LEN_BYTES];
+        let mut magic_and_version = [0_u8; MAGIC_LEN_BYTES];
         self.file.read_exact(&mut magic_and_version)?;
 
         let version = magic_and_version[15];
 
-        if magic_and_version[0..12] != FOSSILIZE_MAGIC ||
-                version < FOSSILIZE_MIN_COMPAT_VERSION ||
-                version > FOSSILIZE_VERSION {
+        if magic_and_version[0..12] != FOSSILIZE_MAGIC || !(FOSSILIZE_MIN_COMPAT_VERSION..=FOSSILIZE_VERSION).contains(&version) {
             return Err(Error::CorruptDatabase);
         }
 
@@ -461,7 +457,7 @@ impl StreamArchive {
                 if fail.kind() == io::ErrorKind::UnexpectedEof {
                     break;
                 }
-                return Err(Error::IOError(fail));
+                return Err(Error::IO(fail));
             }
 
             let name = &name_and_header[0..PAYLOAD_NAME_LEN_BYTES];
@@ -484,7 +480,7 @@ impl StreamArchive {
                     Err(e) => {
                         /* truncated chunk is not fatal */
                         if e.kind() != io::ErrorKind::UnexpectedEof {
-                            return Err(Error::IOError(e));
+                            return Err(Error::IO(e));
                         }
                     },
                 }
@@ -501,7 +497,7 @@ impl StreamArchive {
                         Err(e) => {
                             /* truncated chunk is not fatal */
                             if e.kind() != io::ErrorKind::UnexpectedEof {
-                                return Err(Error::IOError(e));
+                                return Err(Error::IO(e));
                             }
                         },
                     }
