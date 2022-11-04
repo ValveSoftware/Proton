@@ -50,7 +50,6 @@ use std::io::Seek;
 use std::fs::OpenOptions;
 use std::convert::From;
 use std::collections::HashMap;
-use crc32fast;
 
 use crate::*;
 

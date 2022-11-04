@@ -28,7 +28,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-use gst;
 use gst::glib;
 use gst::prelude::*;
 use gst::subclass::prelude::*;
@@ -86,13 +85,13 @@ impl ObjectSubclass for AudioConvBin {
                 AudioConvBin::catch_panic_pad_function(
                     parent,
                     || false,
-                    |audioconvbin, element| audioconvbin.sink_event(pad, element, event)
+                    |audioconvbin| audioconvbin.sink_event(pad, event)
                 )
             }).build();
 
-        let audioconv = gst::ElementFactory::make("protonaudioconverter", None).unwrap();
-        let opusdec = gst::ElementFactory::make("opusdec", None).unwrap();
-        let capssetter = gst::ElementFactory::make("capssetter", None).unwrap();
+        let audioconv = gst::ElementFactory::make("protonaudioconverter").build().unwrap();
+        let opusdec = gst::ElementFactory::make("opusdec").build().unwrap();
+        let capssetter = gst::ElementFactory::make("capssetter").build().unwrap();
 
         AudioConvBin {
             audioconv,
@@ -105,8 +104,10 @@ impl ObjectSubclass for AudioConvBin {
 }
 
 impl ObjectImpl for AudioConvBin {
-    fn constructed(&self, obj: &Self::Type) {
-        self.parent_constructed(obj);
+    fn constructed(&self) {
+        self.parent_constructed();
+
+        let obj = self.obj();
 
         obj.add(&self.audioconv).unwrap();
         obj.add(&self.opusdec).unwrap();
@@ -126,6 +127,8 @@ impl ObjectImpl for AudioConvBin {
         obj.add_pad(&self.srcpad).unwrap();
     }
 }
+
+impl GstObjectImpl for AudioConvBin { }
 
 impl BinImpl for AudioConvBin { }
 
@@ -175,7 +178,6 @@ impl AudioConvBin {
     fn sink_event(
         &self,
         pad: &gst::GhostPad,
-        element: &super::AudioConvBin,
         event: gst::Event
     ) -> bool {
         match event.view() {
@@ -193,20 +195,19 @@ impl AudioConvBin {
                                 .build();
                             rate_caps.append_structure(s);
                         }
-                        self.capssetter.set_property("caps",
-                                                     &rate_caps).unwrap();
+                        self.capssetter.set_property("caps", &rate_caps);
                     }else{
-                        gst_warning!(CAT, "event has no rate");
+                        gst::warning!(CAT, "event has no rate");
                     }
                 } else {
-                    gst_warning!(CAT, "event has no structure");
+                    gst::warning!(CAT, "event has no structure");
                 }
 
                 /* forward on to the real pad */
                 self.audioconv.static_pad("sink").unwrap()
                     .send_event(event)
             },
-            _ => pad.event_default(Some(element), event)
+            _ => gst::Pad::event_default(pad, Some(&*self.obj()), event)
         }
     }
 }
