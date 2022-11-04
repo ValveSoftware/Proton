@@ -97,7 +97,7 @@ macro_rules! box_array {
 
 /* you MUST use this to consistently format the hash bytes into a string */
 fn format_hash(hash: u128) -> String {
-    return format!("{:032x}", hash);
+    format!("{:032x}", hash)
 }
 
 /* changing this will invalidate the cache. you MUST clear it. */
@@ -144,7 +144,7 @@ fn discarding_disabled() -> bool {
         Err(_) => { return false; },
         Ok(c) => c,
     };
-    return v != "0";
+    v != "0"
 }
 
 fn plugin_init(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {

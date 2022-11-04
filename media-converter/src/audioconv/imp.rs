@@ -300,7 +300,7 @@ static DUMPING_DISABLED: Lazy<bool> = Lazy::new(|| {
         Err(_) => { return false; },
         Ok(c) => c,
     };
-    return v != "0";
+    v != "0"
 });
 
 #[derive(Clone)]
@@ -770,7 +770,7 @@ impl ElementImpl for AudioConv {
 
                 let new_state = AudioConvState::new().map_err(|err| {
                     err.log();
-                    return gst::StateChangeError;
+                    gst::StateChangeError
                 })?;
 
                 let mut state = self.state.lock().unwrap();
@@ -887,7 +887,7 @@ impl AudioConv {
 
                 let mut state = self.state.lock().unwrap();
                 if let Some(state) = &mut *state {
-                    let head = match NeedTranscodeHead::new_from_caps(&event_caps.caps()){
+                    let head = match NeedTranscodeHead::new_from_caps(event_caps.caps()){
                         Ok(h) => h,
                         Err(e) => {
                             gst::error!(CAT, "Invalid WMA caps!");

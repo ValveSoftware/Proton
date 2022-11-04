@@ -499,7 +499,7 @@ impl ElementImpl for VideoConv {
 
                 let new_state = VideoConvState::new().map_err(|err| {
                     err.log();
-                    return gst::StateChangeError;
+                    gst::StateChangeError
                 })?;
 
                 let mut state = self.state.lock().unwrap();
