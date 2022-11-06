@@ -1524,7 +1524,8 @@ class Session:
             if not "VKD3D_FEATURE_LEVEL" in self.env:
                 self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
-        if "hidenvgpu" in self.compat_config:
+        # enablenvapi beats hidenvgpu
+        if "hidenvgpu" in self.compat_config and "enablenvapi" not in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
         if "usenativexinput13" in self.compat_config:
