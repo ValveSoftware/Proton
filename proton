@@ -1223,6 +1223,12 @@ def default_compat_config():
             ret.add("noforcelgadd")
 
         if appid in [
+                "1341820"
+                "306130"
+                ]:
+            ret.add("gamedrive")
+
+        if appid in [
                 "202990", #Call of Duty: Black Ops II - Multiplayer
                 "212910", #Call of Duty: Black Ops II - Zombies
                 ]:
