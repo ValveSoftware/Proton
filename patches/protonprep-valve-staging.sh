@@ -14,13 +14,19 @@
     echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
     patch -Np1 < ../patches/dxvk/2675.patch
 
-    echo "DXVK:add dxvk async patch"
+    echo "DXVK: add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch   
     cd ..
 
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
+    
+    echo "VKD3D: fix Gears 5 regression"
+    #https://github.com/HansKristian-Work/vkd3d-proton/issues/1281
+    #https://github.com/HansKristian-Work/vkd3d-proton/pull/1284
+    patch -Np1 < ../patches/vkd3d/1284.patch
+    #git revert --no-commit df1829e40770482597ab168559ef2d68ab3ec707
     cd ..
 
 ### END PREP SECTION ###

@@ -1,0 +1,219 @@
+From a665716016256114f9b56983d310d90236188365 Mon Sep 17 00:00:00 2001
+From: Robin Kertels <robin.kertels@gmail.com>
+Date: Mon, 7 Nov 2022 15:30:52 +0100
+Subject: [PATCH] vkd3d: Implement SetEventOnCompletion for shared fences
+
+---
+ libs/vkd3d/command.c       | 119 ++++++++++++++++++++++++++++++++++---
+ libs/vkd3d/vkd3d_private.h |  15 +++++
+ 2 files changed, 125 insertions(+), 9 deletions(-)
+
+diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
+index afe99ff1f..08a494653 100644
+--- a/libs/vkd3d/command.c
++++ b/libs/vkd3d/command.c
+@@ -1337,9 +1337,18 @@ static void d3d12_shared_fence_dec_ref(struct d3d12_shared_fence *fence)
+ {
+     ULONG refcount_internal = InterlockedDecrement(&fence->refcount_internal);
+     const struct vkd3d_vk_device_procs *vk_procs;
++    struct vkd3d_shared_fence_waiting_event *current, *e;
+ 
+     if (!refcount_internal)
+     {
++        vkd3d_atomic_uint64_store_explicit(&fence->stop, 1, vkd3d_memory_order_release);
++        pthread_join(fence->thread, NULL);
++
++        LIST_FOR_EACH_ENTRY_SAFE(current, e, &fence->events, struct vkd3d_shared_fence_waiting_event, entry)
++        {
++            vkd3d_free(current);
++        }
++
+         vk_procs = &fence->device->vk_procs;
+         VK_CALL(vkDestroySemaphore(fence->device->vk_device, fence->timeline_semaphore, NULL));
+ 
+@@ -1412,19 +1421,80 @@ static HRESULT STDMETHODCALLTYPE d3d12_shared_fence_GetDevice(d3d12_fence_iface
+ static UINT64 STDMETHODCALLTYPE d3d12_shared_fence_GetCompletedValue(d3d12_fence_iface *iface)
+ {
+     struct d3d12_shared_fence *fence = shared_impl_from_ID3D12Fence1(iface);
+-    const struct vkd3d_vk_device_procs *vk_procs = &fence->device->vk_procs;
++
++    TRACE("iface %p\n", iface);
++    return vkd3d_atomic_uint64_load_explicit(&fence->last_value, vkd3d_memory_order_acquire);
++}
++
++static void vkd3d_shared_fence_signal_events(struct d3d12_shared_fence *fence, uint64_t value)
++{
++    struct vkd3d_shared_fence_waiting_event *waiting_event = NULL;
++    struct list *elem;
++
++    vkd3d_atomic_uint64_store_explicit(&fence->last_value, value, vkd3d_memory_order_release);
++
++    pthread_mutex_lock(&fence->mutex);
++    while (!list_empty(&fence->events))
++    {
++        elem = list_tail(&fence->events);
++        waiting_event = LIST_ENTRY(elem, struct vkd3d_shared_fence_waiting_event, entry);
++        if (waiting_event->value <= value)
++        {
++            fence->device->signal_event(waiting_event->event);
++            list_remove(elem);
++            vkd3d_free(waiting_event);
++        }
++        else
++        {
++            break;
++        }
++    }
++    pthread_mutex_unlock(&fence->mutex);
++}
++
++static void *vkd3d_shared_fence_worker_main(void *userdata)
++{
++    const struct vkd3d_vk_device_procs *vk_procs;
++    struct d3d12_shared_fence *fence;
++    VkSemaphoreWaitInfo wait_info;
+     uint64_t completed_value;
+     VkResult vr;
+ 
+-    TRACE("iface %p\n", iface);
++    fence = userdata;
++    vk_procs = &fence->device->vk_procs;
++
++    wait_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
++    wait_info.pNext = NULL;
++    wait_info.flags = 0;
++    wait_info.semaphoreCount = 1;
++    wait_info.pSemaphores = &fence->timeline_semaphore;
++    wait_info.pValues = NULL;
+ 
+-    vr = VK_CALL(vkGetSemaphoreCounterValueKHR(fence->device->vk_device, fence->timeline_semaphore, &completed_value));
+-    if (vr != VK_SUCCESS)
++    while (!vkd3d_atomic_uint32_load_explicit(&fence->stop, vkd3d_memory_order_acquire))
+     {
+-        ERR("Failed to get shared fence counter value, error %d.\n", vr);
+-        return 0;
++        vr = VK_CALL(vkGetSemaphoreCounterValueKHR(fence->device->vk_device, fence->timeline_semaphore, &completed_value));
++        if (vr != VK_SUCCESS)
++        {
++            ERR("Failed to get shared fence counter value, error %d.\n", vr);
++            return NULL;
++        }
++
++        vkd3d_shared_fence_signal_events(fence, completed_value);
++
++        if (!!vkd3d_atomic_uint32_load_explicit(&fence->stop, vkd3d_memory_order_acquire))
++            return NULL;
++
++        completed_value++;
++        wait_info.pValues = &completed_value;
++        vr = VK_CALL(vkWaitSemaphoresKHR(fence->device->vk_device, &wait_info, 10000000ull));
++        if (vr != VK_SUCCESS && vr != VK_TIMEOUT)
++        {
++            ERR("Failed to wait for semaphore, error %d.\n", vr);
++            return NULL;
++        }
+     }
+-    return completed_value;
++
++    return NULL;
+ }
+ 
+ static HRESULT STDMETHODCALLTYPE d3d12_shared_fence_SetEventOnCompletion(d3d12_fence_iface *iface,
+@@ -1432,15 +1502,36 @@ static HRESULT STDMETHODCALLTYPE d3d12_shared_fence_SetEventOnCompletion(d3d12_f
+ {
+     struct d3d12_shared_fence *fence = shared_impl_from_ID3D12Fence1(iface);
+     const struct vkd3d_vk_device_procs *vk_procs = &fence->device->vk_procs;
++    struct vkd3d_shared_fence_waiting_event *waiting_event;
+     VkSemaphoreWaitInfo wait_info;
++    uint64_t completed_value;
+     VkResult vr;
+ 
+     TRACE("iface %p, value %#"PRIx64", event %p.\n", iface, value, event);
+ 
+     if (event)
+     {
+-        FIXME("Signaling events on shared fence completion not supported.\n");
+-        return E_NOTIMPL;
++        completed_value = d3d12_shared_fence_GetCompletedValue(iface);
++        if (completed_value >= value)
++        {
++            fence->device->signal_event(event);
++            return S_OK;
++        }
++
++        pthread_mutex_lock(&fence->mutex);
++
++        if (!(waiting_event = vkd3d_malloc(sizeof(*waiting_event))))
++        {
++            ERR("Failed to register device singleton for adapter.");
++            pthread_mutex_unlock(&fence->mutex);
++            return E_OUTOFMEMORY;
++        }
++        waiting_event->value = value;
++        waiting_event->event = event;
++        list_add_head(&fence->events, &waiting_event->entry);
++
++        pthread_mutex_unlock(&fence->mutex);
++        return S_OK;
+     }
+ 
+     wait_info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
+@@ -1479,6 +1570,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_shared_fence_Signal(d3d12_fence_iface *if
+         return E_FAIL;
+     }
+ 
++    if (value > d3d12_shared_fence_GetCompletedValue(iface))
++        vkd3d_shared_fence_signal_events(fence, value);
++
+     return S_OK;
+ }
+ 
+@@ -1539,8 +1633,15 @@ HRESULT d3d12_shared_fence_create(struct d3d12_device *device,
+         return hr;
+     }
+ 
++    pthread_mutex_init(&object->mutex, NULL);
++    list_init(&object->events);
++    object->last_value = 0;
++    object->stop = 0;
++
+     d3d12_device_add_ref(object->device = device);
+ 
++    pthread_create(&object->thread, NULL, vkd3d_shared_fence_worker_main, object);
++
+     *fence = object;
+     return S_OK;
+ }
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index e83b13f86..458257f2b 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -588,6 +588,13 @@ HRESULT d3d12_fence_create(struct d3d12_device *device,
+ HRESULT d3d12_fence_set_event_on_completion(struct d3d12_fence *fence,
+         UINT64 value, HANDLE event, enum vkd3d_waiting_event_type type);
+ 
++struct vkd3d_shared_fence_waiting_event
++{
++    struct list entry;
++    uint64_t value;
++    HANDLE event;
++};
++
+ struct d3d12_shared_fence
+ {
+     d3d12_fence_iface ID3D12Fence_iface;
+@@ -598,6 +605,14 @@ struct d3d12_shared_fence
+ 
+     VkSemaphore timeline_semaphore;
+ 
++    pthread_t thread;
++    pthread_mutex_t mutex;
++
++    DECLSPEC_ALIGN(4) uint32_t stop;
++    DECLSPEC_ALIGN(8) uint64_t last_value;
++
++    struct list events;
++
+     struct d3d12_device *device;
+ 
+     struct vkd3d_private_store private_store;
