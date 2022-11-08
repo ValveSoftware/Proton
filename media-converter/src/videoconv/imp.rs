@@ -303,18 +303,28 @@ struct VideoConvState {
 }
 
 impl VideoConvState {
-    fn new() -> Result<VideoConvState, gst::LoggableError> {
+    fn new() -> VideoConvState {
 
-        let read_fozdb_path = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE").map_err(|_| {
-            loggable_error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
-        })?;
+        let read_fozdb_path = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE");
 
-        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), true /* read-only? */, VIDEOCONV_FOZ_NUM_TAGS) {
-            Ok(s) => Some(s),
-            Err(_) => None,
+        if read_fozdb_path.is_err() {
+            gst::error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
+        }
+
+        let read_fozdb = match read_fozdb_path {
+            Ok(path) => match fossilize::StreamArchive::new(&path,
+                                                            OpenOptions::new().read(true),
+                                                            true /* read-only? */,
+                                                            VIDEOCONV_FOZ_NUM_TAGS)
+                {
+                    Ok(s) => Some(s),
+                    Err(_) => None
+                },
+            Err(_) => None
         };
 
-        Ok(VideoConvState {
+
+        VideoConvState {
             transcode_hash: None,
 
             read_fozdb,
@@ -325,7 +335,7 @@ impl VideoConvState {
             transcoded_tag: VIDEOCONV_FOZ_TAG_MKVDATA,
 
             need_stream_start: true,
-        })
+        }
     }
 
     /* true if the file is transcoded; false if not */
@@ -511,10 +521,7 @@ impl ElementImpl for VideoConv {
             gst::StateChange::NullToReady => {
                 /* do runtime setup */
 
-                let new_state = VideoConvState::new().map_err(|err| {
-                    err.log();
-                    gst::StateChangeError
-                })?;
+                let new_state = VideoConvState::new();
 
                 let mut state = self.state.lock().unwrap();
                 assert!((*state).is_none());
@@ -653,10 +660,7 @@ impl VideoConv {
                         return false;
                     }
 
-                    if self.init_transcode(state).is_err() {
-                        gst::error!(CAT, "Failed to init transcode");
-                        return false;
-                    }
+                    self.init_transcode(state);
 
                     match state.transcoded_tag {
                         VIDEOCONV_FOZ_TAG_MKVDATA => gst::Caps::builder("video/x-matroska").build(),
@@ -776,10 +780,7 @@ impl VideoConv {
         Ok(())
     }
 
-    fn init_transcode(
-        &self,
-        state: &mut VideoConvState
-    ) -> Result<(), gst::LoggableError> {
+    fn init_transcode(&self, state: &mut VideoConvState) {
 
         if state.transcode_hash.is_none() {
             (*DUMP_FOZDB).lock().unwrap().discard_transcoded();
@@ -788,12 +789,13 @@ impl VideoConv {
 
             if let Ok(hash) = hash {
                 if !state.begin_transcode(hash) {
-                    self.dump_upstream_data(hash).map_err(|_| loggable_error!(CAT, "Dumping file to disk failed"))?;
+                    match self.dump_upstream_data(hash) {
+                        Ok(_) => { },
+                        Err(e) => { gst::error!(CAT, "{}", e.to_string())}
+                    }
                 }
             }
         }
-
-        Ok(())
     }
 
     fn src_activatemode(
@@ -813,7 +815,7 @@ impl VideoConv {
              * released before calling */
             match &mut *self.state.lock().unwrap() {
                 Some(state) => {
-                    self.init_transcode(state)?;
+                    self.init_transcode(state);
                     need_stream_start = state.need_stream_start;
                     hash = state.transcode_hash;
                 },
