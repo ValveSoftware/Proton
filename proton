@@ -1472,7 +1472,8 @@ class Session:
             self.compat_config.add("wined3d")
 
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
-            self.check_environment("PROTON_USE_WINED3D11", "wined3d")
+            if not self.check_environment("PROTON_USE_WINED3D11", "wined3d"):
+                self.check_environment("PROTON_USE_WINED3D9",  "wined3d9")
         self.check_environment("PROTON_NO_D3D12", "nod3d12")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
@@ -1604,6 +1605,9 @@ class Session:
         if "nod3d9" in self.compat_config:
             self.dlloverrides["d3d9"] = ""
             self.dlloverrides["dxgi"] = ""
+
+        if "wined3d9" in self.compat_config:
+            self.dlloverrides["d3d9"] = "b"
 
         if "enablenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
