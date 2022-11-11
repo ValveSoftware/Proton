@@ -1,0 +1,26 @@
+---
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Install Podman
+        run: apt install -y podman
+      - name: Compile Proton
+        run: make redist
+      - uses: actions/upload-artifact@v3
+        with:
+          name: proton-custom-build
+          path: build/
+          retention-days: 1
