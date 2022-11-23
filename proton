@@ -1000,14 +1000,19 @@ def default_compat_config():
                 "536280", #Disintegration
                 "563840", #LOST EMBER
                 "707030", #POSTAL 4: No Regerts
-                "1110100", #Power Rangers: Battle for the Grid
-                "1311070", #Greak: Memories of Azur
                 "1331440", #FUSER
                 "1359980", #POSTAL: Brain Damaged
+                "1766430", #POSTAL Brain Damaged Demo
+
+                #fixed by shared resources
+                "853050", #El Hijo - A Wild West Tale
+                "1102190", #"Monster Train
+                "1110100", #Power Rangers: Battle for the Grid
+                "1311070", #Greak: Memories of Azur
                 "1361320", #The Room 4: Old Sins
+                "1421790", #Labyrinth City: Pierre the Maze Detective
                 "1569550", #Dread X Collection: The Hunt
                 "1642370", #Terra Nil Demo
-                "1766430", #POSTAL Brain Damaged Demo
                 "1913910", #Nine Sols Demo
 
                 #affected by CW bug 19741
