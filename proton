@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-41"
+CURRENT_PREFIX_VERSION="GE-Proton7-42"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -68,8 +68,14 @@ def append_to_env_str(env, variable, append_str, separator):
         env[variable] = env[variable] + separator + append_str
 
 def log(msg):
-    sys.stderr.write(PFX + msg + os.linesep)
-    sys.stderr.flush()
+    try:
+        sys.stderr.write(PFX + msg + os.linesep)
+        sys.stderr.flush()
+    except OSError:
+        # e.g. see https://github.com/ValveSoftware/Proton/issues/6277
+        # There's not much we can usefully do about this: printing a
+        # warning to stderr isn't going to work any better the second time
+        pass
 
 def file_is_wine_builtin_dll(path):
     if os.path.islink(path):

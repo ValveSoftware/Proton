@@ -34,13 +34,14 @@ use crate::box_array;
 use crate::copy_into_array;
 use crate::BufferedReader;
 use crate::discarding_disabled;
+use crate::steam_compat_shader_path;
+use crate::touch_file;
 
-use gst;
 use gst::glib;
 use gst::prelude::*;
 use gst::subclass::prelude::*;
 use gst::EventView;
-use gst::QueryView;
+use gst::QueryViewMut;
 
 use std::sync::Mutex;
 use std::fs;
@@ -302,18 +303,28 @@ struct VideoConvState {
 }
 
 impl VideoConvState {
-    fn new() -> Result<VideoConvState, gst::LoggableError> {
+    fn new() -> VideoConvState {
 
-        let read_fozdb_path = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE").map_err(|_| {
-            loggable_error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
-        })?;
+        let read_fozdb_path = std::env::var("MEDIACONV_VIDEO_TRANSCODED_FILE");
 
-        let read_fozdb = match fossilize::StreamArchive::new(&read_fozdb_path, OpenOptions::new().read(true), true /* read-only? */, VIDEOCONV_FOZ_NUM_TAGS) {
-            Ok(s) => Some(s),
-            Err(_) => None,
+        if read_fozdb_path.is_err() {
+            gst::error!(CAT, "MEDIACONV_VIDEO_TRANSCODED_FILE is not set!")
+        }
+
+        let read_fozdb = match read_fozdb_path {
+            Ok(path) => match fossilize::StreamArchive::new(&path,
+                                                            OpenOptions::new().read(true),
+                                                            true /* read-only? */,
+                                                            VIDEOCONV_FOZ_NUM_TAGS)
+                {
+                    Ok(s) => Some(s),
+                    Err(_) => None
+                },
+            Err(_) => None
         };
 
-        Ok(VideoConvState {
+
+        VideoConvState {
             transcode_hash: None,
 
             read_fozdb,
@@ -324,21 +335,21 @@ impl VideoConvState {
             transcoded_tag: VIDEOCONV_FOZ_TAG_MKVDATA,
 
             need_stream_start: true,
-        })
+        }
     }
 
     /* true if the file is transcoded; false if not */
     fn begin_transcode(&mut self, hash: u128) -> bool {
         if let Some(read_fozdb) = &mut self.read_fozdb {
             if let Ok(transcoded_size) = read_fozdb.entry_size(VIDEOCONV_FOZ_TAG_MKVDATA, hash) {
-                gst_log!(CAT, "Found an MKV video for hash {}", format_hash(hash));
+                gst::log!(CAT, "Found an MKV video for hash {}", format_hash(hash));
                 self.transcode_hash = Some(hash);
                 self.our_duration = Some(transcoded_size as u64);
                 self.transcoded_tag = VIDEOCONV_FOZ_TAG_MKVDATA;
                 return true;
             }
             if let Ok(transcoded_size) = read_fozdb.entry_size(VIDEOCONV_FOZ_TAG_OGVDATA, hash) {
-                gst_log!(CAT, "Found an OGV video for hash {}", format_hash(hash));
+                gst::log!(CAT, "Found an OGV video for hash {}", format_hash(hash));
                 self.transcode_hash = Some(hash);
                 self.our_duration = Some(transcoded_size as u64);
                 self.transcoded_tag = VIDEOCONV_FOZ_TAG_OGVDATA;
@@ -346,10 +357,18 @@ impl VideoConvState {
             }
         }
 
-        gst_log!(CAT, "No transcoded video for {}. Substituting a blank video.", format_hash(hash));
+        gst::log!(CAT, "No transcoded video for {}. Substituting a blank video.", format_hash(hash));
 
         self.transcode_hash = None;
         self.our_duration = Some(include_bytes!("../../blank.mkv").len() as u64);
+
+        match steam_compat_shader_path() {
+            None => gst::log!(CAT, "env STEAM_COMPAT_SHADER_PATH not set"),
+            Some(mut path) => {
+                path.push("placeholder-video-used");
+                if let Err(e) = touch_file(path) { gst::log!(CAT, "Failed to touch placeholder-video-used file: {:?}", e) }
+            },
+        };
 
         false
     }
@@ -394,7 +413,7 @@ impl ObjectSubclass for VideoConv {
                 VideoConv::catch_panic_pad_function(
                     parent,
                     || false,
-                    |videoconv, element| videoconv.sink_event(pad, element, event)
+                    |videoconv| videoconv.sink_event(pad, event)
                 )
             }).build();
 
@@ -404,21 +423,21 @@ impl ObjectSubclass for VideoConv {
                 VideoConv::catch_panic_pad_function(
                     parent,
                     || Err(gst::FlowError::Error),
-                    |videoconv, element| videoconv.range(pad, element, offset, in_buf, size)
+                    |videoconv| videoconv.range(pad, offset, in_buf, size)
                 )
             })
             .query_function(|pad, parent, query| {
                 VideoConv::catch_panic_pad_function(
                     parent,
                     || false,
-                    |videoconv, element| videoconv.src_query(pad, element, query)
+                    |videoconv| videoconv.src_query(pad, query)
                 )
             })
             .activatemode_function(|pad, parent, mode, active| {
                 VideoConv::catch_panic_pad_function(
                     parent,
                     || Err(loggable_error!(CAT, "Panic activating srcpad with mode")),
-                    |videoconv, element| videoconv.src_activatemode(pad, element, mode, active)
+                    |videoconv| videoconv.src_activatemode(pad, mode, active)
                 )
             }).build();
 
@@ -431,13 +450,17 @@ impl ObjectSubclass for VideoConv {
 }
 
 impl ObjectImpl for VideoConv {
-    fn constructed(&self, obj: &Self::Type) {
-        self.parent_constructed(obj);
+    fn constructed(&self) {
+        self.parent_constructed();
+
+        let obj = self.obj();
 
         obj.add_pad(&self.sinkpad).unwrap();
         obj.add_pad(&self.srcpad).unwrap();
     }
 }
+
+impl GstObjectImpl for VideoConv { }
 
 impl ElementImpl for VideoConv {
     fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
@@ -489,20 +512,16 @@ impl ElementImpl for VideoConv {
 
     fn change_state(
         &self,
-        element: &super::VideoConv,
         transition: gst::StateChange
     ) -> Result<gst::StateChangeSuccess, gst::StateChangeError> {
 
-        gst_log!(CAT, obj: element, "State transition: {:?}", transition);
+        gst::log!(CAT, imp: self, "State transition: {:?}", transition);
 
         match transition {
             gst::StateChange::NullToReady => {
                 /* do runtime setup */
 
-                let new_state = VideoConvState::new().map_err(|err| {
-                    err.log();
-                    return gst::StateChangeError;
-                })?;
+                let new_state = VideoConvState::new();
 
                 let mut state = self.state.lock().unwrap();
                 assert!((*state).is_none());
@@ -518,7 +537,7 @@ impl ElementImpl for VideoConv {
             _ => (),
         };
 
-        self.parent_change_state(element, transition)
+        self.parent_change_state(transition)
 
         /* XXX on ReadyToNull, sodium drops state _again_ here... why? */
     }
@@ -555,7 +574,6 @@ impl VideoConv {
     fn range(
         &self,
         _pad: &gst::Pad,
-        _element: &super::VideoConv,
         offset: u64,
         in_buf: Option<&mut gst::BufferRef>,
         requested_size: u32,
@@ -563,17 +581,17 @@ impl VideoConv {
 
         let mut state = self.state.lock().unwrap();
 
-        let mut state = match &mut *state {
+        let state = match &mut *state {
             Some(s) => s,
             None => { return Err(gst::FlowError::Error); }
         };
 
         if state.upstream_duration.is_none() {
-            self.query_upstream_duration(&mut state);
+            self.query_upstream_duration(state);
         }
 
-        let ups_offset = self.duration_ours_to_upstream(&state, offset).unwrap();
-        let ups_requested_size = self.duration_ours_to_upstream(&state, requested_size as u64).unwrap() as u32;
+        let ups_offset = self.duration_ours_to_upstream(state, offset).unwrap();
+        let ups_requested_size = self.duration_ours_to_upstream(state, requested_size as u64).unwrap() as u32;
 
         /* read and ignore upstream bytes */
         self.sinkpad.pull_range(ups_offset, ups_requested_size)?;
@@ -621,10 +639,9 @@ impl VideoConv {
     fn sink_event(
         &self,
         pad: &gst::Pad,
-        element: &super::VideoConv,
         event: gst::Event
     ) -> bool {
-        gst_log!(CAT, obj:pad, "Got an event {:?}", event);
+        gst::log!(CAT, obj:pad, "Got an event {:?}", event);
         match event.view() {
             EventView::Caps(_) => {
 
@@ -633,20 +650,17 @@ impl VideoConv {
                 let caps = {
                     let mut state = self.state.lock().unwrap();
 
-                    let mut state = match &mut *state {
+                    let state = match &mut *state {
                         Some(s) => s,
-                        None => { gst_error!(CAT, "VideoConv not yet in READY state?"); return false; },
+                        None => { gst::error!(CAT, "VideoConv not yet in READY state?"); return false; },
                     };
 
-                    if !self.sinkpad.activate_mode(gst::PadMode::Pull, true).is_ok() {
-                        gst_error!(CAT, "Failed to activate sinkpad in pull mode");
+                    if self.sinkpad.activate_mode(gst::PadMode::Pull, true).is_err() {
+                        gst::error!(CAT, "Failed to activate sinkpad in pull mode");
                         return false;
                     }
 
-                    if !self.init_transcode(&mut state).is_ok() {
-                        gst_error!(CAT, "Failed to init transcode");
-                        return false;
-                    }
+                    self.init_transcode(state);
 
                     match state.transcoded_tag {
                         VIDEOCONV_FOZ_TAG_MKVDATA => gst::Caps::builder("video/x-matroska").build(),
@@ -657,7 +671,7 @@ impl VideoConv {
 
                 self.srcpad.push_event(gst::event::Caps::new(&caps))
             }
-            _ => pad.event_default(Some(element), event)
+            _ => gst::Pad::event_default(pad, Some(&*self.obj()), event)
         }
     }
 
@@ -665,12 +679,12 @@ impl VideoConv {
         let mut query = gst::query::Duration::new(gst::Format::Bytes);
 
         if self.sinkpad.peer_query(&mut query) {
-            state.upstream_duration = match query.result().try_into().unwrap() {
-                Some(gst::format::Bytes(size)) => Some(size),
+            state.upstream_duration = match query.result() {
+                gst::GenericFormattedValue::Bytes(Some(size)) => Some(*size),
                 _ => None,
             }
         }else{
-            gst_warning!(CAT, "upstream duration query failure");
+            gst::warning!(CAT, "upstream duration query failure");
         }
     }
 
@@ -686,12 +700,11 @@ impl VideoConv {
     fn src_query(
         &self,
         pad: &gst::Pad,
-        element: &super::VideoConv,
         query: &mut gst::QueryRef) -> bool
     {
-        gst_log!(CAT, obj: pad, "got query: {:?}", query);
+        gst::log!(CAT, obj: pad, "got query: {:?}", query);
         match query.view_mut() {
-            QueryView::Scheduling(mut q) => {
+            QueryViewMut::Scheduling(q) => {
                 let mut peer_query = gst::query::Scheduling::new();
                 let res = self.sinkpad.peer_query(&mut peer_query);
                 if ! res {
@@ -704,29 +717,29 @@ impl VideoConv {
                 q.add_scheduling_modes(&[gst::PadMode::Pull]);
                 true
             },
-            QueryView::Duration(ref mut q) => {
+            QueryViewMut::Duration(ref mut q) => {
 
                 let mut state = self.state.lock().unwrap();
 
-                let mut state = match &mut *state {
+                let state = match &mut *state {
                     Some(s) => s,
                     None => { return false; }
                 };
 
                 if state.upstream_duration.is_none() {
-                    self.query_upstream_duration(&mut state);
+                    self.query_upstream_duration(state);
                 }
 
                 if let Some(sz) = state.our_duration {
                     if q.format() == gst::Format::Bytes {
-                        q.set(gst::format::Bytes(sz));
+                        q.set(gst::format::Bytes::from_u64(sz));
                         return true
                     }
                 }
 
                 false
             }
-            _ => pad.query_default(Some(element), query)
+            _ => gst::Pad::query_default(pad, Some(&*self.obj()), query)
         }
     }
 
@@ -740,7 +753,7 @@ impl VideoConv {
         let mut db = &mut db.open(true).fozdb;
         let db = match &mut db {
             Some(d) => d,
-            None => { gst_error!(CAT, "Unable to open fozdb!"); return Err(io::Error::new(io::ErrorKind::Other, "unable to open fozdb")); },
+            None => { gst::error!(CAT, "Unable to open fozdb!"); return Err(io::Error::new(io::ErrorKind::Other, "unable to open fozdb")); },
         };
 
         let mut chunks = Vec::<u128>::new();
@@ -758,19 +771,16 @@ impl VideoConv {
             chunks.push(chunk_hash);
 
             db.write_entry(VIDEOCONV_FOZ_TAG_VIDEODATA, chunk_hash, &mut BufferedReader::new(&*buf, readed), fossilize::CRCCheck::WithCRC)
-                .map_err(|e| { gst_warning!(CAT, "Error writing video data to fozdb: {:?}", e); io::Error::new(io::ErrorKind::Other, "error writing video data to fozdb") } )?;
+                .map_err(|e| { gst::warning!(CAT, "Error writing video data to fozdb: {:?}", e); io::Error::new(io::ErrorKind::Other, "error writing video data to fozdb") } )?;
         }
 
         db.write_entry(VIDEOCONV_FOZ_TAG_STREAM, hash, &mut StreamSerializer::new(&chunks), fossilize::CRCCheck::WithCRC)
-            .map_err(|e| { gst_warning!(CAT, "Error writing stream data to fozdb: {:?}", e); io::Error::new(io::ErrorKind::Other, "error writing stream data to fozdb") } )?;
+            .map_err(|e| { gst::warning!(CAT, "Error writing stream data to fozdb: {:?}", e); io::Error::new(io::ErrorKind::Other, "error writing stream data to fozdb") } )?;
 
         Ok(())
     }
 
-    fn init_transcode(
-        &self,
-        state: &mut VideoConvState
-    ) -> Result<(), gst::LoggableError> {
+    fn init_transcode(&self, state: &mut VideoConvState) {
 
         if state.transcode_hash.is_none() {
             (*DUMP_FOZDB).lock().unwrap().discard_transcoded();
@@ -779,18 +789,18 @@ impl VideoConv {
 
             if let Ok(hash) = hash {
                 if !state.begin_transcode(hash) {
-                    self.dump_upstream_data(hash).map_err(|_| loggable_error!(CAT, "Dumping file to disk failed"))?;
+                    match self.dump_upstream_data(hash) {
+                        Ok(_) => { },
+                        Err(e) => { gst::error!(CAT, "{}", e.to_string())}
+                    }
                 }
             }
         }
-
-        Ok(())
     }
 
     fn src_activatemode(
         &self,
         _pad: &gst::Pad,
-        _element: &super::VideoConv,
         mode: gst::PadMode,
         active: bool
     ) -> Result<(), gst::LoggableError> {
@@ -805,7 +815,7 @@ impl VideoConv {
              * released before calling */
             match &mut *self.state.lock().unwrap() {
                 Some(state) => {
-                    self.init_transcode(state)?;
+                    self.init_transcode(state);
                     need_stream_start = state.need_stream_start;
                     hash = state.transcode_hash;
                 },

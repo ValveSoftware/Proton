@@ -13,7 +13,7 @@ BASE_IMAGE_x86_64 = docker.io/amd64/ubuntu:18.04
 BINUTILS_VERSION = 2.37
 GCC_VERSION = 10.3.0
 MINGW_VERSION = 9.0.0
-RUST_VERSION = 1.63.0
+RUST_VERSION = 1.65.0
 
 SOURCES_URLBASE = https://repo.steampowered.com/proton-sdk
 BINUTILS_URLBASE = $(SOURCES_URLBASE)
@@ -84,7 +84,7 @@ build-base-$(1): BASE_IMAGE = $(BASE_IMAGE_$(1))
 build-base-$(1): build-base-$(1).Dockerfile
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
-	  --cache-from=$(PROTONSDK_URLBASE)/build-base-$(1):latest \
+	  --cache-from=$(PROTONSDK_URLBASE)/build-base-$(1) \
 	  -t $(PROTONSDK_URLBASE)/build-base-$(1):latest \
 	  build
 pull::
@@ -102,7 +102,7 @@ all binutils: binutils-$(1)-$(2)
 binutils-$(1)-$(2): binutils-$(1)-$(2).Dockerfile | build-base
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
-	  --cache-from=$(PROTONSDK_URLBASE)/binutils-$(1)-$(2):$(BINUTILS_VERSION) \
+	  --cache-from=$(PROTONSDK_URLBASE)/binutils-$(1)-$(2) \
 	  -t $(PROTONSDK_URLBASE)/binutils-$(1)-$(2):$(BINUTILS_VERSION) \
 	  -t $(PROTONSDK_URLBASE)/binutils-$(1)-$(2):latest \
 	  build
@@ -124,7 +124,7 @@ all mingw: mingw-$(2)-$(1)
 mingw-$(2)-$(1): mingw-$(2)-$(1).Dockerfile | binutils
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
-	  --cache-from=$(PROTONSDK_URLBASE)/mingw-$(2)-$(1):$(MINGW_VERSION) \
+	  --cache-from=$(PROTONSDK_URLBASE)/mingw-$(2)-$(1) \
 	  -t $(PROTONSDK_URLBASE)/mingw-$(2)-$(1):$(MINGW_VERSION) \
 	  -t $(PROTONSDK_URLBASE)/mingw-$(2)-$(1):latest \
 	  build
@@ -156,7 +156,7 @@ gcc-$(1)-$(2): TARGET_FLAGS = $(GCC_TARGET_FLAGS_$(2))
 gcc-$(1)-$(2): gcc-$(1)-$(2).Dockerfile | mingw
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
-	  --cache-from=$(PROTONSDK_URLBASE)/gcc-$(1)-$(2):$(GCC_VERSION) \
+	  --cache-from=$(PROTONSDK_URLBASE)/gcc-$(1)-$(2) \
 	  -t $(PROTONSDK_URLBASE)/gcc-$(1)-$(2):$(GCC_VERSION) \
 	  -t $(PROTONSDK_URLBASE)/gcc-$(1)-$(2):latest \
 	  build
@@ -179,7 +179,7 @@ proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/soldier/sdk:$(STEAMRT_VERSION)
 proton: proton.Dockerfile | gcc
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
-	  --cache-from=$(PROTONSDK_URLBASE):$(PROTONSDK_VERSION) \
+	  --cache-from=$(PROTONSDK_URLBASE) \
 	  -t $(PROTONSDK_URLBASE):$(PROTONSDK_VERSION) \
 	  -t $(PROTONSDK_URLBASE):latest \
 	  build

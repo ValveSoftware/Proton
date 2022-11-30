@@ -35,8 +35,14 @@ extern crate gstreamer_video as gst_video;
 extern crate gstreamer_audio as gst_audio;
 extern crate once_cell;
 
+use std::fs::File;
 use std::io;
 use std::io::Read;
+use std::path::Path;
+use std::path::PathBuf;
+
+use filetime::FileTime;
+use filetime::set_file_handle_times;
 
 #[cfg(target_arch = "x86")]
 mod murmur3_x86_128;
@@ -76,6 +82,24 @@ where
     a
 }
 
+fn touch_file<P>(p: P) -> io::Result<()>
+where
+    P: AsRef<Path> + std::fmt::Debug
+{
+    let f = File::create(p)?;
+    let now = FileTime::now();
+    set_file_handle_times(&f, Some(now), Some(now))?;
+    Ok(())
+}
+
+fn steam_compat_shader_path() -> Option<PathBuf>
+{
+    match std::env::var("STEAM_COMPAT_SHADER_PATH") {
+        Err(_) => None,
+        Ok(c) => Some(Path::new(&c).to_path_buf()),
+    }
+}
+
 /* rust has a hard time with large heap allocations. below macro works around that.
  *
  * by @simias from https://github.com/rust-lang/rust/issues/53827 */
@@ -97,7 +121,7 @@ macro_rules! box_array {
 
 /* you MUST use this to consistently format the hash bytes into a string */
 fn format_hash(hash: u128) -> String {
-    return format!("{:032x}", hash);
+    format!("{:032x}", hash)
 }
 
 /* changing this will invalidate the cache. you MUST clear it. */
@@ -144,7 +168,7 @@ fn discarding_disabled() -> bool {
         Err(_) => { return false; },
         Ok(c) => c,
     };
-    return v != "0";
+    v != "0"
 }
 
 fn plugin_init(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {

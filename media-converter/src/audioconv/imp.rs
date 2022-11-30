@@ -31,14 +31,14 @@
 use crate::format_hash;
 use crate::HASH_SEED;
 use crate::discarding_disabled;
+use crate::steam_compat_shader_path;
+use crate::touch_file;
 
-use gst;
 use gst::glib;
 use gst::prelude::*;
 use gst::subclass::prelude::*;
 use gst::EventView;
-use gst::QueryView;
-use gst_audio;
+use gst::QueryViewMut;
 
 use std::sync::Mutex;
 use std::io;
@@ -302,7 +302,7 @@ static DUMPING_DISABLED: Lazy<bool> = Lazy::new(|| {
         Err(_) => { return false; },
         Ok(c) => c,
     };
-    return v != "0";
+    v != "0"
 });
 
 #[derive(Clone)]
@@ -463,16 +463,16 @@ impl StreamState {
                             offs += 16;
                         }
 
-                        gst_trace!(CAT, "stream id {} is a subset of {}, so not recording stream", self.cur_hash, *stream_id);
-                        return true;
+                        gst::trace!(CAT, "stream id {} is a subset of {}, so not recording stream", self.cur_hash, *stream_id);
+                        true
                     });
             }
 
             if !found {
                 if *DUMPING_DISABLED {
-                    gst_trace!(CAT, "dumping disabled, so not recording stream id {}", self.cur_hash);
+                    gst::trace!(CAT, "dumping disabled, so not recording stream id {}", self.cur_hash);
                 } else {
-                    gst_trace!(CAT, "recording stream id {}", self.cur_hash);
+                    gst::trace!(CAT, "recording stream id {}", self.cur_hash);
                     db.write_entry(AUDIOCONV_FOZ_TAG_CODECINFO,
                                    self.buffers[0].0,
                                    &mut self.codec_info.as_ref().unwrap().serialize().as_slice(),
@@ -594,9 +594,9 @@ impl AudioConvState {
         let buf_len = mapped.size();
 
         let hash = hash_data(mapped.as_slice(), buf_len, &mut self.hash_state)
-            .map_err(|e|{ gst_warning!(CAT, "Hashing buffer failed! {}", e); io::ErrorKind::Other })?;
+            .map_err(|e|{ gst::warning!(CAT, "Hashing buffer failed! {}", e); io::ErrorKind::Other })?;
         let loop_hash = hash_data(mapped.as_slice(), buf_len, &mut self.loop_hash_state)
-            .map_err(|e|{ gst_warning!(CAT, "Hashing buffer failed! {}", e); io::ErrorKind::Other })?;
+            .map_err(|e|{ gst::warning!(CAT, "Hashing buffer failed! {}", e); io::ErrorKind::Other })?;
 
         let try_loop = match self.stream_state.record_buffer(hash, loop_hash, mapped, Some(self.codec_data.as_ref().unwrap()))? {
             LoopState::NoLoop => { self.loop_hash_state.reset(); false },
@@ -605,9 +605,9 @@ impl AudioConvState {
         };
 
         if try_loop {
-            gst_log!(CAT, "Buffer hash: {} (loop: {})", format_hash(hash), format_hash(loop_hash));
+            gst::log!(CAT, "Buffer hash: {} (loop: {})", format_hash(hash), format_hash(loop_hash));
         }else{
-            gst_log!(CAT, "Buffer hash: {}", format_hash(hash));
+            gst::log!(CAT, "Buffer hash: {}", format_hash(hash));
         }
 
         /* try to read transcoded data */
@@ -635,6 +635,14 @@ impl AudioConvState {
 
         let buf = Box::new(*include_bytes!("../../blank.ptna"));
 
+        match steam_compat_shader_path() {
+            None => gst::log!(CAT, "env STEAM_COMPAT_SHADER_PATH not set"),
+            Some(mut path) => {
+                path.push("placeholder-audio-used");
+                if let Err(e) = touch_file(path) { gst::log!(CAT, "Failed to touch placeholder-audio-used file: {:?}", e) }
+            },
+        };
+
         Ok(buf)
     }
 }
@@ -658,14 +666,14 @@ impl ObjectSubclass for AudioConv {
                 AudioConv::catch_panic_pad_function(
                     parent,
                     || Err(gst::FlowError::Error),
-                    |audioconv, element| audioconv.chain(pad, element, buffer)
+                    |audioconv| audioconv.chain(pad, buffer)
                 )
             })
             .event_function(|pad, parent, event| {
                 AudioConv::catch_panic_pad_function(
                     parent,
                     || false,
-                    |audioconv, element| audioconv.sink_event(pad, element, event)
+                    |audioconv| audioconv.sink_event(pad, event)
                 )
             }).build();
 
@@ -675,14 +683,14 @@ impl ObjectSubclass for AudioConv {
                 AudioConv::catch_panic_pad_function(
                     parent,
                     || false,
-                    |audioconv, element| audioconv.src_query(pad, element, query)
+                    |audioconv| audioconv.src_query(pad, query)
                 )
             })
             .activatemode_function(|pad, parent, mode, active| {
                 AudioConv::catch_panic_pad_function(
                     parent,
                     || Err(loggable_error!(CAT, "Panic activating srcpad with mode")),
-                    |audioconv, element| audioconv.src_activatemode(pad, element, mode, active)
+                    |audioconv| audioconv.src_activatemode(pad, mode, active)
                 )
             }).build();
 
@@ -695,13 +703,17 @@ impl ObjectSubclass for AudioConv {
 }
 
 impl ObjectImpl for AudioConv {
-    fn constructed(&self, obj: &Self::Type) {
-        self.parent_constructed(obj);
+    fn constructed(&self) {
+        self.parent_constructed();
+
+        let obj = self.obj();
 
         obj.add_pad(&self.sinkpad).unwrap();
         obj.add_pad(&self.srcpad).unwrap();
     }
 }
+
+impl GstObjectImpl for AudioConv { }
 
 impl ElementImpl for AudioConv {
     fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
@@ -744,11 +756,10 @@ impl ElementImpl for AudioConv {
 
     fn change_state(
         &self,
-        element: &super::AudioConv,
         transition: gst::StateChange
     ) -> Result<gst::StateChangeSuccess, gst::StateChangeError> {
 
-        gst_log!(CAT, obj: element, "State transition: {:?}", transition);
+        gst::log!(CAT, imp: self, "State transition: {:?}", transition);
 
         match transition {
             gst::StateChange::NullToReady => {
@@ -762,14 +773,14 @@ impl ElementImpl for AudioConv {
                     let db = &mut (*DUMP_FOZDB).lock().unwrap();
                     let db = &mut db.open(true).fozdb;
                     if db.is_none() {
-                        gst_error!(CAT, "Failed to open fossilize db!");
+                        gst::error!(CAT, "Failed to open fossilize db!");
                         return Err(gst::StateChangeError);
                     }
                 }
 
                 let new_state = AudioConvState::new().map_err(|err| {
                     err.log();
-                    return gst::StateChangeError;
+                    gst::StateChangeError
                 })?;
 
                 let mut state = self.state.lock().unwrap();
@@ -783,7 +794,7 @@ impl ElementImpl for AudioConv {
                 let old_state = self.state.lock().unwrap().take(); // dispose of state
                 if let Some(old_state) = old_state {
                     if old_state.stream_state.write_to_foz().is_err() {
-                        gst_warning!(CAT, "Error writing out stream data!");
+                        gst::warning!(CAT, "Error writing out stream data!");
                     }
                 }
             },
@@ -791,7 +802,7 @@ impl ElementImpl for AudioConv {
             _ => (),
         };
 
-        self.parent_change_state(element, transition)
+        self.parent_change_state(transition)
 
         /* XXX on ReadyToNull, sodium drops state _again_ here... why? */
     }
@@ -802,10 +813,9 @@ impl AudioConv {
     fn chain(
         &self,
         _pad: &gst::Pad,
-        _element: &super::AudioConv,
         buffer: gst::Buffer
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        gst_log!(CAT, "Handling buffer {:?}", buffer);
+        gst::log!(CAT, "Handling buffer {:?}", buffer);
 
         let mut state = self.state.lock().unwrap();
         let mut state = match &mut *state {
@@ -814,7 +824,7 @@ impl AudioConv {
         };
 
         let ptnadata = state.open_transcode_file(buffer).map_err(|_| {
-            gst_error!(CAT, "ERROR! Failed to read transcoded audio! Things will go badly..."); gst::FlowError::Error
+            gst::error!(CAT, "ERROR! Failed to read transcoded audio! Things will go badly..."); gst::FlowError::Error
         })?;
 
         let mut offs: usize = 0;
@@ -825,7 +835,7 @@ impl AudioConv {
             }
 
             if offs + 4 >= ptnadata.len() {
-                gst_warning!(CAT, "Short read on ptna header?");
+                gst::warning!(CAT, "Short read on ptna header?");
                 break;
             }
 
@@ -838,7 +848,7 @@ impl AudioConv {
                      (packet_hdr & AUDIOCONV_ENCODED_LENGTH_MASK) as usize);
 
             if offs + encoded_len > ptnadata.len() {
-                gst_warning!(CAT, "Short read on ptna data?");
+                gst::warning!(CAT, "Short read on ptna data?");
                 break;
             }
 
@@ -854,14 +864,16 @@ impl AudioConv {
             let mut buffer = gst::Buffer::with_size(encoded_len as usize).unwrap();
 
             if !pkt_is_header && padding_len > 0 {
-                gst_audio::AudioClippingMeta::add(buffer.get_mut().unwrap(), gst::format::Default(0), gst::format::Default(padding_len as u64));
+                gst_audio::AudioClippingMeta::add(buffer.get_mut().unwrap(),
+                gst::format::Default::ZERO,
+                gst::format::Default::from_u64(padding_len as u64));
             }
 
             let mut writable = buffer.into_mapped_buffer_writable().unwrap();
 
             writable.as_mut_slice().copy_from_slice(&ptnadata[offs..offs + encoded_len]);
 
-            gst_log!(CAT, "pushing one packet of len {}", encoded_len);
+            gst::log!(CAT, "pushing one packet of len {}", encoded_len);
             self.srcpad.push(writable.into_buffer())?;
 
             if pkt_is_header {
@@ -877,19 +889,18 @@ impl AudioConv {
     fn sink_event(
         &self,
         pad: &gst::Pad,
-        element: &super::AudioConv,
         event: gst::Event
     ) -> bool {
-        gst_log!(CAT, obj:pad, "Got an event {:?}", event);
+        gst::log!(CAT, obj:pad, "Got an event {:?}", event);
         match event.view() {
             EventView::Caps(event_caps) => {
 
                 let mut state = self.state.lock().unwrap();
                 if let Some(state) = &mut *state {
-                    let head = match NeedTranscodeHead::new_from_caps(&event_caps.caps()){
+                    let head = match NeedTranscodeHead::new_from_caps(event_caps.caps()){
                         Ok(h) => h,
                         Err(e) => {
-                            gst_error!(CAT, "Invalid WMA caps!");
+                            gst::error!(CAT, "Invalid WMA caps!");
                             e.log();
                             return false;
                         },
@@ -916,21 +927,20 @@ impl AudioConv {
                 };
                 drop(state);
 
-                pad.event_default(Some(element), event)
+                gst::Pad::event_default(pad, Some(&*self.obj()), event)
             },
-            _ => pad.event_default(Some(element), event)
+            _ => gst::Pad::event_default(pad, Some(&*self.obj()), event)
         }
     }
 
     fn src_query(
         &self,
         pad: &gst::Pad,
-        element: &super::AudioConv,
         query: &mut gst::QueryRef) -> bool
     {
-        gst_log!(CAT, obj: pad, "got query: {:?}", query);
+        gst::log!(CAT, obj: pad, "got query: {:?}", query);
         match query.view_mut() {
-            QueryView::Scheduling(mut q) => {
+            QueryViewMut::Scheduling(q) => {
                 let mut peer_query = gst::query::Scheduling::new();
                 let res = self.sinkpad.peer_query(&mut peer_query);
                 if ! res {
@@ -942,14 +952,13 @@ impl AudioConv {
                 q.set(flags, min, max, align);
                 true
             },
-            _ => pad.query_default(Some(element), query)
+            _ => gst::Pad::query_default(pad, Some(&*self.obj()), query)
         }
     }
 
     fn src_activatemode(
         &self,
         _pad: &gst::Pad,
-        _element: &super::AudioConv,
         mode: gst::PadMode,
         active: bool
     ) -> Result<(), gst::LoggableError> {
