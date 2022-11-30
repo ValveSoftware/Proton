@@ -18,17 +18,6 @@
     patch -Np1 < ../patches/dxvk/dxvk-async.patch   
     cd ..
 
-    cd vkd3d-proton
-    git reset --hard HEAD
-    git clean -xdf
-    
-    echo "VKD3D: fix Gears 5 regression"
-    #https://github.com/HansKristian-Work/vkd3d-proton/issues/1281
-    #https://github.com/HansKristian-Work/vkd3d-proton/pull/1284
-    patch -Np1 < ../patches/vkd3d/1284.patch
-    #git revert --no-commit df1829e40770482597ab168559ef2d68ab3ec707
-    cd ..
-
 ### END PREP SECTION ###
 
 ### (2) WINE PATCHING ###
@@ -110,7 +99,9 @@
     -W sapi-iteration-tokens \
     -W cryptext-CryptExtOpenCER \
     -W shell32-NewMenu_Interface \
-    -W wintrust-WTHelperGetProvCertFromChain
+    -W wintrust-WTHelperGetProvCertFromChain \
+    -W user32-FlashWindowEx \
+    -W user32-MessageBox_WS_EX_TOPMOST
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
@@ -182,6 +173,8 @@
     # cryptext-CryptExtOpenCER - applied manually
     # ** wintrust-WTHelperGetProvCertFromChain - applied manually
     # ** shell32-NewMenu_Interface - applied manually
+    # ** user32-FlashWindowEx - applied manually
+    # user32-MessageBox_WS_EX_TOPMOST - already applied
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -307,6 +300,9 @@
     # shell32-NewMenu_Interface
     patch -Np1 < ../patches/wine-hotfixes/staging/shell32-NewMenu_Interface/0001-shell32-Implement-NewMenu-with-new-folder-item.patch
     
+    # user32-FlashWindowEx
+    patch -Np1 < ../patches/wine-hotfixes/staging/user32-FlashWindowEx/0001-user32-Improve-FlashWindowEx-message-and-return-valu.patch
+
     # nvapi/nvcuda
     # this was added in 7.1, so it's not in the 7.0 tree
     patch -Np1 < ../patches/wine-hotfixes/staging/nvcuda/0016-nvcuda-Make-nvcuda-attempt-to-load-libcuda.so.1.patch
