@@ -444,7 +444,6 @@ GST_ORC_MESON_ARGS := \
 	-Dorc-test=disabled \
 	-Dexamples=disabled \
 	-Dtests=disabled \
-	-Dgtk_doc=disabled \
 	-Dbenchmarks=disabled
 
 $(eval $(call rules-source,gst_orc,$(SRCDIR)/gst-orc))
@@ -463,7 +462,6 @@ GSTREAMER_MESON_ARGS := \
 	-Dbash-completion=disabled \
 	-Dexamples=disabled \
 	-Dtests=disabled \
-	-Dgtk_doc=disabled \
 	-Dintrospection=disabled \
 	-Dgobject-cast-checks=disabled \
 	-Dglib-asserts=disabled \
