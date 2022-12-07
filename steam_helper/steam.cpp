@@ -59,6 +59,8 @@
 #include "openvr.h"
 #include "../src/ivrclientcore.h"
 
+#include <msi.h>
+
 WINE_DEFAULT_DEBUG_CHANNEL(steam);
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(*a))
@@ -975,13 +977,13 @@ static BOOL should_use_shell_execute(const WCHAR *cmdline)
     return use_shell_execute;
 }
 
-static HANDLE run_process(BOOL *should_await)
+static HANDLE run_process(BOOL *should_await, BOOL game_process)
 {
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
     PROCESS_INFORMATION pi;
     DWORD flags = CREATE_UNICODE_ENVIRONMENT;
-    BOOL use_shell_execute = TRUE;
+    BOOL use_shell_execute = TRUE, link2ea = FALSE;
     BOOL hide_window;
 
     /* skip argv[0] */
@@ -1093,6 +1095,7 @@ run:
         HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
         DWORD timeout = 300;
 
+        link2ea = TRUE;
         if (!SetUserObjectInformationA(desktop, 1000, &timeout, sizeof(timeout)))
             WINE_ERR("Failed to set desktop timeout, err %u.\n", GetLastError());
     }
@@ -1110,8 +1113,23 @@ run:
     if (use_shell_execute)
     {
         static const WCHAR verb[] = { 'o', 'p', 'e', 'n', 0 };
-        ShellExecuteW(NULL, verb, cmdline, NULL, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL);
+        INT_PTR ret;
 
+        if ((ret = (INT_PTR)ShellExecuteW(NULL, verb, cmdline, NULL, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL)) < 32)
+        {
+            WINE_ERR("Failed to execture %s, ret %u.\n", wine_dbgstr_w(cmdline), (unsigned int)ret);
+            if (game_process && ret == SE_ERR_NOASSOC && link2ea)
+            {
+                /* Try to uninstall EA desktop so it is set up from prerequisites on the next run. */
+                UINT ret = MsiConfigureProductExW(L"{C2622085-ABD2-49E5-8AB9-D3D6A642C091}", 0, INSTALLSTATE_DEFAULT, L"REMOVE=ALL");
+
+                WINE_TRACE("MsiConfigureProductExW ret %u.\n", ret);
+                /* If uninstall failed this should trigger interactive repair window on the EA setup run. */
+                RegDeleteTreeW(HKEY_LOCAL_MACHINE, L"Software\\Classes\\link2ea");
+                RegDeleteTreeW(HKEY_LOCAL_MACHINE, L"Software\\Electronic Arts\\EA Desktop");
+                RegDeleteTreeW(HKEY_LOCAL_MACHINE, L"Software\\Electronic Arts\\EA Core");
+            }
+        }
         return INVALID_HANDLE_VALUE;
     }
     else
@@ -1439,7 +1457,7 @@ int main(int argc, char *argv[])
         if (game_process)
             setup_vr_registry();
 
-        child = run_process(&should_await);
+        child = run_process(&should_await, game_process);
 
         if (should_await)
         {
