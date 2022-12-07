@@ -1171,6 +1171,14 @@ run:
     SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
 
     use_shell_execute = should_use_shell_execute(cmdline);
+    if (use_shell_execute && lstrlenW(cmdline) > 10 && !memcmp(cmdline, L"link2ea://", 10 *sizeof(WCHAR)))
+    {
+        HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
+        DWORD timeout = 300;
+
+        if (!SetUserObjectInformationA(desktop, 1000, &timeout, sizeof(timeout)))
+            WINE_ERR("Failed to set desktop timeout, err %u.\n", GetLastError());
+    }
     hide_window = env_nonzero("PROTON_HIDE_PROCESS_WINDOW");
 
     /* only await the process finishing if we launch a process directly...
