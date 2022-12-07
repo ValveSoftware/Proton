@@ -629,7 +629,7 @@ class CompatData:
             if int(old_proton_maj) < 7 or (int(old_proton_maj) == 7 and
                                            int(old_proton_min) == 0 and
                                            int(old_prefix_ver) < 101):
-                with open(self.creation_sync_guard, "x"):
+                with open(self.creation_sync_guard, "w"):
                     pass
                 os.sync()
 
