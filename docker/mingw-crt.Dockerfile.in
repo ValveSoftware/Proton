@@ -13,7 +13,8 @@ RUN wget -q @MINGW_URLBASE@/@MINGW_SOURCE@ \
   --prefix=/usr/@ARCH@-w64-mingw32/ \
   --host=@ARCH@-w64-mingw32 \
   --enable-wildcard \
-  MAKEINFO=true || cat config.log \
+  @ARCH_FLAGS@ \
+  MAKEINFO=true \
 && make --quiet -j@J@ MAKEINFO=true \
 && make --quiet -j@J@ MAKEINFO=true install-strip DESTDIR=/opt \
 && rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
