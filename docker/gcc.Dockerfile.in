@@ -40,6 +40,7 @@ RUN wget -q @GCC_URLBASE@/@GCC_SOURCE@ \
   --with-system-mpfr \
   --with-system-zlib \
   --with-tune=core-avx2 \
+  @ARCH_FLAGS@ \
   MAKEINFO=true \
 && make --quiet -j@J@ MAKEINFO=true CFLAGS="-static --static" LDFLAGS="-s -static --static" \
 && make --quiet -j@J@ MAKEINFO=true CFLAGS="-static --static" LDFLAGS="-s -static --static" install-strip DESTDIR=/opt \
