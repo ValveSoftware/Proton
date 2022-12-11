@@ -61,19 +61,23 @@ DOCKER = docker
 
 %-i686.Dockerfile.in: %.Dockerfile.in
 	sed -re 's!@ARCH@!i686!g' \
+	    -re 's!@ARCH_FLAGS@!$(ARCH_FLAGS)!g' \
 	    $< >$@
 
 %-x86_64.Dockerfile.in: %.Dockerfile.in
 	sed -re 's!@ARCH@!x86_64!g' \
+	    -re 's!@ARCH_FLAGS@!$(ARCH_FLAGS)!g' \
 	    $< >$@
 
 %-linux-gnu.Dockerfile.in: %.Dockerfile.in
 	sed -re 's!@TARGET@!linux-gnu!g' \
+	    -re 's!@ARCH_FLAGS@!$(ARCH_FLAGS)!g' \
 	    -re 's!@TARGET_FLAGS@!$(TARGET_FLAGS)!g' \
 	    $< >$@
 
 %-w64-mingw32.Dockerfile.in: %.Dockerfile.in
 	sed -re 's!@TARGET@!w64-mingw32!g' \
+	    -re 's!@ARCH_FLAGS@!$(ARCH_FLAGS)!g' \
 	    -re 's!@TARGET_FLAGS@!$(TARGET_FLAGS)!g' \
 	    $< >$@
 
@@ -118,9 +122,15 @@ $(eval $(call create-binutils-rules,i686,linux-gnu))
 $(eval $(call create-binutils-rules,x86_64,w64-mingw32))
 $(eval $(call create-binutils-rules,x86_64,linux-gnu))
 
+MINGW_ARCH_FLAGS_crt-x86_64 = --disable-lib32 CFLAGS="-mcmodel=small"
+MINGW_ARCH_FLAGS_crt-i686 = --disable-lib64
+MINGW_ARCH_FLAGS_pthread-x86_64 = CFLAGS="-mcmodel=small"
+MINGW_ARCH_FLAGS_pthread-i686 =
+
 define create-mingw-rules
 .PHONY: mingw-$(2)-$(1)
 all mingw: mingw-$(2)-$(1)
+mingw-$(2)-$(1): ARCH_FLAGS = $(MINGW_ARCH_FLAGS_$(2)-$(1))
 mingw-$(2)-$(1): mingw-$(2)-$(1).Dockerfile | binutils
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
@@ -146,12 +156,16 @@ $(eval $(call create-mingw-rules,x86_64,crt))
 $(eval $(call create-mingw-rules,x86_64,pthreads))
 $(eval $(call create-mingw-rules,x86_64,widl))
 
+GCC_ARCH_FLAGS_x86_64 = CFLAGS_FOR_TARGET="-mcmodel=small" CXXFLAGS_FOR_TARGET="-mcmodel=small"
+GCC_ARCH_FLAGS_i686 =
+
 GCC_TARGET_FLAGS_w64-mingw32 = --disable-shared
 GCC_TARGET_FLAGS_linux-gnu =
 
 define create-gcc-rules
 .PHONY: gcc-$(1)-$(2)
 all gcc: gcc-$(1)-$(2)
+gcc-$(1)-$(2): ARCH_FLAGS = $(GCC_ARCH_FLAGS_$(1))
 gcc-$(1)-$(2): TARGET_FLAGS = $(GCC_TARGET_FLAGS_$(2))
 gcc-$(1)-$(2): gcc-$(1)-$(2).Dockerfile | mingw
 	rm -rf build; mkdir -p build
