@@ -663,7 +663,7 @@ $(eval $(call rules-cmake,openxr,64))
 ## Note 32-bit is not supported by SteamVR, so we don't build it.
 ##
 
-WINEOPENXR_LDFLAGS = -lopenxr_loader -ldxgi -lvulkan
+WINEOPENXR_LDFLAGS = -lopenxr_loader -ldxgi -lvulkan -ldl
 
 WINEOPENXR_DEPENDS = wine openxr
 
