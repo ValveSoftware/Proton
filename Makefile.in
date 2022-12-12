@@ -741,6 +741,16 @@ WINE_SOURCE_ARGS = \
   --exclude configure \
   --exclude autom4te.cache \
   --exclude include/config.h.in \
+  --exclude include/config.h.ink \
+  --exclude include/wine/vulkan.h \
+  --exclude include/wine/vulkan_driver.h \
+  --exclude dlls/vulkan-1/vulkan-1.spec \
+  --exclude dlls/winevulkan/loader_thunks.c \
+  --exclude dlls/winevulkan/loader_thunks.h \
+  --exclude dlls/winevulkan/vulkan_thunks.c \
+  --exclude dlls/winevulkan/vulkan_thunks.h \
+  --exclude dlls/winevulkan/winevulkan.json \
+  --exclude dlls/winevulkan/winevulkan.spec
 
 WINE_CONFIGURE_ARGS = \
   --with-mingw \
