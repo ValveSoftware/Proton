@@ -1446,7 +1446,7 @@ int main(int argc, char *argv[])
     }
 
     if (game_process)
-        NtSetInformationProcess( GetCurrentProcess(), (PROCESS_INFORMATION_CLASS)1000 /* ProcessWineMakeProcessSystem */,
+        NtSetInformationProcess( GetCurrentProcess(), (PROCESSINFOCLASS)1000 /* ProcessWineMakeProcessSystem */,
                                  &wait_handle, sizeof(HANDLE *) );
 
     if(wait_handle != INVALID_HANDLE_VALUE)
