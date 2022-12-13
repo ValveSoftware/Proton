@@ -1,4 +1,5 @@
 #include <stdint.h>
+#define __USE_GNU
 #include <dlfcn.h>
 
 #define COBJMACROS
@@ -7,6 +8,7 @@
 #include "winbase.h"
 #include "winnls.h"
 #include "windows.h"
+#include "winternl.h"
 #include "wine/debug.h"
 #include "dxgi.h"
 #include "d3d11.h"
@@ -32,6 +34,8 @@
 #pragma pop_macro("__cdecl")
 
 #include "openxr_private.h"
+
+#include "wine/unixlib.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(openxr);
 
@@ -95,9 +99,32 @@ VkResult (WINAPI *create_vk_device_with_callback)(VkPhysicalDevice phys_dev,
         VkDevice *, void * (*)(VkInstance, const char *), void *),
         void *native_vkCreateDevice_context);
 
+static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
+{
+    unixlib_handle_t unix_funcs;
+    NTSTATUS status;
+    Dl_info info;
+
+    status = NtQueryVirtualMemory(GetCurrentProcess(), hvulkan, (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
+            &unix_funcs, sizeof(unix_funcs), NULL);
+    if (status)
+    {
+        WINE_ERR("NtQueryVirtualMemory status %#x.\n", (int)status);
+        return NULL;
+    }
+    if (!dladdr((void *)(ULONG_PTR)unix_funcs, &info))
+    {
+        WINE_ERR("dladdr failed.\n");
+        return NULL;
+    }
+    WINE_TRACE("path %s.\n", info.dli_fname);
+    return dlopen(info.dli_fname, RTLD_NOW);
+}
+
 static void load_vk_unwrappers(void)
 {
     static HMODULE h = NULL;
+    void *unix_handle;
 
     if(h)
         /* already loaded */
@@ -109,13 +136,31 @@ static void load_vk_unwrappers(void)
         return;
     }
 
-    get_native_VkDevice = (void*)GetProcAddress(h, "__wine_get_native_VkDevice");
-    get_native_VkInstance = (void*)GetProcAddress(h, "__wine_get_native_VkInstance");
-    get_native_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_native_VkPhysicalDevice");
-    get_wrapped_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_wrapped_VkPhysicalDevice");
-    get_native_VkQueue = (void*)GetProcAddress(h, "__wine_get_native_VkQueue");
     create_vk_instance_with_callback = (void*)GetProcAddress(h, "__wine_create_vk_instance_with_callback");
     create_vk_device_with_callback = (void*)GetProcAddress(h, "__wine_create_vk_device_with_callback");
+
+    if (!(unix_handle = get_winevulkan_unix_lib_handle(h)))
+    {
+        WINE_ERR("Unable to open winevulkan.so.\n");
+        return;
+    }
+
+#define L(name) \
+    if (!(name = dlsym(unix_handle, "__wine_"#name))) \
+    {\
+        WINE_ERR("%s not found.\n", #name);\
+        dlclose(unix_handle);\
+        return;\
+    }
+
+    L(get_native_VkDevice);
+    L(get_native_VkInstance);
+    L(get_native_VkPhysicalDevice);
+    L(get_wrapped_VkPhysicalDevice);
+    L(get_native_VkQueue);
+#undef L
+
+    dlclose(unix_handle);
 }
 
 #define XR_CURRENT_LOADER_API_LAYER_VERSION 1
