@@ -54,6 +54,7 @@
 
 #include "json/json.h"
 
+#include "wine/unixlib.h"
 #include "wine/heap.h"
 #include "wine/vulkan.h"
 #include "openvr.h"
@@ -588,6 +589,28 @@ extern "C"
     VkPhysicalDevice WINAPI __wine_get_native_VkPhysicalDevice(VkPhysicalDevice phys_dev);
 };
 
+static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
+{
+    unixlib_handle_t unix_funcs;
+    NTSTATUS status;
+    Dl_info info;
+
+    status = NtQueryVirtualMemory(GetCurrentProcess(), hvulkan, (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
+            &unix_funcs, sizeof(unix_funcs), NULL);
+    if (status)
+    {
+        WINE_ERR("NtQueryVirtualMemory status %#x.\n", (int)status);
+        return NULL;
+    }
+    if (!dladdr((void *)(ULONG_PTR)unix_funcs, &info))
+    {
+        WINE_ERR("dladdr failed.\n");
+        return NULL;
+    }
+    WINE_TRACE("path %s.\n", info.dli_fname);
+    return dlopen(info.dli_fname, RTLD_NOW);
+}
+
 static DWORD WINAPI initialize_vr_data(void *arg)
 {
     int (WINAPI *p__wineopenxr_get_extensions_internal)(char **instance_extensions, char **device_extensions);
@@ -613,6 +636,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     unsigned int length;
     HMODULE hwineopenxr;
     void *lib_vrclient;
+    void *unix_handle;
     DWORD hmd_present;
     int return_code;
     LSTATUS status;
@@ -697,8 +721,23 @@ static DWORD WINAPI initialize_vr_data(void *arg)
     USE_VULKAN_PROC(vkDestroyInstance)
     USE_VULKAN_PROC(vkEnumeratePhysicalDevices)
     USE_VULKAN_PROC(vkGetPhysicalDeviceProperties)
-    USE_VULKAN_PROC(__wine_get_native_VkPhysicalDevice)
 #undef USE_VULKAN_PROC
+
+    if (!(unix_handle = get_winevulkan_unix_lib_handle(hvulkan)))
+    {
+        WINE_ERR("winevulkan.so not found.\n");
+        goto done;
+    }
+    decltype(__wine_get_native_VkPhysicalDevice) *p__wine_get_native_VkPhysicalDevice;
+    p__wine_get_native_VkPhysicalDevice = reinterpret_cast<decltype(__wine_get_native_VkPhysicalDevice) *>
+            (dlsym(unix_handle, "__wine_get_native_VkPhysicalDevice"));
+
+    dlclose(unix_handle);
+    if (!__wine_get_native_VkPhysicalDevice)
+    {
+        WINE_ERR("__wine_get_native_VkPhysicalDevice not found.\n");
+        goto done;
+    }
 
     parse_extensions(buffer, &instance_extensions_count, &instance_extensions);
 
@@ -762,7 +801,7 @@ static DWORD WINAPI initialize_vr_data(void *arg)
         if ((status = RegSetValueExA(vr_key, name, 0, REG_SZ, (BYTE *)buffer, length)))
         {
             WINE_ERR("Could not set %s value, status %#x.\n", name, status);
-            return FALSE;
+            goto done;
         }
     }
 
@@ -779,13 +818,13 @@ static DWORD WINAPI initialize_vr_data(void *arg)
                         (BYTE *)xr_inst_ext, strlen(xr_inst_ext) + 1)))
                 {
                     WINE_ERR("Could not set openxr_vulkan_instance_extensions value, status %#x.\n", status);
-                    return FALSE;
+                    goto done;
                 }
                 if ((status = RegSetValueExA(vr_key, "openxr_vulkan_device_extensions", 0, REG_SZ,
                         (BYTE *)xr_dev_ext, strlen(xr_dev_ext) + 1)))
                 {
                     WINE_ERR("Could not set openxr_vulkan_device_extensions value, status %#x.\n", status);
-                    return FALSE;
+                    goto done;
                 }
             }
         }
