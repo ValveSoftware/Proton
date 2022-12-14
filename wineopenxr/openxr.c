@@ -35,6 +35,7 @@
 
 #include "openxr_private.h"
 
+#include "wine/vulkan_driver.h"
 #include "wine/unixlib.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(openxr);
@@ -87,17 +88,10 @@ VkInstance(WINAPI *get_native_VkInstance)(VkInstance);
 VkPhysicalDevice(WINAPI *get_native_VkPhysicalDevice)(VkPhysicalDevice);
 VkPhysicalDevice(WINAPI *get_wrapped_VkPhysicalDevice)(VkInstance, VkPhysicalDevice);
 VkQueue(WINAPI *get_native_VkQueue)(VkQueue);
-VkResult (WINAPI *create_vk_instance_with_callback)(const VkInstanceCreateInfo *create_info,
-        const VkAllocationCallbacks *allocator, VkInstance *instance,
-        VkResult (WINAPI *native_vkCreateInstance)(const VkInstanceCreateInfo *, const VkAllocationCallbacks *,
-        VkInstance *, void * (*)(VkInstance, const char *), void *),
-        void *native_vkCreateInstance_context);
-VkResult (WINAPI *create_vk_device_with_callback)(VkPhysicalDevice phys_dev,
-        const VkDeviceCreateInfo *create_info,
-        const VkAllocationCallbacks *allocator, VkDevice *device,
-        VkResult (WINAPI *native_vkCreateDevice)(VkPhysicalDevice, const VkDeviceCreateInfo *, const VkAllocationCallbacks *,
-        VkDevice *, void * (*)(VkInstance, const char *), void *),
-        void *native_vkCreateDevice_context);
+VkResult (WINAPI *p_wine_vkCreateInstance)(const VkInstanceCreateInfo *create_info,
+        const VkAllocationCallbacks *allocator, VkInstance *ret);
+VkResult (WINAPI *p_wine_vkCreateDevice)(VkPhysicalDevice phys_dev, const VkDeviceCreateInfo *create_info,
+        const VkAllocationCallbacks *allocator, VkDevice *ret);
 
 static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
 {
@@ -136,8 +130,8 @@ static void load_vk_unwrappers(void)
         return;
     }
 
-    create_vk_instance_with_callback = (void*)GetProcAddress(h, "__wine_create_vk_instance_with_callback");
-    create_vk_device_with_callback = (void*)GetProcAddress(h, "__wine_create_vk_device_with_callback");
+    p_wine_vkCreateInstance = (void *)GetProcAddress(h, "vkCreateInstance");
+    p_wine_vkCreateDevice = (void *)GetProcAddress(h, "vkCreateDevice");
 
     if (!(unix_handle = get_winevulkan_unix_lib_handle(h)))
     {
@@ -1697,15 +1691,13 @@ struct vk_create_instance_callback_context
 static VkResult WINAPI vk_create_instance_callback(const VkInstanceCreateInfo *create_info, const VkAllocationCallbacks *allocator,
         VkInstance *vk_instance, void * (*pfnGetInstanceProcAddr)(VkInstance, const char *), void *context)
 {
+    /* Only Unix calls here, called from the Unix side. */
     struct vk_create_instance_callback_context *c = context;
     XrVulkanInstanceCreateInfoKHR our_create_info;
     VkInstanceCreateInfo our_vulkan_create_info;
     const char **enabled_extensions = NULL;
     unsigned int i;
     VkResult ret;
-
-    WINE_TRACE("create_info %p, allocator %p, vk_instance %p, pfnGetInstanceProcAddr %p, context %p.\n",
-            create_info, allocator, vk_instance, pfnGetInstanceProcAddr, context);
 
     our_create_info = *c->xr_create_info;
     our_create_info.pfnGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)pfnGetInstanceProcAddr;
@@ -1721,19 +1713,16 @@ static VkResult WINAPI vk_create_instance_callback(const VkInstanceCreateInfo *c
         our_vulkan_create_info = *create_info;
         our_create_info.vulkanCreateInfo = &our_vulkan_create_info;
 
-        enabled_extensions = heap_alloc((create_info->enabledExtensionCount + 2) * sizeof(*enabled_extensions));
+        enabled_extensions = malloc((create_info->enabledExtensionCount + 2) * sizeof(*enabled_extensions));
         memcpy(enabled_extensions, create_info->ppEnabledExtensionNames,
                 create_info->enabledExtensionCount * sizeof(*enabled_extensions));
         enabled_extensions[our_vulkan_create_info.enabledExtensionCount++] = "VK_KHR_surface";
         enabled_extensions[our_vulkan_create_info.enabledExtensionCount++] = "VK_KHR_xlib_surface";
         our_vulkan_create_info.ppEnabledExtensionNames = enabled_extensions;
-
-        for (i = create_info->enabledExtensionCount; i < our_vulkan_create_info.enabledExtensionCount; ++i)
-            WINE_TRACE("Added extension %s.\n", enabled_extensions[i]);
     }
 
     c->ret = c->wine_instance->funcs.p_xrCreateVulkanInstanceKHR(c->wine_instance->instance, &our_create_info, vk_instance, &ret);
-    heap_free(enabled_extensions);
+    free(enabled_extensions);
     return ret;
 }
 
@@ -1741,6 +1730,8 @@ XrResult WINAPI wine_xrCreateVulkanInstanceKHR(XrInstance instance, const XrVulk
         VkInstance *vulkanInstance, VkResult *vulkanResult)
 {
     struct vk_create_instance_callback_context context;
+    VkCreateInfoWineInstanceCallback callback;
+    VkInstanceCreateInfo vulkan_create_info;
 
     WINE_TRACE("instance %p, createInfo %p, vulkanInstance %p, vulkanResult %p.\n",
             instance, createInfo, vulkanInstance, vulkanResult);
@@ -1751,8 +1742,14 @@ XrResult WINAPI wine_xrCreateVulkanInstanceKHR(XrInstance instance, const XrVulk
     context.wine_instance = (wine_XrInstance *)instance;
     context.xr_create_info = createInfo;
 
-    *vulkanResult = create_vk_instance_with_callback(createInfo->vulkanCreateInfo, createInfo->vulkanAllocator, vulkanInstance,
-            vk_create_instance_callback, &context);
+    vulkan_create_info = *createInfo->vulkanCreateInfo;
+    callback.sType = VK_STRUCTURE_TYPE_CREATE_INFO_WINE_INSTANCE_CALLBACK;
+    callback.native_create_callback = vk_create_instance_callback;
+    callback.context = &context;
+    callback.pNext = vulkan_create_info.pNext;
+    vulkan_create_info.pNext = &callback;
+
+    *vulkanResult = p_wine_vkCreateInstance(&vulkan_create_info, createInfo->vulkanAllocator, vulkanInstance);
 
     if (context.ret == XR_SUCCESS && *vulkanResult != VK_SUCCESS)
         WINE_WARN("winevulkan instance creation failed after native xrCreateVulkanInstanceKHR() success.\n");
@@ -1771,12 +1768,10 @@ struct vk_create_device_callback_context
 static VkResult WINAPI vk_create_device_callback(VkPhysicalDevice phys_dev, const VkDeviceCreateInfo *create_info, const VkAllocationCallbacks *allocator,
         VkDevice *vk_device, void * (*pfnGetInstanceProcAddr)(VkInstance, const char *), void *context)
 {
+    /* Only Unix calls here, called from the Unix side. */
     struct vk_create_device_callback_context *c = context;
     XrVulkanDeviceCreateInfoKHR our_create_info;
     VkResult ret;
-
-    WINE_TRACE("phys_dev %p, create_info %p, allocator %p, vk_device %p, pfnGetInstanceProcAddr %p, context %p.\n",
-            phys_dev, create_info, allocator, vk_device, pfnGetInstanceProcAddr, context);
 
     our_create_info = *c->xr_create_info;
     our_create_info.pfnGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)pfnGetInstanceProcAddr;
@@ -1790,6 +1785,8 @@ static VkResult WINAPI vk_create_device_callback(VkPhysicalDevice phys_dev, cons
 XrResult WINAPI wine_xrCreateVulkanDeviceKHR(XrInstance instance, const XrVulkanDeviceCreateInfoKHR *createInfo, VkDevice *vulkanDevice, VkResult *vulkanResult)
 {
     struct vk_create_device_callback_context context;
+    VkCreateInfoWineDeviceCallback callback;
+    VkDeviceCreateInfo vulkan_create_info;
 
     WINE_TRACE("instance %p, createInfo %p, vulkanDevice %p, vulkanResult %p.\n",
             instance, createInfo, vulkanDevice, vulkanResult);
@@ -1800,8 +1797,15 @@ XrResult WINAPI wine_xrCreateVulkanDeviceKHR(XrInstance instance, const XrVulkan
     context.wine_instance = (wine_XrInstance *)instance;
     context.xr_create_info = createInfo;
 
-    *vulkanResult = create_vk_device_with_callback(createInfo->vulkanPhysicalDevice, createInfo->vulkanCreateInfo,
-            createInfo->vulkanAllocator, vulkanDevice, vk_create_device_callback, &context);
+    vulkan_create_info = *createInfo->vulkanCreateInfo;
+    callback.sType = VK_STRUCTURE_TYPE_CREATE_INFO_WINE_DEVICE_CALLBACK;
+    callback.native_create_callback = vk_create_device_callback;
+    callback.context = &context;
+    callback.pNext = vulkan_create_info.pNext;
+    vulkan_create_info.pNext = &callback;
+
+    *vulkanResult = p_wine_vkCreateDevice(createInfo->vulkanPhysicalDevice, &vulkan_create_info,
+            createInfo->vulkanAllocator, vulkanDevice);
 
     if (context.ret == XR_SUCCESS && *vulkanResult != VK_SUCCESS)
         WINE_WARN("winevulkan instance creation failed after native xrCreateVulkanInstanceKHR() success.\n");
