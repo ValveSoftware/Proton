@@ -40,6 +40,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
+#define _USE_GNU
 #include <dlfcn.h>
 
 #pragma push_macro("_WIN32")
