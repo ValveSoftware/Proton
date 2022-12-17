@@ -1,0 +1,121 @@
+From 037cec6623253c20f2fb0ef578350447ff200b72 Mon Sep 17 00:00:00 2001
+From: Connor McAdams <cmcadams@codeweavers.com>
+Date: Thu, 27 Jan 2022 11:11:28 +0100
+Subject: [PATCH] secur32: Properly handle NULL pInput argument for DTLS
+ contexts in schan_InitializeSecurityContextW.
+
+When a NULL pInput argument is passed into InitializeSecurityContextW
+for an existing DTLS context, we need to retransmit the last handshake
+packet.
+
+Signed-off-by: Connor McAdams <cmcadams@codeweavers.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 290cd6769fc637d68129f7286f76cad7ef5bc622)
+---
+ dlls/secur32/schannel.c       | 45 +++++++++++++++++++----------------
+ dlls/secur32/tests/schannel.c | 10 ++++----
+ 2 files changed, 29 insertions(+), 26 deletions(-)
+
+diff --git a/dlls/secur32/schannel.c b/dlls/secur32/schannel.c
+index 3ad2ac3502e..150d3831f2d 100644
+--- a/dlls/secur32/schannel.c
++++ b/dlls/secur32/schannel.c
+@@ -704,7 +704,7 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+     struct schan_context *ctx;
+     struct schan_buffers *out_buffers;
+     struct schan_credentials *cred;
+-    SIZE_T expected_size = ~0UL;
++    SIZE_T expected_size = 0;
+     SECURITY_STATUS ret;
+     SecBuffer *buffer;
+     SecBuffer alloc_buffer = { 0 };
+@@ -823,30 +823,33 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+         unsigned char *ptr;
+ 
+         if (!(ctx = schan_get_object(phContext->dwLower, SCHAN_HANDLE_CTX))) return SEC_E_INVALID_HANDLE;
+-        if (!pInput) return is_dtls_context(ctx) ? SEC_E_INSUFFICIENT_MEMORY : SEC_E_INCOMPLETE_MESSAGE;
+-        if ((idx = schan_find_sec_buffer_idx(pInput, 0, SECBUFFER_TOKEN)) == -1) return SEC_E_INCOMPLETE_MESSAGE;
++        if (!pInput && !is_dtls_context(ctx)) return SEC_E_INCOMPLETE_MESSAGE;
+ 
+-        buffer = &pInput->pBuffers[idx];
+-        ptr = buffer->pvBuffer;
+-        expected_size = 0;
+-
+-        while (buffer->cbBuffer > expected_size + ctx->header_size)
++        if (pInput)
+         {
+-            record_size = ctx->header_size + read_record_size(ptr, ctx->header_size);
++            if ((idx = schan_find_sec_buffer_idx(pInput, 0, SECBUFFER_TOKEN)) == -1) return SEC_E_INCOMPLETE_MESSAGE;
+ 
+-            if (buffer->cbBuffer < expected_size + record_size) break;
+-            expected_size += record_size;
+-            ptr += record_size;
+-        }
++            buffer = &pInput->pBuffers[idx];
++            ptr = buffer->pvBuffer;
+ 
+-        if (!expected_size && record_size)
+-        {
+-            TRACE("Expected at least %Iu bytes, but buffer only contains %lu bytes.\n",
+-                  max(ctx->header_size + 1, record_size), buffer->cbBuffer);
+-            return SEC_E_INCOMPLETE_MESSAGE;
+-        }
++            while (buffer->cbBuffer > expected_size + ctx->header_size)
++            {
++                record_size = ctx->header_size + read_record_size(ptr, ctx->header_size);
+ 
+-        TRACE("Using expected_size %Iu.\n", expected_size);
++                if (buffer->cbBuffer < expected_size + record_size) break;
++                expected_size += record_size;
++                ptr += record_size;
++            }
++
++            if (!expected_size)
++            {
++                TRACE("Expected at least %Iu bytes, but buffer only contains %lu bytes.\n",
++                      max(ctx->header_size + 1, record_size), buffer->cbBuffer);
++                return SEC_E_INCOMPLETE_MESSAGE;
++            }
++
++            TRACE("Using expected_size %Iu.\n", expected_size);
++        }
+ 
+         if (phNewContext) *phNewContext = *phContext;
+     }
+@@ -884,7 +887,7 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+         SecBuffer *buffer = &out_buffers->desc->pBuffers[0];
+         buffer->cbBuffer = 0;
+         /* Nothing to read or to send, but we got SEC_I_CONTINUE_NEEDED, it means missing input */
+-        if (!expected_size && ret == SEC_I_CONTINUE_NEEDED) ret = SEC_E_INCOMPLETE_MESSAGE;
++        if (!is_dtls_context(ctx) && !expected_size && ret == SEC_I_CONTINUE_NEEDED) ret = SEC_E_INCOMPLETE_MESSAGE;
+     }
+     RtlFreeHeap( GetProcessHeap(), 0, alloc_buffer.pvBuffer );
+ 
+diff --git a/dlls/secur32/tests/schannel.c b/dlls/secur32/tests/schannel.c
+index 6fbe0c34bd1..afcc382927a 100644
+--- a/dlls/secur32/tests/schannel.c
++++ b/dlls/secur32/tests/schannel.c
+@@ -1693,17 +1693,17 @@ static void test_dtls(void)
+     ctx_handle2.dwLower = ctx_handle2.dwUpper = 0xdeadbeef;
+     status = InitializeSecurityContextA( &cred_handle, &ctx_handle, (SEC_CHAR *)"winetest", flags_req, 0, 16, NULL, 0,
+                                          &ctx_handle2, &buffers[1], &attr, &exp );
+-    todo_wine ok( status == SEC_I_CONTINUE_NEEDED, "got %08x\n", status );
++    ok( status == SEC_I_CONTINUE_NEEDED, "got %08x\n", status );
+ 
+     flags_ret = ISC_RET_MANUAL_CRED_VALIDATION | ISC_RET_STREAM | ISC_RET_EXTENDED_ERROR | ISC_RET_DATAGRAM |
+                 ISC_RET_USED_SUPPLIED_CREDS | ISC_RET_CONFIDENTIALITY | ISC_RET_SEQUENCE_DETECT | ISC_RET_REPLAY_DETECT;
+-    todo_wine ok( attr == flags_ret, "got %08x\n", attr );
++    ok( attr == flags_ret, "got %08x\n", attr );
+     todo_wine ok( exp.LowPart, "got %08x\n", exp.LowPart );
+     todo_wine ok( exp.HighPart, "got %08x\n", exp.HighPart );
+     ok( buffers[1].pBuffers[1].BufferType == SECBUFFER_ALERT, "Expected buffertype SECBUFFER_ALERT, got %#x\n", buffers[1].pBuffers[1].BufferType);
+-    todo_wine ok( !buffers[1].pBuffers[1].cbBuffer, "Expected SECBUFFER_ALERT buffer to be empty, got %#x\n", buffers[1].pBuffers[1].cbBuffer);
+-    todo_wine ok( ctx_handle.dwLower == ctx_handle2.dwLower, "dwLower mismatch, expected %#lx, got %#lx\n", ctx_handle.dwLower, ctx_handle2.dwLower);
+-    todo_wine ok( ctx_handle.dwUpper == ctx_handle2.dwUpper, "dwUpper mismatch, expected %#lx, got %#lx\n", ctx_handle.dwUpper, ctx_handle2.dwUpper);
++    ok( !buffers[1].pBuffers[1].cbBuffer, "Expected SECBUFFER_ALERT buffer to be empty, got %#x\n", buffers[1].pBuffers[1].cbBuffer);
++    ok( ctx_handle.dwLower == ctx_handle2.dwLower, "dwLower mismatch, expected %#lx, got %#lx\n", ctx_handle.dwLower, ctx_handle2.dwLower);
++    ok( ctx_handle.dwUpper == ctx_handle2.dwUpper, "dwUpper mismatch, expected %#lx, got %#lx\n", ctx_handle.dwUpper, ctx_handle2.dwUpper);
+ 
+     /* With no new input buffer, output buffer length should match prior call. */
+     todo_wine ok(buffers[1].pBuffers[0].cbBuffer == prev_buf_len, "Output buffer size mismatch, expected %#x, got %#x\n",

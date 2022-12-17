@@ -388,9 +388,6 @@
 
     echo "WINE: -HOTFIX- fix Persona 4 Golden"
     patch -Np1 < ../patches/wine-hotfixes/upstream/381c2a9ae151f676a009e89b4b101679fd90b9ae.patch
-
-    echo "WINE: -HOTFIX- fix Uncharted: The Lost Legacy"
-    patch -Np1 < ../patches/wine-hotfixes/pending/uncharted-the-lost-legacy-fix.patch
     
     echo "WINE: -HOTFIX- fix Overwatch 2 shader compilation issue"
     # https://gitlab.winehq.org/wine/wine/-/merge_requests/1152
@@ -399,6 +396,10 @@
     echo "WINE: -HOTFIX- fix Overwatch 2 from freezing on wine 7.12 and older"
     # https://gitlab.winehq.org/wine/wine/-/merge_requests/1152
     patch -Np1 < ../patches/wine-hotfixes/pending/4bf9d2403f269e7f3595ad075a4afee9adbda51f.patch
+    
+    echo "WINE: -HOTFIX- temp fix for Gears5 hang after logo"
+    patch -RNp1 < ../patches/wine-hotfixes/pending/revert_037cec6623253c20f2fb0ef578350447ff200b72.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/82b5be30ede5246f251545a8b312f1409132311d.patch
     
 ### END WINE HOTFIX SECTION ###
 

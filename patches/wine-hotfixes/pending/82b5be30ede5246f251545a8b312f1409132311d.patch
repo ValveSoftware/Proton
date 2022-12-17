@@ -1,0 +1,95 @@
+From 82b5be30ede5246f251545a8b312f1409132311d Mon Sep 17 00:00:00 2001
+From: Connor McAdams <cmcadams@codeweavers.com>
+Date: Tue, 25 Jan 2022 10:16:17 -0500
+Subject: [PATCH] secur32: Properly handle NULL pInput argument for DTLS
+ contexts in schan_InitializeSecurityContextW.
+
+When a NULL pInput argument is passed into InitializeSecurityContextW
+for an existing DTLS context, we need to retransmit the last handshake
+packet.
+
+Signed-off-by: Connor McAdams <cmcadams@codeweavers.com>
+---
+ dlls/secur32/schannel.c        | 41 +++++++++++++++++++---------------
+ dlls/secur32/schannel_gnutls.c |  2 +-
+ dlls/secur32/tests/schannel.c  | 12 +++++-----
+ 3 files changed, 30 insertions(+), 25 deletions(-)
+
+diff --git a/dlls/secur32/schannel.c b/dlls/secur32/schannel.c
+index 983c9d01de7..921c277ba85 100644
+--- a/dlls/secur32/schannel.c
++++ b/dlls/secur32/schannel.c
+@@ -813,6 +813,7 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+         {
+             struct set_dtls_timeouts_params params = { ctx->transport.session, 0, 60000 };
+             GNUTLS_CALL( set_dtls_timeouts, &params );
++            expected_size = 0;
+         }
+ 
+         phNewContext->dwLower = handle;
+@@ -824,30 +825,34 @@ static SECURITY_STATUS SEC_ENTRY schan_InitializeSecurityContextW(
+         unsigned char *ptr;
+ 
+         if (!(ctx = schan_get_object(phContext->dwLower, SCHAN_HANDLE_CTX))) return SEC_E_INVALID_HANDLE;
+-        if (!pInput) return is_dtls_context(ctx) ? SEC_E_INSUFFICIENT_MEMORY : SEC_E_INCOMPLETE_MESSAGE;
+-        if ((idx = schan_find_sec_buffer_idx(pInput, 0, SECBUFFER_TOKEN)) == -1) return SEC_E_INCOMPLETE_MESSAGE;
+-
+-        buffer = &pInput->pBuffers[idx];
+-        ptr = buffer->pvBuffer;
++        if (!pInput && !is_dtls_context(ctx)) return SEC_E_INCOMPLETE_MESSAGE;
+         expected_size = 0;
+ 
+-        while (buffer->cbBuffer > expected_size + ctx->header_size)
++        if (pInput)
+         {
+-            record_size = ctx->header_size + read_record_size(ptr, ctx->header_size);
++            if ((idx = schan_find_sec_buffer_idx(pInput, 0, SECBUFFER_TOKEN)) == -1) return SEC_E_INCOMPLETE_MESSAGE;
+ 
+-            if (buffer->cbBuffer < expected_size + record_size) break;
+-            expected_size += record_size;
+-            ptr += record_size;
+-        }
++            buffer = &pInput->pBuffers[idx];
++            ptr = buffer->pvBuffer;
+ 
+-        if (!expected_size && record_size)
+-        {
+-            TRACE("Expected at least %Iu bytes, but buffer only contains %lu bytes.\n",
+-                  max(ctx->header_size + 1, record_size), buffer->cbBuffer);
+-            return SEC_E_INCOMPLETE_MESSAGE;
+-        }
++            while (buffer->cbBuffer > expected_size + ctx->header_size)
++            {
++                record_size = ctx->header_size + read_record_size(ptr, ctx->header_size);
+ 
+-        TRACE("Using expected_size %Iu.\n", expected_size);
++                if (buffer->cbBuffer < expected_size + record_size) break;
++                expected_size += record_size;
++                ptr += record_size;
++            }
++
++            if (!expected_size && record_size)
++            {
++                TRACE("Expected at least %Iu bytes, but buffer only contains %lu bytes.\n",
++                      max(ctx->header_size + 1, record_size), buffer->cbBuffer);
++                return SEC_E_INCOMPLETE_MESSAGE;
++            }
++
++            TRACE("Using expected_size %Iu.\n", expected_size);
++        }
+ 
+         if (phNewContext) *phNewContext = *phContext;
+     }
+diff --git a/dlls/secur32/schannel_gnutls.c b/dlls/secur32/schannel_gnutls.c
+index 3c0aefa3459..3d07ae796be 100644
+--- a/dlls/secur32/schannel_gnutls.c
++++ b/dlls/secur32/schannel_gnutls.c
+@@ -466,7 +466,7 @@ static int pull_timeout(gnutls_transport_ptr_t transport, unsigned int timeout)
+ 
+     TRACE("\n");
+ 
+-    if (get_buffer(t, &t->in, &count)) return 1;
++    if (!t->in.limit || get_buffer(t, &t->in, &count)) return 1;
+ 
+     return 0;
+ }
