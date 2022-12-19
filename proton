@@ -899,6 +899,10 @@ class CompatData:
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 #copy vkd3d files into place
+                try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-1.dll", "drive_c/windows/system32",
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-1.dll", "drive_c/windows/syswow64",
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                 try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/system32",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                 try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/syswow64",

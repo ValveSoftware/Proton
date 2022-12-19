@@ -692,9 +692,15 @@ WINE_CONFIGURE_ARGS = \
   --with-mingw \
   --disable-tests
 
-WINE_CONFIGURE_ARGS64 = --enable-win64
+WINE_CONFIGURE_ARGS32 = \
+  VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_DST32)/include -I$(VKD3D_DST32)/include/vkd3d" \
+  VKD3D_PE_LIBS="-L$(VKD3D_DST32)/bin -l:libvkd3d-1.dll -l:libvkd3d-shader-1.dll"
 
-WINE_DEPENDS = gst_orc gstreamer gst_base
+WINE_CONFIGURE_ARGS64 = --enable-win64 \
+  VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_DST64)/include -I$(VKD3D_DST64)/include/vkd3d" \
+  VKD3D_PE_LIBS="-L$(VKD3D_DST64)/bin -l:libvkd3d-1.dll -l:libvkd3d-shader-1.dll"
+
+WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d
 
 $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
@@ -823,11 +829,13 @@ $(eval $(call rules-autoconf,vkd3d,64,CROSS))
 
 $(OBJ)/.vkd3d-post-build64:
 	mkdir -p $(DST_DIR)/lib64/vkd3d/
+	$(call install-strip,$(VKD3D_DST64)/bin/libvkd3d-1.dll,$(DST_LIBDIR64)/vkd3d)
 	$(call install-strip,$(VKD3D_DST64)/bin/libvkd3d-shader-1.dll,$(DST_LIBDIR64)/vkd3d)
 	touch $@
 
 $(OBJ)/.vkd3d-post-build32:
 	mkdir -p $(DST_DIR)/lib/vkd3d/
+	$(call install-strip,$(VKD3D_DST32)/bin/libvkd3d-1.dll,$(DST_LIBDIR32)/vkd3d)
 	$(call install-strip,$(VKD3D_DST32)/bin/libvkd3d-shader-1.dll,$(DST_LIBDIR32)/vkd3d)
 	touch $@
 
