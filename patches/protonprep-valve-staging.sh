@@ -398,8 +398,7 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/4bf9d2403f269e7f3595ad075a4afee9adbda51f.patch
     
     echo "WINE: -HOTFIX- temp fix for Gears5 hang after logo"
-    patch -RNp1 < ../patches/wine-hotfixes/pending/revert_037cec6623253c20f2fb0ef578350447ff200b72.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/82b5be30ede5246f251545a8b312f1409132311d.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/secur32-change.diff
     
 ### END WINE HOTFIX SECTION ###
 
