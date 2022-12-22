@@ -1058,7 +1058,10 @@ def default_compat_config():
         if appid == "1621680":
             ret.add("noforcelgadd")
 
-        if appid == "1341820":
+        if appid in [
+                "1341820",
+                "280790",
+                ]:
             ret.add("gamedrive")
 
         if appid in [
