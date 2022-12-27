@@ -1169,6 +1169,10 @@ class Session:
                 "beclient_x64.dll": "b,n",
         }
 
+        # CW Bug 21737. Locoland executable happens to be steam.exe.
+        if os.environ.get("SteamGameId", 0) == "352130":
+            del self.dlloverrides["steam.exe"]
+
         self.compat_config = default_compat_config()
         self.cmdlineappend = []
 
