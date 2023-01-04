@@ -803,7 +803,7 @@ class CompatData:
                 self.copy_pfx()
                 os.sync()
 
-                with open(self.creation_sync_guard, "w"):
+                with open(self.creation_sync_guard, "x"):
                     pass
                 os.sync()
 
