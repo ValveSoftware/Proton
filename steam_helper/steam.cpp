@@ -103,7 +103,7 @@ static DWORD WINAPI create_steam_window(void *arg)
 /* requires steam API to be initialized */
 static void setup_steam_registry(void)
 {
-    const char *ui_lang;
+    const char *ui_lang, *language, *languages, *locale = NULL;
     uint32 appid;
     char buf[256];
     HKEY key;
@@ -129,6 +129,49 @@ static void setup_steam_registry(void)
         RegCloseKey(key);
     }
     else WINE_ERR("Could not create key: %u\n", status);
+
+    language = SteamApps()->GetCurrentGameLanguage();
+    languages = SteamApps()->GetAvailableGameLanguages();
+    WINE_TRACE( "Game language %s, available %s\n", wine_dbgstr_a(language), wine_dbgstr_a(languages) );
+
+    if (!language) locale = NULL;
+    else if (!strcmp( language, "arabic" )) locale = "ar_001.UTF-8";
+    else if (!strcmp( language, "bulgarian" )) locale = "bg_BG.UTF-8";
+    else if (!strcmp( language, "schinese" )) locale = "zh_CN.UTF-8";
+    else if (!strcmp( language, "tchinese" )) locale = "zh_TW.UTF-8";
+    else if (!strcmp( language, "czech" )) locale = "cs_CZ.UTF-8";
+    else if (!strcmp( language, "danish" )) locale = "da_DK.UTF-8";
+    else if (!strcmp( language, "dutch" )) locale = "nl_NL.UTF-8";
+    else if (!strcmp( language, "english" )) locale = "en_US.UTF-8";
+    else if (!strcmp( language, "finnish" )) locale = "fi_FI.UTF-8";
+    else if (!strcmp( language, "french" )) locale = "fr_FR.UTF-8";
+    else if (!strcmp( language, "german" )) locale = "de_DE.UTF-8";
+    else if (!strcmp( language, "greek" )) locale = "el_GR.UTF-8";
+    else if (!strcmp( language, "hungarian" )) locale = "hu_HU.UTF-8";
+    else if (!strcmp( language, "italian" )) locale = "it_IT.UTF-8";
+    else if (!strcmp( language, "japanese" )) locale = "ja_JP.UTF-8";
+    else if (!strcmp( language, "koreana" )) locale = "ko_KR.UTF-8";
+    else if (!strcmp( language, "norwegian" )) locale = "nb_NO.UTF-8";
+    else if (!strcmp( language, "polish" )) locale = "pl_PL.UTF-8";
+    else if (!strcmp( language, "portuguese" )) locale = "pt_PT.UTF-8";
+    else if (!strcmp( language, "brazilian" )) locale = "pt_BR.UTF-8";
+    else if (!strcmp( language, "romanian" )) locale = "ro_RO.UTF-8";
+    else if (!strcmp( language, "russian" )) locale = "ru_RU.UTF-8";
+    else if (!strcmp( language, "spanish" )) locale = "es_ES.UTF-8";
+    else if (!strcmp( language, "latam" )) locale = "es_419.UTF-8";
+    else if (!strcmp( language, "swedish" )) locale = "sv_SE.UTF-8";
+    else if (!strcmp( language, "thai" )) locale = "th_TH.UTF-8";
+    else if (!strcmp( language, "turkish" )) locale = "tr_TR.UTF-8";
+    else if (!strcmp( language, "ukrainian" )) locale = "uk_UA.UTF-8";
+    else if (!strcmp( language, "vietnamese" )) locale = "vi_VN.UTF-8";
+    else WINE_FIXME( "Unsupported game language %s\n", wine_dbgstr_a(language) );
+
+    if (locale)
+    {
+        WINE_FIXME( "Game language %s, defaulting LC_CTYPE / LC_MESSAGES to %s.\n", wine_dbgstr_a(language), locale );
+        setenv( "LC_CTYPE", locale, FALSE );
+        setenv( "LC_MESSAGES", locale, FALSE );
+    }
 }
 
 static void copy_to_win(const char *unix_path, const WCHAR *win_path)
