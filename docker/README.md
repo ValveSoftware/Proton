@@ -1,9 +1,9 @@
-Proton (soldier) SDK
+Proton (sniper) SDK
 ====================
 
 These are the build rules that are used to create docker images to build
 Proton. The automated creation of the official images lives in
-<https://gitlab.steamos.cloud/proton/soldier/sdk>, but this can be
+<https://gitlab.steamos.cloud/proton/sniper/sdk>, but this can be
 used to create local images too.
 
 Local usage
@@ -31,7 +31,7 @@ To update the official Proton SDK images:
    commit and push the changes.
 
 2) Update `.gitlab-ci.yml` in the
-   [Proton SDK](https://gitlab.steamos.cloud/proton/soldier/sdk)
+   [Proton SDK](https://gitlab.steamos.cloud/proton/sniper/sdk)
    repository to point to the new commit, commit and push to trigger a
    new build of "-dev" images.
 
@@ -72,7 +72,7 @@ replacements done using `sed`.
 The <https://gitlab.steamos.cloud> CI uses Kaniko instead of Docker,
 with a bit of script conversion to generate commands usable there. More
 details are available in
-[Proton SDK](https://gitlab.steamos.cloud/proton/soldier/sdk).
+[Proton SDK](https://gitlab.steamos.cloud/proton/sniper/sdk).
 
 The `build-base` images are there to create a common ground to build the
 other elements of the toolchain. They are based on fairly recent (more
