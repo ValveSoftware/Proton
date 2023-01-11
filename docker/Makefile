@@ -1,14 +1,13 @@
-STEAMRT_VERSION = 0.20220601.0
+STEAMRT_VERSION = 0.20221017.1
 STEAMRT_URLBASE = registry.gitlab.steamos.cloud
 
-PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/soldier/sdk
+PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/sniper/sdk
 PROTONSDK_VERSION = $(STEAMRT_VERSION)-0-dev
 
 # this is just for building toolchain, as we do static builds it should
 # not have any impact on the end result, but changing it will invalidate
 # docker caches, so we need something that don't change much
-BASE_IMAGE_i686 = docker.io/i386/ubuntu:18.04
-BASE_IMAGE_x86_64 = docker.io/amd64/ubuntu:18.04
+BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:0.20221017.1
 
 BINUTILS_VERSION = 2.37
 GCC_VERSION = 10.3.0
@@ -84,7 +83,6 @@ DOCKER = docker
 define create-build-base-rules
 .PHONY: build-base-$(1)
 all build-base: build-base-$(1)
-build-base-$(1): BASE_IMAGE = $(BASE_IMAGE_$(1))
 build-base-$(1): build-base-$(1).Dockerfile
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
@@ -189,7 +187,7 @@ $(eval $(call create-gcc-rules,x86_64,w64-mingw32))
 define create-proton-rules
 .PHONY: proton
 all: proton
-proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/soldier/sdk:$(STEAMRT_VERSION)
+proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:$(STEAMRT_VERSION)
 proton: proton.Dockerfile | gcc
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
