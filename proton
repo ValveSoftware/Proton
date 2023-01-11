@@ -1313,6 +1313,9 @@ class Session:
                     kernel_version = "unknown"
 
                 self.log_file.write(f"Kernel: {kernel_version}\n")
+                self.log_file.write("Language: LC_ALL " + str(self.env.get("HOST_LC_ALL", None)) +
+                                    ", LC_MESSAGES " + str(self.env.get("LC_MESSAGES", None)) +
+                                    ", LC_CTYPE " + str(self.env.get("LC_CTYPE", None)) + "\n")
 
                 #dump some important variables into the log header
                 for var in ["WINEDLLOVERRIDES", "WINEDEBUG"]:
