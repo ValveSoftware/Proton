@@ -23,7 +23,7 @@ $$(OBJ)/.$(1)-source: SHELL := $$(SHELL)
 $$(OBJ)/.$(1)-source: $$(if $$(NO_MAKEFILE_DEPENDENCY),,$$(MAKEFILE_LIST))
 $$(OBJ)/.$(1)-source: $$(shell echo -n 'syncing $(1)... ' >&2 && \
                               rsync --dry-run --filter=:C --exclude '*~' --exclude .git $$($(2)_SOURCE_ARGS) --info=name -Oarx --delete "$$(abspath $(3))/" "$$($(2)_SRC)" | \
-                              grep -v -e ^$$$$ | grep -q ^ && echo $(1)-rebuild && \
+                              grep -v -e ^$$$$ 2>/dev/null | grep -q ^ && echo $(1)-rebuild && \
                               echo 'done, dirty' >&2 || echo 'done' >&2)
 	rsync --filter=:C --exclude '*~' --exclude .git $$($(2)_SOURCE_ARGS) --info=name -Oarx --delete "$$(abspath $(3))/" "$$($(2)_SRC)" $(--quiet?)
 	touch $$@
