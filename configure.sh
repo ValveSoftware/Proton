@@ -179,7 +179,7 @@ function configure() {
 # Parse arguments
 #
 
-arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20220601.0-4"
+arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/sniper/sdk:0.20221017.1-0"
 arg_build_name=""
 arg_container_engine=""
 arg_docker_opts=""

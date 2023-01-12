@@ -2,7 +2,7 @@
 {
   "version" "2"
   "commandline" "/proton %verb%"
-  "require_tool_appid" "1391110"
+  "require_tool_appid" "1628350"
   "use_sessions" "1"
   "compatmanager_layer_name" "proton"
 }
