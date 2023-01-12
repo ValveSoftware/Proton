@@ -50,14 +50,14 @@ CONTAINER_MOUNT_OPTS=""
 
 check_container_engine() {
     stat "Trying $1."
-    if ! cmd $1 run --rm $arg_protonsdk_image; then
+    if ! cmd $1 run --rm $2; then
         info "$1 is unable to run the container."
         return 1
     fi
 
     touch permission_check
     local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
-                                            --rm $arg_protonsdk_image \
+                                            --rm $2 \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
 
@@ -94,9 +94,15 @@ function escape_for_make() {
 }
 
 function configure() {
-  local steamrt_image="$1"
+  local steamrt_image="$arg_protonsdk_image"
   local srcdir
   srcdir="$(dirname "$0")"
+
+  # nothing specified, getting the default value from the Makefile to test the
+  # container engine
+  if [[ -z $steamrt_image ]]; then
+    steamrt_image="$(sed -n 's/STEAMRT_IMAGE ?= //p' $SRCDIR/Makefile.in)"
+  fi
 
   # Build name
   local build_name="$arg_build_name"
@@ -126,12 +132,12 @@ function configure() {
   fi
 
   if [[ -n "$arg_container_engine" ]]; then
-    check_container_engine "$arg_container_engine" || die "Specified container engine \"$arg_container_engine\" doesn't work"
+    check_container_engine "$arg_container_engine" "$steamrt_image" || die "Specified container engine \"$arg_container_engine\" doesn't work"
   else
     stat "Trying to find usable container engine."
-    if check_container_engine docker; then
+    if check_container_engine docker "$steamrt_image"; then
       arg_container_engine="docker"
-    elif check_container_engine podman; then
+    elif check_container_engine podman "$steamrt_image"; then
       arg_container_engine="podman"
     else
         die "${arg_container_engine:-Container engine discovery} has failed. Please fix your setup."
@@ -151,8 +157,10 @@ function configure() {
     echo "SRCDIR     := $(escape_for_make "$srcdir")"
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
 
-    # SteamRT
-    echo "STEAMRT_IMAGE := $(escape_for_make "$steamrt_image")"
+    # SteamRT was specified, baking it into the Makefile
+    if [[ -n $arg_protonsdk_image ]]; then
+      echo "STEAMRT_IMAGE := $(escape_for_make "$arg_protonsdk_image")"
+    fi
 
     echo "ROOTLESS_CONTAINER := $ROOTLESS_CONTAINER"
     echo "CONTAINER_ENGINE := $arg_container_engine"
@@ -179,7 +187,7 @@ function configure() {
 # Parse arguments
 #
 
-arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/sniper/sdk:0.20221017.1-0"
+arg_protonsdk_image=""
 arg_build_name=""
 arg_container_engine=""
 arg_docker_opts=""
@@ -304,4 +312,4 @@ usage() {
 parse_args "$@" || usage err
 [[ -z $arg_help ]] || usage info
 
-configure "$arg_protonsdk_image"
+configure
