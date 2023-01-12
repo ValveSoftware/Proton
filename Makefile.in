@@ -13,25 +13,7 @@ MFLAGS += V=1 VERBOSE=1
 --verbose? := --verbose
 endif
 
-##
-## Nested make
-##
-
 SHELL := /bin/bash
-
-ifneq ($(NO_NESTED_MAKE),1)
-# Pass all variables/goals to ourselves as a sub-make such that we will get a trailing error message upon failure.  (We
-# invoke a lot of long-running build-steps, and make fails to re-print errors when they happened ten thousand lines
-# ago.)
-export
-.DEFAULT_GOAL := default
-.PHONY: $(MAKECMDGOALS) default nested_make
-default $(MAKECMDGOALS): nested_make
-
-nested_make:
-	+$(MAKE) $(MAKECMDGOALS) -f $(firstword $(MAKEFILE_LIST)) NO_NESTED_MAKE=1
-
-else # (Rest of the file is the else)
 
 ##
 ## General/global config
@@ -1199,4 +1181,3 @@ all64_configure: $(GOAL_TARGETS_CONFIGURE64)
 	@echo ":: make $@ succeeded"
 
 endif # ifeq ($(CONTAINER),)
-endif # End of NESTED_MAKE from beginning
