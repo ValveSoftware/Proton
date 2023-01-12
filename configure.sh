@@ -113,13 +113,11 @@ function configure() {
     info "No build name specified, using default: $build_name"
   fi
 
-  dependency_command fontforge
   dependency_command find "findutils"
   dependency_command make "GNU Make"
   dependency_command rsync
   dependency_command wget
   dependency_command xz
-  dependency_command patch
   dependency_command git
   dependency_command python3
 

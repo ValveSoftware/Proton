@@ -1065,20 +1065,19 @@ $(FONTS_OBJ):
 
 ifeq ($(CONTAINER),)
 fonts: container-build # trigger container build
-
+else # ifeq ($(CONTAINER),)
 $(FONTS_OBJ)/%.ttf: $(FONTS_OBJ)/%.sfd $(FONTSCRIPT) | $(FONTS_OBJ)
 	$(FONTFORGE) -script $(FONTSCRIPT) $< $($(*)_NAMES)
 
 $(FONTS_OBJ)/%.sfd: $(LIBERATION_SRCDIR)/%.sfd | $(FONTS_OBJ)
 	patch $< -o $@ $(firstword $($(*)_PATCH) /dev/null)
 
-# fonts below need a newer fontforge version then the one in the container
 fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
 fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
 fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
-else # ifeq ($(CONTAINER),)
+
 #The use of "YaHei" for compatibility with programs that require that exact string. This font is not Microsoft YaHei.
 $(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONT) $$(%.ttf_FEATURES) $$(%.ttf_SEQUENCES) $$(%.ttf_UNISOURCE) $$(%.ttf_MENUNAMEDB)
 	mkdir -p $(FONTS_OBJ)/source-han
