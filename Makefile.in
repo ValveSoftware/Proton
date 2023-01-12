@@ -41,7 +41,6 @@ else # (Rest of the file is the else)
 #   SRCDIR          - Path to source
 #   BUILD_NAME      - Name of the build for manifests etc.
 #   STEAMRT_IMAGE   - Name of the docker image to use for building
-#   STEAMRT_NAME    - Name of the steam runtime to build against (scout / soldier)
 
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include Makefile.in directly, run ./configure.sh to generate Makefile)
@@ -82,12 +81,7 @@ DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPT
                 -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
-STEAMRT_NAME ?= soldier
-ifeq ($(STEAMRT_NAME),soldier)
 TOOLMANIFEST_VDF_SRC := toolmanifest_runtime.vdf
-else
-TOOLMANIFEST_VDF_SRC := toolmanifest_noruntime.vdf
-endif
 
 ifneq ($(STEAMRT_IMAGE),)
 CONTAINER_SHELL := $(DOCKER_BASE) /bin/bash

@@ -95,7 +95,6 @@ function escape_for_make() {
 
 function configure() {
   local steamrt_image="$1"
-  local steamrt_name="$2"
   local srcdir
   srcdir="$(dirname "$0")"
 
@@ -153,7 +152,6 @@ function configure() {
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
 
     # SteamRT
-    echo "STEAMRT_NAME  := $(escape_for_make "$steamrt_name")"
     echo "STEAMRT_IMAGE := $(escape_for_make "$steamrt_image")"
 
     echo "ROOTLESS_CONTAINER := $ROOTLESS_CONTAINER"
@@ -181,9 +179,7 @@ function configure() {
 # Parse arguments
 #
 
-arg_steamrt="soldier"
 arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20220601.0-4"
-arg_no_protonsdk=""
 arg_build_name=""
 arg_container_engine=""
 arg_docker_opts=""
@@ -238,11 +234,6 @@ function parse_args() {
     elif [[ $arg = --proton-sdk-image ]]; then
       val_used=1
       arg_protonsdk_image="$val"
-    elif [[ $arg = --steam-runtime ]]; then
-      val_used=1
-      arg_steamrt="$val"
-    elif [[ $arg = --no-proton-sdk ]]; then
-      arg_no_protonsdk=1
     else
       err "Unrecognized option $arg"
       return 1
@@ -313,11 +304,4 @@ usage() {
 parse_args "$@" || usage err
 [[ -z $arg_help ]] || usage info
 
-# Sanity check arguments
-if [[ -n $arg_no_protonsdk && -n $arg_protonsdk_image ]]; then
-    die "Cannot specify --proton-sdk-image as well as --no-proton-sdk"
-elif [[ -z $arg_no_protonsdk && -z $arg_protonsdk_image ]]; then
-    die "Must specify either --no-proton-sdk or --proton-sdk-image"
-fi
-
-configure "$arg_protonsdk_image" "$arg_steamrt"
+configure "$arg_protonsdk_image"
