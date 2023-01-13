@@ -109,22 +109,15 @@ def filter_registry(filename):
 
     os.rename(filename + '.tmp', filename)
 
-def make_default_pfx(default_pfx_dir, dist_dir, runtime):
+def make_default_pfx(default_pfx_dir, dist_dir):
     local_env = dict(os.environ)
 
     ld_path = dist_dir + "/lib64:" + dist_dir + "/lib"
 
-    if runtime is None:
-        local_env["LD_LIBRARY_PATH"] = ld_path
-        local_env["WINEPREFIX"] = default_pfx_dir
-        local_env["WINEDEBUG"] = "-all"
-        runtime_args = []
-    else:
-        #the runtime clears the environment, so we pass it in on the CL via env
-        runtime_args = runtime + ["env",
-                "LD_LIBRARY_PATH=" + ld_path,
-                "WINEPREFIX=" + default_pfx_dir,
-                "WINEDEBUG=-all"]
+    local_env["LD_LIBRARY_PATH"] = ld_path
+    local_env["WINEPREFIX"] = default_pfx_dir
+    local_env["WINEDEBUG"] = "-all"
+    runtime_args = []
 
     subprocess.run(runtime_args + ["/bin/bash", "-c",
         os.path.join(dist_dir, 'bin', 'wine') + " wineboot && " +
@@ -138,7 +131,4 @@ def make_default_pfx(default_pfx_dir, dist_dir, runtime):
 
 if __name__ == '__main__':
     import sys
-    if len(sys.argv) > 3:
-        make_default_pfx(sys.argv[1], sys.argv[2], sys.argv[3:])
-    else:
-        make_default_pfx(sys.argv[1], sys.argv[2], None)
+    make_default_pfx(sys.argv[1], sys.argv[2])
