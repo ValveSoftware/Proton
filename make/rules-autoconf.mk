@@ -7,7 +7,8 @@
 define create-rules-autoconf
 $(call create-rules-common,$(1),$(2),$(3),$(4))
 
-ifeq ($(CONTAINER),1)
+$$($(2)_SRC)/configure.ac: | $$(OBJ)/.$(1)-post-source
+
 $$(OBJ)/.$(1)-pre-configure: $$($(2)_SRC)/configure.ac
 	@echo ":: autoreconfing $(1)..." >&2
 	cd "$$($(2)_SRC)" && autoreconf -fiv
@@ -35,7 +36,6 @@ $$(OBJ)/.$(1)-build$(3):
 	cd "$$($(2)_OBJ$(3))" && env $$($(2)_ENV$(3)) \
 	$$(MAKE) install
 	touch $$@
-endif
 endef
 
 rules-autoconf = $(call create-rules-autoconf,$(1),$(call toupper,$(1)),$(2),$(3))

@@ -15,7 +15,6 @@
 define create-rules-source
 $(2)_SRC = $$(OBJ)/src-$(1)
 
-ifeq ($(CONTAINER),)
 $(1)-rebuild:
 .PHONY: $(1)-rebuild
 
@@ -29,7 +28,6 @@ $$(OBJ)/.$(1)-source: $$(shell echo -n 'syncing $(1)... ' >&2 && \
 	touch $$@
 
 $$(OBJ)/.$(1)-post-source: $$(OBJ)/.$(1)-source
-container-build: $$(OBJ)/.$(1)-post-source
 
 $(1)-source: $$(OBJ)/.$(1)-post-source
 .PHONY: $(1)-source
@@ -47,7 +45,6 @@ $(1)-distclean::
 clean: $(1)-clean
 distclean: $(1)-distclean
 .PHONY: clean distclean
-endif
 endef
 
 rules-source = $(call create-rules-source,$(1),$(call toupper,$(1)),$(2))

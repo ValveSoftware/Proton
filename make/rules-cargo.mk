@@ -6,7 +6,6 @@
 define create-rules-cargo
 $(call create-rules-common,$(1),$(2),$(3))
 
-ifeq ($(CONTAINER),1)
 $$(OBJ)/.$(1)-configure$(3):
 	@echo ":: configuring $(3)bit $(1)..." >&2
 	touch $$@
@@ -22,7 +21,6 @@ $$(OBJ)/.$(1)-build$(3):
 	      $$($(2)_CARGO_ARGS) \
 	      $$($(2)_CARGO_ARGS$(3))
 	touch $$@
-endif
 endef
 
 rules-cargo = $(call create-rules-cargo,$(1),$(call toupper,$(1)),$(2))

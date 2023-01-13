@@ -15,6 +15,7 @@ $(2)_INCDIR$(3) ?= $$($(2)_DST$(3))/include
 $$(OBJ)/.$(1)-configure$(3): $$(shell mkdir -p $$($(2)_OBJ$(3)))
 $$(OBJ)/.$(1)-configure$(3): CCACHE_BASEDIR = $$($(2)_SRC)
 $$(OBJ)/.$(1)-configure$(3): $$(patsubst %,%-build$(3),$$($(2)_DEPENDS) $$($(2)_DEPENDS$(3)))
+$$(OBJ)/.$(1)-configure$(3): | $$(OBJ)/.$(1)-post-source
 
 $(1)-configure$(3): $$(OBJ)/.$(1)-configure$(3)
 .INTERMEDIATE: $(1)-configure$(3)
@@ -30,13 +31,7 @@ $$(OBJ)/.$(1)-build$(3): CCACHE_BASEDIR = $$($(2)_SRC)
 $$(OBJ)/.$(1)-build$(3): $$(OBJ)/.$(1)-source
 $$(OBJ)/.$(1)-build$(3): $$(OBJ)/.$(1)-configure$(3)
 
-ifeq ($(CONTAINER),)
-$$(OBJ)/.$(1)-build$(3): container-build
-$$(OBJ)/.$(1)-post-build$(3): container-build
-$$(OBJ)/.$(1)-dist$(3): container-build
-else
 $$(OBJ)/.$(1)-post-build$(3): $$(OBJ)/.$(1)-build$(3)
-endif
 
 $(1)-build$(3): $$(OBJ)/.$(1)-build$(3)
 .INTERMEDIATE: $(1)-build$(3)
@@ -48,7 +43,6 @@ all-build: $(1)-build
 .PHONY: all-build
 
 
-ifeq ($(CONTAINER),1)
 $$(OBJ)/.$(1)-dist$(3): $$(OBJ)/.$(1)-build$(3)
 $$(OBJ)/.$(1)-dist$(3): $$(OBJ)/.$(1)-post-build$(3)
 
@@ -78,7 +72,6 @@ $$(OBJ)/.$(1)-dist$(3):
 	    xargs $(--verbose?) -0 -r -P$$(J) -n3 objcopy --file-alignment=4096 --set-section-flags .text=contents,alloc,load,readonly,code
 	touch $$@
 endif
-endif
 
 $(1)-dist$(3): $$(OBJ)/.$(1)-dist$(3)
 .INTERMEDIATE: $(1)-dist$(3)
@@ -98,8 +91,6 @@ all$(3) $(1): $(1)$(3)
 
 all: $(1)
 .PHONY: all
-
-CONTAINERGOALS := $(CONTAINERGOALS) $(filter $(1),$(MAKECMDGOALS))
 
 $(2)_INCFLAGS$(3) = $$(foreach d,$$($(2)_DEPS$(3)),-I$$($$(d)_INCDIR$(3)))
 $(2)_LIBFLAGS$(3) = $$(foreach d,$$($(2)_DEPS$(3)),-L$$($$(d)_LIBDIR$(3))) \

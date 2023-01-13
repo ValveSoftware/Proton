@@ -30,117 +30,14 @@ ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include Makefile.in directly, run ./configure.sh to generate Makefile)
 endif
 
-include $(SRC)/make/utility.mk
-include $(SRC)/make/rules-source.mk
-include $(SRC)/make/rules-common.mk
-include $(SRC)/make/rules-meson.mk
-include $(SRC)/make/rules-cmake.mk
-include $(SRC)/make/rules-autoconf.mk
-include $(SRC)/make/rules-configure.mk
-include $(SRC)/make/rules-winemaker.mk
-include $(SRC)/make/rules-cargo.mk
-
-# If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
-CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
-ifeq ($(ENABLE_CCACHE),1)
-	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
-	override DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR)$(CONTAINER_MOUNT_OPTS) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
-else
-	export CCACHE_DISABLE := 1
-	override DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
-endif
-
-export CARGO_HOME := $(if $(CARGO_HOME),$(CARGO_HOME),$(HOME)/.cargo)
-override DOCKER_OPTS := -v $(CARGO_HOME):$(CARGO_HOME)$(CONTAINER_MOUNT_OPTS) -e CARGO_HOME=$(CARGO_HOME) $(DOCKER_OPTS)
-
-ifneq ($(ROOTLESS_CONTAINER),1)
-	override DOCKER_OPTS := -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) $(DOCKER_OPTS)
-endif
-
-ifeq ($(CONTAINER_ENGINE),)
-	CONTAINER_ENGINE := docker
-endif
-
-DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS) -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS) \
-                -w $(OBJ) -e MAKEFLAGS \
-                $(DOCKER_OPTS) $(STEAMRT_IMAGE)
-
-TOOLMANIFEST_VDF_SRC := toolmanifest_runtime.vdf
-
-ifneq ($(STEAMRT_IMAGE),)
-CONTAINER_SHELL := $(DOCKER_BASE) /bin/bash
-STEAM_RUNTIME_RUNSH := $(DOCKER_BASE)
-else
-CONTAINER_SHELL := $(SHELL)
-STEAM_RUNTIME_RUNSH :=
-endif
-
-
-MAKECMDGOALS32 := $(filter-out all32,$(filter %32,$(MAKECMDGOALS)))
-MAKECMDGOALS64 := $(filter-out all64,$(filter %64,$(MAKECMDGOALS)))
-CONTAINERGOALS := $(MAKECMDGOALS32) $(MAKECMDGOALS64) $(filter fonts,$(MAKECMDGOALS))
-
-all: all32 all64 fonts
-.PHONY: all
-
-all32 $(MAKECMDGOALS32):
-.PHONY: all32 $(MAKECMDGOALS32)
-
-all32 $(MAKECMDGOALS64):
-.PHONY: all64 $(MAKECMDGOALS64)
-
-ifeq ($(CONTAINER),)
-J := $(shell nproc)
-ifeq ($(ENABLE_CCACHE),1)
-container-build: $(shell mkdir -p $(CCACHE_DIR))
-endif
-container-build: $(shell mkdir -p $(CARGO_HOME))
-container-build: private SHELL := $(CONTAINER_SHELL)
-container-build:
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(CONTAINERGOALS)
-.PHONY: container-build
-
-all32 $(MAKECMDGOALS32): container-build
-all64 $(MAKECMDGOALS64): container-build
-else
-J = $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
-endif
-
-
-.PHONY: test-container
-test-container:
-	@echo >&2 ":: Testing container"
-	$(CONTAINER_SHELL) -c "echo Hello World!"
-
-# Many of the configure steps below depend on the makefile itself, such that they are dirtied by changing the recipes
-# that create them.  This can be annoying when working on the makefile, building with NO_MAKEFILE_DEPENDENCY=1 disables
-# this.
-MAKEFILE_DEP := $(MAKEFILE_LIST)
-ifeq ($(NO_MAKEFILE_DEPENDENCY),1)
-MAKEFILE_DEP :=
-endif
-
-##
-## Global config
-##
-
 DST_BASE := $(OBJ)/dist
 DST_DIR := $(DST_BASE)/dist
 DST_LIBDIR32 := $(DST_DIR)/lib
 DST_LIBDIR64 := $(DST_DIR)/lib64
+DIST_PREFIX := $(DST_DIR)/share/default_pfx/
+DIST_VERSION := $(DST_BASE)/version
 DEPLOY_DIR := ./deploy
 REDIST_DIR := ./redist
-
-# All top level goals.  Lazy evaluated so they can be added below.
-GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
-# Excluding goals like wine and dist that are either long running or slow per invocation
-GOAL_TARGETS_LIBS =
-# Any explicit thing, superset
-ALL_TARGETS =
-
-##
-## Platform-specific variables
-##
 
 ifneq ($(UNSTRIPPED_BUILD),)
     STRIP :=
@@ -161,199 +58,27 @@ COMMON_FLAGS32 := -mstackrealign
 COMMON_FLAGS64 := -mcmodel=small
 CARGO_BUILD_ARG := --release
 
-##
-## Target configs
-##
-
-COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
-LICENSE := $(SRCDIR)/dist.LICENSE
-OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
-AV1_PATENTS := $(SRCDIR)/dav1d/doc/PATENTS
-
-GECKO_VER := 2.47.3
-GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
-GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
-
-WINEMONO_VER := 7.4.0
-WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
-
-FONTS := $(SRCDIR)/fonts
-FONTS_OBJ := ./obj-fonts
-
-ifeq ($(CONTAINER),)
-
-GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
-GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
-MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
-
-##
-## dist/install -- steps to finalize the install
-##
-
 $(DST_DIR):
 	mkdir -p $@
 
-STEAM_DIR := $(HOME)/.steam/root
+ifeq ($(CONTAINER),1) # inside the container
+# all, all-dist and dist are basically synonyms
+.PHONY: all all-dist dist
+all: all-dist | $(DST_DIR)
+all-dist: | $(DST_DIR)
+dist: all
 
-FILELOCK_TARGET := $(addprefix $(DST_BASE)/,filelock.py)
-$(FILELOCK_TARGET): $(addprefix $(SRCDIR)/,filelock.py)
+J = $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
 
-PROTON_PY_TARGET := $(addprefix $(DST_BASE)/,proton)
-$(PROTON_PY_TARGET): $(addprefix $(SRCDIR)/,proton)
-
-PROTON37_TRACKED_FILES_TARGET := $(addprefix $(DST_BASE)/,proton_3.7_tracked_files)
-$(PROTON37_TRACKED_FILES_TARGET): $(addprefix $(SRCDIR)/,proton_3.7_tracked_files)
-
-USER_SETTINGS_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
-$(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
-
-DIST_COPY_TARGETS := $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
-                     $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET)
-
-DIST_VERSION := $(DST_BASE)/version
-DIST_OVR32 := $(DST_LIBDIR32)/wine/dxvk/openvr_api_dxvk.dll
-DIST_OVR64 := $(DST_LIBDIR64)/wine/dxvk/openvr_api_dxvk.dll
-DIST_PREFIX := $(DST_DIR)/share/default_pfx/
-DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
-DIST_LICENSE := $(DST_BASE)/LICENSE
-DIST_TOOLMANIFEST := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
-DIST_OFL_LICENSE := $(DST_BASE)/LICENSE.OFL
-DIST_AV1_PATENTS := $(DST_BASE)/PATENTS.AV1
-DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
-DIST_GECKO32 := $(OBJ)/.gecko-dist32
-DIST_GECKO64 := $(OBJ)/.gecko-dist64
-DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
-DIST_WINEMONO := $(OBJ)/.wine-mono-dist
-DIST_FONTS := $(DST_DIR)/share/fonts
-DIST_WINEOPENXR_JSON64 := $(DIST_PREFIX)/drive_c/openxr/wineopenxr64.json
-DIST_WINEOPENXR64 := $(DIST_PREFIX)/drive_c/windows/system32/wineopenxr.dll
-
-DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
-                $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
-                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) \
-                $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DIST_FONTS)
-
-DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
-                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
-REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
-
-$(DIST_LICENSE): $(LICENSE)
-	cp -a $< $@
-
-$(DIST_TOOLMANIFEST): $(addprefix $(SRCDIR)/,$(TOOLMANIFEST_VDF_SRC))
-	cp -a $< $@
-
-$(DIST_OFL_LICENSE): $(OFL_LICENSE)
-	cp -a $< $@
-
-$(DIST_AV1_PATENTS): $(AV1_PATENTS)
-	cp -a $< $@
-
-$(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
-	mkdir -p $(DST_LIBDIR32)/wine/dxvk
-	cp -a $< $@
-
-$(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
-	mkdir -p $(DST_LIBDIR64)/wine/dxvk
-	cp -a $< $@
-
-$(DIST_COPY_TARGETS): | $(DST_DIR)
-	cp -a $(SRCDIR)/$(notdir $@) $@
-
-$(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR)
-	sed -r 's|##BUILD_NAME##|$(BUILD_NAME)|' $< > $@
-
-$(SRC)/contrib/$(GECKO64_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O $@ $(GECKO64_TARBALL_URL)
-
-$(SRC)/contrib/$(GECKO32_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O $@ $(GECKO32_TARBALL_URL)
-
-$(SRC)/contrib/$(WINEMONO_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O $@ $(MONO_TARBALL_URL)
-
-$(OBJ)/.gecko-dist32: $(SRC)/contrib/$(GECKO32_TARBALL)
-	mkdir -p $(DIST_GECKO_DIR)
-	rm -rf $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
-	tar -xf $< -C $(DIST_GECKO_DIR)
-	touch $@
-
-$(OBJ)/.gecko-dist64: $(SRC)/contrib/$(GECKO64_TARBALL)
-	mkdir -p $(DIST_GECKO_DIR)
-	rm -rf $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
-	tar -xf $< -C $(DIST_GECKO_DIR)
-	touch $@
-
-$(OBJ)/.wine-mono-dist: $(SRC)/contrib/$(WINEMONO_TARBALL)
-	mkdir -p $(DIST_WINEMONO_DIR)
-	rm -rf $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
-	tar -xf $< -C $(DIST_WINEMONO_DIR)
-	touch $@
-
-$(DIST_FONTS): fonts
-	mkdir -p $@
-	cp $(FONTS_OBJ)/*.ttf "$@"
-	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
-	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
-	cp $(FONTS_OBJ)/ume-gothic/msgothic.ttc "$@"
-	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
-
-.PHONY: dist
-
-ALL_TARGETS += dist
-GOAL_TARGETS += dist
-
-dist_prefix: wine gst_good gst_libav gst_plugins_rs
-	find $(DST_LIBDIR32)/wine -type f -execdir chmod a-w '{}' '+'
-	find $(DST_LIBDIR64)/wine -type f -execdir chmod a-w '{}' '+'
-	rm -rf $(abspath $(DIST_PREFIX))
-	python3 $(SRCDIR)/default_pfx.py $(abspath $(DIST_PREFIX)) $(abspath $(DST_DIR)) $(STEAM_RUNTIME_RUNSH)
-
-dist_wineopenxr: dist_prefix $(DIST_WINEOPENXR_JSON64)
-
-dist: $(DIST_TARGETS) all-dist dist_wineopenxr | $(DST_DIR)
-	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
-
-deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
-	mkdir -p $(DEPLOY_DIR) && \
-	rsync --delete -arx $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
-	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
-	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
-
-install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
-	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
-	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	rsync --delete -arx $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	cp -f $(DIST_VERSION) $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/dist/
-	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	@echo "You may need to restart Steam to select this tool"
-
-redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
-	mkdir -p $(REDIST_DIR)
-	rsync --delete -arx $(REDIST_COPY_TARGETS) $(REDIST_DIR)
-	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
-	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
-
-.PHONY: module32 module64 module
-
-module32: private SHELL := $(CONTAINER_SHELL)
-module32: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure32
-module32: | all-source wine-configure32
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ32)/dlls/$(module)
-
-module64: private SHELL := $(CONTAINER_SHELL)
-module64: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure64
-module64: | all-source wine-configure64
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ64)/dlls/$(module)
-
-module: CONTAINERGOALS := $(CONTAINERGOALS) wine-configure
-module: | all-source wine-configure
-module: module32 module64
-
-endif # ifeq ($(CONTAINER),)
+include $(SRC)/make/utility.mk
+include $(SRC)/make/rules-source.mk
+include $(SRC)/make/rules-common.mk
+include $(SRC)/make/rules-meson.mk
+include $(SRC)/make/rules-cmake.mk
+include $(SRC)/make/rules-autoconf.mk
+include $(SRC)/make/rules-configure.mk
+include $(SRC)/make/rules-winemaker.mk
+include $(SRC)/make/rules-cargo.mk
 
 
 ##
@@ -614,9 +339,13 @@ $(eval $(call rules-source,wineopenxr,$(SRCDIR)/wineopenxr))
 # $(eval $(call rules-winemaker,wineopenxr,32,wineopenxr.dll))
 $(eval $(call rules-winemaker,wineopenxr,64,wineopenxr.dll))
 
-$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json dist_prefix
+DIST_WINEOPENXR_JSON64 := $(DIST_PREFIX)/drive_c/openxr/wineopenxr64.json
+$(WINEOPENXR_SRC)/wineopenxr64.json: wineopenxr
+$(DIST_WINEOPENXR_JSON64): $(WINEOPENXR_SRC)/wineopenxr64.json default_pfx
 	mkdir -p $(dir $@)
 	cp -a $< $@
+
+all-dist: $(DIST_WINEOPENXR_JSON64)
 
 
 ##
@@ -945,10 +674,15 @@ $(OBJ)/.eac-build32:
 
 endif
 
-ALL_TARGETS += fonts
-GOAL_TARGETS += fonts
+
+##
+## Fonts
+##
 
 .PHONY: fonts
+
+FONTS := $(SRCDIR)/fonts
+FONTS_OBJ := ./obj-fonts
 
 FONTFORGE = fontforge -quiet
 FONTSCRIPT = $(FONTS)/scripts/generatefont.pe
@@ -1045,9 +779,6 @@ LiberationMono-Bold_NAMES := "CourierNewPS-BoldMT" "Courier New" "Courier New Bo
 $(FONTS_OBJ):
 	mkdir -p $@
 
-ifeq ($(CONTAINER),)
-fonts: container-build # trigger container build
-else # ifeq ($(CONTAINER),)
 $(FONTS_OBJ)/%.ttf: $(FONTS_OBJ)/%.sfd $(FONTSCRIPT) | $(FONTS_OBJ)
 	$(FONTFORGE) -script $(FONTSCRIPT) $< $($(*)_NAMES)
 
@@ -1108,76 +839,296 @@ fonts: $(msgothic.ttc)
 fonts: $(malgun.ttf)
 fonts: $(micross.ttf)
 fonts: $(nirmala.ttf)
-endif # ifeq ($(CONTAINER),)
+
+DIST_FONTS := $(DST_DIR)/share/fonts
+$(DIST_FONTS): fonts
+	mkdir -p $@
+	cp $(FONTS_OBJ)/*.ttf "$@"
+	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
+	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
+	cp $(FONTS_OBJ)/ume-gothic/msgothic.ttc "$@"
+	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
+
+all-dist: $(DIST_FONTS)
+
 
 ##
-## Targets
+## Gecko
 ##
 
-ifeq ($(CONTAINER),)
-.PHONY: all all64 all32 default help targets
+GECKO_VER := 2.47.3
+GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
+GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
+GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
+GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
+MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
+DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
+DIST_GECKO32 := $(OBJ)/.gecko-dist32
+DIST_GECKO64 := $(OBJ)/.gecko-dist64
 
-# Produce a working dist directory by default
-default: all dist
-.DEFAULT_GOAL := default
+$(SRC)/contrib/$(GECKO64_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O $@ $(GECKO64_TARBALL_URL)
 
-# For suffixes 64/32/_configure64/_configure32 automatically check if they exist compared to ALL_TARGETS and make
-# all_configure32/etc aliases
-GOAL_TARGETS64           := $(filter $(addsuffix 64,$(GOAL_TARGETS)),$(ALL_TARGETS))
-GOAL_TARGETS32           := $(filter $(addsuffix 32,$(GOAL_TARGETS)),$(ALL_TARGETS))
-GOAL_TARGETS_LIBS64      := $(filter $(addsuffix 64,$(GOAL_TARGETS_LIBS)),$(ALL_TARGETS))
-GOAL_TARGETS_LIBS32      := $(filter $(addsuffix 32,$(GOAL_TARGETS_LIBS)),$(ALL_TARGETS))
-GOAL_TARGETS_CONFIGURE   := $(filter $(addsuffix _configure,$(GOAL_TARGETS)),$(ALL_TARGETS))
-GOAL_TARGETS_CONFIGURE64 := $(filter $(addsuffix _configure64,$(GOAL_TARGETS)),$(ALL_TARGETS))
-GOAL_TARGETS_CONFIGURE32 := $(filter $(addsuffix _configure32,$(GOAL_TARGETS)),$(ALL_TARGETS))
+$(SRC)/contrib/$(GECKO32_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O $@ $(GECKO32_TARBALL_URL)
 
-# Anything in all-targets that didn't end up in here
-OTHER_TARGETS := $(filter-out $(ALL_TARGETS),$(GOAL_TARGETS) $(GOAL_TARGETS64) $(GOAL_TARGETS32) \
-                                             $(GOAL_TARGETS_LIBS64) $(GOAL_TARGETS_LIBS32) $(GOAL_TARGETS_CONFIGURE) \
-                                             $(GOAL_TARGETS_CONFIGURE64) $(GOAL_TARGETS_CONFIGURE32))
+$(DIST_GECKO32): $(SRC)/contrib/$(GECKO32_TARBALL)
+	mkdir -p $(DIST_GECKO_DIR)
+	rm -rf $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
+	tar --no-same-owner -xf $< -C $(DIST_GECKO_DIR)
+	touch $@
 
+$(DIST_GECKO64): $(SRC)/contrib/$(GECKO64_TARBALL)
+	mkdir -p $(DIST_GECKO_DIR)
+	rm -rf $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
+	tar --no-same-owner -xf $< -C $(DIST_GECKO_DIR)
+	touch $@
+
+all-dist: $(DIST_GECKO32) $(DIST_GECKO64)
+
+
+##
+## wine-mono
+##
+
+WINEMONO_VER := 7.4.0
+WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
+DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
+DIST_WINEMONO := $(OBJ)/.wine-mono-dist
+
+$(SRC)/contrib/$(WINEMONO_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O $@ $(MONO_TARBALL_URL)
+
+$(DIST_WINEMONO): $(SRC)/contrib/$(WINEMONO_TARBALL)
+	mkdir -p $(DIST_WINEMONO_DIR)
+	rm -rf $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
+	tar --no-same-owner -xf $< -C $(DIST_WINEMONO_DIR)
+	touch $@
+
+all-dist: $(DIST_WINEMONO)
+
+
+##
+## openvr
+##
+
+DIST_OVR32 := $(DST_LIBDIR32)/wine/dxvk/openvr_api_dxvk.dll
+$(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
+	mkdir -p $(DST_LIBDIR32)/wine/dxvk
+	cp -a $< $@
+
+DIST_OVR64 := $(DST_LIBDIR64)/wine/dxvk/openvr_api_dxvk.dll
+$(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
+	mkdir -p $(DST_LIBDIR64)/wine/dxvk
+	cp -a $< $@
+
+all-dist: $(DIST_OVR32) $(DIST_OVR64)
+
+
+##
+## default_pfx
+##
+
+default_pfx: wine gst_good gst_libav gst_plugins_rs lsteamclient steamexe vrclient wineopenxr dxvk dxvk-nvapi vkd3d-proton
+	find $(DST_LIBDIR32)/wine -type f -execdir chmod a-w '{}' '+'
+	find $(DST_LIBDIR64)/wine -type f -execdir chmod a-w '{}' '+'
+	rm -rf $(abspath $(DIST_PREFIX))
+	python3 $(SRCDIR)/default_pfx.py $(abspath $(DIST_PREFIX)) $(abspath $(DST_DIR))
+
+all-dist: default_pfx
+
+
+##
+## toolmanifest.vdf
+##
+
+TOOLMANIFEST_VDF_SRC := toolmanifest_runtime.vdf
+DIST_TOOLMANIFEST := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
+$(DIST_TOOLMANIFEST): $(addprefix $(SRCDIR)/,$(TOOLMANIFEST_VDF_SRC))
+	cp -a $< $@
+
+all-dist: $(DIST_TOOLMANIFEST)
+
+
+##
+## compatibilitytool.vdf
+##
+
+COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
+DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
+$(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) | $(DST_DIR)
+	sed -r 's|##BUILD_NAME##|$(BUILD_NAME)|' $< > $@
+
+all-dist: $(DIST_COMPAT_MANIFEST)
+
+
+##
+## licenses / patents
+##
+
+LICENSE := $(SRCDIR)/dist.LICENSE
+DIST_LICENSE := $(DST_BASE)/LICENSE
+$(DIST_LICENSE): $(LICENSE)
+	cp -a $< $@
+
+OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
+DIST_OFL_LICENSE := $(DST_BASE)/LICENSE.OFL
+$(DIST_OFL_LICENSE): $(OFL_LICENSE)
+	cp -a $< $@
+
+AV1_PATENTS := $(SRCDIR)/dav1d/doc/PATENTS
+DIST_AV1_PATENTS := $(DST_BASE)/PATENTS.AV1
+$(DIST_AV1_PATENTS): $(AV1_PATENTS)
+	cp -a $< $@
+
+all-dist: $(DIST_LICENSE) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
+
+
+##
+## proton(.py), filelock.py, etc.
+##
+
+FILELOCK_TARGET := $(addprefix $(DST_BASE)/,filelock.py)
+$(FILELOCK_TARGET): $(addprefix $(SRCDIR)/,filelock.py)
+
+PROTON_PY_TARGET := $(addprefix $(DST_BASE)/,proton)
+$(PROTON_PY_TARGET): $(addprefix $(SRCDIR)/,proton)
+
+PROTON37_TRACKED_FILES_TARGET := $(addprefix $(DST_BASE)/,proton_3.7_tracked_files)
+$(PROTON37_TRACKED_FILES_TARGET): $(addprefix $(SRCDIR)/,proton_3.7_tracked_files)
+
+USER_SETTINGS_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
+$(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
+
+DIST_COPY_TARGETS := $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
+                     $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET)
+
+$(DIST_COPY_TARGETS): | $(DST_DIR)
+	cp -a $(SRCDIR)/$(notdir $@) $@
+
+all-dist: $(DIST_COPY_TARGETS)
+
+all-dist:
+	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
+
+DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
+                $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
+                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) \
+                $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DIST_FONTS)
+
+DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
+                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
+REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
+
+
+##
+## make deploy
+##
+
+.PHONY: deploy
+deploy: all
+	mkdir -p $(DEPLOY_DIR) && \
+	rsync --delete --exclude dist --exclude compatibilitytool.vdf -arx $(DST_BASE)/ $(DEPLOY_DIR) && \
+	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
+	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
+
+
+##
+## make redist
+##
+
+.PHONY: redist
+redist: all
+	mkdir -p $(REDIST_DIR)
+	rsync --delete --exclude dist -arx $(REDIST_COPY_TARGETS) $(REDIST_DIR)
+	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
+	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
+
+
+##
+## make module=$dllname module[32,64]
+##
+
+.PHONY: module32 module64 module
+
+module32: | all-source wine-configure32
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ32)/dlls/$(module)
+
+module64: | all-source wine-configure64
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ64)/dlls/$(module)
+
+module: | all-source wine-configure
+module: module32 module64
+
+###############################
+else # outside of the container
+###############################
+
+J := $(shell nproc)
+
+# If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
+CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
+ifeq ($(ENABLE_CCACHE),1)
+	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
+	override DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR)$(CONTAINER_MOUNT_OPTS) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
+else
+	export CCACHE_DISABLE := 1
+	override DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
+endif
+
+export CARGO_HOME := $(if $(CARGO_HOME),$(CARGO_HOME),$(HOME)/.cargo)
+override DOCKER_OPTS := -v $(CARGO_HOME):$(CARGO_HOME)$(CONTAINER_MOUNT_OPTS) -e CARGO_HOME=$(CARGO_HOME) $(DOCKER_OPTS)
+
+ifneq ($(ROOTLESS_CONTAINER),1)
+	override DOCKER_OPTS := -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) $(DOCKER_OPTS)
+endif
+
+ifeq ($(CONTAINER_ENGINE),)
+	CONTAINER_ENGINE := docker
+endif
+
+DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS) -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS) \
+                -w $(OBJ) -e MAKEFLAGS \
+                $(DOCKER_OPTS) $(STEAMRT_IMAGE)
+
+.PHONY: dist deploy redist
+.DEFAULT dist deploy redist:
+	if [ "$(ENABLE_CCACHE)" -eq "1" ]; then mkdir -p $(CCACHE_DIR); fi
+	mkdir -p $(CARGO_HOME)
+	$(DOCKER_BASE) $(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $@
+
+
+.PHONY: test-container
+test-container:
+	@echo >&2 ":: Testing container"
+	$(DOCKER_BASE) /bin/bash -c "echo Hello World!"
+
+
+STEAM_DIR := $(HOME)/.steam/root
+.PHONY: install
+install: all
+	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
+	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	rsync --delete -arx $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	cp -f $(DIST_VERSION) $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/dist/
+	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	@echo "You may need to restart Steam to select this tool"
+
+
+.PHONY: help targets
 help: targets
 targets:
-	$(info Default targets      (make all):              $(strip $(GOAL_TARGETS)))
-	$(info Default targets      (make all_lib):          $(strip $(GOAL_TARGETS_LIBS)))
-	$(info Default targets      (make all_configure):    $(strip $(GOAL_TARGETS_CONFIGURE)))
-	$(info Default targets      (make all64):            $(strip $(GOAL_TARGETS64)))
-	$(info Default targets      (make all32):            $(strip $(GOAL_TARGETS32)))
-	$(info Default targets      (make all64_lib):        $(strip $(GOAL_TARGETS_LIBS64)))
-	$(info Default targets      (make all32_lib):        $(strip $(GOAL_TARGETS_LIBS32)))
-	$(info Reconfigure targets  (make all64_configure):  $(strip $(GOAL_TARGETS_CONFIGURE64)))
-	$(info Reconfigure targets  (make all32_configure):  $(strip $(GOAL_TARGETS_CONFIGURE32)))
-	$(info Other targets:    $(OTHER_TARGETS))
+	$(info make                   - create a normal proton build in dist/)
+	$(info make install           - install the proton build locally in $(STEAM_DIR))
+	$(info make deploy            - create a build ready to be uploaded to steamworks in deploy/)
+	$(info make redist            - create an easily sharable proton redistributable in redist/)
+	$(info make module=xyz module - build the selected wine dll)
 
-# All target
-all: $(GOAL_TARGETS)
-	@echo ":: make $@ succeeded"
 
-all32: $(GOAL_TARGETS32)
-	@echo ":: make $@ succeeded"
-
-all64: $(GOAL_TARGETS64)
-	@echo ":: make $@ succeeded"
-
-# Libraries (not wine) only -- wine has a length install step that runs unconditionally, so this is useful for updating
-# incremental builds when not iterating on wine itself.
-all_lib: $(GOAL_TARGETS_LIBS)
-	@echo ":: make $@ succeeded"
-
-all32_lib: $(GOAL_TARGETS_LIBS32)
-	@echo ":: make $@ succeeded"
-
-all64_lib: $(GOAL_TARGETS_LIBS64)
-	@echo ":: make $@ succeeded"
-
-# Explicit reconfigure all targets
-all_configure: $(GOAL_TARGETS_CONFIGURE)
-	@echo ":: make $@ succeeded"
-
-all32_configure: $(GOAL_TARGETS_CONFIGURE32)
-	@echo ":: make $@ succeeded"
-
-all64_configure: $(GOAL_TARGETS_CONFIGURE64)
-	@echo ":: make $@ succeeded"
-
-endif # ifeq ($(CONTAINER),)
+.PHONY: default
+default: all
+.DEFAULT_GOAL := default
+endif

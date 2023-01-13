@@ -19,9 +19,9 @@ if [[ $(tput colors 2>/dev/null || echo 0) -gt 0 ]]; then
   COLOR_CLEAR=$'\e[0m'
 fi
 
-sh_quote() { 
+sh_quote() {
         local quoted
-        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}"; 
+        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}";
 }
 err()      { echo >&2 "${COLOR_ERR}!!${COLOR_CLEAR} $*"; }
 stat()     { echo >&2 "${COLOR_STAT}::${COLOR_CLEAR} $*"; }
@@ -113,13 +113,7 @@ function configure() {
     info "No build name specified, using default: $build_name"
   fi
 
-  dependency_command find "findutils"
   dependency_command make "GNU Make"
-  dependency_command rsync
-  dependency_command wget
-  dependency_command xz
-  dependency_command git
-  dependency_command python3
 
   if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
       die "Missing dependencies, cannot continue."

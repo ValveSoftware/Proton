@@ -7,7 +7,7 @@
 define create-rules-cmake
 $(call create-rules-common,$(1),$(2),$(3),$(4))
 
-ifeq ($(CONTAINER),1)
+$$($(2)_SRC)/CMakeLists.txt: | $$(OBJ)/.$(1)-post-source
 $$(OBJ)/.$(1)-configure$(3): $$($(2)_SRC)/CMakeLists.txt
 	@echo ":: configuring $(3)bit $(1)..." >&2
 	rm -rf "$$($(2)_OBJ$(3))/CMakeCache.txt"
@@ -32,7 +32,6 @@ $$(OBJ)/.$(1)-build$(3):
 	cd "$$($(2)_OBJ$(3))" && env $$($(2)_ENV$(3)) \
 	$$(MAKE) install
 	touch $$@
-endif
 endef
 
 rules-cmake = $(call create-rules-cmake,$(1),$(call toupper,$(1)),$(2),$(3))
