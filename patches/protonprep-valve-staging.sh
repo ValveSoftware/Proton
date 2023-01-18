@@ -13,9 +13,6 @@
     # https://github.com/doitsujin/dxvk/pull/2675
     echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
     patch -Np1 < ../patches/dxvk/2675.patch
-
-    echo "DXVK: add dxvk async patch"
-    patch -Np1 < ../patches/dxvk/dxvk-async.patch
     
     echo "DXVK: Fix Secret World: Legends patcher crash"
     patch -Np1 < ../patches/dxvk/secret-world.patch
