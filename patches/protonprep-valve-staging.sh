@@ -104,7 +104,8 @@
     -W shell32-NewMenu_Interface \
     -W wintrust-WTHelperGetProvCertFromChain \
     -W user32-FlashWindowEx \
-    -W user32-MessageBox_WS_EX_TOPMOST
+    -W user32-MessageBox_WS_EX_TOPMOST \
+    -W wined3d-zero-inf-shaders
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
@@ -178,6 +179,7 @@
     # ** shell32-NewMenu_Interface - applied manually
     # ** user32-FlashWindowEx - applied manually
     # user32-MessageBox_WS_EX_TOPMOST - already applied
+    # wined3d-zero-inf-shaders - already applied
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
