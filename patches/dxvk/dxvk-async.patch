@@ -112,7 +112,7 @@ index c0ecbbb4..f4e4fd4f 100644
      DxvkGraphicsPipelineInstance* instance = this->findInstance(state);
  
      if (unlikely(!instance)) {
-@@ -923,28 +923,36 @@ namespace dxvk {
+@@ -922,28 +923,36 @@ namespace dxvk {
        if (!this->validatePipelineState(state, true))
          return std::make_pair(VK_NULL_HANDLE, DxvkGraphicsPipelineType::FastPipeline);
  
@@ -156,7 +156,7 @@ index c0ecbbb4..f4e4fd4f 100644
 +
 +          // If necessary, compile an optimized pipeline variant
 +          if (!instance->fastHandle.load())
-+            m_workers->compileGraphicsPipeline(this, state);
++            m_workers->compileGraphicsPipeline(this, state, DxvkPipelinePriority::Low);
 +
 +          // Only store pipelines in the state cache that cannot benefit
 +          // from pipeline libraries, or if that feature is disabled.
