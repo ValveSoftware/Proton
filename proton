@@ -787,7 +787,7 @@ class CompatData:
                 makedirs(self.prefix_dir + "/drive_c")
                 set_dir_casefold_bit(self.prefix_dir + "/drive_c")
 
-           if not file_exists(self.prefix_dir + "/user.reg", follow_symlinks=True):
+            if not file_exists(self.prefix_dir + "/user.reg", follow_symlinks=True):
                 self.copy_pfx()
 
             self.migrate_user_paths()
