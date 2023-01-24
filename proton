@@ -706,33 +706,20 @@ class CompatData:
                         tracked_files.write(tracked_name + "\n")
 
     def create_fonts_symlinks(self):
-        fontsmap = [
-            ( g_proton.fonts_dir, "arial.ttf" ),
-            ( g_proton.fonts_dir, "arialbd.ttf" ),
-            ( g_proton.fonts_dir, "times.ttf" ),
-            ( g_proton.fonts_dir, "cour.ttf" ),
-            ( g_proton.fonts_dir, "courbd.ttf" ),
-            ( g_proton.fonts_dir, "msyh.ttf" ),
-            ( g_proton.fonts_dir, "simsun.ttc" ),
-            ( g_proton.fonts_dir, "msgothic.ttc" ),
-            ( g_proton.fonts_dir, "malgun.ttf" ),
-            ( g_proton.fonts_dir, "micross.ttf" ),
-            ( g_proton.fonts_dir, "nirmala.ttf" ),
-
-            ( g_proton.wine_fonts_dir, "tahoma.ttf" ),
-        ]
-
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
-        for p in fontsmap:
-            lname = os.path.join(windowsfonts, p[1])
-            fname = os.path.join(p[0], p[1])
-            if file_exists(lname, follow_symlinks=False):
-                if os.path.islink(lname):
-                    os.remove(lname)
+        for fonts_dir in [g_proton.fonts_dir, g_proton.wine_fonts_dir]:
+            for font in os.listdir(fonts_dir):
+                if not font.endswith('.ttf') and not font.endswith('.ttc'):
+                    continue
+                lname = os.path.join(windowsfonts, font)
+                fname = os.path.join(fonts_dir, font)
+                if file_exists(lname, follow_symlinks=False):
+                    if os.path.islink(lname):
+                        os.remove(lname)
+                        os.symlink(fname, lname)
+                else:
                     os.symlink(fname, lname)
-            else:
-                os.symlink(fname, lname)
 
     def migrate_user_paths(self):
         #move winxp-style paths to vista+ paths. we can't do this in
