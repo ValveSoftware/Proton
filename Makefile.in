@@ -765,31 +765,36 @@ noto_sans_teluguui.ttf = $(FONTS)/noto/NotoSansTeluguUI-Regular.ttf
 nirmala.ttf = $(FONTS_OBJ)/nirmala.ttf
 
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
-LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
+arial_NAMES := "Arial" "Arial" "Arial"
+arial_ORIG := LiberationSans-Regular
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
-LiberationSans-Bold_NAMES := "Arial-Bold" "Arial" "Arial Bold"
+arialbd_NAMES := "Arial-Bold" "Arial" "Arial Bold"
+arialbd_ORIG := LiberationSans-Bold
 #The use of "Times New Roman" here is for compatibility with programs that require that exact string. This font is not Times New Roman.
-LiberationSerif-Regular_NAMES := "TimesNewRoman" "Times New Roman" "Times New Roman"
+times_NAMES := "TimesNewRoman" "Times New Roman" "Times New Roman"
+times_ORIG := LiberationSerif-Regular
 #The use of "Courier New" here is for compatibility with programs that require that exact string. This font is not Courier New.
-LiberationMono-Regular_NAMES := "CourierNew" "Courier New" "Courier New"
-LiberationMono-Regular_PATCH := $(FONTS)/patches/LiberationMono-Regular.patch
+cour_NAMES := "CourierNew" "Courier New" "Courier New"
+cour_PATCH := $(FONTS)/patches/LiberationMono-Regular.patch
+cour_ORIG := LiberationMono-Regular
 #The use of "Courier New" here is for compatibility with programs that require that exact string. This font is not Courier New.
-LiberationMono-Bold_NAMES := "CourierNewPS-BoldMT" "Courier New" "Courier New Bold"
+courbd_NAMES := "CourierNewPS-BoldMT" "Courier New" "Courier New Bold"
+courbd_ORIG := LiberationMono-Bold
 
 $(FONTS_OBJ):
 	mkdir -p $@
 
-$(FONTS_OBJ)/%.ttf: $(FONTS_OBJ)/%.sfd $(FONTSCRIPT) | $(FONTS_OBJ)
-	$(FONTFORGE) -script $(FONTSCRIPT) $< $($(*)_NAMES)
+$(FONTS_OBJ)/%.ttf: $(FONTS_OBJ)/$$($$(*)_ORIG).sfd $(FONTSCRIPT) | $(FONTS_OBJ)
+	$(FONTFORGE) -script $(FONTSCRIPT) $< $($(*)_NAMES) $@
 
 $(FONTS_OBJ)/%.sfd: $(LIBERATION_SRCDIR)/%.sfd | $(FONTS_OBJ)
 	patch $< -o $@ $(firstword $($(*)_PATCH) /dev/null)
 
-fonts: $(FONTS_OBJ)/LiberationSans-Regular.ttf
-fonts: $(FONTS_OBJ)/LiberationSans-Bold.ttf
-fonts: $(FONTS_OBJ)/LiberationSerif-Regular.ttf
-fonts: $(FONTS_OBJ)/LiberationMono-Regular.ttf
-fonts: $(FONTS_OBJ)/LiberationMono-Bold.ttf
+fonts: $(FONTS_OBJ)/arial.ttf
+fonts: $(FONTS_OBJ)/arialbd.ttf
+fonts: $(FONTS_OBJ)/times.ttf
+fonts: $(FONTS_OBJ)/cour.ttf
+fonts: $(FONTS_OBJ)/courbd.ttf
 
 #The use of "YaHei" for compatibility with programs that require that exact string. This font is not Microsoft YaHei.
 $(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONT) $$(%.ttf_FEATURES) $$(%.ttf_SEQUENCES) $$(%.ttf_UNISOURCE) $$(%.ttf_MENUNAMEDB)

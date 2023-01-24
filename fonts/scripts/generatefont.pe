@@ -1,7 +1,7 @@
-if ($argc != 5)
-    Error ("Expected arguments - FileName, PSName, FamilyName, FaceName")
+if ($argc != 6)
+    Error ("Expected arguments - FileName, PSName, FamilyName, FaceName, OutFileName")
 endif
 
 Open($1)
 SetFontNames($argv[2], $argv[3], $argv[4])
-Generate($1:r + ".ttf")
+Generate($5)

@@ -707,25 +707,25 @@ class CompatData:
 
     def create_fonts_symlinks(self):
         fontsmap = [
-            ( g_proton.fonts_dir, "LiberationSans-Regular.ttf", "arial.ttf" ),
-            ( g_proton.fonts_dir, "LiberationSans-Bold.ttf", "arialbd.ttf" ),
-            ( g_proton.fonts_dir, "LiberationSerif-Regular.ttf", "times.ttf" ),
-            ( g_proton.fonts_dir, "LiberationMono-Regular.ttf", "cour.ttf" ),
-            ( g_proton.fonts_dir, "LiberationMono-Bold.ttf", "courbd.ttf" ),
-            ( g_proton.fonts_dir, "msyh.ttf", "msyh.ttf" ),
-            ( g_proton.fonts_dir, "simsun.ttc", "simsun.ttc" ),
-            ( g_proton.fonts_dir, "msgothic.ttc", "msgothic.ttc" ),
-            ( g_proton.fonts_dir, "malgun.ttf", "malgun.ttf" ),
-            ( g_proton.fonts_dir, "micross.ttf", "micross.ttf" ),
-            ( g_proton.fonts_dir, "nirmala.ttf", "nirmala.ttf" ),
+            ( g_proton.fonts_dir, "arial.ttf" ),
+            ( g_proton.fonts_dir, "arialbd.ttf" ),
+            ( g_proton.fonts_dir, "times.ttf" ),
+            ( g_proton.fonts_dir, "cour.ttf" ),
+            ( g_proton.fonts_dir, "courbd.ttf" ),
+            ( g_proton.fonts_dir, "msyh.ttf" ),
+            ( g_proton.fonts_dir, "simsun.ttc" ),
+            ( g_proton.fonts_dir, "msgothic.ttc" ),
+            ( g_proton.fonts_dir, "malgun.ttf" ),
+            ( g_proton.fonts_dir, "micross.ttf" ),
+            ( g_proton.fonts_dir, "nirmala.ttf" ),
 
-            ( g_proton.wine_fonts_dir, "tahoma.ttf", "tahoma.ttf" ),
+            ( g_proton.wine_fonts_dir, "tahoma.ttf" ),
         ]
 
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
         for p in fontsmap:
-            lname = os.path.join(windowsfonts, p[2])
+            lname = os.path.join(windowsfonts, p[1])
             fname = os.path.join(p[0], p[1])
             if file_exists(lname, follow_symlinks=False):
                 if os.path.islink(lname):
