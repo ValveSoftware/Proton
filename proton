@@ -705,21 +705,31 @@ class CompatData:
                     if tracked_name not in prev_tracked_files:
                         tracked_files.write(tracked_name + "\n")
 
+    def create_symlink(self, lname, fname):
+        if file_exists(lname, follow_symlinks=False):
+            if os.path.islink(lname):
+                os.remove(lname)
+                os.symlink(fname, lname)
+        else:
+            os.symlink(fname, lname)
+
     def create_fonts_symlinks(self):
+        ALTERNATIVES = {
+            ('1313860', 'arial.ttf'),    # FIFA 21
+            ('1506830', 'arial.ttf'),    # FIFA 22
+        }
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
+        sgi = os.environ.get('SteamGameId', '')
         for fonts_dir in [g_proton.fonts_dir, g_proton.wine_fonts_dir]:
             for font in os.listdir(fonts_dir):
                 if not font.endswith('.ttf') and not font.endswith('.ttc'):
                     continue
                 lname = os.path.join(windowsfonts, font)
                 fname = os.path.join(fonts_dir, font)
-                if file_exists(lname, follow_symlinks=False):
-                    if os.path.islink(lname):
-                        os.remove(lname)
-                        os.symlink(fname, lname)
-                else:
-                    os.symlink(fname, lname)
+                if (sgi, font) in ALTERNATIVES:
+                    fname = os.path.join(fonts_dir, 'alt', font)
+                self.create_symlink(lname, fname)
 
     def migrate_user_paths(self):
         #move winxp-style paths to vista+ paths. we can't do this in

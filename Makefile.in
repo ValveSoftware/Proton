@@ -683,6 +683,7 @@ endif
 
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
+ALT_FONTS_OBJ := $(FONTS_OBJ)/alt
 
 FONTFORGE = fontforge -quiet
 FONTSCRIPT = $(FONTS)/scripts/generatefont.pe
@@ -764,6 +765,8 @@ noto_sans_tamilui.ttf = $(FONTS)/noto/NotoSansTamilUI-Regular.ttf
 noto_sans_teluguui.ttf = $(FONTS)/noto/NotoSansTeluguUI-Regular.ttf
 nirmala.ttf = $(FONTS_OBJ)/nirmala.ttf
 
+alt_arial.ttf = $(ALT_FONTS_OBJ)/arial.ttf
+
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 arial_NAMES := "Arial" "Arial" "Arial"
 arial_ORIG := LiberationSans-Regular
@@ -782,6 +785,9 @@ courbd_NAMES := "CourierNewPS-BoldMT" "Courier New" "Courier New Bold"
 courbd_ORIG := LiberationMono-Bold
 
 $(FONTS_OBJ):
+	mkdir -p $@
+
+$(ALT_FONTS_OBJ):
 	mkdir -p $@
 
 $(FONTS_OBJ)/%.ttf: $(FONTS_OBJ)/$$($$(*)_ORIG).sfd $(FONTSCRIPT) | $(FONTS_OBJ)
@@ -838,12 +844,16 @@ $(nirmala.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_bengaliui
 		$(noto_sans_oriyaui.ttf) $(noto_sans_sinhalaui.ttf) $(noto_sans_sorasompeng.ttf) $(noto_sans_tamilui.ttf) $(noto_sans_teluguui.ttf) \
 		"NirmalaUI" "Nirmala UI" "Regular" $(nirmala.ttf)
 
+$(alt_arial.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) | $(ALT_FONTS_OBJ)
+	$(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) "Arial" "Arial" "Regular" $(alt_arial.ttf)
+
 fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
 fonts: $(malgun.ttf)
 fonts: $(micross.ttf)
 fonts: $(nirmala.ttf)
+fonts: $(alt_arial.ttf)
 
 DIST_FONTS := $(DST_DIR)/share/fonts
 $(DIST_FONTS): fonts
@@ -853,6 +863,7 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
 	cp $(FONTS_OBJ)/ume-gothic/msgothic.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
+	cp -r $(FONTS_OBJ)/alt "$@"
 
 all-dist: $(DIST_FONTS)
 
