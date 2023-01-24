@@ -201,6 +201,7 @@ WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
+ALT_FONTS_OBJ := $(FONTS_OBJ)/alt
 
 ifeq ($(CONTAINER),)
 
@@ -359,6 +360,7 @@ $(DIST_FONTS): fonts
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
 	cp $(FONTS_OBJ)/ume-gothic/msgothic.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
+	cp -r $(FONTS_OBJ)/alt "$@"
 
 .PHONY: dist
 
@@ -1096,6 +1098,8 @@ noto_sans_tamilui.ttf = $(FONTS)/noto/NotoSansTamilUI-Regular.ttf
 noto_sans_teluguui.ttf = $(FONTS)/noto/NotoSansTeluguUI-Regular.ttf
 nirmala.ttf = $(FONTS_OBJ)/nirmala.ttf
 
+alt_arial.ttf = $(ALT_FONTS_OBJ)/arial.ttf
+
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 LiberationSans-Regular_NAMES := "Arial" "Arial" "Arial"
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
@@ -1109,6 +1113,9 @@ LiberationMono-Regular_PATCH := $(FONTS)/patches/LiberationMono-Regular.patch
 LiberationMono-Bold_NAMES := "CourierNewPS-BoldMT" "Courier New" "Courier New Bold"
 
 $(FONTS_OBJ):
+	mkdir -p $@
+
+$(ALT_FONTS_OBJ):
 	mkdir -p $@
 
 ifeq ($(CONTAINER),)
@@ -1169,12 +1176,16 @@ $(nirmala.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_bengaliui
 		$(noto_sans_oriyaui.ttf) $(noto_sans_sinhalaui.ttf) $(noto_sans_sorasompeng.ttf) $(noto_sans_tamilui.ttf) $(noto_sans_teluguui.ttf) \
 		"NirmalaUI" "Nirmala UI" "Regular" $(nirmala.ttf)
 
+$(alt_arial.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) | $(ALT_FONTS_OBJ)
+	$(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) "Arial" "Arial" "Regular" $(alt_arial.ttf)
+
 fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
 fonts: $(malgun.ttf)
 fonts: $(micross.ttf)
 fonts: $(nirmala.ttf)
+fonts: $(alt_arial.ttf)
 endif # ifeq ($(CONTAINER),)
 
 ##
