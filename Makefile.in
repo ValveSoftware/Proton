@@ -877,7 +877,6 @@ GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.xz
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
 GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
-MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
 DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
 DIST_GECKO32 := $(OBJ)/.gecko-dist32
 DIST_GECKO64 := $(OBJ)/.gecko-dist64
@@ -913,6 +912,7 @@ WINEMONO_VER := 7.4.0
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
 DIST_WINEMONO := $(OBJ)/.wine-mono-dist
+MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
 
 $(SRC)/contrib/$(WINEMONO_TARBALL):
 	mkdir -p $(dir $@)
