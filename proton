@@ -1498,6 +1498,14 @@ class Session:
         else:
             argv = [g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"]
 
+        # Pentiment workaround to also work on regular Linux (mimic Steam Deck depot behaviour)
+        # https://steamdb.info/depot/1205522/
+        if os.environ.get("SteamGameId", 0) == "1205520":
+            pentiment_gameplugins_dir = os.environ['STEAM_COMPAT_INSTALL_PATH'] + '/Pentiment_Data/Plugins/x86_64/'
+            pentiment_dll_file = pentiment_gameplugins_dir + 'SpeechSynthesisWrapper.dll'
+            if os.path.exists(pentiment_dll_file):
+                open(pentiment_dll_file, "w").close()
+
         rc = self.run_proc(adverb + argv + sys.argv[2:] + self.cmdlineappend)
 
         if remote_debug_proc:
