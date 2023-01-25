@@ -738,7 +738,7 @@ msgothic.ttc = $(FONTS_OBJ)/ume-gothic/msgothic.ttc
 
 noto_sans.ttf = $(FONTS)/noto/NotoSans-Regular.ttf
 noto_sans_arabic.ttf = $(FONTS)/noto/NotoSansArabic-Regular.ttf
-noto_sans_armenian.tff = $(FONTS)/noto/NotoSansArmenian-Regular.ttf
+noto_sans_armenian.ttf = $(FONTS)/noto/NotoSansArmenian-Regular.ttf
 noto_sans_bengali.ttf = $(FONTS)/noto/NotoSansBengali-Regular.ttf
 noto_sans_coptic.ttf = $(FONTS)/noto/NotoSansCoptic-Regular.ttf
 noto_sans_georgian.ttf = $(FONTS)/noto/NotoSansGeorgian-Regular.ttf
