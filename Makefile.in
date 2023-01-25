@@ -740,31 +740,34 @@ noto_sans.ttf = $(FONTS)/noto/NotoSans-Regular.ttf
 noto_sans_arabic.ttf = $(FONTS)/noto/NotoSansArabic-Regular.ttf
 noto_sans_armenian.ttf = $(FONTS)/noto/NotoSansArmenian-Regular.ttf
 noto_sans_bengali.ttf = $(FONTS)/noto/NotoSansBengali-Regular.ttf
+noto_sans_bengaliui.ttf = $(FONTS)/noto/NotoSansBengaliUI-Regular.ttf
 noto_sans_coptic.ttf = $(FONTS)/noto/NotoSansCoptic-Regular.ttf
+noto_sans_devanagariui.ttf = $(FONTS)/noto/NotoSansDevanagariUI-Regular.ttf
 noto_sans_georgian.ttf = $(FONTS)/noto/NotoSansGeorgian-Regular.ttf
 noto_sans_gujarati.ttf = $(FONTS)/noto/NotoSansGujarati-Regular.ttf
-noto_sans_hebrew.ttf = $(FONTS)/noto/NotoSansHebrew-Regular.ttf
-noto_sans_khmer.ttf = $(FONTS)/noto/NotoSansKhmer-Regular.ttf
-noto_sans_tamil.ttf = $(FONTS)/noto/NotoSansTamil-Regular.ttf
-noto_sans_thaana.ttf = $(FONTS)/noto/NotoSansThaana-Regular.ttf
-noto_sans_thai.ttf = $(FONTS)/noto/NotoSansThai-Regular.ttf
-micross.ttf = $(FONTS_OBJ)/micross.ttf
-
-noto_sans_bengaliui.ttf = $(FONTS)/noto/NotoSansBengaliUI-Regular.ttf
-noto_sans_devanagariui.ttf = $(FONTS)/noto/NotoSansDevanagariUI-Regular.ttf
 noto_sans_gujaratiui.ttf = $(FONTS)/noto/NotoSansGujaratiUI-Regular.ttf
 noto_sans_gurmukhiui.ttf = $(FONTS)/noto/NotoSansGurmukhiUI-Regular.ttf
+noto_sans_hebrew.ttf = $(FONTS)/noto/NotoSansHebrew-Regular.ttf
 noto_sans_kannadaui.ttf = $(FONTS)/noto/NotoSansKannadaUI-Regular.ttf
+noto_sans_khmer.ttf = $(FONTS)/noto/NotoSansKhmer-Regular.ttf
 noto_sans_malayalamui.ttf = $(FONTS)/noto/NotoSansMalayalamUI-Regular.ttf
+noto_sans_math.ttf = $(FONTS)/noto/NotoSansMath-Regular.ttf
 noto_sans_meeteimayek.ttf = $(FONTS)/noto/NotoSansMeeteiMayek-Regular.ttf
+noto_sans_mono.ttf = $(FONTS)/noto/NotoSansMono-Regular.ttf
 noto_sans_olchiki.ttf = $(FONTS)/noto/NotoSansOlChiki-Regular.ttf
 noto_sans_oriyaui.ttf = $(FONTS)/noto/NotoSansOriyaUI-Regular.ttf
 noto_sans_sinhalaui.ttf = $(FONTS)/noto/NotoSansSinhalaUI-Regular.ttf
 noto_sans_sorasompeng.ttf = $(FONTS)/noto/NotoSansSoraSompeng-Regular.ttf
+noto_sans_symbols.ttf = $(FONTS)/noto/NotoSansSymbols-Regular.ttf
+noto_sans_symbols2.ttf = $(FONTS)/noto/NotoSansSymbols2-Regular.ttf
+noto_sans_tamil.ttf = $(FONTS)/noto/NotoSansTamil-Regular.ttf
 noto_sans_tamilui.ttf = $(FONTS)/noto/NotoSansTamilUI-Regular.ttf
 noto_sans_teluguui.ttf = $(FONTS)/noto/NotoSansTeluguUI-Regular.ttf
-nirmala.ttf = $(FONTS_OBJ)/nirmala.ttf
+noto_sans_thaana.ttf = $(FONTS)/noto/NotoSansThaana-Regular.ttf
+noto_sans_thai.ttf = $(FONTS)/noto/NotoSansThai-Regular.ttf
 
+micross.ttf = $(FONTS_OBJ)/micross.ttf
+nirmala.ttf = $(FONTS_OBJ)/nirmala.ttf
 alt_arial.ttf = $(ALT_FONTS_OBJ)/arial.ttf
 
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
@@ -834,7 +837,7 @@ $(micross.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.tt
 		$(noto_sans_thaana.ttf) $(noto_sans_thai.ttf)
 	$(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_armenian.ttf) $(noto_sans_bengali.ttf) \
 		$(noto_sans_coptic.ttf) $(noto_sans_georgian.ttf) $(noto_sans_gujarati.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_khmer.ttf) \
-		$(noto_sans_tamil.ttf) $(noto_sans_thaana.ttf) $(noto_sans_thai.ttf) "MicrosoftSansSerif" "Microsoft Sans Serif" "Regular" $(micross.ttf)
+		$(noto_sans_tamil.ttf) $(noto_sans_thaana.ttf) $(noto_sans_thai.ttf) "MicrosoftSansSerif" "Microsoft Sans Serif" "Regular" /dev/null $(micross.ttf)
 
 $(nirmala.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_bengaliui.ttf) $(noto_sans_devanagariui.ttf) $(noto_sans_gujaratiui.ttf) $(noto_sans_gurmukhiui.ttf) \
 		$(noto_sans_kannadaui.ttf) $(noto_sans_malayalamui.ttf) $(noto_sans_meeteimayek.ttf) $(noto_sans_olchiki.ttf) $(noto_sans_oriyaui.ttf) \
@@ -842,10 +845,12 @@ $(nirmala.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_bengaliui
 	$(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_bengaliui.ttf) $(noto_sans_devanagariui.ttf) $(noto_sans_gujaratiui.ttf) \
 		$(noto_sans_gurmukhiui.ttf) $(noto_sans_kannadaui.ttf) $(noto_sans_malayalamui.ttf) $(noto_sans_meeteimayek.ttf) $(noto_sans_olchiki.ttf) \
 		$(noto_sans_oriyaui.ttf) $(noto_sans_sinhalaui.ttf) $(noto_sans_sorasompeng.ttf) $(noto_sans_tamilui.ttf) $(noto_sans_teluguui.ttf) \
-		"NirmalaUI" "Nirmala UI" "Regular" $(nirmala.ttf)
+		"NirmalaUI" "Nirmala UI" "Regular" /dev/null $(nirmala.ttf)
 
-$(alt_arial.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) | $(ALT_FONTS_OBJ)
-	$(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) "Arial" "Arial" "Regular" $(alt_arial.ttf)
+$(alt_arial.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_armenian.ttf) $(noto_sans_coptic.ttf) \
+		$(noto_sans_math.ttf) $(noto_sans_symbols.ttf) $(noto_sans_symbols2.ttf) $(noto_sans_mono.ttf) | $(ALT_FONTS_OBJ)
+	$(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_armenian.ttf) $(noto_sans_coptic.ttf) \
+		$(noto_sans_math.ttf) $(noto_sans_symbols.ttf) $(noto_sans_symbols2.ttf) $(noto_sans_mono.ttf) "Arial" "Arial" "Regular" $(FONTS)/ranges/arial $(alt_arial.ttf)
 
 fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
