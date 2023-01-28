@@ -92,7 +92,7 @@ This section is for those that use the native version of Steam.
 5. [Enable proton-ge-custom](#enabling).
   
     
-*Terminal example based of Latest Release*
+*Terminal example based on Latest Release*
 ```bash
 # make temp working directory
 mkdir /tmp/proton-ge-custom
