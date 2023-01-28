@@ -90,6 +90,31 @@ This section is for those that use the native version of Steam.
    * `tar -xf GE-ProtonVERSION.tar.gz -C ~/.steam/root/compatibilitytools.d/`
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
+  
+    
+*Terminal example based of Latest Release*
+```bash
+# make temp working directory
+mkdir /tmp/proton-ge-custom
+cd /tmp/proton-ge-custom
+
+# download  tarball 
+curl -sLOJ $(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep browser_download_url | cut -d\" -f4 | egrep .tar.gz)
+
+# download checksum 
+curl -sLOJ $(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep browser_download_url | cut -d\" -f4 | egrep .sha512sum) 
+
+# check tarball with checksum
+sha512sum -c *.sha512sum
+# if result is ok, continue
+
+# make steam directory if it does not exist
+mkdir -p ~/.steam/root/compatibilitytools.d
+
+# extract proton tarball to steam directory
+tar -xf GE-Proton*.tar.gz -C ~/.steam/root/compatibilitytools.d/
+echo "All done :)"
+```
 
 #### Flatpak
 
