@@ -103,51 +103,74 @@ void sync_environment(void)
     }
 }
 
-/* returns the number of bytes written to dst, not including the NUL terminator */
+/* Returns:
+ *  - if successful, the number of bytes written to dst, including the NULL terminator;
+ *  - 0 if failed;
+ *  - PATH_MAX if insufficient output buffer (TODO: should be actual required length including NULL terminator). */
 unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url)
 {
+    static const char file_prot[] = "file://";
     WCHAR *dosW;
     uint32 r;
 
-    static const char file_prot[] = "file://";
-
-    if(!dst || !dst_bytes)
-        return PATH_MAX - 1;
-
-    if(!src || !*src || !api_result){
-        *dst = 0;
+    if (!api_result)
+    {
+        if (dst && dst_bytes)
+            *dst = 0;
         return 0;
     }
 
-    if(is_url){
-        /* convert only file: URLs */
-        if(strncmp(src, file_prot, 7) != 0){
-            strcpy(dst, src);
-            return strlen(dst);
-        }
+    if (!dst || !dst_bytes)
+        return PATH_MAX;
 
+    if (!src || !*src)
+    {
+        *dst = 0;
+        return PATH_MAX;
+    }
+
+    if (is_url)
+    {
+        /* convert only file: URLs */
+        if (strncmp(src, file_prot, 7))
+        {
+            r = strlen(src) + 1;
+            if (r > dst_bytes)
+                *dst = 0;
+            else
+                memmove(dst, src, r);
+            return r;
+        }
+        if (dst_bytes < sizeof(file_prot))
+        {
+            *dst = 0;
+            return PATH_MAX;
+        }
+        memmove(dst, src, 7);
         src += 7;
-        memcpy(dst, file_prot, sizeof(file_prot));
-        if(dst_bytes < sizeof(file_prot))
-            return 0;
         dst += 7;
         dst_bytes -= 7;
     }
 
     dosW = wine_get_dos_file_name(src);
-    *dst = 0;
 
-    if(!dosW){
-        WARN("Unable to convert unix filename to DOS: %s\n", src);
+    if (!dosW)
+    {
+        WARN("Unable to convert unix filename to DOS: %s.\n", src);
+        *dst = 0;
         return 0;
     }
 
     r = WideCharToMultiByte(CP_ACP, 0, dosW, -1, dst, dst_bytes,
             NULL, NULL);
-
+    if (!r)
+    {
+        *dst = 0;
+        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+            r = PATH_MAX;
+    }
     HeapFree(GetProcessHeap(), 0, dosW);
-
-    return r == 0 ? 0 : r - 1;
+    return r;
 }
 
 #define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
