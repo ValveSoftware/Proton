@@ -6,6 +6,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 #include "vrclient_private.h"
 
 #include "json/json.h"
+#include <fstream>
 
 extern "C" {
 
@@ -141,6 +142,49 @@ char *json_convert_startup_info(const char *startup_info)
     ret[len] = 0;
 
     return ret;
+}
+
+bool json_convert_action_manifest(const char *manifest_file)
+{
+    char dst_path[PATH_MAX];
+    Json::CharReaderBuilder rbuilder;
+    std::ifstream manifest(manifest_file, std::ifstream::binary);
+    Json::Value root;
+    std::string errs;
+
+    WINE_TRACE("converting action manifest file %s.\n", manifest_file);
+
+    bool ok = Json::parseFromStream(rbuilder, manifest, &root, &errs);
+    manifest.close();
+    if (!ok) {
+        WINE_ERR("error parsing action manifest as JSON %s: %s.\n", manifest_file, errs.c_str());
+        return false;
+    }
+
+    if (!root.isMember("default_bindings"))
+        return true;
+
+     if (!root["default_bindings"].isArray()) {
+        WINE_ERR("error converting action manifest %s: default_bindings is not an array.\n", manifest_file);
+        return false;
+    }
+
+    for (Json::Value::ArrayIndex i = 0; i != root["default_bindings"].size(); i++) {
+        if (root["default_bindings"][i].isMember("binding_url")) {
+            if (!root["default_bindings"][i]["binding_url"].isString()) {
+                WINE_ERR("error converting action manifest %s: binding_url %i is not a string.\n", manifest_file, i);
+                return false;
+            }
+            vrclient_dos_path_to_unix_path(root["default_bindings"][i]["binding_url"].asCString(), dst_path);
+            root["default_bindings"][i]["binding_url"] = dst_path;
+        }
+    }
+
+    std::ofstream ofstream(manifest_file);
+    ofstream << root;
+    ofstream.close();
+
+    return true;
 }
 
 }

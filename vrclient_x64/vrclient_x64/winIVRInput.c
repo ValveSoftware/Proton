@@ -30,6 +30,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_SetActionManifestPath(winIVRIn
 {
     char lin_pchActionManifestPath[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    json_convert_action_manifest(lin_pchActionManifestPath);
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_010_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
@@ -377,6 +378,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_SetActionManifestPath(winIVRIn
 {
     char lin_pchActionManifestPath[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    json_convert_action_manifest(lin_pchActionManifestPath);
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_007_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
@@ -688,6 +690,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_SetActionManifestPath(winIVRIn
 {
     char lin_pchActionManifestPath[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    json_convert_action_manifest(lin_pchActionManifestPath);
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_006_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
@@ -981,6 +984,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(winIVRIn
 {
     char lin_pchActionManifestPath[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    json_convert_action_manifest(lin_pchActionManifestPath);
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_005_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
@@ -1265,6 +1269,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(winIVRIn
 {
     char lin_pchActionManifestPath[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    json_convert_action_manifest(lin_pchActionManifestPath);
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_004_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
@@ -1486,6 +1491,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(winIVRIn
 {
     char lin_pchActionManifestPath[PATH_MAX];
     vrclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
+    json_convert_action_manifest(lin_pchActionManifestPath);
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_003_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
