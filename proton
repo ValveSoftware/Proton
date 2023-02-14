@@ -1174,6 +1174,7 @@ def default_compat_config():
                 "236390", #war thunder
                 "936720", #wrench
                 "1249800", #xuan-yuan sword VII
+                "1446780", #monster hunter rise
                 ]:
             ret.add("enablenvapi")
     return ret
