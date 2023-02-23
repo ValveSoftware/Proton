@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_154/steam_api.h"
-#include "steamworks_sdk_154/steamnetworkingtypes.h"
+#include "steamworks_sdk_155/steam_api.h"
+#include "steamworks_sdk_155/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_154
+#define SDKVER_155
 #include "struct_converters.h"
 #include "cppISteamInput_SteamInput006.h"
 bool cppISteamInput_SteamInput006_Init(void *linux_side, bool bExplicitlyCallRunFrame)
@@ -219,6 +219,11 @@ uint32 cppISteamInput_SteamInput006_GetRemotePlaySessionID(void *linux_side, Inp
 uint16 cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings(void *linux_side)
 {
     return ((ISteamInput*)linux_side)->GetSessionInputConfigurationSettings();
+}
+
+void cppISteamInput_SteamInput006_SetDualSenseTriggerEffect(void *linux_side, InputHandle_t inputHandle, const ScePadTriggerEffectParam * pParam)
+{
+    ((ISteamInput*)linux_side)->SetDualSenseTriggerEffect((InputHandle_t)inputHandle, (const ScePadTriggerEffectParam *)pParam);
 }
 
 #ifdef __cplusplus

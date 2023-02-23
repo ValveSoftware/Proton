@@ -232,6 +232,13 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(winIS
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(_this->linux_side, punSecondsAllowed, punSecondsPlayed);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext, 8)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, AppId_t nAppID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(_this->linux_side, nAppID);
+}
+
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable;
 
 #ifndef __GNUC__
@@ -267,6 +274,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext)
     );
 #ifndef __GNUC__
 }
@@ -276,7 +284,7 @@ winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *create_winISteamApps_STEAMAPPS_INT
 {
     winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *r = alloc_mem_for_iface(sizeof(winISteamApps_STEAMAPPS_INTERFACE_VERSION008), "STEAMAPPS_INTERFACE_VERSION008");
     TRACE("-> %p\n", r);
-    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable, 29, "STEAMAPPS_INTERFACE_VERSION008");
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable, 30, "STEAMAPPS_INTERFACE_VERSION008");
     r->linux_side = linux_side;
     return r;
 }

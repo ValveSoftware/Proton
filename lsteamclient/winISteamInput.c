@@ -356,6 +356,13 @@ uint16 __thiscall winISteamInput_SteamInput006_GetSessionInputConfigurationSetti
     return cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings(_this->linux_side);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput006_SetDualSenseTriggerEffect, 16)
+void __thiscall winISteamInput_SteamInput006_SetDualSenseTriggerEffect(winISteamInput_SteamInput006 *_this, InputHandle_t inputHandle, const ScePadTriggerEffectParam * pParam)
+{
+    TRACE("%p\n", _this);
+    cppISteamInput_SteamInput006_SetDualSenseTriggerEffect(_this->linux_side, inputHandle, pParam);
+}
+
 extern vtable_ptr winISteamInput_SteamInput006_vtable;
 
 #ifndef __GNUC__
@@ -409,6 +416,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInput_SteamInput006_GetDeviceBindingRevision)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput006_GetRemotePlaySessionID)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput006_GetSessionInputConfigurationSettings)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput006_SetDualSenseTriggerEffect)
     );
 #ifndef __GNUC__
 }
@@ -418,7 +426,7 @@ winISteamInput_SteamInput006 *create_winISteamInput_SteamInput006(void *linux_si
 {
     winISteamInput_SteamInput006 *r = alloc_mem_for_iface(sizeof(winISteamInput_SteamInput006), "SteamInput006");
     TRACE("-> %p\n", r);
-    r->vtable = alloc_vtable(&winISteamInput_SteamInput006_vtable, 47, "SteamInput006");
+    r->vtable = alloc_vtable(&winISteamInput_SteamInput006_vtable, 48, "SteamInput006");
     r->linux_side = linux_side;
     return r;
 }
