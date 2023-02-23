@@ -74,3 +74,7 @@ extern int cppISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessage
 extern void cppISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInviteDialog(void *, CSteamID);
 extern bool cppISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(void *, const char *);
 extern void cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString(void *, const char *);
+extern SteamAPICall_t cppISteamFriends_SteamFriends017_RequestEquippedProfileItems(void *, CSteamID);
+extern bool cppISteamFriends_SteamFriends017_BHasEquippedProfileItem(void *, CSteamID, ECommunityProfileItemType);
+extern const char * cppISteamFriends_SteamFriends017_GetProfileItemPropertyString(void *, CSteamID, ECommunityProfileItemType, ECommunityProfileItemProperty);
+extern uint32 cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint(void *, CSteamID, ECommunityProfileItemType, ECommunityProfileItemProperty);

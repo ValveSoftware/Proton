@@ -561,6 +561,34 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString(_this->linux_side, pchConnectString);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_RequestEquippedProfileItems, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_RequestEquippedProfileItems(winISteamFriends_SteamFriends017 *_this, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_RequestEquippedProfileItems(_this->linux_side, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_BHasEquippedProfileItem, 16)
+bool __thiscall winISteamFriends_SteamFriends017_BHasEquippedProfileItem(winISteamFriends_SteamFriends017 *_this, CSteamID steamID, ECommunityProfileItemType itemType)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_BHasEquippedProfileItem(_this->linux_side, steamID, itemType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetProfileItemPropertyString, 20)
+const char * __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyString(winISteamFriends_SteamFriends017 *_this, CSteamID steamID, ECommunityProfileItemType itemType, ECommunityProfileItemProperty prop)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetProfileItemPropertyString(_this->linux_side, steamID, itemType, prop);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetProfileItemPropertyUint, 20)
+uint32 __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyUint(winISteamFriends_SteamFriends017 *_this, CSteamID steamID, ECommunityProfileItemType itemType, ECommunityProfileItemProperty prop)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint(_this->linux_side, steamID, itemType, prop);
+}
+
 extern vtable_ptr winISteamFriends_SteamFriends017_vtable;
 
 #ifndef __GNUC__
@@ -643,6 +671,10 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInviteDialog)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser)
         VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_RequestEquippedProfileItems)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_BHasEquippedProfileItem)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetProfileItemPropertyString)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetProfileItemPropertyUint)
     );
 #ifndef __GNUC__
 }
@@ -652,7 +684,7 @@ winISteamFriends_SteamFriends017 *create_winISteamFriends_SteamFriends017(void *
 {
     winISteamFriends_SteamFriends017 *r = alloc_mem_for_iface(sizeof(winISteamFriends_SteamFriends017), "SteamFriends017");
     TRACE("-> %p\n", r);
-    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends017_vtable, 76, "SteamFriends017");
+    r->vtable = alloc_vtable(&winISteamFriends_SteamFriends017_vtable, 80, "SteamFriends017");
     r->linux_side = linux_side;
     return r;
 }
