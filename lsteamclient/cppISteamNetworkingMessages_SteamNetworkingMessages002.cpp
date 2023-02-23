@@ -1,15 +1,15 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_154/steam_api.h"
-#include "steamworks_sdk_154/steamnetworkingtypes.h"
-#include "steamworks_sdk_154/isteamnetworkingmessages.h"
+#include "steamworks_sdk_155/steam_api.h"
+#include "steamworks_sdk_155/steamnetworkingtypes.h"
+#include "steamworks_sdk_155/isteamnetworkingmessages.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_154
+#define SDKVER_155
 #include "struct_converters.h"
 #include "cppISteamNetworkingMessages_SteamNetworkingMessages002.h"
 EResult cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser(void *linux_side, const SteamNetworkingIdentity * identityRemote, const void * pubData, uint32 cubData, int nSendFlags, int nRemoteChannel)

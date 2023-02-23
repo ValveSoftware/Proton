@@ -45,3 +45,4 @@ extern EInputActionOrigin cppISteamInput_SteamInput006_TranslateActionOrigin(voi
 extern bool cppISteamInput_SteamInput006_GetDeviceBindingRevision(void *, InputHandle_t, int *, int *);
 extern uint32 cppISteamInput_SteamInput006_GetRemotePlaySessionID(void *, InputHandle_t);
 extern uint16 cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings(void *);
+extern void cppISteamInput_SteamInput006_SetDualSenseTriggerEffect(void *, InputHandle_t, const ScePadTriggerEffectParam *);

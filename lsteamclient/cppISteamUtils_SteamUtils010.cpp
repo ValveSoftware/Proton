@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_154/steam_api.h"
-#include "steamworks_sdk_154/steamnetworkingtypes.h"
+#include "steamworks_sdk_155/steam_api.h"
+#include "steamworks_sdk_155/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_154
+#define SDKVER_155
 #include "struct_converters.h"
 #include "cppISteamUtils_SteamUtils010.h"
 uint32 cppISteamUtils_SteamUtils010_GetSecondsSinceAppActive(void *linux_side)
