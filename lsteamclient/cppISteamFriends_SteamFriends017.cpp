@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_153a/steam_api.h"
-#include "steamworks_sdk_153a/steamnetworkingtypes.h"
+#include "steamworks_sdk_154/steam_api.h"
+#include "steamworks_sdk_154/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_153a
+#define SDKVER_154
 #include "struct_converters.h"
 #include "cppISteamFriends_SteamFriends017.h"
 const char * cppISteamFriends_SteamFriends017_GetPersonaName(void *linux_side)
@@ -389,6 +389,26 @@ bool cppISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(void *lin
 void cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialogConnectString(void *linux_side, const char * pchConnectString)
 {
     ((ISteamFriends*)linux_side)->ActivateGameOverlayInviteDialogConnectString((const char *)pchConnectString);
+}
+
+SteamAPICall_t cppISteamFriends_SteamFriends017_RequestEquippedProfileItems(void *linux_side, CSteamID steamID)
+{
+    return ((ISteamFriends*)linux_side)->RequestEquippedProfileItems((CSteamID)steamID);
+}
+
+bool cppISteamFriends_SteamFriends017_BHasEquippedProfileItem(void *linux_side, CSteamID steamID, ECommunityProfileItemType itemType)
+{
+    return ((ISteamFriends*)linux_side)->BHasEquippedProfileItem((CSteamID)steamID, (ECommunityProfileItemType)itemType);
+}
+
+const char * cppISteamFriends_SteamFriends017_GetProfileItemPropertyString(void *linux_side, CSteamID steamID, ECommunityProfileItemType itemType, ECommunityProfileItemProperty prop)
+{
+    return ((ISteamFriends*)linux_side)->GetProfileItemPropertyString((CSteamID)steamID, (ECommunityProfileItemType)itemType, (ECommunityProfileItemProperty)prop);
+}
+
+uint32 cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint(void *linux_side, CSteamID steamID, ECommunityProfileItemType itemType, ECommunityProfileItemProperty prop)
+{
+    return ((ISteamFriends*)linux_side)->GetProfileItemPropertyUint((CSteamID)steamID, (ECommunityProfileItemType)itemType, (ECommunityProfileItemProperty)prop);
 }
 
 #ifdef __cplusplus
