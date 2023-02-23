@@ -104,7 +104,9 @@ typedef uint32_t EUserUGCList,
         ERemoteStorageFilePathType,
         ESteamInputGlyphSize,
         EControllerHapticLocation,
-        ESteamNetworkingFakeIPType
+        ESteamNetworkingFakeIPType,
+        ECommunityProfileItemProperty,
+        ECommunityProfileItemType
 ;
 
 /* XXX NO */
