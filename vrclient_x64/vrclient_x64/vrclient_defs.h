@@ -70,6 +70,7 @@ typedef int
         EVRSceneApplicationState,
         HeadsetViewMode_t,
         EVRState,
+        EVRRenderModelTextureFormat,
         vrmb_typeb;
 
 typedef uint32_t DriverId_t;
