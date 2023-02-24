@@ -1001,11 +1001,11 @@ DIST_GECKO64 := $(OBJ)/.gecko-dist64
 
 $(SRC)/contrib/$(GECKO64_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(GECKO64_TARBALL_URL)
+	wget --no-use-server-timestamps -O $@ $(GECKO64_TARBALL_URL) || (rm $@; false)
 
 $(SRC)/contrib/$(GECKO32_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(GECKO32_TARBALL_URL)
+	wget --no-use-server-timestamps -O $@ $(GECKO32_TARBALL_URL) || (rm $@; false)
 
 $(DIST_GECKO32): $(SRC)/contrib/$(GECKO32_TARBALL)
 	mkdir -p $(DIST_GECKO_DIR)
@@ -1034,7 +1034,7 @@ MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/w
 
 $(SRC)/contrib/$(WINEMONO_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(MONO_TARBALL_URL)
+	wget --no-use-server-timestamps -O $@ $(MONO_TARBALL_URL) || (rm $@; false)
 
 $(DIST_WINEMONO): $(SRC)/contrib/$(WINEMONO_TARBALL)
 	mkdir -p $(DIST_WINEMONO_DIR)
