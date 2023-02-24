@@ -1046,6 +1046,29 @@ all-dist: $(DIST_WINEMONO)
 
 
 ##
+## xalia
+##
+
+XALIA_VER := 0.4.1
+XALIA_ZIP := xalia-$(XALIA_VER)-net48-mono.zip
+DIST_XALIA_DIR := $(DST_DIR)/share/xalia
+DIST_XALIA := $(OBJ)/.xalia-dist
+XALIA_ZIP_URL := https://github.com/madewokherd/xalia/releases/download/xalia-$(XALIA_VER)/$(XALIA_ZIP)
+
+$(SRC)/contrib/$(XALIA_ZIP):
+	mkdir -p $(dir $@)
+	wget --no-use-server-timestamps -O $@ $(XALIA_ZIP_URL) || (rm $@; false)
+
+$(DIST_XALIA): $(SRC)/contrib/$(XALIA_ZIP)
+	rm -rf $(DIST_XALIA_DIR)
+	mkdir -p $(DIST_XALIA_DIR)
+	unzip $< -d $(DIST_XALIA_DIR)
+	touch $@
+
+all-dist: $(DIST_XALIA)
+
+
+##
 ## openvr
 ##
 
