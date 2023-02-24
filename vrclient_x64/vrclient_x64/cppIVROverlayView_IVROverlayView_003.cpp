@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.16.8/ivrclientcore.h"
+#include "openvr_v1.23.7/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -23,7 +23,7 @@ void cppIVROverlayView_IVROverlayView_003_PostOverlayEvent(void *linux_side, VRO
 {
     VREvent_t lin;
     if(pvrEvent)
-        struct_VREvent_t_1168_win_to_lin(pvrEvent, &lin);
+        struct_VREvent_t_1237_win_to_lin(pvrEvent, &lin);
     ((IVROverlayView*)linux_side)->PostOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pvrEvent ? &lin : nullptr);
 }
 
