@@ -381,83 +381,6 @@ $(OBJ)/.steamexe-post-build64:
 	cp $(SRC)/steam_helper/64/libsteam_api.so $(DST_LIBDIR64)/
 	touch $@
 
-##
-## openfst
-##
-
-OPENFST_SOURCE_ARGS = \
-  --include src/include/fst/config.h.in \
-  --exclude aclocal.m4 \
-  --exclude ar-lib \
-  --exclude autom4te.cache \
-  --exclude compile \
-  --exclude config.guess \
-  --exclude config.h.in \
-  --exclude config.sub \
-  --exclude configure \
-  --exclude depcomp \
-  --exclude install-sh \
-  --exclude ltmain.sh \
-  --exclude m4/libtool.m4 \
-  --exclude m4/ltoptions.m4 \
-  --exclude m4/ltsugar.m4 \
-  --exclude m4/ltversion.m4 \
-  --exclude m4/lt~obsolete.m4 \
-  --exclude Makefile.in \
-  --exclude missing \
-  --exclude test-driver \
-
-OPENFST_CONFIGURE_ARGS = \
-  --enable-silent-rules \
-  --enable-static \
-  --disable-shared \
-  --enable-far \
-  --enable-ngram-fsts \
-  --enable-lookahead-fsts \
-  --with-pic \
-  --disable-bin \
-
-$(eval $(call rules-source,openfst,$(SRCDIR)/openfst))
-$(eval $(call rules-autoconf,openfst,32))
-$(eval $(call rules-autoconf,openfst,64))
-
-
-##
-## kaldi
-##
-
-KALDI_SOURCE_ARGS = \
-  --exclude src/**/CMakeLists.txt \
-
-KALDI_CMAKE_ARGS = \
-  -DKALDI_VERSION=5.5-proton \
-  -DBLAS_LIBRARIES=-lblas \
-  -DLAPACK_LIBRARIES=-llapack \
-  -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-  -DBUILD_SHARED_LIBS=OFF \
-  -DKALDI_BUILD_TEST=OFF \
-  -DKALDI_BUILD_EXE=OFF \
-
-KALDI_DEPENDS = openfst
-
-$(eval $(call rules-source,kaldi,$(SRCDIR)/kaldi))
-$(eval $(call rules-cmake,kaldi,32))
-$(eval $(call rules-cmake,kaldi,64))
-
-
-##
-## vosk
-##
-
-VOSK_CMAKE_ARGS = \
-  -DBUILD_SHARED_LIBS=ON \
-
-VOSK_DEPENDS = openfst kaldi
-
-$(eval $(call rules-source,vosk,$(SRCDIR)/vosk-api))
-$(eval $(call rules-cmake,vosk,32))
-$(eval $(call rules-cmake,vosk,64))
-
 
 ##
 ## wine
@@ -491,7 +414,7 @@ WINE_CONFIGURE_ARGS64 = --enable-win64 \
   VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_DST64)/include -I$(VKD3D_DST64)/include/vkd3d" \
   VKD3D_PE_LIBS="-L$(VKD3D_DST64)/bin -l:libvkd3d-1.dll -l:libvkd3d-shader-1.dll"
 
-WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d openfst kaldi vosk
+WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d
 
 $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
@@ -612,7 +535,6 @@ VKD3D_CONFIGURE_ARGS = \
 
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
 VKD3D_DEPENDS = vulkan-loader vulkan-headers spirv-headers
-VKD3D_CONFIGURE_ARGS = SONAME_LIBVULKAN=vulkan-1
 
 $(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
 $(eval $(call rules-autoconf,vkd3d,32,CROSS))
@@ -671,6 +593,27 @@ $(OBJ)/.vkd3d-proton-post-build64:
 	rm -f "$(DST_DIR)"/lib64/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib64/wine/vkd3d-proton/version; fi
 	touch $@
 
+
+
+##
+## mediaconv
+##
+
+MEDIACONV_DEPENDS = gst_orc gstreamer gst_base
+
+$(eval $(call rules-source,mediaconv,$(SRCDIR)/media-converter))
+$(eval $(call rules-cargo,mediaconv,32))
+$(eval $(call rules-cargo,mediaconv,64))
+
+$(OBJ)/.mediaconv-post-build64:
+	mkdir -p $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
+	cp -a $(MEDIACONV_OBJ64)/x86_64-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
+	touch $@
+
+$(OBJ)/.mediaconv-post-build32:
+	mkdir -p $(MEDIACONV_DST32)/lib/gstreamer-1.0/
+	cp -a $(MEDIACONV_OBJ32)/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST32)/lib/gstreamer-1.0/
+	touch $@
 
 
 ##
@@ -765,18 +708,6 @@ symstore-tarball:
 	mkdir -p $(OBJ)/symstore/$(BUILD_NAME)
 	$(SYMSTORE_OBJ64)/symstore --skip-managed $(DST_BASE) $(OBJ)/symstore/$(BUILD_NAME)
 	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symstore.zip . >& /dev/null
-
-##
-## Media
-##
-
-DIST_MEDIA := $(DST_DIR)/share/media
-$(DIST_MEDIA):
-	mkdir -p $@
-	cp $(SRCDIR)/media/blank.mkv $@
-	cp $(SRCDIR)/media/blank.ptna $@
-
-all-dist: $(DIST_MEDIA)
 
 ##
 ## Fonts
@@ -1002,11 +933,11 @@ DIST_GECKO64 := $(OBJ)/.gecko-dist64
 
 $(SRC)/contrib/$(GECKO64_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(GECKO64_TARBALL_URL) || (rm $@; false)
+	wget --no-use-server-timestamps -O $@ $(GECKO64_TARBALL_URL)
 
 $(SRC)/contrib/$(GECKO32_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(GECKO32_TARBALL_URL) || (rm $@; false)
+	wget --no-use-server-timestamps -O $@ $(GECKO32_TARBALL_URL)
 
 $(DIST_GECKO32): $(SRC)/contrib/$(GECKO32_TARBALL)
 	mkdir -p $(DIST_GECKO_DIR)
@@ -1035,7 +966,7 @@ MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/w
 
 $(SRC)/contrib/$(WINEMONO_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(MONO_TARBALL_URL) || (rm $@; false)
+	wget --no-use-server-timestamps -O $@ $(MONO_TARBALL_URL)
 
 $(DIST_WINEMONO): $(SRC)/contrib/$(WINEMONO_TARBALL)
 	mkdir -p $(DIST_WINEMONO_DIR)
@@ -1050,7 +981,7 @@ all-dist: $(DIST_WINEMONO)
 ## xalia
 ##
 
-XALIA_VER := 0.4.1
+XALIA_VER := 0.4.2
 XALIA_ZIP := xalia-$(XALIA_VER)-net48-mono.zip
 DIST_XALIA_DIR := $(DST_DIR)/share/xalia
 DIST_XALIA := $(OBJ)/.xalia-dist
@@ -1076,12 +1007,12 @@ all-dist: $(DIST_XALIA)
 DIST_OVR32 := $(DST_LIBDIR32)/wine/dxvk/openvr_api_dxvk.dll
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
 	mkdir -p $(DST_LIBDIR32)/wine/dxvk
-	cp -af $< $@
+	cp -a $< $@
 
 DIST_OVR64 := $(DST_LIBDIR64)/wine/dxvk/openvr_api_dxvk.dll
 $(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
 	mkdir -p $(DST_LIBDIR64)/wine/dxvk
-	cp -af $< $@
+	cp -a $< $@
 
 all-dist: $(DIST_OVR32) $(DIST_OVR64)
 
