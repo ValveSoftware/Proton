@@ -1042,15 +1042,6 @@ all-dist: $(DIST_COPY_TARGETS)
 all-dist:
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 
-DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
-                $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
-                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) \
-                $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS) $(DIST_FONTS)
-
-DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) \
-                       $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
-REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
-
 
 ##
 ## make deploy
@@ -1059,7 +1050,7 @@ REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 .PHONY: deploy
 deploy: all
 	mkdir -p $(DEPLOY_DIR) && \
-	rsync --delete --exclude dist --exclude compatibilitytool.vdf -arx $(DST_BASE)/ $(DEPLOY_DIR) && \
+	rsync --delete --exclude dist --exclude compatibilitytool.vdf -arx $(DST_BASE)/ $(DEPLOY_DIR)
 	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
 	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
 
@@ -1071,7 +1062,7 @@ deploy: all
 .PHONY: redist
 redist: all
 	mkdir -p $(REDIST_DIR)
-	rsync --delete --exclude dist -arx $(REDIST_COPY_TARGETS) $(REDIST_DIR)
+	rsync --delete --exclude dist -arx $(DST_BASE)/ $(REDIST_DIR)
 	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
 	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
 
