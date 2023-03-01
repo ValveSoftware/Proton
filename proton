@@ -1380,7 +1380,7 @@ class Session:
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
-        if self.env["WINEDEBUG"] != "-all":
+        if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             if self.setup_logging(append_forever=False):
                 self.log_file.write("======================\n")
                 with open(g_proton.version_file, "r") as f:
