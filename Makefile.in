@@ -821,8 +821,7 @@ $(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONT) $$(%.ttf_FEATURES) $$(%.ttf_SEQ
 	# to run it in a dedicated temporary directory to prevent concurrent instances
 	# to step onto each other's feet
 	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && afdko sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
-	afdko otf2ttf -o $@ $@.tmp
-	rm $@.tmp
+	mv $@.tmp $@
 
 $(FONTS_OBJ)/ume-gothic/%.ttf: $$(%.ttf_FONT) $$(%.ttf_NAMETABLE_PATCH)
 	mkdir -p $(FONTS_OBJ)/ume-gothic
@@ -831,7 +830,9 @@ $(FONTS_OBJ)/ume-gothic/%.ttf: $$(%.ttf_FONT) $$(%.ttf_NAMETABLE_PATCH)
 	ttx -o $@ -m $($(notdir $@)_FONT) $(FONTS_OBJ)/ume-gothic/$(notdir $(basename $($(notdir $@)_NAMETABLE_PATCH))).ttx
 
 $(simsun.ttc): $(simsun.ttf) $(nsimsun.ttf)
-	afdko otf2otc -o $@ $^
+	afdko otf2otc -o $@.tmp $^
+	afdko otf2ttf -o $@ $@.tmp
+	rm $@.tmp
 
 $(msgothic.ttc): $(msgothic.ttf) $(mspgothic.ttf) $(msuigothic.ttf)
 	afdko otf2otc -o $@ $^
