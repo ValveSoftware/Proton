@@ -102,7 +102,8 @@
     -W wintrust-WTHelperGetProvCertFromChain \
     -W user32-FlashWindowEx \
     -W user32-MessageBox_WS_EX_TOPMOST \
-    -W wined3d-zero-inf-shaders
+    -W wined3d-zero-inf-shaders \
+    -W winex11-XEMBED
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
@@ -177,6 +178,7 @@
     # ** user32-FlashWindowEx - applied manually
     # user32-MessageBox_WS_EX_TOPMOST - already applied
     # wined3d-zero-inf-shaders - already applied
+    # ** winex11-XEMBED - applied manually
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -305,6 +307,9 @@
     # user32-FlashWindowEx
     patch -Np1 < ../patches/wine-hotfixes/staging/user32-FlashWindowEx/0001-user32-Improve-FlashWindowEx-message-and-return-valu.patch
 
+    # winex11-XEMBED
+    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-XEMBED/0001-winex11-Enable-disable-windows-when-they-are-un-mapped.patch
+    
     # nvapi/nvcuda
     # this was added in 7.1, so it's not in the 7.0 tree
     patch -Np1 < ../patches/wine-hotfixes/staging/nvcuda/0016-nvcuda-Make-nvcuda-attempt-to-load-libcuda.so.1.patch
@@ -318,9 +323,6 @@
 
     echo "WINE: -GAME FIXES- killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
-
-    echo "WINE: -GAME FIXES- add cities XXL patches"
-    patch -Np1 < ../patches/game-patches/v5-0001-windowscodecs-Correctly-handle-8bpp-custom-conver.patch
 
     echo "WINE: -GAME FIXES- add powerprof patches for FFVII Remake and SpecialK"
     patch -Np1 < ../patches/game-patches/FFVII-and-SpecialK-powerprof.patch
