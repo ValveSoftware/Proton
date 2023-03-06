@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-49"
+CURRENT_PREFIX_VERSION="GE-Proton7-50"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -711,7 +711,20 @@ class CompatData:
                     if tracked_name not in prev_tracked_files:
                         tracked_files.write(tracked_name + "\n")
 
+    def create_symlink(self, lname, fname):
+        if file_exists(lname, follow_symlinks=False):
+            if os.path.islink(lname):
+                os.remove(lname)
+                os.symlink(fname, lname)
+        else:
+            os.symlink(fname, lname)
+
     def create_fonts_symlinks(self):
+        ALTERNATIVES = {
+            ('1313860', 'arial.ttf'),    # FIFA 21
+            ('1506830', 'arial.ttf'),    # FIFA 22
+        }
+
         fontsmap = [
             ( g_proton.fonts_dir, "LiberationSans-Regular.ttf", "arial.ttf" ),
             ( g_proton.fonts_dir, "LiberationSans-Bold.ttf", "arialbd.ttf" ),
@@ -730,15 +743,13 @@ class CompatData:
 
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
+        sgi = os.environ.get('SteamGameId', '')
         for p in fontsmap:
             lname = os.path.join(windowsfonts, p[2])
             fname = os.path.join(p[0], p[1])
-            if file_exists(lname, follow_symlinks=False):
-                if os.path.islink(lname):
-                    os.remove(lname)
-                    os.symlink(fname, lname)
-            else:
-                os.symlink(fname, lname)
+            if (sgi, p[2]) in ALTERNATIVES:
+                fname = os.path.join(p[0], 'alt', p[2])
+            self.create_symlink(lname, fname)
 
     def migrate_user_paths(self):
         #move winxp-style paths to vista+ paths. we can't do this in
@@ -791,9 +802,7 @@ class CompatData:
                 self.copy_pfx()
 
             self.migrate_user_paths()
-            
-            makedirs(self.prefix_dir + "/dosdevices/")
-            
+
             if not file_exists(self.prefix_dir + "/dosdevices/c:", follow_symlinks=False):
                 os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
 
