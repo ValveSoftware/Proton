@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/13.0.0'
+CLANG_PATH='/usr/lib/clang/15'
 
 from clang.cindex import CursorKind, Index, Type, TypeKind
 import pprint
@@ -14,6 +14,7 @@ import os
 import re
 
 sdk_versions = [
+    "v1.23.7",
     "v1.16.8",
     "v1.14.15",
     "v1.13.10",
@@ -377,7 +378,8 @@ def ivroverlay_set_overlay_texture(cppname, method):
             "021" in cppname or \
             "022" in cppname or \
             "024" in cppname or \
-            "025" in cppname
+            "025" in cppname or \
+            "026" in cppname
     return "ivroverlay_set_overlay_texture"
 
 def ivrinput_get_digital_action_data(cppname, method):
