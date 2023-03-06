@@ -6,10 +6,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    echo "DXVK: add valve dxvk patches"
-    patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
-    patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
-
     # https://github.com/doitsujin/dxvk/pull/2675
     echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
     patch -Np1 < ../patches/dxvk/2675.patch
