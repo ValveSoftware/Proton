@@ -27,3 +27,4 @@ extern SteamAPICall_t cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetail
 extern int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(void *, char *, int);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(void *, uint32 *, uint32 *);
+extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(void *, AppId_t);
