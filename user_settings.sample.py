@@ -7,7 +7,7 @@ user_settings = {
     #Log directory can be overridden with $PROTON_LOG_DIR.
 
     #enable logging
-    "PROTON_LOG": "1"
+    "PROTON_LOG": "1",
 
     #Wine debug logging
     "WINEDEBUG": "+timestamp,+pid,+seh,+unwind,+debugstr,+loaddll,+mscoree",
