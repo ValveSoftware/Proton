@@ -6,6 +6,9 @@ user_settings = {
     #By default, logs are saved to $HOME/steam-<STEAM_GAME_ID>.log, overwriting any previous log with that name.
     #Log directory can be overridden with $PROTON_LOG_DIR.
 
+    #enable logging
+    "PROTON_LOG": "1"
+
     #Wine debug logging
     "WINEDEBUG": "+timestamp,+pid,+seh,+unwind,+debugstr,+loaddll,+mscoree",
 
