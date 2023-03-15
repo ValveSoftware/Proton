@@ -1,0 +1,23 @@
+From 4ff23ccae7798c0c0add0e11ed31fa9c17498dbf Mon Sep 17 00:00:00 2001
+From: Jeffrey van Pelt <jeff@vanpelt.one>
+Date: Sat, 4 Mar 2023 21:30:40 +0100
+Subject: [PATCH] Fix handling for ALG_ID_ECDH_P384, which (among probably some
+ others) fixes Anno 1800 multiplayer session negotiation
+
+---
+ dlls/bcrypt/bcrypt_main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/bcrypt/bcrypt_main.c b/dlls/bcrypt/bcrypt_main.c
+index cc33a3cc63c..54b95ceed7b 100644
+--- a/dlls/bcrypt/bcrypt_main.c
++++ b/dlls/bcrypt/bcrypt_main.c
+@@ -1701,6 +1701,7 @@ NTSTATUS WINAPI BCryptGenerateKeyPair( BCRYPT_ALG_HANDLE algorithm, BCRYPT_KEY_H
+     case ALG_ID_ECDSA_P256:
+         size = sizeof(BCRYPT_ECCKEY_BLOB) + 2 * 256 / 8;
+         break;
++    case ALG_ID_ECDH_P384:
+     case ALG_ID_ECDSA_P384:
+         size = sizeof(BCRYPT_ECCKEY_BLOB) + 2 * 384 / 8;
+         break;
+
