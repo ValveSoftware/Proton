@@ -14,6 +14,16 @@
     patch -Np1 < ../patches/dxvk/secret-world.patch
     cd ..
 
+    cd vkd3d-proton
+    git reset --hard HEAD
+    git clean -xdf
+
+    # https://github.com/doitsujin/dxvk/pull/2675
+    echo "VKD3D: Fix Halo Infinite loading crash"
+    patch -Np1 < ../patches/vkd3d/1465.patch
+    
+    cd ..
+
 ### END PREP SECTION ###
 
 ### (2) WINE PATCHING ###
@@ -391,6 +401,9 @@
     # https://gitlab.winehq.org/wine/wine/-/merge_requests/1152
     patch -Np1 < ../patches/wine-hotfixes/pending/4bf9d2403f269e7f3595ad075a4afee9adbda51f.patch
     
+    echo "WINE: -HOTFIX- fix Anno 1800 multiplayer"
+    # https://gitlab.winehq.org/wine/wine/-/merge_requests/1152
+    patch -Np1 < ../patches/wine-hotfixes/pending/181.patch
     
 ### END WINE HOTFIX SECTION ###
 
