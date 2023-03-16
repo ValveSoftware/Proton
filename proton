@@ -933,7 +933,7 @@ class CompatData:
                     wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
                     dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
-                    vkd3d_protonfiles = ["d3d12"]
+                    vkd3d_protonfiles = ["d3d12", "d3d12core"]
                     wined3dfiles = []
 
                 if use_dxvk_dxgi:
@@ -955,10 +955,13 @@ class CompatData:
                     g_session.dlloverrides[f] = "n"
 
                 for f in vkd3d_protonfiles:
+                    optional = False
+                    if f == "d3d12core":
+                        optional = True
                     try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
                     try_copy(g_proton.lib_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
                     g_session.dlloverrides[f] = "n"
 
                 # If the user requested the NVAPI be available, copy it into place.
