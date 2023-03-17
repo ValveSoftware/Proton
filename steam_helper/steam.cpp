@@ -36,6 +36,7 @@
 #define WIN32_NO_STATUS
 #include <windows.h>
 #include <winternl.h>
+#include <shlwapi.h>
 #include <shlobj.h>
 #include <string.h>
 #include <stdio.h>
@@ -1235,46 +1236,73 @@ run:
     }
 }
 
-static BOOL steam_protocol_handler(int argc, char *argv[])
+/* Forward stub steam.exe commands to the native steam client */
+static BOOL steam_command_handler(int argc, char *argv[])
 {
-    const char *steam_prefix = "steam://";
-    STARTUPINFOA si = { sizeof(si) };
-    PROCESS_INFORMATION pi;
-    char cmd[1024];
-    int size;
-    int i;
+    typedef NTSTATUS (WINAPI *__WINE_UNIX_SPAWNVP)(char *const argv[], int wait);
+    static __WINE_UNIX_SPAWNVP p__wine_unix_spawnvp;
+    NTSTATUS status = STATUS_UNSUCCESSFUL;
+    char **unix_argv;
+    HMODULE module;
+    int i, j;
+    static char *unix_steam[] =
+    {
+        (char *)"steam-runtime-steam-remote",
+        (char *)"steam",
+        NULL,
+    };
+
+    /* If there are command line options, only forward steam:// and options start with - */
+    if (argc > 1 && StrStrIA(argv[1], "steam://") != argv[1] && argv[1][0] != '-')
+        return FALSE;
+
+    if (!p__wine_unix_spawnvp)
+    {
+        module = GetModuleHandleA("ntdll.dll");
+        p__wine_unix_spawnvp = (__WINE_UNIX_SPAWNVP)GetProcAddress(module, "__wine_unix_spawnvp");
+        if (!p__wine_unix_spawnvp)
+        {
+            WINE_ERR("Failed to load __wine_unix_spawnvp().\n");
+            return FALSE;
+        }
+    }
+
+    if (!(unix_argv = static_cast<char **>(malloc((argc + 1) * sizeof(*unix_argv)))))
+    {
+        WINE_ERR("Out of memory.\n");
+        return FALSE;
+    }
 
     for (i = 1; i < argc; ++i)
-        if (!strcmp(argv[i], "--"))
+        unix_argv[i] = argv[i];
+    unix_argv[argc] = NULL;
+
+    for (i = 0; i < ARRAY_SIZE(unix_steam); ++i)
+    {
+        unix_argv[0] = unix_steam[i];
+
+        WINE_TRACE("Trying");
+        for (j = 0; j < argc; ++j)
+            WINE_TRACE(" %s", wine_dbgstr_a(unix_argv[j]));
+        WINE_TRACE("\n");
+
+        status = p__wine_unix_spawnvp(unix_argv, TRUE);
+        if (status == STATUS_SUCCESS)
             break;
-
-    if (i >= argc - 1)
-        return FALSE;
-    ++i;
-
-    if (strlen(argv[i]) < ARRAY_SIZE(steam_prefix))
-        return FALSE;
-
-    if (strncasecmp(argv[i], steam_prefix, ARRAY_SIZE(steam_prefix) - 1))
-        return FALSE;
-
-    size = snprintf(cmd, sizeof(cmd), "winebrowser \"%s\"", argv[i]);
-    if (size >= sizeof(cmd))
-    {
-        WINE_ERR("Argument is too large, argv[%d] %s.\n", i, wine_dbgstr_a(argv[i]));
-        return TRUE;
     }
+    free(unix_argv);
 
-    WINE_TRACE("Executing %s.\n", wine_dbgstr_a(cmd));
-    if (!CreateProcessA(NULL, cmd, NULL, NULL, FALSE, CREATE_UNICODE_ENVIRONMENT, NULL, NULL, &si, &pi))
+    if (status == STATUS_SUCCESS)
     {
-        WINE_ERR("Failed to create process %s, error %u.\n", wine_dbgstr_a(cmd), GetLastError());
-        return TRUE;
+        WINE_TRACE("Forwarded command to native steam.\n");
     }
-    FreeConsole();
-    WaitForSingleObject(pi.hProcess, INFINITE);
-    CloseHandle(pi.hThread);
-    CloseHandle(pi.hProcess);
+    else
+    {
+        WINE_ERR("Forwarding");
+        for (i = 0; i < argc; ++i)
+            WINE_ERR(" %s", wine_dbgstr_a(argv[i]));
+        WINE_ERR(" to native steam failed, status %#lx.\n", status);
+    }
     return TRUE;
 }
 
@@ -1482,7 +1510,7 @@ int main(int argc, char *argv[])
 
     WINE_TRACE("\n");
 
-    if (steam_protocol_handler(argc, argv))
+    if (steam_command_handler(argc, argv))
         return 0;
 
     if (getenv("SteamGameId"))

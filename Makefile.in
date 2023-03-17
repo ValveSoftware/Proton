@@ -354,7 +354,7 @@ all-dist: $(DIST_WINEOPENXR_JSON64)
 
 STEAMEXE_CFLAGS = -Wno-attributes
 STEAMEXE_CXXFLAGS = -Wno-attributes
-STEAMEXE_LDFLAGS = -L$(STEAMEXE_SRC)/32/ -L$(STEAMEXE_SRC)/64/ -lsteam_api -lmsi -lole32 -ldl -static-libgcc -static-libstdc++
+STEAMEXE_LDFLAGS = -L$(STEAMEXE_SRC)/32/ -L$(STEAMEXE_SRC)/64/ -lsteam_api -lshlwapi -lmsi -lole32 -ldl -static-libgcc -static-libstdc++
 
 STEAMEXE_WINEMAKER_ARGS = \
 	"-I$(SRC)/lsteamclient/steamworks_sdk_142/" \
