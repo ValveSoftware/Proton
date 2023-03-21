@@ -953,13 +953,10 @@ class CompatData:
                     g_session.dlloverrides[f] = "n"
 
                 for f in vkd3d_protonfiles:
-                    optional = False
-                    if f == "d3d12core":
-                        optional = True
                     try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     try_copy(g_proton.lib_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides[f] = "n"
 
                 # If the user requested the NVAPI be available, copy it into place.
