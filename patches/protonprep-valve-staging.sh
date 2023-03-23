@@ -17,10 +17,6 @@
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
-
-    # https://github.com/HansKristian-Work/vkd3d-proton/pull/1465
-    echo "VKD3D: Fix Halo Infinite loading crash"
-    patch -Np1 < ../patches/vkd3d/1465.patch
     
     cd ..
 
