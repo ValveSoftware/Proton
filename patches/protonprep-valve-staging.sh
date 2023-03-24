@@ -400,6 +400,9 @@
     echo "WINE: -HOTFIX- fix Anno 1800 multiplayer"
     # https://gitlab.winehq.org/wine/wine/-/merge_requests/1152
     patch -Np1 < ../patches/wine-hotfixes/pending/181.patch
+
+    echo "WINE: -HOTFIX- Add Star Citizen EAC patch and wrap it around SteamGameId=starcitizen envvar"
+    patch -Np1 < ../patches/game-patches/star-citizen-eac.patch
     
 ### END WINE HOTFIX SECTION ###
 
