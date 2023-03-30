@@ -98,6 +98,11 @@ function configure() {
   local srcdir
   srcdir="$(dirname "$0")"
 
+  if [[ "$srcdir" = "." ]]; then
+    err "Cannot do a top level in-tree build."
+    die "Create a subdirectory in build/ or outside of the tree and run configure.sh from there."
+  fi
+
   # nothing specified, getting the default value from the Makefile to test the
   # container engine
   if [[ -z $steamrt_image ]]; then
