@@ -242,7 +242,7 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/windows.networking.connectivity-new-dll/0008-windows.networking.connectivity-IConnectionProfile-G.patch
 
     # wineboot-ProxySettings
-    patch -Np1 < ../wine-staging/patches/wineboot-ProxySettings/0001-wineboot-Initialize-proxy-settings-registry-key.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/wineboot-ProxySettings/0001-wineboot-Initialize-proxy-settings-registry-key.patch
 
     # winex11-UpdateLayeredWindow
     patch -Np1 < ../wine-staging/patches/winex11-UpdateLayeredWindow/0001-winex11-Fix-alpha-blending-in-X11DRV_UpdateLayeredWi.patch
