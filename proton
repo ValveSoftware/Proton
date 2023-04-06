@@ -1164,6 +1164,7 @@ def default_compat_config():
                 "236390", #war thunder
                 "936720", #wrench
                 "1249800", #xuan-yuan sword VII
+                "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
                 ]:
             ret.add("enablenvapi")
 
