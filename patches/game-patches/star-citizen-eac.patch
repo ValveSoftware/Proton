@@ -1,52 +1,45 @@
 diff --git a/dlls/ws2_32/protocol.c b/dlls/ws2_32/protocol.c
-index 84047e1f28c..c0adab72f37 100644
+index 84047e1f28c..e243cad3d91 100644
 --- a/dlls/ws2_32/protocol.c
 +++ b/dlls/ws2_32/protocol.c
-@@ -188,11 +188,21 @@ int WINAPI getaddrinfo( const char *node, const char *service,
+@@ -188,6 +188,19 @@ int WINAPI getaddrinfo( const char *node, const char *service,
  
      if (node)
      {
--        if (eac_download_hack() && !strcmp(node, "download-alt.easyanticheat.net"))
-+        if (eac_download_hack() && !strcmp(node, "download-alt.easyanticheat.net") || !strcmp(node, "modules-cdn.eac-prod.on.epicgames.com"))
-         {
--            SetLastError(WSAHOST_NOT_FOUND);
--            return WSAHOST_NOT_FOUND;
-+            const char *sgi = getenv("SteamGameId");
-+            /* default -- if not star citizen and url is download-alt.easyanticheat.net, follow normal proton code */
-+            if (sgi && (strcmp(sgi, "starcitizen")) && !strcmp(node, "download-alt.easyanticheat.net"))
++        char sgi[64];
++        /* default -- if star citizen and url is modules-cdn.eac-prod.on.epicgames.com, block */
++        if (GetEnvironmentVariableA("SteamGameId", sgi, sizeof(sgi)) && !strcmp(sgi, "starcitizen"))
++        {
++            TRACE( "node %s, matched sgi %s\n", debugstr_a(node), debugstr_a(sgi) );
++            if (!strcmp(node, "modules-cdn.eac-prod.on.epicgames.com"))
 +            {
-+            	SetLastError(WSAHOST_NOT_FOUND);
-+            	return WSAHOST_NOT_FOUND;
-+            /* if it is star citizen -- check for either download-alt.easyanticheat.net and/or modules-cdn.eac-prod.on.epicgames.com and follow normal proton code */
-+            } else if (!strcmp(node, "download-alt.easyanticheat.net") || !strcmp(node, "modules-cdn.eac-prod.on.epicgames.com")) {
-+            	SetLastError(WSAHOST_NOT_FOUND);
-+            	return WSAHOST_NOT_FOUND;
++               SetLastError(WSAHOST_NOT_FOUND);
++               return WSAHOST_NOT_FOUND;
 +            }
-         }
-+ 
- 
-         if (!node[0])
++        }
++        TRACE( "node %s, unmatched sgi %s\n", debugstr_a(node), debugstr_a(sgi) );
++
+         if (eac_download_hack() && !strcmp(node, "download-alt.easyanticheat.net"))
          {
-@@ -951,10 +961,19 @@ struct hostent * WINAPI gethostbyname( const char *name )
+             SetLastError(WSAHOST_NOT_FOUND);
+@@ -950,6 +963,19 @@ struct hostent * WINAPI gethostbyname( const char *name )
+         SetLastError( WSANOTINITIALISED );
          return NULL;
      }
- 
--    if (eac_download_hack() && name && !strcmp(name, "download-alt.easyanticheat.net"))
-+    if (eac_download_hack() && name && !strcmp(name, "download-alt.easyanticheat.net") || !strcmp(name, "modules-cdn.eac-prod.on.epicgames.com"))
-     {
--        SetLastError( WSAHOST_NOT_FOUND );
--        return NULL;
-+        const char *sgi = getenv("SteamGameId");
-+        /* default -- if not star citizen and url is download-alt.easyanticheat.net, follow normal proton code */
-+        if (sgi && (strcmp(sgi, "starcitizen")) && !strcmp(name, "download-alt.easyanticheat.net"))
++    
++    char sgi[64];
++    /* default -- if star citizen and url is modules-cdn.eac-prod.on.epicgames.com, block */
++    if (GetEnvironmentVariableA("SteamGameId", sgi, sizeof(sgi)) && !strcmp(sgi, "starcitizen"))
++    {
++        TRACE( "name %s, matched sgi %s\n", debugstr_a(name), debugstr_a(sgi) );
++        if (name && !strcmp(name, "modules-cdn.eac-prod.on.epicgames.com"))
 +        {
-+            SetLastError(WSAHOST_NOT_FOUND);
-+            return NULL;
-+        /* if it is star citizen -- check for either download-alt.easyanticheat.net and/or modules-cdn.eac-prod.on.epicgames.com and follow normal proton code */
-+        } else if (!strcmp(name, "download-alt.easyanticheat.net") || !strcmp(name, "modules-cdn.eac-prod.on.epicgames.com")) {
-+            SetLastError(WSAHOST_NOT_FOUND);
++            SetLastError( WSAHOST_NOT_FOUND );
 +            return NULL;
 +        }
-     }
++    }
++    TRACE( "name %s, unmatched sgi %s\n", debugstr_a(name), debugstr_a(sgi) );
  
-     if ((ret = WS_CALL( gethostname, &params )))
+     if (eac_download_hack() && name && !strcmp(name, "download-alt.easyanticheat.net"))
+     {
+
