@@ -1,35 +1,83 @@
-From c2385db78148f122d8f0296d2a6462fa2656a047 Mon Sep 17 00:00:00 2001
+From a454ac20b3b503c1d4396b1ea2850e1ca5a1c1ba Mon Sep 17 00:00:00 2001
 From: Paul Gofman <gofmanp@gmail.com>
 Date: Thu, 9 Jun 2022 16:34:39 -0500
 Subject: [PATCH] [dxgi] Leave fullscreen mode when window looses focus
 
 ---
- src/dxgi/dxgi_swapchain.cpp | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ src/dxgi/dxgi_factory.cpp          |  2 +-
+ src/dxgi/dxgi_swapchain.cpp        | 23 ++++++++++++++++++++---
+ src/dxgi/dxgi_swapchain.h          |  7 +++++--
+ src/wsi/glfw/wsi_window_glfw.cpp   | 14 +++++++++++++-
+ src/wsi/sdl2/wsi_window_sdl2.cpp   | 11 +++++++++++
+ src/wsi/win32/wsi_window_win32.cpp | 10 ++++++++++
+ src/wsi/wsi_window.h               | 16 ++++++++++++++++
+ 7 files changed, 76 insertions(+), 7 deletions(-)
 
+diff --git a/src/dxgi/dxgi_factory.cpp b/src/dxgi/dxgi_factory.cpp
+index 3e218ecb4de..e0569b6387d 100644
+--- a/src/dxgi/dxgi_factory.cpp
++++ b/src/dxgi/dxgi_factory.cpp
+@@ -215,7 +215,7 @@ namespace dxvk {
+         return hr;
+       }
+ 
+-      frontendSwapChain = new DxgiSwapChain(this, presenter.ptr(), hWnd, &desc, &fsDesc);
++      frontendSwapChain = new DxgiSwapChain(this, presenter.ptr(), hWnd, &desc, &fsDesc, pDevice);
+     } else {
+       Logger::err("DXGI: CreateSwapChainForHwnd: Unsupported device type");
+       return DXGI_ERROR_UNSUPPORTED;
 diff --git a/src/dxgi/dxgi_swapchain.cpp b/src/dxgi/dxgi_swapchain.cpp
-index 09ebd69724..2ecfc507f0 100644
+index 226ba28d66a..3c71f82b057 100644
 --- a/src/dxgi/dxgi_swapchain.cpp
 +++ b/src/dxgi/dxgi_swapchain.cpp
-@@ -189,7 +189,9 @@ namespace dxvk {
+@@ -4,6 +4,8 @@
+ 
+ #include "../util/util_misc.h"
+ 
++#include <d3d12.h>
++
+ namespace dxvk {
+   
+   DxgiSwapChain::DxgiSwapChain(
+@@ -11,14 +13,17 @@ namespace dxvk {
+           IDXGIVkSwapChain*           pPresenter,
+           HWND                        hWnd,
+     const DXGI_SWAP_CHAIN_DESC1*      pDesc,
+-    const DXGI_SWAP_CHAIN_FULLSCREEN_DESC*  pFullscreenDesc)
++    const DXGI_SWAP_CHAIN_FULLSCREEN_DESC*  pFullscreenDesc,
++          IUnknown*                   pDevice)
+   : m_factory   (pFactory),
+     m_window    (hWnd),
+     m_desc      (*pDesc),
+     m_descFs    (*pFullscreenDesc),
+     m_presentCount(0u),
+     m_presenter (pPresenter),
+-    m_monitor   (wsi::getWindowMonitor(m_window)) {
++    m_monitor   (wsi::getWindowMonitor(m_window)),
++    m_is_d3d12(SUCCEEDED(pDevice->QueryInterface(__uuidof(ID3D12CommandQueue), reinterpret_cast<void**>(&Com<ID3D12CommandQueue>())))) {
++
+     if (FAILED(m_presenter->GetAdapter(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&m_adapter))))
+       throw DxvkError("DXGI: Failed to get adapter for present device");
+     
+@@ -214,7 +219,9 @@ namespace dxvk {
            BOOL*         pFullscreen,
            IDXGIOutput** ppTarget) {
      HRESULT hr = S_OK;
 -    
 +
-+    if (!m_descFs.Windowed && GetForegroundWindow() != m_window)
++    if (!m_is_d3d12 && !m_descFs.Windowed && wsi::isOccluded(m_window))
 +      SetFullscreenState(FALSE, nullptr);
      if (pFullscreen != nullptr)
        *pFullscreen = !m_descFs.Windowed;
      
-@@ -262,6 +264,16 @@ namespace dxvk {
+@@ -287,6 +294,16 @@ namespace dxvk {
      if (SyncInterval > 4)
        return DXGI_ERROR_INVALID_CALL;
  
-+    if (GetWindowLongW(m_window, GWL_STYLE) & WS_MINIMIZE)
++    if (!m_is_d3d12 && wsi::isMinimized(m_window))
 +      return DXGI_STATUS_OCCLUDED;
 +
-+    if (!m_descFs.Windowed && GetForegroundWindow() != m_window)
++    if (!m_descFs.Windowed && wsi::isOccluded(m_window))
 +    {
 +      if (!(PresentFlags & DXGI_PRESENT_TEST))
 +        SetFullscreenState(FALSE, nullptr);
@@ -39,3 +87,129 @@ index 09ebd69724..2ecfc507f0 100644
      std::lock_guard<dxvk::recursive_mutex> lockWin(m_lockWindow);
      std::lock_guard<dxvk::mutex> lockBuf(m_lockBuffer);
  
+diff --git a/src/dxgi/dxgi_swapchain.h b/src/dxgi/dxgi_swapchain.h
+index c32c2c7913d..1c977d47e0c 100644
+--- a/src/dxgi/dxgi_swapchain.h
++++ b/src/dxgi/dxgi_swapchain.h
+@@ -31,7 +31,8 @@ namespace dxvk {
+             IDXGIVkSwapChain*           pPresenter,
+             HWND                        hWnd,
+       const DXGI_SWAP_CHAIN_DESC1*      pDesc,
+-      const DXGI_SWAP_CHAIN_FULLSCREEN_DESC*  pFullscreenDesc);
++      const DXGI_SWAP_CHAIN_FULLSCREEN_DESC*  pFullscreenDesc,
++            IUnknown*                   pDevice);
+     
+     ~DxgiSwapChain();
+     
+@@ -189,7 +190,9 @@ namespace dxvk {
+     
+     HMONITOR                        m_monitor;
+     wsi::DxvkWindowState            m_windowState;
+-    
++
++    bool                            m_is_d3d12;
++
+     HRESULT EnterFullscreenMode(
+             IDXGIOutput1            *pTarget);
+     
+diff --git a/src/wsi/glfw/wsi_window_glfw.cpp b/src/wsi/glfw/wsi_window_glfw.cpp
+index 700312507bc..4cae1f360c7 100644
+--- a/src/wsi/glfw/wsi_window_glfw.cpp
++++ b/src/wsi/glfw/wsi_window_glfw.cpp
+@@ -124,6 +124,18 @@ namespace dxvk::wsi {
+     return window != nullptr;
+   }
+ 
++
++  bool isMinimized(HWND hWindow) {
++    GLFWwindow* window = fromHwnd(hWindow);
++    return glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0;
++  }
++
++
++  bool isOccluded(HWND hWindow) {
++    return false;
++  }
++
++
+   void updateFullscreenWindow(
+       HMONITOR hMonitor,
+       HWND     hWindow,
+@@ -141,4 +153,4 @@ namespace dxvk::wsi {
+     return glfwCreateWindowSurface(instance, window, nullptr, pSurface);
+   }
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/src/wsi/sdl2/wsi_window_sdl2.cpp b/src/wsi/sdl2/wsi_window_sdl2.cpp
+index 1280b6c10ad..506c9b57bf5 100644
+--- a/src/wsi/sdl2/wsi_window_sdl2.cpp
++++ b/src/wsi/sdl2/wsi_window_sdl2.cpp
+@@ -134,6 +134,17 @@ namespace dxvk::wsi {
+   }
+ 
+ 
++  bool isMinimized(HWND hWindow) {
++    SDL_Window* window = fromHwnd(hWindow);
++    return (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) != 0;
++  }
++
++
++  bool isOccluded(HWND hWindow) {
++    return false;
++  }
++
++
+   void updateFullscreenWindow(
+           HMONITOR hMonitor,
+           HWND     hWindow,
+diff --git a/src/wsi/win32/wsi_window_win32.cpp b/src/wsi/win32/wsi_window_win32.cpp
+index 597d7478f63..53b7e597996 100644
+--- a/src/wsi/win32/wsi_window_win32.cpp
++++ b/src/wsi/win32/wsi_window_win32.cpp
+@@ -253,6 +253,16 @@ namespace dxvk::wsi {
+   }
+ 
+ 
++  bool isMinimized(HWND hWindow) {
++    return (::GetWindowLongW(hWindow, GWL_STYLE) & WS_MINIMIZE) != 0;
++  }
++
++
++  bool isOccluded(HWND hWindow) {
++    return ::GetForegroundWindow() != hWindow;
++  }
++
++
+   void updateFullscreenWindow(
+           HMONITOR hMonitor,
+           HWND     hWindow,
+diff --git a/src/wsi/wsi_window.h b/src/wsi/wsi_window.h
+index e0587a0fd77..3b24075d6ca 100644
+--- a/src/wsi/wsi_window.h
++++ b/src/wsi/wsi_window.h
+@@ -99,6 +99,22 @@ namespace dxvk::wsi {
+     */
+   bool isWindow(HWND hWindow);
+ 
++  /**
++    * \brief Is window minimized?
++    *
++    * \param [in] hWindow The window
++    * \returns Is window minimized?
++    */
++  bool isMinimized(HWND hWindow);
++
++  /**
++    * \brief Is window occluded?
++    *
++    * \param [in] hWindow The window
++    * \returns Is window occluded?
++    */
++  bool isOccluded(HWND hWindow);
++
+   /**
+     * \brief Update a fullscreen window's position/size
+     *
+
