@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-54"
+CURRENT_PREFIX_VERSION="GE-Proton7-55"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1328,6 +1328,7 @@ def default_compat_config():
                 "236390", #war thunder
                 "936720", #wrench
                 "1249800", #xuan-yuan sword VII
+                "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
                 ]:
             ret.add("enablenvapi")
     return ret
