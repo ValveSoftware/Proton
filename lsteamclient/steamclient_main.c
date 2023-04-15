@@ -432,6 +432,7 @@ void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_ve
         "STEAMUSERSTATS",
         "STEAMAPPS",
         "SteamNetworking",
+        "SteamClient",
     };
     unsigned int i;
     char *ret;
