@@ -139,6 +139,20 @@ This unofficial build isn't supported by GloriousEggroll nor Valve and wasn't te
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
 
+#### Snap
+
+This section is for those that use the Steam [snap](https://snapcraft.io/steam).
+
+This unofficial build isn't supported by GloriousEggroll nor Valve and wasn't tested with all possible games and cases. It can behave differently from upstream builds. Use at your own risk.
+
+##### Manual
+
+1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
+2. Create a `~/snap/steam/common/.steam/steam/compatibilitytools.d/` directory if it does not exist.
+3. Extract the release tarball into `~/snap/steam/common/.steam/steam/compatibilitytools.d/`.
+   * `tar -xf GE-ProtonVERSION.tar.gz -C ~/snap/steam/common/.steam/steam/compatibilitytools.d/`
+4. Restart Steam.
+5. [Enable proton-ge-custom](#enabling).
 
 ## Building
 
