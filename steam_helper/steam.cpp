@@ -1314,7 +1314,7 @@ static void setup_steam_files(void)
     const char *steam_install_path = getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH");
     const char *steam_library_paths = getenv("STEAM_COMPAT_LIBRARY_PATHS");
     const char *start, *end, *next;
-    unsigned int i, index = 1;
+    unsigned int i, index = 0;
     std::string contents;
     char idx_str[10];
 
@@ -1352,7 +1352,7 @@ static void setup_steam_files(void)
                 }
             }
 
-            contents += std::string("\t\"") + idx_str + "\" \t\"" + s + "\"\n";
+            contents += std::string("\t\"") + idx_str + "\"\n\t{\n\t\t\"path\"\t\t\"" + s + "\"\n\t}\n";
         }
         else
         {
@@ -1394,7 +1394,7 @@ static void setup_steam_files(void)
                 }
             }
 
-            contents += std::string("\t\"") + idx_str + "\" \t\"" + s + "\"\n";
+            contents += std::string("\t\"") + idx_str + "\"\n\t{\n\t\t\"path\"\t\t\"" + s + "\"\n\t}\n";
         }
         else
         {
