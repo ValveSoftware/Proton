@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="8.0-100"
+CURRENT_PREFIX_VERSION="8.0-101"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -619,7 +619,9 @@ class CompatData:
                     pass
 
             stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
-                              self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll" ]
+                              self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll",
+                              self.prefix_dir + "/drive_c/windows/system32/ir50_32.dll",
+                              self.prefix_dir + "/drive_c/windows/syswow64/ir50_32.dll" ]
             for builtin in stale_builtins:
                 if file_exists(builtin, follow_symlinks=False) and file_is_wine_builtin_dll(builtin):
                     log("Removing stale builtin " + builtin)
