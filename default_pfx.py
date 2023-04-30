@@ -6,6 +6,7 @@
 
 import os
 import subprocess
+import re
 
 def file_is_wine_builtin_dll(path):
     if not os.path.exists(path):
@@ -71,6 +72,43 @@ def setup_dll_symlinks(default_pfx_dir, dist_dir):
                 os.unlink(filename)
                 make_relative_symlink(target, filename)
 
+KEY_RE = re.compile(r'\[(.+)\] ([0-9]+)')
+VALUE_RE = re.compile(r'"(.*)"="(.+)"')
+
+def filter_registry(filename):
+    """Remove registry values that contain a fully qualified path
+    inside some well-known registry keys. These paths are devised on
+    the build machine and it makes no sense to distribute them. Plus,
+    they are known to cause bugs."""
+
+    FILTER_KEYS = [
+        r'Software\\Microsoft\\Windows\\CurrentVersion\\Fonts',
+        r'Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts',
+        r'Software\\Wine\\Fonts\\External Fonts',
+    ]
+
+    filtering = False
+    with open(filename) as fin:
+        with open(filename + '.tmp', 'w') as fout:
+            for line in fin:
+                line = line.strip()
+
+                match = KEY_RE.match(line)
+                if match is not None:
+                    fout.write(line + '\n')
+                    filtering = match.group(1) in FILTER_KEYS
+                    continue
+
+                match = VALUE_RE.match(line)
+                if match is not None:
+                    if not filtering or match.group(2)[1:2] != ':':
+                        fout.write(line + '\n')
+                    continue
+
+                fout.write(line + '\n')
+
+    os.rename(filename + '.tmp', filename)
+
 #steampipe can't handle filenames with colons, so we remove them here
 #and restore them in the proton script
 def fixup_drive_links(default_pfx_dir):
@@ -79,22 +117,15 @@ def fixup_drive_links(default_pfx_dir):
             if ":" in dir_:
                 os.remove(os.path.join(walk_dir, dir_))
 
-def make_default_pfx(default_pfx_dir, dist_dir, runtime):
+def make_default_pfx(default_pfx_dir, dist_dir):
     local_env = dict(os.environ)
 
     ld_path = dist_dir + "/lib64:" + dist_dir + "/lib"
 
-    if runtime is None:
-        local_env["LD_LIBRARY_PATH"] = ld_path
-        local_env["WINEPREFIX"] = default_pfx_dir
-        local_env["WINEDEBUG"] = "-all"
-        runtime_args = []
-    else:
-        #the runtime clears the environment, so we pass it in on the CL via env
-        runtime_args = runtime + ["env",
-                "LD_LIBRARY_PATH=" + ld_path,
-                "WINEPREFIX=" + default_pfx_dir,
-                "WINEDEBUG=-all"]
+    local_env["LD_LIBRARY_PATH"] = ld_path
+    local_env["WINEPREFIX"] = default_pfx_dir
+    local_env["WINEDEBUG"] = "-all"
+    runtime_args = []
 
     subprocess.run(runtime_args + ["/bin/bash", "-c",
         os.path.join(dist_dir, 'bin', 'wine') + " wineboot && " +
@@ -104,9 +135,9 @@ def make_default_pfx(default_pfx_dir, dist_dir, runtime):
     setup_dll_symlinks(default_pfx_dir, dist_dir)
     fixup_drive_links(default_pfx_dir)
 
+    filter_registry(os.path.join(default_pfx_dir, 'user.reg'))
+    filter_registry(os.path.join(default_pfx_dir, 'system.reg'))
+
 if __name__ == '__main__':
     import sys
-    if len(sys.argv) > 3:
-        make_default_pfx(sys.argv[1], sys.argv[2], sys.argv[3:])
-    else:
-        make_default_pfx(sys.argv[1], sys.argv[2], None)
+    make_default_pfx(sys.argv[1], sys.argv[2])

@@ -50,14 +50,14 @@ CONTAINER_MOUNT_OPTS=""
 
 check_container_engine() {
     stat "Trying $1."
-    if ! cmd $1 run --rm $arg_protonsdk_image; then
+    if ! cmd $1 run --rm $2; then
         info "$1 is unable to run the container."
         return 1
     fi
 
     touch permission_check
     local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
-                                            --rm $arg_protonsdk_image \
+                                            --rm $2 \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
 
@@ -94,10 +94,20 @@ function escape_for_make() {
 }
 
 function configure() {
-  local steamrt_image="$1"
-  local steamrt_name="$2"
+  local steamrt_image="$arg_protonsdk_image"
   local srcdir
   srcdir="$(dirname "$0")"
+
+  if [[ "$srcdir" = "." ]]; then
+    err "Cannot do a top level in-tree build."
+    die "Create a subdirectory in build/ or outside of the tree and run configure.sh from there."
+  fi
+
+  # nothing specified, getting the default value from the Makefile to test the
+  # container engine
+  if [[ -z $steamrt_image ]]; then
+    steamrt_image="$(sed -n 's/STEAMRT_IMAGE ?= //p' $SRCDIR/Makefile.in)"
+  fi
 
   # Build name
   local build_name="$arg_build_name"
@@ -108,15 +118,7 @@ function configure() {
     info "No build name specified, using default: $build_name"
   fi
 
-  dependency_command fontforge
-  dependency_command find "findutils"
   dependency_command make "GNU Make"
-  dependency_command rsync
-  dependency_command wget
-  dependency_command xz
-  dependency_command patch
-  dependency_command git
-  dependency_command python3
 
   if [ "$MISSING_DEPENDENCIES" -ne 0 ]; then
       die "Missing dependencies, cannot continue."
@@ -127,12 +129,12 @@ function configure() {
   fi
 
   if [[ -n "$arg_container_engine" ]]; then
-    check_container_engine "$arg_container_engine" || die "Specified container engine \"$arg_container_engine\" doesn't work"
+    check_container_engine "$arg_container_engine" "$steamrt_image" || die "Specified container engine \"$arg_container_engine\" doesn't work"
   else
     stat "Trying to find usable container engine."
-    if check_container_engine docker; then
+    if check_container_engine docker "$steamrt_image"; then
       arg_container_engine="docker"
-    elif check_container_engine podman; then
+    elif check_container_engine podman "$steamrt_image"; then
       arg_container_engine="podman"
     else
         die "${arg_container_engine:-Container engine discovery} has failed. Please fix your setup."
@@ -152,9 +154,10 @@ function configure() {
     echo "SRCDIR     := $(escape_for_make "$srcdir")"
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
 
-    # SteamRT
-    echo "STEAMRT_NAME  := $(escape_for_make "$steamrt_name")"
-    echo "STEAMRT_IMAGE := $(escape_for_make "$steamrt_image")"
+    # SteamRT was specified, baking it into the Makefile
+    if [[ -n $arg_protonsdk_image ]]; then
+      echo "STEAMRT_IMAGE := $(escape_for_make "$arg_protonsdk_image")"
+    fi
 
     echo "ROOTLESS_CONTAINER := $ROOTLESS_CONTAINER"
     echo "CONTAINER_ENGINE := $arg_container_engine"
@@ -181,9 +184,7 @@ function configure() {
 # Parse arguments
 #
 
-arg_steamrt="soldier"
-arg_protonsdk_image="registry.gitlab.steamos.cloud/proton/soldier/sdk:0.20220601.0-1"
-arg_no_protonsdk=""
+arg_protonsdk_image=""
 arg_build_name=""
 arg_container_engine=""
 arg_docker_opts=""
@@ -238,11 +239,6 @@ function parse_args() {
     elif [[ $arg = --proton-sdk-image ]]; then
       val_used=1
       arg_protonsdk_image="$val"
-    elif [[ $arg = --steam-runtime ]]; then
-      val_used=1
-      arg_steamrt="$val"
-    elif [[ $arg = --no-proton-sdk ]]; then
-      arg_no_protonsdk=1
     else
       err "Unrecognized option $arg"
       return 1
@@ -313,11 +309,4 @@ usage() {
 parse_args "$@" || usage err
 [[ -z $arg_help ]] || usage info
 
-# Sanity check arguments
-if [[ -n $arg_no_protonsdk && -n $arg_protonsdk_image ]]; then
-    die "Cannot specify --proton-sdk-image as well as --no-proton-sdk"
-elif [[ -z $arg_no_protonsdk && -z $arg_protonsdk_image ]]; then
-    die "Must specify either --no-proton-sdk or --proton-sdk-image"
-fi
-
-configure "$arg_protonsdk_image" "$arg_steamrt"
+configure

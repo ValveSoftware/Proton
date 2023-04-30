@@ -57,9 +57,12 @@ ifneq ($(enable_ccache),0)
     CONFIGURE_CMD += --enable-ccache
 endif
 
-all: help
+TOPLEVELGOALS := all any clean configure deploy downloads help install module proton protonsdk redist
+CONTAINERGOALS := $(filter-out $(TOPLEVELGOALS),$(MAKECMDGOALS))
+CONTAINERGOALS := $(filter-out $(BUILD_ROOT)/%,$(CONTAINERGOALS))
 
-.PHONY: help clean configure proton install deploy module protonsdk
+all: help
+.PHONY: $(TOPLEVELGOALS)
 
 help:
 	@echo "Proton Makefile instructions"
@@ -121,32 +124,24 @@ ifeq ($(protonsdk_version),local)
 configure: protonsdk
 endif
 
-downloads: configure
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR) downloads
-
-proton: downloads
+proton: configure
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dist && \
-	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
+	echo "Proton built locally. Use 'install', 'deploy' or 'redist' targets."
 
-install-internal: | $(BUILD_ROOT)/compatibilitytools.d/$(_build_name)
-install-internal: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) install
-
-install: install-internal
-	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
+install: configure
 	rm -rf $(STEAM_DIR)/compatibilitytools.d/$(_build_name)/files/ #remove proton's internal files, but preserve user_settings etc from top-level
-	cp -Rf --no-dereference --preserve=mode,links $(BUILD_ROOT)/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) install
 	echo "Proton installed to your local Steam installation"
 
 redist: | $(BUILD_ROOT)/$(DEPLOY_DIR)
-redist: downloads
+redist: configure
 	rm -rf $(BUILD_ROOT)/$(DEPLOY_DIR)/* && \
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) redist && \
 	cp -Rf $(BUILD_DIR)/redist/* $(BUILD_ROOT)/$(DEPLOY_DIR) && \
 	echo "Proton build available at $(BUILD_ROOT)/$(DEPLOY_DIR)"
 
 deploy: | $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy
-deploy: downloads
+deploy: configure
 	rm -rf $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy/* && \
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) deploy && \
 	cp -Rf $(BUILD_DIR)/deploy/* $(BUILD_ROOT)/$(DEPLOY_DIR)-deploy && \
@@ -156,7 +151,7 @@ module: | $(BUILD_ROOT)/$(module)/lib/wine/i386-windows
 module: | $(BUILD_ROOT)/$(module)/lib/wine/i386-unix
 module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows
 module: | $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix
-module: downloads
+module: configure
 	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) module=$(module) module && \
 	cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib/wine/i386-windows/ && \
 	cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_PEFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-windows/ && \
@@ -169,24 +164,24 @@ module: downloads
 		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(MODULE_SOFILE) $(BUILD_ROOT)/$(module)/lib64/wine/x86_64-unix/; \
 	fi
 
+any $(CONTAINERGOALS): configure
+	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CONTAINERGOALS)
+
 dxvk: | $(BUILD_ROOT)/dxvk/lib/wine/dxvk
 dxvk: | $(BUILD_ROOT)/dxvk/lib64/wine/dxvk
-dxvk: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dxvk && \
+dxvk: any
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib/wine/dxvk/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/dxvk/*.dll $(BUILD_ROOT)/dxvk/lib64/wine/dxvk/
 
 dxvk-nvapi: | $(BUILD_ROOT)/dxvk-nvapi/lib/wine/nvapi
 dxvk-nvapi: | $(BUILD_ROOT)/dxvk-nvapi/lib64/wine/nvapi
-dxvk-nvapi: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) dxvk-nvapi && \
+dxvk-nvapi: any
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/nvapi/*.dll $(BUILD_ROOT)/dxvk-nvapi/lib/wine/nvapi/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/nvapi/*.dll $(BUILD_ROOT)/dxvk-nvapi/lib64/wine/nvapi/
 
 vkd3d-proton: | $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton
 vkd3d-proton: | $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton
-vkd3d-proton: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) vkd3d-proton && \
+vkd3d-proton: any
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib/wine/vkd3d-proton/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/vkd3d-proton/*.dll $(BUILD_ROOT)/vkd3d-proton/lib64/wine/vkd3d-proton/
 
@@ -194,8 +189,7 @@ lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine/i386-windows
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib/wine/i386-unix
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-windows
 lsteamclient: | $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-unix
-lsteamclient: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) lsteamclient && \
+lsteamclient: any
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib/wine/i386-windows/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-unix/lsteamclient.dll.so $(BUILD_ROOT)/lsteamclient/lib/wine/i386-unix/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-windows/lsteamclient.dll $(BUILD_ROOT)/lsteamclient/lib64/wine/x86_64-windows/ && \
@@ -205,8 +199,7 @@ vrclient: | $(BUILD_ROOT)/vrclient/lib/wine/i386-windows
 vrclient: | $(BUILD_ROOT)/vrclient/lib/wine/i386-unix
 vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-windows
 vrclient: | $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-unix
-vrclient: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) vrclient && \
+vrclient: any
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-windows/vrclient.dll $(BUILD_ROOT)/vrclient/lib/wine/i386-windows/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib/wine/i386-unix/vrclient.dll.so $(BUILD_ROOT)/vrclient/lib/wine/i386-unix/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-windows/vrclient_x64.dll $(BUILD_ROOT)/vrclient/lib64/wine/x86_64-windows/ && \
@@ -214,8 +207,7 @@ vrclient: downloads
 
 wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-windows
 wineopenxr: | $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-unix
-wineopenxr: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) wineopenxr && \
+wineopenxr: any
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-windows/wineopenxr.dll $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-windows/ && \
 	cp -f $(BUILD_DIR)/dist/files/lib64/wine/x86_64-unix/wineopenxr.dll.so $(BUILD_ROOT)/wineopenxr/lib64/wine/x86_64-unix/
 
@@ -223,8 +215,7 @@ battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine/i386-windows
 battleye: | $(BUILD_ROOT)/battleye/v1/lib/wine/i386-unix
 battleye: | $(BUILD_ROOT)/battleye/v1/lib64/wine/x86_64-windows
 battleye: | $(BUILD_ROOT)/battleye/v1/lib64/wine/x86_64-unix
-battleye: downloads
-	$(MAKE) $(MFLAGS) $(MAKEOVERRIDES) -C $(BUILD_DIR)/ $(UNSTRIPPED) battleye && \
+battleye: any
 	cp -f $(BUILD_DIR)/dist-battleye/v1/lib/wine/i386-windows/beclient.dll $(BUILD_ROOT)/battleye/v1/lib/wine/i386-windows/ && \
 	cp -f $(BUILD_DIR)/dist-battleye/v1/lib/wine/i386-unix/beclient.dll.so $(BUILD_ROOT)/battleye/v1/lib/wine/i386-unix/ && \
 	cp -f $(BUILD_DIR)/dist-battleye/v1/lib64/wine/x86_64-windows/beclient_x64.dll $(BUILD_ROOT)/battleye/v1/lib64/wine/x86_64-windows/ && \

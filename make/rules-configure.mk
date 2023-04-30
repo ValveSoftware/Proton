@@ -7,7 +7,6 @@
 define create-rules-configure
 $(call create-rules-common,$(1),$(2),$(3),$(4))
 
-ifeq ($(CONTAINER),1)
 $$(OBJ)/.$(1)-configure$(3):
 	@echo ":: configuring $(3)bit $(1)..." >&2
 
@@ -30,7 +29,6 @@ $$(OBJ)/.$(1)-build$(3):
 	cd "$$($(2)_OBJ$(3))" && env $$($(2)_ENV$(3)) \
 	$$(MAKE) install
 	touch $$@
-endif
 endef
 
 CONFIGURE_ARCH32 = x86

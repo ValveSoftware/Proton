@@ -15,7 +15,6 @@
 define create-rules-source
 $(2)_SRC = $$(OBJ)/src-$(1)
 
-ifeq ($(CONTAINER),)
 $(1)-rebuild:
 .PHONY: $(1)-rebuild
 
@@ -23,13 +22,12 @@ $$(OBJ)/.$(1)-source: SHELL := $$(SHELL)
 $$(OBJ)/.$(1)-source: $$(if $$(NO_MAKEFILE_DEPENDENCY),,$$(MAKEFILE_LIST))
 $$(OBJ)/.$(1)-source: $$(shell echo -n 'syncing $(1)... ' >&2 && \
                               rsync --dry-run --filter=:C --exclude '*~' --exclude .git $$($(2)_SOURCE_ARGS) --info=name -Oarx --delete "$$(abspath $(3))/" "$$($(2)_SRC)" | \
-                              grep -v -e ^$$$$ | grep -q ^ && echo $(1)-rebuild && \
+                              grep -v -e ^$$$$ 2>/dev/null | grep -q ^ && echo $(1)-rebuild && \
                               echo 'done, dirty' >&2 || echo 'done' >&2)
 	rsync --filter=:C --exclude '*~' --exclude .git $$($(2)_SOURCE_ARGS) --info=name -Oarx --delete "$$(abspath $(3))/" "$$($(2)_SRC)" $(--quiet?)
 	touch $$@
 
 $$(OBJ)/.$(1)-post-source: $$(OBJ)/.$(1)-source
-container-build: $$(OBJ)/.$(1)-post-source
 
 $(1)-source: $$(OBJ)/.$(1)-post-source
 .PHONY: $(1)-source
@@ -47,7 +45,6 @@ $(1)-distclean::
 clean: $(1)-clean
 distclean: $(1)-distclean
 .PHONY: clean distclean
-endif
 endef
 
 rules-source = $(call create-rules-source,$(1),$(call toupper,$(1)),$(2))

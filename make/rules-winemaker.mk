@@ -8,7 +8,6 @@ define create-rules-winemaker
 $(call create-rules-common,$(1),$(2),$(3))
 $(2)_OBJ$(3) := $$($(2)_OBJ$(3))/$(4)
 
-ifeq ($(CONTAINER),1)
 $$(OBJ)/.$(1)-configure$(3):
 	@echo ":: configuring $(3)bit $(1)..." >&2
 	rsync -arx "$$($(2)_SRC)/" "$$($(2)_OBJ$(3))/"
@@ -37,7 +36,6 @@ $$(OBJ)/.$(1)-build$(3):
 	mkdir -p $$($(2)_LIBDIR$(3))/$(LIBDIR_WINE_CROSS$(3))
 	cp -a $$($(2)_OBJ$(3))/$(4).fake $$($(2)_LIBDIR$(3))/$(LIBDIR_WINE_CROSS$(3))/$(4)
 	touch $$@
-endif
 endef
 
 rules-winemaker = $(call create-rules-winemaker,$(1),$(call toupper,$(1)),$(2),$(3))

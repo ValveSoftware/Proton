@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
+#define __USE_GNU
 #include <dlfcn.h>
 #include <limits.h>
 #include <stdint.h>
@@ -8,6 +9,7 @@
 #include "windef.h"
 #include "winbase.h"
 #include "winnls.h"
+#include "winternl.h"
 #include "wine/debug.h"
 
 #include "vrclient_defs.h"
@@ -40,6 +42,8 @@ typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015
 typedef struct winRenderModel_t_1237 winRenderModel_t_1237;
 typedef struct winRenderModel_TextureMap_t_1237 winRenderModel_TextureMap_t_1237;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
+
+#include "wine/unixlib.h"
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -370,9 +374,32 @@ static VkPhysicalDevice_T *(WINAPI *get_native_VkPhysicalDevice)(VkPhysicalDevic
 static VkPhysicalDevice_T *(WINAPI *get_wrapped_VkPhysicalDevice)(VkInstance_T *, VkPhysicalDevice_T *);
 static VkQueue_T *(WINAPI *get_native_VkQueue)(VkQueue_T *);
 
+static void *get_winevulkan_unix_lib_handle(HMODULE hvulkan)
+{
+    unixlib_handle_t unix_funcs;
+    NTSTATUS status;
+    Dl_info info;
+
+    status = NtQueryVirtualMemory(GetCurrentProcess(), hvulkan, (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
+            &unix_funcs, sizeof(unix_funcs), NULL);
+    if (status)
+    {
+        WINE_ERR("NtQueryVirtualMemory status %#x.\n", (int)status);
+        return NULL;
+    }
+    if (!dladdr((void *)(ULONG_PTR)unix_funcs, &info))
+    {
+        WINE_ERR("dladdr failed.\n");
+        return NULL;
+    }
+    WINE_TRACE("path %s.\n", info.dli_fname);
+    return dlopen(info.dli_fname, RTLD_NOW);
+}
+
 static void load_vk_unwrappers(void)
 {
     static HMODULE h = NULL;
+    void *unix_handle;
 
     if(h)
         /* already loaded */
@@ -384,11 +411,28 @@ static void load_vk_unwrappers(void)
         return;
     }
 
-    get_native_VkDevice = (void*)GetProcAddress(h, "__wine_get_native_VkDevice");
-    get_native_VkInstance = (void*)GetProcAddress(h, "__wine_get_native_VkInstance");
-    get_native_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_native_VkPhysicalDevice");
-    get_wrapped_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_wrapped_VkPhysicalDevice");
-    get_native_VkQueue = (void*)GetProcAddress(h, "__wine_get_native_VkQueue");
+    if (!(unix_handle = get_winevulkan_unix_lib_handle(h)))
+    {
+        ERR("Unable to open winevulkan.so.\n");
+        return;
+    }
+
+#define L(name) \
+    if (!(name = dlsym(unix_handle, "__wine_"#name))) \
+    {\
+        ERR("%s not found.\n", #name);\
+        dlclose(unix_handle);\
+        return;\
+    }
+
+    L(get_native_VkDevice);
+    L(get_native_VkInstance);
+    L(get_native_VkPhysicalDevice);
+    L(get_wrapped_VkPhysicalDevice);
+    L(get_native_VkQueue);
+#undef L
+
+    dlclose(unix_handle);
 }
 
 static bool is_hmd_present_reg(void)

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# This script was created by Giovanni Mascellani for CodeWeavers
+
 # Based on merge_noto.py and merge_fonts.py from the nototools
 # (https://github.com/googlefonts/nototools), with the following
 # copyright notice:
@@ -25,6 +27,15 @@
 # Copyright 2019 Christopher Simpkins
 # MIT License
 
+# The font subsetting logic is taken from
+# https://github.com/fonttools/fonttools/blob/main/Lib/fontTools/subset/__init__.py
+# with the following copyright notice:
+
+# Copyright 2013 Google, Inc. All Rights Reserved.
+# Google Author(s): Behdad Esfahbod
+
+# The whole fonttools repository is distributed under the MIT license.
+
 """Merges a number of Noto fonts and then sets a given name to the
 result.
 
@@ -36,6 +47,7 @@ import os
 
 from fontTools import merge
 from fontTools import ttLib
+from fontTools import subset
 from fontTools.ttLib.tables import otTables
 
 def read_line_metrics(font):
@@ -215,25 +227,53 @@ def add_gsub_to_font(fontfile):
     font.save(target_file)
     return target_file
 
+def parse_unicodes(s):
+    import re
+
+    s = re.sub(r"0[xX]", " ", s)
+    s = re.sub(r"[<+>,;&#\\xXuU\n	]", " ", s)
+    l = []
+    for item in s.split():
+        fields = item.split("-")
+        if len(fields) == 1:
+            l.append(int(item, 16))
+        else:
+            start, end = fields
+            l.extend(range(int(start, 16), int(end, 16) + 1))
+    return l
+
 def main():
     output_filename = sys.argv[-1]
-    weight = sys.argv[-2]
-    font_name = sys.argv[-3]
-    ps_name = sys.argv[-4]
-    input_filenames = sys.argv[1:-4]
+    ranges_filename = sys.argv[-2]
+    weight = sys.argv[-3]
+    font_name = sys.argv[-4]
+    ps_name = sys.argv[-5]
+    input_filenames = sys.argv[1:-5]
 
-    # Add a GSUB table to the fonts that do not have one
+    # Add a GSUB table to the fonts that do not have one, otherwise
+    # the merger will complain
     for index, filename in enumerate(input_filenames):
         if not has_gsub_table(filename):
             input_filenames[index] = add_gsub_to_font(filename)
 
-    # Merge the fonts together
     merger = merge.Merger()
     font = merger.merge(input_filenames)
 
-    # Use the line metrics defined by the first font
+    # Use the line metrics defined by the first font, which is
+    # supposed to be the basic NotoSans
     metrics = read_line_metrics(ttLib.TTFont(input_filenames[0]))
     set_line_metrics(font, metrics)
+
+    # Select the subset we care about
+    options = subset.Options(ignore_missing_unicodes=False)
+    subsetter = subset.Subsetter(options)
+    unicodes = []
+    with open(ranges_filename) as ranges:
+        for line in ranges:
+            unicodes.extend(parse_unicodes(line.split("#")[0]))
+    if len(unicodes) != 0:
+        subsetter.populate(unicodes=unicodes)
+        subsetter.subset(font)
 
     # Rename the result
     for record in font['name'].names:
