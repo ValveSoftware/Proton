@@ -1,0 +1,25 @@
+From cea29373b287ae84e28adca9834ffdbb97844ffe Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Sun, 6 Aug 2017 02:50:23 +0200
+Subject: [PATCH] packager: Prefer native version.
+
+---
+ dlls/packager/Makefile.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/packager/Makefile.in b/dlls/packager/Makefile.in
+index f539cb6f095..faef8deb263 100644
+--- a/dlls/packager/Makefile.in
++++ b/dlls/packager/Makefile.in
+@@ -2,6 +2,8 @@ EXTRADEFS = -DWINE_NO_LONG_TYPES
+ MODULE = packager.dll
+ IMPORTS = uuid shell32 shlwapi user32
+ 
++EXTRADLLFLAGS = -Wb,--prefer-native
++
+ C_SRCS = \
+ 	packager_main.c
+ 
+-- 
+2.34.1
+

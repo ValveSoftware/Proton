@@ -1,4 +1,4 @@
-From eee60c1777c710cfcb4283922990a306361548ba Mon Sep 17 00:00:00 2001
+From c62655b9d54ce8b692bd84d41abe09cc40ae10e1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
 Date: Mon, 5 Sep 2016 15:31:29 +0200
 Subject: [PATCH] inseng: Implement CIF reader and download functions.
@@ -37,7 +37,7 @@ index 0217203791a..ba2388c97ed 100644
  IDL_SRCS = inseng_classes.idl
 diff --git a/dlls/inseng/icif.c b/dlls/inseng/icif.c
 new file mode 100644
-index 00000000000..11a91b86476
+index 00000000000..27f6f6dfd93
 --- /dev/null
 +++ b/dlls/inseng/icif.c
 @@ -0,0 +1,1745 @@
@@ -301,7 +301,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifgroup *This = impl_from_ICifGroup(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, id, size);
++    TRACE("(%p)->(%p, %lu)\n", This, id, size);
 +
 +    return copy_substring_null(id, size, This->id);
 +}
@@ -310,7 +310,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifgroup *This = impl_from_ICifGroup(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, desc, size);
++    TRACE("(%p)->(%p, %lu)\n", This, desc, size);
 +
 +    return copy_substring_null(desc, size, This->description);
 +}
@@ -329,10 +329,10 @@ index 00000000000..11a91b86476
 +    struct cifgroup *This = impl_from_ICifGroup(iface);
 +    struct ciffile *file;
 +
-+    TRACE("(%p)->(%p, %u, %p)\n", This, enum_components, filter, pv);
++    TRACE("(%p)->(%p, %#lx, %p)\n", This, enum_components, filter, pv);
 +
 +    if (filter)
-+        FIXME("filter (%x) not supported\n", filter);
++        FIXME("filter (%#lx) not supported\n", filter);
 +    if (pv)
 +        FIXME("how to handle pv (%p)?\n", pv);
 +
@@ -390,7 +390,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, id, size);
++    TRACE("(%p)->(%p, %lu)\n", This, id, size);
 +
 +    return copy_substring_null(id, size, This->id);
 +}
@@ -399,7 +399,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, guid, size);
++    TRACE("(%p)->(%p, %lu)\n", This, guid, size);
 +
 +    return copy_substring_null(guid, size, This->guid);
 +}
@@ -408,7 +408,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, desc, size);
++    TRACE("(%p)->(%p, %lu)\n", This, desc, size);
 +
 +    return copy_substring_null(desc, size, This->description);
 +}
@@ -417,7 +417,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, details, size);
++    TRACE("(%p)->(%p, %lu)\n", This, details, size);
 +
 +    return copy_substring_null(details, size, This->details);
 +}
@@ -427,7 +427,7 @@ index 00000000000..11a91b86476
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +    struct url_info *entry;
 +
-+    TRACE("(%p)->(%u, %p, %u, %p)\n", This, index, url, size, flags);
++    TRACE("(%p)->(%u, %p, %lu, %p)\n", This, index, url, size, flags);
 +
 +    /* FIXME: check how functions behaves for url == NULL */
 +
@@ -450,7 +450,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    FIXME("(%p)->(%u, %p, %u): stub\n", This, index, list, size);
++    FIXME("(%p)->(%u, %p, %lu): stub\n", This, index, list, size);
 +
 +    return E_NOTIMPL;
 +}
@@ -468,7 +468,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    FIXME("(%p)->(%u, %p, %u, %p, %u, %p): stub\n", This, index, cmd, cmd_size, switches, switch_size, type);
++    FIXME("(%p)->(%u, %p, %lu, %p, %lu, %p): stub\n", This, index, cmd, cmd_size, switches, switch_size, type);
 +
 +    return E_NOTIMPL;
 +}
@@ -492,7 +492,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, locale, size);
++    TRACE("(%p)->(%p, %lu)\n", This, locale, size);
 +
 +    return copy_substring_null(locale, size, This->locale);
 +}
@@ -501,7 +501,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, key, size);
++    TRACE("(%p)->(%p, %lu)\n", This, key, size);
 +
 +    return copy_substring_null(key, size, This->key_uninstall);
 +}
@@ -543,7 +543,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, key, size);
++    TRACE("(%p)->(%p, %lu)\n", This, key, size);
 +
 +    return copy_substring_null(key, size, This->key_success);
 +}
@@ -554,7 +554,7 @@ index 00000000000..11a91b86476
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +    HRESULT hr;
 +
-+    TRACE("(%p)->(%p, %u, %p, %u): semi-stub\n", This, progress, progress_size, cancel, cancel_size);
++    TRACE("(%p)->(%p, %lu, %p, %lu): semi-stub\n", This, progress, progress_size, cancel, cancel_size);
 +
 +    hr = copy_substring_null(progress, progress_size, This->key_progress);
 +    if (hr != S_OK) return hr;
@@ -608,7 +608,7 @@ index 00000000000..11a91b86476
 +    ICifComponent *dependency;
 +    int pos = 0;
 +
-+    TRACE("(%p)->(%u, %p, %u, %p, %p, %p)\n", This, index, id, id_size, type, ver, build);
++    TRACE("(%p)->(%u, %p, %lu, %p, %p, %p)\n", This, index, id, id_size, type, ver, build);
 +
 +    if (!id || !ver || !build)
 +        return E_FAIL;
@@ -652,7 +652,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    FIXME("(%p)->(%u, %p, %u): stub\n", This, index, mode, size);
++    FIXME("(%p)->(%u, %p, %lu): stub\n", This, index, mode, size);
 +
 +    return E_NOTIMPL;
 +}
@@ -661,7 +661,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, id, size);
++    TRACE("(%p)->(%p, %lu)\n", This, id, size);
 +
 +    return copy_substring_null(id, size, This->group);
 +}
@@ -679,7 +679,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, id, size);
++    TRACE("(%p)->(%p, %lu)\n", This, id, size);
 +
 +    return copy_substring_null(id, size, This->patchid);
 +}
@@ -688,7 +688,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    FIXME("(%p)->(%p, %u, %p, %u): stub\n", This, dll, dll_size, entry, entry_size);
++    FIXME("(%p)->(%p, %lu, %p, %lu): stub\n", This, dll, dll_size, entry, entry_size);
 +
 +    return E_NOTIMPL;
 +}
@@ -697,7 +697,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    FIXME("(%p)->(%u, %p, %u): stub\n", This, index, id, size);
++    FIXME("(%p)->(%u, %p, %lu): stub\n", This, index, id, size);
 +
 +    return E_NOTIMPL;
 +}
@@ -706,7 +706,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    FIXME("(%p)->(%s, %p, %u): stub\n", This, debugstr_a(key), data, size);
++    FIXME("(%p)->(%s, %p, %lu): stub\n", This, debugstr_a(key), data, size);
 +
 +    return E_NOTIMPL;
 +}
@@ -733,7 +733,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    FIXME("(%p)->(%u, %u, %p, %p): stub\n", This, version, build, ret_version, ret_build);
++    FIXME("(%p)->(%lu, %lu, %p, %p): stub\n", This, version, build, ret_version, ret_build);
 +
 +    return 0;
 +}
@@ -751,7 +751,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%u)\n", This, state);
++    TRACE("(%p)->(%lu)\n", This, state);
 +
 +    This->queue_state = state;
 +    return S_OK;
@@ -780,7 +780,7 @@ index 00000000000..11a91b86476
 +{
 +    struct cifcomponent *This = impl_from_ICifComponent(iface);
 +
-+    TRACE("(%p)->(%u)\n", This, priority);
++    TRACE("(%p)->(%lu)\n", This, priority);
 +
 +    This->current_priority = priority;
 +    return S_OK;
@@ -859,7 +859,7 @@ index 00000000000..11a91b86476
 +    struct ciffenum_components *This = impl_from_IEnumCifComponents(iface);
 +    LONG ref = InterlockedIncrement(&This->ref);
 +
-+    TRACE("(%p) ref=%d\n", This, ref);
++    TRACE("(%p) ref=%ld\n", This, ref);
 +
 +    return ref;
 +}
@@ -869,7 +869,7 @@ index 00000000000..11a91b86476
 +    struct ciffenum_components *This = impl_from_IEnumCifComponents(iface);
 +    LONG ref = InterlockedDecrement(&This->ref);
 +
-+    TRACE("(%p) ref=%d\n", This, ref);
++    TRACE("(%p) ref=%ld\n", This, ref);
 +
 +    if(!ref)
 +    {
@@ -983,7 +983,7 @@ index 00000000000..11a91b86476
 +    struct ciffenum_groups *This = impl_from_IEnumCifGroups(iface);
 +    LONG ref = InterlockedIncrement(&This->ref);
 +
-+    TRACE("(%p) ref=%d\n", This, ref);
++    TRACE("(%p) ref=%ld\n", This, ref);
 +
 +    return ref;
 +}
@@ -993,7 +993,7 @@ index 00000000000..11a91b86476
 +    struct ciffenum_groups *This = impl_from_IEnumCifGroups(iface);
 +    LONG ref = InterlockedDecrement(&This->ref);
 +
-+    TRACE("(%p) ref=%d\n", This, ref);
++    TRACE("(%p) ref=%ld\n", This, ref);
 +
 +    if(!ref)
 +    {
@@ -1092,7 +1092,7 @@ index 00000000000..11a91b86476
 +    struct ciffile *This = impl_from_ICiffile(iface);
 +    LONG ref = InterlockedIncrement(&This->ref);
 +
-+    TRACE("(%p) ref=%d\n", This, ref);
++    TRACE("(%p) ref=%ld\n", This, ref);
 +
 +    return ref;
 +}
@@ -1102,7 +1102,7 @@ index 00000000000..11a91b86476
 +    struct ciffile *This = impl_from_ICiffile(iface);
 +    LONG ref = InterlockedDecrement(&This->ref);
 +
-+    TRACE("(%p) ref=%d\n", This, ref);
++    TRACE("(%p) ref=%ld\n", This, ref);
 +
 +    if(!ref)
 +    {
@@ -1133,10 +1133,10 @@ index 00000000000..11a91b86476
 +{
 +    struct ciffile *This = impl_from_ICiffile(iface);
 +
-+    TRACE("(%p)->(%p, %u, %p)\n", This, enum_components, filter, pv);
++    TRACE("(%p)->(%p, %#lx, %p)\n", This, enum_components, filter, pv);
 +
 +    if (filter)
-+        FIXME("filter (%x) not supported\n", filter);
++        FIXME("filter (%#lx) not supported\n", filter);
 +    if (pv)
 +        FIXME("how to handle pv (%p)?\n", pv);
 +
@@ -1166,10 +1166,10 @@ index 00000000000..11a91b86476
 +{
 +    struct ciffile *This = impl_from_ICiffile(iface);
 +
-+    TRACE("(%p)->(%p, %u, %p)\n", This, enum_groups, filter, pv);
++    TRACE("(%p)->(%p, %#lx, %p)\n", This, enum_groups, filter, pv);
 +
 +    if (filter)
-+        FIXME("filter (%x) not supported\n", filter);
++        FIXME("filter (%#lx) not supported\n", filter);
 +    if (pv)
 +        FIXME("how to handle pv (%p)?\n", pv);
 +
@@ -1199,7 +1199,7 @@ index 00000000000..11a91b86476
 +{
 +    struct ciffile *This = impl_from_ICiffile(iface);
 +
-+    FIXME("(%p)->(%p, %u, %p): stub\n", This, cuf_modes, filter, pv);
++    FIXME("(%p)->(%p, %lu, %p): stub\n", This, cuf_modes, filter, pv);
 +
 +    return E_NOTIMPL;
 +}
@@ -1217,7 +1217,7 @@ index 00000000000..11a91b86476
 +{
 +    struct ciffile *This = impl_from_ICiffile(iface);
 +
-+    TRACE("(%p)->(%p, %u)\n", This, desc, size);
++    TRACE("(%p)->(%p, %lu)\n", This, desc, size);
 +
 +    return copy_substring_null(desc, size, This->name);
 +}
@@ -1226,7 +1226,7 @@ index 00000000000..11a91b86476
 +{
 +    struct ciffile *This = impl_from_ICiffile(iface);
 +
-+    FIXME("(%p)->(%p, %u): stub\n", This, dlls, size);
++    FIXME("(%p)->(%p, %lu): stub\n", This, dlls, size);
 +
 +    return E_NOTIMPL;
 +}
@@ -1728,7 +1728,7 @@ index 00000000000..11a91b86476
 +        else
 +            hr = process_section(file, section, section_name);
 +
-+        TRACE("finished processing section %s (%x)\n", debugstr_a(section_name), hr);
++        TRACE("Finished processing section %s, hr %#lx.\n", debugstr_a(section_name), hr);
 +        heap_free(section_name);
 +    }
 +
@@ -2249,7 +2249,7 @@ index 82c0b4d5fe1..7ae46fad3a7 100644
 +@ stdcall GetICifRWFileFromFile(ptr str)
  @ stub PurgeDownloadDirectory
 diff --git a/dlls/inseng/inseng_main.c b/dlls/inseng/inseng_main.c
-index 2c95a2e72bd..6a926ccb379 100644
+index c72a12955b8..87d11472ff0 100644
 --- a/dlls/inseng/inseng_main.c
 +++ b/dlls/inseng/inseng_main.c
 @@ -2,6 +2,7 @@
@@ -2374,7 +2374,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +    struct downloadcb *This = impl_from_IBindStatusCallback(iface);
 +    LONG ref = InterlockedIncrement(&This->ref);
 +
-+    TRACE("(%p) ref = %d\n", This, ref);
++    TRACE("(%p) ref = %ld\n", This, ref);
 +
 +    return ref;
 +}
@@ -2384,7 +2384,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +    struct downloadcb *This = impl_from_IBindStatusCallback(iface);
 +    LONG ref = InterlockedDecrement(&This->ref);
 +
-+    TRACE("(%p) ref = %d\n", This, ref);
++    TRACE("(%p) ref = %ld\n", This, ref);
 +
 +    if (!ref)
 +    {
@@ -2402,7 +2402,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +{
 +    struct downloadcb *This = impl_from_IBindStatusCallback(iface);
 +
-+    TRACE("(%p)->(%u %p)\n", This, reserved, pbind);
++    TRACE("(%p)->(%lu %p)\n", This, reserved, pbind);
 +
 +    return S_OK;
 +}
@@ -2420,7 +2420,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +{
 +    struct downloadcb *This = impl_from_IBindStatusCallback(iface);
 +
-+    FIXME("(%p)->(%u): stub\n", This, reserved);
++    FIXME("(%p)->(%lu): stub\n", This, reserved);
 +
 +    return E_NOTIMPL;
 +}
@@ -2431,7 +2431,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +    struct downloadcb *This = impl_from_IBindStatusCallback(iface);
 +    HRESULT hr = S_OK;
 +
-+    TRACE("%p)->(%u %u %u %s)\n", This, progress, progress_max, status, debugstr_w(status_text));
++    TRACE("%p)->(%lu %lu %lu %s)\n", This, progress, progress_max, status, debugstr_w(status_text));
 +
 +    switch(status)
 +    {
@@ -2465,7 +2465,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +            break;
 +
 +        default:
-+            FIXME("Unsupported status %u\n", status);
++            FIXME("Unsupported status %lu\n", status);
 +    }
 +
 +    return hr;
@@ -2475,7 +2475,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +{
 +    struct downloadcb *This = impl_from_IBindStatusCallback(iface);
 +
-+    TRACE("(%p)->(%08x %s)\n", This, hresult, debugstr_w(szError));
++    TRACE("(%p)->(%#lx %s)\n", This, hresult, debugstr_w(szError));
 +
 +    if (FAILED(hresult))
 +    {
@@ -2493,7 +2493,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +        This->hr = S_OK;
 +    else
 +    {
-+        ERR("CopyFile failed: %u\n", GetLastError());
++        ERR("CopyFile failed: %lu\n", GetLastError());
 +        This->hr = E_FAIL;
 +    }
 +
@@ -2518,7 +2518,7 @@ index 2c95a2e72bd..6a926ccb379 100644
 +{
 +    struct downloadcb *This = impl_from_IBindStatusCallback(iface);
 +
-+    TRACE("(%p)->(%08x %u %p %p)\n", This, grfBSCF, dwSize, pformatetc, pstgmed);
++    TRACE("(%p)->(%#lx %lu %p %p)\n", This, grfBSCF, dwSize, pformatetc, pstgmed);
 +
 +    return S_OK;
 +}
@@ -2602,7 +2602,7 @@ index 2c95a2e72bd..6a926ccb379 100644
  
 @@ -86,181 +385,726 @@ static ULONG WINAPI InstallEngine_Release(IInstallEngine2 *iface)
  
-     TRACE("(%p) ref=%d\n", This, ref);
+     TRACE("(%p) ref=%ld\n", This, ref);
  
 -    if(!ref)
 +    if (!ref)
@@ -3046,10 +3046,10 @@ index 2c95a2e72bd..6a926ccb379 100644
  static HRESULT WINAPI InstallEngine_DownloadComponents(IInstallEngine2 *iface, DWORD flags)
  {
      InstallEngine *This = impl_from_IInstallEngine2(iface);
--    FIXME("(%p)->(%x)\n", This, flags);
+-    FIXME("(%p)->(%lx)\n", This, flags);
 -    return E_NOTIMPL;
 +
-+    TRACE("(%p)->(%x)\n", This, flags);
++    TRACE("(%p)->(%#lx)\n", This, flags);
 +
 +    /* The interface is not really threadsafe on windows, but we can at least prevent multiple installations */
 +    if (InterlockedCompareExchange((LONG *)&This->status, ENGINESTATUS_INSTALLING, ENGINESTATUS_READY) != ENGINESTATUS_READY)
@@ -3064,9 +3064,9 @@ index 2c95a2e72bd..6a926ccb379 100644
  static HRESULT WINAPI InstallEngine_InstallComponents(IInstallEngine2 *iface, DWORD flags)
  {
      InstallEngine *This = impl_from_IInstallEngine2(iface);
--    FIXME("(%p)->(%x)\n", This, flags);
+-    FIXME("(%p)->(%lx)\n", This, flags);
 +
-+    FIXME("(%p)->(%x): stub\n", This, flags);
++    FIXME("(%p)->(%#lx): stub\n", This, flags);
 +
      return E_NOTIMPL;
  }
@@ -3166,12 +3166,12 @@ index 2c95a2e72bd..6a926ccb379 100644
  static HRESULT WINAPI InstallEngine_SetAction(IInstallEngine2 *iface, const char *id, DWORD action, DWORD priority)
  {
      InstallEngine *This = impl_from_IInstallEngine2(iface);
--    FIXME("(%p)->(%s %d %d)\n", This, debugstr_a(id), action, priority);
+-    FIXME("(%p)->(%s %ld %ld)\n", This, debugstr_a(id), action, priority);
 -    return E_NOTIMPL;
 +    ICifComponent *comp;
 +    HRESULT hr;
 +
-+    TRACE("(%p)->(%s %u %u)\n", This, debugstr_a(id), action, priority);
++    TRACE("(%p)->(%s %lu %lu)\n", This, debugstr_a(id), action, priority);
 +
 +    if (!This->icif)
 +        return E_FAIL; /* FIXME: check error code */
@@ -3259,9 +3259,9 @@ index 2c95a2e72bd..6a926ccb379 100644
  static HRESULT WINAPI InstallEngine_SetInstallOptions(IInstallEngine2 *iface, DWORD flags)
  {
      InstallEngine *This = impl_from_IInstallEngine2(iface);
--    FIXME("(%p)->(%x)\n", This, flags);
+-    FIXME("(%p)->(%lx)\n", This, flags);
 +
-+    FIXME("(%p)->(%x): stub\n", This, flags);
++    FIXME("(%p)->(%#lx): stub\n", This, flags);
 +
      return E_NOTIMPL;
  }
@@ -3289,9 +3289,9 @@ index 2c95a2e72bd..6a926ccb379 100644
  static HRESULT WINAPI InstallEngine_Abort(IInstallEngine2 *iface, DWORD flags)
  {
      InstallEngine *This = impl_from_IInstallEngine2(iface);
--    FIXME("(%p)->(%x)\n", This, flags);
+-    FIXME("(%p)->(%lx)\n", This, flags);
 +
-+    FIXME("(%p)->(%x): stub\n", This, flags);
++    FIXME("(%p)->(%#lx): stub\n", This, flags);
 +
      return E_NOTIMPL;
  }
@@ -3862,5 +3862,5 @@ index 8a3f4c4d270..82927418a99 100644
 +cpp_quote("HRESULT WINAPI GetICifFileFromFile(ICifFile **, const char *);")
 +cpp_quote("HRESULT WINAPI GetICifRWFileFromFile(ICifRWFile **, const char *);")
 -- 
-2.33.0
+2.34.1
 

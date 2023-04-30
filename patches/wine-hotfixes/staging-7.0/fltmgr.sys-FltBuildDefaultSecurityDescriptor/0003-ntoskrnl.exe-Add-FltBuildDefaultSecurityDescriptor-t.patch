@@ -1,0 +1,117 @@
+From ba211cf9d8ca7a462c24a62334813c68d41b3fc0 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Mon, 30 Aug 2021 15:16:06 +1000
+Subject: [PATCH] ntoskrnl.exe: Add FltBuildDefaultSecurityDescriptor test
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ dlls/ntoskrnl.exe/tests/Makefile.in |  2 +-
+ dlls/ntoskrnl.exe/tests/driver.c    | 65 +++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntoskrnl.exe/tests/Makefile.in b/dlls/ntoskrnl.exe/tests/Makefile.in
+index 052a8618a81..9028a392002 100644
+--- a/dlls/ntoskrnl.exe/tests/Makefile.in
++++ b/dlls/ntoskrnl.exe/tests/Makefile.in
+@@ -2,7 +2,7 @@ EXTRADEFS = -DWINE_NO_LONG_TYPES
+ TESTDLL   = ntoskrnl.exe
+ IMPORTS   = advapi32 crypt32 newdev setupapi user32 wintrust ws2_32 hid
+ 
+-driver_IMPORTS = winecrt0 ntoskrnl hal
++driver_IMPORTS = winecrt0 ntoskrnl hal fltmgr
+ driver_EXTRADLLFLAGS = -nodefaultlibs -nostartfiles -Wl,--subsystem,native
+ driver2_IMPORTS = winecrt0 ntoskrnl hal
+ driver2_EXTRADLLFLAGS = -nodefaultlibs -nostartfiles -Wl,--subsystem,native
+diff --git a/dlls/ntoskrnl.exe/tests/driver.c b/dlls/ntoskrnl.exe/tests/driver.c
+index dabb3b73f15..187f00c8bcb 100644
+--- a/dlls/ntoskrnl.exe/tests/driver.c
++++ b/dlls/ntoskrnl.exe/tests/driver.c
+@@ -32,6 +32,7 @@
+ #include "ddk/ntddk.h"
+ #include "ddk/ntifs.h"
+ #include "ddk/wdm.h"
++#include "ddk/fltkernel.h"
+ 
+ #include "driver.h"
+ 
+@@ -2338,6 +2339,69 @@ static void test_default_modules(void)
+     ok(dxgmms1, "Failed to find dxgmms1.sys\n");
+ }
+ 
++static void test_default_security(void)
++{
++    PSECURITY_DESCRIPTOR sd = NULL;
++    NTSTATUS status;
++    PSID group = NULL, owner = NULL;
++    BOOLEAN isdefault, present;
++    PACL acl = NULL;
++    PACCESS_ALLOWED_ACE ace;
++    SID_IDENTIFIER_AUTHORITY auth = { SECURITY_NULL_SID_AUTHORITY };
++    PSID sid1, sid2;
++
++    status = FltBuildDefaultSecurityDescriptor(&sd, STANDARD_RIGHTS_ALL);
++    ok(status == STATUS_SUCCESS, "got %#x\n", status);
++    ok(sd != NULL, "Failed to return descriptor\n");
++
++    status = RtlGetGroupSecurityDescriptor(sd, &group, &isdefault);
++    ok(status == STATUS_SUCCESS, "got %#x\n", status);
++    ok(group == NULL, "group isn't NULL\n");
++
++    status = RtlGetOwnerSecurityDescriptor(sd, &owner, &isdefault);
++    ok(status == STATUS_SUCCESS, "got %#x\n", status);
++    ok(owner == NULL, "owner isn't NULL\n");
++
++    status = RtlGetDaclSecurityDescriptor(sd, &present, &acl, &isdefault);
++    ok(status == STATUS_SUCCESS, "got %#x\n", status);
++    ok(acl != NULL, "acl is NULL\n");
++    ok(acl->AceCount == 2, "got %d\n", acl->AceCount);
++
++    sid1 = RtlAllocateHeap(GetProcessHeap(), HEAP_ZERO_MEMORY, RtlLengthRequiredSid(2));
++    RtlInitializeSid(sid1, &auth, 2);
++    *RtlSubAuthoritySid(sid1, 0)  = SECURITY_BUILTIN_DOMAIN_RID;
++    *RtlSubAuthoritySid(sid1, 1) = DOMAIN_GROUP_RID_ADMINS;
++
++    sid2 = RtlAllocateHeap(GetProcessHeap(), HEAP_ZERO_MEMORY, RtlLengthRequiredSid(1));
++    RtlInitializeSid(sid2, &auth, 1);
++    *RtlSubAuthoritySid(sid2, 0)  = SECURITY_LOCAL_SYSTEM_RID;
++
++    /* SECURITY_BUILTIN_DOMAIN_RID */
++    status = RtlGetAce(acl, 0, (void**)&ace);
++    ok(status == STATUS_SUCCESS, "got %#x\n", status);
++
++    ok(ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE, "got %#x\n", ace->Header.AceType);
++    ok(ace->Header.AceFlags == 0, "got %#x\n", ace->Header.AceFlags);
++    ok(ace->Mask == STANDARD_RIGHTS_ALL, "got %#x\n", ace->Mask);
++
++    ok(RtlEqualSid(sid1, (PSID)&ace->SidStart), "SID not equal\n");
++
++    /* SECURITY_LOCAL_SYSTEM_RID */
++    status = RtlGetAce(acl, 1, (void**)&ace);
++    ok(status == STATUS_SUCCESS, "got %#x\n", status);
++
++    ok(ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE, "got %#x\n", ace->Header.AceType);
++    ok(ace->Header.AceFlags == 0, "got %#x\n", ace->Header.AceFlags);
++    ok(ace->Mask == STANDARD_RIGHTS_ALL, "got %#x\n", ace->Mask);
++
++    ok(RtlEqualSid(sid2, (PSID)&ace->SidStart), "SID not equal\n");
++
++    RtlFreeHeap(GetProcessHeap(), 0, sid1);
++    RtlFreeHeap(GetProcessHeap(), 0, sid2);
++
++    FltFreeSecurityDescriptor(sd);
++}
++
+ static NTSTATUS main_test(DEVICE_OBJECT *device, IRP *irp, IO_STACK_LOCATION *stack)
+ {
+     void *buffer = irp->AssociatedIrp.SystemBuffer;
+@@ -2382,6 +2446,7 @@ static NTSTATUS main_test(DEVICE_OBJECT *device, IRP *irp, IO_STACK_LOCATION *st
+     test_dpc();
+     test_process_memory(test_input);
+     test_permanence();
++    test_default_security();
+ 
+     IoMarkIrpPending(irp);
+     IoQueueWorkItem(work_item, main_test_task, DelayedWorkQueue, irp);
+-- 
+2.34.1
+

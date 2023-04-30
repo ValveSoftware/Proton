@@ -1,32 +1,56 @@
-From 6f9a7411f7e0f9db155818b15c3bb1dfba2bbbd3 Mon Sep 17 00:00:00 2001
+From a295be388db4bbe50867b295d09a57726321261c Mon Sep 17 00:00:00 2001
 From: James Coonradt <gamax92@aol.com>
 Date: Tue, 19 Sep 2017 12:28:50 -0600
-Subject: user32: Improve FlashWindowEx message and return value.
+Subject: [PATCH] user32: Improve FlashWindowEx message and return value.
 
 ---
- dlls/user32/win.c       | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ dlls/user32/tests/win.c | 4 ++--
+ dlls/user32/win.c       | 1 -
+ dlls/win32u/window.c    | 5 ++---
+ 3 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/dlls/user32/win.c b/dlls/user32/win.c
-index 3042a560ce9..2fb33058b6c 100644
---- a/dlls/user32/win.c
-+++ b/dlls/user32/win.c
-@@ -3545,13 +3545,12 @@ BOOL WINAPI FlashWindowEx( PFLASHWINFO pfinfo )
-         if (!wndPtr || wndPtr == WND_OTHER_PROCESS || wndPtr == WND_DESKTOP) return FALSE;
-         hwnd = wndPtr->obj.handle;  /* make it a full handle */
+diff --git a/dlls/user32/tests/win.c b/dlls/user32/tests/win.c
+index 496c3f9ab07..2718d4c96c9 100644
+--- a/dlls/user32/tests/win.c
++++ b/dlls/user32/tests/win.c
+@@ -9825,7 +9825,7 @@ static void test_FlashWindowEx(void)
  
--        if (pfinfo->dwFlags) wparam = !(wndPtr->flags & WIN_NCACTIVATED);
--        else wparam = (hwnd == GetForegroundWindow());
-+        wparam = (wndPtr->flags & WIN_NCACTIVATED) != 0;
+     SetLastError(0xdeadbeef);
+     ret = pFlashWindowEx(&finfo);
+-    todo_wine ok(!ret, "previous window state should not be active\n");
++    ok(!ret, "previous window state should not be active\n");
  
-         WIN_ReleasePtr( wndPtr );
-         SendNotifyMessageW( hwnd, WM_NCACTIVATE, wparam, 0 );
-         USER_Driver->pFlashWindowEx( pfinfo );
+     finfo.cbSize = sizeof(FLASHWINFO) - 1;
+     SetLastError(0xdeadbeef);
+@@ -9876,7 +9876,7 @@ static void test_FlashWindowEx(void)
+     finfo.dwFlags = FLASHW_STOP;
+     SetLastError(0xdeadbeef);
+     ret = pFlashWindowEx(&finfo);
+-    ok(prev != ret, "previous window state should be different\n");
++    todo_wine ok(prev != ret, "previous window state should be different\n");
+ 
+     DestroyWindow( hwnd );
+ }
+diff --git a/dlls/win32u/window.c b/dlls/win32u/window.c
+index 1e36e48aded..fd4be68084b 100644
+--- a/dlls/win32u/window.c
++++ b/dlls/win32u/window.c
+@@ -4552,13 +4552,12 @@ BOOL WINAPI NtUserFlashWindowEx( FLASHWINFO *info )
+         if (!win || win == WND_OTHER_PROCESS || win == WND_DESKTOP) return FALSE;
+         hwnd = win->obj.handle;  /* make it a full handle */
+
+-        if (info->dwFlags) wparam = !(win->flags & WIN_NCACTIVATED);
+-        else wparam = (hwnd == NtUserGetForegroundWindow());
++        wparam = (win->flags & WIN_NCACTIVATED) != 0;
+
+         release_win_ptr( win );
+         send_notify_message( hwnd, WM_NCACTIVATE, wparam, 0, 0 );
+         user_driver->pFlashWindowEx( info );
 -        return wparam;
-+        return (pfinfo->dwFlags & FLASHW_CAPTION) ? TRUE : wparam;
++        return (info->dwFlags & FLASHW_CAPTION) ? TRUE : wparam;
      }
  }
- 
+
 -- 
-2.14.1
+2.35.1
 

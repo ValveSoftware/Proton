@@ -1,0 +1,106 @@
+From cc3472938f76b5db50ea86f854e153fd71795b6e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 25 Oct 2021 11:48:00 +0200
+Subject: [PATCH] winex11.drv: Send relative RawMotion events unprocessed.
+
+This makes relative raw input independent from cursor speed, as it is
+the case on Windows. Absolute raw input is already translated to
+virtual desktop space, and cursor speed is meaningless in this case.
+
+This does not support mixed relative/absolute X/Y axis.
+---
+ dlls/winex11.drv/mouse.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index 727ba13bc31..fdf8eca93dd 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -1872,12 +1872,12 @@ static BOOL X11DRV_XIDeviceChangedEvent( XIDeviceChangedEvent *event )
+     return TRUE;
+ }
+
+-static BOOL map_raw_event_coords( XIRawEvent *event, INPUT *input )
++static BOOL map_raw_event_coords( XIRawEvent *event, INPUT *input, RAWINPUT *rawinput )
+ {
+     struct x11drv_thread_data *thread_data = x11drv_thread_data();
+     XIValuatorClassInfo *x = &thread_data->x_valuator, *y = &thread_data->y_valuator;
+-    double x_value = 0, y_value = 0, x_scale, y_scale, user_to_real_scale;
+-    const double *values = event->valuators.values;
++    double x_raw = 0, y_raw = 0, x_value = 0, y_value = 0, x_scale, y_scale, user_to_real_scale;
++    const double *values = event->valuators.values, *raw_values = event->raw_values;
+     RECT virtual_rect;
+     HMONITOR monitor;
+     POINT pt;
+@@ -1908,33 +1908,35 @@ static BOOL map_raw_event_coords( XIRawEvent *event, INPUT *input )
+         if (!XIMaskIsSet( event->valuators.mask, i )) continue;
+         if (i == x->number)
+         {
++            x_raw = *raw_values;
+             x_value = *values;
+             if (x->mode == XIModeRelative) x->value += x_value * x_scale;
+             else x->value = (x_value - x->min) * x_scale;
+         }
+         if (i == y->number)
+         {
++            y_raw = *raw_values;
+             y_value = *values;
+             if (y->mode == XIModeRelative) y->value += y_value * y_scale;
+             else y->value = (y_value - y->min) * y_scale;
+         }
++        raw_values++;
+         values++;
+     }
+
+     input->u.mi.dx = round( x->value );
+     input->u.mi.dy = round( y->value );
+
++    if (x->mode != XIModeAbsolute) rawinput->data.mouse.lLastX = x_raw;
++    else rawinput->data.mouse.lLastX = input->u.mi.dx;
++    if (y->mode != XIModeAbsolute) rawinput->data.mouse.lLastY = y_raw;
++    else rawinput->data.mouse.lLastY = input->u.mi.dy;
++
+     TRACE( "event %f,%f value %f,%f input %d,%d\n", x_value, y_value, x->value, y->value, input->u.mi.dx, input->u.mi.dy );
+
+     x->value -= input->u.mi.dx;
+     y->value -= input->u.mi.dy;
+
+-    if (!(input->u.mi.dwFlags & MOUSEEVENTF_ABSOLUTE) && !input->u.mi.dx && !input->u.mi.dy)
+-    {
+-        TRACE( "accumulating motion\n" );
+-        return FALSE;
+-    }
+-
+     if (input->u.mi.dwFlags & MOUSEEVENTF_ABSOLUTE)
+         fs_hack_point_real_to_user((POINT *)&input->u.mi.dx);
+     else
+@@ -2027,7 +2029,7 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+     input.u.mi.dwExtraInfo = 0;
+     input.u.mi.dx          = 0;
+     input.u.mi.dy          = 0;
+-    if (!map_raw_event_coords( event, &input )) return FALSE;
++    if (!map_raw_event_coords( event, &input, &rawinput )) return FALSE;
+ 
+     if (!thread_data->xi2_rawinput_only)
+         __wine_send_input( 0, &input, NULL );
+@@ -2041,8 +2043,6 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+         rawinput.data.mouse.ulRawButtons = 0;
+         rawinput.data.mouse.u.usButtonData = 0;
+         rawinput.data.mouse.u.usButtonFlags = 0;
+-        rawinput.data.mouse.lLastX = input.u.mi.dx;
+-        rawinput.data.mouse.lLastY = input.u.mi.dy;
+         rawinput.data.mouse.ulExtraInformation = 0;
+ 
+         input.type = INPUT_HARDWARE;
+@@ -2174,7 +2174,7 @@ static BOOL X11DRV_RawTouchEvent( XGenericEventCookie *xev )
+     POINT pos;
+
+     if (!thread_data->xi2_rawinput_only) return FALSE;
+-    if (!map_raw_event_coords( event, &input )) return FALSE;
++    if (!map_raw_event_coords( event, &input, &rawinput )) return FALSE;
+     if (!(input.u.mi.dwFlags & MOUSEEVENTF_ABSOLUTE)) return FALSE;
+     pos.x = input.u.mi.dx;
+     pos.y = input.u.mi.dy;
+--
+2.34.1
+

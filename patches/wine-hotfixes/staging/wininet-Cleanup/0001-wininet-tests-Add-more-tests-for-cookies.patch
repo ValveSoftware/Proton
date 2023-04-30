@@ -1,4 +1,4 @@
-From 915a805cabaec3cc265f4f8ad9f0005502f8fd24 Mon Sep 17 00:00:00 2001
+From b157667185244a4e963fa3c161c76ea53410d16d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
 Date: Fri, 15 May 2015 20:37:19 +0200
 Subject: [PATCH] wininet/tests: Add more tests for cookies.
@@ -8,10 +8,10 @@ Subject: [PATCH] wininet/tests: Add more tests for cookies.
  1 file changed, 89 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
-index 90a38dc3a..55d51b299 100644
+index 98d1b74ca85..308d6a74c20 100644
 --- a/dlls/wininet/tests/http.c
 +++ b/dlls/wininet/tests/http.c
-@@ -2068,6 +2068,14 @@ static const char largemsg[] =
+@@ -2105,6 +2105,14 @@ static const char largemsg[] =
  "Content-Length: %I64u\r\n"
  "\r\n";
  
@@ -26,7 +26,7 @@ index 90a38dc3a..55d51b299 100644
  static const char notokmsg[] =
  "HTTP/1.1 400 Bad Request\r\n"
  "Server: winetest\r\n"
-@@ -2438,6 +2446,32 @@ static DWORD CALLBACK server_thread(LPVOID param)
+@@ -2524,6 +2532,32 @@ static DWORD CALLBACK server_thread(LPVOID param)
              else
                  send(c, noauthmsg, sizeof noauthmsg-1, 0);
          }
@@ -59,7 +59,7 @@ index 90a38dc3a..55d51b299 100644
          if (strstr(buffer, "/test_host_override"))
          {
              if (strstr(buffer, host_header_override))
-@@ -3816,7 +3850,7 @@ static void test_cookie_header(int port)
+@@ -4037,7 +4071,7 @@ static void test_cookie_header(int port)
      HINTERNET ses, con, req;
      DWORD size, error;
      BOOL ret;
@@ -68,24 +68,24 @@ index 90a38dc3a..55d51b299 100644
  
      ses = InternetOpenA("winetest", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
      ok(ses != NULL, "InternetOpen failed\n");
-@@ -3878,7 +3912,7 @@ static void test_cookie_header(int port)
+@@ -4065,7 +4099,7 @@ static void test_cookie_header(int port)
      size = sizeof(buffer);
      ret = HttpQueryInfoA(req, HTTP_QUERY_COOKIE | HTTP_QUERY_FLAG_REQUEST_HEADERS, buffer, &size, NULL);
      ok(ret, "HttpQueryInfo failed: %lu\n", GetLastError());
 -    ok(!strcmp(buffer, "cookie=not biscuit"), "got '%s' expected \'cookie=not biscuit\'\n", buffer);
 +    ok(!!strstr(buffer, "cookie=not biscuit"), "got '%s' expected \'cookie=not biscuit\'\n", buffer);
-
+ 
      ret = HttpSendRequestA(req, NULL, 0, NULL, 0);
      ok(ret, "HttpSendRequest failed: %lu\n", GetLastError());
-@@ -3855,9 +3889,61 @@ static void test_cookie_header(int port)
+@@ -4076,9 +4110,61 @@ static void test_cookie_header(int port)
      size = sizeof(buffer);
      ret = HttpQueryInfoA(req, HTTP_QUERY_COOKIE | HTTP_QUERY_FLAG_REQUEST_HEADERS, buffer, &size, NULL);
      ok(ret, "HttpQueryInfo failed: %lu\n", GetLastError());
 -    ok(!strcmp(buffer, "cookie=biscuit"), "got '%s' expected \'cookie=biscuit\'\n", buffer);
 +    ok(!strstr(buffer, "cookie=not biscuit"), "'%s' should not contain \'cookie=not biscuit\'\n", buffer);
 +    ok(!!strstr(buffer, "cookie=biscuit"), "'%s' should contain \'cookie=biscuit\'\n", buffer);
-+
-+    InternetCloseHandle(req);
+ 
+     InternetCloseHandle(req);
 +
 +    InternetSetCookieA("http://localhost/testCCCC", "subcookie", "data");
 +
@@ -118,18 +118,18 @@ index 90a38dc3a..55d51b299 100644
 +
 +    req = HttpOpenRequestA(con, NULL, "/test_cookie_path2", NULL, NULL, NULL, INTERNET_FLAG_KEEP_CONNECTION, 0);
 +    ok(req != NULL, "HttpOpenRequest failed\n");
- 
++
 +    ret = HttpSendRequestA(req, NULL, 0, NULL, 0);
 +    ok(ret, "HttpSendRequest failed\n");
 +
 +    test_status_code(req, 400);
-     InternetCloseHandle(req);
++    InternetCloseHandle(req);
 +
 +    req = HttpOpenRequestA(con, NULL, "/test_cookie_merge", NULL, NULL, NULL, INTERNET_FLAG_KEEP_CONNECTION, 0);
 +    ok(req != NULL, "HttpOpenRequest failed\n");
 +
 +    ret = HttpAddRequestHeadersA(req, "Cookie: manual_cookie=test\r\n", ~0u, HTTP_ADDREQ_FLAG_ADD);
-+    ok(ret, "HttpAddRequestHeaders failed: %u\n", GetLastError());
++    ok(ret, "HttpAddRequestHeaders failed: %lu\n", GetLastError());
 +
 +    ret = HttpSendRequestA(req, NULL, 0, NULL, 0);
 +    ok(ret, "HttpSendRequest failed\n");
@@ -141,5 +141,5 @@ index 90a38dc3a..55d51b299 100644
      InternetCloseHandle(ses);
  }
 -- 
-2.23.0
+2.35.1
 

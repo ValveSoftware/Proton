@@ -1,0 +1,120 @@
+From e98050400335c07a044c28774c802647ff075af5 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 1 Jun 2021 10:26:28 +1000
+Subject: [PATCH] include: Add windows.networking.idl
+
+---
+ include/Makefile.in            |  1 +
+ include/windows.networking.idl | 87 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
+ create mode 100644 include/windows.networking.idl
+
+diff --git a/include/Makefile.in b/include/Makefile.in
+index e379070caa9..043f1436216 100644
+--- a/include/Makefile.in
++++ b/include/Makefile.in
+@@ -786,6 +786,7 @@ SOURCES = \
+ 	windows.media.devices.idl \
+ 	windows.media.idl \
+ 	windows.media.speechsynthesis.idl \
++	windows.networking.idl \
+ 	windows.networking.connectivity.idl \
+  	windows.security.cryptography.idl \
+  	windows.security.exchangeactivesyncprovisioning.idl \
+diff --git a/include/windows.networking.idl b/include/windows.networking.idl
+new file mode 100644
+index 00000000000..160cd78e540
+--- /dev/null
++++ b/include/windows.networking.idl
+@@ -0,0 +1,87 @@
++/*
++ * Copyright 2021 Alistair Leslie-Hughes
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#ifdef __WIDL__
++#pragma winrt ns_prefix
++#endif
++
++import "inspectable.idl";
++import "asyncinfo.idl";
++import "eventtoken.idl";
++import "windowscontracts.idl";
++import "windows.foundation.idl";
++import "windows.networking.connectivity.idl";
++
++namespace Windows
++{
++    namespace Networking
++    {
++        typedef enum HostNameType HostNameType;
++
++        runtimeclass HostName;
++
++        [contract(Windows.Foundation.UniversalApiContract, 1.0)]
++        enum HostNameType
++        {
++            DomainName,
++            Ipv4,
++            Ipv6,
++            Bluetooth
++        };
++
++        [contract(Windows.Foundation.UniversalApiContract, 1.0)]
++        [exclusiveto(Windows.Networking.HostName)]
++        [uuid(bf8ecaad-ed96-49a7-9084-d416cae88dcb)]
++        interface IHostName : IInspectable
++        {
++            [propget] HRESULT IPInformation([out, retval] Windows.Networking.Connectivity.IPInformation** value);
++            [propget] HRESULT RawName([out, retval] HSTRING* value);
++            [propget] HRESULT DisplayName([out, retval] HSTRING* value);
++            [propget] HRESULT CanonicalName([out, retval] HSTRING* value);
++            [propget] HRESULT Type([out, retval] Windows.Networking.HostNameType* value);
++            HRESULT IsEqual([in] Windows.Networking.HostName* hostName, [out, retval] boolean* equal);
++        }
++
++        [contract(Windows.Foundation.UniversalApiContract, 1.0)]
++        [exclusiveto(Windows.Networking.HostName)]
++        [uuid(458c23ed-712f-4576-adf1-c20b2c643558)]
++        interface IHostNameFactory : IInspectable
++        {
++            HRESULT CreateHostName([in] HSTRING hostname, [out, retval] Windows.Networking.HostName** value);
++        }
++
++        [contract(Windows.Foundation.UniversalApiContract, 1.0)]
++        [exclusiveto(Windows.Networking.HostName)]
++        [uuid(f68cd4bf-a388-4e8b-91ea-54dd6dd901c0)]
++        interface IHostNameStatics : IInspectable
++        {
++            HRESULT Compare([in] HSTRING value1, [in] HSTRING value2, [out, retval] INT32* result);
++        }
++
++        /*[activatable(Windows.Networking.IHostNameFactory, Windows.Foundation.UniversalApiContract, 1.0)]*/
++        [contract(Windows.Foundation.UniversalApiContract, 1.0)]
++        [marshaling_behavior(agile)]
++        [static(Windows.Networking.IHostNameStatics, Windows.Foundation.UniversalApiContract, 1.0)]
++        [threading(both)]
++        runtimeclass HostName
++        {
++            [default] interface Windows.Networking.IHostName;
++            [contract(Windows.Foundation.UniversalApiContract, 1.0)] interface Windows.Foundation.IStringable;
++        }
++    }
++}
+\ No newline at end of file
+-- 
+2.33.0
+

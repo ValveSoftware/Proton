@@ -23,7 +23,7 @@ index c770c312ba9..d95b39bd9ce 100644
      if(request->hdr.dwFlags & INTERNET_FLAG_NO_COOKIES)
          return;
  
-+    path = heap_strdupW(request->path);
++    path = wcsdup(request->path);
 +    if (!path)
 +        return;
 +
@@ -42,7 +42,7 @@ index c770c312ba9..d95b39bd9ce 100644
      }
  
      LeaveCriticalSection( &request->headers_section );
-+    heap_free(path);
++    free(path);
  }
  
  static void strip_spaces(LPWSTR start)

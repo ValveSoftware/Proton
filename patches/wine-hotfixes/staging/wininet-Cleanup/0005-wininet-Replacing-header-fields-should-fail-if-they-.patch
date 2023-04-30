@@ -1,4 +1,4 @@
-From e8ad0fb2501a0ebd489534dbf7f89af209f972bc Mon Sep 17 00:00:00 2001
+From 10bdb80d18fa95c3bffd61217015e1512b14e0d7 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
 Date: Sat, 16 May 2015 03:16:15 +0200
 Subject: [PATCH] wininet: Replacing header fields should fail if they do not
@@ -8,14 +8,14 @@ A lot of details are not properly covered by tests yet and were
 marked with FIXME comments. The implementation was written in such
 a way that it behaves identical to the old code in such situations.
 ---
- dlls/wininet/http.c | 185 ++++++++++++++++++++++----------------------
- 1 file changed, 93 insertions(+), 92 deletions(-)
+ dlls/wininet/http.c | 197 ++++++++++++++++++++++----------------------
+ 1 file changed, 99 insertions(+), 98 deletions(-)
 
 diff --git a/dlls/wininet/http.c b/dlls/wininet/http.c
-index ec984441399..98f63a8c0a4 100644
+index 18be0683d3a..645e7825a5a 100644
 --- a/dlls/wininet/http.c
 +++ b/dlls/wininet/http.c
-@@ -6120,127 +6120,128 @@ static LPWSTR * HTTP_InterpretHttpHeader(LPCWSTR buffer)
+@@ -6113,130 +6113,131 @@ static LPWSTR * HTTP_InterpretHttpHeader(LPCWSTR buffer)
  
  static DWORD HTTP_ProcessHeader(http_request_t *request, LPCWSTR field, LPCWSTR value, DWORD dwModifier)
  {
@@ -26,46 +26,51 @@ index ec984441399..98f63a8c0a4 100644
 -    DWORD res = ERROR_HTTP_INVALID_HEADER;
 +    DWORD res = ERROR_SUCCESS;
  
-     TRACE("--> %s: %s - 0x%08x\n", debugstr_w(field), debugstr_w(value), dwModifier);
+     TRACE("--> %s: %s - 0x%08lx\n", debugstr_w(field), debugstr_w(value), dwModifier);
  
      EnterCriticalSection( &request->headers_section );
  
 -    /* REPLACE wins out over ADD */
--    if (dwModifier & HTTP_ADDHDR_FLAG_REPLACE)
--        dwModifier &= ~HTTP_ADDHDR_FLAG_ADD;
--    
--    if (dwModifier & HTTP_ADDHDR_FLAG_ADD)
+-    if (dwModifier & HTTP_ADDREQ_FLAG_REPLACE)
+-        dwModifier &= ~HTTP_ADDREQ_FLAG_ADD;
++    index = HTTP_GetCustomHeaderIndex(request, field, 0, request_only);
++     if (index >= 0)
++     {
++         lphttpHdr = &request->custHeaders[index];
+ 
+-    if (dwModifier & HTTP_ADDREQ_FLAG_ADD)
 -        index = -1;
 -    else
 -        index = HTTP_GetCustomHeaderIndex(request, field, 0, request_only);
 -
-+    index = HTTP_GetCustomHeaderIndex(request, field, 0, request_only);
-     if (index >= 0)
-     {
--        if (dwModifier & HTTP_ADDHDR_FLAG_ADD_IF_NEW)
--        {
+-    if (index >= 0)
+-    {
+-        if (dwModifier & HTTP_ADDREQ_FLAG_ADD_IF_NEW)
++        /* replace existing header if FLAG_REPLACE is given */
++        if (dwModifier & HTTP_ADDREQ_FLAG_REPLACE)
+         {
 -            LeaveCriticalSection( &request->headers_section );
 -            return ERROR_HTTP_INVALID_HEADER;
 -        }
-         lphttpHdr = &request->custHeaders[index];
+-        lphttpHdr = &request->custHeaders[index];
 -    }
 -    else if (value)
 -    {
 -        HTTPHEADERW hdr;
++            HTTP_DeleteCustomHeader( request, index );
  
 -        hdr.lpszField = (LPWSTR)field;
 -        hdr.lpszValue = (LPWSTR)value;
 -        hdr.wFlags = hdr.wCount = 0;
-+        /* replace existing header if FLAG_REPLACE is given */
-+        if (dwModifier & HTTP_ADDHDR_FLAG_REPLACE)
-+        {
-+            HTTP_DeleteCustomHeader( request, index );
- 
--        if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
--            hdr.wFlags |= HDR_ISREQUEST;
 +            if (value && value[0])
 +            {
 +                HTTPHEADERW hdr;
+ 
+-        if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
+-            hdr.wFlags |= HDR_ISREQUEST;
++                hdr.lpszField = (LPWSTR)field;
++                hdr.lpszValue = (LPWSTR)value;
++                hdr.wFlags = hdr.wCount = 0;
  
 -        res = HTTP_InsertCustomHeader(request, &hdr);
 -        LeaveCriticalSection( &request->headers_section );
@@ -77,94 +82,69 @@ index ec984441399..98f63a8c0a4 100644
 -        LeaveCriticalSection( &request->headers_section );
 -        return ERROR_SUCCESS;
 -    }
-+                hdr.lpszField = (LPWSTR)field;
-+                hdr.lpszValue = (LPWSTR)value;
-+                hdr.wFlags = hdr.wCount = 0;
++                if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
++                    hdr.wFlags |= HDR_ISREQUEST;
  
 -    if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
 -	    lphttpHdr->wFlags |= HDR_ISREQUEST;
 -    else
 -        lphttpHdr->wFlags &= ~HDR_ISREQUEST;
-+                if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
-+                    hdr.wFlags |= HDR_ISREQUEST;
- 
--    if (dwModifier & HTTP_ADDHDR_FLAG_REPLACE)
--    {
--        HTTP_DeleteCustomHeader( request, index );
 +                res = HTTP_InsertCustomHeader( request, &hdr );
 +            }
-+
+ 
+-    if (dwModifier & HTTP_ADDREQ_FLAG_REPLACE)
+-    {
+-        HTTP_DeleteCustomHeader( request, index );
 +            goto out;
 +        }
- 
--        if (value && value[0])
++
 +        /* do not add new header if FLAG_ADD_IF_NEW is set */
-+        if (dwModifier & HTTP_ADDHDR_FLAG_ADD_IF_NEW)
-         {
--            HTTPHEADERW hdr;
++        if (dwModifier & HTTP_ADDREQ_FLAG_ADD_IF_NEW)
++         {
 +            res = ERROR_HTTP_INVALID_HEADER; /* FIXME */
 +            goto out;
 +        }
  
--            hdr.lpszField = (LPWSTR)field;
--            hdr.lpszValue = (LPWSTR)value;
--            hdr.wFlags = hdr.wCount = 0;
+-        if (value && value[0])
 +        /* handle appending to existing header */
 +        if (dwModifier & COALESCEFLAGS)
-+        {
+         {
+-            HTTPHEADERW hdr;
 +            LPWSTR lpsztmp;
 +            WCHAR ch = 0;
 +            INT len = 0;
 +            INT origlen = lstrlenW(lphttpHdr->lpszValue);
 +            INT valuelen = lstrlenW(value);
- 
++
 +            /* FIXME: Should it really clear HDR_ISREQUEST? */
-             if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
--                hdr.wFlags |= HDR_ISREQUEST;
--
--            res = HTTP_InsertCustomHeader(request, &hdr);
--            LeaveCriticalSection( &request->headers_section );
--            return res;
--        }
++             if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
 +                lphttpHdr->wFlags |= HDR_ISREQUEST;
 +            else
 +                lphttpHdr->wFlags &= ~HDR_ISREQUEST;
  
--        LeaveCriticalSection( &request->headers_section );
--        return ERROR_SUCCESS;
--    }
--    else if (dwModifier & COALESCEFLAGS)
--    {
--        LPWSTR lpsztmp;
--        WCHAR ch = 0;
--        INT len = 0;
--        INT origlen = lstrlenW(lphttpHdr->lpszValue);
--        INT valuelen = lstrlenW(value);
-+            if (dwModifier & HTTP_ADDHDR_FLAG_COALESCE_WITH_COMMA)
+-            hdr.lpszField = (LPWSTR)field;
+-            hdr.lpszValue = (LPWSTR)value;
+-            hdr.wFlags = hdr.wCount = 0;
++            if (dwModifier & HTTP_ADDREQ_FLAG_COALESCE_WITH_COMMA)
 +            {
 +                ch = ',';
 +                lphttpHdr->wFlags |= HDR_COMMADELIMITED;
 +            }
-+            else if (dwModifier & HTTP_ADDHDR_FLAG_COALESCE_WITH_SEMICOLON)
++            else if (dwModifier & HTTP_ADDREQ_FLAG_COALESCE_WITH_SEMICOLON)
 +            {
 +                ch = ';';
 +                lphttpHdr->wFlags |= HDR_COMMADELIMITED;
 +            }
  
--        if (dwModifier & HTTP_ADDHDR_FLAG_COALESCE_WITH_COMMA)
--        {
--            ch = ',';
--            lphttpHdr->wFlags |= HDR_COMMADELIMITED;
--        }
--        else if (dwModifier & HTTP_ADDHDR_FLAG_COALESCE_WITH_SEMICOLON)
--        {
--            ch = ';';
--            lphttpHdr->wFlags |= HDR_COMMADELIMITED;
--        }
+-            if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
+-                hdr.wFlags |= HDR_ISREQUEST;
 +            len = origlen + valuelen + ((ch > 0) ? 2 : 0);
  
--        len = origlen + valuelen + ((ch > 0) ? 2 : 0);
-+            lpsztmp = heap_realloc(lphttpHdr->lpszValue, (len+1)*sizeof(WCHAR));
+-            res = HTTP_InsertCustomHeader(request, &hdr);
+-            LeaveCriticalSection( &request->headers_section );
+-            return res;
+-        }
++            lpsztmp = realloc(lphttpHdr->lpszValue, (len+1)*sizeof(WCHAR));
 +            if (lpsztmp)
 +            {
 +                lphttpHdr->lpszValue = lpsztmp;
@@ -177,24 +157,69 @@ index ec984441399..98f63a8c0a4 100644
 +                    origlen++;
 +                }
  
--        lpsztmp = heap_realloc(lphttpHdr->lpszValue, (len+1)*sizeof(WCHAR));
+-        LeaveCriticalSection( &request->headers_section );
+-        return ERROR_SUCCESS;
+-    }
+-    else if (dwModifier & COALESCEFLAGS)
++                memcpy(&lphttpHdr->lpszValue[origlen], value, valuelen*sizeof(WCHAR));
++                lphttpHdr->lpszValue[len] = '\0';
++            }
++            else
++             {
++                WARN("realloc (%d bytes) failed\n",len+1);
++                res = ERROR_OUTOFMEMORY;
++             }
++
++            goto out;
++         }
++     }
++
++    /* FIXME: What about other combinations? */
++    if ((dwModifier & ~HTTP_ADDHDR_FLAG_REQ) == HTTP_ADDREQ_FLAG_REPLACE)
+     {
+-        LPWSTR lpsztmp;
+-        WCHAR ch = 0;
+-        INT len = 0;
+-        INT origlen = lstrlenW(lphttpHdr->lpszValue);
+-        INT valuelen = lstrlenW(value);
++        res = ERROR_HTTP_HEADER_NOT_FOUND;
++        goto out;
++    }
+ 
+-        if (dwModifier & HTTP_ADDREQ_FLAG_COALESCE_WITH_COMMA)
+-        {
+-            ch = ',';
+-            lphttpHdr->wFlags |= HDR_COMMADELIMITED;
+-        }
+-        else if (dwModifier & HTTP_ADDREQ_FLAG_COALESCE_WITH_SEMICOLON)
+-        {
+-            ch = ';';
+-            lphttpHdr->wFlags |= HDR_COMMADELIMITED;
+-        }
++    /* FIXME: What if value == ""? */
++    if (value)
++    {
++        HTTPHEADERW hdr;
+ 
+-        len = origlen + valuelen + ((ch > 0) ? 2 : 0);
++        hdr.lpszField = (LPWSTR)field;
++        hdr.lpszValue = (LPWSTR)value;
++        hdr.wFlags = hdr.wCount = 0;
+ 
+-        lpsztmp = realloc(lphttpHdr->lpszValue, (len + 1) * sizeof(WCHAR));
 -        if (lpsztmp)
 -        {
 -            lphttpHdr->lpszValue = lpsztmp;
 -    /* FIXME: Increment lphttpHdr->wCount. Perhaps lpszValue should be an array */
 -            if (ch > 0)
-+                memcpy(&lphttpHdr->lpszValue[origlen], value, valuelen*sizeof(WCHAR));
-+                lphttpHdr->lpszValue[len] = '\0';
-+            }
-+            else
-             {
+-            {
 -                lphttpHdr->lpszValue[origlen] = ch;
 -                origlen++;
 -                lphttpHdr->lpszValue[origlen] = ' ';
 -                origlen++;
-+                WARN("heap_realloc (%d bytes) failed\n",len+1);
-+                res = ERROR_OUTOFMEMORY;
-             }
+-            }
++        if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
++            hdr.wFlags |= HDR_ISREQUEST;
  
 -            memcpy(&lphttpHdr->lpszValue[origlen], value, valuelen*sizeof(WCHAR));
 -            lphttpHdr->lpszValue[len] = '\0';
@@ -202,40 +227,24 @@ index ec984441399..98f63a8c0a4 100644
 -        }
 -        else
 -        {
--            WARN("heap_realloc (%d bytes) failed\n",len+1);
+-            WARN("realloc (%d bytes) failed\n",len+1);
 -            res = ERROR_OUTOFMEMORY;
-+            goto out;
-         }
-     }
-+
-+    /* FIXME: What about other combinations? */
-+    if ((dwModifier & ~HTTP_ADDHDR_FLAG_REQ) == HTTP_ADDHDR_FLAG_REPLACE)
-+    {
-+        res = ERROR_HTTP_HEADER_NOT_FOUND;
-+        goto out;
-+    }
-+
-+    /* FIXME: What if value == ""? */
-+    if (value)
-+    {
-+        HTTPHEADERW hdr;
-+
-+        hdr.lpszField = (LPWSTR)field;
-+        hdr.lpszValue = (LPWSTR)value;
-+        hdr.wFlags = hdr.wCount = 0;
-+
-+        if (dwModifier & HTTP_ADDHDR_FLAG_REQ)
-+            hdr.wFlags |= HDR_ISREQUEST;
-+
+-        }
 +        res = HTTP_InsertCustomHeader( request, &hdr );
 +        goto out;
-+    }
+     }
+-    TRACE("<-- %ld\n", res);
+-    LeaveCriticalSection( &request->headers_section );
+-    return res;
 +
 +    /* FIXME: What if value == NULL? */
 +out:
-     TRACE("<-- %d\n", res);
-     LeaveCriticalSection( &request->headers_section );
-     return res;
++     TRACE("<-- %ld\n", res);
++     LeaveCriticalSection( &request->headers_section );
++     return res;
+ }
+ 
+ /***********************************************************************
 -- 
-2.17.1
+2.38.1
 

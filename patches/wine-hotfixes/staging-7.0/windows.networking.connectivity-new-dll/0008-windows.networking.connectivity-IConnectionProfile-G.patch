@@ -1,0 +1,30 @@
+From 308cffe2fdf351c360870cd96c04b3384a70bd7a Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 1 Jun 2021 13:24:16 +1000
+Subject: [PATCH 8/8] windows.networking.connectivity: IConnectionProfile
+ GetNetworkConnectivityLevel always return internet access
+
+---
+ .../windows.networking.connectivity_main.c                  | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/windows.networking.connectivity/windows.networking.connectivity_main.c b/dlls/windows.networking.connectivity/windows.networking.connectivity_main.c
+index ba1f5a5401d..0e8f4e699f0 100644
+--- a/dlls/windows.networking.connectivity/windows.networking.connectivity_main.c
++++ b/dlls/windows.networking.connectivity/windows.networking.connectivity_main.c
+@@ -274,8 +274,10 @@ static HRESULT WINAPI connection_profile_get_ProfileName(IConnectionProfile *ifa
+ static HRESULT WINAPI connection_profile_GetNetworkConnectivityLevel(IConnectionProfile *iface,
+         enum __x_ABI_CWindows_CNetworking_CConnectivity_CNetworkConnectivityLevel *value)
+ {
+-    FIXME("iface %p, value %p stub!\n", iface, value);
+-    return E_NOTIMPL;
++    struct connection_profile *impl = impl_from_IConnectionProfile(iface);
++    FIXME("iface %p, value %p stub!\n", impl, value);
++    *value = NetworkConnectivityLevel_InternetAccess;
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI connection_profile_GetNetworkNames(IConnectionProfile *iface, __FIVectorView_1_HSTRING **value)
+-- 
+2.30.2
+

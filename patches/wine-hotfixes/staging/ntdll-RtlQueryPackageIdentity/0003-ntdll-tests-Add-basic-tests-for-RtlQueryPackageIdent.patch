@@ -1,4 +1,4 @@
-From 62e3109b6bd1b3324827063531ae0826571c751b Mon Sep 17 00:00:00 2001
+From 7e1c63548513ec95978c5cbc428555ac5ed7c1d2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
 Date: Sun, 17 Jan 2016 00:50:50 +0100
 Subject: [PATCH] ntdll/tests: Add basic tests for RtlQueryPackageIdentity.
@@ -9,11 +9,10 @@ Subject: [PATCH] ntdll/tests: Add basic tests for RtlQueryPackageIdentity.
  2 files changed, 81 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/ntdll/tests/Makefile.in b/dlls/ntdll/tests/Makefile.in
-index 7e0272498fa..a2c716d11d4 100644
+index 90deb5865f8..428ebde23b3 100644
 --- a/dlls/ntdll/tests/Makefile.in
 +++ b/dlls/ntdll/tests/Makefile.in
-@@ -1,6 +1,6 @@
- EXTRADEFS = -DWINE_NO_LONG_TYPES
+@@ -1,5 +1,5 @@
  TESTDLL   = ntdll.dll
 -IMPORTS   = user32 advapi32
 +IMPORTS   = user32 ole32 advapi32
@@ -21,20 +20,20 @@ index 7e0272498fa..a2c716d11d4 100644
  C_SRCS = \
  	atom.c \
 diff --git a/dlls/ntdll/tests/rtl.c b/dlls/ntdll/tests/rtl.c
-index c0168884a0a..c25a9185fad 100644
+index 1e5e8c2580c..3690402c268 100644
 --- a/dlls/ntdll/tests/rtl.c
 +++ b/dlls/ntdll/tests/rtl.c
-@@ -27,6 +27,9 @@
- #include "in6addr.h"
+@@ -28,6 +28,9 @@
  #include "inaddr.h"
  #include "ip2string.h"
+ #include "wine/asm.h"
 +#include "initguid.h"
 +#define COBJMACROS
 +#include "shobjidl.h"
  
  #ifndef __WINE_WINTERNL_H
  
-@@ -80,6 +83,9 @@ static BOOL      (WINAPI *pRtlIsCriticalSectionLocked)(CRITICAL_SECTION *);
+@@ -95,6 +98,9 @@ static BOOL      (WINAPI *pRtlIsCriticalSectionLocked)(CRITICAL_SECTION *);
  static BOOL      (WINAPI *pRtlIsCriticalSectionLockedByThread)(CRITICAL_SECTION *);
  static NTSTATUS  (WINAPI *pRtlInitializeCriticalSectionEx)(CRITICAL_SECTION *, ULONG, ULONG);
  static NTSTATUS  (WINAPI *pLdrEnumerateLoadedModules)(void *, void *, void *);
@@ -44,7 +43,7 @@ index c0168884a0a..c25a9185fad 100644
  static NTSTATUS  (WINAPI *pLdrRegisterDllNotification)(ULONG, PLDR_DLL_NOTIFICATION_FUNCTION, void *, void **);
  static NTSTATUS  (WINAPI *pLdrUnregisterDllNotification)(void *);
  
-@@ -120,6 +126,9 @@ static void InitFunctionPtrs(void)
+@@ -137,6 +143,9 @@ static void InitFunctionPtrs(void)
          pRtlIsCriticalSectionLockedByThread = (void *)GetProcAddress(hntdll, "RtlIsCriticalSectionLockedByThread");
          pRtlInitializeCriticalSectionEx = (void *)GetProcAddress(hntdll, "RtlInitializeCriticalSectionEx");
          pLdrEnumerateLoadedModules = (void *)GetProcAddress(hntdll, "LdrEnumerateLoadedModules");
@@ -54,8 +53,8 @@ index c0168884a0a..c25a9185fad 100644
          pLdrRegisterDllNotification = (void *)GetProcAddress(hntdll, "LdrRegisterDllNotification");
          pLdrUnregisterDllNotification = (void *)GetProcAddress(hntdll, "LdrUnregisterDllNotification");
      }
-@@ -3682,6 +3691,76 @@ static void test_RtlDestroyHeap(void)
-     RtlRemoveVectoredExceptionHandler( handler );
+@@ -3775,6 +3784,76 @@ static void test_RtlFirstFreeAce(void)
+     HeapFree(GetProcessHeap(), 0, acl);
  }
  
 +static void test_RtlQueryPackageIdentity(void)
@@ -131,7 +130,7 @@ index c0168884a0a..c25a9185fad 100644
  START_TEST(rtl)
  {
      InitFunctionPtrs();
-@@ -3721,6 +3800,7 @@ START_TEST(rtl)
+@@ -3814,6 +3893,7 @@ START_TEST(rtl)
      test_RtlInitializeCriticalSectionEx();
      test_RtlLeaveCriticalSection();
      test_LdrEnumerateLoadedModules();
@@ -140,5 +139,5 @@ index c0168884a0a..c25a9185fad 100644
      test_LdrRegisterDllNotification();
      test_DbgPrint();
 -- 
-2.34.1
+2.39.0
 

@@ -1,0 +1,26 @@
+From 563f0ccc4f47914e1e2952cc4bc5673cbb97a5ae Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Wed, 18 Apr 2018 03:55:16 +0000
+Subject: [PATCH] wintrust: Add parameter check in WTHelperGetProvCertFromChain
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ dlls/wintrust/wintrust_main.c | 2 +-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/wintrust/wintrust_main.c b/dlls/wintrust/wintrust_main.c
+index 58e3ac3..bb52282 100644
+--- a/dlls/wintrust/wintrust_main.c
++++ b/dlls/wintrust/wintrust_main.c
+@@ -787,7 +787,7 @@ CRYPT_PROVIDER_CERT * WINAPI WTHelperGetProvCertFromChain(
+ 
+     TRACE("(%p %ld)\n", pSgnr, idxCert);
+ 
+-    if (idxCert >= pSgnr->csCertChain || !pSgnr->pasCertChain)
++    if (!pSgnr || idxCert >= pSgnr->csCertChain || !pSgnr->pasCertChain)
+         return NULL;
+     cert = &pSgnr->pasCertChain[idxCert];
+     TRACE("returning %p\n", cert);
+-- 
+1.9.1
+

@@ -1,17 +1,17 @@
-From 21ca3efb2a8a1f505f9e3f3ed2126a766d4a127f Mon Sep 17 00:00:00 2001
+From 691cc2563d203b7b8862406fbd373f61bccea9e2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
 Date: Fri, 15 May 2015 23:09:20 +0200
-Subject: wininet/tests: Check cookie behaviour when overriding host.
+Subject: [PATCH] wininet/tests: Check cookie behaviour when overriding host.
 
 ---
- dlls/wininet/tests/http.c | 95 +++++++++++++++++++++++++++++++++++++++++++++++
+ dlls/wininet/tests/http.c | 95 +++++++++++++++++++++++++++++++++++++++
  1 file changed, 95 insertions(+)
 
 diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
-index 546e473..0121aa5 100644
+index 43eba2db172..2ccba48fa2f 100644
 --- a/dlls/wininet/tests/http.c
 +++ b/dlls/wininet/tests/http.c
-@@ -2000,6 +2000,14 @@ static const char okmsg_cookie_path[] =
+@@ -2113,6 +2113,14 @@ static const char okmsg_cookie_path[] =
  "Set-Cookie: subcookie2=data; path=/test_cookie_set_path\r\n"
  "\r\n";
  
@@ -26,7 +26,7 @@ index 546e473..0121aa5 100644
  static const char notokmsg[] =
  "HTTP/1.1 400 Bad Request\r\n"
  "Server: winetest\r\n"
-@@ -2391,6 +2399,25 @@ static DWORD CALLBACK server_thread(LPVOID param)
+@@ -2558,6 +2566,25 @@ static DWORD CALLBACK server_thread(LPVOID param)
               else
                   send(c, notokmsg, sizeof notokmsg-1, 0);
          }
@@ -52,10 +52,11 @@ index 546e473..0121aa5 100644
          if (strstr(buffer, "/test_host_override"))
          {
              if (strstr(buffer, host_header_override))
-@@ -3130,6 +3157,74 @@ static void test_header_override(int port)
+@@ -3305,6 +3332,74 @@ static void test_header_override(int port)
+         test_status_code(req, 400);
      }
  
-     InternetCloseHandle(req);
++    InternetCloseHandle(req);
 +    InternetSetCookieA("http://localhost", "cookie", "biscuit");
 +    req = HttpOpenRequestA(con, NULL, "/testC", NULL, NULL, NULL, INTERNET_FLAG_KEEP_CONNECTION, 0);
 +    ok(req != NULL, "HttpOpenRequest failed\n");
@@ -123,10 +124,9 @@ index 546e473..0121aa5 100644
 +
 +    test_status_code(req, 200);
 +
-+    InternetCloseHandle(req);
+     InternetCloseHandle(req);
      InternetCloseHandle(con);
      InternetCloseHandle(ses);
- 
 -- 
-2.8.0
+2.35.1
 

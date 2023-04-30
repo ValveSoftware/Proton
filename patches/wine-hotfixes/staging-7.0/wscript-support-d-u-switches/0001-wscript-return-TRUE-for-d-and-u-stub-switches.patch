@@ -1,0 +1,33 @@
+From d68918425e249c5c218ee6f0c9418e2e2daf9931 Mon Sep 17 00:00:00 2001
+From: Dmitry Kislyuk <dimaki@rocketmail.com>
+Date: Wed, 28 Apr 2021 09:47:41 -0500
+Subject: [PATCH] wscript: return TRUE for /d and /u stub switches
+
+Patch by Robert Wilhelm from bug:
+https://bugs.winehq.org/show_bug.cgi?id=49905
+
+VbsEdit is able to execute scripts with this patch applied.
+
+Signed-off-by: Dmitry Kislyuk <dimaki@rocketmail.com>
+---
+ programs/wscript/main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/programs/wscript/main.c b/programs/wscript/main.c
+index a7005a9289c..6d6e8935149 100644
+--- a/programs/wscript/main.c
++++ b/programs/wscript/main.c
+@@ -393,6 +393,10 @@ static BOOL set_host_properties(const WCHAR *prop)
+         wshInteractive = VARIANT_FALSE;
+     else if(wcsicmp(prop, L"nologo") == 0)
+         WINE_FIXME("ignored %s switch\n", debugstr_w(L"nologo"));
++    else if(wcsicmp(prop, L"d") == 0)
++        WINE_FIXME("ignored %s switch\n", debugstr_w(L"d"));
++   else if(wcsicmp(prop, L"u") == 0)
++        WINE_FIXME("ignored %s switch\n", debugstr_w(L"u"));
+     else
+     {
+         WINE_FIXME("unsupported switch %s\n", debugstr_w(prop));
+-- 
+2.30.2
+

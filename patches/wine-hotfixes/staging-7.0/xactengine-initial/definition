@@ -1,0 +1,5 @@
+Fixes: [31476] Support Bully Scholarship Edition xactengine3_1.dll.
+Fixes: [38615] DSA: Drakensang Demo fails on IXACTEngine::Initialize
+Fixes: [41030] Pac-Man Museum requires xactengine3_7
+Fixes: [41045] Captain Morgane requires xactengine3_4
+Fixes: [48684] BlazBlue: Calamity Trigger requires for xactengine 3.3 interface.

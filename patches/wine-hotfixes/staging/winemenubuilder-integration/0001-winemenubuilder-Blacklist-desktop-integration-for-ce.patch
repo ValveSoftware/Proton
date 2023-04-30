@@ -1,0 +1,174 @@
+From d83180d032eee8c3ec72c22fc2706d8b7231090e Mon Sep 17 00:00:00 2001
+From: Alex Henrie <alexhenrie24@gmail.com>
+Date: Sun, 1 Mar 2020 17:58:12 -0700
+Subject: [PATCH] winemenubuilder: Blacklist desktop integration for certain
+ associations
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=41275
+Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+---
+ dlls/mshtml/mshtml.inf                     |  6 +++
+ loader/wine.inf.in                         | 10 +++++
+ programs/winemenubuilder/winemenubuilder.c | 52 +++++++++++++++++++---
+ 3 files changed, 62 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mshtml/mshtml.inf b/dlls/mshtml/mshtml.inf
+index 4a650b444fc..548739f4326 100644
+--- a/dlls/mshtml/mshtml.inf
++++ b/dlls/mshtml/mshtml.inf
+@@ -111,6 +111,7 @@ HKCR,"giffile\shell\open\ddeexec",,,"""file:%%1"",,-1,,,,,"
+ HKCR,"giffile\shell\open\ddeexec\Application",,,"IExplore"
+ HKCR,"giffile\shell\open\ddeexec\Topic",,,"WWW_OpenURL"
+ ;; HKCR,"giffile\DefaultIcon",,,"%16422%\Internet Explorer\iexplore.exe,9"
++HKCU,Software\Wine\FileOpenBlacklist\.gif,"iexplore",,"""%16422%\Internet Explorer\iexplore.exe"" -nohome"
+ 
+ ;; GZIP
+ HKCR,"MIME\Database\Content Type\application/x-gzip","Extension",,".gz"
+@@ -158,6 +159,7 @@ HKCR,"jpegfile\shell\open\ddeexec",,,"""file:%%1"",,-1,,,,,"
+ HKCR,"jpegfile\shell\open\ddeexec\Application",,,"IExplore"
+ HKCR,"jpegfile\shell\open\ddeexec\Topic",,,"WWW_OpenURL"
+ ;; HKCR,"jpegfile\DefaultIcon",,,"%16422%\Internet Explorer\iexplore.exe,8"
++HKCU,Software\Wine\FileOpenBlacklist\.jpe,"iexplore",,"""%16422%\Internet Explorer\iexplore.exe"" -nohome"
+ 
+ ;; JPEG
+ HKCR,"MIME\Database\Content Type\image/jpeg","CLSID",,"%CLSID_HTMLDocument%"
+@@ -173,6 +175,7 @@ HKCR,"jpegfile\shell\open\ddeexec",,,"""file:%%1"",,-1,,,,,"
+ HKCR,"jpegfile\shell\open\ddeexec\Application",,,"IExplore"
+ HKCR,"jpegfile\shell\open\ddeexec\Topic",,,"WWW_OpenURL"
+ ;; HKCR,"jpegfile\DefaultIcon",,,"%16422%\Internet Explorer\iexplore.exe,8"
++HKCU,Software\Wine\FileOpenBlacklist\.jpeg,"iexplore",,"""%16422%\Internet Explorer\iexplore.exe"" -nohome"
+ 
+ ;; JPG
+ HKCR,".jpg",,2,"jpegfile"
+@@ -184,6 +187,7 @@ HKCR,"jpegfile\shell\open\ddeexec",,,"""file:%%1"",,-1,,,,,"
+ HKCR,"jpegfile\shell\open\ddeexec\Application",,,"IExplore"
+ HKCR,"jpegfile\shell\open\ddeexec\Topic",,,"WWW_OpenURL"
+ ;; HKCR,"jpegfile\DefaultIcon",,,"%16422%\Internet Explorer\iexplore.exe,8"
++HKCU,Software\Wine\FileOpenBlacklist\.jpg,"iexplore",,"""%16422%\Internet Explorer\iexplore.exe"" -nohome"
+ 
+ ;; MHTML
+ HKCR,"MIME\Database\Content Type\message/rfc822","CLSID",,"%CLSID_MHTMLDocument%"
+@@ -221,6 +225,7 @@ HKCR,"pjpegfile\shell\open\ddeexec",,,"""file:%%1"",,-1,,,,,"
+ HKCR,"pjpegfile\shell\open\ddeexec\Application",,,"IExplore"
+ HKCR,"pjpegfile\shell\open\ddeexec\Topic",,,"WWW_OpenURL"
+ ;; HKCR,"pjpegfile\DefaultIcon",,,"%16422%\Internet Explorer\iexplore.exe,8"
++HKCU,Software\Wine\FileOpenBlacklist\.jfif,"iexplore",,"""%16422%\Internet Explorer\iexplore.exe"" -nohome"
+ 
+ ;; PNG
+ HKCR,"MIME\Database\Content Type\image/png","Extension",,".png"
+@@ -234,6 +239,7 @@ HKCR,"pngfile\shell\open\ddeexec",,,"""file:%%1"",,-1,,,,,"
+ HKCR,"pngfile\shell\open\ddeexec\Application",,,"IExplore"
+ HKCR,"pngfile\shell\open\ddeexec\Topic",,,"WWW_OpenURL"
+ ;; HKCR,"pngfile\DefaultIcon",,,"%16422%\Internet Explorer\iexplore.exe,9"
++HKCU,Software\Wine\FileOpenBlacklist\.png,"iexplore",,"""%16422%\Internet Explorer\iexplore.exe"" -nohome"
+ 
+ ;; PS
+ HKCR,"MIME\Database\Content Type\application/postscript","Extension",,".ps"
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 131fd34ed7a..48c867cd216 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -329,6 +329,16 @@ HKCR,http\shell\open\command,,2,"""%11%\winebrowser.exe"" ""%1"""
+ HKCR,https\shell\open\command,,2,"""%11%\winebrowser.exe"" ""%1"""
+ HKCR,mailto\shell\open\command,,2,"""%11%\winebrowser.exe"" ""%1"""
+ 
++HKCU,Software\Wine\FileOpenBlacklist\.htm,"winebrowser",,"""%11%\winebrowser.exe"" -nohome"
++HKCU,Software\Wine\FileOpenBlacklist\.html,"winebrowser",,"""%11%\winebrowser.exe"" -nohome"
++HKCU,Software\Wine\FileOpenBlacklist\.ini,"notepad",,"%11%\notepad.exe %1"
++HKCU,Software\Wine\FileOpenBlacklist\.pdf,"winebrowser",,"""%11%\winebrowser.exe"" -nohome"
++HKCU,Software\Wine\FileOpenBlacklist\.rtf,"wordpad",,"""%16422%\Windows NT\Accessories\wordpad.exe"" %1"
++HKCU,Software\Wine\FileOpenBlacklist\.txt,"notepad",,"%11%\notepad.exe %1"
++HKCU,Software\Wine\FileOpenBlacklist\.url,"ieframe",,"rundll32.exe ieframe.dll,OpenURL %l"
++HKCU,Software\Wine\FileOpenBlacklist\.wri,"wordpad",,"""%16422%\Windows NT\Accessories\wordpad.exe"" %1"
++HKCU,Software\Wine\FileOpenBlacklist\.xml,"winebrowser",,"""%11%\winebrowser.exe"" -nohome"
++
+ [ContentIndex]
+ HKLM,System\CurrentControlSet\Control\ContentIndex\Language\Neutral,"WBreakerClass",,"{369647e0-17b0-11ce-9950-00aa004bbb1f}"
+ HKLM,System\CurrentControlSet\Control\ContentIndex\Language\Neutral,"StemmerClass",,""
+diff --git a/programs/winemenubuilder/winemenubuilder.c b/programs/winemenubuilder/winemenubuilder.c
+index 31c97107802..0226d0d7ad9 100644
+--- a/programs/winemenubuilder/winemenubuilder.c
++++ b/programs/winemenubuilder/winemenubuilder.c
+@@ -1954,7 +1954,7 @@ static BOOL write_freedesktop_mime_type_entry(const WCHAR *packages_dir, const W
+     return ret;
+ }
+ 
+-static BOOL is_extension_banned(LPCWSTR extension)
++static BOOL is_extension_banned(const WCHAR *extension)
+ {
+     /* These are managed through external tools like wine.desktop, to evade malware created file type associations */
+     if (!wcsicmp(extension, L".com") ||
+@@ -1964,6 +1964,42 @@ static BOOL is_extension_banned(LPCWSTR extension)
+     return FALSE;
+ }
+ 
++static BOOL is_soft_blacklisted(const WCHAR *extension, const WCHAR *command)
++{
++    static const WCHAR FileOpenBlacklistW[] = {'S','o','f','t','w','a','r','e','\\',
++                                               'W','i','n','e','\\',
++                                               'F','i','l','e','O','p','e','n','B','l','a','c','k','l','i','s','t','\\',0};
++    WCHAR blacklist_key_path[MAX_PATH];
++    HKEY blacklist_key;
++    WCHAR program_name[MAX_PATH], *blacklisted_command;
++    DWORD len = ARRAY_SIZE(program_name);
++    DWORD i = 0;
++
++    if (ARRAY_SIZE(FileOpenBlacklistW) + lstrlenW(extension) > ARRAY_SIZE(blacklist_key_path))
++        return FALSE;
++
++    lstrcpyW(blacklist_key_path, FileOpenBlacklistW);
++    lstrcatW(blacklist_key_path, extension);
++
++    if (RegOpenKeyExW(HKEY_CURRENT_USER, blacklist_key_path, 0, KEY_QUERY_VALUE, &blacklist_key) != ERROR_SUCCESS)
++        return FALSE;
++
++    while (RegEnumValueW(blacklist_key, i, program_name, &len, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
++    {
++        blacklisted_command = reg_get_valW(HKEY_CURRENT_USER, blacklist_key_path, program_name);
++        if (wcscmp(command, blacklisted_command) == 0)
++        {
++            RegCloseKey(blacklist_key);
++            return TRUE;
++        }
++        len = ARRAY_SIZE(program_name);
++        i++;
++    }
++
++    RegCloseKey(blacklist_key);
++    return FALSE;
++}
++
+ static WCHAR *get_special_mime_type(LPCWSTR extension)
+ {
+     if (!wcsicmp(extension, L".lnk"))
+@@ -2044,6 +2080,15 @@ static BOOL generate_associations(const WCHAR *packages_dir, const WCHAR *applic
+             WCHAR *mimeProgId = NULL;
+             struct rb_string_entry *entry;
+ 
++            commandW = assoc_query(ASSOCSTR_COMMAND, extensionW, L"open");
++            if (commandW == NULL)
++                /* no command => no application is associated */
++                goto end;
++
++            if (is_soft_blacklisted(extensionW, commandW))
++                /* command is on the blacklist => desktop integration is not desirable */
++                goto end;
++
+             wcslwr(extensionW);
+             friendlyDocNameW = assoc_query(ASSOCSTR_FRIENDLYDOCNAME, extensionW, NULL);
+ 
+@@ -2083,11 +2128,6 @@ static BOOL generate_associations(const WCHAR *packages_dir, const WCHAR *applic
+                 hasChanged = TRUE;
+             }
+ 
+-            commandW = assoc_query(ASSOCSTR_COMMAND, extensionW, L"open");
+-            if (commandW == NULL)
+-                /* no command => no application is associated */
+-                goto end;
+-
+             executableW = assoc_query(ASSOCSTR_EXECUTABLE, extensionW, L"open");
+             if (executableW)
+                 openWithIcon = compute_native_identifier(0, executableW, NULL);
+-- 
+2.35.1
+

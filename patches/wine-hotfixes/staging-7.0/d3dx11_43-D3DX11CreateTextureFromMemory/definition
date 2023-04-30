@@ -1,0 +1,4 @@
+Fixes: [50210] - Implement D3DX11GetImageInfoFromMemory
+Fixes: [45533] - Implement D3DX11CreateTextureFromMemory
+
+# This patchset will need to wait until the new wined3dx dll implemented.

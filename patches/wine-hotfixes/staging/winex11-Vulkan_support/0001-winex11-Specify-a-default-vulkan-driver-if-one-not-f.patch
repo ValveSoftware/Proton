@@ -1,4 +1,4 @@
-From 3561f512f400ca1d049ac5ce26b9cbb6aac1dc31 Mon Sep 17 00:00:00 2001
+From b6c918acf5996c494bece9efb1439fe00b81a274 Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Fri, 1 Jun 2018 14:03:26 +1000
 Subject: [PATCH] winex11: Specify a default vulkan driver if one not found at
@@ -7,11 +7,11 @@ Subject: [PATCH] winex11: Specify a default vulkan driver if one not found at
 We cannot specify it as a dependency since Debian Jessie has the
 vulkan library in backports and not everybody will have this mapped.
 ---
- dlls/winex11.drv/vulkan.c | 35 ++++++++++++++---------------------
- 1 file changed, 14 insertions(+), 21 deletions(-)
+ dlls/winex11.drv/vulkan.c | 38 ++++++++++++++++----------------------
+ 1 file changed, 16 insertions(+), 22 deletions(-)
 
 diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
-index 4f6624b3db8..6e343f47f34 100644
+index f4fe202dfaf..1768444b2e5 100644
 --- a/dlls/winex11.drv/vulkan.c
 +++ b/dlls/winex11.drv/vulkan.c
 @@ -40,10 +40,12 @@
@@ -26,19 +26,21 @@ index 4f6624b3db8..6e343f47f34 100644
 +#define SONAME_LIBVULKAN ""
 +#endif
 +
- static CRITICAL_SECTION context_section;
- static CRITICAL_SECTION_DEBUG critsect_debug =
- {
-@@ -111,9 +113,17 @@ static void *vulkan_handle;
+ static pthread_mutex_t vulkan_mutex;
  
- static BOOL WINAPI wine_vk_init(INIT_ONCE *once, void *param, void **context)
+ static XContext vulkan_hwnd_context;
+@@ -104,14 +106,23 @@ static void *vulkan_handle;
+ 
+ static void wine_vk_init(void)
  {
--    if (!(vulkan_handle = dlopen(SONAME_LIBVULKAN, RTLD_NOW)))
+-    init_recursive_mutex(&vulkan_mutex);
 +    const char *libvulkan_candidates[] = {SONAME_LIBVULKAN,
 +                                          "libvulkan.so.1",
 +                                          "libvulkan.so",
 +                                          NULL};
 +    int i;
+ 
+-    if (!(vulkan_handle = dlopen(SONAME_LIBVULKAN, RTLD_NOW)))
 +    for (i=0; libvulkan_candidates[i] && !vulkan_handle; i++)
 +        vulkan_handle = dlopen(libvulkan_candidates[i], RTLD_NOW);
 +
@@ -46,10 +48,15 @@ index 4f6624b3db8..6e343f47f34 100644
      {
 -        ERR("Failed to load %s.\n", SONAME_LIBVULKAN);
 +        ERR("Failed to load vulkan library\n");
-         return TRUE;
+         return;
      }
  
-@@ -1068,28 +1068,3 @@ const struct vulkan_funcs *get_vulkan_driver(UINT version)
++    init_recursive_mutex(&vulkan_mutex);
++
+ #define LOAD_FUNCPTR(f) if (!(p##f = dlsym(vulkan_handle, #f))) goto fail
+ #define LOAD_OPTIONAL_FUNCPTR(f) p##f = dlsym(vulkan_handle, #f)
+     LOAD_FUNCPTR(vkCreateInstance);
+@@ -1270,32 +1270,3 @@ const struct vulkan_funcs *get_vulkan_driver(UINT version)
      return NULL;
  }
 
@@ -73,12 +80,15 @@ index 4f6624b3db8..6e343f47f34 100644
 -{
 -}
 -
+-void invalidate_vk_surfaces(HWND hwnd)
+-{
+-}
+-
 -void vulkan_thread_detach(void)
 -{
 -}
 -
 -#endif /* SONAME_LIBVULKAN */
-
 -- 
-2.33.0
+2.35.1
 
