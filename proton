@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton7-55"
+CURRENT_PREFIX_VERSION="GE-Proton8-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -724,32 +724,18 @@ class CompatData:
             ('1313860', 'arial.ttf'),    # FIFA 21
             ('1506830', 'arial.ttf'),    # FIFA 22
         }
-
-        fontsmap = [
-            ( g_proton.fonts_dir, "LiberationSans-Regular.ttf", "arial.ttf" ),
-            ( g_proton.fonts_dir, "LiberationSans-Bold.ttf", "arialbd.ttf" ),
-            ( g_proton.fonts_dir, "LiberationSerif-Regular.ttf", "times.ttf" ),
-            ( g_proton.fonts_dir, "LiberationMono-Regular.ttf", "cour.ttf" ),
-            ( g_proton.fonts_dir, "LiberationMono-Bold.ttf", "courbd.ttf" ),
-            ( g_proton.fonts_dir, "msyh.ttf", "msyh.ttf" ),
-            ( g_proton.fonts_dir, "simsun.ttc", "simsun.ttc" ),
-            ( g_proton.fonts_dir, "msgothic.ttc", "msgothic.ttc" ),
-            ( g_proton.fonts_dir, "malgun.ttf", "malgun.ttf" ),
-            ( g_proton.fonts_dir, "micross.ttf", "micross.ttf" ),
-            ( g_proton.fonts_dir, "nirmala.ttf", "nirmala.ttf" ),
-
-            ( g_proton.wine_fonts_dir, "tahoma.ttf", "tahoma.ttf" ),
-        ]
-
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
         makedirs(windowsfonts)
         sgi = os.environ.get('SteamGameId', '')
-        for p in fontsmap:
-            lname = os.path.join(windowsfonts, p[2])
-            fname = os.path.join(p[0], p[1])
-            if (sgi, p[2]) in ALTERNATIVES:
-                fname = os.path.join(p[0], 'alt', p[2])
-            self.create_symlink(lname, fname)
+        for fonts_dir in [g_proton.fonts_dir, g_proton.wine_fonts_dir]:
+            for font in os.listdir(fonts_dir):
+                if not font.endswith('.ttf') and not font.endswith('.ttc'):
+                    continue
+                lname = os.path.join(windowsfonts, font)
+                fname = os.path.join(fonts_dir, font)
+                if (sgi, font) in ALTERNATIVES:
+                    fname = os.path.join(fonts_dir, 'alt', font)
+                self.create_symlink(lname, fname)
 
     def migrate_user_paths(self):
         #move winxp-style paths to vista+ paths. we can't do this in
@@ -1088,6 +1074,10 @@ class CompatData:
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 #copy vkd3d files into place
+                try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-1.dll", "drive_c/windows/system32",
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-1.dll", "drive_c/windows/syswow64",
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                 try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/system32",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                 try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/syswow64",
@@ -1331,6 +1321,7 @@ def default_compat_config():
                 "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
                 ]:
             ret.add("enablenvapi")
+
     return ret
 
 class Session:
@@ -1465,7 +1456,7 @@ class Session:
                 log("************************************************")
 
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
-            self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+debugstr,+loaddll,+mscoree")
+            self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+threadname,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
             self.env.setdefault("VKD3D_DEBUG", "warn")
             self.env.setdefault("VKD3D_SHADER_DEBUG", "fixme")
@@ -1561,7 +1552,7 @@ class Session:
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
-        if self.env["WINEDEBUG"] != "-all":
+        if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             if self.setup_logging(append_forever=False):
                 self.log_file.write("======================\n")
                 with open(g_proton.version_file, "r") as f:
@@ -1855,4 +1846,3 @@ if __name__ == "__main__":
 
 #pylint --disable=C0301,C0326,C0330,C0111,C0103,R0902,C1801,R0914,R0912,R0915
 # vim: set syntax=python:
-
