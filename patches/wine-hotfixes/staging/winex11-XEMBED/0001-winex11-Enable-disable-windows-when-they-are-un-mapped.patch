@@ -1,27 +1,27 @@
-From b628604e599f96eda85be0f8677419f8f591a7c6 Mon Sep 17 00:00:00 2001
+From e1440086421942267ff1df00fdb11e724bd0119b Mon Sep 17 00:00:00 2001
 From: Sebastian Lackner <sebastian@fds-team.de>
 Date: Fri, 22 Nov 2013 18:54:18 +0100
-Subject: winex11: Enable/disable windows when they are (un)mapped by foreign
- applications
+Subject: [PATCH] winex11: Enable/disable windows when they are (un)mapped by
+ foreign applications
 
 ---
  dlls/winex11.drv/event.c | 17 +++++++++++++++++
  1 file changed, 17 insertions(+)
 
 diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index f79f40c23..04a4c3c94 100644
+index 68cf638f1ed..38abae1278b 100644
 --- a/dlls/winex11.drv/event.c
 +++ b/dlls/winex11.drv/event.c
-@@ -1137,6 +1138,7 @@ static BOOL X11DRV_Expose( HWND hwnd, XEvent *xev )
+@@ -1148,6 +1148,7 @@ static BOOL X11DRV_Expose( HWND hwnd, XEvent *xev )
  static BOOL X11DRV_MapNotify( HWND hwnd, XEvent *event )
  {
      struct x11drv_win_data *data;
 +    BOOL is_embedded;
- 
+
      x11drv_input_add_window( hwnd, event->xany.window );
- 
-@@ -994,7 +995,12 @@ static BOOL X11DRV_MapNotify( HWND hwnd, XEvent *event )
-         if (hwndFocus && IsChild( hwnd, hwndFocus ))
+
+@@ -1161,7 +1162,12 @@ static BOOL X11DRV_MapNotify( HWND hwnd, XEvent *event )
+         if (hwndFocus && NtUserIsChild( hwnd, hwndFocus ))
              set_input_focus( data );
      }
 +
@@ -29,11 +29,11 @@ index f79f40c23..04a4c3c94 100644
      release_win_data( data );
 +
 +    if (is_embedded)
-+        EnableWindow( hwnd, TRUE );
++        NtUserEnableWindow( hwnd, TRUE );
      return TRUE;
  }
- 
-@@ -1004,6 +1010,17 @@ static BOOL X11DRV_MapNotify( HWND hwnd, XEvent *event )
+
+@@ -1171,6 +1177,17 @@ static BOOL X11DRV_MapNotify( HWND hwnd, XEvent *event )
   */
  static BOOL X11DRV_UnmapNotify( HWND hwnd, XEvent *event )
  {
@@ -46,11 +46,11 @@ index f79f40c23..04a4c3c94 100644
 +    release_win_data( data );
 +
 +    if (is_embedded)
-+        EnableWindow( hwnd, FALSE );
++        NtUserEnableWindow( hwnd, FALSE );
 +
      x11drv_input_remove_window( event->xany.window );
      return TRUE;
  }
--- 
-2.22.0
+--
+2.34.1
 
