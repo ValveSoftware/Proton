@@ -13,14 +13,14 @@ diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
 index 6e2a5b01359..ca080798f64 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -650,6 +650,7 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
- {
+@@ -1042,6 +1042,7 @@ VkResult wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+     VkInstance client_instance = client_ptr;
      VkInstanceCreateInfo create_info_host;
      const VkApplicationInfo *app_info;
 +    uint32_t new_mxcsr, old_mxcsr;
-     struct VkInstance_T *object;
+     struct conversion_context ctx;
+     struct wine_instance *object;
      VkResult res;
- 
 @@ -694,7 +695,12 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
       * the native physical devices and present those to the application.
       * Cleanup happens as part of wine_vkDestroyInstance.
