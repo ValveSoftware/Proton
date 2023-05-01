@@ -292,15 +292,50 @@
     # winex11-XEMBED
     patch -Np1 < ../patches/wine-hotfixes/staging/winex11-XEMBED/0001-winex11-Enable-disable-windows-when-they-are-un-mapped.patch
 
-### END WINE HOTFIX SECTION ###
+### END WINE STAGING APPLY SECTION ###
 
-### (2-6) WINE PENDING UPSTREAM SECTION ###
+### (2-3) GAME PATCH SECTION ###
 
+    echo "WINE: -GAME FIXES- assetto corsa hud fix"
+    patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
+
+    echo "WINE: -GAME FIXES- killer instinct vulkan fix"
+    patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
+
+    echo "WINE: -GAME FIXES- add file search workaround hack for Phantasy Star Online 2"
+    patch -Np1 < ../patches/game-patches/pso2_hack.patch
+
+    echo "WINE: -GAME FIXES- Add Star Citizen EAC patch and wrap it around SteamGameId=starcitizen envvar"
+    patch -Np1 < ../patches/game-patches/star-citizen-eac.patch
+
+### END GAME PATCH SECTION ###
+
+### (2-4) WINE HOTFIX/BACKPORT SECTION ###
+
+### END WINE HOTFIX/BACKPORT SECTION ###
+
+### (2-5) WINE PENDING UPSTREAM SECTION ###
+
+    # https://github.com/Frogging-Family/wine-tkg-git/commit/ca0daac62037be72ae5dd7bf87c705c989eba2cb
+    echo "WINE: -PENDING- unity crash hotfix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/unity_crash_hotfix.patch
+    
+    # https://bugs.winehq.org/show_bug.cgi?id=51683
+    echo "WINE: -PENDING- Guild Wars 2 patch"
+    patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-guild_wars_2.patch
+
+    echo "WINE: -PENDING- fix Battlenet qt platform bug"
+    # https://gitlab.winehq.org/wine/wine/-/merge_requests/1148
+    # added to staging in 8.5
+    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0001-ntdll-tests-Add-test-for-file-attributes-of-files-wi.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0002-ntdll-Do-not-open-code-hidden-file-handling-in-get_d.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0003-ntdll-Handle-hidden-file-names-inside-get_file_info-.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0004-ntdll-Only-infer-hidden-attribute-from-file-name-if-.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0005-ntdll-Set-xattr-in-NtCreateFile-if-inferred-and-requ.patch
+    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0006-ntdll-tests-Increase-margins-in-timer-merging-tests.patch
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
 
-### (2-7) WINE CUSTOM PATCHES ###
 
-### END WINE CUSTOM PATCHES ###
 ### END WINE PATCHING ###
