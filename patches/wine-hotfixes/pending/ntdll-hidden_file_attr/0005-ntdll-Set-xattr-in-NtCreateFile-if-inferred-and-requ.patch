@@ -1,0 +1,132 @@
+From 2ad3cf7addcbf191db85365c0c52aa24935dcdf5 Mon Sep 17 00:00:00 2001
+From: Torge Matthies <tmatthies@codeweavers.com>
+Date: Thu, 30 Mar 2023 05:46:39 +0200
+Subject: [PATCH 5/6] ntdll: Set xattr in NtCreateFile if inferred and
+ requested attributes don't match.
+
+And make sure it doesn't get deleted.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=53826
+Signed-off-by: Torge Matthies <tmatthies@codeweavers.com>
+---
+ dlls/ntdll/tests/file.c |  2 +-
+ dlls/ntdll/unix/file.c  | 26 +++++++++++++++++++-------
+ 2 files changed, 20 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/ntdll/tests/file.c b/dlls/ntdll/tests/file.c
+index cdd924a7226..b96b2e5b072 100644
+--- a/dlls/ntdll/tests/file.c
++++ b/dlls/ntdll/tests/file.c
+@@ -4094,7 +4094,7 @@ static void test_dotfile_file_attributes(void)
+ 
+     status = nt_get_file_attrs(filename, &attrs);
+     ok( status == STATUS_SUCCESS, "got %#lx\n", status );
+-    todo_wine ok( !(attrs & FILE_ATTRIBUTE_HIDDEN), "got attributes %#lx\n", attrs );
++    ok( !(attrs & FILE_ATTRIBUTE_HIDDEN), "got attributes %#lx\n", attrs );
+ 
+     status = pNtQueryInformationFile( h, &io, &info, sizeof(info), FileBasicInformation );
+     ok( status == STATUS_SUCCESS, "got %#lx\n", status );
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index d127e113230..5f5aa9be87c 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -1600,11 +1600,11 @@ static int fd_get_file_info( int fd, unsigned int options, struct stat *st, ULON
+ }
+ 
+ 
+-static int fd_set_dos_attrib( int fd, UINT attr )
++static int fd_set_dos_attrib( int fd, UINT attr, BOOL force_set )
+ {
+     /* we only store the HIDDEN and SYSTEM attributes */
+     attr &= XATTR_ATTRIBS_MASK;
+-    if (attr != 0)
++    if (force_set || attr != 0)
+     {
+         /* encode the attributes in Samba 3 ASCII format. Samba 4 has extended
+          * this format with more features, but retains compatibility with the
+@@ -1618,7 +1618,7 @@ static int fd_set_dos_attrib( int fd, UINT attr )
+ 
+ 
+ /* set the stat info and file attributes for a file (by file descriptor) */
+-NTSTATUS fd_set_file_info( int fd, UINT attr, HANDLE handle )
++NTSTATUS fd_set_file_info( int fd, UINT attr, HANDLE handle, BOOL force_set_xattr )
+ {
+     struct stat st;
+ 
+@@ -1637,7 +1637,8 @@ static NTSTATUS fd_set_file_info( int fd, UINT attr )
+     }
+     if (fchmod( fd, st.st_mode ) == -1) return errno_to_status( errno );
+ 
+-    if (fd_set_dos_attrib( fd, attr ) == -1 && errno != ENOTSUP)
++    force_set_xattr = force_set_xattr || st.st_nlink > 1;
++    if (fd_set_dos_attrib( fd, attr, force_set_xattr ) == -1 && errno != ENOTSUP)
+         WARN( "Failed to set extended attribute " SAMBA_XATTR_DOS_ATTRIB ". errno %d (%s)\n",
+               errno, strerror( errno ) );
+ 
+@@ -3963,6 +3964,7 @@ NTSTATUS WINAPI NtCreateFile( HANDLE *handle, ACCESS_MASK access, OBJECT_ATTRIBU
+     OBJECT_ATTRIBUTES new_attr;
+     UNICODE_STRING nt_name;
+     char *unix_name;
++    BOOL name_hidden = FALSE;
+     BOOL created = FALSE;
+     unsigned int status;
+ 
+@@ -4005,6 +4007,7 @@ NTSTATUS WINAPI NtCreateFile( HANDLE *handle, ACCESS_MASK access, OBJECT_ATTRIBU
+ 
+     if (status == STATUS_SUCCESS)
+     {
++        name_hidden = is_hidden_file( unix_name );
+         status = open_unix_file( handle, unix_name, access, &new_attr, attributes,
+                                  sharing, disposition, options, ea_buffer, ea_length );
+         free( unix_name );
+@@ -4032,14 +4035,15 @@ NTSTATUS WINAPI NtCreateFile( HANDLE *handle, ACCESS_MASK access, OBJECT_ATTRIBU
+             break;
+         }
+ 
+-        if (io->Information == FILE_CREATED && (attributes & XATTR_ATTRIBS_MASK))
++        if (io->Information == FILE_CREATED &&
++            ((attributes & XATTR_ATTRIBS_MASK) || name_hidden))
+         {
+             int fd, needs_close;
+ 
+             /* set any DOS extended attributes */
+             if (!server_get_unix_fd( *handle, 0, &fd, &needs_close, NULL, NULL ))
+             {
+-                if (fd_set_dos_attrib( fd, attributes ) == -1 && errno != ENOTSUP)
++                if (fd_set_dos_attrib( fd, attributes, TRUE ) == -1 && errno != ENOTSUP)
+                     WARN( "Failed to set extended attribute " SAMBA_XATTR_DOS_ATTRIB ". errno %d (%s)",
+                           errno, strerror( errno ) );
+                 if (needs_close) close( fd );
+@@ -4561,10 +4565,14 @@ NTSTATUS WINAPI NtSetInformationFile( HANDLE handle, IO_STATUS_BLOCK *io,
+         {
+             const FILE_BASIC_INFORMATION *info = ptr;
+             LARGE_INTEGER mtime, atime;
++            char *unix_name;
+ 
+             if ((status = server_get_unix_fd( handle, 0, &fd, &needs_close, NULL, NULL )))
+                 return io->u.Status = status;
+ 
++            if ((status = server_get_unix_name( handle, &unix_name )))
++                unix_name = NULL;
++
+             mtime.QuadPart = info->LastWriteTime.QuadPart == -1 ? 0 : info->LastWriteTime.QuadPart;
+             atime.QuadPart = info->LastAccessTime.QuadPart == -1 ? 0 : info->LastAccessTime.QuadPart;
+ 
+@@ -4572,9 +4580,13 @@ NTSTATUS WINAPI NtSetInformationFile( HANDLE handle, IO_STATUS_BLOCK *io,
+                 status = set_file_times( fd, &mtime, &atime );
+ 
+             if (status == STATUS_SUCCESS && info->FileAttributes)
+-                status = fd_set_file_info( fd, info->FileAttributes, handle );
++            {
++                BOOL force_xattr = unix_name && is_hidden_file( unix_name );
++                status = fd_set_file_info( fd, info->FileAttributes, handle, force_xattr );
++            }
+ 
+             if (needs_close) close( fd );
++            free( unix_name );
+         }
+         else status = STATUS_INVALID_PARAMETER_3;
+         break;
+-- 
+2.40.0
+

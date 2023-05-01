@@ -1,0 +1,46 @@
+From bf28841ea6e717ed625ccd02a025fb6153f45677 Mon Sep 17 00:00:00 2001
+From: Torge Matthies <tmatthies@codeweavers.com>
+Date: Thu, 30 Mar 2023 05:46:39 +0200
+Subject: [PATCH 2/6] ntdll: Do not open-code hidden file handling in
+ get_dir_data_entry.
+
+Signed-off-by: Torge Matthies <tmatthies@codeweavers.com>
+---
+ dlls/ntdll/unix/file.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index eca75b2d4fb..f48de4641b3 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -1303,7 +1303,7 @@ static BOOL is_hidden_file( const UNICODE_STRING *name )
+     end = p = name->Buffer + name->Length/sizeof(WCHAR);
+     while (p > name->Buffer && p[-1] == '\\') p--;
+     while (p > name->Buffer && p[-1] != '\\') p--;
+-    return (p < end && *p == '.');
++    return (p < end && p + 1 != end && p[0] == '.' && p[1] != '\\' && (p[1] != '.' || (p + 2 != end && p[2] != '\\')));
+ }
+ 
+ 
+@@ -2224,6 +2224,7 @@ static NTSTATUS get_dir_data_entry( struct dir_data *dir_data, void *info_ptr, I
+     union file_directory_info *info;
+     struct stat st;
+     ULONG name_len, start, dir_size, attributes;
++    UNICODE_STRING name;
+ 
+     if (get_file_info( names->unix_name, &st, &attributes ) == -1)
+     {
+@@ -2253,8 +2254,8 @@ static NTSTATUS get_dir_data_entry( struct dir_data *dir_data, void *info_ptr, I
+     {
+         if (st.st_dev != dir_data->id.dev) st.st_ino = 0;  /* ignore inode if on a different device */
+ 
+-        if (!show_dot_files && names->long_name[0] == '.' && names->long_name[1] &&
+-            (names->long_name[1] != '.' || names->long_name[2]))
++        RtlInitUnicodeString( &name, names->long_name );
++        if (is_hidden_file( &name ))
+             attributes |= FILE_ATTRIBUTE_HIDDEN;
+ 
+         fill_file_info( &st, attributes, info, class );
+-- 
+2.40.0
+
