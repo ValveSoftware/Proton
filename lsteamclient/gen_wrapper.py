@@ -943,6 +943,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cpp.write("#include \"steam_defs.h\"\n")
     cpp.write("#pragma push_macro(\"__cdecl\")\n")
     cpp.write("#undef __cdecl\n")
+    cpp.write("#define __cdecl\n")
     cpp.write(f"#include \"steamworks_sdk_{sdkver}/steam_api.h\"\n")
     if os.path.isfile(f"steamworks_sdk_{sdkver}/steamnetworkingtypes.h"):
         cpp.write(f"#include \"steamworks_sdk_{sdkver}/steamnetworkingtypes.h\"\n")
@@ -1165,6 +1166,7 @@ def handle_struct(sdkver, struct):
         cppfile.write("#include \"steam_defs.h\"\n")
         cppfile.write("#pragma push_macro(\"__cdecl\")\n")
         cppfile.write("#undef __cdecl\n")
+        cppfile.write("#define __cdecl\n")
         cppfile.write(f"#include \"steamworks_sdk_{sdkver}/steam_api.h\"\n")
         cppfile.write(f"#include \"steamworks_sdk_{sdkver}/isteamgameserver.h\"\n")
         if os.path.isfile(f"steamworks_sdk_{sdkver}/isteamnetworkingsockets.h"):
