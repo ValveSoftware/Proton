@@ -63,6 +63,8 @@ case 2103: /* HTTPRequestDataReceived_t_24 */
     return 20;
 case 2803: /* SteamInputConfigurationLoaded_t_40 */
     return 32;
+case 2804: /* SteamInputGamepadSlotChange_t_32 */
+    return 24;
 case 3402: /* SteamUGCRequestUGCDetailsResult_t_9784 */
     return 9768;
 case 3403: /* CreateItemResult_t_24 */
@@ -195,6 +197,8 @@ case 2103: /* HTTPRequestDataReceived_t_24 */
     return 20;
 case 2803: /* SteamInputConfigurationLoaded_t_40 */
     return 32;
+case 2804: /* SteamInputGamepadSlotChange_t_32 */
+    return 24;
 case 3402: /* SteamUGCRequestUGCDetailsResult_t_9784 */
     return 9768;
 case 3403: /* CreateItemResult_t_24 */

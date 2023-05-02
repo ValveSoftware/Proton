@@ -199,6 +199,12 @@ case 2803:
     case 40: cb_SteamInputConfigurationLoaded_t_40(lin_callback, callback); break;
     }
     break;
+case 2804:
+    switch(callback_len){
+    default:
+    case 32: cb_SteamInputGamepadSlotChange_t_32(lin_callback, callback); break;
+    }
+    break;
 case 3402:
     switch(callback_len){
     default:
@@ -600,6 +606,12 @@ case 2803:
     switch(callback_len){
     default:
     case 40: cb_SteamInputConfigurationLoaded_t_40(lin_callback, callback); break;
+    }
+    break;
+case 2804:
+    switch(callback_len){
+    default:
+    case 32: cb_SteamInputGamepadSlotChange_t_32(lin_callback, callback); break;
     }
     break;
 case 3402:

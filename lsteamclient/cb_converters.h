@@ -134,6 +134,10 @@ struct SteamInputConfigurationLoaded_t;
 struct winSteamInputConfigurationLoaded_t_40;
 extern void cb_SteamInputConfigurationLoaded_t_40(const struct SteamInputConfigurationLoaded_t *l, struct winSteamInputConfigurationLoaded_t_40 *w);
 
+struct SteamInputGamepadSlotChange_t;
+struct winSteamInputGamepadSlotChange_t_32;
+extern void cb_SteamInputGamepadSlotChange_t_32(const struct SteamInputGamepadSlotChange_t *l, struct winSteamInputGamepadSlotChange_t_32 *w);
+
 struct SteamUGCRequestUGCDetailsResult_t;
 struct winSteamUGCRequestUGCDetailsResult_t_9784;
 extern void cb_SteamUGCRequestUGCDetailsResult_t_9784(const struct SteamUGCRequestUGCDetailsResult_t *l, struct winSteamUGCRequestUGCDetailsResult_t_9784 *w);
