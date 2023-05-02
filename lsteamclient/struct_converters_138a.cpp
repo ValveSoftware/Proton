@@ -1,6 +1,7 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
+#define __cdecl
 #include "steamworks_sdk_138a/steam_api.h"
 #include "steamworks_sdk_138a/isteamgameserver.h"
 #include "steamworks_sdk_138a/isteamgameserverstats.h"
