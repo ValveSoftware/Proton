@@ -30,7 +30,7 @@ EResult __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_SendMe
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel, 16)
-int __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, int nLocalChannel, winSteamNetworkingMessage_t_156 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(winISteamNetworkingMessages_SteamNetworkingMessages002 *_this, int nLocalChannel, winSteamNetworkingMessage_t_157 ** ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(_this->linux_side, nLocalChannel, ppOutMessages, nMaxMessages);

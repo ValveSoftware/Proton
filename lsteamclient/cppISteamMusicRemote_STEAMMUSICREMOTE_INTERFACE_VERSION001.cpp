@@ -2,14 +2,14 @@
 #pragma push_macro("__cdecl")
 #undef __cdecl
 #define __cdecl
-#include "steamworks_sdk_156/steam_api.h"
-#include "steamworks_sdk_156/steamnetworkingtypes.h"
+#include "steamworks_sdk_157/steam_api.h"
+#include "steamworks_sdk_157/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_156
+#define SDKVER_157
 #include "struct_converters.h"
 #include "cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001.h"
 bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(void *linux_side, const char * pchName)

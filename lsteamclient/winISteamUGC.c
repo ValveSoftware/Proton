@@ -58,7 +58,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SendQueryUG
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult, 20)
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(winISteamUGC_STEAMUGC_INTERFACE_VERSION017 *_this, UGCQueryHandle_t handle, uint32 index, winSteamUGCDetails_t_156 * pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(winISteamUGC_STEAMUGC_INTERFACE_VERSION017 *_this, UGCQueryHandle_t handle, uint32 index, winSteamUGCDetails_t_157 * pDetails)
 {
     TRACE("%p\n", _this);
     return cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(_this->linux_side, handle, index, pDetails);
