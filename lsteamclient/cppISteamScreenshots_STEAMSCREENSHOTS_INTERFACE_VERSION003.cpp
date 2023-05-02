@@ -2,14 +2,14 @@
 #pragma push_macro("__cdecl")
 #undef __cdecl
 #define __cdecl
-#include "steamworks_sdk_155/steam_api.h"
-#include "steamworks_sdk_155/steamnetworkingtypes.h"
+#include "steamworks_sdk_156/steam_api.h"
+#include "steamworks_sdk_156/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_155
+#define SDKVER_156
 #include "struct_converters.h"
 #include "cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003.h"
 ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(void *linux_side, void * pubRGB, uint32 cubRGB, int nWidth, int nHeight)

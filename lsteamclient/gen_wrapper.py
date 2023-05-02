@@ -16,6 +16,7 @@ import re
 import math
 
 sdk_versions = [
+    "156",
     "155",
     "154",
     "153a",

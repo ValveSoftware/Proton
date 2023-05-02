@@ -19,6 +19,7 @@ typedef int64 lint64;
 typedef uint64 ulint64;
 
 typedef uint32_t EUserUGCList,
+        EUGCContentDescriptorID,
         EUGCMatchingUGCType,
         EUserUGCListSortOrder,
         EUGCQuery,

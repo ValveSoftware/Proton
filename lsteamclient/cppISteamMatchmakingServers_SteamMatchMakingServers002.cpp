@@ -2,14 +2,14 @@
 #pragma push_macro("__cdecl")
 #undef __cdecl
 #define __cdecl
-#include "steamworks_sdk_155/steam_api.h"
-#include "steamworks_sdk_155/steamnetworkingtypes.h"
+#include "steamworks_sdk_156/steam_api.h"
+#include "steamworks_sdk_156/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_155
+#define SDKVER_156
 #include "struct_converters.h"
 #include "cppISteamMatchmakingServers_SteamMatchMakingServers002.h"
 HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
