@@ -107,7 +107,7 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMess
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages, 16)
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, int nMessages, winSteamNetworkingMessage_t_155 *const * pMessages, int64 * pOutMessageNumberOrResult)
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, int nMessages, winSteamNetworkingMessage_t_156 *const * pMessages, int64 * pOutMessageNumberOrResult)
 {
     TRACE("%p\n", _this);
     cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(_this->linux_side, nMessages, pMessages, pOutMessageNumberOrResult);
@@ -121,7 +121,7 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_FlushMes
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection, 16)
-int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_155 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_156 ** ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection(_this->linux_side, hConn, ppOutMessages, nMaxMessages);
@@ -212,7 +212,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnecti
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup, 16)
-int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, HSteamNetPollGroup hPollGroup, winSteamNetworkingMessage_t_155 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup(winISteamNetworkingSockets_SteamNetworkingSockets012 *_this, HSteamNetPollGroup hPollGroup, winSteamNetworkingMessage_t_156 ** ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup(_this->linux_side, hPollGroup, ppOutMessages, nMaxMessages);

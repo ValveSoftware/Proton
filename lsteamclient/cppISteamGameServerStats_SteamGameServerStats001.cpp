@@ -2,15 +2,15 @@
 #pragma push_macro("__cdecl")
 #undef __cdecl
 #define __cdecl
-#include "steamworks_sdk_155/steam_api.h"
-#include "steamworks_sdk_155/steamnetworkingtypes.h"
-#include "steamworks_sdk_155/isteamgameserverstats.h"
+#include "steamworks_sdk_156/steam_api.h"
+#include "steamworks_sdk_156/steamnetworkingtypes.h"
+#include "steamworks_sdk_156/isteamgameserverstats.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_155
+#define SDKVER_156
 #include "struct_converters.h"
 #include "cppISteamGameServerStats_SteamGameServerStats001.h"
 SteamAPICall_t cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats(void *linux_side, CSteamID steamIDUser)
