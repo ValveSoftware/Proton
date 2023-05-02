@@ -2,14 +2,14 @@
 #pragma push_macro("__cdecl")
 #undef __cdecl
 #define __cdecl
-#include "steamworks_sdk_156/steam_api.h"
-#include "steamworks_sdk_156/steamnetworkingtypes.h"
+#include "steamworks_sdk_157/steam_api.h"
+#include "steamworks_sdk_157/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_156
+#define SDKVER_157
 #include "struct_converters.h"
 #include "cppISteamNetworking_SteamNetworking006.h"
 bool cppISteamNetworking_SteamNetworking006_SendP2PPacket(void *linux_side, CSteamID steamIDRemote, const void * pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)
