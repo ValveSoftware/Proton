@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton8-1"
+CURRENT_PREFIX_VERSION="GE-Proton8-3"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -625,7 +625,9 @@ class CompatData:
                     pass
 
             stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
-                              self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll" ]
+                              self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll",
+                              self.prefix_dir + "/drive_c/windows/system32/ir50_32.dll",
+                              self.prefix_dir + "/drive_c/windows/syswow64/ir50_32.dll" ]
             for builtin in stale_builtins:
                 if file_exists(builtin, follow_symlinks=False) and file_is_wine_builtin_dll(builtin):
                     log("Removing stale builtin " + builtin)
@@ -1247,6 +1249,7 @@ def default_compat_config():
                 "924970", #back 4 blood
                 "1178830", #bright memory infinite
                 "1409670", #bright memory infinite benchmark
+                "1016800", #chernobylite enhanced edition
                 "1153640", #chorus
                 "1791040", #chorus demo
                 "1577240", #cions of vega
@@ -1254,6 +1257,7 @@ def default_compat_config():
                 "870780", #control ultimate edition
                 "884660", #CRSED
                 "1091500", #cyberpunk 2077
+                "1693980", #dead space (remake)
                 "1190460", #death stranding
                 "1850570", #Death Stranding Director's Cut
                 "1252330", #deathloop
@@ -1269,6 +1273,9 @@ def default_compat_config():
                 "1332390", #F.I.S.T.: Forged In Shadow Torch Demo
                 "1641960", #Forever Skies
                 "2141060", #Forever Skies Demo
+                "1680880", #forspoken
+                "2228080", #forspoken demo
+                "1551360", #Forza Horizon 5
                 "1080110", #f1 2020
                 "1098130", #get stuffed
                 "1139900", #ghostrunner
@@ -1277,6 +1284,7 @@ def default_compat_config():
                 "1593500", #god of war
                 "1496790", #Gotham Knights
                 "414340", #hellblade: senua's sacrifice
+                "1817230", #hi-fi rush
                 "1659040", #hitman 3
                 "1847520", #hitman 3 free starter pack
                 "1151640", #Horizon Zero Dawn
@@ -1286,21 +1294,30 @@ def default_compat_config():
                 "1544360", #lego builder's journey
                 "1363080", #Manor Lords
                 "2122820", #Manor Lords Demo
+                "997070", #marvel's avengers
                 "1817070", #marvel's spider-man remastered
                 "784080", #mechwarrior 5: mercenaries
                 "1170950", #mortal online 2
                 "261550", #mount & blade II: bannerlord
                 "1222370", #Necromunda: Hired Gun
+                "1846380", #need for speed unbound
+                "1325200", #nioh 2
                 "275850", #no man's sky
                 "1386900", #Observer: System Redux
                 "1140100", #the persistence
                 "1322170", #pluviophile
                 "400", #Portal [RTX]
+                "1549180", #propnight
                 "1186640", #pumpkin jack
                 "1144200", #Ready Or Not
                 "1404210", #Red Dead Online
                 "1174180", #Red Dead Redemption 2
+                "1294810", #Redfall
+                "1649240", #returnal
                 "391220", #rise of the tomb raider
+                "1599660", #sackboy: a big adventure
+                "872670", #SCP: 5K - alpha testing
+                "513710", #scum
                 "750920", #shadow of the tomb raider
                 "1602080", #soulstice
                 "2015300", #soulstice demo
@@ -1309,6 +1326,7 @@ def default_compat_config():
                 "487390", #system shock demo
                 "868270", #the cycle: frontier
                 "306130", #the elder scrolls online
+                "1888930", #the last of us part 1
                 "1096200", #the orville: interactive fan experience
                 "1843860", #the redress of mira
                 "2050550", #the redress of mira demo
@@ -1316,9 +1334,11 @@ def default_compat_config():
                 "1662690", #twin stones: the journey of bukka
                 "1659420", #Uncharted Legacy of Thieves
                 "236390", #war thunder
+                "2239550", #watch dogs legion
                 "936720", #wrench
                 "1249800", #xuan-yuan sword VII
                 "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
+                "1446780", #monster hunter rise
                 ]:
             ret.add("enablenvapi")
 
