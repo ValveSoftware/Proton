@@ -1,19 +1,18 @@
-STEAMRT_VERSION = 0.20220601.0
+STEAMRT_VERSION = 0.20221017.1
 STEAMRT_URLBASE = registry.gitlab.steamos.cloud
 
-PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/soldier/sdk
+PROTONSDK_URLBASE = $(STEAMRT_URLBASE)/proton/sniper/sdk
 PROTONSDK_VERSION = $(STEAMRT_VERSION)-0-dev
 
 # this is just for building toolchain, as we do static builds it should
 # not have any impact on the end result, but changing it will invalidate
 # docker caches, so we need something that don't change much
-BASE_IMAGE_i686 = docker.io/i386/ubuntu:18.04
-BASE_IMAGE_x86_64 = docker.io/amd64/ubuntu:18.04
+BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:0.20221017.1
 
 BINUTILS_VERSION = 2.37
 GCC_VERSION = 10.3.0
 MINGW_VERSION = 9.0.0
-RUST_VERSION = 1.65.0
+RUST_VERSION = 1.68.0
 
 SOURCES_URLBASE = https://repo.steampowered.com/proton-sdk
 BINUTILS_URLBASE = $(SOURCES_URLBASE)
@@ -30,8 +29,8 @@ RUST_SOURCE_i686 = rust-$(RUST_VERSION)-i686-unknown-linux-gnu.tar.gz
 BINUTILS_SHA256 = 820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c
 GCC_SHA256 = 64f404c1a650f27fc33da242e1f2df54952e3963a49e06e73f6940f3223ac344
 MINGW_SHA256 = 1929b94b402f5ff4d7d37a9fe88daa9cc55515a6134805c104d1794ae22a4181
-RUST_SHA256_x86_64 = 8f754fdd5af783fe9020978c64e414cb45f3ad0a6f44d045219bbf2210ca3cb9
-RUST_SHA256_i686 = b29869f8e2c7029150a929b2c4e26843f363846ad99253a25be6abcfa8e84f46
+RUST_SHA256_x86_64 = 7be1acdac656d0b0b7e909e5c0d4ddf61c755c203ec26ebafbd306322335b361
+RUST_SHA256_i686 = dc931adeb2943dcadfbd29546481f0296fcb97a511421053ecae6586a85869b1
 
 DOCKER = docker
 
@@ -84,7 +83,6 @@ DOCKER = docker
 define create-build-base-rules
 .PHONY: build-base-$(1)
 all build-base: build-base-$(1)
-build-base-$(1): BASE_IMAGE = $(BASE_IMAGE_$(1))
 build-base-$(1): build-base-$(1).Dockerfile
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
@@ -189,7 +187,7 @@ $(eval $(call create-gcc-rules,x86_64,w64-mingw32))
 define create-proton-rules
 .PHONY: proton
 all: proton
-proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/soldier/sdk:$(STEAMRT_VERSION)
+proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:$(STEAMRT_VERSION)
 proton: proton.Dockerfile | gcc
 	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
