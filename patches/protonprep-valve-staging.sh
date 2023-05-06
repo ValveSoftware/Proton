@@ -106,7 +106,11 @@
     -W winmm-mciSendCommandA \
     -W winemenubuilder-Desktop_Icon_Path \
     -W winemenubuilder-integration \
-    -W winex11-XEMBED
+    -W winex11-XEMBED \
+    -W winex11-CandidateWindowPos \
+    -W winex11-Window_Style \
+    -W winex11-ime-check-thread-data \
+    -W winex11.drv-Query_server_position
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
