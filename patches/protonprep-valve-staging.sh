@@ -104,6 +104,8 @@
     -W winemenubuilder-integration \
     -W winspool.drv-ClosePrinter \
     -W winmm-mciSendCommandA \
+    -W winemenubuilder-Desktop_Icon_Path \
+    -W winemenubuilder-integration \
     -W winex11-XEMBED
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
@@ -180,6 +182,12 @@
     # winspool.drv-ClosePrinter - not required, only adds trace lines, for printers.
     # winmm-mciSendCommandA - not needed, only applies to win 9x mode
     # ** winex11-XEMBED - applied manually
+    #
+    # Paul Gofman — Yesterday at 3:49 PM
+    # that’s only for desktop integration, spamming native menu’s with wine apps which won’t probably start from there anyway
+    # winemenubuilder-integration -- winemenubuilder is disabled in proton and is not needed
+    # winemenubuilder-Desktop_Icon_Path -- winemenubuilder is disabled in proton and is not needed
+    # winemenubuilder-integration -- winemenubuilder is disabled in proton and is not needed
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -324,15 +332,9 @@
     echo "WINE: -PENDING- Guild Wars 2 patch"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-guild_wars_2.patch
 
-    echo "WINE: -PENDING- fix Battlenet qt platform bug"
-    # https://gitlab.winehq.org/wine/wine/-/merge_requests/1148
-    # added to staging in 8.5
-    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0001-ntdll-tests-Add-test-for-file-attributes-of-files-wi.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0002-ntdll-Do-not-open-code-hidden-file-handling-in-get_d.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0003-ntdll-Handle-hidden-file-names-inside-get_file_info-.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0004-ntdll-Only-infer-hidden-attribute-from-file-name-if-.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0005-ntdll-Set-xattr-in-NtCreateFile-if-inferred-and-requ.patch
-    patch -Np1 < ../patches/wine-hotfixes/pending/ntdll-hidden_file_attr/0006-ntdll-tests-Increase-margins-in-timer-merging-tests.patch
+    echo "WINE: -PENDING- Add Star Citizen GameGlass stub"
+    # added in 8.5 -- backporting
+    patch -Np1 < ../patches/wine-hotfixes/upstream/2326.patch
 
 ### END WINE PENDING UPSTREAM SECTION ###
 
