@@ -241,7 +241,7 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/wineboot-ProxySettings/0001-wineboot-Initialize-proxy-settings-registry-key.patch
 
     # winex11-UpdateLayeredWindow
-    patch -Np1 < ../wine-staging/patches/winex11-UpdateLayeredWindow/0001-winex11-Fix-alpha-blending-in-X11DRV_UpdateLayeredWi.patch
+    # patch -Np1 < ../wine-staging/patches/winex11-UpdateLayeredWindow/0001-winex11-Fix-alpha-blending-in-X11DRV_UpdateLayeredWi.patch
 
     # winex11-Vulkan_support
     patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Vulkan_support/0001-winex11-Specify-a-default-vulkan-driver-if-one-not-f.patch
@@ -281,7 +281,7 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0005-wininet-Replacing-header-fields-should-fail-if-they-.patch
 
     # winex11-wglShareLists
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-wglShareLists/0001-winex11.drv-Only-warn-about-used-contexts-in-wglShar.patch
+    # patch -Np1 < ../patches/wine-hotfixes/staging/winex11-wglShareLists/0001-winex11.drv-Only-warn-about-used-contexts-in-wglShar.patch
 
     # cryptext-CryptExtOpenCER
     patch -Np1 < ../patches/wine-hotfixes/staging/cryptext-CryptExtOpenCER/0001-cryptext-Implement-CryptExtOpenCER.patch
@@ -302,7 +302,7 @@
     patch -Np1 < ../wine-staging/patches/winemenubuilder-integration/0001-winemenubuilder-Blacklist-desktop-integration-for-ce.patch
 
     # winex11-XEMBED
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-XEMBED/0001-winex11-Enable-disable-windows-when-they-are-un-mapped.patch
+    # patch -Np1 < ../patches/wine-hotfixes/staging/winex11-XEMBED/0001-winex11-Enable-disable-windows-when-they-are-un-mapped.patch
 
 ### END WINE STAGING APPLY SECTION ###
 
