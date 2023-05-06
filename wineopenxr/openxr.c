@@ -2145,6 +2145,8 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
 {
     uint32_t i;
 
+    WINE_TRACE("Type %u, pNext %p.\n", in_layer->type, in_layer->next);
+
     switch(in_layer->type){
     case XR_TYPE_COMPOSITION_LAYER_CUBE_KHR: {
         out_layer->cube = *(const XrCompositionLayerCubeKHR *)in_layer;
@@ -2211,6 +2213,7 @@ static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *
             ((XrCompositionLayerProjectionView *)view)->subImage.swapchain = ((wine_XrSwapchain *)view->subImage.swapchain)->swapchain;
             while (view->next)
             {
+                WINE_TRACE("Projection view type %u.\n", ((XrCompositionLayerProjectionView *)view->next)->type);
                 switch (((XrCompositionLayerProjectionView *)view->next)->type)
                 {
                     case XR_TYPE_COMPOSITION_LAYER_DEPTH_INFO_KHR:
