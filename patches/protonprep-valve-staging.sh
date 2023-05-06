@@ -110,7 +110,8 @@
     -W winex11-CandidateWindowPos \
     -W winex11-Window_Style \
     -W winex11-ime-check-thread-data \
-    -W winex11.drv-Query_server_position
+    -W winex11.drv-Query_server_position \
+    -W user32-Mouse_Message_Hwnd
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
@@ -298,9 +299,6 @@
     # kernel32-Debugger
     patch -Np1 < ../wine-staging/patches/kernel32-Debugger/0001-kernel32-Always-start-debugger-on-WinSta0.patch
     
-    # winemenubuilder-integration
-    patch -Np1 < ../wine-staging/patches/winemenubuilder-integration/0001-winemenubuilder-Blacklist-desktop-integration-for-ce.patch
-
     # winex11-XEMBED
     # patch -Np1 < ../patches/wine-hotfixes/staging/winex11-XEMBED/0001-winex11-Enable-disable-windows-when-they-are-un-mapped.patch
 
