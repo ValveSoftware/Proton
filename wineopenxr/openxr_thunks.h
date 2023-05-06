@@ -3,7 +3,7 @@
  * This file is generated from OpenXR xr.xml file covered
  * by the following copyright and permission notice:
  *
- * Copyright (c) 2017-2021, The Khronos Group Inc.
+ * Copyright (c) 2017-2023, The Khronos Group Inc.
  *
  * SPDX-License-Identifier: Apache-2.0 OR MIT
  *
@@ -72,15 +72,6 @@ XrResult WINAPI wine_xrPollEvent(XrInstance instance, XrEventDataBuffer *eventDa
 
 /* Private thunks */
 
-typedef struct XrMarkerSpaceCreateInfoVARJO_host
-{
-    XrStructureType type;
-    const void *next;
-    uint64_t markerId;
-    XrPosef poseInMarkerSpace;
-} XrMarkerSpaceCreateInfoVARJO_host;
-
-
 typedef struct XrSceneMeshBuffersGetInfoMSFT_host
 {
     XrStructureType type;
@@ -97,6 +88,8 @@ void free_XrInstanceCreateInfo_struct_chain(XrInstanceCreateInfo *s) DECLSPEC_HI
 struct openxr_instance_funcs
 {
     XrResult (*p_xrAcquireSwapchainImage)(XrSwapchain, const XrSwapchainImageAcquireInfo *, uint32_t *);
+    XrResult (*p_xrApplyForceFeedbackCurlMNDX)(XrHandTrackerEXT, const XrForceFeedbackCurlApplyLocationsMNDX *);
+    XrResult (*p_xrApplyFoveationHTC)(XrSession, const XrFoveationApplyInfoHTC *);
     XrResult (*p_xrApplyHapticFeedback)(XrSession, const XrHapticActionInfo *, const XrHapticBaseHeader *);
     XrResult (*p_xrAttachSessionActionSets)(XrSession, const XrSessionActionSetsAttachInfo *);
     XrResult (*p_xrBeginFrame)(XrSession, const XrFrameBeginInfo *);
@@ -108,13 +101,7 @@ struct openxr_instance_funcs
     XrResult (*p_xrCreateActionSpace)(XrSession, const XrActionSpaceCreateInfo *, XrSpace *);
     XrResult (*p_xrCreateFoveationProfileFB)(XrSession, const XrFoveationProfileCreateInfoFB *, XrFoveationProfileFB *);
     XrResult (*p_xrCreateGeometryInstanceFB)(XrSession, const XrGeometryInstanceCreateInfoFB *, XrGeometryInstanceFB *);
-    XrResult (*p_xrCreateHandMeshSpaceMSFT)(XrHandTrackerEXT, const XrHandMeshSpaceCreateInfoMSFT *, XrSpace *);
     XrResult (*p_xrCreateHandTrackerEXT)(XrSession, const XrHandTrackerCreateInfoEXT *, XrHandTrackerEXT *);
-#if defined(USE_STRUCT_CONVERSION)
-    XrResult (*p_xrCreateMarkerSpaceVARJO)(XrSession, const XrMarkerSpaceCreateInfoVARJO_host *, XrSpace *);
-#else
-    XrResult (*p_xrCreateMarkerSpaceVARJO)(XrSession, const XrMarkerSpaceCreateInfoVARJO *, XrSpace *);
-#endif
     XrResult (*p_xrCreatePassthroughFB)(XrSession, const XrPassthroughCreateInfoFB *, XrPassthroughFB *);
     XrResult (*p_xrCreatePassthroughLayerFB)(XrSession, const XrPassthroughLayerCreateInfoFB *, XrPassthroughLayerFB *);
     XrResult (*p_xrCreateReferenceSpace)(XrSession, const XrReferenceSpaceCreateInfo *, XrSpace *);
@@ -125,7 +112,6 @@ struct openxr_instance_funcs
     XrResult (*p_xrCreateSpatialAnchorMSFT)(XrSession, const XrSpatialAnchorCreateInfoMSFT *, XrSpatialAnchorMSFT *);
     XrResult (*p_xrCreateSpatialAnchorSpaceMSFT)(XrSession, const XrSpatialAnchorSpaceCreateInfoMSFT *, XrSpace *);
     XrResult (*p_xrCreateSpatialAnchorStoreConnectionMSFT)(XrSession, XrSpatialAnchorStoreConnectionMSFT *);
-    XrResult (*p_xrCreateSpatialGraphNodeSpaceMSFT)(XrSession, const XrSpatialGraphNodeSpaceCreateInfoMSFT *, XrSpace *);
     XrResult (*p_xrCreateSwapchain)(XrSession, const XrSwapchainCreateInfo *, XrSwapchain *);
     XrResult (*p_xrCreateTriangleMeshFB)(XrSession, const XrTriangleMeshCreateInfoFB *, XrTriangleMeshFB *);
     XrResult (*p_xrCreateVulkanDeviceKHR)(XrInstance, const XrVulkanDeviceCreateInfoKHR *, VkDevice *, VkResult *);
@@ -153,8 +139,11 @@ struct openxr_instance_funcs
     XrResult (*p_xrEnumerateColorSpacesFB)(XrSession, uint32_t, uint32_t *, XrColorSpaceFB *);
     XrResult (*p_xrEnumerateDisplayRefreshRatesFB)(XrSession, uint32_t, uint32_t *, float *);
     XrResult (*p_xrEnumerateEnvironmentBlendModes)(XrInstance, XrSystemId, XrViewConfigurationType, uint32_t, uint32_t *, XrEnvironmentBlendMode *);
+    XrResult (*p_xrEnumerateExternalCamerasOCULUS)(XrSession, uint32_t, uint32_t *, XrExternalCameraOCULUS *);
+    XrResult (*p_xrEnumeratePerformanceMetricsCounterPathsMETA)(XrInstance, uint32_t, uint32_t *, XrPath *);
     XrResult (*p_xrEnumeratePersistedSpatialAnchorNamesMSFT)(XrSpatialAnchorStoreConnectionMSFT, uint32_t, uint32_t *, XrSpatialAnchorPersistenceNameMSFT *);
     XrResult (*p_xrEnumerateReferenceSpaces)(XrSession, uint32_t, uint32_t *, XrReferenceSpaceType *);
+    XrResult (*p_xrEnumerateRenderModelPathsFB)(XrSession, uint32_t, uint32_t *, XrRenderModelPathInfoFB *);
     XrResult (*p_xrEnumerateReprojectionModesMSFT)(XrInstance, XrSystemId, XrViewConfigurationType, uint32_t, uint32_t *, XrReprojectionModeMSFT *);
     XrResult (*p_xrEnumerateSceneComputeFeaturesMSFT)(XrInstance, XrSystemId, uint32_t, uint32_t *, XrSceneComputeFeatureMSFT *);
     XrResult (*p_xrEnumerateSwapchainFormats)(XrSession, uint32_t, uint32_t *, int64_t *);
@@ -173,13 +162,16 @@ struct openxr_instance_funcs
     XrResult (*p_xrGetControllerModelPropertiesMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelPropertiesMSFT *);
     XrResult (*p_xrGetControllerModelStateMSFT)(XrSession, XrControllerModelKeyMSFT, XrControllerModelStateMSFT *);
     XrResult (*p_xrGetCurrentInteractionProfile)(XrSession, XrPath, XrInteractionProfileState *);
+    XrResult (*p_xrGetDeviceSampleRateFB)(XrSession, const XrHapticActionInfo *, XrDevicePcmSampleRateGetInfoFB *);
     XrResult (*p_xrGetDisplayRefreshRateFB)(XrSession, float *);
+    XrResult (*p_xrGetFoveationEyeTrackedStateMETA)(XrSession, XrFoveationEyeTrackedStateMETA *);
     XrResult (*p_xrGetHandMeshFB)(XrHandTrackerEXT, XrHandTrackingMeshFB *);
     XrResult (*p_xrGetInputSourceLocalizedName)(XrSession, const XrInputSourceLocalizedNameGetInfo *, uint32_t, uint32_t *, char *);
     XrResult (*p_xrGetInstanceProperties)(XrInstance, XrInstanceProperties *);
-    XrResult (*p_xrGetMarkerSizeVARJO)(XrSession, uint64_t, XrExtent2Df *);
     XrResult (*p_xrGetOpenGLGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsOpenGLKHR *);
+    XrResult (*p_xrGetPerformanceMetricsStateMETA)(XrSession, XrPerformanceMetricsStateMETA *);
     XrResult (*p_xrGetReferenceSpaceBoundsRect)(XrSession, XrReferenceSpaceType, XrExtent2Df *);
+    XrResult (*p_xrGetRenderModelPropertiesFB)(XrSession, XrPath, XrRenderModelPropertiesFB *);
     XrResult (*p_xrGetSceneComponentsMSFT)(XrSceneMSFT, const XrSceneComponentsGetInfoMSFT *, XrSceneComponentsMSFT *);
     XrResult (*p_xrGetSceneComputeStateMSFT)(XrSceneObserverMSFT, XrSceneComputeStateMSFT *);
 #if defined(USE_STRUCT_CONVERSION)
@@ -200,12 +192,14 @@ struct openxr_instance_funcs
     XrResult (*p_xrGetVulkanGraphicsRequirementsKHR)(XrInstance, XrSystemId, XrGraphicsRequirementsVulkanKHR *);
     XrResult (*p_xrGetVulkanInstanceExtensionsKHR)(XrInstance, XrSystemId, uint32_t, uint32_t *, char *);
     XrResult (*p_xrLoadControllerModelMSFT)(XrSession, XrControllerModelKeyMSFT, uint32_t, uint32_t *, uint8_t *);
+    XrResult (*p_xrLoadRenderModelFB)(XrSession, const XrRenderModelLoadInfoFB *, XrRenderModelBufferFB *);
     XrResult (*p_xrLocateHandJointsEXT)(XrHandTrackerEXT, const XrHandJointsLocateInfoEXT *, XrHandJointLocationsEXT *);
     XrResult (*p_xrLocateSceneComponentsMSFT)(XrSceneMSFT, const XrSceneComponentsLocateInfoMSFT *, XrSceneComponentLocationsMSFT *);
     XrResult (*p_xrLocateSpace)(XrSpace, XrSpace, XrTime, XrSpaceLocation *);
     XrResult (*p_xrLocateViews)(XrSession, const XrViewLocateInfo *, XrViewState *, uint32_t, uint32_t *, XrView *);
     XrResult (*p_xrPassthroughLayerPauseFB)(XrPassthroughLayerFB);
     XrResult (*p_xrPassthroughLayerResumeFB)(XrPassthroughLayerFB);
+    XrResult (*p_xrPassthroughLayerSetKeyboardHandsIntensityFB)(XrPassthroughLayerFB, const XrPassthroughKeyboardHandsIntensityFB *);
     XrResult (*p_xrPassthroughLayerSetStyleFB)(XrPassthroughLayerFB, const XrPassthroughStyleFB *);
     XrResult (*p_xrPassthroughPauseFB)(XrPassthroughFB);
     XrResult (*p_xrPassthroughStartFB)(XrPassthroughFB);
@@ -213,20 +207,26 @@ struct openxr_instance_funcs
     XrResult (*p_xrPerfSettingsSetPerformanceLevelEXT)(XrSession, XrPerfSettingsDomainEXT, XrPerfSettingsLevelEXT);
     XrResult (*p_xrPersistSpatialAnchorMSFT)(XrSpatialAnchorStoreConnectionMSFT, const XrSpatialAnchorPersistenceInfoMSFT *);
     XrResult (*p_xrPollEvent)(XrInstance, XrEventDataBuffer *);
+    XrResult (*p_xrQueryPerformanceMetricsCounterMETA)(XrSession, XrPath, XrPerformanceMetricsCounterMETA *);
+    XrResult (*p_xrQuerySpacesFB)(XrSession, const XrSpaceQueryInfoBaseHeaderFB *, XrAsyncRequestIdFB *);
     XrResult (*p_xrReleaseSwapchainImage)(XrSwapchain, const XrSwapchainImageReleaseInfo *);
     XrResult (*p_xrRequestDisplayRefreshRateFB)(XrSession, float);
     XrResult (*p_xrRequestExitSession)(XrSession);
+    XrResult (*p_xrRequestSceneCaptureFB)(XrSession, const XrSceneCaptureRequestInfoFB *, XrAsyncRequestIdFB *);
     XrResult (*p_xrResultToString)(XrInstance, XrResult, char[]);
+    XrResult (*p_xrRetrieveSpaceQueryResultsFB)(XrSession, XrAsyncRequestIdFB, XrSpaceQueryResultsFB *);
+    XrResult (*p_xrSaveSpaceListFB)(XrSession, const XrSpaceListSaveInfoFB *, XrAsyncRequestIdFB *);
     XrResult (*p_xrSetColorSpaceFB)(XrSession, const XrColorSpaceFB);
+    XrResult (*p_xrSetDigitalLensControlALMALENCE)(XrSession, const XrDigitalLensControlALMALENCE *);
     XrResult (*p_xrSetEnvironmentDepthEstimationVARJO)(XrSession, XrBool32);
     XrResult (*p_xrSetInputDeviceActiveEXT)(XrSession, XrPath, XrPath, XrBool32);
     XrResult (*p_xrSetInputDeviceLocationEXT)(XrSession, XrPath, XrPath, XrSpace, XrPosef);
     XrResult (*p_xrSetInputDeviceStateBoolEXT)(XrSession, XrPath, XrPath, XrBool32);
     XrResult (*p_xrSetInputDeviceStateFloatEXT)(XrSession, XrPath, XrPath, float);
     XrResult (*p_xrSetInputDeviceStateVector2fEXT)(XrSession, XrPath, XrPath, XrVector2f);
-    XrResult (*p_xrSetMarkerTrackingPredictionVARJO)(XrSession, uint64_t, XrBool32);
-    XrResult (*p_xrSetMarkerTrackingTimeoutVARJO)(XrSession, uint64_t, XrDuration);
-    XrResult (*p_xrSetMarkerTrackingVARJO)(XrSession, XrBool32);
+    XrResult (*p_xrSetPerformanceMetricsStateMETA)(XrSession, const XrPerformanceMetricsStateMETA *);
+    XrResult (*p_xrSetTrackingOptimizationSettingsHintQCOM)(XrSession, XrTrackingOptimizationSettingsDomainQCOM, XrTrackingOptimizationSettingsHintQCOM);
+    XrResult (*p_xrSetViewOffsetVARJO)(XrSession, float);
     XrResult (*p_xrStopHapticFeedback)(XrSession, const XrHapticActionInfo *);
     XrResult (*p_xrStringToPath)(XrInstance, const char *, XrPath *);
     XrResult (*p_xrStructureTypeToString)(XrInstance, XrStructureType, char[]);
@@ -240,7 +240,6 @@ struct openxr_instance_funcs
     XrResult (*p_xrTriangleMeshGetIndexBufferFB)(XrTriangleMeshFB, uint32_t **);
     XrResult (*p_xrTriangleMeshGetVertexBufferFB)(XrTriangleMeshFB, XrVector3f **);
     XrResult (*p_xrUnpersistSpatialAnchorMSFT)(XrSpatialAnchorStoreConnectionMSFT, const XrSpatialAnchorPersistenceNameMSFT *);
-    XrResult (*p_xrUpdateHandMeshMSFT)(XrHandTrackerEXT, const XrHandMeshUpdateInfoMSFT *, XrHandMeshMSFT *);
     XrResult (*p_xrUpdateSwapchainFB)(XrSwapchain, const XrSwapchainStateBaseHeaderFB *);
     XrResult (*p_xrWaitFrame)(XrSession, const XrFrameWaitInfo *, XrFrameState *);
     XrResult (*p_xrWaitSwapchainImage)(XrSwapchain, const XrSwapchainImageWaitInfo *);
@@ -248,6 +247,8 @@ struct openxr_instance_funcs
 
 #define ALL_XR_INSTANCE_FUNCS() \
     USE_XR_FUNC(xrAcquireSwapchainImage) \
+    USE_XR_FUNC(xrApplyForceFeedbackCurlMNDX) \
+    USE_XR_FUNC(xrApplyFoveationHTC) \
     USE_XR_FUNC(xrApplyHapticFeedback) \
     USE_XR_FUNC(xrAttachSessionActionSets) \
     USE_XR_FUNC(xrBeginFrame) \
@@ -259,9 +260,7 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrCreateActionSpace) \
     USE_XR_FUNC(xrCreateFoveationProfileFB) \
     USE_XR_FUNC(xrCreateGeometryInstanceFB) \
-    USE_XR_FUNC(xrCreateHandMeshSpaceMSFT) \
     USE_XR_FUNC(xrCreateHandTrackerEXT) \
-    USE_XR_FUNC(xrCreateMarkerSpaceVARJO) \
     USE_XR_FUNC(xrCreatePassthroughFB) \
     USE_XR_FUNC(xrCreatePassthroughLayerFB) \
     USE_XR_FUNC(xrCreateReferenceSpace) \
@@ -272,7 +271,6 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrCreateSpatialAnchorMSFT) \
     USE_XR_FUNC(xrCreateSpatialAnchorSpaceMSFT) \
     USE_XR_FUNC(xrCreateSpatialAnchorStoreConnectionMSFT) \
-    USE_XR_FUNC(xrCreateSpatialGraphNodeSpaceMSFT) \
     USE_XR_FUNC(xrCreateSwapchain) \
     USE_XR_FUNC(xrCreateTriangleMeshFB) \
     USE_XR_FUNC(xrCreateVulkanDeviceKHR) \
@@ -300,8 +298,11 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrEnumerateColorSpacesFB) \
     USE_XR_FUNC(xrEnumerateDisplayRefreshRatesFB) \
     USE_XR_FUNC(xrEnumerateEnvironmentBlendModes) \
+    USE_XR_FUNC(xrEnumerateExternalCamerasOCULUS) \
+    USE_XR_FUNC(xrEnumeratePerformanceMetricsCounterPathsMETA) \
     USE_XR_FUNC(xrEnumeratePersistedSpatialAnchorNamesMSFT) \
     USE_XR_FUNC(xrEnumerateReferenceSpaces) \
+    USE_XR_FUNC(xrEnumerateRenderModelPathsFB) \
     USE_XR_FUNC(xrEnumerateReprojectionModesMSFT) \
     USE_XR_FUNC(xrEnumerateSceneComputeFeaturesMSFT) \
     USE_XR_FUNC(xrEnumerateSwapchainFormats) \
@@ -320,13 +321,16 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrGetControllerModelPropertiesMSFT) \
     USE_XR_FUNC(xrGetControllerModelStateMSFT) \
     USE_XR_FUNC(xrGetCurrentInteractionProfile) \
+    USE_XR_FUNC(xrGetDeviceSampleRateFB) \
     USE_XR_FUNC(xrGetDisplayRefreshRateFB) \
+    USE_XR_FUNC(xrGetFoveationEyeTrackedStateMETA) \
     USE_XR_FUNC(xrGetHandMeshFB) \
     USE_XR_FUNC(xrGetInputSourceLocalizedName) \
     USE_XR_FUNC(xrGetInstanceProperties) \
-    USE_XR_FUNC(xrGetMarkerSizeVARJO) \
     USE_XR_FUNC(xrGetOpenGLGraphicsRequirementsKHR) \
+    USE_XR_FUNC(xrGetPerformanceMetricsStateMETA) \
     USE_XR_FUNC(xrGetReferenceSpaceBoundsRect) \
+    USE_XR_FUNC(xrGetRenderModelPropertiesFB) \
     USE_XR_FUNC(xrGetSceneComponentsMSFT) \
     USE_XR_FUNC(xrGetSceneComputeStateMSFT) \
     USE_XR_FUNC(xrGetSceneMeshBuffersMSFT) \
@@ -343,12 +347,14 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrGetVulkanGraphicsRequirementsKHR) \
     USE_XR_FUNC(xrGetVulkanInstanceExtensionsKHR) \
     USE_XR_FUNC(xrLoadControllerModelMSFT) \
+    USE_XR_FUNC(xrLoadRenderModelFB) \
     USE_XR_FUNC(xrLocateHandJointsEXT) \
     USE_XR_FUNC(xrLocateSceneComponentsMSFT) \
     USE_XR_FUNC(xrLocateSpace) \
     USE_XR_FUNC(xrLocateViews) \
     USE_XR_FUNC(xrPassthroughLayerPauseFB) \
     USE_XR_FUNC(xrPassthroughLayerResumeFB) \
+    USE_XR_FUNC(xrPassthroughLayerSetKeyboardHandsIntensityFB) \
     USE_XR_FUNC(xrPassthroughLayerSetStyleFB) \
     USE_XR_FUNC(xrPassthroughPauseFB) \
     USE_XR_FUNC(xrPassthroughStartFB) \
@@ -356,20 +362,26 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrPerfSettingsSetPerformanceLevelEXT) \
     USE_XR_FUNC(xrPersistSpatialAnchorMSFT) \
     USE_XR_FUNC(xrPollEvent) \
+    USE_XR_FUNC(xrQueryPerformanceMetricsCounterMETA) \
+    USE_XR_FUNC(xrQuerySpacesFB) \
     USE_XR_FUNC(xrReleaseSwapchainImage) \
     USE_XR_FUNC(xrRequestDisplayRefreshRateFB) \
     USE_XR_FUNC(xrRequestExitSession) \
+    USE_XR_FUNC(xrRequestSceneCaptureFB) \
     USE_XR_FUNC(xrResultToString) \
+    USE_XR_FUNC(xrRetrieveSpaceQueryResultsFB) \
+    USE_XR_FUNC(xrSaveSpaceListFB) \
     USE_XR_FUNC(xrSetColorSpaceFB) \
+    USE_XR_FUNC(xrSetDigitalLensControlALMALENCE) \
     USE_XR_FUNC(xrSetEnvironmentDepthEstimationVARJO) \
     USE_XR_FUNC(xrSetInputDeviceActiveEXT) \
     USE_XR_FUNC(xrSetInputDeviceLocationEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateBoolEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateFloatEXT) \
     USE_XR_FUNC(xrSetInputDeviceStateVector2fEXT) \
-    USE_XR_FUNC(xrSetMarkerTrackingPredictionVARJO) \
-    USE_XR_FUNC(xrSetMarkerTrackingTimeoutVARJO) \
-    USE_XR_FUNC(xrSetMarkerTrackingVARJO) \
+    USE_XR_FUNC(xrSetPerformanceMetricsStateMETA) \
+    USE_XR_FUNC(xrSetTrackingOptimizationSettingsHintQCOM) \
+    USE_XR_FUNC(xrSetViewOffsetVARJO) \
     USE_XR_FUNC(xrStopHapticFeedback) \
     USE_XR_FUNC(xrStringToPath) \
     USE_XR_FUNC(xrStructureTypeToString) \
@@ -383,7 +395,6 @@ struct openxr_instance_funcs
     USE_XR_FUNC(xrTriangleMeshGetIndexBufferFB) \
     USE_XR_FUNC(xrTriangleMeshGetVertexBufferFB) \
     USE_XR_FUNC(xrUnpersistSpatialAnchorMSFT) \
-    USE_XR_FUNC(xrUpdateHandMeshMSFT) \
     USE_XR_FUNC(xrUpdateSwapchainFB) \
     USE_XR_FUNC(xrWaitFrame) \
     USE_XR_FUNC(xrWaitSwapchainImage)
