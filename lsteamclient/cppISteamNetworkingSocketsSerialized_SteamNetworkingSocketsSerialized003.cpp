@@ -1,6 +1,7 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
+#define __cdecl
 #include "steamworks_sdk_143y/steam_api.h"
 #include "steamworks_sdk_143y/isteamnetworkingsocketsserialized.h"
 #pragma pop_macro("__cdecl")
