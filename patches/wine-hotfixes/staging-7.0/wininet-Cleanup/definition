@@ -1,1 +1,0 @@
-# Fixes: [28911] Add HTTP Host header in HttpSendRequest instead of HttpOpenRequest

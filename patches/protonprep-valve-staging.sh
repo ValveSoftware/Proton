@@ -5,10 +5,6 @@
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
-
-    # https://github.com/doitsujin/dxvk/pull/2675
-    echo "DXVK: [dxgi] Leave fullscreen mode when window looses focus"
-    patch -Np1 < ../patches/dxvk/2675.patch
     
     echo "DXVK: Fix Secret World: Legends patcher crash"
     patch -Np1 < ../patches/dxvk/secret-world.patch
@@ -241,9 +237,6 @@
     # wineboot-ProxySettings
     patch -Np1 < ../patches/wine-hotfixes/staging/wineboot-ProxySettings/0001-wineboot-Initialize-proxy-settings-registry-key.patch
 
-    # winex11-UpdateLayeredWindow
-    # patch -Np1 < ../wine-staging/patches/winex11-UpdateLayeredWindow/0001-winex11-Fix-alpha-blending-in-X11DRV_UpdateLayeredWi.patch
-
     # winex11-Vulkan_support
     patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Vulkan_support/0001-winex11-Specify-a-default-vulkan-driver-if-one-not-f.patch
 
@@ -268,9 +261,6 @@
     # packager-DllMain
     patch -Np1 < ../patches/wine-hotfixes/staging/packager-DllMain/0001-packager-Prefer-native-version.patch
 
-    # winemenubuilder-Desktop_Icon_Path
-    patch -Np1 < ../patches/wine-hotfixes/staging/winemenubuilder-Desktop_Icon_Path/0001-winemenubuilder-Create-desktop-shortcuts-with-absolu.patch
-
     # wscript-support-d-u-switches
     patch -Np1 < ../patches/wine-hotfixes/staging/wscript-support-d-u-switches/0001-wscript-return-TRUE-for-d-and-u-stub-switches.patch
 
@@ -280,9 +270,6 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0003-wininet-tests-Check-cookie-behaviour-when-overriding.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0004-wininet-Strip-filename-if-no-path-is-set-in-cookie.patch
     patch -Np1 < ../patches/wine-hotfixes/staging/wininet-Cleanup/0005-wininet-Replacing-header-fields-should-fail-if-they-.patch
-
-    # winex11-wglShareLists
-    # patch -Np1 < ../patches/wine-hotfixes/staging/winex11-wglShareLists/0001-winex11.drv-Only-warn-about-used-contexts-in-wglShar.patch
 
     # cryptext-CryptExtOpenCER
     patch -Np1 < ../patches/wine-hotfixes/staging/cryptext-CryptExtOpenCER/0001-cryptext-Implement-CryptExtOpenCER.patch
@@ -299,9 +286,6 @@
     # kernel32-Debugger
     patch -Np1 < ../wine-staging/patches/kernel32-Debugger/0001-kernel32-Always-start-debugger-on-WinSta0.patch
     
-    # winex11-XEMBED
-    # patch -Np1 < ../patches/wine-hotfixes/staging/winex11-XEMBED/0001-winex11-Enable-disable-windows-when-they-are-un-mapped.patch
-
 ### END WINE STAGING APPLY SECTION ###
 
 ### (2-3) GAME PATCH SECTION ###
@@ -333,10 +317,6 @@
     # https://bugs.winehq.org/show_bug.cgi?id=51683
     echo "WINE: -PENDING- Guild Wars 2 patch"
     patch -Np1 < ../patches/wine-hotfixes/pending/hotfix-guild_wars_2.patch
-
-    echo "WINE: -PENDING- Add Star Citizen GameGlass stub"
-    # added in 8.5 -- backporting
-    patch -Np1 < ../patches/wine-hotfixes/upstream/2326.patch
 
 ### END WINE PENDING UPSTREAM SECTION ###
 

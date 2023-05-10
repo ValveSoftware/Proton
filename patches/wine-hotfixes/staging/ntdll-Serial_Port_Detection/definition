@@ -1,1 +1,0 @@
-Fixes: [39793] Do a device check before returning a default serial port name

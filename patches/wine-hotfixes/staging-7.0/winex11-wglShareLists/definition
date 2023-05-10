@@ -1,2 +1,0 @@
-Fixes: [11436] Do not fail when a used context is passed to wglShareLists
-Fixes: [25419] Fix broken textures in XIII Century: Death or Glory

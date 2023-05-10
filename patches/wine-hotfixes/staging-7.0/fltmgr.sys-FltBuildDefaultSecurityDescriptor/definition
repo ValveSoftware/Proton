@@ -1,2 +1,0 @@
-Fixes: [49089] fltmgr.sys: Implement FltBuildDefaultSecurityDescriptor
-Depends: winedevice-Default_Drivers

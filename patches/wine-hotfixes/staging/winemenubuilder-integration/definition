@@ -1,2 +1,0 @@
-Fixes: [41275] Winemenubuilder should respect existing defaults for filetype associations
-Fixes: [22904] Register URL protocol handlers under Linux

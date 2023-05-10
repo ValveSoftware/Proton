@@ -1,2 +1,0 @@
-Fixes: [40613] Multiple applications require UAC implementation to run installer/app as a normal user instead of administrator (WhatsApp Desktop, Smartflix, Squirrel Installers, OneDrive)
-Fixes: [39262] DiscordSetup.exe (.NET 4.5.2 app): Squirrell installer requires being run as unelevated process ('explorer.exe' should run unelevated by default with Vista+ setting)

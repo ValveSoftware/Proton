@@ -1,2 +1,0 @@
-Fixes: [9158] Support for DOS hidden/system file attributes
-Fixes: [15679] cygwin symlinks not working in wine

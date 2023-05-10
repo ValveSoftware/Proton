@@ -1,1 +1,0 @@
-Fixes: Do not signal threads until they are really gone
