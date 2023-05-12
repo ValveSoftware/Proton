@@ -1097,7 +1097,10 @@ def default_compat_config():
                 "1291680", #apocalypse: 2.0 edition
                 "979690", #the ascent
                 "805550", #assetto corsa competizione
+                "668580", #Atomic Heart
+                "2407990", #Atomic Heart demo
                 "924970", #back 4 blood
+                "1086940", #Baldur's Gate 3
                 "1178830", #bright memory infinite
                 "1409670", #bright memory infinite benchmark
                 "1016800", #chernobylite enhanced edition
@@ -1114,6 +1117,8 @@ def default_compat_config():
                 "1252330", #deathloop
                 "548430", #deep rock galactic
                 "428660", #deliver us the moon
+                "1929610", #Demonologist
+                "2302560", #Demonologist demo
                 "534380", #dying light 2
                 "269190", #edge of eternity
                 "1871990", #engine evolution 2022
@@ -1139,9 +1144,12 @@ def default_compat_config():
                 "1659040", #hitman 3
                 "1847520", #hitman 3 free starter pack
                 "1151640", #Horizon Zero Dawn
+                "1149460", #Icarus
                 "1650150", #island of the ancients
                 "1987940", #island of the ancients demo
                 "1371480", #iron conflict
+                "1946700", #Layers of Fear
+                "2237040", #Layers of Fear (demo)
                 "1544360", #lego builder's journey
                 "1363080", #Manor Lords
                 "2122820", #Manor Lords Demo
@@ -1169,10 +1177,16 @@ def default_compat_config():
                 "1599660", #sackboy: a big adventure
                 "872670", #SCP: 5K - alpha testing
                 "513710", #scum
+                "1227690", #Severed Steel
+                "1631910", #Severed Steel demo
                 "750920", #shadow of the tomb raider
+                "1155330", #Showgunners
+                "2022460", #Showgunners demo
                 "1602080", #soulstice
                 "2015300", #soulstice demo
                 "1296010", #stay in the light
+                "2162020", #Strayed Lights
+                "2311720", #Strayed Lights demo
                 "813630", #supraland
                 "487390", #system shock demo
                 "868270", #the cycle: frontier
@@ -1184,6 +1198,9 @@ def default_compat_config():
                 "1567740", #to hell with it
                 "1662690", #twin stones: the journey of bukka
                 "1659420", #Uncharted Legacy of Thieves
+                "1159690", #Voidtrain
+                "1321660", #Voidtrain demo
+                "1361210", #Warhammer 40,000: Darktide
                 "236390", #war thunder
                 "2239550", #watch dogs legion
                 "936720", #wrench
