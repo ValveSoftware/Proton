@@ -571,16 +571,8 @@ impl <'a> Read for StreamSerializer<'a> {
 }
 
 impl VideoConv {
-    fn range(
-        &self,
-        _pad: &gst::Pad,
-        offset: u64,
-        in_buf: Option<&mut gst::BufferRef>,
-        requested_size: u32,
-    ) -> Result<gst::PadGetRangeSuccess, gst::FlowError> {
-
+    fn get_upstream_range(&self, offset: u64, requested_size: u32) -> Result<(u64, u32), gst::FlowError> {
         let mut state = self.state.lock().unwrap();
-
         let state = match &mut *state {
             Some(s) => s,
             None => { return Err(gst::FlowError::Error); }
@@ -592,6 +584,24 @@ impl VideoConv {
 
         let ups_offset = self.duration_ours_to_upstream(state, offset).unwrap();
         let ups_requested_size = self.duration_ours_to_upstream(state, requested_size as u64).unwrap() as u32;
+
+        Ok((ups_offset, ups_requested_size))
+    }
+
+    fn range(
+        &self,
+        _pad: &gst::Pad,
+        offset: u64,
+        in_buf: Option<&mut gst::BufferRef>,
+        requested_size: u32,
+    ) -> Result<gst::PadGetRangeSuccess, gst::FlowError> {
+        let (ups_offset, ups_requested_size) = self.get_upstream_range(offset, requested_size)?;
+
+        let mut state = self.state.lock().unwrap();
+        let state = match &mut *state {
+            Some(s) => s,
+            None => { return Err(gst::FlowError::Error); }
+        };
 
         /* read and ignore upstream bytes */
         self.sinkpad.pull_range(ups_offset, ups_requested_size)?;
