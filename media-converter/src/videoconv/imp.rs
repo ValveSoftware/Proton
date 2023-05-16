@@ -728,6 +728,7 @@ impl VideoConv {
                 true
             },
             QueryViewMut::Duration(ref mut q) => {
+                if q.format() != gst::Format::Bytes { return false };
 
                 let mut state = self.state.lock().unwrap();
 
@@ -741,10 +742,8 @@ impl VideoConv {
                 }
 
                 if let Some(sz) = state.our_duration {
-                    if q.format() == gst::Format::Bytes {
-                        q.set(gst::format::Bytes::from_u64(sz));
-                        return true
-                    }
+                    q.set(gst::format::Bytes::from_u64(sz));
+                    return true
                 }
 
                 false
