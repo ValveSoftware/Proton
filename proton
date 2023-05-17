@@ -1443,6 +1443,8 @@ class Session:
                         self.log_file.write("System " + var + ": " + os.environ[var] + "\n")
                     if var in used_user_settings:
                         self.log_file.write("User settings " + var + ": " + used_user_settings[var] + "\n")
+                    if var in self.env:
+                        self.log_file.write("Effective " + var + ": " + self.env[var] + "\n")
 
                 self.log_file.write("======================\n")
                 self.log_file.flush()
