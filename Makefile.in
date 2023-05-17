@@ -470,6 +470,11 @@ $(eval $(call rules-source,dxvk,$(SRCDIR)/dxvk))
 $(eval $(call rules-meson,dxvk,32,CROSS))
 $(eval $(call rules-meson,dxvk,64,CROSS))
 
+$(OBJ)/.dxvk-post-source:
+	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/dxvk describe --always --abbrev=15 --dirty=0)#' \
+	    $(SRCDIR)/dxvk/version.h.in > $(DXVK_SRC)/version.h.in
+	touch $@
+
 $(OBJ)/.dxvk-post-build64:
 	mkdir -p "$(DST_DIR)"/lib64/wine/dxvk
 	rm -f "$(DST_DIR)"/lib64/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version; fi
