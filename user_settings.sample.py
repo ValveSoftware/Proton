@@ -9,8 +9,8 @@ user_settings = {
     #enable logging
     "PROTON_LOG": "1",
 
-    #Wine debug logging
-    "WINEDEBUG": "+timestamp,+pid,+seh,+unwind,+debugstr,+loaddll,+mscoree",
+    #custom Wine debug logging
+    #"WINEDEBUG": "+timestamp,+pid,+tid,+seh,+unwind,+threadname,+debugstr,+loaddll,+mscoree",
 
     #DXVK debug logging
     "DXVK_LOG_LEVEL": "info",
