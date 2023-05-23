@@ -782,6 +782,9 @@ arialbd_ORIG := LiberationSans-Bold
 #The use of "Times New Roman" here is for compatibility with programs that require that exact string. This font is not Times New Roman.
 times_NAMES := "TimesNewRoman" "Times New Roman" "Times New Roman"
 times_ORIG := LiberationSerif-Regular
+#The use of "Georgia" here is for compatibility with programs that require that exact string. This font is not Georgia.
+georgia_NAMES := "Georgia" "Georgia" "Georgia"
+georgia_ORIG := LiberationSerif-Regular
 #The use of "Courier New" here is for compatibility with programs that require that exact string. This font is not Courier New.
 cour_NAMES := "CourierNew" "Courier New" "Courier New"
 cour_PATCH := $(FONTS)/patches/LiberationMono-Regular.patch
@@ -804,6 +807,7 @@ $(FONTS_OBJ)/%.sfd: $(LIBERATION_SRCDIR)/%.sfd | $(FONTS_OBJ)
 
 fonts: $(FONTS_OBJ)/arial.ttf
 fonts: $(FONTS_OBJ)/arialbd.ttf
+fonts: $(FONTS_OBJ)/georgia.ttf
 fonts: $(FONTS_OBJ)/times.ttf
 fonts: $(FONTS_OBJ)/cour.ttf
 fonts: $(FONTS_OBJ)/courbd.ttf
