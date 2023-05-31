@@ -1077,6 +1077,12 @@ def default_compat_config():
             ret.add("heapdelayfree")
 
         if appid in [
+                "2630", #Call of Duty 2
+                ]:
+            ret.add("nofsync")
+            ret.add("noesync")
+
+        if appid in [
                 # enable dxvknvapi for titles verified to benefit (e.g. working DLSS)
                 "673130", #amid evil
                 "1182900", #A Plague Tale: Requiem
