@@ -1,0 +1,61 @@
+From d99d8826b4dac235945c083eacc87965390bf466 Mon Sep 17 00:00:00 2001
+From: Jan200101 <sentrycraft123@gmail.com>
+Date: Wed, 22 Feb 2023 00:40:58 +0100
+Subject: [PATCH] steam_helper: separate parameters from command when using
+ ShellExecuteW
+
+ShellExecuteW ignores any extra information passed as part of lpFile
+resulting in arguments being ignored.
+---
+ steam_helper/steam.cpp | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/steam_helper/steam.cpp b/steam_helper/steam.cpp
+index d5c02f05..199cb2d7 100644
+--- a/steam_helper/steam.cpp
++++ b/steam_helper/steam.cpp
+@@ -1028,9 +1028,8 @@ static BOOL streq_niw(const WCHAR *l, const WCHAR *r, size_t len)
+     return TRUE;
+ }
+ 
+-static BOOL should_use_shell_execute(const WCHAR *cmdline)
++static const WCHAR* get_end_of_excutable_name(const WCHAR *cmdline)
+ {
+-    BOOL use_shell_execute = TRUE;
+     BOOL quoted = FALSE;
+     const WCHAR *executable_name_end = cmdline;
+ 
+@@ -1044,6 +1043,14 @@ static BOOL should_use_shell_execute(const WCHAR *cmdline)
+         executable_name_end++;
+     }
+ 
++    return executable_name_end;
++}
++
++static BOOL should_use_shell_execute(const WCHAR *cmdline)
++{
++    BOOL use_shell_execute = TRUE;
++    const WCHAR *executable_name_end = get_end_of_excutable_name(cmdline);
++
+     /* backtrack to before the end of the arg
+      * and check if we end in .exe or not
+      * and determine whether to use ShellExecute
+@@ -1196,10 +1203,17 @@ run:
+ 
+     if (use_shell_execute)
+     {
++        WCHAR *param = NULL;
++        WCHAR *executable_name_end = (WCHAR*)get_end_of_excutable_name(cmdline);
++        if (*executable_name_end != '\0')
++        {
++            *executable_name_end = '\0';
++            param = executable_name_end+1;
++        }
+         static const WCHAR verb[] = { 'o', 'p', 'e', 'n', 0 };
+         INT_PTR ret;
+ 
+-        if ((ret = (INT_PTR)ShellExecuteW(NULL, verb, cmdline, NULL, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL)) < 32)
++        if ((ret = (INT_PTR)ShellExecuteW(NULL, verb, cmdline, param, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL)) < 32)
+         {
+             WINE_ERR("Failed to execture %s, ret %u.\n", wine_dbgstr_w(cmdline), (unsigned int)ret);
+             if (game_process && ret == SE_ERR_NOASSOC && link2ea)

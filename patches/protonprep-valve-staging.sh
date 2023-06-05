@@ -13,8 +13,14 @@
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
-    
     cd ..
+
+    # https://github.com/ValveSoftware/Proton/pull/6555
+    cd steam_helper
+    git checkout steam.cpp
+    cd ..
+    patch -Np1 < ./patches/steam_helper/6555.patch
+
 
 ### END PREP SECTION ###
 
