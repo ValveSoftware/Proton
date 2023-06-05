@@ -119,6 +119,20 @@ UNSUPPORTED_EXTENSIONS = [
     # Deprecated extensions
     "XR_NV_external_memory_capabilities",
     "XR_NV_external_memory_win32",
+
+    # Not widely supported extensions which require handler wrapping
+    "XR_MSFT_spatial_graph_bridge",
+    "XR_ML_compat",
+    "XR_MSFT_hand_tracking_mesh",
+    "XR_FB_keyboard_tracking",
+    "XR_VARJO_marker_tracking",
+    "XR_HTC_facial_tracking",
+    "XR_FB_face_tracking",
+    "XR_HTC_passthrough",
+    "XR_FB_eye_tracking_social",
+    "XR_FB_spatial_entity_user",
+    "XR_FB_body_tracking",
+    "XR_FB_spatial_entity",
 ]
 
 ALLOWED_PROTECTS = [
@@ -1333,7 +1347,7 @@ class XrParam(object):
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type in ["uint16_t", "uint32_t", "XrBool32"]:
                 self.format_str = "%u"
-            elif self.type in ["uint64_t"]:
+            elif self.type in ["uint64_t","XrAsyncRequestIdFB"]:
                 self.format_str = "0x%s"
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type == "HANDLE":
@@ -1630,10 +1644,13 @@ class XrStruct(Sequence):
         return decoupled_structs
 
     def typedef(self):
-        if self.union:
-            text = "typedef union {0} {0};\n".format(self.name)
+        if not self.is_alias():
+            if self.union:
+                text = "typedef union {0} {0};\n".format(self.name)
+            else:
+                text = "typedef struct {0} {0};\n".format(self.name)
         else:
-            text = "typedef struct {0} {0};\n".format(self.name)
+            text = ""
 
         for aliasee in self.aliased_by:
             text += "typedef {0} {1};\n".format(self.name, aliasee.name)
