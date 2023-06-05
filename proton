@@ -40,7 +40,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="GE-Proton8-3"
+CURRENT_PREFIX_VERSION="GE-Proton8-4"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -1169,11 +1169,12 @@ def default_compat_config():
                 #affected by CW bug 19126
                 "536280", #Disintegration
                 "707030", #POSTAL 4: No Regerts
-                "794260", #Outward: Definitive Edition
-                "1328350", #Turbo Overkill
                 "1331440", #FUSER
                 "1359980", #POSTAL: Brain Damaged
                 "1766430", #POSTAL Brain Damaged Demo
+                "692890", #Roboquest
+                "794260", #Outward: Definitive Edition
+                "1328350", #Turbo Overkill
                 "2001540", #Slayers X Demo
 
                 #affected by CW bug 19741
@@ -1238,6 +1239,12 @@ def default_compat_config():
                 "212910", #Call of Duty: Black Ops II - Zombies
                 ]:
             ret.add("heapdelayfree")
+
+        if appid in [
+                "2630", #Call of Duty 2
+                ]:
+            ret.add("nofsync")
+            ret.add("noesync")
 
         if appid in [
                 # enable dxvknvapi for titles verified to benefit (e.g. working DLSS)
@@ -1601,6 +1608,8 @@ class Session:
                         self.log_file.write("System " + var + ": " + os.environ[var] + "\n")
                     if var in used_user_settings:
                         self.log_file.write("User settings " + var + ": " + used_user_settings[var] + "\n")
+                    if var in self.env:
+                        self.log_file.write("Effective " + var + ": " + self.env[var] + "\n")
 
                 self.log_file.write("======================\n")
                 self.log_file.flush()
