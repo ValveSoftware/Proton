@@ -1,0 +1,133 @@
+From f57e7a06cffc47773c647a10ed4d298b58fbd408 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 9 Jul 2019 14:13:28 +1000
+Subject: [PATCH] user32: Do not enumerate the registry in
+ GetKeyboardLayoutList().
+
+This function returns the current list of *installed* Keyboard layouts
+not the complete list from the registry.
+---
+ dlls/user32/input.c       |  1 -
+ dlls/user32/tests/input.c | 35 +++++++++++++++++++++++++++++++++++
+ dlls/win32u/input.c       | 33 +--------------------------------
+ 3 files changed, 36 insertions(+), 33 deletions(-)
+
+diff --git a/dlls/user32/input.c b/dlls/user32/input.c
+index c5387cf9212..2507a86e3b6 100644
+--- a/dlls/user32/input.c
++++ b/dlls/user32/input.c
+@@ -494,7 +494,6 @@ BOOL WINAPI UnloadKeyboardLayout( HKL layout )
+     return FALSE;
+ }
+ 
+-
+ /***********************************************************************
+  *		EnableMouseInPointer (USER32.@)
+  */
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index bf913b8e6a6..8ac46bedc71 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -4837,6 +4837,40 @@ static void test_EnableMouseInPointer( char **argv, BOOL enable )
+     CloseHandle( info.hProcess );
+ }
+ 
++static void test_GetKeyboardLayoutList(void)
++{
++    int cnt, cnt2;
++    HKL *layouts;
++    ULONG_PTR baselayout;
++    LANGID langid;
++
++    baselayout = GetUserDefaultLCID();
++    langid = PRIMARYLANGID(LANGIDFROMLCID(baselayout));
++    if (langid == LANG_CHINESE || langid == LANG_JAPANESE || langid == LANG_KOREAN)
++        baselayout = MAKELONG( baselayout, 0xe001 ); /* IME */
++    else
++        baselayout |= baselayout << 16;
++
++    cnt = GetKeyboardLayoutList(0, NULL);
++    /* Most users will not have more than a few keyboard layouts installed at a time. */
++    ok(cnt > 0 && cnt < 10, "Layout count %d\n", cnt);
++    if (cnt > 0)
++    {
++        layouts = HeapAlloc(GetProcessHeap(), 0, sizeof(*layouts) * cnt );
++
++        cnt2 = GetKeyboardLayoutList(cnt, layouts);
++        ok(cnt == cnt2, "wrong value %d!=%d\n", cnt, cnt2);
++        for(cnt = 0; cnt < cnt2; cnt++)
++        {
++            if(layouts[cnt] == (HKL)baselayout)
++                break;
++        }
++        ok(cnt < cnt2, "Didnt find current keyboard\n");
++
++        HeapFree(GetProcessHeap(), 0, layouts);
++    }
++}
++
+ START_TEST(input)
+ {
+     char **argv;
+@@ -4887,6 +4921,7 @@ START_TEST(input)
+     test_GetRawInputBuffer();
+     test_RegisterRawInputDevices();
+     test_rawinput(argv[0]);
++    test_GetKeyboardLayoutList();
+     test_DefRawInputProc();
+ 
+     if(pGetMouseMovePointsEx)
+diff --git a/dlls/win32u/input.c b/dlls/win32u/input.c
+index fd16d03f733..fb452843803 100644
+--- a/dlls/win32u/input.c
++++ b/dlls/win32u/input.c
+@@ -934,11 +934,7 @@ HKL WINAPI NtUserActivateKeyboardLayout( HKL layout, UINT flags )
+  */
+ UINT WINAPI NtUserGetKeyboardLayoutList( INT size, HKL *layouts )
+ {
+-    char buffer[4096];
+-    KEY_NODE_INFORMATION *key_info = (KEY_NODE_INFORMATION *)buffer;
+-    KEY_VALUE_PARTIAL_INFORMATION *value_info = (KEY_VALUE_PARTIAL_INFORMATION *)buffer;
+-    DWORD count, tmp, i = 0;
+-    HKEY hkey, subkey;
++    DWORD count;
+     HKL layout;
+ 
+     TRACE_(keyboard)( "size %d, layouts %p.\n", size, layouts );
+@@ -1277,33 +1273,6 @@ UINT WINAPI NtUserGetKeyboardLayoutList( INT size, HKL *layouts )
+     if (size && layouts)
+     {
+         layouts[count - 1] = layout;
+-        if (count == size) return count;
+-    }
+-
+-    if ((hkey = reg_open_key( NULL, keyboard_layouts_keyW, sizeof(keyboard_layouts_keyW) )))
+-    {
+-        while (!NtEnumerateKey( hkey, i++, KeyNodeInformation, key_info,
+-                                sizeof(buffer) - sizeof(WCHAR), &tmp ))
+-        {
+-            if (!(subkey = reg_open_key( hkey, key_info->Name, key_info->NameLength ))) continue;
+-            key_info->Name[key_info->NameLength / sizeof(WCHAR)] = 0;
+-            tmp = wcstoul( key_info->Name, NULL, 16 );
+-            if (query_reg_ascii_value( subkey, "Layout Id", value_info, sizeof(buffer) ) &&
+-                value_info->Type == REG_SZ)
+-                tmp = 0xf000 | (wcstoul( (const WCHAR *)value_info->Data, NULL, 16 ) & 0xfff);
+-            NtClose( subkey );
+-
+-            tmp = MAKELONG( LOWORD( layout ), LOWORD( tmp ) );
+-            if (layout == UlongToHandle( tmp )) continue;
+-
+-            count++;
+-            if (size && layouts)
+-            {
+-                layouts[count - 1] = UlongToHandle( tmp );
+-                if (count == size) break;
+-            }
+-        }
+-        NtClose( hkey );
+     }
+ 
+     return count;
+-- 
+2.39.0
+

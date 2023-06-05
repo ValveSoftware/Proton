@@ -107,7 +107,9 @@
     -W winex11-Window_Style \
     -W winex11-ime-check-thread-data \
     -W winex11.drv-Query_server_position \
-    -W user32-Mouse_Message_Hwnd
+    -W user32-Mouse_Message_Hwnd \
+    -W wined3d-SWVP-shaders \
+    -W wined3d-Indexed_Vertex_Blending
 
     # NOTE: Some patches are applied manually because they -do- apply, just not cleanly, ie with patch fuzz.
     # A detailed list of why the above patches are disabled is listed below:
@@ -189,6 +191,8 @@
     # winemenubuilder-integration -- winemenubuilder is disabled in proton and is not needed
     # winemenubuilder-Desktop_Icon_Path -- winemenubuilder is disabled in proton and is not needed
     # winemenubuilder-integration -- winemenubuilder is disabled in proton and is not needed
+    # wined3d-SWVP-shaders -- interferes with proton's wined3d
+    # wined3d-Indexed_Vertex_Blending -- interferes with proton's wined3d
 
     echo "WINE: -STAGING- applying staging Compiler_Warnings revert for steamclient compatibility"
     # revert this, it breaks lsteamclient compilation
@@ -199,8 +203,8 @@
     patch -Np1 < ../patches/wine-hotfixes/staging/d3dx11_43-D3DX11CreateTextureFromMemory/0002-d3dx11_42-Implement-D3DX11CreateTextureFromMemory.patch
 
     # loader-KeyboardLayouts
-    patch -Np1 < ../wine-staging/patches/loader-KeyboardLayouts/0001-loader-Add-Keyboard-Layouts-registry-enteries.patch
-    patch -Np1 < ../wine-staging/patches/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/loader-KeyboardLayouts/0001-loader-Add-Keyboard-Layouts-registry-enteries.patch
+    patch -Np1 < ../patches/wine-hotfixes/staging/loader-KeyboardLayouts/0002-user32-Improve-GetKeyboardLayoutList.patch
 
     # ntdll-Exception
     patch -Np1 < ../wine-staging/patches/ntdll-Exception/0002-ntdll-OutputDebugString-should-throw-the-exception-a.patch

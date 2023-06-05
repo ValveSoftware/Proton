@@ -1,0 +1,81 @@
+From 0c71b9c48afdc0478941417595998ab21fcf12ae Mon Sep 17 00:00:00 2001
+From: Alex Henrie <alexhenrie24@gmail.com>
+Date: Tue, 29 Dec 2015 00:48:02 -0700
+Subject: [PATCH] mountmgr.sys: Do a device check before returning a default
+ serial port name.
+
+Fixes https://bugs.winehq.org/show_bug.cgi?id=39793
+---
+ dlls/mountmgr.sys/device.c  |  2 +-
+ dlls/mountmgr.sys/unixlib.c | 22 ++++++++++++++++++++++
+ dlls/mountmgr.sys/unixlib.h |  1 +
+ 3 files changed, 24 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mountmgr.sys/device.c b/dlls/mountmgr.sys/device.c
+index 328b0b2f344..0757036c8e3 100644
+--- a/dlls/mountmgr.sys/device.c
++++ b/dlls/mountmgr.sys/device.c
+@@ -1884,7 +1884,7 @@ static BOOL create_port_device( DRIVER_OBJECT *driver, int n, const char *unix_p
+     UNICODE_STRING nt_name, symlink_name, default_name;
+     DEVICE_OBJECT *dev_obj;
+     NTSTATUS status;
+-    struct set_dosdev_symlink_params params = { dosdevices_path, unix_path };
++    struct set_dosdev_symlink_params params = { dosdevices_path, unix_path, driver == serial_driver };
+ 
+     /* create DOS device */
+     if (MOUNTMGR_CALL( set_dosdev_symlink, &params )) return FALSE;
+diff --git a/dlls/mountmgr.sys/unixlib.c b/dlls/mountmgr.sys/unixlib.c
+index 13f6fbecf09..0332f6f6018 100644
+--- a/dlls/mountmgr.sys/unixlib.c
++++ b/dlls/mountmgr.sys/unixlib.c
+@@ -36,6 +36,7 @@
+ #ifdef HAVE_SYS_STATVFS_H
+ # include <sys/statvfs.h>
+ #endif
++#include <termios.h>
+ #include <unistd.h>
+ 
+ #include "unixlib.h"
+@@ -304,6 +305,27 @@ static NTSTATUS set_dosdev_symlink( void *args )
+     char *path;
+     NTSTATUS status = STATUS_SUCCESS;
+ 
++#ifdef linux
++    /* Serial port device files almost always exist on Linux even if the corresponding serial
++     * ports don't exist. Do a basic functionality check before advertising a serial port. */
++    if (params->serial)
++    {
++        struct termios tios;
++        int fd;
++
++        if ((fd = open( params->dest, O_RDONLY )) == -1)
++            return FALSE;
++
++        if (tcgetattr( fd, &tios ) == -1)
++        {
++            close( fd );
++            return FALSE;
++        }
++
++        close( fd );
++    }
++#endif
++
+     if (!(path = get_dosdevices_path( params->dev ))) return STATUS_NO_MEMORY;
+ 
+     if (params->dest && params->dest[0])
+diff --git a/dlls/mountmgr.sys/unixlib.h b/dlls/mountmgr.sys/unixlib.h
+index d70371876fa..ef5b10732f6 100644
+--- a/dlls/mountmgr.sys/unixlib.h
++++ b/dlls/mountmgr.sys/unixlib.h
+@@ -90,6 +90,7 @@ struct set_dosdev_symlink_params
+ {
+     const char *dev;
+     const char *dest;
++    BOOL serial;
+ };
+ 
+ struct get_volume_dos_devices_params
+-- 
+2.37.2
+
