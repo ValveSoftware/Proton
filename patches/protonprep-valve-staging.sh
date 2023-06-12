@@ -5,9 +5,6 @@
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
-    
-    echo "DXVK: Fix Secret World: Legends patcher crash"
-    patch -Np1 < ../patches/dxvk/secret-world.patch
     cd ..
 
     cd vkd3d-proton
