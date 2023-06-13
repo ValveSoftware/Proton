@@ -1177,7 +1177,7 @@ run:
     if (use_shell_execute && lstrlenW(cmdline) > 10 && !memcmp(cmdline, L"link2ea://", 10 *sizeof(WCHAR)))
     {
         HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
-        DWORD timeout = 300;
+        DWORD timeout = 3000;
 
         link2ea = TRUE;
         if (!SetUserObjectInformationA(desktop, 1000, &timeout, sizeof(timeout)))
