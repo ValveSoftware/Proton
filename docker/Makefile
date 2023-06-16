@@ -34,7 +34,7 @@ RUST_SHA256_i686 = dc931adeb2943dcadfbd29546481f0296fcb97a511421053ecae6586a8586
 
 DOCKER = docker
 
-%.Dockerfile: %.Dockerfile.in
+%.Dockerfile: %.Dockerfile.in Makefile
 	sed -re 's!@PROTONSDK_URLBASE@!$(PROTONSDK_URLBASE)!g' \
 	    -re 's!@BASE_IMAGE@!$(BASE_IMAGE)!g' \
 	    -re 's!@BINUTILS_VERSION@!$(BINUTILS_VERSION)!g' \
