@@ -3,7 +3,7 @@
 	url = ../wine
 [submodule "dxvk"]
 	path = dxvk
-	url = https://github.com/doitsujin/dxvk.git
+	url = ../dxvk
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr
