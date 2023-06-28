@@ -62,3 +62,6 @@
 	path = kaldi
 	url = https://github.com/alphacep/kaldi
 	branch = vosk
+[submodule "vosk-api"]
+	path = vosk-api
+	url = https://github.com/alphacep/vosk-api
