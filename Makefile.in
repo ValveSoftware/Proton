@@ -446,6 +446,20 @@ $(eval $(call rules-cmake,kaldi,64))
 
 
 ##
+## vosk
+##
+
+VOSK_CMAKE_ARGS = \
+  -DBUILD_SHARED_LIBS=ON \
+
+VOSK_DEPENDS = openfst kaldi
+
+$(eval $(call rules-source,vosk,$(SRCDIR)/vosk-api))
+$(eval $(call rules-cmake,vosk,32))
+$(eval $(call rules-cmake,vosk,64))
+
+
+##
 ## wine
 ##
 
@@ -477,7 +491,7 @@ WINE_CONFIGURE_ARGS64 = --enable-win64 \
   VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_DST64)/include -I$(VKD3D_DST64)/include/vkd3d" \
   VKD3D_PE_LIBS="-L$(VKD3D_DST64)/bin -l:libvkd3d-1.dll -l:libvkd3d-shader-1.dll"
 
-WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d
+WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d openfst kaldi vosk
 
 $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
