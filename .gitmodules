@@ -55,3 +55,6 @@
 [submodule "glslang"]
 	path = glslang
 	url = https://github.com/KhronosGroup/glslang
+[submodule "openfst"]
+	path = openfst
+	url = https://github.com/alphacep/openfst
