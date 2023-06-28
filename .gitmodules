@@ -58,3 +58,7 @@
 [submodule "openfst"]
 	path = openfst
 	url = https://github.com/alphacep/openfst
+[submodule "kaldi"]
+	path = kaldi
+	url = https://github.com/alphacep/kaldi
+	branch = vosk
