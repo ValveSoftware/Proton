@@ -308,6 +308,10 @@
 
     echo "WINE: -GAME FIXES- Add Star Citizen EAC patch and wrap it around SteamGameId=starcitizen envvar"
     patch -Np1 < ../patches/game-patches/star-citizen-eac.patch
+    
+    #https://github.com/ValveSoftware/Proton/issues/580#issuecomment-1588435182
+    echo "WINE: -GAME FIXES- Fix FFXIV not playing Hydaelyn intro video on new install"
+    patch -Np1 < ../patches/game-patches/ffxiv_hydaelyn_intro_playback_fix.patch
 
 ### END GAME PATCH SECTION ###
 
