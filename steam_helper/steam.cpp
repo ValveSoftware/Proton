@@ -1177,11 +1177,26 @@ run:
     if (use_shell_execute && lstrlenW(cmdline) > 10 && !memcmp(cmdline, L"link2ea://", 10 *sizeof(WCHAR)))
     {
         HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
-        DWORD timeout = 300;
+        DWORD is_unavailable, type, size;
+        DWORD timeout = 3000;
+        HKEY eakey;
 
         link2ea = TRUE;
         if (!SetUserObjectInformationA(desktop, 1000, &timeout, sizeof(timeout)))
             WINE_ERR("Failed to set desktop timeout, err %u.\n", GetLastError());
+
+        if (!RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"Software\\Electronic Arts\\EA Desktop", 0, KEY_ALL_ACCESS, &eakey))
+        {
+            size = sizeof(is_unavailable);
+            if (!RegQueryValueExW(eakey, L"IsUnavailable", NULL, &type, (BYTE *)&is_unavailable, &size)
+                    && type == REG_DWORD && is_unavailable)
+            {
+                WINE_ERR("EA Desktop\\IsUnavailable is set, clearing.\n");
+                is_unavailable = 0;
+                RegSetValueExW(eakey, L"IsUnavailable", 0, REG_DWORD, (BYTE *)&is_unavailable, sizeof(is_unavailable));
+            }
+            RegCloseKey(eakey);
+        }
     }
     hide_window = env_nonzero("PROTON_HIDE_PROCESS_WINDOW");
 
@@ -1499,6 +1514,29 @@ static DWORD WINAPI steam_drm_thread(void *arg)
 
     return 0;
 }
+
+BOOL is_ptraced(void)
+{
+    char key[50];
+    int value;
+    FILE *fp = fopen("/proc/self/status", "r");
+    BOOL ret = FALSE;
+
+    if (!fp) return FALSE;
+
+    while (fscanf(fp, " %s	%d\n", key, &value) > 0)
+    {
+        if (!strcmp("TracerPid:", key))
+        {
+            ret = (value != 0);
+            break;
+        }
+    }
+
+    fclose(fp);
+    return ret;
+}
+
 int main(int argc, char *argv[])
 {
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
@@ -1542,7 +1580,7 @@ int main(int argc, char *argv[])
         {
             unsigned int sleep_count = 0;
             WINE_TRACE("PROTON_WAIT_ATTACH is set, waiting for debugger...\n");
-            while (!IsDebuggerPresent())
+            while (!IsDebuggerPresent() && !is_ptraced())
             {
                 Sleep(100);
                 ++sleep_count;
