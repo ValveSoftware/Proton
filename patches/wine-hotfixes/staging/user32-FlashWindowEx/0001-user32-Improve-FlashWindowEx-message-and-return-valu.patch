@@ -32,25 +32,28 @@ index 496c3f9ab07..2718d4c96c9 100644
      DestroyWindow( hwnd );
  }
 diff --git a/dlls/win32u/window.c b/dlls/win32u/window.c
-index 1e36e48aded..fd4be68084b 100644
+index 70f73cb0fb3..e677e21af5d 100644
 --- a/dlls/win32u/window.c
 +++ b/dlls/win32u/window.c
-@@ -4552,13 +4552,12 @@ BOOL WINAPI NtUserFlashWindowEx( FLASHWINFO *info )
+@@ -4551,8 +4551,7 @@ BOOL WINAPI NtUserFlashWindowEx( FLASHWINFO *info )
          if (!win || win == WND_OTHER_PROCESS || win == WND_DESKTOP) return FALSE;
          hwnd = win->obj.handle;  /* make it a full handle */
-
+ 
 -        if (info->dwFlags) wparam = !(win->flags & WIN_NCACTIVATED);
 -        else wparam = (hwnd == NtUserGetForegroundWindow());
-+        wparam = (win->flags & WIN_NCACTIVATED) != 0;
-
++       wparam = (win->flags & WIN_NCACTIVATED) != 0;
+ 
          release_win_ptr( win );
-         send_notify_message( hwnd, WM_NCACTIVATE, wparam, 0, 0 );
+ 
+@@ -4560,7 +4559,7 @@ BOOL WINAPI NtUserFlashWindowEx( FLASHWINFO *info )
+             send_notify_message( hwnd, WM_NCACTIVATE, wparam, 0, 0 );
+ 
          user_driver->pFlashWindowEx( info );
 -        return wparam;
 +        return (info->dwFlags & FLASHW_CAPTION) ? TRUE : wparam;
      }
  }
-
+ 
 -- 
 2.35.1
 
