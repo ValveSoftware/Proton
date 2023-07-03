@@ -764,6 +764,27 @@ $(OBJ)/.eac-build32:
 
 endif
 
+##
+## Windows Symbol Store creation
+##
+
+ifneq ($(wildcard $(SRCDIR)/symstore/.*),)
+
+$(eval $(call rules-source,symstore,$(SRCDIR)/symstore))
+
+SYMSTORE_OBJ := $(OBJ)/obj-symstore
+
+.PHONY: symstore-tarball
+symstore-tarball: dist
+	@echo ":: building symbol store..." >&2
+	rsync -arx "$(SYMSTORE_SRC)/" "$(SYMSTORE_OBJ)/"
+	$(MAKE) -C "$(SYMSTORE_OBJ)" SYMSTORE_CFLAGS="-I$(WINE_SRC)/include -I$(WINE_OBJ64)/include"
+	mkdir -p $(OBJ)/symstore/$(BUILD_NAME)
+	$(SYMSTORE_OBJ)/symstore --skip-managed $(DST_BASE) $(OBJ)/symstore/$(BUILD_NAME)
+	cd $(OBJ)/symstore/$(BUILD_NAME) && tar zcf ../$(BUILD_NAME)-symbolstore.tgz .
+	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symbolstore.zip .
+
+endif
 
 ##
 ## Fonts
@@ -1207,8 +1228,8 @@ DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPT
                 -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
-.PHONY: dist deploy redist
-.DEFAULT dist deploy redist:
+.PHONY: dist deploy redist symstore-tarball
+.DEFAULT dist deploy redist symstore-tarball:
 	if [ "$(ENABLE_CCACHE)" -eq "1" ]; then mkdir -p $(CCACHE_DIR); fi
 	mkdir -p $(CARGO_HOME)
 	$(DOCKER_BASE) $(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $@
