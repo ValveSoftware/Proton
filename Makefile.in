@@ -782,7 +782,7 @@ symstore-tarball: dist
 	mkdir -p $(OBJ)/symstore/$(BUILD_NAME)
 	$(SYMSTORE_OBJ)/symstore --skip-managed $(DST_BASE) $(OBJ)/symstore/$(BUILD_NAME)
 	cd $(OBJ)/symstore/$(BUILD_NAME) && tar zcf ../$(BUILD_NAME)-symbolstore.tgz .
-	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symbolstore.zip .
+	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symbolstore.zip . >& /dev/null
 
 endif
 
