@@ -41,7 +41,7 @@ pub fn register(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
     gst::Element::register(
         Some(plugin),
         "protonaudioconverterbin",
-        gst::Rank::Marginal + 1,
+        gst::Rank::Marginal - 3,
         AudioConvBin::static_type()
     )
 }

@@ -41,6 +41,6 @@ pub fn register(plugin: &gst::Plugin) -> Result<(), glib::BoolError> {
     gst::Element::register(
         Some(plugin),
         "protonvideoconverter",
-        gst::Rank::Marginal,
+        gst::Rank::Marginal - 4,
         VideoConv::static_type())
 }
