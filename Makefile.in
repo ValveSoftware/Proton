@@ -7,6 +7,7 @@ OBJ := $(abspath $(CURDIR))
 ifeq ($(filter s,$(MAKEFLAGS)),s)
 MAKEFLAGS += --quiet --no-print-directory
 --quiet? := --quiet
+CARGO_BUILD_ARGS := --quiet
 else
 MFLAGS += V=1 VERBOSE=1
 -v? := -v
@@ -56,7 +57,11 @@ DEBUG_FLAGS    := -ggdb -ffunction-sections -fdata-sections -fno-omit-frame-poin
 COMMON_FLAGS    = $(DEBUG_FLAGS) $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
 COMMON_FLAGS32 := -mstackrealign
 COMMON_FLAGS64 := -mcmodel=small
-CARGO_BUILD_ARG := --release
+CARGO_BUILD_ARGS += --release
+
+ifneq ($(SUPPRESS_WARNINGS),)
+	COMMON_FLAGS += -w
+endif
 
 $(DST_DIR):
 	mkdir -p $@
