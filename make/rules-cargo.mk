@@ -17,7 +17,7 @@ $$(OBJ)/.$(1)-build$(3):
 	      $$(filter -j%,$$(MAKEFLAGS)) \
 	      --target "$$(CARGO_TARGET_$(3))" \
 	      --target-dir $$($(2)_OBJ$(3)) \
-	      $$(CARGO_BUILD_ARG) \
+	      $$(CARGO_BUILD_ARGS) \
 	      $$($(2)_CARGO_ARGS) \
 	      $$($(2)_CARGO_ARGS$(3))
 	touch $$@
