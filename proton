@@ -1061,9 +1061,11 @@ def default_compat_config():
             ret.add("noforcelgadd")
 
         if appid in [
-                "1341820",
-                "280790",
-                "306130",
+                "1341820", #As Dusk falls
+                "280790", #Creativerse
+                "306130", #The Elder Scrolls Online
+                "24010", #Train Simulator
+                "374320", #DARK SOULS III
                 ]:
             ret.add("gamedrive")
 
