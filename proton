@@ -1092,6 +1092,8 @@ def default_compat_config():
 
         if appid in [
                 # enable dxvknvapi for titles verified to benefit (e.g. working DLSS)
+                "1938800", #Alone in the Dark Prologue
+                "1310410", #Alone in the Dark
                 "673130", #amid evil
                 "1182900", #A Plague Tale: Requiem
                 "1291680", #apocalypse: 2.0 edition
@@ -1119,6 +1121,10 @@ def default_compat_config():
                 "428660", #deliver us the moon
                 "1929610", #Demonologist
                 "2302560", #Demonologist demo
+                "2097490", #Desordre
+                "2373430", #Desordre (demo)
+                "2211940", #Doge Simulator
+                "2312000", #Doge Simulator (demo)
                 "534380", #dying light 2
                 "269190", #edge of eternity
                 "1871990", #engine evolution 2022
@@ -1151,6 +1157,7 @@ def default_compat_config():
                 "1946700", #Layers of Fear
                 "2237040", #Layers of Fear (demo)
                 "1544360", #lego builder's journey
+                "1265780", #Lord of the Rings: Gollum
                 "1363080", #Manor Lords
                 "2122820", #Manor Lords Demo
                 "997070", #marvel's avengers
@@ -1166,12 +1173,15 @@ def default_compat_config():
                 "1140100", #the persistence
                 "1322170", #pluviophile
                 "400", #Portal [RTX]
+                "2410180", #Portal Prelude RTX
                 "1549180", #propnight
                 "1186640", #pumpkin jack
+                "1895880", #Ratchet & Clank: Rift Apart
                 "1144200", #Ready Or Not
                 "1404210", #Red Dead Online
                 "1174180", #Red Dead Redemption 2
                 "1294810", #Redfall
+                "1282100", #Remnant 2
                 "1649240", #returnal
                 "391220", #rise of the tomb raider
                 "1599660", #sackboy: a big adventure
@@ -1180,10 +1190,12 @@ def default_compat_config():
                 "1227690", #Severed Steel
                 "1631910", #Severed Steel demo
                 "750920", #shadow of the tomb raider
+                "1949030", #Sherlock Holmes: The Awakened
                 "1155330", #Showgunners
                 "2022460", #Showgunners demo
                 "1602080", #soulstice
                 "2015300", #soulstice demo
+                "1817190", #Spider-Man: Miles Morales
                 "1296010", #stay in the light
                 "2162020", #Strayed Lights
                 "2311720", #Strayed Lights demo
@@ -1196,6 +1208,8 @@ def default_compat_config():
                 "1843860", #the redress of mira
                 "2050550", #the redress of mira demo
                 "1567740", #to hell with it
+                "1164940", #Trepang2
+                "1210600", #Trepang2 (demo)
                 "1662690", #twin stones: the journey of bukka
                 "1659420", #Uncharted Legacy of Thieves
                 "1159690", #Voidtrain
