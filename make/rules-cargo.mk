@@ -17,7 +17,7 @@ $$(OBJ)/.$(1)-build$(3):
 	      $$(filter -j%,$$(MAKEFLAGS)) \
 	      --target "$$(CARGO_TARGET_$(3))" \
 	      --target-dir $$($(2)_OBJ$(3)) \
-	      $$(CARGO_BUILD_ARG) \
+	      $$(CARGO_BUILD_ARGS) \
 	      $$($(2)_CARGO_ARGS) \
 	      $$($(2)_CARGO_ARGS$(3))
 	touch $$@
@@ -27,3 +27,4 @@ rules-cargo = $(call create-rules-cargo,$(1),$(call toupper,$(1)),$(2))
 
 CARGO_TARGET_32 := i686-unknown-linux-gnu
 CARGO_TARGET_64 := x86_64-unknown-linux-gnu
+
