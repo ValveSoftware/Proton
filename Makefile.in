@@ -7,6 +7,7 @@ OBJ := $(abspath $(CURDIR))
 ifeq ($(filter s,$(MAKEFLAGS)),s)
 MAKEFLAGS += --quiet --no-print-directory
 --quiet? := --quiet
+CARGO_BUILD_ARGS := --quiet
 else
 MFLAGS += V=1 VERBOSE=1
 -v? := -v
@@ -24,8 +25,7 @@ SHELL := /bin/bash
 #   BUILD_NAME      - Name of the build for manifests etc.
 #   STEAMRT_IMAGE   - Name of the docker image to use for building
 
-STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/sniper/sdk:0.20221017.1-1
-
+STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/sniper/sdk:0.20230509.49493-0
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include Makefile.in directly, run ./configure.sh to generate Makefile)
 endif
@@ -56,7 +56,11 @@ DEBUG_FLAGS    := -ggdb -ffunction-sections -fdata-sections -fno-omit-frame-poin
 COMMON_FLAGS    = $(DEBUG_FLAGS) $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
 COMMON_FLAGS32 := -mstackrealign
 COMMON_FLAGS64 := -mcmodel=small
-CARGO_BUILD_ARG := --release
+CARGO_BUILD_ARGS += --release
+
+ifneq ($(SUPPRESS_WARNINGS),)
+	COMMON_FLAGS += -w
+endif
 
 $(DST_DIR):
 	mkdir -p $@
@@ -572,6 +576,7 @@ $(eval $(call rules-source,kaldi,$(SRCDIR)/kaldi))
 $(eval $(call rules-cmake,kaldi,32))
 $(eval $(call rules-cmake,kaldi,64))
 
+
 ##
 ## vosk
 ##
@@ -584,6 +589,7 @@ VOSK_DEPENDS = openfst kaldi
 $(eval $(call rules-source,vosk,$(SRCDIR)/vosk-api))
 $(eval $(call rules-cmake,vosk,32))
 $(eval $(call rules-cmake,vosk,64))
+
 
 ##
 ## wine
@@ -772,6 +778,10 @@ VKD3D_PROTON_MESON_ARGS32 = --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton
 VKD3D_PROTON_MESON_ARGS64 = --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton
 VKD3D_PROTON_DEPENDS = glslang
 
+ifneq ($(UNSTRIPPED_BUILD),)
+	VKD3D_PROTON_MESON_ARGS = -Denable_trace=true
+endif
+
 $(eval $(call rules-source,vkd3d-proton,$(SRCDIR)/vkd3d-proton))
 $(eval $(call rules-meson,vkd3d-proton,32,CROSS))
 $(eval $(call rules-meson,vkd3d-proton,64,CROSS))
@@ -888,6 +898,27 @@ $(OBJ)/.eac-build32:
 
 endif
 
+##
+## Windows Symbol Store creation
+##
+
+ifneq ($(wildcard $(SRCDIR)/symstore/.*),)
+
+$(eval $(call rules-source,symstore,$(SRCDIR)/symstore))
+
+SYMSTORE_OBJ := $(OBJ)/obj-symstore
+
+.PHONY: symstore-tarball
+symstore-tarball: dist
+	@echo ":: building symbol store..." >&2
+	rsync -arx "$(SYMSTORE_SRC)/" "$(SYMSTORE_OBJ)/"
+	$(MAKE) -C "$(SYMSTORE_OBJ)" SYMSTORE_CFLAGS="-I$(WINE_SRC)/include -I$(WINE_OBJ64)/include"
+	mkdir -p $(OBJ)/symstore/$(BUILD_NAME)
+	$(SYMSTORE_OBJ)/symstore --skip-managed $(DST_BASE) $(OBJ)/symstore/$(BUILD_NAME)
+	cd $(OBJ)/symstore/$(BUILD_NAME) && tar zcf ../$(BUILD_NAME)-symbolstore.tgz .
+	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symbolstore.zip . >& /dev/null
+
+endif
 
 ##
 ## Fonts
@@ -1378,3 +1409,4 @@ targets:
 default: all
 .DEFAULT_GOAL := default
 endif
+
