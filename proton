@@ -792,7 +792,7 @@ class CompatData:
                 os.symlink("/", self.prefix_dir + "/dosdevices/z:")
 
             # collect configuration info
-            steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
+            steamdir = os.environ.get("STEAM_COMPAT_CLIENT_INSTALL_PATH", "")
 
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = not use_wined3d and \
@@ -1655,10 +1655,13 @@ if __name__ == "__main__":
     if g_proton.missing_default_prefix():
         g_proton.make_default_prefix()
 
-    g_session.init_session(sys.argv[1] != "runinprefix")
+    g_session.init_session(len(sys.argv) < 2 or sys.argv[1] != "runinprefix")
 
     #determine mode
     rc = 0
+    if len(sys.argv) < 2:
+        log("Need a verb.")
+        sys.exit(1)
     if sys.argv[1] == "run":
         #start target app
         setup_game_dir_drive()
@@ -1682,7 +1685,7 @@ if __name__ == "__main__":
         path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
         sys.stdout.buffer.write(path)
     else:
-        log("Need a verb.")
+        log("Bad verb.")
         sys.exit(1)
 
     sys.exit(rc)
