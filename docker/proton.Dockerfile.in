@@ -69,6 +69,23 @@ RUN apt-get install -y \
 && rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
 && rm -rf /var/lib/apt/lists/*
 
+COPY ninja-jobserver-client.patch /tmp
+
+RUN wget -q @NINJA_URLBASE@/@NINJA_SOURCE@ \
+&& echo '@NINJA_SHA256@ @NINJA_SOURCE@' \
+&& echo '@NINJA_SHA256@ @NINJA_SOURCE@' | sha256sum -c - \
+&& tar xf @NINJA_SOURCE@ -C /tmp && rm @NINJA_SOURCE@ \
+&& cd /tmp/ninja-@NINJA_VERSION@ \
+&& patch -p1 < /tmp/ninja-jobserver-client.patch \
+&& mkdir build \
+&& cd build \
+&& cmake .. \
+&& make \
+&& cp ninja $(which ninja) \
+&& cd / \
+&& rm -rf /tmp/ninja-@NINJA_VERSION@ \
+&& rm -rf /tmp/ninja-jobserver-client.patch
+
 ENTRYPOINT ["/usr/bin/tini-static", "-s", "-g", "--"]
 
 CMD ["/bin/bash"]

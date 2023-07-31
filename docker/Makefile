@@ -13,24 +13,28 @@ BINUTILS_VERSION = 2.40
 GCC_VERSION = 10.3.0
 MINGW_VERSION = 9.0.0
 RUST_VERSION = 1.68.0
+NINJA_VERSION = 1.11.1
 
 SOURCES_URLBASE = https://repo.steampowered.com/proton-sdk
 BINUTILS_URLBASE = $(SOURCES_URLBASE)
 GCC_URLBASE = $(SOURCES_URLBASE)
 MINGW_URLBASE = $(SOURCES_URLBASE)
 RUST_URLBASE = $(SOURCES_URLBASE)
+NINJA_URLBASE = $(SOURCES_URLBASE)
 
 BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.xz
 GCC_SOURCE = gcc-$(GCC_VERSION).tar.xz
 MINGW_SOURCE = mingw-w64-v$(MINGW_VERSION).tar.bz2
 RUST_SOURCE_x86_64 = rust-$(RUST_VERSION)-x86_64-unknown-linux-gnu.tar.gz
 RUST_SOURCE_i686 = rust-$(RUST_VERSION)-i686-unknown-linux-gnu.tar.gz
+NINJA_SOURCE = ninja-build_$(NINJA_VERSION).orig.tar.gz
 
 BINUTILS_SHA256 = 0f8a4c272d7f17f369ded10a4aca28b8e304828e95526da482b0ccc4dfc9d8e1
 GCC_SHA256 = 64f404c1a650f27fc33da242e1f2df54952e3963a49e06e73f6940f3223ac344
 MINGW_SHA256 = 1929b94b402f5ff4d7d37a9fe88daa9cc55515a6134805c104d1794ae22a4181
 RUST_SHA256_x86_64 = 7be1acdac656d0b0b7e909e5c0d4ddf61c755c203ec26ebafbd306322335b361
 RUST_SHA256_i686 = dc931adeb2943dcadfbd29546481f0296fcb97a511421053ecae6586a85869b1
+NINJA_SHA256 = 31747ae633213f1eda3842686f83c2aa1412e0f5691d1c14dbbcc67fe7400cea
 
 DOCKER = docker
 
@@ -55,6 +59,10 @@ DOCKER = docker
 	    -re 's!@RUST_SOURCE_i686@!$(RUST_SOURCE_i686)!g' \
 	    -re 's!@RUST_SHA256_x86_64@!$(RUST_SHA256_x86_64)!g' \
 	    -re 's!@RUST_SHA256_i686@!$(RUST_SHA256_i686)!g' \
+	    -re 's!@NINJA_VERSION@!$(NINJA_VERSION)!g' \
+	    -re 's!@NINJA_URLBASE@!$(NINJA_URLBASE)!g' \
+	    -re 's!@NINJA_SOURCE@!$(NINJA_SOURCE)!g' \
+	    -re 's!@NINJA_SHA256@!$(NINJA_SHA256)!g' \
 	    -re 's!@J@!$(shell nproc)!g' \
 	    $< >$@
 
@@ -189,12 +197,11 @@ define create-proton-rules
 all: proton
 proton: BASE_IMAGE = $(STEAMRT_URLBASE)/steamrt/sniper/sdk:$(STEAMRT_VERSION)
 proton: proton.Dockerfile | gcc
-	rm -rf build; mkdir -p build
 	$(DOCKER) build -f $$< \
 	  --cache-from=$(PROTONSDK_URLBASE) \
 	  -t $(PROTONSDK_URLBASE):$(PROTONSDK_VERSION) \
 	  -t $(PROTONSDK_URLBASE):latest \
-	  build
+	  context
 pull::
 	-$(DOCKER) pull $(PROTONSDK_URLBASE):$(PROTONSDK_VERSION)
 push::
@@ -210,13 +217,16 @@ sources::
 	rm -f $(GCC_SOURCE)
 	rm -f $(RUST_SOURCE_x86_64)
 	rm -f $(RUST_SOURCE_i686)
+	rm -f $(NINJA_SOURCE)
 	wget $(BINUTILS_URLBASE)/$(BINUTILS_SOURCE)
 	wget $(MINGW_URLBASE)/$(MINGW_SOURCE)
 	wget $(GCC_URLBASE)/$(GCC_SOURCE)
 	wget $(RUST_URLBASE)/$(RUST_SOURCE_x86_64)
 	wget $(RUST_URLBASE)/$(RUST_SOURCE_i686)
+	wget $(NINJA_URLBASE)/$(NINJA_SOURCE)
 	echo $(BINUTILS_SHA256) $(BINUTILS_SOURCE) | sha256sum -c -
 	echo $(MINGW_SHA256) $(MINGW_SOURCE) | sha256sum -c -
 	echo $(GCC_SHA256) $(GCC_SOURCE) | sha256sum -c -
 	echo $(RUST_SHA256_x86_64) $(RUST_SOURCE_x86_64) | sha256sum -c -
 	echo $(RUST_SHA256_i686) $(RUST_SOURCE_i686) | sha256sum -c -
+	echo $(NINJA_SHA256) $(NINJA_SOURCE) | sha256sum -c -
