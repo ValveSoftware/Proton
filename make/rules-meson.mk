@@ -60,8 +60,8 @@ $$(OBJ)/.$(1)-configure$(3): $$($(2)_SRC)/meson.build
 
 $$(OBJ)/.$(1)-build$(3):
 	@echo ":: building $(3)bit $(1)..." >&2
-	env $$($(2)_ENV$(3)) \
-	ninja $$(filter -j%,$$(MAKEFLAGS)) -C "$$($(2)_OBJ$(3))" install $(-v?)
+	+env $$($(2)_ENV$(3)) \
+	ninja -C "$$($(2)_OBJ$(3))" install
 	touch $$@
 endef
 
