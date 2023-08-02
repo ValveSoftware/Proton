@@ -810,6 +810,7 @@ class CompatData:
                     "d3dcompiler_*.dll," +
                     "d3dcsx*.dll," +
                     "d3dx*.dll," +
+                    "dx8vb.dll," +
                     "x3daudio*.dll," +
                     "xactengine*.dll," +
                     "xapofx*.dll," +
