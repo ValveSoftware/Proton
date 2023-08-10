@@ -1174,7 +1174,6 @@ def default_compat_config():
                 "2410180", #Portal Prelude RTX
                 "1549180", #propnight
                 "1186640", #pumpkin jack
-                "1895880", #Ratchet & Clank: Rift Apart
                 "1144200", #Ready Or Not
                 "1404210", #Red Dead Online
                 "1174180", #Red Dead Redemption 2
