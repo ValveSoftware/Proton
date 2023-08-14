@@ -122,7 +122,7 @@ GSTREAMER_MESON_ARGS := \
 
 GSTREAMER_DEPENDS = gst_orc
 
-$(eval $(call rules-source,gstreamer,$(SRCDIR)/gstreamer))
+$(eval $(call rules-source,gstreamer,$(SRCDIR)/gstreamer/subprojects/gstreamer))
 $(eval $(call rules-meson,gstreamer,32))
 $(eval $(call rules-meson,gstreamer,64))
 
@@ -152,8 +152,7 @@ GST_BASE_MESON_ARGS := \
 	-Dplayback=enabled \
 	-Dtheora=enabled \
 	-Dtypefind=enabled \
-	-Dvideoconvert=enabled \
-	-Dvideoscale=enabled \
+	-Dvideoconvertscale=enabled \
 	-Dvorbis=enabled \
 	-Dorc=enabled \
 	-Dx11=enabled \
@@ -164,7 +163,7 @@ GST_BASE_MESON_ARGS := \
 
 GST_BASE_DEPENDS = gst_orc graphene gstreamer
 
-$(eval $(call rules-source,gst_base,$(SRCDIR)/gst-plugins-base))
+$(eval $(call rules-source,gst_base,$(SRCDIR)/gstreamer/subprojects/gst-plugins-base))
 $(eval $(call rules-meson,gst_base,32))
 $(eval $(call rules-meson,gst_base,64))
 
@@ -194,7 +193,7 @@ GST_GOOD_MESON_ARGS := \
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
 
-$(eval $(call rules-source,gst_good,$(SRCDIR)/gst-plugins-good))
+$(eval $(call rules-source,gst_good,$(SRCDIR)/gstreamer/subprojects/gst-plugins-good/))
 $(eval $(call rules-meson,gst_good,32))
 $(eval $(call rules-meson,gst_good,64))
 
@@ -225,7 +224,7 @@ $(OBJ)/.ffmpeg-dist64:
 
 GST_LIBAV_DEPENDS = gst_orc gstreamer gst_base ffmpeg
 
-$(eval $(call rules-source,gst_libav,$(SRCDIR)/gst-libav))
+$(eval $(call rules-source,gst_libav,$(SRCDIR)/gstreamer/subprojects/gst-libav))
 $(eval $(call rules-meson,gst_libav,32))
 $(eval $(call rules-meson,gst_libav,64))
 
