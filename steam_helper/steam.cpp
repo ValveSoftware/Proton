@@ -1028,21 +1028,32 @@ static BOOL streq_niw(const WCHAR *l, const WCHAR *r, size_t len)
     return TRUE;
 }
 
-static BOOL should_use_shell_execute(const WCHAR *cmdline)
+static WCHAR* get_end_of_excutable_name(WCHAR *cmdline)
 {
-    BOOL use_shell_execute = TRUE;
     BOOL quoted = FALSE;
-    const WCHAR *executable_name_end = cmdline;
+    WCHAR *executable_name_end = cmdline;
 
     /* find the end of the first arg...*/
     while (*executable_name_end != '\0' &&
-           (*executable_name_end != ' ' || quoted) &&
-           (*executable_name_end != '"' || !quoted))
+           (*executable_name_end != ' ' || quoted))
     {
         quoted ^= *executable_name_end == '"';
 
         executable_name_end++;
     }
+
+    return executable_name_end;
+}
+
+static BOOL should_use_shell_execute(WCHAR *cmdline)
+{
+    BOOL use_shell_execute = TRUE;
+    const WCHAR *executable_name_end = (const WCHAR*)get_end_of_excutable_name(cmdline);
+
+    /* if the executable is quoted backtrack a bit */
+    if (*(executable_name_end - 1) == '"')
+        --executable_name_end;
+
 
     /* backtrack to before the end of the arg
      * and check if we end in .exe or not
@@ -1211,10 +1222,17 @@ run:
 
     if (use_shell_execute)
     {
+        WCHAR *param = NULL;
+        WCHAR *executable_name_end = get_end_of_excutable_name(cmdline);
+        if (*executable_name_end != '\0')
+        {
+            *executable_name_end = '\0';
+            param = executable_name_end+1;
+        }
         static const WCHAR verb[] = { 'o', 'p', 'e', 'n', 0 };
         INT_PTR ret;
 
-        if ((ret = (INT_PTR)ShellExecuteW(NULL, verb, cmdline, NULL, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL)) < 32)
+        if ((ret = (INT_PTR)ShellExecuteW(NULL, verb, cmdline, param, NULL, hide_window ? SW_HIDE : SW_SHOWNORMAL)) < 32)
         {
             WINE_ERR("Failed to execute %s, ret %u.\n", wine_dbgstr_w(cmdline), (unsigned int)ret);
             if (game_process && ret == SE_ERR_NOASSOC && link2ea)
