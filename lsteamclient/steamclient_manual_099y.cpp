@@ -15,6 +15,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 
+#define SDK_VERSION 992
+#include "steamclient_manual_common.h"
+
 class ISteamUser_linux
 {
 public:
