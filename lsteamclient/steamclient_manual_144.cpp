@@ -21,8 +21,6 @@ extern "C" {
 #define SDKVER_144
 #include "struct_converters.h"
 
-#include "queue.h"
-
 #define SDK_VERSION 1440
 #include "steamclient_manual_common.h"
 
