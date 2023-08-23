@@ -23,8 +23,6 @@ extern "C" {
 #include "cb_converters.h"
 #include "win_constructors.h"
 
-#include "queue.h"
-
 #define SDK_VERSION 1531
 #include "steamclient_manual_common.h"
 
@@ -33,14 +31,9 @@ struct msg_wrapper {
     struct SteamNetworkingMessage_t *lin_msg;
 
     void (*orig_FreeData)(SteamNetworkingMessage_t *);
-
-    SLIST_ENTRY(msg_wrapper) entry;
 };
 
 /***** manual struct converter for SteamNetworkingMessage_t *****/
-
-static SLIST_HEAD(free_msgs_head, msg_wrapper) free_msgs = SLIST_HEAD_INITIALIZER(free_msgs);
-static CRITICAL_SECTION free_msgs_lock = { NULL, -1, 0, 0, 0, 0 };
 
 static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_153a *win_msg)
 {
@@ -56,13 +49,11 @@ static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessag
 static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_153a *win_msg)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
+
     TRACE("%p\n", msg);
     msg->lin_msg->m_pfnRelease(msg->lin_msg);
-    msg->lin_msg = NULL;
-    msg->orig_FreeData = NULL;
-    EnterCriticalSection(&free_msgs_lock);
-    SLIST_INSERT_HEAD(&free_msgs, msg, entry);
-    LeaveCriticalSection(&free_msgs_lock);
+    SecureZeroMemory(msg, sizeof(*msg));
+    HeapFree(GetProcessHeap(), 0, msg);
 }
 
 static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
@@ -78,22 +69,7 @@ void *network_message_lin_to_win_(void *msg_, unsigned int version)
     struct SteamNetworkingMessage_t *lin_msg = (struct SteamNetworkingMessage_t *)msg_;
     struct msg_wrapper *msg;
 
-    EnterCriticalSection(&free_msgs_lock);
-
-    msg = SLIST_FIRST(&free_msgs);
-
-    if(!msg){
-        int n;
-        /* allocs can be pricey, so alloc in blocks */
-#define MSGS_PER_BLOCK 16
-        struct msg_wrapper *msgs = (struct msg_wrapper *)HeapAlloc(GetProcessHeap(), 0, sizeof(struct msg_wrapper) * MSGS_PER_BLOCK);
-        for(n = 1; n < MSGS_PER_BLOCK; ++n)
-            SLIST_INSERT_HEAD(&free_msgs, &msgs[n], entry);
-        msg = &msgs[0];
-    }else
-        SLIST_REMOVE_HEAD(&free_msgs, entry);
-
-    LeaveCriticalSection(&free_msgs_lock);
+    msg = (struct msg_wrapper *)HeapAlloc(GetProcessHeap(), 0, sizeof(*msg));
 
     TRACE("lin_msg %p, msg %p.\n", lin_msg, msg);
 

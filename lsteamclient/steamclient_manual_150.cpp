@@ -23,8 +23,6 @@ extern "C" {
 #include "struct_converters.h"
 #include "cb_converters.h"
 
-#include "queue.h"
-
 #define SDK_VERSION 1500
 #include "steamclient_manual_common.h"
 
