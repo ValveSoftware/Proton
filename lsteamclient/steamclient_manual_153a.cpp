@@ -25,8 +25,6 @@ extern "C" {
 #include "cb_converters.h"
 #include "win_constructors.h"
 
-#include "queue.h"
-
 #define SDK_VERSION 1531
 #include "steamclient_manual_common.h"
 
