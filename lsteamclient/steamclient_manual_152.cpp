@@ -23,6 +23,9 @@ extern "C" {
 #include "struct_converters.h"
 #include "cb_converters.h"
 
+#define SDK_VERSION 1520
+#include "steamclient_manual_common.h"
+
 /***** manual fn wrapper for ISteamInput::EnableActionEventCallbacks *****/
 win_SteamInputActionEventCallbackPointer win_EnableActionEventCallbacks;
 
