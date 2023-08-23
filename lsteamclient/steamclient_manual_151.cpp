@@ -20,6 +20,9 @@ extern "C" {
 #include "struct_converters.h"
 #include "cb_converters.h"
 
+#define SDK_VERSION 1510
+#include "steamclient_manual_common.h"
+
 const char * cppISteamInput_SteamInput002_GetGlyphForActionOrigin(void *linux_side, EInputActionOrigin eOrigin)
 {
     const char *path_result;
