@@ -1,11 +1,13 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <dlfcn.h>
 #include <limits.h>
 #include <stdint.h>
 #include <pthread.h>
 #include <assert.h>
+
+#define __USE_GNU
+#include <dlfcn.h>
 
 #include "windef.h"
 #include "winbase.h"
@@ -42,6 +44,37 @@ static pthread_cond_t callback_queue_callback_event;
 static pthread_cond_t callback_queue_ready_event;
 static pthread_cond_t callback_queue_complete_event;
 
+static void * (WINAPI *p_NtCurrentTeb)(void);
+
+static void init_ntdll_so_funcs(void)
+{
+    Dl_info info;
+    UINT64 unix_funcs;
+    unsigned int status;
+    void *ntdll;
+
+    status = NtQueryVirtualMemory(GetCurrentProcess(), GetModuleHandleW(L"ntdll.dll"), (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
+            &unix_funcs, sizeof(unix_funcs), NULL);
+    if (status)
+    {
+        fprintf(stderr, "err:lsteamclient:init_ntdll_so_funcs NtQueryVirtualMemory status %#x.\n", status);
+        return;
+    }
+    if (!dladdr((void *)(ULONG_PTR)unix_funcs, &info))
+    {
+        fprintf(stderr, "err:lsteamclient:init_ntdll_so_funcs dladdr failed.\n");
+        return;
+    }
+    ntdll = dlopen(info.dli_fname, RTLD_NOW);
+    if (!ntdll)
+    {
+        fprintf(stderr, "err:lsteamclient:init_ntdll_so_funcs could not find ntdll.so.\n");
+        return;
+    }
+    p_NtCurrentTeb = dlsym(ntdll, "NtCurrentTeb");
+    dlclose(ntdll);
+}
+
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
     TRACE("(%p, %u, %p)\n", instance, reason, reserved);
@@ -51,6 +84,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(instance);
             steam_overlay_event = CreateEventA(NULL, TRUE, FALSE, "__wine_steamclient_GameOverlayActivated");
+            init_ntdll_so_funcs();
             break;
         case DLL_PROCESS_DETACH:
             if (callback_thread_handle)
@@ -74,6 +108,13 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     }
 
     return TRUE;
+}
+
+BOOL is_native_thread(void)
+{
+    if (!p_NtCurrentTeb)
+        return TRUE;
+    return !p_NtCurrentTeb();
 }
 
 void sync_environment(void)
@@ -743,7 +784,12 @@ static DWORD WINAPI callback_thread(void *dummy)
                         cb_data.steam_api_warning_hook.msg);
                 callback_complete(cookie);
                 break;
-
+            case STEAM_API_CALLBACK_ONE_PARAM:
+                TRACE("STEAM_API_CALLBACK_ONE_PARAM func %p, param %p.\n",
+                        cb_data.func, cb_data.steam_api_callback_one_param.param);
+                ((void (WINAPI *)(void *))cb_data.func)(cb_data.steam_api_callback_one_param.param);
+                callback_complete(cookie);
+                break;
             default:
                 ERR("Unexpected callback type %u.\n", cb_data.type);
                 break;

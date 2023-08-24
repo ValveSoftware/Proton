@@ -88,13 +88,25 @@ static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage
 static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
 {
     struct msg_wrapper *msg = msg_wrapper_from_lin(lin_msg);
+    struct callback_data cb_data;
 
-    TRACE("%p\n", msg);
     if (!msg)
         return;
 
-    if(msg->win_msg.m_pfnFreeData)
+    if (!msg->win_msg.m_pfnFreeData)
+        return;
+
+    if (!is_native_thread())
+    {
+        TRACE("msg %p, callback %p.\n", msg, msg->win_msg.m_pfnFreeData);
         ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_153a *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
+        return;
+    }
+
+    cb_data.type = STEAM_API_CALLBACK_ONE_PARAM;
+    cb_data.func = (void *)msg->win_msg.m_pfnFreeData;
+    cb_data.steam_api_callback_one_param.param = (void *)&msg->win_msg;
+    execute_callback(&cb_data);
 }
 
 void *network_message_lin_to_win_(void *msg_, unsigned int version)
@@ -104,7 +116,7 @@ void *network_message_lin_to_win_(void *msg_, unsigned int version)
 
     msg = (struct msg_wrapper *)HeapAlloc(GetProcessHeap(), 0, sizeof(*msg));
 
-    TRACE("lin_msg %p, msg %p.\n", lin_msg, msg);
+    TRACE("lin_msg %p, msg %p, m_cbSize %d.\n", lin_msg, msg, lin_msg->m_cbSize);
 
     msg->lin_msg = lin_msg;
 
