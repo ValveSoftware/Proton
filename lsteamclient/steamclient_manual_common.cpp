@@ -35,6 +35,7 @@ struct msg_wrapper {
 
     struct list mapping_entry;
     void (*orig_FreeData)(SteamNetworkingMessage_t *);
+    void (*orig_Release)(SteamNetworkingMessage_t *);
 };
 
 /***** manual struct converter for SteamNetworkingMessage_t *****/
@@ -77,7 +78,8 @@ static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
 
     TRACE("%p\n", msg);
-    msg->lin_msg->m_pfnRelease(msg->lin_msg);
+    if (msg->orig_Release)
+        msg->orig_Release(msg->lin_msg);
     pthread_mutex_lock(&msg_lin_to_win_mapping_mutex);
     list_remove(&msg->mapping_entry);
     pthread_mutex_unlock(&msg_lin_to_win_mapping_mutex);
@@ -105,6 +107,30 @@ static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
 
     cb_data.type = STEAM_API_CALLBACK_ONE_PARAM;
     cb_data.func = (void *)msg->win_msg.m_pfnFreeData;
+    cb_data.steam_api_callback_one_param.param = (void *)&msg->win_msg;
+    execute_callback(&cb_data);
+}
+
+static void lin_Release(struct SteamNetworkingMessage_t *lin_msg)
+{
+    struct msg_wrapper *msg = msg_wrapper_from_lin(lin_msg);
+    struct callback_data cb_data;
+
+    if (!msg)
+        return;
+
+    if (!msg->win_msg.m_pfnRelease)
+        return;
+
+    if (!is_native_thread())
+    {
+        TRACE("msg %p, callback %p.\n", msg, msg->win_msg.m_pfnFreeData);
+        ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_153a *))msg->win_msg.m_pfnRelease)(&msg->win_msg);
+        return;
+    }
+
+    cb_data.type = STEAM_API_CALLBACK_ONE_PARAM;
+    cb_data.func = (void *)msg->win_msg.m_pfnRelease;
     cb_data.steam_api_callback_one_param.param = (void *)&msg->win_msg;
     execute_callback(&cb_data);
 }
@@ -140,6 +166,8 @@ void *network_message_lin_to_win_(void *msg_, unsigned int version)
 
     msg->orig_FreeData = msg->lin_msg->m_pfnFreeData;
     msg->lin_msg->m_pfnFreeData = lin_FreeData;
+    msg->orig_Release = msg->lin_msg->m_pfnRelease;
+    msg->lin_msg->m_pfnRelease = lin_Release;
 
     pthread_mutex_lock(&msg_lin_to_win_mapping_mutex);
     list_add_head(&msg_lin_to_win_mapping, &msg->mapping_entry);
