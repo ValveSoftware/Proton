@@ -3,6 +3,7 @@ extern "C" {
 
 #include "windef.h"
 #include "winbase.h"
+#include "wine/list.h"
 #include "wine/debug.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
@@ -26,14 +27,39 @@ extern "C" {
 #define SDK_VERSION 1531
 #include "steamclient_manual_common.h"
 
+#include <pthread.h>
+
 struct msg_wrapper {
     struct winSteamNetworkingMessage_t_153a win_msg;
     struct SteamNetworkingMessage_t *lin_msg;
 
+    struct list mapping_entry;
     void (*orig_FreeData)(SteamNetworkingMessage_t *);
 };
 
 /***** manual struct converter for SteamNetworkingMessage_t *****/
+
+static struct list msg_lin_to_win_mapping = LIST_INIT(msg_lin_to_win_mapping);
+static pthread_mutex_t msg_lin_to_win_mapping_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+static struct msg_wrapper *msg_wrapper_from_lin(struct SteamNetworkingMessage_t *lin_msg)
+{
+    struct msg_wrapper *msg = NULL, *m;
+
+    pthread_mutex_lock(&msg_lin_to_win_mapping_mutex);
+    LIST_FOR_EACH_ENTRY(m, &msg_lin_to_win_mapping, struct msg_wrapper, mapping_entry)
+    {
+        if (m->lin_msg == lin_msg)
+        {
+            msg = m;
+            break;
+        }
+    }
+    pthread_mutex_unlock(&msg_lin_to_win_mapping_mutex);
+    if (!msg)
+        fprintf(stderr, "err:lsteamclient:msg_wrapper_from_lin Mapping for %p not found.\n", lin_msg);
+    return msg;
+}
 
 static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_153a *win_msg)
 {
@@ -52,14 +78,21 @@ static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage
 
     TRACE("%p\n", msg);
     msg->lin_msg->m_pfnRelease(msg->lin_msg);
+    pthread_mutex_lock(&msg_lin_to_win_mapping_mutex);
+    list_remove(&msg->mapping_entry);
+    pthread_mutex_unlock(&msg_lin_to_win_mapping_mutex);
     SecureZeroMemory(msg, sizeof(*msg));
     HeapFree(GetProcessHeap(), 0, msg);
 }
 
 static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
 {
-    struct msg_wrapper *msg = (struct msg_wrapper *)lin_msg->m_pData; /* ! see assignment, below */
+    struct msg_wrapper *msg = msg_wrapper_from_lin(lin_msg);
+
     TRACE("%p\n", msg);
+    if (!msg)
+        return;
+
     if(msg->win_msg.m_pfnFreeData)
         ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_153a *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
 }
@@ -95,8 +128,10 @@ void *network_message_lin_to_win_(void *msg_, unsigned int version)
 
     msg->orig_FreeData = msg->lin_msg->m_pfnFreeData;
     msg->lin_msg->m_pfnFreeData = lin_FreeData;
-    /* ! store the wrapper here and restore the original pointer from win_msg before calling orig_FreeData */
-    msg->lin_msg->m_pData = msg;
+
+    pthread_mutex_lock(&msg_lin_to_win_mapping_mutex);
+    list_add_head(&msg_lin_to_win_mapping, &msg->mapping_entry);
+    pthread_mutex_unlock(&msg_lin_to_win_mapping_mutex);
 
     return &msg->win_msg;
 }
