@@ -75,6 +75,7 @@ enum callback_type
 {
     SOCKET_DEBUG_OUTPUT = 1,
     STEAM_API_WARNING_HOOK,
+    STEAM_API_CALLBACK_ONE_PARAM,
 };
 
 struct callback_data
@@ -96,10 +97,16 @@ struct callback_data
             const char *msg;
         }
         steam_api_warning_hook;
+        struct
+        {
+            void *param;
+        }
+        steam_api_callback_one_param;
     };
 };
 
 void execute_callback(struct callback_data *cb_data);
+BOOL is_native_thread(void);
 
 #ifdef __cplusplus
 }
