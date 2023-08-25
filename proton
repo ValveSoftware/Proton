@@ -803,7 +803,7 @@ class CompatData:
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = not use_wined3d and \
                     not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
-            use_nvapi = 'disablenvapi' not in g_session.compat_config
+            use_nvapi = 'disablenvapi' not in g_session.compat_config or 'forcenvapi' in g_session.compat_config
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
                     #dxsetup redist
@@ -1282,6 +1282,7 @@ class Session:
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
         self.check_environment("PROTON_DISABLE_NVAPI", "disablenvapi")
+        self.check_environment("PROTON_FORCE_NVAPI", "forcenvapi")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -1324,7 +1325,7 @@ class Session:
         if "hidevggpu" in self.compat_config:
             self.env["WINE_HIDE_VANGOGH_GPU"] = "1"
 
-        if "hidenvgpu" in self.compat_config:
+        if "hidenvgpu" in self.compat_config and "forcenvapi" not in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
         if "usenativexinput13" in self.compat_config:
@@ -1400,8 +1401,13 @@ class Session:
         if "nativevulkanloader" in self.compat_config:
             self.dlloverrides["vulkan-1"] = "n"
 
-        if "disablenvapi" not in self.compat_config:
+        if "disablenvapi" not in self.compat_config or "forcenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
+
+        if "forcenvapi" in self.compat_config:
+            self.env["DXVK_NVAPI_ALLOW_OTHER_DRIVERS"] = "1"
+            self.env["DXVK_NVAPI_DRIVER_VERSION"] = "99999"
+            self.env["WINE_HIDE_AMD_GPU"] = "1"
 
         s = ""
         for dll in self.dlloverrides:
