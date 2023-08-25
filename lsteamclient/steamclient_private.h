@@ -107,6 +107,8 @@ struct callback_data
 
 void execute_callback(struct callback_data *cb_data);
 BOOL is_native_thread(void);
+bool after_shutdown(bool);
+HSteamPipe after_steam_pipe_create(HSteamPipe pipe);
 
 #ifdef __cplusplus
 }

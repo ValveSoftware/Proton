@@ -755,6 +755,21 @@ static void callback_complete(UINT64 cookie)
     pthread_mutex_unlock(&callback_queue_mutex);
 }
 
+static void finish_callback_thread(void)
+{
+    if (!callback_thread_handle)
+        return;
+    pthread_mutex_lock(&callback_queue_mutex);
+    callback_queue_done = TRUE;
+    pthread_cond_broadcast(&callback_queue_callback_event);
+    pthread_cond_broadcast(&callback_queue_complete_event);
+    pthread_mutex_unlock(&callback_queue_mutex);
+
+    WaitForSingleObject(callback_thread_handle, INFINITE);
+    CloseHandle(callback_thread_handle);
+    callback_thread_handle = NULL;
+}
+
 typedef void (WINAPI *win_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType,
         const char *pszMsg);
 typedef void (CDECL *win_SteamAPIWarningMessageHook_t)(int, const char *pszMsg);
@@ -795,6 +810,7 @@ static DWORD WINAPI callback_thread(void *dummy)
                 break;
         }
     }
+    TRACE("exiting.\n");
     return 0;
 }
 
@@ -1064,4 +1080,33 @@ int CDECL Breakpad_SteamWriteMiniDumpSetComment(const char *comment)
 void CDECL Breakpad_SteamWriteMiniDumpUsingExceptionInfoWithBuildId(int a, int b)
 {
     TRACE("\n");
+}
+
+bool after_shutdown(bool ret)
+{
+    TRACE("ret %d.\n", ret);
+
+    if (!ret)
+        return 0;
+    finish_callback_thread();
+    return ret;
+}
+
+HSteamPipe after_steam_pipe_create(HSteamPipe pipe)
+{
+    DWORD callback_thread_id;
+
+    TRACE("pipe %#x.\n", pipe);
+
+    if (!pipe)
+        return 0;
+
+    if (callback_thread_handle)
+        return pipe;
+
+    callback_queue_done = FALSE;
+    callback_thread_handle = CreateThread(NULL, 0, callback_thread, NULL, 0, &callback_thread_id);
+    TRACE("Created callback thread 0x%04x.\n", callback_thread_id);
+
+    return pipe;
 }

@@ -13,7 +13,7 @@ extern "C" {
 #include "cppISteamClient_SteamClient012.h"
 HSteamPipe cppISteamClient_SteamClient012_CreateSteamPipe(void *linux_side)
 {
-    return ((ISteamClient*)linux_side)->CreateSteamPipe();
+    return after_steam_pipe_create(((ISteamClient*)linux_side)->CreateSteamPipe());
 }
 
 bool cppISteamClient_SteamClient012_BReleaseSteamPipe(void *linux_side, HSteamPipe hSteamPipe)
@@ -124,7 +124,7 @@ void cppISteamClient_SteamClient012_SetWarningMessageHook(void *linux_side, Stea
 
 bool cppISteamClient_SteamClient012_BShutdownIfAllPipesClosed(void *linux_side)
 {
-    return ((ISteamClient*)linux_side)->BShutdownIfAllPipesClosed();
+    return after_shutdown(((ISteamClient*)linux_side)->BShutdownIfAllPipesClosed());
 }
 
 void *cppISteamClient_SteamClient012_GetISteamHTTP(void *linux_side, HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char * pchVersion)
