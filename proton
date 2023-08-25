@@ -1220,6 +1220,7 @@ def default_compat_config():
                 "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
                 "1446780", #monster hunter rise
                 "1245620", #Elden Ring
+                "814380", #Sekiro: Shadows Die Twice
                 ]:
             ret.add("enablenvapi")
 
@@ -1227,6 +1228,7 @@ def default_compat_config():
                 # force dxvknvapi for certain titles on all vendors
                 # for HDR or to avoid AMD AGS usage
                 "1245620", #Elden Ring
+                "814380", #Sekiro: Shadows Die Twice
                 ]:
             ret.add("forcenvapi")
 
