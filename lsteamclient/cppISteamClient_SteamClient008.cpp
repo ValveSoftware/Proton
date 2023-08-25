@@ -13,7 +13,7 @@ extern "C" {
 #include "cppISteamClient_SteamClient008.h"
 HSteamPipe cppISteamClient_SteamClient008_CreateSteamPipe(void *linux_side)
 {
-    return ((ISteamClient*)linux_side)->CreateSteamPipe();
+    return after_steam_pipe_create(((ISteamClient*)linux_side)->CreateSteamPipe());
 }
 
 bool cppISteamClient_SteamClient008_BReleaseSteamPipe(void *linux_side, HSteamPipe hSteamPipe)
