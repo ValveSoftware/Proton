@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/13.0.1'
+CLANG_PATH='/usr/lib/clang/16'
 
 from clang.cindex import CursorKind, Index, Type, TypeKind
 from collections import namedtuple
@@ -232,6 +232,16 @@ manually_handled_methods = {
             #TODO: Do we need the the value -> pointer conversion for other versions of the interface?
             Method("InitiateGameConnection", lambda version: version == 8),
         ],
+        #"cppISteamClient_SteamClient": [
+        #    Method("BShutdownIfAllPipesClosed"),
+        #],
+}
+
+
+
+post_execution_functions = {
+        "ISteamClient_BShutdownIfAllPipesClosed" : "after_shutdown",
+        "ISteamClient_CreateSteamPipe" : "after_steam_pipe_create",
 }
 
 INTERFACE_NAME_VERSION = re.compile(r'^(?P<name>.+?)(?P<version>\d*)$')
@@ -245,6 +255,9 @@ def method_needs_manual_handling(interface_with_version, method_name):
     method = next(filter(lambda m: m.name == method_name, method_list), None)
 
     return method and method.version_func(version)
+
+def post_execution_function(classname, method_name):
+    return post_execution_functions.get(classname + "_" + method_name)
 
 # manual converters for simple types (function pointers)
 manual_type_converters = [
@@ -816,6 +829,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     else:
         cpp.write("    return ")
 
+    post_exec = post_execution_function(classname, method.spelling)
+    if post_exec != None:
+        cpp.write(post_exec + '(');
+
     should_do_cb_wrap = "GetAPICallResult" in used_name
     should_gen_wrapper = cpp != dummy_writer and \
             (method.result_type.spelling.startswith("ISteam") or \
@@ -861,7 +878,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cpp.write(f"({param.type.spelling}){param.spelling}")
     if should_gen_wrapper:
         cfile.write(")")
+
     cfile.write(");\n")
+    if post_exec != None:
+        cpp.write(")")
     cpp.write(");\n")
     if returns_record:
         cfile.write("    return _r;\n")
