@@ -1219,8 +1219,16 @@ def default_compat_config():
                 "1249800", #xuan-yuan sword VII
                 "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
                 "1446780", #monster hunter rise
+                "1245620", #Elden Ring
                 ]:
             ret.add("enablenvapi")
+
+        if appid in [
+                # force dxvknvapi for certain titles on all vendors
+                # for HDR or to avoid AMD AGS usage
+                "1245620", #Elden Ring
+                ]:
+            ret.add("forcenvapi")
 
     return ret
 
