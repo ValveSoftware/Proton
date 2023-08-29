@@ -244,12 +244,12 @@ $(eval $(call rules-cargo,gst_plugins_rs,64))
 
 $(OBJ)/.gst_plugins_rs-post-build64:
 	mkdir -p $(GST_PLUGINS_RS_DST64)/lib64/gstreamer-1.0/
-	cp -a $(GST_PLUGINS_RS_OBJ64)/x86_64-unknown-linux-gnu/release/libgstrsdav1d.so $(GST_PLUGINS_RS_DST64)/lib64/gstreamer-1.0/
+	cp -a $(GST_PLUGINS_RS_OBJ64)/x86_64-unknown-linux-gnu/release/libgstdav1d.so $(GST_PLUGINS_RS_DST64)/lib64/gstreamer-1.0/
 	touch $@
 
 $(OBJ)/.gst_plugins_rs-post-build32:
 	mkdir -p $(GST_PLUGINS_RS_DST32)/lib/gstreamer-1.0/
-	cp -a $(GST_PLUGINS_RS_OBJ32)/i686-unknown-linux-gnu/release/libgstrsdav1d.so $(GST_PLUGINS_RS_DST32)/lib/gstreamer-1.0/
+	cp -a $(GST_PLUGINS_RS_OBJ32)/i686-unknown-linux-gnu/release/libgstdav1d.so $(GST_PLUGINS_RS_DST32)/lib/gstreamer-1.0/
 	touch $@
 
 
