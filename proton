@@ -1219,6 +1219,7 @@ def default_compat_config():
                 "1249800", #xuan-yuan sword VII
                 "1358700", #STRANGER OF PARADISE FINAL FANTASY ORIGIN
                 "1446780", #monster hunter rise
+                "2379390", #Rainbow Six Extraction
                 ]:
             ret.add("enablenvapi")
 
