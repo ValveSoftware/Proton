@@ -1189,6 +1189,14 @@ def default_compat_config():
                 ]:
             ret.add("enablenvapi")
 
+        if appid in [
+                "1245620", #Elden Ring
+                "1888160", #Armored Core VI
+                "814380", #Sekiro: Shadows Die Twice
+                "2379390", #Rainbow Six Extraction
+                ]:
+            ret.add("enableamdags")
+
     return ret
 
 class Session:
@@ -1359,6 +1367,7 @@ class Session:
         self.check_environment("PROTON_NO_XIM", "noxim")
         self.check_environment("PROTON_HEAP_DELAY_FREE", "heapdelayfree")
         self.check_environment("PROTON_ENABLE_NVAPI", "enablenvapi")
+        self.check_environment("PROTON_ENABLE_AMD_AGS", "enableamdags")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -1474,6 +1483,9 @@ class Session:
 
         if "enablenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
+
+        if "enableamdags" in self.compat_config:
+            self.dlloverrides["amd_ags_x64"] = "b"
 
         s = ""
         for dll in self.dlloverrides:
