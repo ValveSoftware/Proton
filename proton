@@ -1070,6 +1070,7 @@ def default_compat_config():
                 "65500", #Aura: Fate of the Ages
                 "4000", #Garry's Mod
                 "383120", #Empyrion - Galactic Survival
+                "2371630", #Sword Art Online: Integral Factor
                 ]:
             ret.add("gamedrive")
 
