@@ -1072,6 +1072,7 @@ def default_compat_config():
                 "374320", #DARK SOULS III
                 "65500", #Aura: Fate of the Ages
                 "4000", #Garry's Mod
+                "383120", #Empyrion - Galactic Survival
                 ]:
             ret.add("gamedrive")
 
