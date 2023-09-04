@@ -62,6 +62,12 @@ ifneq ($(SUPPRESS_WARNINGS),)
 	COMMON_FLAGS += -w
 endif
 
+ifeq ($(ENABLE_BEAR),1)
+	BEAR := bear --append --
+else
+	BEAR :=
+endif
+
 $(DST_DIR):
 	mkdir -p $@
 
@@ -1187,10 +1193,10 @@ redist: all
 .PHONY: module32 module64 module
 
 module32: | all-source wine-configure32
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ32)/dlls/$(module)
+	+$(BEAR) $(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ32)/dlls/$(module)
 
 module64: | all-source wine-configure64
-	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ64)/dlls/$(module)
+	+$(BEAR) $(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) $(MFLAGS) $(MAKEOVERRIDES) -C $(WINE_OBJ64)/dlls/$(module)
 
 module: | all-source wine-configure
 module: module32 module64
