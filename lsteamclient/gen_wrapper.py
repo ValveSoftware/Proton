@@ -877,7 +877,7 @@ def handle_method(used_name, cfile, classname, winclassname, cppname, method, cp
              used_name.startswith("GetISteamGenericInterface"))
 
     if should_do_cb_wrap:
-        cfile.write(f"do_cb_wrap(0, _this->linux_side, &{cppname}_{used_name}")
+        cfile.write(f"do_cb_wrap(0, &{cppname}_{used_name}, _this->linux_side")
     else:
         if should_gen_wrapper:
             cfile.write("create_win_interface(pchVersion,\n        ")

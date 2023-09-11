@@ -999,9 +999,9 @@ static int get_callback_len(int cb)
     return 0;
 }
 
-bool do_cb_wrap(HSteamPipe pipe, void *linux_side,
-        bool (*cpp_func)(void *, SteamAPICall_t, void *, int, int, bool *),
-        SteamAPICall_t call, void *callback, int callback_len, int cb_expected, bool *failed)
+bool do_cb_wrap( HSteamPipe pipe, bool (*cpp_func)( void *, SteamAPICall_t, void *, int, int, bool * ),
+                 void *linux_side, SteamAPICall_t call, void *callback, int callback_len,
+                 int cb_expected, bool *failed )
 {
     void *lin_callback = NULL;
     int lin_callback_len;

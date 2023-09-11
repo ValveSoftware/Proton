@@ -117,7 +117,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils002_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(winISteamUtils_SteamUtils002 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils002_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils002_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 extern vtable_ptr winISteamUtils_SteamUtils002_vtable;
@@ -256,7 +256,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils004_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(winISteamUtils_SteamUtils004 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils004_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils004_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils004_RunFrame, 4)
@@ -427,7 +427,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(winISteamUtils_SteamUtils005 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils005_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils005_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_RunFrame, 4)
@@ -640,7 +640,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(winISteamUtils_SteamUtils006 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils006_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils006_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_RunFrame, 4)
@@ -869,7 +869,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(winISteamUtils_SteamUtils007 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils007_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils007_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_RunFrame, 4)
@@ -1106,7 +1106,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(winISteamUtils_SteamUtils008 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils008_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils008_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_RunFrame, 4)
@@ -1359,7 +1359,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(winISteamUtils_SteamUtils009 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils009_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils009_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_RunFrame, 4)
@@ -1660,7 +1660,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_GetAPICallResult, 28)
 bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(winISteamUtils_SteamUtils010 *_this, SteamAPICall_t hSteamAPICall, void * pCallback, int cubCallback, int iCallbackExpected, bool * pbFailed)
 {
     TRACE("%p\n", _this);
-    return do_cb_wrap(0, _this->linux_side, &cppISteamUtils_SteamUtils010_GetAPICallResult, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
+    return do_cb_wrap(0, &cppISteamUtils_SteamUtils010_GetAPICallResult, _this->linux_side, hSteamAPICall, pCallback, cubCallback, iCallbackExpected, pbFailed);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils010_RunFrame, 4)
