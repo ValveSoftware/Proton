@@ -127,7 +127,7 @@ static BOOL copy_file(const char* from, const char* to)
 static BOOL files_same_content(const char* file1, const char* file2)
 {
     FILE* f1 = fopen(file1, "rb");
-    FILE* f2 = fopen(file1, "rb");
+    FILE* f2 = fopen(file2, "rb");
     BOOL ret = FALSE;
 
     if (f1 && f2)
