@@ -767,23 +767,22 @@ endif
 ## Windows Symbol Store creation
 ##
 
-ifneq ($(wildcard $(SRCDIR)/symstore/.*),)
+SYMSTORE_DEPENDS = wine
 
 $(eval $(call rules-source,symstore,$(SRCDIR)/symstore))
+$(eval $(call create-rules-common,symstore,SYMSTORE,64))
 
-SYMSTORE_OBJ := $(OBJ)/obj-symstore
+$(OBJ)/.symstore-build64:
+	@echo ":: building symstore helper..." >&2
+	rsync -arx "$(SYMSTORE_SRC)/" "$(SYMSTORE_OBJ64)/"
+	$(MAKE) -C "$(SYMSTORE_OBJ64)" SYMSTORE_CFLAGS="-I$(WINE_SRC)/include -I$(WINE_OBJ64)/include"
+	touch $@
 
 .PHONY: symstore-tarball
-symstore-tarball: dist
-	@echo ":: building symbol store..." >&2
-	rsync -arx "$(SYMSTORE_SRC)/" "$(SYMSTORE_OBJ)/"
-	$(MAKE) -C "$(SYMSTORE_OBJ)" SYMSTORE_CFLAGS="-I$(WINE_SRC)/include -I$(WINE_OBJ64)/include"
+symstore-tarball:
 	mkdir -p $(OBJ)/symstore/$(BUILD_NAME)
-	$(SYMSTORE_OBJ)/symstore --skip-managed $(DST_BASE) $(OBJ)/symstore/$(BUILD_NAME)
-	cd $(OBJ)/symstore/$(BUILD_NAME) && tar zcf ../$(BUILD_NAME)-symbolstore.tgz .
-	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symbolstore.zip . >& /dev/null
-
-endif
+	$(SYMSTORE_OBJ64)/symstore --skip-managed $(DST_BASE) $(OBJ)/symstore/$(BUILD_NAME)
+	cd $(OBJ)/symstore/$(BUILD_NAME) && zip -r ../$(BUILD_NAME)-symstore.zip . >& /dev/null
 
 ##
 ## Fonts

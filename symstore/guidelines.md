@@ -20,10 +20,10 @@ information, and your setup must be fixed before going any further.
 
 # Installing on dev machine
 
-Each new released proton version (starting at XXXX FIXME XXXX) will
-also be available as a zip package to be installed inside symbol store.
+Each new released proton version (starting at Proton 8.0-4) will also be
+available as a zip package to be installed inside symbol store.
 
-The .zip file is available at URL XXX FIXME XXX [decide] and is named
+The .zip file is available as a part of GitHub release and is named
 <BUILD_NAME>-symstore.zip.
 
 You must create a top directory (referred as <SYMSTORE> below) and
@@ -65,13 +65,10 @@ configuration as described above for MS tools.
 
 # Public store
 
-[[ NOTE depends on Valve's agreeing to set it up ]]
-
-A Proton symbol store is available at <SYMSTORE_URI>.
+A Proton symbol store is available at <https://proton-archive.steamos.cloud/>.
 
 Then no local installation is required, only setting the
 ```
 srv*<SYMSTORE_URI>
 ```
 in the debugging tools would be required.
-
