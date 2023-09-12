@@ -158,7 +158,7 @@ static BOOL validate_proton_dist(const char* src)
     snprintf(buffer, ARRAYSIZE(buffer), "%s/%s", src, "version");
     allgood = stat(buffer, &st) == 0 && (st.st_mode & S_IFMT) == S_IFREG;
 
-    snprintf(buffer, ARRAYSIZE(buffer), "%s/%s", src, "files");
+    snprintf(buffer, ARRAYSIZE(buffer), "%s/%s", src, "dist");
     allgood = allgood && stat(buffer, &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR;
 
     return allgood;
