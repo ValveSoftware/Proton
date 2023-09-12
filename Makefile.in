@@ -687,6 +687,23 @@ $(OBJ)/.eac-build32:
 
 endif
 
+# HACK: we need to order those builds so that timestamps are different between
+# 32 and 64 bit versions of the dlls. Otherwise there's a significant chance for
+# conflict when creating symbol storage. We also have to make sure that projects
+# which build alternative versions of the DLLs do not share the same timestamps.
+#
+# This is a temporary solution that only lowers the chance of conflicts.
+# Binutils 2.42 (not released yet at the time of writing this) will introduce
+# support for SOURCE_DATE_EPOCH which we should use instead.
+$(OBJ)/.wine-build64: $(OBJ)/.wine-build32
+$(OBJ)/.vkd3d-proton-build32: $(OBJ)/.wine-build64
+$(OBJ)/.vkd3d-proton-build64: $(OBJ)/.vkd3d-proton-build32
+$(OBJ)/.dxvk-build32: $(OBJ)/.wine-build64
+$(OBJ)/.dxvk-build64: $(OBJ)/.dxvk-build32
+$(OBJ)/.dxvk-lsteamclient64: $(OBJ)/.dxvk-lsteamclient32
+$(OBJ)/.vkd3d-build64: $(OBJ)/.vkd3d-build32
+# nvapi and vrclient dlls have distinct names for 64 bit versions
+
 ##
 ## Windows Symbol Store creation
 ##
