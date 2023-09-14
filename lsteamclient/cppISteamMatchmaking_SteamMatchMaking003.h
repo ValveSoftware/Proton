@@ -185,7 +185,7 @@ struct cppISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry_params
     CSteamID *pSteamIDUser;
     void *pvData;
     int cubData;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry( struct cppISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry_params *params );
 

@@ -59,10 +59,11 @@ void gccServerListResponse_ServerFailedToRespond(struct gccServerListResponse *_
     CALL_VTBL_FUNC(_this->win_side, 4, void, (winServerListResponse *, HServerListRequest, int), (_this->win_side, hRequest, iServer));
 }
 
-void gccServerListResponse_RefreshComplete(struct gccServerListResponse *_this, HServerListRequest hRequest, EMatchMakingServerResponse response)
+void gccServerListResponse_RefreshComplete( struct gccServerListResponse *_this, HServerListRequest hRequest, uint32_t response )
 {
     TRACE("%p/%p\n", _this, _this->win_side);
-    CALL_VTBL_FUNC(_this->win_side, 8, void, (winServerListResponse *, HServerListRequest, EMatchMakingServerResponse), (_this->win_side, hRequest, response));
+    CALL_VTBL_FUNC( _this->win_side, 8, void, (winServerListResponse *, HServerListRequest, uint32_t),
+                    (_this->win_side, hRequest, response) );
 }
 
 struct gccServerListResponseVtbl {
@@ -70,7 +71,7 @@ struct gccServerListResponseVtbl {
 
     void (*ServerFailedToRespond)(struct gccServerListResponse *, HServerListRequest, int);
 
-    void (*RefreshComplete)(struct gccServerListResponse *, HServerListRequest, EMatchMakingServerResponse);
+    void (*RefreshComplete)( struct gccServerListResponse *, HServerListRequest, uint32_t );
 } gccServerListResponse_vtbl = {
     gccServerListResponse_ServerResponded,
     gccServerListResponse_ServerFailedToRespond,
@@ -89,10 +90,10 @@ void gccServerListResponse001_ServerFailedToRespond(struct gccServerListResponse
     CALL_VTBL_FUNC(_this->win_side, 4, void, (winServerListResponse *, int), (_this->win_side, iServer));
 }
 
-void gccServerListResponse001_RefreshComplete(struct gccServerListResponse *_this, EMatchMakingServerResponse response)
+void gccServerListResponse001_RefreshComplete( struct gccServerListResponse *_this, uint32_t response )
 {
     TRACE("%p/%p\n", _this, _this->win_side);
-    CALL_VTBL_FUNC(_this->win_side, 8, void, (winServerListResponse *, EMatchMakingServerResponse), (_this->win_side, response));
+    CALL_VTBL_FUNC( _this->win_side, 8, void, (winServerListResponse *, uint32_t), (_this->win_side, response) );
 }
 
 struct gccServerListResponse001Vtbl {
@@ -100,7 +101,7 @@ struct gccServerListResponse001Vtbl {
 
     void (*ServerFailedToRespond)(struct gccServerListResponse *, int);
 
-    void (*RefreshComplete)(struct gccServerListResponse *, EMatchMakingServerResponse);
+    void (*RefreshComplete)( struct gccServerListResponse *, uint32_t );
 } gccServerListResponse001_vtbl = {
     gccServerListResponse001_ServerResponded,
     gccServerListResponse001_ServerFailedToRespond,
@@ -292,9 +293,9 @@ void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
 }
 
 /***** FSteamNetworkingSocketsDebugOutput *****/
-static void (__attribute__((ms_abi)) *stored_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
+static void (__attribute__((ms_abi)) * stored_FSteamNetworkingSocketsDebugOutput)( uint32_t nType, const char *pszMsg );
 
-static void lin_FSteamNetworkingSocketsDebugOutput(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg)
+static void lin_FSteamNetworkingSocketsDebugOutput( uint32_t nType, const char *pszMsg )
 {
     struct callback_data cb_data = { 0 };
     /* Only Unix native calls from here (not even TRACE):

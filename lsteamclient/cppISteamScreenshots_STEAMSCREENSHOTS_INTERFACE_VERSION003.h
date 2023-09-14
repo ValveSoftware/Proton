@@ -71,7 +71,7 @@ struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreensho
 {
     void *linux_side;
     ScreenshotHandle _ret;
-    EVRScreenshotType eType;
+    uint32_t eType;
     const char *pchFilename;
     const char *pchVRFilename;
 };

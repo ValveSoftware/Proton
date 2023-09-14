@@ -316,7 +316,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking001_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry_params params =
     {
@@ -635,7 +635,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking002_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking002_GetLobbyChatEntry_params params =
     {
@@ -1009,7 +1009,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking003_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry_params params =
     {
@@ -1453,7 +1453,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking004_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking004_GetLobbyChatEntry_params params =
     {
@@ -1760,7 +1760,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyByIndex(s
     return params._ret;
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking005_CreateLobby(struct w_steam_iface *_this, ELobbyType eLobbyType)
+void __thiscall winISteamMatchmaking_SteamMatchMaking005_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking005_CreateLobby_params params =
     {
@@ -1900,7 +1900,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking005_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking005_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking005_GetLobbyChatEntry_params params =
     {
@@ -1994,7 +1994,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking005_RequestFriendsLobbies(s
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking005_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, ELobbyType eLobbyType)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking005_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking005_SetLobbyType_params params =
     {
@@ -2237,7 +2237,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking006_CreateLobby(struct w_steam_iface *_this, ELobbyType eLobbyType)
+SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking006_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_CreateLobby_params params =
     {
@@ -2379,7 +2379,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking006_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_GetLobbyChatEntry_params params =
     {
@@ -2462,7 +2462,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyMemberLimit(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking006_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, ELobbyType eLobbyType)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking006_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_SetLobbyType_params params =
     {
@@ -2646,7 +2646,7 @@ SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking007_RequestLobbyL
     return params._ret;
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListStringFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, const char *pchValueToMatch, ELobbyComparison eComparisonType)
+void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListStringFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, const char *pchValueToMatch, uint32_t eComparisonType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListStringFilter_params params =
     {
@@ -2659,7 +2659,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListStri
     cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListStringFilter( &params );
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNumericalFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, int nValueToMatch, ELobbyComparison eComparisonType)
+void __thiscall winISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNumericalFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, int nValueToMatch, uint32_t eComparisonType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNumericalFilter_params params =
     {
@@ -2708,7 +2708,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking007_CreateLobby(struct w_steam_iface *_this, ELobbyType eLobbyType, int cMaxMembers)
+SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking007_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int cMaxMembers)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_CreateLobby_params params =
     {
@@ -2893,7 +2893,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyChatEntry_params params =
     {
@@ -2976,7 +2976,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberLimit(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, ELobbyType eLobbyType)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_SetLobbyType_params params =
     {
@@ -3194,7 +3194,7 @@ SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking008_RequestLobbyL
     return params._ret;
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListStringFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, const char *pchValueToMatch, ELobbyComparison eComparisonType)
+void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListStringFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, const char *pchValueToMatch, uint32_t eComparisonType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListStringFilter_params params =
     {
@@ -3207,7 +3207,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListStri
     cppISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListStringFilter( &params );
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListNumericalFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, int nValueToMatch, ELobbyComparison eComparisonType)
+void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListNumericalFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, int nValueToMatch, uint32_t eComparisonType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListNumericalFilter_params params =
     {
@@ -3243,7 +3243,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListFilt
     cppISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListFilterSlotsAvailable( &params );
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListDistanceFilter(struct w_steam_iface *_this, ELobbyDistanceFilter eLobbyDistanceFilter)
+void __thiscall winISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListDistanceFilter(struct w_steam_iface *_this, uint32_t eLobbyDistanceFilter)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_AddRequestLobbyListDistanceFilter_params params =
     {
@@ -3278,7 +3278,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking008_CreateLobby(struct w_steam_iface *_this, ELobbyType eLobbyType, int cMaxMembers)
+SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking008_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int cMaxMembers)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_CreateLobby_params params =
     {
@@ -3463,7 +3463,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_GetLobbyChatEntry_params params =
     {
@@ -3546,7 +3546,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyMemberLimit(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, ELobbyType eLobbyType)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_SetLobbyType_params params =
     {
@@ -3768,7 +3768,7 @@ SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking009_RequestLobbyL
     return params._ret;
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, const char *pchValueToMatch, ELobbyComparison eComparisonType)
+void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, const char *pchValueToMatch, uint32_t eComparisonType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter_params params =
     {
@@ -3781,7 +3781,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStri
     cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter( &params );
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNumericalFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, int nValueToMatch, ELobbyComparison eComparisonType)
+void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNumericalFilter(struct w_steam_iface *_this, const char *pchKeyToMatch, int nValueToMatch, uint32_t eComparisonType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNumericalFilter_params params =
     {
@@ -3817,7 +3817,7 @@ void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListFilt
     cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListFilterSlotsAvailable( &params );
 }
 
-void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListDistanceFilter(struct w_steam_iface *_this, ELobbyDistanceFilter eLobbyDistanceFilter)
+void __thiscall winISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListDistanceFilter(struct w_steam_iface *_this, uint32_t eLobbyDistanceFilter)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListDistanceFilter_params params =
     {
@@ -3863,7 +3863,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking009_CreateLobby(struct w_steam_iface *_this, ELobbyType eLobbyType, int cMaxMembers)
+SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking009_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int cMaxMembers)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_CreateLobby_params params =
     {
@@ -4048,7 +4048,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_SendLobbyChatMsg(struct
     return params._ret;
 }
 
-int __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyChatEntry(struct w_steam_iface *_this, CSteamID steamIDLobby, int iChatID, CSteamID *pSteamIDUser, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_GetLobbyChatEntry_params params =
     {
@@ -4131,7 +4131,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyMemberLimit(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, ELobbyType eLobbyType)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyType(struct w_steam_iface *_this, CSteamID steamIDLobby, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_SetLobbyType_params params =
     {

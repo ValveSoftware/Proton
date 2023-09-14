@@ -114,7 +114,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestSp
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList( &params );
 }
 
-gameserveritem_t * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails(struct w_steam_iface *_this, EMatchMakingType eType, int iServer)
+gameserveritem_t * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails(struct w_steam_iface *_this, uint32_t eType, int iServer)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_params params =
     {
@@ -127,7 +127,7 @@ gameserveritem_t * __thiscall winISteamMatchmakingServers_SteamMatchMakingServer
     return params._ret;
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery(struct w_steam_iface *_this, EMatchMakingType eType)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery_params params =
     {
@@ -138,7 +138,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_CancelQue
     cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery( &params );
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery(struct w_steam_iface *_this, EMatchMakingType eType)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery_params params =
     {
@@ -149,7 +149,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQu
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery( &params );
 }
 
-bool __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing(struct w_steam_iface *_this, EMatchMakingType eType)
+bool __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing_params params =
     {
@@ -161,7 +161,7 @@ bool __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_IsRefresh
     return params._ret;
 }
 
-int __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount(struct w_steam_iface *_this, EMatchMakingType eType)
+int __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount_params params =
     {
@@ -173,7 +173,7 @@ int __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerC
     return params._ret;
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer(struct w_steam_iface *_this, EMatchMakingType eType, int iServer)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer(struct w_steam_iface *_this, uint32_t eType, int iServer)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer_params params =
     {

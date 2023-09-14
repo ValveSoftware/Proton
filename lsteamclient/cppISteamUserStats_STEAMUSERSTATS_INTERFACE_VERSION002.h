@@ -18,7 +18,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatName( 
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002_GetStatType_params
 {
     void *linux_side;
-    ESteamUserStatType _ret;
+    uint32_t _ret;
     CGameID nGameID;
     const char *pchName;
 };

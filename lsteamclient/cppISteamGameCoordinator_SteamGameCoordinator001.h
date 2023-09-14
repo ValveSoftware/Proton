@@ -1,7 +1,7 @@
 struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params
 {
     void *linux_side;
-    EGCResults _ret;
+    uint32_t _ret;
     uint32 unMsgType;
     const void *pubData;
     uint32 cubData;
@@ -19,7 +19,7 @@ extern void cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(
 struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params
 {
     void *linux_side;
-    EGCResults _ret;
+    uint32_t _ret;
     uint32 *punMsgType;
     void *pubDest;
     uint32 cubDest;

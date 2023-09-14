@@ -106,7 +106,7 @@ struct cppISteamController_SteamController007_GetDigitalActionOrigins_params
     ControllerHandle_t controllerHandle;
     ControllerActionSetHandle_t actionSetHandle;
     ControllerDigitalActionHandle_t digitalActionHandle;
-    EControllerActionOrigin *originsOut;
+    uint32_t *originsOut;
 };
 extern void cppISteamController_SteamController007_GetDigitalActionOrigins( struct cppISteamController_SteamController007_GetDigitalActionOrigins_params *params );
 
@@ -134,7 +134,7 @@ struct cppISteamController_SteamController007_GetAnalogActionOrigins_params
     ControllerHandle_t controllerHandle;
     ControllerActionSetHandle_t actionSetHandle;
     ControllerAnalogActionHandle_t analogActionHandle;
-    EControllerActionOrigin *originsOut;
+    uint32_t *originsOut;
 };
 extern void cppISteamController_SteamController007_GetAnalogActionOrigins( struct cppISteamController_SteamController007_GetAnalogActionOrigins_params *params );
 
@@ -142,7 +142,7 @@ struct cppISteamController_SteamController007_GetGlyphForActionOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EControllerActionOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamController_SteamController007_GetGlyphForActionOrigin( struct cppISteamController_SteamController007_GetGlyphForActionOrigin_params *params );
 
@@ -150,7 +150,7 @@ struct cppISteamController_SteamController007_GetStringForActionOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EControllerActionOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamController_SteamController007_GetStringForActionOrigin( struct cppISteamController_SteamController007_GetStringForActionOrigin_params *params );
 
@@ -174,7 +174,7 @@ struct cppISteamController_SteamController007_TriggerHapticPulse_params
 {
     void *linux_side;
     ControllerHandle_t controllerHandle;
-    ESteamControllerPad eTargetPad;
+    uint32_t eTargetPad;
     unsigned short usDurationMicroSec;
 };
 extern void cppISteamController_SteamController007_TriggerHapticPulse( struct cppISteamController_SteamController007_TriggerHapticPulse_params *params );
@@ -183,7 +183,7 @@ struct cppISteamController_SteamController007_TriggerRepeatedHapticPulse_params
 {
     void *linux_side;
     ControllerHandle_t controllerHandle;
-    ESteamControllerPad eTargetPad;
+    uint32_t eTargetPad;
     unsigned short usDurationMicroSec;
     unsigned short usOffMicroSec;
     unsigned short unRepeat;
@@ -222,7 +222,7 @@ extern void cppISteamController_SteamController007_ShowBindingPanel( struct cppI
 struct cppISteamController_SteamController007_GetInputTypeForHandle_params
 {
     void *linux_side;
-    ESteamInputType _ret;
+    uint32_t _ret;
     ControllerHandle_t controllerHandle;
 };
 extern void cppISteamController_SteamController007_GetInputTypeForHandle( struct cppISteamController_SteamController007_GetInputTypeForHandle_params *params );
@@ -247,7 +247,7 @@ struct cppISteamController_SteamController007_GetStringForXboxOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamController_SteamController007_GetStringForXboxOrigin( struct cppISteamController_SteamController007_GetStringForXboxOrigin_params *params );
 
@@ -255,25 +255,25 @@ struct cppISteamController_SteamController007_GetGlyphForXboxOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamController_SteamController007_GetGlyphForXboxOrigin( struct cppISteamController_SteamController007_GetGlyphForXboxOrigin_params *params );
 
 struct cppISteamController_SteamController007_GetActionOriginFromXboxOrigin_params
 {
     void *linux_side;
-    EControllerActionOrigin _ret;
+    uint32_t _ret;
     ControllerHandle_t controllerHandle;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamController_SteamController007_GetActionOriginFromXboxOrigin( struct cppISteamController_SteamController007_GetActionOriginFromXboxOrigin_params *params );
 
 struct cppISteamController_SteamController007_TranslateActionOrigin_params
 {
     void *linux_side;
-    EControllerActionOrigin _ret;
-    ESteamInputType eDestinationInputType;
-    EControllerActionOrigin eSourceOrigin;
+    uint32_t _ret;
+    uint32_t eDestinationInputType;
+    uint32_t eSourceOrigin;
 };
 extern void cppISteamController_SteamController007_TranslateActionOrigin( struct cppISteamController_SteamController007_TranslateActionOrigin_params *params );
 

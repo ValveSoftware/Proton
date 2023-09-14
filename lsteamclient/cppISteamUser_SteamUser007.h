@@ -36,7 +36,7 @@ struct cppISteamUser_SteamUser007_SetRegistryString_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     const char *pchValue;
 };
@@ -46,7 +46,7 @@ struct cppISteamUser_SteamUser007_GetRegistryString_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
     int cbValue;
@@ -57,7 +57,7 @@ struct cppISteamUser_SteamUser007_SetRegistryInt_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     int iValue;
 };
@@ -67,7 +67,7 @@ struct cppISteamUser_SteamUser007_GetRegistryInt_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     int *piValue;
 };

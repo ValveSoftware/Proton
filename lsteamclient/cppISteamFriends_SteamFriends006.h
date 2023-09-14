@@ -15,7 +15,7 @@ extern void cppISteamFriends_SteamFriends006_SetPersonaName( struct cppISteamFri
 struct cppISteamFriends_SteamFriends006_GetPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends006_GetPersonaState( struct cppISteamFriends_SteamFriends006_GetPersonaState_params *params );
 
@@ -39,7 +39,7 @@ extern void cppISteamFriends_SteamFriends006_GetFriendByIndex( struct cppISteamF
 struct cppISteamFriends_SteamFriends006_GetFriendRelationship_params
 {
     void *linux_side;
-    EFriendRelationship _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends006_GetFriendRelationship( struct cppISteamFriends_SteamFriends006_GetFriendRelationship_params *params );
@@ -47,7 +47,7 @@ extern void cppISteamFriends_SteamFriends006_GetFriendRelationship( struct cppIS
 struct cppISteamFriends_SteamFriends006_GetFriendPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends006_GetFriendPersonaState( struct cppISteamFriends_SteamFriends006_GetFriendPersonaState_params *params );

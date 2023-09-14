@@ -15,7 +15,7 @@ extern void cppISteamUtils_SteamUtils010_GetSecondsSinceComputerActive( struct c
 struct cppISteamUtils_SteamUtils010_GetConnectedUniverse_params
 {
     void *linux_side;
-    EUniverse _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils010_GetConnectedUniverse( struct cppISteamUtils_SteamUtils010_GetConnectedUniverse_params *params );
 
@@ -79,7 +79,7 @@ extern void cppISteamUtils_SteamUtils010_GetAppID( struct cppISteamUtils_SteamUt
 struct cppISteamUtils_SteamUtils010_SetOverlayNotificationPosition_params
 {
     void *linux_side;
-    ENotificationPosition eNotificationPosition;
+    uint32_t eNotificationPosition;
 };
 extern void cppISteamUtils_SteamUtils010_SetOverlayNotificationPosition( struct cppISteamUtils_SteamUtils010_SetOverlayNotificationPosition_params *params );
 
@@ -95,7 +95,7 @@ extern void cppISteamUtils_SteamUtils010_IsAPICallCompleted( struct cppISteamUti
 struct cppISteamUtils_SteamUtils010_GetAPICallFailureReason_params
 {
     void *linux_side;
-    ESteamAPICallFailure _ret;
+    uint32_t _ret;
     SteamAPICall_t hSteamAPICall;
 };
 extern void cppISteamUtils_SteamUtils010_GetAPICallFailureReason( struct cppISteamUtils_SteamUtils010_GetAPICallFailureReason_params *params );
@@ -158,8 +158,8 @@ struct cppISteamUtils_SteamUtils010_ShowGamepadTextInput_params
 {
     void *linux_side;
     bool _ret;
-    EGamepadTextInputMode eInputMode;
-    EGamepadTextInputLineMode eLineInputMode;
+    uint32_t eInputMode;
+    uint32_t eLineInputMode;
     const char *pchDescription;
     uint32 unCharMax;
     const char *pchExistingText;
@@ -250,7 +250,7 @@ struct cppISteamUtils_SteamUtils010_FilterText_params
 {
     void *linux_side;
     int _ret;
-    ETextFilteringContext eContext;
+    uint32_t eContext;
     CSteamID sourceSteamID;
     const char *pchInputMessage;
     char *pchOutFilteredText;
@@ -261,8 +261,8 @@ extern void cppISteamUtils_SteamUtils010_FilterText( struct cppISteamUtils_Steam
 struct cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState_params
 {
     void *linux_side;
-    ESteamIPv6ConnectivityState _ret;
-    ESteamIPv6ConnectivityProtocol eProtocol;
+    uint32_t _ret;
+    uint32_t eProtocol;
 };
 extern void cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState( struct cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState_params *params );
 
@@ -277,7 +277,7 @@ struct cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput_params
 {
     void *linux_side;
     bool _ret;
-    EFloatingGamepadTextInputMode eKeyboardMode;
+    uint32_t eKeyboardMode;
     int nTextFieldXPosition;
     int nTextFieldYPosition;
     int nTextFieldWidth;

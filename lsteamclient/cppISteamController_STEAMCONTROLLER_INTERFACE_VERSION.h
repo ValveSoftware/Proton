@@ -32,7 +32,7 @@ struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse_
 {
     void *linux_side;
     uint32 unControllerIndex;
-    ESteamControllerPad eTargetPad;
+    uint32_t eTargetPad;
     unsigned short usDurationMicroSec;
 };
 extern void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse( struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse_params *params );

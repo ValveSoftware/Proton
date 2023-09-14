@@ -1,7 +1,7 @@
 struct cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     const SteamNetworkingIdentity *identityRemote;
     const void *pubData;
     uint32 cubData;
@@ -48,7 +48,7 @@ extern void cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelW
 struct cppISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionInfo_params
 {
     void *linux_side;
-    ESteamNetworkingConnectionState _ret;
+    uint32_t _ret;
     const SteamNetworkingIdentity *identityRemote;
     SteamNetConnectionInfo_t *pConnectionInfo;
     SteamNetConnectionRealTimeStatus_t *pQuickStatus;
