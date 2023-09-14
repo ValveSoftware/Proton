@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVRChaperone_IVRChaperone_002_GetCalibrationState_params
 {
     void *linux_side;
-    ChaperoneCalibrationState _ret;
+    uint32_t _ret;
 };
 extern void cppIVRChaperone_IVRChaperone_002_GetCalibrationState( struct cppIVRChaperone_IVRChaperone_002_GetCalibrationState_params *params );
 

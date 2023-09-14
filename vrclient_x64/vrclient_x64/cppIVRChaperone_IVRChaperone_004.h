@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVRChaperone_IVRChaperone_004_GetCalibrationState_params
 {
     void *linux_side;
-    ChaperoneCalibrationState _ret;
+    uint32_t _ret;
 };
 extern void cppIVRChaperone_IVRChaperone_004_GetCalibrationState( struct cppIVRChaperone_IVRChaperone_004_GetCalibrationState_params *params );
 
@@ -65,7 +65,7 @@ extern void cppIVRChaperone_IVRChaperone_004_ForceBoundsVisible( struct cppIVRCh
 struct cppIVRChaperone_IVRChaperone_004_ResetZeroPose_params
 {
     void *linux_side;
-    ETrackingUniverseOrigin eTrackingUniverseOrigin;
+    uint32_t eTrackingUniverseOrigin;
 };
 extern void cppIVRChaperone_IVRChaperone_004_ResetZeroPose( struct cppIVRChaperone_IVRChaperone_004_ResetZeroPose_params *params );
 

@@ -4,21 +4,21 @@ extern "C" {
 struct cppIVRCompositor_IVRCompositor_024_SetTrackingSpace_params
 {
     void *linux_side;
-    ETrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppIVRCompositor_IVRCompositor_024_SetTrackingSpace( struct cppIVRCompositor_IVRCompositor_024_SetTrackingSpace_params *params );
 
 struct cppIVRCompositor_IVRCompositor_024_GetTrackingSpace_params
 {
     void *linux_side;
-    ETrackingUniverseOrigin _ret;
+    uint32_t _ret;
 };
 extern void cppIVRCompositor_IVRCompositor_024_GetTrackingSpace( struct cppIVRCompositor_IVRCompositor_024_GetTrackingSpace_params *params );
 
 struct cppIVRCompositor_IVRCompositor_024_WaitGetPoses_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     TrackedDevicePose_t *pRenderPoseArray;
     uint32_t unRenderPoseArrayCount;
     TrackedDevicePose_t *pGamePoseArray;
@@ -29,7 +29,7 @@ extern void cppIVRCompositor_IVRCompositor_024_WaitGetPoses( struct cppIVRCompos
 struct cppIVRCompositor_IVRCompositor_024_GetLastPoses_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     TrackedDevicePose_t *pRenderPoseArray;
     uint32_t unRenderPoseArrayCount;
     TrackedDevicePose_t *pGamePoseArray;
@@ -40,7 +40,7 @@ extern void cppIVRCompositor_IVRCompositor_024_GetLastPoses( struct cppIVRCompos
 struct cppIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     TrackedDeviceIndex_t unDeviceIndex;
     TrackedDevicePose_t *pOutputPose;
     TrackedDevicePose_t *pOutputGamePose;
@@ -50,11 +50,11 @@ extern void cppIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex(
 struct cppIVRCompositor_IVRCompositor_024_Submit_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
-    EVREye eEye;
+    uint32_t _ret;
+    uint32_t eEye;
     const Texture_t *pTexture;
     const VRTextureBounds_t *pBounds;
-    EVRSubmitFlags nSubmitFlags;
+    uint32_t nSubmitFlags;
 };
 extern void cppIVRCompositor_IVRCompositor_024_Submit( struct cppIVRCompositor_IVRCompositor_024_Submit_params *params );
 
@@ -141,7 +141,7 @@ extern void cppIVRCompositor_IVRCompositor_024_GetCurrentGridAlpha( struct cppIV
 struct cppIVRCompositor_IVRCompositor_024_SetSkyboxOverride_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     const Texture_t *pTextures;
     uint32_t unTextureCount;
 };
@@ -323,14 +323,14 @@ extern void cppIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired
 struct cppIVRCompositor_IVRCompositor_024_SetExplicitTimingMode_params
 {
     void *linux_side;
-    EVRCompositorTimingMode eTimingMode;
+    uint32_t eTimingMode;
 };
 extern void cppIVRCompositor_IVRCompositor_024_SetExplicitTimingMode( struct cppIVRCompositor_IVRCompositor_024_SetExplicitTimingMode_params *params );
 
 struct cppIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
 };
 extern void cppIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData( struct cppIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData_params *params );
 
@@ -358,7 +358,7 @@ extern void cppIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading( st
 struct cppIVRCompositor_IVRCompositor_024_SetStageOverride_Async_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     const char *pchRenderModelPath;
     const HmdMatrix34_t *pTransform;
     const Compositor_StageRenderSettings *pRenderSettings;

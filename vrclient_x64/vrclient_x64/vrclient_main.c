@@ -617,7 +617,7 @@ Texture_t vrclient_translate_texture_dxvk( const Texture_t *texture, struct VRVu
     return vktexture;
 }
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init( struct w_steam_iface *_this, EVRApplicationType eApplicationType )
+uint32_t __thiscall winIVRClientCore_IVRClientCore_002_Init( struct w_steam_iface *_this, uint32_t eApplicationType )
 {
     struct cppIVRClientCore_IVRClientCore_002_Init_params params =
     {
@@ -647,7 +647,7 @@ void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup( struct w_steam_iface
 }
 
 void *__thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface( struct w_steam_iface *_this,
-                                                                         const char *pchNameAndVersion, EVRInitError *peError )
+                                                                         const char *pchNameAndVersion, uint32_t *peError )
 {
     struct cppIVRClientCore_IVRClientCore_002_GetGenericInterface_params params =
     {
@@ -692,8 +692,8 @@ bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent( struct w_steam
     return TRUE;
 }
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init( struct w_steam_iface *_this, EVRApplicationType eApplicationType,
-                                                                 const char *pStartupInfo )
+uint32_t __thiscall winIVRClientCore_IVRClientCore_003_Init( struct w_steam_iface *_this,
+                                                             uint32_t eApplicationType, const char *pStartupInfo )
 {
     struct cppIVRClientCore_IVRClientCore_003_Init_params params =
     {
@@ -732,7 +732,7 @@ void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup( struct w_steam_iface
 }
 
 void *__thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface( struct w_steam_iface *_this,
-                                                                         const char *pchNameAndVersion, EVRInitError *peError )
+                                                                         const char *pchNameAndVersion, uint32_t *peError )
 {
     struct cppIVRClientCore_IVRClientCore_003_GetGenericInterface_params params =
     {

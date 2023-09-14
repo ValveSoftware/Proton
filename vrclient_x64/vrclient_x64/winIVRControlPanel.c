@@ -72,7 +72,7 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc2(struct w_steam
     return params._ret;
 }
 
-EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc3(struct w_steam_iface *_this, const char *a)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc3(struct w_steam_iface *_this, const char *a)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc3_params params =
     {
@@ -250,7 +250,7 @@ bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc17(struct w_steam_if
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc18(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc18(struct w_steam_iface *_this)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc18_params params =
     {
@@ -283,7 +283,7 @@ bool __thiscall winIVRControlPanel_IVRControlPanel_006_undoc20(struct w_steam_if
     return params._ret;
 }
 
-EVRInitError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc21(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc21(struct w_steam_iface *_this)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc21_params params =
     {
@@ -357,7 +357,7 @@ uint64_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc26(struct w_stea
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(struct w_steam_iface *_this, const char *a)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(struct w_steam_iface *_this, const char *a)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc27_params params =
     {

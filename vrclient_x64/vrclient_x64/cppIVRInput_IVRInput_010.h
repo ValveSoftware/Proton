@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVRInput_IVRInput_010_SetActionManifestPath_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     const char *pchActionManifestPath;
 };
 extern void cppIVRInput_IVRInput_010_SetActionManifestPath( struct cppIVRInput_IVRInput_010_SetActionManifestPath_params *params );
@@ -12,7 +12,7 @@ extern void cppIVRInput_IVRInput_010_SetActionManifestPath( struct cppIVRInput_I
 struct cppIVRInput_IVRInput_010_GetActionSetHandle_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     const char *pchActionSetName;
     VRActionSetHandle_t *pHandle;
 };
@@ -21,7 +21,7 @@ extern void cppIVRInput_IVRInput_010_GetActionSetHandle( struct cppIVRInput_IVRI
 struct cppIVRInput_IVRInput_010_GetActionHandle_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     const char *pchActionName;
     VRActionHandle_t *pHandle;
 };
@@ -30,7 +30,7 @@ extern void cppIVRInput_IVRInput_010_GetActionHandle( struct cppIVRInput_IVRInpu
 struct cppIVRInput_IVRInput_010_GetInputSourceHandle_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     const char *pchInputSourcePath;
     VRInputValueHandle_t *pHandle;
 };
@@ -39,7 +39,7 @@ extern void cppIVRInput_IVRInput_010_GetInputSourceHandle( struct cppIVRInput_IV
 struct cppIVRInput_IVRInput_010_UpdateActionState_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActiveActionSet_t *pSets;
     uint32_t unSizeOfVRSelectedActionSet_t;
     uint32_t unSetCount;
@@ -49,7 +49,7 @@ extern void cppIVRInput_IVRInput_010_UpdateActionState( struct cppIVRInput_IVRIn
 struct cppIVRInput_IVRInput_010_GetDigitalActionData_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     winInputDigitalActionData_t_1267 *pActionData;
     uint32_t unActionDataSize;
@@ -60,7 +60,7 @@ extern void cppIVRInput_IVRInput_010_GetDigitalActionData( struct cppIVRInput_IV
 struct cppIVRInput_IVRInput_010_GetAnalogActionData_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     winInputAnalogActionData_t_1267 *pActionData;
     uint32_t unActionDataSize;
@@ -71,9 +71,9 @@ extern void cppIVRInput_IVRInput_010_GetAnalogActionData( struct cppIVRInput_IVR
 struct cppIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
-    ETrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
     float fPredictedSecondsFromNow;
     winInputPoseActionData_t_1267 *pActionData;
     uint32_t unActionDataSize;
@@ -84,9 +84,9 @@ extern void cppIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow( struct cppI
 struct cppIVRInput_IVRInput_010_GetPoseActionDataForNextFrame_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
-    ETrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
     winInputPoseActionData_t_1267 *pActionData;
     uint32_t unActionDataSize;
     VRInputValueHandle_t ulRestrictToDevice;
@@ -96,7 +96,7 @@ extern void cppIVRInput_IVRInput_010_GetPoseActionDataForNextFrame( struct cppIV
 struct cppIVRInput_IVRInput_010_GetSkeletalActionData_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     winInputSkeletalActionData_t_1267 *pActionData;
     uint32_t unActionDataSize;
@@ -106,23 +106,23 @@ extern void cppIVRInput_IVRInput_010_GetSkeletalActionData( struct cppIVRInput_I
 struct cppIVRInput_IVRInput_010_GetDominantHand_params
 {
     void *linux_side;
-    EVRInputError _ret;
-    ETrackedControllerRole *peDominantHand;
+    uint32_t _ret;
+    uint32_t *peDominantHand;
 };
 extern void cppIVRInput_IVRInput_010_GetDominantHand( struct cppIVRInput_IVRInput_010_GetDominantHand_params *params );
 
 struct cppIVRInput_IVRInput_010_SetDominantHand_params
 {
     void *linux_side;
-    EVRInputError _ret;
-    ETrackedControllerRole eDominantHand;
+    uint32_t _ret;
+    uint32_t eDominantHand;
 };
 extern void cppIVRInput_IVRInput_010_SetDominantHand( struct cppIVRInput_IVRInput_010_SetDominantHand_params *params );
 
 struct cppIVRInput_IVRInput_010_GetBoneCount_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     uint32_t *pBoneCount;
 };
@@ -131,7 +131,7 @@ extern void cppIVRInput_IVRInput_010_GetBoneCount( struct cppIVRInput_IVRInput_0
 struct cppIVRInput_IVRInput_010_GetBoneHierarchy_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     BoneIndex_t *pParentIndices;
     uint32_t unIndexArayCount;
@@ -141,7 +141,7 @@ extern void cppIVRInput_IVRInput_010_GetBoneHierarchy( struct cppIVRInput_IVRInp
 struct cppIVRInput_IVRInput_010_GetBoneName_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     BoneIndex_t nBoneIndex;
     char *pchBoneName;
@@ -152,10 +152,10 @@ extern void cppIVRInput_IVRInput_010_GetBoneName( struct cppIVRInput_IVRInput_01
 struct cppIVRInput_IVRInput_010_GetSkeletalReferenceTransforms_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
-    EVRSkeletalTransformSpace eTransformSpace;
-    EVRSkeletalReferencePose eReferencePose;
+    uint32_t eTransformSpace;
+    uint32_t eReferencePose;
     VRBoneTransform_t *pTransformArray;
     uint32_t unTransformArrayCount;
 };
@@ -164,19 +164,19 @@ extern void cppIVRInput_IVRInput_010_GetSkeletalReferenceTransforms( struct cppI
 struct cppIVRInput_IVRInput_010_GetSkeletalTrackingLevel_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
-    EVRSkeletalTrackingLevel *pSkeletalTrackingLevel;
+    uint32_t *pSkeletalTrackingLevel;
 };
 extern void cppIVRInput_IVRInput_010_GetSkeletalTrackingLevel( struct cppIVRInput_IVRInput_010_GetSkeletalTrackingLevel_params *params );
 
 struct cppIVRInput_IVRInput_010_GetSkeletalBoneData_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
-    EVRSkeletalTransformSpace eTransformSpace;
-    EVRSkeletalMotionRange eMotionRange;
+    uint32_t eTransformSpace;
+    uint32_t eMotionRange;
     VRBoneTransform_t *pTransformArray;
     uint32_t unTransformArrayCount;
 };
@@ -185,9 +185,9 @@ extern void cppIVRInput_IVRInput_010_GetSkeletalBoneData( struct cppIVRInput_IVR
 struct cppIVRInput_IVRInput_010_GetSkeletalSummaryData_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
-    EVRSummaryType eSummaryType;
+    uint32_t eSummaryType;
     VRSkeletalSummaryData_t *pSkeletalSummaryData;
 };
 extern void cppIVRInput_IVRInput_010_GetSkeletalSummaryData( struct cppIVRInput_IVRInput_010_GetSkeletalSummaryData_params *params );
@@ -195,9 +195,9 @@ extern void cppIVRInput_IVRInput_010_GetSkeletalSummaryData( struct cppIVRInput_
 struct cppIVRInput_IVRInput_010_GetSkeletalBoneDataCompressed_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
-    EVRSkeletalMotionRange eMotionRange;
+    uint32_t eMotionRange;
     void *pvCompressedData;
     uint32_t unCompressedSize;
     uint32_t *punRequiredCompressedSize;
@@ -207,10 +207,10 @@ extern void cppIVRInput_IVRInput_010_GetSkeletalBoneDataCompressed( struct cppIV
 struct cppIVRInput_IVRInput_010_DecompressSkeletalBoneData_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     const void *pvCompressedBuffer;
     uint32_t unCompressedBufferSize;
-    EVRSkeletalTransformSpace eTransformSpace;
+    uint32_t eTransformSpace;
     VRBoneTransform_t *pTransformArray;
     uint32_t unTransformArrayCount;
 };
@@ -219,7 +219,7 @@ extern void cppIVRInput_IVRInput_010_DecompressSkeletalBoneData( struct cppIVRIn
 struct cppIVRInput_IVRInput_010_TriggerHapticVibrationAction_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     float fStartSecondsFromNow;
     float fDurationSeconds;
@@ -232,7 +232,7 @@ extern void cppIVRInput_IVRInput_010_TriggerHapticVibrationAction( struct cppIVR
 struct cppIVRInput_IVRInput_010_GetActionOrigins_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionSetHandle_t actionSetHandle;
     VRActionHandle_t digitalActionHandle;
     VRInputValueHandle_t *originsOut;
@@ -243,7 +243,7 @@ extern void cppIVRInput_IVRInput_010_GetActionOrigins( struct cppIVRInput_IVRInp
 struct cppIVRInput_IVRInput_010_GetOriginLocalizedName_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRInputValueHandle_t origin;
     char *pchNameArray;
     uint32_t unNameArraySize;
@@ -254,7 +254,7 @@ extern void cppIVRInput_IVRInput_010_GetOriginLocalizedName( struct cppIVRInput_
 struct cppIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRInputValueHandle_t origin;
     InputOriginInfo_t *pOriginInfo;
     uint32_t unOriginInfoSize;
@@ -264,7 +264,7 @@ extern void cppIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo( struct cppIVRIn
 struct cppIVRInput_IVRInput_010_GetActionBindingInfo_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionHandle_t action;
     InputBindingInfo_t *pOriginInfo;
     uint32_t unBindingInfoSize;
@@ -276,7 +276,7 @@ extern void cppIVRInput_IVRInput_010_GetActionBindingInfo( struct cppIVRInput_IV
 struct cppIVRInput_IVRInput_010_ShowActionOrigins_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActionSetHandle_t actionSetHandle;
     VRActionHandle_t ulActionHandle;
 };
@@ -285,7 +285,7 @@ extern void cppIVRInput_IVRInput_010_ShowActionOrigins( struct cppIVRInput_IVRIn
 struct cppIVRInput_IVRInput_010_ShowBindingsForActionSet_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRActiveActionSet_t *pSets;
     uint32_t unSizeOfVRSelectedActionSet_t;
     uint32_t unSetCount;
@@ -296,7 +296,7 @@ extern void cppIVRInput_IVRInput_010_ShowBindingsForActionSet( struct cppIVRInpu
 struct cppIVRInput_IVRInput_010_GetComponentStateForBinding_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     const char *pchRenderModelName;
     const char *pchComponentName;
     const InputBindingInfo_t *pOriginInfo;
@@ -316,7 +316,7 @@ extern void cppIVRInput_IVRInput_010_IsUsingLegacyInput( struct cppIVRInput_IVRI
 struct cppIVRInput_IVRInput_010_OpenBindingUI_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     const char *pchAppKey;
     VRActionSetHandle_t ulActionSetHandle;
     VRInputValueHandle_t ulDeviceHandle;
@@ -327,7 +327,7 @@ extern void cppIVRInput_IVRInput_010_OpenBindingUI( struct cppIVRInput_IVRInput_
 struct cppIVRInput_IVRInput_010_GetBindingVariant_params
 {
     void *linux_side;
-    EVRInputError _ret;
+    uint32_t _ret;
     VRInputValueHandle_t ulDevicePath;
     char *pchVariantArray;
     uint32_t unVariantArraySize;

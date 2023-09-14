@@ -21,7 +21,7 @@ extern void cppIVRControlPanel_IVRControlPanel_006_undoc2( struct cppIVRControlP
 struct cppIVRControlPanel_IVRControlPanel_006_undoc3_params
 {
     void *linux_side;
-    EVRInitError _ret;
+    uint32_t _ret;
     const char *a;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc3( struct cppIVRControlPanel_IVRControlPanel_006_undoc3_params *params );
@@ -139,7 +139,7 @@ extern void cppIVRControlPanel_IVRControlPanel_006_undoc17( struct cppIVRControl
 struct cppIVRControlPanel_IVRControlPanel_006_undoc18_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc18( struct cppIVRControlPanel_IVRControlPanel_006_undoc18_params *params );
 
@@ -160,7 +160,7 @@ extern void cppIVRControlPanel_IVRControlPanel_006_undoc20( struct cppIVRControl
 struct cppIVRControlPanel_IVRControlPanel_006_undoc21_params
 {
     void *linux_side;
-    EVRInitError _ret;
+    uint32_t _ret;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc21( struct cppIVRControlPanel_IVRControlPanel_006_undoc21_params *params );
 
@@ -208,7 +208,7 @@ extern void cppIVRControlPanel_IVRControlPanel_006_undoc26( struct cppIVRControl
 struct cppIVRControlPanel_IVRControlPanel_006_undoc27_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     const char *a;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc27( struct cppIVRControlPanel_IVRControlPanel_006_undoc27_params *params );

@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVRApplications_IVRApplications_006_AddApplicationManifest_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchApplicationManifestFullPath;
     bool bTemporary;
 };
@@ -13,7 +13,7 @@ extern void cppIVRApplications_IVRApplications_006_AddApplicationManifest( struc
 struct cppIVRApplications_IVRApplications_006_RemoveApplicationManifest_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchApplicationManifestFullPath;
 };
 extern void cppIVRApplications_IVRApplications_006_RemoveApplicationManifest( struct cppIVRApplications_IVRApplications_006_RemoveApplicationManifest_params *params );
@@ -36,7 +36,7 @@ extern void cppIVRApplications_IVRApplications_006_GetApplicationCount( struct c
 struct cppIVRApplications_IVRApplications_006_GetApplicationKeyByIndex_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     uint32_t unApplicationIndex;
     char *pchAppKeyBuffer;
     uint32_t unAppKeyBufferLen;
@@ -46,7 +46,7 @@ extern void cppIVRApplications_IVRApplications_006_GetApplicationKeyByIndex( str
 struct cppIVRApplications_IVRApplications_006_GetApplicationKeyByProcessId_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     uint32_t unProcessId;
     char *pchAppKeyBuffer;
     uint32_t unAppKeyBufferLen;
@@ -56,7 +56,7 @@ extern void cppIVRApplications_IVRApplications_006_GetApplicationKeyByProcessId(
 struct cppIVRApplications_IVRApplications_006_LaunchApplication_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchAppKey;
 };
 extern void cppIVRApplications_IVRApplications_006_LaunchApplication( struct cppIVRApplications_IVRApplications_006_LaunchApplication_params *params );
@@ -64,7 +64,7 @@ extern void cppIVRApplications_IVRApplications_006_LaunchApplication( struct cpp
 struct cppIVRApplications_IVRApplications_006_LaunchTemplateApplication_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchTemplateAppKey;
     const char *pchNewAppKey;
     const AppOverrideKeys_t *pKeys;
@@ -84,7 +84,7 @@ extern void cppIVRApplications_IVRApplications_006_LaunchApplicationFromMimeType
 struct cppIVRApplications_IVRApplications_006_LaunchDashboardOverlay_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchAppKey;
 };
 extern void cppIVRApplications_IVRApplications_006_LaunchDashboardOverlay( struct cppIVRApplications_IVRApplications_006_LaunchDashboardOverlay_params *params );
@@ -100,7 +100,7 @@ extern void cppIVRApplications_IVRApplications_006_CancelApplicationLaunch( stru
 struct cppIVRApplications_IVRApplications_006_IdentifyApplication_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     uint32_t unProcessId;
     const char *pchAppKey;
 };
@@ -118,7 +118,7 @@ struct cppIVRApplications_IVRApplications_006_GetApplicationsErrorNameFromEnum_p
 {
     void *linux_side;
     const char *_ret;
-    EVRApplicationError error;
+    uint32_t error;
 };
 extern void cppIVRApplications_IVRApplications_006_GetApplicationsErrorNameFromEnum( struct cppIVRApplications_IVRApplications_006_GetApplicationsErrorNameFromEnum_params *params );
 
@@ -127,10 +127,10 @@ struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyString_param
     void *linux_side;
     uint32_t _ret;
     const char *pchAppKey;
-    EVRApplicationProperty eProperty;
+    uint32_t eProperty;
     char *pchPropertyValueBuffer;
     uint32_t unPropertyValueBufferLen;
-    EVRApplicationError *peError;
+    uint32_t *peError;
 };
 extern void cppIVRApplications_IVRApplications_006_GetApplicationPropertyString( struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyString_params *params );
 
@@ -139,8 +139,8 @@ struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyBool_params
     void *linux_side;
     bool _ret;
     const char *pchAppKey;
-    EVRApplicationProperty eProperty;
-    EVRApplicationError *peError;
+    uint32_t eProperty;
+    uint32_t *peError;
 };
 extern void cppIVRApplications_IVRApplications_006_GetApplicationPropertyBool( struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyBool_params *params );
 
@@ -149,15 +149,15 @@ struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyUint64_param
     void *linux_side;
     uint64_t _ret;
     const char *pchAppKey;
-    EVRApplicationProperty eProperty;
-    EVRApplicationError *peError;
+    uint32_t eProperty;
+    uint32_t *peError;
 };
 extern void cppIVRApplications_IVRApplications_006_GetApplicationPropertyUint64( struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyUint64_params *params );
 
 struct cppIVRApplications_IVRApplications_006_SetApplicationAutoLaunch_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchAppKey;
     bool bAutoLaunch;
 };
@@ -174,7 +174,7 @@ extern void cppIVRApplications_IVRApplications_006_GetApplicationAutoLaunch( str
 struct cppIVRApplications_IVRApplications_006_SetDefaultApplicationForMimeType_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchAppKey;
     const char *pchMimeType;
 };
@@ -223,7 +223,7 @@ extern void cppIVRApplications_IVRApplications_006_GetApplicationLaunchArguments
 struct cppIVRApplications_IVRApplications_006_GetStartingApplication_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     char *pchAppKeyBuffer;
     uint32_t unAppKeyBufferLen;
 };
@@ -232,14 +232,14 @@ extern void cppIVRApplications_IVRApplications_006_GetStartingApplication( struc
 struct cppIVRApplications_IVRApplications_006_GetTransitionState_params
 {
     void *linux_side;
-    EVRApplicationTransitionState _ret;
+    uint32_t _ret;
 };
 extern void cppIVRApplications_IVRApplications_006_GetTransitionState( struct cppIVRApplications_IVRApplications_006_GetTransitionState_params *params );
 
 struct cppIVRApplications_IVRApplications_006_PerformApplicationPrelaunchCheck_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchAppKey;
 };
 extern void cppIVRApplications_IVRApplications_006_PerformApplicationPrelaunchCheck( struct cppIVRApplications_IVRApplications_006_PerformApplicationPrelaunchCheck_params *params );
@@ -248,7 +248,7 @@ struct cppIVRApplications_IVRApplications_006_GetApplicationsTransitionStateName
 {
     void *linux_side;
     const char *_ret;
-    EVRApplicationTransitionState state;
+    uint32_t state;
 };
 extern void cppIVRApplications_IVRApplications_006_GetApplicationsTransitionStateNameFromEnum( struct cppIVRApplications_IVRApplications_006_GetApplicationsTransitionStateNameFromEnum_params *params );
 
@@ -262,7 +262,7 @@ extern void cppIVRApplications_IVRApplications_006_IsQuitUserPromptRequested( st
 struct cppIVRApplications_IVRApplications_006_LaunchInternalProcess_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchBinaryPath;
     const char *pchArguments;
     const char *pchWorkingDirectory;

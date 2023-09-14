@@ -23,7 +23,7 @@ DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc2, 12)
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc3, 20)
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc4, 24)
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc1(struct w_steam_iface *_this, const char *a, vrmb_typea *b)
+uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc1(struct w_steam_iface *_this, const char *a, vrmb_typea *b)
 {
     struct cppIVRMailbox_IVRMailbox_001_undoc1_params params =
     {
@@ -36,7 +36,7 @@ vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc1(struct w_steam_iface *
     return params._ret;
 }
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *_this, vrmb_typea a)
+uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *_this, vrmb_typea a)
 {
     struct cppIVRMailbox_IVRMailbox_001_undoc2_params params =
     {
@@ -48,9 +48,9 @@ vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc2(struct w_steam_iface *
     return params._ret;
 }
 
-extern vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, vrmb_typea a, const char *b, const char *c);
+extern uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc3(struct w_steam_iface *_this, vrmb_typea a, const char *b, const char *c);
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_this, vrmb_typea a, char *b, uint32_t c, uint32_t *d)
+uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc4(struct w_steam_iface *_this, vrmb_typea a, char *b, uint32_t c, uint32_t *d)
 {
     struct cppIVRMailbox_IVRMailbox_001_undoc4_params params =
     {

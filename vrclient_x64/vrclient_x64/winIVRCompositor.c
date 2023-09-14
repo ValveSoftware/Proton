@@ -100,7 +100,7 @@ float __thiscall winIVRCompositor_IVRCompositor_005_GetGamma(struct w_steam_ifac
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_005_SetGraphicsDevice(struct w_steam_iface *_this, Compositor_DeviceType eType, void *pDevice)
+void __thiscall winIVRCompositor_IVRCompositor_005_SetGraphicsDevice(struct w_steam_iface *_this, uint32_t eType, void *pDevice)
 {
     struct cppIVRCompositor_IVRCompositor_005_SetGraphicsDevice_params params =
     {
@@ -124,7 +124,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_WaitGetPoses(struct w_steam_i
     cppIVRCompositor_IVRCompositor_005_WaitGetPoses( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_005_Submit(struct w_steam_iface *_this, Hmd_Eye eEye, void *pTexture, Compositor_TextureBounds *pBounds)
+void __thiscall winIVRCompositor_IVRCompositor_005_Submit(struct w_steam_iface *_this, uint32_t eEye, void *pTexture, Compositor_TextureBounds *pBounds)
 {
     struct cppIVRCompositor_IVRCompositor_005_Submit_params params =
     {
@@ -309,7 +309,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(st
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_005_SetTrackingSpace(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_005_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_005_SetTrackingSpace_params params =
     {
@@ -320,7 +320,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_005_SetTrackingSpace( &params );
 }
 
-TrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_005_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_005_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_005_GetTrackingSpace_params params =
     {
@@ -508,7 +508,7 @@ float __thiscall winIVRCompositor_IVRCompositor_006_GetGamma(struct w_steam_ifac
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_006_SetGraphicsDevice(struct w_steam_iface *_this, Compositor_DeviceType eType, void *pDevice)
+void __thiscall winIVRCompositor_IVRCompositor_006_SetGraphicsDevice(struct w_steam_iface *_this, uint32_t eType, void *pDevice)
 {
     struct cppIVRCompositor_IVRCompositor_006_SetGraphicsDevice_params params =
     {
@@ -520,7 +520,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_SetGraphicsDevice(struct w_st
     cppIVRCompositor_IVRCompositor_006_SetGraphicsDevice( &params );
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_006_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_006_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_006_WaitGetPoses_params params =
     {
@@ -535,7 +535,7 @@ VRCompositorError __thiscall winIVRCompositor_IVRCompositor_006_WaitGetPoses(str
     return params._ret;
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_006_Submit(struct w_steam_iface *_this, Hmd_Eye eEye, void *pTexture, VRTextureBounds_t *pBounds)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_006_Submit(struct w_steam_iface *_this, uint32_t eEye, void *pTexture, VRTextureBounds_t *pBounds)
 {
     struct cppIVRCompositor_IVRCompositor_006_Submit_params params =
     {
@@ -641,7 +641,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_006_IsFullscreen(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_006_SetTrackingSpace(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_006_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_006_SetTrackingSpace_params params =
     {
@@ -652,7 +652,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_006_SetTrackingSpace( &params );
 }
 
-TrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_006_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_006_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_006_GetTrackingSpace_params params =
     {
@@ -853,7 +853,7 @@ float __thiscall winIVRCompositor_IVRCompositor_007_GetGamma(struct w_steam_ifac
     return params._ret;
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_007_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_007_WaitGetPoses_params params =
     {
@@ -868,7 +868,7 @@ VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_WaitGetPoses(str
     return params._ret;
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_Submit(struct w_steam_iface *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, const VRTextureBounds_t *pBounds)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_007_Submit(struct w_steam_iface *_this, uint32_t eEye, uint32_t eTextureType, void *pTexture, const VRTextureBounds_t *pBounds)
 {
     struct cppIVRCompositor_IVRCompositor_007_Submit_params params =
     {
@@ -976,7 +976,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_007_IsFullscreen(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_007_SetTrackingSpace(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_007_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_007_SetTrackingSpace_params params =
     {
@@ -987,7 +987,7 @@ void __thiscall winIVRCompositor_IVRCompositor_007_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_007_SetTrackingSpace( &params );
 }
 
-TrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_007_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_007_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_007_GetTrackingSpace_params params =
     {
@@ -1193,7 +1193,7 @@ float __thiscall winIVRCompositor_IVRCompositor_008_GetGamma(struct w_steam_ifac
     return params._ret;
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_008_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_008_WaitGetPoses_params params =
     {
@@ -1208,7 +1208,7 @@ VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_WaitGetPoses(str
     return params._ret;
 }
 
-VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_Submit(struct w_steam_iface *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void *pTexture, const VRTextureBounds_t *pBounds, VRSubmitFlags_t nSubmitFlags)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_008_Submit(struct w_steam_iface *_this, uint32_t eEye, uint32_t eTextureType, void *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags)
 {
     struct cppIVRCompositor_IVRCompositor_008_Submit_params params =
     {
@@ -1276,7 +1276,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_008_FadeGrid( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_008_SetSkyboxOverride(struct w_steam_iface *_this, GraphicsAPIConvention eTextureType, void *pFront, void *pBack, void *pLeft, void *pRight, void *pTop, void *pBottom)
+void __thiscall winIVRCompositor_IVRCompositor_008_SetSkyboxOverride(struct w_steam_iface *_this, uint32_t eTextureType, void *pFront, void *pBack, void *pLeft, void *pRight, void *pTop, void *pBottom)
 {
     struct cppIVRCompositor_IVRCompositor_008_SetSkyboxOverride_params params =
     {
@@ -1345,7 +1345,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_008_IsFullscreen(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_008_SetTrackingSpace(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_008_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_008_SetTrackingSpace_params params =
     {
@@ -1356,7 +1356,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_008_SetTrackingSpace( &params );
 }
 
-TrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_008_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_008_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_008_GetTrackingSpace_params params =
     {
@@ -1569,7 +1569,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_HideMirrorWindow, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_IsMirrorWindowVisible, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_CompositorDumpImages, 4)
 
-void __thiscall winIVRCompositor_IVRCompositor_009_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_009_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_009_SetTrackingSpace_params params =
     {
@@ -1580,7 +1580,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_009_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_009_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_009_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_009_GetTrackingSpace_params params =
     {
@@ -1591,7 +1591,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_009_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_009_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_009_WaitGetPoses_params params =
     {
@@ -1606,7 +1606,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_009_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_009_GetLastPoses_params params =
     {
@@ -1621,7 +1621,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_GetLastPoses(st
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_009_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_009_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -1687,7 +1687,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_009_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_009_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_009_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -1938,7 +1938,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_HideMirrorWindow, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_IsMirrorWindowVisible, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_CompositorDumpImages, 4)
 
-void __thiscall winIVRCompositor_IVRCompositor_010_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_010_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_010_SetTrackingSpace_params params =
     {
@@ -1949,7 +1949,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_010_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_010_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_010_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_010_GetTrackingSpace_params params =
     {
@@ -1960,7 +1960,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_010_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_010_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_010_WaitGetPoses_params params =
     {
@@ -1975,7 +1975,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_010_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_010_GetLastPoses_params params =
     {
@@ -1990,7 +1990,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_GetLastPoses(st
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_010_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -2056,7 +2056,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_010_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_010_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_010_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -2307,7 +2307,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_HideMirrorWindow, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_IsMirrorWindowVisible, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_CompositorDumpImages, 4)
 
-void __thiscall winIVRCompositor_IVRCompositor_011_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_011_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_011_SetTrackingSpace_params params =
     {
@@ -2318,7 +2318,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_011_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_011_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_011_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_011_GetTrackingSpace_params params =
     {
@@ -2329,7 +2329,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_011_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_011_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_011_WaitGetPoses_params params =
     {
@@ -2344,7 +2344,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_011_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_011_GetLastPoses_params params =
     {
@@ -2359,7 +2359,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_GetLastPoses(st
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_011_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -2425,7 +2425,7 @@ void __thiscall winIVRCompositor_IVRCompositor_011_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_011_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_011_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_011_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -2678,7 +2678,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_IsMirrorWindowVisible
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_CompositorDumpImages, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_ShouldAppRenderWithLowResources, 4)
 
-void __thiscall winIVRCompositor_IVRCompositor_012_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_012_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_012_SetTrackingSpace_params params =
     {
@@ -2689,7 +2689,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_012_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_012_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_012_GetTrackingSpace_params params =
     {
@@ -2700,7 +2700,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_012_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_012_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_012_WaitGetPoses_params params =
     {
@@ -2715,7 +2715,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_012_GetLastPoses_params params =
     {
@@ -2730,7 +2730,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_012_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -2744,7 +2744,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_012_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_012_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -2810,7 +2810,7 @@ void __thiscall winIVRCompositor_IVRCompositor_012_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_012_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_012_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_012_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -3079,7 +3079,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_CompositorDumpImages,
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_ShouldAppRenderWithLowResources, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_ForceInterleavedReprojectionOn, 8)
 
-void __thiscall winIVRCompositor_IVRCompositor_013_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_013_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_013_SetTrackingSpace_params params =
     {
@@ -3090,7 +3090,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_013_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_013_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_013_GetTrackingSpace_params params =
     {
@@ -3101,7 +3101,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_013_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_013_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_013_WaitGetPoses_params params =
     {
@@ -3116,7 +3116,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_013_GetLastPoses_params params =
     {
@@ -3131,7 +3131,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -3145,7 +3145,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_013_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -3211,7 +3211,7 @@ void __thiscall winIVRCompositor_IVRCompositor_013_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_013_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_013_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_013_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -3495,7 +3495,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_ForceInterleavedRepro
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_ForceReconnectProcess, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_SuspendRendering, 8)
 
-void __thiscall winIVRCompositor_IVRCompositor_014_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_014_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_014_SetTrackingSpace_params params =
     {
@@ -3506,7 +3506,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_014_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_014_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_014_GetTrackingSpace_params params =
     {
@@ -3517,7 +3517,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_014_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_014_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_014_WaitGetPoses_params params =
     {
@@ -3532,7 +3532,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_014_GetLastPoses_params params =
     {
@@ -3547,7 +3547,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -3561,7 +3561,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_014_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_014_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -3627,7 +3627,7 @@ void __thiscall winIVRCompositor_IVRCompositor_014_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_014_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_014_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_014_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -3944,7 +3944,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_ReleaseSharedGLTextur
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_LockGLSharedTextureForAccess, 8)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_UnlockGLSharedTextureForAccess, 8)
 
-void __thiscall winIVRCompositor_IVRCompositor_015_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_015_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_015_SetTrackingSpace_params params =
     {
@@ -3955,7 +3955,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_015_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_015_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetTrackingSpace_params params =
     {
@@ -3966,7 +3966,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_015_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_015_WaitGetPoses_params params =
     {
@@ -3981,7 +3981,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetLastPoses_params params =
     {
@@ -3996,7 +3996,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -4010,7 +4010,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_015_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_015_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -4088,7 +4088,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_015_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_015_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_015_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -4507,7 +4507,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_ReleaseSharedGLTextur
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_LockGLSharedTextureForAccess, 8)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess, 8)
 
-void __thiscall winIVRCompositor_IVRCompositor_016_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_016_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_016_SetTrackingSpace_params params =
     {
@@ -4518,7 +4518,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_016_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_016_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetTrackingSpace_params params =
     {
@@ -4529,9 +4529,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_016_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_016_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetLastPoses_params params =
     {
@@ -4546,7 +4546,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -4560,7 +4560,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_016_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_016_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -4638,7 +4638,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_016_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_016_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_016_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -5029,7 +5029,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_ReleaseSharedGLTextur
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_LockGLSharedTextureForAccess, 8)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess, 8)
 
-void __thiscall winIVRCompositor_IVRCompositor_017_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_017_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_017_SetTrackingSpace_params params =
     {
@@ -5040,7 +5040,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_017_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_017_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetTrackingSpace_params params =
     {
@@ -5051,9 +5051,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_017_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_017_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetLastPoses_params params =
     {
@@ -5068,7 +5068,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -5082,7 +5082,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_017_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_017_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -5173,7 +5173,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_FadeGrid(struct w_steam_iface
     cppIVRCompositor_IVRCompositor_017_FadeGrid( &params );
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_017_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_017_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -5568,7 +5568,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_ReleaseSharedGLTextur
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess, 8)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess, 8)
 
-void __thiscall winIVRCompositor_IVRCompositor_018_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_018_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_018_SetTrackingSpace_params params =
     {
@@ -5579,7 +5579,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_018_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_018_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetTrackingSpace_params params =
     {
@@ -5590,9 +5590,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_018_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_018_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetLastPoses_params params =
     {
@@ -5607,7 +5607,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -5621,7 +5621,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_018_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -5736,7 +5736,7 @@ float __thiscall winIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_018_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_018_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -6137,7 +6137,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_UnlockGLSharedTexture
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetVulkanInstanceExtensionsRequired, 12)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired, 16)
 
-void __thiscall winIVRCompositor_IVRCompositor_019_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_019_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_019_SetTrackingSpace_params params =
     {
@@ -6148,7 +6148,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_019_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_019_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetTrackingSpace_params params =
     {
@@ -6159,9 +6159,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_019_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetLastPoses_params params =
     {
@@ -6176,7 +6176,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -6190,7 +6190,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_019_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -6305,7 +6305,7 @@ float __thiscall winIVRCompositor_IVRCompositor_019_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_019_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_019_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -6726,7 +6726,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_UnlockGLSharedTexture
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetVulkanInstanceExtensionsRequired, 12)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired, 16)
 
-void __thiscall winIVRCompositor_IVRCompositor_020_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_020_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_020_SetTrackingSpace_params params =
     {
@@ -6737,7 +6737,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_020_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_020_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetTrackingSpace_params params =
     {
@@ -6748,9 +6748,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_020_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetLastPoses_params params =
     {
@@ -6765,7 +6765,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -6779,7 +6779,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_020_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -6894,7 +6894,7 @@ float __thiscall winIVRCompositor_IVRCompositor_020_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_020_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_020_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -7330,7 +7330,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtens
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode, 8)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData, 4)
 
-void __thiscall winIVRCompositor_IVRCompositor_021_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_021_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_021_SetTrackingSpace_params params =
     {
@@ -7341,7 +7341,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_021_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_021_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetTrackingSpace_params params =
     {
@@ -7352,9 +7352,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_021_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetLastPoses_params params =
     {
@@ -7369,7 +7369,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -7383,7 +7383,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_021_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -7498,7 +7498,7 @@ float __thiscall winIVRCompositor_IVRCompositor_021_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_021_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_021_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -7768,7 +7768,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(struct 
     cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData_params params =
     {
@@ -7963,7 +7963,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnab
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported, 4)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading, 4)
 
-void __thiscall winIVRCompositor_IVRCompositor_022_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_022_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_022_SetTrackingSpace_params params =
     {
@@ -7974,7 +7974,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_022_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_022_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetTrackingSpace_params params =
     {
@@ -7985,9 +7985,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_022_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetLastPoses_params params =
     {
@@ -8002,7 +8002,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -8016,7 +8016,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_022_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -8131,7 +8131,7 @@ float __thiscall winIVRCompositor_IVRCompositor_022_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_022_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -8390,7 +8390,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanInstanceExtensio
 
 extern uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
 
-void __thiscall winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(struct w_steam_iface *_this, EVRCompositorTimingMode eTimingMode)
+void __thiscall winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {
     struct cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode_params params =
     {
@@ -8401,7 +8401,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(struct 
     cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData_params params =
     {
@@ -8637,7 +8637,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAp
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_SetStageOverride_Async, 20)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_024_ClearStageOverride, 4)
 
-void __thiscall winIVRCompositor_IVRCompositor_024_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_024_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_024_SetTrackingSpace_params params =
     {
@@ -8648,7 +8648,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_024_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_024_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetTrackingSpace_params params =
     {
@@ -8659,9 +8659,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_024_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetLastPoses_params params =
     {
@@ -8676,7 +8676,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -8690,7 +8690,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_024_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -8805,7 +8805,7 @@ float __thiscall winIVRCompositor_IVRCompositor_024_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_024_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -9064,7 +9064,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanInstanceExtensio
 
 extern uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
 
-void __thiscall winIVRCompositor_IVRCompositor_024_SetExplicitTimingMode(struct w_steam_iface *_this, EVRCompositorTimingMode eTimingMode)
+void __thiscall winIVRCompositor_IVRCompositor_024_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {
     struct cppIVRCompositor_IVRCompositor_024_SetExplicitTimingMode_params params =
     {
@@ -9075,7 +9075,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_SetExplicitTimingMode(struct 
     cppIVRCompositor_IVRCompositor_024_SetExplicitTimingMode( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_024_SubmitExplicitTimingData_params params =
     {
@@ -9119,7 +9119,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_IsCurrentSceneFocusAppLoading
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     struct cppIVRCompositor_IVRCompositor_024_SetStageOverride_Async_params params =
     {
@@ -9345,7 +9345,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetCompositorBenchmar
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetLastPosePredictionIDs, 12)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_026_GetPosesForFrame, 16)
 
-void __thiscall winIVRCompositor_IVRCompositor_026_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_026_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_026_SetTrackingSpace_params params =
     {
@@ -9356,7 +9356,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_026_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_026_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetTrackingSpace_params params =
     {
@@ -9367,9 +9367,9 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_026_GetTrackin
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount);
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetLastPoses_params params =
     {
@@ -9384,7 +9384,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -9398,7 +9398,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_026_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -9513,7 +9513,7 @@ float __thiscall winIVRCompositor_IVRCompositor_026_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_026_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -9772,7 +9772,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanInstanceExtensio
 
 extern uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
 
-void __thiscall winIVRCompositor_IVRCompositor_026_SetExplicitTimingMode(struct w_steam_iface *_this, EVRCompositorTimingMode eTimingMode)
+void __thiscall winIVRCompositor_IVRCompositor_026_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {
     struct cppIVRCompositor_IVRCompositor_026_SetExplicitTimingMode_params params =
     {
@@ -9783,7 +9783,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_SetExplicitTimingMode(struct 
     cppIVRCompositor_IVRCompositor_026_SetExplicitTimingMode( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SubmitExplicitTimingData(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SubmitExplicitTimingData(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_026_SubmitExplicitTimingData_params params =
     {
@@ -9827,7 +9827,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_IsCurrentSceneFocusAppLoading
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     struct cppIVRCompositor_IVRCompositor_026_SetStageOverride_Async_params params =
     {
@@ -9867,7 +9867,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_GetCompositorBenchmarkResults
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetLastPosePredictionIDs(struct w_steam_iface *_this, uint32_t *pRenderPosePredictionID, uint32_t *pGamePosePredictionID)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastPosePredictionIDs(struct w_steam_iface *_this, uint32_t *pRenderPosePredictionID, uint32_t *pGamePosePredictionID)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetLastPosePredictionIDs_params params =
     {
@@ -9880,7 +9880,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetLastPosePred
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetPosesForFrame(struct w_steam_iface *_this, uint32_t unPosePredictionID, TrackedDevicePose_t *pPoseArray, uint32_t unPoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetPosesForFrame(struct w_steam_iface *_this, uint32_t unPosePredictionID, TrackedDevicePose_t *pPoseArray, uint32_t unPoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetPosesForFrame_params params =
     {
@@ -10099,7 +10099,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_027_GetCompositorBenchmar
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_027_GetLastPosePredictionIDs, 12)
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_027_GetPosesForFrame, 16)
 
-void __thiscall winIVRCompositor_IVRCompositor_027_SetTrackingSpace(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin)
+void __thiscall winIVRCompositor_IVRCompositor_027_SetTrackingSpace(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppIVRCompositor_IVRCompositor_027_SetTrackingSpace_params params =
     {
@@ -10110,7 +10110,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_SetTrackingSpace(struct w_ste
     cppIVRCompositor_IVRCompositor_027_SetTrackingSpace( &params );
 }
 
-ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_027_GetTrackingSpace(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetTrackingSpace(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetTrackingSpace_params params =
     {
@@ -10121,7 +10121,7 @@ ETrackingUniverseOrigin __thiscall winIVRCompositor_IVRCompositor_027_GetTrackin
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_WaitGetPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_027_WaitGetPoses_params params =
     {
@@ -10136,7 +10136,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_WaitGetPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoses(struct w_steam_iface *_this, TrackedDevicePose_t *pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t *pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetLastPoses_params params =
     {
@@ -10151,7 +10151,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoses(st
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -10165,7 +10165,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoseForT
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_Submit(struct w_steam_iface *_this, EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, EVRSubmitFlags nSubmitFlags);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_Submit(struct w_steam_iface *_this, uint32_t eEye, const Texture_t *pTexture, const VRTextureBounds_t *pBounds, uint32_t nSubmitFlags);
 
 void __thiscall winIVRCompositor_IVRCompositor_027_ClearLastSubmittedFrame(struct w_steam_iface *_this)
 {
@@ -10280,7 +10280,7 @@ float __thiscall winIVRCompositor_IVRCompositor_027_GetCurrentGridAlpha(struct w
     return params._ret;
 }
 
-extern EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
+extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SetSkyboxOverride(struct w_steam_iface *_this, const Texture_t *pTextures, uint32_t unTextureCount);
 
 void __thiscall winIVRCompositor_IVRCompositor_027_ClearSkyboxOverride(struct w_steam_iface *_this)
 {
@@ -10539,7 +10539,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetVulkanInstanceExtensio
 
 extern uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetVulkanDeviceExtensionsRequired(struct w_steam_iface *_this, VkPhysicalDevice_T *pPhysicalDevice, char *pchValue, uint32_t unBufferSize);
 
-void __thiscall winIVRCompositor_IVRCompositor_027_SetExplicitTimingMode(struct w_steam_iface *_this, EVRCompositorTimingMode eTimingMode)
+void __thiscall winIVRCompositor_IVRCompositor_027_SetExplicitTimingMode(struct w_steam_iface *_this, uint32_t eTimingMode)
 {
     struct cppIVRCompositor_IVRCompositor_027_SetExplicitTimingMode_params params =
     {
@@ -10550,7 +10550,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_SetExplicitTimingMode(struct 
     cppIVRCompositor_IVRCompositor_027_SetExplicitTimingMode( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SubmitExplicitTimingData(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SubmitExplicitTimingData(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_027_SubmitExplicitTimingData_params params =
     {
@@ -10594,7 +10594,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_IsCurrentSceneFocusAppLoading
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_SetStageOverride_Async(struct w_steam_iface *_this, const char *pchRenderModelPath, const HmdMatrix34_t *pTransform, const Compositor_StageRenderSettings *pRenderSettings, uint32_t nSizeOfRenderSettings)
 {
     struct cppIVRCompositor_IVRCompositor_027_SetStageOverride_Async_params params =
     {
@@ -10634,7 +10634,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_GetCompositorBenchmarkResults
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetLastPosePredictionIDs(struct w_steam_iface *_this, uint32_t *pRenderPosePredictionID, uint32_t *pGamePosePredictionID)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPosePredictionIDs(struct w_steam_iface *_this, uint32_t *pRenderPosePredictionID, uint32_t *pGamePosePredictionID)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetLastPosePredictionIDs_params params =
     {
@@ -10647,7 +10647,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetLastPosePred
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetPosesForFrame(struct w_steam_iface *_this, uint32_t unPosePredictionID, TrackedDevicePose_t *pPoseArray, uint32_t unPoseArrayCount)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetPosesForFrame(struct w_steam_iface *_this, uint32_t unPosePredictionID, TrackedDevicePose_t *pPoseArray, uint32_t unPoseArrayCount)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetPosesForFrame_params params =
     {

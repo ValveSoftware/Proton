@@ -14,7 +14,7 @@ extern void cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds( struct
 struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params
 {
     void *linux_side;
-    EVREye eEye;
+    uint32_t eEye;
     uint32_t *pnX;
     uint32_t *pnY;
     uint32_t *pnWidth;
