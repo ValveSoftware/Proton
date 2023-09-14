@@ -50,7 +50,7 @@ struct cppIVRChaperone_IVRChaperone_002_GetBoundsColor_params
 {
     void *linux_side;
     HmdColor_t *pOutputColorArray;
-    int nNumOutputColors;
+    int32_t nNumOutputColors;
 };
 extern void cppIVRChaperone_IVRChaperone_002_GetBoundsColor( struct cppIVRChaperone_IVRChaperone_002_GetBoundsColor_params *params );
 

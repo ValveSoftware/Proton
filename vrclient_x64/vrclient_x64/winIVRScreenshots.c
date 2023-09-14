@@ -45,7 +45,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreen
     return params._ret;
 }
 
-EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(struct w_steam_iface *_this, const EVRScreenshotType *pSupportedTypes, int numTypes)
+EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(struct w_steam_iface *_this, const EVRScreenshotType *pSupportedTypes, int32_t numTypes)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_HookScreenshot_params params =
     {

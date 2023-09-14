@@ -333,16 +333,23 @@ def declspec(decl, name):
     real_name = real_name.removeprefix("vr::")
 
     if real_name in SDK_STRUCTS:
-        typename = f"win{real_name}_{display_sdkver(sdkver)}"
+        type_name = f"win{real_name}_{display_sdkver(sdkver)}"
     elif struct_needs_conversion(decl.get_canonical()) \
          and not decl.is_const_qualified(): # FIXME
-        typename = f"win{real_name}_{display_sdkver(sdkver)}"
+        type_name = f"win{real_name}_{display_sdkver(sdkver)}"
     else:
-        typename = decl.spelling
-        typename = typename.removeprefix("const ")
-        typename = typename.removeprefix("vr::")
+        type_name = decl.spelling
+        type_name = type_name.removeprefix("const ")
+        type_name = type_name.removeprefix("vr::")
 
-    return f'{const}{typename}{name}'
+    if type_name in ('void', 'bool', 'char', 'float', 'double'):
+        return f'{const}{type_name}{name}'
+    if type_name.startswith(('int', 'long', 'short', 'signed')):
+        return f'{const}int{decl.get_size() * 8}_t{name}'
+    if type_name.startswith(('uint', 'unsigned')):
+        return f'{const}uint{decl.get_size() * 8}_t{name}'
+
+    return f'{const}{type_name}{name}'
 
 
 def handle_method_hpp(method, cppname, out):
