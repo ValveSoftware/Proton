@@ -50,7 +50,7 @@ struct cppISteamUser_SteamUser005_IsVACBanned_params
 {
     void *linux_side;
     bool _ret;
-    int nGameID;
+    int32_t nGameID;
 };
 extern void cppISteamUser_SteamUser005_IsVACBanned( struct cppISteamUser_SteamUser005_IsVACBanned_params *params );
 
@@ -58,30 +58,30 @@ struct cppISteamUser_SteamUser005_RequireShowVACBannedMessage_params
 {
     void *linux_side;
     bool _ret;
-    int nAppID;
+    int32_t nAppID;
 };
 extern void cppISteamUser_SteamUser005_RequireShowVACBannedMessage( struct cppISteamUser_SteamUser005_RequireShowVACBannedMessage_params *params );
 
 struct cppISteamUser_SteamUser005_AcknowledgeVACBanning_params
 {
     void *linux_side;
-    int nAppID;
+    int32_t nAppID;
 };
 extern void cppISteamUser_SteamUser005_AcknowledgeVACBanning( struct cppISteamUser_SteamUser005_AcknowledgeVACBanning_params *params );
 
 struct cppISteamUser_SteamUser005_SetSteam2Ticket_params
 {
     void *linux_side;
-    uint8 *pubTicket;
-    int cubTicket;
+    uint8_t *pubTicket;
+    int32_t cubTicket;
 };
 extern void cppISteamUser_SteamUser005_SetSteam2Ticket( struct cppISteamUser_SteamUser005_SetSteam2Ticket_params *params );
 
 struct cppISteamUser_SteamUser005_AddServerNetAddress_params
 {
     void *linux_side;
-    uint32 unIP;
-    uint16 unPort;
+    uint32_t unIP;
+    uint16_t unPort;
 };
 extern void cppISteamUser_SteamUser005_AddServerNetAddress( struct cppISteamUser_SteamUser005_AddServerNetAddress_params *params );
 
@@ -110,7 +110,7 @@ struct cppISteamUser_SteamUser005_GetRegistryString_params
     uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
-    int cbValue;
+    int32_t cbValue;
 };
 extern void cppISteamUser_SteamUser005_GetRegistryString( struct cppISteamUser_SteamUser005_GetRegistryString_params *params );
 
@@ -120,7 +120,7 @@ struct cppISteamUser_SteamUser005_SetRegistryInt_params
     bool _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
-    int iValue;
+    int32_t iValue;
 };
 extern void cppISteamUser_SteamUser005_SetRegistryInt( struct cppISteamUser_SteamUser005_SetRegistryInt_params *params );
 
@@ -130,20 +130,20 @@ struct cppISteamUser_SteamUser005_GetRegistryInt_params
     bool _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
-    int *piValue;
+    int32_t *piValue;
 };
 extern void cppISteamUser_SteamUser005_GetRegistryInt( struct cppISteamUser_SteamUser005_GetRegistryInt_params *params );
 
 struct cppISteamUser_SteamUser005_InitiateGameConnection_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pBlob;
-    int cbMaxBlob;
+    int32_t cbMaxBlob;
     CSteamID steamID;
     CGameID gameID;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
     bool bSecure;
 };
 extern void cppISteamUser_SteamUser005_InitiateGameConnection( struct cppISteamUser_SteamUser005_InitiateGameConnection_params *params );
@@ -151,8 +151,8 @@ extern void cppISteamUser_SteamUser005_InitiateGameConnection( struct cppISteamU
 struct cppISteamUser_SteamUser005_TerminateGameConnection_params
 {
     void *linux_side;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
 };
 extern void cppISteamUser_SteamUser005_TerminateGameConnection( struct cppISteamUser_SteamUser005_TerminateGameConnection_params *params );
 
@@ -172,7 +172,7 @@ extern void cppISteamUser_SteamUser005_IsPrimaryChatDestination( struct cppIStea
 struct cppISteamUser_SteamUser005_RequestLegacyCDKey_params
 {
     void *linux_side;
-    uint32 nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamUser_SteamUser005_RequestLegacyCDKey( struct cppISteamUser_SteamUser005_RequestLegacyCDKey_params *params );
 
@@ -190,7 +190,7 @@ struct cppISteamUser_SteamUser005_SendGuestPassByAccountID_params
 {
     void *linux_side;
     bool _ret;
-    uint32 uAccountID;
+    uint32_t uAccountID;
     GID_t gidGuestPassID;
     bool bResending;
 };
@@ -215,14 +215,14 @@ extern void cppISteamUser_SteamUser005_RedeemGuestPass( struct cppISteamUser_Ste
 struct cppISteamUser_SteamUser005_GetGuestPassToGiveCount_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUser_SteamUser005_GetGuestPassToGiveCount( struct cppISteamUser_SteamUser005_GetGuestPassToGiveCount_params *params );
 
 struct cppISteamUser_SteamUser005_GetGuestPassToRedeemCount_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUser_SteamUser005_GetGuestPassToRedeemCount( struct cppISteamUser_SteamUser005_GetGuestPassToRedeemCount_params *params );
 
@@ -237,7 +237,7 @@ struct cppISteamUser_SteamUser005_GetGuestPassToGiveInfo_params
 {
     void *linux_side;
     bool _ret;
-    uint32 nPassIndex;
+    uint32_t nPassIndex;
     GID_t *pgidGuestPassID;
     PackageId_t *pnPackageID;
     RTime32 *pRTime32Created;
@@ -245,7 +245,7 @@ struct cppISteamUser_SteamUser005_GetGuestPassToGiveInfo_params
     RTime32 *pRTime32Sent;
     RTime32 *pRTime32Redeemed;
     char *pchRecipientAddress;
-    int cRecipientAddressSize;
+    int32_t cRecipientAddressSize;
 };
 extern void cppISteamUser_SteamUser005_GetGuestPassToGiveInfo( struct cppISteamUser_SteamUser005_GetGuestPassToGiveInfo_params *params );
 
@@ -253,7 +253,7 @@ struct cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo_params
 {
     void *linux_side;
     bool _ret;
-    uint32 nPassIndex;
+    uint32_t nPassIndex;
     GID_t *pgidGuestPassID;
     PackageId_t *pnPackageID;
     RTime32 *pRTime32Created;
@@ -267,9 +267,9 @@ struct cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress_params
 {
     void *linux_side;
     bool _ret;
-    uint32 nPassIndex;
+    uint32_t nPassIndex;
     char *pchSenderAddress;
-    int cSenderAddressSize;
+    int32_t cSenderAddressSize;
 };
 extern void cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress( struct cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress_params *params );
 
@@ -277,9 +277,9 @@ struct cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderName_params
 {
     void *linux_side;
     bool _ret;
-    uint32 nPassIndex;
+    uint32_t nPassIndex;
     char *pchSenderName;
-    int cSenderNameSize;
+    int32_t cSenderNameSize;
 };
 extern void cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderName( struct cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderName_params *params );
 
@@ -302,7 +302,7 @@ struct cppISteamUser_SteamUser005_TrackAppUsageEvent_params
 {
     void *linux_side;
     CGameID gameID;
-    int eAppUsageEvent;
+    int32_t eAppUsageEvent;
     const char *pchExtraInfo;
 };
 extern void cppISteamUser_SteamUser005_TrackAppUsageEvent( struct cppISteamUser_SteamUser005_TrackAppUsageEvent_params *params );

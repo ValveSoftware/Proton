@@ -22,7 +22,7 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation, 12)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot_params params =
     {
@@ -37,7 +37,7 @@ ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERS
     return params._ret;
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary_params params =
     {
@@ -139,7 +139,7 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser, 16)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot_params params =
     {
@@ -154,7 +154,7 @@ ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERS
     return params._ret;
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary_params params =
     {
@@ -272,7 +272,7 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked, 4)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32 cubRGB, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot_params params =
     {
@@ -287,7 +287,7 @@ ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERS
     return params._ret;
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int nWidth, int nHeight)
+ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary_params params =
     {

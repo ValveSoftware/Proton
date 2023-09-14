@@ -35,9 +35,9 @@ struct cppISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate_par
 {
     void *linux_side;
     bool _ret;
-    uint32 unIPClient;
+    uint32_t unIPClient;
     const void *pvAuthBlob;
-    uint32 cubAuthBlobSize;
+    uint32_t cubAuthBlobSize;
     CSteamID *pSteamIDUser;
 };
 extern void cppISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate( struct cppISteamGameServer_SteamGameServer005_SendUserConnectAndAuthenticate_params *params );
@@ -62,7 +62,7 @@ struct cppISteamGameServer_SteamGameServer005_BUpdateUserData_params
     bool _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
-    uint32 uScore;
+    uint32_t uScore;
 };
 extern void cppISteamGameServer_SteamGameServer005_BUpdateUserData( struct cppISteamGameServer_SteamGameServer005_BUpdateUserData_params *params );
 
@@ -70,11 +70,11 @@ struct cppISteamGameServer_SteamGameServer005_BSetServerType_params
 {
     void *linux_side;
     bool _ret;
-    uint32 unServerFlags;
-    uint32 unGameIP;
-    uint16 unGamePort;
-    uint16 unSpectatorPort;
-    uint16 usQueryPort;
+    uint32_t unServerFlags;
+    uint32_t unGameIP;
+    uint16_t unGamePort;
+    uint16_t unSpectatorPort;
+    uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
     bool bLANMode;
@@ -84,9 +84,9 @@ extern void cppISteamGameServer_SteamGameServer005_BSetServerType( struct cppISt
 struct cppISteamGameServer_SteamGameServer005_UpdateServerStatus_params
 {
     void *linux_side;
-    int cPlayers;
-    int cPlayersMax;
-    int cBotPlayers;
+    int32_t cPlayers;
+    int32_t cPlayersMax;
+    int32_t cBotPlayers;
     const char *pchServerName;
     const char *pSpectatorServerName;
     const char *pchMapName;
@@ -96,7 +96,7 @@ extern void cppISteamGameServer_SteamGameServer005_UpdateServerStatus( struct cp
 struct cppISteamGameServer_SteamGameServer005_UpdateSpectatorPort_params
 {
     void *linux_side;
-    uint16 unSpectatorPort;
+    uint16_t unSpectatorPort;
 };
 extern void cppISteamGameServer_SteamGameServer005_UpdateSpectatorPort( struct cppISteamGameServer_SteamGameServer005_UpdateSpectatorPort_params *params );
 

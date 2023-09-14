@@ -22,24 +22,24 @@ extern void cppISteamUser_SteamUser008_GetSteamID( struct cppISteamUser_SteamUse
 struct cppISteamUser_SteamUser008_InitiateGameConnection_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pBlob;
-    int cbMaxBlob;
+    int32_t cbMaxBlob;
     CSteamID steamID;
     CGameID gameID;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
     bool bSecure;
     void *pvSteam2GetEncryptionKey;
-    int cbSteam2GetEncryptionKey;
+    int32_t cbSteam2GetEncryptionKey;
 };
 extern void cppISteamUser_SteamUser008_InitiateGameConnection( struct cppISteamUser_SteamUser008_InitiateGameConnection_params *params );
 
 struct cppISteamUser_SteamUser008_TerminateGameConnection_params
 {
     void *linux_side;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
 };
 extern void cppISteamUser_SteamUser008_TerminateGameConnection( struct cppISteamUser_SteamUser008_TerminateGameConnection_params *params );
 
@@ -47,7 +47,7 @@ struct cppISteamUser_SteamUser008_TrackAppUsageEvent_params
 {
     void *linux_side;
     CGameID gameID;
-    int eAppUsageEvent;
+    int32_t eAppUsageEvent;
     const char *pchExtraInfo;
 };
 extern void cppISteamUser_SteamUser008_TrackAppUsageEvent( struct cppISteamUser_SteamUser008_TrackAppUsageEvent_params *params );

@@ -338,9 +338,9 @@ void *manual_convert_SteamAPIWarningMessageHook_t(void *win_func)
 }
 
 /***** SteamAPI_CheckCallbackRegistered_t *****/
-static uint32 (__attribute__((ms_abi)) *stored_SteamAPI_CheckCallbackRegistered_t)(int cb);
+static uint32_t (__attribute__((ms_abi)) * stored_SteamAPI_CheckCallbackRegistered_t)( int cb );
 
-static uint32 lin_SteamAPI_CheckCallbackRegistered_t(int cb)
+static uint32_t lin_SteamAPI_CheckCallbackRegistered_t( int cb )
 {
     return stored_SteamAPI_CheckCallbackRegistered_t(cb);
 }

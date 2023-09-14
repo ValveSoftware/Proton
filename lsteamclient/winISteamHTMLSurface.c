@@ -113,7 +113,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Load
     steamclient_free_path( params.pchURL );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize_params params =
     {
@@ -231,7 +231,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove_params params =
     {
@@ -244,7 +244,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t nDelta)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel_params params =
     {
@@ -256,7 +256,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown_params params =
     {
@@ -269,7 +269,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyD
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp_params params =
     {
@@ -282,7 +282,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyU
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t cUnicodeChar, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar_params params =
     {
@@ -295,7 +295,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll_params params =
     {
@@ -307,7 +307,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetH
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll_params params =
     {
@@ -389,7 +389,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Stop
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition_params params =
     {
@@ -595,7 +595,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Load
     steamclient_free_path( params.pchURL );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize_params params =
     {
@@ -713,7 +713,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseDoubleClick( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove_params params =
     {
@@ -726,7 +726,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseMove( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t nDelta)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel_params params =
     {
@@ -738,7 +738,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_MouseWheel( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown_params params =
     {
@@ -751,7 +751,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyD
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyDown( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp_params params =
     {
@@ -764,7 +764,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyU
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyUp( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t cUnicodeChar, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar_params params =
     {
@@ -777,7 +777,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_KeyChar( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll_params params =
     {
@@ -789,7 +789,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetH
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetHorizontalScroll( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll_params params =
     {
@@ -871,7 +871,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Stop
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_StopFind( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition_params params =
     {
@@ -901,7 +901,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int32_t nPointX, int32_t nPointY)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor_params params =
     {
@@ -1111,7 +1111,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Load
     steamclient_free_path( params.pchURL );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize_params params =
     {
@@ -1229,7 +1229,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseDoubleClick( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove_params params =
     {
@@ -1242,7 +1242,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t nDelta)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel_params params =
     {
@@ -1254,7 +1254,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown_params params =
     {
@@ -1267,7 +1267,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyD
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp_params params =
     {
@@ -1280,7 +1280,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyU
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t cUnicodeChar, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar_params params =
     {
@@ -1293,7 +1293,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll_params params =
     {
@@ -1305,7 +1305,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetH
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll_params params =
     {
@@ -1387,7 +1387,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Stop
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_StopFind( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition_params params =
     {
@@ -1417,7 +1417,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int32_t nPointX, int32_t nPointY)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor_params params =
     {
@@ -1641,7 +1641,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Load
     steamclient_free_path( params.pchURL );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize_params params =
     {
@@ -1759,7 +1759,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseDoubleClick( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove_params params =
     {
@@ -1772,7 +1772,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseMove( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t nDelta)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel_params params =
     {
@@ -1784,7 +1784,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_MouseWheel( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown_params params =
     {
@@ -1797,7 +1797,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyD
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyDown( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp_params params =
     {
@@ -1810,7 +1810,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyU
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyUp( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t cUnicodeChar, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar_params params =
     {
@@ -1823,7 +1823,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_KeyChar( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll_params params =
     {
@@ -1835,7 +1835,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetH
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetHorizontalScroll( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll_params params =
     {
@@ -1917,7 +1917,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Stop
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_StopFind( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition_params params =
     {
@@ -1947,7 +1947,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int32_t nPointX, int32_t nPointY)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor_params params =
     {
@@ -2185,7 +2185,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Load
     steamclient_free_path( params.pchURL );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t unWidth, uint32_t unHeight)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize_params params =
     {
@@ -2303,7 +2303,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleClick( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove_params params =
     {
@@ -2316,7 +2316,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseMove( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t nDelta)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel_params params =
     {
@@ -2328,7 +2328,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Mous
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseWheel( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers, bool bIsSystemKey)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers, bool bIsSystemKey)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown_params params =
     {
@@ -2342,7 +2342,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyD
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nNativeKeyCode, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp_params params =
     {
@@ -2355,7 +2355,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyU
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, uint32_t eHTMLKeyModifiers)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t cUnicodeChar, uint32_t eHTMLKeyModifiers)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar_params params =
     {
@@ -2368,7 +2368,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll_params params =
     {
@@ -2380,7 +2380,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetH
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetHorizontalScroll( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetVerticalScroll(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, uint32_t nAbsolutePixelScroll)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetVerticalScroll_params params =
     {
@@ -2462,7 +2462,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Stop
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_StopFind( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GetLinkAtPosition(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, int32_t x, int32_t y)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_GetLinkAtPosition_params params =
     {
@@ -2492,7 +2492,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetC
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetCookie( &params );
 }
 
-void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int nPointX, int nPointY)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor(struct w_steam_iface *_this, HHTMLBrowser unBrowserHandle, float flZoom, int32_t nPointX, int32_t nPointY)
 {
     struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetPageScaleFactor_params params =
     {

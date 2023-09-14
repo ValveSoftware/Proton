@@ -4,17 +4,17 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite_
     bool _ret;
     const char *pchFile;
     const void *pvData;
-    int32 cubData;
+    int32_t cubData;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWrite_params *params );
 
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
     const char *pchFile;
     void *pvData;
-    int32 cubDataToRead;
+    int32_t cubDataToRead;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileRead_params *params );
 
@@ -65,7 +65,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteS
     bool _ret;
     UGCFileWriteStreamHandle_t writeHandle;
     const void *pvData;
-    int32 cubData;
+    int32_t cubData;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileWriteStreamWriteChunk_params *params );
 
@@ -104,7 +104,7 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_FileP
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileSize_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
     const char *pchFile;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileSize( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileSize_params *params );
@@ -112,7 +112,7 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFi
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileTimestamp_params
 {
     void *linux_side;
-    int64 _ret;
+    int64_t _ret;
     const char *pchFile;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileTimestamp( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileTimestamp_params *params );
@@ -128,7 +128,7 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetSy
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileCount_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileCount( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileCount_params *params );
 
@@ -136,8 +136,8 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileNam
 {
     void *linux_side;
     const char *_ret;
-    int iFile;
-    int32 *pnFileSizeInBytes;
+    int32_t iFile;
+    int32_t *pnFileSizeInBytes;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileNameAndSize( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetFileNameAndSize_params *params );
 
@@ -145,8 +145,8 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota_p
 {
     void *linux_side;
     bool _ret;
-    int32 *pnTotalBytes;
-    int32 *puAvailableBytes;
+    int32_t *pnTotalBytes;
+    int32_t *puAvailableBytes;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetQuota_params *params );
 
@@ -176,7 +176,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloa
     void *linux_side;
     SteamAPICall_t _ret;
     UGCHandle_t hContent;
-    uint32 unPriority;
+    uint32_t unPriority;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownload( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownload_params *params );
 
@@ -185,8 +185,8 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDown
     void *linux_side;
     bool _ret;
     UGCHandle_t hContent;
-    int32 *pnBytesDownloaded;
-    int32 *pnBytesExpected;
+    int32_t *pnBytesDownloaded;
+    int32_t *pnBytesExpected;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDownloadProgress_params *params );
 
@@ -197,7 +197,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDeta
     UGCHandle_t hContent;
     AppId_t *pnAppID;
     char **ppchName;
-    int32 *pnFileSizeInBytes;
+    int32_t *pnFileSizeInBytes;
     CSteamID *pSteamIDOwner;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUGCDetails_params *params );
@@ -205,18 +205,18 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetUG
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCRead_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
     UGCHandle_t hContent;
     void *pvData;
-    int32 cubDataToRead;
-    uint32 cOffset;
+    int32_t cubDataToRead;
+    uint32_t cOffset;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCRead( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCRead_params *params );
 
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetCachedUGCCount_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetCachedUGCCount( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetCachedUGCCount_params *params );
 
@@ -224,7 +224,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetCachedU
 {
     void *linux_side;
     UGCHandle_t _ret;
-    int32 iCachedContent;
+    int32_t iCachedContent;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetCachedUGCHandle( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetCachedUGCHandle_params *params );
 
@@ -318,7 +318,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetPublish
     void *linux_side;
     SteamAPICall_t _ret;
     PublishedFileId_t unPublishedFileId;
-    uint32 unMaxSecondsOld;
+    uint32_t unMaxSecondsOld;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetPublishedFileDetails( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_GetPublishedFileDetails_params *params );
 
@@ -334,7 +334,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateU
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    uint32 unStartIndex;
+    uint32_t unStartIndex;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateUserPublishedFiles( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateUserPublishedFiles_params *params );
 
@@ -350,7 +350,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateU
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    uint32 unStartIndex;
+    uint32_t unStartIndex;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateUserSubscribedFiles( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateUserSubscribedFiles_params *params );
 
@@ -401,7 +401,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateU
     void *linux_side;
     SteamAPICall_t _ret;
     CSteamID steamId;
-    uint32 unStartIndex;
+    uint32_t unStartIndex;
     SteamParamStringArray_t *pRequiredTags;
     SteamParamStringArray_t *pExcludedTags;
 };
@@ -437,7 +437,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateP
     void *linux_side;
     SteamAPICall_t _ret;
     uint32_t eAction;
-    uint32 unStartIndex;
+    uint32_t unStartIndex;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedFilesByUserAction( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumeratePublishedFilesByUserAction_params *params );
 
@@ -446,9 +446,9 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_EnumerateP
     void *linux_side;
     SteamAPICall_t _ret;
     uint32_t eEnumerationType;
-    uint32 unStartIndex;
-    uint32 unCount;
-    uint32 unDays;
+    uint32_t unStartIndex;
+    uint32_t unCount;
+    uint32_t unDays;
     SteamParamStringArray_t *pTags;
     SteamParamStringArray_t *pUserTags;
 };
@@ -460,7 +460,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloa
     SteamAPICall_t _ret;
     UGCHandle_t hContent;
     const char *pchLocation;
-    uint32 unPriority;
+    uint32_t unPriority;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation_params *params );
 

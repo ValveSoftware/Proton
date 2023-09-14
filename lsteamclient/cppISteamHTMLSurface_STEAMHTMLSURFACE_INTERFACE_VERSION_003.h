@@ -41,8 +41,8 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize_param
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 unWidth;
-    uint32 unHeight;
+    uint32_t unWidth;
+    uint32_t unHeight;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize_params *params );
 
@@ -119,8 +119,8 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove_par
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    int x;
-    int y;
+    int32_t x;
+    int32_t y;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseMove_params *params );
 
@@ -128,7 +128,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel_pa
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    int32 nDelta;
+    int32_t nDelta;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_MouseWheel_params *params );
 
@@ -136,7 +136,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown_param
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nNativeKeyCode;
+    uint32_t nNativeKeyCode;
     uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyDown_params *params );
@@ -145,7 +145,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp_params
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nNativeKeyCode;
+    uint32_t nNativeKeyCode;
     uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyUp_params *params );
@@ -154,7 +154,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar_param
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 cUnicodeChar;
+    uint32_t cUnicodeChar;
     uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_KeyChar_params *params );
@@ -163,7 +163,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontal
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nAbsolutePixelScroll;
+    uint32_t nAbsolutePixelScroll;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetHorizontalScroll_params *params );
 
@@ -171,7 +171,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalSc
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nAbsolutePixelScroll;
+    uint32_t nAbsolutePixelScroll;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll_params *params );
 
@@ -225,8 +225,8 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosi
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    int x;
-    int y;
+    int32_t x;
+    int32_t y;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition_params *params );
 
@@ -248,8 +248,8 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleF
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
     float flZoom;
-    int nPointX;
-    int nPointY;
+    int32_t nPointX;
+    int32_t nPointY;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor_params *params );
 

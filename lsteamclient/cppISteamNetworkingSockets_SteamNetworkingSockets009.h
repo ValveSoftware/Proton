@@ -3,7 +3,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP
     void *linux_side;
     HSteamListenSocket _ret;
     const SteamNetworkingIPAddr *localAddress;
-    int nOptions;
+    int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP_params *params );
@@ -13,7 +13,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress_p
     void *linux_side;
     HSteamNetConnection _ret;
     const SteamNetworkingIPAddr *address;
-    int nOptions;
+    int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress_params *params );
@@ -22,8 +22,8 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketP2
 {
     void *linux_side;
     HSteamListenSocket _ret;
-    int nLocalVirtualPort;
-    int nOptions;
+    int32_t nLocalVirtualPort;
+    int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketP2P( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketP2P_params *params );
@@ -33,8 +33,8 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P_params
     void *linux_side;
     HSteamNetConnection _ret;
     const SteamNetworkingIdentity *identityRemote;
-    int nRemoteVirtualPort;
-    int nOptions;
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P_params *params );
@@ -52,7 +52,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CloseConnection_para
     void *linux_side;
     bool _ret;
     HSteamNetConnection hPeer;
-    int nReason;
+    int32_t nReason;
     const char *pszDebug;
     bool bEnableLinger;
 };
@@ -71,14 +71,14 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionUserDat
     void *linux_side;
     bool _ret;
     HSteamNetConnection hPeer;
-    int64 nUserData;
+    int64_t nUserData;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionUserData( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionUserData_params *params );
 
 struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionUserData_params
 {
     void *linux_side;
-    int64 _ret;
+    int64_t _ret;
     HSteamNetConnection hPeer;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionUserData( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionUserData_params *params );
@@ -97,7 +97,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionName_pa
     bool _ret;
     HSteamNetConnection hPeer;
     char *pszName;
-    int nMaxLen;
+    int32_t nMaxLen;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionName( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionName_params *params );
 
@@ -107,18 +107,18 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessageToConnect
     uint32_t _ret;
     HSteamNetConnection hConn;
     const void *pData;
-    uint32 cbData;
-    int nSendFlags;
-    int64 *pOutMessageNumber;
+    uint32_t cbData;
+    int32_t nSendFlags;
+    int64_t *pOutMessageNumber;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessageToConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessageToConnection_params *params );
 
 struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages_params
 {
     void *linux_side;
-    int nMessages;
+    int32_t nMessages;
     winSteamNetworkingMessage_t_152 *const *pMessages;
-    int64 *pOutMessageNumberOrResult;
+    int64_t *pOutMessageNumberOrResult;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages_params *params );
 
@@ -133,10 +133,10 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_FlushMessagesOn
 struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     HSteamNetConnection hConn;
     winSteamNetworkingMessage_t_152 **ppOutMessages;
-    int nMaxMessages;
+    int32_t nMaxMessages;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection_params *params );
 
@@ -161,10 +161,10 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_GetQuickConnect
 struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetDetailedConnectionStatus_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     HSteamNetConnection hConn;
     char *pszBuf;
-    int cbBuf;
+    int32_t cbBuf;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_GetDetailedConnectionStatus( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetDetailedConnectionStatus_params *params );
 
@@ -239,10 +239,10 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionPo
 struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     HSteamNetPollGroup hPollGroup;
     winSteamNetworkingMessage_t_152 **ppOutMessages;
-    int nMaxMessages;
+    int32_t nMaxMessages;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup_params *params );
 
@@ -251,7 +251,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedRelayAuthTic
     void *linux_side;
     bool _ret;
     const void *pvTicket;
-    int cbTicket;
+    int32_t cbTicket;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedRelayAuthTicket( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedRelayAuthTicket_params *params );
@@ -259,9 +259,9 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedRelayAu
 struct cppISteamNetworkingSockets_SteamNetworkingSockets009_FindRelayAuthTicketForServer_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     const SteamNetworkingIdentity *identityGameServer;
-    int nRemoteVirtualPort;
+    int32_t nRemoteVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_FindRelayAuthTicketForServer( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_FindRelayAuthTicketForServer_params *params );
@@ -271,8 +271,8 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedic
     void *linux_side;
     HSteamNetConnection _ret;
     const SteamNetworkingIdentity *identityTarget;
-    int nRemoteVirtualPort;
-    int nOptions;
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedicatedServer( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedicatedServer_params *params );
@@ -280,7 +280,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHosted
 struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetHostedDedicatedServerPort_params
 {
     void *linux_side;
-    uint16 _ret;
+    uint16_t _ret;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_GetHostedDedicatedServerPort( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetHostedDedicatedServerPort_params *params );
 
@@ -303,8 +303,8 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateHostedDedicate
 {
     void *linux_side;
     HSteamListenSocket _ret;
-    int nLocalVirtualPort;
-    int nOptions;
+    int32_t nLocalVirtualPort;
+    int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateHostedDedicatedServerListenSocket( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateHostedDedicatedServerListenSocket_params *params );
@@ -314,7 +314,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetGameCoordinatorSe
     void *linux_side;
     uint32_t _ret;
     SteamDatagramGameCoordinatorServerLogin *pLoginInfo;
-    int *pcbSignedBlob;
+    int32_t *pcbSignedBlob;
     void *pBlob;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_GetGameCoordinatorServerLogin( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetGameCoordinatorServerLogin_params *params );
@@ -325,8 +325,8 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSign
     HSteamNetConnection _ret;
     void /*ISteamNetworkingConnectionSignaling*/ *pSignaling;
     const SteamNetworkingIdentity *pPeerIdentity;
-    int nRemoteVirtualPort;
-    int nOptions;
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling_params *params );
@@ -336,7 +336,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSig
     void *linux_side;
     bool _ret;
     const void *pMsg;
-    int cbMsg;
+    int32_t cbMsg;
     void /*ISteamNetworkingSignalingRecvContext*/ *pContext;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal_params *params );
@@ -345,7 +345,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetCertificateReques
 {
     void *linux_side;
     bool _ret;
-    int *pcbBlob;
+    int32_t *pcbBlob;
     void *pBlob;
     SteamNetworkingErrMsg *errMsg;
 };
@@ -356,7 +356,7 @@ struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate_param
     void *linux_side;
     bool _ret;
     const void *pCertificate;
-    int cbCertificate;
+    int32_t cbCertificate;
     SteamNetworkingErrMsg *errMsg;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate( struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate_params *params );

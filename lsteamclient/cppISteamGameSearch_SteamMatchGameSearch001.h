@@ -12,8 +12,8 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby_params
     void *linux_side;
     uint32_t _ret;
     CSteamID steamIDLobby;
-    int nPlayerMin;
-    int nPlayerMax;
+    int32_t nPlayerMin;
+    int32_t nPlayerMax;
 };
 extern void cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby( struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby_params *params );
 
@@ -21,8 +21,8 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo_params
 {
     void *linux_side;
     uint32_t _ret;
-    int nPlayerMin;
-    int nPlayerMax;
+    int32_t nPlayerMin;
+    int32_t nPlayerMax;
 };
 extern void cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo( struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo_params *params );
 
@@ -46,7 +46,7 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails_par
     uint32_t _ret;
     CSteamID steamIDHost;
     char *pchConnectionDetails;
-    int cubConnectionDetails;
+    int32_t cubConnectionDetails;
 };
 extern void cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails( struct cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails_params *params );
 
@@ -71,7 +71,7 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails_params
     void *linux_side;
     uint32_t _ret;
     const char *pchConnectionDetails;
-    int cubConnectionDetails;
+    int32_t cubConnectionDetails;
 };
 extern void cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails( struct cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails_params *params );
 
@@ -79,9 +79,9 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame_params
 {
     void *linux_side;
     uint32_t _ret;
-    int nPlayerMin;
-    int nPlayerMax;
-    int nMaxTeamSize;
+    int32_t nPlayerMin;
+    int32_t nPlayerMax;
+    int32_t nMaxTeamSize;
 };
 extern void cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame( struct cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame_params *params );
 
@@ -89,7 +89,7 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart_params
 {
     void *linux_side;
     uint32_t _ret;
-    uint64 ullUniqueGameID;
+    uint64_t ullUniqueGameID;
 };
 extern void cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart( struct cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart_params *params );
 
@@ -104,7 +104,7 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult_params
 {
     void *linux_side;
     uint32_t _ret;
-    uint64 ullUniqueGameID;
+    uint64_t ullUniqueGameID;
     CSteamID steamIDPlayer;
     uint32_t EPlayerResult;
 };
@@ -114,7 +114,7 @@ struct cppISteamGameSearch_SteamMatchGameSearch001_EndGame_params
 {
     void *linux_side;
     uint32_t _ret;
-    uint64 ullUniqueGameID;
+    uint64_t ullUniqueGameID;
 };
 extern void cppISteamGameSearch_SteamMatchGameSearch001_EndGame( struct cppISteamGameSearch_SteamMatchGameSearch001_EndGame_params *params );
 

@@ -19,7 +19,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_SendMes
 DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable, 8)
 DEFINE_THISCALL_WRAPPER(winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage, 20)
 
-uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage(struct w_steam_iface *_this, uint32 unMsgType, const void *pubData, uint32 cubData)
+uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage(struct w_steam_iface *_this, uint32_t unMsgType, const void *pubData, uint32_t cubData)
 {
     struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params params =
     {
@@ -33,7 +33,7 @@ uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_SendMessage
     return params._ret;
 }
 
-bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(struct w_steam_iface *_this, uint32 *pcubMsgSize)
+bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable(struct w_steam_iface *_this, uint32_t *pcubMsgSize)
 {
     struct cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params params =
     {
@@ -45,7 +45,7 @@ bool __thiscall winISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvaila
     return params._ret;
 }
 
-uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(struct w_steam_iface *_this, uint32 *punMsgType, void *pubDest, uint32 cubDest, uint32 *pcubMsgSize)
+uint32_t __thiscall winISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage(struct w_steam_iface *_this, uint32_t *punMsgType, void *pubDest, uint32_t cubDest, uint32_t *pcubMsgSize)
 {
     struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params params =
     {

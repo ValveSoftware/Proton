@@ -59,7 +59,7 @@ extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled( struct
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     AppId_t nAppID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime_params *params );
@@ -74,7 +74,7 @@ extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedFromFreeWe
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount_params *params );
 
@@ -82,11 +82,11 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex_params
 {
     void *linux_side;
     bool _ret;
-    int iDLC;
+    int32_t iDLC;
     AppId_t *pAppID;
     bool *pbAvailable;
     char *pchName;
-    int cchNameBufferSize;
+    int32_t cchNameBufferSize;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex_params *params );
 

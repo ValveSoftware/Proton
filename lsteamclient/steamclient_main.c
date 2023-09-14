@@ -37,7 +37,7 @@ static HANDLE callback_thread_handle;
 #define MAX_CALLBACK_QUEUE_SIZE 4
 struct callback_data *callback_queue[MAX_CALLBACK_QUEUE_SIZE];
 static unsigned int callback_queue_size;
-static BOOL callback_queue_done;
+static bool callback_queue_done;
 static pthread_mutex_t callback_queue_mutex;
 static pthread_cond_t callback_queue_callback_event;
 static pthread_cond_t callback_queue_ready_event;
@@ -49,7 +49,7 @@ static void init_ntdll_so_funcs(void)
 {
     static const WCHAR ntdllW[] = {'n','t','d','l','l','.','d','l','l',0};
     Dl_info info;
-    UINT64 unix_funcs;
+    uint64_t unix_funcs;
     unsigned int status;
     void *ntdll;
 
@@ -110,7 +110,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     return TRUE;
 }
 
-BOOL is_native_thread(void)
+bool is_native_thread(void)
 {
     if (!p_NtCurrentTeb)
         return TRUE;
@@ -148,11 +148,11 @@ void sync_environment(void)
  *  - if successful, the number of bytes written to dst, including the NULL terminator;
  *  - 0 if failed;
  *  - PATH_MAX if insufficient output buffer (TODO: should be actual required length including NULL terminator). */
-unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url)
+unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst, uint32_t dst_bytes, int is_url )
 {
     static const char file_prot[] = "file://";
     WCHAR *dosW;
-    uint32 r;
+    uint32_t r;
 
     if (!api_result)
     {
@@ -242,7 +242,7 @@ const char *steamclient_dos_to_unix_path( const char *src, int is_url )
         /* absolute path, use wine conversion */
         WCHAR srcW[PATH_MAX];
         char *unix_path;
-        uint32 r;
+        uint32_t r;
 
         r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
         if(r == 0)
@@ -333,7 +333,7 @@ void steamclient_free_path_array( const char **path_array )
 
 static BYTE *alloc_start, *alloc_end;
 
-static BOOL allocated_from_steamclient_dll( void *ptr )
+static bool allocated_from_steamclient_dll( void *ptr )
 {
     return (BYTE *)ptr >= alloc_start && (BYTE *)ptr < alloc_end;
 }
@@ -504,135 +504,182 @@ void *alloc_vtable(void *vtable, unsigned int method_count, const char *iface_ve
 }
 
 #ifdef __linux__
-static const uint32 vk_to_xkeysym[0xFF] = {
-    0, /* 0x0  Undefined */
-    0, /* VK_LBUTTON */
-    0, /* VK_RBUTTON */
-    XK_Cancel, /* VK_CANCEL */
-    0, /* VK_MBUTTON */
-    0, /* VK_XBUTTON1 */
-    0, /* VK_XBUTTON2 */
-    0, /* 0x07 Undefined */
+static const uint32_t vk_to_xkeysym[0xFF] =
+{
+    0,            /* 0x0  Undefined */
+    0,            /* VK_LBUTTON */
+    0,            /* VK_RBUTTON */
+    XK_Cancel,    /* VK_CANCEL */
+    0,            /* VK_MBUTTON */
+    0,            /* VK_XBUTTON1 */
+    0,            /* VK_XBUTTON2 */
+    0,            /* 0x07 Undefined */
     XK_BackSpace, /* VK_BACK */
-    XK_Tab, /* VK_TAB */
-    0, /* 0x0A-0x0B  Undefined */
+    XK_Tab,       /* VK_TAB */
+    0,            /* 0x0A-0x0B  Undefined */
     0,
-    XK_Clear, /* VK_CLEAR */
+    XK_Clear,  /* VK_CLEAR */
     XK_Return, /* VK_RETURN */
-    0, /* 0x0E-0x0F  Undefined */
+    0,         /* 0x0E-0x0F  Undefined */
     0,
-    XK_Shift_L, /* VK_SHIFT */
-    XK_Control_L, /* VK_CONTROL */
-    XK_Alt_L, /* VK_MENU */
-    XK_Pause, /* VK_PAUSE */
-    XK_Caps_Lock, /* VK_CAPITAL */
-    0, /* VK_KANA */
-    0, /* 0x16  Undefined */
-    0, /* VK_JUNJA */
-    0, /* VK_FINAL */
-    0, /* VK_HANJA */
-    0, /* 0x1A  Undefined */
-    XK_Escape, /* VK_ESCAPE */
+    XK_Shift_L,     /* VK_SHIFT */
+    XK_Control_L,   /* VK_CONTROL */
+    XK_Alt_L,       /* VK_MENU */
+    XK_Pause,       /* VK_PAUSE */
+    XK_Caps_Lock,   /* VK_CAPITAL */
+    0,              /* VK_KANA */
+    0,              /* 0x16  Undefined */
+    0,              /* VK_JUNJA */
+    0,              /* VK_FINAL */
+    0,              /* VK_HANJA */
+    0,              /* 0x1A  Undefined */
+    XK_Escape,      /* VK_ESCAPE */
     XK_Henkan_Mode, /* VK_CONVERT */
-    XK_Muhenkan, /* VK_NONCONVERT */
-    0, /* VK_ACCEPT */
-    0, /* VK_MODECHANGE */
-    ' ', /* VK_SPACE */
-    XK_Prior, /* VK_PRIOR */
-    XK_Next, /* VK_NEXT */
-    XK_End, /* VK_END */
-    XK_Home, /* VK_HOME */
-    XK_Left, /* VK_LEFT */
-    XK_Up, /* VK_UP */
-    XK_Right, /* VK_RIGHT */
-    XK_Down, /* VK_DOWN */
-    XK_Select, /* VK_SELECT */
-    XK_Print, /* VK_PRINT */
-    XK_Execute, /* VK_EXECUTE */
-    XK_Print, /* VK_SNAPSHOT */
-    XK_Insert, /* VK_INSERT */
-    XK_Delete, /* VK_DELETE */
-    XK_Help, /* VK_HELP */
+    XK_Muhenkan,    /* VK_NONCONVERT */
+    0,              /* VK_ACCEPT */
+    0,              /* VK_MODECHANGE */
+    ' ',            /* VK_SPACE */
+    XK_Prior,       /* VK_PRIOR */
+    XK_Next,        /* VK_NEXT */
+    XK_End,         /* VK_END */
+    XK_Home,        /* VK_HOME */
+    XK_Left,        /* VK_LEFT */
+    XK_Up,          /* VK_UP */
+    XK_Right,       /* VK_RIGHT */
+    XK_Down,        /* VK_DOWN */
+    XK_Select,      /* VK_SELECT */
+    XK_Print,       /* VK_PRINT */
+    XK_Execute,     /* VK_EXECUTE */
+    XK_Print,       /* VK_SNAPSHOT */
+    XK_Insert,      /* VK_INSERT */
+    XK_Delete,      /* VK_DELETE */
+    XK_Help,        /* VK_HELP */
 
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    0, 0, 0, 0, 0, 0, 0, /* 0x3A-0x40  Undefined */
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-    'U', 'V', 'W', 'X', 'Y', 'Z',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0, /* 0x3A-0x40  Undefined */
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
 
-    XK_Super_L, /* VK_LWIN */
-    XK_Super_R, /* VK_RWIN */
-    XK_Menu, /* VK_APPS */
-    0, /* 0x5E  Unassigned */
-    0, /* VK_SLEEP */
-    XK_KP_0, /* VK_NUMPAD0 */
-    XK_KP_1, /* VK_NUMPAD1 */
-    XK_KP_2, /* VK_NUMPAD2 */
-    XK_KP_3, /* VK_NUMPAD3 */
-    XK_KP_4, /* VK_NUMPAD4 */
-    XK_KP_5, /* VK_NUMPAD5 */
-    XK_KP_6, /* VK_NUMPAD6 */
-    XK_KP_7, /* VK_NUMPAD7 */
-    XK_KP_8, /* VK_NUMPAD8 */
-    XK_KP_9, /* VK_NUMPAD9 */
-    XK_KP_Multiply, /* VK_MULTIPLY */
-    XK_KP_Add, /* VK_ADD */
+    XK_Super_L,      /* VK_LWIN */
+    XK_Super_R,      /* VK_RWIN */
+    XK_Menu,         /* VK_APPS */
+    0,               /* 0x5E  Unassigned */
+    0,               /* VK_SLEEP */
+    XK_KP_0,         /* VK_NUMPAD0 */
+    XK_KP_1,         /* VK_NUMPAD1 */
+    XK_KP_2,         /* VK_NUMPAD2 */
+    XK_KP_3,         /* VK_NUMPAD3 */
+    XK_KP_4,         /* VK_NUMPAD4 */
+    XK_KP_5,         /* VK_NUMPAD5 */
+    XK_KP_6,         /* VK_NUMPAD6 */
+    XK_KP_7,         /* VK_NUMPAD7 */
+    XK_KP_8,         /* VK_NUMPAD8 */
+    XK_KP_9,         /* VK_NUMPAD9 */
+    XK_KP_Multiply,  /* VK_MULTIPLY */
+    XK_KP_Add,       /* VK_ADD */
     XK_KP_Separator, /* VK_SEPARATOR */
-    XK_KP_Subtract, /* VK_SUBTRACT */
-    XK_KP_Decimal, /* VK_DECIMAL */
-    XK_KP_Divide, /* VK_DIVIDE */
-    XK_F1, /* VK_F1 */
-    XK_F2, /* VK_F2 */
-    XK_F3, /* VK_F3 */
-    XK_F4, /* VK_F4 */
-    XK_F5, /* VK_F5 */
-    XK_F6, /* VK_F6 */
-    XK_F7, /* VK_F7 */
-    XK_F8, /* VK_F8 */
-    XK_F9, /* VK_F9 */
-    XK_F10, /* VK_F10 */
-    XK_F11, /* VK_F11 */
-    XK_F12, /* VK_F12 */
-    XK_F13, /* VK_F13 */
-    XK_F14, /* VK_F14 */
-    XK_F15, /* VK_F15 */
-    XK_F16, /* VK_F16 */
-    XK_F17, /* VK_F17 */
-    XK_F18, /* VK_F18 */
-    XK_F19, /* VK_F19 */
-    XK_F20, /* VK_F20 */
-    XK_F21, /* VK_F21 */
-    XK_F22, /* VK_F22 */
-    XK_F23, /* VK_F23 */
-    XK_F24, /* VK_F24 */
-    0, /* VK_NAVIGATION_VIEW */
-    0, /* VK_NAVIGATION_MENU */
-    0, /* VK_NAVIGATION_UP */
-    0, /* VK_NAVIGATION_DOWN */
-    0, /* VK_NAVIGATION_LEFT */
-    0, /* VK_NAVIGATION_RIGHT */
-    0, /* VK_NAVIGATION_ACCEPT */
-    0, /* VK_NAVIGATION_CANCEL */
-    XK_Num_Lock, /* VK_NUMLOCK */
-    XK_Scroll_Lock, /* VK_SCROLL */
-    XK_KP_Equal, /* VK_OEM_NEC_EQUAL */
-    0, /* VK_OEM_FJ_JISHO */
-    0, /* VK_OEM_FJ_MASSHOU */
-    0, /* VK_OEM_FJ_TOUROKU */
-    0, /* VK_OEM_FJ_LOYA */
-    0, /* VK_OEM_FJ_ROYA */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x97-0x9F  Unassigned */
-    XK_Shift_L, /* VK_LSHIFT */
-    XK_Shift_R, /* VK_RSHIFT */
+    XK_KP_Subtract,  /* VK_SUBTRACT */
+    XK_KP_Decimal,   /* VK_DECIMAL */
+    XK_KP_Divide,    /* VK_DIVIDE */
+    XK_F1,           /* VK_F1 */
+    XK_F2,           /* VK_F2 */
+    XK_F3,           /* VK_F3 */
+    XK_F4,           /* VK_F4 */
+    XK_F5,           /* VK_F5 */
+    XK_F6,           /* VK_F6 */
+    XK_F7,           /* VK_F7 */
+    XK_F8,           /* VK_F8 */
+    XK_F9,           /* VK_F9 */
+    XK_F10,          /* VK_F10 */
+    XK_F11,          /* VK_F11 */
+    XK_F12,          /* VK_F12 */
+    XK_F13,          /* VK_F13 */
+    XK_F14,          /* VK_F14 */
+    XK_F15,          /* VK_F15 */
+    XK_F16,          /* VK_F16 */
+    XK_F17,          /* VK_F17 */
+    XK_F18,          /* VK_F18 */
+    XK_F19,          /* VK_F19 */
+    XK_F20,          /* VK_F20 */
+    XK_F21,          /* VK_F21 */
+    XK_F22,          /* VK_F22 */
+    XK_F23,          /* VK_F23 */
+    XK_F24,          /* VK_F24 */
+    0,               /* VK_NAVIGATION_VIEW */
+    0,               /* VK_NAVIGATION_MENU */
+    0,               /* VK_NAVIGATION_UP */
+    0,               /* VK_NAVIGATION_DOWN */
+    0,               /* VK_NAVIGATION_LEFT */
+    0,               /* VK_NAVIGATION_RIGHT */
+    0,               /* VK_NAVIGATION_ACCEPT */
+    0,               /* VK_NAVIGATION_CANCEL */
+    XK_Num_Lock,     /* VK_NUMLOCK */
+    XK_Scroll_Lock,  /* VK_SCROLL */
+    XK_KP_Equal,     /* VK_OEM_NEC_EQUAL */
+    0,               /* VK_OEM_FJ_JISHO */
+    0,               /* VK_OEM_FJ_MASSHOU */
+    0,               /* VK_OEM_FJ_TOUROKU */
+    0,               /* VK_OEM_FJ_LOYA */
+    0,               /* VK_OEM_FJ_ROYA */
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,            /* 0x97-0x9F  Unassigned */
+    XK_Shift_L,   /* VK_LSHIFT */
+    XK_Shift_R,   /* VK_RSHIFT */
     XK_Control_L, /* VK_LCONTROL */
     XK_Control_R, /* VK_RCONTROL */
-    XK_Alt_L, /* VK_LMENU */
-    XK_Alt_R, /* VK_RMENU */
+    XK_Alt_L,     /* VK_LMENU */
+    XK_Alt_R,     /* VK_RMENU */
 
     /* below are OEM, browser keys, etc */
 };
 
-uint32 manual_convert_nNativeKeyCode(uint32 win_vk)
+uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk )
 {
     if(win_vk < sizeof(vk_to_xkeysym) / sizeof(*vk_to_xkeysym))
         return vk_to_xkeysym[win_vk];
@@ -733,9 +780,9 @@ void execute_callback(struct callback_data *cb_data)
     pthread_mutex_unlock(&callback_queue_mutex);
 }
 
-static BOOL get_next_callback(struct callback_data *cb_data, UINT64 *cookie)
+static bool get_next_callback( struct callback_data *cb_data, uint64_t *cookie )
 {
-    BOOL ret;
+    bool ret;
 
     pthread_mutex_lock(&callback_queue_mutex);
     while (!callback_queue_done && !callback_queue_size)
@@ -745,7 +792,7 @@ static BOOL get_next_callback(struct callback_data *cb_data, UINT64 *cookie)
     {
         assert(callback_queue_size);
         --callback_queue_size;
-        *cookie = (UINT64)(ULONG_PTR)callback_queue[callback_queue_size];
+        *cookie = (uint64_t)(ULONG_PTR)callback_queue[callback_queue_size];
         *cb_data = *callback_queue[callback_queue_size];
     }
     pthread_cond_broadcast(&callback_queue_ready_event);
@@ -753,7 +800,7 @@ static BOOL get_next_callback(struct callback_data *cb_data, UINT64 *cookie)
     return ret;
 }
 
-static void callback_complete(UINT64 cookie)
+static void callback_complete( uint64_t cookie )
 {
     struct callback_data *cb_data = (struct callback_data *)(ULONG_PTR)cookie;
 
@@ -784,7 +831,7 @@ typedef void (CDECL *win_SteamAPIWarningMessageHook_t)(int, const char *pszMsg);
 static DWORD WINAPI callback_thread(void *dummy)
 {
     struct callback_data cb_data;
-    UINT64 cookie;
+    uint64_t cookie;
 
     while (get_next_callback( &cb_data, &cookie))
     {
@@ -823,7 +870,7 @@ static DWORD WINAPI callback_thread(void *dummy)
 
 static void *steamclient_lib;
 static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
-static bool (*steamclient_BGetCallback)(HSteamPipe a, CallbackMsg_t *b, int32 *c);
+static bool (*steamclient_BGetCallback)( HSteamPipe a, CallbackMsg_t *b, int32_t *c );
 static bool (*steamclient_GetAPICallResult)(HSteamPipe, SteamAPICall_t, void *, int, int, bool *);
 static bool (*steamclient_FreeLastCallback)(HSteamPipe);
 static void (*steamclient_ReleaseThreadLocalMemory)(int);
@@ -934,14 +981,14 @@ struct winCallbackMsg_t
 {
     HSteamUser m_hSteamUser;
     int m_iCallback;
-    uint8 *m_pubParam;
+    uint8_t *m_pubParam;
     int m_cubParam;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 
 static void *last_cb = NULL;
 
-bool CDECL Steam_BGetCallback(HSteamPipe pipe, struct winCallbackMsg_t *win_msg, int32 *ignored)
+bool CDECL Steam_BGetCallback( HSteamPipe pipe, struct winCallbackMsg_t *win_msg, int32_t *ignored )
 {
     bool ret;
     CallbackMsg_t lin_msg;
@@ -955,13 +1002,13 @@ next_event:
     ret = steamclient_BGetCallback(pipe, &lin_msg, ignored);
 
     if(ret){
-        BOOL need_free = TRUE;
+        bool need_free = TRUE;
         win_msg->m_hSteamUser = lin_msg.m_hSteamUser;
         win_msg->m_iCallback = lin_msg.m_iCallback;
 
         if (win_msg->m_iCallback == 0x14b) /* GameOverlayActivated_t::k_iCallback */
         {
-            uint8 activated = *(uint8 *)lin_msg.m_pubParam;
+            uint8_t activated = *(uint8_t *)lin_msg.m_pubParam;
             FIXME("HACK: Steam overlay %sactivated, %sabling all input events.\n", activated ? "" : "de", activated ? "dis" : "en");
             if (activated)
             {
@@ -1070,17 +1117,17 @@ void CDECL Steam_ReleaseThreadLocalMemory(int bThreadExit)
     steamclient_ReleaseThreadLocalMemory(bThreadExit);
 }
 
-void CDECL Breakpad_SteamMiniDumpInit(uint32_t a, const char *b, const char *c)
+void CDECL Breakpad_SteamMiniDumpInit( uint32_t a, const char *b, const char *c )
 {
     TRACE("\n");
 }
 
-void CDECL Breakpad_SteamSetAppID(uint32_t appid)
+void CDECL Breakpad_SteamSetAppID( uint32_t appid )
 {
     TRACE("\n");
 }
 
-int CDECL Breakpad_SteamSetSteamID(uint64_t steamid)
+int CDECL Breakpad_SteamSetSteamID( uint64_t steamid )
 {
     TRACE("\n");
     return 1;

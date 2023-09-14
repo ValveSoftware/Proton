@@ -87,7 +87,7 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages( struct c
         for (i = 0; i < params->nMessages && i < MAX_SEND_MESSAGES; ++i)
             lin_msgs[i] = (SteamNetworkingMessage_t *)network_message_win_to_lin( params->pMessages[i] );
 
-        iface->SendMessages( i, lin_msgs, params->pOutMessageNumberOrResult );
+        iface->SendMessages( i, lin_msgs, (int64 *)params->pOutMessageNumberOrResult );
 
         params->nMessages -= i;
         params->pMessages += i;

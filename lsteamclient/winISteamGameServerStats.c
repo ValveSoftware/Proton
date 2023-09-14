@@ -38,7 +38,7 @@ SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32 *pData)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t *pData)
 {
     struct cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_params params =
     {
@@ -80,7 +80,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_GetUserAchievem
     return params._ret;
 }
 
-bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32 nData)
+bool __thiscall winISteamGameServerStats_SteamGameServerStats001_SetUserStat(struct w_steam_iface *_this, CSteamID steamIDUser, const char *pchName, int32_t nData)
 {
     struct cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_params params =
     {

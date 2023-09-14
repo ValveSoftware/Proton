@@ -8,7 +8,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest_para
     uint32_t eSortOrder;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
-    uint32 unPage;
+    uint32_t unPage;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest_params *params );
 
@@ -20,7 +20,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryAllUGCRequest_param
     uint32_t eMatchingeMatchingUGCTypeFileType;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
-    uint32 unPage;
+    uint32_t unPage;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryAllUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryAllUGCRequest_params *params );
 
@@ -37,7 +37,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     winSteamUGCDetails_t_130 *pDetails;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult_params *params );
@@ -91,7 +91,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 unMaxAgeSeconds;
+    uint32_t unMaxAgeSeconds;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse_params *params );
 
@@ -127,7 +127,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 unDays;
+    uint32_t unDays;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays_params *params );
 
@@ -136,7 +136,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_RequestUGCDetails_params
     void *linux_side;
     SteamAPICall_t _ret;
     PublishedFileId_t nPublishedFileID;
-    uint32 unMaxAgeSeconds;
+    uint32_t unMaxAgeSeconds;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_RequestUGCDetails( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_RequestUGCDetails_params *params );
 
@@ -226,8 +226,8 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateProgress_params
     void *linux_side;
     uint32_t _ret;
     UGCUpdateHandle_t handle;
-    uint64 *punBytesProcessed;
-    uint64 *punBytesTotal;
+    uint64_t *punBytesProcessed;
+    uint64_t *punBytesTotal;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateProgress( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateProgress_params *params );
 
@@ -250,16 +250,16 @@ extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_UnsubscribeItem( struct c
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetNumSubscribedItems_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetNumSubscribedItems( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetNumSubscribedItems_params *params );
 
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItems_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     PublishedFileId_t *pvecPublishedFileID;
-    uint32 cMaxEntries;
+    uint32_t cMaxEntries;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItems( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItems_params *params );
 
@@ -268,9 +268,9 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo_params
     void *linux_side;
     bool _ret;
     PublishedFileId_t nPublishedFileID;
-    uint64 *punSizeOnDisk;
+    uint64_t *punSizeOnDisk;
     char *pchFolder;
-    uint32 cchFolderSize;
+    uint32_t cchFolderSize;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo_params *params );
 
@@ -281,8 +281,8 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo_params
     PublishedFileId_t nPublishedFileID;
     bool *pbNeedsUpdate;
     bool *pbIsDownloading;
-    uint64 *punBytesDownloaded;
-    uint64 *punBytesTotal;
+    uint64_t *punBytesDownloaded;
+    uint64_t *punBytesTotal;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo_params *params );
 

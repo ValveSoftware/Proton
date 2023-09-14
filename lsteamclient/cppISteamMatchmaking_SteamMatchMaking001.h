@@ -1,7 +1,7 @@
 struct cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount( struct cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount_params *params );
 
@@ -9,24 +9,24 @@ struct cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame_params
 {
     void *linux_side;
     bool _ret;
-    int iGame;
-    uint32 *pnAppID;
-    uint32 *pnIP;
-    uint16 *pnConnPort;
-    uint32 *punFlags;
-    uint32 *pRTime32LastPlayedOnServer;
+    int32_t iGame;
+    uint32_t *pnAppID;
+    uint32_t *pnIP;
+    uint16_t *pnConnPort;
+    uint32_t *punFlags;
+    uint32_t *pRTime32LastPlayedOnServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame( struct cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame_params
 {
     void *linux_side;
-    int _ret;
-    uint32 nAppID;
-    uint32 nIP;
-    uint16 nConnPort;
-    uint32 unFlags;
-    uint32 rTime32LastPlayedOnServer;
+    int32_t _ret;
+    uint32_t nAppID;
+    uint32_t nIP;
+    uint16_t nConnPort;
+    uint32_t unFlags;
+    uint32_t rTime32LastPlayedOnServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame( struct cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame_params *params );
 
@@ -34,10 +34,10 @@ struct cppISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame_params
 {
     void *linux_side;
     bool _ret;
-    uint32 nAppID;
-    uint32 nIP;
-    uint16 nConnPort;
-    uint32 unFlags;
+    uint32_t nAppID;
+    uint32_t nIP;
+    uint16_t nConnPort;
+    uint32_t unFlags;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame( struct cppISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame_params *params );
 
@@ -45,26 +45,26 @@ struct cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame2_params
 {
     void *linux_side;
     bool _ret;
-    int iGame;
-    uint32 *pnAppID;
-    uint32 *pnIP;
-    uint16 *pnConnPort;
-    uint16 *pnQueryPort;
-    uint32 *punFlags;
-    uint32 *pRTime32LastPlayedOnServer;
+    int32_t iGame;
+    uint32_t *pnAppID;
+    uint32_t *pnIP;
+    uint16_t *pnConnPort;
+    uint16_t *pnQueryPort;
+    uint32_t *punFlags;
+    uint32_t *pRTime32LastPlayedOnServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame2( struct cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame2_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2_params
 {
     void *linux_side;
-    int _ret;
-    uint32 nAppID;
-    uint32 nIP;
-    uint16 nConnPort;
-    uint16 nQueryPort;
-    uint32 unFlags;
-    uint32 rTime32LastPlayedOnServer;
+    int32_t _ret;
+    uint32_t nAppID;
+    uint32_t nIP;
+    uint16_t nConnPort;
+    uint16_t nQueryPort;
+    uint32_t unFlags;
+    uint32_t rTime32LastPlayedOnServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2( struct cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2_params *params );
 
@@ -72,20 +72,20 @@ struct cppISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame2_params
 {
     void *linux_side;
     bool _ret;
-    uint32 nAppID;
-    uint32 nIP;
-    uint16 nConnPort;
-    uint16 nQueryPort;
-    uint32 unFlags;
+    uint32_t nAppID;
+    uint32_t nIP;
+    uint16_t nConnPort;
+    uint16_t nQueryPort;
+    uint32_t unFlags;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame2( struct cppISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame2_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking001_RequestLobbyList_params
 {
     void *linux_side;
-    uint64 ulGameID;
+    uint64_t ulGameID;
     MatchMakingKeyValuePair_t *pFilters;
-    uint32 nFilters;
+    uint32_t nFilters;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_RequestLobbyList( struct cppISteamMatchmaking_SteamMatchMaking001_RequestLobbyList_params *params );
 
@@ -93,14 +93,14 @@ struct cppISteamMatchmaking_SteamMatchMaking001_GetLobbyByIndex_params
 {
     void *linux_side;
     CSteamID *_ret;
-    int iLobby;
+    int32_t iLobby;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_GetLobbyByIndex( struct cppISteamMatchmaking_SteamMatchMaking001_GetLobbyByIndex_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking001_CreateLobby_params
 {
     void *linux_side;
-    uint64 ulGameID;
+    uint64_t ulGameID;
     bool bPrivate;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_CreateLobby( struct cppISteamMatchmaking_SteamMatchMaking001_CreateLobby_params *params );
@@ -131,7 +131,7 @@ extern void cppISteamMatchmaking_SteamMatchMaking001_InviteUserToLobby( struct c
 struct cppISteamMatchmaking_SteamMatchMaking001_GetNumLobbyMembers_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDLobby;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_GetNumLobbyMembers( struct cppISteamMatchmaking_SteamMatchMaking001_GetNumLobbyMembers_params *params );
@@ -141,7 +141,7 @@ struct cppISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberByIndex_params
     void *linux_side;
     CSteamID *_ret;
     CSteamID steamIDLobby;
-    int iMember;
+    int32_t iMember;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberByIndex( struct cppISteamMatchmaking_SteamMatchMaking001_GetLobbyMemberByIndex_params *params );
 
@@ -190,19 +190,19 @@ struct cppISteamMatchmaking_SteamMatchMaking001_SendLobbyChatMsg_params
     bool _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
-    int cubMsgBody;
+    int32_t cubMsgBody;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_SendLobbyChatMsg( struct cppISteamMatchmaking_SteamMatchMaking001_SendLobbyChatMsg_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDLobby;
-    int iChatID;
+    int32_t iChatID;
     CSteamID *pSteamIDUser;
     void *pvData;
-    int cubData;
+    int32_t cubData;
     uint32_t *peChatEntryType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry( struct cppISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry_params *params );

@@ -1,7 +1,7 @@
 struct cppISteamParties_SteamParties002_GetNumActiveBeacons_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamParties_SteamParties002_GetNumActiveBeacons( struct cppISteamParties_SteamParties002_GetNumActiveBeacons_params *params );
 
@@ -9,7 +9,7 @@ struct cppISteamParties_SteamParties002_GetBeaconByIndex_params
 {
     void *linux_side;
     PartyBeaconID_t _ret;
-    uint32 unIndex;
+    uint32_t unIndex;
 };
 extern void cppISteamParties_SteamParties002_GetBeaconByIndex( struct cppISteamParties_SteamParties002_GetBeaconByIndex_params *params );
 
@@ -21,7 +21,7 @@ struct cppISteamParties_SteamParties002_GetBeaconDetails_params
     CSteamID *pSteamIDBeaconOwner;
     winSteamPartyBeaconLocation_t_158 *pLocation;
     char *pchMetadata;
-    int cchMetadata;
+    int32_t cchMetadata;
 };
 extern void cppISteamParties_SteamParties002_GetBeaconDetails( struct cppISteamParties_SteamParties002_GetBeaconDetails_params *params );
 
@@ -37,7 +37,7 @@ struct cppISteamParties_SteamParties002_GetNumAvailableBeaconLocations_params
 {
     void *linux_side;
     bool _ret;
-    uint32 *puNumLocations;
+    uint32_t *puNumLocations;
 };
 extern void cppISteamParties_SteamParties002_GetNumAvailableBeaconLocations( struct cppISteamParties_SteamParties002_GetNumAvailableBeaconLocations_params *params );
 
@@ -46,7 +46,7 @@ struct cppISteamParties_SteamParties002_GetAvailableBeaconLocations_params
     void *linux_side;
     bool _ret;
     winSteamPartyBeaconLocation_t_158 *pLocationList;
-    uint32 uMaxNumLocations;
+    uint32_t uMaxNumLocations;
 };
 extern void cppISteamParties_SteamParties002_GetAvailableBeaconLocations( struct cppISteamParties_SteamParties002_GetAvailableBeaconLocations_params *params );
 
@@ -54,7 +54,7 @@ struct cppISteamParties_SteamParties002_CreateBeacon_params
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    uint32 unOpenSlots;
+    uint32_t unOpenSlots;
     winSteamPartyBeaconLocation_t_158 *pBeaconLocation;
     const char *pchConnectString;
     const char *pchMetadata;
@@ -82,7 +82,7 @@ struct cppISteamParties_SteamParties002_ChangeNumOpenSlots_params
     void *linux_side;
     SteamAPICall_t _ret;
     PartyBeaconID_t ulBeacon;
-    uint32 unOpenSlots;
+    uint32_t unOpenSlots;
 };
 extern void cppISteamParties_SteamParties002_ChangeNumOpenSlots( struct cppISteamParties_SteamParties002_ChangeNumOpenSlots_params *params );
 
@@ -101,7 +101,7 @@ struct cppISteamParties_SteamParties002_GetBeaconLocationData_params
     winSteamPartyBeaconLocation_t_158 BeaconLocation;
     uint32_t eData;
     char *pchDataStringOut;
-    int cchDataStringOut;
+    int32_t cchDataStringOut;
 };
 extern void cppISteamParties_SteamParties002_GetBeaconLocationData( struct cppISteamParties_SteamParties002_GetBeaconLocationData_params *params );
 

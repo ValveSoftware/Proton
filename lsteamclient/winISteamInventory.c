@@ -52,7 +52,7 @@ uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultSt
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, SteamItemDetails_t *pOutItemsArray, uint32 *punOutItemsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, SteamItemDetails_t *pOutItemsArray, uint32_t *punOutItemsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems_params params =
     {
@@ -66,7 +66,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems(
     return params._ret;
 }
 
-uint32 __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultTimestamp(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultTimestamp(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultTimestamp_params params =
     {
@@ -114,7 +114,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetAllItems(str
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemsByID(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemInstanceID_t *pInstanceIDs, uint32 unCountInstanceIDs)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemsByID(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemInstanceID_t *pInstanceIDs, uint32_t unCountInstanceIDs)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemsByID_params params =
     {
@@ -128,7 +128,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemsByID(st
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, void *pOutBuffer, uint32 *punOutBufferSize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, void *pOutBuffer, uint32_t *punOutBufferSize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult_params params =
     {
@@ -142,7 +142,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResult(struct w_steam_iface *_this, SteamInventoryResult_t *pOutResultHandle, const void *pBuffer, uint32 unBufferSize, bool bRESERVED_MUST_BE_FALSE)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResult(struct w_steam_iface *_this, SteamInventoryResult_t *pOutResultHandle, const void *pBuffer, uint32_t unBufferSize, bool bRESERVED_MUST_BE_FALSE)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResult_params params =
     {
@@ -157,7 +157,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResu
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GenerateItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, const uint32 *punArrayQuantity, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GenerateItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, const uint32_t *punArrayQuantity, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GenerateItems_params params =
     {
@@ -197,7 +197,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItem(st
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItems_params params =
     {
@@ -211,7 +211,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_AddPromoItems(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_ConsumeItem(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemConsume, uint32 unQuantity)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_ConsumeItem(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemConsume, uint32_t unQuantity)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_ConsumeItem_params params =
     {
@@ -225,7 +225,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_ConsumeItem(str
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_ExchangeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayGenerate, const uint32 *punArrayGenerateQuantity, uint32 unArrayGenerateLength, const SteamItemInstanceID_t *pArrayDestroy, const uint32 *punArrayDestroyQuantity, uint32 unArrayDestroyLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_ExchangeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayGenerate, const uint32_t *punArrayGenerateQuantity, uint32_t unArrayGenerateLength, const SteamItemInstanceID_t *pArrayDestroy, const uint32_t *punArrayDestroyQuantity, uint32_t unArrayDestroyLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_ExchangeItems_params params =
     {
@@ -243,7 +243,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_ExchangeItems(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_TransferItemQuantity(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemIdSource, uint32 unQuantity, SteamItemInstanceID_t itemIdDest)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_TransferItemQuantity(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemIdSource, uint32_t unQuantity, SteamItemInstanceID_t itemIdDest)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_TransferItemQuantity_params params =
     {
@@ -281,7 +281,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_TriggerItemDrop
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_TradeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, CSteamID steamIDTradePartner, const SteamItemInstanceID_t *pArrayGive, const uint32 *pArrayGiveQuantity, uint32 nArrayGiveLength, const SteamItemInstanceID_t *pArrayGet, const uint32 *pArrayGetQuantity, uint32 nArrayGetLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_TradeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, CSteamID steamIDTradePartner, const SteamItemInstanceID_t *pArrayGive, const uint32_t *pArrayGiveQuantity, uint32_t nArrayGiveLength, const SteamItemInstanceID_t *pArrayGet, const uint32_t *pArrayGetQuantity, uint32_t nArrayGetLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_TradeItems_params params =
     {
@@ -311,7 +311,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_LoadItemDefinit
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionIDs(struct w_steam_iface *_this, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionIDs(struct w_steam_iface *_this, SteamItemDef_t *pItemDefIDs, uint32_t *punItemDefIDsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionIDs_params params =
     {
@@ -324,7 +324,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefiniti
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionProperty(struct w_steam_iface *_this, SteamItemDef_t iDefinition, const char *pchPropertyName, char *pchValueBuffer, uint32 *punValueBufferSizeOut)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionProperty(struct w_steam_iface *_this, SteamItemDef_t iDefinition, const char *pchPropertyName, char *pchValueBuffer, uint32_t *punValueBufferSizeOut)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionProperty_params params =
     {
@@ -351,7 +351,7 @@ SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligiblePromoItemDefinitionIDs(struct w_steam_iface *_this, CSteamID steamID, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligiblePromoItemDefinitionIDs(struct w_steam_iface *_this, CSteamID steamID, SteamItemDef_t *pItemDefIDs, uint32_t *punItemDefIDsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligiblePromoItemDefinitionIDs_params params =
     {
@@ -461,7 +461,7 @@ uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultSt
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, SteamItemDetails_t *pOutItemsArray, uint32 *punOutItemsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, SteamItemDetails_t *pOutItemsArray, uint32_t *punOutItemsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems_params params =
     {
@@ -475,7 +475,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems(
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItemProperty(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, uint32 unItemIndex, const char *pchPropertyName, char *pchValueBuffer, uint32 *punValueBufferSizeOut)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItemProperty(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, uint32_t unItemIndex, const char *pchPropertyName, char *pchValueBuffer, uint32_t *punValueBufferSizeOut)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItemProperty_params params =
     {
@@ -491,7 +491,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItemPr
     return params._ret;
 }
 
-uint32 __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultTimestamp(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultTimestamp(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultTimestamp_params params =
     {
@@ -539,7 +539,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetAllItems(str
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsByID(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemInstanceID_t *pInstanceIDs, uint32 unCountInstanceIDs)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsByID(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemInstanceID_t *pInstanceIDs, uint32_t unCountInstanceIDs)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsByID_params params =
     {
@@ -553,7 +553,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsByID(st
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, void *pOutBuffer, uint32 *punOutBufferSize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, void *pOutBuffer, uint32_t *punOutBufferSize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult_params params =
     {
@@ -567,7 +567,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResult(struct w_steam_iface *_this, SteamInventoryResult_t *pOutResultHandle, const void *pBuffer, uint32 unBufferSize, bool bRESERVED_MUST_BE_FALSE)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResult(struct w_steam_iface *_this, SteamInventoryResult_t *pOutResultHandle, const void *pBuffer, uint32_t unBufferSize, bool bRESERVED_MUST_BE_FALSE)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResult_params params =
     {
@@ -582,7 +582,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResu
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GenerateItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, const uint32 *punArrayQuantity, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GenerateItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, const uint32_t *punArrayQuantity, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GenerateItems_params params =
     {
@@ -622,7 +622,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItem(st
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItems_params params =
     {
@@ -636,7 +636,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_AddPromoItems(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_ConsumeItem(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemConsume, uint32 unQuantity)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_ConsumeItem(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemConsume, uint32_t unQuantity)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_ConsumeItem_params params =
     {
@@ -650,7 +650,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_ConsumeItem(str
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_ExchangeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayGenerate, const uint32 *punArrayGenerateQuantity, uint32 unArrayGenerateLength, const SteamItemInstanceID_t *pArrayDestroy, const uint32 *punArrayDestroyQuantity, uint32 unArrayDestroyLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_ExchangeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayGenerate, const uint32_t *punArrayGenerateQuantity, uint32_t unArrayGenerateLength, const SteamItemInstanceID_t *pArrayDestroy, const uint32_t *punArrayDestroyQuantity, uint32_t unArrayDestroyLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_ExchangeItems_params params =
     {
@@ -668,7 +668,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_ExchangeItems(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_TransferItemQuantity(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemIdSource, uint32 unQuantity, SteamItemInstanceID_t itemIdDest)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_TransferItemQuantity(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemIdSource, uint32_t unQuantity, SteamItemInstanceID_t itemIdDest)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_TransferItemQuantity_params params =
     {
@@ -706,7 +706,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_TriggerItemDrop
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_TradeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, CSteamID steamIDTradePartner, const SteamItemInstanceID_t *pArrayGive, const uint32 *pArrayGiveQuantity, uint32 nArrayGiveLength, const SteamItemInstanceID_t *pArrayGet, const uint32 *pArrayGetQuantity, uint32 nArrayGetLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_TradeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, CSteamID steamIDTradePartner, const SteamItemInstanceID_t *pArrayGive, const uint32_t *pArrayGiveQuantity, uint32_t nArrayGiveLength, const SteamItemInstanceID_t *pArrayGet, const uint32_t *pArrayGetQuantity, uint32_t nArrayGetLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_TradeItems_params params =
     {
@@ -736,7 +736,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_LoadItemDefinit
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionIDs(struct w_steam_iface *_this, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionIDs(struct w_steam_iface *_this, SteamItemDef_t *pItemDefIDs, uint32_t *punItemDefIDsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionIDs_params params =
     {
@@ -749,7 +749,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefiniti
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionProperty(struct w_steam_iface *_this, SteamItemDef_t iDefinition, const char *pchPropertyName, char *pchValueBuffer, uint32 *punValueBufferSizeOut)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionProperty(struct w_steam_iface *_this, SteamItemDef_t iDefinition, const char *pchPropertyName, char *pchValueBuffer, uint32_t *punValueBufferSizeOut)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemDefinitionProperty_params params =
     {
@@ -776,7 +776,7 @@ SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetEligiblePromoItemDefinitionIDs(struct w_steam_iface *_this, CSteamID steamID, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetEligiblePromoItemDefinitionIDs(struct w_steam_iface *_this, CSteamID steamID, SteamItemDef_t *pItemDefIDs, uint32_t *punItemDefIDsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetEligiblePromoItemDefinitionIDs_params params =
     {
@@ -790,7 +790,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetEligibleProm
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_StartPurchase(struct w_steam_iface *_this, const SteamItemDef_t *pArrayItemDefs, const uint32 *punArrayQuantity, uint32 unArrayLength)
+SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_StartPurchase(struct w_steam_iface *_this, const SteamItemDef_t *pArrayItemDefs, const uint32_t *punArrayQuantity, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_StartPurchase_params params =
     {
@@ -815,7 +815,7 @@ SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_Reque
     return params._ret;
 }
 
-uint32 __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetNumItemsWithPrices(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetNumItemsWithPrices(struct w_steam_iface *_this)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetNumItemsWithPrices_params params =
     {
@@ -826,7 +826,7 @@ uint32 __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetNumItemsWi
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsWithPrices(struct w_steam_iface *_this, SteamItemDef_t *pArrayItemDefs, uint64 *pPrices, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsWithPrices(struct w_steam_iface *_this, SteamItemDef_t *pArrayItemDefs, uint64_t *pPrices, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsWithPrices_params params =
     {
@@ -840,7 +840,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemsWithPri
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemPrice(struct w_steam_iface *_this, SteamItemDef_t iDefinition, uint64 *pPrice)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemPrice(struct w_steam_iface *_this, SteamItemDef_t iDefinition, uint64_t *pPrice)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemPrice_params params =
     {
@@ -908,7 +908,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3(struct w_steam_iface *_this, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, int64 nValue)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3(struct w_steam_iface *_this, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, int64_t nValue)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3_params params =
     {
@@ -1061,7 +1061,7 @@ uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultSt
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, SteamItemDetails_t *pOutItemsArray, uint32 *punOutItemsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, SteamItemDetails_t *pOutItemsArray, uint32_t *punOutItemsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems_params params =
     {
@@ -1075,7 +1075,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItems(
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, uint32 unItemIndex, const char *pchPropertyName, char *pchValueBuffer, uint32 *punValueBufferSizeOut)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, uint32_t unItemIndex, const char *pchPropertyName, char *pchValueBuffer, uint32_t *punValueBufferSizeOut)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemProperty_params params =
     {
@@ -1091,7 +1091,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultItemPr
     return params._ret;
 }
 
-uint32 __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultTimestamp(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultTimestamp(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultTimestamp_params params =
     {
@@ -1139,7 +1139,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetAllItems(str
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemInstanceID_t *pInstanceIDs, uint32 unCountInstanceIDs)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemInstanceID_t *pInstanceIDs, uint32_t unCountInstanceIDs)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID_params params =
     {
@@ -1153,7 +1153,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsByID(st
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, void *pOutBuffer, uint32 *punOutBufferSize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle, void *pOutBuffer, uint32_t *punOutBufferSize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult_params params =
     {
@@ -1167,7 +1167,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SerializeResult
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResult(struct w_steam_iface *_this, SteamInventoryResult_t *pOutResultHandle, const void *pBuffer, uint32 unBufferSize, bool bRESERVED_MUST_BE_FALSE)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResult(struct w_steam_iface *_this, SteamInventoryResult_t *pOutResultHandle, const void *pBuffer, uint32_t unBufferSize, bool bRESERVED_MUST_BE_FALSE)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResult_params params =
     {
@@ -1182,7 +1182,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_DeserializeResu
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, const uint32 *punArrayQuantity, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, const uint32_t *punArrayQuantity, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GenerateItems_params params =
     {
@@ -1222,7 +1222,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItem(st
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayItemDefs, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems_params params =
     {
@@ -1236,7 +1236,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_AddPromoItems(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemConsume, uint32 unQuantity)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemConsume, uint32_t unQuantity)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem_params params =
     {
@@ -1250,7 +1250,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_ConsumeItem(str
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayGenerate, const uint32 *punArrayGenerateQuantity, uint32 unArrayGenerateLength, const SteamItemInstanceID_t *pArrayDestroy, const uint32 *punArrayDestroyQuantity, uint32 unArrayDestroyLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, const SteamItemDef_t *pArrayGenerate, const uint32_t *punArrayGenerateQuantity, uint32_t unArrayGenerateLength, const SteamItemInstanceID_t *pArrayDestroy, const uint32_t *punArrayDestroyQuantity, uint32_t unArrayDestroyLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems_params params =
     {
@@ -1268,7 +1268,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_ExchangeItems(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_TransferItemQuantity(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemIdSource, uint32 unQuantity, SteamItemInstanceID_t itemIdDest)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_TransferItemQuantity(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, SteamItemInstanceID_t itemIdSource, uint32_t unQuantity, SteamItemInstanceID_t itemIdDest)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TransferItemQuantity_params params =
     {
@@ -1306,7 +1306,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_TriggerItemDrop
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, CSteamID steamIDTradePartner, const SteamItemInstanceID_t *pArrayGive, const uint32 *pArrayGiveQuantity, uint32 nArrayGiveLength, const SteamItemInstanceID_t *pArrayGet, const uint32 *pArrayGetQuantity, uint32 nArrayGetLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems(struct w_steam_iface *_this, SteamInventoryResult_t *pResultHandle, CSteamID steamIDTradePartner, const SteamItemInstanceID_t *pArrayGive, const uint32_t *pArrayGiveQuantity, uint32_t nArrayGiveLength, const SteamItemInstanceID_t *pArrayGet, const uint32_t *pArrayGetQuantity, uint32_t nArrayGetLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_TradeItems_params params =
     {
@@ -1336,7 +1336,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_LoadItemDefinit
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs(struct w_steam_iface *_this, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs(struct w_steam_iface *_this, SteamItemDef_t *pItemDefIDs, uint32_t *punItemDefIDsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionIDs_params params =
     {
@@ -1349,7 +1349,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefiniti
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty(struct w_steam_iface *_this, SteamItemDef_t iDefinition, const char *pchPropertyName, char *pchValueBuffer, uint32 *punValueBufferSizeOut)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty(struct w_steam_iface *_this, SteamItemDef_t iDefinition, const char *pchPropertyName, char *pchValueBuffer, uint32_t *punValueBufferSizeOut)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemDefinitionProperty_params params =
     {
@@ -1376,7 +1376,7 @@ SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_Reque
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligiblePromoItemDefinitionIDs(struct w_steam_iface *_this, CSteamID steamID, SteamItemDef_t *pItemDefIDs, uint32 *punItemDefIDsArraySize)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligiblePromoItemDefinitionIDs(struct w_steam_iface *_this, CSteamID steamID, SteamItemDef_t *pItemDefIDs, uint32_t *punItemDefIDsArraySize)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligiblePromoItemDefinitionIDs_params params =
     {
@@ -1390,7 +1390,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetEligibleProm
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartPurchase(struct w_steam_iface *_this, const SteamItemDef_t *pArrayItemDefs, const uint32 *punArrayQuantity, uint32 unArrayLength)
+SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartPurchase(struct w_steam_iface *_this, const SteamItemDef_t *pArrayItemDefs, const uint32_t *punArrayQuantity, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_StartPurchase_params params =
     {
@@ -1415,7 +1415,7 @@ SteamAPICall_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_Reque
     return params._ret;
 }
 
-uint32 __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWithPrices(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWithPrices(struct w_steam_iface *_this)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWithPrices_params params =
     {
@@ -1426,7 +1426,7 @@ uint32 __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetNumItemsWi
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices(struct w_steam_iface *_this, SteamItemDef_t *pArrayItemDefs, uint64 *pCurrentPrices, uint64 *pBasePrices, uint32 unArrayLength)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices(struct w_steam_iface *_this, SteamItemDef_t *pArrayItemDefs, uint64_t *pCurrentPrices, uint64_t *pBasePrices, uint32_t unArrayLength)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPrices_params params =
     {
@@ -1441,7 +1441,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemsWithPri
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemPrice(struct w_steam_iface *_this, SteamItemDef_t iDefinition, uint64 *pCurrentPrice, uint64 *pBasePrice)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemPrice(struct w_steam_iface *_this, SteamItemDef_t iDefinition, uint64_t *pCurrentPrice, uint64_t *pBasePrice)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetItemPrice_params params =
     {
@@ -1510,7 +1510,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2(s
     return params._ret;
 }
 
-bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3(struct w_steam_iface *_this, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, int64 nValue)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3(struct w_steam_iface *_this, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char *pchPropertyName, int64_t nValue)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_3_params params =
     {

@@ -1,14 +1,14 @@
 struct cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive( struct cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive_params *params );
 
 struct cppISteamUtils_SteamUtils009_GetSecondsSinceComputerActive_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils009_GetSecondsSinceComputerActive( struct cppISteamUtils_SteamUtils009_GetSecondsSinceComputerActive_params *params );
 
@@ -22,7 +22,7 @@ extern void cppISteamUtils_SteamUtils009_GetConnectedUniverse( struct cppISteamU
 struct cppISteamUtils_SteamUtils009_GetServerRealTime_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils009_GetServerRealTime( struct cppISteamUtils_SteamUtils009_GetServerRealTime_params *params );
 
@@ -37,9 +37,9 @@ struct cppISteamUtils_SteamUtils009_GetImageSize_params
 {
     void *linux_side;
     bool _ret;
-    int iImage;
-    uint32 *pnWidth;
-    uint32 *pnHeight;
+    int32_t iImage;
+    uint32_t *pnWidth;
+    uint32_t *pnHeight;
 };
 extern void cppISteamUtils_SteamUtils009_GetImageSize( struct cppISteamUtils_SteamUtils009_GetImageSize_params *params );
 
@@ -47,9 +47,9 @@ struct cppISteamUtils_SteamUtils009_GetImageRGBA_params
 {
     void *linux_side;
     bool _ret;
-    int iImage;
-    uint8 *pubDest;
-    int nDestBufferSize;
+    int32_t iImage;
+    uint8_t *pubDest;
+    int32_t nDestBufferSize;
 };
 extern void cppISteamUtils_SteamUtils009_GetImageRGBA( struct cppISteamUtils_SteamUtils009_GetImageRGBA_params *params );
 
@@ -57,22 +57,22 @@ struct cppISteamUtils_SteamUtils009_GetCSERIPPort_params
 {
     void *linux_side;
     bool _ret;
-    uint32 *unIP;
-    uint16 *usPort;
+    uint32_t *unIP;
+    uint16_t *usPort;
 };
 extern void cppISteamUtils_SteamUtils009_GetCSERIPPort( struct cppISteamUtils_SteamUtils009_GetCSERIPPort_params *params );
 
 struct cppISteamUtils_SteamUtils009_GetCurrentBatteryPower_params
 {
     void *linux_side;
-    uint8 _ret;
+    uint8_t _ret;
 };
 extern void cppISteamUtils_SteamUtils009_GetCurrentBatteryPower( struct cppISteamUtils_SteamUtils009_GetCurrentBatteryPower_params *params );
 
 struct cppISteamUtils_SteamUtils009_GetAppID_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils009_GetAppID( struct cppISteamUtils_SteamUtils009_GetAppID_params *params );
 
@@ -106,8 +106,8 @@ struct cppISteamUtils_SteamUtils009_GetAPICallResult_params
     bool _ret;
     SteamAPICall_t hSteamAPICall;
     void *pCallback;
-    int cubCallback;
-    int iCallbackExpected;
+    int32_t cubCallback;
+    int32_t iCallbackExpected;
     bool *pbFailed;
 };
 extern void cppISteamUtils_SteamUtils009_GetAPICallResult( struct cppISteamUtils_SteamUtils009_GetAPICallResult_params *params );
@@ -121,7 +121,7 @@ extern void cppISteamUtils_SteamUtils009_RunFrame( struct cppISteamUtils_SteamUt
 struct cppISteamUtils_SteamUtils009_GetIPCCallCount_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils009_GetIPCCallCount( struct cppISteamUtils_SteamUtils009_GetIPCCallCount_params *params );
 
@@ -161,7 +161,7 @@ struct cppISteamUtils_SteamUtils009_ShowGamepadTextInput_params
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     const char *pchDescription;
-    uint32 unCharMax;
+    uint32_t unCharMax;
     const char *pchExistingText;
 };
 extern void cppISteamUtils_SteamUtils009_ShowGamepadTextInput( struct cppISteamUtils_SteamUtils009_ShowGamepadTextInput_params *params );
@@ -169,7 +169,7 @@ extern void cppISteamUtils_SteamUtils009_ShowGamepadTextInput( struct cppISteamU
 struct cppISteamUtils_SteamUtils009_GetEnteredGamepadTextLength_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils009_GetEnteredGamepadTextLength( struct cppISteamUtils_SteamUtils009_GetEnteredGamepadTextLength_params *params );
 
@@ -178,7 +178,7 @@ struct cppISteamUtils_SteamUtils009_GetEnteredGamepadTextInput_params
     void *linux_side;
     bool _ret;
     char *pchText;
-    uint32 cchText;
+    uint32_t cchText;
 };
 extern void cppISteamUtils_SteamUtils009_GetEnteredGamepadTextInput( struct cppISteamUtils_SteamUtils009_GetEnteredGamepadTextInput_params *params );
 
@@ -199,8 +199,8 @@ extern void cppISteamUtils_SteamUtils009_IsSteamRunningInVR( struct cppISteamUti
 struct cppISteamUtils_SteamUtils009_SetOverlayNotificationInset_params
 {
     void *linux_side;
-    int nHorizontalInset;
-    int nVerticalInset;
+    int32_t nHorizontalInset;
+    int32_t nVerticalInset;
 };
 extern void cppISteamUtils_SteamUtils009_SetOverlayNotificationInset( struct cppISteamUtils_SteamUtils009_SetOverlayNotificationInset_params *params );
 
@@ -248,9 +248,9 @@ extern void cppISteamUtils_SteamUtils009_InitFilterText( struct cppISteamUtils_S
 struct cppISteamUtils_SteamUtils009_FilterText_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     char *pchOutFilteredText;
-    uint32 nByteSizeOutFilteredText;
+    uint32_t nByteSizeOutFilteredText;
     const char *pchInputMessage;
     bool bLegalOnly;
 };

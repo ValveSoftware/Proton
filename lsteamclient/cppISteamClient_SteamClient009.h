@@ -61,8 +61,8 @@ extern void cppISteamClient_SteamClient009_GetISteamGameServer( struct cppISteam
 struct cppISteamClient_SteamClient009_SetLocalIPBinding_params
 {
     void *linux_side;
-    uint32 unIP;
-    uint16 usPort;
+    uint32_t unIP;
+    uint16_t usPort;
 };
 extern void cppISteamClient_SteamClient009_SetLocalIPBinding( struct cppISteamClient_SteamClient009_SetLocalIPBinding_params *params );
 
@@ -184,7 +184,7 @@ extern void cppISteamClient_SteamClient009_RunFrame( struct cppISteamClient_Stea
 struct cppISteamClient_SteamClient009_GetIPCCallCount_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamClient_SteamClient009_GetIPCCallCount( struct cppISteamClient_SteamClient009_GetIPCCallCount_params *params );
 

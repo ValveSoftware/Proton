@@ -35,9 +35,9 @@ struct cppISteamGameServer_SteamGameServer010_SendUserConnectAndAuthenticate_par
 {
     void *linux_side;
     bool _ret;
-    uint32 unIPClient;
+    uint32_t unIPClient;
     const void *pvAuthBlob;
-    uint32 cubAuthBlobSize;
+    uint32_t cubAuthBlobSize;
     CSteamID *pSteamIDUser;
 };
 extern void cppISteamGameServer_SteamGameServer010_SendUserConnectAndAuthenticate( struct cppISteamGameServer_SteamGameServer010_SendUserConnectAndAuthenticate_params *params );
@@ -62,7 +62,7 @@ struct cppISteamGameServer_SteamGameServer010_BUpdateUserData_params
     bool _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
-    uint32 uScore;
+    uint32_t uScore;
 };
 extern void cppISteamGameServer_SteamGameServer010_BUpdateUserData( struct cppISteamGameServer_SteamGameServer010_BUpdateUserData_params *params );
 
@@ -70,11 +70,11 @@ struct cppISteamGameServer_SteamGameServer010_BSetServerType_params
 {
     void *linux_side;
     bool _ret;
-    uint32 unServerFlags;
-    uint32 unGameIP;
-    uint16 unGamePort;
-    uint16 unSpectatorPort;
-    uint16 usQueryPort;
+    uint32_t unServerFlags;
+    uint32_t unGameIP;
+    uint16_t unGamePort;
+    uint16_t unSpectatorPort;
+    uint16_t usQueryPort;
     const char *pchGameDir;
     const char *pchVersion;
     bool bLANMode;
@@ -84,9 +84,9 @@ extern void cppISteamGameServer_SteamGameServer010_BSetServerType( struct cppISt
 struct cppISteamGameServer_SteamGameServer010_UpdateServerStatus_params
 {
     void *linux_side;
-    int cPlayers;
-    int cPlayersMax;
-    int cBotPlayers;
+    int32_t cPlayers;
+    int32_t cPlayersMax;
+    int32_t cBotPlayers;
     const char *pchServerName;
     const char *pSpectatorServerName;
     const char *pchMapName;
@@ -96,7 +96,7 @@ extern void cppISteamGameServer_SteamGameServer010_UpdateServerStatus( struct cp
 struct cppISteamGameServer_SteamGameServer010_UpdateSpectatorPort_params
 {
     void *linux_side;
-    uint16 unSpectatorPort;
+    uint16_t unSpectatorPort;
 };
 extern void cppISteamGameServer_SteamGameServer010_UpdateSpectatorPort( struct cppISteamGameServer_SteamGameServer010_UpdateSpectatorPort_params *params );
 
@@ -132,7 +132,7 @@ extern void cppISteamGameServer_SteamGameServer010_RequestUserGroupStatus( struc
 struct cppISteamGameServer_SteamGameServer010_GetPublicIP_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamGameServer_SteamGameServer010_GetPublicIP( struct cppISteamGameServer_SteamGameServer010_GetPublicIP_params *params );
 
@@ -157,8 +157,8 @@ struct cppISteamGameServer_SteamGameServer010_GetAuthSessionTicket_params
     void *linux_side;
     HAuthTicket _ret;
     void *pTicket;
-    int cbMaxTicket;
-    uint32 *pcbTicket;
+    int32_t cbMaxTicket;
+    uint32_t *pcbTicket;
 };
 extern void cppISteamGameServer_SteamGameServer010_GetAuthSessionTicket( struct cppISteamGameServer_SteamGameServer010_GetAuthSessionTicket_params *params );
 
@@ -167,7 +167,7 @@ struct cppISteamGameServer_SteamGameServer010_BeginAuthSession_params
     void *linux_side;
     EBeginAuthSessionResult _ret;
     const void *pAuthTicket;
-    int cbAuthTicket;
+    int32_t cbAuthTicket;
     CSteamID steamID;
 };
 extern void cppISteamGameServer_SteamGameServer010_BeginAuthSession( struct cppISteamGameServer_SteamGameServer010_BeginAuthSession_params *params );

@@ -2,7 +2,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage_params
 {
     void *linux_side;
     winSteamNetworkingMessage_t_152 *_ret;
-    int cbAllocateBuffer;
+    int32_t cbAllocateBuffer;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage_params *params );
 
@@ -25,7 +25,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetLocalPingLocatio
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_EstimatePingTimeBetweenTwoLocations_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     const SteamNetworkPingLocation_t *location1;
     const SteamNetworkPingLocation_t *location2;
 };
@@ -34,7 +34,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_EstimatePingTimeBet
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_EstimatePingTimeFromLocalHost_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     const SteamNetworkPingLocation_t *remoteLocation;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_EstimatePingTimeFromLocalHost( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_EstimatePingTimeFromLocalHost_params *params );
@@ -44,7 +44,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_ConvertPingLocationToStr
     void *linux_side;
     const SteamNetworkPingLocation_t *location;
     char *pszBuf;
-    int cchBufSize;
+    int32_t cchBufSize;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_ConvertPingLocationToString( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_ConvertPingLocationToString_params *params );
 
@@ -68,7 +68,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_CheckPingDataUpToDa
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPingToDataCenter_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     SteamNetworkingPOPID popID;
     SteamNetworkingPOPID *pViaRelayPoP;
 };
@@ -77,7 +77,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPingToDataCenter
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetDirectPingToPOP_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     SteamNetworkingPOPID popID;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetDirectPingToPOP( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetDirectPingToPOP_params *params );
@@ -85,16 +85,16 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetDirectPingToPOP(
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPCount( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPCount_params *params );
 
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPList_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     SteamNetworkingPOPID *list;
-    int nListSz;
+    int32_t nListSz;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPList( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPList_params *params );
 
@@ -119,7 +119,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue_params
     bool _ret;
     uint32_t eValue;
     uint32_t eScopeType;
-    intptr_t scopeObj;
+    int32_t scopeObj;
     uint32_t eDataType;
     const void *pArg;
 };
@@ -131,7 +131,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue_params
     uint32_t _ret;
     uint32_t eValue;
     uint32_t eScopeType;
-    intptr_t scopeObj;
+    int32_t scopeObj;
     uint32_t *pOutDataType;
     void *pResult;
     size_t *cbResult;

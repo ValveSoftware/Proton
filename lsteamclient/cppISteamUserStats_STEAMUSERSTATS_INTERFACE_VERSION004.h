@@ -10,7 +10,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_params
     void *linux_side;
     bool _ret;
     const char *pchName;
-    int32 *pData;
+    int32_t *pData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetStat_params *params );
 
@@ -28,7 +28,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_params
     void *linux_side;
     bool _ret;
     const char *pchName;
-    int32 nData;
+    int32_t nData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_SetStat_params *params );
 
@@ -86,7 +86,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_StoreStats( s
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     const char *pchName;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetAchievementIcon_params *params );
@@ -105,8 +105,8 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievemen
     void *linux_side;
     bool _ret;
     const char *pchName;
-    uint32 nCurProgress;
-    uint32 nMaxProgress;
+    uint32_t nCurProgress;
+    uint32_t nMaxProgress;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchievementProgress_params *params );
 
@@ -124,7 +124,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_params
     bool _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    int32 *pData;
+    int32_t *pData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_GetUserStat_params *params );
 

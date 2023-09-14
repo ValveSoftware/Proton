@@ -3,9 +3,9 @@ struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreensho
     void *linux_side;
     ScreenshotHandle _ret;
     void *pubRGB;
-    uint32 cubRGB;
-    int nWidth;
-    int nHeight;
+    uint32_t cubRGB;
+    int32_t nWidth;
+    int32_t nHeight;
 };
 extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot_params *params );
 
@@ -15,8 +15,8 @@ struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotT
     ScreenshotHandle _ret;
     const char *pchFilename;
     const char *pchThumbnailFilename;
-    int nWidth;
-    int nHeight;
+    int32_t nWidth;
+    int32_t nHeight;
 };
 extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary_params *params );
 

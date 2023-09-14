@@ -9,7 +9,7 @@ struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting_params
 {
     void *linux_side;
     bool _ret;
-    int *pnNumViewers;
+    int32_t *pnNumViewers;
 };
 extern void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_IsBroadcasting_params *params );
 
@@ -26,7 +26,7 @@ struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params
     bool _ret;
     AppId_t unVideoAppID;
     char *pchBuffer;
-    int32 *pnBufferSize;
+    int32_t *pnBufferSize;
 };
 extern void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetOPFStringForApp_params *params );
 
