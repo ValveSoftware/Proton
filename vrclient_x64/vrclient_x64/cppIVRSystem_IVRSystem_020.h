@@ -333,7 +333,7 @@ struct cppIVRSystem_IVRSystem_020_TriggerHapticPulse_params
     void *linux_side;
     TrackedDeviceIndex_t unControllerDeviceIndex;
     uint32_t unAxisId;
-    unsigned short usDurationMicroSec;
+    uint16_t usDurationMicroSec;
 };
 extern void cppIVRSystem_IVRSystem_020_TriggerHapticPulse( struct cppIVRSystem_IVRSystem_020_TriggerHapticPulse_params *params );
 
