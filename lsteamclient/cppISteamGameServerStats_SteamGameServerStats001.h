@@ -12,7 +12,7 @@ struct cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_params
     bool _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    int32 *pData;
+    int32_t *pData;
 };
 extern void cppISteamGameServerStats_SteamGameServerStats001_GetUserStat( struct cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_params *params );
 
@@ -42,7 +42,7 @@ struct cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_params
     bool _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    int32 nData;
+    int32_t nData;
 };
 extern void cppISteamGameServerStats_SteamGameServerStats001_SetUserStat( struct cppISteamGameServerStats_SteamGameServerStats001_SetUserStat_params *params );
 

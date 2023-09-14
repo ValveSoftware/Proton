@@ -33,7 +33,7 @@ struct cppISteamInput_SteamInput006_BWaitForData_params
     void *linux_side;
     bool _ret;
     bool bWaitForever;
-    uint32 unTimeout;
+    uint32_t unTimeout;
 };
 extern void cppISteamInput_SteamInput006_BWaitForData( struct cppISteamInput_SteamInput006_BWaitForData_params *params );
 
@@ -47,7 +47,7 @@ extern void cppISteamInput_SteamInput006_BNewDataAvailable( struct cppISteamInpu
 struct cppISteamInput_SteamInput006_GetConnectedControllers_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     InputHandle_t *handlesOut;
 };
 extern void cppISteamInput_SteamInput006_GetConnectedControllers( struct cppISteamInput_SteamInput006_GetConnectedControllers_params *params );
@@ -115,7 +115,7 @@ extern void cppISteamInput_SteamInput006_DeactivateAllActionSetLayers( struct cp
 struct cppISteamInput_SteamInput006_GetActiveActionSetLayers_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     InputHandle_t inputHandle;
     InputActionSetHandle_t *handlesOut;
 };
@@ -141,7 +141,7 @@ extern void cppISteamInput_SteamInput006_GetDigitalActionData( struct cppISteamI
 struct cppISteamInput_SteamInput006_GetDigitalActionOrigins_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     InputHandle_t inputHandle;
     InputActionSetHandle_t actionSetHandle;
     InputDigitalActionHandle_t digitalActionHandle;
@@ -177,7 +177,7 @@ extern void cppISteamInput_SteamInput006_GetAnalogActionData( struct cppISteamIn
 struct cppISteamInput_SteamInput006_GetAnalogActionOrigins_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     InputHandle_t inputHandle;
     InputActionSetHandle_t actionSetHandle;
     InputAnalogActionHandle_t analogActionHandle;
@@ -191,7 +191,7 @@ struct cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin_params
     const char *_ret;
     uint32_t eOrigin;
     uint32_t eSize;
-    uint32 unFlags;
+    uint32_t unFlags;
 };
 extern void cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin( struct cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin_params *params );
 
@@ -200,7 +200,7 @@ struct cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin_params
     void *linux_side;
     const char *_ret;
     uint32_t eOrigin;
-    uint32 unFlags;
+    uint32_t unFlags;
 };
 extern void cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin( struct cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin_params *params );
 
@@ -248,8 +248,8 @@ struct cppISteamInput_SteamInput006_TriggerVibration_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    unsigned short usLeftSpeed;
-    unsigned short usRightSpeed;
+    uint16_t usLeftSpeed;
+    uint16_t usRightSpeed;
 };
 extern void cppISteamInput_SteamInput006_TriggerVibration( struct cppISteamInput_SteamInput006_TriggerVibration_params *params );
 
@@ -257,10 +257,10 @@ struct cppISteamInput_SteamInput006_TriggerVibrationExtended_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    unsigned short usLeftSpeed;
-    unsigned short usRightSpeed;
-    unsigned short usLeftTriggerSpeed;
-    unsigned short usRightTriggerSpeed;
+    uint16_t usLeftSpeed;
+    uint16_t usRightSpeed;
+    uint16_t usLeftTriggerSpeed;
+    uint16_t usRightTriggerSpeed;
 };
 extern void cppISteamInput_SteamInput006_TriggerVibrationExtended( struct cppISteamInput_SteamInput006_TriggerVibrationExtended_params *params );
 
@@ -269,9 +269,9 @@ struct cppISteamInput_SteamInput006_TriggerSimpleHapticEvent_params
     void *linux_side;
     InputHandle_t inputHandle;
     uint32_t eHapticLocation;
-    uint8 nIntensity;
+    uint8_t nIntensity;
     char nGainDB;
-    uint8 nOtherIntensity;
+    uint8_t nOtherIntensity;
     char nOtherGainDB;
 };
 extern void cppISteamInput_SteamInput006_TriggerSimpleHapticEvent( struct cppISteamInput_SteamInput006_TriggerSimpleHapticEvent_params *params );
@@ -280,10 +280,10 @@ struct cppISteamInput_SteamInput006_SetLEDColor_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    uint8 nColorR;
-    uint8 nColorG;
-    uint8 nColorB;
-    unsigned int nFlags;
+    uint8_t nColorR;
+    uint8_t nColorG;
+    uint8_t nColorB;
+    uint32_t nFlags;
 };
 extern void cppISteamInput_SteamInput006_SetLEDColor( struct cppISteamInput_SteamInput006_SetLEDColor_params *params );
 
@@ -292,7 +292,7 @@ struct cppISteamInput_SteamInput006_Legacy_TriggerHapticPulse_params
     void *linux_side;
     InputHandle_t inputHandle;
     uint32_t eTargetPad;
-    unsigned short usDurationMicroSec;
+    uint16_t usDurationMicroSec;
 };
 extern void cppISteamInput_SteamInput006_Legacy_TriggerHapticPulse( struct cppISteamInput_SteamInput006_Legacy_TriggerHapticPulse_params *params );
 
@@ -301,10 +301,10 @@ struct cppISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse_params
     void *linux_side;
     InputHandle_t inputHandle;
     uint32_t eTargetPad;
-    unsigned short usDurationMicroSec;
-    unsigned short usOffMicroSec;
-    unsigned short unRepeat;
-    unsigned int nFlags;
+    uint16_t usDurationMicroSec;
+    uint16_t usOffMicroSec;
+    uint16_t unRepeat;
+    uint32_t nFlags;
 };
 extern void cppISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse( struct cppISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse_params *params );
 
@@ -328,14 +328,14 @@ struct cppISteamInput_SteamInput006_GetControllerForGamepadIndex_params
 {
     void *linux_side;
     InputHandle_t _ret;
-    int nIndex;
+    int32_t nIndex;
 };
 extern void cppISteamInput_SteamInput006_GetControllerForGamepadIndex( struct cppISteamInput_SteamInput006_GetControllerForGamepadIndex_params *params );
 
 struct cppISteamInput_SteamInput006_GetGamepadIndexForController_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     InputHandle_t ulinputHandle;
 };
 extern void cppISteamInput_SteamInput006_GetGamepadIndexForController( struct cppISteamInput_SteamInput006_GetGamepadIndexForController_params *params );
@@ -379,15 +379,15 @@ struct cppISteamInput_SteamInput006_GetDeviceBindingRevision_params
     void *linux_side;
     bool _ret;
     InputHandle_t inputHandle;
-    int *pMajor;
-    int *pMinor;
+    int32_t *pMajor;
+    int32_t *pMinor;
 };
 extern void cppISteamInput_SteamInput006_GetDeviceBindingRevision( struct cppISteamInput_SteamInput006_GetDeviceBindingRevision_params *params );
 
 struct cppISteamInput_SteamInput006_GetRemotePlaySessionID_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     InputHandle_t inputHandle;
 };
 extern void cppISteamInput_SteamInput006_GetRemotePlaySessionID( struct cppISteamInput_SteamInput006_GetRemotePlaySessionID_params *params );
@@ -395,7 +395,7 @@ extern void cppISteamInput_SteamInput006_GetRemotePlaySessionID( struct cppIStea
 struct cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings_params
 {
     void *linux_side;
-    uint16 _ret;
+    uint16_t _ret;
 };
 extern void cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings( struct cppISteamInput_SteamInput006_GetSessionInputConfigurationSettings_params *params );
 

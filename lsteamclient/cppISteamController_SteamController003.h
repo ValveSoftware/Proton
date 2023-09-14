@@ -21,7 +21,7 @@ extern void cppISteamController_SteamController003_RunFrame( struct cppISteamCon
 struct cppISteamController_SteamController003_GetConnectedControllers_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     ControllerHandle_t *handlesOut;
 };
 extern void cppISteamController_SteamController003_GetConnectedControllers( struct cppISteamController_SteamController003_GetConnectedControllers_params *params );
@@ -78,7 +78,7 @@ extern void cppISteamController_SteamController003_GetDigitalActionData( struct 
 struct cppISteamController_SteamController003_GetDigitalActionOrigins_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     ControllerHandle_t controllerHandle;
     ControllerActionSetHandle_t actionSetHandle;
     ControllerDigitalActionHandle_t digitalActionHandle;
@@ -106,7 +106,7 @@ extern void cppISteamController_SteamController003_GetAnalogActionData( struct c
 struct cppISteamController_SteamController003_GetAnalogActionOrigins_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     ControllerHandle_t controllerHandle;
     ControllerActionSetHandle_t actionSetHandle;
     ControllerAnalogActionHandle_t analogActionHandle;
@@ -127,7 +127,7 @@ struct cppISteamController_SteamController003_TriggerHapticPulse_params
     void *linux_side;
     ControllerHandle_t controllerHandle;
     uint32_t eTargetPad;
-    unsigned short usDurationMicroSec;
+    uint16_t usDurationMicroSec;
 };
 extern void cppISteamController_SteamController003_TriggerHapticPulse( struct cppISteamController_SteamController003_TriggerHapticPulse_params *params );
 
@@ -136,10 +136,10 @@ struct cppISteamController_SteamController003_TriggerRepeatedHapticPulse_params
     void *linux_side;
     ControllerHandle_t controllerHandle;
     uint32_t eTargetPad;
-    unsigned short usDurationMicroSec;
-    unsigned short usOffMicroSec;
-    unsigned short unRepeat;
-    unsigned int nFlags;
+    uint16_t usDurationMicroSec;
+    uint16_t usOffMicroSec;
+    uint16_t unRepeat;
+    uint32_t nFlags;
 };
 extern void cppISteamController_SteamController003_TriggerRepeatedHapticPulse( struct cppISteamController_SteamController003_TriggerRepeatedHapticPulse_params *params );
 

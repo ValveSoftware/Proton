@@ -71,9 +71,9 @@ struct cppISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDFriend;
-    int32 *pnGameID;
-    uint32 *punGameIP;
-    uint16 *pusGamePort;
+    int32_t *pnGameID;
+    uint32_t *punGameIP;
+    uint16_t *pusGamePort;
 };
 extern void cppISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed( struct cppISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed_params *params );
 
@@ -88,7 +88,7 @@ extern void cppISteamFriends_SteamFriends001_GetFriendPersonaName( struct cppISt
 struct cppISteamFriends_SteamFriends001_AddFriendByName_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
     const char *pchEmailOrAccountName;
 };
 extern void cppISteamFriends_SteamFriends001_AddFriendByName( struct cppISteamFriends_SteamFriends001_AddFriendByName_params *params );
@@ -96,7 +96,7 @@ extern void cppISteamFriends_SteamFriends001_AddFriendByName( struct cppISteamFr
 struct cppISteamFriends_SteamFriends001_GetFriendCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends001_GetFriendCount( struct cppISteamFriends_SteamFriends001_GetFriendCount_params *params );
 
@@ -104,7 +104,7 @@ struct cppISteamFriends_SteamFriends001_GetFriendByIndex_params
 {
     void *linux_side;
     CSteamID *_ret;
-    int iFriend;
+    int32_t iFriend;
 };
 extern void cppISteamFriends_SteamFriends001_GetFriendByIndex( struct cppISteamFriends_SteamFriends001_GetFriendByIndex_params *params );
 
@@ -140,18 +140,18 @@ struct cppISteamFriends_SteamFriends001_GetFriendPersonaNameHistory_params
     void *linux_side;
     const char *_ret;
     CSteamID steamIDFriend;
-    int iPersonaName;
+    int32_t iPersonaName;
 };
 extern void cppISteamFriends_SteamFriends001_GetFriendPersonaNameHistory( struct cppISteamFriends_SteamFriends001_GetFriendPersonaNameHistory_params *params );
 
 struct cppISteamFriends_SteamFriends001_GetChatMessage_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
-    int iChatID;
+    int32_t iChatID;
     void *pvData;
-    int cubData;
+    int32_t cubData;
     uint32_t *peChatEntryType;
 };
 extern void cppISteamFriends_SteamFriends001_GetChatMessage( struct cppISteamFriends_SteamFriends001_GetChatMessage_params *params );
@@ -163,14 +163,14 @@ struct cppISteamFriends_SteamFriends001_SendMsgToFriend_2_params
     CSteamID steamIDFriend;
     uint32_t eChatEntryType;
     const void *pvMsgBody;
-    int cubMsgBody;
+    int32_t cubMsgBody;
 };
 extern void cppISteamFriends_SteamFriends001_SendMsgToFriend_2( struct cppISteamFriends_SteamFriends001_SendMsgToFriend_2_params *params );
 
 struct cppISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart( struct cppISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart_params *params );
@@ -179,7 +179,7 @@ struct cppISteamFriends_SteamFriends001_SetChatHistoryStart_params
 {
     void *linux_side;
     CSteamID steamIDFriend;
-    int iChatID;
+    int32_t iChatID;
 };
 extern void cppISteamFriends_SteamFriends001_SetChatHistoryStart( struct cppISteamFriends_SteamFriends001_SetChatHistoryStart_params *params );
 
@@ -201,7 +201,7 @@ extern void cppISteamFriends_SteamFriends001_InviteFriendByEmail( struct cppISte
 struct cppISteamFriends_SteamFriends001_GetBlockedFriendCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends001_GetBlockedFriendCount( struct cppISteamFriends_SteamFriends001_GetBlockedFriendCount_params *params );
 
@@ -210,9 +210,9 @@ struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDFriend;
-    uint64 *pulGameID;
-    uint32 *punGameIP;
-    uint16 *pusGamePort;
+    uint64_t *pulGameID;
+    uint32_t *punGameIP;
+    uint16_t *pusGamePort;
 };
 extern void cppISteamFriends_SteamFriends001_GetFriendGamePlayed( struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed_params *params );
 
@@ -221,10 +221,10 @@ struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed2_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDFriend;
-    uint64 *pulGameID;
-    uint32 *punGameIP;
-    uint16 *pusGamePort;
-    uint16 *pusQueryPort;
+    uint64_t *pulGameID;
+    uint32_t *punGameIP;
+    uint16_t *pusGamePort;
+    uint16_t *pusQueryPort;
 };
 extern void cppISteamFriends_SteamFriends001_GetFriendGamePlayed2( struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed2_params *params );
 

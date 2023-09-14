@@ -106,7 +106,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetDi
     return params._ret;
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(struct w_steam_iface *_this, void *pvBuffer, uint32 cbBufferLength)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(struct w_steam_iface *_this, void *pvBuffer, uint32_t cbBufferLength)
 {
     struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64_params params =
     {
@@ -274,7 +274,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Updat
     return params._ret;
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds(struct w_steam_iface *_this, int nValue)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds(struct w_steam_iface *_this, int32_t nValue)
 {
     struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds_params params =
     {
@@ -286,7 +286,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Updat
     return params._ret;
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(struct w_steam_iface *_this, void *pvBuffer, uint32 cbBufferLength)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt(struct w_steam_iface *_this, void *pvBuffer, uint32_t cbBufferLength)
 {
     struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt_params params =
     {
@@ -332,7 +332,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Reset
     return params._ret;
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(struct w_steam_iface *_this, int nID, int nPosition, const char *pchEntryText)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry(struct w_steam_iface *_this, int32_t nID, int32_t nPosition, const char *pchEntryText)
 {
     struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry_params params =
     {
@@ -346,7 +346,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQu
     return params._ret;
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry(struct w_steam_iface *_this, int nID)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry(struct w_steam_iface *_this, int32_t nID)
 {
     struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry_params params =
     {
@@ -391,7 +391,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Reset
     return params._ret;
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(struct w_steam_iface *_this, int nID, int nPosition, const char *pchEntryText)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry(struct w_steam_iface *_this, int32_t nID, int32_t nPosition, const char *pchEntryText)
 {
     struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry_params params =
     {
@@ -405,7 +405,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPl
     return params._ret;
 }
 
-bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry(struct w_steam_iface *_this, int nID)
+bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry(struct w_steam_iface *_this, int32_t nID)
 {
     struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry_params params =
     {

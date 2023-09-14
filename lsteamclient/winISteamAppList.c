@@ -21,7 +21,7 @@ DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAp
 DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir, 16)
 DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId, 8)
 
-uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(struct w_steam_iface *_this)
 {
     struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps_params params =
     {
@@ -32,7 +32,7 @@ uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInsta
     return params._ret;
 }
 
-uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(struct w_steam_iface *_this, AppId_t *pvecAppID, uint32 unMaxAppIDs)
+uint32_t __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps(struct w_steam_iface *_this, AppId_t *pvecAppID, uint32_t unMaxAppIDs)
 {
     struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps_params params =
     {
@@ -45,7 +45,7 @@ uint32 __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalle
     return params._ret;
 }
 
-int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(struct w_steam_iface *_this, AppId_t nAppID, char *pchName, int cchNameMax)
+int32_t __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(struct w_steam_iface *_this, AppId_t nAppID, char *pchName, int32_t cchNameMax)
 {
     struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName_params params =
     {
@@ -59,7 +59,7 @@ int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName(str
     return params._ret;
 }
 
-int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(struct w_steam_iface *_this, AppId_t nAppID, char *pchDirectory, int cchNameMax)
+int32_t __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(struct w_steam_iface *_this, AppId_t nAppID, char *pchDirectory, int32_t cchNameMax)
 {
     struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_params params =
     {
@@ -74,7 +74,7 @@ int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallD
     return params._ret;
 }
 
-int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId(struct w_steam_iface *_this, AppId_t nAppID)
+int32_t __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId(struct w_steam_iface *_this, AppId_t nAppID)
 {
     struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId_params params =
     {

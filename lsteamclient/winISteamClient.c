@@ -150,7 +150,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient006_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient006_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient006_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient006_SetLocalIPBinding_params params =
     {
@@ -302,7 +302,7 @@ void __thiscall winISteamClient_SteamClient006_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient006_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient006_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient006_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient006_GetIPCCallCount_params params =
     {
@@ -468,7 +468,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient007_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient007_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient007_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient007_SetLocalIPBinding_params params =
     {
@@ -594,7 +594,7 @@ void __thiscall winISteamClient_SteamClient007_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient007_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient007_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient007_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient007_GetIPCCallCount_params params =
     {
@@ -832,7 +832,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient008_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient008_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient008_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient008_SetLocalIPBinding_params params =
     {
@@ -1003,7 +1003,7 @@ void __thiscall winISteamClient_SteamClient008_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient008_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient008_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient008_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient008_GetIPCCallCount_params params =
     {
@@ -1181,7 +1181,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient009_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient009_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient009_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient009_SetLocalIPBinding_params params =
     {
@@ -1367,7 +1367,7 @@ void __thiscall winISteamClient_SteamClient009_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient009_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient009_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient009_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient009_GetIPCCallCount_params params =
     {
@@ -1548,7 +1548,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient010_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient010_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient010_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient010_SetLocalIPBinding_params params =
     {
@@ -1734,7 +1734,7 @@ void __thiscall winISteamClient_SteamClient010_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient010_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient010_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient010_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient010_GetIPCCallCount_params params =
     {
@@ -1944,7 +1944,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient011_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient011_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient011_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient011_SetLocalIPBinding_params params =
     {
@@ -2145,7 +2145,7 @@ void __thiscall winISteamClient_SteamClient011_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient011_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient011_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient011_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient011_GetIPCCallCount_params params =
     {
@@ -2358,7 +2358,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient012_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient012_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient012_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient012_SetLocalIPBinding_params params =
     {
@@ -2544,7 +2544,7 @@ void __thiscall winISteamClient_SteamClient012_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient012_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient012_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient012_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient012_GetIPCCallCount_params params =
     {
@@ -2807,7 +2807,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient013_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient013_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient013_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient013_SetLocalIPBinding_params params =
     {
@@ -2993,7 +2993,7 @@ void __thiscall winISteamClient_SteamClient013_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient013_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient013_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient013_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient013_GetIPCCallCount_params params =
     {
@@ -3301,7 +3301,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient014_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient014_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient014_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient014_SetLocalIPBinding_params params =
     {
@@ -3487,7 +3487,7 @@ void __thiscall winISteamClient_SteamClient014_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient014_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient014_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient014_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient014_GetIPCCallCount_params params =
     {
@@ -3782,7 +3782,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient015_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient015_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient015_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient015_SetLocalIPBinding_params params =
     {
@@ -3968,7 +3968,7 @@ void __thiscall winISteamClient_SteamClient015_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient015_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient015_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient015_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient015_GetIPCCallCount_params params =
     {
@@ -4283,7 +4283,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient016_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient016_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient016_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient016_SetLocalIPBinding_params params =
     {
@@ -4469,7 +4469,7 @@ void __thiscall winISteamClient_SteamClient016_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient016_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient016_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient016_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient016_GetIPCCallCount_params params =
     {
@@ -4839,7 +4839,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient017_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient017_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient017_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient017_SetLocalIPBinding_params params =
     {
@@ -5025,7 +5025,7 @@ void __thiscall winISteamClient_SteamClient017_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient017_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient017_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient017_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient017_GetIPCCallCount_params params =
     {
@@ -5445,7 +5445,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient018_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient018_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient018_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient018_SetLocalIPBinding_params params =
     {
@@ -5646,7 +5646,7 @@ void __thiscall winISteamClient_SteamClient018_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient018_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient018_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient018_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient018_GetIPCCallCount_params params =
     {
@@ -6100,7 +6100,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient019_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient019_SetLocalIPBinding(struct w_steam_iface *_this, uint32 unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient019_SetLocalIPBinding(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient019_SetLocalIPBinding_params params =
     {
@@ -6301,7 +6301,7 @@ void __thiscall winISteamClient_SteamClient019_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient019_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient019_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient019_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient019_GetIPCCallCount_params params =
     {
@@ -6772,7 +6772,7 @@ void /*ISteamGameServer*/ * __thiscall winISteamClient_SteamClient020_GetISteamG
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient020_SetLocalIPBinding(struct w_steam_iface *_this, const SteamIPAddress_t *unIP, uint16 usPort)
+void __thiscall winISteamClient_SteamClient020_SetLocalIPBinding(struct w_steam_iface *_this, const SteamIPAddress_t *unIP, uint16_t usPort)
 {
     struct cppISteamClient_SteamClient020_SetLocalIPBinding_params params =
     {
@@ -6973,7 +6973,7 @@ void __thiscall winISteamClient_SteamClient020_RunFrame(struct w_steam_iface *_t
     cppISteamClient_SteamClient020_RunFrame( &params );
 }
 
-uint32 __thiscall winISteamClient_SteamClient020_GetIPCCallCount(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamClient_SteamClient020_GetIPCCallCount(struct w_steam_iface *_this)
 {
     struct cppISteamClient_SteamClient020_GetIPCCallCount_params params =
     {

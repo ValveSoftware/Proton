@@ -1,7 +1,7 @@
 struct cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGameCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGameCount( struct cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGameCount_params *params );
 
@@ -9,26 +9,26 @@ struct cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame_params
 {
     void *linux_side;
     bool _ret;
-    int iGame;
+    int32_t iGame;
     AppId_t *pnAppID;
-    uint32 *pnIP;
-    uint16 *pnConnPort;
-    uint16 *pnQueryPort;
-    uint32 *punFlags;
-    uint32 *pRTime32LastPlayedOnServer;
+    uint32_t *pnIP;
+    uint16_t *pnConnPort;
+    uint16_t *pnQueryPort;
+    uint32_t *punFlags;
+    uint32_t *pRTime32LastPlayedOnServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame( struct cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     AppId_t nAppID;
-    uint32 nIP;
-    uint16 nConnPort;
-    uint16 nQueryPort;
-    uint32 unFlags;
-    uint32 rTime32LastPlayedOnServer;
+    uint32_t nIP;
+    uint16_t nConnPort;
+    uint16_t nQueryPort;
+    uint32_t unFlags;
+    uint32_t rTime32LastPlayedOnServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame( struct cppISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame_params *params );
 
@@ -37,10 +37,10 @@ struct cppISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame_params
     void *linux_side;
     bool _ret;
     AppId_t nAppID;
-    uint32 nIP;
-    uint16 nConnPort;
-    uint16 nQueryPort;
-    uint32 unFlags;
+    uint32_t nIP;
+    uint16_t nConnPort;
+    uint16_t nQueryPort;
+    uint32_t unFlags;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame( struct cppISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame_params *params );
 
@@ -64,7 +64,7 @@ struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNumericalFilt
 {
     void *linux_side;
     const char *pchKeyToMatch;
-    int nValueToMatch;
+    int32_t nValueToMatch;
     uint32_t eComparisonType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNumericalFilter( struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNumericalFilter_params *params );
@@ -73,14 +73,14 @@ struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNearValueFilt
 {
     void *linux_side;
     const char *pchKeyToMatch;
-    int nValueToBeCloseTo;
+    int32_t nValueToBeCloseTo;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNearValueFilter( struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListNearValueFilter_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListFilterSlotsAvailable_params
 {
     void *linux_side;
-    int nSlotsAvailable;
+    int32_t nSlotsAvailable;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListFilterSlotsAvailable( struct cppISteamMatchmaking_SteamMatchMaking007_AddRequestLobbyListFilterSlotsAvailable_params *params );
 
@@ -88,7 +88,7 @@ struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex_params
 {
     void *linux_side;
     CSteamID *_ret;
-    int iLobby;
+    int32_t iLobby;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex( struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex_params *params );
 
@@ -97,7 +97,7 @@ struct cppISteamMatchmaking_SteamMatchMaking007_CreateLobby_params
     void *linux_side;
     SteamAPICall_t _ret;
     uint32_t eLobbyType;
-    int cMaxMembers;
+    int32_t cMaxMembers;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_CreateLobby( struct cppISteamMatchmaking_SteamMatchMaking007_CreateLobby_params *params );
 
@@ -128,7 +128,7 @@ extern void cppISteamMatchmaking_SteamMatchMaking007_InviteUserToLobby( struct c
 struct cppISteamMatchmaking_SteamMatchMaking007_GetNumLobbyMembers_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDLobby;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetNumLobbyMembers( struct cppISteamMatchmaking_SteamMatchMaking007_GetNumLobbyMembers_params *params );
@@ -138,7 +138,7 @@ struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberByIndex_params
     void *linux_side;
     CSteamID *_ret;
     CSteamID steamIDLobby;
-    int iMember;
+    int32_t iMember;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberByIndex( struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberByIndex_params *params );
 
@@ -164,7 +164,7 @@ extern void cppISteamMatchmaking_SteamMatchMaking007_SetLobbyData( struct cppISt
 struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyDataCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDLobby;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetLobbyDataCount( struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyDataCount_params *params );
@@ -174,11 +174,11 @@ struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyDataByIndex_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDLobby;
-    int iLobbyData;
+    int32_t iLobbyData;
     char *pchKey;
-    int cchKeyBufferSize;
+    int32_t cchKeyBufferSize;
     char *pchValue;
-    int cchValueBufferSize;
+    int32_t cchValueBufferSize;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetLobbyDataByIndex( struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyDataByIndex_params *params );
 
@@ -216,19 +216,19 @@ struct cppISteamMatchmaking_SteamMatchMaking007_SendLobbyChatMsg_params
     bool _ret;
     CSteamID steamIDLobby;
     const void *pvMsgBody;
-    int cubMsgBody;
+    int32_t cubMsgBody;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_SendLobbyChatMsg( struct cppISteamMatchmaking_SteamMatchMaking007_SendLobbyChatMsg_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyChatEntry_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDLobby;
-    int iChatID;
+    int32_t iChatID;
     CSteamID *pSteamIDUser;
     void *pvData;
-    int cubData;
+    int32_t cubData;
     uint32_t *peChatEntryType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetLobbyChatEntry( struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyChatEntry_params *params );
@@ -245,8 +245,8 @@ struct cppISteamMatchmaking_SteamMatchMaking007_SetLobbyGameServer_params
 {
     void *linux_side;
     CSteamID steamIDLobby;
-    uint32 unGameServerIP;
-    uint16 unGameServerPort;
+    uint32_t unGameServerIP;
+    uint16_t unGameServerPort;
     CSteamID steamIDGameServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_SetLobbyGameServer( struct cppISteamMatchmaking_SteamMatchMaking007_SetLobbyGameServer_params *params );
@@ -256,8 +256,8 @@ struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyGameServer_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDLobby;
-    uint32 *punGameServerIP;
-    uint16 *punGameServerPort;
+    uint32_t *punGameServerIP;
+    uint16_t *punGameServerPort;
     CSteamID *psteamIDGameServer;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetLobbyGameServer( struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyGameServer_params *params );
@@ -267,14 +267,14 @@ struct cppISteamMatchmaking_SteamMatchMaking007_SetLobbyMemberLimit_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDLobby;
-    int cMaxMembers;
+    int32_t cMaxMembers;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_SetLobbyMemberLimit( struct cppISteamMatchmaking_SteamMatchMaking007_SetLobbyMemberLimit_params *params );
 
 struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberLimit_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDLobby;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberLimit( struct cppISteamMatchmaking_SteamMatchMaking007_GetLobbyMemberLimit_params *params );

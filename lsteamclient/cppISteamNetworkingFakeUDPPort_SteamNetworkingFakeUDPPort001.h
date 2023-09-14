@@ -10,17 +10,17 @@ struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageT
     uint32_t _ret;
     const SteamNetworkingIPAddr *remoteAddress;
     const void *pData;
-    uint32 cbData;
-    int nSendFlags;
+    uint32_t cbData;
+    int32_t nSendFlags;
 };
 extern void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP_params *params );
 
 struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     winSteamNetworkingMessage_t_158 **ppOutMessages;
-    int nMaxMessages;
+    int32_t nMaxMessages;
 };
 extern void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages( struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params *params );
 

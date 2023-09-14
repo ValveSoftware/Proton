@@ -12,7 +12,7 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue_p
     void *linux_side;
     bool _ret;
     HTTPRequestHandle hRequest;
-    uint64 ulContextValue;
+    uint64_t ulContextValue;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestContextValue_params *params );
 
@@ -21,7 +21,7 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivit
     void *linux_side;
     bool _ret;
     HTTPRequestHandle hRequest;
-    uint32 unTimeoutSeconds;
+    uint32_t unTimeoutSeconds;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivityTimeout( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestNetworkActivityTimeout_params *params );
 
@@ -85,7 +85,7 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize_pa
     bool _ret;
     HTTPRequestHandle hRequest;
     const char *pchHeaderName;
-    uint32 *unResponseHeaderSize;
+    uint32_t *unResponseHeaderSize;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderSize_params *params );
 
@@ -95,8 +95,8 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue_p
     bool _ret;
     HTTPRequestHandle hRequest;
     const char *pchHeaderName;
-    uint8 *pHeaderValueBuffer;
-    uint32 unBufferSize;
+    uint8_t *pHeaderValueBuffer;
+    uint32_t unBufferSize;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseHeaderValue_params *params );
 
@@ -105,7 +105,7 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize_para
     void *linux_side;
     bool _ret;
     HTTPRequestHandle hRequest;
-    uint32 *unBodySize;
+    uint32_t *unBodySize;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodySize_params *params );
 
@@ -114,8 +114,8 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData_para
     void *linux_side;
     bool _ret;
     HTTPRequestHandle hRequest;
-    uint8 *pBodyDataBuffer;
-    uint32 unBufferSize;
+    uint8_t *pBodyDataBuffer;
+    uint32_t unBufferSize;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPResponseBodyData_params *params );
 
@@ -124,9 +124,9 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBody
     void *linux_side;
     bool _ret;
     HTTPRequestHandle hRequest;
-    uint32 cOffset;
-    uint8 *pBodyDataBuffer;
-    uint32 unBufferSize;
+    uint32_t cOffset;
+    uint8_t *pBodyDataBuffer;
+    uint32_t unBufferSize;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBodyData( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_GetHTTPStreamingResponseBodyData_params *params );
 
@@ -153,8 +153,8 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody_pa
     bool _ret;
     HTTPRequestHandle hRequest;
     const char *pchContentType;
-    uint8 *pubBody;
-    uint32 unBodyLen;
+    uint8_t *pubBody;
+    uint32_t unBodyLen;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody_params *params );
 
@@ -217,7 +217,7 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeou
     void *linux_side;
     bool _ret;
     HTTPRequestHandle hRequest;
-    uint32 unMilliseconds;
+    uint32_t unMilliseconds;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestAbsoluteTimeoutMS_params *params );
 
