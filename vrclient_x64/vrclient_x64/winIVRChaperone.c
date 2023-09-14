@@ -97,7 +97,7 @@ void __thiscall winIVRChaperone_IVRChaperone_002_SetSceneColor(struct w_steam_if
     cppIVRChaperone_IVRChaperone_002_SetSceneColor( &params );
 }
 
-void __thiscall winIVRChaperone_IVRChaperone_002_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int nNumOutputColors)
+void __thiscall winIVRChaperone_IVRChaperone_002_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int32_t nNumOutputColors)
 {
     struct cppIVRChaperone_IVRChaperone_002_GetBoundsColor_params params =
     {
@@ -266,7 +266,7 @@ void __thiscall winIVRChaperone_IVRChaperone_003_SetSceneColor(struct w_steam_if
     cppIVRChaperone_IVRChaperone_003_SetSceneColor( &params );
 }
 
-void __thiscall winIVRChaperone_IVRChaperone_003_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
+void __thiscall winIVRChaperone_IVRChaperone_003_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int32_t nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
 {
     struct cppIVRChaperone_IVRChaperone_003_GetBoundsColor_params params =
     {
@@ -436,7 +436,7 @@ void __thiscall winIVRChaperone_IVRChaperone_004_SetSceneColor(struct w_steam_if
     cppIVRChaperone_IVRChaperone_004_SetSceneColor( &params );
 }
 
-void __thiscall winIVRChaperone_IVRChaperone_004_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
+void __thiscall winIVRChaperone_IVRChaperone_004_GetBoundsColor(struct w_steam_iface *_this, HmdColor_t *pOutputColorArray, int32_t nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t *pOutputCameraColor)
 {
     struct cppIVRChaperone_IVRChaperone_004_GetBoundsColor_params params =
     {

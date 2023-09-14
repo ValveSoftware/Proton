@@ -42,7 +42,7 @@ struct cppIVRChaperone_IVRChaperone_003_GetBoundsColor_params
 {
     void *linux_side;
     HmdColor_t *pOutputColorArray;
-    int nNumOutputColors;
+    int32_t nNumOutputColors;
     float flCollisionBoundsFadeDistance;
     HmdColor_t *pOutputCameraColor;
 };

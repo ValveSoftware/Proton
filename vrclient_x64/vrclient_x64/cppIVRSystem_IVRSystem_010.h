@@ -306,7 +306,7 @@ struct cppIVRSystem_IVRSystem_010_TriggerHapticPulse_params
     void *linux_side;
     TrackedDeviceIndex_t unControllerDeviceIndex;
     uint32_t unAxisId;
-    unsigned short usDurationMicroSec;
+    uint16_t usDurationMicroSec;
 };
 extern void cppIVRSystem_IVRSystem_010_TriggerHapticPulse( struct cppIVRSystem_IVRSystem_010_TriggerHapticPulse_params *params );
 
@@ -387,7 +387,7 @@ extern void cppIVRSystem_IVRSystem_010_PerformanceTestEnableCapture( struct cppI
 struct cppIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange_params
 {
     void *linux_side;
-    int nFidelityLevel;
+    int32_t nFidelityLevel;
 };
 extern void cppIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange( struct cppIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange_params *params );
 

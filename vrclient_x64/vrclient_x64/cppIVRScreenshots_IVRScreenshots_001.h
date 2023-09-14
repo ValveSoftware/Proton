@@ -17,7 +17,7 @@ struct cppIVRScreenshots_IVRScreenshots_001_HookScreenshot_params
     void *linux_side;
     EVRScreenshotError _ret;
     const EVRScreenshotType *pSupportedTypes;
-    int numTypes;
+    int32_t numTypes;
 };
 extern void cppIVRScreenshots_IVRScreenshots_001_HookScreenshot( struct cppIVRScreenshots_IVRScreenshots_001_HookScreenshot_params *params );
 

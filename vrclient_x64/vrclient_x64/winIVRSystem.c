@@ -457,7 +457,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_003_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_003_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_003_TriggerHapticPulse_params params =
     {
@@ -1082,7 +1082,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_004_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_004_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_004_TriggerHapticPulse_params params =
     {
@@ -1718,7 +1718,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_005_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_005_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_005_TriggerHapticPulse_params params =
     {
@@ -2385,7 +2385,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_006_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_006_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_006_TriggerHapticPulse_params params =
     {
@@ -3092,7 +3092,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_009_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_009_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_009_TriggerHapticPulse_params params =
     {
@@ -3824,7 +3824,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_010_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_010_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_010_TriggerHapticPulse_params params =
     {
@@ -3951,7 +3951,7 @@ void __thiscall winIVRSystem_IVRSystem_010_PerformanceTestEnableCapture(struct w
     cppIVRSystem_IVRSystem_010_PerformanceTestEnableCapture( &params );
 }
 
-void __thiscall winIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange(struct w_steam_iface *_this, int nFidelityLevel)
+void __thiscall winIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange(struct w_steam_iface *_this, int32_t nFidelityLevel)
 {
     struct cppIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange_params params =
     {
@@ -4588,7 +4588,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_011_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_011_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_011_TriggerHapticPulse_params params =
     {
@@ -4715,7 +4715,7 @@ void __thiscall winIVRSystem_IVRSystem_011_PerformanceTestEnableCapture(struct w
     cppIVRSystem_IVRSystem_011_PerformanceTestEnableCapture( &params );
 }
 
-void __thiscall winIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange(struct w_steam_iface *_this, int nFidelityLevel)
+void __thiscall winIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange(struct w_steam_iface *_this, int32_t nFidelityLevel)
 {
     struct cppIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange_params params =
     {
@@ -5350,7 +5350,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_012_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_012_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_012_TriggerHapticPulse_params params =
     {
@@ -6089,7 +6089,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_014_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_014_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_014_TriggerHapticPulse_params params =
     {
@@ -6827,7 +6827,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_015_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_015_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_015_TriggerHapticPulse_params params =
     {
@@ -7578,7 +7578,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_016_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_016_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_016_TriggerHapticPulse_params params =
     {
@@ -8321,7 +8321,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_017_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_017_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_017_TriggerHapticPulse_params params =
     {
@@ -9083,7 +9083,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_019_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_019_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_019_TriggerHapticPulse_params params =
     {
@@ -9862,7 +9862,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_020_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_020_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_020_TriggerHapticPulse_params params =
     {
@@ -10651,7 +10651,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_021_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_021_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_021_TriggerHapticPulse_params params =
     {
@@ -11417,7 +11417,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_GetControllerStateWithPose(struct w_s
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_022_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall winIVRSystem_IVRSystem_022_TriggerHapticPulse(struct w_steam_iface *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, uint16_t usDurationMicroSec)
 {
     struct cppIVRSystem_IVRSystem_022_TriggerHapticPulse_params params =
     {
