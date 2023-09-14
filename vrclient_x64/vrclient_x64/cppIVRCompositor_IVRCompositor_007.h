@@ -41,7 +41,7 @@ extern void cppIVRCompositor_IVRCompositor_007_GetGamma( struct cppIVRCompositor
 struct cppIVRCompositor_IVRCompositor_007_WaitGetPoses_params
 {
     void *linux_side;
-    VRCompositorError _ret;
+    uint32_t _ret;
     TrackedDevicePose_t *pRenderPoseArray;
     uint32_t unRenderPoseArrayCount;
     TrackedDevicePose_t *pGamePoseArray;
@@ -52,9 +52,9 @@ extern void cppIVRCompositor_IVRCompositor_007_WaitGetPoses( struct cppIVRCompos
 struct cppIVRCompositor_IVRCompositor_007_Submit_params
 {
     void *linux_side;
-    VRCompositorError _ret;
-    Hmd_Eye eEye;
-    GraphicsAPIConvention eTextureType;
+    uint32_t _ret;
+    uint32_t eEye;
+    uint32_t eTextureType;
     void *pTexture;
     const VRTextureBounds_t *pBounds;
 };
@@ -123,14 +123,14 @@ extern void cppIVRCompositor_IVRCompositor_007_IsFullscreen( struct cppIVRCompos
 struct cppIVRCompositor_IVRCompositor_007_SetTrackingSpace_params
 {
     void *linux_side;
-    TrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppIVRCompositor_IVRCompositor_007_SetTrackingSpace( struct cppIVRCompositor_IVRCompositor_007_SetTrackingSpace_params *params );
 
 struct cppIVRCompositor_IVRCompositor_007_GetTrackingSpace_params
 {
     void *linux_side;
-    TrackingUniverseOrigin _ret;
+    uint32_t _ret;
 };
 extern void cppIVRCompositor_IVRCompositor_007_GetTrackingSpace( struct cppIVRCompositor_IVRCompositor_007_GetTrackingSpace_params *params );
 

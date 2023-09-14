@@ -390,7 +390,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_GetComponentRende
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_GetComponentState, 24)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent, 12)
 
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, winRenderModel_t_0918 **ppRenderModel)
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, winRenderModel_t_0918 **ppRenderModel)
 {
     struct cppIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async_params params =
     {
@@ -414,7 +414,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeRenderModel(struct w_
     cppIVRRenderModels_IVRRenderModels_004_FreeRenderModel( &params );
 }
 
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async(struct w_steam_iface *_this, TextureID_t textureId, winRenderModel_TextureMap_t_0918 **ppTexture)
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async(struct w_steam_iface *_this, TextureID_t textureId, winRenderModel_TextureMap_t_0918 **ppTexture)
 {
     struct cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async_params params =
     {
@@ -438,7 +438,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTexture(struct w_stea
     cppIVRRenderModels_IVRRenderModels_004_FreeTexture( &params );
 }
 
-extern EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
 
 extern void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11(struct w_steam_iface *_this, void *pD3D11Texture2D);
 
@@ -649,7 +649,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_GetRenderModelThu
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath, 20)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum, 8)
 
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, winRenderModel_t_1015 **ppRenderModel)
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, winRenderModel_t_1015 **ppRenderModel)
 {
     struct cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async_params params =
     {
@@ -673,7 +673,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeRenderModel(struct w_
     cppIVRRenderModels_IVRRenderModels_005_FreeRenderModel( &params );
 }
 
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(struct w_steam_iface *_this, TextureID_t textureId, winRenderModel_TextureMap_t_1015 **ppTexture)
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(struct w_steam_iface *_this, TextureID_t textureId, winRenderModel_TextureMap_t_1015 **ppTexture)
 {
     struct cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async_params params =
     {
@@ -697,9 +697,9 @@ void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTexture(struct w_stea
     cppIVRRenderModels_IVRRenderModels_005_FreeTexture( &params );
 }
 
-extern EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
 
-extern EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pDstTexture);
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pDstTexture);
 
 extern void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11(struct w_steam_iface *_this, void *pD3D11Texture2D);
 
@@ -961,7 +961,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_GetRenderModelThu
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_GetRenderModelOriginalPath, 20)
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_GetRenderModelErrorNameFromEnum, 8)
 
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, winRenderModel_t_1267 **ppRenderModel)
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(struct w_steam_iface *_this, const char *pchRenderModelName, winRenderModel_t_1267 **ppRenderModel)
 {
     struct cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async_params params =
     {
@@ -985,7 +985,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel(struct w_
     cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel( &params );
 }
 
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(struct w_steam_iface *_this, TextureID_t textureId, winRenderModel_TextureMap_t_1267 **ppTexture)
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(struct w_steam_iface *_this, TextureID_t textureId, winRenderModel_TextureMap_t_1267 **ppTexture)
 {
     struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params params =
     {
@@ -1009,9 +1009,9 @@ void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture(struct w_stea
     cppIVRRenderModels_IVRRenderModels_006_FreeTexture( &params );
 }
 
-extern EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pD3D11Device, void **ppD3D11Texture2D);
 
-extern EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pDstTexture);
+extern uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async(struct w_steam_iface *_this, TextureID_t textureId, void *pDstTexture);
 
 extern void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11(struct w_steam_iface *_this, void *pD3D11Texture2D);
 

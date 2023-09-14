@@ -41,7 +41,7 @@ extern void cppIVRCompositor_IVRCompositor_005_GetGamma( struct cppIVRCompositor
 struct cppIVRCompositor_IVRCompositor_005_SetGraphicsDevice_params
 {
     void *linux_side;
-    Compositor_DeviceType eType;
+    uint32_t eType;
     void *pDevice;
 };
 extern void cppIVRCompositor_IVRCompositor_005_SetGraphicsDevice( struct cppIVRCompositor_IVRCompositor_005_SetGraphicsDevice_params *params );
@@ -57,7 +57,7 @@ extern void cppIVRCompositor_IVRCompositor_005_WaitGetPoses( struct cppIVRCompos
 struct cppIVRCompositor_IVRCompositor_005_Submit_params
 {
     void *linux_side;
-    Hmd_Eye eEye;
+    uint32_t eEye;
     void *pTexture;
     Compositor_TextureBounds *pBounds;
 };
@@ -180,14 +180,14 @@ extern void cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection( struc
 struct cppIVRCompositor_IVRCompositor_005_SetTrackingSpace_params
 {
     void *linux_side;
-    TrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppIVRCompositor_IVRCompositor_005_SetTrackingSpace( struct cppIVRCompositor_IVRCompositor_005_SetTrackingSpace_params *params );
 
 struct cppIVRCompositor_IVRCompositor_005_GetTrackingSpace_params
 {
     void *linux_side;
-    TrackingUniverseOrigin _ret;
+    uint32_t _ret;
 };
 extern void cppIVRCompositor_IVRCompositor_005_GetTrackingSpace( struct cppIVRCompositor_IVRCompositor_005_GetTrackingSpace_params *params );
 

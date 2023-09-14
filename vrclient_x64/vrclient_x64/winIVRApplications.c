@@ -40,7 +40,7 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_001_GetTransitionStat
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_001_PerformApplicationPrelaunchCheck, 8)
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum, 8)
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     struct cppIVRApplications_IVRApplications_001_AddApplicationManifest_params params =
     {
@@ -55,7 +55,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_AddApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     struct cppIVRApplications_IVRApplications_001_RemoveApplicationManifest_params params =
     {
@@ -92,7 +92,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_001_GetApplicationCount(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_001_GetApplicationKeyByIndex_params params =
     {
@@ -106,7 +106,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_001_GetApplicationKeyByProcessId_params params =
     {
@@ -120,7 +120,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_001_LaunchApplication_params params =
     {
@@ -132,7 +132,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_001_LaunchDashboardOverlay_params params =
     {
@@ -144,7 +144,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_LaunchDash
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_001_IdentifyApplication_params params =
     {
@@ -169,7 +169,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_001_GetApplicationProcess
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_001_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, EVRApplicationError error)
+const char * __thiscall winIVRApplications_IVRApplications_001_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRApplications_IVRApplications_001_GetApplicationsErrorNameFromEnum_params params =
     {
@@ -181,7 +181,7 @@ const char * __thiscall winIVRApplications_IVRApplications_001_GetApplicationsEr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_001_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError *peError)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_001_GetApplicationPropertyString_params params =
     {
@@ -197,7 +197,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_001_GetApplicationPropert
     return params._ret;
 }
 
-bool __thiscall winIVRApplications_IVRApplications_001_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+bool __thiscall winIVRApplications_IVRApplications_001_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_001_GetApplicationPropertyBool_params params =
     {
@@ -211,7 +211,7 @@ bool __thiscall winIVRApplications_IVRApplications_001_GetApplicationPropertyBoo
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetHomeApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_GetHomeApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_001_GetHomeApplication_params params =
     {
@@ -224,7 +224,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetHomeApp
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_SetHomeApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_SetHomeApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_001_SetHomeApplication_params params =
     {
@@ -236,7 +236,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_SetHomeApp
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
 {
     struct cppIVRApplications_IVRApplications_001_SetApplicationAutoLaunch_params params =
     {
@@ -261,7 +261,7 @@ bool __thiscall winIVRApplications_IVRApplications_001_GetApplicationAutoLaunch(
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_001_GetStartingApplication_params params =
     {
@@ -274,7 +274,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_GetStartin
     return params._ret;
 }
 
-EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_001_GetTransitionState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_GetTransitionState(struct w_steam_iface *_this)
 {
     struct cppIVRApplications_IVRApplications_001_GetTransitionState_params params =
     {
@@ -285,7 +285,7 @@ EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_001_
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_001_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_001_PerformApplicationPrelaunchCheck_params params =
     {
@@ -297,7 +297,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_PerformApp
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, EVRApplicationTransitionState state)
+const char * __thiscall winIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, uint32_t state)
 {
     struct cppIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum_params params =
     {
@@ -423,7 +423,7 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_002_PerformApplicatio
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_002_GetApplicationsTransitionStateNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_002_IsQuitUserPromptRequested, 4)
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     struct cppIVRApplications_IVRApplications_002_AddApplicationManifest_params params =
     {
@@ -438,7 +438,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_AddApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     struct cppIVRApplications_IVRApplications_002_RemoveApplicationManifest_params params =
     {
@@ -475,7 +475,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_002_GetApplicationCount(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_002_GetApplicationKeyByIndex_params params =
     {
@@ -489,7 +489,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_002_GetApplicationKeyByProcessId_params params =
     {
@@ -503,7 +503,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_002_LaunchApplication_params params =
     {
@@ -515,7 +515,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_002_LaunchDashboardOverlay_params params =
     {
@@ -527,7 +527,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_LaunchDash
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_002_IdentifyApplication_params params =
     {
@@ -552,7 +552,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_002_GetApplicationProcess
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_002_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, EVRApplicationError error)
+const char * __thiscall winIVRApplications_IVRApplications_002_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRApplications_IVRApplications_002_GetApplicationsErrorNameFromEnum_params params =
     {
@@ -564,7 +564,7 @@ const char * __thiscall winIVRApplications_IVRApplications_002_GetApplicationsEr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_002_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError *peError)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_002_GetApplicationPropertyString_params params =
     {
@@ -580,7 +580,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_002_GetApplicationPropert
     return params._ret;
 }
 
-bool __thiscall winIVRApplications_IVRApplications_002_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+bool __thiscall winIVRApplications_IVRApplications_002_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_002_GetApplicationPropertyBool_params params =
     {
@@ -594,7 +594,7 @@ bool __thiscall winIVRApplications_IVRApplications_002_GetApplicationPropertyBoo
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
 {
     struct cppIVRApplications_IVRApplications_002_SetApplicationAutoLaunch_params params =
     {
@@ -619,7 +619,7 @@ bool __thiscall winIVRApplications_IVRApplications_002_GetApplicationAutoLaunch(
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_002_GetStartingApplication_params params =
     {
@@ -632,7 +632,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_GetStartin
     return params._ret;
 }
 
-EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_002_GetTransitionState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_GetTransitionState(struct w_steam_iface *_this)
 {
     struct cppIVRApplications_IVRApplications_002_GetTransitionState_params params =
     {
@@ -643,7 +643,7 @@ EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_002_
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_002_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_002_PerformApplicationPrelaunchCheck_params params =
     {
@@ -655,7 +655,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_PerformApp
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_002_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, EVRApplicationTransitionState state)
+const char * __thiscall winIVRApplications_IVRApplications_002_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, uint32_t state)
 {
     struct cppIVRApplications_IVRApplications_002_GetApplicationsTransitionStateNameFromEnum_params params =
     {
@@ -791,7 +791,7 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_003_PerformApplicatio
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_003_GetApplicationsTransitionStateNameFromEnum, 8)
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_003_IsQuitUserPromptRequested, 4)
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     struct cppIVRApplications_IVRApplications_003_AddApplicationManifest_params params =
     {
@@ -806,7 +806,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_AddApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     struct cppIVRApplications_IVRApplications_003_RemoveApplicationManifest_params params =
     {
@@ -843,7 +843,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationCount(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_003_GetApplicationKeyByIndex_params params =
     {
@@ -857,7 +857,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_003_GetApplicationKeyByProcessId_params params =
     {
@@ -871,7 +871,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_003_LaunchApplication_params params =
     {
@@ -883,7 +883,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_003_LaunchDashboardOverlay_params params =
     {
@@ -895,7 +895,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_LaunchDash
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_003_IdentifyApplication_params params =
     {
@@ -920,7 +920,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationProcess
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_003_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, EVRApplicationError error)
+const char * __thiscall winIVRApplications_IVRApplications_003_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRApplications_IVRApplications_003_GetApplicationsErrorNameFromEnum_params params =
     {
@@ -932,7 +932,7 @@ const char * __thiscall winIVRApplications_IVRApplications_003_GetApplicationsEr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError *peError)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_003_GetApplicationPropertyString_params params =
     {
@@ -948,7 +948,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropert
     return params._ret;
 }
 
-bool __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+bool __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_003_GetApplicationPropertyBool_params params =
     {
@@ -962,7 +962,7 @@ bool __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropertyBoo
     return params._ret;
 }
 
-uint64_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+uint64_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_003_GetApplicationPropertyUint64_params params =
     {
@@ -976,7 +976,7 @@ uint64_t __thiscall winIVRApplications_IVRApplications_003_GetApplicationPropert
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
 {
     struct cppIVRApplications_IVRApplications_003_SetApplicationAutoLaunch_params params =
     {
@@ -1001,7 +1001,7 @@ bool __thiscall winIVRApplications_IVRApplications_003_GetApplicationAutoLaunch(
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_003_GetStartingApplication_params params =
     {
@@ -1014,7 +1014,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_GetStartin
     return params._ret;
 }
 
-EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_003_GetTransitionState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_GetTransitionState(struct w_steam_iface *_this)
 {
     struct cppIVRApplications_IVRApplications_003_GetTransitionState_params params =
     {
@@ -1025,7 +1025,7 @@ EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_003_
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_003_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_003_PerformApplicationPrelaunchCheck_params params =
     {
@@ -1037,7 +1037,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_PerformApp
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_003_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, EVRApplicationTransitionState state)
+const char * __thiscall winIVRApplications_IVRApplications_003_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, uint32_t state)
 {
     struct cppIVRApplications_IVRApplications_003_GetApplicationsTransitionStateNameFromEnum_params params =
     {
@@ -1177,7 +1177,7 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_004_GetApplicationsTr
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_004_IsQuitUserPromptRequested, 4)
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_004_LaunchInternalProcess, 16)
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     struct cppIVRApplications_IVRApplications_004_AddApplicationManifest_params params =
     {
@@ -1192,7 +1192,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_AddApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     struct cppIVRApplications_IVRApplications_004_RemoveApplicationManifest_params params =
     {
@@ -1229,7 +1229,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationCount(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_004_GetApplicationKeyByIndex_params params =
     {
@@ -1243,7 +1243,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_004_GetApplicationKeyByProcessId_params params =
     {
@@ -1257,7 +1257,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_004_LaunchApplication_params params =
     {
@@ -1269,7 +1269,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_004_LaunchDashboardOverlay_params params =
     {
@@ -1293,7 +1293,7 @@ bool __thiscall winIVRApplications_IVRApplications_004_CancelApplicationLaunch(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_004_IdentifyApplication_params params =
     {
@@ -1318,7 +1318,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationProcess
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_004_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, EVRApplicationError error)
+const char * __thiscall winIVRApplications_IVRApplications_004_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRApplications_IVRApplications_004_GetApplicationsErrorNameFromEnum_params params =
     {
@@ -1330,7 +1330,7 @@ const char * __thiscall winIVRApplications_IVRApplications_004_GetApplicationsEr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError *peError)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_004_GetApplicationPropertyString_params params =
     {
@@ -1346,7 +1346,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropert
     return params._ret;
 }
 
-bool __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+bool __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_004_GetApplicationPropertyBool_params params =
     {
@@ -1360,7 +1360,7 @@ bool __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropertyBoo
     return params._ret;
 }
 
-uint64_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+uint64_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_004_GetApplicationPropertyUint64_params params =
     {
@@ -1374,7 +1374,7 @@ uint64_t __thiscall winIVRApplications_IVRApplications_004_GetApplicationPropert
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
 {
     struct cppIVRApplications_IVRApplications_004_SetApplicationAutoLaunch_params params =
     {
@@ -1399,7 +1399,7 @@ bool __thiscall winIVRApplications_IVRApplications_004_GetApplicationAutoLaunch(
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_004_GetStartingApplication_params params =
     {
@@ -1412,7 +1412,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_GetStartin
     return params._ret;
 }
 
-EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_004_GetTransitionState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_GetTransitionState(struct w_steam_iface *_this)
 {
     struct cppIVRApplications_IVRApplications_004_GetTransitionState_params params =
     {
@@ -1423,7 +1423,7 @@ EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_004_
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_004_PerformApplicationPrelaunchCheck_params params =
     {
@@ -1435,7 +1435,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_PerformApp
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_004_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, EVRApplicationTransitionState state)
+const char * __thiscall winIVRApplications_IVRApplications_004_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, uint32_t state)
 {
     struct cppIVRApplications_IVRApplications_004_GetApplicationsTransitionStateNameFromEnum_params params =
     {
@@ -1458,7 +1458,7 @@ bool __thiscall winIVRApplications_IVRApplications_004_IsQuitUserPromptRequested
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
+uint32_t __thiscall winIVRApplications_IVRApplications_004_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
 {
     struct cppIVRApplications_IVRApplications_004_LaunchInternalProcess_params params =
     {
@@ -1594,7 +1594,7 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_005_GetApplicationsTr
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_005_IsQuitUserPromptRequested, 4)
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_005_LaunchInternalProcess, 16)
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     struct cppIVRApplications_IVRApplications_005_AddApplicationManifest_params params =
     {
@@ -1609,7 +1609,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_AddApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     struct cppIVRApplications_IVRApplications_005_RemoveApplicationManifest_params params =
     {
@@ -1646,7 +1646,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationCount(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_005_GetApplicationKeyByIndex_params params =
     {
@@ -1660,7 +1660,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_005_GetApplicationKeyByProcessId_params params =
     {
@@ -1674,7 +1674,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_005_LaunchApplication_params params =
     {
@@ -1686,7 +1686,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     struct cppIVRApplications_IVRApplications_005_LaunchTemplateApplication_params params =
     {
@@ -1701,7 +1701,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchTemp
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_005_LaunchDashboardOverlay_params params =
     {
@@ -1725,7 +1725,7 @@ bool __thiscall winIVRApplications_IVRApplications_005_CancelApplicationLaunch(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_005_IdentifyApplication_params params =
     {
@@ -1750,7 +1750,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationProcess
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_005_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, EVRApplicationError error)
+const char * __thiscall winIVRApplications_IVRApplications_005_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRApplications_IVRApplications_005_GetApplicationsErrorNameFromEnum_params params =
     {
@@ -1762,7 +1762,7 @@ const char * __thiscall winIVRApplications_IVRApplications_005_GetApplicationsEr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError *peError)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_005_GetApplicationPropertyString_params params =
     {
@@ -1778,7 +1778,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropert
     return params._ret;
 }
 
-bool __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+bool __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_005_GetApplicationPropertyBool_params params =
     {
@@ -1792,7 +1792,7 @@ bool __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropertyBoo
     return params._ret;
 }
 
-uint64_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+uint64_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_005_GetApplicationPropertyUint64_params params =
     {
@@ -1806,7 +1806,7 @@ uint64_t __thiscall winIVRApplications_IVRApplications_005_GetApplicationPropert
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
 {
     struct cppIVRApplications_IVRApplications_005_SetApplicationAutoLaunch_params params =
     {
@@ -1831,7 +1831,7 @@ bool __thiscall winIVRApplications_IVRApplications_005_GetApplicationAutoLaunch(
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_005_GetStartingApplication_params params =
     {
@@ -1844,7 +1844,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_GetStartin
     return params._ret;
 }
 
-EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_005_GetTransitionState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_GetTransitionState(struct w_steam_iface *_this)
 {
     struct cppIVRApplications_IVRApplications_005_GetTransitionState_params params =
     {
@@ -1855,7 +1855,7 @@ EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_005_
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_005_PerformApplicationPrelaunchCheck_params params =
     {
@@ -1867,7 +1867,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_PerformApp
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_005_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, EVRApplicationTransitionState state)
+const char * __thiscall winIVRApplications_IVRApplications_005_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, uint32_t state)
 {
     struct cppIVRApplications_IVRApplications_005_GetApplicationsTransitionStateNameFromEnum_params params =
     {
@@ -1890,7 +1890,7 @@ bool __thiscall winIVRApplications_IVRApplications_005_IsQuitUserPromptRequested
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
+uint32_t __thiscall winIVRApplications_IVRApplications_005_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
 {
     struct cppIVRApplications_IVRApplications_005_LaunchInternalProcess_params params =
     {
@@ -2035,7 +2035,7 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_006_IsQuitUserPromptR
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_006_LaunchInternalProcess, 16)
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_006_GetCurrentSceneProcessId, 4)
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     struct cppIVRApplications_IVRApplications_006_AddApplicationManifest_params params =
     {
@@ -2050,7 +2050,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_AddApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     struct cppIVRApplications_IVRApplications_006_RemoveApplicationManifest_params params =
     {
@@ -2087,7 +2087,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationCount(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_006_GetApplicationKeyByIndex_params params =
     {
@@ -2101,7 +2101,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_006_GetApplicationKeyByProcessId_params params =
     {
@@ -2115,7 +2115,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_006_LaunchApplication_params params =
     {
@@ -2127,7 +2127,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     struct cppIVRApplications_IVRApplications_006_LaunchTemplateApplication_params params =
     {
@@ -2155,7 +2155,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_006_LaunchDashboardOverlay_params params =
     {
@@ -2179,7 +2179,7 @@ bool __thiscall winIVRApplications_IVRApplications_006_CancelApplicationLaunch(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_006_IdentifyApplication_params params =
     {
@@ -2204,7 +2204,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationProcess
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_006_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, EVRApplicationError error)
+const char * __thiscall winIVRApplications_IVRApplications_006_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRApplications_IVRApplications_006_GetApplicationsErrorNameFromEnum_params params =
     {
@@ -2216,7 +2216,7 @@ const char * __thiscall winIVRApplications_IVRApplications_006_GetApplicationsEr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError *peError)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyString_params params =
     {
@@ -2232,7 +2232,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropert
     return params._ret;
 }
 
-bool __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+bool __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyBool_params params =
     {
@@ -2246,7 +2246,7 @@ bool __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropertyBoo
     return params._ret;
 }
 
-uint64_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+uint64_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_006_GetApplicationPropertyUint64_params params =
     {
@@ -2260,7 +2260,7 @@ uint64_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationPropert
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
 {
     struct cppIVRApplications_IVRApplications_006_SetApplicationAutoLaunch_params params =
     {
@@ -2285,7 +2285,7 @@ bool __thiscall winIVRApplications_IVRApplications_006_GetApplicationAutoLaunch(
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_SetDefaultApplicationForMimeType(struct w_steam_iface *_this, const char *pchAppKey, const char *pchMimeType)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_SetDefaultApplicationForMimeType(struct w_steam_iface *_this, const char *pchAppKey, const char *pchMimeType)
 {
     struct cppIVRApplications_IVRApplications_006_SetDefaultApplicationForMimeType_params params =
     {
@@ -2354,7 +2354,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_006_GetApplicationLaunchA
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_006_GetStartingApplication_params params =
     {
@@ -2367,7 +2367,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_GetStartin
     return params._ret;
 }
 
-EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_006_GetTransitionState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_GetTransitionState(struct w_steam_iface *_this)
 {
     struct cppIVRApplications_IVRApplications_006_GetTransitionState_params params =
     {
@@ -2378,7 +2378,7 @@ EVRApplicationTransitionState __thiscall winIVRApplications_IVRApplications_006_
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_006_PerformApplicationPrelaunchCheck_params params =
     {
@@ -2390,7 +2390,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_PerformApp
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_006_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, EVRApplicationTransitionState state)
+const char * __thiscall winIVRApplications_IVRApplications_006_GetApplicationsTransitionStateNameFromEnum(struct w_steam_iface *_this, uint32_t state)
 {
     struct cppIVRApplications_IVRApplications_006_GetApplicationsTransitionStateNameFromEnum_params params =
     {
@@ -2413,7 +2413,7 @@ bool __thiscall winIVRApplications_IVRApplications_006_IsQuitUserPromptRequested
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
 {
     struct cppIVRApplications_IVRApplications_006_LaunchInternalProcess_params params =
     {
@@ -2582,7 +2582,7 @@ DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetSceneApplicati
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_LaunchInternalProcess, 16)
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetCurrentSceneProcessId, 4)
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_AddApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath, bool bTemporary)
 {
     struct cppIVRApplications_IVRApplications_007_AddApplicationManifest_params params =
     {
@@ -2597,7 +2597,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_AddApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_RemoveApplicationManifest(struct w_steam_iface *_this, const char *pchApplicationManifestFullPath)
 {
     struct cppIVRApplications_IVRApplications_007_RemoveApplicationManifest_params params =
     {
@@ -2634,7 +2634,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationCount(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationKeyByIndex(struct w_steam_iface *_this, uint32_t unApplicationIndex, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_007_GetApplicationKeyByIndex_params params =
     {
@@ -2648,7 +2648,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId(struct w_steam_iface *_this, uint32_t unProcessId, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId_params params =
     {
@@ -2662,7 +2662,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchApplication(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_007_LaunchApplication_params params =
     {
@@ -2674,7 +2674,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplication(struct w_steam_iface *_this, const char *pchTemplateAppKey, const char *pchNewAppKey, const AppOverrideKeys_t *pKeys, uint32_t unKeys)
 {
     struct cppIVRApplications_IVRApplications_007_LaunchTemplateApplication_params params =
     {
@@ -2702,7 +2702,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchAppl
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchDashboardOverlay(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_007_LaunchDashboardOverlay_params params =
     {
@@ -2726,7 +2726,7 @@ bool __thiscall winIVRApplications_IVRApplications_007_CancelApplicationLaunch(s
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_IdentifyApplication(struct w_steam_iface *_this, uint32_t unProcessId, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_007_IdentifyApplication_params params =
     {
@@ -2751,7 +2751,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationProcess
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, EVRApplicationError error)
+const char * __thiscall winIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum_params params =
     {
@@ -2763,7 +2763,7 @@ const char * __thiscall winIVRApplications_IVRApplications_007_GetApplicationsEr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError *peError)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyString(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, char *pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_007_GetApplicationPropertyString_params params =
     {
@@ -2779,7 +2779,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropert
     return params._ret;
 }
 
-bool __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+bool __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyBool(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_007_GetApplicationPropertyBool_params params =
     {
@@ -2793,7 +2793,7 @@ bool __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyBoo
     return params._ret;
 }
 
-uint64_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError *peError)
+uint64_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyUint64(struct w_steam_iface *_this, const char *pchAppKey, uint32_t eProperty, uint32_t *peError)
 {
     struct cppIVRApplications_IVRApplications_007_GetApplicationPropertyUint64_params params =
     {
@@ -2807,7 +2807,7 @@ uint64_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropert
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_SetApplicationAutoLaunch(struct w_steam_iface *_this, const char *pchAppKey, bool bAutoLaunch)
 {
     struct cppIVRApplications_IVRApplications_007_SetApplicationAutoLaunch_params params =
     {
@@ -2832,7 +2832,7 @@ bool __thiscall winIVRApplications_IVRApplications_007_GetApplicationAutoLaunch(
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType(struct w_steam_iface *_this, const char *pchAppKey, const char *pchMimeType)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType(struct w_steam_iface *_this, const char *pchAppKey, const char *pchMimeType)
 {
     struct cppIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType_params params =
     {
@@ -2901,7 +2901,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationLaunchA
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetStartingApplication(struct w_steam_iface *_this, char *pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
 {
     struct cppIVRApplications_IVRApplications_007_GetStartingApplication_params params =
     {
@@ -2914,7 +2914,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetStartin
     return params._ret;
 }
 
-EVRSceneApplicationState __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicationState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicationState(struct w_steam_iface *_this)
 {
     struct cppIVRApplications_IVRApplications_007_GetSceneApplicationState_params params =
     {
@@ -2925,7 +2925,7 @@ EVRSceneApplicationState __thiscall winIVRApplications_IVRApplications_007_GetSc
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck(struct w_steam_iface *_this, const char *pchAppKey)
 {
     struct cppIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck_params params =
     {
@@ -2937,7 +2937,7 @@ EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_PerformApp
     return params._ret;
 }
 
-const char * __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum(struct w_steam_iface *_this, EVRSceneApplicationState state)
+const char * __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum(struct w_steam_iface *_this, uint32_t state)
 {
     struct cppIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum_params params =
     {
@@ -2949,7 +2949,7 @@ const char * __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicati
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchInternalProcess(struct w_steam_iface *_this, const char *pchBinaryPath, const char *pchArguments, const char *pchWorkingDirectory)
 {
     struct cppIVRApplications_IVRApplications_007_LaunchInternalProcess_params params =
     {

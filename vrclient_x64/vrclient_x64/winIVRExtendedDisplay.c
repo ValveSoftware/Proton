@@ -36,7 +36,7 @@ void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds(str
     cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds( &params );
 }
 
-void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(struct w_steam_iface *_this, EVREye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void __thiscall winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     struct cppIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport_params params =
     {
