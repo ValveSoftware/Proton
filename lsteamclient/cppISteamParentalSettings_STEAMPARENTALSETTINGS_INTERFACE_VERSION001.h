@@ -32,7 +32,7 @@ struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsF
 {
     void *linux_side;
     bool _ret;
-    EParentalFeature eFeature;
+    uint32_t eFeature;
 };
 extern void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked_params *params );
 
@@ -40,7 +40,7 @@ struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsF
 {
     void *linux_side;
     bool _ret;
-    EParentalFeature eFeature;
+    uint32_t eFeature;
 };
 extern void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList_params *params );
 

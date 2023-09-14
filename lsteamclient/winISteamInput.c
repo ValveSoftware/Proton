@@ -205,7 +205,7 @@ InputDigitalActionData_t * __thiscall winISteamInput_SteamInput001_GetDigitalAct
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput001_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput001_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput001_GetDigitalActionOrigins_params params =
     {
@@ -246,7 +246,7 @@ InputAnalogActionData_t * __thiscall winISteamInput_SteamInput001_GetAnalogActio
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput001_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput001_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput001_GetAnalogActionOrigins_params params =
     {
@@ -261,7 +261,7 @@ int __thiscall winISteamInput_SteamInput001_GetAnalogActionOrigins(struct w_stea
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetGlyphForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput001_GetGlyphForActionOrigin_params params =
     {
@@ -273,7 +273,7 @@ const char * __thiscall winISteamInput_SteamInput001_GetGlyphForActionOrigin(str
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput001_GetStringForActionOrigin_params params =
     {
@@ -338,7 +338,7 @@ void __thiscall winISteamInput_SteamInput001_SetLEDColor(struct w_steam_iface *_
     cppISteamInput_SteamInput001_SetLEDColor( &params );
 }
 
-void __thiscall winISteamInput_SteamInput001_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput001_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamInput_SteamInput001_TriggerHapticPulse_params params =
     {
@@ -351,7 +351,7 @@ void __thiscall winISteamInput_SteamInput001_TriggerHapticPulse(struct w_steam_i
     cppISteamInput_SteamInput001_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamInput_SteamInput001_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput001_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamInput_SteamInput001_TriggerRepeatedHapticPulse_params params =
     {
@@ -379,7 +379,7 @@ bool __thiscall winISteamInput_SteamInput001_ShowBindingPanel(struct w_steam_ifa
     return params._ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput001_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
+uint32_t __thiscall winISteamInput_SteamInput001_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     struct cppISteamInput_SteamInput001_GetInputTypeForHandle_params params =
     {
@@ -415,7 +415,7 @@ int __thiscall winISteamInput_SteamInput001_GetGamepadIndexForController(struct 
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetStringForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput001_GetStringForXboxOrigin_params params =
     {
@@ -427,7 +427,7 @@ const char * __thiscall winISteamInput_SteamInput001_GetStringForXboxOrigin(stru
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput001_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput001_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput001_GetGlyphForXboxOrigin_params params =
     {
@@ -439,7 +439,7 @@ const char * __thiscall winISteamInput_SteamInput001_GetGlyphForXboxOrigin(struc
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+uint32_t __thiscall winISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput001_GetActionOriginFromXboxOrigin_params params =
     {
@@ -452,7 +452,7 @@ EInputActionOrigin __thiscall winISteamInput_SteamInput001_GetActionOriginFromXb
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput001_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+uint32_t __thiscall winISteamInput_SteamInput001_TranslateActionOrigin(struct w_steam_iface *_this, uint32_t eDestinationInputType, uint32_t eSourceOrigin)
 {
     struct cppISteamInput_SteamInput001_TranslateActionOrigin_params params =
     {
@@ -738,7 +738,7 @@ InputDigitalActionData_t * __thiscall winISteamInput_SteamInput002_GetDigitalAct
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput002_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput002_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput002_GetDigitalActionOrigins_params params =
     {
@@ -779,7 +779,7 @@ InputAnalogActionData_t * __thiscall winISteamInput_SteamInput002_GetAnalogActio
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput002_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput002_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput002_GetAnalogActionOrigins_params params =
     {
@@ -794,7 +794,7 @@ int __thiscall winISteamInput_SteamInput002_GetAnalogActionOrigins(struct w_stea
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetGlyphForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput002_GetGlyphForActionOrigin_params params =
     {
@@ -806,7 +806,7 @@ const char * __thiscall winISteamInput_SteamInput002_GetGlyphForActionOrigin(str
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput002_GetStringForActionOrigin_params params =
     {
@@ -871,7 +871,7 @@ void __thiscall winISteamInput_SteamInput002_SetLEDColor(struct w_steam_iface *_
     cppISteamInput_SteamInput002_SetLEDColor( &params );
 }
 
-void __thiscall winISteamInput_SteamInput002_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput002_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamInput_SteamInput002_TriggerHapticPulse_params params =
     {
@@ -884,7 +884,7 @@ void __thiscall winISteamInput_SteamInput002_TriggerHapticPulse(struct w_steam_i
     cppISteamInput_SteamInput002_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamInput_SteamInput002_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput002_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamInput_SteamInput002_TriggerRepeatedHapticPulse_params params =
     {
@@ -912,7 +912,7 @@ bool __thiscall winISteamInput_SteamInput002_ShowBindingPanel(struct w_steam_ifa
     return params._ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput002_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
+uint32_t __thiscall winISteamInput_SteamInput002_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     struct cppISteamInput_SteamInput002_GetInputTypeForHandle_params params =
     {
@@ -948,7 +948,7 @@ int __thiscall winISteamInput_SteamInput002_GetGamepadIndexForController(struct 
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetStringForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput002_GetStringForXboxOrigin_params params =
     {
@@ -960,7 +960,7 @@ const char * __thiscall winISteamInput_SteamInput002_GetStringForXboxOrigin(stru
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput002_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput002_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput002_GetGlyphForXboxOrigin_params params =
     {
@@ -972,7 +972,7 @@ const char * __thiscall winISteamInput_SteamInput002_GetGlyphForXboxOrigin(struc
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput002_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+uint32_t __thiscall winISteamInput_SteamInput002_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput002_GetActionOriginFromXboxOrigin_params params =
     {
@@ -985,7 +985,7 @@ EInputActionOrigin __thiscall winISteamInput_SteamInput002_GetActionOriginFromXb
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput002_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+uint32_t __thiscall winISteamInput_SteamInput002_TranslateActionOrigin(struct w_steam_iface *_this, uint32_t eDestinationInputType, uint32_t eSourceOrigin)
 {
     struct cppISteamInput_SteamInput002_TranslateActionOrigin_params params =
     {
@@ -1344,7 +1344,7 @@ InputDigitalActionData_t * __thiscall winISteamInput_SteamInput005_GetDigitalAct
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput005_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput005_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput005_GetDigitalActionOrigins_params params =
     {
@@ -1397,7 +1397,7 @@ InputAnalogActionData_t * __thiscall winISteamInput_SteamInput005_GetAnalogActio
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput005_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput005_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput005_GetAnalogActionOrigins_params params =
     {
@@ -1412,7 +1412,7 @@ int __thiscall winISteamInput_SteamInput005_GetAnalogActionOrigins(struct w_stea
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t eSize, uint32 unFlags)
 {
     struct cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin_params params =
     {
@@ -1426,7 +1426,7 @@ const char * __thiscall winISteamInput_SteamInput005_GetGlyphPNGForActionOrigin(
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32 unFlags)
 {
     struct cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin_params params =
     {
@@ -1439,7 +1439,7 @@ const char * __thiscall winISteamInput_SteamInput005_GetGlyphSVGForActionOrigin(
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy_params params =
     {
@@ -1451,7 +1451,7 @@ const char * __thiscall winISteamInput_SteamInput005_GetGlyphForActionOrigin_Leg
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput005_GetStringForActionOrigin_params params =
     {
@@ -1528,7 +1528,7 @@ void __thiscall winISteamInput_SteamInput005_TriggerVibrationExtended(struct w_s
     cppISteamInput_SteamInput005_TriggerVibrationExtended( &params );
 }
 
-void __thiscall winISteamInput_SteamInput005_TriggerSimpleHapticEvent(struct w_steam_iface *_this, InputHandle_t inputHandle, EControllerHapticLocation eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
+void __thiscall winISteamInput_SteamInput005_TriggerSimpleHapticEvent(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
 {
     struct cppISteamInput_SteamInput005_TriggerSimpleHapticEvent_params params =
     {
@@ -1559,7 +1559,7 @@ void __thiscall winISteamInput_SteamInput005_SetLEDColor(struct w_steam_iface *_
     cppISteamInput_SteamInput005_SetLEDColor( &params );
 }
 
-void __thiscall winISteamInput_SteamInput005_Legacy_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput005_Legacy_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamInput_SteamInput005_Legacy_TriggerHapticPulse_params params =
     {
@@ -1572,7 +1572,7 @@ void __thiscall winISteamInput_SteamInput005_Legacy_TriggerHapticPulse(struct w_
     cppISteamInput_SteamInput005_Legacy_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse_params params =
     {
@@ -1600,7 +1600,7 @@ bool __thiscall winISteamInput_SteamInput005_ShowBindingPanel(struct w_steam_ifa
     return params._ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput005_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
+uint32_t __thiscall winISteamInput_SteamInput005_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     struct cppISteamInput_SteamInput005_GetInputTypeForHandle_params params =
     {
@@ -1636,7 +1636,7 @@ int __thiscall winISteamInput_SteamInput005_GetGamepadIndexForController(struct 
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetStringForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput005_GetStringForXboxOrigin_params params =
     {
@@ -1648,7 +1648,7 @@ const char * __thiscall winISteamInput_SteamInput005_GetStringForXboxOrigin(stru
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput005_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput005_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput005_GetGlyphForXboxOrigin_params params =
     {
@@ -1660,7 +1660,7 @@ const char * __thiscall winISteamInput_SteamInput005_GetGlyphForXboxOrigin(struc
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput005_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+uint32_t __thiscall winISteamInput_SteamInput005_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput005_GetActionOriginFromXboxOrigin_params params =
     {
@@ -1673,7 +1673,7 @@ EInputActionOrigin __thiscall winISteamInput_SteamInput005_GetActionOriginFromXb
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput005_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+uint32_t __thiscall winISteamInput_SteamInput005_TranslateActionOrigin(struct w_steam_iface *_this, uint32_t eDestinationInputType, uint32_t eSourceOrigin)
 {
     struct cppISteamInput_SteamInput005_TranslateActionOrigin_params params =
     {
@@ -2056,7 +2056,7 @@ InputDigitalActionData_t * __thiscall winISteamInput_SteamInput006_GetDigitalAct
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput006_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput006_GetDigitalActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput006_GetDigitalActionOrigins_params params =
     {
@@ -2109,7 +2109,7 @@ InputAnalogActionData_t * __thiscall winISteamInput_SteamInput006_GetAnalogActio
     return params._ret;
 }
 
-int __thiscall winISteamInput_SteamInput006_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, EInputActionOrigin *originsOut)
+int __thiscall winISteamInput_SteamInput006_GetAnalogActionOrigins(struct w_steam_iface *_this, InputHandle_t inputHandle, InputActionSetHandle_t actionSetHandle, InputAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamInput_SteamInput006_GetAnalogActionOrigins_params params =
     {
@@ -2124,7 +2124,7 @@ int __thiscall winISteamInput_SteamInput006_GetAnalogActionOrigins(struct w_stea
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, ESteamInputGlyphSize eSize, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32_t eSize, uint32 unFlags)
 {
     struct cppISteamInput_SteamInput006_GetGlyphPNGForActionOrigin_params params =
     {
@@ -2138,7 +2138,7 @@ const char * __thiscall winISteamInput_SteamInput006_GetGlyphPNGForActionOrigin(
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin, uint32 unFlags)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin, uint32 unFlags)
 {
     struct cppISteamInput_SteamInput006_GetGlyphSVGForActionOrigin_params params =
     {
@@ -2151,7 +2151,7 @@ const char * __thiscall winISteamInput_SteamInput006_GetGlyphSVGForActionOrigin(
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput006_GetGlyphForActionOrigin_Legacy_params params =
     {
@@ -2163,7 +2163,7 @@ const char * __thiscall winISteamInput_SteamInput006_GetGlyphForActionOrigin_Leg
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetStringForActionOrigin(struct w_steam_iface *_this, EInputActionOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput006_GetStringForActionOrigin_params params =
     {
@@ -2240,7 +2240,7 @@ void __thiscall winISteamInput_SteamInput006_TriggerVibrationExtended(struct w_s
     cppISteamInput_SteamInput006_TriggerVibrationExtended( &params );
 }
 
-void __thiscall winISteamInput_SteamInput006_TriggerSimpleHapticEvent(struct w_steam_iface *_this, InputHandle_t inputHandle, EControllerHapticLocation eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
+void __thiscall winISteamInput_SteamInput006_TriggerSimpleHapticEvent(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eHapticLocation, uint8 nIntensity, char nGainDB, uint8 nOtherIntensity, char nOtherGainDB)
 {
     struct cppISteamInput_SteamInput006_TriggerSimpleHapticEvent_params params =
     {
@@ -2271,7 +2271,7 @@ void __thiscall winISteamInput_SteamInput006_SetLEDColor(struct w_steam_iface *_
     cppISteamInput_SteamInput006_SetLEDColor( &params );
 }
 
-void __thiscall winISteamInput_SteamInput006_Legacy_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamInput_SteamInput006_Legacy_TriggerHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamInput_SteamInput006_Legacy_TriggerHapticPulse_params params =
     {
@@ -2284,7 +2284,7 @@ void __thiscall winISteamInput_SteamInput006_Legacy_TriggerHapticPulse(struct w_
     cppISteamInput_SteamInput006_Legacy_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamInput_SteamInput006_Legacy_TriggerRepeatedHapticPulse_params params =
     {
@@ -2312,7 +2312,7 @@ bool __thiscall winISteamInput_SteamInput006_ShowBindingPanel(struct w_steam_ifa
     return params._ret;
 }
 
-ESteamInputType __thiscall winISteamInput_SteamInput006_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
+uint32_t __thiscall winISteamInput_SteamInput006_GetInputTypeForHandle(struct w_steam_iface *_this, InputHandle_t inputHandle)
 {
     struct cppISteamInput_SteamInput006_GetInputTypeForHandle_params params =
     {
@@ -2348,7 +2348,7 @@ int __thiscall winISteamInput_SteamInput006_GetGamepadIndexForController(struct 
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetStringForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput006_GetStringForXboxOrigin_params params =
     {
@@ -2360,7 +2360,7 @@ const char * __thiscall winISteamInput_SteamInput006_GetStringForXboxOrigin(stru
     return params._ret;
 }
 
-const char * __thiscall winISteamInput_SteamInput006_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamInput_SteamInput006_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput006_GetGlyphForXboxOrigin_params params =
     {
@@ -2372,7 +2372,7 @@ const char * __thiscall winISteamInput_SteamInput006_GetGlyphForXboxOrigin(struc
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput006_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, EXboxOrigin eOrigin)
+uint32_t __thiscall winISteamInput_SteamInput006_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, InputHandle_t inputHandle, uint32_t eOrigin)
 {
     struct cppISteamInput_SteamInput006_GetActionOriginFromXboxOrigin_params params =
     {
@@ -2385,7 +2385,7 @@ EInputActionOrigin __thiscall winISteamInput_SteamInput006_GetActionOriginFromXb
     return params._ret;
 }
 
-EInputActionOrigin __thiscall winISteamInput_SteamInput006_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
+uint32_t __thiscall winISteamInput_SteamInput006_TranslateActionOrigin(struct w_steam_iface *_this, uint32_t eDestinationInputType, uint32_t eSourceOrigin)
 {
     struct cppISteamInput_SteamInput006_TranslateActionOrigin_params params =
     {

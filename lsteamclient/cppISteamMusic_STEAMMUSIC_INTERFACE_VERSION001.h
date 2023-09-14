@@ -15,7 +15,7 @@ extern void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_BIsPlaying( struct cp
 struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus_params
 {
     void *linux_side;
-    AudioPlayback_Status _ret;
+    uint32_t _ret;
 };
 extern void cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus( struct cppISteamMusic_STEAMMUSIC_INTERFACE_VERSION001_GetPlaybackStatus_params *params );
 

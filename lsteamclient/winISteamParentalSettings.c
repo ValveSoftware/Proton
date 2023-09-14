@@ -68,7 +68,7 @@ bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSIO
     return params._ret;
 }
 
-bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(struct w_steam_iface *_this, EParentalFeature eFeature)
+bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked(struct w_steam_iface *_this, uint32_t eFeature)
 {
     struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureBlocked_params params =
     {
@@ -80,7 +80,7 @@ bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSIO
     return params._ret;
 }
 
-bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(struct w_steam_iface *_this, EParentalFeature eFeature)
+bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList(struct w_steam_iface *_this, uint32_t eFeature)
 {
     struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsFeatureInBlockList_params params =
     {

@@ -95,7 +95,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseUp_param
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    EHTMLMouseButton eMouseButton;
+    uint32_t eMouseButton;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseUp( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseUp_params *params );
 
@@ -103,7 +103,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDown_par
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    EHTMLMouseButton eMouseButton;
+    uint32_t eMouseButton;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDown( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDown_params *params );
 
@@ -111,7 +111,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleCl
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    EHTMLMouseButton eMouseButton;
+    uint32_t eMouseButton;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleClick( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_MouseDoubleClick_params *params );
 
@@ -137,7 +137,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown_param
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
     uint32 nNativeKeyCode;
-    EHTMLKeyModifiers eHTMLKeyModifiers;
+    uint32_t eHTMLKeyModifiers;
     bool bIsSystemKey;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyDown_params *params );
@@ -147,7 +147,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp_params
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
     uint32 nNativeKeyCode;
-    EHTMLKeyModifiers eHTMLKeyModifiers;
+    uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyUp_params *params );
 
@@ -156,7 +156,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar_param
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
     uint32 cUnicodeChar;
-    EHTMLKeyModifiers eHTMLKeyModifiers;
+    uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_KeyChar_params *params );
 

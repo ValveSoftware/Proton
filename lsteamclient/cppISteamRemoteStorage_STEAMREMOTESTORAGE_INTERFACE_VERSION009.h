@@ -47,7 +47,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPla
     void *linux_side;
     bool _ret;
     const char *pchFile;
-    ERemoteStoragePlatform eRemoteStoragePlatform;
+    uint32_t eRemoteStoragePlatform;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetSyncPlatforms_params *params );
 
@@ -120,7 +120,7 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetFi
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetSyncPlatforms_params
 {
     void *linux_side;
-    ERemoteStoragePlatform _ret;
+    uint32_t _ret;
     const char *pchFile;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetSyncPlatforms( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_GetSyncPlatforms_params *params );
@@ -236,9 +236,9 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWor
     AppId_t nConsumerAppId;
     const char *pchTitle;
     const char *pchDescription;
-    ERemoteStoragePublishedFileVisibility eVisibility;
+    uint32_t eVisibility;
     SteamParamStringArray_t *pTags;
-    EWorkshopFileType eWorkshopFileType;
+    uint32_t eWorkshopFileType;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile_params *params );
 
@@ -291,7 +291,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePubl
     void *linux_side;
     bool _ret;
     PublishedFileUpdateHandle_t updateHandle;
-    ERemoteStoragePublishedFileVisibility eVisibility;
+    uint32_t eVisibility;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileVisibility( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileVisibility_params *params );
 
@@ -409,14 +409,14 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVid
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    EWorkshopVideoProvider eVideoProvider;
+    uint32_t eVideoProvider;
     const char *pchVideoAccount;
     const char *pchVideoIdentifier;
     const char *pchPreviewFile;
     AppId_t nConsumerAppId;
     const char *pchTitle;
     const char *pchDescription;
-    ERemoteStoragePublishedFileVisibility eVisibility;
+    uint32_t eVisibility;
     SteamParamStringArray_t *pTags;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo_params *params );
@@ -426,7 +426,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetUserPub
     void *linux_side;
     SteamAPICall_t _ret;
     PublishedFileId_t unPublishedFileId;
-    EWorkshopFileAction eAction;
+    uint32_t eAction;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetUserPublishedFileAction( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_SetUserPublishedFileAction_params *params );
 
@@ -434,7 +434,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumerateP
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    EWorkshopFileAction eAction;
+    uint32_t eAction;
     uint32 unStartIndex;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedFilesByUserAction( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumeratePublishedFilesByUserAction_params *params );
@@ -443,7 +443,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_EnumerateP
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    EWorkshopEnumerationType eEnumerationType;
+    uint32_t eEnumerationType;
     uint32 unStartIndex;
     uint32 unCount;
     uint32 unDays;

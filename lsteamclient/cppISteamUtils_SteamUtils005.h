@@ -15,7 +15,7 @@ extern void cppISteamUtils_SteamUtils005_GetSecondsSinceComputerActive( struct c
 struct cppISteamUtils_SteamUtils005_GetConnectedUniverse_params
 {
     void *linux_side;
-    EUniverse _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils005_GetConnectedUniverse( struct cppISteamUtils_SteamUtils005_GetConnectedUniverse_params *params );
 
@@ -79,7 +79,7 @@ extern void cppISteamUtils_SteamUtils005_GetAppID( struct cppISteamUtils_SteamUt
 struct cppISteamUtils_SteamUtils005_SetOverlayNotificationPosition_params
 {
     void *linux_side;
-    ENotificationPosition eNotificationPosition;
+    uint32_t eNotificationPosition;
 };
 extern void cppISteamUtils_SteamUtils005_SetOverlayNotificationPosition( struct cppISteamUtils_SteamUtils005_SetOverlayNotificationPosition_params *params );
 
@@ -95,7 +95,7 @@ extern void cppISteamUtils_SteamUtils005_IsAPICallCompleted( struct cppISteamUti
 struct cppISteamUtils_SteamUtils005_GetAPICallFailureReason_params
 {
     void *linux_side;
-    ESteamAPICallFailure _ret;
+    uint32_t _ret;
     SteamAPICall_t hSteamAPICall;
 };
 extern void cppISteamUtils_SteamUtils005_GetAPICallFailureReason( struct cppISteamUtils_SteamUtils005_GetAPICallFailureReason_params *params );
@@ -158,8 +158,8 @@ struct cppISteamUtils_SteamUtils005_ShowGamepadTextInput_params
 {
     void *linux_side;
     bool _ret;
-    EGamepadTextInputMode eInputMode;
-    EGamepadTextInputLineMode eLineInputMode;
+    uint32_t eInputMode;
+    uint32_t eLineInputMode;
     const char *pchDescription;
     uint32 unCharMax;
 };

@@ -16,7 +16,7 @@ extern void cppISteamFriends_SteamFriends017_SetPersonaName( struct cppISteamFri
 struct cppISteamFriends_SteamFriends017_GetPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends017_GetPersonaState( struct cppISteamFriends_SteamFriends017_GetPersonaState_params *params );
 
@@ -40,7 +40,7 @@ extern void cppISteamFriends_SteamFriends017_GetFriendByIndex( struct cppISteamF
 struct cppISteamFriends_SteamFriends017_GetFriendRelationship_params
 {
     void *linux_side;
-    EFriendRelationship _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends017_GetFriendRelationship( struct cppISteamFriends_SteamFriends017_GetFriendRelationship_params *params );
@@ -48,7 +48,7 @@ extern void cppISteamFriends_SteamFriends017_GetFriendRelationship( struct cppIS
 struct cppISteamFriends_SteamFriends017_GetFriendPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends017_GetFriendPersonaState( struct cppISteamFriends_SteamFriends017_GetFriendPersonaState_params *params );
@@ -248,7 +248,7 @@ struct cppISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage_params
 {
     void *linux_side;
     const char *pchURL;
-    EActivateGameOverlayToWebPageMode eMode;
+    uint32_t eMode;
 };
 extern void cppISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage( struct cppISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage_params *params );
 
@@ -256,7 +256,7 @@ struct cppISteamFriends_SteamFriends017_ActivateGameOverlayToStore_params
 {
     void *linux_side;
     AppId_t nAppID;
-    EOverlayToStoreFlag eFlag;
+    uint32_t eFlag;
 };
 extern void cppISteamFriends_SteamFriends017_ActivateGameOverlayToStore( struct cppISteamFriends_SteamFriends017_ActivateGameOverlayToStore_params *params );
 
@@ -485,7 +485,7 @@ struct cppISteamFriends_SteamFriends017_GetClanChatMessage_params
     int iMessage;
     void *prgchText;
     int cchTextMax;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
     CSteamID *psteamidChatter;
 };
 extern void cppISteamFriends_SteamFriends017_GetClanChatMessage( struct cppISteamFriends_SteamFriends017_GetClanChatMessage_params *params );
@@ -548,7 +548,7 @@ struct cppISteamFriends_SteamFriends017_GetFriendMessage_params
     int iMessageID;
     void *pvData;
     int cubData;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
 };
 extern void cppISteamFriends_SteamFriends017_GetFriendMessage( struct cppISteamFriends_SteamFriends017_GetFriendMessage_params *params );
 
@@ -634,7 +634,7 @@ struct cppISteamFriends_SteamFriends017_BHasEquippedProfileItem_params
     void *linux_side;
     bool _ret;
     CSteamID steamID;
-    ECommunityProfileItemType itemType;
+    uint32_t itemType;
 };
 extern void cppISteamFriends_SteamFriends017_BHasEquippedProfileItem( struct cppISteamFriends_SteamFriends017_BHasEquippedProfileItem_params *params );
 
@@ -643,8 +643,8 @@ struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyString_params
     void *linux_side;
     const char *_ret;
     CSteamID steamID;
-    ECommunityProfileItemType itemType;
-    ECommunityProfileItemProperty prop;
+    uint32_t itemType;
+    uint32_t prop;
 };
 extern void cppISteamFriends_SteamFriends017_GetProfileItemPropertyString( struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyString_params *params );
 
@@ -653,8 +653,8 @@ struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint_params
     void *linux_side;
     uint32 _ret;
     CSteamID steamID;
-    ECommunityProfileItemType itemType;
-    ECommunityProfileItemProperty prop;
+    uint32_t itemType;
+    uint32_t prop;
 };
 extern void cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint( struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint_params *params );
 

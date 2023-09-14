@@ -28,7 +28,7 @@ extern void cppISteamUser_SteamUser005_BLoggedOn( struct cppISteamUser_SteamUser
 struct cppISteamUser_SteamUser005_GetLogonState_params
 {
     void *linux_side;
-    ELogonState _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUser_SteamUser005_GetLogonState( struct cppISteamUser_SteamUser005_GetLogonState_params *params );
 
@@ -97,7 +97,7 @@ struct cppISteamUser_SteamUser005_SetRegistryString_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     const char *pchValue;
 };
@@ -107,7 +107,7 @@ struct cppISteamUser_SteamUser005_GetRegistryString_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
     int cbValue;
@@ -118,7 +118,7 @@ struct cppISteamUser_SteamUser005_SetRegistryInt_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     int iValue;
 };
@@ -128,7 +128,7 @@ struct cppISteamUser_SteamUser005_GetRegistryInt_params
 {
     void *linux_side;
     bool _ret;
-    EConfigSubTree eRegistrySubTree;
+    uint32_t eRegistrySubTree;
     const char *pchKey;
     int *piValue;
 };

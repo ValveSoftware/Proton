@@ -778,8 +778,7 @@ static void finish_callback_thread(void)
     callback_thread_handle = NULL;
 }
 
-typedef void (WINAPI *win_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType,
-        const char *pszMsg);
+typedef void (WINAPI *win_FSteamNetworkingSocketsDebugOutput)( uint32_t nType, const char *pszMsg );
 typedef void (CDECL *win_SteamAPIWarningMessageHook_t)(int, const char *pszMsg);
 
 static DWORD WINAPI callback_thread(void *dummy)

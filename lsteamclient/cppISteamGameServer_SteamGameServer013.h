@@ -218,7 +218,7 @@ extern void cppISteamGameServer_SteamGameServer013_GetAuthSessionTicket( struct 
 struct cppISteamGameServer_SteamGameServer013_BeginAuthSession_params
 {
     void *linux_side;
-    EBeginAuthSessionResult _ret;
+    uint32_t _ret;
     const void *pAuthTicket;
     int cbAuthTicket;
     CSteamID steamID;
@@ -242,7 +242,7 @@ extern void cppISteamGameServer_SteamGameServer013_CancelAuthTicket( struct cppI
 struct cppISteamGameServer_SteamGameServer013_UserHasLicenseForApp_params
 {
     void *linux_side;
-    EUserHasLicenseForAppResult _ret;
+    uint32_t _ret;
     CSteamID steamID;
     AppId_t appID;
 };

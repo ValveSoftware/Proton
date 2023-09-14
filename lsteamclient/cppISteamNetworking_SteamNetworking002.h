@@ -126,7 +126,7 @@ extern void cppISteamNetworking_SteamNetworking002_GetListenSocketInfo( struct c
 struct cppISteamNetworking_SteamNetworking002_GetSocketConnectionType_params
 {
     void *linux_side;
-    ESNetSocketConnectionType _ret;
+    uint32_t _ret;
     SNetSocket_t hSocket;
 };
 extern void cppISteamNetworking_SteamNetworking002_GetSocketConnectionType( struct cppISteamNetworking_SteamNetworking002_GetSocketConnectionType_params *params );

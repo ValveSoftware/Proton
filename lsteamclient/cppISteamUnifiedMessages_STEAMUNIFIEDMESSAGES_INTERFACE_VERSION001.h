@@ -15,7 +15,7 @@ struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMet
     bool _ret;
     ClientUnifiedMessageHandle hHandle;
     uint32 *punResponseSize;
-    EResult *peResult;
+    uint32_t *peResult;
 };
 extern void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo_params *params );
 

@@ -73,7 +73,7 @@ extern void cppISteamUser_SteamUser016_StopVoiceRecording( struct cppISteamUser_
 struct cppISteamUser_SteamUser016_GetAvailableVoice_params
 {
     void *linux_side;
-    EVoiceResult _ret;
+    uint32_t _ret;
     uint32 *pcbCompressed;
     uint32 *pcbUncompressed;
     uint32 nUncompressedVoiceDesiredSampleRate;
@@ -83,7 +83,7 @@ extern void cppISteamUser_SteamUser016_GetAvailableVoice( struct cppISteamUser_S
 struct cppISteamUser_SteamUser016_GetVoice_params
 {
     void *linux_side;
-    EVoiceResult _ret;
+    uint32_t _ret;
     bool bWantCompressed;
     void *pDestBuffer;
     uint32 cbDestBufferSize;
@@ -99,7 +99,7 @@ extern void cppISteamUser_SteamUser016_GetVoice( struct cppISteamUser_SteamUser0
 struct cppISteamUser_SteamUser016_DecompressVoice_params
 {
     void *linux_side;
-    EVoiceResult _ret;
+    uint32_t _ret;
     const void *pCompressed;
     uint32 cbCompressed;
     void *pDestBuffer;

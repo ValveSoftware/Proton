@@ -15,14 +15,14 @@ extern void cppISteamFriends_SteamFriends002_SetPersonaName( struct cppISteamFri
 struct cppISteamFriends_SteamFriends002_GetPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends002_GetPersonaState( struct cppISteamFriends_SteamFriends002_GetPersonaState_params *params );
 
 struct cppISteamFriends_SteamFriends002_SetPersonaState_params
 {
     void *linux_side;
-    EPersonaState ePersonaState;
+    uint32_t ePersonaState;
 };
 extern void cppISteamFriends_SteamFriends002_SetPersonaState( struct cppISteamFriends_SteamFriends002_SetPersonaState_params *params );
 
@@ -46,7 +46,7 @@ extern void cppISteamFriends_SteamFriends002_GetFriendByIndex( struct cppISteamF
 struct cppISteamFriends_SteamFriends002_GetFriendRelationship_params
 {
     void *linux_side;
-    EFriendRelationship _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends002_GetFriendRelationship( struct cppISteamFriends_SteamFriends002_GetFriendRelationship_params *params );
@@ -54,7 +54,7 @@ extern void cppISteamFriends_SteamFriends002_GetFriendRelationship( struct cppIS
 struct cppISteamFriends_SteamFriends002_GetFriendPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends002_GetFriendPersonaState( struct cppISteamFriends_SteamFriends002_GetFriendPersonaState_params *params );
@@ -155,7 +155,7 @@ struct cppISteamFriends_SteamFriends002_GetChatMessage_params
     int iChatID;
     void *pvData;
     int cubData;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
 };
 extern void cppISteamFriends_SteamFriends002_GetChatMessage( struct cppISteamFriends_SteamFriends002_GetChatMessage_params *params );
 
@@ -164,7 +164,7 @@ struct cppISteamFriends_SteamFriends002_SendMsgToFriend_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDFriend;
-    EChatEntryType eChatEntryType;
+    uint32_t eChatEntryType;
     const void *pvMsgBody;
     int cubMsgBody;
 };

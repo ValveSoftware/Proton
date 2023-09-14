@@ -162,7 +162,7 @@ void __thiscall winISteamClient_SteamClient006_SetLocalIPBinding(struct w_steam_
     cppISteamClient_SteamClient006_SetLocalIPBinding( &params );
 }
 
-const char * __thiscall winISteamClient_SteamClient006_GetUniverseName(struct w_steam_iface *_this, EUniverse eUniverse)
+const char * __thiscall winISteamClient_SteamClient006_GetUniverseName(struct w_steam_iface *_this, uint32_t eUniverse)
 {
     struct cppISteamClient_SteamClient006_GetUniverseName_params params =
     {
@@ -777,7 +777,7 @@ HSteamUser __thiscall winISteamClient_SteamClient008_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient008_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient008_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient008_CreateLocalUser_params params =
     {
@@ -1126,7 +1126,7 @@ HSteamUser __thiscall winISteamClient_SteamClient009_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient009_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient009_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient009_CreateLocalUser_params params =
     {
@@ -1493,7 +1493,7 @@ HSteamUser __thiscall winISteamClient_SteamClient010_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient010_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient010_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient010_CreateLocalUser_params params =
     {
@@ -1889,7 +1889,7 @@ HSteamUser __thiscall winISteamClient_SteamClient011_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient011_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient011_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient011_CreateLocalUser_params params =
     {
@@ -2303,7 +2303,7 @@ HSteamUser __thiscall winISteamClient_SteamClient012_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient012_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient012_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient012_CreateLocalUser_params params =
     {
@@ -2752,7 +2752,7 @@ HSteamUser __thiscall winISteamClient_SteamClient013_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient013_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient013_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient013_CreateLocalUser_params params =
     {
@@ -3246,7 +3246,7 @@ HSteamUser __thiscall winISteamClient_SteamClient014_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient014_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient014_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient014_CreateLocalUser_params params =
     {
@@ -3727,7 +3727,7 @@ HSteamUser __thiscall winISteamClient_SteamClient015_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient015_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient015_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient015_CreateLocalUser_params params =
     {
@@ -4228,7 +4228,7 @@ HSteamUser __thiscall winISteamClient_SteamClient016_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient016_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient016_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient016_CreateLocalUser_params params =
     {
@@ -4784,7 +4784,7 @@ HSteamUser __thiscall winISteamClient_SteamClient017_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient017_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient017_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient017_CreateLocalUser_params params =
     {
@@ -5390,7 +5390,7 @@ HSteamUser __thiscall winISteamClient_SteamClient018_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient018_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient018_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient018_CreateLocalUser_params params =
     {
@@ -6045,7 +6045,7 @@ HSteamUser __thiscall winISteamClient_SteamClient019_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient019_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient019_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient019_CreateLocalUser_params params =
     {
@@ -6717,7 +6717,7 @@ HSteamUser __thiscall winISteamClient_SteamClient020_ConnectToGlobalUser(struct 
     return params._ret;
 }
 
-HSteamUser __thiscall winISteamClient_SteamClient020_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, EAccountType eAccountType)
+HSteamUser __thiscall winISteamClient_SteamClient020_CreateLocalUser(struct w_steam_iface *_this, HSteamPipe *phSteamPipe, uint32_t eAccountType)
 {
     struct cppISteamClient_SteamClient020_CreateLocalUser_params params =
     {

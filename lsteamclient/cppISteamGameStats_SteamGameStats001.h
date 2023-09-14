@@ -22,7 +22,7 @@ extern void cppISteamGameStats_SteamGameStats001_EndSession( struct cppISteamGam
 struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulSessionID;
     const char *pstrName;
     int32 nData;
@@ -32,7 +32,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt( struct 
 struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeString_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulSessionID;
     const char *pstrName;
     const char *pstrData;
@@ -42,7 +42,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddSessionAttributeString( stru
 struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeFloat_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulSessionID;
     const char *pstrName;
     float fData;
@@ -52,7 +52,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddSessionAttributeFloat( struc
 struct cppISteamGameStats_SteamGameStats001_AddNewRow_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 *pulRowID;
     uint64 ulSessionID;
     const char *pstrTableName;
@@ -62,7 +62,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddNewRow( struct cppISteamGame
 struct cppISteamGameStats_SteamGameStats001_CommitRow_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulRowID;
 };
 extern void cppISteamGameStats_SteamGameStats001_CommitRow( struct cppISteamGameStats_SteamGameStats001_CommitRow_params *params );
@@ -70,7 +70,7 @@ extern void cppISteamGameStats_SteamGameStats001_CommitRow( struct cppISteamGame
 struct cppISteamGameStats_SteamGameStats001_CommitOutstandingRows_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulSessionID;
 };
 extern void cppISteamGameStats_SteamGameStats001_CommitOutstandingRows( struct cppISteamGameStats_SteamGameStats001_CommitOutstandingRows_params *params );
@@ -78,7 +78,7 @@ extern void cppISteamGameStats_SteamGameStats001_CommitOutstandingRows( struct c
 struct cppISteamGameStats_SteamGameStats001_AddRowAttributeInt_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulRowID;
     const char *pstrName;
     int32 nData;
@@ -88,7 +88,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddRowAttributeInt( struct cppI
 struct cppISteamGameStats_SteamGameStats001_AddRowAtributeString_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulRowID;
     const char *pstrName;
     const char *pstrData;
@@ -98,7 +98,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddRowAtributeString( struct cp
 struct cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulRowID;
     const char *pstrName;
     float fData;
@@ -108,7 +108,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat( struct cp
 struct cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulSessionID;
     const char *pstrName;
     int64 llData;
@@ -118,7 +118,7 @@ extern void cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64( struc
 struct cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     uint64 ulRowID;
     const char *pstrName;
     int64 llData;

@@ -85,7 +85,7 @@ bool __thiscall winISteamUser_SteamUser004_BLoggedOn(struct w_steam_iface *_this
     return params._ret;
 }
 
-ELogonState __thiscall winISteamUser_SteamUser004_GetLogonState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUser_SteamUser004_GetLogonState(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser004_GetLogonState_params params =
     {
@@ -239,7 +239,7 @@ int __thiscall winISteamUser_SteamUser004_GetSteamGameConnectToken(struct w_stea
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser004_SetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUser_SteamUser004_SetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUser_SteamUser004_SetRegistryString_params params =
     {
@@ -253,7 +253,7 @@ bool __thiscall winISteamUser_SteamUser004_SetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser004_GetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
+bool __thiscall winISteamUser_SteamUser004_GetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
     struct cppISteamUser_SteamUser004_GetRegistryString_params params =
     {
@@ -268,7 +268,7 @@ bool __thiscall winISteamUser_SteamUser004_GetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser004_SetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
+bool __thiscall winISteamUser_SteamUser004_SetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int iValue)
 {
     struct cppISteamUser_SteamUser004_SetRegistryInt_params params =
     {
@@ -282,7 +282,7 @@ bool __thiscall winISteamUser_SteamUser004_SetRegistryInt(struct w_steam_iface *
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser004_GetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
+bool __thiscall winISteamUser_SteamUser004_GetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int *piValue)
 {
     struct cppISteamUser_SteamUser004_GetRegistryInt_params params =
     {
@@ -489,7 +489,7 @@ bool __thiscall winISteamUser_SteamUser005_BLoggedOn(struct w_steam_iface *_this
     return params._ret;
 }
 
-ELogonState __thiscall winISteamUser_SteamUser005_GetLogonState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUser_SteamUser005_GetLogonState(struct w_steam_iface *_this)
 {
     struct cppISteamUser_SteamUser005_GetLogonState_params params =
     {
@@ -594,7 +594,7 @@ bool __thiscall winISteamUser_SteamUser005_SetEmail(struct w_steam_iface *_this,
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser005_SetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUser_SteamUser005_SetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUser_SteamUser005_SetRegistryString_params params =
     {
@@ -608,7 +608,7 @@ bool __thiscall winISteamUser_SteamUser005_SetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser005_GetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
+bool __thiscall winISteamUser_SteamUser005_GetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
     struct cppISteamUser_SteamUser005_GetRegistryString_params params =
     {
@@ -623,7 +623,7 @@ bool __thiscall winISteamUser_SteamUser005_GetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser005_SetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
+bool __thiscall winISteamUser_SteamUser005_SetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int iValue)
 {
     struct cppISteamUser_SteamUser005_SetRegistryInt_params params =
     {
@@ -637,7 +637,7 @@ bool __thiscall winISteamUser_SteamUser005_SetRegistryInt(struct w_steam_iface *
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser005_GetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
+bool __thiscall winISteamUser_SteamUser005_GetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int *piValue)
 {
     struct cppISteamUser_SteamUser005_GetRegistryInt_params params =
     {
@@ -1062,7 +1062,7 @@ CSteamID * __thiscall winISteamUser_SteamUser006_GetSteamID(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser006_SetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUser_SteamUser006_SetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUser_SteamUser006_SetRegistryString_params params =
     {
@@ -1076,7 +1076,7 @@ bool __thiscall winISteamUser_SteamUser006_SetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser006_GetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
+bool __thiscall winISteamUser_SteamUser006_GetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
     struct cppISteamUser_SteamUser006_GetRegistryString_params params =
     {
@@ -1091,7 +1091,7 @@ bool __thiscall winISteamUser_SteamUser006_GetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser006_SetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
+bool __thiscall winISteamUser_SteamUser006_SetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int iValue)
 {
     struct cppISteamUser_SteamUser006_SetRegistryInt_params params =
     {
@@ -1105,7 +1105,7 @@ bool __thiscall winISteamUser_SteamUser006_SetRegistryInt(struct w_steam_iface *
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser006_GetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
+bool __thiscall winISteamUser_SteamUser006_GetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int *piValue)
 {
     struct cppISteamUser_SteamUser006_GetRegistryInt_params params =
     {
@@ -1265,7 +1265,7 @@ CSteamID * __thiscall winISteamUser_SteamUser007_GetSteamID(struct w_steam_iface
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser007_SetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUser_SteamUser007_SetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUser_SteamUser007_SetRegistryString_params params =
     {
@@ -1279,7 +1279,7 @@ bool __thiscall winISteamUser_SteamUser007_SetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser007_GetRegistryString(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
+bool __thiscall winISteamUser_SteamUser007_GetRegistryString(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, char *pchValue, int cbValue)
 {
     struct cppISteamUser_SteamUser007_GetRegistryString_params params =
     {
@@ -1294,7 +1294,7 @@ bool __thiscall winISteamUser_SteamUser007_GetRegistryString(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser007_SetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int iValue)
+bool __thiscall winISteamUser_SteamUser007_SetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int iValue)
 {
     struct cppISteamUser_SteamUser007_SetRegistryInt_params params =
     {
@@ -1308,7 +1308,7 @@ bool __thiscall winISteamUser_SteamUser007_SetRegistryInt(struct w_steam_iface *
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser007_GetRegistryInt(struct w_steam_iface *_this, EConfigSubTree eRegistrySubTree, const char *pchKey, int *piValue)
+bool __thiscall winISteamUser_SteamUser007_GetRegistryInt(struct w_steam_iface *_this, uint32_t eRegistrySubTree, const char *pchKey, int *piValue)
 {
     struct cppISteamUser_SteamUser007_GetRegistryInt_params params =
     {
@@ -1895,7 +1895,7 @@ void __thiscall winISteamUser_SteamUser011_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser011_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser011_GetCompressedVoice(struct w_steam_iface *_this, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser011_GetCompressedVoice(struct w_steam_iface *_this, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
     struct cppISteamUser_SteamUser011_GetCompressedVoice_params params =
     {
@@ -1909,7 +1909,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser011_GetCompressedVoice(struct w_s
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser011_DecompressVoice(struct w_steam_iface *_this, void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser011_DecompressVoice(struct w_steam_iface *_this, void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
     struct cppISteamUser_SteamUser011_DecompressVoice_params params =
     {
@@ -2085,7 +2085,7 @@ void __thiscall winISteamUser_SteamUser012_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser012_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser012_GetCompressedVoice(struct w_steam_iface *_this, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser012_GetCompressedVoice(struct w_steam_iface *_this, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
     struct cppISteamUser_SteamUser012_GetCompressedVoice_params params =
     {
@@ -2099,7 +2099,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser012_GetCompressedVoice(struct w_s
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser012_DecompressVoice(struct w_steam_iface *_this, void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser012_DecompressVoice(struct w_steam_iface *_this, void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
     struct cppISteamUser_SteamUser012_DecompressVoice_params params =
     {
@@ -2344,7 +2344,7 @@ void __thiscall winISteamUser_SteamUser013_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser013_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser013_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
+uint32_t __thiscall winISteamUser_SteamUser013_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
 {
     struct cppISteamUser_SteamUser013_GetAvailableVoice_params params =
     {
@@ -2357,7 +2357,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser013_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser013_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser013_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
 {
     struct cppISteamUser_SteamUser013_GetVoice_params params =
     {
@@ -2376,7 +2376,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser013_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser013_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser013_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
     struct cppISteamUser_SteamUser013_DecompressVoice_params params =
     {
@@ -2626,7 +2626,7 @@ void __thiscall winISteamUser_SteamUser014_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser014_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser014_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
+uint32_t __thiscall winISteamUser_SteamUser014_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
 {
     struct cppISteamUser_SteamUser014_GetAvailableVoice_params params =
     {
@@ -2639,7 +2639,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser014_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser014_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser014_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
 {
     struct cppISteamUser_SteamUser014_GetVoice_params params =
     {
@@ -2658,7 +2658,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser014_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser014_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser014_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten)
 {
     struct cppISteamUser_SteamUser014_DecompressVoice_params params =
     {
@@ -2964,7 +2964,7 @@ void __thiscall winISteamUser_SteamUser015_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser015_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser015_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
+uint32_t __thiscall winISteamUser_SteamUser015_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed)
 {
     struct cppISteamUser_SteamUser015_GetAvailableVoice_params params =
     {
@@ -2977,7 +2977,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser015_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser015_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
+uint32_t __thiscall winISteamUser_SteamUser015_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten)
 {
     struct cppISteamUser_SteamUser015_GetVoice_params params =
     {
@@ -2996,7 +2996,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser015_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser015_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser015_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser015_DecompressVoice_params params =
     {
@@ -3315,7 +3315,7 @@ void __thiscall winISteamUser_SteamUser016_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser016_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser016_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser016_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser016_GetAvailableVoice_params params =
     {
@@ -3329,7 +3329,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser016_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser016_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser016_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser016_GetVoice_params params =
     {
@@ -3349,7 +3349,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser016_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser016_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser016_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser016_DecompressVoice_params params =
     {
@@ -3670,7 +3670,7 @@ void __thiscall winISteamUser_SteamUser017_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser017_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser017_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser017_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser017_GetAvailableVoice_params params =
     {
@@ -3684,7 +3684,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser017_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser017_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser017_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser017_GetVoice_params params =
     {
@@ -3704,7 +3704,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser017_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser017_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser017_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser017_DecompressVoice_params params =
     {
@@ -4052,7 +4052,7 @@ void __thiscall winISteamUser_SteamUser018_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser018_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser018_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser018_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed, uint32 nUncompressedVoiceDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser018_GetAvailableVoice_params params =
     {
@@ -4066,7 +4066,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser018_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser018_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser018_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed, void *pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 *nUncompressBytesWritten, uint32 nUncompressedVoiceDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser018_GetVoice_params params =
     {
@@ -4086,7 +4086,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser018_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser018_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser018_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser018_DecompressVoice_params params =
     {
@@ -4128,7 +4128,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser018_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser018_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser018_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser018_BeginAuthSession_params params =
     {
@@ -4164,7 +4164,7 @@ void __thiscall winISteamUser_SteamUser018_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser018_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser018_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser018_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamUser_SteamUser018_UserHasLicenseForApp_params params =
     {
@@ -4451,7 +4451,7 @@ void __thiscall winISteamUser_SteamUser019_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser019_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser019_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser019_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser019_GetAvailableVoice_params params =
     {
@@ -4465,7 +4465,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser019_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser019_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser019_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser019_GetVoice_params params =
     {
@@ -4485,7 +4485,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser019_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser019_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser019_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser019_DecompressVoice_params params =
     {
@@ -4527,7 +4527,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser019_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser019_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser019_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser019_BeginAuthSession_params params =
     {
@@ -4563,7 +4563,7 @@ void __thiscall winISteamUser_SteamUser019_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser019_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser019_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser019_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamUser_SteamUser019_UserHasLicenseForApp_params params =
     {
@@ -4900,7 +4900,7 @@ void __thiscall winISteamUser_SteamUser020_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser020_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser020_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser020_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser020_GetAvailableVoice_params params =
     {
@@ -4914,7 +4914,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser020_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser020_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser020_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser020_GetVoice_params params =
     {
@@ -4934,7 +4934,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser020_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser020_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser020_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser020_DecompressVoice_params params =
     {
@@ -4976,7 +4976,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser020_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser020_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser020_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser020_BeginAuthSession_params params =
     {
@@ -5012,7 +5012,7 @@ void __thiscall winISteamUser_SteamUser020_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser020_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser020_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser020_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamUser_SteamUser020_UserHasLicenseForApp_params params =
     {
@@ -5374,7 +5374,7 @@ void __thiscall winISteamUser_SteamUser021_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser021_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser021_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser021_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser021_GetAvailableVoice_params params =
     {
@@ -5388,7 +5388,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser021_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser021_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser021_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser021_GetVoice_params params =
     {
@@ -5408,7 +5408,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser021_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser021_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser021_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser021_DecompressVoice_params params =
     {
@@ -5450,7 +5450,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser021_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser021_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser021_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser021_BeginAuthSession_params params =
     {
@@ -5486,7 +5486,7 @@ void __thiscall winISteamUser_SteamUser021_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser021_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser021_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser021_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamUser_SteamUser021_UserHasLicenseForApp_params params =
     {
@@ -5652,7 +5652,7 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser021_GetDurationControl(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser021_BSetDurationControlOnlineState(struct w_steam_iface *_this, EDurationControlOnlineState eNewState)
+bool __thiscall winISteamUser_SteamUser021_BSetDurationControlOnlineState(struct w_steam_iface *_this, uint32_t eNewState)
 {
     struct cppISteamUser_SteamUser021_BSetDurationControlOnlineState_params params =
     {
@@ -5861,7 +5861,7 @@ void __thiscall winISteamUser_SteamUser022_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser022_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser022_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser022_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser022_GetAvailableVoice_params params =
     {
@@ -5875,7 +5875,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser022_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser022_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser022_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser022_GetVoice_params params =
     {
@@ -5895,7 +5895,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser022_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser022_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser022_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser022_DecompressVoice_params params =
     {
@@ -5938,7 +5938,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(struct w_
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser022_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser022_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser022_BeginAuthSession_params params =
     {
@@ -5974,7 +5974,7 @@ void __thiscall winISteamUser_SteamUser022_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser022_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser022_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser022_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamUser_SteamUser022_UserHasLicenseForApp_params params =
     {
@@ -6140,7 +6140,7 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser022_GetDurationControl(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser022_BSetDurationControlOnlineState(struct w_steam_iface *_this, EDurationControlOnlineState eNewState)
+bool __thiscall winISteamUser_SteamUser022_BSetDurationControlOnlineState(struct w_steam_iface *_this, uint32_t eNewState)
 {
     struct cppISteamUser_SteamUser022_BSetDurationControlOnlineState_params params =
     {
@@ -6350,7 +6350,7 @@ void __thiscall winISteamUser_SteamUser023_StopVoiceRecording(struct w_steam_ifa
     cppISteamUser_SteamUser023_StopVoiceRecording( &params );
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser023_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser023_GetAvailableVoice(struct w_steam_iface *_this, uint32 *pcbCompressed, uint32 *pcbUncompressed_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser023_GetAvailableVoice_params params =
     {
@@ -6364,7 +6364,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser023_GetAvailableVoice(struct w_st
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser023_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
+uint32_t __thiscall winISteamUser_SteamUser023_GetVoice(struct w_steam_iface *_this, bool bWantCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, bool bWantUncompressed_Deprecated, void *pUncompressedDestBuffer_Deprecated, uint32 cbUncompressedDestBufferSize_Deprecated, uint32 *nUncompressBytesWritten_Deprecated, uint32 nUncompressedVoiceDesiredSampleRate_Deprecated)
 {
     struct cppISteamUser_SteamUser023_GetVoice_params params =
     {
@@ -6384,7 +6384,7 @@ EVoiceResult __thiscall winISteamUser_SteamUser023_GetVoice(struct w_steam_iface
     return params._ret;
 }
 
-EVoiceResult __thiscall winISteamUser_SteamUser023_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
+uint32_t __thiscall winISteamUser_SteamUser023_DecompressVoice(struct w_steam_iface *_this, const void *pCompressed, uint32 cbCompressed, void *pDestBuffer, uint32 cbDestBufferSize, uint32 *nBytesWritten, uint32 nDesiredSampleRate)
 {
     struct cppISteamUser_SteamUser023_DecompressVoice_params params =
     {
@@ -6439,7 +6439,7 @@ HAuthTicket __thiscall winISteamUser_SteamUser023_GetAuthTicketForWebApi(struct 
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamUser_SteamUser023_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamUser_SteamUser023_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamUser_SteamUser023_BeginAuthSession_params params =
     {
@@ -6475,7 +6475,7 @@ void __thiscall winISteamUser_SteamUser023_CancelAuthTicket(struct w_steam_iface
     cppISteamUser_SteamUser023_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser023_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamUser_SteamUser023_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamUser_SteamUser023_UserHasLicenseForApp_params params =
     {
@@ -6641,7 +6641,7 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser023_GetDurationControl(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUser_SteamUser023_BSetDurationControlOnlineState(struct w_steam_iface *_this, EDurationControlOnlineState eNewState)
+bool __thiscall winISteamUser_SteamUser023_BSetDurationControlOnlineState(struct w_steam_iface *_this, uint32_t eNewState)
 {
     struct cppISteamUser_SteamUser023_BSetDurationControlOnlineState_params params =
     {

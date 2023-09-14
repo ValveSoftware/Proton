@@ -34,7 +34,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_ConnectP2P( str
 struct cppISteamNetworkingSockets_SteamNetworkingSockets004_AcceptConnection_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     HSteamNetConnection hConn;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_AcceptConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets004_AcceptConnection_params *params );
@@ -96,7 +96,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionNa
 struct cppISteamNetworkingSockets_SteamNetworkingSockets004_SendMessageToConnection_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     HSteamNetConnection hConn;
     const void *pData;
     uint32 cbData;
@@ -107,7 +107,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_SendMessageToCo
 struct cppISteamNetworkingSockets_SteamNetworkingSockets004_FlushMessagesOnConnection_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     HSteamNetConnection hConn;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_FlushMessagesOnConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets004_FlushMessagesOnConnection_params *params );
@@ -192,14 +192,14 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_GetIdentity( st
 struct cppISteamNetworkingSockets_SteamNetworkingSockets004_InitAuthentication_params
 {
     void *linux_side;
-    ESteamNetworkingAvailability _ret;
+    uint32_t _ret;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_InitAuthentication( struct cppISteamNetworkingSockets_SteamNetworkingSockets004_InitAuthentication_params *params );
 
 struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetAuthenticationStatus_params
 {
     void *linux_side;
-    ESteamNetworkingAvailability _ret;
+    uint32_t _ret;
     SteamNetAuthenticationStatus_t *pDetails;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_GetAuthenticationStatus( struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetAuthenticationStatus_params *params );
@@ -250,7 +250,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_GetHostedDedica
 struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetHostedDedicatedServerAddress_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     SteamDatagramHostedAddress *pRouting;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_GetHostedDedicatedServerAddress( struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetHostedDedicatedServerAddress_params *params );
@@ -266,7 +266,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets004_CreateHostedDed
 struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetGameCoordinatorServerLogin_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     SteamDatagramGameCoordinatorServerLogin *pLoginInfo;
     int *pcbSignedBlob;
     void *pBlob;

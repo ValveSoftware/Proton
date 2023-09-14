@@ -2,7 +2,7 @@ struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest_params
 {
     void *linux_side;
     HTTPRequestHandle _ret;
-    EHTTPMethod eHTTPRequestMethod;
+    uint32_t eHTTPRequestMethod;
     const char *pchAbsoluteURL;
 };
 extern void cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest( struct cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest_params *params );

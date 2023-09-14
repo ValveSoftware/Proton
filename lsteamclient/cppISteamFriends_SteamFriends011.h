@@ -15,7 +15,7 @@ extern void cppISteamFriends_SteamFriends011_SetPersonaName( struct cppISteamFri
 struct cppISteamFriends_SteamFriends011_GetPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends011_GetPersonaState( struct cppISteamFriends_SteamFriends011_GetPersonaState_params *params );
 
@@ -39,7 +39,7 @@ extern void cppISteamFriends_SteamFriends011_GetFriendByIndex( struct cppISteamF
 struct cppISteamFriends_SteamFriends011_GetFriendRelationship_params
 {
     void *linux_side;
-    EFriendRelationship _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendRelationship( struct cppISteamFriends_SteamFriends011_GetFriendRelationship_params *params );
@@ -47,7 +47,7 @@ extern void cppISteamFriends_SteamFriends011_GetFriendRelationship( struct cppIS
 struct cppISteamFriends_SteamFriends011_GetFriendPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendPersonaState( struct cppISteamFriends_SteamFriends011_GetFriendPersonaState_params *params );
@@ -426,7 +426,7 @@ struct cppISteamFriends_SteamFriends011_GetClanChatMessage_params
     int iMessage;
     void *prgchText;
     int cchTextMax;
-    EChatEntryType *_e;
+    uint32_t *_e;
     CSteamID *_f;
 };
 extern void cppISteamFriends_SteamFriends011_GetClanChatMessage( struct cppISteamFriends_SteamFriends011_GetClanChatMessage_params *params );
@@ -489,7 +489,7 @@ struct cppISteamFriends_SteamFriends011_GetFriendMessage_params
     int iMessageID;
     void *pvData;
     int cubData;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendMessage( struct cppISteamFriends_SteamFriends011_GetFriendMessage_params *params );
 
