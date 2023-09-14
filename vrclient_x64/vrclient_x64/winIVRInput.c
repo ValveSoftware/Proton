@@ -36,7 +36,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo, 20)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_003_ShowActionOrigins, 20)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_003_ShowBindingsForActionSet, 24)
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
+uint32_t __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     struct cppIVRInput_IVRInput_003_SetActionManifestPath_params params =
     {
@@ -50,7 +50,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_003_GetActionSetHandle_params params =
     {
@@ -63,7 +63,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetActionSetHandle(struct w_st
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_003_GetActionHandle_params params =
     {
@@ -76,7 +76,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetActionHandle(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_003_GetInputSourceHandle_params params =
     {
@@ -89,7 +89,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetInputSourceHandle(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_003_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_003_UpdateActionState_params params =
     {
@@ -103,7 +103,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_UpdateActionState(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1015 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1015 *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_003_GetDigitalActionData_params params =
     {
@@ -117,7 +117,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetDigitalActionData(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1015 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1015 *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_003_GetAnalogActionData_params params =
     {
@@ -131,7 +131,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetAnalogActionData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetPoseActionData(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1015 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetPoseActionData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1015 *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_003_GetPoseActionData_params params =
     {
@@ -147,7 +147,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetPoseActionData(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eBoneParent, float fPredictedSecondsFromNow, winInputSkeletonActionData_t_1015 *pActionData, uint32_t unActionDataSize, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eBoneParent, float fPredictedSecondsFromNow, winInputSkeletonActionData_t_1015 *pActionData, uint32_t unActionDataSize, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_003_GetSkeletalActionData_params params =
     {
@@ -165,7 +165,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetSkeletalActionData(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetSkeletalActionDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eBoneParent, float fPredictedSecondsFromNow, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetSkeletalActionDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eBoneParent, float fPredictedSecondsFromNow, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
 {
     struct cppIVRInput_IVRInput_003_GetSkeletalActionDataCompressed_params params =
     {
@@ -182,7 +182,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetSkeletalActionDataCompresse
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_UncompressSkeletalActionData(struct w_steam_iface *_this, void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace *peBoneParent, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_003_UncompressSkeletalActionData(struct w_steam_iface *_this, void *pvCompressedBuffer, uint32_t unCompressedBufferSize, uint32_t *peBoneParent, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_003_UncompressSkeletalActionData_params params =
     {
@@ -198,7 +198,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_UncompressSkeletalActionData(s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude)
+uint32_t __thiscall winIVRInput_IVRInput_003_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude)
 {
     struct cppIVRInput_IVRInput_003_TriggerHapticVibrationAction_params params =
     {
@@ -214,7 +214,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_TriggerHapticVibrationAction(s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
 {
     struct cppIVRInput_IVRInput_003_GetActionOrigins_params params =
     {
@@ -229,7 +229,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetActionOrigins(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize)
 {
     struct cppIVRInput_IVRInput_003_GetOriginLocalizedName_params params =
     {
@@ -243,7 +243,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetOriginLocalizedName(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo_params params =
     {
@@ -257,7 +257,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_GetOriginTrackedDeviceInfo(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+uint32_t __thiscall winIVRInput_IVRInput_003_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
 {
     struct cppIVRInput_IVRInput_003_ShowActionOrigins_params params =
     {
@@ -270,7 +270,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_003_ShowActionOrigins(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_003_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_003_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_003_ShowBindingsForActionSet_params params =
     {
@@ -389,7 +389,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo, 20)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_ShowActionOrigins, 20)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_ShowBindingsForActionSet, 24)
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
+uint32_t __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     struct cppIVRInput_IVRInput_004_SetActionManifestPath_params params =
     {
@@ -403,7 +403,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_004_GetActionSetHandle_params params =
     {
@@ -416,7 +416,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionSetHandle(struct w_st
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_004_GetActionHandle_params params =
     {
@@ -429,7 +429,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionHandle(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_004_GetInputSourceHandle_params params =
     {
@@ -442,7 +442,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetInputSourceHandle(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_004_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_004_UpdateActionState_params params =
     {
@@ -456,9 +456,9 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_UpdateActionState(struct w_ste
     return params._ret;
 }
 
-extern EVRInputError __thiscall winIVRInput_IVRInput_004_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetAnalogActionData_params params =
     {
@@ -473,7 +473,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetPoseActionData(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetPoseActionData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetPoseActionData_params params =
     {
@@ -490,7 +490,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetPoseActionData(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1017 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetSkeletalActionData_params params =
     {
@@ -505,7 +505,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalActionData(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetSkeletalBoneData_params params =
     {
@@ -522,7 +522,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed_params params =
     {
@@ -540,7 +540,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_DecompressSkeletalBoneData(struct w_steam_iface *_this, void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace *peTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_004_DecompressSkeletalBoneData(struct w_steam_iface *_this, void *pvCompressedBuffer, uint32_t unCompressedBufferSize, uint32_t *peTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_004_DecompressSkeletalBoneData_params params =
     {
@@ -556,7 +556,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_DecompressSkeletalBoneData(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_004_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_004_TriggerHapticVibrationAction_params params =
     {
@@ -573,7 +573,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_TriggerHapticVibrationAction(s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
 {
     struct cppIVRInput_IVRInput_004_GetActionOrigins_params params =
     {
@@ -588,7 +588,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionOrigins(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize)
 {
     struct cppIVRInput_IVRInput_004_GetOriginLocalizedName_params params =
     {
@@ -602,7 +602,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetOriginLocalizedName(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo_params params =
     {
@@ -616,7 +616,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+uint32_t __thiscall winIVRInput_IVRInput_004_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
 {
     struct cppIVRInput_IVRInput_004_ShowActionOrigins_params params =
     {
@@ -629,7 +629,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_004_ShowActionOrigins(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_004_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_004_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_004_ShowBindingsForActionSet_params params =
     {
@@ -757,7 +757,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_ShowActionOrigins, 20)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_ShowBindingsForActionSet, 24)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_IsUsingLegacyInput, 4)
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
+uint32_t __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     struct cppIVRInput_IVRInput_005_SetActionManifestPath_params params =
     {
@@ -771,7 +771,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_005_GetActionSetHandle_params params =
     {
@@ -784,7 +784,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetActionSetHandle(struct w_st
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_005_GetActionHandle_params params =
     {
@@ -797,7 +797,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetActionHandle(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_005_GetInputSourceHandle_params params =
     {
@@ -810,7 +810,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetInputSourceHandle(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_005_UpdateActionState_params params =
     {
@@ -824,9 +824,9 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_UpdateActionState(struct w_ste
     return params._ret;
 }
 
-extern EVRInputError __thiscall winIVRInput_IVRInput_005_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1322 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1322 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1322 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1322 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_005_GetAnalogActionData_params params =
     {
@@ -841,7 +841,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetAnalogActionData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetPoseActionData(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1322 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetPoseActionData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1322 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_005_GetPoseActionData_params params =
     {
@@ -858,7 +858,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetPoseActionData(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1322 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1322 *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_005_GetSkeletalActionData_params params =
     {
@@ -872,7 +872,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalActionData(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
 {
     struct cppIVRInput_IVRInput_005_GetBoneCount_params params =
     {
@@ -885,7 +885,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetBoneCount(struct w_steam_if
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
 {
     struct cppIVRInput_IVRInput_005_GetBoneHierarchy_params params =
     {
@@ -899,7 +899,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetBoneHierarchy(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
 {
     struct cppIVRInput_IVRInput_005_GetBoneName_params params =
     {
@@ -914,7 +914,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetBoneName(struct w_steam_ifa
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_005_GetSkeletalReferenceTransforms_params params =
     {
@@ -930,7 +930,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalReferenceTransforms
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel *pSkeletalTrackingLevel)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pSkeletalTrackingLevel)
 {
     struct cppIVRInput_IVRInput_005_GetSkeletalTrackingLevel_params params =
     {
@@ -943,7 +943,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalTrackingLevel(struc
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_005_GetSkeletalBoneData_params params =
     {
@@ -959,7 +959,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalBoneData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, VRSkeletalSummaryData_t *pSkeletalSummaryData)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, VRSkeletalSummaryData_t *pSkeletalSummaryData)
 {
     struct cppIVRInput_IVRInput_005_GetSkeletalSummaryData_params params =
     {
@@ -972,7 +972,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalSummaryData(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
 {
     struct cppIVRInput_IVRInput_005_GetSkeletalBoneDataCompressed_params params =
     {
@@ -988,7 +988,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetSkeletalBoneDataCompressed(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, uint32_t eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_005_DecompressSkeletalBoneData_params params =
     {
@@ -1004,7 +1004,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_DecompressSkeletalBoneData(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_005_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_005_TriggerHapticVibrationAction_params params =
     {
@@ -1021,7 +1021,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_TriggerHapticVibrationAction(s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
 {
     struct cppIVRInput_IVRInput_005_GetActionOrigins_params params =
     {
@@ -1036,7 +1036,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetActionOrigins(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
 {
     struct cppIVRInput_IVRInput_005_GetOriginLocalizedName_params params =
     {
@@ -1051,7 +1051,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetOriginLocalizedName(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo_params params =
     {
@@ -1065,7 +1065,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+uint32_t __thiscall winIVRInput_IVRInput_005_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
 {
     struct cppIVRInput_IVRInput_005_ShowActionOrigins_params params =
     {
@@ -1078,7 +1078,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_ShowActionOrigins(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_005_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_005_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_005_ShowBindingsForActionSet_params params =
     {
@@ -1232,7 +1232,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_006_ShowActionOrigins, 20)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_006_ShowBindingsForActionSet, 24)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_006_IsUsingLegacyInput, 4)
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
+uint32_t __thiscall winIVRInput_IVRInput_006_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     struct cppIVRInput_IVRInput_006_SetActionManifestPath_params params =
     {
@@ -1246,7 +1246,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_SetActionManifestPath(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_006_GetActionSetHandle_params params =
     {
@@ -1259,7 +1259,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetActionSetHandle(struct w_st
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_006_GetActionHandle_params params =
     {
@@ -1272,7 +1272,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetActionHandle(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_006_GetInputSourceHandle_params params =
     {
@@ -1285,7 +1285,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetInputSourceHandle(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_006_UpdateActionState_params params =
     {
@@ -1299,9 +1299,9 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_UpdateActionState(struct w_ste
     return params._ret;
 }
 
-extern EVRInputError __thiscall winIVRInput_IVRInput_006_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_006_GetAnalogActionData_params params =
     {
@@ -1316,7 +1316,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetAnalogActionData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow_params params =
     {
@@ -1333,7 +1333,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, winInputPoseActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, winInputPoseActionData_t_1418 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_006_GetPoseActionDataForNextFrame_params params =
     {
@@ -1349,7 +1349,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1418 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1418 *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_006_GetSkeletalActionData_params params =
     {
@@ -1363,7 +1363,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalActionData(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
 {
     struct cppIVRInput_IVRInput_006_GetBoneCount_params params =
     {
@@ -1376,7 +1376,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetBoneCount(struct w_steam_if
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
 {
     struct cppIVRInput_IVRInput_006_GetBoneHierarchy_params params =
     {
@@ -1390,7 +1390,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetBoneHierarchy(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
 {
     struct cppIVRInput_IVRInput_006_GetBoneName_params params =
     {
@@ -1405,7 +1405,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetBoneName(struct w_steam_ifa
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_006_GetSkeletalReferenceTransforms_params params =
     {
@@ -1421,7 +1421,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalReferenceTransforms
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel *pSkeletalTrackingLevel)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pSkeletalTrackingLevel)
 {
     struct cppIVRInput_IVRInput_006_GetSkeletalTrackingLevel_params params =
     {
@@ -1434,7 +1434,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalTrackingLevel(struc
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_006_GetSkeletalBoneData_params params =
     {
@@ -1450,7 +1450,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalBoneData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t *pSkeletalSummaryData)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eSummaryType, VRSkeletalSummaryData_t *pSkeletalSummaryData)
 {
     struct cppIVRInput_IVRInput_006_GetSkeletalSummaryData_params params =
     {
@@ -1464,7 +1464,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalSummaryData(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
 {
     struct cppIVRInput_IVRInput_006_GetSkeletalBoneDataCompressed_params params =
     {
@@ -1480,7 +1480,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetSkeletalBoneDataCompressed(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, uint32_t eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_006_DecompressSkeletalBoneData_params params =
     {
@@ -1496,7 +1496,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_DecompressSkeletalBoneData(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_006_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_006_TriggerHapticVibrationAction_params params =
     {
@@ -1513,7 +1513,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_TriggerHapticVibrationAction(s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
 {
     struct cppIVRInput_IVRInput_006_GetActionOrigins_params params =
     {
@@ -1528,7 +1528,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetActionOrigins(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
 {
     struct cppIVRInput_IVRInput_006_GetOriginLocalizedName_params params =
     {
@@ -1543,7 +1543,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetOriginLocalizedName(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo_params params =
     {
@@ -1557,7 +1557,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_GetOriginTrackedDeviceInfo(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+uint32_t __thiscall winIVRInput_IVRInput_006_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
 {
     struct cppIVRInput_IVRInput_006_ShowActionOrigins_params params =
     {
@@ -1570,7 +1570,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_006_ShowActionOrigins(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_006_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_006_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_006_ShowBindingsForActionSet_params params =
     {
@@ -1728,7 +1728,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_ShowBindingsForActionSet, 24)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_IsUsingLegacyInput, 4)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_OpenBindingUI, 28)
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
+uint32_t __thiscall winIVRInput_IVRInput_007_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     struct cppIVRInput_IVRInput_007_SetActionManifestPath_params params =
     {
@@ -1742,7 +1742,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_SetActionManifestPath(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_007_GetActionSetHandle_params params =
     {
@@ -1755,7 +1755,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionSetHandle(struct w_st
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_007_GetActionHandle_params params =
     {
@@ -1768,7 +1768,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionHandle(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_007_GetInputSourceHandle_params params =
     {
@@ -1781,7 +1781,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetInputSourceHandle(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_007_UpdateActionState_params params =
     {
@@ -1795,9 +1795,9 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_UpdateActionState(struct w_ste
     return params._ret;
 }
 
-extern EVRInputError __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_007_GetAnalogActionData_params params =
     {
@@ -1812,7 +1812,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow_params params =
     {
@@ -1829,7 +1829,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, winInputPoseActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, winInputPoseActionData_t_1916 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_007_GetPoseActionDataForNextFrame_params params =
     {
@@ -1845,7 +1845,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1916 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1916 *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_007_GetSkeletalActionData_params params =
     {
@@ -1859,7 +1859,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
 {
     struct cppIVRInput_IVRInput_007_GetBoneCount_params params =
     {
@@ -1872,7 +1872,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetBoneCount(struct w_steam_if
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
 {
     struct cppIVRInput_IVRInput_007_GetBoneHierarchy_params params =
     {
@@ -1886,7 +1886,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetBoneHierarchy(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
 {
     struct cppIVRInput_IVRInput_007_GetBoneName_params params =
     {
@@ -1901,7 +1901,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetBoneName(struct w_steam_ifa
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_007_GetSkeletalReferenceTransforms_params params =
     {
@@ -1917,7 +1917,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalReferenceTransforms
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel *pSkeletalTrackingLevel)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pSkeletalTrackingLevel)
 {
     struct cppIVRInput_IVRInput_007_GetSkeletalTrackingLevel_params params =
     {
@@ -1930,7 +1930,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalTrackingLevel(struc
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_007_GetSkeletalBoneData_params params =
     {
@@ -1946,7 +1946,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalBoneData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t *pSkeletalSummaryData)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eSummaryType, VRSkeletalSummaryData_t *pSkeletalSummaryData)
 {
     struct cppIVRInput_IVRInput_007_GetSkeletalSummaryData_params params =
     {
@@ -1960,7 +1960,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalSummaryData(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
 {
     struct cppIVRInput_IVRInput_007_GetSkeletalBoneDataCompressed_params params =
     {
@@ -1976,7 +1976,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalBoneDataCompressed(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, uint32_t eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_007_DecompressSkeletalBoneData_params params =
     {
@@ -1992,7 +1992,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_DecompressSkeletalBoneData(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_007_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_007_TriggerHapticVibrationAction_params params =
     {
@@ -2009,7 +2009,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_TriggerHapticVibrationAction(s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
 {
     struct cppIVRInput_IVRInput_007_GetActionOrigins_params params =
     {
@@ -2024,7 +2024,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionOrigins(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
 {
     struct cppIVRInput_IVRInput_007_GetOriginLocalizedName_params params =
     {
@@ -2039,7 +2039,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetOriginLocalizedName(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo_params params =
     {
@@ -2053,7 +2053,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetOriginTrackedDeviceInfo(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionBindingInfo(struct w_steam_iface *_this, VRActionHandle_t action, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
+uint32_t __thiscall winIVRInput_IVRInput_007_GetActionBindingInfo(struct w_steam_iface *_this, VRActionHandle_t action, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
 {
     struct cppIVRInput_IVRInput_007_GetActionBindingInfo_params params =
     {
@@ -2069,7 +2069,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_GetActionBindingInfo(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+uint32_t __thiscall winIVRInput_IVRInput_007_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
 {
     struct cppIVRInput_IVRInput_007_ShowActionOrigins_params params =
     {
@@ -2082,7 +2082,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_ShowActionOrigins(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_007_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_007_ShowBindingsForActionSet_params params =
     {
@@ -2108,7 +2108,7 @@ bool __thiscall winIVRInput_IVRInput_007_IsUsingLegacyInput(struct w_steam_iface
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_007_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop)
+uint32_t __thiscall winIVRInput_IVRInput_007_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop)
 {
     struct cppIVRInput_IVRInput_007_OpenBindingUI_params params =
     {
@@ -2263,7 +2263,7 @@ DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_010_IsUsingLegacyInput, 4)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_010_OpenBindingUI, 28)
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_010_GetBindingVariant, 20)
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
+uint32_t __thiscall winIVRInput_IVRInput_010_SetActionManifestPath(struct w_steam_iface *_this, const char *pchActionManifestPath)
 {
     struct cppIVRInput_IVRInput_010_SetActionManifestPath_params params =
     {
@@ -2277,7 +2277,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_SetActionManifestPath(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetActionSetHandle(struct w_steam_iface *_this, const char *pchActionSetName, VRActionSetHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_010_GetActionSetHandle_params params =
     {
@@ -2290,7 +2290,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionSetHandle(struct w_st
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetActionHandle(struct w_steam_iface *_this, const char *pchActionName, VRActionHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_010_GetActionHandle_params params =
     {
@@ -2303,7 +2303,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionHandle(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetInputSourceHandle(struct w_steam_iface *_this, const char *pchInputSourcePath, VRInputValueHandle_t *pHandle)
 {
     struct cppIVRInput_IVRInput_010_GetInputSourceHandle_params params =
     {
@@ -2316,7 +2316,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetInputSourceHandle(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_UpdateActionState(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
 {
     struct cppIVRInput_IVRInput_010_UpdateActionState_params params =
     {
@@ -2330,9 +2330,9 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_UpdateActionState(struct w_ste
     return params._ret;
 }
 
-extern EVRInputError __thiscall winIVRInput_IVRInput_010_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
+extern uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputDigitalActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice);
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetAnalogActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputAnalogActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_010_GetAnalogActionData_params params =
     {
@@ -2347,7 +2347,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetAnalogActionData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow_params params =
     {
@@ -2364,7 +2364,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetPoseActionDataRelativeToNow
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, winInputPoseActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetPoseActionDataForNextFrame(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eOrigin, winInputPoseActionData_t_1267 *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_010_GetPoseActionDataForNextFrame_params params =
     {
@@ -2380,7 +2380,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetPoseActionDataForNextFrame(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1267 *pActionData, uint32_t unActionDataSize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalActionData(struct w_steam_iface *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1267 *pActionData, uint32_t unActionDataSize)
 {
     struct cppIVRInput_IVRInput_010_GetSkeletalActionData_params params =
     {
@@ -2394,7 +2394,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalActionData(struct w
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetDominantHand(struct w_steam_iface *_this, ETrackedControllerRole *peDominantHand)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetDominantHand(struct w_steam_iface *_this, uint32_t *peDominantHand)
 {
     struct cppIVRInput_IVRInput_010_GetDominantHand_params params =
     {
@@ -2406,7 +2406,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetDominantHand(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_SetDominantHand(struct w_steam_iface *_this, ETrackedControllerRole eDominantHand)
+uint32_t __thiscall winIVRInput_IVRInput_010_SetDominantHand(struct w_steam_iface *_this, uint32_t eDominantHand)
 {
     struct cppIVRInput_IVRInput_010_SetDominantHand_params params =
     {
@@ -2418,7 +2418,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_SetDominantHand(struct w_steam
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetBoneCount(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pBoneCount)
 {
     struct cppIVRInput_IVRInput_010_GetBoneCount_params params =
     {
@@ -2431,7 +2431,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetBoneCount(struct w_steam_if
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetBoneHierarchy(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t *pParentIndices, uint32_t unIndexArayCount)
 {
     struct cppIVRInput_IVRInput_010_GetBoneHierarchy_params params =
     {
@@ -2445,7 +2445,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetBoneHierarchy(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetBoneName(struct w_steam_iface *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char *pchBoneName, uint32_t unNameBufferSize)
 {
     struct cppIVRInput_IVRInput_010_GetBoneName_params params =
     {
@@ -2460,7 +2460,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetBoneName(struct w_steam_ifa
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalReferenceTransforms(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_010_GetSkeletalReferenceTransforms_params params =
     {
@@ -2476,7 +2476,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalReferenceTransforms
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel *pSkeletalTrackingLevel)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalTrackingLevel(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t *pSkeletalTrackingLevel)
 {
     struct cppIVRInput_IVRInput_010_GetSkeletalTrackingLevel_params params =
     {
@@ -2489,7 +2489,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalTrackingLevel(struc
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalBoneData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eTransformSpace, uint32_t eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_010_GetSkeletalBoneData_params params =
     {
@@ -2505,7 +2505,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalBoneData(struct w_s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t *pSkeletalSummaryData)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalSummaryData(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eSummaryType, VRSkeletalSummaryData_t *pSkeletalSummaryData)
 {
     struct cppIVRInput_IVRInput_010_GetSkeletalSummaryData_params params =
     {
@@ -2519,7 +2519,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalSummaryData(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetSkeletalBoneDataCompressed(struct w_steam_iface *_this, VRActionHandle_t action, uint32_t eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize)
 {
     struct cppIVRInput_IVRInput_010_GetSkeletalBoneDataCompressed_params params =
     {
@@ -2535,7 +2535,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetSkeletalBoneDataCompressed(
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_DecompressSkeletalBoneData(struct w_steam_iface *_this, const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, uint32_t eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount)
 {
     struct cppIVRInput_IVRInput_010_DecompressSkeletalBoneData_params params =
     {
@@ -2551,7 +2551,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_DecompressSkeletalBoneData(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+uint32_t __thiscall winIVRInput_IVRInput_010_TriggerHapticVibrationAction(struct w_steam_iface *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
 {
     struct cppIVRInput_IVRInput_010_TriggerHapticVibrationAction_params params =
     {
@@ -2568,7 +2568,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_TriggerHapticVibrationAction(s
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t *originsOut, uint32_t originOutCount)
 {
     struct cppIVRInput_IVRInput_010_GetActionOrigins_params params =
     {
@@ -2583,7 +2583,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionOrigins(struct w_stea
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginLocalizedName(struct w_steam_iface *_this, VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
 {
     struct cppIVRInput_IVRInput_010_GetOriginLocalizedName_params params =
     {
@@ -2598,7 +2598,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetOriginLocalizedName(struct 
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(struct w_steam_iface *_this, VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize)
 {
     struct cppIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo_params params =
     {
@@ -2612,7 +2612,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetOriginTrackedDeviceInfo(str
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionBindingInfo(struct w_steam_iface *_this, VRActionHandle_t action, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetActionBindingInfo(struct w_steam_iface *_this, VRActionHandle_t action, InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t *punReturnedBindingInfoCount)
 {
     struct cppIVRInput_IVRInput_010_GetActionBindingInfo_params params =
     {
@@ -2628,7 +2628,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_GetActionBindingInfo(struct w_
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+uint32_t __thiscall winIVRInput_IVRInput_010_ShowActionOrigins(struct w_steam_iface *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
 {
     struct cppIVRInput_IVRInput_010_ShowActionOrigins_params params =
     {
@@ -2641,7 +2641,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_ShowActionOrigins(struct w_ste
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+uint32_t __thiscall winIVRInput_IVRInput_010_ShowBindingsForActionSet(struct w_steam_iface *_this, VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
 {
     struct cppIVRInput_IVRInput_010_ShowBindingsForActionSet_params params =
     {
@@ -2656,7 +2656,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_ShowBindingsForActionSet(struc
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetComponentStateForBinding(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetComponentStateForBinding(struct w_steam_iface *_this, const char *pchRenderModelName, const char *pchComponentName, const InputBindingInfo_t *pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, RenderModel_ComponentState_t *pComponentState)
 {
     struct cppIVRInput_IVRInput_010_GetComponentStateForBinding_params params =
     {
@@ -2684,7 +2684,7 @@ bool __thiscall winIVRInput_IVRInput_010_IsUsingLegacyInput(struct w_steam_iface
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop)
+uint32_t __thiscall winIVRInput_IVRInput_010_OpenBindingUI(struct w_steam_iface *_this, const char *pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop)
 {
     struct cppIVRInput_IVRInput_010_OpenBindingUI_params params =
     {
@@ -2699,7 +2699,7 @@ EVRInputError __thiscall winIVRInput_IVRInput_010_OpenBindingUI(struct w_steam_i
     return params._ret;
 }
 
-EVRInputError __thiscall winIVRInput_IVRInput_010_GetBindingVariant(struct w_steam_iface *_this, VRInputValueHandle_t ulDevicePath, char *pchVariantArray, uint32_t unVariantArraySize)
+uint32_t __thiscall winIVRInput_IVRInput_010_GetBindingVariant(struct w_steam_iface *_this, VRInputValueHandle_t ulDevicePath, char *pchVariantArray, uint32_t unVariantArraySize)
 {
     struct cppIVRInput_IVRInput_010_GetBindingVariant_params params =
     {

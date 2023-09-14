@@ -326,7 +326,7 @@ def declspec(decl, name):
     if decl.kind in (TypeKind.UNEXPOSED, TypeKind.FUNCTIONPROTO):
         return f'void{name}'
     if decl.kind == TypeKind.ENUM:
-        return f'{decl.spelling.split("::")[-1]}{name}'
+        return f'uint{decl.get_size() * 8}_t{name}'
 
     real_name = canonical_typename(decl)
     real_name = real_name.removeprefix("const ")

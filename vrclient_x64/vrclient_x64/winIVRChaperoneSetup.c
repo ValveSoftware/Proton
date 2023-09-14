@@ -35,7 +35,7 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeated
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo, 12)
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo, 12)
 
-bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
+bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy(struct w_steam_iface *_this, uint32_t configFile)
 {
     struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy_params params =
     {
@@ -178,7 +178,7 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZer
     cppIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose( &params );
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk(struct w_steam_iface *_this, uint32_t configFile)
 {
     struct cppIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk_params params =
     {
@@ -330,7 +330,7 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysic
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer, 12)
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking, 12)
 
-bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
+bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy(struct w_steam_iface *_this, uint32_t configFile)
 {
     struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params params =
     {
@@ -473,7 +473,7 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZer
     cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose( &params );
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk(struct w_steam_iface *_this, uint32_t configFile)
 {
     struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk_params params =
     {
@@ -685,7 +685,7 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSe
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview, 4)
 DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting, 4)
 
-bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
+bool __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy(struct w_steam_iface *_this, uint32_t configFile)
 {
     struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_CommitWorkingCopy_params params =
     {
@@ -840,7 +840,7 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZer
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose( &params );
 }
 
-void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk(struct w_steam_iface *_this, EChaperoneConfigFile configFile)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk(struct w_steam_iface *_this, uint32_t configFile)
 {
     struct cppIVRChaperoneSetup_IVRChaperoneSetup_006_ReloadFromDisk_params params =
     {

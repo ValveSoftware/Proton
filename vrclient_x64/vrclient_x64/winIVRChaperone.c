@@ -28,7 +28,7 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetBoundsColor, 12)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_AreBoundsVisible, 4)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_ForceBoundsVisible, 8)
 
-ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_002_GetCalibrationState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRChaperone_IVRChaperone_002_GetCalibrationState(struct w_steam_iface *_this)
 {
     struct cppIVRChaperone_IVRChaperone_002_GetCalibrationState_params params =
     {
@@ -209,7 +209,7 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetBoundsColor, 20)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_AreBoundsVisible, 4)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_ForceBoundsVisible, 8)
 
-ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_003_GetCalibrationState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRChaperone_IVRChaperone_003_GetCalibrationState(struct w_steam_iface *_this)
 {
     struct cppIVRChaperone_IVRChaperone_003_GetCalibrationState_params params =
     {
@@ -379,7 +379,7 @@ DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_AreBoundsVisible, 4)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ForceBoundsVisible, 8)
 DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ResetZeroPose, 8)
 
-ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_004_GetCalibrationState(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRChaperone_IVRChaperone_004_GetCalibrationState(struct w_steam_iface *_this)
 {
     struct cppIVRChaperone_IVRChaperone_004_GetCalibrationState_params params =
     {
@@ -472,7 +472,7 @@ void __thiscall winIVRChaperone_IVRChaperone_004_ForceBoundsVisible(struct w_ste
     cppIVRChaperone_IVRChaperone_004_ForceBoundsVisible( &params );
 }
 
-void __thiscall winIVRChaperone_IVRChaperone_004_ResetZeroPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eTrackingUniverseOrigin)
+void __thiscall winIVRChaperone_IVRChaperone_004_ResetZeroPose(struct w_steam_iface *_this, uint32_t eTrackingUniverseOrigin)
 {
     struct cppIVRChaperone_IVRChaperone_004_ResetZeroPose_params params =
     {

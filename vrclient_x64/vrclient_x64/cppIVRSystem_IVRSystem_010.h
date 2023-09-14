@@ -13,17 +13,17 @@ struct cppIVRSystem_IVRSystem_010_GetProjectionMatrix_params
 {
     void *linux_side;
     HmdMatrix44_t *_ret;
-    EVREye eEye;
+    uint32_t eEye;
     float fNearZ;
     float fFarZ;
-    EGraphicsAPIConvention eProjType;
+    uint32_t eProjType;
 };
 extern void cppIVRSystem_IVRSystem_010_GetProjectionMatrix( struct cppIVRSystem_IVRSystem_010_GetProjectionMatrix_params *params );
 
 struct cppIVRSystem_IVRSystem_010_GetProjectionRaw_params
 {
     void *linux_side;
-    EVREye eEye;
+    uint32_t eEye;
     float *pfLeft;
     float *pfRight;
     float *pfTop;
@@ -35,7 +35,7 @@ struct cppIVRSystem_IVRSystem_010_ComputeDistortion_params
 {
     void *linux_side;
     DistortionCoordinates_t *_ret;
-    EVREye eEye;
+    uint32_t eEye;
     float fU;
     float fV;
 };
@@ -45,7 +45,7 @@ struct cppIVRSystem_IVRSystem_010_GetEyeToHeadTransform_params
 {
     void *linux_side;
     HmdMatrix34_t *_ret;
-    EVREye eEye;
+    uint32_t eEye;
 };
 extern void cppIVRSystem_IVRSystem_010_GetEyeToHeadTransform( struct cppIVRSystem_IVRSystem_010_GetEyeToHeadTransform_params *params );
 
@@ -90,7 +90,7 @@ extern void cppIVRSystem_IVRSystem_010_SetDisplayVisibility( struct cppIVRSystem
 struct cppIVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose_params
 {
     void *linux_side;
-    ETrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
     float fPredictedSecondsToPhotonsFromNow;
     TrackedDevicePose_t *pTrackedDevicePoseArray;
     uint32_t unTrackedDevicePoseArrayCount;
@@ -121,7 +121,7 @@ struct cppIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass_params
 {
     void *linux_side;
     uint32_t _ret;
-    ETrackedDeviceClass eTrackedDeviceClass;
+    uint32_t eTrackedDeviceClass;
     TrackedDeviceIndex_t *punTrackedDeviceIndexArray;
     uint32_t unTrackedDeviceIndexArrayCount;
     TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex;
@@ -131,7 +131,7 @@ extern void cppIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass( str
 struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel_params
 {
     void *linux_side;
-    EDeviceActivityLevel _ret;
+    uint32_t _ret;
     TrackedDeviceIndex_t unDeviceId;
 };
 extern void cppIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel( struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel_params *params );
@@ -164,7 +164,7 @@ extern void cppIVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex( s
 struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceClass_params
 {
     void *linux_side;
-    ETrackedDeviceClass _ret;
+    uint32_t _ret;
     TrackedDeviceIndex_t unDeviceIndex;
 };
 extern void cppIVRSystem_IVRSystem_010_GetTrackedDeviceClass( struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceClass_params *params );
@@ -182,8 +182,8 @@ struct cppIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty_params
     void *linux_side;
     bool _ret;
     TrackedDeviceIndex_t unDeviceIndex;
-    ETrackedDeviceProperty prop;
-    ETrackedPropertyError *pError;
+    uint32_t prop;
+    uint32_t *pError;
 };
 extern void cppIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty_params *params );
 
@@ -192,8 +192,8 @@ struct cppIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty_params
     void *linux_side;
     float _ret;
     TrackedDeviceIndex_t unDeviceIndex;
-    ETrackedDeviceProperty prop;
-    ETrackedPropertyError *pError;
+    uint32_t prop;
+    uint32_t *pError;
 };
 extern void cppIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty_params *params );
 
@@ -202,8 +202,8 @@ struct cppIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty_params
     void *linux_side;
     int32_t _ret;
     TrackedDeviceIndex_t unDeviceIndex;
-    ETrackedDeviceProperty prop;
-    ETrackedPropertyError *pError;
+    uint32_t prop;
+    uint32_t *pError;
 };
 extern void cppIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty_params *params );
 
@@ -212,8 +212,8 @@ struct cppIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty_params
     void *linux_side;
     uint64_t _ret;
     TrackedDeviceIndex_t unDeviceIndex;
-    ETrackedDeviceProperty prop;
-    ETrackedPropertyError *pError;
+    uint32_t prop;
+    uint32_t *pError;
 };
 extern void cppIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty_params *params );
 
@@ -222,8 +222,8 @@ struct cppIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty_params
     void *linux_side;
     HmdMatrix34_t *_ret;
     TrackedDeviceIndex_t unDeviceIndex;
-    ETrackedDeviceProperty prop;
-    ETrackedPropertyError *pError;
+    uint32_t prop;
+    uint32_t *pError;
 };
 extern void cppIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty_params *params );
 
@@ -232,10 +232,10 @@ struct cppIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty_params
     void *linux_side;
     uint32_t _ret;
     TrackedDeviceIndex_t unDeviceIndex;
-    ETrackedDeviceProperty prop;
+    uint32_t prop;
     char *pchValue;
     uint32_t unBufferSize;
-    ETrackedPropertyError *pError;
+    uint32_t *pError;
 };
 extern void cppIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty( struct cppIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty_params *params );
 
@@ -243,7 +243,7 @@ struct cppIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum_params
 {
     void *linux_side;
     const char *_ret;
-    ETrackedPropertyError error;
+    uint32_t error;
 };
 extern void cppIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum_params *params );
 
@@ -259,7 +259,7 @@ struct cppIVRSystem_IVRSystem_010_PollNextEventWithPose_params
 {
     void *linux_side;
     bool _ret;
-    ETrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
     VREvent_t *pEvent;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
@@ -269,7 +269,7 @@ struct cppIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum_params
 {
     void *linux_side;
     const char *_ret;
-    EVREventType eType;
+    uint32_t eType;
 };
 extern void cppIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum_params *params );
 
@@ -277,7 +277,7 @@ struct cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh_params
 {
     void *linux_side;
     HiddenAreaMesh_t *_ret;
-    EVREye eEye;
+    uint32_t eEye;
 };
 extern void cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh( struct cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh_params *params );
 
@@ -294,7 +294,7 @@ struct cppIVRSystem_IVRSystem_010_GetControllerStateWithPose_params
 {
     void *linux_side;
     bool _ret;
-    ETrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
     TrackedDeviceIndex_t unControllerDeviceIndex;
     winVRControllerState001_t_0914 *pControllerState;
     TrackedDevicePose_t *pTrackedDevicePose;
@@ -314,7 +314,7 @@ struct cppIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum_params
 {
     void *linux_side;
     const char *_ret;
-    EVRButtonId eButtonId;
+    uint32_t eButtonId;
 };
 extern void cppIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum_params *params );
 
@@ -322,7 +322,7 @@ struct cppIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum_params
 {
     void *linux_side;
     const char *_ret;
-    EVRControllerAxisType eAxisType;
+    uint32_t eAxisType;
 };
 extern void cppIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum( struct cppIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum_params *params );
 

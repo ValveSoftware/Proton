@@ -4,21 +4,21 @@ extern "C" {
 struct cppIVRCompositor_IVRCompositor_017_SetTrackingSpace_params
 {
     void *linux_side;
-    ETrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppIVRCompositor_IVRCompositor_017_SetTrackingSpace( struct cppIVRCompositor_IVRCompositor_017_SetTrackingSpace_params *params );
 
 struct cppIVRCompositor_IVRCompositor_017_GetTrackingSpace_params
 {
     void *linux_side;
-    ETrackingUniverseOrigin _ret;
+    uint32_t _ret;
 };
 extern void cppIVRCompositor_IVRCompositor_017_GetTrackingSpace( struct cppIVRCompositor_IVRCompositor_017_GetTrackingSpace_params *params );
 
 struct cppIVRCompositor_IVRCompositor_017_WaitGetPoses_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     TrackedDevicePose_t *pRenderPoseArray;
     uint32_t unRenderPoseArrayCount;
     TrackedDevicePose_t *pGamePoseArray;
@@ -29,7 +29,7 @@ extern void cppIVRCompositor_IVRCompositor_017_WaitGetPoses( struct cppIVRCompos
 struct cppIVRCompositor_IVRCompositor_017_GetLastPoses_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     TrackedDevicePose_t *pRenderPoseArray;
     uint32_t unRenderPoseArrayCount;
     TrackedDevicePose_t *pGamePoseArray;
@@ -40,7 +40,7 @@ extern void cppIVRCompositor_IVRCompositor_017_GetLastPoses( struct cppIVRCompos
 struct cppIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     TrackedDeviceIndex_t unDeviceIndex;
     TrackedDevicePose_t *pOutputPose;
     TrackedDevicePose_t *pOutputGamePose;
@@ -50,11 +50,11 @@ extern void cppIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(
 struct cppIVRCompositor_IVRCompositor_017_Submit_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
-    EVREye eEye;
+    uint32_t _ret;
+    uint32_t eEye;
     const Texture_t *pTexture;
     const VRTextureBounds_t *pBounds;
-    EVRSubmitFlags nSubmitFlags;
+    uint32_t nSubmitFlags;
 };
 extern void cppIVRCompositor_IVRCompositor_017_Submit( struct cppIVRCompositor_IVRCompositor_017_Submit_params *params );
 
@@ -126,7 +126,7 @@ extern void cppIVRCompositor_IVRCompositor_017_FadeGrid( struct cppIVRCompositor
 struct cppIVRCompositor_IVRCompositor_017_SetSkyboxOverride_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
+    uint32_t _ret;
     const Texture_t *pTextures;
     uint32_t unTextureCount;
 };

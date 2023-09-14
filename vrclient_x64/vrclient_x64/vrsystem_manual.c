@@ -32,13 +32,13 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
-static VkInstance_T *unwrap_instance( ETextureType type, VkInstance_T *instance )
+static VkInstance_T *unwrap_instance( uint32_t type, VkInstance_T *instance )
 {
     if (type == TextureType_Vulkan) return get_native_VkInstance( instance );
     return instance;
 }
 
-static uint64_t wrap_device( ETextureType type, VkInstance_T *instance, uint64_t device )
+static uint64_t wrap_device( uint32_t type, VkInstance_T *instance, uint64_t device )
 {
     if (type == TextureType_Vulkan)
     {
@@ -130,7 +130,7 @@ void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo( struct w_steam_ifa
 }
 
 void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
-                                                            ETextureType textureType, VkInstance_T *pInstance )
+                                                            uint32_t textureType, VkInstance_T *pInstance )
 {
     struct cppIVRSystem_IVRSystem_017_GetOutputDevice_params params =
     {
@@ -153,7 +153,7 @@ void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo( struct w_steam_ifa
 }
 
 void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
-                                                            ETextureType textureType, VkInstance_T *pInstance )
+                                                            uint32_t textureType, VkInstance_T *pInstance )
 {
     struct cppIVRSystem_IVRSystem_019_GetOutputDevice_params params =
     {
@@ -176,7 +176,7 @@ void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo( struct w_steam_ifa
 }
 
 void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
-                                                            ETextureType textureType, VkInstance_T *pInstance )
+                                                            uint32_t textureType, VkInstance_T *pInstance )
 {
     struct cppIVRSystem_IVRSystem_020_GetOutputDevice_params params =
     {
@@ -199,7 +199,7 @@ void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo( struct w_steam_ifa
 }
 
 void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
-                                                            ETextureType textureType, VkInstance_T *pInstance )
+                                                            uint32_t textureType, VkInstance_T *pInstance )
 {
     struct cppIVRSystem_IVRSystem_021_GetOutputDevice_params params =
     {
@@ -222,7 +222,7 @@ void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo( struct w_steam_ifa
 }
 
 void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice( struct w_steam_iface *_this, uint64_t *pnDevice,
-                                                            ETextureType textureType, VkInstance_T *pInstance )
+                                                            uint32_t textureType, VkInstance_T *pInstance )
 {
     struct cppIVRSystem_IVRSystem_022_GetOutputDevice_params params =
     {

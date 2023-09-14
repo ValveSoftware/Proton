@@ -52,7 +52,7 @@ void __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize(struct w
     cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize( &params );
 }
 
-void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(struct w_steam_iface *_this, HeadsetViewMode_t eHeadsetViewMode)
+void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(struct w_steam_iface *_this, uint32_t eHeadsetViewMode)
 {
     struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode_params params =
     {
@@ -63,7 +63,7 @@ void __thiscall winIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode(struct w
     cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode( &params );
 }
 
-HeadsetViewMode_t __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode(struct w_steam_iface *_this)
 {
     struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params params =
     {

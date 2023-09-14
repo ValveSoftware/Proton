@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVRMailbox_IVRMailbox_001_undoc1_params
 {
     void *linux_side;
-    vrmb_typeb _ret;
+    uint32_t _ret;
     const char *a;
     vrmb_typea *b;
 };
@@ -13,7 +13,7 @@ extern void cppIVRMailbox_IVRMailbox_001_undoc1( struct cppIVRMailbox_IVRMailbox
 struct cppIVRMailbox_IVRMailbox_001_undoc2_params
 {
     void *linux_side;
-    vrmb_typeb _ret;
+    uint32_t _ret;
     vrmb_typea a;
 };
 extern void cppIVRMailbox_IVRMailbox_001_undoc2( struct cppIVRMailbox_IVRMailbox_001_undoc2_params *params );
@@ -21,7 +21,7 @@ extern void cppIVRMailbox_IVRMailbox_001_undoc2( struct cppIVRMailbox_IVRMailbox
 struct cppIVRMailbox_IVRMailbox_001_undoc3_params
 {
     void *linux_side;
-    vrmb_typeb _ret;
+    uint32_t _ret;
     vrmb_typea a;
     const char *b;
     const char *c;
@@ -31,7 +31,7 @@ extern void cppIVRMailbox_IVRMailbox_001_undoc3( struct cppIVRMailbox_IVRMailbox
 struct cppIVRMailbox_IVRMailbox_001_undoc4_params
 {
     void *linux_side;
-    vrmb_typeb _ret;
+    uint32_t _ret;
     vrmb_typea a;
     char *b;
     uint32_t c;

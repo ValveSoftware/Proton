@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVRClientCore_IVRClientCore_002_Init_params
 {
     void *linux_side;
-    EVRInitError _ret;
+    uint32_t _ret;
     EVRApplicationType eApplicationType;
 };
 extern void cppIVRClientCore_IVRClientCore_002_Init( struct cppIVRClientCore_IVRClientCore_002_Init_params *params );
@@ -18,7 +18,7 @@ extern void cppIVRClientCore_IVRClientCore_002_Cleanup( struct cppIVRClientCore_
 struct cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid_params
 {
     void *linux_side;
-    EVRInitError _ret;
+    uint32_t _ret;
     const char *pchInterfaceVersion;
 };
 extern void cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid( struct cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid_params *params );
@@ -28,7 +28,7 @@ struct cppIVRClientCore_IVRClientCore_002_GetGenericInterface_params
     void *linux_side;
     void *_ret;
     const char *pchNameAndVersion;
-    EVRInitError *peError;
+    uint32_t *peError;
 };
 extern void cppIVRClientCore_IVRClientCore_002_GetGenericInterface( struct cppIVRClientCore_IVRClientCore_002_GetGenericInterface_params *params );
 

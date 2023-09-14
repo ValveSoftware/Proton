@@ -26,11 +26,11 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetIDForVRInitError, 8)
 
-extern EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType);
+extern uint32_t __thiscall winIVRClientCore_IVRClientCore_002_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType);
 
 extern void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(struct w_steam_iface *_this);
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
+uint32_t __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
     struct cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid_params params =
     {
@@ -42,7 +42,7 @@ EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionVal
     return params._ret;
 }
 
-extern void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError);
+extern void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, uint32_t *peError);
 
 extern bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w_steam_iface *_this);
 
@@ -143,11 +143,11 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetIDForVRInitError, 8)
 
-extern EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType, const char *pStartupInfo);
+extern uint32_t __thiscall winIVRClientCore_IVRClientCore_003_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType, const char *pStartupInfo);
 
 extern void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(struct w_steam_iface *_this);
 
-EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
+uint32_t __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(struct w_steam_iface *_this, const char *pchInterfaceVersion)
 {
     struct cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid_params params =
     {
@@ -159,7 +159,7 @@ EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionVal
     return params._ret;
 }
 
-extern void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, EVRInitError *peError);
+extern void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(struct w_steam_iface *_this, const char *pchNameAndVersion, uint32_t *peError);
 
 extern bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w_steam_iface *_this);
 

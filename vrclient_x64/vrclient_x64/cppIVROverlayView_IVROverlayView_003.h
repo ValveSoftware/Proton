@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVROverlayView_IVROverlayView_003_AcquireOverlayView_params
 {
     void *linux_side;
-    EVROverlayError _ret;
+    uint32_t _ret;
     VROverlayHandle_t ulOverlayHandle;
     VRNativeDevice_t *pNativeDevice;
     VROverlayView_t *pOverlayView;
@@ -15,7 +15,7 @@ extern void cppIVROverlayView_IVROverlayView_003_AcquireOverlayView( struct cppI
 struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params
 {
     void *linux_side;
-    EVROverlayError _ret;
+    uint32_t _ret;
     VROverlayView_t *pOverlayView;
 };
 extern void cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView( struct cppIVROverlayView_IVROverlayView_003_ReleaseOverlayView_params *params );

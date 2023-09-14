@@ -83,7 +83,7 @@ void __thiscall winIVRSystem_IVRSystem_003_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_003_GetRecommendedRenderTargetSize( &params );
 }
 
-void __thiscall winIVRSystem_IVRSystem_003_GetEyeOutputViewport(struct w_steam_iface *_this, Hmd_Eye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void __thiscall winIVRSystem_IVRSystem_003_GetEyeOutputViewport(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     struct cppIVRSystem_IVRSystem_003_GetEyeOutputViewport_params params =
     {
@@ -98,7 +98,7 @@ void __thiscall winIVRSystem_IVRSystem_003_GetEyeOutputViewport(struct w_steam_i
     cppIVRSystem_IVRSystem_003_GetEyeOutputViewport( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_003_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_003_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_003_GetProjectionMatrix_params params =
     {
@@ -114,7 +114,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_003_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_003_GetProjectionRaw(struct w_steam_iface *_this, Hmd_Eye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_003_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_003_GetProjectionRaw_params params =
     {
@@ -129,7 +129,7 @@ void __thiscall winIVRSystem_IVRSystem_003_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_003_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_003_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_003_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_003_ComputeDistortion_params params =
     {
@@ -144,7 +144,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_003_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_003_GetEyeToHeadTransform_params params =
     {
@@ -195,7 +195,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_AttachToWindow(struct w_steam_iface *
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_003_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_003_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_003_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -255,7 +255,7 @@ void __thiscall winIVRSystem_IVRSystem_003_FreeRenderModel(struct w_steam_iface 
     cppIVRSystem_IVRSystem_003_FreeRenderModel( &params );
 }
 
-TrackedDeviceClass __thiscall winIVRSystem_IVRSystem_003_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_003_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_003_GetTrackedDeviceClass_params params =
     {
@@ -279,7 +279,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_003_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_003_GetBoolTrackedDeviceProperty_params params =
     {
@@ -293,7 +293,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_003_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_003_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_003_GetFloatTrackedDeviceProperty_params params =
     {
@@ -307,7 +307,7 @@ float __thiscall winIVRSystem_IVRSystem_003_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_003_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_003_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_003_GetInt32TrackedDeviceProperty_params params =
     {
@@ -321,7 +321,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_003_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_003_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_003_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_003_GetUint64TrackedDeviceProperty_params params =
     {
@@ -335,7 +335,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_003_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -350,7 +350,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_003_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_003_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, TrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_003_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_003_GetStringTrackedDeviceProperty_params params =
     {
@@ -366,7 +366,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_003_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_003_GetPropErrorNameFromEnum(struct w_steam_iface *_this, TrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_003_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_003_GetPropErrorNameFromEnum_params params =
     {
@@ -390,7 +390,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_PollNextEventWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_003_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_003_PollNextEventWithPose_params params =
     {
@@ -404,7 +404,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum_params params =
     {
@@ -416,7 +416,7 @@ const char * __thiscall winIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_003_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_003_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_003_GetHiddenAreaMesh_params params =
     {
@@ -442,7 +442,7 @@ bool __thiscall winIVRSystem_IVRSystem_003_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_003_GetControllerStateWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_091 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_003_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_091 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_003_GetControllerStateWithPose_params params =
     {
@@ -470,7 +470,7 @@ void __thiscall winIVRSystem_IVRSystem_003_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_003_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_003_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_003_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_003_GetButtonIdNameFromEnum_params params =
     {
@@ -482,7 +482,7 @@ const char * __thiscall winIVRSystem_IVRSystem_003_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_003_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_003_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_003_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -732,7 +732,7 @@ void __thiscall winIVRSystem_IVRSystem_004_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_004_GetRecommendedRenderTargetSize( &params );
 }
 
-void __thiscall winIVRSystem_IVRSystem_004_GetEyeOutputViewport(struct w_steam_iface *_this, Hmd_Eye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void __thiscall winIVRSystem_IVRSystem_004_GetEyeOutputViewport(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     struct cppIVRSystem_IVRSystem_004_GetEyeOutputViewport_params params =
     {
@@ -747,7 +747,7 @@ void __thiscall winIVRSystem_IVRSystem_004_GetEyeOutputViewport(struct w_steam_i
     cppIVRSystem_IVRSystem_004_GetEyeOutputViewport( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_004_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_004_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_004_GetProjectionMatrix_params params =
     {
@@ -763,7 +763,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_004_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_004_GetProjectionRaw(struct w_steam_iface *_this, Hmd_Eye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_004_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_004_GetProjectionRaw_params params =
     {
@@ -778,7 +778,7 @@ void __thiscall winIVRSystem_IVRSystem_004_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_004_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_004_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_004_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_004_ComputeDistortion_params params =
     {
@@ -793,7 +793,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_004_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_004_GetEyeToHeadTransform_params params =
     {
@@ -844,7 +844,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_AttachToWindow(struct w_steam_iface *
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_004_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_004_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_004_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -880,7 +880,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetSeatedZeroPoseToStandin
     return params._ret;
 }
 
-TrackedDeviceClass __thiscall winIVRSystem_IVRSystem_004_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_004_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_004_GetTrackedDeviceClass_params params =
     {
@@ -904,7 +904,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_004_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_004_GetBoolTrackedDeviceProperty_params params =
     {
@@ -918,7 +918,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_004_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_004_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_004_GetFloatTrackedDeviceProperty_params params =
     {
@@ -932,7 +932,7 @@ float __thiscall winIVRSystem_IVRSystem_004_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_004_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_004_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_004_GetInt32TrackedDeviceProperty_params params =
     {
@@ -946,7 +946,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_004_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty_params params =
     {
@@ -960,7 +960,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -975,7 +975,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_004_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_004_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, TrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_004_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_004_GetStringTrackedDeviceProperty_params params =
     {
@@ -991,7 +991,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_004_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_004_GetPropErrorNameFromEnum(struct w_steam_iface *_this, TrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_004_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_004_GetPropErrorNameFromEnum_params params =
     {
@@ -1015,7 +1015,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_PollNextEventWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_004_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_004_PollNextEventWithPose_params params =
     {
@@ -1029,7 +1029,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum_params params =
     {
@@ -1041,7 +1041,7 @@ const char * __thiscall winIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_004_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_004_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_004_GetHiddenAreaMesh_params params =
     {
@@ -1067,7 +1067,7 @@ bool __thiscall winIVRSystem_IVRSystem_004_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_004_GetControllerStateWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_092 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_004_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_092 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_004_GetControllerStateWithPose_params params =
     {
@@ -1095,7 +1095,7 @@ void __thiscall winIVRSystem_IVRSystem_004_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_004_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_004_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_004_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_004_GetButtonIdNameFromEnum_params params =
     {
@@ -1107,7 +1107,7 @@ const char * __thiscall winIVRSystem_IVRSystem_004_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_004_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_004_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_004_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -1353,7 +1353,7 @@ void __thiscall winIVRSystem_IVRSystem_005_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_005_GetRecommendedRenderTargetSize( &params );
 }
 
-void __thiscall winIVRSystem_IVRSystem_005_GetEyeOutputViewport(struct w_steam_iface *_this, Hmd_Eye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void __thiscall winIVRSystem_IVRSystem_005_GetEyeOutputViewport(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     struct cppIVRSystem_IVRSystem_005_GetEyeOutputViewport_params params =
     {
@@ -1368,7 +1368,7 @@ void __thiscall winIVRSystem_IVRSystem_005_GetEyeOutputViewport(struct w_steam_i
     cppIVRSystem_IVRSystem_005_GetEyeOutputViewport( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_005_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_005_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_005_GetProjectionMatrix_params params =
     {
@@ -1384,7 +1384,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_005_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_005_GetProjectionRaw(struct w_steam_iface *_this, Hmd_Eye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_005_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_005_GetProjectionRaw_params params =
     {
@@ -1399,7 +1399,7 @@ void __thiscall winIVRSystem_IVRSystem_005_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_005_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_005_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_005_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_005_ComputeDistortion_params params =
     {
@@ -1414,7 +1414,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_005_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_005_GetEyeToHeadTransform_params params =
     {
@@ -1465,7 +1465,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_AttachToWindow(struct w_steam_iface *
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_005_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_005_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_005_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -1501,7 +1501,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandin
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, TrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -1516,7 +1516,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-TrackedDeviceClass __thiscall winIVRSystem_IVRSystem_005_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_005_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_005_GetTrackedDeviceClass_params params =
     {
@@ -1540,7 +1540,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty_params params =
     {
@@ -1554,7 +1554,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty_params params =
     {
@@ -1568,7 +1568,7 @@ float __thiscall winIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty_params params =
     {
@@ -1582,7 +1582,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty_params params =
     {
@@ -1596,7 +1596,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -1611,7 +1611,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_005_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, TrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty_params params =
     {
@@ -1627,7 +1627,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum(struct w_steam_iface *_this, TrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum_params params =
     {
@@ -1651,7 +1651,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_PollNextEventWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_005_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_005_PollNextEventWithPose_params params =
     {
@@ -1665,7 +1665,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum_params params =
     {
@@ -1677,7 +1677,7 @@ const char * __thiscall winIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_005_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_005_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_005_GetHiddenAreaMesh_params params =
     {
@@ -1703,7 +1703,7 @@ bool __thiscall winIVRSystem_IVRSystem_005_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_005_GetControllerStateWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_098 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_005_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_098 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_005_GetControllerStateWithPose_params params =
     {
@@ -1731,7 +1731,7 @@ void __thiscall winIVRSystem_IVRSystem_005_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_005_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum_params params =
     {
@@ -1743,7 +1743,7 @@ const char * __thiscall winIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -1996,7 +1996,7 @@ void __thiscall winIVRSystem_IVRSystem_006_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_006_GetRecommendedRenderTargetSize( &params );
 }
 
-void __thiscall winIVRSystem_IVRSystem_006_GetEyeOutputViewport(struct w_steam_iface *_this, Hmd_Eye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
+void __thiscall winIVRSystem_IVRSystem_006_GetEyeOutputViewport(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight)
 {
     struct cppIVRSystem_IVRSystem_006_GetEyeOutputViewport_params params =
     {
@@ -2011,7 +2011,7 @@ void __thiscall winIVRSystem_IVRSystem_006_GetEyeOutputViewport(struct w_steam_i
     cppIVRSystem_IVRSystem_006_GetEyeOutputViewport( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_006_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, Hmd_Eye eEye, float fNearZ, float fFarZ, GraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_006_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_006_GetProjectionMatrix_params params =
     {
@@ -2027,7 +2027,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_006_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_006_GetProjectionRaw(struct w_steam_iface *_this, Hmd_Eye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_006_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_006_GetProjectionRaw_params params =
     {
@@ -2042,7 +2042,7 @@ void __thiscall winIVRSystem_IVRSystem_006_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_006_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_006_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, Hmd_Eye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_006_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_006_ComputeDistortion_params params =
     {
@@ -2057,7 +2057,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_006_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, Hmd_Eye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_006_GetEyeToHeadTransform_params params =
     {
@@ -2108,7 +2108,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_AttachToWindow(struct w_steam_iface *
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_006_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_006_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_006_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -2156,7 +2156,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_006_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, TrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_006_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_006_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -2171,7 +2171,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_006_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_006_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_006_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_006_GetTrackedDeviceActivityLevel_params params =
     {
@@ -2183,7 +2183,7 @@ EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_006_GetTrackedDeviceActiv
     return params._ret;
 }
 
-TrackedDeviceClass __thiscall winIVRSystem_IVRSystem_006_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_006_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_006_GetTrackedDeviceClass_params params =
     {
@@ -2207,7 +2207,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_006_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_006_GetBoolTrackedDeviceProperty_params params =
     {
@@ -2221,7 +2221,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_006_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_006_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_006_GetFloatTrackedDeviceProperty_params params =
     {
@@ -2235,7 +2235,7 @@ float __thiscall winIVRSystem_IVRSystem_006_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_006_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_006_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_006_GetInt32TrackedDeviceProperty_params params =
     {
@@ -2249,7 +2249,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_006_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_006_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_006_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_006_GetUint64TrackedDeviceProperty_params params =
     {
@@ -2263,7 +2263,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_006_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, TrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_006_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -2278,7 +2278,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_006_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_006_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, TrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_006_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_006_GetStringTrackedDeviceProperty_params params =
     {
@@ -2294,7 +2294,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_006_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_006_GetPropErrorNameFromEnum(struct w_steam_iface *_this, TrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_006_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_006_GetPropErrorNameFromEnum_params params =
     {
@@ -2318,7 +2318,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_PollNextEventWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_006_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_006_PollNextEventWithPose_params params =
     {
@@ -2332,7 +2332,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum_params params =
     {
@@ -2344,7 +2344,7 @@ const char * __thiscall winIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_006_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, Hmd_Eye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_006_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_006_GetHiddenAreaMesh_params params =
     {
@@ -2370,7 +2370,7 @@ bool __thiscall winIVRSystem_IVRSystem_006_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_006_GetControllerStateWithPose(struct w_steam_iface *_this, TrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0910 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_006_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0910 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_006_GetControllerStateWithPose_params params =
     {
@@ -2398,7 +2398,7 @@ void __thiscall winIVRSystem_IVRSystem_006_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_006_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_006_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_006_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_006_GetButtonIdNameFromEnum_params params =
     {
@@ -2410,7 +2410,7 @@ const char * __thiscall winIVRSystem_IVRSystem_006_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_006_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_006_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_006_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -2694,7 +2694,7 @@ void __thiscall winIVRSystem_IVRSystem_009_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_009_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_009_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_009_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_009_GetProjectionMatrix_params params =
     {
@@ -2710,7 +2710,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_009_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_009_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_009_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_009_GetProjectionRaw_params params =
     {
@@ -2725,7 +2725,7 @@ void __thiscall winIVRSystem_IVRSystem_009_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_009_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_009_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_009_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_009_ComputeDistortion_params params =
     {
@@ -2740,7 +2740,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_009_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_009_GetEyeToHeadTransform_params params =
     {
@@ -2802,7 +2802,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_009_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_009_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_009_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -2850,7 +2850,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_009_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_009_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_009_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -2865,7 +2865,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_009_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_009_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_009_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_009_GetTrackedDeviceActivityLevel_params params =
     {
@@ -2890,7 +2890,7 @@ void __thiscall winIVRSystem_IVRSystem_009_ApplyTransform(struct w_steam_iface *
     cppIVRSystem_IVRSystem_009_ApplyTransform( &params );
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_009_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_009_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_009_GetTrackedDeviceClass_params params =
     {
@@ -2914,7 +2914,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_009_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_009_GetBoolTrackedDeviceProperty_params params =
     {
@@ -2928,7 +2928,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_009_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_009_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_009_GetFloatTrackedDeviceProperty_params params =
     {
@@ -2942,7 +2942,7 @@ float __thiscall winIVRSystem_IVRSystem_009_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_009_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_009_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_009_GetInt32TrackedDeviceProperty_params params =
     {
@@ -2956,7 +2956,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_009_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_009_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_009_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_009_GetUint64TrackedDeviceProperty_params params =
     {
@@ -2970,7 +2970,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_009_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -2985,7 +2985,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_009_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_009_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_009_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_009_GetStringTrackedDeviceProperty_params params =
     {
@@ -3001,7 +3001,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_009_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_009_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_009_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_009_GetPropErrorNameFromEnum_params params =
     {
@@ -3025,7 +3025,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_009_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_009_PollNextEventWithPose_params params =
     {
@@ -3039,7 +3039,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum_params params =
     {
@@ -3051,7 +3051,7 @@ const char * __thiscall winIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_009_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_009_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_009_GetHiddenAreaMesh_params params =
     {
@@ -3077,7 +3077,7 @@ bool __thiscall winIVRSystem_IVRSystem_009_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_009_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0912 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_009_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0912 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_009_GetControllerStateWithPose_params params =
     {
@@ -3105,7 +3105,7 @@ void __thiscall winIVRSystem_IVRSystem_009_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_009_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_009_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_009_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_009_GetButtonIdNameFromEnum_params params =
     {
@@ -3117,7 +3117,7 @@ const char * __thiscall winIVRSystem_IVRSystem_009_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_009_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_009_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_009_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -3402,7 +3402,7 @@ void __thiscall winIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_010_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_010_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_010_GetProjectionMatrix_params params =
     {
@@ -3418,7 +3418,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_010_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_010_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_010_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_010_GetProjectionRaw_params params =
     {
@@ -3433,7 +3433,7 @@ void __thiscall winIVRSystem_IVRSystem_010_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_010_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_010_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_010_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_010_ComputeDistortion_params params =
     {
@@ -3448,7 +3448,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_010_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_010_GetEyeToHeadTransform_params params =
     {
@@ -3510,7 +3510,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -3558,7 +3558,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -3573,7 +3573,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel_params params =
     {
@@ -3622,7 +3622,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_010_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_010_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_010_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_010_GetTrackedDeviceClass_params params =
     {
@@ -3646,7 +3646,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty_params params =
     {
@@ -3660,7 +3660,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty_params params =
     {
@@ -3674,7 +3674,7 @@ float __thiscall winIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty_params params =
     {
@@ -3688,7 +3688,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty_params params =
     {
@@ -3702,7 +3702,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -3717,7 +3717,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_010_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty_params params =
     {
@@ -3733,7 +3733,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum_params params =
     {
@@ -3757,7 +3757,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_010_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, VREvent_t *pEvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_010_PollNextEventWithPose_params params =
     {
@@ -3771,7 +3771,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum_params params =
     {
@@ -3783,7 +3783,7 @@ const char * __thiscall winIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_010_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_010_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_010_GetHiddenAreaMesh_params params =
     {
@@ -3809,7 +3809,7 @@ bool __thiscall winIVRSystem_IVRSystem_010_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_010_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0914 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_010_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0914 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_010_GetControllerStateWithPose_params params =
     {
@@ -3837,7 +3837,7 @@ void __thiscall winIVRSystem_IVRSystem_010_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_010_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum_params params =
     {
@@ -3849,7 +3849,7 @@ const char * __thiscall winIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -4164,7 +4164,7 @@ void __thiscall winIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_011_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_011_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_011_GetProjectionMatrix_params params =
     {
@@ -4180,7 +4180,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_011_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_011_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_011_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_011_GetProjectionRaw_params params =
     {
@@ -4195,7 +4195,7 @@ void __thiscall winIVRSystem_IVRSystem_011_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_011_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_011_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_011_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_011_ComputeDistortion_params params =
     {
@@ -4210,7 +4210,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_011_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_011_GetEyeToHeadTransform_params params =
     {
@@ -4272,7 +4272,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_011_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_011_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_011_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -4320,7 +4320,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_011_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_011_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_011_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -4335,7 +4335,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_011_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_011_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_011_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_011_GetTrackedDeviceActivityLevel_params params =
     {
@@ -4384,7 +4384,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_011_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_011_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_011_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_011_GetTrackedDeviceClass_params params =
     {
@@ -4408,7 +4408,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_011_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_011_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_011_GetBoolTrackedDeviceProperty_params params =
     {
@@ -4422,7 +4422,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_011_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_011_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_011_GetFloatTrackedDeviceProperty_params params =
     {
@@ -4436,7 +4436,7 @@ float __thiscall winIVRSystem_IVRSystem_011_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_011_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_011_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_011_GetInt32TrackedDeviceProperty_params params =
     {
@@ -4450,7 +4450,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_011_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_011_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_011_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_011_GetUint64TrackedDeviceProperty_params params =
     {
@@ -4464,7 +4464,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_011_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_011_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -4479,7 +4479,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_011_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_011_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_011_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_011_GetStringTrackedDeviceProperty_params params =
     {
@@ -4495,7 +4495,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_011_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_011_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_011_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_011_GetPropErrorNameFromEnum_params params =
     {
@@ -4520,7 +4520,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_011_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_0918 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_011_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_0918 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_011_PollNextEventWithPose_params params =
     {
@@ -4535,7 +4535,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum_params params =
     {
@@ -4547,7 +4547,7 @@ const char * __thiscall winIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_011_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_011_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_011_GetHiddenAreaMesh_params params =
     {
@@ -4573,7 +4573,7 @@ bool __thiscall winIVRSystem_IVRSystem_011_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_011_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0918 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_011_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_0918 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_011_GetControllerStateWithPose_params params =
     {
@@ -4601,7 +4601,7 @@ void __thiscall winIVRSystem_IVRSystem_011_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_011_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_011_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_011_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_011_GetButtonIdNameFromEnum_params params =
     {
@@ -4613,7 +4613,7 @@ const char * __thiscall winIVRSystem_IVRSystem_011_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_011_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_011_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_011_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -4926,7 +4926,7 @@ void __thiscall winIVRSystem_IVRSystem_012_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_012_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_012_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_012_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_012_GetProjectionMatrix_params params =
     {
@@ -4942,7 +4942,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_012_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_012_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_012_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_012_GetProjectionRaw_params params =
     {
@@ -4957,7 +4957,7 @@ void __thiscall winIVRSystem_IVRSystem_012_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_012_GetProjectionRaw( &params );
 }
 
-DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_012_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, EVREye eEye, float fU, float fV)
+DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_012_ComputeDistortion(struct w_steam_iface *_this, DistortionCoordinates_t *_ret, uint32_t eEye, float fU, float fV)
 {
     struct cppIVRSystem_IVRSystem_012_ComputeDistortion_params params =
     {
@@ -4972,7 +4972,7 @@ DistortionCoordinates_t * __thiscall winIVRSystem_IVRSystem_012_ComputeDistortio
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_012_GetEyeToHeadTransform_params params =
     {
@@ -5034,7 +5034,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_012_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_012_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_012_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -5082,7 +5082,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_012_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_012_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_012_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -5097,7 +5097,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_012_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_012_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_012_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_012_GetTrackedDeviceActivityLevel_params params =
     {
@@ -5146,7 +5146,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_012_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_012_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_012_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_012_GetTrackedDeviceClass_params params =
     {
@@ -5170,7 +5170,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_012_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_012_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_012_GetBoolTrackedDeviceProperty_params params =
     {
@@ -5184,7 +5184,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_012_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_012_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_012_GetFloatTrackedDeviceProperty_params params =
     {
@@ -5198,7 +5198,7 @@ float __thiscall winIVRSystem_IVRSystem_012_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_012_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_012_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_012_GetInt32TrackedDeviceProperty_params params =
     {
@@ -5212,7 +5212,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_012_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_012_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_012_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_012_GetUint64TrackedDeviceProperty_params params =
     {
@@ -5226,7 +5226,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_012_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_012_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -5241,7 +5241,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_012_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_012_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_012_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_012_GetStringTrackedDeviceProperty_params params =
     {
@@ -5257,7 +5257,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_012_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_012_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_012_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_012_GetPropErrorNameFromEnum_params params =
     {
@@ -5282,7 +5282,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_012_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_103 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_012_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_103 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_012_PollNextEventWithPose_params params =
     {
@@ -5297,7 +5297,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_012_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_012_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_012_GetEventTypeNameFromEnum_params params =
     {
@@ -5309,7 +5309,7 @@ const char * __thiscall winIVRSystem_IVRSystem_012_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_012_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_012_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_012_GetHiddenAreaMesh_params params =
     {
@@ -5335,7 +5335,7 @@ bool __thiscall winIVRSystem_IVRSystem_012_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_012_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_103 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_012_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_103 *pControllerState, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_012_GetControllerStateWithPose_params params =
     {
@@ -5363,7 +5363,7 @@ void __thiscall winIVRSystem_IVRSystem_012_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_012_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_012_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_012_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_012_GetButtonIdNameFromEnum_params params =
     {
@@ -5375,7 +5375,7 @@ const char * __thiscall winIVRSystem_IVRSystem_012_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_012_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_012_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_012_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -5662,7 +5662,7 @@ void __thiscall winIVRSystem_IVRSystem_014_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_014_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_014_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ, EGraphicsAPIConvention eProjType)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_014_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ, uint32_t eProjType)
 {
     struct cppIVRSystem_IVRSystem_014_GetProjectionMatrix_params params =
     {
@@ -5678,7 +5678,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_014_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_014_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_014_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_014_GetProjectionRaw_params params =
     {
@@ -5693,7 +5693,7 @@ void __thiscall winIVRSystem_IVRSystem_014_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_014_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_014_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_014_ComputeDistortion_params params =
     {
@@ -5708,7 +5708,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_014_GetEyeToHeadTransform_params params =
     {
@@ -5770,7 +5770,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_014_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_014_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_014_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -5818,7 +5818,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_014_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_014_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_014_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -5833,7 +5833,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_014_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_014_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_014_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_014_GetTrackedDeviceActivityLevel_params params =
     {
@@ -5882,7 +5882,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_014_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_014_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_014_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_014_GetTrackedDeviceClass_params params =
     {
@@ -5906,7 +5906,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_014_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_014_GetBoolTrackedDeviceProperty_params params =
     {
@@ -5920,7 +5920,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_014_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_014_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_014_GetFloatTrackedDeviceProperty_params params =
     {
@@ -5934,7 +5934,7 @@ float __thiscall winIVRSystem_IVRSystem_014_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_014_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_014_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_014_GetInt32TrackedDeviceProperty_params params =
     {
@@ -5948,7 +5948,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_014_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_014_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_014_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_014_GetUint64TrackedDeviceProperty_params params =
     {
@@ -5962,7 +5962,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_014_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_014_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -5977,7 +5977,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_014_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_014_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_014_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_014_GetStringTrackedDeviceProperty_params params =
     {
@@ -5993,7 +5993,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_014_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_014_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_014_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_014_GetPropErrorNameFromEnum_params params =
     {
@@ -6018,7 +6018,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_104 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_014_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_104 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_014_PollNextEventWithPose_params params =
     {
@@ -6033,7 +6033,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum_params params =
     {
@@ -6045,7 +6045,7 @@ const char * __thiscall winIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_014_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_014_GetHiddenAreaMesh_params params =
     {
@@ -6073,7 +6073,7 @@ bool __thiscall winIVRSystem_IVRSystem_014_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_014_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_104 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_014_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_104 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_014_GetControllerStateWithPose_params params =
     {
@@ -6102,7 +6102,7 @@ void __thiscall winIVRSystem_IVRSystem_014_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_014_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_014_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_014_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_014_GetButtonIdNameFromEnum_params params =
     {
@@ -6114,7 +6114,7 @@ const char * __thiscall winIVRSystem_IVRSystem_014_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_014_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_014_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_014_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -6401,7 +6401,7 @@ void __thiscall winIVRSystem_IVRSystem_015_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_015_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_015_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_015_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ)
 {
     struct cppIVRSystem_IVRSystem_015_GetProjectionMatrix_params params =
     {
@@ -6416,7 +6416,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_015_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_015_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_015_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_015_GetProjectionRaw_params params =
     {
@@ -6431,7 +6431,7 @@ void __thiscall winIVRSystem_IVRSystem_015_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_015_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_015_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_015_ComputeDistortion_params params =
     {
@@ -6446,7 +6446,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_015_GetEyeToHeadTransform_params params =
     {
@@ -6508,7 +6508,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_015_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_015_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_015_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -6556,7 +6556,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_015_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_015_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_015_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -6571,7 +6571,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_015_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_015_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_015_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_015_GetTrackedDeviceActivityLevel_params params =
     {
@@ -6620,7 +6620,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_015_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_015_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_015_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_015_GetTrackedDeviceClass_params params =
     {
@@ -6644,7 +6644,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_015_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_015_GetBoolTrackedDeviceProperty_params params =
     {
@@ -6658,7 +6658,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_015_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_015_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_015_GetFloatTrackedDeviceProperty_params params =
     {
@@ -6672,7 +6672,7 @@ float __thiscall winIVRSystem_IVRSystem_015_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_015_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_015_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_015_GetInt32TrackedDeviceProperty_params params =
     {
@@ -6686,7 +6686,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_015_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_015_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_015_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_015_GetUint64TrackedDeviceProperty_params params =
     {
@@ -6700,7 +6700,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_015_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_015_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -6715,7 +6715,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_015_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_015_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_015_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_015_GetStringTrackedDeviceProperty_params params =
     {
@@ -6731,7 +6731,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_015_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_015_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_015_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_015_GetPropErrorNameFromEnum_params params =
     {
@@ -6756,7 +6756,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_107 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_015_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_107 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_015_PollNextEventWithPose_params params =
     {
@@ -6771,7 +6771,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_015_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_015_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_015_GetEventTypeNameFromEnum_params params =
     {
@@ -6783,7 +6783,7 @@ const char * __thiscall winIVRSystem_IVRSystem_015_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_015_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_015_GetHiddenAreaMesh_params params =
     {
@@ -6811,7 +6811,7 @@ bool __thiscall winIVRSystem_IVRSystem_015_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_015_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_107 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_015_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_107 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_015_GetControllerStateWithPose_params params =
     {
@@ -6840,7 +6840,7 @@ void __thiscall winIVRSystem_IVRSystem_015_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_015_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_015_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_015_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_015_GetButtonIdNameFromEnum_params params =
     {
@@ -6852,7 +6852,7 @@ const char * __thiscall winIVRSystem_IVRSystem_015_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_015_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_015_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_015_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -7140,7 +7140,7 @@ void __thiscall winIVRSystem_IVRSystem_016_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_016_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_016_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_016_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ)
 {
     struct cppIVRSystem_IVRSystem_016_GetProjectionMatrix_params params =
     {
@@ -7155,7 +7155,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_016_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_016_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_016_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_016_GetProjectionRaw_params params =
     {
@@ -7170,7 +7170,7 @@ void __thiscall winIVRSystem_IVRSystem_016_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_016_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_016_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_016_ComputeDistortion_params params =
     {
@@ -7185,7 +7185,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_016_GetEyeToHeadTransform_params params =
     {
@@ -7224,7 +7224,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_016_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_016_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-void __thiscall winIVRSystem_IVRSystem_016_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType)
+void __thiscall winIVRSystem_IVRSystem_016_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType)
 {
     struct cppIVRSystem_IVRSystem_016_GetOutputDevice_params params =
     {
@@ -7259,7 +7259,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_016_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_016_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_016_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -7307,7 +7307,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_016_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_016_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_016_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -7322,7 +7322,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_016_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_016_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_016_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_016_GetTrackedDeviceActivityLevel_params params =
     {
@@ -7371,7 +7371,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_016_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_016_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_016_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_016_GetTrackedDeviceClass_params params =
     {
@@ -7395,7 +7395,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_016_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_016_GetBoolTrackedDeviceProperty_params params =
     {
@@ -7409,7 +7409,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_016_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_016_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_016_GetFloatTrackedDeviceProperty_params params =
     {
@@ -7423,7 +7423,7 @@ float __thiscall winIVRSystem_IVRSystem_016_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_016_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_016_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_016_GetInt32TrackedDeviceProperty_params params =
     {
@@ -7437,7 +7437,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_016_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_016_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_016_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_016_GetUint64TrackedDeviceProperty_params params =
     {
@@ -7451,7 +7451,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_016_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_016_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -7466,7 +7466,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_016_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_016_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_016_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_016_GetStringTrackedDeviceProperty_params params =
     {
@@ -7482,7 +7482,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_016_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_016_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_016_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_016_GetPropErrorNameFromEnum_params params =
     {
@@ -7507,7 +7507,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_109 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_016_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_109 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_016_PollNextEventWithPose_params params =
     {
@@ -7522,7 +7522,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum_params params =
     {
@@ -7534,7 +7534,7 @@ const char * __thiscall winIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_016_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_016_GetHiddenAreaMesh_params params =
     {
@@ -7562,7 +7562,7 @@ bool __thiscall winIVRSystem_IVRSystem_016_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_016_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_109 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_016_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_109 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_016_GetControllerStateWithPose_params params =
     {
@@ -7591,7 +7591,7 @@ void __thiscall winIVRSystem_IVRSystem_016_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_016_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_016_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_016_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_016_GetButtonIdNameFromEnum_params params =
     {
@@ -7603,7 +7603,7 @@ const char * __thiscall winIVRSystem_IVRSystem_016_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_016_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_016_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_016_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -7893,7 +7893,7 @@ void __thiscall winIVRSystem_IVRSystem_017_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_017_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_017_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_017_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ)
 {
     struct cppIVRSystem_IVRSystem_017_GetProjectionMatrix_params params =
     {
@@ -7908,7 +7908,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_017_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_017_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_017_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_017_GetProjectionRaw_params params =
     {
@@ -7923,7 +7923,7 @@ void __thiscall winIVRSystem_IVRSystem_017_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_017_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_017_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_017_ComputeDistortion_params params =
     {
@@ -7938,7 +7938,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_017_GetEyeToHeadTransform_params params =
     {
@@ -7977,7 +7977,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_017_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
+extern void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_017_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -8002,7 +8002,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_017_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_017_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_017_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -8050,7 +8050,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_017_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_017_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_017_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -8065,7 +8065,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_017_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_017_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_017_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_017_GetTrackedDeviceActivityLevel_params params =
     {
@@ -8114,7 +8114,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_017_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_017_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_017_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_017_GetTrackedDeviceClass_params params =
     {
@@ -8138,7 +8138,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_017_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_017_GetBoolTrackedDeviceProperty_params params =
     {
@@ -8152,7 +8152,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_017_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_017_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_017_GetFloatTrackedDeviceProperty_params params =
     {
@@ -8166,7 +8166,7 @@ float __thiscall winIVRSystem_IVRSystem_017_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_017_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_017_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_017_GetInt32TrackedDeviceProperty_params params =
     {
@@ -8180,7 +8180,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_017_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_017_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_017_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_017_GetUint64TrackedDeviceProperty_params params =
     {
@@ -8194,7 +8194,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_017_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_017_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -8209,7 +8209,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_017_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_017_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_017_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_017_GetStringTrackedDeviceProperty_params params =
     {
@@ -8225,7 +8225,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_017_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_017_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_017_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_017_GetPropErrorNameFromEnum_params params =
     {
@@ -8250,7 +8250,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1011 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_017_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1011 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_017_PollNextEventWithPose_params params =
     {
@@ -8265,7 +8265,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_017_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_017_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_017_GetEventTypeNameFromEnum_params params =
     {
@@ -8277,7 +8277,7 @@ const char * __thiscall winIVRSystem_IVRSystem_017_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_017_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_017_GetHiddenAreaMesh_params params =
     {
@@ -8305,7 +8305,7 @@ bool __thiscall winIVRSystem_IVRSystem_017_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_017_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1011 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_017_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1011 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_017_GetControllerStateWithPose_params params =
     {
@@ -8334,7 +8334,7 @@ void __thiscall winIVRSystem_IVRSystem_017_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_017_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_017_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_017_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_017_GetButtonIdNameFromEnum_params params =
     {
@@ -8346,7 +8346,7 @@ const char * __thiscall winIVRSystem_IVRSystem_017_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_017_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_017_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_017_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -8638,7 +8638,7 @@ void __thiscall winIVRSystem_IVRSystem_019_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_019_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_019_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_019_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ)
 {
     struct cppIVRSystem_IVRSystem_019_GetProjectionMatrix_params params =
     {
@@ -8653,7 +8653,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_019_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_019_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_019_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_019_GetProjectionRaw_params params =
     {
@@ -8668,7 +8668,7 @@ void __thiscall winIVRSystem_IVRSystem_019_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_019_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_019_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_019_ComputeDistortion_params params =
     {
@@ -8683,7 +8683,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_019_GetEyeToHeadTransform_params params =
     {
@@ -8722,7 +8722,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_019_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
+extern void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_019_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -8747,7 +8747,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_019_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_019_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_019_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -8795,7 +8795,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -8810,7 +8810,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_019_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_019_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_019_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_019_GetTrackedDeviceActivityLevel_params params =
     {
@@ -8859,7 +8859,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_019_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_019_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_019_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_019_GetTrackedDeviceClass_params params =
     {
@@ -8883,7 +8883,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_019_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_019_GetBoolTrackedDeviceProperty_params params =
     {
@@ -8897,7 +8897,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_019_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_019_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_019_GetFloatTrackedDeviceProperty_params params =
     {
@@ -8911,7 +8911,7 @@ float __thiscall winIVRSystem_IVRSystem_019_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_019_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_019_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_019_GetInt32TrackedDeviceProperty_params params =
     {
@@ -8925,7 +8925,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_019_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_019_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_019_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_019_GetUint64TrackedDeviceProperty_params params =
     {
@@ -8939,7 +8939,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_019_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -8954,7 +8954,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_019_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_019_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_019_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_019_GetArrayTrackedDeviceProperty_params params =
     {
@@ -8971,7 +8971,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_019_GetArrayTrackedDeviceProperty(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_019_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_019_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_019_GetStringTrackedDeviceProperty_params params =
     {
@@ -8987,7 +8987,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_019_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_019_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_019_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_019_GetPropErrorNameFromEnum_params params =
     {
@@ -9012,7 +9012,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1418 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_019_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1418 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_019_PollNextEventWithPose_params params =
     {
@@ -9027,7 +9027,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum_params params =
     {
@@ -9039,7 +9039,7 @@ const char * __thiscall winIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_019_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_019_GetHiddenAreaMesh_params params =
     {
@@ -9067,7 +9067,7 @@ bool __thiscall winIVRSystem_IVRSystem_019_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_019_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1418 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_019_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1418 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_019_GetControllerStateWithPose_params params =
     {
@@ -9096,7 +9096,7 @@ void __thiscall winIVRSystem_IVRSystem_019_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_019_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_019_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_019_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_019_GetButtonIdNameFromEnum_params params =
     {
@@ -9108,7 +9108,7 @@ const char * __thiscall winIVRSystem_IVRSystem_019_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_019_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_019_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_019_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -9417,7 +9417,7 @@ void __thiscall winIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_020_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_020_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ)
 {
     struct cppIVRSystem_IVRSystem_020_GetProjectionMatrix_params params =
     {
@@ -9432,7 +9432,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_020_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_020_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_020_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_020_GetProjectionRaw_params params =
     {
@@ -9447,7 +9447,7 @@ void __thiscall winIVRSystem_IVRSystem_020_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_020_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_020_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_020_ComputeDistortion_params params =
     {
@@ -9462,7 +9462,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_020_GetEyeToHeadTransform_params params =
     {
@@ -9501,7 +9501,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_020_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
+extern void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_020_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -9526,7 +9526,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -9574,7 +9574,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -9589,7 +9589,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel_params params =
     {
@@ -9638,7 +9638,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_020_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_020_GetTrackedDeviceClass_params params =
     {
@@ -9662,7 +9662,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty_params params =
     {
@@ -9676,7 +9676,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty_params params =
     {
@@ -9690,7 +9690,7 @@ float __thiscall winIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty_params params =
     {
@@ -9704,7 +9704,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty_params params =
     {
@@ -9718,7 +9718,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -9733,7 +9733,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_020_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty_params params =
     {
@@ -9750,7 +9750,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty_params params =
     {
@@ -9766,7 +9766,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum_params params =
     {
@@ -9791,7 +9791,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1715 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1715 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_020_PollNextEventWithPose_params params =
     {
@@ -9806,7 +9806,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum_params params =
     {
@@ -9818,7 +9818,7 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_020_GetHiddenAreaMesh_params params =
     {
@@ -9846,7 +9846,7 @@ bool __thiscall winIVRSystem_IVRSystem_020_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1715 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1715 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_020_GetControllerStateWithPose_params params =
     {
@@ -9875,7 +9875,7 @@ void __thiscall winIVRSystem_IVRSystem_020_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_020_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum_params params =
     {
@@ -9887,7 +9887,7 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -10206,7 +10206,7 @@ void __thiscall winIVRSystem_IVRSystem_021_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_021_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_021_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_021_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ)
 {
     struct cppIVRSystem_IVRSystem_021_GetProjectionMatrix_params params =
     {
@@ -10221,7 +10221,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_021_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_021_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_021_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_021_GetProjectionRaw_params params =
     {
@@ -10236,7 +10236,7 @@ void __thiscall winIVRSystem_IVRSystem_021_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_021_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_021_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_021_ComputeDistortion_params params =
     {
@@ -10251,7 +10251,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_021_GetEyeToHeadTransform_params params =
     {
@@ -10290,7 +10290,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_021_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_021_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
+extern void __thiscall winIVRSystem_IVRSystem_021_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_021_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -10315,7 +10315,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_021_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_021_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_021_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -10363,7 +10363,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -10378,7 +10378,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_021_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_021_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_021_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_021_GetTrackedDeviceActivityLevel_params params =
     {
@@ -10427,7 +10427,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_021_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_021_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_021_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_021_GetTrackedDeviceClass_params params =
     {
@@ -10451,7 +10451,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_021_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_021_GetBoolTrackedDeviceProperty_params params =
     {
@@ -10465,7 +10465,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_021_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_021_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_021_GetFloatTrackedDeviceProperty_params params =
     {
@@ -10479,7 +10479,7 @@ float __thiscall winIVRSystem_IVRSystem_021_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_021_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_021_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_021_GetInt32TrackedDeviceProperty_params params =
     {
@@ -10493,7 +10493,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_021_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_021_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_021_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_021_GetUint64TrackedDeviceProperty_params params =
     {
@@ -10507,7 +10507,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_021_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_021_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -10522,7 +10522,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_021_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_021_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_021_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_021_GetArrayTrackedDeviceProperty_params params =
     {
@@ -10539,7 +10539,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_021_GetArrayTrackedDeviceProperty(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_021_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_021_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_021_GetStringTrackedDeviceProperty_params params =
     {
@@ -10555,7 +10555,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_021_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_021_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_021_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_021_GetPropErrorNameFromEnum_params params =
     {
@@ -10580,7 +10580,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1125 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1125 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_021_PollNextEventWithPose_params params =
     {
@@ -10595,7 +10595,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_021_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_021_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_021_GetEventTypeNameFromEnum_params params =
     {
@@ -10607,7 +10607,7 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_021_GetHiddenAreaMesh_params params =
     {
@@ -10635,7 +10635,7 @@ bool __thiscall winIVRSystem_IVRSystem_021_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1125 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1125 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_021_GetControllerStateWithPose_params params =
     {
@@ -10664,7 +10664,7 @@ void __thiscall winIVRSystem_IVRSystem_021_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_021_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_021_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_021_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_021_GetButtonIdNameFromEnum_params params =
     {
@@ -10676,7 +10676,7 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_021_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_021_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_021_GetControllerAxisTypeNameFromEnum_params params =
     {
@@ -10982,7 +10982,7 @@ void __thiscall winIVRSystem_IVRSystem_022_GetRecommendedRenderTargetSize(struct
     cppIVRSystem_IVRSystem_022_GetRecommendedRenderTargetSize( &params );
 }
 
-HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_022_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_022_GetProjectionMatrix(struct w_steam_iface *_this, HmdMatrix44_t *_ret, uint32_t eEye, float fNearZ, float fFarZ)
 {
     struct cppIVRSystem_IVRSystem_022_GetProjectionMatrix_params params =
     {
@@ -10997,7 +10997,7 @@ HmdMatrix44_t * __thiscall winIVRSystem_IVRSystem_022_GetProjectionMatrix(struct
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_022_GetProjectionRaw(struct w_steam_iface *_this, EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
+void __thiscall winIVRSystem_IVRSystem_022_GetProjectionRaw(struct w_steam_iface *_this, uint32_t eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom)
 {
     struct cppIVRSystem_IVRSystem_022_GetProjectionRaw_params params =
     {
@@ -11012,7 +11012,7 @@ void __thiscall winIVRSystem_IVRSystem_022_GetProjectionRaw(struct w_steam_iface
     cppIVRSystem_IVRSystem_022_GetProjectionRaw( &params );
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_ComputeDistortion(struct w_steam_iface *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
+bool __thiscall winIVRSystem_IVRSystem_022_ComputeDistortion(struct w_steam_iface *_this, uint32_t eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates)
 {
     struct cppIVRSystem_IVRSystem_022_ComputeDistortion_params params =
     {
@@ -11027,7 +11027,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_ComputeDistortion(struct w_steam_ifac
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, EVREye eEye)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetEyeToHeadTransform(struct w_steam_iface *_this, HmdMatrix34_t *_ret, uint32_t eEye)
 {
     struct cppIVRSystem_IVRSystem_022_GetEyeToHeadTransform_params params =
     {
@@ -11066,7 +11066,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_022_GetD3D9AdapterIndex(struct w_steam
 
 extern void __thiscall winIVRSystem_IVRSystem_022_GetDXGIOutputInfo(struct w_steam_iface *_this, int32_t *pnAdapterIndex);
 
-extern void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, ETextureType textureType, VkInstance_T *pInstance);
+extern void __thiscall winIVRSystem_IVRSystem_022_GetOutputDevice(struct w_steam_iface *_this, uint64_t *pnDevice, uint32_t textureType, VkInstance_T *pInstance);
 
 bool __thiscall winIVRSystem_IVRSystem_022_IsDisplayOnDesktop(struct w_steam_iface *_this)
 {
@@ -11091,7 +11091,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_SetDisplayVisibility(struct w_steam_i
     return params._ret;
 }
 
-void __thiscall winIVRSystem_IVRSystem_022_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall winIVRSystem_IVRSystem_022_GetDeviceToAbsoluteTrackingPose(struct w_steam_iface *_this, uint32_t eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t *pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     struct cppIVRSystem_IVRSystem_022_GetDeviceToAbsoluteTrackingPose_params params =
     {
@@ -11129,7 +11129,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetRawZeroPoseToStandingAb
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass(struct w_steam_iface *_this, uint32_t eTrackedDeviceClass, TrackedDeviceIndex_t *punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass_params params =
     {
@@ -11144,7 +11144,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_022_GetSortedTrackedDeviceIndicesOfCl
     return params._ret;
 }
 
-EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_022_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
+uint32_t __thiscall winIVRSystem_IVRSystem_022_GetTrackedDeviceActivityLevel(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceId)
 {
     struct cppIVRSystem_IVRSystem_022_GetTrackedDeviceActivityLevel_params params =
     {
@@ -11193,7 +11193,7 @@ ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_022_GetControllerRoleFo
     return params._ret;
 }
 
-ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_022_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
+uint32_t __thiscall winIVRSystem_IVRSystem_022_GetTrackedDeviceClass(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     struct cppIVRSystem_IVRSystem_022_GetTrackedDeviceClass_params params =
     {
@@ -11217,7 +11217,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_IsTrackedDeviceConnected(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+bool __thiscall winIVRSystem_IVRSystem_022_GetBoolTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_022_GetBoolTrackedDeviceProperty_params params =
     {
@@ -11231,7 +11231,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_GetBoolTrackedDeviceProperty(struct w
     return params._ret;
 }
 
-float __thiscall winIVRSystem_IVRSystem_022_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+float __thiscall winIVRSystem_IVRSystem_022_GetFloatTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_022_GetFloatTrackedDeviceProperty_params params =
     {
@@ -11245,7 +11245,7 @@ float __thiscall winIVRSystem_IVRSystem_022_GetFloatTrackedDeviceProperty(struct
     return params._ret;
 }
 
-int32_t __thiscall winIVRSystem_IVRSystem_022_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+int32_t __thiscall winIVRSystem_IVRSystem_022_GetInt32TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_022_GetInt32TrackedDeviceProperty_params params =
     {
@@ -11259,7 +11259,7 @@ int32_t __thiscall winIVRSystem_IVRSystem_022_GetInt32TrackedDeviceProperty(stru
     return params._ret;
 }
 
-uint64_t __thiscall winIVRSystem_IVRSystem_022_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+uint64_t __thiscall winIVRSystem_IVRSystem_022_GetUint64TrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_022_GetUint64TrackedDeviceProperty_params params =
     {
@@ -11273,7 +11273,7 @@ uint64_t __thiscall winIVRSystem_IVRSystem_022_GetUint64TrackedDeviceProperty(st
     return params._ret;
 }
 
-HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError *pError)
+HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetMatrix34TrackedDeviceProperty(struct w_steam_iface *_this, HmdMatrix34_t *_ret, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_022_GetMatrix34TrackedDeviceProperty_params params =
     {
@@ -11288,7 +11288,7 @@ HmdMatrix34_t * __thiscall winIVRSystem_IVRSystem_022_GetMatrix34TrackedDevicePr
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_022_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_022_GetArrayTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, PropertyTypeTag_t propType, void *pBuffer, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_022_GetArrayTrackedDeviceProperty_params params =
     {
@@ -11305,7 +11305,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_022_GetArrayTrackedDeviceProperty(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVRSystem_IVRSystem_022_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError)
+uint32_t __thiscall winIVRSystem_IVRSystem_022_GetStringTrackedDeviceProperty(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, uint32_t prop, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVRSystem_IVRSystem_022_GetStringTrackedDeviceProperty_params params =
     {
@@ -11321,7 +11321,7 @@ uint32_t __thiscall winIVRSystem_IVRSystem_022_GetStringTrackedDeviceProperty(st
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_022_GetPropErrorNameFromEnum(struct w_steam_iface *_this, ETrackedPropertyError error)
+const char * __thiscall winIVRSystem_IVRSystem_022_GetPropErrorNameFromEnum(struct w_steam_iface *_this, uint32_t error)
 {
     struct cppIVRSystem_IVRSystem_022_GetPropErrorNameFromEnum_params params =
     {
@@ -11346,7 +11346,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_PollNextEvent(struct w_steam_iface *_
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1267 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_iface *_this, uint32_t eOrigin, winVREvent_t_1267 *pEvent, uint32_t uncbVREvent, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_022_PollNextEventWithPose_params params =
     {
@@ -11361,7 +11361,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_PollNextEventWithPose(struct w_steam_
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_022_GetEventTypeNameFromEnum(struct w_steam_iface *_this, EVREventType eType)
+const char * __thiscall winIVRSystem_IVRSystem_022_GetEventTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppIVRSystem_IVRSystem_022_GetEventTypeNameFromEnum_params params =
     {
@@ -11373,7 +11373,7 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetEventTypeNameFromEnum(stru
     return params._ret;
 }
 
-HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t * __thiscall winIVRSystem_IVRSystem_022_GetHiddenAreaMesh(struct w_steam_iface *_this, HiddenAreaMesh_t *_ret, uint32_t eEye, uint32_t type)
 {
     struct cppIVRSystem_IVRSystem_022_GetHiddenAreaMesh_params params =
     {
@@ -11401,7 +11401,7 @@ bool __thiscall winIVRSystem_IVRSystem_022_GetControllerState(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVRSystem_IVRSystem_022_GetControllerStateWithPose(struct w_steam_iface *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1267 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_022_GetControllerStateWithPose(struct w_steam_iface *_this, uint32_t eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1267 *pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t *pTrackedDevicePose)
 {
     struct cppIVRSystem_IVRSystem_022_GetControllerStateWithPose_params params =
     {
@@ -11430,7 +11430,7 @@ void __thiscall winIVRSystem_IVRSystem_022_TriggerHapticPulse(struct w_steam_ifa
     cppIVRSystem_IVRSystem_022_TriggerHapticPulse( &params );
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_022_GetButtonIdNameFromEnum(struct w_steam_iface *_this, EVRButtonId eButtonId)
+const char * __thiscall winIVRSystem_IVRSystem_022_GetButtonIdNameFromEnum(struct w_steam_iface *_this, uint32_t eButtonId)
 {
     struct cppIVRSystem_IVRSystem_022_GetButtonIdNameFromEnum_params params =
     {
@@ -11442,7 +11442,7 @@ const char * __thiscall winIVRSystem_IVRSystem_022_GetButtonIdNameFromEnum(struc
     return params._ret;
 }
 
-const char * __thiscall winIVRSystem_IVRSystem_022_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall winIVRSystem_IVRSystem_022_GetControllerAxisTypeNameFromEnum(struct w_steam_iface *_this, uint32_t eAxisType)
 {
     struct cppIVRSystem_IVRSystem_022_GetControllerAxisTypeNameFromEnum_params params =
     {

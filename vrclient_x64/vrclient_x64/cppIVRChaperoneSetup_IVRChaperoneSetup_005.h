@@ -5,7 +5,7 @@ struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params
 {
     void *linux_side;
     bool _ret;
-    EChaperoneConfigFile configFile;
+    uint32_t configFile;
 };
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy( struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy_params *params );
 
@@ -99,7 +99,7 @@ extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPos
 struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk_params
 {
     void *linux_side;
-    EChaperoneConfigFile configFile;
+    uint32_t configFile;
 };
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk( struct cppIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk_params *params );
 

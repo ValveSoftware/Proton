@@ -4,7 +4,7 @@ extern "C" {
 struct cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async_params
 {
     void *linux_side;
-    EVRRenderModelError _ret;
+    uint32_t _ret;
     const char *pchRenderModelName;
     winRenderModel_t_1267 **ppRenderModel;
 };
@@ -20,7 +20,7 @@ extern void cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel( struct cppIV
 struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params
 {
     void *linux_side;
-    EVRRenderModelError _ret;
+    uint32_t _ret;
     TextureID_t textureId;
     winRenderModel_TextureMap_t_1267 **ppTexture;
 };
@@ -36,7 +36,7 @@ extern void cppIVRRenderModels_IVRRenderModels_006_FreeTexture( struct cppIVRRen
 struct cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async_params
 {
     void *linux_side;
-    EVRRenderModelError _ret;
+    uint32_t _ret;
     TextureID_t textureId;
     void *pD3D11Device;
     void **ppD3D11Texture2D;
@@ -46,7 +46,7 @@ extern void cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async( struc
 struct cppIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async_params
 {
     void *linux_side;
-    EVRRenderModelError _ret;
+    uint32_t _ret;
     TextureID_t textureId;
     void *pDstTexture;
 };

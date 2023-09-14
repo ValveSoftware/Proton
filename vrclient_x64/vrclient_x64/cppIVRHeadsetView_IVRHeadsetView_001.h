@@ -20,14 +20,14 @@ extern void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewSize( struct cppI
 struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode_params
 {
     void *linux_side;
-    HeadsetViewMode_t eHeadsetViewMode;
+    uint32_t eHeadsetViewMode;
 };
 extern void cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode( struct cppIVRHeadsetView_IVRHeadsetView_001_SetHeadsetViewMode_params *params );
 
 struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params
 {
     void *linux_side;
-    HeadsetViewMode_t _ret;
+    uint32_t _ret;
 };
 extern void cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode( struct cppIVRHeadsetView_IVRHeadsetView_001_GetHeadsetViewMode_params *params );
 
