@@ -99,7 +99,7 @@ struct cppISteamParties_SteamParties002_GetBeaconLocationData_params
     void *linux_side;
     bool _ret;
     winSteamPartyBeaconLocation_t_158 BeaconLocation;
-    ESteamPartyBeaconLocationData eData;
+    uint32_t eData;
     char *pchDataStringOut;
     int cchDataStringOut;
 };

@@ -85,7 +85,7 @@ struct cppISteamClient_SteamClient006_GetUniverseName_params
 {
     void *linux_side;
     const char *_ret;
-    EUniverse eUniverse;
+    uint32_t eUniverse;
 };
 extern void cppISteamClient_SteamClient006_GetUniverseName( struct cppISteamClient_SteamClient006_GetUniverseName_params *params );
 

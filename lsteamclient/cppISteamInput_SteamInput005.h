@@ -145,7 +145,7 @@ struct cppISteamInput_SteamInput005_GetDigitalActionOrigins_params
     InputHandle_t inputHandle;
     InputActionSetHandle_t actionSetHandle;
     InputDigitalActionHandle_t digitalActionHandle;
-    EInputActionOrigin *originsOut;
+    uint32_t *originsOut;
 };
 extern void cppISteamInput_SteamInput005_GetDigitalActionOrigins( struct cppISteamInput_SteamInput005_GetDigitalActionOrigins_params *params );
 
@@ -181,7 +181,7 @@ struct cppISteamInput_SteamInput005_GetAnalogActionOrigins_params
     InputHandle_t inputHandle;
     InputActionSetHandle_t actionSetHandle;
     InputAnalogActionHandle_t analogActionHandle;
-    EInputActionOrigin *originsOut;
+    uint32_t *originsOut;
 };
 extern void cppISteamInput_SteamInput005_GetAnalogActionOrigins( struct cppISteamInput_SteamInput005_GetAnalogActionOrigins_params *params );
 
@@ -189,8 +189,8 @@ struct cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EInputActionOrigin eOrigin;
-    ESteamInputGlyphSize eSize;
+    uint32_t eOrigin;
+    uint32_t eSize;
     uint32 unFlags;
 };
 extern void cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin( struct cppISteamInput_SteamInput005_GetGlyphPNGForActionOrigin_params *params );
@@ -199,7 +199,7 @@ struct cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EInputActionOrigin eOrigin;
+    uint32_t eOrigin;
     uint32 unFlags;
 };
 extern void cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin( struct cppISteamInput_SteamInput005_GetGlyphSVGForActionOrigin_params *params );
@@ -208,7 +208,7 @@ struct cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy_params
 {
     void *linux_side;
     const char *_ret;
-    EInputActionOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy( struct cppISteamInput_SteamInput005_GetGlyphForActionOrigin_Legacy_params *params );
 
@@ -216,7 +216,7 @@ struct cppISteamInput_SteamInput005_GetStringForActionOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EInputActionOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput005_GetStringForActionOrigin( struct cppISteamInput_SteamInput005_GetStringForActionOrigin_params *params );
 
@@ -268,7 +268,7 @@ struct cppISteamInput_SteamInput005_TriggerSimpleHapticEvent_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    EControllerHapticLocation eHapticLocation;
+    uint32_t eHapticLocation;
     uint8 nIntensity;
     char nGainDB;
     uint8 nOtherIntensity;
@@ -291,7 +291,7 @@ struct cppISteamInput_SteamInput005_Legacy_TriggerHapticPulse_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    ESteamControllerPad eTargetPad;
+    uint32_t eTargetPad;
     unsigned short usDurationMicroSec;
 };
 extern void cppISteamInput_SteamInput005_Legacy_TriggerHapticPulse( struct cppISteamInput_SteamInput005_Legacy_TriggerHapticPulse_params *params );
@@ -300,7 +300,7 @@ struct cppISteamInput_SteamInput005_Legacy_TriggerRepeatedHapticPulse_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    ESteamControllerPad eTargetPad;
+    uint32_t eTargetPad;
     unsigned short usDurationMicroSec;
     unsigned short usOffMicroSec;
     unsigned short unRepeat;
@@ -319,7 +319,7 @@ extern void cppISteamInput_SteamInput005_ShowBindingPanel( struct cppISteamInput
 struct cppISteamInput_SteamInput005_GetInputTypeForHandle_params
 {
     void *linux_side;
-    ESteamInputType _ret;
+    uint32_t _ret;
     InputHandle_t inputHandle;
 };
 extern void cppISteamInput_SteamInput005_GetInputTypeForHandle( struct cppISteamInput_SteamInput005_GetInputTypeForHandle_params *params );
@@ -344,7 +344,7 @@ struct cppISteamInput_SteamInput005_GetStringForXboxOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput005_GetStringForXboxOrigin( struct cppISteamInput_SteamInput005_GetStringForXboxOrigin_params *params );
 
@@ -352,25 +352,25 @@ struct cppISteamInput_SteamInput005_GetGlyphForXboxOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput005_GetGlyphForXboxOrigin( struct cppISteamInput_SteamInput005_GetGlyphForXboxOrigin_params *params );
 
 struct cppISteamInput_SteamInput005_GetActionOriginFromXboxOrigin_params
 {
     void *linux_side;
-    EInputActionOrigin _ret;
+    uint32_t _ret;
     InputHandle_t inputHandle;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput005_GetActionOriginFromXboxOrigin( struct cppISteamInput_SteamInput005_GetActionOriginFromXboxOrigin_params *params );
 
 struct cppISteamInput_SteamInput005_TranslateActionOrigin_params
 {
     void *linux_side;
-    EInputActionOrigin _ret;
-    ESteamInputType eDestinationInputType;
-    EInputActionOrigin eSourceOrigin;
+    uint32_t _ret;
+    uint32_t eDestinationInputType;
+    uint32_t eSourceOrigin;
 };
 extern void cppISteamInput_SteamInput005_TranslateActionOrigin( struct cppISteamInput_SteamInput005_TranslateActionOrigin_params *params );
 

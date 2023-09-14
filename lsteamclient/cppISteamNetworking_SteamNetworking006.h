@@ -5,7 +5,7 @@ struct cppISteamNetworking_SteamNetworking006_SendP2PPacket_params
     CSteamID steamIDRemote;
     const void *pubData;
     uint32 cubData;
-    EP2PSend eP2PSendType;
+    uint32_t eP2PSendType;
     int nChannel;
 };
 extern void cppISteamNetworking_SteamNetworking006_SendP2PPacket( struct cppISteamNetworking_SteamNetworking006_SendP2PPacket_params *params );
@@ -201,7 +201,7 @@ extern void cppISteamNetworking_SteamNetworking006_GetListenSocketInfo( struct c
 struct cppISteamNetworking_SteamNetworking006_GetSocketConnectionType_params
 {
     void *linux_side;
-    ESNetSocketConnectionType _ret;
+    uint32_t _ret;
     SNetSocket_t hSocket;
 };
 extern void cppISteamNetworking_SteamNetworking006_GetSocketConnectionType( struct cppISteamNetworking_SteamNetworking006_GetSocketConnectionType_params *params );

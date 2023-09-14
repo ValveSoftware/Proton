@@ -16,7 +16,7 @@ extern void cppISteamFriends_SteamFriends013_SetPersonaName( struct cppISteamFri
 struct cppISteamFriends_SteamFriends013_GetPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends013_GetPersonaState( struct cppISteamFriends_SteamFriends013_GetPersonaState_params *params );
 
@@ -40,7 +40,7 @@ extern void cppISteamFriends_SteamFriends013_GetFriendByIndex( struct cppISteamF
 struct cppISteamFriends_SteamFriends013_GetFriendRelationship_params
 {
     void *linux_side;
-    EFriendRelationship _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends013_GetFriendRelationship( struct cppISteamFriends_SteamFriends013_GetFriendRelationship_params *params );
@@ -48,7 +48,7 @@ extern void cppISteamFriends_SteamFriends013_GetFriendRelationship( struct cppIS
 struct cppISteamFriends_SteamFriends013_GetFriendPersonaState_params
 {
     void *linux_side;
-    EPersonaState _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends013_GetFriendPersonaState( struct cppISteamFriends_SteamFriends013_GetFriendPersonaState_params *params );
@@ -199,7 +199,7 @@ struct cppISteamFriends_SteamFriends013_ActivateGameOverlayToStore_params
 {
     void *linux_side;
     AppId_t nAppID;
-    EOverlayToStoreFlag eFlag;
+    uint32_t eFlag;
 };
 extern void cppISteamFriends_SteamFriends013_ActivateGameOverlayToStore( struct cppISteamFriends_SteamFriends013_ActivateGameOverlayToStore_params *params );
 
@@ -428,7 +428,7 @@ struct cppISteamFriends_SteamFriends013_GetClanChatMessage_params
     int iMessage;
     void *prgchText;
     int cchTextMax;
-    EChatEntryType *_e;
+    uint32_t *_e;
     CSteamID *_f;
 };
 extern void cppISteamFriends_SteamFriends013_GetClanChatMessage( struct cppISteamFriends_SteamFriends013_GetClanChatMessage_params *params );
@@ -491,7 +491,7 @@ struct cppISteamFriends_SteamFriends013_GetFriendMessage_params
     int iMessageID;
     void *pvData;
     int cubData;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
 };
 extern void cppISteamFriends_SteamFriends013_GetFriendMessage( struct cppISteamFriends_SteamFriends013_GetFriendMessage_params *params );
 

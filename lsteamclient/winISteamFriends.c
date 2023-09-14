@@ -65,7 +65,7 @@ void __thiscall winISteamFriends_SteamFriends001_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends001_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends001_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends001_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends001_GetPersonaState_params params =
     {
@@ -76,7 +76,7 @@ EPersonaState __thiscall winISteamFriends_SteamFriends001_GetPersonaState(struct
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends001_SetPersonaState(struct w_steam_iface *_this, EPersonaState ePersonaState)
+void __thiscall winISteamFriends_SteamFriends001_SetPersonaState(struct w_steam_iface *_this, uint32_t ePersonaState)
 {
     struct cppISteamFriends_SteamFriends001_SetPersonaState_params params =
     {
@@ -123,7 +123,7 @@ bool __thiscall winISteamFriends_SteamFriends001_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends001_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends001_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends001_GetFriendRelationship_params params =
     {
@@ -135,7 +135,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends001_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends001_GetFriendPersonaState_params params =
     {
@@ -210,7 +210,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends001_GetFriendByIndex(struct w
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, EChatEntryType eChatEntryType, const char *pchMsgBody)
+void __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const char *pchMsgBody)
 {
     struct cppISteamFriends_SteamFriends001_SendMsgToFriend_params params =
     {
@@ -262,7 +262,7 @@ const char * __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaNameHis
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends001_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends001_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends001_GetChatMessage_params params =
     {
@@ -278,7 +278,7 @@ int __thiscall winISteamFriends_SteamFriends001_GetChatMessage(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(struct w_steam_iface *_this, CSteamID steamIDFriend, EChatEntryType eChatEntryType, const void *pvMsgBody, int cubMsgBody)
+bool __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int cubMsgBody)
 {
     struct cppISteamFriends_SteamFriends001_SendMsgToFriend_2_params params =
     {
@@ -484,7 +484,7 @@ void __thiscall winISteamFriends_SteamFriends002_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends002_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends002_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends002_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends002_GetPersonaState_params params =
     {
@@ -495,7 +495,7 @@ EPersonaState __thiscall winISteamFriends_SteamFriends002_GetPersonaState(struct
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends002_SetPersonaState(struct w_steam_iface *_this, EPersonaState ePersonaState)
+void __thiscall winISteamFriends_SteamFriends002_SetPersonaState(struct w_steam_iface *_this, uint32_t ePersonaState)
 {
     struct cppISteamFriends_SteamFriends002_SetPersonaState_params params =
     {
@@ -532,7 +532,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends002_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends002_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendRelationship_params params =
     {
@@ -544,7 +544,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends002_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendPersonaState_params params =
     {
@@ -684,7 +684,7 @@ bool __thiscall winISteamFriends_SteamFriends002_InviteFriendByEmail(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends002_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends002_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends002_GetChatMessage_params params =
     {
@@ -700,7 +700,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetChatMessage(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, EChatEntryType eChatEntryType, const void *pvMsgBody, int cubMsgBody)
+bool __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int cubMsgBody)
 {
     struct cppISteamFriends_SteamFriends002_SendMsgToFriend_params params =
     {
@@ -933,7 +933,7 @@ void __thiscall winISteamFriends_SteamFriends003_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends003_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends003_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends003_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends003_GetPersonaState_params params =
     {
@@ -970,7 +970,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends003_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends003_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendRelationship_params params =
     {
@@ -982,7 +982,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends003_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends003_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends003_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendPersonaState_params params =
     {
@@ -1243,7 +1243,7 @@ void __thiscall winISteamFriends_SteamFriends004_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends004_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends004_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends004_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends004_GetPersonaState_params params =
     {
@@ -1280,7 +1280,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends004_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends004_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendRelationship_params params =
     {
@@ -1292,7 +1292,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends004_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends004_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends004_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendPersonaState_params params =
     {
@@ -1558,7 +1558,7 @@ void __thiscall winISteamFriends_SteamFriends005_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends005_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends005_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends005_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends005_GetPersonaState_params params =
     {
@@ -1595,7 +1595,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends005_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends005_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendRelationship_params params =
     {
@@ -1607,7 +1607,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends005_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends005_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends005_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendPersonaState_params params =
     {
@@ -1921,7 +1921,7 @@ void __thiscall winISteamFriends_SteamFriends006_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends006_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends006_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends006_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends006_GetPersonaState_params params =
     {
@@ -1958,7 +1958,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends006_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends006_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendRelationship_params params =
     {
@@ -1970,7 +1970,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends006_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends006_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends006_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendPersonaState_params params =
     {
@@ -2311,7 +2311,7 @@ void __thiscall winISteamFriends_SteamFriends007_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends007_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends007_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends007_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends007_GetPersonaState_params params =
     {
@@ -2348,7 +2348,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends007_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends007_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends007_GetFriendRelationship_params params =
     {
@@ -2360,7 +2360,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends007_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends007_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends007_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends007_GetFriendPersonaState_params params =
     {
@@ -2732,7 +2732,7 @@ void __thiscall winISteamFriends_SteamFriends008_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends008_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends008_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends008_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends008_GetPersonaState_params params =
     {
@@ -2769,7 +2769,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends008_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends008_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends008_GetFriendRelationship_params params =
     {
@@ -2781,7 +2781,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends008_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends008_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends008_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends008_GetFriendPersonaState_params params =
     {
@@ -3244,7 +3244,7 @@ void __thiscall winISteamFriends_SteamFriends009_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends009_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends009_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends009_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends009_GetPersonaState_params params =
     {
@@ -3281,7 +3281,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends009_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends009_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendRelationship_params params =
     {
@@ -3293,7 +3293,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends009_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends009_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends009_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendPersonaState_params params =
     {
@@ -3903,7 +3903,7 @@ void __thiscall winISteamFriends_SteamFriends010_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends010_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends010_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends010_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends010_GetPersonaState_params params =
     {
@@ -3940,7 +3940,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends010_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends010_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendRelationship_params params =
     {
@@ -3952,7 +3952,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends010_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendPersonaState_params params =
     {
@@ -4505,7 +4505,7 @@ bool __thiscall winISteamFriends_SteamFriends010_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *_e, CSteamID *_f)
+int __thiscall winISteamFriends_SteamFriends010_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends010_GetClanChatMessage_params params =
     {
@@ -4596,7 +4596,7 @@ bool __thiscall winISteamFriends_SteamFriends010_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends010_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendMessage_params params =
     {
@@ -4779,7 +4779,7 @@ void __thiscall winISteamFriends_SteamFriends011_SetPersonaName(struct w_steam_i
     cppISteamFriends_SteamFriends011_SetPersonaName( &params );
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends011_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends011_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends011_GetPersonaState_params params =
     {
@@ -4816,7 +4816,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends011_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends011_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendRelationship_params params =
     {
@@ -4828,7 +4828,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends011_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends011_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends011_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendPersonaState_params params =
     {
@@ -5392,7 +5392,7 @@ bool __thiscall winISteamFriends_SteamFriends011_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *_e, CSteamID *_f)
+int __thiscall winISteamFriends_SteamFriends011_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends011_GetClanChatMessage_params params =
     {
@@ -5483,7 +5483,7 @@ bool __thiscall winISteamFriends_SteamFriends011_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends011_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendMessage_params params =
     {
@@ -5707,7 +5707,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_SetPersonaName(struct
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends012_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends012_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends012_GetPersonaState_params params =
     {
@@ -5744,7 +5744,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends012_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends012_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendRelationship_params params =
     {
@@ -5756,7 +5756,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends012_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendPersonaState_params params =
     {
@@ -6320,7 +6320,7 @@ bool __thiscall winISteamFriends_SteamFriends012_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *_e, CSteamID *_f)
+int __thiscall winISteamFriends_SteamFriends012_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends012_GetClanChatMessage_params params =
     {
@@ -6411,7 +6411,7 @@ bool __thiscall winISteamFriends_SteamFriends012_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends012_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendMessage_params params =
     {
@@ -6635,7 +6635,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_SetPersonaName(struct
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends013_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends013_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends013_GetPersonaState_params params =
     {
@@ -6672,7 +6672,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends013_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends013_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendRelationship_params params =
     {
@@ -6684,7 +6684,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends013_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends013_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends013_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendPersonaState_params params =
     {
@@ -6908,7 +6908,7 @@ void __thiscall winISteamFriends_SteamFriends013_ActivateGameOverlayToWebPage(st
     cppISteamFriends_SteamFriends013_ActivateGameOverlayToWebPage( &params );
 }
 
-void __thiscall winISteamFriends_SteamFriends013_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, EOverlayToStoreFlag eFlag)
+void __thiscall winISteamFriends_SteamFriends013_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, uint32_t eFlag)
 {
     struct cppISteamFriends_SteamFriends013_ActivateGameOverlayToStore_params params =
     {
@@ -7249,7 +7249,7 @@ bool __thiscall winISteamFriends_SteamFriends013_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *_e, CSteamID *_f)
+int __thiscall winISteamFriends_SteamFriends013_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends013_GetClanChatMessage_params params =
     {
@@ -7340,7 +7340,7 @@ bool __thiscall winISteamFriends_SteamFriends013_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends013_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendMessage_params params =
     {
@@ -7565,7 +7565,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_SetPersonaName(struct
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends014_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends014_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends014_GetPersonaState_params params =
     {
@@ -7602,7 +7602,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends014_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends014_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendRelationship_params params =
     {
@@ -7614,7 +7614,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends014_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends014_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends014_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendPersonaState_params params =
     {
@@ -7850,7 +7850,7 @@ void __thiscall winISteamFriends_SteamFriends014_ActivateGameOverlayToWebPage(st
     cppISteamFriends_SteamFriends014_ActivateGameOverlayToWebPage( &params );
 }
 
-void __thiscall winISteamFriends_SteamFriends014_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, EOverlayToStoreFlag eFlag)
+void __thiscall winISteamFriends_SteamFriends014_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, uint32_t eFlag)
 {
     struct cppISteamFriends_SteamFriends014_ActivateGameOverlayToStore_params params =
     {
@@ -8191,7 +8191,7 @@ bool __thiscall winISteamFriends_SteamFriends014_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *peChatEntryType, CSteamID *psteamidChatter)
+int __thiscall winISteamFriends_SteamFriends014_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
 {
     struct cppISteamFriends_SteamFriends014_GetClanChatMessage_params params =
     {
@@ -8282,7 +8282,7 @@ bool __thiscall winISteamFriends_SteamFriends014_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends014_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendMessage_params params =
     {
@@ -8516,7 +8516,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_SetPersonaName(struct
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends015_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends015_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends015_GetPersonaState_params params =
     {
@@ -8553,7 +8553,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends015_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends015_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendRelationship_params params =
     {
@@ -8565,7 +8565,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends015_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends015_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends015_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendPersonaState_params params =
     {
@@ -8873,7 +8873,7 @@ void __thiscall winISteamFriends_SteamFriends015_ActivateGameOverlayToWebPage(st
     cppISteamFriends_SteamFriends015_ActivateGameOverlayToWebPage( &params );
 }
 
-void __thiscall winISteamFriends_SteamFriends015_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, EOverlayToStoreFlag eFlag)
+void __thiscall winISteamFriends_SteamFriends015_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, uint32_t eFlag)
 {
     struct cppISteamFriends_SteamFriends015_ActivateGameOverlayToStore_params params =
     {
@@ -9214,7 +9214,7 @@ bool __thiscall winISteamFriends_SteamFriends015_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *peChatEntryType, CSteamID *psteamidChatter)
+int __thiscall winISteamFriends_SteamFriends015_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
 {
     struct cppISteamFriends_SteamFriends015_GetClanChatMessage_params params =
     {
@@ -9305,7 +9305,7 @@ bool __thiscall winISteamFriends_SteamFriends015_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends015_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendMessage_params params =
     {
@@ -9579,7 +9579,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_SetPersonaName(struct
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends017_GetPersonaState(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends017_GetPersonaState(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends017_GetPersonaState_params params =
     {
@@ -9616,7 +9616,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendByIndex(struct w
     return params._ret;
 }
 
-EFriendRelationship __thiscall winISteamFriends_SteamFriends017_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends017_GetFriendRelationship(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendRelationship_params params =
     {
@@ -9628,7 +9628,7 @@ EFriendRelationship __thiscall winISteamFriends_SteamFriends017_GetFriendRelatio
     return params._ret;
 }
 
-EPersonaState __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
+uint32_t __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaState(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendPersonaState_params params =
     {
@@ -9925,7 +9925,7 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToUser(struc
     cppISteamFriends_SteamFriends017_ActivateGameOverlayToUser( &params );
 }
 
-void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage(struct w_steam_iface *_this, const char *pchURL, EActivateGameOverlayToWebPageMode eMode)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage(struct w_steam_iface *_this, const char *pchURL, uint32_t eMode)
 {
     struct cppISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage_params params =
     {
@@ -9937,7 +9937,7 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage(st
     cppISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage( &params );
 }
 
-void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, EOverlayToStoreFlag eFlag)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToStore(struct w_steam_iface *_this, AppId_t nAppID, uint32_t eFlag)
 {
     struct cppISteamFriends_SteamFriends017_ActivateGameOverlayToStore_params params =
     {
@@ -10278,7 +10278,7 @@ bool __thiscall winISteamFriends_SteamFriends017_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, EChatEntryType *peChatEntryType, CSteamID *psteamidChatter)
+int __thiscall winISteamFriends_SteamFriends017_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
 {
     struct cppISteamFriends_SteamFriends017_GetClanChatMessage_params params =
     {
@@ -10369,7 +10369,7 @@ bool __thiscall winISteamFriends_SteamFriends017_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, EChatEntryType *peChatEntryType)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendMessage_params params =
     {
@@ -10502,7 +10502,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_RequestEquippedProfil
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_BHasEquippedProfileItem(struct w_steam_iface *_this, CSteamID steamID, ECommunityProfileItemType itemType)
+bool __thiscall winISteamFriends_SteamFriends017_BHasEquippedProfileItem(struct w_steam_iface *_this, CSteamID steamID, uint32_t itemType)
 {
     struct cppISteamFriends_SteamFriends017_BHasEquippedProfileItem_params params =
     {
@@ -10515,7 +10515,7 @@ bool __thiscall winISteamFriends_SteamFriends017_BHasEquippedProfileItem(struct 
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyString(struct w_steam_iface *_this, CSteamID steamID, ECommunityProfileItemType itemType, ECommunityProfileItemProperty prop)
+const char * __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyString(struct w_steam_iface *_this, CSteamID steamID, uint32_t itemType, uint32_t prop)
 {
     struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyString_params params =
     {
@@ -10529,7 +10529,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyS
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyUint(struct w_steam_iface *_this, CSteamID steamID, ECommunityProfileItemType itemType, ECommunityProfileItemProperty prop)
+uint32 __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyUint(struct w_steam_iface *_this, CSteamID steamID, uint32_t itemType, uint32_t prop)
 {
     struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint_params params =
     {

@@ -3,9 +3,9 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryUserUGCRequest_para
     void *linux_side;
     UGCQueryHandle_t _ret;
     AccountID_t unAccountID;
-    EUserUGCList eListType;
-    EUGCMatchingUGCType eMatchingUGCType;
-    EUserUGCListSortOrder eSortOrder;
+    uint32_t eListType;
+    uint32_t eMatchingUGCType;
+    uint32_t eSortOrder;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
     uint32 unPage;
@@ -16,8 +16,8 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryAllUGCRequest_param
 {
     void *linux_side;
     UGCQueryHandle_t _ret;
-    EUGCQuery eQueryType;
-    EUGCMatchingUGCType eMatchingeMatchingUGCTypeFileType;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
     uint32 unPage;
@@ -145,7 +145,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateItem_params
     void *linux_side;
     SteamAPICall_t _ret;
     AppId_t nConsumerAppId;
-    EWorkshopFileType eFileType;
+    uint32_t eFileType;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateItem( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateItem_params *params );
 
@@ -181,7 +181,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility_params
     void *linux_side;
     bool _ret;
     UGCUpdateHandle_t handle;
-    ERemoteStoragePublishedFileVisibility eVisibility;
+    uint32_t eVisibility;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility_params *params );
 
@@ -224,7 +224,7 @@ extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubmitItemUpdate( struct 
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemUpdateProgress_params
 {
     void *linux_side;
-    EItemUpdateStatus _ret;
+    uint32_t _ret;
     UGCUpdateHandle_t handle;
     uint64 *punBytesProcessed;
     uint64 *punBytesTotal;

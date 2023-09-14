@@ -30,7 +30,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_CancelReques
 DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult, 24)
 DEFINE_THISCALL_WRAPPER(winISteamGameSearch_SteamMatchGameSearch001_EndGame, 12)
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(struct w_steam_iface *_this, const char *pchKeyToFind, const char *pchValuesToFind)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams(struct w_steam_iface *_this, const char *pchKeyToFind, const char *pchValuesToFind)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_AddGameSearchParams_params params =
     {
@@ -43,7 +43,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Ad
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby(struct w_steam_iface *_this, CSteamID steamIDLobby, int nPlayerMin, int nPlayerMax)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby(struct w_steam_iface *_this, CSteamID steamIDLobby, int nPlayerMin, int nPlayerMax)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameWithLobby_params params =
     {
@@ -57,7 +57,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Se
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo(struct w_steam_iface *_this, int nPlayerMin, int nPlayerMax)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo(struct w_steam_iface *_this, int nPlayerMin, int nPlayerMax)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_SearchForGameSolo_params params =
     {
@@ -70,7 +70,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Se
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AcceptGame(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_AcceptGame(struct w_steam_iface *_this)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_AcceptGame_params params =
     {
@@ -81,7 +81,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Ac
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_DeclineGame(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_DeclineGame(struct w_steam_iface *_this)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_DeclineGame_params params =
     {
@@ -92,7 +92,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_De
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(struct w_steam_iface *_this, CSteamID steamIDHost, char *pchConnectionDetails, int cubConnectionDetails)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails(struct w_steam_iface *_this, CSteamID steamIDHost, char *pchConnectionDetails, int cubConnectionDetails)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_RetrieveConnectionDetails_params params =
     {
@@ -106,7 +106,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Re
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGameSearch(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGameSearch(struct w_steam_iface *_this)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_EndGameSearch_params params =
     {
@@ -117,7 +117,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_En
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams(struct w_steam_iface *_this, const char *pchKey, const char *pchValue)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_SetGameHostParams_params params =
     {
@@ -130,7 +130,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Se
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(struct w_steam_iface *_this, const char *pchConnectionDetails, int cubConnectionDetails)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails(struct w_steam_iface *_this, const char *pchConnectionDetails, int cubConnectionDetails)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_SetConnectionDetails_params params =
     {
@@ -143,7 +143,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Se
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame(struct w_steam_iface *_this, int nPlayerMin, int nPlayerMax, int nMaxTeamSize)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame(struct w_steam_iface *_this, int nPlayerMin, int nPlayerMax, int nMaxTeamSize)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_RequestPlayersForGame_params params =
     {
@@ -157,7 +157,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Re
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart(struct w_steam_iface *_this, uint64 ullUniqueGameID)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart(struct w_steam_iface *_this, uint64 ullUniqueGameID)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_HostConfirmGameStart_params params =
     {
@@ -169,7 +169,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Ho
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame(struct w_steam_iface *_this)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_CancelRequestPlayersForGame_params params =
     {
@@ -180,7 +180,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Ca
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult(struct w_steam_iface *_this, uint64 ullUniqueGameID, CSteamID steamIDPlayer, EPlayerResult_t EPlayerResult)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult(struct w_steam_iface *_this, uint64 ullUniqueGameID, CSteamID steamIDPlayer, uint32_t EPlayerResult)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_SubmitPlayerResult_params params =
     {
@@ -194,7 +194,7 @@ EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_Su
     return params._ret;
 }
 
-EGameSearchErrorCode_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGame(struct w_steam_iface *_this, uint64 ullUniqueGameID)
+uint32_t __thiscall winISteamGameSearch_SteamMatchGameSearch001_EndGame(struct w_steam_iface *_this, uint64 ullUniqueGameID)
 {
     struct cppISteamGameSearch_SteamMatchGameSearch001_EndGame_params params =
     {

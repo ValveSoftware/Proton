@@ -106,7 +106,7 @@ struct cppISteamInput_SteamInput002_GetDigitalActionOrigins_params
     InputHandle_t inputHandle;
     InputActionSetHandle_t actionSetHandle;
     InputDigitalActionHandle_t digitalActionHandle;
-    EInputActionOrigin *originsOut;
+    uint32_t *originsOut;
 };
 extern void cppISteamInput_SteamInput002_GetDigitalActionOrigins( struct cppISteamInput_SteamInput002_GetDigitalActionOrigins_params *params );
 
@@ -134,7 +134,7 @@ struct cppISteamInput_SteamInput002_GetAnalogActionOrigins_params
     InputHandle_t inputHandle;
     InputActionSetHandle_t actionSetHandle;
     InputAnalogActionHandle_t analogActionHandle;
-    EInputActionOrigin *originsOut;
+    uint32_t *originsOut;
 };
 extern void cppISteamInput_SteamInput002_GetAnalogActionOrigins( struct cppISteamInput_SteamInput002_GetAnalogActionOrigins_params *params );
 
@@ -142,7 +142,7 @@ struct cppISteamInput_SteamInput002_GetGlyphForActionOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EInputActionOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput002_GetGlyphForActionOrigin( struct cppISteamInput_SteamInput002_GetGlyphForActionOrigin_params *params );
 
@@ -150,7 +150,7 @@ struct cppISteamInput_SteamInput002_GetStringForActionOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EInputActionOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput002_GetStringForActionOrigin( struct cppISteamInput_SteamInput002_GetStringForActionOrigin_params *params );
 
@@ -194,7 +194,7 @@ struct cppISteamInput_SteamInput002_TriggerHapticPulse_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    ESteamControllerPad eTargetPad;
+    uint32_t eTargetPad;
     unsigned short usDurationMicroSec;
 };
 extern void cppISteamInput_SteamInput002_TriggerHapticPulse( struct cppISteamInput_SteamInput002_TriggerHapticPulse_params *params );
@@ -203,7 +203,7 @@ struct cppISteamInput_SteamInput002_TriggerRepeatedHapticPulse_params
 {
     void *linux_side;
     InputHandle_t inputHandle;
-    ESteamControllerPad eTargetPad;
+    uint32_t eTargetPad;
     unsigned short usDurationMicroSec;
     unsigned short usOffMicroSec;
     unsigned short unRepeat;
@@ -222,7 +222,7 @@ extern void cppISteamInput_SteamInput002_ShowBindingPanel( struct cppISteamInput
 struct cppISteamInput_SteamInput002_GetInputTypeForHandle_params
 {
     void *linux_side;
-    ESteamInputType _ret;
+    uint32_t _ret;
     InputHandle_t inputHandle;
 };
 extern void cppISteamInput_SteamInput002_GetInputTypeForHandle( struct cppISteamInput_SteamInput002_GetInputTypeForHandle_params *params );
@@ -247,7 +247,7 @@ struct cppISteamInput_SteamInput002_GetStringForXboxOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput002_GetStringForXboxOrigin( struct cppISteamInput_SteamInput002_GetStringForXboxOrigin_params *params );
 
@@ -255,25 +255,25 @@ struct cppISteamInput_SteamInput002_GetGlyphForXboxOrigin_params
 {
     void *linux_side;
     const char *_ret;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput002_GetGlyphForXboxOrigin( struct cppISteamInput_SteamInput002_GetGlyphForXboxOrigin_params *params );
 
 struct cppISteamInput_SteamInput002_GetActionOriginFromXboxOrigin_params
 {
     void *linux_side;
-    EInputActionOrigin _ret;
+    uint32_t _ret;
     InputHandle_t inputHandle;
-    EXboxOrigin eOrigin;
+    uint32_t eOrigin;
 };
 extern void cppISteamInput_SteamInput002_GetActionOriginFromXboxOrigin( struct cppISteamInput_SteamInput002_GetActionOriginFromXboxOrigin_params *params );
 
 struct cppISteamInput_SteamInput002_TranslateActionOrigin_params
 {
     void *linux_side;
-    EInputActionOrigin _ret;
-    ESteamInputType eDestinationInputType;
-    EInputActionOrigin eSourceOrigin;
+    uint32_t _ret;
+    uint32_t eDestinationInputType;
+    uint32_t eSourceOrigin;
 };
 extern void cppISteamInput_SteamInput002_TranslateActionOrigin( struct cppISteamInput_SteamInput002_TranslateActionOrigin_params *params );
 

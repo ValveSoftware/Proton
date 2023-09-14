@@ -1,7 +1,7 @@
 struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     SteamInventoryResult_t resultHandle;
 };
 extern void cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus( struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus_params *params );

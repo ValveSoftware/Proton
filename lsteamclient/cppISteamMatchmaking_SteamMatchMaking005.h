@@ -92,7 +92,7 @@ extern void cppISteamMatchmaking_SteamMatchMaking005_GetLobbyByIndex( struct cpp
 struct cppISteamMatchmaking_SteamMatchMaking005_CreateLobby_params
 {
     void *linux_side;
-    ELobbyType eLobbyType;
+    uint32_t eLobbyType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking005_CreateLobby( struct cppISteamMatchmaking_SteamMatchMaking005_CreateLobby_params *params );
 
@@ -193,7 +193,7 @@ struct cppISteamMatchmaking_SteamMatchMaking005_GetLobbyChatEntry_params
     CSteamID *pSteamIDUser;
     void *pvData;
     int cubData;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking005_GetLobbyChatEntry( struct cppISteamMatchmaking_SteamMatchMaking005_GetLobbyChatEntry_params *params );
 
@@ -255,7 +255,7 @@ struct cppISteamMatchmaking_SteamMatchMaking005_SetLobbyType_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDLobby;
-    ELobbyType eLobbyType;
+    uint32_t eLobbyType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking005_SetLobbyType( struct cppISteamMatchmaking_SteamMatchMaking005_SetLobbyType_params *params );
 

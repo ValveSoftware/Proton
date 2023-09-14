@@ -56,7 +56,7 @@ struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter_
     void *linux_side;
     const char *pchKeyToMatch;
     const char *pchValueToMatch;
-    ELobbyComparison eComparisonType;
+    uint32_t eComparisonType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter( struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListStringFilter_params *params );
 
@@ -65,7 +65,7 @@ struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNumericalFilt
     void *linux_side;
     const char *pchKeyToMatch;
     int nValueToMatch;
-    ELobbyComparison eComparisonType;
+    uint32_t eComparisonType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNumericalFilter( struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListNumericalFilter_params *params );
 
@@ -87,7 +87,7 @@ extern void cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListFilterSl
 struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListDistanceFilter_params
 {
     void *linux_side;
-    ELobbyDistanceFilter eLobbyDistanceFilter;
+    uint32_t eLobbyDistanceFilter;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListDistanceFilter( struct cppISteamMatchmaking_SteamMatchMaking009_AddRequestLobbyListDistanceFilter_params *params );
 
@@ -117,7 +117,7 @@ struct cppISteamMatchmaking_SteamMatchMaking009_CreateLobby_params
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    ELobbyType eLobbyType;
+    uint32_t eLobbyType;
     int cMaxMembers;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking009_CreateLobby( struct cppISteamMatchmaking_SteamMatchMaking009_CreateLobby_params *params );
@@ -250,7 +250,7 @@ struct cppISteamMatchmaking_SteamMatchMaking009_GetLobbyChatEntry_params
     CSteamID *pSteamIDUser;
     void *pvData;
     int cubData;
-    EChatEntryType *peChatEntryType;
+    uint32_t *peChatEntryType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking009_GetLobbyChatEntry( struct cppISteamMatchmaking_SteamMatchMaking009_GetLobbyChatEntry_params *params );
 
@@ -305,7 +305,7 @@ struct cppISteamMatchmaking_SteamMatchMaking009_SetLobbyType_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDLobby;
-    ELobbyType eLobbyType;
+    uint32_t eLobbyType;
 };
 extern void cppISteamMatchmaking_SteamMatchMaking009_SetLobbyType( struct cppISteamMatchmaking_SteamMatchMaking009_SetLobbyType_params *params );
 

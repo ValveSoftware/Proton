@@ -73,7 +73,7 @@ extern void cppISteamUser_SteamUser020_StopVoiceRecording( struct cppISteamUser_
 struct cppISteamUser_SteamUser020_GetAvailableVoice_params
 {
     void *linux_side;
-    EVoiceResult _ret;
+    uint32_t _ret;
     uint32 *pcbCompressed;
     uint32 *pcbUncompressed_Deprecated;
     uint32 nUncompressedVoiceDesiredSampleRate_Deprecated;
@@ -83,7 +83,7 @@ extern void cppISteamUser_SteamUser020_GetAvailableVoice( struct cppISteamUser_S
 struct cppISteamUser_SteamUser020_GetVoice_params
 {
     void *linux_side;
-    EVoiceResult _ret;
+    uint32_t _ret;
     bool bWantCompressed;
     void *pDestBuffer;
     uint32 cbDestBufferSize;
@@ -99,7 +99,7 @@ extern void cppISteamUser_SteamUser020_GetVoice( struct cppISteamUser_SteamUser0
 struct cppISteamUser_SteamUser020_DecompressVoice_params
 {
     void *linux_side;
-    EVoiceResult _ret;
+    uint32_t _ret;
     const void *pCompressed;
     uint32 cbCompressed;
     void *pDestBuffer;
@@ -129,7 +129,7 @@ extern void cppISteamUser_SteamUser020_GetAuthSessionTicket( struct cppISteamUse
 struct cppISteamUser_SteamUser020_BeginAuthSession_params
 {
     void *linux_side;
-    EBeginAuthSessionResult _ret;
+    uint32_t _ret;
     const void *pAuthTicket;
     int cbAuthTicket;
     CSteamID steamID;
@@ -153,7 +153,7 @@ extern void cppISteamUser_SteamUser020_CancelAuthTicket( struct cppISteamUser_St
 struct cppISteamUser_SteamUser020_UserHasLicenseForApp_params
 {
     void *linux_side;
-    EUserHasLicenseForAppResult _ret;
+    uint32_t _ret;
     CSteamID steamID;
     AppId_t appID;
 };

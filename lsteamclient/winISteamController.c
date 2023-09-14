@@ -70,7 +70,7 @@ bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControl
     return params._ret;
 }
 
-void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(struct w_steam_iface *_this, uint32 unControllerIndex, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(struct w_steam_iface *_this, uint32 unControllerIndex, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse_params params =
     {
@@ -258,7 +258,7 @@ ControllerDigitalActionData_t * __thiscall winISteamController_SteamController00
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController003_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController003_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController003_GetDigitalActionOrigins_params params =
     {
@@ -299,7 +299,7 @@ ControllerAnalogActionData_t * __thiscall winISteamController_SteamController003
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController003_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController003_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController003_GetAnalogActionOrigins_params params =
     {
@@ -326,7 +326,7 @@ void __thiscall winISteamController_SteamController003_StopAnalogActionMomentum(
     cppISteamController_SteamController003_StopAnalogActionMomentum( &params );
 }
 
-void __thiscall winISteamController_SteamController003_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamController_SteamController003_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamController_SteamController003_TriggerHapticPulse_params params =
     {
@@ -339,7 +339,7 @@ void __thiscall winISteamController_SteamController003_TriggerHapticPulse(struct
     cppISteamController_SteamController003_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamController_SteamController003_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamController_SteamController003_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamController_SteamController003_TriggerRepeatedHapticPulse_params params =
     {
@@ -535,7 +535,7 @@ ControllerDigitalActionData_t * __thiscall winISteamController_SteamController00
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController004_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController004_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController004_GetDigitalActionOrigins_params params =
     {
@@ -576,7 +576,7 @@ ControllerAnalogActionData_t * __thiscall winISteamController_SteamController004
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController004_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController004_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController004_GetAnalogActionOrigins_params params =
     {
@@ -603,7 +603,7 @@ void __thiscall winISteamController_SteamController004_StopAnalogActionMomentum(
     cppISteamController_SteamController004_StopAnalogActionMomentum( &params );
 }
 
-void __thiscall winISteamController_SteamController004_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamController_SteamController004_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamController_SteamController004_TriggerHapticPulse_params params =
     {
@@ -616,7 +616,7 @@ void __thiscall winISteamController_SteamController004_TriggerHapticPulse(struct
     cppISteamController_SteamController004_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamController_SteamController004_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamController_SteamController004_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamController_SteamController004_TriggerRepeatedHapticPulse_params params =
     {
@@ -890,7 +890,7 @@ ControllerDigitalActionData_t * __thiscall winISteamController_SteamController00
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController005_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController005_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController005_GetDigitalActionOrigins_params params =
     {
@@ -931,7 +931,7 @@ ControllerAnalogActionData_t * __thiscall winISteamController_SteamController005
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController005_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController005_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController005_GetAnalogActionOrigins_params params =
     {
@@ -958,7 +958,7 @@ void __thiscall winISteamController_SteamController005_StopAnalogActionMomentum(
     cppISteamController_SteamController005_StopAnalogActionMomentum( &params );
 }
 
-void __thiscall winISteamController_SteamController005_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamController_SteamController005_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamController_SteamController005_TriggerHapticPulse_params params =
     {
@@ -971,7 +971,7 @@ void __thiscall winISteamController_SteamController005_TriggerHapticPulse(struct
     cppISteamController_SteamController005_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamController_SteamController005_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamController_SteamController005_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamController_SteamController005_TriggerRepeatedHapticPulse_params params =
     {
@@ -1084,7 +1084,7 @@ bool __thiscall winISteamController_SteamController005_ShowAnalogActionOrigins(s
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController005_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController005_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController005_GetStringForActionOrigin_params params =
     {
@@ -1096,7 +1096,7 @@ const char * __thiscall winISteamController_SteamController005_GetStringForActio
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController005_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController005_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController005_GetGlyphForActionOrigin_params params =
     {
@@ -1354,7 +1354,7 @@ ControllerDigitalActionData_t * __thiscall winISteamController_SteamController00
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController006_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController006_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController006_GetDigitalActionOrigins_params params =
     {
@@ -1395,7 +1395,7 @@ ControllerAnalogActionData_t * __thiscall winISteamController_SteamController006
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController006_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController006_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController006_GetAnalogActionOrigins_params params =
     {
@@ -1422,7 +1422,7 @@ void __thiscall winISteamController_SteamController006_StopAnalogActionMomentum(
     cppISteamController_SteamController006_StopAnalogActionMomentum( &params );
 }
 
-void __thiscall winISteamController_SteamController006_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamController_SteamController006_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamController_SteamController006_TriggerHapticPulse_params params =
     {
@@ -1435,7 +1435,7 @@ void __thiscall winISteamController_SteamController006_TriggerHapticPulse(struct
     cppISteamController_SteamController006_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamController_SteamController006_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamController_SteamController006_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamController_SteamController006_TriggerRepeatedHapticPulse_params params =
     {
@@ -1548,7 +1548,7 @@ bool __thiscall winISteamController_SteamController006_ShowAnalogActionOrigins(s
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController006_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController006_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController006_GetStringForActionOrigin_params params =
     {
@@ -1560,7 +1560,7 @@ const char * __thiscall winISteamController_SteamController006_GetStringForActio
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController006_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController006_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController006_GetGlyphForActionOrigin_params params =
     {
@@ -1572,7 +1572,7 @@ const char * __thiscall winISteamController_SteamController006_GetGlyphForAction
     return params._ret;
 }
 
-ESteamInputType __thiscall winISteamController_SteamController006_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
+uint32_t __thiscall winISteamController_SteamController006_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
     struct cppISteamController_SteamController006_GetInputTypeForHandle_params params =
     {
@@ -1826,7 +1826,7 @@ InputDigitalActionData_t * __thiscall winISteamController_SteamController007_Get
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController007_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController007_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController007_GetDigitalActionOrigins_params params =
     {
@@ -1867,7 +1867,7 @@ InputAnalogActionData_t * __thiscall winISteamController_SteamController007_GetA
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController007_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController007_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController007_GetAnalogActionOrigins_params params =
     {
@@ -1882,7 +1882,7 @@ int __thiscall winISteamController_SteamController007_GetAnalogActionOrigins(str
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController007_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController007_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController007_GetGlyphForActionOrigin_params params =
     {
@@ -1894,7 +1894,7 @@ const char * __thiscall winISteamController_SteamController007_GetGlyphForAction
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController007_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController007_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController007_GetStringForActionOrigin_params params =
     {
@@ -1931,7 +1931,7 @@ InputMotionData_t * __thiscall winISteamController_SteamController007_GetMotionD
     return params._ret;
 }
 
-void __thiscall winISteamController_SteamController007_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamController_SteamController007_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamController_SteamController007_TriggerHapticPulse_params params =
     {
@@ -1944,7 +1944,7 @@ void __thiscall winISteamController_SteamController007_TriggerHapticPulse(struct
     cppISteamController_SteamController007_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamController_SteamController007_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamController_SteamController007_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamController_SteamController007_TriggerRepeatedHapticPulse_params params =
     {
@@ -2000,7 +2000,7 @@ bool __thiscall winISteamController_SteamController007_ShowBindingPanel(struct w
     return params._ret;
 }
 
-ESteamInputType __thiscall winISteamController_SteamController007_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
+uint32_t __thiscall winISteamController_SteamController007_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
     struct cppISteamController_SteamController007_GetInputTypeForHandle_params params =
     {
@@ -2036,7 +2036,7 @@ int __thiscall winISteamController_SteamController007_GetGamepadIndexForControll
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController007_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController007_GetStringForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController007_GetStringForXboxOrigin_params params =
     {
@@ -2048,7 +2048,7 @@ const char * __thiscall winISteamController_SteamController007_GetStringForXboxO
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController007_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController007_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController007_GetGlyphForXboxOrigin_params params =
     {
@@ -2060,7 +2060,7 @@ const char * __thiscall winISteamController_SteamController007_GetGlyphForXboxOr
     return params._ret;
 }
 
-EControllerActionOrigin __thiscall winISteamController_SteamController007_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, EXboxOrigin eOrigin)
+uint32_t __thiscall winISteamController_SteamController007_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController007_GetActionOriginFromXboxOrigin_params params =
     {
@@ -2073,7 +2073,7 @@ EControllerActionOrigin __thiscall winISteamController_SteamController007_GetAct
     return params._ret;
 }
 
-EControllerActionOrigin __thiscall winISteamController_SteamController007_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EControllerActionOrigin eSourceOrigin)
+uint32_t __thiscall winISteamController_SteamController007_TranslateActionOrigin(struct w_steam_iface *_this, uint32_t eDestinationInputType, uint32_t eSourceOrigin)
 {
     struct cppISteamController_SteamController007_TranslateActionOrigin_params params =
     {
@@ -2345,7 +2345,7 @@ InputDigitalActionData_t * __thiscall winISteamController_SteamController008_Get
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController008_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController008_GetDigitalActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerDigitalActionHandle_t digitalActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController008_GetDigitalActionOrigins_params params =
     {
@@ -2386,7 +2386,7 @@ InputAnalogActionData_t * __thiscall winISteamController_SteamController008_GetA
     return params._ret;
 }
 
-int __thiscall winISteamController_SteamController008_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, EControllerActionOrigin *originsOut)
+int __thiscall winISteamController_SteamController008_GetAnalogActionOrigins(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ControllerActionSetHandle_t actionSetHandle, ControllerAnalogActionHandle_t analogActionHandle, uint32_t *originsOut)
 {
     struct cppISteamController_SteamController008_GetAnalogActionOrigins_params params =
     {
@@ -2401,7 +2401,7 @@ int __thiscall winISteamController_SteamController008_GetAnalogActionOrigins(str
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController008_GetGlyphForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController008_GetGlyphForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController008_GetGlyphForActionOrigin_params params =
     {
@@ -2413,7 +2413,7 @@ const char * __thiscall winISteamController_SteamController008_GetGlyphForAction
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController008_GetStringForActionOrigin(struct w_steam_iface *_this, EControllerActionOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController008_GetStringForActionOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController008_GetStringForActionOrigin_params params =
     {
@@ -2450,7 +2450,7 @@ InputMotionData_t * __thiscall winISteamController_SteamController008_GetMotionD
     return params._ret;
 }
 
-void __thiscall winISteamController_SteamController008_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
+void __thiscall winISteamController_SteamController008_TriggerHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec)
 {
     struct cppISteamController_SteamController008_TriggerHapticPulse_params params =
     {
@@ -2463,7 +2463,7 @@ void __thiscall winISteamController_SteamController008_TriggerHapticPulse(struct
     cppISteamController_SteamController008_TriggerHapticPulse( &params );
 }
 
-void __thiscall winISteamController_SteamController008_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
+void __thiscall winISteamController_SteamController008_TriggerRepeatedHapticPulse(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     struct cppISteamController_SteamController008_TriggerRepeatedHapticPulse_params params =
     {
@@ -2519,7 +2519,7 @@ bool __thiscall winISteamController_SteamController008_ShowBindingPanel(struct w
     return params._ret;
 }
 
-ESteamInputType __thiscall winISteamController_SteamController008_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
+uint32_t __thiscall winISteamController_SteamController008_GetInputTypeForHandle(struct w_steam_iface *_this, ControllerHandle_t controllerHandle)
 {
     struct cppISteamController_SteamController008_GetInputTypeForHandle_params params =
     {
@@ -2555,7 +2555,7 @@ int __thiscall winISteamController_SteamController008_GetGamepadIndexForControll
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController008_GetStringForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController008_GetStringForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController008_GetStringForXboxOrigin_params params =
     {
@@ -2567,7 +2567,7 @@ const char * __thiscall winISteamController_SteamController008_GetStringForXboxO
     return params._ret;
 }
 
-const char * __thiscall winISteamController_SteamController008_GetGlyphForXboxOrigin(struct w_steam_iface *_this, EXboxOrigin eOrigin)
+const char * __thiscall winISteamController_SteamController008_GetGlyphForXboxOrigin(struct w_steam_iface *_this, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController008_GetGlyphForXboxOrigin_params params =
     {
@@ -2579,7 +2579,7 @@ const char * __thiscall winISteamController_SteamController008_GetGlyphForXboxOr
     return params._ret;
 }
 
-EControllerActionOrigin __thiscall winISteamController_SteamController008_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, EXboxOrigin eOrigin)
+uint32_t __thiscall winISteamController_SteamController008_GetActionOriginFromXboxOrigin(struct w_steam_iface *_this, ControllerHandle_t controllerHandle, uint32_t eOrigin)
 {
     struct cppISteamController_SteamController008_GetActionOriginFromXboxOrigin_params params =
     {
@@ -2592,7 +2592,7 @@ EControllerActionOrigin __thiscall winISteamController_SteamController008_GetAct
     return params._ret;
 }
 
-EControllerActionOrigin __thiscall winISteamController_SteamController008_TranslateActionOrigin(struct w_steam_iface *_this, ESteamInputType eDestinationInputType, EControllerActionOrigin eSourceOrigin)
+uint32_t __thiscall winISteamController_SteamController008_TranslateActionOrigin(struct w_steam_iface *_this, uint32_t eDestinationInputType, uint32_t eSourceOrigin)
 {
     struct cppISteamController_SteamController008_TranslateActionOrigin_params params =
     {

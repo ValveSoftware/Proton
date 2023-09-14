@@ -34,7 +34,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets002_ConnectP2P( str
 struct cppISteamNetworkingSockets_SteamNetworkingSockets002_AcceptConnection_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     HSteamNetConnection hConn;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets002_AcceptConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets002_AcceptConnection_params *params );
@@ -96,7 +96,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionNa
 struct cppISteamNetworkingSockets_SteamNetworkingSockets002_SendMessageToConnection_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     HSteamNetConnection hConn;
     const void *pData;
     uint32 cbData;
@@ -107,7 +107,7 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets002_SendMessageToCo
 struct cppISteamNetworkingSockets_SteamNetworkingSockets002_FlushMessagesOnConnection_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     HSteamNetConnection hConn;
 };
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets002_FlushMessagesOnConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets002_FlushMessagesOnConnection_params *params );

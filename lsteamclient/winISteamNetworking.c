@@ -421,7 +421,7 @@ bool __thiscall winISteamNetworking_SteamNetworking002_GetListenSocketInfo(struc
     return params._ret;
 }
 
-ESNetSocketConnectionType __thiscall winISteamNetworking_SteamNetworking002_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
+uint32_t __thiscall winISteamNetworking_SteamNetworking002_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
 {
     struct cppISteamNetworking_SteamNetworking002_GetSocketConnectionType_params params =
     {
@@ -502,7 +502,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking003_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType)
+bool __thiscall winISteamNetworking_SteamNetworking003_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, uint32_t eP2PSendType)
 {
     struct cppISteamNetworking_SteamNetworking003_SendP2PPacket_params params =
     {
@@ -754,7 +754,7 @@ bool __thiscall winISteamNetworking_SteamNetworking003_GetListenSocketInfo(struc
     return params._ret;
 }
 
-ESNetSocketConnectionType __thiscall winISteamNetworking_SteamNetworking003_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
+uint32_t __thiscall winISteamNetworking_SteamNetworking003_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
 {
     struct cppISteamNetworking_SteamNetworking003_GetSocketConnectionType_params params =
     {
@@ -841,7 +841,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking004_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType, int nVirtualPort)
+bool __thiscall winISteamNetworking_SteamNetworking004_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, uint32_t eP2PSendType, int nVirtualPort)
 {
     struct cppISteamNetworking_SteamNetworking004_SendP2PPacket_params params =
     {
@@ -1096,7 +1096,7 @@ bool __thiscall winISteamNetworking_SteamNetworking004_GetListenSocketInfo(struc
     return params._ret;
 }
 
-ESNetSocketConnectionType __thiscall winISteamNetworking_SteamNetworking004_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
+uint32_t __thiscall winISteamNetworking_SteamNetworking004_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
 {
     struct cppISteamNetworking_SteamNetworking004_GetSocketConnectionType_params params =
     {
@@ -1185,7 +1185,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking005_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking005_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, uint32_t eP2PSendType, int nChannel)
 {
     struct cppISteamNetworking_SteamNetworking005_SendP2PPacket_params params =
     {
@@ -1465,7 +1465,7 @@ bool __thiscall winISteamNetworking_SteamNetworking005_GetListenSocketInfo(struc
     return params._ret;
 }
 
-ESNetSocketConnectionType __thiscall winISteamNetworking_SteamNetworking005_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
+uint32_t __thiscall winISteamNetworking_SteamNetworking005_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
 {
     struct cppISteamNetworking_SteamNetworking005_GetSocketConnectionType_params params =
     {
@@ -1556,7 +1556,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_GetListenSocketIn
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_GetSocketConnectionType, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking006_GetMaxPacketSize, 8)
 
-bool __thiscall winISteamNetworking_SteamNetworking006_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)
+bool __thiscall winISteamNetworking_SteamNetworking006_SendP2PPacket(struct w_steam_iface *_this, CSteamID steamIDRemote, const void *pubData, uint32 cubData, uint32_t eP2PSendType, int nChannel)
 {
     struct cppISteamNetworking_SteamNetworking006_SendP2PPacket_params params =
     {
@@ -1836,7 +1836,7 @@ bool __thiscall winISteamNetworking_SteamNetworking006_GetListenSocketInfo(struc
     return params._ret;
 }
 
-ESNetSocketConnectionType __thiscall winISteamNetworking_SteamNetworking006_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
+uint32_t __thiscall winISteamNetworking_SteamNetworking006_GetSocketConnectionType(struct w_steam_iface *_this, SNetSocket_t hSocket)
 {
     struct cppISteamNetworking_SteamNetworking006_GetSocketConnectionType_params params =
     {

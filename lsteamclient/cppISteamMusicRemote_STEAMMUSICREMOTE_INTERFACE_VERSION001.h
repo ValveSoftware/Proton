@@ -97,7 +97,7 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlayback
 {
     void *linux_side;
     bool _ret;
-    AudioPlayback_Status nStatus;
+    uint32_t nStatus;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlaybackStatus( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlaybackStatus_params *params );
 

@@ -32,7 +32,7 @@ extern void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionC
 struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor_params
 {
     void *linux_side;
-    ESteamDeviceFormFactor _ret;
+    uint32_t _ret;
     RemotePlaySessionID_t unSessionID;
 };
 extern void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor_params *params );

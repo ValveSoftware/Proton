@@ -15,7 +15,7 @@ extern void cppISteamUtils_SteamUtils002_GetSecondsSinceComputerActive( struct c
 struct cppISteamUtils_SteamUtils002_GetConnectedUniverse_params
 {
     void *linux_side;
-    EUniverse _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUtils_SteamUtils002_GetConnectedUniverse( struct cppISteamUtils_SteamUtils002_GetConnectedUniverse_params *params );
 
@@ -79,7 +79,7 @@ extern void cppISteamUtils_SteamUtils002_GetAppID( struct cppISteamUtils_SteamUt
 struct cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition_params
 {
     void *linux_side;
-    ENotificationPosition eNotificationPosition;
+    uint32_t eNotificationPosition;
 };
 extern void cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition( struct cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition_params *params );
 
@@ -95,7 +95,7 @@ extern void cppISteamUtils_SteamUtils002_IsAPICallCompleted( struct cppISteamUti
 struct cppISteamUtils_SteamUtils002_GetAPICallFailureReason_params
 {
     void *linux_side;
-    ESteamAPICallFailure _ret;
+    uint32_t _ret;
     SteamAPICall_t hSteamAPICall;
 };
 extern void cppISteamUtils_SteamUtils002_GetAPICallFailureReason( struct cppISteamUtils_SteamUtils002_GetAPICallFailureReason_params *params );

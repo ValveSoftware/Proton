@@ -184,7 +184,7 @@ SteamNetworkingMicroseconds __thiscall winISteamNetworkingUtils_SteamNetworkingU
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction(struct w_steam_iface *_this, ESteamNetworkingSocketsDebugOutputType eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction_params params =
     {
@@ -196,7 +196,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputF
     cppISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction( &params );
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType eDataType, const void *pArg)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t eDataType, const void *pArg)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SetConfigValue_params params =
     {
@@ -212,7 +212,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetConfigValue(
     return params._ret;
 }
 
-ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType *pOutDataType, void *pResult, size_t *cbResult)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t *pOutDataType, void *pResult, size_t *cbResult)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValue_params params =
     {
@@ -229,7 +229,7 @@ ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNe
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValueInfo(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, const char **pOutName, ESteamNetworkingConfigDataType *pOutDataType, ESteamNetworkingConfigScope *pOutScope, ESteamNetworkingConfigValue *pOutNextValue)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValueInfo(struct w_steam_iface *_this, uint32_t eValue, const char **pOutName, uint32_t *pOutDataType, uint32_t *pOutScope, uint32_t *pOutNextValue)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValueInfo_params params =
     {
@@ -245,7 +245,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetConfigValueI
     return params._ret;
 }
 
-ESteamNetworkingConfigValue __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetFirstConfigValue(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetFirstConfigValue(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_GetFirstConfigValue_params params =
     {
@@ -379,7 +379,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNe
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ParseString, 12)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingUtils_SteamNetworkingUtils002_destructor, 4)
 
-ESteamNetworkingAvailability __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus(struct w_steam_iface *_this, SteamRelayNetworkStatus_t *pDetails)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus(struct w_steam_iface *_this, SteamRelayNetworkStatus_t *pDetails)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus_params params =
     {
@@ -526,7 +526,7 @@ SteamNetworkingMicroseconds __thiscall winISteamNetworkingUtils_SteamNetworkingU
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction(struct w_steam_iface *_this, ESteamNetworkingSocketsDebugOutputType eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_params params =
     {
@@ -538,7 +538,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputF
     cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction( &params );
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType eDataType, const void *pArg)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t eDataType, const void *pArg)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue_params params =
     {
@@ -554,7 +554,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue(
     return params._ret;
 }
 
-ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType *pOutDataType, void *pResult, size_t *cbResult)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t *pOutDataType, void *pResult, size_t *cbResult)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValue_params params =
     {
@@ -571,7 +571,7 @@ ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNe
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueInfo(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, const char **pOutName, ESteamNetworkingConfigDataType *pOutDataType, ESteamNetworkingConfigScope *pOutScope, ESteamNetworkingConfigValue *pOutNextValue)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueInfo(struct w_steam_iface *_this, uint32_t eValue, const char **pOutName, uint32_t *pOutDataType, uint32_t *pOutScope, uint32_t *pOutNextValue)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueInfo_params params =
     {
@@ -587,7 +587,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueI
     return params._ret;
 }
 
-ESteamNetworkingConfigValue __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetFirstConfigValue(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetFirstConfigValue(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetFirstConfigValue_params params =
     {
@@ -734,7 +734,7 @@ winSteamNetworkingMessage_t_152 * __thiscall winISteamNetworkingUtils_SteamNetwo
     return params._ret;
 }
 
-ESteamNetworkingAvailability __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetRelayNetworkStatus(struct w_steam_iface *_this, SteamRelayNetworkStatus_t *pDetails)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetRelayNetworkStatus(struct w_steam_iface *_this, SteamRelayNetworkStatus_t *pDetails)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetRelayNetworkStatus_params params =
     {
@@ -881,7 +881,7 @@ SteamNetworkingMicroseconds __thiscall winISteamNetworkingUtils_SteamNetworkingU
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction(struct w_steam_iface *_this, ESteamNetworkingSocketsDebugOutputType eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction_params params =
     {
@@ -893,7 +893,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputF
     cppISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction( &params );
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType eDataType, const void *pArg)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t eDataType, const void *pArg)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue_params params =
     {
@@ -909,7 +909,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue(
     return params._ret;
 }
 
-ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType *pOutDataType, void *pResult, size_t *cbResult)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t *pOutDataType, void *pResult, size_t *cbResult)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue_params params =
     {
@@ -926,7 +926,7 @@ ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNe
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValueInfo(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, const char **pOutName, ESteamNetworkingConfigDataType *pOutDataType, ESteamNetworkingConfigScope *pOutScope, ESteamNetworkingConfigValue *pOutNextValue)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValueInfo(struct w_steam_iface *_this, uint32_t eValue, const char **pOutName, uint32_t *pOutDataType, uint32_t *pOutScope, uint32_t *pOutNextValue)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValueInfo_params params =
     {
@@ -942,7 +942,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValueI
     return params._ret;
 }
 
-ESteamNetworkingConfigValue __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetFirstConfigValue(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetFirstConfigValue(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetFirstConfigValue_params params =
     {
@@ -1093,7 +1093,7 @@ winSteamNetworkingMessage_t_158 * __thiscall winISteamNetworkingUtils_SteamNetwo
     return params._ret;
 }
 
-ESteamNetworkingAvailability __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus(struct w_steam_iface *_this, SteamRelayNetworkStatus_t *pDetails)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus(struct w_steam_iface *_this, SteamRelayNetworkStatus_t *pDetails)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus_params params =
     {
@@ -1240,7 +1240,7 @@ SteamNetworkingMicroseconds __thiscall winISteamNetworkingUtils_SteamNetworkingU
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction(struct w_steam_iface *_this, ESteamNetworkingSocketsDebugOutputType eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction_params params =
     {
@@ -1252,7 +1252,7 @@ void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputF
     cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction( &params );
 }
 
-ESteamNetworkingFakeIPType __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType(struct w_steam_iface *_this, uint32 nIPv4)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType(struct w_steam_iface *_this, uint32 nIPv4)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType_params params =
     {
@@ -1264,7 +1264,7 @@ ESteamNetworkingFakeIPType __thiscall winISteamNetworkingUtils_SteamNetworkingUt
     return params._ret;
 }
 
-EResult __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *fakeIP, SteamNetworkingIdentity *pOutRealIdentity)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *fakeIP, SteamNetworkingIdentity *pOutRealIdentity)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP_params params =
     {
@@ -1277,7 +1277,7 @@ EResult __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdent
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType eDataType, const void *pArg)
+bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t eDataType, const void *pArg)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue_params params =
     {
@@ -1293,7 +1293,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue(
     return params._ret;
 }
 
-ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValue(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType, intptr_t scopeObj, ESteamNetworkingConfigDataType *pOutDataType, void *pResult, size_t *cbResult)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValue(struct w_steam_iface *_this, uint32_t eValue, uint32_t eScopeType, intptr_t scopeObj, uint32_t *pOutDataType, void *pResult, size_t *cbResult)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValue_params params =
     {
@@ -1310,7 +1310,7 @@ ESteamNetworkingGetConfigValueResult __thiscall winISteamNetworkingUtils_SteamNe
     return params._ret;
 }
 
-const char * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo(struct w_steam_iface *_this, ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigDataType *pOutDataType, ESteamNetworkingConfigScope *pOutScope)
+const char * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo(struct w_steam_iface *_this, uint32_t eValue, uint32_t *pOutDataType, uint32_t *pOutScope)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo_params params =
     {
@@ -1324,7 +1324,7 @@ const char * __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetConf
     return params._ret;
 }
 
-ESteamNetworkingConfigValue __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfigValues(struct w_steam_iface *_this, ESteamNetworkingConfigValue eCurrent, bool bEnumerateDevVars)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfigValues(struct w_steam_iface *_this, uint32_t eCurrent, bool bEnumerateDevVars)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfigValues_params params =
     {
@@ -1364,7 +1364,7 @@ bool __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworking
     return params._ret;
 }
 
-ESteamNetworkingFakeIPType __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_GetFakeIPType(struct w_steam_iface *_this, const SteamNetworkingIPAddr *addr)
+uint32_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_GetFakeIPType(struct w_steam_iface *_this, const SteamNetworkingIPAddr *addr)
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_GetFakeIPType_params params =
     {

@@ -60,7 +60,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_p
 {
     void *linux_side;
     gameserveritem_t *_ret;
-    EMatchMakingType eType;
+    uint32_t eType;
     int iServer;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_params *params );
@@ -68,14 +68,14 @@ extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDeta
 struct cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery_params
 {
     void *linux_side;
-    EMatchMakingType eType;
+    uint32_t eType;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery_params *params );
 
 struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery_params
 {
     void *linux_side;
-    EMatchMakingType eType;
+    uint32_t eType;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshQuery_params *params );
 
@@ -83,7 +83,7 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing_param
 {
     void *linux_side;
     bool _ret;
-    EMatchMakingType eType;
+    uint32_t eType;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_IsRefreshing_params *params );
 
@@ -91,14 +91,14 @@ struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount_par
 {
     void *linux_side;
     int _ret;
-    EMatchMakingType eType;
+    uint32_t eType;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount_params *params );
 
 struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer_params
 {
     void *linux_side;
-    EMatchMakingType eType;
+    uint32_t eType;
     int iServer;
 };
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer( struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer_params *params );

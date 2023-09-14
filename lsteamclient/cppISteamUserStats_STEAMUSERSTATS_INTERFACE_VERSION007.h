@@ -182,8 +182,8 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeader
     void *linux_side;
     SteamAPICall_t _ret;
     const char *pchLeaderboardName;
-    ELeaderboardSortMethod eLeaderboardSortMethod;
-    ELeaderboardDisplayType eLeaderboardDisplayType;
+    uint32_t eLeaderboardSortMethod;
+    uint32_t eLeaderboardDisplayType;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard_params *params );
 
@@ -214,7 +214,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboar
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod_params
 {
     void *linux_side;
-    ELeaderboardSortMethod _ret;
+    uint32_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod_params *params );
@@ -222,7 +222,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboar
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType_params
 {
     void *linux_side;
-    ELeaderboardDisplayType _ret;
+    uint32_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType_params *params );
@@ -232,7 +232,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboar
     void *linux_side;
     SteamAPICall_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
-    ELeaderboardDataRequest eLeaderboardDataRequest;
+    uint32_t eLeaderboardDataRequest;
     int nRangeStart;
     int nRangeEnd;
 };
@@ -255,7 +255,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardS
     void *linux_side;
     SteamAPICall_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
-    ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod;
+    uint32_t eLeaderboardUploadScoreMethod;
     int32 nScore;
     const int32 *pScoreDetails;
     int cScoreDetailsCount;

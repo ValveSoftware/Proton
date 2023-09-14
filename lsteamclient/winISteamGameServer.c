@@ -3019,7 +3019,7 @@ HAuthTicket __thiscall winISteamGameServer_SteamGameServer012_GetAuthSessionTick
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamGameServer_SteamGameServer012_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer012_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamGameServer_SteamGameServer012_BeginAuthSession_params params =
     {
@@ -3055,7 +3055,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer012_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer012_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer012_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamGameServer_SteamGameServer012_UserHasLicenseForApp_params params =
     {
@@ -3645,7 +3645,7 @@ HAuthTicket __thiscall winISteamGameServer_SteamGameServer013_GetAuthSessionTick
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamGameServer_SteamGameServer013_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer013_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamGameServer_SteamGameServer013_BeginAuthSession_params params =
     {
@@ -3681,7 +3681,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer013_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer013_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer013_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamGameServer_SteamGameServer013_UserHasLicenseForApp_params params =
     {
@@ -4231,7 +4231,7 @@ HAuthTicket __thiscall winISteamGameServer_SteamGameServer014_GetAuthSessionTick
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamGameServer_SteamGameServer014_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer014_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamGameServer_SteamGameServer014_BeginAuthSession_params params =
     {
@@ -4267,7 +4267,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer014_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer014_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer014_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamGameServer_SteamGameServer014_UserHasLicenseForApp_params params =
     {
@@ -4859,7 +4859,7 @@ HAuthTicket __thiscall winISteamGameServer_SteamGameServer015_GetAuthSessionTick
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamGameServer_SteamGameServer015_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer015_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamGameServer_SteamGameServer015_BeginAuthSession_params params =
     {
@@ -4895,7 +4895,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer015_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer015_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer015_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
 {
     struct cppISteamGameServer_SteamGameServer015_UserHasLicenseForApp_params params =
     {

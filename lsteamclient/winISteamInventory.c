@@ -40,7 +40,7 @@ DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItem
 DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_RequestEligiblePromoItemDefinitionsIDs, 12)
 DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligiblePromoItemDefinitionIDs, 20)
 
-EResult __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus_params params =
     {
@@ -449,7 +449,7 @@ DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProp
 DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_4, 28)
 DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SubmitUpdateProperties, 16)
 
-EResult __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus_params params =
     {
@@ -1049,7 +1049,7 @@ DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProp
 DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties, 16)
 DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem, 12)
 
-EResult __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
+uint32_t __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus(struct w_steam_iface *_this, SteamInventoryResult_t resultHandle)
 {
     struct cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus_params params =
     {

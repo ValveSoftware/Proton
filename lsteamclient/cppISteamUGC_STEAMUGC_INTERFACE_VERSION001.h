@@ -3,9 +3,9 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_para
     void *linux_side;
     UGCQueryHandle_t _ret;
     AccountID_t unAccountID;
-    EUserUGCList eListType;
-    EUGCMatchingUGCType eMatchingUGCType;
-    EUserUGCListSortOrder eSortOrder;
+    uint32_t eListType;
+    uint32_t eMatchingUGCType;
+    uint32_t eSortOrder;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
     uint32 unPage;
@@ -16,8 +16,8 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest_param
 {
     void *linux_side;
     UGCQueryHandle_t _ret;
-    EUGCQuery eQueryType;
-    EUGCMatchingUGCType eMatchingeMatchingUGCTypeFileType;
+    uint32_t eQueryType;
+    uint32_t eMatchingeMatchingUGCTypeFileType;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
     uint32 unPage;

@@ -26,7 +26,7 @@ struct cppISteamClient_SteamClient018_CreateLocalUser_params
     void *linux_side;
     HSteamUser _ret;
     HSteamPipe *phSteamPipe;
-    EAccountType eAccountType;
+    uint32_t eAccountType;
 };
 extern void cppISteamClient_SteamClient018_CreateLocalUser( struct cppISteamClient_SteamClient018_CreateLocalUser_params *params );
 

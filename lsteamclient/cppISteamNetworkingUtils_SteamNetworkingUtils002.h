@@ -1,7 +1,7 @@
 struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus_params
 {
     void *linux_side;
-    ESteamNetworkingAvailability _ret;
+    uint32_t _ret;
     SteamRelayNetworkStatus_t *pDetails;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus( struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetRelayNetworkStatus_params *params );
@@ -100,7 +100,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_GetLocalTimestamp( 
 struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_params
 {
     void *linux_side;
-    ESteamNetworkingSocketsDebugOutputType eDetailLevel;
+    uint32_t eDetailLevel;
     FSteamNetworkingSocketsDebugOutput pfnFunc;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction( struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_params *params );
@@ -109,10 +109,10 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue_params
 {
     void *linux_side;
     bool _ret;
-    ESteamNetworkingConfigValue eValue;
-    ESteamNetworkingConfigScope eScopeType;
+    uint32_t eValue;
+    uint32_t eScopeType;
     intptr_t scopeObj;
-    ESteamNetworkingConfigDataType eDataType;
+    uint32_t eDataType;
     const void *pArg;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue( struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue_params *params );
@@ -120,11 +120,11 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_SetConfigValue( str
 struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValue_params
 {
     void *linux_side;
-    ESteamNetworkingGetConfigValueResult _ret;
-    ESteamNetworkingConfigValue eValue;
-    ESteamNetworkingConfigScope eScopeType;
+    uint32_t _ret;
+    uint32_t eValue;
+    uint32_t eScopeType;
     intptr_t scopeObj;
-    ESteamNetworkingConfigDataType *pOutDataType;
+    uint32_t *pOutDataType;
     void *pResult;
     size_t *cbResult;
 };
@@ -134,18 +134,18 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueInfo_param
 {
     void *linux_side;
     bool _ret;
-    ESteamNetworkingConfigValue eValue;
+    uint32_t eValue;
     const char **pOutName;
-    ESteamNetworkingConfigDataType *pOutDataType;
-    ESteamNetworkingConfigScope *pOutScope;
-    ESteamNetworkingConfigValue *pOutNextValue;
+    uint32_t *pOutDataType;
+    uint32_t *pOutScope;
+    uint32_t *pOutNextValue;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueInfo( struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetConfigValueInfo_params *params );
 
 struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetFirstConfigValue_params
 {
     void *linux_side;
-    ESteamNetworkingConfigValue _ret;
+    uint32_t _ret;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_GetFirstConfigValue( struct cppISteamNetworkingUtils_SteamNetworkingUtils002_GetFirstConfigValue_params *params );
 

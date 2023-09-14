@@ -9,7 +9,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage( st
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus_params
 {
     void *linux_side;
-    ESteamNetworkingAvailability _ret;
+    uint32_t _ret;
     SteamRelayNetworkStatus_t *pDetails;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRelayNetworkStatus_params *params );
@@ -108,7 +108,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_GetLocalTimestamp( 
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction_params
 {
     void *linux_side;
-    ESteamNetworkingSocketsDebugOutputType eDetailLevel;
+    uint32_t eDetailLevel;
     FSteamNetworkingSocketsDebugOutput pfnFunc;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction_params *params );
@@ -116,7 +116,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunct
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType_params
 {
     void *linux_side;
-    ESteamNetworkingFakeIPType _ret;
+    uint32_t _ret;
     uint32 nIPv4;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType_params *params );
@@ -124,7 +124,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_GetIPv4FakeIPType( 
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     const SteamNetworkingIPAddr *fakeIP;
     SteamNetworkingIdentity *pOutRealIdentity;
 };
@@ -134,10 +134,10 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue_params
 {
     void *linux_side;
     bool _ret;
-    ESteamNetworkingConfigValue eValue;
-    ESteamNetworkingConfigScope eScopeType;
+    uint32_t eValue;
+    uint32_t eScopeType;
     intptr_t scopeObj;
-    ESteamNetworkingConfigDataType eDataType;
+    uint32_t eDataType;
     const void *pArg;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue_params *params );
@@ -145,11 +145,11 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue( str
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValue_params
 {
     void *linux_side;
-    ESteamNetworkingGetConfigValueResult _ret;
-    ESteamNetworkingConfigValue eValue;
-    ESteamNetworkingConfigScope eScopeType;
+    uint32_t _ret;
+    uint32_t eValue;
+    uint32_t eScopeType;
     intptr_t scopeObj;
-    ESteamNetworkingConfigDataType *pOutDataType;
+    uint32_t *pOutDataType;
     void *pResult;
     size_t *cbResult;
 };
@@ -159,17 +159,17 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo_param
 {
     void *linux_side;
     const char *_ret;
-    ESteamNetworkingConfigValue eValue;
-    ESteamNetworkingConfigDataType *pOutDataType;
-    ESteamNetworkingConfigScope *pOutScope;
+    uint32_t eValue;
+    uint32_t *pOutDataType;
+    uint32_t *pOutScope;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_GetConfigValueInfo_params *params );
 
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfigValues_params
 {
     void *linux_side;
-    ESteamNetworkingConfigValue _ret;
-    ESteamNetworkingConfigValue eCurrent;
+    uint32_t _ret;
+    uint32_t eCurrent;
     bool bEnumerateDevVars;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfigValues( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_IterateGenericEditableConfigValues_params *params );
@@ -196,7 +196,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAd
 struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_GetFakeIPType_params
 {
     void *linux_side;
-    ESteamNetworkingFakeIPType _ret;
+    uint32_t _ret;
     const SteamNetworkingIPAddr *addr;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_GetFakeIPType( struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr_GetFakeIPType_params *params );

@@ -168,7 +168,7 @@ bool __thiscall winISteamParties_SteamParties002_DestroyBeacon(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(struct w_steam_iface *_this, winSteamPartyBeaconLocation_t_158 BeaconLocation, ESteamPartyBeaconLocationData eData, char *pchDataStringOut, int cchDataStringOut)
+bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(struct w_steam_iface *_this, winSteamPartyBeaconLocation_t_158 BeaconLocation, uint32_t eData, char *pchDataStringOut, int cchDataStringOut)
 {
     struct cppISteamParties_SteamParties002_GetBeaconLocationData_params params =
     {

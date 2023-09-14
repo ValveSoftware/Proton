@@ -7,7 +7,7 @@ extern void cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_Destroy
 struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP_params
 {
     void *linux_side;
-    EResult _ret;
+    uint32_t _ret;
     const SteamNetworkingIPAddr *remoteAddress;
     const void *pData;
     uint32 cbData;

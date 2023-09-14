@@ -52,7 +52,7 @@ uint32 __thiscall winISteamUtils_SteamUtils002_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils002_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils002_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils002_GetConnectedUniverse_params params =
     {
@@ -148,7 +148,7 @@ uint32 __thiscall winISteamUtils_SteamUtils002_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils002_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils002_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition_params params =
     {
@@ -172,7 +172,7 @@ bool __thiscall winISteamUtils_SteamUtils002_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils002_GetAPICallFailureReason_params params =
     {
@@ -286,7 +286,7 @@ uint32 __thiscall winISteamUtils_SteamUtils004_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils004_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils004_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils004_GetConnectedUniverse_params params =
     {
@@ -382,7 +382,7 @@ uint32 __thiscall winISteamUtils_SteamUtils004_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils004_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils004_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils004_SetOverlayNotificationPosition_params params =
     {
@@ -406,7 +406,7 @@ bool __thiscall winISteamUtils_SteamUtils004_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils004_GetAPICallFailureReason_params params =
     {
@@ -572,7 +572,7 @@ uint32 __thiscall winISteamUtils_SteamUtils005_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils005_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils005_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils005_GetConnectedUniverse_params params =
     {
@@ -668,7 +668,7 @@ uint32 __thiscall winISteamUtils_SteamUtils005_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils005_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils005_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils005_SetOverlayNotificationPosition_params params =
     {
@@ -692,7 +692,7 @@ bool __thiscall winISteamUtils_SteamUtils005_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils005_GetAPICallFailureReason_params params =
     {
@@ -797,7 +797,7 @@ SteamAPICall_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax)
+bool __thiscall winISteamUtils_SteamUtils005_ShowGamepadTextInput(struct w_steam_iface *_this, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32 unCharMax)
 {
     struct cppISteamUtils_SteamUtils005_ShowGamepadTextInput_params params =
     {
@@ -929,7 +929,7 @@ uint32 __thiscall winISteamUtils_SteamUtils006_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils006_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils006_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils006_GetConnectedUniverse_params params =
     {
@@ -1025,7 +1025,7 @@ uint32 __thiscall winISteamUtils_SteamUtils006_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils006_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils006_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils006_SetOverlayNotificationPosition_params params =
     {
@@ -1049,7 +1049,7 @@ bool __thiscall winISteamUtils_SteamUtils006_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils006_GetAPICallFailureReason_params params =
     {
@@ -1154,7 +1154,7 @@ SteamAPICall_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax)
+bool __thiscall winISteamUtils_SteamUtils006_ShowGamepadTextInput(struct w_steam_iface *_this, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32 unCharMax)
 {
     struct cppISteamUtils_SteamUtils006_ShowGamepadTextInput_params params =
     {
@@ -1311,7 +1311,7 @@ uint32 __thiscall winISteamUtils_SteamUtils007_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils007_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils007_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils007_GetConnectedUniverse_params params =
     {
@@ -1407,7 +1407,7 @@ uint32 __thiscall winISteamUtils_SteamUtils007_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils007_SetOverlayNotificationPosition_params params =
     {
@@ -1431,7 +1431,7 @@ bool __thiscall winISteamUtils_SteamUtils007_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils007_GetAPICallFailureReason_params params =
     {
@@ -1536,7 +1536,7 @@ SteamAPICall_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils007_ShowGamepadTextInput(struct w_steam_iface *_this, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     struct cppISteamUtils_SteamUtils007_ShowGamepadTextInput_params params =
     {
@@ -1709,7 +1709,7 @@ uint32 __thiscall winISteamUtils_SteamUtils008_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils008_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils008_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils008_GetConnectedUniverse_params params =
     {
@@ -1805,7 +1805,7 @@ uint32 __thiscall winISteamUtils_SteamUtils008_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils008_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils008_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils008_SetOverlayNotificationPosition_params params =
     {
@@ -1829,7 +1829,7 @@ bool __thiscall winISteamUtils_SteamUtils008_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils008_GetAPICallFailureReason_params params =
     {
@@ -1934,7 +1934,7 @@ SteamAPICall_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils008_ShowGamepadTextInput(struct w_steam_iface *_this, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     struct cppISteamUtils_SteamUtils008_ShowGamepadTextInput_params params =
     {
@@ -2136,7 +2136,7 @@ uint32 __thiscall winISteamUtils_SteamUtils009_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils009_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils009_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils009_GetConnectedUniverse_params params =
     {
@@ -2232,7 +2232,7 @@ uint32 __thiscall winISteamUtils_SteamUtils009_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils009_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils009_SetOverlayNotificationPosition_params params =
     {
@@ -2256,7 +2256,7 @@ bool __thiscall winISteamUtils_SteamUtils009_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils009_GetAPICallFailureReason_params params =
     {
@@ -2361,7 +2361,7 @@ SteamAPICall_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils009_ShowGamepadTextInput(struct w_steam_iface *_this, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     struct cppISteamUtils_SteamUtils009_ShowGamepadTextInput_params params =
     {
@@ -2515,7 +2515,7 @@ int __thiscall winISteamUtils_SteamUtils009_FilterText(struct w_steam_iface *_th
     return params._ret;
 }
 
-ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils009_GetIPv6ConnectivityState(struct w_steam_iface *_this, ESteamIPv6ConnectivityProtocol eProtocol)
+uint32_t __thiscall winISteamUtils_SteamUtils009_GetIPv6ConnectivityState(struct w_steam_iface *_this, uint32_t eProtocol)
 {
     struct cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState_params params =
     {
@@ -2644,7 +2644,7 @@ uint32 __thiscall winISteamUtils_SteamUtils010_GetSecondsSinceComputerActive(str
     return params._ret;
 }
 
-EUniverse __thiscall winISteamUtils_SteamUtils010_GetConnectedUniverse(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamUtils_SteamUtils010_GetConnectedUniverse(struct w_steam_iface *_this)
 {
     struct cppISteamUtils_SteamUtils010_GetConnectedUniverse_params params =
     {
@@ -2740,7 +2740,7 @@ uint32 __thiscall winISteamUtils_SteamUtils010_GetAppID(struct w_steam_iface *_t
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_SetOverlayNotificationPosition(struct w_steam_iface *_this, ENotificationPosition eNotificationPosition)
+void __thiscall winISteamUtils_SteamUtils010_SetOverlayNotificationPosition(struct w_steam_iface *_this, uint32_t eNotificationPosition)
 {
     struct cppISteamUtils_SteamUtils010_SetOverlayNotificationPosition_params params =
     {
@@ -2764,7 +2764,7 @@ bool __thiscall winISteamUtils_SteamUtils010_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-ESteamAPICallFailure __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils010_GetAPICallFailureReason_params params =
     {
@@ -2869,7 +2869,7 @@ SteamAPICall_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_ShowGamepadTextInput(struct w_steam_iface *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
+bool __thiscall winISteamUtils_SteamUtils010_ShowGamepadTextInput(struct w_steam_iface *_this, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32 unCharMax, const char *pchExistingText)
 {
     struct cppISteamUtils_SteamUtils010_ShowGamepadTextInput_params params =
     {
@@ -3009,7 +3009,7 @@ bool __thiscall winISteamUtils_SteamUtils010_InitFilterText(struct w_steam_iface
     return params._ret;
 }
 
-int __thiscall winISteamUtils_SteamUtils010_FilterText(struct w_steam_iface *_this, ETextFilteringContext eContext, CSteamID sourceSteamID, const char *pchInputMessage, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText)
+int __thiscall winISteamUtils_SteamUtils010_FilterText(struct w_steam_iface *_this, uint32_t eContext, CSteamID sourceSteamID, const char *pchInputMessage, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText)
 {
     struct cppISteamUtils_SteamUtils010_FilterText_params params =
     {
@@ -3025,7 +3025,7 @@ int __thiscall winISteamUtils_SteamUtils010_FilterText(struct w_steam_iface *_th
     return params._ret;
 }
 
-ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils010_GetIPv6ConnectivityState(struct w_steam_iface *_this, ESteamIPv6ConnectivityProtocol eProtocol)
+uint32_t __thiscall winISteamUtils_SteamUtils010_GetIPv6ConnectivityState(struct w_steam_iface *_this, uint32_t eProtocol)
 {
     struct cppISteamUtils_SteamUtils010_GetIPv6ConnectivityState_params params =
     {
@@ -3048,7 +3048,7 @@ bool __thiscall winISteamUtils_SteamUtils010_IsSteamRunningOnSteamDeck(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(struct w_steam_iface *_this, EFloatingGamepadTextInputMode eKeyboardMode, int nTextFieldXPosition, int nTextFieldYPosition, int nTextFieldWidth, int nTextFieldHeight)
+bool __thiscall winISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput(struct w_steam_iface *_this, uint32_t eKeyboardMode, int nTextFieldXPosition, int nTextFieldYPosition, int nTextFieldWidth, int nTextFieldHeight)
 {
     struct cppISteamUtils_SteamUtils010_ShowFloatingGamepadTextInput_params params =
     {
