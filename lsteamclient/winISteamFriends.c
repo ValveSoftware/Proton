@@ -147,7 +147,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaState(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, int32 *pnGameID, uint32 *punGameIP, uint16 *pusGamePort)
+bool __thiscall winISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t *pnGameID, uint32_t *punGameIP, uint16_t *pusGamePort)
 {
     struct cppISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed_params params =
     {
@@ -174,7 +174,7 @@ const char * __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaName(st
     return params._ret;
 }
 
-int32 __thiscall winISteamFriends_SteamFriends001_AddFriendByName(struct w_steam_iface *_this, const char *pchEmailOrAccountName)
+int32_t __thiscall winISteamFriends_SteamFriends001_AddFriendByName(struct w_steam_iface *_this, const char *pchEmailOrAccountName)
 {
     struct cppISteamFriends_SteamFriends001_AddFriendByName_params params =
     {
@@ -186,7 +186,7 @@ int32 __thiscall winISteamFriends_SteamFriends001_AddFriendByName(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends001_GetFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends001_GetFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends001_GetFriendCount_params params =
     {
@@ -197,7 +197,7 @@ int __thiscall winISteamFriends_SteamFriends001_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends001_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends001_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends001_GetFriendByIndex_params params =
     {
@@ -249,7 +249,7 @@ const char * __thiscall winISteamFriends_SteamFriends001_GetFriendRegValue(struc
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends001_GetFriendPersonaNameHistory_params params =
     {
@@ -262,7 +262,7 @@ const char * __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaNameHis
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends001_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends001_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iChatID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends001_GetChatMessage_params params =
     {
@@ -278,7 +278,7 @@ int __thiscall winISteamFriends_SteamFriends001_GetChatMessage(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int cubMsgBody)
+bool __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int32_t cubMsgBody)
 {
     struct cppISteamFriends_SteamFriends001_SendMsgToFriend_2_params params =
     {
@@ -293,7 +293,7 @@ bool __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart_params params =
     {
@@ -305,7 +305,7 @@ int __thiscall winISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart(stru
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends001_SetChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID)
+void __thiscall winISteamFriends_SteamFriends001_SetChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iChatID)
 {
     struct cppISteamFriends_SteamFriends001_SetChatHistoryStart_params params =
     {
@@ -340,7 +340,7 @@ bool __thiscall winISteamFriends_SteamFriends001_InviteFriendByEmail(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends001_GetBlockedFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends001_GetBlockedFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends001_GetBlockedFriendCount_params params =
     {
@@ -351,7 +351,7 @@ int __thiscall winISteamFriends_SteamFriends001_GetBlockedFriendCount(struct w_s
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort)
+bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort)
 {
     struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed_params params =
     {
@@ -366,7 +366,7 @@ bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort, uint16 *pusQueryPort)
+bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed2(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct cppISteamFriends_SteamFriends001_GetFriendGamePlayed2_params params =
     {
@@ -506,7 +506,7 @@ void __thiscall winISteamFriends_SteamFriends002_SetPersonaState(struct w_steam_
     cppISteamFriends_SteamFriends002_SetPersonaState( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends002_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends002_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendCount_params params =
     {
@@ -518,7 +518,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendByIndex_params params =
     {
@@ -594,7 +594,7 @@ const char * __thiscall winISteamFriends_SteamFriends002_GetFriendRegValue(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort, uint16 *pusQueryPort)
+bool __thiscall winISteamFriends_SteamFriends002_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendGamePlayed_params params =
     {
@@ -610,7 +610,7 @@ bool __thiscall winISteamFriends_SteamFriends002_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendPersonaNameHistory_params params =
     {
@@ -647,7 +647,7 @@ bool __thiscall winISteamFriends_SteamFriends002_RemoveFriend(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends002_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends002_HasFriend_params params =
     {
@@ -660,7 +660,7 @@ bool __thiscall winISteamFriends_SteamFriends002_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int32 __thiscall winISteamFriends_SteamFriends002_AddFriendByName(struct w_steam_iface *_this, const char *pchEmailOrAccountName)
+int32_t __thiscall winISteamFriends_SteamFriends002_AddFriendByName(struct w_steam_iface *_this, const char *pchEmailOrAccountName)
 {
     struct cppISteamFriends_SteamFriends002_AddFriendByName_params params =
     {
@@ -684,7 +684,7 @@ bool __thiscall winISteamFriends_SteamFriends002_InviteFriendByEmail(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends002_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends002_GetChatMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iChatID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends002_GetChatMessage_params params =
     {
@@ -700,7 +700,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetChatMessage(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int cubMsgBody)
+bool __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, uint32_t eChatEntryType, const void *pvMsgBody, int32_t cubMsgBody)
 {
     struct cppISteamFriends_SteamFriends002_SendMsgToFriend_params params =
     {
@@ -715,7 +715,7 @@ bool __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(struct w_steam_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart_params params =
     {
@@ -727,7 +727,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart(stru
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends002_SetChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend, int iChatID)
+void __thiscall winISteamFriends_SteamFriends002_SetChatHistoryStart(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iChatID)
 {
     struct cppISteamFriends_SteamFriends002_SetChatHistoryStart_params params =
     {
@@ -750,7 +750,7 @@ void __thiscall winISteamFriends_SteamFriends002_ClearChatHistory(struct w_steam
     cppISteamFriends_SteamFriends002_ClearChatHistory( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends002_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends002_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends002_GetClanCount_params params =
     {
@@ -761,7 +761,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends002_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends002_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends002_GetClanByIndex_params params =
     {
@@ -812,7 +812,7 @@ bool __thiscall winISteamFriends_SteamFriends002_AcknowledgeInviteToClan(struct 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends002_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends002_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendCountFromSource_params params =
     {
@@ -824,7 +824,7 @@ int __thiscall winISteamFriends_SteamFriends002_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends002_GetFriendFromSourceByIndex_params params =
     {
@@ -944,7 +944,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends003_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends003_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends003_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendCount_params params =
     {
@@ -956,7 +956,7 @@ int __thiscall winISteamFriends_SteamFriends003_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendByIndex_params params =
     {
@@ -1006,7 +1006,7 @@ const char * __thiscall winISteamFriends_SteamFriends003_GetFriendPersonaName(st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends003_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends003_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendAvatar_params params =
     {
@@ -1018,7 +1018,7 @@ int __thiscall winISteamFriends_SteamFriends003_GetFriendAvatar(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends003_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort, uint16 *pusQueryPort)
+bool __thiscall winISteamFriends_SteamFriends003_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendGamePlayed_params params =
     {
@@ -1034,7 +1034,7 @@ bool __thiscall winISteamFriends_SteamFriends003_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends003_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends003_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendPersonaNameHistory_params params =
     {
@@ -1047,7 +1047,7 @@ const char * __thiscall winISteamFriends_SteamFriends003_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends003_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends003_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends003_HasFriend_params params =
     {
@@ -1060,7 +1060,7 @@ bool __thiscall winISteamFriends_SteamFriends003_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends003_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends003_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends003_GetClanCount_params params =
     {
@@ -1071,7 +1071,7 @@ int __thiscall winISteamFriends_SteamFriends003_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends003_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends003_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends003_GetClanByIndex_params params =
     {
@@ -1096,7 +1096,7 @@ const char * __thiscall winISteamFriends_SteamFriends003_GetClanName(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends003_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends003_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendCountFromSource_params params =
     {
@@ -1108,7 +1108,7 @@ int __thiscall winISteamFriends_SteamFriends003_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends003_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends003_GetFriendFromSourceByIndex_params params =
     {
@@ -1254,7 +1254,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends004_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends004_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends004_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendCount_params params =
     {
@@ -1266,7 +1266,7 @@ int __thiscall winISteamFriends_SteamFriends004_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendByIndex_params params =
     {
@@ -1316,7 +1316,7 @@ const char * __thiscall winISteamFriends_SteamFriends004_GetFriendPersonaName(st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends004_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend, int eAvatarSize)
+int32_t __thiscall winISteamFriends_SteamFriends004_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t eAvatarSize)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendAvatar_params params =
     {
@@ -1329,7 +1329,7 @@ int __thiscall winISteamFriends_SteamFriends004_GetFriendAvatar(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends004_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64 *pulGameID, uint32 *punGameIP, uint16 *pusGamePort, uint16 *pusQueryPort)
+bool __thiscall winISteamFriends_SteamFriends004_GetFriendGamePlayed(struct w_steam_iface *_this, CSteamID steamIDFriend, uint64_t *pulGameID, uint32_t *punGameIP, uint16_t *pusGamePort, uint16_t *pusQueryPort)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendGamePlayed_params params =
     {
@@ -1345,7 +1345,7 @@ bool __thiscall winISteamFriends_SteamFriends004_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends004_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends004_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendPersonaNameHistory_params params =
     {
@@ -1358,7 +1358,7 @@ const char * __thiscall winISteamFriends_SteamFriends004_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends004_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends004_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends004_HasFriend_params params =
     {
@@ -1371,7 +1371,7 @@ bool __thiscall winISteamFriends_SteamFriends004_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends004_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends004_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends004_GetClanCount_params params =
     {
@@ -1382,7 +1382,7 @@ int __thiscall winISteamFriends_SteamFriends004_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends004_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends004_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends004_GetClanByIndex_params params =
     {
@@ -1407,7 +1407,7 @@ const char * __thiscall winISteamFriends_SteamFriends004_GetClanName(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends004_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends004_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendCountFromSource_params params =
     {
@@ -1419,7 +1419,7 @@ int __thiscall winISteamFriends_SteamFriends004_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends004_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends004_GetFriendFromSourceByIndex_params params =
     {
@@ -1569,7 +1569,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends005_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends005_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends005_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendCount_params params =
     {
@@ -1581,7 +1581,7 @@ int __thiscall winISteamFriends_SteamFriends005_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendByIndex_params params =
     {
@@ -1631,7 +1631,7 @@ const char * __thiscall winISteamFriends_SteamFriends005_GetFriendPersonaName(st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends005_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend, int eAvatarSize)
+int32_t __thiscall winISteamFriends_SteamFriends005_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t eAvatarSize)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendAvatar_params params =
     {
@@ -1657,7 +1657,7 @@ bool __thiscall winISteamFriends_SteamFriends005_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends005_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends005_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendPersonaNameHistory_params params =
     {
@@ -1670,7 +1670,7 @@ const char * __thiscall winISteamFriends_SteamFriends005_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends005_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends005_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends005_HasFriend_params params =
     {
@@ -1683,7 +1683,7 @@ bool __thiscall winISteamFriends_SteamFriends005_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends005_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends005_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends005_GetClanCount_params params =
     {
@@ -1694,7 +1694,7 @@ int __thiscall winISteamFriends_SteamFriends005_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends005_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends005_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends005_GetClanByIndex_params params =
     {
@@ -1719,7 +1719,7 @@ const char * __thiscall winISteamFriends_SteamFriends005_GetClanName(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends005_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends005_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendCountFromSource_params params =
     {
@@ -1731,7 +1731,7 @@ int __thiscall winISteamFriends_SteamFriends005_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends005_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends005_GetFriendFromSourceByIndex_params params =
     {
@@ -1932,7 +1932,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends006_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends006_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends006_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendCount_params params =
     {
@@ -1944,7 +1944,7 @@ int __thiscall winISteamFriends_SteamFriends006_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendByIndex_params params =
     {
@@ -1994,7 +1994,7 @@ const char * __thiscall winISteamFriends_SteamFriends006_GetFriendPersonaName(st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends006_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend, int eAvatarSize)
+int32_t __thiscall winISteamFriends_SteamFriends006_GetFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t eAvatarSize)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendAvatar_params params =
     {
@@ -2020,7 +2020,7 @@ bool __thiscall winISteamFriends_SteamFriends006_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends006_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends006_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendPersonaNameHistory_params params =
     {
@@ -2033,7 +2033,7 @@ const char * __thiscall winISteamFriends_SteamFriends006_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends006_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends006_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends006_HasFriend_params params =
     {
@@ -2046,7 +2046,7 @@ bool __thiscall winISteamFriends_SteamFriends006_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends006_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends006_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends006_GetClanCount_params params =
     {
@@ -2057,7 +2057,7 @@ int __thiscall winISteamFriends_SteamFriends006_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends006_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends006_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends006_GetClanByIndex_params params =
     {
@@ -2094,7 +2094,7 @@ const char * __thiscall winISteamFriends_SteamFriends006_GetClanTag(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends006_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends006_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendCountFromSource_params params =
     {
@@ -2106,7 +2106,7 @@ int __thiscall winISteamFriends_SteamFriends006_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends006_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends006_GetFriendFromSourceByIndex_params params =
     {
@@ -2322,7 +2322,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends007_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends007_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends007_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends007_GetFriendCount_params params =
     {
@@ -2334,7 +2334,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends007_GetFriendByIndex_params params =
     {
@@ -2397,7 +2397,7 @@ bool __thiscall winISteamFriends_SteamFriends007_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends007_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends007_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends007_GetFriendPersonaNameHistory_params params =
     {
@@ -2410,7 +2410,7 @@ const char * __thiscall winISteamFriends_SteamFriends007_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends007_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends007_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends007_HasFriend_params params =
     {
@@ -2423,7 +2423,7 @@ bool __thiscall winISteamFriends_SteamFriends007_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends007_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends007_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends007_GetClanCount_params params =
     {
@@ -2434,7 +2434,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends007_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends007_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends007_GetClanByIndex_params params =
     {
@@ -2471,7 +2471,7 @@ const char * __thiscall winISteamFriends_SteamFriends007_GetClanTag(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends007_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends007_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends007_GetFriendCountFromSource_params params =
     {
@@ -2483,7 +2483,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends007_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends007_GetFriendFromSourceByIndex_params params =
     {
@@ -2589,7 +2589,7 @@ void __thiscall winISteamFriends_SteamFriends007_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends007_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends007_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends007_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends007_GetSmallFriendAvatar_params params =
     {
@@ -2601,7 +2601,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends007_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends007_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends007_GetMediumFriendAvatar_params params =
     {
@@ -2613,7 +2613,7 @@ int __thiscall winISteamFriends_SteamFriends007_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends007_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends007_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends007_GetLargeFriendAvatar_params params =
     {
@@ -2743,7 +2743,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends008_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends008_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends008_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends008_GetFriendCount_params params =
     {
@@ -2755,7 +2755,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends008_GetFriendByIndex_params params =
     {
@@ -2818,7 +2818,7 @@ bool __thiscall winISteamFriends_SteamFriends008_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends008_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends008_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends008_GetFriendPersonaNameHistory_params params =
     {
@@ -2831,7 +2831,7 @@ const char * __thiscall winISteamFriends_SteamFriends008_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends008_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends008_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends008_HasFriend_params params =
     {
@@ -2844,7 +2844,7 @@ bool __thiscall winISteamFriends_SteamFriends008_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends008_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends008_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends008_GetClanCount_params params =
     {
@@ -2855,7 +2855,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends008_GetClanByIndex_params params =
     {
@@ -2892,7 +2892,7 @@ const char * __thiscall winISteamFriends_SteamFriends008_GetClanTag(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends008_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends008_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends008_GetFriendCountFromSource_params params =
     {
@@ -2904,7 +2904,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends008_GetFriendFromSourceByIndex_params params =
     {
@@ -3010,7 +3010,7 @@ void __thiscall winISteamFriends_SteamFriends008_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends008_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends008_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends008_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends008_GetSmallFriendAvatar_params params =
     {
@@ -3022,7 +3022,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends008_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends008_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends008_GetMediumFriendAvatar_params params =
     {
@@ -3034,7 +3034,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends008_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends008_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends008_GetLargeFriendAvatar_params params =
     {
@@ -3084,7 +3084,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends008_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends008_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends008_GetClanOfficerCount_params params =
     {
@@ -3096,7 +3096,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends008_GetClanOfficerByIndex_params params =
     {
@@ -3110,7 +3110,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends008_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends008_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends008_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends008_GetUserRestrictions_params params =
     {
@@ -3255,7 +3255,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends009_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendCount_params params =
     {
@@ -3267,7 +3267,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendByIndex_params params =
     {
@@ -3330,7 +3330,7 @@ bool __thiscall winISteamFriends_SteamFriends009_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends009_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends009_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendPersonaNameHistory_params params =
     {
@@ -3343,7 +3343,7 @@ const char * __thiscall winISteamFriends_SteamFriends009_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends009_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends009_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends009_HasFriend_params params =
     {
@@ -3356,7 +3356,7 @@ bool __thiscall winISteamFriends_SteamFriends009_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends009_GetClanCount_params params =
     {
@@ -3367,7 +3367,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends009_GetClanByIndex_params params =
     {
@@ -3404,7 +3404,7 @@ const char * __thiscall winISteamFriends_SteamFriends009_GetClanTag(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendCountFromSource_params params =
     {
@@ -3416,7 +3416,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendFromSourceByIndex_params params =
     {
@@ -3522,7 +3522,7 @@ void __thiscall winISteamFriends_SteamFriends009_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends009_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetSmallFriendAvatar_params params =
     {
@@ -3534,7 +3534,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetMediumFriendAvatar_params params =
     {
@@ -3546,7 +3546,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetLargeFriendAvatar_params params =
     {
@@ -3596,7 +3596,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends009_GetClanOfficerCount_params params =
     {
@@ -3608,7 +3608,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends009_GetClanOfficerByIndex_params params =
     {
@@ -3622,7 +3622,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends009_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends009_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends009_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends009_GetUserRestrictions_params params =
     {
@@ -3669,7 +3669,7 @@ const char * __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendRichPresenceKeyCount_params params =
     {
@@ -3681,7 +3681,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends009_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -3707,7 +3707,7 @@ bool __thiscall winISteamFriends_SteamFriends009_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends009_GetCoplayFriendCount_params params =
     {
@@ -3718,7 +3718,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends009_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends009_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetCoplayFriend_params params =
     {
@@ -3731,7 +3731,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends009_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends009_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends009_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends009_GetFriendCoplayTime_params params =
     {
@@ -3914,7 +3914,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends010_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendCount_params params =
     {
@@ -3926,7 +3926,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendByIndex_params params =
     {
@@ -3989,7 +3989,7 @@ bool __thiscall winISteamFriends_SteamFriends010_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendPersonaNameHistory_params params =
     {
@@ -4002,7 +4002,7 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends010_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends010_HasFriend_params params =
     {
@@ -4015,7 +4015,7 @@ bool __thiscall winISteamFriends_SteamFriends010_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends010_GetClanCount_params params =
     {
@@ -4026,7 +4026,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends010_GetClanByIndex_params params =
     {
@@ -4063,7 +4063,7 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends010_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
+bool __thiscall winISteamFriends_SteamFriends010_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct cppISteamFriends_SteamFriends010_GetClanActivityCounts_params params =
     {
@@ -4078,7 +4078,7 @@ bool __thiscall winISteamFriends_SteamFriends010_GetClanActivityCounts(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends010_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int cClansToRequest)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends010_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int32_t cClansToRequest)
 {
     struct cppISteamFriends_SteamFriends010_DownloadClanActivityCounts_params params =
     {
@@ -4091,7 +4091,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends010_DownloadClanActivityC
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendCountFromSource_params params =
     {
@@ -4103,7 +4103,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendFromSourceByIndex_params params =
     {
@@ -4209,7 +4209,7 @@ void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends010_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetSmallFriendAvatar_params params =
     {
@@ -4221,7 +4221,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetMediumFriendAvatar_params params =
     {
@@ -4233,7 +4233,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetLargeFriendAvatar_params params =
     {
@@ -4283,7 +4283,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends010_GetClanOfficerCount_params params =
     {
@@ -4295,7 +4295,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends010_GetClanOfficerByIndex_params params =
     {
@@ -4309,7 +4309,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends010_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends010_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends010_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends010_GetUserRestrictions_params params =
     {
@@ -4356,7 +4356,7 @@ const char * __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount_params params =
     {
@@ -4368,7 +4368,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -4394,7 +4394,7 @@ bool __thiscall winISteamFriends_SteamFriends010_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends010_GetCoplayFriendCount_params params =
     {
@@ -4405,7 +4405,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends010_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetCoplayFriend_params params =
     {
@@ -4418,7 +4418,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends010_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendCoplayTime_params params =
     {
@@ -4466,7 +4466,7 @@ bool __thiscall winISteamFriends_SteamFriends010_LeaveClanChatRoom(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends010_GetClanChatMemberCount_params params =
     {
@@ -4478,7 +4478,7 @@ int __thiscall winISteamFriends_SteamFriends010_GetClanChatMemberCount(struct w_
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends010_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends010_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iUser)
 {
     struct cppISteamFriends_SteamFriends010_GetChatMemberByIndex_params params =
     {
@@ -4505,7 +4505,7 @@ bool __thiscall winISteamFriends_SteamFriends010_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int32_t iMessage, void *prgchText, int32_t cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends010_GetClanChatMessage_params params =
     {
@@ -4596,7 +4596,7 @@ bool __thiscall winISteamFriends_SteamFriends010_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends010_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends010_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iMessageID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends010_GetFriendMessage_params params =
     {
@@ -4790,7 +4790,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends011_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendCount_params params =
     {
@@ -4802,7 +4802,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendByIndex_params params =
     {
@@ -4865,7 +4865,7 @@ bool __thiscall winISteamFriends_SteamFriends011_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends011_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends011_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendPersonaNameHistory_params params =
     {
@@ -4878,7 +4878,7 @@ const char * __thiscall winISteamFriends_SteamFriends011_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends011_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends011_HasFriend_params params =
     {
@@ -4891,7 +4891,7 @@ bool __thiscall winISteamFriends_SteamFriends011_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends011_GetClanCount_params params =
     {
@@ -4902,7 +4902,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends011_GetClanByIndex_params params =
     {
@@ -4939,7 +4939,7 @@ const char * __thiscall winISteamFriends_SteamFriends011_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends011_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
+bool __thiscall winISteamFriends_SteamFriends011_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct cppISteamFriends_SteamFriends011_GetClanActivityCounts_params params =
     {
@@ -4954,7 +4954,7 @@ bool __thiscall winISteamFriends_SteamFriends011_GetClanActivityCounts(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends011_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int cClansToRequest)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends011_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int32_t cClansToRequest)
 {
     struct cppISteamFriends_SteamFriends011_DownloadClanActivityCounts_params params =
     {
@@ -4967,7 +4967,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends011_DownloadClanActivityC
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendCountFromSource_params params =
     {
@@ -4979,7 +4979,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendFromSourceByIndex_params params =
     {
@@ -5085,7 +5085,7 @@ void __thiscall winISteamFriends_SteamFriends011_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends011_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetSmallFriendAvatar_params params =
     {
@@ -5097,7 +5097,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetMediumFriendAvatar_params params =
     {
@@ -5109,7 +5109,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetLargeFriendAvatar_params params =
     {
@@ -5159,7 +5159,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends011_GetClanOfficerCount_params params =
     {
@@ -5171,7 +5171,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends011_GetClanOfficerByIndex_params params =
     {
@@ -5185,7 +5185,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends011_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends011_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends011_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends011_GetUserRestrictions_params params =
     {
@@ -5232,7 +5232,7 @@ const char * __thiscall winISteamFriends_SteamFriends011_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyCount_params params =
     {
@@ -5244,7 +5244,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends011_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends011_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -5281,7 +5281,7 @@ bool __thiscall winISteamFriends_SteamFriends011_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends011_GetCoplayFriendCount_params params =
     {
@@ -5292,7 +5292,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends011_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetCoplayFriend_params params =
     {
@@ -5305,7 +5305,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends011_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendCoplayTime_params params =
     {
@@ -5353,7 +5353,7 @@ bool __thiscall winISteamFriends_SteamFriends011_LeaveClanChatRoom(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends011_GetClanChatMemberCount_params params =
     {
@@ -5365,7 +5365,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetClanChatMemberCount(struct w_
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends011_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends011_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iUser)
 {
     struct cppISteamFriends_SteamFriends011_GetChatMemberByIndex_params params =
     {
@@ -5392,7 +5392,7 @@ bool __thiscall winISteamFriends_SteamFriends011_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int32_t iMessage, void *prgchText, int32_t cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends011_GetClanChatMessage_params params =
     {
@@ -5483,7 +5483,7 @@ bool __thiscall winISteamFriends_SteamFriends011_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends011_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends011_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iMessageID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends011_GetFriendMessage_params params =
     {
@@ -5523,7 +5523,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends011_IsFollowing(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends011_EnumerateFollowingList(struct w_steam_iface *_this, uint32 unStartIndex)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends011_EnumerateFollowingList(struct w_steam_iface *_this, uint32_t unStartIndex)
 {
     struct cppISteamFriends_SteamFriends011_EnumerateFollowingList_params params =
     {
@@ -5718,7 +5718,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends012_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendCount_params params =
     {
@@ -5730,7 +5730,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendByIndex_params params =
     {
@@ -5793,7 +5793,7 @@ bool __thiscall winISteamFriends_SteamFriends012_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendPersonaNameHistory_params params =
     {
@@ -5806,7 +5806,7 @@ const char * __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends012_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends012_HasFriend_params params =
     {
@@ -5819,7 +5819,7 @@ bool __thiscall winISteamFriends_SteamFriends012_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends012_GetClanCount_params params =
     {
@@ -5830,7 +5830,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends012_GetClanByIndex_params params =
     {
@@ -5867,7 +5867,7 @@ const char * __thiscall winISteamFriends_SteamFriends012_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends012_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
+bool __thiscall winISteamFriends_SteamFriends012_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct cppISteamFriends_SteamFriends012_GetClanActivityCounts_params params =
     {
@@ -5882,7 +5882,7 @@ bool __thiscall winISteamFriends_SteamFriends012_GetClanActivityCounts(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int cClansToRequest)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int32_t cClansToRequest)
 {
     struct cppISteamFriends_SteamFriends012_DownloadClanActivityCounts_params params =
     {
@@ -5895,7 +5895,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_DownloadClanActivityC
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendCountFromSource_params params =
     {
@@ -5907,7 +5907,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendFromSourceByIndex_params params =
     {
@@ -6013,7 +6013,7 @@ void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends012_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetSmallFriendAvatar_params params =
     {
@@ -6025,7 +6025,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetMediumFriendAvatar_params params =
     {
@@ -6037,7 +6037,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetLargeFriendAvatar_params params =
     {
@@ -6087,7 +6087,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends012_GetClanOfficerCount_params params =
     {
@@ -6099,7 +6099,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends012_GetClanOfficerByIndex_params params =
     {
@@ -6113,7 +6113,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends012_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends012_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends012_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends012_GetUserRestrictions_params params =
     {
@@ -6160,7 +6160,7 @@ const char * __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount_params params =
     {
@@ -6172,7 +6172,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -6209,7 +6209,7 @@ bool __thiscall winISteamFriends_SteamFriends012_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends012_GetCoplayFriendCount_params params =
     {
@@ -6220,7 +6220,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends012_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetCoplayFriend_params params =
     {
@@ -6233,7 +6233,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends012_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendCoplayTime_params params =
     {
@@ -6281,7 +6281,7 @@ bool __thiscall winISteamFriends_SteamFriends012_LeaveClanChatRoom(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends012_GetClanChatMemberCount_params params =
     {
@@ -6293,7 +6293,7 @@ int __thiscall winISteamFriends_SteamFriends012_GetClanChatMemberCount(struct w_
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends012_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends012_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iUser)
 {
     struct cppISteamFriends_SteamFriends012_GetChatMemberByIndex_params params =
     {
@@ -6320,7 +6320,7 @@ bool __thiscall winISteamFriends_SteamFriends012_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int32_t iMessage, void *prgchText, int32_t cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends012_GetClanChatMessage_params params =
     {
@@ -6411,7 +6411,7 @@ bool __thiscall winISteamFriends_SteamFriends012_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends012_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends012_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iMessageID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends012_GetFriendMessage_params params =
     {
@@ -6451,7 +6451,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_IsFollowing(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_EnumerateFollowingList(struct w_steam_iface *_this, uint32 unStartIndex)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_EnumerateFollowingList(struct w_steam_iface *_this, uint32_t unStartIndex)
 {
     struct cppISteamFriends_SteamFriends012_EnumerateFollowingList_params params =
     {
@@ -6646,7 +6646,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends013_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendCount_params params =
     {
@@ -6658,7 +6658,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendByIndex_params params =
     {
@@ -6721,7 +6721,7 @@ bool __thiscall winISteamFriends_SteamFriends013_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends013_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends013_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendPersonaNameHistory_params params =
     {
@@ -6734,7 +6734,7 @@ const char * __thiscall winISteamFriends_SteamFriends013_GetFriendPersonaNameHis
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends013_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends013_HasFriend_params params =
     {
@@ -6747,7 +6747,7 @@ bool __thiscall winISteamFriends_SteamFriends013_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends013_GetClanCount_params params =
     {
@@ -6758,7 +6758,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends013_GetClanByIndex_params params =
     {
@@ -6795,7 +6795,7 @@ const char * __thiscall winISteamFriends_SteamFriends013_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends013_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
+bool __thiscall winISteamFriends_SteamFriends013_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct cppISteamFriends_SteamFriends013_GetClanActivityCounts_params params =
     {
@@ -6810,7 +6810,7 @@ bool __thiscall winISteamFriends_SteamFriends013_GetClanActivityCounts(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int cClansToRequest)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int32_t cClansToRequest)
 {
     struct cppISteamFriends_SteamFriends013_DownloadClanActivityCounts_params params =
     {
@@ -6823,7 +6823,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_DownloadClanActivityC
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendCountFromSource_params params =
     {
@@ -6835,7 +6835,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendFromSourceByIndex_params params =
     {
@@ -6942,7 +6942,7 @@ void __thiscall winISteamFriends_SteamFriends013_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends013_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetSmallFriendAvatar_params params =
     {
@@ -6954,7 +6954,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetMediumFriendAvatar_params params =
     {
@@ -6966,7 +6966,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetLargeFriendAvatar_params params =
     {
@@ -7016,7 +7016,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends013_GetClanOfficerCount_params params =
     {
@@ -7028,7 +7028,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends013_GetClanOfficerByIndex_params params =
     {
@@ -7042,7 +7042,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends013_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends013_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends013_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends013_GetUserRestrictions_params params =
     {
@@ -7089,7 +7089,7 @@ const char * __thiscall winISteamFriends_SteamFriends013_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendRichPresenceKeyCount_params params =
     {
@@ -7101,7 +7101,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends013_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends013_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -7138,7 +7138,7 @@ bool __thiscall winISteamFriends_SteamFriends013_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends013_GetCoplayFriendCount_params params =
     {
@@ -7149,7 +7149,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends013_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetCoplayFriend_params params =
     {
@@ -7162,7 +7162,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends013_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendCoplayTime_params params =
     {
@@ -7210,7 +7210,7 @@ bool __thiscall winISteamFriends_SteamFriends013_LeaveClanChatRoom(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends013_GetClanChatMemberCount_params params =
     {
@@ -7222,7 +7222,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetClanChatMemberCount(struct w_
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends013_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends013_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iUser)
 {
     struct cppISteamFriends_SteamFriends013_GetChatMemberByIndex_params params =
     {
@@ -7249,7 +7249,7 @@ bool __thiscall winISteamFriends_SteamFriends013_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *_e, CSteamID *_f)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int32_t iMessage, void *prgchText, int32_t cchTextMax, uint32_t *_e, CSteamID *_f)
 {
     struct cppISteamFriends_SteamFriends013_GetClanChatMessage_params params =
     {
@@ -7340,7 +7340,7 @@ bool __thiscall winISteamFriends_SteamFriends013_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends013_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends013_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iMessageID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends013_GetFriendMessage_params params =
     {
@@ -7380,7 +7380,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_IsFollowing(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_EnumerateFollowingList(struct w_steam_iface *_this, uint32 unStartIndex)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends013_EnumerateFollowingList(struct w_steam_iface *_this, uint32_t unStartIndex)
 {
     struct cppISteamFriends_SteamFriends013_EnumerateFollowingList_params params =
     {
@@ -7576,7 +7576,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends014_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendCount_params params =
     {
@@ -7588,7 +7588,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendByIndex_params params =
     {
@@ -7651,7 +7651,7 @@ bool __thiscall winISteamFriends_SteamFriends014_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends014_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends014_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendPersonaNameHistory_params params =
     {
@@ -7676,7 +7676,7 @@ const char * __thiscall winISteamFriends_SteamFriends014_GetPlayerNickname(struc
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends014_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends014_HasFriend_params params =
     {
@@ -7689,7 +7689,7 @@ bool __thiscall winISteamFriends_SteamFriends014_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends014_GetClanCount_params params =
     {
@@ -7700,7 +7700,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends014_GetClanByIndex_params params =
     {
@@ -7737,7 +7737,7 @@ const char * __thiscall winISteamFriends_SteamFriends014_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends014_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
+bool __thiscall winISteamFriends_SteamFriends014_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct cppISteamFriends_SteamFriends014_GetClanActivityCounts_params params =
     {
@@ -7752,7 +7752,7 @@ bool __thiscall winISteamFriends_SteamFriends014_GetClanActivityCounts(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int cClansToRequest)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int32_t cClansToRequest)
 {
     struct cppISteamFriends_SteamFriends014_DownloadClanActivityCounts_params params =
     {
@@ -7765,7 +7765,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_DownloadClanActivityC
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendCountFromSource_params params =
     {
@@ -7777,7 +7777,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendFromSourceByIndex_params params =
     {
@@ -7884,7 +7884,7 @@ void __thiscall winISteamFriends_SteamFriends014_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends014_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetSmallFriendAvatar_params params =
     {
@@ -7896,7 +7896,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetMediumFriendAvatar_params params =
     {
@@ -7908,7 +7908,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetLargeFriendAvatar_params params =
     {
@@ -7958,7 +7958,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends014_GetClanOfficerCount_params params =
     {
@@ -7970,7 +7970,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends014_GetClanOfficerByIndex_params params =
     {
@@ -7984,7 +7984,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends014_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends014_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends014_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends014_GetUserRestrictions_params params =
     {
@@ -8031,7 +8031,7 @@ const char * __thiscall winISteamFriends_SteamFriends014_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendRichPresenceKeyCount_params params =
     {
@@ -8043,7 +8043,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends014_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends014_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -8080,7 +8080,7 @@ bool __thiscall winISteamFriends_SteamFriends014_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends014_GetCoplayFriendCount_params params =
     {
@@ -8091,7 +8091,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends014_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetCoplayFriend_params params =
     {
@@ -8104,7 +8104,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends014_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendCoplayTime_params params =
     {
@@ -8152,7 +8152,7 @@ bool __thiscall winISteamFriends_SteamFriends014_LeaveClanChatRoom(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends014_GetClanChatMemberCount_params params =
     {
@@ -8164,7 +8164,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetClanChatMemberCount(struct w_
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends014_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends014_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iUser)
 {
     struct cppISteamFriends_SteamFriends014_GetChatMemberByIndex_params params =
     {
@@ -8191,7 +8191,7 @@ bool __thiscall winISteamFriends_SteamFriends014_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int32_t iMessage, void *prgchText, int32_t cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
 {
     struct cppISteamFriends_SteamFriends014_GetClanChatMessage_params params =
     {
@@ -8282,7 +8282,7 @@ bool __thiscall winISteamFriends_SteamFriends014_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends014_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends014_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iMessageID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends014_GetFriendMessage_params params =
     {
@@ -8322,7 +8322,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_IsFollowing(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_EnumerateFollowingList(struct w_steam_iface *_this, uint32 unStartIndex)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends014_EnumerateFollowingList(struct w_steam_iface *_this, uint32_t unStartIndex)
 {
     struct cppISteamFriends_SteamFriends014_EnumerateFollowingList_params params =
     {
@@ -8527,7 +8527,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends015_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendCount_params params =
     {
@@ -8539,7 +8539,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendByIndex_params params =
     {
@@ -8602,7 +8602,7 @@ bool __thiscall winISteamFriends_SteamFriends015_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends015_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends015_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendPersonaNameHistory_params params =
     {
@@ -8615,7 +8615,7 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetFriendPersonaNameHis
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendSteamLevel(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendSteamLevel(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendSteamLevel_params params =
     {
@@ -8639,7 +8639,7 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetPlayerNickname(struc
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendsGroupCount_params params =
     {
@@ -8650,7 +8650,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupCount(struct w_st
     return params._ret;
 }
 
-FriendsGroupID_t __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupIDByIndex(struct w_steam_iface *_this, int iFG)
+FriendsGroupID_t __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupIDByIndex(struct w_steam_iface *_this, int32_t iFG)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendsGroupIDByIndex_params params =
     {
@@ -8674,7 +8674,7 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupName(str
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendsGroupMembersCount_params params =
     {
@@ -8686,7 +8686,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(stru
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersList(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID, CSteamID *pOutSteamIDMembers, int nMembersCount)
+void __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersList(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID, CSteamID *pOutSteamIDMembers, int32_t nMembersCount)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendsGroupMembersList_params params =
     {
@@ -8699,7 +8699,7 @@ void __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersList(stru
     cppISteamFriends_SteamFriends015_GetFriendsGroupMembersList( &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends015_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends015_HasFriend_params params =
     {
@@ -8712,7 +8712,7 @@ bool __thiscall winISteamFriends_SteamFriends015_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends015_GetClanCount_params params =
     {
@@ -8723,7 +8723,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends015_GetClanByIndex_params params =
     {
@@ -8760,7 +8760,7 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends015_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
+bool __thiscall winISteamFriends_SteamFriends015_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct cppISteamFriends_SteamFriends015_GetClanActivityCounts_params params =
     {
@@ -8775,7 +8775,7 @@ bool __thiscall winISteamFriends_SteamFriends015_GetClanActivityCounts(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int cClansToRequest)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int32_t cClansToRequest)
 {
     struct cppISteamFriends_SteamFriends015_DownloadClanActivityCounts_params params =
     {
@@ -8788,7 +8788,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_DownloadClanActivityC
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendCountFromSource_params params =
     {
@@ -8800,7 +8800,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendFromSourceByIndex_params params =
     {
@@ -8907,7 +8907,7 @@ void __thiscall winISteamFriends_SteamFriends015_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends015_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetSmallFriendAvatar_params params =
     {
@@ -8919,7 +8919,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetMediumFriendAvatar_params params =
     {
@@ -8931,7 +8931,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetLargeFriendAvatar_params params =
     {
@@ -8981,7 +8981,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends015_GetClanOfficerCount_params params =
     {
@@ -8993,7 +8993,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends015_GetClanOfficerByIndex_params params =
     {
@@ -9007,7 +9007,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends015_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends015_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends015_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends015_GetUserRestrictions_params params =
     {
@@ -9054,7 +9054,7 @@ const char * __thiscall winISteamFriends_SteamFriends015_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendRichPresenceKeyCount_params params =
     {
@@ -9066,7 +9066,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends015_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends015_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -9103,7 +9103,7 @@ bool __thiscall winISteamFriends_SteamFriends015_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends015_GetCoplayFriendCount_params params =
     {
@@ -9114,7 +9114,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends015_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetCoplayFriend_params params =
     {
@@ -9127,7 +9127,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends015_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendCoplayTime_params params =
     {
@@ -9175,7 +9175,7 @@ bool __thiscall winISteamFriends_SteamFriends015_LeaveClanChatRoom(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends015_GetClanChatMemberCount_params params =
     {
@@ -9187,7 +9187,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetClanChatMemberCount(struct w_
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends015_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends015_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iUser)
 {
     struct cppISteamFriends_SteamFriends015_GetChatMemberByIndex_params params =
     {
@@ -9214,7 +9214,7 @@ bool __thiscall winISteamFriends_SteamFriends015_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int32_t iMessage, void *prgchText, int32_t cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
 {
     struct cppISteamFriends_SteamFriends015_GetClanChatMessage_params params =
     {
@@ -9305,7 +9305,7 @@ bool __thiscall winISteamFriends_SteamFriends015_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends015_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends015_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iMessageID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends015_GetFriendMessage_params params =
     {
@@ -9345,7 +9345,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_IsFollowing(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_EnumerateFollowingList(struct w_steam_iface *_this, uint32 unStartIndex)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends015_EnumerateFollowingList(struct w_steam_iface *_this, uint32_t unStartIndex)
 {
     struct cppISteamFriends_SteamFriends015_EnumerateFollowingList_params params =
     {
@@ -9590,7 +9590,7 @@ uint32_t __thiscall winISteamFriends_SteamFriends017_GetPersonaState(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendCount(struct w_steam_iface *_this, int iFriendFlags)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendCount(struct w_steam_iface *_this, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendCount_params params =
     {
@@ -9602,7 +9602,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetFriendCount(struct w_steam_if
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iFriend, int iFriendFlags)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendByIndex_params params =
     {
@@ -9665,7 +9665,7 @@ bool __thiscall winISteamFriends_SteamFriends017_GetFriendGamePlayed(struct w_st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int iPersonaName)
+const char * __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaNameHistory(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iPersonaName)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendPersonaNameHistory_params params =
     {
@@ -9678,7 +9678,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaNameHis
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendSteamLevel(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendSteamLevel(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendSteamLevel_params params =
     {
@@ -9702,7 +9702,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetPlayerNickname(struc
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendsGroupCount_params params =
     {
@@ -9713,7 +9713,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupCount(struct w_st
     return params._ret;
 }
 
-FriendsGroupID_t __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupIDByIndex(struct w_steam_iface *_this, int iFG)
+FriendsGroupID_t __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupIDByIndex(struct w_steam_iface *_this, int32_t iFG)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendsGroupIDByIndex_params params =
     {
@@ -9737,7 +9737,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupName(str
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersCount(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersCount(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendsGroupMembersCount_params params =
     {
@@ -9749,7 +9749,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersCount(stru
     return params._ret;
 }
 
-void __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersList(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID, CSteamID *pOutSteamIDMembers, int nMembersCount)
+void __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersList(struct w_steam_iface *_this, FriendsGroupID_t friendsGroupID, CSteamID *pOutSteamIDMembers, int32_t nMembersCount)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendsGroupMembersList_params params =
     {
@@ -9762,7 +9762,7 @@ void __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersList(stru
     cppISteamFriends_SteamFriends017_GetFriendsGroupMembersList( &params );
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int iFriendFlags)
+bool __thiscall winISteamFriends_SteamFriends017_HasFriend(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iFriendFlags)
 {
     struct cppISteamFriends_SteamFriends017_HasFriend_params params =
     {
@@ -9775,7 +9775,7 @@ bool __thiscall winISteamFriends_SteamFriends017_HasFriend(struct w_steam_iface 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetClanCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetClanCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends017_GetClanCount_params params =
     {
@@ -9786,7 +9786,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetClanCount(struct w_steam_ifac
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int iClan)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanByIndex(struct w_steam_iface *_this, CSteamID *_ret, int32_t iClan)
 {
     struct cppISteamFriends_SteamFriends017_GetClanByIndex_params params =
     {
@@ -9823,7 +9823,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetClanTag(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winISteamFriends_SteamFriends017_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int *pnOnline, int *pnInGame, int *pnChatting)
+bool __thiscall winISteamFriends_SteamFriends017_GetClanActivityCounts(struct w_steam_iface *_this, CSteamID steamIDClan, int32_t *pnOnline, int32_t *pnInGame, int32_t *pnChatting)
 {
     struct cppISteamFriends_SteamFriends017_GetClanActivityCounts_params params =
     {
@@ -9838,7 +9838,7 @@ bool __thiscall winISteamFriends_SteamFriends017_GetClanActivityCounts(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int cClansToRequest)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_DownloadClanActivityCounts(struct w_steam_iface *_this, CSteamID *psteamIDClans, int32_t cClansToRequest)
 {
     struct cppISteamFriends_SteamFriends017_DownloadClanActivityCounts_params params =
     {
@@ -9851,7 +9851,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_DownloadClanActivityC
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendCountFromSource(struct w_steam_iface *_this, CSteamID steamIDSource)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendCountFromSource_params params =
     {
@@ -9863,7 +9863,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetFriendCountFromSource(struct 
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int iFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetFriendFromSourceByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDSource, int32_t iFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendFromSourceByIndex_params params =
     {
@@ -9971,7 +9971,7 @@ void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog
     cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog( &params );
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetSmallFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetSmallFriendAvatar_params params =
     {
@@ -9983,7 +9983,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetSmallFriendAvatar(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetMediumFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetMediumFriendAvatar_params params =
     {
@@ -9995,7 +9995,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetMediumFriendAvatar(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetLargeFriendAvatar(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetLargeFriendAvatar_params params =
     {
@@ -10045,7 +10045,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanOwner(struct w_ste
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetClanOfficerCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends017_GetClanOfficerCount_params params =
     {
@@ -10057,7 +10057,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetClanOfficerCount(struct w_ste
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iOfficer)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanOfficerByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iOfficer)
 {
     struct cppISteamFriends_SteamFriends017_GetClanOfficerByIndex_params params =
     {
@@ -10071,7 +10071,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends017_GetClanOfficerByIndex(str
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends017_GetUserRestrictions(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamFriends_SteamFriends017_GetUserRestrictions(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends017_GetUserRestrictions_params params =
     {
@@ -10118,7 +10118,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresence(s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount_params params =
     {
@@ -10130,7 +10130,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount(st
     return params._ret;
 }
 
-const char * __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int iKey)
+const char * __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyByIndex(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iKey)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendRichPresenceKeyByIndex_params params =
     {
@@ -10167,7 +10167,7 @@ bool __thiscall winISteamFriends_SteamFriends017_InviteUserToGame(struct w_steam
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetCoplayFriendCount(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetCoplayFriendCount(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends017_GetCoplayFriendCount_params params =
     {
@@ -10178,7 +10178,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetCoplayFriendCount(struct w_st
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends017_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int iCoplayFriend)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetCoplayFriend(struct w_steam_iface *_this, CSteamID *_ret, int32_t iCoplayFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetCoplayFriend_params params =
     {
@@ -10191,7 +10191,7 @@ CSteamID * __thiscall winISteamFriends_SteamFriends017_GetCoplayFriend(struct w_
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendCoplayTime(struct w_steam_iface *_this, CSteamID steamIDFriend)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendCoplayTime_params params =
     {
@@ -10239,7 +10239,7 @@ bool __thiscall winISteamFriends_SteamFriends017_LeaveClanChatRoom(struct w_stea
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetClanChatMemberCount(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamFriends_SteamFriends017_GetClanChatMemberCount_params params =
     {
@@ -10251,7 +10251,7 @@ int __thiscall winISteamFriends_SteamFriends017_GetClanChatMemberCount(struct w_
     return params._ret;
 }
 
-CSteamID * __thiscall winISteamFriends_SteamFriends017_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int iUser)
+CSteamID * __thiscall winISteamFriends_SteamFriends017_GetChatMemberByIndex(struct w_steam_iface *_this, CSteamID *_ret, CSteamID steamIDClan, int32_t iUser)
 {
     struct cppISteamFriends_SteamFriends017_GetChatMemberByIndex_params params =
     {
@@ -10278,7 +10278,7 @@ bool __thiscall winISteamFriends_SteamFriends017_SendClanChatMessage(struct w_st
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int iMessage, void *prgchText, int cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetClanChatMessage(struct w_steam_iface *_this, CSteamID steamIDClanChat, int32_t iMessage, void *prgchText, int32_t cchTextMax, uint32_t *peChatEntryType, CSteamID *psteamidChatter)
 {
     struct cppISteamFriends_SteamFriends017_GetClanChatMessage_params params =
     {
@@ -10369,7 +10369,7 @@ bool __thiscall winISteamFriends_SteamFriends017_ReplyToFriendMessage(struct w_s
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int iMessageID, void *pvData, int cubData, uint32_t *peChatEntryType)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetFriendMessage(struct w_steam_iface *_this, CSteamID steamIDFriend, int32_t iMessageID, void *pvData, int32_t cubData, uint32_t *peChatEntryType)
 {
     struct cppISteamFriends_SteamFriends017_GetFriendMessage_params params =
     {
@@ -10409,7 +10409,7 @@ SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_IsFollowing(struct w_
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_EnumerateFollowingList(struct w_steam_iface *_this, uint32 unStartIndex)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_EnumerateFollowingList(struct w_steam_iface *_this, uint32_t unStartIndex)
 {
     struct cppISteamFriends_SteamFriends017_EnumerateFollowingList_params params =
     {
@@ -10445,7 +10445,7 @@ bool __thiscall winISteamFriends_SteamFriends017_IsClanOfficialGameGroup(struct 
     return params._ret;
 }
 
-int __thiscall winISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages(struct w_steam_iface *_this)
+int32_t __thiscall winISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages(struct w_steam_iface *_this)
 {
     struct cppISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages_params params =
     {
@@ -10529,7 +10529,7 @@ const char * __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyS
     return params._ret;
 }
 
-uint32 __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyUint(struct w_steam_iface *_this, CSteamID steamID, uint32_t itemType, uint32_t prop)
+uint32_t __thiscall winISteamFriends_SteamFriends017_GetProfileItemPropertyUint(struct w_steam_iface *_this, CSteamID steamID, uint32_t itemType, uint32_t prop)
 {
     struct cppISteamFriends_SteamFriends017_GetProfileItemPropertyUint_params params =
     {

@@ -10,7 +10,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_params
     void *linux_side;
     bool _ret;
     const char *pchName;
-    int32 *pData;
+    int32_t *pData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetStat_params *params );
 
@@ -28,7 +28,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_params
     void *linux_side;
     bool _ret;
     const char *pchName;
-    int32 nData;
+    int32_t nData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_SetStat_params *params );
 
@@ -82,7 +82,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndU
     bool _ret;
     const char *pchName;
     bool *pbAchieved;
-    uint32 *punUnlockTime;
+    uint32_t *punUnlockTime;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementAndUnlockTime_params *params );
 
@@ -96,7 +96,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_StoreStats( s
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     const char *pchName;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchievementIcon_params *params );
@@ -115,8 +115,8 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievemen
     void *linux_side;
     bool _ret;
     const char *pchName;
-    uint32 nCurProgress;
-    uint32 nMaxProgress;
+    uint32_t nCurProgress;
+    uint32_t nMaxProgress;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateAchievementProgress_params *params );
 
@@ -134,7 +134,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_params
     bool _ret;
     CSteamID steamIDUser;
     const char *pchName;
-    int32 *pData;
+    int32_t *pData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserStat_params *params );
 
@@ -165,7 +165,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievement
     CSteamID steamIDUser;
     const char *pchName;
     bool *pbAchieved;
-    uint32 *punUnlockTime;
+    uint32_t *punUnlockTime;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime_params *params );
 
@@ -206,7 +206,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboar
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount_params *params );
@@ -233,8 +233,8 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboar
     SteamAPICall_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
     uint32_t eLeaderboardDataRequest;
-    int nRangeStart;
-    int nRangeEnd;
+    int32_t nRangeStart;
+    int32_t nRangeEnd;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries_params *params );
 
@@ -244,7 +244,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboar
     SteamAPICall_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
     CSteamID *prgUsers;
-    int cUsers;
+    int32_t cUsers;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers_params *params );
 
@@ -253,10 +253,10 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeade
     void *linux_side;
     bool _ret;
     SteamLeaderboardEntries_t hSteamLeaderboardEntries;
-    int index;
+    int32_t index;
     winLeaderboardEntry_t_119 *pLeaderboardEntry;
-    int32 *pDetails;
-    int cDetailsMax;
+    int32_t *pDetails;
+    int32_t cDetailsMax;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry_params *params );
 
@@ -266,9 +266,9 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardS
     SteamAPICall_t _ret;
     SteamLeaderboard_t hSteamLeaderboard;
     uint32_t eLeaderboardUploadScoreMethod;
-    int32 nScore;
-    const int32 *pScoreDetails;
-    int cScoreDetailsCount;
+    int32_t nScore;
+    const int32_t *pScoreDetails;
+    int32_t cScoreDetailsCount;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore_params *params );
 
@@ -298,9 +298,9 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobal
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchievedAchievementInfo_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     char *pchName;
-    uint32 unNameBufLen;
+    uint32_t unNameBufLen;
     float *pflPercent;
     bool *pbAchieved;
 };
@@ -309,10 +309,10 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetMostAchiev
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNextMostAchievedAchievementInfo_params
 {
     void *linux_side;
-    int _ret;
-    int iIteratorPrevious;
+    int32_t _ret;
+    int32_t iIteratorPrevious;
     char *pchName;
-    uint32 unNameBufLen;
+    uint32_t unNameBufLen;
     float *pflPercent;
     bool *pbAchieved;
 };
@@ -331,7 +331,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    int nHistoryDays;
+    int32_t nHistoryDays;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats_params *params );
 
@@ -340,7 +340,7 @@ struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_para
     void *linux_side;
     bool _ret;
     const char *pchStatName;
-    int64 *pData;
+    int64_t *pData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat_params *params );
 
@@ -356,20 +356,20 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStat
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
     const char *pchStatName;
-    int64 *pData;
-    uint32 cubData;
+    int64_t *pData;
+    uint32_t cubData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_params *params );
 
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2_params
 {
     void *linux_side;
-    int32 _ret;
+    int32_t _ret;
     const char *pchStatName;
     double *pData;
-    uint32 cubData;
+    uint32_t cubData;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetGlobalStatHistory_2_params *params );
 

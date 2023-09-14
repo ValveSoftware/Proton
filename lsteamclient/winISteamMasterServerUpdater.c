@@ -41,7 +41,7 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActi
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive( &params );
 }
 
-void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval(struct w_steam_iface *_this, int iHeartbeatInterval)
+void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval(struct w_steam_iface *_this, int32_t iHeartbeatInterval)
 {
     struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval_params params =
     {
@@ -52,7 +52,7 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHear
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval( &params );
 }
 
-bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int cbData, uint32 srcIP, uint16 srcPort)
+bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(struct w_steam_iface *_this, const void *pData, int32_t cbData, uint32_t srcIP, uint16_t srcPort)
 {
     struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket_params params =
     {
@@ -67,7 +67,7 @@ bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleI
     return params._ret;
 }
 
-int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(struct w_steam_iface *_this, void *pOut, int cbMaxOut, uint32 *pNetAdr, uint16 *pPort)
+int32_t __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(struct w_steam_iface *_this, void *pOut, int32_t cbMaxOut, uint32_t *pNetAdr, uint16_t *pPort)
 {
     struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket_params params =
     {
@@ -82,7 +82,7 @@ int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextO
     return params._ret;
 }
 
-void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData(struct w_steam_iface *_this, unsigned short nProtocolVersion, bool bDedicatedServer, const char *pRegionName, const char *pProductName, unsigned short nMaxReportedClients, bool bPasswordProtected, const char *pGameDescription)
+void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData(struct w_steam_iface *_this, uint16_t nProtocolVersion, bool bDedicatedServer, const char *pRegionName, const char *pProductName, uint16_t nMaxReportedClients, bool bPasswordProtected, const char *pGameDescription)
 {
     struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData_params params =
     {
@@ -176,7 +176,7 @@ bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveM
     return params._ret;
 }
 
-int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(struct w_steam_iface *_this)
+int32_t __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(struct w_steam_iface *_this)
 {
     struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers_params params =
     {
@@ -187,7 +187,7 @@ int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMa
     return params._ret;
 }
 
-int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(struct w_steam_iface *_this, int iServer, char *pOut, int outBufferSize)
+int32_t __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(struct w_steam_iface *_this, int32_t iServer, char *pOut, int32_t outBufferSize)
 {
     struct cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress_params params =
     {

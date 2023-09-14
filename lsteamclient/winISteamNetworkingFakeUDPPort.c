@@ -30,7 +30,7 @@ void __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_Des
     cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_DestroyFakeUDPPort( &params );
 }
 
-uint32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *remoteAddress, const void *pData, uint32 cbData, int nSendFlags)
+uint32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *remoteAddress, const void *pData, uint32_t cbData, int32_t nSendFlags)
 {
     struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_SendMessageToFakeIP_params params =
     {
@@ -45,7 +45,7 @@ uint32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001
     return params._ret;
 }
 
-int __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(struct w_steam_iface *_this, winSteamNetworkingMessage_t_158 **ppOutMessages, int nMaxMessages)
+int32_t __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(struct w_steam_iface *_this, winSteamNetworkingMessage_t_158 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages_params params =
     {

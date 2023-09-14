@@ -8,7 +8,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_para
     uint32_t eSortOrder;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
-    uint32 unPage;
+    uint32_t unPage;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_params *params );
 
@@ -20,7 +20,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest_param
     uint32_t eMatchingeMatchingUGCTypeFileType;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
-    uint32 unPage;
+    uint32_t unPage;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest_params *params );
 
@@ -37,7 +37,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     winSteamUGCDetails_t_128 *pDetails;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params *params );
@@ -118,7 +118,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 unDays;
+    uint32_t unDays;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays_params *params );
 

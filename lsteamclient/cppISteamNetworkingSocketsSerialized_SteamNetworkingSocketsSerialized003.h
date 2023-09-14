@@ -2,9 +2,9 @@ struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_
 {
     void *linux_side;
     CSteamID steamIDRemote;
-    uint32 unConnectionIDSrc;
+    uint32_t unConnectionIDSrc;
     const void *pMsgRendezvous;
-    uint32 cbRendezvous;
+    uint32_t cbRendezvous;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous_params *params );
 
@@ -12,8 +12,8 @@ struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_
 {
     void *linux_side;
     CSteamID steamIDRemote;
-    uint32 unConnectionIDDest;
-    uint32 nReason;
+    uint32_t unConnectionIDDest;
+    uint32_t nReason;
     const char *pszReason;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PConnectionFailure( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PConnectionFailure_params *params );
@@ -28,9 +28,9 @@ extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialize
 struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *buf;
-    uint32 cbBuf;
+    uint32_t cbBuf;
     const char *pszLauncherPartner;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetNetworkConfigJSON_params *params );
@@ -39,24 +39,24 @@ struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_
 {
     void *linux_side;
     const void *pTicket;
-    uint32 cbTicket;
+    uint32_t cbTicket;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_CacheRelayTicket( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_CacheRelayTicket_params *params );
 
 struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicketCount_params *params );
 
 struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket_params
 {
     void *linux_side;
-    int _ret;
-    uint32 idxTicket;
+    int32_t _ret;
+    uint32_t idxTicket;
     void *buf;
-    uint32 cbBuf;
+    uint32_t cbBuf;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_GetCachedRelayTicket_params *params );
 
@@ -64,7 +64,7 @@ struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_
 {
     void *linux_side;
     const void *pMsg;
-    uint32 cbMsg;
+    uint32_t cbMsg;
 };
 extern void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_PostConnectionStateMsg( struct cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_PostConnectionStateMsg_params *params );
 

@@ -22,8 +22,8 @@ extern void cppISteamFriends_SteamFriends011_GetPersonaState( struct cppISteamFr
 struct cppISteamFriends_SteamFriends011_GetFriendCount_params
 {
     void *linux_side;
-    int _ret;
-    int iFriendFlags;
+    int32_t _ret;
+    int32_t iFriendFlags;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendCount( struct cppISteamFriends_SteamFriends011_GetFriendCount_params *params );
 
@@ -31,8 +31,8 @@ struct cppISteamFriends_SteamFriends011_GetFriendByIndex_params
 {
     void *linux_side;
     CSteamID *_ret;
-    int iFriend;
-    int iFriendFlags;
+    int32_t iFriend;
+    int32_t iFriendFlags;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendByIndex( struct cppISteamFriends_SteamFriends011_GetFriendByIndex_params *params );
 
@@ -74,7 +74,7 @@ struct cppISteamFriends_SteamFriends011_GetFriendPersonaNameHistory_params
     void *linux_side;
     const char *_ret;
     CSteamID steamIDFriend;
-    int iPersonaName;
+    int32_t iPersonaName;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendPersonaNameHistory( struct cppISteamFriends_SteamFriends011_GetFriendPersonaNameHistory_params *params );
 
@@ -83,14 +83,14 @@ struct cppISteamFriends_SteamFriends011_HasFriend_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDFriend;
-    int iFriendFlags;
+    int32_t iFriendFlags;
 };
 extern void cppISteamFriends_SteamFriends011_HasFriend( struct cppISteamFriends_SteamFriends011_HasFriend_params *params );
 
 struct cppISteamFriends_SteamFriends011_GetClanCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends011_GetClanCount( struct cppISteamFriends_SteamFriends011_GetClanCount_params *params );
 
@@ -98,7 +98,7 @@ struct cppISteamFriends_SteamFriends011_GetClanByIndex_params
 {
     void *linux_side;
     CSteamID *_ret;
-    int iClan;
+    int32_t iClan;
 };
 extern void cppISteamFriends_SteamFriends011_GetClanByIndex( struct cppISteamFriends_SteamFriends011_GetClanByIndex_params *params );
 
@@ -123,9 +123,9 @@ struct cppISteamFriends_SteamFriends011_GetClanActivityCounts_params
     void *linux_side;
     bool _ret;
     CSteamID steamIDClan;
-    int *pnOnline;
-    int *pnInGame;
-    int *pnChatting;
+    int32_t *pnOnline;
+    int32_t *pnInGame;
+    int32_t *pnChatting;
 };
 extern void cppISteamFriends_SteamFriends011_GetClanActivityCounts( struct cppISteamFriends_SteamFriends011_GetClanActivityCounts_params *params );
 
@@ -134,14 +134,14 @@ struct cppISteamFriends_SteamFriends011_DownloadClanActivityCounts_params
     void *linux_side;
     SteamAPICall_t _ret;
     CSteamID *psteamIDClans;
-    int cClansToRequest;
+    int32_t cClansToRequest;
 };
 extern void cppISteamFriends_SteamFriends011_DownloadClanActivityCounts( struct cppISteamFriends_SteamFriends011_DownloadClanActivityCounts_params *params );
 
 struct cppISteamFriends_SteamFriends011_GetFriendCountFromSource_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDSource;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendCountFromSource( struct cppISteamFriends_SteamFriends011_GetFriendCountFromSource_params *params );
@@ -151,7 +151,7 @@ struct cppISteamFriends_SteamFriends011_GetFriendFromSourceByIndex_params
     void *linux_side;
     CSteamID *_ret;
     CSteamID steamIDSource;
-    int iFriend;
+    int32_t iFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendFromSourceByIndex( struct cppISteamFriends_SteamFriends011_GetFriendFromSourceByIndex_params *params );
 
@@ -218,7 +218,7 @@ extern void cppISteamFriends_SteamFriends011_ActivateGameOverlayInviteDialog( st
 struct cppISteamFriends_SteamFriends011_GetSmallFriendAvatar_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetSmallFriendAvatar( struct cppISteamFriends_SteamFriends011_GetSmallFriendAvatar_params *params );
@@ -226,7 +226,7 @@ extern void cppISteamFriends_SteamFriends011_GetSmallFriendAvatar( struct cppISt
 struct cppISteamFriends_SteamFriends011_GetMediumFriendAvatar_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetMediumFriendAvatar( struct cppISteamFriends_SteamFriends011_GetMediumFriendAvatar_params *params );
@@ -234,7 +234,7 @@ extern void cppISteamFriends_SteamFriends011_GetMediumFriendAvatar( struct cppIS
 struct cppISteamFriends_SteamFriends011_GetLargeFriendAvatar_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetLargeFriendAvatar( struct cppISteamFriends_SteamFriends011_GetLargeFriendAvatar_params *params );
@@ -267,7 +267,7 @@ extern void cppISteamFriends_SteamFriends011_GetClanOwner( struct cppISteamFrien
 struct cppISteamFriends_SteamFriends011_GetClanOfficerCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDClan;
 };
 extern void cppISteamFriends_SteamFriends011_GetClanOfficerCount( struct cppISteamFriends_SteamFriends011_GetClanOfficerCount_params *params );
@@ -277,14 +277,14 @@ struct cppISteamFriends_SteamFriends011_GetClanOfficerByIndex_params
     void *linux_side;
     CSteamID *_ret;
     CSteamID steamIDClan;
-    int iOfficer;
+    int32_t iOfficer;
 };
 extern void cppISteamFriends_SteamFriends011_GetClanOfficerByIndex( struct cppISteamFriends_SteamFriends011_GetClanOfficerByIndex_params *params );
 
 struct cppISteamFriends_SteamFriends011_GetUserRestrictions_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends011_GetUserRestrictions( struct cppISteamFriends_SteamFriends011_GetUserRestrictions_params *params );
 
@@ -315,7 +315,7 @@ extern void cppISteamFriends_SteamFriends011_GetFriendRichPresence( struct cppIS
 struct cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyCount( struct cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyCount_params *params );
@@ -325,7 +325,7 @@ struct cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyByIndex_params
     void *linux_side;
     const char *_ret;
     CSteamID steamIDFriend;
-    int iKey;
+    int32_t iKey;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyByIndex( struct cppISteamFriends_SteamFriends011_GetFriendRichPresenceKeyByIndex_params *params );
 
@@ -348,7 +348,7 @@ extern void cppISteamFriends_SteamFriends011_InviteUserToGame( struct cppISteamF
 struct cppISteamFriends_SteamFriends011_GetCoplayFriendCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
 };
 extern void cppISteamFriends_SteamFriends011_GetCoplayFriendCount( struct cppISteamFriends_SteamFriends011_GetCoplayFriendCount_params *params );
 
@@ -356,14 +356,14 @@ struct cppISteamFriends_SteamFriends011_GetCoplayFriend_params
 {
     void *linux_side;
     CSteamID *_ret;
-    int iCoplayFriend;
+    int32_t iCoplayFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetCoplayFriend( struct cppISteamFriends_SteamFriends011_GetCoplayFriend_params *params );
 
 struct cppISteamFriends_SteamFriends011_GetFriendCoplayTime_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendCoplayTime( struct cppISteamFriends_SteamFriends011_GetFriendCoplayTime_params *params );
@@ -395,7 +395,7 @@ extern void cppISteamFriends_SteamFriends011_LeaveClanChatRoom( struct cppISteam
 struct cppISteamFriends_SteamFriends011_GetClanChatMemberCount_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDClan;
 };
 extern void cppISteamFriends_SteamFriends011_GetClanChatMemberCount( struct cppISteamFriends_SteamFriends011_GetClanChatMemberCount_params *params );
@@ -405,7 +405,7 @@ struct cppISteamFriends_SteamFriends011_GetChatMemberByIndex_params
     void *linux_side;
     CSteamID *_ret;
     CSteamID steamIDClan;
-    int iUser;
+    int32_t iUser;
 };
 extern void cppISteamFriends_SteamFriends011_GetChatMemberByIndex( struct cppISteamFriends_SteamFriends011_GetChatMemberByIndex_params *params );
 
@@ -421,11 +421,11 @@ extern void cppISteamFriends_SteamFriends011_SendClanChatMessage( struct cppISte
 struct cppISteamFriends_SteamFriends011_GetClanChatMessage_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDClanChat;
-    int iMessage;
+    int32_t iMessage;
     void *prgchText;
-    int cchTextMax;
+    int32_t cchTextMax;
     uint32_t *_e;
     CSteamID *_f;
 };
@@ -484,11 +484,11 @@ extern void cppISteamFriends_SteamFriends011_ReplyToFriendMessage( struct cppISt
 struct cppISteamFriends_SteamFriends011_GetFriendMessage_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     CSteamID steamIDFriend;
-    int iMessageID;
+    int32_t iMessageID;
     void *pvData;
-    int cubData;
+    int32_t cubData;
     uint32_t *peChatEntryType;
 };
 extern void cppISteamFriends_SteamFriends011_GetFriendMessage( struct cppISteamFriends_SteamFriends011_GetFriendMessage_params *params );
@@ -513,7 +513,7 @@ struct cppISteamFriends_SteamFriends011_EnumerateFollowingList_params
 {
     void *linux_side;
     SteamAPICall_t _ret;
-    uint32 unStartIndex;
+    uint32_t unStartIndex;
 };
 extern void cppISteamFriends_SteamFriends011_EnumerateFollowingList( struct cppISteamFriends_SteamFriends011_EnumerateFollowingList_params *params );
 

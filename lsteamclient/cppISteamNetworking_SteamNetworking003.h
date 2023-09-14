@@ -4,7 +4,7 @@ struct cppISteamNetworking_SteamNetworking003_SendP2PPacket_params
     bool _ret;
     CSteamID steamIDRemote;
     const void *pubData;
-    uint32 cubData;
+    uint32_t cubData;
     uint32_t eP2PSendType;
 };
 extern void cppISteamNetworking_SteamNetworking003_SendP2PPacket( struct cppISteamNetworking_SteamNetworking003_SendP2PPacket_params *params );
@@ -13,7 +13,7 @@ struct cppISteamNetworking_SteamNetworking003_IsP2PPacketAvailable_params
 {
     void *linux_side;
     bool _ret;
-    uint32 *pcubMsgSize;
+    uint32_t *pcubMsgSize;
 };
 extern void cppISteamNetworking_SteamNetworking003_IsP2PPacketAvailable( struct cppISteamNetworking_SteamNetworking003_IsP2PPacketAvailable_params *params );
 
@@ -22,8 +22,8 @@ struct cppISteamNetworking_SteamNetworking003_ReadP2PPacket_params
     void *linux_side;
     bool _ret;
     void *pubDest;
-    uint32 cubDest;
-    uint32 *pcubMsgSize;
+    uint32_t cubDest;
+    uint32_t *pcubMsgSize;
     CSteamID *psteamIDRemote;
 };
 extern void cppISteamNetworking_SteamNetworking003_ReadP2PPacket( struct cppISteamNetworking_SteamNetworking003_ReadP2PPacket_params *params );
@@ -57,9 +57,9 @@ struct cppISteamNetworking_SteamNetworking003_CreateListenSocket_params
 {
     void *linux_side;
     SNetListenSocket_t _ret;
-    int nVirtualP2PPort;
-    uint32 nIP;
-    uint16 nPort;
+    int32_t nVirtualP2PPort;
+    uint32_t nIP;
+    uint16_t nPort;
     bool bAllowUseOfPacketRelay;
 };
 extern void cppISteamNetworking_SteamNetworking003_CreateListenSocket( struct cppISteamNetworking_SteamNetworking003_CreateListenSocket_params *params );
@@ -69,8 +69,8 @@ struct cppISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket_params
     void *linux_side;
     SNetSocket_t _ret;
     CSteamID steamIDTarget;
-    int nVirtualPort;
-    int nTimeoutSec;
+    int32_t nVirtualPort;
+    int32_t nTimeoutSec;
     bool bAllowUseOfPacketRelay;
 };
 extern void cppISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket( struct cppISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket_params *params );
@@ -79,9 +79,9 @@ struct cppISteamNetworking_SteamNetworking003_CreateConnectionSocket_params
 {
     void *linux_side;
     SNetSocket_t _ret;
-    uint32 nIP;
-    uint16 nPort;
-    int nTimeoutSec;
+    uint32_t nIP;
+    uint16_t nPort;
+    int32_t nTimeoutSec;
 };
 extern void cppISteamNetworking_SteamNetworking003_CreateConnectionSocket( struct cppISteamNetworking_SteamNetworking003_CreateConnectionSocket_params *params );
 
@@ -109,7 +109,7 @@ struct cppISteamNetworking_SteamNetworking003_SendDataOnSocket_params
     bool _ret;
     SNetSocket_t hSocket;
     void *pubData;
-    uint32 cubData;
+    uint32_t cubData;
     bool bReliable;
 };
 extern void cppISteamNetworking_SteamNetworking003_SendDataOnSocket( struct cppISteamNetworking_SteamNetworking003_SendDataOnSocket_params *params );
@@ -119,7 +119,7 @@ struct cppISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket_params
     void *linux_side;
     bool _ret;
     SNetSocket_t hSocket;
-    uint32 *pcubMsgSize;
+    uint32_t *pcubMsgSize;
 };
 extern void cppISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket( struct cppISteamNetworking_SteamNetworking003_IsDataAvailableOnSocket_params *params );
 
@@ -129,8 +129,8 @@ struct cppISteamNetworking_SteamNetworking003_RetrieveDataFromSocket_params
     bool _ret;
     SNetSocket_t hSocket;
     void *pubDest;
-    uint32 cubDest;
-    uint32 *pcubMsgSize;
+    uint32_t cubDest;
+    uint32_t *pcubMsgSize;
 };
 extern void cppISteamNetworking_SteamNetworking003_RetrieveDataFromSocket( struct cppISteamNetworking_SteamNetworking003_RetrieveDataFromSocket_params *params );
 
@@ -139,7 +139,7 @@ struct cppISteamNetworking_SteamNetworking003_IsDataAvailable_params
     void *linux_side;
     bool _ret;
     SNetListenSocket_t hListenSocket;
-    uint32 *pcubMsgSize;
+    uint32_t *pcubMsgSize;
     SNetSocket_t *phSocket;
 };
 extern void cppISteamNetworking_SteamNetworking003_IsDataAvailable( struct cppISteamNetworking_SteamNetworking003_IsDataAvailable_params *params );
@@ -150,8 +150,8 @@ struct cppISteamNetworking_SteamNetworking003_RetrieveData_params
     bool _ret;
     SNetListenSocket_t hListenSocket;
     void *pubDest;
-    uint32 cubDest;
-    uint32 *pcubMsgSize;
+    uint32_t cubDest;
+    uint32_t *pcubMsgSize;
     SNetSocket_t *phSocket;
 };
 extern void cppISteamNetworking_SteamNetworking003_RetrieveData( struct cppISteamNetworking_SteamNetworking003_RetrieveData_params *params );
@@ -162,9 +162,9 @@ struct cppISteamNetworking_SteamNetworking003_GetSocketInfo_params
     bool _ret;
     SNetSocket_t hSocket;
     CSteamID *pSteamIDRemote;
-    int *peSocketStatus;
-    uint32 *punIPRemote;
-    uint16 *punPortRemote;
+    int32_t *peSocketStatus;
+    uint32_t *punIPRemote;
+    uint16_t *punPortRemote;
 };
 extern void cppISteamNetworking_SteamNetworking003_GetSocketInfo( struct cppISteamNetworking_SteamNetworking003_GetSocketInfo_params *params );
 
@@ -173,8 +173,8 @@ struct cppISteamNetworking_SteamNetworking003_GetListenSocketInfo_params
     void *linux_side;
     bool _ret;
     SNetListenSocket_t hListenSocket;
-    uint32 *pnIP;
-    uint16 *pnPort;
+    uint32_t *pnIP;
+    uint16_t *pnPort;
 };
 extern void cppISteamNetworking_SteamNetworking003_GetListenSocketInfo( struct cppISteamNetworking_SteamNetworking003_GetListenSocketInfo_params *params );
 
@@ -189,7 +189,7 @@ extern void cppISteamNetworking_SteamNetworking003_GetSocketConnectionType( stru
 struct cppISteamNetworking_SteamNetworking003_GetMaxPacketSize_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     SNetSocket_t hSocket;
 };
 extern void cppISteamNetworking_SteamNetworking003_GetMaxPacketSize( struct cppISteamNetworking_SteamNetworking003_GetMaxPacketSize_params *params );

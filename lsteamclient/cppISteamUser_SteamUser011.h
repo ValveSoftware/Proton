@@ -22,12 +22,12 @@ extern void cppISteamUser_SteamUser011_GetSteamID( struct cppISteamUser_SteamUse
 struct cppISteamUser_SteamUser011_InitiateGameConnection_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pAuthBlob;
-    int cbMaxAuthBlob;
+    int32_t cbMaxAuthBlob;
     CSteamID steamIDGameServer;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
     bool bSecure;
 };
 extern void cppISteamUser_SteamUser011_InitiateGameConnection( struct cppISteamUser_SteamUser011_InitiateGameConnection_params *params );
@@ -35,8 +35,8 @@ extern void cppISteamUser_SteamUser011_InitiateGameConnection( struct cppISteamU
 struct cppISteamUser_SteamUser011_TerminateGameConnection_params
 {
     void *linux_side;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
 };
 extern void cppISteamUser_SteamUser011_TerminateGameConnection( struct cppISteamUser_SteamUser011_TerminateGameConnection_params *params );
 
@@ -44,7 +44,7 @@ struct cppISteamUser_SteamUser011_TrackAppUsageEvent_params
 {
     void *linux_side;
     CGameID gameID;
-    int eAppUsageEvent;
+    int32_t eAppUsageEvent;
     const char *pchExtraInfo;
 };
 extern void cppISteamUser_SteamUser011_TrackAppUsageEvent( struct cppISteamUser_SteamUser011_TrackAppUsageEvent_params *params );
@@ -54,7 +54,7 @@ struct cppISteamUser_SteamUser011_GetUserDataFolder_params
     void *linux_side;
     bool _ret;
     char *pchBuffer;
-    int cubBuffer;
+    int32_t cubBuffer;
 };
 extern void cppISteamUser_SteamUser011_GetUserDataFolder( struct cppISteamUser_SteamUser011_GetUserDataFolder_params *params );
 
@@ -75,8 +75,8 @@ struct cppISteamUser_SteamUser011_GetCompressedVoice_params
     void *linux_side;
     uint32_t _ret;
     void *pDestBuffer;
-    uint32 cbDestBufferSize;
-    uint32 *nBytesWritten;
+    uint32_t cbDestBufferSize;
+    uint32_t *nBytesWritten;
 };
 extern void cppISteamUser_SteamUser011_GetCompressedVoice( struct cppISteamUser_SteamUser011_GetCompressedVoice_params *params );
 
@@ -85,10 +85,10 @@ struct cppISteamUser_SteamUser011_DecompressVoice_params
     void *linux_side;
     uint32_t _ret;
     void *pCompressed;
-    uint32 cbCompressed;
+    uint32_t cbCompressed;
     void *pDestBuffer;
-    uint32 cbDestBufferSize;
-    uint32 *nBytesWritten;
+    uint32_t cbDestBufferSize;
+    uint32_t *nBytesWritten;
 };
 extern void cppISteamUser_SteamUser011_DecompressVoice( struct cppISteamUser_SteamUser011_DecompressVoice_params *params );
 

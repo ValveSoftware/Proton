@@ -49,7 +49,7 @@ struct cppISteamUser_SteamUser006_GetRegistryString_params
     uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
-    int cbValue;
+    int32_t cbValue;
 };
 extern void cppISteamUser_SteamUser006_GetRegistryString( struct cppISteamUser_SteamUser006_GetRegistryString_params *params );
 
@@ -59,7 +59,7 @@ struct cppISteamUser_SteamUser006_SetRegistryInt_params
     bool _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
-    int iValue;
+    int32_t iValue;
 };
 extern void cppISteamUser_SteamUser006_SetRegistryInt( struct cppISteamUser_SteamUser006_SetRegistryInt_params *params );
 
@@ -69,20 +69,20 @@ struct cppISteamUser_SteamUser006_GetRegistryInt_params
     bool _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
-    int *piValue;
+    int32_t *piValue;
 };
 extern void cppISteamUser_SteamUser006_GetRegistryInt( struct cppISteamUser_SteamUser006_GetRegistryInt_params *params );
 
 struct cppISteamUser_SteamUser006_InitiateGameConnection_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pBlob;
-    int cbMaxBlob;
+    int32_t cbMaxBlob;
     CSteamID steamID;
     CGameID gameID;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
     bool bSecure;
 };
 extern void cppISteamUser_SteamUser006_InitiateGameConnection( struct cppISteamUser_SteamUser006_InitiateGameConnection_params *params );
@@ -90,8 +90,8 @@ extern void cppISteamUser_SteamUser006_InitiateGameConnection( struct cppISteamU
 struct cppISteamUser_SteamUser006_TerminateGameConnection_params
 {
     void *linux_side;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
 };
 extern void cppISteamUser_SteamUser006_TerminateGameConnection( struct cppISteamUser_SteamUser006_TerminateGameConnection_params *params );
 
@@ -99,7 +99,7 @@ struct cppISteamUser_SteamUser006_TrackAppUsageEvent_params
 {
     void *linux_side;
     CGameID gameID;
-    int eAppUsageEvent;
+    int32_t eAppUsageEvent;
     const char *pchExtraInfo;
 };
 extern void cppISteamUser_SteamUser006_TrackAppUsageEvent( struct cppISteamUser_SteamUser006_TrackAppUsageEvent_params *params );

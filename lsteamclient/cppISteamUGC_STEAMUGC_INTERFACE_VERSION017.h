@@ -8,7 +8,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUserUGCRequest_para
     uint32_t eSortOrder;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
-    uint32 unPage;
+    uint32_t unPage;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUserUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUserUGCRequest_params *params );
 
@@ -20,7 +20,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_param
     uint32_t eMatchingeMatchingUGCTypeFileType;
     AppId_t nCreatorAppID;
     AppId_t nConsumerAppID;
-    uint32 unPage;
+    uint32_t unPage;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_params *params );
 
@@ -41,7 +41,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUGCDetailsRequest_p
     void *linux_side;
     UGCQueryHandle_t _ret;
     PublishedFileId_t *pvecPublishedFileID;
-    uint32 unNumPublishedFileIDs;
+    uint32_t unNumPublishedFileIDs;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUGCDetailsRequest( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUGCDetailsRequest_params *params );
 
@@ -58,7 +58,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     winSteamUGCDetails_t_157 *pDetails;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult_params *params );
@@ -66,9 +66,9 @@ extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult( struct
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTags_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTags( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTags_params *params );
 
@@ -77,10 +77,10 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
-    uint32 indexTag;
+    uint32_t index;
+    uint32_t indexTag;
     char *pchValue;
-    uint32 cchValueSize;
+    uint32_t cchValueSize;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag_params *params );
 
@@ -89,10 +89,10 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName_para
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
-    uint32 indexTag;
+    uint32_t index;
+    uint32_t indexTag;
     char *pchValue;
-    uint32 cchValueSize;
+    uint32_t cchValueSize;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName_params *params );
 
@@ -101,9 +101,9 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     char *pchURL;
-    uint32 cchURLSize;
+    uint32_t cchURLSize;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL_params *params );
 
@@ -112,9 +112,9 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     char *pchMetadata;
-    uint32 cchMetadatasize;
+    uint32_t cchMetadatasize;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata_params *params );
 
@@ -123,9 +123,9 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     PublishedFileId_t *pvecPublishedFileID;
-    uint32 cMaxEntries;
+    uint32_t cMaxEntries;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren_params *params );
 
@@ -134,18 +134,18 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     uint32_t eStatType;
-    uint64 *pStatValue;
+    uint64_t *pStatValue;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic_params *params );
 
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdditionalPreviews_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdditionalPreviews( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdditionalPreviews_params *params );
 
@@ -154,12 +154,12 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview_p
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
-    uint32 previewIndex;
+    uint32_t index;
+    uint32_t previewIndex;
     char *pchURLOrVideoID;
-    uint32 cchURLSize;
+    uint32_t cchURLSize;
     char *pchOriginalFileName;
-    uint32 cchOriginalFileNameSize;
+    uint32_t cchOriginalFileNameSize;
     uint32_t *pPreviewType;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview_params *params );
@@ -167,9 +167,9 @@ extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPrev
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKeyValueTags_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKeyValueTags( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKeyValueTags_params *params );
 
@@ -178,12 +178,12 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
-    uint32 keyValueTagIndex;
+    uint32_t index;
+    uint32_t keyValueTagIndex;
     char *pchKey;
-    uint32 cchKeySize;
+    uint32_t cchKeySize;
     char *pchValue;
-    uint32 cchValueSize;
+    uint32_t cchValueSize;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_params *params );
 
@@ -192,21 +192,21 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2_param
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     const char *pchKey;
     char *pchValue;
-    uint32 cchValueSize;
+    uint32_t cchValueSize;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2_params *params );
 
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCContentDescriptors_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     UGCQueryHandle_t handle;
-    uint32 index;
+    uint32_t index;
     uint32_t *pvecDescriptors;
-    uint32 cMaxEntries;
+    uint32_t cMaxEntries;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCContentDescriptors( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCContentDescriptors_params *params );
 
@@ -313,7 +313,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 unDays;
+    uint32_t unDays;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats_params *params );
 
@@ -331,7 +331,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 unMaxAgeSeconds;
+    uint32_t unMaxAgeSeconds;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse_params *params );
 
@@ -367,7 +367,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays_params
     void *linux_side;
     bool _ret;
     UGCQueryHandle_t handle;
-    uint32 unDays;
+    uint32_t unDays;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays_params *params );
 
@@ -406,7 +406,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RequestUGCDetails_params
     void *linux_side;
     SteamAPICall_t _ret;
     PublishedFileId_t nPublishedFileID;
-    uint32 unMaxAgeSeconds;
+    uint32_t unMaxAgeSeconds;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RequestUGCDetails( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RequestUGCDetails_params *params );
 
@@ -560,7 +560,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile_params
     void *linux_side;
     bool _ret;
     UGCUpdateHandle_t handle;
-    uint32 index;
+    uint32_t index;
     const char *pszPreviewFile;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile_params *params );
@@ -570,7 +570,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo_params
     void *linux_side;
     bool _ret;
     UGCUpdateHandle_t handle;
-    uint32 index;
+    uint32_t index;
     const char *pszVideoID;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo_params *params );
@@ -580,7 +580,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview_params
     void *linux_side;
     bool _ret;
     UGCUpdateHandle_t handle;
-    uint32 index;
+    uint32_t index;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview_params *params );
 
@@ -616,8 +616,8 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemUpdateProgress_params
     void *linux_side;
     uint32_t _ret;
     UGCUpdateHandle_t handle;
-    uint64 *punBytesProcessed;
-    uint64 *punBytesTotal;
+    uint64_t *punBytesProcessed;
+    uint64_t *punBytesTotal;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemUpdateProgress( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemUpdateProgress_params *params );
 
@@ -675,23 +675,23 @@ extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UnsubscribeItem( struct c
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetNumSubscribedItems_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetNumSubscribedItems( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetNumSubscribedItems_params *params );
 
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetSubscribedItems_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     PublishedFileId_t *pvecPublishedFileID;
-    uint32 cMaxEntries;
+    uint32_t cMaxEntries;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetSubscribedItems( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetSubscribedItems_params *params );
 
 struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
     PublishedFileId_t nPublishedFileID;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState_params *params );
@@ -701,10 +701,10 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo_params
     void *linux_side;
     bool _ret;
     PublishedFileId_t nPublishedFileID;
-    uint64 *punSizeOnDisk;
+    uint64_t *punSizeOnDisk;
     char *pchFolder;
-    uint32 cchFolderSize;
-    uint32 *punTimeStamp;
+    uint32_t cchFolderSize;
+    uint32_t *punTimeStamp;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo_params *params );
 
@@ -713,8 +713,8 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo_params
     void *linux_side;
     bool _ret;
     PublishedFileId_t nPublishedFileID;
-    uint64 *punBytesDownloaded;
-    uint64 *punBytesTotal;
+    uint64_t *punBytesDownloaded;
+    uint64_t *punBytesTotal;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo_params *params );
 
@@ -748,7 +748,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlaytimeTracking_params
     void *linux_side;
     SteamAPICall_t _ret;
     PublishedFileId_t *pvecPublishedFileID;
-    uint32 unNumPublishedFileIDs;
+    uint32_t unNumPublishedFileIDs;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlaytimeTracking( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlaytimeTracking_params *params );
 
@@ -757,7 +757,7 @@ struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTracking_params
     void *linux_side;
     SteamAPICall_t _ret;
     PublishedFileId_t *pvecPublishedFileID;
-    uint32 unNumPublishedFileIDs;
+    uint32_t unNumPublishedFileIDs;
 };
 extern void cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTracking( struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTracking_params *params );
 

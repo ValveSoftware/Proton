@@ -41,8 +41,8 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize_param
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 unWidth;
-    uint32 unHeight;
+    uint32_t unWidth;
+    uint32_t unHeight;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize_params *params );
 
@@ -119,8 +119,8 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove_par
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    int x;
-    int y;
+    int32_t x;
+    int32_t y;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove_params *params );
 
@@ -128,7 +128,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel_pa
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    int32 nDelta;
+    int32_t nDelta;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel_params *params );
 
@@ -136,7 +136,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown_param
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nNativeKeyCode;
+    uint32_t nNativeKeyCode;
     uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown_params *params );
@@ -145,7 +145,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp_params
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nNativeKeyCode;
+    uint32_t nNativeKeyCode;
     uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp_params *params );
@@ -154,7 +154,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar_param
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 cUnicodeChar;
+    uint32_t cUnicodeChar;
     uint32_t eHTMLKeyModifiers;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar_params *params );
@@ -163,7 +163,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontal
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nAbsolutePixelScroll;
+    uint32_t nAbsolutePixelScroll;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll_params *params );
 
@@ -171,7 +171,7 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalSc
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    uint32 nAbsolutePixelScroll;
+    uint32_t nAbsolutePixelScroll;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll_params *params );
 
@@ -225,8 +225,8 @@ struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosi
 {
     void *linux_side;
     HHTMLBrowser unBrowserHandle;
-    int x;
-    int y;
+    int32_t x;
+    int32_t y;
 };
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition( struct cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition_params *params );
 

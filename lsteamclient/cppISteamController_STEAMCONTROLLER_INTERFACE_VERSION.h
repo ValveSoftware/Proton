@@ -23,7 +23,7 @@ struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState_
 {
     void *linux_side;
     bool _ret;
-    uint32 unControllerIndex;
+    uint32_t unControllerIndex;
     SteamControllerState001_t *pState;
 };
 extern void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState( struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState_params *params );
@@ -31,9 +31,9 @@ extern void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerS
 struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse_params
 {
     void *linux_side;
-    uint32 unControllerIndex;
+    uint32_t unControllerIndex;
     uint32_t eTargetPad;
-    unsigned short usDurationMicroSec;
+    uint16_t usDurationMicroSec;
 };
 extern void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse( struct cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse_params *params );
 

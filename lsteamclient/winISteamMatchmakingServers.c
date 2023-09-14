@@ -32,7 +32,7 @@ DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_P
 DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules, 16)
 DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_CancelServerQuery, 8)
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList_params params =
     {
@@ -58,7 +58,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestLA
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerList( &params );
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList_params params =
     {
@@ -72,7 +72,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFr
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList( &params );
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList_params params =
     {
@@ -86,7 +86,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestFa
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFavoritesServerList( &params );
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList_params params =
     {
@@ -100,7 +100,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestHi
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestHistoryServerList( &params );
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList_params params =
     {
@@ -114,7 +114,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RequestSp
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestSpectatorServerList( &params );
 }
 
-gameserveritem_t * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails(struct w_steam_iface *_this, uint32_t eType, int iServer)
+gameserveritem_t * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails(struct w_steam_iface *_this, uint32_t eType, int32_t iServer)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerDetails_params params =
     {
@@ -161,7 +161,7 @@ bool __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_IsRefresh
     return params._ret;
 }
 
-int __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount(struct w_steam_iface *_this, uint32_t eType)
+int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount(struct w_steam_iface *_this, uint32_t eType)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_GetServerCount_params params =
     {
@@ -173,7 +173,7 @@ int __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_GetServerC
     return params._ret;
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer(struct w_steam_iface *_this, uint32_t eType, int iServer)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer(struct w_steam_iface *_this, uint32_t eType, int32_t iServer)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer_params params =
     {
@@ -185,7 +185,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshSe
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer( &params );
 }
 
-HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_PingServer(struct w_steam_iface *_this, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingPingResponse*/ *pRequestServersResponse)
+HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_PingServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort, void /*ISteamMatchmakingPingResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_PingServer_params params =
     {
@@ -199,7 +199,7 @@ HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_P
     return params._ret;
 }
 
-HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails(struct w_steam_iface *_this, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingPlayersResponse*/ *pRequestServersResponse)
+HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort, void /*ISteamMatchmakingPlayersResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails_params params =
     {
@@ -213,7 +213,7 @@ HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_P
     return params._ret;
 }
 
-HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules(struct w_steam_iface *_this, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingRulesResponse*/ *pRequestServersResponse)
+HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort, void /*ISteamMatchmakingRulesResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules_params params =
     {
@@ -294,7 +294,7 @@ DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_P
 DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules, 16)
 DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery, 8)
 
-HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList_params params =
     {
@@ -322,7 +322,7 @@ HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServer
     return params._ret;
 }
 
-HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList_params params =
     {
@@ -337,7 +337,7 @@ HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServer
     return params._ret;
 }
 
-HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList_params params =
     {
@@ -352,7 +352,7 @@ HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServer
     return params._ret;
 }
 
-HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList_params params =
     {
@@ -367,7 +367,7 @@ HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServer
     return params._ret;
 }
 
-HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32 nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
+HServerListRequest __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList(struct w_steam_iface *_this, AppId_t iApp, MatchMakingKeyValuePair_t **ppchFilters, uint32_t nFilters, void /*ISteamMatchmakingServerListResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList_params params =
     {
@@ -393,7 +393,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRe
     cppISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest( &params );
 }
 
-gameserveritem_t * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails(struct w_steam_iface *_this, HServerListRequest hRequest, int iServer)
+gameserveritem_t * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails(struct w_steam_iface *_this, HServerListRequest hRequest, int32_t iServer)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails_params params =
     {
@@ -440,7 +440,7 @@ bool __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_IsRefresh
     return params._ret;
 }
 
-int __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount(struct w_steam_iface *_this, HServerListRequest hRequest)
+int32_t __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount(struct w_steam_iface *_this, HServerListRequest hRequest)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount_params params =
     {
@@ -452,7 +452,7 @@ int __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_GetServerC
     return params._ret;
 }
 
-void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer(struct w_steam_iface *_this, HServerListRequest hRequest, int iServer)
+void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer(struct w_steam_iface *_this, HServerListRequest hRequest, int32_t iServer)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer_params params =
     {
@@ -464,7 +464,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RefreshSe
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer( &params );
 }
 
-HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_PingServer(struct w_steam_iface *_this, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingPingResponse*/ *pRequestServersResponse)
+HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_PingServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort, void /*ISteamMatchmakingPingResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer_params params =
     {
@@ -478,7 +478,7 @@ HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_P
     return params._ret;
 }
 
-HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails(struct w_steam_iface *_this, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingPlayersResponse*/ *pRequestServersResponse)
+HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort, void /*ISteamMatchmakingPlayersResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails_params params =
     {
@@ -492,7 +492,7 @@ HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_P
     return params._ret;
 }
 
-HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules(struct w_steam_iface *_this, uint32 unIP, uint16 usPort, void /*ISteamMatchmakingRulesResponse*/ *pRequestServersResponse)
+HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules(struct w_steam_iface *_this, uint32_t unIP, uint16_t usPort, void /*ISteamMatchmakingRulesResponse*/ *pRequestServersResponse)
 {
     struct cppISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules_params params =
     {

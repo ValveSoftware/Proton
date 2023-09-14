@@ -1,7 +1,7 @@
 struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount_params
 {
     void *linux_side;
-    uint32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount_params *params );
 
@@ -9,7 +9,7 @@ struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID_par
 {
     void *linux_side;
     RemotePlaySessionID_t _ret;
-    int iSessionIndex;
+    int32_t iSessionIndex;
 };
 extern void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID_params *params );
 
@@ -42,8 +42,8 @@ struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClien
     void *linux_side;
     bool _ret;
     RemotePlaySessionID_t unSessionID;
-    int *pnResolutionX;
-    int *pnResolutionY;
+    int32_t *pnResolutionX;
+    int32_t *pnResolutionY;
 };
 extern void cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution( struct cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution_params *params );
 

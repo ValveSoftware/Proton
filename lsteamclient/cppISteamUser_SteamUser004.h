@@ -50,7 +50,7 @@ struct cppISteamUser_SteamUser004_IsVACBanned_params
 {
     void *linux_side;
     bool _ret;
-    int nGameID;
+    int32_t nGameID;
 };
 extern void cppISteamUser_SteamUser004_IsVACBanned( struct cppISteamUser_SteamUser004_IsVACBanned_params *params );
 
@@ -58,54 +58,54 @@ struct cppISteamUser_SteamUser004_RequireShowVACBannedMessage_params
 {
     void *linux_side;
     bool _ret;
-    int nGameID;
+    int32_t nGameID;
 };
 extern void cppISteamUser_SteamUser004_RequireShowVACBannedMessage( struct cppISteamUser_SteamUser004_RequireShowVACBannedMessage_params *params );
 
 struct cppISteamUser_SteamUser004_AcknowledgeVACBanning_params
 {
     void *linux_side;
-    int nGameID;
+    int32_t nGameID;
 };
 extern void cppISteamUser_SteamUser004_AcknowledgeVACBanning( struct cppISteamUser_SteamUser004_AcknowledgeVACBanning_params *params );
 
 struct cppISteamUser_SteamUser004_NClientGameIDAdd_params
 {
     void *linux_side;
-    int _ret;
-    int nGameID;
+    int32_t _ret;
+    int32_t nGameID;
 };
 extern void cppISteamUser_SteamUser004_NClientGameIDAdd( struct cppISteamUser_SteamUser004_NClientGameIDAdd_params *params );
 
 struct cppISteamUser_SteamUser004_RemoveClientGame_params
 {
     void *linux_side;
-    int nClientGameID;
+    int32_t nClientGameID;
 };
 extern void cppISteamUser_SteamUser004_RemoveClientGame( struct cppISteamUser_SteamUser004_RemoveClientGame_params *params );
 
 struct cppISteamUser_SteamUser004_SetClientGameServer_params
 {
     void *linux_side;
-    int nClientGameID;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    int32_t nClientGameID;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
 };
 extern void cppISteamUser_SteamUser004_SetClientGameServer( struct cppISteamUser_SteamUser004_SetClientGameServer_params *params );
 
 struct cppISteamUser_SteamUser004_SetSteam2Ticket_params
 {
     void *linux_side;
-    uint8 *pubTicket;
-    int cubTicket;
+    uint8_t *pubTicket;
+    int32_t cubTicket;
 };
 extern void cppISteamUser_SteamUser004_SetSteam2Ticket( struct cppISteamUser_SteamUser004_SetSteam2Ticket_params *params );
 
 struct cppISteamUser_SteamUser004_AddServerNetAddress_params
 {
     void *linux_side;
-    uint32 unIP;
-    uint16 unPort;
+    uint32_t unIP;
+    uint16_t unPort;
 };
 extern void cppISteamUser_SteamUser004_AddServerNetAddress( struct cppISteamUser_SteamUser004_AddServerNetAddress_params *params );
 
@@ -120,9 +120,9 @@ extern void cppISteamUser_SteamUser004_SetEmail( struct cppISteamUser_SteamUser0
 struct cppISteamUser_SteamUser004_GetSteamGameConnectToken_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pBlob;
-    int cbMaxBlob;
+    int32_t cbMaxBlob;
 };
 extern void cppISteamUser_SteamUser004_GetSteamGameConnectToken( struct cppISteamUser_SteamUser004_GetSteamGameConnectToken_params *params );
 
@@ -143,7 +143,7 @@ struct cppISteamUser_SteamUser004_GetRegistryString_params
     uint32_t eRegistrySubTree;
     const char *pchKey;
     char *pchValue;
-    int cbValue;
+    int32_t cbValue;
 };
 extern void cppISteamUser_SteamUser004_GetRegistryString( struct cppISteamUser_SteamUser004_GetRegistryString_params *params );
 
@@ -153,7 +153,7 @@ struct cppISteamUser_SteamUser004_SetRegistryInt_params
     bool _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
-    int iValue;
+    int32_t iValue;
 };
 extern void cppISteamUser_SteamUser004_SetRegistryInt( struct cppISteamUser_SteamUser004_SetRegistryInt_params *params );
 
@@ -163,20 +163,20 @@ struct cppISteamUser_SteamUser004_GetRegistryInt_params
     bool _ret;
     uint32_t eRegistrySubTree;
     const char *pchKey;
-    int *piValue;
+    int32_t *piValue;
 };
 extern void cppISteamUser_SteamUser004_GetRegistryInt( struct cppISteamUser_SteamUser004_GetRegistryInt_params *params );
 
 struct cppISteamUser_SteamUser004_InitiateGameConnection_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pBlob;
-    int cbMaxBlob;
+    int32_t cbMaxBlob;
     CSteamID steamID;
-    int nGameAppID;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    int32_t nGameAppID;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
     bool bSecure;
 };
 extern void cppISteamUser_SteamUser004_InitiateGameConnection( struct cppISteamUser_SteamUser004_InitiateGameConnection_params *params );
@@ -184,8 +184,8 @@ extern void cppISteamUser_SteamUser004_InitiateGameConnection( struct cppISteamU
 struct cppISteamUser_SteamUser004_TerminateGameConnection_params
 {
     void *linux_side;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
 };
 extern void cppISteamUser_SteamUser004_TerminateGameConnection( struct cppISteamUser_SteamUser004_TerminateGameConnection_params *params );
 
@@ -205,7 +205,7 @@ extern void cppISteamUser_SteamUser004_IsPrimaryChatDestination( struct cppIStea
 struct cppISteamUser_SteamUser004_RequestLegacyCDKey_params
 {
     void *linux_side;
-    uint32 iAppID;
+    uint32_t iAppID;
 };
 extern void cppISteamUser_SteamUser004_RequestLegacyCDKey( struct cppISteamUser_SteamUser004_RequestLegacyCDKey_params *params );
 

@@ -1,5 +1,11 @@
 /* TODO these should be generated */
 
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdbool.h>
+
+#include "windef.h"
+
 #ifndef __cplusplus
 #include "cxx.h"
 #else
@@ -9,8 +15,6 @@ typedef void (*vtable_ptr)(void);
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "windef.h"
 
 typedef struct __winISteamClient winISteamClient;
 typedef struct __winISteamUser winISteamUser;
@@ -57,7 +61,8 @@ typedef void (*CDECL win_SteamInputActionEventCallbackPointer)(SteamInputActionE
 void lin_SteamInputActionEventCallbackPointer(SteamInputActionEvent_t *dat);
 
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
-unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url);
+unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst,
+                                                uint32_t dst_bytes, int is_url );
 
 extern const char *steamclient_dos_to_unix_path( const char *src, int is_url );
 extern void steamclient_free_path( const char *path_array );
@@ -69,7 +74,7 @@ const char *steamclient_isteaminput_getglyph(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph_xbox(int origin, const char *lin_path);
 const char *steamclient_isteaminput_getglyph_png(int origin, int size, int flags, const char *lin_path);
 const char *steamclient_isteaminput_getglyph_svg(int origin, int flags, const char *lin_path);
-uint32 manual_convert_nNativeKeyCode(uint32 win_vk);
+uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk );
 void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *version);
@@ -80,7 +85,6 @@ void *manual_convert_SteamAPI_CheckCallbackRegistered_t(void *win_func);
 
 extern char g_tmppath[PATH_MAX];
 
-typedef uint64 SteamAPICall_t; //for ancient SDKs
 void *alloc_callback_wtou( int id, void *callback, int *callback_len );
 void convert_callback_utow( int id, void *lin_callback, int lin_callback_len, void *callback, int callback_len );
 
@@ -122,7 +126,7 @@ struct callback_data
 };
 
 void execute_callback(struct callback_data *cb_data);
-BOOL is_native_thread(void);
+bool is_native_thread(void);
 bool after_shutdown(bool);
 HSteamPipe after_steam_pipe_create(HSteamPipe pipe);
 

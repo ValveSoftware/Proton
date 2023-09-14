@@ -4,19 +4,19 @@ struct cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_
     uint32_t _ret;
     const SteamNetworkingIdentity *identityRemote;
     const void *pubData;
-    uint32 cubData;
-    int nSendFlags;
-    int nRemoteChannel;
+    uint32_t cubData;
+    int32_t nSendFlags;
+    int32_t nRemoteChannel;
 };
 extern void cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser( struct cppISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_params *params );
 
 struct cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params
 {
     void *linux_side;
-    int _ret;
-    int nLocalChannel;
+    int32_t _ret;
+    int32_t nLocalChannel;
     winSteamNetworkingMessage_t_158 **ppOutMessages;
-    int nMaxMessages;
+    int32_t nMaxMessages;
 };
 extern void cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel( struct cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel_params *params );
 
@@ -41,7 +41,7 @@ struct cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUs
     void *linux_side;
     bool _ret;
     const SteamNetworkingIdentity *identityRemote;
-    int nLocalChannel;
+    int32_t nLocalChannel;
 };
 extern void cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser( struct cppISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser_params *params );
 

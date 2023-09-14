@@ -21,7 +21,7 @@ extern void cppISteamController_SteamController005_RunFrame( struct cppISteamCon
 struct cppISteamController_SteamController005_GetConnectedControllers_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     ControllerHandle_t *handlesOut;
 };
 extern void cppISteamController_SteamController005_GetConnectedControllers( struct cppISteamController_SteamController005_GetConnectedControllers_params *params );
@@ -78,7 +78,7 @@ extern void cppISteamController_SteamController005_GetDigitalActionData( struct 
 struct cppISteamController_SteamController005_GetDigitalActionOrigins_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     ControllerHandle_t controllerHandle;
     ControllerActionSetHandle_t actionSetHandle;
     ControllerDigitalActionHandle_t digitalActionHandle;
@@ -106,7 +106,7 @@ extern void cppISteamController_SteamController005_GetAnalogActionData( struct c
 struct cppISteamController_SteamController005_GetAnalogActionOrigins_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     ControllerHandle_t controllerHandle;
     ControllerActionSetHandle_t actionSetHandle;
     ControllerAnalogActionHandle_t analogActionHandle;
@@ -127,7 +127,7 @@ struct cppISteamController_SteamController005_TriggerHapticPulse_params
     void *linux_side;
     ControllerHandle_t controllerHandle;
     uint32_t eTargetPad;
-    unsigned short usDurationMicroSec;
+    uint16_t usDurationMicroSec;
 };
 extern void cppISteamController_SteamController005_TriggerHapticPulse( struct cppISteamController_SteamController005_TriggerHapticPulse_params *params );
 
@@ -136,10 +136,10 @@ struct cppISteamController_SteamController005_TriggerRepeatedHapticPulse_params
     void *linux_side;
     ControllerHandle_t controllerHandle;
     uint32_t eTargetPad;
-    unsigned short usDurationMicroSec;
-    unsigned short usOffMicroSec;
-    unsigned short unRepeat;
-    unsigned int nFlags;
+    uint16_t usDurationMicroSec;
+    uint16_t usOffMicroSec;
+    uint16_t unRepeat;
+    uint32_t nFlags;
 };
 extern void cppISteamController_SteamController005_TriggerRepeatedHapticPulse( struct cppISteamController_SteamController005_TriggerRepeatedHapticPulse_params *params );
 
@@ -147,8 +147,8 @@ struct cppISteamController_SteamController005_TriggerVibration_params
 {
     void *linux_side;
     ControllerHandle_t controllerHandle;
-    unsigned short usLeftSpeed;
-    unsigned short usRightSpeed;
+    uint16_t usLeftSpeed;
+    uint16_t usRightSpeed;
 };
 extern void cppISteamController_SteamController005_TriggerVibration( struct cppISteamController_SteamController005_TriggerVibration_params *params );
 
@@ -156,17 +156,17 @@ struct cppISteamController_SteamController005_SetLEDColor_params
 {
     void *linux_side;
     ControllerHandle_t controllerHandle;
-    uint8 nColorR;
-    uint8 nColorG;
-    uint8 nColorB;
-    unsigned int nFlags;
+    uint8_t nColorR;
+    uint8_t nColorG;
+    uint8_t nColorB;
+    uint32_t nFlags;
 };
 extern void cppISteamController_SteamController005_SetLEDColor( struct cppISteamController_SteamController005_SetLEDColor_params *params );
 
 struct cppISteamController_SteamController005_GetGamepadIndexForController_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     ControllerHandle_t ulControllerHandle;
 };
 extern void cppISteamController_SteamController005_GetGamepadIndexForController( struct cppISteamController_SteamController005_GetGamepadIndexForController_params *params );
@@ -175,7 +175,7 @@ struct cppISteamController_SteamController005_GetControllerForGamepadIndex_param
 {
     void *linux_side;
     ControllerHandle_t _ret;
-    int nIndex;
+    int32_t nIndex;
 };
 extern void cppISteamController_SteamController005_GetControllerForGamepadIndex( struct cppISteamController_SteamController005_GetControllerForGamepadIndex_params *params );
 

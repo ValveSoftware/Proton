@@ -22,12 +22,12 @@ extern void cppISteamUser_SteamUser012_GetSteamID( struct cppISteamUser_SteamUse
 struct cppISteamUser_SteamUser012_InitiateGameConnection_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pAuthBlob;
-    int cbMaxAuthBlob;
+    int32_t cbMaxAuthBlob;
     CSteamID steamIDGameServer;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
     bool bSecure;
 };
 extern void cppISteamUser_SteamUser012_InitiateGameConnection( struct cppISteamUser_SteamUser012_InitiateGameConnection_params *params );
@@ -35,8 +35,8 @@ extern void cppISteamUser_SteamUser012_InitiateGameConnection( struct cppISteamU
 struct cppISteamUser_SteamUser012_TerminateGameConnection_params
 {
     void *linux_side;
-    uint32 unIPServer;
-    uint16 usPortServer;
+    uint32_t unIPServer;
+    uint16_t usPortServer;
 };
 extern void cppISteamUser_SteamUser012_TerminateGameConnection( struct cppISteamUser_SteamUser012_TerminateGameConnection_params *params );
 
@@ -44,7 +44,7 @@ struct cppISteamUser_SteamUser012_TrackAppUsageEvent_params
 {
     void *linux_side;
     CGameID gameID;
-    int eAppUsageEvent;
+    int32_t eAppUsageEvent;
     const char *pchExtraInfo;
 };
 extern void cppISteamUser_SteamUser012_TrackAppUsageEvent( struct cppISteamUser_SteamUser012_TrackAppUsageEvent_params *params );
@@ -54,7 +54,7 @@ struct cppISteamUser_SteamUser012_GetUserDataFolder_params
     void *linux_side;
     bool _ret;
     char *pchBuffer;
-    int cubBuffer;
+    int32_t cubBuffer;
 };
 extern void cppISteamUser_SteamUser012_GetUserDataFolder( struct cppISteamUser_SteamUser012_GetUserDataFolder_params *params );
 
@@ -75,8 +75,8 @@ struct cppISteamUser_SteamUser012_GetCompressedVoice_params
     void *linux_side;
     uint32_t _ret;
     void *pDestBuffer;
-    uint32 cbDestBufferSize;
-    uint32 *nBytesWritten;
+    uint32_t cbDestBufferSize;
+    uint32_t *nBytesWritten;
 };
 extern void cppISteamUser_SteamUser012_GetCompressedVoice( struct cppISteamUser_SteamUser012_GetCompressedVoice_params *params );
 
@@ -85,10 +85,10 @@ struct cppISteamUser_SteamUser012_DecompressVoice_params
     void *linux_side;
     uint32_t _ret;
     void *pCompressed;
-    uint32 cbCompressed;
+    uint32_t cbCompressed;
     void *pDestBuffer;
-    uint32 cbDestBufferSize;
-    uint32 *nBytesWritten;
+    uint32_t cbDestBufferSize;
+    uint32_t *nBytesWritten;
 };
 extern void cppISteamUser_SteamUser012_DecompressVoice( struct cppISteamUser_SteamUser012_DecompressVoice_params *params );
 
@@ -97,8 +97,8 @@ struct cppISteamUser_SteamUser012_GetAuthSessionTicket_params
     void *linux_side;
     HAuthTicket _ret;
     void *pTicket;
-    int cbMaxTicket;
-    uint32 *pcbTicket;
+    int32_t cbMaxTicket;
+    uint32_t *pcbTicket;
 };
 extern void cppISteamUser_SteamUser012_GetAuthSessionTicket( struct cppISteamUser_SteamUser012_GetAuthSessionTicket_params *params );
 
@@ -107,7 +107,7 @@ struct cppISteamUser_SteamUser012_BeginAuthSession_params
     void *linux_side;
     EBeginAuthSessionResult _ret;
     const void *pAuthTicket;
-    int cbAuthTicket;
+    int32_t cbAuthTicket;
     CSteamID steamID;
 };
 extern void cppISteamUser_SteamUser012_BeginAuthSession( struct cppISteamUser_SteamUser012_BeginAuthSession_params *params );

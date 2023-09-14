@@ -2,9 +2,9 @@ struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params
 {
     void *linux_side;
     uint32_t _ret;
-    uint32 unMsgType;
+    uint32_t unMsgType;
     const void *pubData;
-    uint32 cubData;
+    uint32_t cubData;
 };
 extern void cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage( struct cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage_params *params );
 
@@ -12,7 +12,7 @@ struct cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_param
 {
     void *linux_side;
     bool _ret;
-    uint32 *pcubMsgSize;
+    uint32_t *pcubMsgSize;
 };
 extern void cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable( struct cppISteamGameCoordinator_SteamGameCoordinator001_IsMessageAvailable_params *params );
 
@@ -20,10 +20,10 @@ struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params
 {
     void *linux_side;
     uint32_t _ret;
-    uint32 *punMsgType;
+    uint32_t *punMsgType;
     void *pubDest;
-    uint32 cubDest;
-    uint32 *pcubMsgSize;
+    uint32_t cubDest;
+    uint32_t *pcubMsgSize;
 };
 extern void cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage( struct cppISteamGameCoordinator_SteamGameCoordinator001_RetrieveMessage_params *params );
 

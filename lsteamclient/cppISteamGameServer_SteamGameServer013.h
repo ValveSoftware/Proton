@@ -2,10 +2,10 @@ struct cppISteamGameServer_SteamGameServer013_InitGameServer_params
 {
     void *linux_side;
     bool _ret;
-    uint32 unIP;
-    uint16 usGamePort;
-    uint16 usQueryPort;
-    uint32 unFlags;
+    uint32_t unIP;
+    uint16_t usGamePort;
+    uint16_t usQueryPort;
+    uint32_t unFlags;
     AppId_t nGameAppId;
     const char *pchVersionString;
 };
@@ -89,14 +89,14 @@ extern void cppISteamGameServer_SteamGameServer013_WasRestartRequested( struct c
 struct cppISteamGameServer_SteamGameServer013_SetMaxPlayerCount_params
 {
     void *linux_side;
-    int cPlayersMax;
+    int32_t cPlayersMax;
 };
 extern void cppISteamGameServer_SteamGameServer013_SetMaxPlayerCount( struct cppISteamGameServer_SteamGameServer013_SetMaxPlayerCount_params *params );
 
 struct cppISteamGameServer_SteamGameServer013_SetBotPlayerCount_params
 {
     void *linux_side;
-    int cBotplayers;
+    int32_t cBotplayers;
 };
 extern void cppISteamGameServer_SteamGameServer013_SetBotPlayerCount( struct cppISteamGameServer_SteamGameServer013_SetBotPlayerCount_params *params );
 
@@ -124,7 +124,7 @@ extern void cppISteamGameServer_SteamGameServer013_SetPasswordProtected( struct 
 struct cppISteamGameServer_SteamGameServer013_SetSpectatorPort_params
 {
     void *linux_side;
-    uint16 unSpectatorPort;
+    uint16_t unSpectatorPort;
 };
 extern void cppISteamGameServer_SteamGameServer013_SetSpectatorPort( struct cppISteamGameServer_SteamGameServer013_SetSpectatorPort_params *params );
 
@@ -174,9 +174,9 @@ struct cppISteamGameServer_SteamGameServer013_SendUserConnectAndAuthenticate_par
 {
     void *linux_side;
     bool _ret;
-    uint32 unIPClient;
+    uint32_t unIPClient;
     const void *pvAuthBlob;
-    uint32 cubAuthBlobSize;
+    uint32_t cubAuthBlobSize;
     CSteamID *pSteamIDUser;
 };
 extern void cppISteamGameServer_SteamGameServer013_SendUserConnectAndAuthenticate( struct cppISteamGameServer_SteamGameServer013_SendUserConnectAndAuthenticate_params *params );
@@ -201,7 +201,7 @@ struct cppISteamGameServer_SteamGameServer013_BUpdateUserData_params
     bool _ret;
     CSteamID steamIDUser;
     const char *pchPlayerName;
-    uint32 uScore;
+    uint32_t uScore;
 };
 extern void cppISteamGameServer_SteamGameServer013_BUpdateUserData( struct cppISteamGameServer_SteamGameServer013_BUpdateUserData_params *params );
 
@@ -210,8 +210,8 @@ struct cppISteamGameServer_SteamGameServer013_GetAuthSessionTicket_params
     void *linux_side;
     HAuthTicket _ret;
     void *pTicket;
-    int cbMaxTicket;
-    uint32 *pcbTicket;
+    int32_t cbMaxTicket;
+    uint32_t *pcbTicket;
 };
 extern void cppISteamGameServer_SteamGameServer013_GetAuthSessionTicket( struct cppISteamGameServer_SteamGameServer013_GetAuthSessionTicket_params *params );
 
@@ -220,7 +220,7 @@ struct cppISteamGameServer_SteamGameServer013_BeginAuthSession_params
     void *linux_side;
     uint32_t _ret;
     const void *pAuthTicket;
-    int cbAuthTicket;
+    int32_t cbAuthTicket;
     CSteamID steamID;
 };
 extern void cppISteamGameServer_SteamGameServer013_BeginAuthSession( struct cppISteamGameServer_SteamGameServer013_BeginAuthSession_params *params );
@@ -282,20 +282,20 @@ struct cppISteamGameServer_SteamGameServer013_HandleIncomingPacket_params
     void *linux_side;
     bool _ret;
     const void *pData;
-    int cbData;
-    uint32 srcIP;
-    uint16 srcPort;
+    int32_t cbData;
+    uint32_t srcIP;
+    uint16_t srcPort;
 };
 extern void cppISteamGameServer_SteamGameServer013_HandleIncomingPacket( struct cppISteamGameServer_SteamGameServer013_HandleIncomingPacket_params *params );
 
 struct cppISteamGameServer_SteamGameServer013_GetNextOutgoingPacket_params
 {
     void *linux_side;
-    int _ret;
+    int32_t _ret;
     void *pOut;
-    int cbMaxOut;
-    uint32 *pNetAdr;
-    uint16 *pPort;
+    int32_t cbMaxOut;
+    uint32_t *pNetAdr;
+    uint16_t *pPort;
 };
 extern void cppISteamGameServer_SteamGameServer013_GetNextOutgoingPacket( struct cppISteamGameServer_SteamGameServer013_GetNextOutgoingPacket_params *params );
 
@@ -309,7 +309,7 @@ extern void cppISteamGameServer_SteamGameServer013_EnableHeartbeats( struct cppI
 struct cppISteamGameServer_SteamGameServer013_SetHeartbeatInterval_params
 {
     void *linux_side;
-    int iHeartbeatInterval;
+    int32_t iHeartbeatInterval;
 };
 extern void cppISteamGameServer_SteamGameServer013_SetHeartbeatInterval( struct cppISteamGameServer_SteamGameServer013_SetHeartbeatInterval_params *params );
 

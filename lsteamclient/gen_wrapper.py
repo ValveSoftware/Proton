@@ -581,13 +581,15 @@ def declspec(decl, name):
     if param_needs_conversion(decl):
         return f"win{decl.spelling}_{sdkver}{name}"
 
-    if decl.spelling.startswith('const '):
-        const, type_name = 'const ', decl.spelling[6:]
-    else:
-        const, type_name = '', decl.spelling
-
+    type_name = decl.spelling.removeprefix("const ")
     if type_name.startswith('ISteam'):
         return f'{const}void /*{type_name}*/{name}'
+    if type_name in ('void', 'bool', 'char', 'float', 'double'):
+        return f'{const}{type_name}{name}'
+    if type_name.startswith(('int', 'long', 'short', 'signed')):
+        return f'{const}int{decl.get_size() * 8}_t{name}'
+    if type_name.startswith(('uint', 'unsigned')):
+        return f'{const}uint{decl.get_size() * 8}_t{name}'
 
     return f'{decl.spelling}{name}'
 

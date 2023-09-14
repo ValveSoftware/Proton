@@ -41,7 +41,7 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x
     void *linux_side;
     bool _ret;
     void *pvBuffer;
-    uint32 cbBufferLength;
+    uint32_t cbBufferLength;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64_params *params );
 
@@ -152,7 +152,7 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentE
 {
     void *linux_side;
     bool _ret;
-    int nValue;
+    int32_t nValue;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryElapsedSeconds_params *params );
 
@@ -161,7 +161,7 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentE
     void *linux_side;
     bool _ret;
     void *pvBuffer;
-    uint32 cbBufferLength;
+    uint32_t cbBufferLength;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateCurrentEntryCoverArt_params *params );
 
@@ -190,8 +190,8 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry_
 {
     void *linux_side;
     bool _ret;
-    int nID;
-    int nPosition;
+    int32_t nID;
+    int32_t nPosition;
     const char *pchEntryText;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetQueueEntry_params *params );
@@ -200,7 +200,7 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueu
 {
     void *linux_side;
     bool _ret;
-    int nID;
+    int32_t nID;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentQueueEntry_params *params );
 
@@ -229,8 +229,8 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEnt
 {
     void *linux_side;
     bool _ret;
-    int nID;
-    int nPosition;
+    int32_t nID;
+    int32_t nPosition;
     const char *pchEntryText;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPlaylistEntry_params *params );
@@ -239,7 +239,7 @@ struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlay
 {
     void *linux_side;
     bool _ret;
-    int nID;
+    int32_t nID;
 };
 extern void cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry( struct cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetCurrentPlaylistEntry_params *params );
 
