@@ -3,13 +3,9 @@
 #NOTE: If you make modifications here, consider whether they should
 #be duplicated in ../lsteamclient/gen_wrapper.py
 
-from __future__ import print_function
-
 CLANG_PATH='/usr/lib/clang/15'
 
 from clang.cindex import CursorKind, Index, Type, TypeKind
-import pprint
-import sys
 import os
 import re
 
@@ -240,46 +236,8 @@ path_conversions = [
     #TODO: LaunchInternalProcess, need steam cooperation
 ]
 
-aliases = {
-    #Some interface versions are not present in the public SDK
-    #headers, but are actually requested by games. It would be nice
-    #to verify that these interface versions are actually binary
-    #compatible. Lacking that, we hope the next highest version
-    #is compatible.
-#    "SteamClient012":["SteamClient013"],
-#    "SteamUtils004":["SteamUtils003"], # TimeShift uses SteamUtils003
-
-
-    #leaving these commented-out. let's see if they turn up in practice,
-    #and handle them correctly if so.
-
-#    "SteamFriends011":["SteamFriends010"],
-#    "SteamFriends013":["SteamFriends012"],
-#    "SteamGameServer008":["SteamGameServer007", "SteamGameServer006"],
-#    "SteamMatchMaking004":["SteamMatchMaking003"],
-#    "SteamMatchMaking006":["SteamMatchMaking005"],
-#    "STEAMREMOTESTORAGE_INTERFACE_VERSION004":["STEAMREMOTESTORAGE_INTERFACE_VERSION003"],
-#    "STEAMREMOTESTORAGE_INTERFACE_VERSION008":["STEAMREMOTESTORAGE_INTERFACE_VERSION007"],
-#    "STEAMREMOTESTORAGE_INTERFACE_VERSION010":["STEAMREMOTESTORAGE_INTERFACE_VERSION009"],
-#    "STEAMUGC_INTERFACE_VERSION005":["STEAMUGC_INTERFACE_VERSION004"],
-#    "STEAMUGC_INTERFACE_VERSION007":["STEAMUGC_INTERFACE_VERSION006"],
-#    "SteamUser016":["SteamUser015"],
-#    "STEAMUSERSTATS_INTERFACE_VERSION009":["STEAMUSERSTATS_INTERFACE_VERSION008"],
-}
-
-# TODO: we could do this automatically by creating temp files and
-# having clang parse those and detect when the MS-style padding results
-# in identical struct widths. But there's only a couple, so let's cheat...
-skip_structs = [
-#        "RemoteStorageGetPublishedFileDetailsResult_t_9740",
-#        "SteamUGCQueryCompleted_t_20",
-#        "SteamUGCRequestUGCDetailsResult_t_9764"
-]
-
 struct_conversion_cache = {}
 struct_needs_size_adjustment_cache = {}
-
-print_sizes = []
 
 class_versions = {}
 
@@ -479,7 +437,6 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     do_size_fixup = None
     do_wrap = None
     do_unwrap = None
-    need_convert = []
     for param in get_params(method):
         if param.type.kind == TypeKind.POINTER and \
                 param.type.get_pointee().kind == TypeKind.UNEXPOSED:
@@ -853,10 +810,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     constructors = open("vrclient_x64/win_constructors_table.dat", "a")
     constructors.write("    {\"%s\", &create_%s, &destroy_%s},\n" % (iface_version, winclassname, winclassname))
     constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (iface_version, winclassname, winclassname))
-    if iface_version in aliases.keys():
-        for alias in aliases[iface_version]:
-            constructors.write("    {\"%s\", &create_%s, &destroy_%s}, /* alias */\n" % (alias, winclassname, winclassname))
-            constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (alias, winclassname, winclassname))
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 
@@ -1449,8 +1402,6 @@ for sdkver in sdk_versions:
             handle_class(sdkver, child)
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
-        if child.displayname in print_sizes:
-            sys.stdout.write("size of %s is %u\n" % (child.displayname, child.type.get_size()))
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
