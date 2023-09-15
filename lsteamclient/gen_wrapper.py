@@ -3,14 +3,10 @@
 #NOTE: If you make modifications here, consider whether they should
 #be duplicated in ../vrclient/gen_wrapper.py
 
-from __future__ import print_function
-
-CLANG_PATH='/usr/lib/clang/16'
+CLANG_PATH='/usr/lib/clang/15'
 
 from clang.cindex import CursorKind, Index, Type, TypeKind
 from collections import namedtuple
-import pprint
-import sys
 import os
 import re
 import math
@@ -176,7 +172,6 @@ aliases = {
     "SteamGameServer008":["SteamGameServer007","SteamGameServer006"],
     "SteamNetworkingSocketsSerialized002":["SteamNetworkingSocketsSerialized001"],
     "STEAMAPPS_INTERFACE_VERSION001":["SteamApps001"],
-    "STEAMAPPS_INTERFACE_VERSION001":["SteamApps001"],
     "SteamNetworkingSockets002":["SteamNetworkingSockets003"],
 }
 
@@ -290,8 +285,6 @@ wrapped_classes = [
         "ISteamMatchmakingRulesResponse",
         "ISteamNetworkingFakeUDPPort",
 ]
-
-print_sizes = []
 
 class_versions = {}
 
@@ -1333,8 +1326,6 @@ for sdkver in sdk_versions:
             handle_class(sdkver, child, classes[child.displayname])
         if child.kind in [CursorKind.STRUCT_DECL, CursorKind.CLASS_DECL]:
             handle_struct(sdkver, child)
-        if child.displayname in print_sizes:
-            print("size of %s is %u" % (child.displayname, child.type.get_size()))
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
