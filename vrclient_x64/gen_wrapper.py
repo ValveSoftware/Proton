@@ -1331,6 +1331,37 @@ int main(void)
         f.write("    test_capi_thunks_%s();\n" % class_name)
 
 
+def enumerate_structs(cursor, vr_only=False):
+    for child in cursor.get_children():
+        if child.kind == CursorKind.NAMESPACE \
+           and child.displayname == "vr":
+            yield from child.get_children()
+        elif not vr_only:
+            yield child
+
+
+def parse(sources, abi):
+    args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/']
+    if abi[0] == 'w':
+        args += ["-D_WIN32", "-U__linux__"]
+        args += ["-fms-extensions", "-mms-bitfields"]
+        args += ["-Wno-ignored-attributes", "-Wno-incompatible-ms-struct"]
+    if abi[0] == 'u':
+        args += ["-DGNUC"]
+
+    index = Index.create()
+    build = index.parse("source.cpp", args=args, unsaved_files=sources.items())
+    diagnostics = list(build.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    structs = enumerate_structs(build.cursor)
+    structs = [(child.type.spelling, child.type) for child in structs]
+    structs = dict(reversed(structs))
+
+    return build, structs
+
+
 prog = re.compile("^.*const\s*char.* \*?(\w*)_Version.*\"(.*)\"")
 for sdkver in SDK_VERSIONS:
     print(f'parsing SDK version {sdkver}...')
@@ -1356,49 +1387,12 @@ for sdkver in SDK_VERSIONS:
     else:
         source = [f'#include "{sdkdir}/{file}"'
                   for file in SDK_SOURCES.keys()]
-
     sources["source.cpp"] = "\n".join(source)
-    windows_args = ["-D_WIN32", "-fms-extensions", "-Wno-ignored-attributes",
-                    "-mms-bitfields", "-U__linux__", "-Wno-incompatible-ms-struct"]
-    windows_args += ['-I' + CLANG_PATH + '/include/']
-    linux_args = ["-DGNUC"]
-    linux_args += ['-I' + CLANG_PATH + '/include/']
 
-    index = Index.create()
-
-    linux_build32 = index.parse("source.cpp", args=linux_args + ["-m32"], unsaved_files=sources.items())
-    diagnostics = list(linux_build32.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    linux_build64 = index.parse("source.cpp", args=linux_args + ["-m64"], unsaved_files=sources.items())
-    diagnostics = list(linux_build64.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    windows_build32 = index.parse("source.cpp", args=windows_args + ["-m32"], unsaved_files=sources.items())
-    diagnostics = list(windows_build32.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    windows_build64 = index.parse("source.cpp", args=windows_args + ["-m64"], unsaved_files=sources.items())
-    diagnostics = list(windows_build64.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    def enumerate_structs(cursor, vr_only=False):
-        for child in cursor.get_children():
-            if child.kind == CursorKind.NAMESPACE and child.displayname == "vr":
-                yield from child.get_children()
-            elif not vr_only:
-                yield child
-
-    windows_structs32 = dict(reversed([(child.type.spelling, child.type) for child
-                                       in enumerate_structs(windows_build32.cursor)]))
-    windows_structs64 = dict(reversed([(child.type.spelling, child.type) for child
-                                       in enumerate_structs(windows_build64.cursor)]))
-    linux_structs64 = dict(reversed([(child.type.spelling, child.type) for child
-                                     in enumerate_structs(linux_build64.cursor)]))
+    linux_build32, linux_structs32 = parse(sources, 'u32')
+    linux_build64, linux_structs64 = parse(sources, 'u64')
+    windows_build32, windows_structs32 = parse(sources, 'w32')
+    windows_build64, windows_structs64 = parse(sources, 'w64')
 
     for child in enumerate_structs(linux_build32.cursor, vr_only=True):
         if child.kind == CursorKind.CLASS_DECL and child.displayname in SDK_CLASSES:
