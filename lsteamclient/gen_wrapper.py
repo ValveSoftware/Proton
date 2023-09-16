@@ -1261,6 +1261,29 @@ def handle_struct(sdkver, struct):
         else:
             cppfile.write("\n")
 
+
+def parse(sources, abi):
+    args = [f'-m{abi[1:]}', '-I' + CLANG_PATH + '/include/']
+    if abi[0] == 'w':
+        args += ["-D_WIN32", "-U__linux__"]
+        args += ["-fms-extensions", "-mms-bitfields"]
+        args += ["-Wno-ignored-attributes", "-Wno-incompatible-ms-struct"]
+    if abi[0] == 'u':
+        args += ["-DGNUC"]
+
+    index = Index.create()
+    build = index.parse("source.cpp", args=args, unsaved_files=sources.items())
+    diagnostics = list(build.diagnostics)
+    for diag in diagnostics: print(diag)
+    assert len(diagnostics) == 0
+
+    structs = build.cursor.get_children()
+    structs = [(child.spelling, child.type) for child in structs]
+    structs = dict(reversed(structs))
+
+    return build, structs
+
+
 prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
 for sdkver in SDK_VERSIONS:
     print(f"parsing SDK version {sdkver}...")
@@ -1289,40 +1312,11 @@ for sdkver in SDK_VERSIONS:
               f'#endif\n'
               for file in SDK_SOURCES.keys()]
     sources["source.cpp"] = "\n".join(source)
-    windows_args = ["-D_WIN32", "-fms-extensions", "-Wno-ignored-attributes",
-                    "-mms-bitfields", "-U__linux__", "-Wno-incompatible-ms-struct"]
-    windows_args += ['-I' + CLANG_PATH + '/include/']
-    linux_args = ["-DGNUC"]
-    linux_args += ['-I' + CLANG_PATH + '/include/']
 
-    index = Index.create()
-
-    linux_build32 = index.parse("source.cpp", args=linux_args + ["-m32"], unsaved_files=sources.items())
-    diagnostics = list(linux_build32.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    linux_build64 = index.parse("source.cpp", args=linux_args + ["-m64"], unsaved_files=sources.items())
-    diagnostics = list(linux_build64.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    windows_build32 = index.parse("source.cpp", args=windows_args + ["-m32"], unsaved_files=sources.items())
-    diagnostics = list(windows_build32.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    windows_build64 = index.parse("source.cpp", args=windows_args + ["-m64"], unsaved_files=sources.items())
-    diagnostics = list(windows_build64.diagnostics)
-    for diag in diagnostics: print(diag)
-    assert len(diagnostics) == 0
-
-    linux_structs64 = dict(reversed([(child.spelling, child.type) for child
-                                     in linux_build64.cursor.get_children()]))
-    windows_structs32 = dict(reversed([(child.spelling, child.type) for child
-                                       in windows_build32.cursor.get_children()]))
-    windows_structs64 = dict(reversed([(child.spelling, child.type) for child
-                                       in windows_build64.cursor.get_children()]))
+    linux_build32, linux_structs32 = parse(sources, 'u32')
+    linux_build64, linux_structs64 = parse(sources, 'u64')
+    windows_build32, windows_structs32 = parse(sources, 'w32')
+    windows_build64, windows_structs64 = parse(sources, 'w64')
 
     for child in linux_build32.cursor.get_children():
         if child.kind == CursorKind.CLASS_DECL and child.displayname in SDK_CLASSES:
