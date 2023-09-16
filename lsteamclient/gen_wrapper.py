@@ -278,14 +278,6 @@ MANUAL_PARAMS = [
     "nNativeKeyCode"
 ]
 
-#struct_conversion_cache = {
-#    '142': {
-#                'SteamUGCDetails_t': True,
-#                'SteamUGCQueryCompleted_t': False
-#           }
-#}
-struct_conversion_cache = {}
-
 converted_structs = []
 
 # callback classes for which we have a linux wrapper
@@ -446,11 +438,13 @@ class Struct:
         self._sdkver = sdkver
         self._abi = abi
         self._fields = None
+        self._conv_cache = {}
 
         self.name = canonical_typename(self._cursor)
         self.type = self._cursor.type.get_canonical()
         self.size = self.type.get_size()
         self.align = self.type.get_align()
+        self.id = f'{abi}_{self.name}_{sdkver}'
 
         if self.name in EXEMPT_STRUCTS:
             self._fields = [Padding(0, self.size)]
@@ -488,6 +482,10 @@ class Struct:
         return [f for f in self.padded_fields if type(f) is not Padding]
 
     def needs_conversion(self, other):
+        if other.id in self._conv_cache:
+            return self._conv_cache[other.id]
+        self._conv_cache[other.id] = other._conv_cache[self.id] = True
+
         if self.name in PATH_CONV_STRUCTS and self._abi[0] != other._abi[0]:
             return True
         if self.name in SIZED_STRUCTS and self.size != other.size:
@@ -498,6 +496,7 @@ class Struct:
                for a, b in zip(self.fields, other.fields)]):
             return True
 
+        self._conv_cache[other.id] = other._conv_cache[self.id] = False
         return False
 
     def get_children(self):
@@ -657,7 +656,7 @@ def find_struct_abis(name):
     return structs[sdkver]
 
 
-def struct_needs_conversion_nocache(struct):
+def struct_needs_conversion(struct):
     name = canonical_typename(struct)
     if name in EXEMPT_STRUCTS:
         return False
@@ -673,15 +672,6 @@ def struct_needs_conversion_nocache(struct):
     if abis['w64'].needs_conversion(abis['u64']):
         return True
     return False
-
-
-def struct_needs_conversion(struct):
-    name = canonical_typename(struct)
-    if not sdkver in struct_conversion_cache:
-        struct_conversion_cache[sdkver] = {}
-    if not name in struct_conversion_cache[sdkver]:
-        struct_conversion_cache[sdkver][name] = struct_needs_conversion_nocache(struct)
-    return struct_conversion_cache[sdkver][name]
 
 
 def underlying_type(decl):
@@ -1121,6 +1111,9 @@ def handle_struct(sdkver, struct):
     w2l_handler_name = None
     l2w_handler_name = None
 
+    name = canonical_typename(struct)
+    abis = find_struct_abis(name)
+
     def dump_win_struct(to_file, name):
         to_file.write("#pragma pack( push, 8 )\n")
         to_file.write(f"struct win{name} {{\n")
@@ -1174,8 +1167,6 @@ def handle_struct(sdkver, struct):
         hfile.write("#endif\n\n")
     else:
         #for callbacks, we use the windows struct size in the cb dispatch switch
-        name = canonical_typename(struct)
-        abis = find_struct_abis(name)
         size = {a: abis[a].size for a in abis.keys()}
 
         struct_name = f"{struct.name}_{size['w32']}"
