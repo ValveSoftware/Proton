@@ -6,6 +6,7 @@
 CLANG_PATH='/usr/lib/clang/15'
 
 from clang.cindex import CursorKind, Index, Type, TypeKind
+import concurrent.futures
 import os
 import re
 
@@ -68,6 +69,8 @@ SDK_VERSIONS = [
     "0.9.1",
     "0.9.0",
 ]
+
+ABIS = ['u32', 'u64', 'w32', 'w64']
 
 SDK_SOURCES = {
     "ivrclientcore.h": [
@@ -1422,19 +1425,22 @@ for i, sdkver in enumerate(SDK_VERSIONS):
     all_versions[sdkver], all_sources[sdkver] = load(sdkver)
 print(u'loading SDKs... 100%')
 
-for i, sdkver in enumerate(SDK_VERSIONS):
-    print(f'parsing SDKs... {i * 100 // len(SDK_VERSIONS)}%', end='\r')
-    sources = all_sources[sdkver]
-    records = {}
-    records['u32'] = parse(sources, 'u32')
-    records['u64'] = parse(sources, 'u64')
-    records['w32'] = parse(sources, 'w32')
-    records['w64'] = parse(sources, 'w64')
-    all_records[sdkver] = records
-print(u'parsing SDKs... 100%')
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    arg0 = [sdkver for sdkver in SDK_VERSIONS for abi in ABIS]
+    arg1 = [abi for sdkver in SDK_VERSIONS for abi in ABIS]
+    def parse_map(sdkver, abi):
+        return sdkver, abi, parse(all_sources[sdkver], abi)
 
-for sdkver, records in all_records.items():
-    generate(sdkver, records)
+    results = executor.map(parse_map, arg0, arg1)
+    for i, result in enumerate(results):
+        print(f'parsing SDKs... {i * 100 // len(arg0)}%', end='\r')
+        sdkver, abi, index = result
+        if sdkver not in all_records: all_records[sdkver] = {}
+        all_records[sdkver][abi] = index
+print('parsing SDKs... 100%')
+
+for sdkver in SDK_VERSIONS:
+    generate(sdkver, all_records[sdkver])
 
 
 for f in cpp_files_need_close_brace:
