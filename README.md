@@ -160,7 +160,7 @@ E.g.:
 ```
 mkdir ../debug-proton-build && cd ../debug-proton-build
 ../proton/configure.sh --enable-ccache --build-name=debug_build
-make UNSTRIPPED_BUILD=1 install`
+make UNSTRIPPED_BUILD=1 install
 ```
 
 
