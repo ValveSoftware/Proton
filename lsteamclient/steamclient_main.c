@@ -986,43 +986,46 @@ static int get_callback_len(int cb)
     return 0;
 }
 
-bool do_cb_wrap( HSteamPipe pipe, bool (*cpp_func)( void *, SteamAPICall_t, void *, int, int, bool * ),
-                 void *linux_side, SteamAPICall_t call, void *callback, int callback_len,
-                 int cb_expected, bool *failed )
+static void *alloc_callback_wtou( int id, void *callback, int *callback_len )
 {
-    void *lin_callback = NULL;
-    int lin_callback_len;
+    int len;
+
+    if (!(len = get_callback_len( id ))) return callback;
+    callback = HeapAlloc( GetProcessHeap(), 0, len );
+    *callback_len = len;
+
+    return callback;
+}
+
+static void convert_callback_utow( int id, void *lin_callback, int lin_callback_len, void *callback, int callback_len )
+{
+    switch (id)
+    {
+#include "cb_getapi_table.dat"
+    }
+}
+
+bool do_cb_wrap( HSteamPipe pipe, bool (*cpp_func)( void *, SteamAPICall_t, void *, int, int, bool * ),
+                 void *linux_side, SteamAPICall_t call, void *callback, int callback_len, int id, bool *failed )
+{
+    int lin_callback_len = callback_len;
+    void *lin_callback;
     bool ret;
 
-    lin_callback_len = get_callback_len(cb_expected);
-    if(!lin_callback_len){
-        /* structs are compatible, pass on through */
-        if(!cpp_func){
-            if(!load_steamclient())
-                return 0;
-            return steamclient_GetAPICallResult(pipe, call, callback, callback_len, cb_expected, failed);
-        }
-        return cpp_func(linux_side, call, callback, callback_len, cb_expected, failed);
-    }
-
-    /* structs require conversion */
-    lin_callback = HeapAlloc(GetProcessHeap(), 0, lin_callback_len);
+    if (!(lin_callback = alloc_callback_wtou( id, callback, &lin_callback_len ))) return FALSE;
 
     if(!cpp_func){
         if(!load_steamclient())
             return 0;
-        ret = steamclient_GetAPICallResult(pipe, call, lin_callback, lin_callback_len, cb_expected, failed);
+        ret = steamclient_GetAPICallResult(pipe, call, callback, callback_len, id, failed);
     }else
-        ret = cpp_func(linux_side, call, lin_callback, lin_callback_len, cb_expected, failed);
+        ret = cpp_func(linux_side, call, callback, callback_len, id, failed);
 
-    if(ret){
-        switch(cb_expected){
-#include "cb_getapi_table.dat"
-        }
+    if (ret && lin_callback != callback)
+    {
+        convert_callback_utow( id, lin_callback, lin_callback_len, callback, callback_len );
+        HeapFree( GetProcessHeap(), 0, lin_callback );
     }
-
-    HeapFree(GetProcessHeap(), 0, lin_callback);
-
     return ret;
 }
 
