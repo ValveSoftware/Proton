@@ -123,13 +123,9 @@ static DWORD WINAPI callback_thread( void *dummy )
                                                               cb_data.steam_api_warning_hook.msg );
             callback_complete( cookie );
             break;
-        case STEAM_API_CALLBACK_ONE_PARAM:
-            TRACE( "STEAM_API_CALLBACK_ONE_PARAM func %p, param %p.\n", cb_data.func,
-                   cb_data.steam_api_callback_one_param.param );
-            ((void (WINAPI *)( void * ))cb_data.func)( cb_data.steam_api_callback_one_param.param );
-            callback_complete( cookie );
+        default:
+            ERR( "Unexpected callback type %u.\n", cb_data.type );
             break;
-        default: ERR( "Unexpected callback type %u.\n", cb_data.type ); break;
         }
     }
     TRACE( "exiting.\n" );
