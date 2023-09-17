@@ -1,12 +1,4 @@
-extern "C" {
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
-}
+#include "steamclient_private.h"
 
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
@@ -16,7 +8,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #include "steamworks_sdk_151/steam_api.h"
 #pragma pop_macro("__cdecl")
 #pragma pop_macro("strncpy")
-#include "steamclient_private.h"
 
 extern "C" {
 #define SDKVER_151
