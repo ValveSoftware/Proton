@@ -215,7 +215,6 @@ SOURCES = \
 	cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V001.cpp \
 	cppISteamVideo_STEAMVIDEO_INTERFACE_V002.cpp \
-	steamclient_manual_common.cpp \
 	struct_converters_111x.cpp \
 	struct_converters_112.cpp \
 	struct_converters_112x.cpp \
