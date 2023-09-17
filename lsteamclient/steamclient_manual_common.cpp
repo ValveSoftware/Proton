@@ -1,13 +1,4 @@
-extern "C" {
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/list.h"
-#include "wine/debug.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
-}
+#include "steamclient_private.h"
 
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
@@ -19,7 +10,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #pragma pop_macro("__cdecl")
 #pragma pop_macro("strncpy")
-#include "steamclient_private.h"
 
 extern "C" {
 #define SDKVER_153a
@@ -29,8 +19,11 @@ extern "C" {
 
 #define SDK_VERSION 1531
 #include "steamclient_manual_common.h"
+} /* extern "C" { */
 
 #include <pthread.h>
+
+WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 struct msg_wrapper {
     struct winSteamNetworkingMessage_t_153a win_msg;
@@ -218,5 +211,3 @@ void *network_message_win_to_lin_(void *win_msg, unsigned int version)
 
     return lin_msg;
 }
-
-} /* extern "C" { */

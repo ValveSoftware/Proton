@@ -1245,16 +1245,9 @@ for klass in all_classes.values():
         out = file.write
 
         out(u'/* This file is auto-generated, do not edit. */\n')
-        out(u'#include <stdarg.h>\n')
-        out(u'\n')
-        out(u'#include "windef.h"\n')
-        out(u'#include "winbase.h"\n')
-        out(u'#include "wine/debug.h"\n')
-        out(u'\n')
-        out(u'#include "steam_defs.h"\n')
-        out(u'\n')
         out(u'#include "steamclient_private.h"\n')
         out(u'\n')
+        out(u'#include "steam_defs.h"\n')
         out(u'#include "struct_converters.h"\n')
         out(u'\n')
         out(u'WINE_DEFAULT_DEBUG_CHANNEL(steamclient);\n')

@@ -1,4 +1,6 @@
 /* TODO these should be generated */
+#ifndef __STEAMCLIENT_PRIVATE_H
+#define __STEAMCLIENT_PRIVATE_H
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -6,6 +8,10 @@
 #include <stdbool.h>
 
 #include "windef.h"
+#include "winbase.h"
+
+#include "wine/debug.h"
+#include "wine/list.h"
 
 #ifndef __cplusplus
 #include "cxx.h"
@@ -17,40 +23,6 @@ typedef void (*vtable_ptr)(void);
 extern "C" {
 #endif
 
-typedef struct __winISteamClient winISteamClient;
-typedef struct __winISteamUser winISteamUser;
-typedef struct __winISteamGameServer winISteamGameServer;
-typedef struct __winISteamFriends winISteamFriends;
-typedef struct __winISteamUtils winISteamUtils;
-typedef struct __winISteamMatchmaking winISteamMatchmaking;
-typedef struct __winISteamMatchmakingServers winISteamMatchmakingServers;
-typedef struct __winISteamUserStats winISteamUserStats;
-typedef struct __winISteamGameServerStats winISteamGameServerStats;
-typedef struct __winISteamApps winISteamApps;
-typedef struct __winISteamNetworking winISteamNetworking;
-typedef struct __winISteamRemoteStorage winISteamRemoteStorage;
-typedef struct __winISteamRemoteScreenshots winISteamRemoteScreenshots;
-typedef struct __winISteamScreenshots winISteamScreenshots;
-typedef struct __winISteamHTTP winISteamHTTP;
-typedef struct __winISteamUnifiedMessages winISteamUnifiedMessages;
-typedef struct __winISteamController winISteamController;
-typedef struct __winISteamUGC winISteamUGC;
-typedef struct __winISteamAppList winISteamAppList;
-typedef struct __winISteamMusic winISteamMusic;
-typedef struct __winISteamMusicRemote winISteamMusicRemote;
-typedef struct __winISteamHTMLSurface winISteamHTMLSurface;
-typedef struct __winISteamInventory winISteamInventory;
-typedef struct __winISteamVideo winISteamVideo;
-typedef struct __winISteamMasterServerUpdater winISteamMasterServerUpdater;
-typedef struct __winISteamContentServer winISteamContentServer;
-typedef struct __winISteamParentalSettings winISteamParentalSettings;
-typedef struct __winISteamGameSearch winISteamGameSearch;
-typedef struct __winISteamInput winISteamInput;
-typedef struct __winISteamParties winISteamParties;
-typedef struct __winISteamRemotePlay winISteamRemotePlay;
-typedef struct __winISteamNetworkingFakeUDPPort winISteamNetworkingFakeUDPPort;
-typedef struct __winX winX;
-
 struct w_steam_iface
 {
     vtable_ptr *vtable;
@@ -58,8 +30,8 @@ struct w_steam_iface
 };
 
 struct SteamInputActionEvent_t;
-typedef void (*CDECL win_SteamInputActionEventCallbackPointer)(SteamInputActionEvent_t *);
-void lin_SteamInputActionEventCallbackPointer(SteamInputActionEvent_t *dat);
+typedef void (*CDECL win_SteamInputActionEventCallbackPointer)( struct SteamInputActionEvent_t * );
+void lin_SteamInputActionEventCallbackPointer( struct SteamInputActionEvent_t *dat );
 
 struct w_steam_iface *create_win_interface(const char *name, void *linux_side);
 unsigned int steamclient_unix_path_to_dos_path( bool api_result, const char *src, char *dst,
@@ -84,6 +56,7 @@ void *manual_convert_SteamAPIWarningMessageHook_t(void *win_func);
 void *manual_convert_FSteamNetworkingSocketsDebugOutput(void *win_func);
 void *manual_convert_SteamAPI_CheckCallbackRegistered_t(void *win_func);
 
+#define PATH_MAX 4096
 extern char g_tmppath[PATH_MAX];
 
 void *alloc_callback_wtou( int id, void *callback, int *callback_len );
@@ -134,3 +107,5 @@ int32_t after_steam_pipe_create( int32_t pipe );
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* __STEAMCLIENT_PRIVATE_H */

@@ -1,12 +1,4 @@
-extern "C" {
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
-}
+#include "steamclient_private.h"
 
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
@@ -19,7 +11,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #include "steamworks_sdk_148a/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #pragma pop_macro("strncpy")
-#include "steamclient_private.h"
 
 extern "C" {
 #define SDKVER_148a
@@ -33,6 +24,8 @@ typedef winSteamNetworkingMessage_t_148a winSteamNetworkingMessage_t_152;
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets008.h"
 #include "cppISteamNetworkingUtils_SteamNetworkingUtils003.h"
 }
+
+WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 void cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection( struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection_params *params )
 {

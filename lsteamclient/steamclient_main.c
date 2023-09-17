@@ -14,14 +14,12 @@
 #include "winnls.h"
 #include "winuser.h"
 #include "winternl.h"
-#include "wine/debug.h"
-#include "wine/list.h"
-#include "steam_defs.h"
 
 #ifdef __linux__
 #include <X11/keysym.h>
 #endif
 
+#include "steam_defs.h"
 #include "steamclient_private.h"
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))

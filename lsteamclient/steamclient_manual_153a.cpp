@@ -1,12 +1,4 @@
-extern "C" {
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
-}
+#include "steamclient_private.h"
 
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
@@ -20,7 +12,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #include "steamworks_sdk_153a/steamnetworkingfakeip.h"
 #pragma pop_macro("__cdecl")
 #pragma pop_macro("strncpy")
-#include "steamclient_private.h"
 
 extern "C" {
 #define SDKVER_153a
@@ -38,6 +29,8 @@ typedef winSteamNetworkingMessage_t_153a winSteamNetworkingMessage_t_158;
 typedef struct ScePadTriggerEffectParam { uint8 m_data[120]; } ScePadTriggerEffectParam;
 #include "cppISteamInput_SteamInput006.h"
 }
+
+WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 /***** manual fn wrapper for ISteamInput::EnableActionEventCallbacks *****/
 extern win_SteamInputActionEventCallbackPointer win_EnableActionEventCallbacks;
