@@ -27,38 +27,6 @@ char g_tmppath[PATH_MAX];
 static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 static HANDLE steam_overlay_event;
 
-static void * (WINAPI *p_NtCurrentTeb)(void);
-
-static void init_ntdll_so_funcs(void)
-{
-    static const WCHAR ntdllW[] = {'n','t','d','l','l','.','d','l','l',0};
-    Dl_info info;
-    uint64_t unix_funcs;
-    unsigned int status;
-    void *ntdll;
-
-    status = NtQueryVirtualMemory(GetCurrentProcess(), GetModuleHandleW(ntdllW), (MEMORY_INFORMATION_CLASS)1000 /*MemoryWineUnixFuncs*/,
-            &unix_funcs, sizeof(unix_funcs), NULL);
-    if (status)
-    {
-        fprintf(stderr, "err:lsteamclient:init_ntdll_so_funcs NtQueryVirtualMemory status %#x.\n", status);
-        return;
-    }
-    if (!dladdr((void *)(ULONG_PTR)unix_funcs, &info))
-    {
-        fprintf(stderr, "err:lsteamclient:init_ntdll_so_funcs dladdr failed.\n");
-        return;
-    }
-    ntdll = dlopen(info.dli_fname, RTLD_NOW);
-    if (!ntdll)
-    {
-        fprintf(stderr, "err:lsteamclient:init_ntdll_so_funcs could not find ntdll.so.\n");
-        return;
-    }
-    p_NtCurrentTeb = dlsym(ntdll, "NtCurrentTeb");
-    dlclose(ntdll);
-}
-
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
     TRACE("(%p, %u, %p)\n", instance, reason, reserved);
@@ -68,7 +36,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(instance);
             steam_overlay_event = CreateEventA(NULL, TRUE, FALSE, "__wine_steamclient_GameOverlayActivated");
-            init_ntdll_so_funcs();
             break;
         case DLL_PROCESS_DETACH:
             stop_callback_thread();
@@ -77,13 +44,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     }
 
     return TRUE;
-}
-
-bool is_native_thread(void)
-{
-    if (!p_NtCurrentTeb)
-        return TRUE;
-    return !p_NtCurrentTeb();
 }
 
 void sync_environment(void)
