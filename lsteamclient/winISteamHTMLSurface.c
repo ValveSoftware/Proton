@@ -1,14 +1,7 @@
 /* This file is auto-generated, do not edit. */
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "steam_defs.h"
-
 #include "steamclient_private.h"
 
+#include "steam_defs.h"
 #include "struct_converters.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);

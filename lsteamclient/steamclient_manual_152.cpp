@@ -1,12 +1,4 @@
-extern "C" {
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
-}
+#include "steamclient_private.h"
 
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
@@ -17,7 +9,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 #include "steamworks_sdk_152/isteaminput.h"
 #pragma pop_macro("__cdecl")
 #pragma pop_macro("strncpy")
-#include "steamclient_private.h"
 
 #include <unordered_map>
 
@@ -32,6 +23,8 @@ extern "C" {
 #include "cppISteamInput_SteamInput005.h"
 #include "cppISteamController_SteamController008.h"
 }
+
+WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 /***** manual fn wrapper for ISteamInput::EnableActionEventCallbacks *****/
 win_SteamInputActionEventCallbackPointer win_EnableActionEventCallbacks;

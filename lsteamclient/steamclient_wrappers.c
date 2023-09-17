@@ -1,13 +1,7 @@
 /* Linux-to-Windows conversions (i.e. callbacks) here. */
 
-#include <stdarg.h>
-
-#include "windef.h"
-#include "winbase.h"
-#include "wine/debug.h"
-
-#include "steam_defs.h"
 #include "steamclient_private.h"
+#include "steam_defs.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
