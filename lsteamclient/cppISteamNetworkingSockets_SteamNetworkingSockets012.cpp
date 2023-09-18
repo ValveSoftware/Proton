@@ -2,15 +2,15 @@
 #pragma push_macro("__cdecl")
 #undef __cdecl
 #define __cdecl
-#include "steamworks_sdk_157/steam_api.h"
-#include "steamworks_sdk_157/steamnetworkingtypes.h"
-#include "steamworks_sdk_157/isteamnetworkingsockets.h"
+#include "steamworks_sdk_158/steam_api.h"
+#include "steamworks_sdk_158/steamnetworkingtypes.h"
+#include "steamworks_sdk_158/isteamnetworkingsockets.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_157
+#define SDKVER_158
 #include "struct_converters.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets012.h"
 HSteamListenSocket cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketIP(void *linux_side, const SteamNetworkingIPAddr * localAddress, int nOptions, const SteamNetworkingConfigValue_t * pOptions)
