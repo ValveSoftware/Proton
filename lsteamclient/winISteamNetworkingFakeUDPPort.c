@@ -37,7 +37,7 @@ EResult __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages, 12)
-int __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, winSteamNetworkingMessage_t_157 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(winISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001 *_this, winSteamNetworkingMessage_t_158 ** ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort001_ReceiveMessages(_this->linux_side, ppOutMessages, nMaxMessages);
