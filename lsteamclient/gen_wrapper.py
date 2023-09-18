@@ -6,7 +6,6 @@
 CLANG_PATH='/usr/lib/clang/15'
 
 from clang.cindex import Cursor, CursorKind, Index, TypeKind
-from collections import namedtuple
 import concurrent.futures
 import os
 import re
@@ -201,65 +200,55 @@ MANUAL_STRUCTS = [
     "SteamNetworkingMessage_t"
 ]
 
-Method = namedtuple('Method', ['name', 'version_func'], defaults=[lambda _: True])
 
 MANUAL_METHODS = {
     #TODO: 001 005 007
     #NOTE: 003 never appeared in a public SDK, but is an alias for 002 (the version in SDK 1.45 is actually 004 but incorrectly versioned as 003)
-    "cppISteamNetworkingSockets_SteamNetworkingSockets": [
-        Method("ReceiveMessagesOnConnection"),
-        Method("ReceiveMessagesOnListenSocket"),
-        Method("ReceiveMessagesOnPollGroup"),
-        Method("SendMessages"),
-        Method("CreateFakeUDPPort"),
-    ],
-    "cppISteamNetworkingUtils_SteamNetworkingUtils": [
-        Method("AllocateMessage"),
-        Method("SetConfigValue", lambda version: version >= 3)
-    ],
-    "cppISteamNetworkingMessages_SteamNetworkingMessages": [
-        Method("ReceiveMessagesOnChannel"),
-    ],
-    "cppISteamInput_SteamInput": [
-        Method("EnableActionEventCallbacks"),
-        Method("GetGlyphForActionOrigin"),
-        Method("GetGlyphPNGForActionOrigin"),
-        Method("GetGlyphSVGForActionOrigin"),
-        Method("GetGlyphForActionOrigin_Legacy"),
-        Method("GetGlyphForXboxOrigin"),
-    ],
-    "cppISteamController_SteamController": [
-        Method("GetGlyphForActionOrigin"),
-        Method("GetGlyphForXboxOrigin"),
-    ],
-    "cppISteamNetworkingFakeUDPPort_SteamNetworkingFakeUDPPort": [
-        Method("DestroyFakeUDPPort"),
-        Method("ReceiveMessages"),
-    ],
-    "cppISteamClient_SteamClient": [
-        Method("Set_SteamAPI_CCheckCallbackRegisteredInProcess", lambda version: version >= 20),
-    ],
+    "ISteamNetworkingSockets_ReceiveMessagesOnConnection": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingSockets_ReceiveMessagesOnListenSocket": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingSockets_ReceiveMessagesOnPollGroup": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingSockets_SendMessages": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingSockets_CreateFakeUDPPort": lambda ver, abi: abi == 'u',
+
+    "ISteamNetworkingUtils_AllocateMessage": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingUtils_SetConfigValue": lambda ver, abi: abi == 'u' and ver >= 3,
+
+    "ISteamNetworkingMessages_ReceiveMessagesOnChannel": lambda ver, abi: abi == 'u',
+
+    "ISteamInput_EnableActionEventCallbacks": lambda ver, abi: abi == 'u',
+    "ISteamInput_GetGlyphForActionOrigin": lambda ver, abi: abi == 'u',
+    "ISteamInput_GetGlyphPNGForActionOrigin": lambda ver, abi: abi == 'u',
+    "ISteamInput_GetGlyphSVGForActionOrigin": lambda ver, abi: abi == 'u',
+    "ISteamInput_GetGlyphForActionOrigin_Legacy": lambda ver, abi: abi == 'u',
+    "ISteamInput_GetGlyphForXboxOrigin": lambda ver, abi: abi == 'u',
+
+    "ISteamController_GetGlyphForActionOrigin": lambda ver, abi: abi == 'u',
+    "ISteamController_GetGlyphForXboxOrigin": lambda ver, abi: abi == 'u',
+
+    "ISteamNetworkingFakeUDPPort_DestroyFakeUDPPort": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingFakeUDPPort_ReceiveMessages": lambda ver, abi: abi == 'u',
+
+    "ISteamClient_Set_SteamAPI_CCheckCallbackRegisteredInProcess": lambda ver, abi: abi == 'u' and ver >= 20,
 }
-
-
 
 POST_EXEC_FUNCS = {
     "ISteamClient_BShutdownIfAllPipesClosed" : "after_shutdown",
     "ISteamClient_CreateSteamPipe" : "after_steam_pipe_create",
 }
 
-INTERFACE_NAME_VERSION = re.compile(r'^(?P<name>.+?)(?P<version>\d*)$')
 DEFINE_INTERFACE_VERSION = re.compile(r'^#define\s*(?P<name>STEAM(?:\w*)_VERSION(?:\w*))\s*"(?P<version>.*)"')
 
-def method_needs_manual_handling(interface_with_version, method_name):
-    match_dict = INTERFACE_NAME_VERSION.match(interface_with_version).groupdict()
-    interface = match_dict['name']
-    version = int(match_dict['version']) if match_dict['version'] else None
 
-    method_list = MANUAL_METHODS.get(interface, [])
-    method = next(filter(lambda m: m.name == method_name, method_list), None)
+def is_manual_method(klass, method, abi):
+    version = re.search(r'(\d+)$', klass.version)
 
-    return method and method.version_func(version)
+    key = f'{klass.name}_{method.name}'
+    needs_manual = MANUAL_METHODS.get(key, False)
+
+    if callable(needs_manual) and version:
+        return needs_manual(int(version[0]), abi)
+    return needs_manual
+
 
 def post_execution_function(classname, method_name):
     return POST_EXEC_FUNCS.get(classname + "_" + method_name, None)
@@ -987,7 +976,7 @@ def handle_thiscall_wrapper(klass, method, out):
     out(f'DEFINE_THISCALL_WRAPPER({name}, {size})\n')
 
 
-def handle_method_c(method, winclassname, cppname, out):
+def handle_method_c(klass, method, winclassname, cppname, out):
     returns_void = method.result_type.kind == TypeKind.VOID
     returns_record = method.result_type.get_canonical().kind == TypeKind.RECORD
 
@@ -1035,7 +1024,7 @@ def handle_method_c(method, winclassname, cppname, out):
 
     out(f'    {cppname}_{method.name}( &params );\n')
 
-    should_gen_wrapper = not method_needs_manual_handling(cppname, method.name) and \
+    should_gen_wrapper = not is_manual_method(klass, method, "u") and \
             (method.result_type.spelling.startswith("ISteam") or \
              method.name.startswith("GetISteamGenericInterface"))
     if should_gen_wrapper:
@@ -1072,7 +1061,7 @@ def handle_class(klass):
     for method in klass.methods:
         if type(method) is Destructor:
             continue
-        if method_needs_manual_handling(cppname, method.name):
+        if is_manual_method(klass, method, "u"):
             ext = "hpp"
 
     with open(f"{cppname}.h", "w") as file:
@@ -1109,7 +1098,7 @@ def handle_class(klass):
         for method in klass.methods:
             if type(method) is Destructor:
                 continue
-            if method_needs_manual_handling(cppname, method.spelling):
+            if is_manual_method(klass, method, "u"):
                 continue
             handle_method_cpp(method, klass.name, cppname, out)
 
@@ -1126,10 +1115,12 @@ def handle_class(klass):
         out('\n')
 
         for method in klass.methods:
+            if is_manual_method(klass, method, "w"):
+                continue
             if type(method) is Destructor:
                 out(f'void __thiscall {winclassname}_{method.name}(struct w_steam_iface *_this)\n{{/* never called */}}\n\n')
             else:
-                handle_method_c(method, winclassname, cppname, out)
+                handle_method_c(klass, method, winclassname, cppname, out)
 
         out(f'extern vtable_ptr {winclassname}_vtable;\n')
         out(u'\n')
