@@ -197,7 +197,7 @@ void cppISteamClient_SteamClient020_GetIPCCallCount( struct cppISteamClient_Stea
 void cppISteamClient_SteamClient020_SetWarningMessageHook( struct cppISteamClient_SteamClient020_SetWarningMessageHook_params *params )
 {
     struct cppISteamClient_SteamClient020 *iface = (struct cppISteamClient_SteamClient020 *)params->linux_side;
-    void (*lin_pFunction)(int32_t, const char *) = (void (*)(int32_t, const char *))manual_convert_SteamAPIWarningMessageHook_t( (void *)params->pFunction );
+    void (*U_CDECL lin_pFunction)(int32_t, const char *) = manual_convert_SetWarningMessageHook_pFunction( params->pFunction );
     iface->SetWarningMessageHook( lin_pFunction );
 }
 
@@ -259,20 +259,15 @@ void cppISteamClient_SteamClient020_GetISteamHTMLSurface( struct cppISteamClient
 void cppISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params *params )
 {
     struct cppISteamClient_SteamClient020 *iface = (struct cppISteamClient_SteamClient020 *)params->linux_side;
-    iface->DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( (void (*)(void))params->_a );
+    void (*U_STDCALL lin__a)(void) = manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( params->_a );
+    iface->DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( lin__a );
 }
 
 void cppISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params *params )
 {
     struct cppISteamClient_SteamClient020 *iface = (struct cppISteamClient_SteamClient020 *)params->linux_side;
-    iface->DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( (void (*)(void))params->_a );
-}
-
-void cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess( struct cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params )
-{
-    struct cppISteamClient_SteamClient020 *iface = (struct cppISteamClient_SteamClient020 *)params->linux_side;
-    uint32_t (*lin_func)(int32_t) = (uint32_t (*)(int32_t))manual_convert_SteamAPI_CheckCallbackRegistered_t( (void *)params->func );
-    iface->Set_SteamAPI_CCheckCallbackRegisteredInProcess( lin_func );
+    void (*U_STDCALL lin__a)(void) = manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( params->_a );
+    iface->DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( lin__a );
 }
 
 void cppISteamClient_SteamClient020_GetISteamInventory( struct cppISteamClient_SteamClient020_GetISteamInventory_params *params )

@@ -289,7 +289,7 @@ void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
 }
 
 /***** FSteamNetworkingSocketsDebugOutput *****/
-static void (__attribute__((ms_abi)) * stored_FSteamNetworkingSocketsDebugOutput)( uint32_t nType, const char *pszMsg );
+static w_FSteamNetworkingSocketsDebugOutput stored_FSteamNetworkingSocketsDebugOutput;
 
 static void lin_FSteamNetworkingSocketsDebugOutput( uint32_t nType, const char *pszMsg )
 {
@@ -303,14 +303,14 @@ static void lin_FSteamNetworkingSocketsDebugOutput( uint32_t nType, const char *
     execute_callback(&cb_data);
 }
 
-void *manual_convert_FSteamNetworkingSocketsDebugOutput(void *win_func)
+u_FSteamNetworkingSocketsDebugOutput manual_convert_SetDebugOutputFunction_pfnFunc( w_FSteamNetworkingSocketsDebugOutput win_func )
 {
-    stored_FSteamNetworkingSocketsDebugOutput = (void*)win_func;
+    stored_FSteamNetworkingSocketsDebugOutput = win_func;
     return &lin_FSteamNetworkingSocketsDebugOutput;
 }
 
 
-static void *stored_SteamAPIWarningMessageHook_t;
+static w_SteamAPIWarningMessageHook_t stored_SteamAPIWarningMessageHook_t;
 
 static void lin_SteamAPIWarningMessageHook_t(int severity, const char *msg)
 {
@@ -324,7 +324,7 @@ static void lin_SteamAPIWarningMessageHook_t(int severity, const char *msg)
     execute_callback(&cb_data);
 }
 
-void *manual_convert_SteamAPIWarningMessageHook_t(void *win_func)
+u_SteamAPIWarningMessageHook_t manual_convert_SetWarningMessageHook_pFunction( w_SteamAPIWarningMessageHook_t win_func )
 {
     TRACE("win_func %p, returning %p.\n", win_func, lin_SteamAPIWarningMessageHook_t);
 
@@ -334,17 +334,71 @@ void *manual_convert_SteamAPIWarningMessageHook_t(void *win_func)
 }
 
 /***** SteamAPI_CheckCallbackRegistered_t *****/
-static uint32_t (__attribute__((ms_abi)) * stored_SteamAPI_CheckCallbackRegistered_t)( int cb );
+static w_SteamAPI_CheckCallbackRegistered_t stored_SteamAPI_CheckCallbackRegistered_t;
 
 static uint32_t lin_SteamAPI_CheckCallbackRegistered_t( int cb )
 {
     return stored_SteamAPI_CheckCallbackRegistered_t(cb);
 }
 
-void *manual_convert_SteamAPI_CheckCallbackRegistered_t(void *win_func)
+u_SteamAPI_CheckCallbackRegistered_t manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func( w_SteamAPI_CheckCallbackRegistered_t win_func )
 {
-    if (!(stored_SteamAPI_CheckCallbackRegistered_t = (void*)win_func))
-        return NULL;
-
+    FIXME( "\n" );
+    if (!(stored_SteamAPI_CheckCallbackRegistered_t = win_func)) return NULL;
     return &lin_SteamAPI_CheckCallbackRegistered_t;
+}
+
+static w_SteamAPI_CheckCallbackRegistered_t_156 stored_SteamAPI_CheckCallbackRegistered_t_156;
+
+static uint32_t lin_SteamAPI_CheckCallbackRegistered_t_156( int cb )
+{
+    return stored_SteamAPI_CheckCallbackRegistered_t_156( cb );
+}
+
+u_SteamAPI_CheckCallbackRegistered_t_156 manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func_156( w_SteamAPI_CheckCallbackRegistered_t_156 win_func )
+{
+    if (!(stored_SteamAPI_CheckCallbackRegistered_t_156 = win_func)) return NULL;
+    return &lin_SteamAPI_CheckCallbackRegistered_t_156;
+}
+
+static w_SteamAPI_PostAPIResultInProcess_t stored_SteamAPI_PostAPIResultInProcess_t;
+
+static void lin_SteamAPI_PostAPIResultInProcess_t( uint64_t a, void *b, uint32_t c, int32_t d )
+{
+    FIXME( "\n" );
+}
+
+u_SteamAPI_PostAPIResultInProcess_t manual_convert_Set_SteamAPI_CPostAPIResultInProcess_func( w_SteamAPI_PostAPIResultInProcess_t win_func )
+{
+    FIXME( "\n" );
+    if (!(stored_SteamAPI_PostAPIResultInProcess_t = win_func)) return NULL;
+    return &lin_SteamAPI_PostAPIResultInProcess_t;
+}
+
+u_SteamAPI_PostAPIResultInProcess_t manual_convert_Remove_SteamAPI_CPostAPIResultInProcess_func( w_SteamAPI_PostAPIResultInProcess_t win_func )
+{
+    FIXME( "\n" );
+    stored_SteamAPI_PostAPIResultInProcess_t = NULL;
+    return &lin_SteamAPI_PostAPIResultInProcess_t;
+}
+
+static w_void_SteamAPI_PostAPIResultInProcess_t stored_void_SteamAPI_PostAPIResultInProcess_t;
+
+static void lin_void_SteamAPI_PostAPIResultInProcess_t(void)
+{
+    FIXME( "\n" );
+}
+
+u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t win_func )
+{
+    FIXME( "\n" );
+    if (!(stored_void_SteamAPI_PostAPIResultInProcess_t = win_func)) return NULL;
+    return &lin_void_SteamAPI_PostAPIResultInProcess_t;
+}
+
+u_void_SteamAPI_PostAPIResultInProcess_t manual_convert_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess__a( w_void_SteamAPI_PostAPIResultInProcess_t win_func )
+{
+    FIXME( "\n" );
+    stored_void_SteamAPI_PostAPIResultInProcess_t = NULL;
+    return &lin_void_SteamAPI_PostAPIResultInProcess_t;
 }
