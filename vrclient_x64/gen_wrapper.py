@@ -341,9 +341,10 @@ def callconv(cursor, prefix):
 
     tokens = cursor.get_tokens()
     while next(tokens).spelling != '(': pass
-    token = f'{next(tokens).spelling} '
-    return token.replace('*', '__stdcall') \
-                .replace('S_CALLTYPE', '__cdecl')
+    token = next(tokens).spelling.strip('_')
+    token = token.replace('*', 'stdcall')
+    token = token.replace('S_CALLTYPE', 'cdecl')
+    return f'{prefix[0].upper()}_{token.upper()} '
 
 
 def declspec_func(decl, name, prefix):
@@ -447,14 +448,14 @@ def handle_method_cpp(method, classname, cppname, out):
         type_name = strip_ns(underlying_typename(param))
 
         if param.type.kind != TypeKind.POINTER:
-            out(f'    {declspec(param, f"lin_{name}", None).removeprefix("const ")};\n')
+            out(f'    {declspec(param, f"lin_{name}", "u_").removeprefix("const ")};\n')
             out(f'    win_to_lin_struct_{param.type.spelling}_{display_sdkver(sdkver)}( &params->{name}, &lin_{name} );\n')
             continue
 
         pointee = param.type.get_pointee()
         if pointee.kind == TypeKind.POINTER:
             need_output[name] = param
-            out(f'    {declspec(pointee, f"lin_{name}", None).removeprefix("const ")};\n')
+            out(f'    {declspec(pointee, f"lin_{name}", "u_").removeprefix("const ")};\n')
             continue
 
         if type_name in SDK_STRUCTS:
@@ -464,7 +465,7 @@ def handle_method_cpp(method, classname, cppname, out):
         if not pointee.is_const_qualified():
             need_output[name] = param
 
-        out(f'    {declspec(pointee, f"lin_{name}", None).removeprefix("const ")};\n')
+        out(f'    {declspec(pointee, f"lin_{name}", "u_").removeprefix("const ")};\n')
         out(f'    if (params->{name})\n')
         out(f'        struct_{type_name}_{display_sdkver(sdkver)}_win_to_lin( params->{name}, &lin_{name} );\n')
 
@@ -504,8 +505,6 @@ def handle_method_cpp(method, classname, cppname, out):
         if name in size_fixup: return f"lin_{name}"
         if name in need_unwrap: return f'struct_{type_name}_{display_sdkver(sdkver)}_unwrap( params->{name} )'
         if name in need_convert: return f"params->{name} ? {pfx}lin_{name} : nullptr"
-        if underlying_type(param.type.get_canonical()).kind is TypeKind.FUNCTIONPROTO:
-            return f'({declspec(param, "", None)})params->{name}'
         return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]
