@@ -1,98 +1,11 @@
+#include <stdint.h>
+
 #ifdef __cplusplus
 #include <algorithm>
 #else
 #ifndef bool
 typedef char bool; /* 1 byte on modern visual studio c++ */
 #endif
-
-/* enums */
-typedef int
-        EVREye,
-        ETrackingUniverseOrigin,
-        ETrackedDeviceClass,
-        EDeviceActivityLevel,
-        ETrackedControllerRole,
-        ETrackedDeviceProperty,
-        ETrackedPropertyError,
-        EHiddenAreaMeshType,
-        EVREventType,
-        EVRControllerAxisType,
-        EVRFirmwareError,
-        EVRInitError,
-        EVRApplicationType,
-        EVRButtonId,
-        EVRCompositorError,
-        EVRApplicationError,
-        EVRApplicationProperty,
-        EVRApplicationTransitionState,
-        EVRSettingsError,
-        ChaperoneCalibrationState,
-        EChaperoneConfigFile,
-        EVRNotificationType,
-        EVRNotificationError,
-        EVRNotificationStyle,
-        EGamepadTextInputLineMode,
-        EOverlayDirection,
-        EColorSpace,
-        EGamepadTextInputMode,
-        VROverlayFlags,
-        VROverlayTransformType,
-        VROverlayInputMethod,
-        EDualAnalogWhich,
-        VRMessageOverlayResponse,
-        EVRTrackedCameraError,
-        EVRTrackedCameraFrameType,
-        EVRScreenshotError,
-        EVRScreenshotPropertyFilenames,
-        EVRScreenshotType,
-        Hmd_Eye,
-        TrackingUniverseOrigin,
-        TrackedDeviceClass,
-        TrackedDeviceProperty,
-        TrackedPropertyError,
-        VRFirmwareError,
-        EVRControllerEventOutputType,
-        VRCompositorError,
-        VRSubmitFlags_t,
-        Compositor_DeviceType,
-        NotificationError_t,
-        VROverlayError,
-        VROverlayVisibility,
-        ECameraVideoStreamFormat,
-        EVRInputError,
-        EIOBufferError,
-        EVRSkeletalTransformSpace,
-        EIOBufferMode,
-        EVRSkeletalMotionRange,
-        EVRSkeletalReferencePose,
-        EVRSkeletalTrackingLevel,
-        EVRSummaryType,
-        EVRSceneApplicationState,
-        HeadsetViewMode_t,
-        EVRState,
-        EVRRenderModelTextureFormat,
-        vrmb_typeb;
-
-typedef uint32_t DriverId_t;
-typedef uint32_t TrackedDeviceIndex_t;
-typedef uint32_t glUInt_t;
-typedef uint32_t VRNotificationId;
-typedef uint32_t ScreenshotHandle_t;
-typedef int32_t glInt_t;
-typedef int32_t TextureID_t;
-typedef void *glSharedTextureHandle_t;
-typedef uint64_t VROverlayHandle_t;
-typedef uint64_t TrackedCameraHandle_t;
-typedef uint32_t PropertyTypeTag_t;
-typedef uint64_t PropertyContainerHandle_t;
-typedef PropertyContainerHandle_t DriverHandle_t;
-typedef uint64_t IOBufferHandle_t;
-typedef uint64_t VRActionHandle_t;
-typedef uint64_t VRActionSetHandle_t;
-typedef uint64_t VRInputValueHandle_t;
-typedef int32_t BoneIndex_t;
-typedef uint64_t WebConsoleHandle_t;
-typedef uint64_t vrmb_typea;
 
 /* never dereferenced */
 typedef struct VROverlayIntersectionParams_t VROverlayIntersectionParams_t;
@@ -248,8 +161,8 @@ struct VRVulkanTextureArrayData_t
 typedef struct Texture_t
 {
     void *handle;
-    ETextureType eType;
-    EColorSpace eColorSpace;
+    uint32_t eType;
+    uint32_t eColorSpace;
 } Texture_t;
 
 typedef struct VRTextureWithPose_t

@@ -41,7 +41,7 @@ struct cppIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex_param
 {
     void *linux_side;
     uint32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     TrackedDevicePose_t *pOutputPose;
     TrackedDevicePose_t *pOutputGamePose;
 };

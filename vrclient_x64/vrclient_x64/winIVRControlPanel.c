@@ -195,7 +195,7 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc12(struct w_steam_if
     cppIVRControlPanel_IVRControlPanel_006_undoc12( &params );
 }
 
-void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc13(struct w_steam_iface *_this, TrackedDeviceIndex_t a)
+void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc13(struct w_steam_iface *_this, uint32_t a)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc13_params params =
     {
@@ -206,7 +206,7 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc13(struct w_steam_if
     cppIVRControlPanel_IVRControlPanel_006_undoc13( &params );
 }
 
-void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc14(struct w_steam_iface *_this, EVRState a)
+void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc14(struct w_steam_iface *_this, uint32_t a)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc14_params params =
     {
@@ -217,7 +217,7 @@ void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc14(struct w_steam_if
     cppIVRControlPanel_IVRControlPanel_006_undoc14( &params );
 }
 
-EVRState __thiscall winIVRControlPanel_IVRControlPanel_006_undoc15(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc15(struct w_steam_iface *_this)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc15_params params =
     {
@@ -294,7 +294,7 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc21(struct w_stea
     return params._ret;
 }
 
-void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(struct w_steam_iface *_this, WebConsoleHandle_t a, const char *b, uint32_t c, uint32_t d, const char *e)
+void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc22(struct w_steam_iface *_this, uint64_t a, const char *b, uint32_t c, uint32_t d, const char *e)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc22_params params =
     {
@@ -371,7 +371,7 @@ uint32_t __thiscall winIVRControlPanel_IVRControlPanel_006_undoc27(struct w_stea
     return params._ret;
 }
 
-void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc28(struct w_steam_iface *_this, VROverlayHandle_t a)
+void __thiscall winIVRControlPanel_IVRControlPanel_006_undoc28(struct w_steam_iface *_this, uint64_t a)
 {
     struct cppIVRControlPanel_IVRControlPanel_006_undoc28_params params =
     {

@@ -21,7 +21,7 @@ struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params
 {
     void *linux_side;
     bool _ret;
-    TextureID_t textureId;
+    int32_t textureId;
     winRenderModel_TextureMap_t_0915 **ppTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_002_LoadTexture( struct cppIVRRenderModels_IVRRenderModels_002_LoadTexture_params *params );

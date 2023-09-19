@@ -12,7 +12,7 @@ struct cppIVRDriverManager_IVRDriverManager_001_GetDriverName_params
 {
     void *linux_side;
     uint32_t _ret;
-    DriverId_t nDriver;
+    uint32_t nDriver;
     char *pchValue;
     uint32_t unBufferSize;
 };
@@ -21,7 +21,7 @@ extern void cppIVRDriverManager_IVRDriverManager_001_GetDriverName( struct cppIV
 struct cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle_params
 {
     void *linux_side;
-    DriverHandle_t _ret;
+    uint64_t _ret;
     const char *pchDriverName;
 };
 extern void cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle( struct cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle_params *params );
@@ -30,7 +30,7 @@ struct cppIVRDriverManager_IVRDriverManager_001_IsEnabled_params
 {
     void *linux_side;
     bool _ret;
-    DriverId_t nDriver;
+    uint32_t nDriver;
 };
 extern void cppIVRDriverManager_IVRDriverManager_001_IsEnabled( struct cppIVRDriverManager_IVRDriverManager_001_IsEnabled_params *params );
 

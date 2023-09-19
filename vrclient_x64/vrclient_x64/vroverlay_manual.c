@@ -119,14 +119,14 @@ static void load_overlay_texture_vulkan( const Texture_t *texture, struct set_ov
 }
 
 uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTexture( struct w_steam_iface *_this,
-                                                                    VROverlayHandle_t ulOverlayHandle, void *pTexture )
+                                                                    uint64_t ulOverlayHandle, void *pTexture )
 {
     /* probably no one actually uses this old interface... */
     FIXME( "unimplemented!\n" );
     return VROverlayError_InvalidHandle;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     uint32_t eTextureType, void *pTexture )
 {
     /* hopefully no one actually uses this old interface... Vulkan support
@@ -135,7 +135,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture( struct w_ste
     return VROverlayError_InvalidHandle;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     uint32_t eTextureType, void *pTexture )
 {
     /* hopefully no one actually uses this old interface... Vulkan support
@@ -144,7 +144,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture( struct w_ste
     return VROverlayError_InvalidHandle;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     uint32_t eTextureType, void *pTexture )
 {
     /* hopefully no one actually uses this old interface... Vulkan support
@@ -153,7 +153,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture( struct w_ste
     return VROverlayError_InvalidHandle;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     uint32_t eTextureType, void *pTexture )
 {
     /* hopefully no one actually uses this old interface... Vulkan support
@@ -162,7 +162,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture( struct w_ste
     return VROverlayError_InvalidHandle;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -183,7 +183,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -204,7 +204,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -225,7 +225,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -246,7 +246,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -267,7 +267,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -288,7 +288,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -309,7 +309,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -330,7 +330,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -351,7 +351,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -372,7 +372,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -393,7 +393,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -414,7 +414,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -435,7 +435,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -456,7 +456,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -477,7 +477,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -498,7 +498,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};
@@ -519,7 +519,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture( struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture( struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle,
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture( struct w_steam_iface *_this, uint64_t ulOverlayHandle,
                                                                     const Texture_t *pTexture )
 {
     struct set_overlay_texture_state state = {.texture = *pTexture};

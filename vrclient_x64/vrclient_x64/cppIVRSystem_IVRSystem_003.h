@@ -145,7 +145,7 @@ struct cppIVRSystem_IVRSystem_003_GetTrackedDeviceClass_params
 {
     void *linux_side;
     uint32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
 };
 extern void cppIVRSystem_IVRSystem_003_GetTrackedDeviceClass( struct cppIVRSystem_IVRSystem_003_GetTrackedDeviceClass_params *params );
 
@@ -153,7 +153,7 @@ struct cppIVRSystem_IVRSystem_003_IsTrackedDeviceConnected_params
 {
     void *linux_side;
     bool _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
 };
 extern void cppIVRSystem_IVRSystem_003_IsTrackedDeviceConnected( struct cppIVRSystem_IVRSystem_003_IsTrackedDeviceConnected_params *params );
 
@@ -161,7 +161,7 @@ struct cppIVRSystem_IVRSystem_003_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
     bool _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -171,7 +171,7 @@ struct cppIVRSystem_IVRSystem_003_GetFloatTrackedDeviceProperty_params
 {
     void *linux_side;
     float _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -181,7 +181,7 @@ struct cppIVRSystem_IVRSystem_003_GetInt32TrackedDeviceProperty_params
 {
     void *linux_side;
     int32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -191,7 +191,7 @@ struct cppIVRSystem_IVRSystem_003_GetUint64TrackedDeviceProperty_params
 {
     void *linux_side;
     uint64_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -201,7 +201,7 @@ struct cppIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty_params
 {
     void *linux_side;
     HmdMatrix34_t *_ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -211,7 +211,7 @@ struct cppIVRSystem_IVRSystem_003_GetStringTrackedDeviceProperty_params
 {
     void *linux_side;
     uint32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     char *pchValue;
     uint32_t unBufferSize;
@@ -265,7 +265,7 @@ struct cppIVRSystem_IVRSystem_003_GetControllerState_params
 {
     void *linux_side;
     bool _ret;
-    TrackedDeviceIndex_t unControllerDeviceIndex;
+    uint32_t unControllerDeviceIndex;
     winVRControllerState001_t_091 *pControllerState;
 };
 extern void cppIVRSystem_IVRSystem_003_GetControllerState( struct cppIVRSystem_IVRSystem_003_GetControllerState_params *params );
@@ -275,7 +275,7 @@ struct cppIVRSystem_IVRSystem_003_GetControllerStateWithPose_params
     void *linux_side;
     bool _ret;
     uint32_t eOrigin;
-    TrackedDeviceIndex_t unControllerDeviceIndex;
+    uint32_t unControllerDeviceIndex;
     winVRControllerState001_t_091 *pControllerState;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
@@ -284,7 +284,7 @@ extern void cppIVRSystem_IVRSystem_003_GetControllerStateWithPose( struct cppIVR
 struct cppIVRSystem_IVRSystem_003_TriggerHapticPulse_params
 {
     void *linux_side;
-    TrackedDeviceIndex_t unControllerDeviceIndex;
+    uint32_t unControllerDeviceIndex;
     uint32_t unAxisId;
     uint16_t usDurationMicroSec;
 };
@@ -313,8 +313,8 @@ struct cppIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse_para
     const Compositor_OverlaySettings *overlaySettings;
     HmdVector2_t vecWindowClientPositionOnScreen;
     HmdVector2_t vecWindowClientSize;
-    TrackedDeviceIndex_t unControllerDeviceIndex;
-    EVRControllerEventOutputType eOutputType;
+    uint32_t unControllerDeviceIndex;
+    uint32_t eOutputType;
 };
 extern void cppIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse( struct cppIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse_params *params );
 

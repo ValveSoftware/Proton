@@ -41,7 +41,7 @@ struct cppIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDeviceIndex_param
 {
     void *linux_side;
     uint32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     TrackedDevicePose_t *pOutputPose;
     TrackedDevicePose_t *pOutputGamePose;
 };
@@ -254,8 +254,8 @@ extern void cppIVRCompositor_IVRCompositor_020_SuspendRendering( struct cppIVRCo
 struct cppIVRCompositor_IVRCompositor_020_GetMirrorTextureD3D11_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
-    EVREye eEye;
+    uint32_t _ret;
+    uint32_t eEye;
     void *pD3D11DeviceOrResource;
     void **ppD3D11ShaderResourceView;
 };
@@ -271,10 +271,10 @@ extern void cppIVRCompositor_IVRCompositor_020_ReleaseMirrorTextureD3D11( struct
 struct cppIVRCompositor_IVRCompositor_020_GetMirrorTextureGL_params
 {
     void *linux_side;
-    EVRCompositorError _ret;
-    EVREye eEye;
-    glUInt_t *pglTextureId;
-    glSharedTextureHandle_t *pglSharedTextureHandle;
+    uint32_t _ret;
+    uint32_t eEye;
+    uint32_t *pglTextureId;
+    void **pglSharedTextureHandle;
 };
 extern void cppIVRCompositor_IVRCompositor_020_GetMirrorTextureGL( struct cppIVRCompositor_IVRCompositor_020_GetMirrorTextureGL_params *params );
 
@@ -282,22 +282,22 @@ struct cppIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture_params
 {
     void *linux_side;
     bool _ret;
-    glUInt_t glTextureId;
-    glSharedTextureHandle_t glSharedTextureHandle;
+    uint32_t glTextureId;
+    void *glSharedTextureHandle;
 };
 extern void cppIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture( struct cppIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture_params *params );
 
 struct cppIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess_params
 {
     void *linux_side;
-    glSharedTextureHandle_t glSharedTextureHandle;
+    void *glSharedTextureHandle;
 };
 extern void cppIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess( struct cppIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess_params *params );
 
 struct cppIVRCompositor_IVRCompositor_020_UnlockGLSharedTextureForAccess_params
 {
     void *linux_side;
-    glSharedTextureHandle_t glSharedTextureHandle;
+    void *glSharedTextureHandle;
 };
 extern void cppIVRCompositor_IVRCompositor_020_UnlockGLSharedTextureForAccess( struct cppIVRCompositor_IVRCompositor_020_UnlockGLSharedTextureForAccess_params *params );
 

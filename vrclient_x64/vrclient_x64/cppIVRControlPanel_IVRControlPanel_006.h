@@ -104,21 +104,21 @@ extern void cppIVRControlPanel_IVRControlPanel_006_undoc12( struct cppIVRControl
 struct cppIVRControlPanel_IVRControlPanel_006_undoc13_params
 {
     void *linux_side;
-    TrackedDeviceIndex_t a;
+    uint32_t a;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc13( struct cppIVRControlPanel_IVRControlPanel_006_undoc13_params *params );
 
 struct cppIVRControlPanel_IVRControlPanel_006_undoc14_params
 {
     void *linux_side;
-    EVRState a;
+    uint32_t a;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc14( struct cppIVRControlPanel_IVRControlPanel_006_undoc14_params *params );
 
 struct cppIVRControlPanel_IVRControlPanel_006_undoc15_params
 {
     void *linux_side;
-    EVRState _ret;
+    uint32_t _ret;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc15( struct cppIVRControlPanel_IVRControlPanel_006_undoc15_params *params );
 
@@ -167,7 +167,7 @@ extern void cppIVRControlPanel_IVRControlPanel_006_undoc21( struct cppIVRControl
 struct cppIVRControlPanel_IVRControlPanel_006_undoc22_params
 {
     void *linux_side;
-    WebConsoleHandle_t a;
+    uint64_t a;
     const char *b;
     uint32_t c;
     uint32_t d;
@@ -216,7 +216,7 @@ extern void cppIVRControlPanel_IVRControlPanel_006_undoc27( struct cppIVRControl
 struct cppIVRControlPanel_IVRControlPanel_006_undoc28_params
 {
     void *linux_side;
-    VROverlayHandle_t a;
+    uint64_t a;
 };
 extern void cppIVRControlPanel_IVRControlPanel_006_undoc28( struct cppIVRControlPanel_IVRControlPanel_006_undoc28_params *params );
 

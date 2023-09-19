@@ -24,7 +24,7 @@ DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Read, 24)
 DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_Write, 20)
 DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer, 12)
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Open(struct w_steam_iface *_this, const char *pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t *pulBuffer)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_Open(struct w_steam_iface *_this, const char *pchPath, uint32_t mode, uint32_t unElementSize, uint32_t unElements, uint64_t *pulBuffer)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_001_Open_params params =
     {
@@ -40,7 +40,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Open(struct w_steam_ifa
     return params._ret;
 }
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Close(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_Close(struct w_steam_iface *_this, uint64_t ulBuffer)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_001_Close_params params =
     {
@@ -52,7 +52,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Close(struct w_steam_if
     return params._ret;
 }
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Read(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer, void *pDst, uint32_t unBytes, uint32_t *punRead)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_Read(struct w_steam_iface *_this, uint64_t ulBuffer, void *pDst, uint32_t unBytes, uint32_t *punRead)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_001_Read_params params =
     {
@@ -67,7 +67,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Read(struct w_steam_ifa
     return params._ret;
 }
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Write(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer, void *pSrc, uint32_t unBytes)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_Write(struct w_steam_iface *_this, uint64_t ulBuffer, void *pSrc, uint32_t unBytes)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_001_Write_params params =
     {
@@ -81,7 +81,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_001_Write(struct w_steam_if
     return params._ret;
 }
 
-PropertyContainerHandle_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer)
+uint64_t __thiscall winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer(struct w_steam_iface *_this, uint64_t ulBuffer)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_001_PropertyContainer_params params =
     {
@@ -161,7 +161,7 @@ DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_Write, 20)
 DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer, 12)
 DEFINE_THISCALL_WRAPPER(winIVRIOBuffer_IVRIOBuffer_002_HasReaders, 12)
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Open(struct w_steam_iface *_this, const char *pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t *pulBuffer)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_Open(struct w_steam_iface *_this, const char *pchPath, uint32_t mode, uint32_t unElementSize, uint32_t unElements, uint64_t *pulBuffer)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_002_Open_params params =
     {
@@ -177,7 +177,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Open(struct w_steam_ifa
     return params._ret;
 }
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Close(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_Close(struct w_steam_iface *_this, uint64_t ulBuffer)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_002_Close_params params =
     {
@@ -189,7 +189,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Close(struct w_steam_if
     return params._ret;
 }
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Read(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer, void *pDst, uint32_t unBytes, uint32_t *punRead)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_Read(struct w_steam_iface *_this, uint64_t ulBuffer, void *pDst, uint32_t unBytes, uint32_t *punRead)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_002_Read_params params =
     {
@@ -204,7 +204,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Read(struct w_steam_ifa
     return params._ret;
 }
 
-EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Write(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer, void *pSrc, uint32_t unBytes)
+uint32_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_Write(struct w_steam_iface *_this, uint64_t ulBuffer, void *pSrc, uint32_t unBytes)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_002_Write_params params =
     {
@@ -218,7 +218,7 @@ EIOBufferError __thiscall winIVRIOBuffer_IVRIOBuffer_002_Write(struct w_steam_if
     return params._ret;
 }
 
-PropertyContainerHandle_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer)
+uint64_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_PropertyContainer(struct w_steam_iface *_this, uint64_t ulBuffer)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_002_PropertyContainer_params params =
     {
@@ -230,7 +230,7 @@ PropertyContainerHandle_t __thiscall winIVRIOBuffer_IVRIOBuffer_002_PropertyCont
     return params._ret;
 }
 
-bool __thiscall winIVRIOBuffer_IVRIOBuffer_002_HasReaders(struct w_steam_iface *_this, IOBufferHandle_t ulBuffer)
+bool __thiscall winIVRIOBuffer_IVRIOBuffer_002_HasReaders(struct w_steam_iface *_this, uint64_t ulBuffer)
 {
     struct cppIVRIOBuffer_IVRIOBuffer_002_HasReaders_params params =
     {

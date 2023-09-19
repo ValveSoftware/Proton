@@ -25,7 +25,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 struct winInputDigitalActionData_t
 {
     bool bActive;
-    VRInputValueHandle_t activeOrigin;
+    uint32_t activeOrigin;
     bool bState;
     bool bChanged;
     float fUpdateTime;
@@ -33,8 +33,8 @@ struct winInputDigitalActionData_t
 #pragma pack( pop )
 
 #ifndef __x86_64__
-static uint32_t ivrinput_get_digital_action_data( VRActionHandle_t action_handle, void *action_data, uint32_t action_data_size,
-                                                  VRInputValueHandle_t restrict_to_device, unsigned int version )
+static uint32_t ivrinput_get_digital_action_data( uint64_t action_handle, void *action_data, uint32_t action_data_size,
+                                                  uint32_t restrict_to_device, unsigned int version )
 {
     /* Digital action state change fixup hack. */
     struct winInputDigitalActionData_t *data = action_data;
@@ -95,9 +95,9 @@ static uint32_t ivrinput_get_digital_action_data( VRActionHandle_t action_handle
 }
 #endif
 
-uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData( struct w_steam_iface *_this, uint64_t action,
                                                                    winInputDigitalActionData_t_1017 *pActionData,
-                                                                   uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+                                                                   uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
     struct cppIVRInput_IVRInput_004_GetDigitalActionData_params params =
     {
@@ -119,9 +119,9 @@ uint32_t __thiscall winIVRInput_IVRInput_004_GetDigitalActionData( struct w_stea
 #endif
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData( struct w_steam_iface *_this, uint64_t action,
                                                                    winInputDigitalActionData_t_1322 *pActionData,
-                                                                   uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+                                                                   uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
     struct cppIVRInput_IVRInput_005_GetDigitalActionData_params params =
     {
@@ -143,9 +143,9 @@ uint32_t __thiscall winIVRInput_IVRInput_005_GetDigitalActionData( struct w_stea
 #endif
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData( struct w_steam_iface *_this, uint64_t action,
                                                                    winInputDigitalActionData_t_1418 *pActionData,
-                                                                   uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+                                                                   uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
     struct cppIVRInput_IVRInput_006_GetDigitalActionData_params params =
     {
@@ -167,9 +167,9 @@ uint32_t __thiscall winIVRInput_IVRInput_006_GetDigitalActionData( struct w_stea
 #endif
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData( struct w_steam_iface *_this, uint64_t action,
                                                                    winInputDigitalActionData_t_1916 *pActionData,
-                                                                   uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+                                                                   uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
     struct cppIVRInput_IVRInput_007_GetDigitalActionData_params params =
     {
@@ -191,9 +191,9 @@ uint32_t __thiscall winIVRInput_IVRInput_007_GetDigitalActionData( struct w_stea
 #endif
 }
 
-uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData( struct w_steam_iface *_this, VRActionHandle_t action,
+uint32_t __thiscall winIVRInput_IVRInput_010_GetDigitalActionData( struct w_steam_iface *_this, uint64_t action,
                                                                    winInputDigitalActionData_t_1267 *pActionData,
-                                                                   uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+                                                                   uint32_t unActionDataSize, uint32_t ulRestrictToDevice )
 {
     struct cppIVRInput_IVRInput_010_GetDigitalActionData_params params =
     {

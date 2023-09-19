@@ -338,13 +338,12 @@ def declspec(decl, name):
     call = callconv(decl)
     if type(decl) is Cursor:
         decl = decl.type
-    canon = decl.get_canonical()
-
-    if canon.kind == TypeKind.POINTER and canon.get_pointee().kind == TypeKind.FUNCTIONPROTO:
-        canon = canon.get_pointee()
-        return declspec_func(canon, f"*{call}{name}")
+    if 'VRControllerState_t' not in decl.spelling: # FIXME
+        decl = decl.get_canonical()
 
     const = 'const ' if decl.is_const_qualified() else ''
+    if decl.kind == TypeKind.FUNCTIONPROTO:
+        return declspec_func(decl, name)
     if decl.kind in (TypeKind.POINTER, TypeKind.LVALUEREFERENCE):
         decl = decl.get_pointee()
         return declspec(decl, f"*{call}{const}{name}")

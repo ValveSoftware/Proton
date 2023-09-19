@@ -75,7 +75,7 @@ extern void cppIVRApplications_IVRApplications_007_LaunchTemplateApplication( st
 struct cppIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType_params
 {
     void *linux_side;
-    EVRApplicationError _ret;
+    uint32_t _ret;
     const char *pchMimeType;
     const char *pchArgs;
 };
