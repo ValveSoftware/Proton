@@ -777,8 +777,8 @@ bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent( struct w_steam
     return TRUE;
 }
 
-vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3( struct w_steam_iface *_this, vrmb_typea a,
-                                                           const char *b, const char *c )
+uint32_t __thiscall winIVRMailbox_IVRMailbox_001_undoc3( struct w_steam_iface *_this, uint64_t a,
+                                                         const char *b, const char *c )
 {
     struct cppIVRMailbox_IVRMailbox_001_undoc3_params params =
     {

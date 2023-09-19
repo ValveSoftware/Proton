@@ -77,8 +77,8 @@ struct compositor_data
     /* Digital action state change fixup hack. */
     struct
     {
-        VRActionHandle_t action;
-        VRInputValueHandle_t origin;
+        uint64_t action;
+        uint64_t origin;
         LARGE_INTEGER update_qpf_time;
         BOOL previous_state;
     } digital_actions_state[128];

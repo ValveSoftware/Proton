@@ -129,7 +129,7 @@ struct cppIVRSystem_IVRSystem_004_GetTrackedDeviceClass_params
 {
     void *linux_side;
     uint32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
 };
 extern void cppIVRSystem_IVRSystem_004_GetTrackedDeviceClass( struct cppIVRSystem_IVRSystem_004_GetTrackedDeviceClass_params *params );
 
@@ -137,7 +137,7 @@ struct cppIVRSystem_IVRSystem_004_IsTrackedDeviceConnected_params
 {
     void *linux_side;
     bool _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
 };
 extern void cppIVRSystem_IVRSystem_004_IsTrackedDeviceConnected( struct cppIVRSystem_IVRSystem_004_IsTrackedDeviceConnected_params *params );
 
@@ -145,7 +145,7 @@ struct cppIVRSystem_IVRSystem_004_GetBoolTrackedDeviceProperty_params
 {
     void *linux_side;
     bool _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -155,7 +155,7 @@ struct cppIVRSystem_IVRSystem_004_GetFloatTrackedDeviceProperty_params
 {
     void *linux_side;
     float _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -165,7 +165,7 @@ struct cppIVRSystem_IVRSystem_004_GetInt32TrackedDeviceProperty_params
 {
     void *linux_side;
     int32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -175,7 +175,7 @@ struct cppIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty_params
 {
     void *linux_side;
     uint64_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -185,7 +185,7 @@ struct cppIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty_params
 {
     void *linux_side;
     HmdMatrix34_t *_ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     uint32_t *pError;
 };
@@ -195,7 +195,7 @@ struct cppIVRSystem_IVRSystem_004_GetStringTrackedDeviceProperty_params
 {
     void *linux_side;
     uint32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     uint32_t prop;
     char *pchValue;
     uint32_t unBufferSize;
@@ -249,7 +249,7 @@ struct cppIVRSystem_IVRSystem_004_GetControllerState_params
 {
     void *linux_side;
     bool _ret;
-    TrackedDeviceIndex_t unControllerDeviceIndex;
+    uint32_t unControllerDeviceIndex;
     winVRControllerState001_t_092 *pControllerState;
 };
 extern void cppIVRSystem_IVRSystem_004_GetControllerState( struct cppIVRSystem_IVRSystem_004_GetControllerState_params *params );
@@ -259,7 +259,7 @@ struct cppIVRSystem_IVRSystem_004_GetControllerStateWithPose_params
     void *linux_side;
     bool _ret;
     uint32_t eOrigin;
-    TrackedDeviceIndex_t unControllerDeviceIndex;
+    uint32_t unControllerDeviceIndex;
     winVRControllerState001_t_092 *pControllerState;
     TrackedDevicePose_t *pTrackedDevicePose;
 };
@@ -268,7 +268,7 @@ extern void cppIVRSystem_IVRSystem_004_GetControllerStateWithPose( struct cppIVR
 struct cppIVRSystem_IVRSystem_004_TriggerHapticPulse_params
 {
     void *linux_side;
-    TrackedDeviceIndex_t unControllerDeviceIndex;
+    uint32_t unControllerDeviceIndex;
     uint32_t unAxisId;
     uint16_t usDurationMicroSec;
 };
@@ -314,7 +314,7 @@ struct cppIVRSystem_IVRSystem_004_DriverDebugRequest_params
 {
     void *linux_side;
     uint32_t _ret;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint32_t unDeviceIndex;
     const char *pchRequest;
     char *pchResponseBuffer;
     uint32_t unResponseBufferSize;

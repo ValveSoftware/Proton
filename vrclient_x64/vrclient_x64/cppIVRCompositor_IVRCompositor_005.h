@@ -169,7 +169,7 @@ struct cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection_params
     bool _ret;
     const Compositor_OverlaySettings *pSettings;
     float fAspectRatio;
-    TrackingUniverseOrigin eOrigin;
+    uint32_t eOrigin;
     HmdVector3_t vSource;
     HmdVector3_t vDirection;
     HmdVector2_t *pvecIntersectionUV;

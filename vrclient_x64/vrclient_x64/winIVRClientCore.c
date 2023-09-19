@@ -26,7 +26,7 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetIDForVRInitError, 8)
 
-extern uint32_t __thiscall winIVRClientCore_IVRClientCore_002_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType);
+extern uint32_t __thiscall winIVRClientCore_IVRClientCore_002_Init(struct w_steam_iface *_this, uint32_t eApplicationType);
 
 extern void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(struct w_steam_iface *_this);
 
@@ -46,7 +46,7 @@ extern void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(
 
 extern bool __thiscall winIVRClientCore_IVRClientCore_002_BIsHmdPresent(struct w_steam_iface *_this);
 
-const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError(struct w_steam_iface *_this, uint32_t eError)
 {
     struct cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError_params params =
     {
@@ -58,7 +58,7 @@ const char * __thiscall winIVRClientCore_IVRClientCore_002_GetEnglishStringForHm
     return params._ret;
 }
 
-const char * __thiscall winIVRClientCore_IVRClientCore_002_GetIDForVRInitError(struct w_steam_iface *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_002_GetIDForVRInitError(struct w_steam_iface *_this, uint32_t eError)
 {
     struct cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError_params params =
     {
@@ -143,7 +143,7 @@ DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_BIsHmdPresent, 4)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError, 8)
 DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetIDForVRInitError, 8)
 
-extern uint32_t __thiscall winIVRClientCore_IVRClientCore_003_Init(struct w_steam_iface *_this, EVRApplicationType eApplicationType, const char *pStartupInfo);
+extern uint32_t __thiscall winIVRClientCore_IVRClientCore_003_Init(struct w_steam_iface *_this, uint32_t eApplicationType, const char *pStartupInfo);
 
 extern void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(struct w_steam_iface *_this);
 
@@ -163,7 +163,7 @@ extern void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(
 
 extern bool __thiscall winIVRClientCore_IVRClientCore_003_BIsHmdPresent(struct w_steam_iface *_this);
 
-const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(struct w_steam_iface *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError(struct w_steam_iface *_this, uint32_t eError)
 {
     struct cppIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError_params params =
     {
@@ -175,7 +175,7 @@ const char * __thiscall winIVRClientCore_IVRClientCore_003_GetEnglishStringForHm
     return params._ret;
 }
 
-const char * __thiscall winIVRClientCore_IVRClientCore_003_GetIDForVRInitError(struct w_steam_iface *_this, EVRInitError eError)
+const char * __thiscall winIVRClientCore_IVRClientCore_003_GetIDForVRInitError(struct w_steam_iface *_this, uint32_t eError)
 {
     struct cppIVRClientCore_IVRClientCore_003_GetIDForVRInitError_params params =
     {

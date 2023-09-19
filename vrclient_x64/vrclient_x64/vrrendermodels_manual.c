@@ -100,7 +100,7 @@ static uint32_t load_into_texture_d3d11( ID3D11Texture2D *texture, const struct 
     return VRRenderModelError_None;
 }
 
-static uint32_t load_linux_texture_map_004( void *linux_side, TextureID_t texture_id,
+static uint32_t load_linux_texture_map_004( void *linux_side, int32_t texture_id,
                                             struct winRenderModel_TextureMap_t_1237 **texture_map )
 {
     struct winRenderModel_TextureMap_t_0918 *orig_map;
@@ -128,7 +128,7 @@ static void free_linux_texture_map_004( void *linux_side, struct winRenderModel_
     HeapFree( GetProcessHeap(), 0, texture_map );
 }
 
-static uint32_t load_linux_texture_map_005( void *linux_side, TextureID_t texture_id,
+static uint32_t load_linux_texture_map_005( void *linux_side, int32_t texture_id,
                                             struct winRenderModel_TextureMap_t_1237 **texture_map )
 {
     struct winRenderModel_TextureMap_t_1015 *orig_map;
@@ -156,7 +156,7 @@ static void free_linux_texture_map_005( void *linux_side, struct winRenderModel_
     HeapFree( GetProcessHeap(), 0, texture_map );
 }
 
-static uint32_t load_linux_texture_map_006( void *linux_side, TextureID_t texture_id,
+static uint32_t load_linux_texture_map_006( void *linux_side, int32_t texture_id,
                                             struct winRenderModel_TextureMap_t_1237 **texture_map )
 {
     struct cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async_params load_params =
@@ -241,7 +241,7 @@ static uint32_t ivrrendermodels_load_into_texture_d3d11_async( void *dst_texture
 
     return error;
 }
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async( struct w_steam_iface *_this, int32_t textureId,
                                                                                    void *pD3D11Device, void **ppD3D11Texture2D )
 {
     struct winRenderModel_TextureMap_t_1237 *texture_map = NULL;
@@ -266,7 +266,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Asyn
 
     return _ret;
 }
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async( struct w_steam_iface *_this, int32_t textureId,
                                                                                    void *pD3D11Device, void **ppD3D11Texture2D )
 {
     struct winRenderModel_TextureMap_t_1237 *texture_map = NULL;
@@ -291,7 +291,7 @@ uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Asyn
 
     return _ret;
 }
-uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async( struct w_steam_iface *_this, TextureID_t textureId,
+uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async( struct w_steam_iface *_this, int32_t textureId,
                                                                                    void *pD3D11Device, void **ppD3D11Texture2D )
 {
     struct winRenderModel_TextureMap_t_1237 *texture_map = NULL;
@@ -324,7 +324,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11( struct 
     d3d11_texture->lpVtbl->Release( d3d11_texture );
 }
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async( struct w_steam_iface *_this,
-                                                                                       TextureID_t textureId, void *pDstTexture )
+                                                                                       int32_t textureId, void *pDstTexture )
 {
     struct winRenderModel_TextureMap_t_1237 *texture_map = NULL;
     uint32_t _ret;
@@ -359,7 +359,7 @@ void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11( struct 
     d3d11_texture->lpVtbl->Release( d3d11_texture );
 }
 uint32_t __thiscall winIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async( struct w_steam_iface *_this,
-                                                                                       TextureID_t textureId, void *pDstTexture )
+                                                                                       int32_t textureId, void *pDstTexture )
 {
     struct winRenderModel_TextureMap_t_1237 *texture_map = NULL;
     uint32_t _ret;
