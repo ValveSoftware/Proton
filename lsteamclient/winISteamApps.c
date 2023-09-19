@@ -17,7 +17,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData, 20)
 
-int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(struct w_steam_iface *_this, AppId_t nAppID, const char *pchKey, char *pchValue, int32_t cchValueMax)
+int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData(struct w_steam_iface *_this, uint32_t nAppID, const char *pchKey, char *pchValue, int32_t cchValueMax)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION001_GetAppData_params params =
     {
@@ -129,7 +129,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_GetAvailabl
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp_params params =
     {
@@ -245,7 +245,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_GetAvailabl
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp_params params =
     {
@@ -257,7 +257,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsSubscribedApp(st
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION003_BIsDlcInstalled_params params =
     {
@@ -380,7 +380,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetAvailabl
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp_params params =
     {
@@ -392,7 +392,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribedApp(st
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled_params params =
     {
@@ -404,7 +404,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsDlcInstalled(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetEarliestPurchaseUnixTime_params params =
     {
@@ -438,7 +438,7 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount(stru
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, uint32_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex_params params =
     {
@@ -454,7 +454,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(
     return params._ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC_params params =
     {
@@ -465,7 +465,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(struct w
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC_params params =
     {
@@ -599,7 +599,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAvailabl
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp_params params =
     {
@@ -611,7 +611,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribedApp(st
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled_params params =
     {
@@ -623,7 +623,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsDlcInstalled(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetEarliestPurchaseUnixTime_params params =
     {
@@ -657,7 +657,7 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetDLCCount(stru
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, uint32_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex_params params =
     {
@@ -673,7 +673,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BGetDLCDataByIndex(
     return params._ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC_params params =
     {
@@ -684,7 +684,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC(struct w
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_InstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC_params params =
     {
@@ -695,7 +695,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC(struct
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_UninstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_RequestAppProofOfPurchaseKey_params params =
     {
@@ -731,7 +731,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(struct w_steam_iface *_this, DepotId_t *pvecDepots, uint32_t cMaxDepots)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(struct w_steam_iface *_this, uint32_t *pvecDepots, uint32_t cMaxDepots)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots_params params =
     {
@@ -744,7 +744,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDep
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(struct w_steam_iface *_this, uint32_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir_params params =
     {
@@ -759,7 +759,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDi
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled_params params =
     {
@@ -902,7 +902,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAvailabl
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp_params params =
     {
@@ -914,7 +914,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsSubscribedApp(st
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled_params params =
     {
@@ -926,7 +926,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsDlcInstalled(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetEarliestPurchaseUnixTime_params params =
     {
@@ -960,7 +960,7 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetDLCCount(stru
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, uint32_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex_params params =
     {
@@ -976,7 +976,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BGetDLCDataByIndex(
     return params._ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC_params params =
     {
@@ -987,7 +987,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC(struct w
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_InstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC_params params =
     {
@@ -998,7 +998,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC(struct
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_UninstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_RequestAppProofOfPurchaseKey_params params =
     {
@@ -1034,7 +1034,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots(struct w_steam_iface *_this, AppId_t appID, DepotId_t *pvecDepots, uint32_t cMaxDepots)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots(struct w_steam_iface *_this, uint32_t appID, uint32_t *pvecDepots, uint32_t cMaxDepots)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDepots_params params =
     {
@@ -1048,7 +1048,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetInstalledDep
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(struct w_steam_iface *_this, uint32_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir_params params =
     {
@@ -1063,7 +1063,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDi
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_BIsAppInstalled_params params =
     {
@@ -1234,7 +1234,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAvailabl
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp_params params =
     {
@@ -1246,7 +1246,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribedApp(st
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled_params params =
     {
@@ -1258,7 +1258,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsDlcInstalled(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetEarliestPurchaseUnixTime_params params =
     {
@@ -1292,7 +1292,7 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDLCCount(stru
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, uint32_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex_params params =
     {
@@ -1308,7 +1308,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BGetDLCDataByIndex(
     return params._ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC_params params =
     {
@@ -1319,7 +1319,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC(struct w
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_InstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC_params params =
     {
@@ -1330,7 +1330,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC(struct
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_UninstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_RequestAppProofOfPurchaseKey_params params =
     {
@@ -1366,7 +1366,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(struct w_steam_iface *_this, AppId_t appID, DepotId_t *pvecDepots, uint32_t cMaxDepots)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots(struct w_steam_iface *_this, uint32_t appID, uint32_t *pvecDepots, uint32_t cMaxDepots)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDepots_params params =
     {
@@ -1380,7 +1380,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetInstalledDep
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(struct w_steam_iface *_this, uint32_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir_params params =
     {
@@ -1395,7 +1395,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDi
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsAppInstalled_params params =
     {
@@ -1431,7 +1431,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQu
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(struct w_steam_iface *_this, AppId_t nAppID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(struct w_steam_iface *_this, uint32_t nAppID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress_params params =
     {
@@ -1599,7 +1599,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAvailabl
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp_params params =
     {
@@ -1611,7 +1611,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp(st
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled_params params =
     {
@@ -1623,7 +1623,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, AppId_t nAppID)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime_params params =
     {
@@ -1657,7 +1657,7 @@ int32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDLCCount(stru
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, AppId_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(struct w_steam_iface *_this, int32_t iDLC, uint32_t *pAppID, bool *pbAvailable, char *pchName, int32_t cchNameBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex_params params =
     {
@@ -1673,7 +1673,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex(
     return params._ret;
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC_params params =
     {
@@ -1684,7 +1684,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC(struct w
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC_params params =
     {
@@ -1695,7 +1695,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC(struct
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC( &params );
 }
 
-void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, AppId_t nAppID)
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey_params params =
     {
@@ -1731,7 +1731,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(struct w_steam_iface *_this, AppId_t appID, DepotId_t *pvecDepots, uint32_t cMaxDepots)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots(struct w_steam_iface *_this, uint32_t appID, uint32_t *pvecDepots, uint32_t cMaxDepots)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots_params params =
     {
@@ -1745,7 +1745,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDep
     return params._ret;
 }
 
-uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(struct w_steam_iface *_this, AppId_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
+uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(struct w_steam_iface *_this, uint32_t appID, char *pchFolder, uint32_t cchFolderBufferSize)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir_params params =
     {
@@ -1760,7 +1760,7 @@ uint32_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDi
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled(struct w_steam_iface *_this, AppId_t appID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled(struct w_steam_iface *_this, uint32_t appID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled_params params =
     {
@@ -1796,7 +1796,7 @@ const char * __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchQu
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(struct w_steam_iface *_this, AppId_t nAppID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(struct w_steam_iface *_this, uint32_t nAppID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress_params params =
     {
@@ -1831,7 +1831,7 @@ void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPu
     cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys( &params );
 }
 
-SteamAPICall_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(struct w_steam_iface *_this, const char *pszFileName)
+uint64_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(struct w_steam_iface *_this, const char *pszFileName)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails_params params =
     {
@@ -1882,7 +1882,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(struc
     return params._ret;
 }
 
-bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(struct w_steam_iface *_this, AppId_t nAppID)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext_params params =
     {

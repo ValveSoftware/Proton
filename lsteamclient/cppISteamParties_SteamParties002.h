@@ -8,7 +8,7 @@ extern void cppISteamParties_SteamParties002_GetNumActiveBeacons( struct cppISte
 struct cppISteamParties_SteamParties002_GetBeaconByIndex_params
 {
     void *linux_side;
-    PartyBeaconID_t _ret;
+    uint64_t _ret;
     uint32_t unIndex;
 };
 extern void cppISteamParties_SteamParties002_GetBeaconByIndex( struct cppISteamParties_SteamParties002_GetBeaconByIndex_params *params );
@@ -17,7 +17,7 @@ struct cppISteamParties_SteamParties002_GetBeaconDetails_params
 {
     void *linux_side;
     bool _ret;
-    PartyBeaconID_t ulBeaconID;
+    uint64_t ulBeaconID;
     CSteamID *pSteamIDBeaconOwner;
     winSteamPartyBeaconLocation_t_158 *pLocation;
     char *pchMetadata;
@@ -28,8 +28,8 @@ extern void cppISteamParties_SteamParties002_GetBeaconDetails( struct cppISteamP
 struct cppISteamParties_SteamParties002_JoinParty_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
-    PartyBeaconID_t ulBeaconID;
+    uint64_t _ret;
+    uint64_t ulBeaconID;
 };
 extern void cppISteamParties_SteamParties002_JoinParty( struct cppISteamParties_SteamParties002_JoinParty_params *params );
 
@@ -53,7 +53,7 @@ extern void cppISteamParties_SteamParties002_GetAvailableBeaconLocations( struct
 struct cppISteamParties_SteamParties002_CreateBeacon_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     uint32_t unOpenSlots;
     winSteamPartyBeaconLocation_t_158 *pBeaconLocation;
     const char *pchConnectString;
@@ -64,7 +64,7 @@ extern void cppISteamParties_SteamParties002_CreateBeacon( struct cppISteamParti
 struct cppISteamParties_SteamParties002_OnReservationCompleted_params
 {
     void *linux_side;
-    PartyBeaconID_t ulBeacon;
+    uint64_t ulBeacon;
     CSteamID steamIDUser;
 };
 extern void cppISteamParties_SteamParties002_OnReservationCompleted( struct cppISteamParties_SteamParties002_OnReservationCompleted_params *params );
@@ -72,7 +72,7 @@ extern void cppISteamParties_SteamParties002_OnReservationCompleted( struct cppI
 struct cppISteamParties_SteamParties002_CancelReservation_params
 {
     void *linux_side;
-    PartyBeaconID_t ulBeacon;
+    uint64_t ulBeacon;
     CSteamID steamIDUser;
 };
 extern void cppISteamParties_SteamParties002_CancelReservation( struct cppISteamParties_SteamParties002_CancelReservation_params *params );
@@ -80,8 +80,8 @@ extern void cppISteamParties_SteamParties002_CancelReservation( struct cppISteam
 struct cppISteamParties_SteamParties002_ChangeNumOpenSlots_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
-    PartyBeaconID_t ulBeacon;
+    uint64_t _ret;
+    uint64_t ulBeacon;
     uint32_t unOpenSlots;
 };
 extern void cppISteamParties_SteamParties002_ChangeNumOpenSlots( struct cppISteamParties_SteamParties002_ChangeNumOpenSlots_params *params );
@@ -90,7 +90,7 @@ struct cppISteamParties_SteamParties002_DestroyBeacon_params
 {
     void *linux_side;
     bool _ret;
-    PartyBeaconID_t ulBeacon;
+    uint64_t ulBeacon;
 };
 extern void cppISteamParties_SteamParties002_DestroyBeacon( struct cppISteamParties_SteamParties002_DestroyBeacon_params *params );
 

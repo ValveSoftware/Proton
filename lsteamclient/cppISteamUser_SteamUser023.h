@@ -1,7 +1,7 @@
 struct cppISteamUser_SteamUser023_GetHSteamUser_params
 {
     void *linux_side;
-    HSteamUser _ret;
+    int32_t _ret;
 };
 extern void cppISteamUser_SteamUser023_GetHSteamUser( struct cppISteamUser_SteamUser023_GetHSteamUser_params *params );
 
@@ -119,7 +119,7 @@ extern void cppISteamUser_SteamUser023_GetVoiceOptimalSampleRate( struct cppISte
 struct cppISteamUser_SteamUser023_GetAuthSessionTicket_params
 {
     void *linux_side;
-    HAuthTicket _ret;
+    uint32_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -130,7 +130,7 @@ extern void cppISteamUser_SteamUser023_GetAuthSessionTicket( struct cppISteamUse
 struct cppISteamUser_SteamUser023_GetAuthTicketForWebApi_params
 {
     void *linux_side;
-    HAuthTicket _ret;
+    uint32_t _ret;
     const char *pchIdentity;
 };
 extern void cppISteamUser_SteamUser023_GetAuthTicketForWebApi( struct cppISteamUser_SteamUser023_GetAuthTicketForWebApi_params *params );
@@ -155,7 +155,7 @@ extern void cppISteamUser_SteamUser023_EndAuthSession( struct cppISteamUser_Stea
 struct cppISteamUser_SteamUser023_CancelAuthTicket_params
 {
     void *linux_side;
-    HAuthTicket hAuthTicket;
+    uint32_t hAuthTicket;
 };
 extern void cppISteamUser_SteamUser023_CancelAuthTicket( struct cppISteamUser_SteamUser023_CancelAuthTicket_params *params );
 
@@ -164,7 +164,7 @@ struct cppISteamUser_SteamUser023_UserHasLicenseForApp_params
     void *linux_side;
     uint32_t _ret;
     CSteamID steamID;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamUser_SteamUser023_UserHasLicenseForApp( struct cppISteamUser_SteamUser023_UserHasLicenseForApp_params *params );
 
@@ -187,7 +187,7 @@ extern void cppISteamUser_SteamUser023_AdvertiseGame( struct cppISteamUser_Steam
 struct cppISteamUser_SteamUser023_RequestEncryptedAppTicket_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     void *pDataToInclude;
     int32_t cbDataToInclude;
 };
@@ -222,7 +222,7 @@ extern void cppISteamUser_SteamUser023_GetPlayerSteamLevel( struct cppISteamUser
 struct cppISteamUser_SteamUser023_RequestStoreAuthURL_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     const char *pchRedirectURL;
 };
 extern void cppISteamUser_SteamUser023_RequestStoreAuthURL( struct cppISteamUser_SteamUser023_RequestStoreAuthURL_params *params );
@@ -258,14 +258,14 @@ extern void cppISteamUser_SteamUser023_BIsPhoneRequiringVerification( struct cpp
 struct cppISteamUser_SteamUser023_GetMarketEligibility_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
 };
 extern void cppISteamUser_SteamUser023_GetMarketEligibility( struct cppISteamUser_SteamUser023_GetMarketEligibility_params *params );
 
 struct cppISteamUser_SteamUser023_GetDurationControl_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
 };
 extern void cppISteamUser_SteamUser023_GetDurationControl( struct cppISteamUser_SteamUser023_GetDurationControl_params *params );
 

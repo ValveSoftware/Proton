@@ -1,7 +1,7 @@
 struct cppISteamUser_SteamUser006_GetHSteamUser_params
 {
     void *linux_side;
-    HSteamUser _ret;
+    int32_t _ret;
 };
 extern void cppISteamUser_SteamUser006_GetHSteamUser( struct cppISteamUser_SteamUser006_GetHSteamUser_params *params );
 

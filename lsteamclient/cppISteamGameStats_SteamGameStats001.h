@@ -1,20 +1,20 @@
 struct cppISteamGameStats_SteamGameStats001_GetNewSession_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     int8_t nAccountType;
     uint64_t ulAccountID;
     int32_t nAppID;
-    RTime32 rtTimeStarted;
+    uint32_t rtTimeStarted;
 };
 extern void cppISteamGameStats_SteamGameStats001_GetNewSession( struct cppISteamGameStats_SteamGameStats001_GetNewSession_params *params );
 
 struct cppISteamGameStats_SteamGameStats001_EndSession_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     uint64_t ulSessionID;
-    RTime32 rtTimeEnded;
+    uint32_t rtTimeEnded;
     int32_t nReasonCode;
 };
 extern void cppISteamGameStats_SteamGameStats001_EndSession( struct cppISteamGameStats_SteamGameStats001_EndSession_params *params );

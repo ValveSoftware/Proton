@@ -177,7 +177,7 @@ extern void cppISteamFriends_SteamFriends008_ActivateGameOverlayToWebPage( struc
 struct cppISteamFriends_SteamFriends008_ActivateGameOverlayToStore_params
 {
     void *linux_side;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamFriends_SteamFriends008_ActivateGameOverlayToStore( struct cppISteamFriends_SteamFriends008_ActivateGameOverlayToStore_params *params );
 
@@ -231,7 +231,7 @@ extern void cppISteamFriends_SteamFriends008_RequestUserInformation( struct cppI
 struct cppISteamFriends_SteamFriends008_RequestClanOfficerList_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDClan;
 };
 extern void cppISteamFriends_SteamFriends008_RequestClanOfficerList( struct cppISteamFriends_SteamFriends008_RequestClanOfficerList_params *params );

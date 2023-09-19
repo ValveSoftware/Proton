@@ -26,7 +26,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_SetUser
 DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement, 16)
 DEFINE_THISCALL_WRAPPER(winISteamGameServerStats_SteamGameServerStats001_StoreUserStats, 12)
 
-SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamGameServerStats_SteamGameServerStats001_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats_params params =
     {
@@ -149,7 +149,7 @@ bool __thiscall winISteamGameServerStats_SteamGameServerStats001_ClearUserAchiev
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServerStats_SteamGameServerStats001_StoreUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamGameServerStats_SteamGameServerStats001_StoreUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats_params params =
     {

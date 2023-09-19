@@ -10,7 +10,7 @@ struct cppISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame_params
     void *linux_side;
     bool _ret;
     int32_t iGame;
-    AppId_t *pnAppID;
+    uint32_t *pnAppID;
     uint32_t *pnIP;
     uint16_t *pnConnPort;
     uint16_t *pnQueryPort;
@@ -23,7 +23,7 @@ struct cppISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame_params
 {
     void *linux_side;
     int32_t _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
     uint16_t nQueryPort;
@@ -36,7 +36,7 @@ struct cppISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame_params
 {
     void *linux_side;
     bool _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
     uint32_t nIP;
     uint16_t nConnPort;
     uint16_t nQueryPort;

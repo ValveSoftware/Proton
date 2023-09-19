@@ -37,7 +37,7 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileD
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     const char *pchFile;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileShare_params *params );
@@ -140,8 +140,8 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_SetCl
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCDownload_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
-    UGCHandle_t hContent;
+    uint64_t _ret;
+    uint64_t hContent;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCDownload( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCDownload_params *params );
 
@@ -149,8 +149,8 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUGCDeta
 {
     void *linux_side;
     bool _ret;
-    UGCHandle_t hContent;
-    AppId_t *pnAppID;
+    uint64_t hContent;
+    uint32_t *pnAppID;
     char **ppchName;
     int32_t *pnFileSizeInBytes;
     CSteamID *pSteamIDOwner;
@@ -161,7 +161,7 @@ struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCRead_pa
 {
     void *linux_side;
     int32_t _ret;
-    UGCHandle_t hContent;
+    uint64_t hContent;
     void *pvData;
     int32_t cubDataToRead;
 };
@@ -177,7 +177,7 @@ extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCa
 struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCHandle_params
 {
     void *linux_side;
-    UGCHandle_t _ret;
+    uint64_t _ret;
     int32_t iCachedContent;
 };
 extern void cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCHandle( struct cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCHandle_params *params );

@@ -870,12 +870,12 @@ static DWORD WINAPI callback_thread(void *dummy)
 
 static void *steamclient_lib;
 static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
-static bool (*steamclient_BGetCallback)( HSteamPipe a, CallbackMsg_t *b, int32_t *c );
-static bool (*steamclient_GetAPICallResult)(HSteamPipe, SteamAPICall_t, void *, int, int, bool *);
-static bool (*steamclient_FreeLastCallback)(HSteamPipe);
+static bool (*steamclient_BGetCallback)( int32_t a, CallbackMsg_t *b, int32_t *c );
+static bool (*steamclient_GetAPICallResult)( int32_t, uint64_t, void *, int, int, bool * );
+static bool (*steamclient_FreeLastCallback)( int32_t );
 static void (*steamclient_ReleaseThreadLocalMemory)(int);
 static bool (*steamclient_IsKnownInterface)( const char *pchVersion );
-static void (*steamclient_NotifyMissingInterface)( HSteamPipe hSteamPipe, const char *pchVersion );
+static void (*steamclient_NotifyMissingInterface)( int32_t hSteamPipe, const char *pchVersion );
 
 static int load_steamclient(void)
 {
@@ -979,7 +979,7 @@ void *CDECL CreateInterface(const char *name, int *return_code)
 #pragma pack( push, 8 )
 struct winCallbackMsg_t
 {
-    HSteamUser m_hSteamUser;
+    int32_t m_hSteamUser;
     int m_iCallback;
     uint8_t *m_pubParam;
     int m_cubParam;
@@ -988,7 +988,7 @@ struct winCallbackMsg_t
 
 static void *last_cb = NULL;
 
-bool CDECL Steam_BGetCallback( HSteamPipe pipe, struct winCallbackMsg_t *win_msg, int32_t *ignored )
+bool CDECL Steam_BGetCallback( int32_t pipe, struct winCallbackMsg_t *win_msg, int32_t *ignored )
 {
     bool ret;
     CallbackMsg_t lin_msg;
@@ -1072,7 +1072,7 @@ void convert_callback_utow( int id, void *lin_callback, int lin_callback_len, vo
     }
 }
 
-bool CDECL Steam_GetAPICallResult( HSteamPipe pipe, SteamAPICall_t call, void *w_callback,
+bool CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callback,
                                    int w_callback_len, int id, bool *failed )
 {
     int u_callback_len = w_callback_len;
@@ -1094,7 +1094,7 @@ bool CDECL Steam_GetAPICallResult( HSteamPipe pipe, SteamAPICall_t call, void *w
     return ret;
 }
 
-bool CDECL Steam_FreeLastCallback(HSteamPipe pipe)
+bool CDECL Steam_FreeLastCallback( int32_t pipe )
 {
     TRACE("%u\n", pipe);
 
@@ -1154,7 +1154,7 @@ bool after_shutdown(bool ret)
     return ret;
 }
 
-HSteamPipe after_steam_pipe_create(HSteamPipe pipe)
+int32_t after_steam_pipe_create( int32_t pipe )
 {
     DWORD callback_thread_id;
 
@@ -1180,7 +1180,7 @@ bool CDECL Steam_IsKnownInterface( const char *pchVersion )
     return steamclient_IsKnownInterface( pchVersion );
 }
 
-void CDECL Steam_NotifyMissingInterface( HSteamPipe hSteamPipe, const char *pchVersion )
+void CDECL Steam_NotifyMissingInterface( int32_t hSteamPipe, const char *pchVersion )
 {
     TRACE("%u %s\n", hSteamPipe, pchVersion);
     load_steamclient();

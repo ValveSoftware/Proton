@@ -1,7 +1,7 @@
 struct cppISteamUser_SteamUser014_GetHSteamUser_params
 {
     void *linux_side;
-    HSteamUser _ret;
+    int32_t _ret;
 };
 extern void cppISteamUser_SteamUser014_GetHSteamUser( struct cppISteamUser_SteamUser014_GetHSteamUser_params *params );
 
@@ -109,7 +109,7 @@ extern void cppISteamUser_SteamUser014_DecompressVoice( struct cppISteamUser_Ste
 struct cppISteamUser_SteamUser014_GetAuthSessionTicket_params
 {
     void *linux_side;
-    HAuthTicket _ret;
+    uint32_t _ret;
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
@@ -119,7 +119,7 @@ extern void cppISteamUser_SteamUser014_GetAuthSessionTicket( struct cppISteamUse
 struct cppISteamUser_SteamUser014_BeginAuthSession_params
 {
     void *linux_side;
-    EBeginAuthSessionResult _ret;
+    uint32_t _ret;
     const void *pAuthTicket;
     int32_t cbAuthTicket;
     CSteamID steamID;
@@ -136,16 +136,16 @@ extern void cppISteamUser_SteamUser014_EndAuthSession( struct cppISteamUser_Stea
 struct cppISteamUser_SteamUser014_CancelAuthTicket_params
 {
     void *linux_side;
-    HAuthTicket hAuthTicket;
+    uint32_t hAuthTicket;
 };
 extern void cppISteamUser_SteamUser014_CancelAuthTicket( struct cppISteamUser_SteamUser014_CancelAuthTicket_params *params );
 
 struct cppISteamUser_SteamUser014_UserHasLicenseForApp_params
 {
     void *linux_side;
-    EUserHasLicenseForAppResult _ret;
+    uint32_t _ret;
     CSteamID steamID;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamUser_SteamUser014_UserHasLicenseForApp( struct cppISteamUser_SteamUser014_UserHasLicenseForApp_params *params );
 
@@ -168,7 +168,7 @@ extern void cppISteamUser_SteamUser014_AdvertiseGame( struct cppISteamUser_Steam
 struct cppISteamUser_SteamUser014_RequestEncryptedAppTicket_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     void *pDataToInclude;
     int32_t cbDataToInclude;
 };

@@ -30,7 +30,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays, 16)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails, 12)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest_params params =
     {
@@ -48,7 +48,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryAllUGCRequest_params params =
     {
@@ -64,7 +64,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUGCRequest_params params =
     {
@@ -76,7 +76,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_128 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_128 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult_params params =
     {
@@ -90,7 +90,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_ReleaseQueryUGCRequest_params params =
     {
@@ -102,7 +102,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag_params params =
     {
@@ -115,7 +115,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag_params params =
     {
@@ -128,7 +128,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnLongDescription_params params =
     {
@@ -141,7 +141,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnTotalOnly_params params =
     {
@@ -154,7 +154,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilter_params params =
     {
@@ -167,7 +167,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetMatchAnyTag_params params =
     {
@@ -180,7 +180,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText_params params =
     {
@@ -193,7 +193,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays_params params =
     {
@@ -206,7 +206,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_SetRankedByTrendDays(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_RequestUGCDetails_params params =
     {
@@ -286,7 +286,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribed
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo, 24)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo, 28)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest_params params =
     {
@@ -304,7 +304,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryAllUGCRequest_params params =
     {
@@ -320,7 +320,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SendQueryUGCRequest_params params =
     {
@@ -332,7 +332,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_130 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_130 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult_params params =
     {
@@ -346,7 +346,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_ReleaseQueryUGCRequest_params params =
     {
@@ -358,7 +358,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag_params params =
     {
@@ -371,7 +371,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag_params params =
     {
@@ -384,7 +384,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnLongDescription_params params =
     {
@@ -397,7 +397,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnTotalOnly_params params =
     {
@@ -410,7 +410,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedResponse_params params =
     {
@@ -423,7 +423,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFilter_params params =
     {
@@ -436,7 +436,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetMatchAnyTag_params params =
     {
@@ -449,7 +449,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText_params params =
     {
@@ -462,7 +462,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays_params params =
     {
@@ -475,7 +475,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetRankedByTrendDays(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_RequestUGCDetails_params params =
     {
@@ -488,7 +488,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateItem_params params =
     {
@@ -501,7 +501,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_StartItemUpdate_params params =
     {
@@ -514,7 +514,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle_params params =
     {
@@ -527,7 +527,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription_params params =
     {
@@ -540,7 +540,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility_params params =
     {
@@ -553,7 +553,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags_params params =
     {
@@ -566,7 +566,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent_params params =
     {
@@ -581,7 +581,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview_params params =
     {
@@ -596,7 +596,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemPreview(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubmitItemUpdate_params params =
     {
@@ -609,7 +609,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateProgress_params params =
     {
@@ -623,7 +623,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubscribeItem_params params =
     {
@@ -635,7 +635,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_UnsubscribeItem_params params =
     {
@@ -658,7 +658,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItems_params params =
     {
@@ -671,7 +671,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetSubscribedItem
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo_params params =
     {
@@ -687,7 +687,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool *pbNeedsUpdate, bool *pbIsDownloading, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool *pbNeedsUpdate, bool *pbIsDownloading, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetItemUpdateInfo_params params =
     {
@@ -788,7 +788,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetSubscribed
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo, 28)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo, 28)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest_params params =
     {
@@ -806,7 +806,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryAllUGCRequest_params params =
     {
@@ -822,7 +822,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUGCRequest_params params =
     {
@@ -834,7 +834,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_132 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_132 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult_params params =
     {
@@ -848,7 +848,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_ReleaseQueryUGCRequest_params params =
     {
@@ -860,7 +860,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag_params params =
     {
@@ -873,7 +873,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag_params params =
     {
@@ -886,7 +886,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnLongDescription_params params =
     {
@@ -899,7 +899,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnTotalOnly_params params =
     {
@@ -912,7 +912,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetAllowCachedResponse_params params =
     {
@@ -925,7 +925,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFilter_params params =
     {
@@ -938,7 +938,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetMatchAnyTag_params params =
     {
@@ -951,7 +951,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText_params params =
     {
@@ -964,7 +964,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetRankedByTrendDays_params params =
     {
@@ -977,7 +977,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetRankedByTrendDays(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_RequestUGCDetails_params params =
     {
@@ -990,7 +990,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateItem_params params =
     {
@@ -1003,7 +1003,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_StartItemUpdate_params params =
     {
@@ -1016,7 +1016,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle_params params =
     {
@@ -1029,7 +1029,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription_params params =
     {
@@ -1042,7 +1042,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility_params params =
     {
@@ -1055,7 +1055,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags_params params =
     {
@@ -1068,7 +1068,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent_params params =
     {
@@ -1083,7 +1083,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview_params params =
     {
@@ -1098,7 +1098,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemPreview(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubmitItemUpdate_params params =
     {
@@ -1111,7 +1111,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateProgress_params params =
     {
@@ -1125,7 +1125,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubscribeItem_params params =
     {
@@ -1137,7 +1137,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_UnsubscribeItem_params params =
     {
@@ -1160,7 +1160,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetSubscribedItems_params params =
     {
@@ -1173,7 +1173,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetSubscribedItem
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, bool *pbLegacyItem)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, bool *pbLegacyItem)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo_params params =
     {
@@ -1190,7 +1190,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool *pbNeedsUpdate, bool *pbIsDownloading, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool *pbNeedsUpdate, bool *pbIsDownloading, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo_params params =
     {
@@ -1293,7 +1293,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstal
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION004_DownloadItem, 16)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryUserUGCRequest_params params =
     {
@@ -1311,7 +1311,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQueryAllUGCRequest_params params =
     {
@@ -1327,7 +1327,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SendQueryUGCRequest_params params =
     {
@@ -1339,7 +1339,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_132x *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_132x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult_params params =
     {
@@ -1353,7 +1353,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_ReleaseQueryUGCRequest_params params =
     {
@@ -1365,7 +1365,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag_params params =
     {
@@ -1378,7 +1378,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag_params params =
     {
@@ -1391,7 +1391,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnLongDescription_params params =
     {
@@ -1404,7 +1404,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnTotalOnly_params params =
     {
@@ -1417,7 +1417,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetAllowCachedResponse_params params =
     {
@@ -1430,7 +1430,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFilter_params params =
     {
@@ -1443,7 +1443,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetMatchAnyTag_params params =
     {
@@ -1456,7 +1456,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText_params params =
     {
@@ -1469,7 +1469,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetRankedByTrendDays_params params =
     {
@@ -1482,7 +1482,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetRankedByTrendDays(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_RequestUGCDetails_params params =
     {
@@ -1495,7 +1495,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateItem_params params =
     {
@@ -1508,7 +1508,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_StartItemUpdate_params params =
     {
@@ -1521,7 +1521,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle_params params =
     {
@@ -1534,7 +1534,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription_params params =
     {
@@ -1547,7 +1547,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility_params params =
     {
@@ -1560,7 +1560,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags_params params =
     {
@@ -1573,7 +1573,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent_params params =
     {
@@ -1588,7 +1588,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview_params params =
     {
@@ -1603,7 +1603,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SetItemPreview(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubmitItemUpdate_params params =
     {
@@ -1616,7 +1616,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemUpdateProgress_params params =
     {
@@ -1630,7 +1630,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubscribeItem_params params =
     {
@@ -1642,7 +1642,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_UnsubscribeItem_params params =
     {
@@ -1665,7 +1665,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetSubscribedItems_params params =
     {
@@ -1678,7 +1678,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemState_params params =
     {
@@ -1690,7 +1690,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo_params params =
     {
@@ -1707,7 +1707,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo_params params =
     {
@@ -1721,7 +1721,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION004_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION004_DownloadItem_params params =
     {
@@ -1836,7 +1836,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstal
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION005_DownloadItem, 16)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUserUGCRequest_params params =
     {
@@ -1854,7 +1854,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryAllUGCRequest_params params =
     {
@@ -1870,7 +1870,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQueryUGCDetailsRequest_params params =
     {
@@ -1883,7 +1883,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SendQueryUGCRequest_params params =
     {
@@ -1895,7 +1895,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_133b *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_133b *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult_params params =
     {
@@ -1909,7 +1909,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCPreviewURL_params params =
     {
@@ -1924,7 +1924,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCMetadata_params params =
     {
@@ -1939,7 +1939,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCChildren_params params =
     {
@@ -1954,7 +1954,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCStatistic_params params =
     {
@@ -1969,7 +1969,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -1982,7 +1982,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, bool *pbIsImage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, bool *pbIsImage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCAdditionalPreview_params params =
     {
@@ -2000,7 +2000,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetQueryUGCAdditional
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_ReleaseQueryUGCRequest_params params =
     {
@@ -2012,7 +2012,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag_params params =
     {
@@ -2025,7 +2025,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag_params params =
     {
@@ -2038,7 +2038,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnLongDescription_params params =
     {
@@ -2051,7 +2051,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnMetadata_params params =
     {
@@ -2064,7 +2064,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnChildren_params params =
     {
@@ -2077,7 +2077,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnAdditionalPreviews_params params =
     {
@@ -2090,7 +2090,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnTotalOnly_params params =
     {
@@ -2103,7 +2103,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetAllowCachedResponse_params params =
     {
@@ -2116,7 +2116,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFilter_params params =
     {
@@ -2129,7 +2129,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetMatchAnyTag_params params =
     {
@@ -2142,7 +2142,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText_params params =
     {
@@ -2155,7 +2155,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetRankedByTrendDays_params params =
     {
@@ -2168,7 +2168,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetRankedByTrendDays(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_RequestUGCDetails_params params =
     {
@@ -2181,7 +2181,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateItem_params params =
     {
@@ -2194,7 +2194,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_StartItemUpdate_params params =
     {
@@ -2207,7 +2207,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle_params params =
     {
@@ -2220,7 +2220,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription_params params =
     {
@@ -2233,7 +2233,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata_params params =
     {
@@ -2246,7 +2246,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemVisibility_params params =
     {
@@ -2259,7 +2259,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags_params params =
     {
@@ -2272,7 +2272,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent_params params =
     {
@@ -2287,7 +2287,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview_params params =
     {
@@ -2302,7 +2302,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SetItemPreview(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubmitItemUpdate_params params =
     {
@@ -2315,7 +2315,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemUpdateProgress_params params =
     {
@@ -2329,7 +2329,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddItemToFavorites_params params =
     {
@@ -2342,7 +2342,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_RemoveItemFromFavorites_params params =
     {
@@ -2355,7 +2355,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubscribeItem_params params =
     {
@@ -2367,7 +2367,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_UnsubscribeItem_params params =
     {
@@ -2390,7 +2390,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetSubscribedItems_params params =
     {
@@ -2403,7 +2403,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemState_params params =
     {
@@ -2415,7 +2415,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo_params params =
     {
@@ -2432,7 +2432,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo_params params =
     {
@@ -2446,7 +2446,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION005_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION005_DownloadItem_params params =
     {
@@ -2578,7 +2578,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstal
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo, 20)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem, 16)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUserUGCRequest_params params =
     {
@@ -2596,7 +2596,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryAllUGCRequest_params params =
     {
@@ -2612,7 +2612,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUGCDetailsRequest_params params =
     {
@@ -2625,7 +2625,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SendQueryUGCRequest_params params =
     {
@@ -2637,7 +2637,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_133x *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_133x *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult_params params =
     {
@@ -2651,7 +2651,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCPreviewURL_params params =
     {
@@ -2666,7 +2666,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCMetadata_params params =
     {
@@ -2681,7 +2681,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCChildren_params params =
     {
@@ -2696,7 +2696,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCStatistic_params params =
     {
@@ -2711,7 +2711,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -2724,7 +2724,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, bool *pbIsImage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, bool *pbIsImage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCAdditionalPreview_params params =
     {
@@ -2742,7 +2742,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCAdditional
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_ReleaseQueryUGCRequest_params params =
     {
@@ -2754,7 +2754,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag_params params =
     {
@@ -2767,7 +2767,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag_params params =
     {
@@ -2780,7 +2780,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnLongDescription_params params =
     {
@@ -2793,7 +2793,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnMetadata_params params =
     {
@@ -2806,7 +2806,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnChildren_params params =
     {
@@ -2819,7 +2819,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnAdditionalPreviews_params params =
     {
@@ -2832,7 +2832,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnTotalOnly_params params =
     {
@@ -2845,7 +2845,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage_params params =
     {
@@ -2858,7 +2858,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetAllowCachedResponse_params params =
     {
@@ -2871,7 +2871,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFilter_params params =
     {
@@ -2884,7 +2884,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetMatchAnyTag_params params =
     {
@@ -2897,7 +2897,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText_params params =
     {
@@ -2910,7 +2910,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetRankedByTrendDays_params params =
     {
@@ -2923,7 +2923,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetRankedByTrendDays(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_RequestUGCDetails_params params =
     {
@@ -2936,7 +2936,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateItem_params params =
     {
@@ -2949,7 +2949,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_StartItemUpdate_params params =
     {
@@ -2962,7 +2962,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle_params params =
     {
@@ -2975,7 +2975,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription_params params =
     {
@@ -2988,7 +2988,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLanguage_params params =
     {
@@ -3001,7 +3001,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata_params params =
     {
@@ -3014,7 +3014,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemVisibility_params params =
     {
@@ -3027,7 +3027,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags_params params =
     {
@@ -3040,7 +3040,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent_params params =
     {
@@ -3055,7 +3055,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview_params params =
     {
@@ -3070,7 +3070,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetItemPreview(struct
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubmitItemUpdate_params params =
     {
@@ -3083,7 +3083,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemUpdateProgress_params params =
     {
@@ -3097,7 +3097,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetUserItemVote_params params =
     {
@@ -3110,7 +3110,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetUserItemVote_params params =
     {
@@ -3122,7 +3122,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddItemToFavorites_params params =
     {
@@ -3135,7 +3135,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_RemoveItemFromFavorites_params params =
     {
@@ -3148,7 +3148,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubscribeItem_params params =
     {
@@ -3160,7 +3160,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_UnsubscribeItem_params params =
     {
@@ -3183,7 +3183,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetSubscribedItems_params params =
     {
@@ -3196,7 +3196,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemState_params params =
     {
@@ -3208,7 +3208,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo_params params =
     {
@@ -3225,7 +3225,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo_params params =
     {
@@ -3239,7 +3239,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem_params params =
     {
@@ -3383,7 +3383,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_DownloadItem,
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SuspendDownloads, 8)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUserUGCRequest_params params =
     {
@@ -3401,7 +3401,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryAllUGCRequest_params params =
     {
@@ -3417,7 +3417,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQueryUGCDetailsRequest_params params =
     {
@@ -3430,7 +3430,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SendQueryUGCRequest_params params =
     {
@@ -3442,7 +3442,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_136 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_136 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult_params params =
     {
@@ -3456,7 +3456,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCPreviewURL_params params =
     {
@@ -3471,7 +3471,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCMetadata_params params =
     {
@@ -3486,7 +3486,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCChildren_params params =
     {
@@ -3501,7 +3501,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCStatistic_params params =
     {
@@ -3516,7 +3516,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -3529,7 +3529,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, bool *pbIsImage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, bool *pbIsImage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCAdditionalPreview_params params =
     {
@@ -3547,7 +3547,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -3560,7 +3560,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCKeyValueTag_params params =
     {
@@ -3578,7 +3578,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_ReleaseQueryUGCRequest_params params =
     {
@@ -3590,7 +3590,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag_params params =
     {
@@ -3603,7 +3603,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag_params params =
     {
@@ -3616,7 +3616,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnKeyValueTags_params params =
     {
@@ -3629,7 +3629,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnLongDescription_params params =
     {
@@ -3642,7 +3642,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnMetadata_params params =
     {
@@ -3655,7 +3655,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnChildren_params params =
     {
@@ -3668,7 +3668,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnAdditionalPreviews_params params =
     {
@@ -3681,7 +3681,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnTotalOnly_params params =
     {
@@ -3694,7 +3694,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage_params params =
     {
@@ -3707,7 +3707,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetAllowCachedResponse_params params =
     {
@@ -3720,7 +3720,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFilter_params params =
     {
@@ -3733,7 +3733,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetMatchAnyTag_params params =
     {
@@ -3746,7 +3746,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText_params params =
     {
@@ -3759,7 +3759,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetRankedByTrendDays_params params =
     {
@@ -3772,7 +3772,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredKeyValueTag_params params =
     {
@@ -3786,7 +3786,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_RequestUGCDetails_params params =
     {
@@ -3799,7 +3799,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateItem_params params =
     {
@@ -3812,7 +3812,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_StartItemUpdate_params params =
     {
@@ -3825,7 +3825,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle_params params =
     {
@@ -3838,7 +3838,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription_params params =
     {
@@ -3851,7 +3851,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLanguage_params params =
     {
@@ -3864,7 +3864,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata_params params =
     {
@@ -3877,7 +3877,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemVisibility_params params =
     {
@@ -3890,7 +3890,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags_params params =
     {
@@ -3903,7 +3903,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent_params params =
     {
@@ -3918,7 +3918,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview_params params =
     {
@@ -3933,7 +3933,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueTags_params params =
     {
@@ -3946,7 +3946,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemKeyValueTag_params params =
     {
@@ -3960,7 +3960,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemKeyValueTag(st
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubmitItemUpdate_params params =
     {
@@ -3973,7 +3973,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemUpdateProgress_params params =
     {
@@ -3987,7 +3987,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetUserItemVote_params params =
     {
@@ -4000,7 +4000,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetUserItemVote_params params =
     {
@@ -4012,7 +4012,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemToFavorites_params params =
     {
@@ -4025,7 +4025,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemFromFavorites_params params =
     {
@@ -4038,7 +4038,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubscribeItem_params params =
     {
@@ -4050,7 +4050,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_UnsubscribeItem_params params =
     {
@@ -4073,7 +4073,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetSubscribedItems_params params =
     {
@@ -4086,7 +4086,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemState_params params =
     {
@@ -4098,7 +4098,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo_params params =
     {
@@ -4115,7 +4115,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemDownloadInfo_params params =
     {
@@ -4129,7 +4129,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_DownloadItem_params params =
     {
@@ -4142,7 +4142,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION007_BInitWorkshopForGameServer_params params =
     {
@@ -4312,7 +4312,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_DownloadItem,
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SuspendDownloads, 8)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUserUGCRequest_params params =
     {
@@ -4330,7 +4330,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryAllUGCRequest_params params =
     {
@@ -4346,7 +4346,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQueryUGCDetailsRequest_params params =
     {
@@ -4359,7 +4359,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SendQueryUGCRequest_params params =
     {
@@ -4371,7 +4371,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_137 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_137 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult_params params =
     {
@@ -4385,7 +4385,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCPreviewURL_params params =
     {
@@ -4400,7 +4400,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCMetadata_params params =
     {
@@ -4415,7 +4415,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCChildren_params params =
     {
@@ -4430,7 +4430,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint32_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCStatistic_params params =
     {
@@ -4445,7 +4445,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -4458,7 +4458,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCAdditionalPreview_params params =
     {
@@ -4478,7 +4478,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -4491,7 +4491,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCKeyValueTag_params params =
     {
@@ -4509,7 +4509,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_ReleaseQueryUGCRequest_params params =
     {
@@ -4521,7 +4521,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag_params params =
     {
@@ -4534,7 +4534,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag_params params =
     {
@@ -4547,7 +4547,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnKeyValueTags_params params =
     {
@@ -4560,7 +4560,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnLongDescription_params params =
     {
@@ -4573,7 +4573,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnMetadata_params params =
     {
@@ -4586,7 +4586,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnChildren_params params =
     {
@@ -4599,7 +4599,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnAdditionalPreviews_params params =
     {
@@ -4612,7 +4612,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnTotalOnly_params params =
     {
@@ -4625,7 +4625,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage_params params =
     {
@@ -4638,7 +4638,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetAllowCachedResponse_params params =
     {
@@ -4651,7 +4651,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFilter_params params =
     {
@@ -4664,7 +4664,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetMatchAnyTag_params params =
     {
@@ -4677,7 +4677,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText_params params =
     {
@@ -4690,7 +4690,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetRankedByTrendDays_params params =
     {
@@ -4703,7 +4703,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredKeyValueTag_params params =
     {
@@ -4717,7 +4717,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_RequestUGCDetails_params params =
     {
@@ -4730,7 +4730,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateItem_params params =
     {
@@ -4743,7 +4743,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_StartItemUpdate_params params =
     {
@@ -4756,7 +4756,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle_params params =
     {
@@ -4769,7 +4769,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription_params params =
     {
@@ -4782,7 +4782,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLanguage_params params =
     {
@@ -4795,7 +4795,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata_params params =
     {
@@ -4808,7 +4808,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemVisibility_params params =
     {
@@ -4821,7 +4821,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags_params params =
     {
@@ -4834,7 +4834,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent_params params =
     {
@@ -4849,7 +4849,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview_params params =
     {
@@ -4864,7 +4864,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueTags_params params =
     {
@@ -4877,7 +4877,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag_params params =
     {
@@ -4891,7 +4891,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile_params params =
     {
@@ -4907,7 +4907,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo_params params =
     {
@@ -4920,7 +4920,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile_params params =
     {
@@ -4936,7 +4936,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVideo_params params =
     {
@@ -4950,7 +4950,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemPreview_params params =
     {
@@ -4963,7 +4963,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubmitItemUpdate_params params =
     {
@@ -4976,7 +4976,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemUpdateProgress_params params =
     {
@@ -4990,7 +4990,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetUserItemVote_params params =
     {
@@ -5003,7 +5003,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetUserItemVote_params params =
     {
@@ -5015,7 +5015,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemToFavorites_params params =
     {
@@ -5028,7 +5028,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemFromFavorites_params params =
     {
@@ -5041,7 +5041,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubscribeItem_params params =
     {
@@ -5053,7 +5053,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_UnsubscribeItem_params params =
     {
@@ -5076,7 +5076,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetSubscribedItems_params params =
     {
@@ -5089,7 +5089,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemState_params params =
     {
@@ -5101,7 +5101,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo_params params =
     {
@@ -5118,7 +5118,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemDownloadInfo_params params =
     {
@@ -5132,7 +5132,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_DownloadItem_params params =
     {
@@ -5145,7 +5145,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION008_BInitWorkshopForGameServer_params params =
     {
@@ -5324,7 +5324,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartPlaytime
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTracking, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTrackingForAllItems, 4)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUserUGCRequest_params params =
     {
@@ -5342,7 +5342,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryAllUGCRequest_params params =
     {
@@ -5358,7 +5358,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQueryUGCDetailsRequest_params params =
     {
@@ -5371,7 +5371,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SendQueryUGCRequest_params params =
     {
@@ -5383,7 +5383,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_139 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_139 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult_params params =
     {
@@ -5397,7 +5397,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCPreviewURL_params params =
     {
@@ -5412,7 +5412,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCMetadata_params params =
     {
@@ -5427,7 +5427,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCChildren_params params =
     {
@@ -5442,7 +5442,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCStatistic_params params =
     {
@@ -5457,7 +5457,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -5470,7 +5470,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditionalPreview_params params =
     {
@@ -5490,7 +5490,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -5503,7 +5503,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCKeyValueTag_params params =
     {
@@ -5521,7 +5521,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_ReleaseQueryUGCRequest_params params =
     {
@@ -5533,7 +5533,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag_params params =
     {
@@ -5546,7 +5546,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag_params params =
     {
@@ -5559,7 +5559,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnOnlyIDs_params params =
     {
@@ -5572,7 +5572,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnKeyValueTags_params params =
     {
@@ -5585,7 +5585,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnLongDescription_params params =
     {
@@ -5598,7 +5598,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnMetadata_params params =
     {
@@ -5611,7 +5611,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnChildren_params params =
     {
@@ -5624,7 +5624,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnAdditionalPreviews_params params =
     {
@@ -5637,7 +5637,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnTotalOnly_params params =
     {
@@ -5650,7 +5650,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage_params params =
     {
@@ -5663,7 +5663,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetAllowCachedResponse_params params =
     {
@@ -5676,7 +5676,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFilter_params params =
     {
@@ -5689,7 +5689,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetMatchAnyTag_params params =
     {
@@ -5702,7 +5702,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText_params params =
     {
@@ -5715,7 +5715,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetRankedByTrendDays_params params =
     {
@@ -5728,7 +5728,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredKeyValueTag_params params =
     {
@@ -5742,7 +5742,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_RequestUGCDetails_params params =
     {
@@ -5755,7 +5755,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateItem_params params =
     {
@@ -5768,7 +5768,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartItemUpdate_params params =
     {
@@ -5781,7 +5781,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle_params params =
     {
@@ -5794,7 +5794,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription_params params =
     {
@@ -5807,7 +5807,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLanguage_params params =
     {
@@ -5820,7 +5820,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata_params params =
     {
@@ -5833,7 +5833,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemVisibility_params params =
     {
@@ -5846,7 +5846,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags_params params =
     {
@@ -5859,7 +5859,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent_params params =
     {
@@ -5874,7 +5874,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview_params params =
     {
@@ -5889,7 +5889,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueTags_params params =
     {
@@ -5902,7 +5902,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag_params params =
     {
@@ -5916,7 +5916,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile_params params =
     {
@@ -5932,7 +5932,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo_params params =
     {
@@ -5945,7 +5945,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile_params params =
     {
@@ -5961,7 +5961,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVideo_params params =
     {
@@ -5975,7 +5975,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemPreview_params params =
     {
@@ -5988,7 +5988,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubmitItemUpdate_params params =
     {
@@ -6001,7 +6001,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemUpdateProgress_params params =
     {
@@ -6015,7 +6015,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetUserItemVote_params params =
     {
@@ -6028,7 +6028,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetUserItemVote_params params =
     {
@@ -6040,7 +6040,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemToFavorites_params params =
     {
@@ -6053,7 +6053,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemFromFavorites_params params =
     {
@@ -6066,7 +6066,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubscribeItem_params params =
     {
@@ -6078,7 +6078,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_UnsubscribeItem_params params =
     {
@@ -6101,7 +6101,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetSubscribedItems_params params =
     {
@@ -6114,7 +6114,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemState_params params =
     {
@@ -6126,7 +6126,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo_params params =
     {
@@ -6143,7 +6143,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemDownloadInfo_params params =
     {
@@ -6157,7 +6157,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_DownloadItem_params params =
     {
@@ -6170,7 +6170,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_BInitWorkshopForGameServer_params params =
     {
@@ -6196,7 +6196,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartPlaytimeTracking_params params =
     {
@@ -6209,7 +6209,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTracking_params params =
     {
@@ -6222,7 +6222,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION009_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -6397,7 +6397,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveAppDepe
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetAppDependencies, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DeleteItem, 12)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryUserUGCRequest_params params =
     {
@@ -6415,7 +6415,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryAllUGCRequest_params params =
     {
@@ -6431,7 +6431,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQueryUGCDetailsRequest_params params =
     {
@@ -6444,7 +6444,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SendQueryUGCRequest_params params =
     {
@@ -6456,7 +6456,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_142 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_142 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult_params params =
     {
@@ -6470,7 +6470,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCPreviewURL_params params =
     {
@@ -6485,7 +6485,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCMetadata_params params =
     {
@@ -6500,7 +6500,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCChildren_params params =
     {
@@ -6515,7 +6515,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCStatistic_params params =
     {
@@ -6530,7 +6530,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -6543,7 +6543,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCAdditionalPreview_params params =
     {
@@ -6563,7 +6563,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -6576,7 +6576,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCKeyValueTag_params params =
     {
@@ -6594,7 +6594,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_ReleaseQueryUGCRequest_params params =
     {
@@ -6606,7 +6606,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag_params params =
     {
@@ -6619,7 +6619,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag_params params =
     {
@@ -6632,7 +6632,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnOnlyIDs_params params =
     {
@@ -6645,7 +6645,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnKeyValueTags_params params =
     {
@@ -6658,7 +6658,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnLongDescription_params params =
     {
@@ -6671,7 +6671,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnMetadata_params params =
     {
@@ -6684,7 +6684,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnChildren_params params =
     {
@@ -6697,7 +6697,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnAdditionalPreviews_params params =
     {
@@ -6710,7 +6710,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnTotalOnly_params params =
     {
@@ -6723,7 +6723,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnPlaytimeStats_params params =
     {
@@ -6736,7 +6736,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage_params params =
     {
@@ -6749,7 +6749,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetAllowCachedResponse_params params =
     {
@@ -6762,7 +6762,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFilter_params params =
     {
@@ -6775,7 +6775,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetMatchAnyTag_params params =
     {
@@ -6788,7 +6788,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText_params params =
     {
@@ -6801,7 +6801,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetRankedByTrendDays_params params =
     {
@@ -6814,7 +6814,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredKeyValueTag_params params =
     {
@@ -6828,7 +6828,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_RequestUGCDetails_params params =
     {
@@ -6841,7 +6841,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateItem_params params =
     {
@@ -6854,7 +6854,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartItemUpdate_params params =
     {
@@ -6867,7 +6867,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle_params params =
     {
@@ -6880,7 +6880,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription_params params =
     {
@@ -6893,7 +6893,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLanguage_params params =
     {
@@ -6906,7 +6906,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata_params params =
     {
@@ -6919,7 +6919,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemVisibility_params params =
     {
@@ -6932,7 +6932,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags_params params =
     {
@@ -6945,7 +6945,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent_params params =
     {
@@ -6960,7 +6960,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview_params params =
     {
@@ -6975,7 +6975,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueTags_params params =
     {
@@ -6988,7 +6988,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag_params params =
     {
@@ -7002,7 +7002,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile_params params =
     {
@@ -7018,7 +7018,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo_params params =
     {
@@ -7031,7 +7031,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile_params params =
     {
@@ -7047,7 +7047,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVideo_params params =
     {
@@ -7061,7 +7061,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemPreview_params params =
     {
@@ -7074,7 +7074,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubmitItemUpdate_params params =
     {
@@ -7087,7 +7087,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemUpdateProgress_params params =
     {
@@ -7101,7 +7101,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetUserItemVote_params params =
     {
@@ -7114,7 +7114,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetUserItemVote_params params =
     {
@@ -7126,7 +7126,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemToFavorites_params params =
     {
@@ -7139,7 +7139,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemFromFavorites_params params =
     {
@@ -7152,7 +7152,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubscribeItem_params params =
     {
@@ -7164,7 +7164,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_UnsubscribeItem_params params =
     {
@@ -7187,7 +7187,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetSubscribedItems_params params =
     {
@@ -7200,7 +7200,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemState_params params =
     {
@@ -7212,7 +7212,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo_params params =
     {
@@ -7229,7 +7229,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemDownloadInfo_params params =
     {
@@ -7243,7 +7243,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_DownloadItem_params params =
     {
@@ -7256,7 +7256,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_BInitWorkshopForGameServer_params params =
     {
@@ -7282,7 +7282,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartPlaytimeTracking_params params =
     {
@@ -7295,7 +7295,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytimeTracking_params params =
     {
@@ -7308,7 +7308,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -7319,7 +7319,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddDependency_params params =
     {
@@ -7332,7 +7332,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveDependency_params params =
     {
@@ -7345,7 +7345,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddAppDependency_params params =
     {
@@ -7358,7 +7358,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveAppDependency_params params =
     {
@@ -7371,7 +7371,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetAppDependencies_params params =
     {
@@ -7383,7 +7383,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION010_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION010_DeleteItem_params params =
     {
@@ -7568,7 +7568,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveAppDepe
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetAppDependencies, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DeleteItem, 12)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryUserUGCRequest_params params =
     {
@@ -7586,7 +7586,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest_params params =
     {
@@ -7602,7 +7602,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, const char *pchCursor)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryAllUGCRequest_2_params params =
     {
@@ -7618,7 +7618,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQueryUGCDetailsRequest_params params =
     {
@@ -7631,7 +7631,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SendQueryUGCRequest_params params =
     {
@@ -7643,7 +7643,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_144 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_144 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult_params params =
     {
@@ -7657,7 +7657,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCPreviewURL_params params =
     {
@@ -7672,7 +7672,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCMetadata_params params =
     {
@@ -7687,7 +7687,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCChildren_params params =
     {
@@ -7702,7 +7702,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCStatistic_params params =
     {
@@ -7717,7 +7717,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -7730,7 +7730,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCAdditionalPreview_params params =
     {
@@ -7750,7 +7750,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -7763,7 +7763,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCKeyValueTag_params params =
     {
@@ -7781,7 +7781,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_ReleaseQueryUGCRequest_params params =
     {
@@ -7793,7 +7793,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag_params params =
     {
@@ -7806,7 +7806,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag_params params =
     {
@@ -7819,7 +7819,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnOnlyIDs_params params =
     {
@@ -7832,7 +7832,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnKeyValueTags_params params =
     {
@@ -7845,7 +7845,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnLongDescription_params params =
     {
@@ -7858,7 +7858,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnMetadata_params params =
     {
@@ -7871,7 +7871,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnChildren_params params =
     {
@@ -7884,7 +7884,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnAdditionalPreviews_params params =
     {
@@ -7897,7 +7897,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnTotalOnly_params params =
     {
@@ -7910,7 +7910,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnPlaytimeStats_params params =
     {
@@ -7923,7 +7923,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage_params params =
     {
@@ -7936,7 +7936,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowCachedResponse_params params =
     {
@@ -7949,7 +7949,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFilter_params params =
     {
@@ -7962,7 +7962,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetMatchAnyTag_params params =
     {
@@ -7975,7 +7975,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText_params params =
     {
@@ -7988,7 +7988,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetRankedByTrendDays_params params =
     {
@@ -8001,7 +8001,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredKeyValueTag_params params =
     {
@@ -8015,7 +8015,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_RequestUGCDetails_params params =
     {
@@ -8028,7 +8028,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateItem_params params =
     {
@@ -8041,7 +8041,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartItemUpdate_params params =
     {
@@ -8054,7 +8054,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle_params params =
     {
@@ -8067,7 +8067,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription_params params =
     {
@@ -8080,7 +8080,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLanguage_params params =
     {
@@ -8093,7 +8093,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata_params params =
     {
@@ -8106,7 +8106,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemVisibility_params params =
     {
@@ -8119,7 +8119,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags_params params =
     {
@@ -8132,7 +8132,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent_params params =
     {
@@ -8147,7 +8147,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview_params params =
     {
@@ -8162,7 +8162,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowLegacyUpload(struct w_steam_iface *_this, UGCUpdateHandle_t handle, bool bAllowLegacyUpload)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, bool bAllowLegacyUpload)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowLegacyUpload_params params =
     {
@@ -8175,7 +8175,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetAllowLegacyUpload(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueTags_params params =
     {
@@ -8188,7 +8188,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag_params params =
     {
@@ -8202,7 +8202,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile_params params =
     {
@@ -8218,7 +8218,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo_params params =
     {
@@ -8231,7 +8231,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile_params params =
     {
@@ -8247,7 +8247,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVideo_params params =
     {
@@ -8261,7 +8261,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemPreview_params params =
     {
@@ -8274,7 +8274,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubmitItemUpdate_params params =
     {
@@ -8287,7 +8287,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemUpdateProgress_params params =
     {
@@ -8301,7 +8301,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetUserItemVote_params params =
     {
@@ -8314,7 +8314,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetUserItemVote_params params =
     {
@@ -8326,7 +8326,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemToFavorites_params params =
     {
@@ -8339,7 +8339,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemFromFavorites_params params =
     {
@@ -8352,7 +8352,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubscribeItem_params params =
     {
@@ -8364,7 +8364,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_UnsubscribeItem_params params =
     {
@@ -8387,7 +8387,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetSubscribedItems_params params =
     {
@@ -8400,7 +8400,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemState_params params =
     {
@@ -8412,7 +8412,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo_params params =
     {
@@ -8429,7 +8429,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemDownloadInfo_params params =
     {
@@ -8443,7 +8443,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_DownloadItem_params params =
     {
@@ -8456,7 +8456,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_BInitWorkshopForGameServer_params params =
     {
@@ -8482,7 +8482,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartPlaytimeTracking_params params =
     {
@@ -8495,7 +8495,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytimeTracking_params params =
     {
@@ -8508,7 +8508,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -8519,7 +8519,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddDependency_params params =
     {
@@ -8532,7 +8532,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveDependency_params params =
     {
@@ -8545,7 +8545,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddAppDependency_params params =
     {
@@ -8558,7 +8558,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveAppDependency_params params =
     {
@@ -8571,7 +8571,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetAppDependencies_params params =
     {
@@ -8583,7 +8583,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION012_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION012_DeleteItem_params params =
     {
@@ -8772,7 +8772,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAppDepe
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetAppDependencies, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DeleteItem, 12)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryUserUGCRequest_params params =
     {
@@ -8790,7 +8790,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest_params params =
     {
@@ -8806,7 +8806,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, const char *pchCursor)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryAllUGCRequest_2_params params =
     {
@@ -8822,7 +8822,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQueryUGCDetailsRequest_params params =
     {
@@ -8835,7 +8835,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SendQueryUGCRequest_params params =
     {
@@ -8847,7 +8847,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_146 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_146 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult_params params =
     {
@@ -8861,7 +8861,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCPreviewURL_params params =
     {
@@ -8876,7 +8876,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCMetadata_params params =
     {
@@ -8891,7 +8891,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCChildren_params params =
     {
@@ -8906,7 +8906,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCStatistic_params params =
     {
@@ -8921,7 +8921,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -8934,7 +8934,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCAdditionalPreview_params params =
     {
@@ -8954,7 +8954,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -8967,7 +8967,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_params params =
     {
@@ -8985,7 +8985,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTag_2_params params =
     {
@@ -9001,7 +9001,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_ReleaseQueryUGCRequest_params params =
     {
@@ -9013,7 +9013,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag_params params =
     {
@@ -9026,7 +9026,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag_params params =
     {
@@ -9039,7 +9039,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnOnlyIDs_params params =
     {
@@ -9052,7 +9052,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnKeyValueTags_params params =
     {
@@ -9065,7 +9065,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnLongDescription_params params =
     {
@@ -9078,7 +9078,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnMetadata_params params =
     {
@@ -9091,7 +9091,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnChildren_params params =
     {
@@ -9104,7 +9104,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnAdditionalPreviews_params params =
     {
@@ -9117,7 +9117,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnTotalOnly_params params =
     {
@@ -9130,7 +9130,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnPlaytimeStats_params params =
     {
@@ -9143,7 +9143,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage_params params =
     {
@@ -9156,7 +9156,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowCachedResponse_params params =
     {
@@ -9169,7 +9169,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFilter_params params =
     {
@@ -9182,7 +9182,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetMatchAnyTag_params params =
     {
@@ -9195,7 +9195,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText_params params =
     {
@@ -9208,7 +9208,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetRankedByTrendDays_params params =
     {
@@ -9221,7 +9221,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredKeyValueTag_params params =
     {
@@ -9235,7 +9235,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_RequestUGCDetails_params params =
     {
@@ -9248,7 +9248,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateItem_params params =
     {
@@ -9261,7 +9261,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartItemUpdate_params params =
     {
@@ -9274,7 +9274,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle_params params =
     {
@@ -9287,7 +9287,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription_params params =
     {
@@ -9300,7 +9300,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLanguage_params params =
     {
@@ -9313,7 +9313,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata_params params =
     {
@@ -9326,7 +9326,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemVisibility_params params =
     {
@@ -9339,7 +9339,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags_params params =
     {
@@ -9352,7 +9352,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent_params params =
     {
@@ -9367,7 +9367,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview_params params =
     {
@@ -9382,7 +9382,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowLegacyUpload(struct w_steam_iface *_this, UGCUpdateHandle_t handle, bool bAllowLegacyUpload)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, bool bAllowLegacyUpload)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowLegacyUpload_params params =
     {
@@ -9395,7 +9395,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetAllowLegacyUpload(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAllItemKeyValueTags_params params =
     {
@@ -9407,7 +9407,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAllItemKeyValue
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueTags_params params =
     {
@@ -9420,7 +9420,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag_params params =
     {
@@ -9434,7 +9434,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile_params params =
     {
@@ -9450,7 +9450,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo_params params =
     {
@@ -9463,7 +9463,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile_params params =
     {
@@ -9479,7 +9479,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVideo_params params =
     {
@@ -9493,7 +9493,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemPreview_params params =
     {
@@ -9506,7 +9506,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubmitItemUpdate_params params =
     {
@@ -9519,7 +9519,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemUpdateProgress_params params =
     {
@@ -9533,7 +9533,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetUserItemVote_params params =
     {
@@ -9546,7 +9546,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetUserItemVote_params params =
     {
@@ -9558,7 +9558,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemToFavorites_params params =
     {
@@ -9571,7 +9571,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemFromFavorites_params params =
     {
@@ -9584,7 +9584,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubscribeItem_params params =
     {
@@ -9596,7 +9596,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_UnsubscribeItem_params params =
     {
@@ -9619,7 +9619,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetSubscribedItems_params params =
     {
@@ -9632,7 +9632,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemState_params params =
     {
@@ -9644,7 +9644,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo_params params =
     {
@@ -9661,7 +9661,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemDownloadInfo_params params =
     {
@@ -9675,7 +9675,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_DownloadItem_params params =
     {
@@ -9688,7 +9688,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_BInitWorkshopForGameServer_params params =
     {
@@ -9714,7 +9714,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartPlaytimeTracking_params params =
     {
@@ -9727,7 +9727,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytimeTracking_params params =
     {
@@ -9740,7 +9740,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -9751,7 +9751,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddDependency_params params =
     {
@@ -9764,7 +9764,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveDependency_params params =
     {
@@ -9777,7 +9777,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddAppDependency_params params =
     {
@@ -9790,7 +9790,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAppDependency_params params =
     {
@@ -9803,7 +9803,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetAppDependencies_params params =
     {
@@ -9815,7 +9815,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION013_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION013_DeleteItem_params params =
     {
@@ -10007,7 +10007,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAppDepe
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetAppDependencies, 12)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DeleteItem, 12)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryUserUGCRequest_params params =
     {
@@ -10025,7 +10025,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest_params params =
     {
@@ -10041,7 +10041,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, const char *pchCursor)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryAllUGCRequest_2_params params =
     {
@@ -10057,7 +10057,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQueryUGCDetailsRequest_params params =
     {
@@ -10070,7 +10070,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SendQueryUGCRequest_params params =
     {
@@ -10082,7 +10082,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_150 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_150 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult_params params =
     {
@@ -10096,7 +10096,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCResult(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCPreviewURL_params params =
     {
@@ -10111,7 +10111,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCMetadata_params params =
     {
@@ -10126,7 +10126,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCChildren_params params =
     {
@@ -10141,7 +10141,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCStatistic_params params =
     {
@@ -10156,7 +10156,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -10169,7 +10169,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCAdditionalPreview_params params =
     {
@@ -10189,7 +10189,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -10202,7 +10202,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_params params =
     {
@@ -10220,7 +10220,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTag_2_params params =
     {
@@ -10236,7 +10236,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_ReleaseQueryUGCRequest_params params =
     {
@@ -10248,7 +10248,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag_params params =
     {
@@ -10261,7 +10261,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup(struct w_steam_iface *_this, UGCQueryHandle_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup_params params =
     {
@@ -10274,7 +10274,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredTagGroup(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag_params params =
     {
@@ -10287,7 +10287,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnOnlyIDs_params params =
     {
@@ -10300,7 +10300,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnKeyValueTags_params params =
     {
@@ -10313,7 +10313,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnLongDescription_params params =
     {
@@ -10326,7 +10326,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnMetadata_params params =
     {
@@ -10339,7 +10339,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnChildren_params params =
     {
@@ -10352,7 +10352,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnAdditionalPreviews_params params =
     {
@@ -10365,7 +10365,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnTotalOnly_params params =
     {
@@ -10378,7 +10378,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnPlaytimeStats_params params =
     {
@@ -10391,7 +10391,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage_params params =
     {
@@ -10404,7 +10404,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowCachedResponse_params params =
     {
@@ -10417,7 +10417,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFilter_params params =
     {
@@ -10430,7 +10430,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetMatchAnyTag_params params =
     {
@@ -10443,7 +10443,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText_params params =
     {
@@ -10456,7 +10456,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetRankedByTrendDays_params params =
     {
@@ -10469,7 +10469,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredKeyValueTag_params params =
     {
@@ -10483,7 +10483,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_RequestUGCDetails_params params =
     {
@@ -10496,7 +10496,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateItem_params params =
     {
@@ -10509,7 +10509,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartItemUpdate_params params =
     {
@@ -10522,7 +10522,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle_params params =
     {
@@ -10535,7 +10535,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription_params params =
     {
@@ -10548,7 +10548,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLanguage_params params =
     {
@@ -10561,7 +10561,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata_params params =
     {
@@ -10574,7 +10574,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemVisibility_params params =
     {
@@ -10587,7 +10587,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags_params params =
     {
@@ -10600,7 +10600,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent_params params =
     {
@@ -10615,7 +10615,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview_params params =
     {
@@ -10630,7 +10630,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowLegacyUpload(struct w_steam_iface *_this, UGCUpdateHandle_t handle, bool bAllowLegacyUpload)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, bool bAllowLegacyUpload)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowLegacyUpload_params params =
     {
@@ -10643,7 +10643,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetAllowLegacyUpload(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAllItemKeyValueTags_params params =
     {
@@ -10655,7 +10655,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAllItemKeyValue
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueTags_params params =
     {
@@ -10668,7 +10668,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag_params params =
     {
@@ -10682,7 +10682,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile_params params =
     {
@@ -10698,7 +10698,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo_params params =
     {
@@ -10711,7 +10711,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile_params params =
     {
@@ -10727,7 +10727,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVideo_params params =
     {
@@ -10741,7 +10741,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemPreview_params params =
     {
@@ -10754,7 +10754,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubmitItemUpdate_params params =
     {
@@ -10767,7 +10767,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemUpdateProgress_params params =
     {
@@ -10781,7 +10781,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetUserItemVote_params params =
     {
@@ -10794,7 +10794,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetUserItemVote_params params =
     {
@@ -10806,7 +10806,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemToFavorites_params params =
     {
@@ -10819,7 +10819,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemFromFavorites_params params =
     {
@@ -10832,7 +10832,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubscribeItem_params params =
     {
@@ -10844,7 +10844,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_UnsubscribeItem_params params =
     {
@@ -10867,7 +10867,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetSubscribedItems_params params =
     {
@@ -10880,7 +10880,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemState_params params =
     {
@@ -10892,7 +10892,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo_params params =
     {
@@ -10909,7 +10909,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemDownloadInfo_params params =
     {
@@ -10923,7 +10923,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_DownloadItem_params params =
     {
@@ -10936,7 +10936,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_BInitWorkshopForGameServer_params params =
     {
@@ -10962,7 +10962,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartPlaytimeTracking_params params =
     {
@@ -10975,7 +10975,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytimeTracking_params params =
     {
@@ -10988,7 +10988,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -10999,7 +10999,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddDependency_params params =
     {
@@ -11012,7 +11012,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveDependency_params params =
     {
@@ -11025,7 +11025,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddAppDependency_params params =
     {
@@ -11038,7 +11038,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAppDependency_params params =
     {
@@ -11051,7 +11051,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetAppDependencies_params params =
     {
@@ -11063,7 +11063,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION014_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION014_DeleteItem_params params =
     {
@@ -11261,7 +11261,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem, 1
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus, 4)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUserUGCRequest_params params =
     {
@@ -11279,7 +11279,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest_params params =
     {
@@ -11295,7 +11295,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, const char *pchCursor)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryAllUGCRequest_2_params params =
     {
@@ -11311,7 +11311,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQueryUGCDetailsRequest_params params =
     {
@@ -11324,7 +11324,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUGCRequest_params params =
     {
@@ -11336,7 +11336,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_152 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_152 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult_params params =
     {
@@ -11350,7 +11350,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCResult(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumTags_params params =
     {
@@ -11363,7 +11363,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTag_params params =
     {
@@ -11379,7 +11379,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTagDisplayName_params params =
     {
@@ -11395,7 +11395,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCTagDisplay
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCPreviewURL_params params =
     {
@@ -11410,7 +11410,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCMetadata_params params =
     {
@@ -11425,7 +11425,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCChildren_params params =
     {
@@ -11440,7 +11440,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCStatistic_params params =
     {
@@ -11455,7 +11455,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -11468,7 +11468,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCAdditionalPreview_params params =
     {
@@ -11488,7 +11488,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -11501,7 +11501,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_params params =
     {
@@ -11519,7 +11519,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTag_2_params params =
     {
@@ -11535,7 +11535,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_ReleaseQueryUGCRequest_params params =
     {
@@ -11547,7 +11547,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag_params params =
     {
@@ -11560,7 +11560,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup(struct w_steam_iface *_this, UGCQueryHandle_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup_params params =
     {
@@ -11573,7 +11573,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredTagGroup(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag_params params =
     {
@@ -11586,7 +11586,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnOnlyIDs_params params =
     {
@@ -11599,7 +11599,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnKeyValueTags_params params =
     {
@@ -11612,7 +11612,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnLongDescription_params params =
     {
@@ -11625,7 +11625,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnMetadata_params params =
     {
@@ -11638,7 +11638,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnChildren_params params =
     {
@@ -11651,7 +11651,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnAdditionalPreviews_params params =
     {
@@ -11664,7 +11664,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnTotalOnly_params params =
     {
@@ -11677,7 +11677,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnPlaytimeStats_params params =
     {
@@ -11690,7 +11690,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage_params params =
     {
@@ -11703,7 +11703,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowCachedResponse_params params =
     {
@@ -11716,7 +11716,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFilter_params params =
     {
@@ -11729,7 +11729,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetMatchAnyTag_params params =
     {
@@ -11742,7 +11742,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText_params params =
     {
@@ -11755,7 +11755,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetRankedByTrendDays_params params =
     {
@@ -11768,7 +11768,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredKeyValueTag_params params =
     {
@@ -11782,7 +11782,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_RequestUGCDetails_params params =
     {
@@ -11795,7 +11795,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateItem_params params =
     {
@@ -11808,7 +11808,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartItemUpdate_params params =
     {
@@ -11821,7 +11821,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle_params params =
     {
@@ -11834,7 +11834,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription_params params =
     {
@@ -11847,7 +11847,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLanguage_params params =
     {
@@ -11860,7 +11860,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata_params params =
     {
@@ -11873,7 +11873,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemVisibility_params params =
     {
@@ -11886,7 +11886,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags_params params =
     {
@@ -11899,7 +11899,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent_params params =
     {
@@ -11914,7 +11914,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview_params params =
     {
@@ -11929,7 +11929,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowLegacyUpload(struct w_steam_iface *_this, UGCUpdateHandle_t handle, bool bAllowLegacyUpload)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, bool bAllowLegacyUpload)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowLegacyUpload_params params =
     {
@@ -11942,7 +11942,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetAllowLegacyUpload(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAllItemKeyValueTags_params params =
     {
@@ -11954,7 +11954,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAllItemKeyValue
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueTags_params params =
     {
@@ -11967,7 +11967,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag_params params =
     {
@@ -11981,7 +11981,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile_params params =
     {
@@ -11997,7 +11997,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo_params params =
     {
@@ -12010,7 +12010,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile_params params =
     {
@@ -12026,7 +12026,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVideo_params params =
     {
@@ -12040,7 +12040,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemPreview_params params =
     {
@@ -12053,7 +12053,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubmitItemUpdate_params params =
     {
@@ -12066,7 +12066,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemUpdateProgress_params params =
     {
@@ -12080,7 +12080,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetUserItemVote_params params =
     {
@@ -12093,7 +12093,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetUserItemVote_params params =
     {
@@ -12105,7 +12105,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemToFavorites_params params =
     {
@@ -12118,7 +12118,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemFromFavorites_params params =
     {
@@ -12131,7 +12131,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubscribeItem_params params =
     {
@@ -12143,7 +12143,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_UnsubscribeItem_params params =
     {
@@ -12166,7 +12166,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetSubscribedItems_params params =
     {
@@ -12179,7 +12179,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemState_params params =
     {
@@ -12191,7 +12191,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo_params params =
     {
@@ -12208,7 +12208,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemDownloadInfo_params params =
     {
@@ -12222,7 +12222,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_DownloadItem_params params =
     {
@@ -12235,7 +12235,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_BInitWorkshopForGameServer_params params =
     {
@@ -12261,7 +12261,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartPlaytimeTracking_params params =
     {
@@ -12274,7 +12274,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytimeTracking_params params =
     {
@@ -12287,7 +12287,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -12298,7 +12298,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddDependency_params params =
     {
@@ -12311,7 +12311,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveDependency_params params =
     {
@@ -12324,7 +12324,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddAppDependency_params params =
     {
@@ -12337,7 +12337,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAppDependency_params params =
     {
@@ -12350,7 +12350,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetAppDependencies_params params =
     {
@@ -12362,7 +12362,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_DeleteItem_params params =
     {
@@ -12385,7 +12385,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_ShowWorkshopEULA(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION015_GetWorkshopEULAStatus_params params =
     {
@@ -12589,7 +12589,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_DeleteItem, 1
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_ShowWorkshopEULA, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetWorkshopEULAStatus, 4)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryUserUGCRequest_params params =
     {
@@ -12607,7 +12607,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest_params params =
     {
@@ -12623,7 +12623,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, const char *pchCursor)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryAllUGCRequest_2_params params =
     {
@@ -12639,7 +12639,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQueryUGCDetailsRequest_params params =
     {
@@ -12652,7 +12652,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SendQueryUGCRequest_params params =
     {
@@ -12664,7 +12664,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_155 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_155 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult_params params =
     {
@@ -12678,7 +12678,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCResult(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumTags_params params =
     {
@@ -12691,7 +12691,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTag_params params =
     {
@@ -12707,7 +12707,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTagDisplayName_params params =
     {
@@ -12723,7 +12723,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCTagDisplay
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCPreviewURL_params params =
     {
@@ -12738,7 +12738,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCMetadata_params params =
     {
@@ -12753,7 +12753,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCChildren_params params =
     {
@@ -12768,7 +12768,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCStatistic_params params =
     {
@@ -12783,7 +12783,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -12796,7 +12796,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCAdditionalPreview_params params =
     {
@@ -12816,7 +12816,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -12829,7 +12829,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_params params =
     {
@@ -12847,7 +12847,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTag_2_params params =
     {
@@ -12863,7 +12863,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_ReleaseQueryUGCRequest_params params =
     {
@@ -12875,7 +12875,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag_params params =
     {
@@ -12888,7 +12888,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup(struct w_steam_iface *_this, UGCQueryHandle_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup_params params =
     {
@@ -12901,7 +12901,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredTagGroup(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag_params params =
     {
@@ -12914,7 +12914,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnOnlyIDs_params params =
     {
@@ -12927,7 +12927,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnKeyValueTags_params params =
     {
@@ -12940,7 +12940,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnLongDescription_params params =
     {
@@ -12953,7 +12953,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnMetadata_params params =
     {
@@ -12966,7 +12966,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnChildren_params params =
     {
@@ -12979,7 +12979,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnAdditionalPreviews_params params =
     {
@@ -12992,7 +12992,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnTotalOnly_params params =
     {
@@ -13005,7 +13005,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnPlaytimeStats_params params =
     {
@@ -13018,7 +13018,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage_params params =
     {
@@ -13031,7 +13031,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowCachedResponse_params params =
     {
@@ -13044,7 +13044,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFilter_params params =
     {
@@ -13057,7 +13057,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetMatchAnyTag_params params =
     {
@@ -13070,7 +13070,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText_params params =
     {
@@ -13083,7 +13083,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetRankedByTrendDays_params params =
     {
@@ -13096,7 +13096,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeCreatedDateRange(struct w_steam_iface *_this, UGCQueryHandle_t handle, RTime32 rtStart, RTime32 rtEnd)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeCreatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeCreatedDateRange_params params =
     {
@@ -13110,7 +13110,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeCreatedDateRan
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeUpdatedDateRange(struct w_steam_iface *_this, UGCQueryHandle_t handle, RTime32 rtStart, RTime32 rtEnd)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeUpdatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeUpdatedDateRange_params params =
     {
@@ -13124,7 +13124,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetTimeUpdatedDateRan
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredKeyValueTag_params params =
     {
@@ -13138,7 +13138,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_RequestUGCDetails_params params =
     {
@@ -13151,7 +13151,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateItem_params params =
     {
@@ -13164,7 +13164,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartItemUpdate_params params =
     {
@@ -13177,7 +13177,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle_params params =
     {
@@ -13190,7 +13190,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription_params params =
     {
@@ -13203,7 +13203,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLanguage_params params =
     {
@@ -13216,7 +13216,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata_params params =
     {
@@ -13229,7 +13229,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemVisibility_params params =
     {
@@ -13242,7 +13242,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags_params params =
     {
@@ -13255,7 +13255,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent_params params =
     {
@@ -13270,7 +13270,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview_params params =
     {
@@ -13285,7 +13285,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowLegacyUpload(struct w_steam_iface *_this, UGCUpdateHandle_t handle, bool bAllowLegacyUpload)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, bool bAllowLegacyUpload)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowLegacyUpload_params params =
     {
@@ -13298,7 +13298,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetAllowLegacyUpload(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAllItemKeyValueTags_params params =
     {
@@ -13310,7 +13310,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAllItemKeyValue
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueTags_params params =
     {
@@ -13323,7 +13323,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag_params params =
     {
@@ -13337,7 +13337,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile_params params =
     {
@@ -13353,7 +13353,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo_params params =
     {
@@ -13366,7 +13366,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile_params params =
     {
@@ -13382,7 +13382,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVideo_params params =
     {
@@ -13396,7 +13396,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemPreview_params params =
     {
@@ -13409,7 +13409,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemPreview(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubmitItemUpdate_params params =
     {
@@ -13422,7 +13422,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemUpdateProgress_params params =
     {
@@ -13436,7 +13436,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetUserItemVote_params params =
     {
@@ -13449,7 +13449,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetUserItemVote_params params =
     {
@@ -13461,7 +13461,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemToFavorites_params params =
     {
@@ -13474,7 +13474,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemFromFavorites_params params =
     {
@@ -13487,7 +13487,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubscribeItem_params params =
     {
@@ -13499,7 +13499,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_UnsubscribeItem_params params =
     {
@@ -13522,7 +13522,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetSubscribedItems_params params =
     {
@@ -13535,7 +13535,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemState_params params =
     {
@@ -13547,7 +13547,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo_params params =
     {
@@ -13564,7 +13564,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemDownloadInfo_params params =
     {
@@ -13578,7 +13578,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_DownloadItem_params params =
     {
@@ -13591,7 +13591,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_BInitWorkshopForGameServer_params params =
     {
@@ -13617,7 +13617,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartPlaytimeTracking_params params =
     {
@@ -13630,7 +13630,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytimeTracking_params params =
     {
@@ -13643,7 +13643,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -13654,7 +13654,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddDependency_params params =
     {
@@ -13667,7 +13667,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveDependency_params params =
     {
@@ -13680,7 +13680,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddAppDependency_params params =
     {
@@ -13693,7 +13693,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAppDependency_params params =
     {
@@ -13706,7 +13706,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetAppDependencies_params params =
     {
@@ -13718,7 +13718,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_DeleteItem_params params =
     {
@@ -13741,7 +13741,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_ShowWorkshopEULA(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetWorkshopEULAStatus(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetWorkshopEULAStatus(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION016_GetWorkshopEULAStatus_params params =
     {
@@ -13950,7 +13950,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_DeleteItem, 1
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_ShowWorkshopEULA, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetWorkshopEULAStatus, 4)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUserUGCRequest_params params =
     {
@@ -13968,7 +13968,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_params params =
     {
@@ -13984,7 +13984,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, const char *pchCursor)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryAllUGCRequest_2_params params =
     {
@@ -14000,7 +14000,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQueryUGCDetailsRequest_params params =
     {
@@ -14013,7 +14013,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SendQueryUGCRequest_params params =
     {
@@ -14025,7 +14025,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_157 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_157 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult_params params =
     {
@@ -14039,7 +14039,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCResult(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTags_params params =
     {
@@ -14052,7 +14052,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag_params params =
     {
@@ -14068,7 +14068,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplayName_params params =
     {
@@ -14084,7 +14084,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCTagDisplay
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL_params params =
     {
@@ -14099,7 +14099,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata_params params =
     {
@@ -14114,7 +14114,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren_params params =
     {
@@ -14129,7 +14129,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic_params params =
     {
@@ -14144,7 +14144,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -14157,7 +14157,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditionalPreview_params params =
     {
@@ -14177,7 +14177,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -14190,7 +14190,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_params params =
     {
@@ -14208,7 +14208,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTag_2_params params =
     {
@@ -14224,7 +14224,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCContentDescriptors(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t *pvecDescriptors, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCContentDescriptors(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t *pvecDescriptors, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCContentDescriptors_params params =
     {
@@ -14239,7 +14239,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetQueryUGCConten
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_ReleaseQueryUGCRequest_params params =
     {
@@ -14251,7 +14251,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag_params params =
     {
@@ -14264,7 +14264,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup(struct w_steam_iface *_this, UGCQueryHandle_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup_params params =
     {
@@ -14277,7 +14277,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredTagGroup(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag_params params =
     {
@@ -14290,7 +14290,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnOnlyIDs_params params =
     {
@@ -14303,7 +14303,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnKeyValueTags_params params =
     {
@@ -14316,7 +14316,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnLongDescription_params params =
     {
@@ -14329,7 +14329,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnMetadata_params params =
     {
@@ -14342,7 +14342,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnChildren_params params =
     {
@@ -14355,7 +14355,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnAdditionalPreviews_params params =
     {
@@ -14368,7 +14368,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnTotalOnly_params params =
     {
@@ -14381,7 +14381,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStats_params params =
     {
@@ -14394,7 +14394,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage_params params =
     {
@@ -14407,7 +14407,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedResponse_params params =
     {
@@ -14420,7 +14420,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFilter_params params =
     {
@@ -14433,7 +14433,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetMatchAnyTag_params params =
     {
@@ -14446,7 +14446,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText_params params =
     {
@@ -14459,7 +14459,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays_params params =
     {
@@ -14472,7 +14472,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeCreatedDateRange(struct w_steam_iface *_this, UGCQueryHandle_t handle, RTime32 rtStart, RTime32 rtEnd)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeCreatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeCreatedDateRange_params params =
     {
@@ -14486,7 +14486,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeCreatedDateRan
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeUpdatedDateRange(struct w_steam_iface *_this, UGCQueryHandle_t handle, RTime32 rtStart, RTime32 rtEnd)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeUpdatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeUpdatedDateRange_params params =
     {
@@ -14500,7 +14500,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetTimeUpdatedDateRan
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredKeyValueTag_params params =
     {
@@ -14514,7 +14514,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RequestUGCDetails_params params =
     {
@@ -14527,7 +14527,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateItem_params params =
     {
@@ -14540,7 +14540,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartItemUpdate_params params =
     {
@@ -14553,7 +14553,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle_params params =
     {
@@ -14566,7 +14566,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription_params params =
     {
@@ -14579,7 +14579,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLanguage_params params =
     {
@@ -14592,7 +14592,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata_params params =
     {
@@ -14605,7 +14605,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemVisibility_params params =
     {
@@ -14618,7 +14618,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags_params params =
     {
@@ -14631,7 +14631,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent_params params =
     {
@@ -14646,7 +14646,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview_params params =
     {
@@ -14661,7 +14661,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowLegacyUpload(struct w_steam_iface *_this, UGCUpdateHandle_t handle, bool bAllowLegacyUpload)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, bool bAllowLegacyUpload)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowLegacyUpload_params params =
     {
@@ -14674,7 +14674,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetAllowLegacyUpload(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAllItemKeyValueTags_params params =
     {
@@ -14686,7 +14686,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAllItemKeyValue
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueTags_params params =
     {
@@ -14699,7 +14699,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag_params params =
     {
@@ -14713,7 +14713,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile_params params =
     {
@@ -14729,7 +14729,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo_params params =
     {
@@ -14742,7 +14742,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile_params params =
     {
@@ -14758,7 +14758,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVideo_params params =
     {
@@ -14772,7 +14772,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview_params params =
     {
@@ -14785,7 +14785,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemPreview(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddContentDescriptor(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t descid)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddContentDescriptor(struct w_steam_iface *_this, uint64_t handle, uint32_t descid)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddContentDescriptor_params params =
     {
@@ -14798,7 +14798,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddContentDescriptor(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveContentDescriptor(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t descid)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveContentDescriptor(struct w_steam_iface *_this, uint64_t handle, uint32_t descid)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveContentDescriptor_params params =
     {
@@ -14811,7 +14811,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveContentDescript
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubmitItemUpdate_params params =
     {
@@ -14824,7 +14824,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemUpdateProgress_params params =
     {
@@ -14838,7 +14838,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetUserItemVote_params params =
     {
@@ -14851,7 +14851,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetUserItemVote_params params =
     {
@@ -14863,7 +14863,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemToFavorites_params params =
     {
@@ -14876,7 +14876,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemFromFavorites_params params =
     {
@@ -14889,7 +14889,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubscribeItem_params params =
     {
@@ -14901,7 +14901,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_UnsubscribeItem_params params =
     {
@@ -14924,7 +14924,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetSubscribedItems_params params =
     {
@@ -14937,7 +14937,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState_params params =
     {
@@ -14949,7 +14949,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo_params params =
     {
@@ -14966,7 +14966,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo_params params =
     {
@@ -14980,7 +14980,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_DownloadItem_params params =
     {
@@ -14993,7 +14993,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_BInitWorkshopForGameServer_params params =
     {
@@ -15019,7 +15019,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlaytimeTracking_params params =
     {
@@ -15032,7 +15032,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTracking_params params =
     {
@@ -15045,7 +15045,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -15056,7 +15056,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddDependency_params params =
     {
@@ -15069,7 +15069,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveDependency_params params =
     {
@@ -15082,7 +15082,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddAppDependency_params params =
     {
@@ -15095,7 +15095,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAppDependency_params params =
     {
@@ -15108,7 +15108,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetAppDependencies_params params =
     {
@@ -15120,7 +15120,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_DeleteItem_params params =
     {
@@ -15143,7 +15143,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_ShowWorkshopEULA(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetWorkshopEULAStatus(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetWorkshopEULAStatus(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION017_GetWorkshopEULAStatus_params params =
     {
@@ -15356,7 +15356,7 @@ DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_ShowWorkshopE
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus, 4)
 DEFINE_THISCALL_WRAPPER(winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserContentDescriptorPreferences, 12)
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryUserUGCRequest(struct w_steam_iface *_this, AccountID_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryUserUGCRequest(struct w_steam_iface *_this, uint32_t unAccountID, uint32_t eListType, uint32_t eMatchingUGCType, uint32_t eSortOrder, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryUserUGCRequest_params params =
     {
@@ -15374,7 +15374,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32_t unPage)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, uint32_t unPage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest_params params =
     {
@@ -15390,7 +15390,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, AppId_t nCreatorAppID, AppId_t nConsumerAppID, const char *pchCursor)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest_2(struct w_steam_iface *_this, uint32_t eQueryType, uint32_t eMatchingeMatchingUGCTypeFileType, uint32_t nCreatorAppID, uint32_t nConsumerAppID, const char *pchCursor)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryAllUGCRequest_2_params params =
     {
@@ -15406,7 +15406,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQue
     return params._ret;
 }
 
-UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryUGCDetailsRequest(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQueryUGCDetailsRequest_params params =
     {
@@ -15419,7 +15419,7 @@ UGCQueryHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateQue
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SendQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SendQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SendQueryUGCRequest_params params =
     {
@@ -15431,7 +15431,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SendQueryUG
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, winSteamUGCDetails_t_158 *pDetails)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult(struct w_steam_iface *_this, uint64_t handle, uint32_t index, winSteamUGCDetails_t_158 *pDetails)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult_params params =
     {
@@ -15445,7 +15445,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCResult(str
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumTags_params params =
     {
@@ -15458,7 +15458,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTag_params params =
     {
@@ -15474,7 +15474,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTagDisplayName(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t indexTag, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTagDisplayName_params params =
     {
@@ -15490,7 +15490,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCTagDisplay
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCPreviewURL(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCPreviewURL(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchURL, uint32_t cchURLSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCPreviewURL_params params =
     {
@@ -15505,7 +15505,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCPreviewURL
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCMetadata(struct w_steam_iface *_this, uint64_t handle, uint32_t index, char *pchMetadata, uint32_t cchMetadatasize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCMetadata_params params =
     {
@@ -15520,7 +15520,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCMetadata(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCChildren(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCChildren_params params =
     {
@@ -15535,7 +15535,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCChildren(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCStatistic(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCStatistic(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t eStatType, uint64_t *pStatValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCStatistic_params params =
     {
@@ -15550,7 +15550,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCStatistic(
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumAdditionalPreviews_params params =
     {
@@ -15563,7 +15563,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumAdd
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCAdditionalPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t previewIndex, char *pchURLOrVideoID, uint32_t cchURLSize, char *pchOriginalFileName, uint32_t cchOriginalFileNameSize, uint32_t *pPreviewType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCAdditionalPreview_params params =
     {
@@ -15583,7 +15583,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCAdditional
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumKeyValueTags(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumKeyValueTags_params params =
     {
@@ -15596,7 +15596,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCNumKey
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t keyValueTagIndex, char *pchKey, uint32_t cchKeySize, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_params params =
     {
@@ -15614,7 +15614,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_2(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pchKey, char *pchValue, uint32_t cchValueSize)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTag_2_params params =
     {
@@ -15630,7 +15630,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCKeyValueTa
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCContentDescriptors(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t index, uint32_t *pvecDescriptors, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCContentDescriptors(struct w_steam_iface *_this, uint64_t handle, uint32_t index, uint32_t *pvecDescriptors, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCContentDescriptors_params params =
     {
@@ -15645,7 +15645,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetQueryUGCConten
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_ReleaseQueryUGCRequest(struct w_steam_iface *_this, UGCQueryHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_ReleaseQueryUGCRequest(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_ReleaseQueryUGCRequest_params params =
     {
@@ -15657,7 +15657,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_ReleaseQueryUGCReques
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag_params params =
     {
@@ -15670,7 +15670,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup(struct w_steam_iface *_this, UGCQueryHandle_t handle, const SteamParamStringArray_t *pTagGroups)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup(struct w_steam_iface *_this, uint64_t handle, const SteamParamStringArray_t *pTagGroups)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup_params params =
     {
@@ -15683,7 +15683,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredTagGroup(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pTagName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag(struct w_steam_iface *_this, uint64_t handle, const char *pTagName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag_params params =
     {
@@ -15696,7 +15696,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddExcludedTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnOnlyIDs(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnOnlyIDs)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnOnlyIDs(struct w_steam_iface *_this, uint64_t handle, bool bReturnOnlyIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnOnlyIDs_params params =
     {
@@ -15709,7 +15709,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnOnlyIDs(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnKeyValueTags(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnKeyValueTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnKeyValueTags(struct w_steam_iface *_this, uint64_t handle, bool bReturnKeyValueTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnKeyValueTags_params params =
     {
@@ -15722,7 +15722,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnKeyValueTags
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnLongDescription(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnLongDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnLongDescription(struct w_steam_iface *_this, uint64_t handle, bool bReturnLongDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnLongDescription_params params =
     {
@@ -15735,7 +15735,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnLongDescript
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnMetadata(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnMetadata)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnMetadata(struct w_steam_iface *_this, uint64_t handle, bool bReturnMetadata)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnMetadata_params params =
     {
@@ -15748,7 +15748,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnMetadata(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnChildren(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnChildren)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnChildren(struct w_steam_iface *_this, uint64_t handle, bool bReturnChildren)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnChildren_params params =
     {
@@ -15761,7 +15761,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnChildren(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnAdditionalPreviews(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnAdditionalPreviews)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnAdditionalPreviews(struct w_steam_iface *_this, uint64_t handle, bool bReturnAdditionalPreviews)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnAdditionalPreviews_params params =
     {
@@ -15774,7 +15774,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnAdditionalPr
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnTotalOnly(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bReturnTotalOnly)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnTotalOnly(struct w_steam_iface *_this, uint64_t handle, bool bReturnTotalOnly)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnTotalOnly_params params =
     {
@@ -15787,7 +15787,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnTotalOnly(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnPlaytimeStats(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnPlaytimeStats(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnPlaytimeStats_params params =
     {
@@ -15800,7 +15800,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetReturnPlaytimeStat
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage_params params =
     {
@@ -15813,7 +15813,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetLanguage(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowCachedResponse(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unMaxAgeSeconds)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowCachedResponse(struct w_steam_iface *_this, uint64_t handle, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowCachedResponse_params params =
     {
@@ -15826,7 +15826,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowCachedRespons
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFilter(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pMatchCloudFileName)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFilter(struct w_steam_iface *_this, uint64_t handle, const char *pMatchCloudFileName)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFilter_params params =
     {
@@ -15839,7 +15839,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetCloudFileNameFilte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetMatchAnyTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, bool bMatchAnyTag)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetMatchAnyTag(struct w_steam_iface *_this, uint64_t handle, bool bMatchAnyTag)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetMatchAnyTag_params params =
     {
@@ -15852,7 +15852,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetMatchAnyTag(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pSearchText)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText(struct w_steam_iface *_this, uint64_t handle, const char *pSearchText)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText_params params =
     {
@@ -15865,7 +15865,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetSearchText(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetRankedByTrendDays(struct w_steam_iface *_this, UGCQueryHandle_t handle, uint32_t unDays)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetRankedByTrendDays(struct w_steam_iface *_this, uint64_t handle, uint32_t unDays)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetRankedByTrendDays_params params =
     {
@@ -15878,7 +15878,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetRankedByTrendDays(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeCreatedDateRange(struct w_steam_iface *_this, UGCQueryHandle_t handle, RTime32 rtStart, RTime32 rtEnd)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeCreatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeCreatedDateRange_params params =
     {
@@ -15892,7 +15892,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeCreatedDateRan
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeUpdatedDateRange(struct w_steam_iface *_this, UGCQueryHandle_t handle, RTime32 rtStart, RTime32 rtEnd)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeUpdatedDateRange(struct w_steam_iface *_this, uint64_t handle, uint32_t rtStart, uint32_t rtEnd)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeUpdatedDateRange_params params =
     {
@@ -15906,7 +15906,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetTimeUpdatedDateRan
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredKeyValueTag(struct w_steam_iface *_this, UGCQueryHandle_t handle, const char *pKey, const char *pValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pKey, const char *pValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredKeyValueTag_params params =
     {
@@ -15920,7 +15920,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddRequiredKeyValueTa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RequestUGCDetails(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint32_t unMaxAgeSeconds)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RequestUGCDetails(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t unMaxAgeSeconds)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RequestUGCDetails_params params =
     {
@@ -15933,7 +15933,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RequestUGCD
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateItem(struct w_steam_iface *_this, AppId_t nConsumerAppId, uint32_t eFileType)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateItem(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint32_t eFileType)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateItem_params params =
     {
@@ -15946,7 +15946,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_CreateItem(
     return params._ret;
 }
 
-UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartItemUpdate(struct w_steam_iface *_this, AppId_t nConsumerAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartItemUpdate(struct w_steam_iface *_this, uint32_t nConsumerAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartItemUpdate_params params =
     {
@@ -15959,7 +15959,7 @@ UGCUpdateHandle_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartIte
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchTitle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle(struct w_steam_iface *_this, uint64_t handle, const char *pchTitle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle_params params =
     {
@@ -15972,7 +15972,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTitle(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchDescription)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription(struct w_steam_iface *_this, uint64_t handle, const char *pchDescription)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription_params params =
     {
@@ -15985,7 +15985,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemDescription(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLanguage(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchLanguage)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLanguage(struct w_steam_iface *_this, uint64_t handle, const char *pchLanguage)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLanguage_params params =
     {
@@ -15998,7 +15998,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemUpdateLanguage
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchMetaData)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata(struct w_steam_iface *_this, uint64_t handle, const char *pchMetaData)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata_params params =
     {
@@ -16011,7 +16011,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemMetadata(struc
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemVisibility(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t eVisibility)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemVisibility(struct w_steam_iface *_this, uint64_t handle, uint32_t eVisibility)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemVisibility_params params =
     {
@@ -16024,7 +16024,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemVisibility(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags(struct w_steam_iface *_this, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t *pTags, bool bAllowAdminTags)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags(struct w_steam_iface *_this, uint64_t updateHandle, const SteamParamStringArray_t *pTags, bool bAllowAdminTags)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags_params params =
     {
@@ -16038,7 +16038,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemTags(struct w_
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszContentFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent(struct w_steam_iface *_this, uint64_t handle, const char *pszContentFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent_params params =
     {
@@ -16053,7 +16053,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemContent(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview_params params =
     {
@@ -16068,7 +16068,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetItemPreview(struct
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowLegacyUpload(struct w_steam_iface *_this, UGCUpdateHandle_t handle, bool bAllowLegacyUpload)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowLegacyUpload(struct w_steam_iface *_this, uint64_t handle, bool bAllowLegacyUpload)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowLegacyUpload_params params =
     {
@@ -16081,7 +16081,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetAllowLegacyUpload(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAllItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAllItemKeyValueTags_params params =
     {
@@ -16093,7 +16093,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAllItemKeyValue
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueTags(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueTags(struct w_steam_iface *_this, uint64_t handle, const char *pchKey)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueTags_params params =
     {
@@ -16106,7 +16106,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemKeyValueTag
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchKey, const char *pchValue)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag(struct w_steam_iface *_this, uint64_t handle, const char *pchKey, const char *pchValue)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag_params params =
     {
@@ -16120,7 +16120,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemKeyValueTag(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszPreviewFile, uint32_t type)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, const char *pszPreviewFile, uint32_t type)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile_params params =
     {
@@ -16136,7 +16136,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewFile(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo_params params =
     {
@@ -16149,7 +16149,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemPreviewVideo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszPreviewFile)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszPreviewFile)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile_params params =
     {
@@ -16165,7 +16165,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewFile
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVideo(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index, const char *pszVideoID)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVideo(struct w_steam_iface *_this, uint64_t handle, uint32_t index, const char *pszVideoID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVideo_params params =
     {
@@ -16179,7 +16179,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UpdateItemPreviewVide
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemPreview(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t index)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemPreview(struct w_steam_iface *_this, uint64_t handle, uint32_t index)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemPreview_params params =
     {
@@ -16192,7 +16192,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemPreview(str
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddContentDescriptor(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t descid)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddContentDescriptor(struct w_steam_iface *_this, uint64_t handle, uint32_t descid)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddContentDescriptor_params params =
     {
@@ -16205,7 +16205,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddContentDescriptor(
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveContentDescriptor(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint32_t descid)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveContentDescriptor(struct w_steam_iface *_this, uint64_t handle, uint32_t descid)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveContentDescriptor_params params =
     {
@@ -16218,7 +16218,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveContentDescript
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubmitItemUpdate(struct w_steam_iface *_this, UGCUpdateHandle_t handle, const char *pchChangeNote)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubmitItemUpdate(struct w_steam_iface *_this, uint64_t handle, const char *pchChangeNote)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubmitItemUpdate_params params =
     {
@@ -16231,7 +16231,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubmitItemU
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemUpdateProgress(struct w_steam_iface *_this, UGCUpdateHandle_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemUpdateProgress(struct w_steam_iface *_this, uint64_t handle, uint64_t *punBytesProcessed, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemUpdateProgress_params params =
     {
@@ -16245,7 +16245,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemUpdateProg
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bVoteUp)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bVoteUp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetUserItemVote_params params =
     {
@@ -16258,7 +16258,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserItemVote(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserItemVote(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserItemVote_params params =
     {
@@ -16270,7 +16270,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetUserItem
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemToFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemToFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemToFavorites_params params =
     {
@@ -16283,7 +16283,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddItemToFa
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemFromFavorites(struct w_steam_iface *_this, AppId_t nAppId, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemFromFavorites(struct w_steam_iface *_this, uint32_t nAppId, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemFromFavorites_params params =
     {
@@ -16296,7 +16296,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveItemF
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubscribeItem_params params =
     {
@@ -16308,7 +16308,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SubscribeIt
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UnsubscribeItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_UnsubscribeItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_UnsubscribeItem_params params =
     {
@@ -16331,7 +16331,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetNumSubscribedI
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetSubscribedItems(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t cMaxEntries)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetSubscribedItems(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t cMaxEntries)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetSubscribedItems_params params =
     {
@@ -16344,7 +16344,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetSubscribedItem
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemState(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemState(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemState_params params =
     {
@@ -16356,7 +16356,7 @@ uint32_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemState(stru
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punSizeOnDisk, char *pchFolder, uint32_t cchFolderSize, uint32_t *punTimeStamp)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo_params params =
     {
@@ -16373,7 +16373,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemInstallInfo(st
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemDownloadInfo(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemDownloadInfo(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint64_t *punBytesDownloaded, uint64_t *punBytesTotal)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemDownloadInfo_params params =
     {
@@ -16387,7 +16387,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetItemDownloadInfo(s
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_DownloadItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, bool bHighPriority)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_DownloadItem(struct w_steam_iface *_this, uint64_t nPublishedFileID, bool bHighPriority)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_DownloadItem_params params =
     {
@@ -16400,7 +16400,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_DownloadItem(struct w
     return params._ret;
 }
 
-bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameServer(struct w_steam_iface *_this, DepotId_t unWorkshopDepotID, const char *pszFolder)
+bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameServer(struct w_steam_iface *_this, uint32_t unWorkshopDepotID, const char *pszFolder)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_BInitWorkshopForGameServer_params params =
     {
@@ -16426,7 +16426,7 @@ void __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_SuspendDownloads(stru
     cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_SuspendDownloads( &params );
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartPlaytimeTracking_params params =
     {
@@ -16439,7 +16439,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StartPlayti
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytimeTracking(struct w_steam_iface *_this, PublishedFileId_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytimeTracking(struct w_steam_iface *_this, uint64_t *pvecPublishedFileID, uint32_t unNumPublishedFileIDs)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytimeTracking_params params =
     {
@@ -16452,7 +16452,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytimeTrackingForAllItems(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytimeTrackingForAllItems_params params =
     {
@@ -16463,7 +16463,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_StopPlaytim
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddDependency_params params =
     {
@@ -16476,7 +16476,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddDependen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveDependency(struct w_steam_iface *_this, PublishedFileId_t nParentPublishedFileID, PublishedFileId_t nChildPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveDependency(struct w_steam_iface *_this, uint64_t nParentPublishedFileID, uint64_t nChildPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveDependency_params params =
     {
@@ -16489,7 +16489,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddAppDependency_params params =
     {
@@ -16502,7 +16502,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_AddAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAppDependency(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID, AppId_t nAppID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAppDependency(struct w_steam_iface *_this, uint64_t nPublishedFileID, uint32_t nAppID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAppDependency_params params =
     {
@@ -16515,7 +16515,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_RemoveAppDe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetAppDependencies(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetAppDependencies(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetAppDependencies_params params =
     {
@@ -16527,7 +16527,7 @@ SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetAppDepen
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_DeleteItem(struct w_steam_iface *_this, PublishedFileId_t nPublishedFileID)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_DeleteItem(struct w_steam_iface *_this, uint64_t nPublishedFileID)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_DeleteItem_params params =
     {
@@ -16550,7 +16550,7 @@ bool __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_ShowWorkshopEULA(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus(struct w_steam_iface *_this)
 {
     struct cppISteamUGC_STEAMUGC_INTERFACE_VERSION018_GetWorkshopEULAStatus_params params =
     {

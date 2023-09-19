@@ -1066,7 +1066,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateA
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats_params params =
     {
@@ -1351,7 +1351,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_IndicateA
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_RequestUserStats_params params =
     {
@@ -1417,7 +1417,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindOrCreateLeaderboard_params params =
     {
@@ -1431,7 +1431,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_FindLeaderboard_params params =
     {
@@ -1443,7 +1443,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardName_params params =
     {
@@ -1455,7 +1455,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardEntryCount_params params =
     {
@@ -1467,7 +1467,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardSortMethod_params params =
     {
@@ -1479,7 +1479,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLeaderboardDisplayType_params params =
     {
@@ -1491,7 +1491,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_DownloadLeaderboardEntries_params params =
     {
@@ -1506,7 +1506,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownloadedLeaderboardEntry_params params =
     {
@@ -1522,7 +1522,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, int32_t nScore, int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, int32_t nScore, int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_UploadLeaderboardScore_params params =
     {
@@ -1779,7 +1779,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_IndicateA
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestUserStats_params params =
     {
@@ -1845,7 +1845,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindOrCreateLeaderboard_params params =
     {
@@ -1859,7 +1859,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_FindLeaderboard_params params =
     {
@@ -1871,7 +1871,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardName_params params =
     {
@@ -1883,7 +1883,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardEntryCount_params params =
     {
@@ -1895,7 +1895,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardSortMethod_params params =
     {
@@ -1907,7 +1907,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLeaderboardDisplayType_params params =
     {
@@ -1919,7 +1919,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_DownloadLeaderboardEntries_params params =
     {
@@ -1934,7 +1934,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry_params params =
     {
@@ -1950,7 +1950,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore_params params =
     {
@@ -1966,7 +1966,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers_params params =
     {
@@ -2236,7 +2236,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_IndicateA
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_RequestUserStats_params params =
     {
@@ -2317,7 +2317,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindOrCreateLeaderboard_params params =
     {
@@ -2331,7 +2331,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_FindLeaderboard_params params =
     {
@@ -2343,7 +2343,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardName_params params =
     {
@@ -2355,7 +2355,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardEntryCount_params params =
     {
@@ -2367,7 +2367,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardSortMethod_params params =
     {
@@ -2379,7 +2379,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLeaderboardDisplayType_params params =
     {
@@ -2391,7 +2391,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_DownloadLeaderboardEntries_params params =
     {
@@ -2406,7 +2406,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, LeaderboardEntry_t *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownloadedLeaderboardEntry_params params =
     {
@@ -2422,7 +2422,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_UploadLeaderboardScore_params params =
     {
@@ -2438,7 +2438,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetNumberOfCurrentPlayers_params params =
     {
@@ -2711,7 +2711,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_IndicateA
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestUserStats_params params =
     {
@@ -2792,7 +2792,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindOrCreateLeaderboard_params params =
     {
@@ -2806,7 +2806,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_FindLeaderboard_params params =
     {
@@ -2818,7 +2818,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardName_params params =
     {
@@ -2830,7 +2830,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardEntryCount_params params =
     {
@@ -2842,7 +2842,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardSortMethod_params params =
     {
@@ -2854,7 +2854,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardDisplayType_params params =
     {
@@ -2866,7 +2866,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEntries_params params =
     {
@@ -2881,7 +2881,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_111x *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry_params params =
     {
@@ -2897,7 +2897,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UploadLeaderboardScore_params params =
     {
@@ -2913,7 +2913,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint64_t hUGC)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC_params params =
     {
@@ -2926,7 +2926,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers_params params =
     {
@@ -3201,7 +3201,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_IndicateA
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_RequestUserStats_params params =
     {
@@ -3282,7 +3282,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindOrCreateLeaderboard_params params =
     {
@@ -3296,7 +3296,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_FindLeaderboard_params params =
     {
@@ -3308,7 +3308,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardName_params params =
     {
@@ -3320,7 +3320,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardEntryCount_params params =
     {
@@ -3332,7 +3332,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardSortMethod_params params =
     {
@@ -3344,7 +3344,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLeaderboardDisplayType_params params =
     {
@@ -3356,7 +3356,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntries_params params =
     {
@@ -3371,7 +3371,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_DownloadLeaderboardEntriesForUsers_params params =
     {
@@ -3385,7 +3385,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_113 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_113 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownloadedLeaderboardEntry_params params =
     {
@@ -3401,7 +3401,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_UploadLeaderboardScore_params params =
     {
@@ -3417,7 +3417,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint64_t hUGC)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_AttachLeaderboardUGC_params params =
     {
@@ -3430,7 +3430,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetNumberOfCurrentPlayers_params params =
     {
@@ -3715,7 +3715,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_IndicateA
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestUserStats_params params =
     {
@@ -3796,7 +3796,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindOrCreateLeaderboard_params params =
     {
@@ -3810,7 +3810,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_FindLeaderboard_params params =
     {
@@ -3822,7 +3822,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardName_params params =
     {
@@ -3834,7 +3834,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardEntryCount_params params =
     {
@@ -3846,7 +3846,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardSortMethod_params params =
     {
@@ -3858,7 +3858,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLeaderboardDisplayType_params params =
     {
@@ -3870,7 +3870,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntries_params params =
     {
@@ -3885,7 +3885,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLeaderboardEntriesForUsers_params params =
     {
@@ -3899,7 +3899,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_119 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_119 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry_params params =
     {
@@ -3915,7 +3915,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore_params params =
     {
@@ -3931,7 +3931,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_AttachLeaderboardUGC(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_AttachLeaderboardUGC(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint64_t hUGC)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_AttachLeaderboardUGC_params params =
     {
@@ -3944,7 +3944,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetNumberOfCurrentPlayers_params params =
     {
@@ -3955,7 +3955,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalAchievementPercentages(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalAchievementPercentages(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalAchievementPercentages_params params =
     {
@@ -4010,7 +4010,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetAchiev
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats(struct w_steam_iface *_this, int32_t nHistoryDays)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats(struct w_steam_iface *_this, int32_t nHistoryDays)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_RequestGlobalStats_params params =
     {
@@ -4384,7 +4384,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_G
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestUserStats_params params =
     {
@@ -4465,7 +4465,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindOrCreateLeaderboard_params params =
     {
@@ -4479,7 +4479,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_FindLeaderboard_params params =
     {
@@ -4491,7 +4491,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardName_params params =
     {
@@ -4503,7 +4503,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardEntryCount_params params =
     {
@@ -4515,7 +4515,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardSortMethod_params params =
     {
@@ -4527,7 +4527,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType_params params =
     {
@@ -4539,7 +4539,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries_params params =
     {
@@ -4554,7 +4554,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers_params params =
     {
@@ -4568,7 +4568,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_148a *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_148a *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry_params params =
     {
@@ -4584,7 +4584,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore_params params =
     {
@@ -4600,7 +4600,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint64_t hUGC)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC_params params =
     {
@@ -4613,7 +4613,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers_params params =
     {
@@ -4624,7 +4624,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalAchievementPercentages(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalAchievementPercentages(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalAchievementPercentages_params params =
     {
@@ -4679,7 +4679,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetAchiev
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalStats(struct w_steam_iface *_this, int32_t nHistoryDays)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalStats(struct w_steam_iface *_this, int32_t nHistoryDays)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestGlobalStats_params params =
     {
@@ -5057,7 +5057,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_G
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestUserStats(struct w_steam_iface *_this, CSteamID steamIDUser)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestUserStats_params params =
     {
@@ -5138,7 +5138,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_ResetAllS
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName, uint32_t eLeaderboardSortMethod, uint32_t eLeaderboardDisplayType)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindOrCreateLeaderboard_params params =
     {
@@ -5152,7 +5152,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindLeaderboard(struct w_steam_iface *_this, const char *pchLeaderboardName)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_FindLeaderboard_params params =
     {
@@ -5164,7 +5164,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012
     return params._ret;
 }
 
-const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardName(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardName(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardName_params params =
     {
@@ -5176,7 +5176,7 @@ const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_G
     return params._ret;
 }
 
-int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardEntryCount(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardEntryCount(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardEntryCount_params params =
     {
@@ -5188,7 +5188,7 @@ int32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLea
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardSortMethod(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardSortMethod(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardSortMethod_params params =
     {
@@ -5200,7 +5200,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLe
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardDisplayType(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard)
+uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardDisplayType(struct w_steam_iface *_this, uint64_t hSteamLeaderboard)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLeaderboardDisplayType_params params =
     {
@@ -5212,7 +5212,7 @@ uint32_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetLe
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntries(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntries(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardDataRequest, int32_t nRangeStart, int32_t nRangeEnd)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntries_params params =
     {
@@ -5227,7 +5227,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntriesForUsers(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, CSteamID *prgUsers, int32_t cUsers)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_DownloadLeaderboardEntriesForUsers_params params =
     {
@@ -5241,7 +5241,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012
     return params._ret;
 }
 
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_158 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry(struct w_steam_iface *_this, uint64_t hSteamLeaderboardEntries, int32_t index, winLeaderboardEntry_t_158 *pLeaderboardEntry, int32_t *pDetails, int32_t cDetailsMax)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownloadedLeaderboardEntry_params params =
     {
@@ -5257,7 +5257,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetDownlo
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UploadLeaderboardScore(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UploadLeaderboardScore(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint32_t eLeaderboardUploadScoreMethod, int32_t nScore, const int32_t *pScoreDetails, int32_t cScoreDetailsCount)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_UploadLeaderboardScore_params params =
     {
@@ -5273,7 +5273,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_AttachLeaderboardUGC(struct w_steam_iface *_this, SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_AttachLeaderboardUGC(struct w_steam_iface *_this, uint64_t hSteamLeaderboard, uint64_t hUGC)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_AttachLeaderboardUGC_params params =
     {
@@ -5286,7 +5286,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumberOfCurrentPlayers(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetNumberOfCurrentPlayers_params params =
     {
@@ -5297,7 +5297,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalAchievementPercentages(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalAchievementPercentages(struct w_steam_iface *_this)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalAchievementPercentages_params params =
     {
@@ -5352,7 +5352,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_GetAchiev
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalStats(struct w_steam_iface *_this, int32_t nHistoryDays)
+uint64_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalStats(struct w_steam_iface *_this, int32_t nHistoryDays)
 {
     struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION012_RequestGlobalStats_params params =
     {

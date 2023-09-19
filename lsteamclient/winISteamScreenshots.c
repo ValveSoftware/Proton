@@ -22,7 +22,7 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation, 12)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
+uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_WriteScreenshot_params params =
     {
@@ -37,7 +37,7 @@ ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERS
     return params._ret;
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
+uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary_params params =
     {
@@ -77,7 +77,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookS
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots( &params );
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation(struct w_steam_iface *_this, uint32_t hScreenshot, const char *pchLocation)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLocation_params params =
     {
@@ -90,7 +90,7 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_SetLo
     return params._ret;
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, CSteamID steamID)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser(struct w_steam_iface *_this, uint32_t hScreenshot, CSteamID steamID)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TagUser_params params =
     {
@@ -139,7 +139,7 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser, 16)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
+uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot_params params =
     {
@@ -154,7 +154,7 @@ ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERS
     return params._ret;
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
+uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary_params params =
     {
@@ -194,7 +194,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookS
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots( &params );
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation(struct w_steam_iface *_this, uint32_t hScreenshot, const char *pchLocation)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation_params params =
     {
@@ -207,7 +207,7 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLo
     return params._ret;
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, CSteamID steamID)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser(struct w_steam_iface *_this, uint32_t hScreenshot, CSteamID steamID)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser_params params =
     {
@@ -220,7 +220,7 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUs
     return params._ret;
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, PublishedFileId_t unPublishedFileID)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile(struct w_steam_iface *_this, uint32_t hScreenshot, uint64_t unPublishedFileID)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile_params params =
     {
@@ -272,7 +272,7 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked, 4)
 DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary, 16)
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
+uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(struct w_steam_iface *_this, void *pubRGB, uint32_t cubRGB, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot_params params =
     {
@@ -287,7 +287,7 @@ ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERS
     return params._ret;
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
+uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(struct w_steam_iface *_this, const char *pchFilename, const char *pchThumbnailFilename, int32_t nWidth, int32_t nHeight)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary_params params =
     {
@@ -327,7 +327,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookS
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots( &params );
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, const char *pchLocation)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation(struct w_steam_iface *_this, uint32_t hScreenshot, const char *pchLocation)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLocation_params params =
     {
@@ -340,7 +340,7 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_SetLo
     return params._ret;
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, CSteamID steamID)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser(struct w_steam_iface *_this, uint32_t hScreenshot, CSteamID steamID)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser_params params =
     {
@@ -353,7 +353,7 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUs
     return params._ret;
 }
 
-bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile(struct w_steam_iface *_this, ScreenshotHandle hScreenshot, PublishedFileId_t unPublishedFileID)
+bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile(struct w_steam_iface *_this, uint32_t hScreenshot, uint64_t unPublishedFileID)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile_params params =
     {
@@ -377,7 +377,7 @@ bool __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScr
     return params._ret;
 }
 
-ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(struct w_steam_iface *_this, uint32_t eType, const char *pchFilename, const char *pchVRFilename)
+uint32_t __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(struct w_steam_iface *_this, uint32_t eType, const char *pchFilename, const char *pchVRFilename)
 {
     struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary_params params =
     {

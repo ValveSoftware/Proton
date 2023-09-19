@@ -16,7 +16,7 @@ struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsA
 {
     void *linux_side;
     bool _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked_params *params );
 
@@ -24,7 +24,7 @@ struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsA
 {
     void *linux_side;
     bool _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList( struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList_params *params );
 

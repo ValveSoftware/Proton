@@ -178,7 +178,7 @@ extern void cppISteamFriends_SteamFriends005_ActivateGameOverlayToWebPage( struc
 struct cppISteamFriends_SteamFriends005_ActivateGameOverlayToStore_params
 {
     void *linux_side;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamFriends_SteamFriends005_ActivateGameOverlayToStore( struct cppISteamFriends_SteamFriends005_ActivateGameOverlayToStore_params *params );
 

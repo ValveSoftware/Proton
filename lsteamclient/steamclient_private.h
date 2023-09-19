@@ -2,6 +2,7 @@
 
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 #include "windef.h"
@@ -128,7 +129,7 @@ struct callback_data
 void execute_callback(struct callback_data *cb_data);
 bool is_native_thread(void);
 bool after_shutdown(bool);
-HSteamPipe after_steam_pipe_create(HSteamPipe pipe);
+int32_t after_steam_pipe_create( int32_t pipe );
 
 #ifdef __cplusplus
 }
