@@ -21,7 +21,7 @@ struct cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async_params
 {
     void *linux_side;
     uint32_t _ret;
-    TextureID_t textureId;
+    int32_t textureId;
     winRenderModel_TextureMap_t_0918 **ppTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async( struct cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async_params *params );
@@ -37,7 +37,7 @@ struct cppIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async_params
 {
     void *linux_side;
     uint32_t _ret;
-    TextureID_t textureId;
+    int32_t textureId;
     void *pD3D11Device;
     void **ppD3D11Texture2D;
 };

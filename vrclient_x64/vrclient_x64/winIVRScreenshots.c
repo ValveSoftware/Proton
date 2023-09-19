@@ -26,7 +26,7 @@ DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_UpdateScreenshotPro
 DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot, 16)
 DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 20)
 
-EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(struct w_steam_iface *_this, ScreenshotHandle_t *pOutScreenshotHandle, EVRScreenshotType type, const char *pchPreviewFilename, const char *pchVRFilename)
+uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(struct w_steam_iface *_this, uint32_t *pOutScreenshotHandle, uint32_t type, const char *pchPreviewFilename, const char *pchVRFilename)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot_params params =
     {
@@ -45,7 +45,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreen
     return params._ret;
 }
 
-EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(struct w_steam_iface *_this, const EVRScreenshotType *pSupportedTypes, int32_t numTypes)
+uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(struct w_steam_iface *_this, uint32_t *pSupportedTypes, int32_t numTypes)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_HookScreenshot_params params =
     {
@@ -58,7 +58,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreensho
     return params._ret;
 }
 
-EVRScreenshotType __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(struct w_steam_iface *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotError *pError)
+uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(struct w_steam_iface *_this, uint32_t screenshotHandle, uint32_t *pError)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType_params params =
     {
@@ -71,7 +71,7 @@ EVRScreenshotType __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotP
     return params._ret;
 }
 
-uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(struct w_steam_iface *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char *pchFilename, uint32_t cchFilename, EVRScreenshotError *pError)
+uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(struct w_steam_iface *_this, uint32_t screenshotHandle, uint32_t filenameType, char *pchFilename, uint32_t cchFilename, uint32_t *pError)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename_params params =
     {
@@ -88,7 +88,7 @@ uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFi
     return params._ret;
 }
 
-EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(struct w_steam_iface *_this, ScreenshotHandle_t screenshotHandle, float flProgress)
+uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(struct w_steam_iface *_this, uint32_t screenshotHandle, float flProgress)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress_params params =
     {
@@ -101,7 +101,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_UpdateScreens
     return params._ret;
 }
 
-EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(struct w_steam_iface *_this, ScreenshotHandle_t *pOutScreenshotHandle, const char *pchPreviewFilename, const char *pchVRFilename)
+uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(struct w_steam_iface *_this, uint32_t *pOutScreenshotHandle, const char *pchPreviewFilename, const char *pchVRFilename)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot_params params =
     {
@@ -119,7 +119,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScr
     return params._ret;
 }
 
-EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(struct w_steam_iface *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char *pchSourcePreviewFilename, const char *pchSourceVRFilename)
+uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(struct w_steam_iface *_this, uint32_t screenshotHandle, uint32_t type, const char *pchSourcePreviewFilename, const char *pchSourceVRFilename)
 {
     struct cppIVRScreenshots_IVRScreenshots_001_SubmitScreenshot_params params =
     {

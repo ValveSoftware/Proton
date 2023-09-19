@@ -2142,7 +2142,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchTemplateApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_LaunchApplicationFromMimeType(struct w_steam_iface *_this, const char *pchMimeType, const char *pchArgs)
+uint32_t __thiscall winIVRApplications_IVRApplications_006_LaunchApplicationFromMimeType(struct w_steam_iface *_this, const char *pchMimeType, const char *pchArgs)
 {
     struct cppIVRApplications_IVRApplications_006_LaunchApplicationFromMimeType_params params =
     {
@@ -2689,7 +2689,7 @@ uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplica
     return params._ret;
 }
 
-EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType(struct w_steam_iface *_this, const char *pchMimeType, const char *pchArgs)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType(struct w_steam_iface *_this, const char *pchMimeType, const char *pchArgs)
 {
     struct cppIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType_params params =
     {

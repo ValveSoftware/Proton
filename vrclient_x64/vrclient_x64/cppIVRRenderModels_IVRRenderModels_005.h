@@ -21,7 +21,7 @@ struct cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async_params
 {
     void *linux_side;
     uint32_t _ret;
-    TextureID_t textureId;
+    int32_t textureId;
     winRenderModel_TextureMap_t_1015 **ppTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async( struct cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async_params *params );
@@ -37,7 +37,7 @@ struct cppIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async_params
 {
     void *linux_side;
     uint32_t _ret;
-    TextureID_t textureId;
+    int32_t textureId;
     void *pD3D11Device;
     void **ppD3D11Texture2D;
 };
@@ -47,7 +47,7 @@ struct cppIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async_params
 {
     void *linux_side;
     uint32_t _ret;
-    TextureID_t textureId;
+    int32_t textureId;
     void *pDstTexture;
 };
 extern void cppIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async( struct cppIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async_params *params );
@@ -143,7 +143,7 @@ struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL_params
     const char *pchRenderModelName;
     char *pchThumbnailURL;
     uint32_t unThumbnailURLLen;
-    EVRRenderModelError *peError;
+    uint32_t *peError;
 };
 extern void cppIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL( struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL_params *params );
 
@@ -154,7 +154,7 @@ struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath_params
     const char *pchRenderModelName;
     char *pchOriginalPath;
     uint32_t unOriginalPathLen;
-    EVRRenderModelError *peError;
+    uint32_t *peError;
 };
 extern void cppIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath( struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath_params *params );
 
@@ -162,7 +162,7 @@ struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum_pa
 {
     void *linux_side;
     const char *_ret;
-    EVRRenderModelError error;
+    uint32_t error;
 };
 extern void cppIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum( struct cppIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum_params *params );
 

@@ -6,7 +6,7 @@ struct cppIVROverlay_IVROverlay_027_FindOverlay_params
     void *linux_side;
     uint32_t _ret;
     const char *pchOverlayKey;
-    VROverlayHandle_t *pOverlayHandle;
+    uint64_t *pOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_FindOverlay( struct cppIVROverlay_IVROverlay_027_FindOverlay_params *params );
 
@@ -16,7 +16,7 @@ struct cppIVROverlay_IVROverlay_027_CreateOverlay_params
     uint32_t _ret;
     const char *pchOverlayKey;
     const char *pchOverlayName;
-    VROverlayHandle_t *pOverlayHandle;
+    uint64_t *pOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_CreateOverlay( struct cppIVROverlay_IVROverlay_027_CreateOverlay_params *params );
 
@@ -24,7 +24,7 @@ struct cppIVROverlay_IVROverlay_027_DestroyOverlay_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_DestroyOverlay( struct cppIVROverlay_IVROverlay_027_DestroyOverlay_params *params );
 
@@ -32,7 +32,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayKey_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     char *pchValue;
     uint32_t unBufferSize;
     uint32_t *pError;
@@ -43,7 +43,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayName_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     char *pchValue;
     uint32_t unBufferSize;
     uint32_t *pError;
@@ -54,7 +54,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayName_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     const char *pchName;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayName( struct cppIVROverlay_IVROverlay_027_SetOverlayName_params *params );
@@ -63,7 +63,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayImageData_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     void *pvBuffer;
     uint32_t unBufferSize;
     uint32_t *punWidth;
@@ -83,7 +83,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayRenderingPid_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t unPID;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayRenderingPid( struct cppIVROverlay_IVROverlay_027_SetOverlayRenderingPid_params *params );
@@ -92,7 +92,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayRenderingPid_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayRenderingPid( struct cppIVROverlay_IVROverlay_027_GetOverlayRenderingPid_params *params );
 
@@ -100,7 +100,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayFlag_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
     bool bEnabled;
 };
@@ -110,7 +110,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayFlag_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t eOverlayFlag;
     bool *pbEnabled;
 };
@@ -120,7 +120,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayFlags_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *pFlags;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayFlags( struct cppIVROverlay_IVROverlay_027_GetOverlayFlags_params *params );
@@ -129,7 +129,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayColor_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float fRed;
     float fGreen;
     float fBlue;
@@ -140,7 +140,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayColor_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float *pfRed;
     float *pfGreen;
     float *pfBlue;
@@ -151,7 +151,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayAlpha_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float fAlpha;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayAlpha( struct cppIVROverlay_IVROverlay_027_SetOverlayAlpha_params *params );
@@ -160,7 +160,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayAlpha_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float *pfAlpha;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayAlpha( struct cppIVROverlay_IVROverlay_027_GetOverlayAlpha_params *params );
@@ -169,7 +169,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTexelAspect_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float fTexelAspect;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTexelAspect( struct cppIVROverlay_IVROverlay_027_SetOverlayTexelAspect_params *params );
@@ -178,7 +178,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTexelAspect_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float *pfTexelAspect;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayTexelAspect( struct cppIVROverlay_IVROverlay_027_GetOverlayTexelAspect_params *params );
@@ -187,7 +187,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlaySortOrder_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t unSortOrder;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlaySortOrder( struct cppIVROverlay_IVROverlay_027_SetOverlaySortOrder_params *params );
@@ -196,7 +196,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlaySortOrder_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *punSortOrder;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlaySortOrder( struct cppIVROverlay_IVROverlay_027_GetOverlaySortOrder_params *params );
@@ -205,7 +205,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayWidthInMeters_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float fWidthInMeters;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayWidthInMeters( struct cppIVROverlay_IVROverlay_027_SetOverlayWidthInMeters_params *params );
@@ -214,7 +214,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayWidthInMeters_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float *pfWidthInMeters;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayWidthInMeters( struct cppIVROverlay_IVROverlay_027_GetOverlayWidthInMeters_params *params );
@@ -223,7 +223,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayCurvature_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float fCurvature;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayCurvature( struct cppIVROverlay_IVROverlay_027_SetOverlayCurvature_params *params );
@@ -232,7 +232,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayCurvature_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float *pfCurvature;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayCurvature( struct cppIVROverlay_IVROverlay_027_GetOverlayCurvature_params *params );
@@ -241,7 +241,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayPreCurvePitch_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float fRadians;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayPreCurvePitch( struct cppIVROverlay_IVROverlay_027_SetOverlayPreCurvePitch_params *params );
@@ -250,7 +250,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayPreCurvePitch_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float *pfRadians;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayPreCurvePitch( struct cppIVROverlay_IVROverlay_027_GetOverlayPreCurvePitch_params *params );
@@ -259,7 +259,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTextureColorSpace_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t eTextureColorSpace;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTextureColorSpace( struct cppIVROverlay_IVROverlay_027_SetOverlayTextureColorSpace_params *params );
@@ -268,7 +268,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTextureColorSpace_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *peTextureColorSpace;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayTextureColorSpace( struct cppIVROverlay_IVROverlay_027_GetOverlayTextureColorSpace_params *params );
@@ -277,7 +277,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTextureBounds_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     const VRTextureBounds_t *pOverlayTextureBounds;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTextureBounds( struct cppIVROverlay_IVROverlay_027_SetOverlayTextureBounds_params *params );
@@ -286,7 +286,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTextureBounds_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     VRTextureBounds_t *pOverlayTextureBounds;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayTextureBounds( struct cppIVROverlay_IVROverlay_027_GetOverlayTextureBounds_params *params );
@@ -295,7 +295,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTransformType_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *peTransformType;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayTransformType( struct cppIVROverlay_IVROverlay_027_GetOverlayTransformType_params *params );
@@ -304,7 +304,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTransformAbsolute_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t eTrackingOrigin;
     const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform;
 };
@@ -314,7 +314,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTransformAbsolute_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *peTrackingOrigin;
     HmdMatrix34_t *pmatTrackingOriginToOverlayTransform;
 };
@@ -324,8 +324,8 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceRelative_par
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
-    TrackedDeviceIndex_t unTrackedDevice;
+    uint64_t ulOverlayHandle;
+    uint32_t unTrackedDevice;
     const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceRelative( struct cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceRelative_params *params );
@@ -334,8 +334,8 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceRelative_par
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
-    TrackedDeviceIndex_t *punTrackedDevice;
+    uint64_t ulOverlayHandle;
+    uint32_t *punTrackedDevice;
     HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceRelative( struct cppIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceRelative_params *params );
@@ -344,8 +344,8 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceComponent_pa
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
-    TrackedDeviceIndex_t unDeviceIndex;
+    uint64_t ulOverlayHandle;
+    uint32_t unDeviceIndex;
     const char *pchComponentName;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceComponent( struct cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceComponent_params *params );
@@ -354,8 +354,8 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceComponent_pa
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
-    TrackedDeviceIndex_t *punDeviceIndex;
+    uint64_t ulOverlayHandle;
+    uint32_t *punDeviceIndex;
     char *pchComponentName;
     uint32_t unComponentNameSize;
 };
@@ -365,7 +365,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTransformCursor_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulCursorOverlayHandle;
+    uint64_t ulCursorOverlayHandle;
     const HmdVector2_t *pvHotspot;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTransformCursor( struct cppIVROverlay_IVROverlay_027_SetOverlayTransformCursor_params *params );
@@ -373,8 +373,8 @@ extern void cppIVROverlay_IVROverlay_027_SetOverlayTransformCursor( struct cppIV
 struct cppIVROverlay_IVROverlay_027_GetOverlayTransformCursor_params
 {
     void *linux_side;
-    EVROverlayError _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint32_t _ret;
+    uint64_t ulOverlayHandle;
     HmdVector2_t *pvHotspot;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayTransformCursor( struct cppIVROverlay_IVROverlay_027_GetOverlayTransformCursor_params *params );
@@ -382,12 +382,12 @@ extern void cppIVROverlay_IVROverlay_027_GetOverlayTransformCursor( struct cppIV
 struct cppIVROverlay_IVROverlay_027_SetOverlayTransformProjection_params
 {
     void *linux_side;
-    EVROverlayError _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint32_t _ret;
+    uint64_t ulOverlayHandle;
     uint32_t eTrackingOrigin;
     const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform;
     const VROverlayProjection_t *pProjection;
-    EVREye eEye;
+    uint32_t eEye;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTransformProjection( struct cppIVROverlay_IVROverlay_027_SetOverlayTransformProjection_params *params );
 
@@ -395,7 +395,7 @@ struct cppIVROverlay_IVROverlay_027_ShowOverlay_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_ShowOverlay( struct cppIVROverlay_IVROverlay_027_ShowOverlay_params *params );
 
@@ -403,7 +403,7 @@ struct cppIVROverlay_IVROverlay_027_HideOverlay_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_HideOverlay( struct cppIVROverlay_IVROverlay_027_HideOverlay_params *params );
 
@@ -411,7 +411,7 @@ struct cppIVROverlay_IVROverlay_027_IsOverlayVisible_params
 {
     void *linux_side;
     bool _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_IsOverlayVisible( struct cppIVROverlay_IVROverlay_027_IsOverlayVisible_params *params );
 
@@ -419,7 +419,7 @@ struct cppIVROverlay_IVROverlay_027_GetTransformForOverlayCoordinates_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t eTrackingOrigin;
     HmdVector2_t coordinatesInOverlay;
     HmdMatrix34_t *pmatTransform;
@@ -438,7 +438,7 @@ struct cppIVROverlay_IVROverlay_027_PollNextOverlayEvent_params
 {
     void *linux_side;
     bool _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     winVREvent_t_1267 *pEvent;
     uint32_t uncbVREvent;
 };
@@ -448,7 +448,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayInputMethod_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *peInputMethod;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayInputMethod( struct cppIVROverlay_IVROverlay_027_GetOverlayInputMethod_params *params );
@@ -457,7 +457,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayInputMethod_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t eInputMethod;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayInputMethod( struct cppIVROverlay_IVROverlay_027_SetOverlayInputMethod_params *params );
@@ -466,7 +466,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayMouseScale_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     HmdVector2_t *pvecMouseScale;
 };
 extern void cppIVROverlay_IVROverlay_027_GetOverlayMouseScale( struct cppIVROverlay_IVROverlay_027_GetOverlayMouseScale_params *params );
@@ -475,7 +475,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayMouseScale_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     const HmdVector2_t *pvecMouseScale;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayMouseScale( struct cppIVROverlay_IVROverlay_027_SetOverlayMouseScale_params *params );
@@ -484,7 +484,7 @@ struct cppIVROverlay_IVROverlay_027_ComputeOverlayIntersection_params
 {
     void *linux_side;
     bool _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     const VROverlayIntersectionParams_t *pParams;
     VROverlayIntersectionResults_t *pResults;
 };
@@ -494,7 +494,7 @@ struct cppIVROverlay_IVROverlay_027_IsHoverTargetOverlay_params
 {
     void *linux_side;
     bool _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_IsHoverTargetOverlay( struct cppIVROverlay_IVROverlay_027_IsHoverTargetOverlay_params *params );
 
@@ -502,7 +502,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayIntersectionMask_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives;
     uint32_t unNumMaskPrimitives;
     uint32_t unPrimitiveSize;
@@ -513,7 +513,7 @@ struct cppIVROverlay_IVROverlay_027_TriggerLaserMouseHapticVibration_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     float fDurationSeconds;
     float fFrequency;
     float fAmplitude;
@@ -524,8 +524,8 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayCursor_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
-    VROverlayHandle_t ulCursorHandle;
+    uint64_t ulOverlayHandle;
+    uint64_t ulCursorHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayCursor( struct cppIVROverlay_IVROverlay_027_SetOverlayCursor_params *params );
 
@@ -533,7 +533,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayCursorPositionOverride_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     const HmdVector2_t *pvCursor;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayCursorPositionOverride( struct cppIVROverlay_IVROverlay_027_SetOverlayCursorPositionOverride_params *params );
@@ -542,7 +542,7 @@ struct cppIVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverride_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverride( struct cppIVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverride_params *params );
 
@@ -550,7 +550,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayTexture_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     const Texture_t *pTexture;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayTexture( struct cppIVROverlay_IVROverlay_027_SetOverlayTexture_params *params );
@@ -559,7 +559,7 @@ struct cppIVROverlay_IVROverlay_027_ClearOverlayTexture_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_ClearOverlayTexture( struct cppIVROverlay_IVROverlay_027_ClearOverlayTexture_params *params );
 
@@ -567,7 +567,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayRaw_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     void *pvBuffer;
     uint32_t unWidth;
     uint32_t unHeight;
@@ -579,7 +579,7 @@ struct cppIVROverlay_IVROverlay_027_SetOverlayFromFile_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     const char *pchFilePath;
 };
 extern void cppIVROverlay_IVROverlay_027_SetOverlayFromFile( struct cppIVROverlay_IVROverlay_027_SetOverlayFromFile_params *params );
@@ -588,7 +588,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTexture_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     void **pNativeTextureHandle;
     void *pNativeTextureRef;
     uint32_t *pWidth;
@@ -604,7 +604,7 @@ struct cppIVROverlay_IVROverlay_027_ReleaseNativeOverlayHandle_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     void *pNativeTextureHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_ReleaseNativeOverlayHandle( struct cppIVROverlay_IVROverlay_027_ReleaseNativeOverlayHandle_params *params );
@@ -613,7 +613,7 @@ struct cppIVROverlay_IVROverlay_027_GetOverlayTextureSize_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *pWidth;
     uint32_t *pHeight;
 };
@@ -625,8 +625,8 @@ struct cppIVROverlay_IVROverlay_027_CreateDashboardOverlay_params
     uint32_t _ret;
     const char *pchOverlayKey;
     const char *pchOverlayFriendlyName;
-    VROverlayHandle_t *pMainHandle;
-    VROverlayHandle_t *pThumbnailHandle;
+    uint64_t *pMainHandle;
+    uint64_t *pThumbnailHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_CreateDashboardOverlay( struct cppIVROverlay_IVROverlay_027_CreateDashboardOverlay_params *params );
 
@@ -641,7 +641,7 @@ struct cppIVROverlay_IVROverlay_027_IsActiveDashboardOverlay_params
 {
     void *linux_side;
     bool _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
 };
 extern void cppIVROverlay_IVROverlay_027_IsActiveDashboardOverlay( struct cppIVROverlay_IVROverlay_027_IsActiveDashboardOverlay_params *params );
 
@@ -649,7 +649,7 @@ struct cppIVROverlay_IVROverlay_027_SetDashboardOverlaySceneProcess_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t unProcessId;
 };
 extern void cppIVROverlay_IVROverlay_027_SetDashboardOverlaySceneProcess( struct cppIVROverlay_IVROverlay_027_SetDashboardOverlaySceneProcess_params *params );
@@ -658,7 +658,7 @@ struct cppIVROverlay_IVROverlay_027_GetDashboardOverlaySceneProcess_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t *punProcessId;
 };
 extern void cppIVROverlay_IVROverlay_027_GetDashboardOverlaySceneProcess( struct cppIVROverlay_IVROverlay_027_GetDashboardOverlaySceneProcess_params *params );
@@ -673,7 +673,7 @@ extern void cppIVROverlay_IVROverlay_027_ShowDashboard( struct cppIVROverlay_IVR
 struct cppIVROverlay_IVROverlay_027_GetPrimaryDashboardDevice_params
 {
     void *linux_side;
-    TrackedDeviceIndex_t _ret;
+    uint32_t _ret;
 };
 extern void cppIVROverlay_IVROverlay_027_GetPrimaryDashboardDevice( struct cppIVROverlay_IVROverlay_027_GetPrimaryDashboardDevice_params *params );
 
@@ -695,7 +695,7 @@ struct cppIVROverlay_IVROverlay_027_ShowKeyboardForOverlay_params
 {
     void *linux_side;
     uint32_t _ret;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     uint32_t eInputMode;
     uint32_t eLineInputMode;
     uint32_t unFlags;
@@ -732,7 +732,7 @@ extern void cppIVROverlay_IVROverlay_027_SetKeyboardTransformAbsolute( struct cp
 struct cppIVROverlay_IVROverlay_027_SetKeyboardPositionForOverlay_params
 {
     void *linux_side;
-    VROverlayHandle_t ulOverlayHandle;
+    uint64_t ulOverlayHandle;
     HmdRect2_t avoidRect;
 };
 extern void cppIVROverlay_IVROverlay_027_SetKeyboardPositionForOverlay( struct cppIVROverlay_IVROverlay_027_SetKeyboardPositionForOverlay_params *params );

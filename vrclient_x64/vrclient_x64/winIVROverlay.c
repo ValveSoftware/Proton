@@ -59,7 +59,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_IsActiveSystemOverlay, 12)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_SetSystemOverlaySceneProcess, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_GetSystemOverlaySceneProcess, 16)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_FindOverlay_params params =
     {
@@ -72,7 +72,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_CreateOverlay_params params =
     {
@@ -86,7 +86,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_DestroyOverlay_params params =
     {
@@ -98,7 +98,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_SetHighQualityOverlay_params params =
     {
@@ -110,7 +110,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_001_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_001_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_001_GetHighQualityOverlay_params params =
     {
@@ -133,7 +133,7 @@ const char * __thiscall winIVROverlay_IVROverlay_001_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayFlag_params params =
     {
@@ -147,7 +147,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayFlag_params params =
     {
@@ -161,7 +161,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayAlpha_params params =
     {
@@ -174,7 +174,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayAlpha_params params =
     {
@@ -187,7 +187,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fGamma)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayGamma_params params =
     {
@@ -200,7 +200,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfGamma)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayGamma_params params =
     {
@@ -213,7 +213,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayWidthInMeters_params params =
     {
@@ -226,7 +226,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayWidthInMeters_params params =
     {
@@ -239,7 +239,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayTextureBounds_params params =
     {
@@ -252,7 +252,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayTextureBounds_params params =
     {
@@ -265,7 +265,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayTransformType_params params =
     {
@@ -278,7 +278,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayTransformAbsolute_params params =
     {
@@ -292,7 +292,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayTransformAbsolute_params params =
     {
@@ -306,7 +306,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -320,7 +320,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -334,7 +334,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayVisibility(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peOverlayVisibility)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayVisibility(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peOverlayVisibility)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayVisibility_params params =
     {
@@ -347,7 +347,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayVisibility(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayVisibility(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayVisibility)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayVisibility(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayVisibility)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayVisibility_params params =
     {
@@ -360,7 +360,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayVisibility(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_ShowOverlay_params params =
     {
@@ -372,7 +372,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_HideOverlay_params params =
     {
@@ -384,7 +384,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_001_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_001_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_IsOverlayVisible_params params =
     {
@@ -396,7 +396,7 @@ bool __thiscall winIVROverlay_IVROverlay_001_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_001_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pEvent)
+bool __thiscall winIVROverlay_IVROverlay_001_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VREvent_t *pEvent)
 {
     struct cppIVROverlay_IVROverlay_001_PollNextOverlayEvent_params params =
     {
@@ -409,7 +409,7 @@ bool __thiscall winIVROverlay_IVROverlay_001_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayInputMethod_params params =
     {
@@ -422,7 +422,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayInputMethod_params params =
     {
@@ -435,7 +435,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_001_GetOverlayMouseScale_params params =
     {
@@ -448,7 +448,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayMouseScale_params params =
     {
@@ -461,7 +461,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_001_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_001_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_001_ComputeOverlayIntersection_params params =
     {
@@ -475,7 +475,7 @@ bool __thiscall winIVROverlay_IVROverlay_001_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_001_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_001_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_001_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -488,9 +488,9 @@ bool __thiscall winIVROverlay_IVROverlay_001_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayRaw_params params =
     {
@@ -506,7 +506,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_001_SetOverlayFromFile_params params =
     {
@@ -532,7 +532,7 @@ bool __thiscall winIVROverlay_IVROverlay_001_IsSystemOverlayVisible(struct w_ste
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_001_IsActiveSystemOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_001_IsActiveSystemOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_001_IsActiveSystemOverlay_params params =
     {
@@ -544,7 +544,7 @@ bool __thiscall winIVROverlay_IVROverlay_001_IsActiveSystemOverlay(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_SetSystemOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_SetSystemOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_001_SetSystemOverlaySceneProcess_params params =
     {
@@ -557,7 +557,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_001_SetSystemOverlaySceneProcess(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_001_GetSystemOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_001_GetSystemOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_001_GetSystemOverlaySceneProcess_params params =
     {
@@ -744,7 +744,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_IsActiveDashboardOverlay, 1
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_SetDashboardOverlaySceneProcess, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_GetDashboardOverlaySceneProcess, 16)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_FindOverlay_params params =
     {
@@ -757,7 +757,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_CreateOverlay_params params =
     {
@@ -771,7 +771,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_DestroyOverlay_params params =
     {
@@ -783,7 +783,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_SetHighQualityOverlay_params params =
     {
@@ -795,7 +795,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_002_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_002_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_002_GetHighQualityOverlay_params params =
     {
@@ -818,7 +818,7 @@ const char * __thiscall winIVROverlay_IVROverlay_002_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayFlag_params params =
     {
@@ -832,7 +832,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayFlag_params params =
     {
@@ -846,7 +846,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayColor_params params =
     {
@@ -861,7 +861,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayColor_params params =
     {
@@ -876,7 +876,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayAlpha_params params =
     {
@@ -889,7 +889,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayAlpha_params params =
     {
@@ -902,7 +902,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fGamma)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayGamma_params params =
     {
@@ -915,7 +915,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfGamma)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayGamma_params params =
     {
@@ -928,7 +928,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayWidthInMeters_params params =
     {
@@ -941,7 +941,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayWidthInMeters_params params =
     {
@@ -954,7 +954,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayTextureBounds_params params =
     {
@@ -967,7 +967,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayTextureBounds_params params =
     {
@@ -980,7 +980,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayTransformType_params params =
     {
@@ -993,7 +993,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayTransformAbsolute_params params =
     {
@@ -1007,7 +1007,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayTransformAbsolute_params params =
     {
@@ -1021,7 +1021,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -1035,7 +1035,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -1049,7 +1049,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_ShowOverlay_params params =
     {
@@ -1061,7 +1061,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_HideOverlay_params params =
     {
@@ -1073,7 +1073,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_002_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_002_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_IsOverlayVisible_params params =
     {
@@ -1085,7 +1085,7 @@ bool __thiscall winIVROverlay_IVROverlay_002_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_002_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pEvent)
+bool __thiscall winIVROverlay_IVROverlay_002_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VREvent_t *pEvent)
 {
     struct cppIVROverlay_IVROverlay_002_PollNextOverlayEvent_params params =
     {
@@ -1098,7 +1098,7 @@ bool __thiscall winIVROverlay_IVROverlay_002_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayInputMethod_params params =
     {
@@ -1111,7 +1111,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayInputMethod_params params =
     {
@@ -1124,7 +1124,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_002_GetOverlayMouseScale_params params =
     {
@@ -1137,7 +1137,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayMouseScale_params params =
     {
@@ -1150,7 +1150,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_002_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_002_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_002_ComputeOverlayIntersection_params params =
     {
@@ -1164,7 +1164,7 @@ bool __thiscall winIVROverlay_IVROverlay_002_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_002_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_002_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_002_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -1177,9 +1177,9 @@ bool __thiscall winIVROverlay_IVROverlay_002_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_ClearOverlayTexture_params params =
     {
@@ -1191,7 +1191,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayRaw_params params =
     {
@@ -1207,7 +1207,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_002_SetOverlayFromFile_params params =
     {
@@ -1222,7 +1222,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_002_CreateDashboardOverlay_params params =
     {
@@ -1248,7 +1248,7 @@ bool __thiscall winIVROverlay_IVROverlay_002_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_002_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_002_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_002_IsActiveDashboardOverlay_params params =
     {
@@ -1260,7 +1260,7 @@ bool __thiscall winIVROverlay_IVROverlay_002_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_002_SetDashboardOverlaySceneProcess_params params =
     {
@@ -1273,7 +1273,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_002_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_002_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_002_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_002_GetDashboardOverlaySceneProcess_params params =
     {
@@ -1468,7 +1468,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_SetDashboardOverlayScenePro
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_GetDashboardOverlaySceneProcess, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_ShowDashboard, 8)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_FindOverlay_params params =
     {
@@ -1481,7 +1481,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_CreateOverlay_params params =
     {
@@ -1495,7 +1495,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_DestroyOverlay_params params =
     {
@@ -1507,7 +1507,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_SetHighQualityOverlay_params params =
     {
@@ -1519,7 +1519,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_003_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_003_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_003_GetHighQualityOverlay_params params =
     {
@@ -1530,7 +1530,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_003_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayKey_params params =
     {
@@ -1545,7 +1545,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayName_params params =
     {
@@ -1560,7 +1560,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayImageData_params params =
     {
@@ -1588,7 +1588,7 @@ const char * __thiscall winIVROverlay_IVROverlay_003_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayFlag_params params =
     {
@@ -1602,7 +1602,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayFlag_params params =
     {
@@ -1616,7 +1616,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayColor_params params =
     {
@@ -1631,7 +1631,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayColor_params params =
     {
@@ -1646,7 +1646,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayAlpha_params params =
     {
@@ -1659,7 +1659,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayAlpha_params params =
     {
@@ -1672,7 +1672,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fGamma)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayGamma_params params =
     {
@@ -1685,7 +1685,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfGamma)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayGamma_params params =
     {
@@ -1698,7 +1698,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayWidthInMeters_params params =
     {
@@ -1711,7 +1711,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayWidthInMeters_params params =
     {
@@ -1724,7 +1724,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayTextureBounds_params params =
     {
@@ -1737,7 +1737,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayTextureBounds_params params =
     {
@@ -1750,7 +1750,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayTransformType_params params =
     {
@@ -1763,7 +1763,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayTransformAbsolute_params params =
     {
@@ -1777,7 +1777,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayTransformAbsolute_params params =
     {
@@ -1791,7 +1791,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -1805,7 +1805,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -1819,7 +1819,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_ShowOverlay_params params =
     {
@@ -1831,7 +1831,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_HideOverlay_params params =
     {
@@ -1843,7 +1843,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_003_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_003_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_IsOverlayVisible_params params =
     {
@@ -1855,7 +1855,7 @@ bool __thiscall winIVROverlay_IVROverlay_003_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_003_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pEvent)
+bool __thiscall winIVROverlay_IVROverlay_003_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VREvent_t *pEvent)
 {
     struct cppIVROverlay_IVROverlay_003_PollNextOverlayEvent_params params =
     {
@@ -1868,7 +1868,7 @@ bool __thiscall winIVROverlay_IVROverlay_003_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayInputMethod_params params =
     {
@@ -1881,7 +1881,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayInputMethod_params params =
     {
@@ -1894,7 +1894,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_003_GetOverlayMouseScale_params params =
     {
@@ -1907,7 +1907,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayMouseScale_params params =
     {
@@ -1920,7 +1920,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_003_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_003_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_003_ComputeOverlayIntersection_params params =
     {
@@ -1934,7 +1934,7 @@ bool __thiscall winIVROverlay_IVROverlay_003_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_003_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_003_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_003_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -1947,9 +1947,9 @@ bool __thiscall winIVROverlay_IVROverlay_003_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_ClearOverlayTexture_params params =
     {
@@ -1961,7 +1961,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayRaw_params params =
     {
@@ -1977,7 +1977,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_003_SetOverlayFromFile_params params =
     {
@@ -1992,7 +1992,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_003_CreateDashboardOverlay_params params =
     {
@@ -2018,7 +2018,7 @@ bool __thiscall winIVROverlay_IVROverlay_003_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_003_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_003_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_003_IsActiveDashboardOverlay_params params =
     {
@@ -2030,7 +2030,7 @@ bool __thiscall winIVROverlay_IVROverlay_003_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_003_SetDashboardOverlaySceneProcess_params params =
     {
@@ -2043,7 +2043,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_003_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_003_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_003_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_003_GetDashboardOverlaySceneProcess_params params =
     {
@@ -2259,7 +2259,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_SetDashboardOverlayScenePro
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_GetDashboardOverlaySceneProcess, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_ShowDashboard, 8)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_FindOverlay_params params =
     {
@@ -2272,7 +2272,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_CreateOverlay_params params =
     {
@@ -2286,7 +2286,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_DestroyOverlay_params params =
     {
@@ -2298,7 +2298,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_SetHighQualityOverlay_params params =
     {
@@ -2310,7 +2310,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_004_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_004_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_004_GetHighQualityOverlay_params params =
     {
@@ -2321,7 +2321,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_004_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayKey_params params =
     {
@@ -2336,7 +2336,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayName_params params =
     {
@@ -2351,7 +2351,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayImageData_params params =
     {
@@ -2379,7 +2379,7 @@ const char * __thiscall winIVROverlay_IVROverlay_004_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayFlag_params params =
     {
@@ -2393,7 +2393,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayFlag_params params =
     {
@@ -2407,7 +2407,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayColor_params params =
     {
@@ -2422,7 +2422,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayColor_params params =
     {
@@ -2437,7 +2437,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayAlpha_params params =
     {
@@ -2450,7 +2450,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayAlpha_params params =
     {
@@ -2463,7 +2463,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fGamma)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayGamma_params params =
     {
@@ -2476,7 +2476,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfGamma)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayGamma_params params =
     {
@@ -2489,7 +2489,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayWidthInMeters_params params =
     {
@@ -2502,7 +2502,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayWidthInMeters_params params =
     {
@@ -2515,7 +2515,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -2529,7 +2529,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -2543,7 +2543,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayTextureBounds_params params =
     {
@@ -2556,7 +2556,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayTextureBounds_params params =
     {
@@ -2569,7 +2569,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayTransformType_params params =
     {
@@ -2582,7 +2582,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayTransformAbsolute_params params =
     {
@@ -2596,7 +2596,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayTransformAbsolute_params params =
     {
@@ -2610,7 +2610,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -2624,7 +2624,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -2638,7 +2638,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_ShowOverlay_params params =
     {
@@ -2650,7 +2650,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_HideOverlay_params params =
     {
@@ -2662,7 +2662,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_004_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_004_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_IsOverlayVisible_params params =
     {
@@ -2674,7 +2674,7 @@ bool __thiscall winIVROverlay_IVROverlay_004_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_004_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pEvent)
+bool __thiscall winIVROverlay_IVROverlay_004_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VREvent_t *pEvent)
 {
     struct cppIVROverlay_IVROverlay_004_PollNextOverlayEvent_params params =
     {
@@ -2687,7 +2687,7 @@ bool __thiscall winIVROverlay_IVROverlay_004_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayInputMethod_params params =
     {
@@ -2700,7 +2700,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayInputMethod_params params =
     {
@@ -2713,7 +2713,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_004_GetOverlayMouseScale_params params =
     {
@@ -2726,7 +2726,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayMouseScale_params params =
     {
@@ -2739,7 +2739,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_004_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_004_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_004_ComputeOverlayIntersection_params params =
     {
@@ -2753,7 +2753,7 @@ bool __thiscall winIVROverlay_IVROverlay_004_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_004_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_004_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_004_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -2766,9 +2766,9 @@ bool __thiscall winIVROverlay_IVROverlay_004_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_ClearOverlayTexture_params params =
     {
@@ -2780,7 +2780,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayRaw_params params =
     {
@@ -2796,7 +2796,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_004_SetOverlayFromFile_params params =
     {
@@ -2811,7 +2811,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_004_CreateDashboardOverlay_params params =
     {
@@ -2837,7 +2837,7 @@ bool __thiscall winIVROverlay_IVROverlay_004_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_004_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_004_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_004_IsActiveDashboardOverlay_params params =
     {
@@ -2849,7 +2849,7 @@ bool __thiscall winIVROverlay_IVROverlay_004_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_004_SetDashboardOverlaySceneProcess_params params =
     {
@@ -2862,7 +2862,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_004_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_004_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_004_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_004_GetDashboardOverlaySceneProcess_params params =
     {
@@ -3086,7 +3086,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_ShowKeyboard, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_GetKeyboardText, 12)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_HideKeyboard, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_FindOverlay_params params =
     {
@@ -3099,7 +3099,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_CreateOverlay_params params =
     {
@@ -3113,7 +3113,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_DestroyOverlay_params params =
     {
@@ -3125,7 +3125,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_SetHighQualityOverlay_params params =
     {
@@ -3137,7 +3137,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_005_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_005_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_005_GetHighQualityOverlay_params params =
     {
@@ -3148,7 +3148,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_005_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayKey_params params =
     {
@@ -3163,7 +3163,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayName_params params =
     {
@@ -3178,7 +3178,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayImageData_params params =
     {
@@ -3206,7 +3206,7 @@ const char * __thiscall winIVROverlay_IVROverlay_005_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayFlag_params params =
     {
@@ -3220,7 +3220,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayFlag_params params =
     {
@@ -3234,7 +3234,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayColor_params params =
     {
@@ -3249,7 +3249,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayColor_params params =
     {
@@ -3264,7 +3264,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayAlpha_params params =
     {
@@ -3277,7 +3277,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayAlpha_params params =
     {
@@ -3290,7 +3290,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fGamma)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayGamma_params params =
     {
@@ -3303,7 +3303,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayGamma(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfGamma)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayGamma(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfGamma)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayGamma_params params =
     {
@@ -3316,7 +3316,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayGamma(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayWidthInMeters_params params =
     {
@@ -3329,7 +3329,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayWidthInMeters_params params =
     {
@@ -3342,7 +3342,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -3356,7 +3356,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -3370,7 +3370,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayTextureBounds_params params =
     {
@@ -3383,7 +3383,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayTextureBounds_params params =
     {
@@ -3396,7 +3396,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayTransformType_params params =
     {
@@ -3409,7 +3409,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayTransformAbsolute_params params =
     {
@@ -3423,7 +3423,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayTransformAbsolute_params params =
     {
@@ -3437,7 +3437,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -3451,7 +3451,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -3465,7 +3465,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_ShowOverlay_params params =
     {
@@ -3477,7 +3477,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_HideOverlay_params params =
     {
@@ -3489,7 +3489,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_005_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_005_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_IsOverlayVisible_params params =
     {
@@ -3501,7 +3501,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_005_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pEvent)
+bool __thiscall winIVROverlay_IVROverlay_005_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VREvent_t *pEvent)
 {
     struct cppIVROverlay_IVROverlay_005_PollNextOverlayEvent_params params =
     {
@@ -3514,7 +3514,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayInputMethod_params params =
     {
@@ -3527,7 +3527,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayInputMethod_params params =
     {
@@ -3540,7 +3540,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_005_GetOverlayMouseScale_params params =
     {
@@ -3553,7 +3553,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayMouseScale_params params =
     {
@@ -3566,7 +3566,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_005_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_005_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_005_ComputeOverlayIntersection_params params =
     {
@@ -3580,7 +3580,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_005_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_005_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_005_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -3593,7 +3593,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_005_IsFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_005_IsFocusOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_IsFocusOverlay_params params =
     {
@@ -3605,9 +3605,9 @@ bool __thiscall winIVROverlay_IVROverlay_005_IsFocusOverlay(struct w_steam_iface
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureType, void *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_ClearOverlayTexture_params params =
     {
@@ -3619,7 +3619,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayRaw_params params =
     {
@@ -3635,7 +3635,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_005_SetOverlayFromFile_params params =
     {
@@ -3650,7 +3650,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_005_CreateDashboardOverlay_params params =
     {
@@ -3676,7 +3676,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_005_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_005_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_005_IsActiveDashboardOverlay_params params =
     {
@@ -3688,7 +3688,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_005_SetDashboardOverlaySceneProcess_params params =
     {
@@ -3701,7 +3701,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_005_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_005_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_005_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_005_GetDashboardOverlaySceneProcess_params params =
     {
@@ -3978,7 +3978,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_ShowKeyboardForOverlay, 44)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_GetKeyboardText, 12)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_HideKeyboard, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_FindOverlay_params params =
     {
@@ -3991,7 +3991,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_CreateOverlay_params params =
     {
@@ -4005,7 +4005,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_DestroyOverlay_params params =
     {
@@ -4017,7 +4017,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_SetHighQualityOverlay_params params =
     {
@@ -4029,7 +4029,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_007_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_007_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_007_GetHighQualityOverlay_params params =
     {
@@ -4040,7 +4040,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_007_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayKey_params params =
     {
@@ -4055,7 +4055,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayName_params params =
     {
@@ -4070,7 +4070,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayImageData_params params =
     {
@@ -4098,7 +4098,7 @@ const char * __thiscall winIVROverlay_IVROverlay_007_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayFlag_params params =
     {
@@ -4112,7 +4112,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayFlag_params params =
     {
@@ -4126,7 +4126,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayColor_params params =
     {
@@ -4141,7 +4141,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayColor_params params =
     {
@@ -4156,7 +4156,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayAlpha_params params =
     {
@@ -4169,7 +4169,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayAlpha_params params =
     {
@@ -4182,7 +4182,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayWidthInMeters_params params =
     {
@@ -4195,7 +4195,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayWidthInMeters_params params =
     {
@@ -4208,7 +4208,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -4222,7 +4222,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -4236,7 +4236,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayTextureColorSpace_params params =
     {
@@ -4249,7 +4249,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayTextureColorSpace_params params =
     {
@@ -4262,7 +4262,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayTextureBounds_params params =
     {
@@ -4275,7 +4275,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayTextureBounds_params params =
     {
@@ -4288,7 +4288,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayTransformType_params params =
     {
@@ -4301,7 +4301,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayTransformAbsolute_params params =
     {
@@ -4315,7 +4315,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayTransformAbsolute_params params =
     {
@@ -4329,7 +4329,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -4343,7 +4343,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -4357,7 +4357,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_ShowOverlay_params params =
     {
@@ -4369,7 +4369,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_HideOverlay_params params =
     {
@@ -4381,7 +4381,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_007_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_007_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_IsOverlayVisible_params params =
     {
@@ -4393,7 +4393,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_007_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pEvent)
+bool __thiscall winIVROverlay_IVROverlay_007_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VREvent_t *pEvent)
 {
     struct cppIVROverlay_IVROverlay_007_PollNextOverlayEvent_params params =
     {
@@ -4406,7 +4406,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayInputMethod_params params =
     {
@@ -4419,7 +4419,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayInputMethod_params params =
     {
@@ -4432,7 +4432,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_007_GetOverlayMouseScale_params params =
     {
@@ -4445,7 +4445,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayMouseScale_params params =
     {
@@ -4458,7 +4458,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_007_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_007_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_007_ComputeOverlayIntersection_params params =
     {
@@ -4472,7 +4472,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_007_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_007_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_007_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -4485,7 +4485,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_007_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_007_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_IsHoverTargetOverlay_params params =
     {
@@ -4497,7 +4497,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_007_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_007_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_007_GetGamepadFocusOverlay_params params =
     {
@@ -4508,7 +4508,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_007_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_007_SetGamepadFocusOverlay_params params =
     {
@@ -4520,7 +4520,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayNeighbor_params params =
     {
@@ -4534,7 +4534,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_007_MoveGamepadFocusToNeighbor_params params =
     {
@@ -4547,9 +4547,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_ClearOverlayTexture_params params =
     {
@@ -4561,7 +4561,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayRaw_params params =
     {
@@ -4577,7 +4577,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_007_SetOverlayFromFile_params params =
     {
@@ -4592,7 +4592,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_007_CreateDashboardOverlay_params params =
     {
@@ -4618,7 +4618,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_007_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_007_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_007_IsActiveDashboardOverlay_params params =
     {
@@ -4630,7 +4630,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_007_SetDashboardOverlaySceneProcess_params params =
     {
@@ -4643,7 +4643,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_007_GetDashboardOverlaySceneProcess_params params =
     {
@@ -4685,7 +4685,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_007_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_007_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_007_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_007_ShowKeyboardForOverlay_params params =
     {
@@ -4953,7 +4953,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_HideKeyboard, 4)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_SetKeyboardTransformAbsolute, 12)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_SetKeyboardPositionForOverlay, 28)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_FindOverlay_params params =
     {
@@ -4966,7 +4966,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_CreateOverlay_params params =
     {
@@ -4980,7 +4980,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_DestroyOverlay_params params =
     {
@@ -4992,7 +4992,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_SetHighQualityOverlay_params params =
     {
@@ -5004,7 +5004,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_008_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_008_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_008_GetHighQualityOverlay_params params =
     {
@@ -5015,7 +5015,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_008_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayKey_params params =
     {
@@ -5030,7 +5030,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayName_params params =
     {
@@ -5045,7 +5045,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayImageData_params params =
     {
@@ -5073,7 +5073,7 @@ const char * __thiscall winIVROverlay_IVROverlay_008_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayFlag_params params =
     {
@@ -5087,7 +5087,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayFlag_params params =
     {
@@ -5101,7 +5101,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayColor_params params =
     {
@@ -5116,7 +5116,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayColor_params params =
     {
@@ -5131,7 +5131,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayAlpha_params params =
     {
@@ -5144,7 +5144,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayAlpha_params params =
     {
@@ -5157,7 +5157,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayWidthInMeters_params params =
     {
@@ -5170,7 +5170,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayWidthInMeters_params params =
     {
@@ -5183,7 +5183,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -5197,7 +5197,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -5211,7 +5211,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayTextureColorSpace_params params =
     {
@@ -5224,7 +5224,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayTextureColorSpace_params params =
     {
@@ -5237,7 +5237,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayTextureBounds_params params =
     {
@@ -5250,7 +5250,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayTextureBounds_params params =
     {
@@ -5263,7 +5263,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayTransformType_params params =
     {
@@ -5276,7 +5276,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayTransformAbsolute_params params =
     {
@@ -5290,7 +5290,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayTransformAbsolute_params params =
     {
@@ -5304,7 +5304,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -5318,7 +5318,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -5332,7 +5332,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_ShowOverlay_params params =
     {
@@ -5344,7 +5344,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_HideOverlay_params params =
     {
@@ -5356,7 +5356,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_008_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_008_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_IsOverlayVisible_params params =
     {
@@ -5368,7 +5368,7 @@ bool __thiscall winIVROverlay_IVROverlay_008_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_008_GetTransformForOverlayCoordinates_params params =
     {
@@ -5383,7 +5383,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_008_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t *pEvent)
+bool __thiscall winIVROverlay_IVROverlay_008_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VREvent_t *pEvent)
 {
     struct cppIVROverlay_IVROverlay_008_PollNextOverlayEvent_params params =
     {
@@ -5396,7 +5396,7 @@ bool __thiscall winIVROverlay_IVROverlay_008_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayInputMethod_params params =
     {
@@ -5409,7 +5409,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayInputMethod_params params =
     {
@@ -5422,7 +5422,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_008_GetOverlayMouseScale_params params =
     {
@@ -5435,7 +5435,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayMouseScale_params params =
     {
@@ -5448,7 +5448,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_008_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_008_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_008_ComputeOverlayIntersection_params params =
     {
@@ -5462,7 +5462,7 @@ bool __thiscall winIVROverlay_IVROverlay_008_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_008_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_008_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_008_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -5475,7 +5475,7 @@ bool __thiscall winIVROverlay_IVROverlay_008_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_008_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_008_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_IsHoverTargetOverlay_params params =
     {
@@ -5487,7 +5487,7 @@ bool __thiscall winIVROverlay_IVROverlay_008_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_008_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_008_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_008_GetGamepadFocusOverlay_params params =
     {
@@ -5498,7 +5498,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_008_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_008_SetGamepadFocusOverlay_params params =
     {
@@ -5510,7 +5510,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayNeighbor_params params =
     {
@@ -5524,7 +5524,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_008_MoveGamepadFocusToNeighbor_params params =
     {
@@ -5537,9 +5537,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_ClearOverlayTexture_params params =
     {
@@ -5551,7 +5551,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayRaw_params params =
     {
@@ -5567,7 +5567,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_008_SetOverlayFromFile_params params =
     {
@@ -5582,7 +5582,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_008_CreateDashboardOverlay_params params =
     {
@@ -5608,7 +5608,7 @@ bool __thiscall winIVROverlay_IVROverlay_008_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_008_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_008_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_008_IsActiveDashboardOverlay_params params =
     {
@@ -5620,7 +5620,7 @@ bool __thiscall winIVROverlay_IVROverlay_008_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_008_SetDashboardOverlaySceneProcess_params params =
     {
@@ -5633,7 +5633,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_008_GetDashboardOverlaySceneProcess_params params =
     {
@@ -5675,7 +5675,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_008_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_008_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_008_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_008_ShowKeyboardForOverlay_params params =
     {
@@ -5729,7 +5729,7 @@ void __thiscall winIVROverlay_IVROverlay_008_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_008_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_008_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_008_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_008_SetKeyboardPositionForOverlay_params params =
     {
@@ -5976,7 +5976,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_010_HideKeyboard, 4)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_010_SetKeyboardTransformAbsolute, 12)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_010_SetKeyboardPositionForOverlay, 28)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_FindOverlay_params params =
     {
@@ -5989,7 +5989,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_CreateOverlay_params params =
     {
@@ -6003,7 +6003,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_DestroyOverlay_params params =
     {
@@ -6015,7 +6015,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_SetHighQualityOverlay_params params =
     {
@@ -6027,7 +6027,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_010_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_010_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_010_GetHighQualityOverlay_params params =
     {
@@ -6038,7 +6038,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_010_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayKey_params params =
     {
@@ -6053,7 +6053,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayName_params params =
     {
@@ -6068,7 +6068,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayImageData_params params =
     {
@@ -6096,7 +6096,7 @@ const char * __thiscall winIVROverlay_IVROverlay_010_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayFlag_params params =
     {
@@ -6110,7 +6110,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayFlag_params params =
     {
@@ -6124,7 +6124,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayColor_params params =
     {
@@ -6139,7 +6139,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayColor_params params =
     {
@@ -6154,7 +6154,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayAlpha_params params =
     {
@@ -6167,7 +6167,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayAlpha_params params =
     {
@@ -6180,7 +6180,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayWidthInMeters_params params =
     {
@@ -6193,7 +6193,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayWidthInMeters_params params =
     {
@@ -6206,7 +6206,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -6220,7 +6220,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -6234,7 +6234,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayTextureColorSpace_params params =
     {
@@ -6247,7 +6247,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayTextureColorSpace_params params =
     {
@@ -6260,7 +6260,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayTextureBounds_params params =
     {
@@ -6273,7 +6273,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayTextureBounds_params params =
     {
@@ -6286,7 +6286,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayTransformType_params params =
     {
@@ -6299,7 +6299,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayTransformAbsolute_params params =
     {
@@ -6313,7 +6313,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayTransformAbsolute_params params =
     {
@@ -6327,7 +6327,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -6341,7 +6341,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -6355,7 +6355,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -6369,7 +6369,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -6384,7 +6384,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_ShowOverlay_params params =
     {
@@ -6396,7 +6396,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_HideOverlay_params params =
     {
@@ -6408,7 +6408,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_010_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_010_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_IsOverlayVisible_params params =
     {
@@ -6420,7 +6420,7 @@ bool __thiscall winIVROverlay_IVROverlay_010_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_010_GetTransformForOverlayCoordinates_params params =
     {
@@ -6435,7 +6435,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_010_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_0918 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_010_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_0918 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_010_PollNextOverlayEvent_params params =
     {
@@ -6449,7 +6449,7 @@ bool __thiscall winIVROverlay_IVROverlay_010_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayInputMethod_params params =
     {
@@ -6462,7 +6462,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayInputMethod_params params =
     {
@@ -6475,7 +6475,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_010_GetOverlayMouseScale_params params =
     {
@@ -6488,7 +6488,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayMouseScale_params params =
     {
@@ -6501,7 +6501,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_010_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_010_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_010_ComputeOverlayIntersection_params params =
     {
@@ -6515,7 +6515,7 @@ bool __thiscall winIVROverlay_IVROverlay_010_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_010_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_010_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_010_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -6528,7 +6528,7 @@ bool __thiscall winIVROverlay_IVROverlay_010_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_010_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_010_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_IsHoverTargetOverlay_params params =
     {
@@ -6540,7 +6540,7 @@ bool __thiscall winIVROverlay_IVROverlay_010_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_010_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_010_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_010_GetGamepadFocusOverlay_params params =
     {
@@ -6551,7 +6551,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_010_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_010_SetGamepadFocusOverlay_params params =
     {
@@ -6563,7 +6563,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayNeighbor_params params =
     {
@@ -6577,7 +6577,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_010_MoveGamepadFocusToNeighbor_params params =
     {
@@ -6590,9 +6590,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_ClearOverlayTexture_params params =
     {
@@ -6604,7 +6604,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayRaw_params params =
     {
@@ -6620,7 +6620,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_010_SetOverlayFromFile_params params =
     {
@@ -6635,7 +6635,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_010_CreateDashboardOverlay_params params =
     {
@@ -6661,7 +6661,7 @@ bool __thiscall winIVROverlay_IVROverlay_010_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_010_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_010_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_010_IsActiveDashboardOverlay_params params =
     {
@@ -6673,7 +6673,7 @@ bool __thiscall winIVROverlay_IVROverlay_010_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_010_SetDashboardOverlaySceneProcess_params params =
     {
@@ -6686,7 +6686,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_010_GetDashboardOverlaySceneProcess_params params =
     {
@@ -6710,7 +6710,7 @@ void __thiscall winIVROverlay_IVROverlay_010_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_010_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_010_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_010_GetPrimaryDashboardDevice_params params =
     {
@@ -6739,7 +6739,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_010_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_010_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_010_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_010_ShowKeyboardForOverlay_params params =
     {
@@ -6793,7 +6793,7 @@ void __thiscall winIVROverlay_IVROverlay_010_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_010_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_010_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_010_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_010_SetKeyboardPositionForOverlay_params params =
     {
@@ -7050,7 +7050,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_011_HideKeyboard, 4)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_011_SetKeyboardTransformAbsolute, 12)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_011_SetKeyboardPositionForOverlay, 28)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_FindOverlay_params params =
     {
@@ -7063,7 +7063,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_CreateOverlay_params params =
     {
@@ -7077,7 +7077,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_DestroyOverlay_params params =
     {
@@ -7089,7 +7089,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_SetHighQualityOverlay_params params =
     {
@@ -7101,7 +7101,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_011_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_011_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_011_GetHighQualityOverlay_params params =
     {
@@ -7112,7 +7112,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_011_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayKey_params params =
     {
@@ -7127,7 +7127,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayName_params params =
     {
@@ -7142,7 +7142,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayImageData_params params =
     {
@@ -7170,7 +7170,7 @@ const char * __thiscall winIVROverlay_IVROverlay_011_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayRenderingPid_params params =
     {
@@ -7183,7 +7183,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayRenderingPid_params params =
     {
@@ -7195,7 +7195,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayFlag_params params =
     {
@@ -7209,7 +7209,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayFlag_params params =
     {
@@ -7223,7 +7223,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayColor_params params =
     {
@@ -7238,7 +7238,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayColor_params params =
     {
@@ -7253,7 +7253,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayAlpha_params params =
     {
@@ -7266,7 +7266,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayAlpha_params params =
     {
@@ -7279,7 +7279,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayWidthInMeters_params params =
     {
@@ -7292,7 +7292,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayWidthInMeters_params params =
     {
@@ -7305,7 +7305,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -7319,7 +7319,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -7333,7 +7333,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayTextureColorSpace_params params =
     {
@@ -7346,7 +7346,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayTextureColorSpace_params params =
     {
@@ -7359,7 +7359,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayTextureBounds_params params =
     {
@@ -7372,7 +7372,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayTextureBounds_params params =
     {
@@ -7385,7 +7385,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayTransformType_params params =
     {
@@ -7398,7 +7398,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayTransformAbsolute_params params =
     {
@@ -7412,7 +7412,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayTransformAbsolute_params params =
     {
@@ -7426,7 +7426,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -7440,7 +7440,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -7454,7 +7454,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -7468,7 +7468,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -7483,7 +7483,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_ShowOverlay_params params =
     {
@@ -7495,7 +7495,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_HideOverlay_params params =
     {
@@ -7507,7 +7507,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_011_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_011_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_IsOverlayVisible_params params =
     {
@@ -7519,7 +7519,7 @@ bool __thiscall winIVROverlay_IVROverlay_011_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_011_GetTransformForOverlayCoordinates_params params =
     {
@@ -7534,7 +7534,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_011_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_0920 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_011_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_0920 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_011_PollNextOverlayEvent_params params =
     {
@@ -7548,7 +7548,7 @@ bool __thiscall winIVROverlay_IVROverlay_011_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayInputMethod_params params =
     {
@@ -7561,7 +7561,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayInputMethod_params params =
     {
@@ -7574,7 +7574,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayMouseScale_params params =
     {
@@ -7587,7 +7587,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayMouseScale_params params =
     {
@@ -7600,7 +7600,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_011_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_011_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_011_ComputeOverlayIntersection_params params =
     {
@@ -7614,7 +7614,7 @@ bool __thiscall winIVROverlay_IVROverlay_011_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_011_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_011_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_011_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -7627,7 +7627,7 @@ bool __thiscall winIVROverlay_IVROverlay_011_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_011_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_011_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_IsHoverTargetOverlay_params params =
     {
@@ -7639,7 +7639,7 @@ bool __thiscall winIVROverlay_IVROverlay_011_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_011_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_011_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_011_GetGamepadFocusOverlay_params params =
     {
@@ -7650,7 +7650,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_011_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_011_SetGamepadFocusOverlay_params params =
     {
@@ -7662,7 +7662,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayNeighbor_params params =
     {
@@ -7676,7 +7676,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_011_MoveGamepadFocusToNeighbor_params params =
     {
@@ -7689,9 +7689,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_ClearOverlayTexture_params params =
     {
@@ -7703,7 +7703,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayRaw_params params =
     {
@@ -7719,7 +7719,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_011_SetOverlayFromFile_params params =
     {
@@ -7734,7 +7734,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPI, uint32_t *pColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPI, uint32_t *pColorSpace)
 {
     struct cppIVROverlay_IVROverlay_011_GetOverlayTexture_params params =
     {
@@ -7753,7 +7753,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_011_ReleaseNativeOverlayHandle_params params =
     {
@@ -7766,7 +7766,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_011_CreateDashboardOverlay_params params =
     {
@@ -7792,7 +7792,7 @@ bool __thiscall winIVROverlay_IVROverlay_011_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_011_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_011_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_011_IsActiveDashboardOverlay_params params =
     {
@@ -7804,7 +7804,7 @@ bool __thiscall winIVROverlay_IVROverlay_011_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_011_SetDashboardOverlaySceneProcess_params params =
     {
@@ -7817,7 +7817,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_011_GetDashboardOverlaySceneProcess_params params =
     {
@@ -7841,7 +7841,7 @@ void __thiscall winIVROverlay_IVROverlay_011_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_011_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_011_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_011_GetPrimaryDashboardDevice_params params =
     {
@@ -7870,7 +7870,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_011_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_011_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_011_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_011_ShowKeyboardForOverlay_params params =
     {
@@ -7924,7 +7924,7 @@ void __thiscall winIVROverlay_IVROverlay_011_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_011_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_011_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_011_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_011_SetKeyboardPositionForOverlay_params params =
     {
@@ -8190,7 +8190,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_012_HideKeyboard, 4)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_012_SetKeyboardTransformAbsolute, 12)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_012_SetKeyboardPositionForOverlay, 28)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_FindOverlay_params params =
     {
@@ -8203,7 +8203,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_CreateOverlay_params params =
     {
@@ -8217,7 +8217,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_DestroyOverlay_params params =
     {
@@ -8229,7 +8229,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_SetHighQualityOverlay_params params =
     {
@@ -8241,7 +8241,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_012_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_012_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_012_GetHighQualityOverlay_params params =
     {
@@ -8252,7 +8252,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_012_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayKey_params params =
     {
@@ -8267,7 +8267,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayName_params params =
     {
@@ -8282,7 +8282,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayImageData_params params =
     {
@@ -8310,7 +8310,7 @@ const char * __thiscall winIVROverlay_IVROverlay_012_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayRenderingPid_params params =
     {
@@ -8323,7 +8323,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayRenderingPid_params params =
     {
@@ -8335,7 +8335,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayFlag_params params =
     {
@@ -8349,7 +8349,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayFlag_params params =
     {
@@ -8363,7 +8363,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayColor_params params =
     {
@@ -8378,7 +8378,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayColor_params params =
     {
@@ -8393,7 +8393,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayAlpha_params params =
     {
@@ -8406,7 +8406,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayAlpha_params params =
     {
@@ -8419,7 +8419,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayWidthInMeters_params params =
     {
@@ -8432,7 +8432,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayWidthInMeters_params params =
     {
@@ -8445,7 +8445,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -8459,7 +8459,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -8473,7 +8473,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayTextureColorSpace_params params =
     {
@@ -8486,7 +8486,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTextureColorSpace_params params =
     {
@@ -8499,7 +8499,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayTextureBounds_params params =
     {
@@ -8512,7 +8512,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTextureBounds_params params =
     {
@@ -8525,7 +8525,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTransformType_params params =
     {
@@ -8538,7 +8538,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayTransformAbsolute_params params =
     {
@@ -8552,7 +8552,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTransformAbsolute_params params =
     {
@@ -8566,7 +8566,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -8580,7 +8580,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -8594,7 +8594,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -8608,7 +8608,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -8623,7 +8623,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_ShowOverlay_params params =
     {
@@ -8635,7 +8635,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_HideOverlay_params params =
     {
@@ -8647,7 +8647,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_012_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_012_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_IsOverlayVisible_params params =
     {
@@ -8659,7 +8659,7 @@ bool __thiscall winIVROverlay_IVROverlay_012_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_012_GetTransformForOverlayCoordinates_params params =
     {
@@ -8674,7 +8674,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_012_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_101 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_012_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_101 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_012_PollNextOverlayEvent_params params =
     {
@@ -8688,7 +8688,7 @@ bool __thiscall winIVROverlay_IVROverlay_012_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayInputMethod_params params =
     {
@@ -8701,7 +8701,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayInputMethod_params params =
     {
@@ -8714,7 +8714,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayMouseScale_params params =
     {
@@ -8727,7 +8727,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayMouseScale_params params =
     {
@@ -8740,7 +8740,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_012_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_012_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_012_ComputeOverlayIntersection_params params =
     {
@@ -8754,7 +8754,7 @@ bool __thiscall winIVROverlay_IVROverlay_012_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_012_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_012_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_012_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -8767,7 +8767,7 @@ bool __thiscall winIVROverlay_IVROverlay_012_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_012_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_012_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_IsHoverTargetOverlay_params params =
     {
@@ -8779,7 +8779,7 @@ bool __thiscall winIVROverlay_IVROverlay_012_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_012_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_012_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_012_GetGamepadFocusOverlay_params params =
     {
@@ -8790,7 +8790,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_012_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_012_SetGamepadFocusOverlay_params params =
     {
@@ -8802,7 +8802,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayNeighbor_params params =
     {
@@ -8816,7 +8816,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_012_MoveGamepadFocusToNeighbor_params params =
     {
@@ -8829,9 +8829,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_ClearOverlayTexture_params params =
     {
@@ -8843,7 +8843,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayRaw_params params =
     {
@@ -8859,7 +8859,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_012_SetOverlayFromFile_params params =
     {
@@ -8874,7 +8874,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPI, uint32_t *pColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPI, uint32_t *pColorSpace)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTexture_params params =
     {
@@ -8893,7 +8893,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_012_ReleaseNativeOverlayHandle_params params =
     {
@@ -8906,7 +8906,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_012_GetOverlayTextureSize_params params =
     {
@@ -8920,7 +8920,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_012_CreateDashboardOverlay_params params =
     {
@@ -8946,7 +8946,7 @@ bool __thiscall winIVROverlay_IVROverlay_012_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_012_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_012_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_012_IsActiveDashboardOverlay_params params =
     {
@@ -8958,7 +8958,7 @@ bool __thiscall winIVROverlay_IVROverlay_012_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_012_SetDashboardOverlaySceneProcess_params params =
     {
@@ -8971,7 +8971,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_012_GetDashboardOverlaySceneProcess_params params =
     {
@@ -8995,7 +8995,7 @@ void __thiscall winIVROverlay_IVROverlay_012_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_012_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_012_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_012_GetPrimaryDashboardDevice_params params =
     {
@@ -9024,7 +9024,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_012_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_012_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_012_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_012_ShowKeyboardForOverlay_params params =
     {
@@ -9078,7 +9078,7 @@ void __thiscall winIVROverlay_IVROverlay_012_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_012_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_012_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_012_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_012_SetKeyboardPositionForOverlay_params params =
     {
@@ -9351,7 +9351,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_013_SetKeyboardTransformAbsolut
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_013_SetOverlayIntersectionMask, 24)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_FindOverlay_params params =
     {
@@ -9364,7 +9364,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_CreateOverlay_params params =
     {
@@ -9378,7 +9378,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_DestroyOverlay_params params =
     {
@@ -9390,7 +9390,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_SetHighQualityOverlay_params params =
     {
@@ -9402,7 +9402,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_013_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_013_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_013_GetHighQualityOverlay_params params =
     {
@@ -9413,7 +9413,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_013_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayKey_params params =
     {
@@ -9428,7 +9428,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayName_params params =
     {
@@ -9443,7 +9443,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayImageData_params params =
     {
@@ -9471,7 +9471,7 @@ const char * __thiscall winIVROverlay_IVROverlay_013_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayRenderingPid_params params =
     {
@@ -9484,7 +9484,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayRenderingPid_params params =
     {
@@ -9496,7 +9496,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayFlag_params params =
     {
@@ -9510,7 +9510,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayFlag_params params =
     {
@@ -9524,7 +9524,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayColor_params params =
     {
@@ -9539,7 +9539,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayColor_params params =
     {
@@ -9554,7 +9554,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayAlpha_params params =
     {
@@ -9567,7 +9567,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayAlpha_params params =
     {
@@ -9580,7 +9580,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayTexelAspect_params params =
     {
@@ -9593,7 +9593,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTexelAspect_params params =
     {
@@ -9606,7 +9606,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlaySortOrder_params params =
     {
@@ -9619,7 +9619,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlaySortOrder_params params =
     {
@@ -9632,7 +9632,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayWidthInMeters_params params =
     {
@@ -9645,7 +9645,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayWidthInMeters_params params =
     {
@@ -9658,7 +9658,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -9672,7 +9672,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -9686,7 +9686,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayTextureColorSpace_params params =
     {
@@ -9699,7 +9699,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTextureColorSpace_params params =
     {
@@ -9712,7 +9712,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayTextureBounds_params params =
     {
@@ -9725,7 +9725,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTextureBounds_params params =
     {
@@ -9738,7 +9738,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTransformType_params params =
     {
@@ -9751,7 +9751,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayTransformAbsolute_params params =
     {
@@ -9765,7 +9765,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTransformAbsolute_params params =
     {
@@ -9779,7 +9779,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -9793,7 +9793,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -9807,7 +9807,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -9821,7 +9821,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -9836,7 +9836,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_ShowOverlay_params params =
     {
@@ -9848,7 +9848,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_HideOverlay_params params =
     {
@@ -9860,7 +9860,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_013_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_013_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_IsOverlayVisible_params params =
     {
@@ -9872,7 +9872,7 @@ bool __thiscall winIVROverlay_IVROverlay_013_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_013_GetTransformForOverlayCoordinates_params params =
     {
@@ -9887,7 +9887,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_013_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_104 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_013_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_104 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_013_PollNextOverlayEvent_params params =
     {
@@ -9901,7 +9901,7 @@ bool __thiscall winIVROverlay_IVROverlay_013_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayInputMethod_params params =
     {
@@ -9914,7 +9914,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayInputMethod_params params =
     {
@@ -9927,7 +9927,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayMouseScale_params params =
     {
@@ -9940,7 +9940,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayMouseScale_params params =
     {
@@ -9953,7 +9953,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_013_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_013_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_013_ComputeOverlayIntersection_params params =
     {
@@ -9967,7 +9967,7 @@ bool __thiscall winIVROverlay_IVROverlay_013_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_013_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_013_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_013_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -9980,7 +9980,7 @@ bool __thiscall winIVROverlay_IVROverlay_013_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_013_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_013_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_IsHoverTargetOverlay_params params =
     {
@@ -9992,7 +9992,7 @@ bool __thiscall winIVROverlay_IVROverlay_013_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_013_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_013_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_013_GetGamepadFocusOverlay_params params =
     {
@@ -10003,7 +10003,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_013_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_013_SetGamepadFocusOverlay_params params =
     {
@@ -10015,7 +10015,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayNeighbor_params params =
     {
@@ -10029,7 +10029,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_013_MoveGamepadFocusToNeighbor_params params =
     {
@@ -10042,9 +10042,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_ClearOverlayTexture_params params =
     {
@@ -10056,7 +10056,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayRaw_params params =
     {
@@ -10072,7 +10072,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayFromFile_params params =
     {
@@ -10087,7 +10087,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPI, uint32_t *pColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPI, uint32_t *pColorSpace)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTexture_params params =
     {
@@ -10106,7 +10106,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_013_ReleaseNativeOverlayHandle_params params =
     {
@@ -10119,7 +10119,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_013_GetOverlayTextureSize_params params =
     {
@@ -10133,7 +10133,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_013_CreateDashboardOverlay_params params =
     {
@@ -10159,7 +10159,7 @@ bool __thiscall winIVROverlay_IVROverlay_013_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_013_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_013_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_013_IsActiveDashboardOverlay_params params =
     {
@@ -10171,7 +10171,7 @@ bool __thiscall winIVROverlay_IVROverlay_013_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_013_SetDashboardOverlaySceneProcess_params params =
     {
@@ -10184,7 +10184,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_013_GetDashboardOverlaySceneProcess_params params =
     {
@@ -10208,7 +10208,7 @@ void __thiscall winIVROverlay_IVROverlay_013_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_013_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_013_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_013_GetPrimaryDashboardDevice_params params =
     {
@@ -10237,7 +10237,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_013_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_013_ShowKeyboardForOverlay_params params =
     {
@@ -10291,7 +10291,7 @@ void __thiscall winIVROverlay_IVROverlay_013_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_013_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay_params params =
     {
@@ -10303,7 +10303,7 @@ void __thiscall winIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_013_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_013_SetOverlayIntersectionMask_params params =
     {
@@ -10591,7 +10591,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_014_SetOverlayIntersectionMask,
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_014_GetOverlayFlags, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_014_ShowMessageOverlay, 28)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_FindOverlay_params params =
     {
@@ -10604,7 +10604,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_CreateOverlay_params params =
     {
@@ -10618,7 +10618,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_DestroyOverlay_params params =
     {
@@ -10630,7 +10630,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_SetHighQualityOverlay_params params =
     {
@@ -10642,7 +10642,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_014_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_014_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_014_GetHighQualityOverlay_params params =
     {
@@ -10653,7 +10653,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_014_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayKey_params params =
     {
@@ -10668,7 +10668,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayName_params params =
     {
@@ -10683,7 +10683,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayImageData_params params =
     {
@@ -10711,7 +10711,7 @@ const char * __thiscall winIVROverlay_IVROverlay_014_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayRenderingPid_params params =
     {
@@ -10724,7 +10724,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayRenderingPid_params params =
     {
@@ -10736,7 +10736,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayFlag_params params =
     {
@@ -10750,7 +10750,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayFlag_params params =
     {
@@ -10764,7 +10764,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayColor_params params =
     {
@@ -10779,7 +10779,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayColor_params params =
     {
@@ -10794,7 +10794,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayAlpha_params params =
     {
@@ -10807,7 +10807,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayAlpha_params params =
     {
@@ -10820,7 +10820,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayTexelAspect_params params =
     {
@@ -10833,7 +10833,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTexelAspect_params params =
     {
@@ -10846,7 +10846,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlaySortOrder_params params =
     {
@@ -10859,7 +10859,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlaySortOrder_params params =
     {
@@ -10872,7 +10872,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayWidthInMeters_params params =
     {
@@ -10885,7 +10885,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayWidthInMeters_params params =
     {
@@ -10898,7 +10898,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -10912,7 +10912,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -10926,7 +10926,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayTextureColorSpace_params params =
     {
@@ -10939,7 +10939,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTextureColorSpace_params params =
     {
@@ -10952,7 +10952,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayTextureBounds_params params =
     {
@@ -10965,7 +10965,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTextureBounds_params params =
     {
@@ -10978,7 +10978,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTransformType_params params =
     {
@@ -10991,7 +10991,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayTransformAbsolute_params params =
     {
@@ -11005,7 +11005,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTransformAbsolute_params params =
     {
@@ -11019,7 +11019,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -11033,7 +11033,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -11047,7 +11047,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -11061,7 +11061,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -11076,7 +11076,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_ShowOverlay_params params =
     {
@@ -11088,7 +11088,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_HideOverlay_params params =
     {
@@ -11100,7 +11100,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_014_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_014_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_IsOverlayVisible_params params =
     {
@@ -11112,7 +11112,7 @@ bool __thiscall winIVROverlay_IVROverlay_014_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_014_GetTransformForOverlayCoordinates_params params =
     {
@@ -11127,7 +11127,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_014_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_106 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_014_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_106 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_014_PollNextOverlayEvent_params params =
     {
@@ -11141,7 +11141,7 @@ bool __thiscall winIVROverlay_IVROverlay_014_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayInputMethod_params params =
     {
@@ -11154,7 +11154,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayInputMethod_params params =
     {
@@ -11167,7 +11167,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayMouseScale_params params =
     {
@@ -11180,7 +11180,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayMouseScale_params params =
     {
@@ -11193,7 +11193,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_014_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_014_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_014_ComputeOverlayIntersection_params params =
     {
@@ -11207,7 +11207,7 @@ bool __thiscall winIVROverlay_IVROverlay_014_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_014_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_014_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_014_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -11220,7 +11220,7 @@ bool __thiscall winIVROverlay_IVROverlay_014_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_014_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_014_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_IsHoverTargetOverlay_params params =
     {
@@ -11232,7 +11232,7 @@ bool __thiscall winIVROverlay_IVROverlay_014_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_014_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_014_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_014_GetGamepadFocusOverlay_params params =
     {
@@ -11243,7 +11243,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_014_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_014_SetGamepadFocusOverlay_params params =
     {
@@ -11255,7 +11255,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayNeighbor_params params =
     {
@@ -11269,7 +11269,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_014_MoveGamepadFocusToNeighbor_params params =
     {
@@ -11282,9 +11282,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_ClearOverlayTexture_params params =
     {
@@ -11296,7 +11296,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayRaw_params params =
     {
@@ -11312,7 +11312,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayFromFile_params params =
     {
@@ -11327,7 +11327,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTexture_params params =
     {
@@ -11347,7 +11347,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_014_ReleaseNativeOverlayHandle_params params =
     {
@@ -11360,7 +11360,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayTextureSize_params params =
     {
@@ -11374,7 +11374,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_014_CreateDashboardOverlay_params params =
     {
@@ -11400,7 +11400,7 @@ bool __thiscall winIVROverlay_IVROverlay_014_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_014_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_014_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_014_IsActiveDashboardOverlay_params params =
     {
@@ -11412,7 +11412,7 @@ bool __thiscall winIVROverlay_IVROverlay_014_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_014_SetDashboardOverlaySceneProcess_params params =
     {
@@ -11425,7 +11425,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_014_GetDashboardOverlaySceneProcess_params params =
     {
@@ -11449,7 +11449,7 @@ void __thiscall winIVROverlay_IVROverlay_014_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_014_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_014_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_014_GetPrimaryDashboardDevice_params params =
     {
@@ -11478,7 +11478,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_014_ShowKeyboardForOverlay_params params =
     {
@@ -11532,7 +11532,7 @@ void __thiscall winIVROverlay_IVROverlay_014_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_014_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_014_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_014_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_014_SetKeyboardPositionForOverlay_params params =
     {
@@ -11544,7 +11544,7 @@ void __thiscall winIVROverlay_IVROverlay_014_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_014_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_014_SetOverlayIntersectionMask_params params =
     {
@@ -11559,7 +11559,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_014_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_014_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_014_GetOverlayFlags_params params =
     {
@@ -11872,7 +11872,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_016_GetOverlayFlags, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_016_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_016_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_FindOverlay_params params =
     {
@@ -11885,7 +11885,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_CreateOverlay_params params =
     {
@@ -11899,7 +11899,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_DestroyOverlay_params params =
     {
@@ -11911,7 +11911,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_SetHighQualityOverlay_params params =
     {
@@ -11923,7 +11923,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_016_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_016_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_016_GetHighQualityOverlay_params params =
     {
@@ -11934,7 +11934,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_016_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayKey_params params =
     {
@@ -11949,7 +11949,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayName_params params =
     {
@@ -11964,7 +11964,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayName_params params =
     {
@@ -11977,7 +11977,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayImageData_params params =
     {
@@ -12005,7 +12005,7 @@ const char * __thiscall winIVROverlay_IVROverlay_016_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayRenderingPid_params params =
     {
@@ -12018,7 +12018,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayRenderingPid_params params =
     {
@@ -12030,7 +12030,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayFlag_params params =
     {
@@ -12044,7 +12044,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayFlag_params params =
     {
@@ -12058,7 +12058,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayColor_params params =
     {
@@ -12073,7 +12073,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayColor_params params =
     {
@@ -12088,7 +12088,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayAlpha_params params =
     {
@@ -12101,7 +12101,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayAlpha_params params =
     {
@@ -12114,7 +12114,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayTexelAspect_params params =
     {
@@ -12127,7 +12127,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTexelAspect_params params =
     {
@@ -12140,7 +12140,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlaySortOrder_params params =
     {
@@ -12153,7 +12153,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlaySortOrder_params params =
     {
@@ -12166,7 +12166,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayWidthInMeters_params params =
     {
@@ -12179,7 +12179,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayWidthInMeters_params params =
     {
@@ -12192,7 +12192,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -12206,7 +12206,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -12220,7 +12220,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayTextureColorSpace_params params =
     {
@@ -12233,7 +12233,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTextureColorSpace_params params =
     {
@@ -12246,7 +12246,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayTextureBounds_params params =
     {
@@ -12259,7 +12259,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTextureBounds_params params =
     {
@@ -12272,7 +12272,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, EVROverlayError *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayRenderModel_params params =
     {
@@ -12288,7 +12288,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayRenderModel(struct w_
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayRenderModel_params params =
     {
@@ -12302,7 +12302,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayRenderModel(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTransformType_params params =
     {
@@ -12315,7 +12315,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayTransformAbsolute_params params =
     {
@@ -12329,7 +12329,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTransformAbsolute_params params =
     {
@@ -12343,7 +12343,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -12357,7 +12357,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -12371,7 +12371,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -12385,7 +12385,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -12400,7 +12400,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTransformOverlayRelative_params params =
     {
@@ -12414,7 +12414,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_016_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayTransformOverlayRelative_params params =
     {
@@ -12428,7 +12428,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_ShowOverlay_params params =
     {
@@ -12440,7 +12440,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_HideOverlay_params params =
     {
@@ -12452,7 +12452,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_016_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_016_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_IsOverlayVisible_params params =
     {
@@ -12464,7 +12464,7 @@ bool __thiscall winIVROverlay_IVROverlay_016_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_016_GetTransformForOverlayCoordinates_params params =
     {
@@ -12479,7 +12479,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_016_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1010 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_016_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1010 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_016_PollNextOverlayEvent_params params =
     {
@@ -12493,7 +12493,7 @@ bool __thiscall winIVROverlay_IVROverlay_016_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayInputMethod_params params =
     {
@@ -12506,7 +12506,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayInputMethod_params params =
     {
@@ -12519,7 +12519,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayMouseScale_params params =
     {
@@ -12532,7 +12532,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayMouseScale_params params =
     {
@@ -12545,7 +12545,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_016_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_016_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_016_ComputeOverlayIntersection_params params =
     {
@@ -12559,7 +12559,7 @@ bool __thiscall winIVROverlay_IVROverlay_016_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_016_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_016_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_016_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -12572,7 +12572,7 @@ bool __thiscall winIVROverlay_IVROverlay_016_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_016_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_016_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_IsHoverTargetOverlay_params params =
     {
@@ -12584,7 +12584,7 @@ bool __thiscall winIVROverlay_IVROverlay_016_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_016_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_016_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_016_GetGamepadFocusOverlay_params params =
     {
@@ -12595,7 +12595,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_016_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_016_SetGamepadFocusOverlay_params params =
     {
@@ -12607,7 +12607,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayNeighbor_params params =
     {
@@ -12621,7 +12621,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_016_MoveGamepadFocusToNeighbor_params params =
     {
@@ -12634,9 +12634,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_ClearOverlayTexture_params params =
     {
@@ -12648,7 +12648,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayRaw_params params =
     {
@@ -12664,7 +12664,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayFromFile_params params =
     {
@@ -12679,7 +12679,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTexture_params params =
     {
@@ -12699,7 +12699,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_016_ReleaseNativeOverlayHandle_params params =
     {
@@ -12712,7 +12712,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayTextureSize_params params =
     {
@@ -12726,7 +12726,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_016_CreateDashboardOverlay_params params =
     {
@@ -12752,7 +12752,7 @@ bool __thiscall winIVROverlay_IVROverlay_016_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_016_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_016_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_016_IsActiveDashboardOverlay_params params =
     {
@@ -12764,7 +12764,7 @@ bool __thiscall winIVROverlay_IVROverlay_016_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_016_SetDashboardOverlaySceneProcess_params params =
     {
@@ -12777,7 +12777,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_016_GetDashboardOverlaySceneProcess_params params =
     {
@@ -12801,7 +12801,7 @@ void __thiscall winIVROverlay_IVROverlay_016_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_016_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_016_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_016_GetPrimaryDashboardDevice_params params =
     {
@@ -12830,7 +12830,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_016_ShowKeyboardForOverlay_params params =
     {
@@ -12884,7 +12884,7 @@ void __thiscall winIVROverlay_IVROverlay_016_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_016_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_016_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_016_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_016_SetKeyboardPositionForOverlay_params params =
     {
@@ -12896,7 +12896,7 @@ void __thiscall winIVROverlay_IVROverlay_016_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_016_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_016_SetOverlayIntersectionMask_params params =
     {
@@ -12911,7 +12911,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_016_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_016_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_016_GetOverlayFlags_params params =
     {
@@ -13248,7 +13248,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_017_GetOverlayFlags, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_017_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_017_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_FindOverlay_params params =
     {
@@ -13261,7 +13261,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_CreateOverlay_params params =
     {
@@ -13275,7 +13275,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_DestroyOverlay_params params =
     {
@@ -13287,7 +13287,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_SetHighQualityOverlay_params params =
     {
@@ -13299,7 +13299,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_017_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_017_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_017_GetHighQualityOverlay_params params =
     {
@@ -13310,7 +13310,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_017_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayKey_params params =
     {
@@ -13325,7 +13325,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayName_params params =
     {
@@ -13340,7 +13340,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayName_params params =
     {
@@ -13353,7 +13353,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayImageData_params params =
     {
@@ -13381,7 +13381,7 @@ const char * __thiscall winIVROverlay_IVROverlay_017_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayRenderingPid_params params =
     {
@@ -13394,7 +13394,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayRenderingPid_params params =
     {
@@ -13406,7 +13406,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayFlag_params params =
     {
@@ -13420,7 +13420,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayFlag_params params =
     {
@@ -13434,7 +13434,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayColor_params params =
     {
@@ -13449,7 +13449,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayColor_params params =
     {
@@ -13464,7 +13464,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayAlpha_params params =
     {
@@ -13477,7 +13477,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayAlpha_params params =
     {
@@ -13490,7 +13490,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayTexelAspect_params params =
     {
@@ -13503,7 +13503,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTexelAspect_params params =
     {
@@ -13516,7 +13516,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlaySortOrder_params params =
     {
@@ -13529,7 +13529,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlaySortOrder_params params =
     {
@@ -13542,7 +13542,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayWidthInMeters_params params =
     {
@@ -13555,7 +13555,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayWidthInMeters_params params =
     {
@@ -13568,7 +13568,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -13582,7 +13582,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -13596,7 +13596,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayTextureColorSpace_params params =
     {
@@ -13609,7 +13609,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTextureColorSpace_params params =
     {
@@ -13622,7 +13622,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayTextureBounds_params params =
     {
@@ -13635,7 +13635,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTextureBounds_params params =
     {
@@ -13648,7 +13648,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, EVROverlayError *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayRenderModel_params params =
     {
@@ -13664,7 +13664,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayRenderModel(struct w_
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayRenderModel_params params =
     {
@@ -13678,7 +13678,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayRenderModel(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTransformType_params params =
     {
@@ -13691,7 +13691,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayTransformAbsolute_params params =
     {
@@ -13705,7 +13705,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTransformAbsolute_params params =
     {
@@ -13719,7 +13719,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -13733,7 +13733,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -13747,7 +13747,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -13761,7 +13761,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -13776,7 +13776,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTransformOverlayRelative_params params =
     {
@@ -13790,7 +13790,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_017_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayTransformOverlayRelative_params params =
     {
@@ -13804,7 +13804,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_ShowOverlay_params params =
     {
@@ -13816,7 +13816,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_HideOverlay_params params =
     {
@@ -13828,7 +13828,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_017_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_017_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_IsOverlayVisible_params params =
     {
@@ -13840,7 +13840,7 @@ bool __thiscall winIVROverlay_IVROverlay_017_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_017_GetTransformForOverlayCoordinates_params params =
     {
@@ -13855,7 +13855,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_017_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1011 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_017_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1011 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_017_PollNextOverlayEvent_params params =
     {
@@ -13869,7 +13869,7 @@ bool __thiscall winIVROverlay_IVROverlay_017_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayInputMethod_params params =
     {
@@ -13882,7 +13882,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayInputMethod_params params =
     {
@@ -13895,7 +13895,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayMouseScale_params params =
     {
@@ -13908,7 +13908,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayMouseScale_params params =
     {
@@ -13921,7 +13921,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_017_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_017_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_017_ComputeOverlayIntersection_params params =
     {
@@ -13935,7 +13935,7 @@ bool __thiscall winIVROverlay_IVROverlay_017_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_017_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unControllerDeviceIndex)
+bool __thiscall winIVROverlay_IVROverlay_017_HandleControllerOverlayInteractionAsMouse(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unControllerDeviceIndex)
 {
     struct cppIVROverlay_IVROverlay_017_HandleControllerOverlayInteractionAsMouse_params params =
     {
@@ -13948,7 +13948,7 @@ bool __thiscall winIVROverlay_IVROverlay_017_HandleControllerOverlayInteractionA
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_017_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_017_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_IsHoverTargetOverlay_params params =
     {
@@ -13960,7 +13960,7 @@ bool __thiscall winIVROverlay_IVROverlay_017_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_017_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_017_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_017_GetGamepadFocusOverlay_params params =
     {
@@ -13971,7 +13971,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_017_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_017_SetGamepadFocusOverlay_params params =
     {
@@ -13983,7 +13983,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayNeighbor_params params =
     {
@@ -13997,7 +13997,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_017_MoveGamepadFocusToNeighbor_params params =
     {
@@ -14010,7 +14010,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, const HmdVector2_t *vCenter, float fRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, const HmdVector2_t *vCenter, float fRadius)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayDualAnalogTransform_params params =
     {
@@ -14025,7 +14025,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayDualAnalogTransform_params params =
     {
@@ -14040,9 +14040,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_ClearOverlayTexture_params params =
     {
@@ -14054,7 +14054,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayRaw_params params =
     {
@@ -14070,7 +14070,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayFromFile_params params =
     {
@@ -14085,7 +14085,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTexture_params params =
     {
@@ -14105,7 +14105,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_017_ReleaseNativeOverlayHandle_params params =
     {
@@ -14118,7 +14118,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayTextureSize_params params =
     {
@@ -14132,7 +14132,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_017_CreateDashboardOverlay_params params =
     {
@@ -14158,7 +14158,7 @@ bool __thiscall winIVROverlay_IVROverlay_017_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_017_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_017_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_017_IsActiveDashboardOverlay_params params =
     {
@@ -14170,7 +14170,7 @@ bool __thiscall winIVROverlay_IVROverlay_017_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_017_SetDashboardOverlaySceneProcess_params params =
     {
@@ -14183,7 +14183,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_017_GetDashboardOverlaySceneProcess_params params =
     {
@@ -14207,7 +14207,7 @@ void __thiscall winIVROverlay_IVROverlay_017_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_017_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_017_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_017_GetPrimaryDashboardDevice_params params =
     {
@@ -14236,7 +14236,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_017_ShowKeyboardForOverlay_params params =
     {
@@ -14290,7 +14290,7 @@ void __thiscall winIVROverlay_IVROverlay_017_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_017_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_017_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_017_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_017_SetKeyboardPositionForOverlay_params params =
     {
@@ -14302,7 +14302,7 @@ void __thiscall winIVROverlay_IVROverlay_017_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_017_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_017_SetOverlayIntersectionMask_params params =
     {
@@ -14317,7 +14317,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_017_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_017_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_017_GetOverlayFlags_params params =
     {
@@ -14657,7 +14657,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_GetOverlayFlags, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_FindOverlay_params params =
     {
@@ -14670,7 +14670,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_CreateOverlay_params params =
     {
@@ -14684,7 +14684,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_DestroyOverlay_params params =
     {
@@ -14696,7 +14696,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_SetHighQualityOverlay_params params =
     {
@@ -14708,7 +14708,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_018_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_018_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_018_GetHighQualityOverlay_params params =
     {
@@ -14719,7 +14719,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_018_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayKey_params params =
     {
@@ -14734,7 +14734,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayName_params params =
     {
@@ -14749,7 +14749,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayName_params params =
     {
@@ -14762,7 +14762,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayImageData_params params =
     {
@@ -14790,7 +14790,7 @@ const char * __thiscall winIVROverlay_IVROverlay_018_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayRenderingPid_params params =
     {
@@ -14803,7 +14803,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayRenderingPid_params params =
     {
@@ -14815,7 +14815,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayFlag_params params =
     {
@@ -14829,7 +14829,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayFlag_params params =
     {
@@ -14843,7 +14843,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayColor_params params =
     {
@@ -14858,7 +14858,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayColor_params params =
     {
@@ -14873,7 +14873,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayAlpha_params params =
     {
@@ -14886,7 +14886,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayAlpha_params params =
     {
@@ -14899,7 +14899,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayTexelAspect_params params =
     {
@@ -14912,7 +14912,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTexelAspect_params params =
     {
@@ -14925,7 +14925,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlaySortOrder_params params =
     {
@@ -14938,7 +14938,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlaySortOrder_params params =
     {
@@ -14951,7 +14951,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayWidthInMeters_params params =
     {
@@ -14964,7 +14964,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayWidthInMeters_params params =
     {
@@ -14977,7 +14977,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -14991,7 +14991,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -15005,7 +15005,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayTextureColorSpace_params params =
     {
@@ -15018,7 +15018,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTextureColorSpace_params params =
     {
@@ -15031,7 +15031,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayTextureBounds_params params =
     {
@@ -15044,7 +15044,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTextureBounds_params params =
     {
@@ -15057,7 +15057,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, EVROverlayError *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayRenderModel_params params =
     {
@@ -15073,7 +15073,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayRenderModel(struct w_
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayRenderModel_params params =
     {
@@ -15087,7 +15087,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayRenderModel(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTransformType_params params =
     {
@@ -15100,7 +15100,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayTransformAbsolute_params params =
     {
@@ -15114,7 +15114,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTransformAbsolute_params params =
     {
@@ -15128,7 +15128,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -15142,7 +15142,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -15156,7 +15156,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -15170,7 +15170,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -15185,7 +15185,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTransformOverlayRelative_params params =
     {
@@ -15199,7 +15199,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_018_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayTransformOverlayRelative_params params =
     {
@@ -15213,7 +15213,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_ShowOverlay_params params =
     {
@@ -15225,7 +15225,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_HideOverlay_params params =
     {
@@ -15237,7 +15237,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_018_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_018_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_IsOverlayVisible_params params =
     {
@@ -15249,7 +15249,7 @@ bool __thiscall winIVROverlay_IVROverlay_018_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_018_GetTransformForOverlayCoordinates_params params =
     {
@@ -15264,7 +15264,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_018_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1017 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_018_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1017 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_018_PollNextOverlayEvent_params params =
     {
@@ -15278,7 +15278,7 @@ bool __thiscall winIVROverlay_IVROverlay_018_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayInputMethod_params params =
     {
@@ -15291,7 +15291,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayInputMethod_params params =
     {
@@ -15304,7 +15304,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayMouseScale_params params =
     {
@@ -15317,7 +15317,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayMouseScale_params params =
     {
@@ -15330,7 +15330,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_018_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_018_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_018_ComputeOverlayIntersection_params params =
     {
@@ -15344,7 +15344,7 @@ bool __thiscall winIVROverlay_IVROverlay_018_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_018_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_018_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_IsHoverTargetOverlay_params params =
     {
@@ -15356,7 +15356,7 @@ bool __thiscall winIVROverlay_IVROverlay_018_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_018_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_018_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_018_GetGamepadFocusOverlay_params params =
     {
@@ -15367,7 +15367,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_018_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_018_SetGamepadFocusOverlay_params params =
     {
@@ -15379,7 +15379,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayNeighbor_params params =
     {
@@ -15393,7 +15393,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_018_MoveGamepadFocusToNeighbor_params params =
     {
@@ -15406,7 +15406,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, const HmdVector2_t *vCenter, float fRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, const HmdVector2_t *vCenter, float fRadius)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayDualAnalogTransform_params params =
     {
@@ -15421,7 +15421,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayDualAnalogTransform_params params =
     {
@@ -15436,9 +15436,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_ClearOverlayTexture_params params =
     {
@@ -15450,7 +15450,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayRaw_params params =
     {
@@ -15466,7 +15466,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayFromFile_params params =
     {
@@ -15481,7 +15481,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTexture_params params =
     {
@@ -15501,7 +15501,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_018_ReleaseNativeOverlayHandle_params params =
     {
@@ -15514,7 +15514,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayTextureSize_params params =
     {
@@ -15528,7 +15528,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_018_CreateDashboardOverlay_params params =
     {
@@ -15554,7 +15554,7 @@ bool __thiscall winIVROverlay_IVROverlay_018_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_018_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_018_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_018_IsActiveDashboardOverlay_params params =
     {
@@ -15566,7 +15566,7 @@ bool __thiscall winIVROverlay_IVROverlay_018_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_018_SetDashboardOverlaySceneProcess_params params =
     {
@@ -15579,7 +15579,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_018_GetDashboardOverlaySceneProcess_params params =
     {
@@ -15603,7 +15603,7 @@ void __thiscall winIVROverlay_IVROverlay_018_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_018_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_018_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_018_GetPrimaryDashboardDevice_params params =
     {
@@ -15632,7 +15632,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_018_ShowKeyboardForOverlay_params params =
     {
@@ -15686,7 +15686,7 @@ void __thiscall winIVROverlay_IVROverlay_018_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_018_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_018_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_018_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_018_SetKeyboardPositionForOverlay_params params =
     {
@@ -15698,7 +15698,7 @@ void __thiscall winIVROverlay_IVROverlay_018_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_018_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_018_SetOverlayIntersectionMask_params params =
     {
@@ -15713,7 +15713,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_018_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_018_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_018_GetOverlayFlags_params params =
     {
@@ -16051,7 +16051,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_GetOverlayFlags, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_FindOverlay_params params =
     {
@@ -16064,7 +16064,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_CreateOverlay_params params =
     {
@@ -16078,7 +16078,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_DestroyOverlay_params params =
     {
@@ -16090,7 +16090,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetHighQualityOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetHighQualityOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_SetHighQualityOverlay_params params =
     {
@@ -16102,7 +16102,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetHighQualityOverlay(struct w_
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_019_GetHighQualityOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_019_GetHighQualityOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_019_GetHighQualityOverlay_params params =
     {
@@ -16113,7 +16113,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_019_GetHighQualityOverlay(
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayKey_params params =
     {
@@ -16128,7 +16128,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayName_params params =
     {
@@ -16143,7 +16143,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayName_params params =
     {
@@ -16156,7 +16156,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayImageData_params params =
     {
@@ -16184,7 +16184,7 @@ const char * __thiscall winIVROverlay_IVROverlay_019_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayRenderingPid_params params =
     {
@@ -16197,7 +16197,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayRenderingPid_params params =
     {
@@ -16209,7 +16209,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayFlag_params params =
     {
@@ -16223,7 +16223,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayFlag_params params =
     {
@@ -16237,7 +16237,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayColor_params params =
     {
@@ -16252,7 +16252,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayColor_params params =
     {
@@ -16267,7 +16267,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayAlpha_params params =
     {
@@ -16280,7 +16280,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayAlpha_params params =
     {
@@ -16293,7 +16293,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayTexelAspect_params params =
     {
@@ -16306,7 +16306,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTexelAspect_params params =
     {
@@ -16319,7 +16319,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlaySortOrder_params params =
     {
@@ -16332,7 +16332,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlaySortOrder_params params =
     {
@@ -16345,7 +16345,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayWidthInMeters_params params =
     {
@@ -16358,7 +16358,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayWidthInMeters_params params =
     {
@@ -16371,7 +16371,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -16385,7 +16385,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -16399,7 +16399,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayTextureColorSpace_params params =
     {
@@ -16412,7 +16412,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTextureColorSpace_params params =
     {
@@ -16425,7 +16425,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayTextureBounds_params params =
     {
@@ -16438,7 +16438,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTextureBounds_params params =
     {
@@ -16451,7 +16451,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, EVROverlayError *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayRenderModel_params params =
     {
@@ -16467,7 +16467,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayRenderModel(struct w_
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayRenderModel_params params =
     {
@@ -16481,7 +16481,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayRenderModel(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTransformType_params params =
     {
@@ -16494,7 +16494,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayTransformAbsolute_params params =
     {
@@ -16508,7 +16508,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTransformAbsolute_params params =
     {
@@ -16522,7 +16522,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -16536,7 +16536,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -16550,7 +16550,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -16564,7 +16564,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -16579,7 +16579,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTransformOverlayRelative_params params =
     {
@@ -16593,7 +16593,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_019_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayTransformOverlayRelative_params params =
     {
@@ -16607,7 +16607,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_ShowOverlay_params params =
     {
@@ -16619,7 +16619,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_HideOverlay_params params =
     {
@@ -16631,7 +16631,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_019_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_019_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_IsOverlayVisible_params params =
     {
@@ -16643,7 +16643,7 @@ bool __thiscall winIVROverlay_IVROverlay_019_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_019_GetTransformForOverlayCoordinates_params params =
     {
@@ -16658,7 +16658,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_019_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1610 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_019_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1610 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_019_PollNextOverlayEvent_params params =
     {
@@ -16672,7 +16672,7 @@ bool __thiscall winIVROverlay_IVROverlay_019_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayInputMethod_params params =
     {
@@ -16685,7 +16685,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayInputMethod_params params =
     {
@@ -16698,7 +16698,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayMouseScale_params params =
     {
@@ -16711,7 +16711,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayMouseScale_params params =
     {
@@ -16724,7 +16724,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_019_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_019_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_019_ComputeOverlayIntersection_params params =
     {
@@ -16738,7 +16738,7 @@ bool __thiscall winIVROverlay_IVROverlay_019_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_019_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_019_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_IsHoverTargetOverlay_params params =
     {
@@ -16750,7 +16750,7 @@ bool __thiscall winIVROverlay_IVROverlay_019_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_019_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_019_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_019_GetGamepadFocusOverlay_params params =
     {
@@ -16761,7 +16761,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_019_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_019_SetGamepadFocusOverlay_params params =
     {
@@ -16773,7 +16773,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayNeighbor_params params =
     {
@@ -16787,7 +16787,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_019_MoveGamepadFocusToNeighbor_params params =
     {
@@ -16800,7 +16800,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayDualAnalogTransform_params params =
     {
@@ -16815,7 +16815,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayDualAnalogTransform_params params =
     {
@@ -16830,9 +16830,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_ClearOverlayTexture_params params =
     {
@@ -16844,7 +16844,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayRaw_params params =
     {
@@ -16860,7 +16860,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayFromFile_params params =
     {
@@ -16875,7 +16875,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTexture_params params =
     {
@@ -16895,7 +16895,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_019_ReleaseNativeOverlayHandle_params params =
     {
@@ -16908,7 +16908,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayTextureSize_params params =
     {
@@ -16922,7 +16922,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_019_CreateDashboardOverlay_params params =
     {
@@ -16948,7 +16948,7 @@ bool __thiscall winIVROverlay_IVROverlay_019_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_019_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_019_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_019_IsActiveDashboardOverlay_params params =
     {
@@ -16960,7 +16960,7 @@ bool __thiscall winIVROverlay_IVROverlay_019_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_019_SetDashboardOverlaySceneProcess_params params =
     {
@@ -16973,7 +16973,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_019_GetDashboardOverlaySceneProcess_params params =
     {
@@ -16997,7 +16997,7 @@ void __thiscall winIVROverlay_IVROverlay_019_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_019_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_019_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_019_GetPrimaryDashboardDevice_params params =
     {
@@ -17026,7 +17026,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_019_ShowKeyboardForOverlay_params params =
     {
@@ -17080,7 +17080,7 @@ void __thiscall winIVROverlay_IVROverlay_019_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_019_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_019_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_019_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_019_SetKeyboardPositionForOverlay_params params =
     {
@@ -17092,7 +17092,7 @@ void __thiscall winIVROverlay_IVROverlay_019_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_019_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_019_SetOverlayIntersectionMask_params params =
     {
@@ -17107,7 +17107,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_019_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_019_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_019_GetOverlayFlags_params params =
     {
@@ -17443,7 +17443,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayFlags, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_FindOverlay_params params =
     {
@@ -17456,7 +17456,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_CreateOverlay_params params =
     {
@@ -17470,7 +17470,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_DestroyOverlay_params params =
     {
@@ -17482,7 +17482,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayKey_params params =
     {
@@ -17497,7 +17497,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayName_params params =
     {
@@ -17512,7 +17512,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayName_params params =
     {
@@ -17525,7 +17525,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayImageData_params params =
     {
@@ -17553,7 +17553,7 @@ const char * __thiscall winIVROverlay_IVROverlay_020_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayRenderingPid_params params =
     {
@@ -17566,7 +17566,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayRenderingPid_params params =
     {
@@ -17578,7 +17578,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayFlag_params params =
     {
@@ -17592,7 +17592,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayFlag_params params =
     {
@@ -17606,7 +17606,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayColor_params params =
     {
@@ -17621,7 +17621,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayColor_params params =
     {
@@ -17636,7 +17636,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayAlpha_params params =
     {
@@ -17649,7 +17649,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayAlpha_params params =
     {
@@ -17662,7 +17662,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayTexelAspect_params params =
     {
@@ -17675,7 +17675,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTexelAspect_params params =
     {
@@ -17688,7 +17688,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlaySortOrder_params params =
     {
@@ -17701,7 +17701,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlaySortOrder_params params =
     {
@@ -17714,7 +17714,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayWidthInMeters_params params =
     {
@@ -17727,7 +17727,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayWidthInMeters_params params =
     {
@@ -17740,7 +17740,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -17754,7 +17754,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfMinDistanceInMeters, float *pfMaxDistanceInMeters)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters_params params =
     {
@@ -17768,7 +17768,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRang
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace_params params =
     {
@@ -17781,7 +17781,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace_params params =
     {
@@ -17794,7 +17794,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayTextureBounds_params params =
     {
@@ -17807,7 +17807,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTextureBounds_params params =
     {
@@ -17820,7 +17820,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, EVROverlayError *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayRenderModel_params params =
     {
@@ -17836,7 +17836,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderModel(struct w_
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayRenderModel_params params =
     {
@@ -17850,7 +17850,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderModel(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTransformType_params params =
     {
@@ -17863,7 +17863,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute_params params =
     {
@@ -17877,7 +17877,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute_params params =
     {
@@ -17891,7 +17891,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -17905,7 +17905,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -17919,7 +17919,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -17933,7 +17933,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -17948,7 +17948,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative_params params =
     {
@@ -17962,7 +17962,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative_params params =
     {
@@ -17976,7 +17976,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_ShowOverlay_params params =
     {
@@ -17988,7 +17988,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_HideOverlay_params params =
     {
@@ -18000,7 +18000,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_020_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_020_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_IsOverlayVisible_params params =
     {
@@ -18012,7 +18012,7 @@ bool __thiscall winIVROverlay_IVROverlay_020_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates_params params =
     {
@@ -18027,7 +18027,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_020_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1715 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_020_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1715 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_020_PollNextOverlayEvent_params params =
     {
@@ -18041,7 +18041,7 @@ bool __thiscall winIVROverlay_IVROverlay_020_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayInputMethod_params params =
     {
@@ -18054,7 +18054,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayInputMethod_params params =
     {
@@ -18067,7 +18067,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayMouseScale_params params =
     {
@@ -18080,7 +18080,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayMouseScale_params params =
     {
@@ -18093,7 +18093,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_020_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_020_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_020_ComputeOverlayIntersection_params params =
     {
@@ -18107,7 +18107,7 @@ bool __thiscall winIVROverlay_IVROverlay_020_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_020_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_020_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_IsHoverTargetOverlay_params params =
     {
@@ -18119,7 +18119,7 @@ bool __thiscall winIVROverlay_IVROverlay_020_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_020_GetGamepadFocusOverlay(struct w_steam_iface *_this)
+uint64_t __thiscall winIVROverlay_IVROverlay_020_GetGamepadFocusOverlay(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_020_GetGamepadFocusOverlay_params params =
     {
@@ -18130,7 +18130,7 @@ VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_020_GetGamepadFocusOverlay
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetGamepadFocusOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulNewFocusOverlay)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetGamepadFocusOverlay(struct w_steam_iface *_this, uint64_t ulNewFocusOverlay)
 {
     struct cppIVROverlay_IVROverlay_020_SetGamepadFocusOverlay_params params =
     {
@@ -18142,7 +18142,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetGamepadFocusOverlay(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom, uint64_t ulTo)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayNeighbor_params params =
     {
@@ -18156,7 +18156,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayNeighbor(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, VROverlayHandle_t ulFrom)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor(struct w_steam_iface *_this, uint32_t eDirection, uint64_t ulFrom)
 {
     struct cppIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor_params params =
     {
@@ -18169,7 +18169,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform_params params =
     {
@@ -18184,7 +18184,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform_params params =
     {
@@ -18199,9 +18199,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_ClearOverlayTexture_params params =
     {
@@ -18213,7 +18213,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayRaw_params params =
     {
@@ -18229,7 +18229,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayFromFile_params params =
     {
@@ -18244,7 +18244,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTexture_params params =
     {
@@ -18264,7 +18264,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle_params params =
     {
@@ -18277,7 +18277,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayTextureSize_params params =
     {
@@ -18291,7 +18291,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_020_CreateDashboardOverlay_params params =
     {
@@ -18317,7 +18317,7 @@ bool __thiscall winIVROverlay_IVROverlay_020_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_020_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_020_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_020_IsActiveDashboardOverlay_params params =
     {
@@ -18329,7 +18329,7 @@ bool __thiscall winIVROverlay_IVROverlay_020_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess_params params =
     {
@@ -18342,7 +18342,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess_params params =
     {
@@ -18366,7 +18366,7 @@ void __thiscall winIVROverlay_IVROverlay_020_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_020_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice_params params =
     {
@@ -18395,7 +18395,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_020_ShowKeyboardForOverlay_params params =
     {
@@ -18449,7 +18449,7 @@ void __thiscall winIVROverlay_IVROverlay_020_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_020_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay_params params =
     {
@@ -18461,7 +18461,7 @@ void __thiscall winIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_020_SetOverlayIntersectionMask_params params =
     {
@@ -18476,7 +18476,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_020_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_020_GetOverlayFlags_params params =
     {
@@ -18804,7 +18804,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayFlags, 16)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_FindOverlay_params params =
     {
@@ -18817,7 +18817,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_CreateOverlay_params params =
     {
@@ -18831,7 +18831,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_DestroyOverlay_params params =
     {
@@ -18843,7 +18843,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayKey_params params =
     {
@@ -18858,7 +18858,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayName_params params =
     {
@@ -18873,7 +18873,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayName_params params =
     {
@@ -18886,7 +18886,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayImageData_params params =
     {
@@ -18914,7 +18914,7 @@ const char * __thiscall winIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayRenderingPid_params params =
     {
@@ -18927,7 +18927,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayRenderingPid_params params =
     {
@@ -18939,7 +18939,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayFlag_params params =
     {
@@ -18953,7 +18953,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayFlag_params params =
     {
@@ -18967,7 +18967,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayColor_params params =
     {
@@ -18982,7 +18982,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayColor_params params =
     {
@@ -18997,7 +18997,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayAlpha_params params =
     {
@@ -19010,7 +19010,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayAlpha_params params =
     {
@@ -19023,7 +19023,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayTexelAspect_params params =
     {
@@ -19036,7 +19036,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTexelAspect_params params =
     {
@@ -19049,7 +19049,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlaySortOrder_params params =
     {
@@ -19062,7 +19062,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlaySortOrder_params params =
     {
@@ -19075,7 +19075,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayWidthInMeters_params params =
     {
@@ -19088,7 +19088,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayWidthInMeters_params params =
     {
@@ -19101,7 +19101,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fCurvature)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayCurvature_params params =
     {
@@ -19114,7 +19114,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfCurvature)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayCurvature_params params =
     {
@@ -19127,7 +19127,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace_params params =
     {
@@ -19140,7 +19140,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace_params params =
     {
@@ -19153,7 +19153,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayTextureBounds_params params =
     {
@@ -19166,7 +19166,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTextureBounds_params params =
     {
@@ -19179,7 +19179,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, EVROverlayError *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayRenderModel_params params =
     {
@@ -19195,7 +19195,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderModel(struct w_
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayRenderModel_params params =
     {
@@ -19209,7 +19209,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderModel(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTransformType_params params =
     {
@@ -19222,7 +19222,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute_params params =
     {
@@ -19236,7 +19236,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute_params params =
     {
@@ -19250,7 +19250,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -19264,7 +19264,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -19278,7 +19278,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -19292,7 +19292,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -19307,7 +19307,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative_params params =
     {
@@ -19321,7 +19321,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative_params params =
     {
@@ -19335,7 +19335,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_ShowOverlay_params params =
     {
@@ -19347,7 +19347,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_HideOverlay_params params =
     {
@@ -19359,7 +19359,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_021_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_021_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_IsOverlayVisible_params params =
     {
@@ -19371,7 +19371,7 @@ bool __thiscall winIVROverlay_IVROverlay_021_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates_params params =
     {
@@ -19386,7 +19386,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_021_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1819 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_021_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1819 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_021_PollNextOverlayEvent_params params =
     {
@@ -19400,7 +19400,7 @@ bool __thiscall winIVROverlay_IVROverlay_021_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayInputMethod_params params =
     {
@@ -19413,7 +19413,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayInputMethod_params params =
     {
@@ -19426,7 +19426,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayMouseScale_params params =
     {
@@ -19439,7 +19439,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayMouseScale_params params =
     {
@@ -19452,7 +19452,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_021_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_021_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_021_ComputeOverlayIntersection_params params =
     {
@@ -19466,7 +19466,7 @@ bool __thiscall winIVROverlay_IVROverlay_021_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_021_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_021_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_IsHoverTargetOverlay_params params =
     {
@@ -19478,7 +19478,7 @@ bool __thiscall winIVROverlay_IVROverlay_021_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform_params params =
     {
@@ -19493,7 +19493,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform_params params =
     {
@@ -19508,9 +19508,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_ClearOverlayTexture_params params =
     {
@@ -19522,7 +19522,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayRaw_params params =
     {
@@ -19538,7 +19538,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayFromFile_params params =
     {
@@ -19553,7 +19553,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTexture_params params =
     {
@@ -19573,7 +19573,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle_params params =
     {
@@ -19586,7 +19586,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayTextureSize_params params =
     {
@@ -19600,7 +19600,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_021_CreateDashboardOverlay_params params =
     {
@@ -19626,7 +19626,7 @@ bool __thiscall winIVROverlay_IVROverlay_021_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_021_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_021_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_021_IsActiveDashboardOverlay_params params =
     {
@@ -19638,7 +19638,7 @@ bool __thiscall winIVROverlay_IVROverlay_021_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess_params params =
     {
@@ -19651,7 +19651,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess_params params =
     {
@@ -19675,7 +19675,7 @@ void __thiscall winIVROverlay_IVROverlay_021_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_021_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice_params params =
     {
@@ -19704,7 +19704,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_021_ShowKeyboardForOverlay_params params =
     {
@@ -19758,7 +19758,7 @@ void __thiscall winIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay_params params =
     {
@@ -19770,7 +19770,7 @@ void __thiscall winIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay(struc
     cppIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay( &params );
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_021_SetOverlayIntersectionMask_params params =
     {
@@ -19785,7 +19785,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_021_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_021_GetOverlayFlags_params params =
     {
@@ -20111,7 +20111,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_022_SetKeyboardPositionForOverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_022_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_022_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_FindOverlay_params params =
     {
@@ -20124,7 +20124,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_CreateOverlay_params params =
     {
@@ -20138,7 +20138,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_DestroyOverlay_params params =
     {
@@ -20150,7 +20150,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayKey_params params =
     {
@@ -20165,7 +20165,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayName_params params =
     {
@@ -20180,7 +20180,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayName_params params =
     {
@@ -20193,7 +20193,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayImageData_params params =
     {
@@ -20221,7 +20221,7 @@ const char * __thiscall winIVROverlay_IVROverlay_022_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayRenderingPid_params params =
     {
@@ -20234,7 +20234,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayRenderingPid_params params =
     {
@@ -20246,7 +20246,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayFlag_params params =
     {
@@ -20260,7 +20260,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayFlag_params params =
     {
@@ -20274,7 +20274,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayFlags_params params =
     {
@@ -20287,7 +20287,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayFlags(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayColor_params params =
     {
@@ -20302,7 +20302,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayColor_params params =
     {
@@ -20317,7 +20317,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayAlpha_params params =
     {
@@ -20330,7 +20330,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayAlpha_params params =
     {
@@ -20343,7 +20343,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTexelAspect_params params =
     {
@@ -20356,7 +20356,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTexelAspect_params params =
     {
@@ -20369,7 +20369,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlaySortOrder_params params =
     {
@@ -20382,7 +20382,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlaySortOrder_params params =
     {
@@ -20395,7 +20395,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayWidthInMeters_params params =
     {
@@ -20408,7 +20408,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayWidthInMeters_params params =
     {
@@ -20421,7 +20421,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fCurvature)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayCurvature_params params =
     {
@@ -20434,7 +20434,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfCurvature)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayCurvature_params params =
     {
@@ -20447,7 +20447,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTextureColorSpace_params params =
     {
@@ -20460,7 +20460,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTextureColorSpace_params params =
     {
@@ -20473,7 +20473,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTextureBounds_params params =
     {
@@ -20486,7 +20486,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTextureBounds_params params =
     {
@@ -20499,7 +20499,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, EVROverlayError *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, HmdColor_t *pColor, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayRenderModel_params params =
     {
@@ -20515,7 +20515,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayRenderModel(struct w_
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayRenderModel(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayRenderModel(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchRenderModel, const HmdColor_t *pColor)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayRenderModel_params params =
     {
@@ -20529,7 +20529,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayRenderModel(st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTransformType_params params =
     {
@@ -20542,7 +20542,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTransformAbsolute_params params =
     {
@@ -20556,7 +20556,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTransformAbsolute_params params =
     {
@@ -20570,7 +20570,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -20584,7 +20584,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -20598,7 +20598,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -20612,7 +20612,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -20627,7 +20627,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTransformOverlayRelative_params params =
     {
@@ -20641,7 +20641,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTransformOverlayRelative_params params =
     {
@@ -20655,7 +20655,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayTransformCursor_params params =
     {
@@ -20668,7 +20668,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTransformCursor(struc
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTransformCursor_params params =
     {
@@ -20681,7 +20681,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_022_GetOverlayTransformCurso
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_ShowOverlay_params params =
     {
@@ -20693,7 +20693,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_HideOverlay_params params =
     {
@@ -20705,7 +20705,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_022_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_022_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_IsOverlayVisible_params params =
     {
@@ -20717,7 +20717,7 @@ bool __thiscall winIVROverlay_IVROverlay_022_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_022_GetTransformForOverlayCoordinates_params params =
     {
@@ -20732,7 +20732,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_022_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1916 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_022_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1916 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_022_PollNextOverlayEvent_params params =
     {
@@ -20746,7 +20746,7 @@ bool __thiscall winIVROverlay_IVROverlay_022_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayInputMethod_params params =
     {
@@ -20759,7 +20759,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayInputMethod_params params =
     {
@@ -20772,7 +20772,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayMouseScale_params params =
     {
@@ -20785,7 +20785,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayMouseScale_params params =
     {
@@ -20798,7 +20798,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_022_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_022_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_022_ComputeOverlayIntersection_params params =
     {
@@ -20812,7 +20812,7 @@ bool __thiscall winIVROverlay_IVROverlay_022_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_022_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_022_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_IsHoverTargetOverlay_params params =
     {
@@ -20824,7 +20824,7 @@ bool __thiscall winIVROverlay_IVROverlay_022_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, const HmdVector2_t *pvCenter, float fRadius)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayDualAnalogTransform_params params =
     {
@@ -20839,7 +20839,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, VROverlayHandle_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayDualAnalogTransform(struct w_steam_iface *_this, uint64_t ulOverlay, uint32_t eWhich, HmdVector2_t *pvCenter, float *pfRadius)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayDualAnalogTransform_params params =
     {
@@ -20854,7 +20854,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayDualAnalogTransform(s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayIntersectionMask_params params =
     {
@@ -20869,7 +20869,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
 {
     struct cppIVROverlay_IVROverlay_022_TriggerLaserMouseHapticVibration_params params =
     {
@@ -20884,7 +20884,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_TriggerLaserMouseHapticVibratio
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulCursorHandle)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayCursor_params params =
     {
@@ -20897,7 +20897,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCursor(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvCursor)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvCursor)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayCursorPositionOverride_params params =
     {
@@ -20910,7 +20910,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayCursorPositionOverrid
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_ClearOverlayCursorPositionOverride_params params =
     {
@@ -20922,9 +20922,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_ClearOverlayCursorPositionOverr
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_ClearOverlayTexture_params params =
     {
@@ -20936,7 +20936,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayRaw_params params =
     {
@@ -20952,7 +20952,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_022_SetOverlayFromFile_params params =
     {
@@ -20967,7 +20967,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTexture_params params =
     {
@@ -20987,7 +20987,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_022_ReleaseNativeOverlayHandle_params params =
     {
@@ -21000,7 +21000,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_022_GetOverlayTextureSize_params params =
     {
@@ -21014,7 +21014,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_022_CreateDashboardOverlay_params params =
     {
@@ -21040,7 +21040,7 @@ bool __thiscall winIVROverlay_IVROverlay_022_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_022_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_022_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_022_IsActiveDashboardOverlay_params params =
     {
@@ -21052,7 +21052,7 @@ bool __thiscall winIVROverlay_IVROverlay_022_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_022_SetDashboardOverlaySceneProcess_params params =
     {
@@ -21065,7 +21065,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_022_GetDashboardOverlaySceneProcess_params params =
     {
@@ -21089,7 +21089,7 @@ void __thiscall winIVROverlay_IVROverlay_022_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_022_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_022_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_022_GetPrimaryDashboardDevice_params params =
     {
@@ -21118,7 +21118,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_022_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_022_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_022_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_022_ShowKeyboardForOverlay_params params =
     {
@@ -21172,7 +21172,7 @@ void __thiscall winIVROverlay_IVROverlay_022_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_022_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_022_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_022_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_022_SetKeyboardPositionForOverlay_params params =
     {
@@ -21505,7 +21505,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_024_SetKeyboardPositionForOverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_024_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_024_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_FindOverlay_params params =
     {
@@ -21518,7 +21518,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_CreateOverlay_params params =
     {
@@ -21532,7 +21532,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_DestroyOverlay_params params =
     {
@@ -21544,7 +21544,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayKey_params params =
     {
@@ -21559,7 +21559,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayName_params params =
     {
@@ -21574,7 +21574,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayName_params params =
     {
@@ -21587,7 +21587,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayImageData_params params =
     {
@@ -21615,7 +21615,7 @@ const char * __thiscall winIVROverlay_IVROverlay_024_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayRenderingPid_params params =
     {
@@ -21628,7 +21628,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayRenderingPid_params params =
     {
@@ -21640,7 +21640,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayFlag_params params =
     {
@@ -21654,7 +21654,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayFlag_params params =
     {
@@ -21668,7 +21668,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayFlags_params params =
     {
@@ -21681,7 +21681,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayFlags(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayColor_params params =
     {
@@ -21696,7 +21696,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayColor_params params =
     {
@@ -21711,7 +21711,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayAlpha_params params =
     {
@@ -21724,7 +21724,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayAlpha_params params =
     {
@@ -21737,7 +21737,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTexelAspect_params params =
     {
@@ -21750,7 +21750,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTexelAspect_params params =
     {
@@ -21763,7 +21763,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlaySortOrder_params params =
     {
@@ -21776,7 +21776,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlaySortOrder_params params =
     {
@@ -21789,7 +21789,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayWidthInMeters_params params =
     {
@@ -21802,7 +21802,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayWidthInMeters_params params =
     {
@@ -21815,7 +21815,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fCurvature)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayCurvature_params params =
     {
@@ -21828,7 +21828,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfCurvature)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayCurvature_params params =
     {
@@ -21841,7 +21841,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTextureColorSpace_params params =
     {
@@ -21854,7 +21854,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTextureColorSpace_params params =
     {
@@ -21867,7 +21867,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTextureBounds_params params =
     {
@@ -21880,7 +21880,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTextureBounds_params params =
     {
@@ -21893,7 +21893,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTransformType_params params =
     {
@@ -21906,7 +21906,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTransformAbsolute_params params =
     {
@@ -21920,7 +21920,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTransformAbsolute_params params =
     {
@@ -21934,7 +21934,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -21948,7 +21948,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -21962,7 +21962,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -21976,7 +21976,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -21991,7 +21991,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTransformOverlayRelative_params params =
     {
@@ -22005,7 +22005,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTransformOverlayRelative_params params =
     {
@@ -22019,7 +22019,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayTransformCursor_params params =
     {
@@ -22032,7 +22032,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTransformCursor(struc
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTransformCursor_params params =
     {
@@ -22045,7 +22045,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_024_GetOverlayTransformCurso
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_ShowOverlay_params params =
     {
@@ -22057,7 +22057,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_HideOverlay_params params =
     {
@@ -22069,7 +22069,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_024_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_024_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_IsOverlayVisible_params params =
     {
@@ -22081,7 +22081,7 @@ bool __thiscall winIVROverlay_IVROverlay_024_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_024_GetTransformForOverlayCoordinates_params params =
     {
@@ -22096,7 +22096,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_024_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_11415 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_024_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_11415 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_024_PollNextOverlayEvent_params params =
     {
@@ -22110,7 +22110,7 @@ bool __thiscall winIVROverlay_IVROverlay_024_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayInputMethod_params params =
     {
@@ -22123,7 +22123,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayInputMethod_params params =
     {
@@ -22136,7 +22136,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayMouseScale_params params =
     {
@@ -22149,7 +22149,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayMouseScale_params params =
     {
@@ -22162,7 +22162,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_024_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_024_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_024_ComputeOverlayIntersection_params params =
     {
@@ -22176,7 +22176,7 @@ bool __thiscall winIVROverlay_IVROverlay_024_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_024_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_024_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_IsHoverTargetOverlay_params params =
     {
@@ -22188,7 +22188,7 @@ bool __thiscall winIVROverlay_IVROverlay_024_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayIntersectionMask_params params =
     {
@@ -22203,7 +22203,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
 {
     struct cppIVROverlay_IVROverlay_024_TriggerLaserMouseHapticVibration_params params =
     {
@@ -22218,7 +22218,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_TriggerLaserMouseHapticVibratio
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulCursorHandle)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayCursor_params params =
     {
@@ -22231,7 +22231,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCursor(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvCursor)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvCursor)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayCursorPositionOverride_params params =
     {
@@ -22244,7 +22244,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayCursorPositionOverrid
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_ClearOverlayCursorPositionOverride_params params =
     {
@@ -22256,9 +22256,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_ClearOverlayCursorPositionOverr
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_ClearOverlayTexture_params params =
     {
@@ -22270,7 +22270,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayRaw_params params =
     {
@@ -22286,7 +22286,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_024_SetOverlayFromFile_params params =
     {
@@ -22301,7 +22301,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTexture_params params =
     {
@@ -22321,7 +22321,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_024_ReleaseNativeOverlayHandle_params params =
     {
@@ -22334,7 +22334,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_024_GetOverlayTextureSize_params params =
     {
@@ -22348,7 +22348,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_024_CreateDashboardOverlay_params params =
     {
@@ -22374,7 +22374,7 @@ bool __thiscall winIVROverlay_IVROverlay_024_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_024_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_024_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_024_IsActiveDashboardOverlay_params params =
     {
@@ -22386,7 +22386,7 @@ bool __thiscall winIVROverlay_IVROverlay_024_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_024_SetDashboardOverlaySceneProcess_params params =
     {
@@ -22399,7 +22399,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_024_GetDashboardOverlaySceneProcess_params params =
     {
@@ -22423,7 +22423,7 @@ void __thiscall winIVROverlay_IVROverlay_024_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_024_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_024_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_024_GetPrimaryDashboardDevice_params params =
     {
@@ -22452,7 +22452,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_024_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_024_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_024_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_024_ShowKeyboardForOverlay_params params =
     {
@@ -22506,7 +22506,7 @@ void __thiscall winIVROverlay_IVROverlay_024_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_024_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_024_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_024_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_024_SetKeyboardPositionForOverlay_params params =
     {
@@ -22832,7 +22832,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_025_SetKeyboardPositionForOverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_025_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_025_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_FindOverlay_params params =
     {
@@ -22845,7 +22845,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_CreateOverlay_params params =
     {
@@ -22859,7 +22859,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_DestroyOverlay_params params =
     {
@@ -22871,7 +22871,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayKey_params params =
     {
@@ -22886,7 +22886,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayName_params params =
     {
@@ -22901,7 +22901,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayName_params params =
     {
@@ -22914,7 +22914,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayImageData_params params =
     {
@@ -22942,7 +22942,7 @@ const char * __thiscall winIVROverlay_IVROverlay_025_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayRenderingPid_params params =
     {
@@ -22955,7 +22955,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayRenderingPid_params params =
     {
@@ -22967,7 +22967,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayFlag_params params =
     {
@@ -22981,7 +22981,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayFlag_params params =
     {
@@ -22995,7 +22995,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayFlags_params params =
     {
@@ -23008,7 +23008,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayFlags(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayColor_params params =
     {
@@ -23023,7 +23023,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayColor_params params =
     {
@@ -23038,7 +23038,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayAlpha_params params =
     {
@@ -23051,7 +23051,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayAlpha_params params =
     {
@@ -23064,7 +23064,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTexelAspect_params params =
     {
@@ -23077,7 +23077,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTexelAspect_params params =
     {
@@ -23090,7 +23090,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlaySortOrder_params params =
     {
@@ -23103,7 +23103,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlaySortOrder_params params =
     {
@@ -23116,7 +23116,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayWidthInMeters_params params =
     {
@@ -23129,7 +23129,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayWidthInMeters_params params =
     {
@@ -23142,7 +23142,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fCurvature)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayCurvature_params params =
     {
@@ -23155,7 +23155,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfCurvature)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayCurvature_params params =
     {
@@ -23168,7 +23168,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTextureColorSpace_params params =
     {
@@ -23181,7 +23181,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTextureColorSpace_params params =
     {
@@ -23194,7 +23194,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTextureBounds_params params =
     {
@@ -23207,7 +23207,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTextureBounds_params params =
     {
@@ -23220,7 +23220,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTransformType_params params =
     {
@@ -23233,7 +23233,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTransformAbsolute_params params =
     {
@@ -23247,7 +23247,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTransformAbsolute_params params =
     {
@@ -23261,7 +23261,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -23275,7 +23275,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -23289,7 +23289,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -23303,7 +23303,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -23318,7 +23318,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTransformOverlayRelative_params params =
     {
@@ -23332,7 +23332,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTransformOverlayRelative_params params =
     {
@@ -23346,7 +23346,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTransformCursor_params params =
     {
@@ -23359,7 +23359,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformCursor(struc
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTransformCursor_params params =
     {
@@ -23372,7 +23372,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_025_GetOverlayTransformCurso
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformProjection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, const VROverlayProjection_t *pProjection, EVREye eEye)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformProjection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, const VROverlayProjection_t *pProjection, uint32_t eEye)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayTransformProjection_params params =
     {
@@ -23388,7 +23388,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_025_SetOverlayTransformProje
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_ShowOverlay_params params =
     {
@@ -23400,7 +23400,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_HideOverlay_params params =
     {
@@ -23412,7 +23412,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_025_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_025_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_IsOverlayVisible_params params =
     {
@@ -23424,7 +23424,7 @@ bool __thiscall winIVROverlay_IVROverlay_025_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_025_GetTransformForOverlayCoordinates_params params =
     {
@@ -23439,7 +23439,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetTransformForOverlayCoordinat
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_025_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1168 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_025_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1168 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_025_PollNextOverlayEvent_params params =
     {
@@ -23453,7 +23453,7 @@ bool __thiscall winIVROverlay_IVROverlay_025_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayInputMethod_params params =
     {
@@ -23466,7 +23466,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayInputMethod_params params =
     {
@@ -23479,7 +23479,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayMouseScale_params params =
     {
@@ -23492,7 +23492,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayMouseScale_params params =
     {
@@ -23505,7 +23505,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_025_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_025_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_025_ComputeOverlayIntersection_params params =
     {
@@ -23519,7 +23519,7 @@ bool __thiscall winIVROverlay_IVROverlay_025_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_025_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_025_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_IsHoverTargetOverlay_params params =
     {
@@ -23531,7 +23531,7 @@ bool __thiscall winIVROverlay_IVROverlay_025_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayIntersectionMask_params params =
     {
@@ -23546,7 +23546,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
 {
     struct cppIVROverlay_IVROverlay_025_TriggerLaserMouseHapticVibration_params params =
     {
@@ -23561,7 +23561,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_TriggerLaserMouseHapticVibratio
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulCursorHandle)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayCursor_params params =
     {
@@ -23574,7 +23574,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCursor(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvCursor)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvCursor)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayCursorPositionOverride_params params =
     {
@@ -23587,7 +23587,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayCursorPositionOverrid
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_ClearOverlayCursorPositionOverride_params params =
     {
@@ -23599,9 +23599,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_ClearOverlayCursorPositionOverr
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_ClearOverlayTexture_params params =
     {
@@ -23613,7 +23613,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayRaw_params params =
     {
@@ -23629,7 +23629,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_025_SetOverlayFromFile_params params =
     {
@@ -23644,7 +23644,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTexture_params params =
     {
@@ -23664,7 +23664,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_025_ReleaseNativeOverlayHandle_params params =
     {
@@ -23677,7 +23677,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_025_GetOverlayTextureSize_params params =
     {
@@ -23691,7 +23691,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_025_CreateDashboardOverlay_params params =
     {
@@ -23717,7 +23717,7 @@ bool __thiscall winIVROverlay_IVROverlay_025_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_025_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_025_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_025_IsActiveDashboardOverlay_params params =
     {
@@ -23729,7 +23729,7 @@ bool __thiscall winIVROverlay_IVROverlay_025_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_025_SetDashboardOverlaySceneProcess_params params =
     {
@@ -23742,7 +23742,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_025_GetDashboardOverlaySceneProcess_params params =
     {
@@ -23766,7 +23766,7 @@ void __thiscall winIVROverlay_IVROverlay_025_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_025_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_025_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_025_GetPrimaryDashboardDevice_params params =
     {
@@ -23795,7 +23795,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_025_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_025_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_025_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_025_ShowKeyboardForOverlay_params params =
     {
@@ -23849,7 +23849,7 @@ void __thiscall winIVROverlay_IVROverlay_025_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_025_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_025_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_025_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_025_SetKeyboardPositionForOverlay_params params =
     {
@@ -24180,7 +24180,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_026_SetKeyboardPositionForOverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_026_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_026_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_FindOverlay_params params =
     {
@@ -24193,7 +24193,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_CreateOverlay_params params =
     {
@@ -24207,7 +24207,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_DestroyOverlay_params params =
     {
@@ -24219,7 +24219,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayKey_params params =
     {
@@ -24234,7 +24234,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayName_params params =
     {
@@ -24249,7 +24249,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayName_params params =
     {
@@ -24262,7 +24262,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayImageData_params params =
     {
@@ -24290,7 +24290,7 @@ const char * __thiscall winIVROverlay_IVROverlay_026_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayRenderingPid_params params =
     {
@@ -24303,7 +24303,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayRenderingPid_params params =
     {
@@ -24315,7 +24315,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayFlag_params params =
     {
@@ -24329,7 +24329,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayFlag_params params =
     {
@@ -24343,7 +24343,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayFlags_params params =
     {
@@ -24356,7 +24356,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayFlags(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayColor_params params =
     {
@@ -24371,7 +24371,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayColor_params params =
     {
@@ -24386,7 +24386,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayAlpha_params params =
     {
@@ -24399,7 +24399,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayAlpha_params params =
     {
@@ -24412,7 +24412,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTexelAspect_params params =
     {
@@ -24425,7 +24425,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTexelAspect_params params =
     {
@@ -24438,7 +24438,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlaySortOrder_params params =
     {
@@ -24451,7 +24451,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlaySortOrder_params params =
     {
@@ -24464,7 +24464,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayWidthInMeters_params params =
     {
@@ -24477,7 +24477,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayWidthInMeters_params params =
     {
@@ -24490,7 +24490,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fCurvature)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayCurvature_params params =
     {
@@ -24503,7 +24503,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfCurvature)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayCurvature_params params =
     {
@@ -24516,7 +24516,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayPreCurvePitch(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRadians)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayPreCurvePitch(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRadians)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayPreCurvePitch_params params =
     {
@@ -24529,7 +24529,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayPreCurvePitch(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayPreCurvePitch(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRadians)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayPreCurvePitch(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRadians)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayPreCurvePitch_params params =
     {
@@ -24542,7 +24542,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayPreCurvePitch(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTextureColorSpace_params params =
     {
@@ -24555,7 +24555,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTextureColorSpace_params params =
     {
@@ -24568,7 +24568,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTextureBounds_params params =
     {
@@ -24581,7 +24581,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTextureBounds_params params =
     {
@@ -24594,7 +24594,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTransformType_params params =
     {
@@ -24607,7 +24607,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTransformAbsolute_params params =
     {
@@ -24621,7 +24621,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTransformAbsolute_params params =
     {
@@ -24635,7 +24635,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -24649,7 +24649,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -24663,7 +24663,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -24677,7 +24677,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -24692,7 +24692,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t *ulOverlayHandleParent, HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTransformOverlayRelative_params params =
     {
@@ -24706,7 +24706,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformOverl
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformOverlayRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulOverlayHandleParent, const HmdMatrix34_t *pmatParentOverlayToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTransformOverlayRelative_params params =
     {
@@ -24720,7 +24720,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformOverl
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTransformCursor_params params =
     {
@@ -24733,7 +24733,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformCursor(struc
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTransformCursor_params params =
     {
@@ -24746,7 +24746,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_026_GetOverlayTransformCurso
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformProjection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, const VROverlayProjection_t *pProjection, EVREye eEye)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformProjection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, const VROverlayProjection_t *pProjection, uint32_t eEye)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayTransformProjection_params params =
     {
@@ -24762,7 +24762,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_026_SetOverlayTransformProje
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_ShowOverlay_params params =
     {
@@ -24774,7 +24774,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_HideOverlay_params params =
     {
@@ -24786,7 +24786,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_026_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_026_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_IsOverlayVisible_params params =
     {
@@ -24798,7 +24798,7 @@ bool __thiscall winIVROverlay_IVROverlay_026_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_026_GetTransformForOverlayCoordinates_params params =
     {
@@ -24825,7 +24825,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_WaitFrameSync(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_026_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1237 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_026_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1237 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_026_PollNextOverlayEvent_params params =
     {
@@ -24839,7 +24839,7 @@ bool __thiscall winIVROverlay_IVROverlay_026_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayInputMethod_params params =
     {
@@ -24852,7 +24852,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayInputMethod_params params =
     {
@@ -24865,7 +24865,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayMouseScale_params params =
     {
@@ -24878,7 +24878,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayMouseScale_params params =
     {
@@ -24891,7 +24891,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_026_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_026_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_026_ComputeOverlayIntersection_params params =
     {
@@ -24905,7 +24905,7 @@ bool __thiscall winIVROverlay_IVROverlay_026_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_026_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_026_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_IsHoverTargetOverlay_params params =
     {
@@ -24917,7 +24917,7 @@ bool __thiscall winIVROverlay_IVROverlay_026_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayIntersectionMask_params params =
     {
@@ -24932,7 +24932,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
 {
     struct cppIVROverlay_IVROverlay_026_TriggerLaserMouseHapticVibration_params params =
     {
@@ -24947,7 +24947,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_TriggerLaserMouseHapticVibratio
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulCursorHandle)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayCursor_params params =
     {
@@ -24960,7 +24960,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCursor(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvCursor)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvCursor)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayCursorPositionOverride_params params =
     {
@@ -24973,7 +24973,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayCursorPositionOverrid
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_ClearOverlayCursorPositionOverride_params params =
     {
@@ -24985,9 +24985,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_ClearOverlayCursorPositionOverr
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_ClearOverlayTexture_params params =
     {
@@ -24999,7 +24999,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayRaw_params params =
     {
@@ -25015,7 +25015,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_026_SetOverlayFromFile_params params =
     {
@@ -25030,7 +25030,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTexture_params params =
     {
@@ -25050,7 +25050,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_026_ReleaseNativeOverlayHandle_params params =
     {
@@ -25063,7 +25063,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_026_GetOverlayTextureSize_params params =
     {
@@ -25077,7 +25077,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_026_CreateDashboardOverlay_params params =
     {
@@ -25103,7 +25103,7 @@ bool __thiscall winIVROverlay_IVROverlay_026_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_026_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_026_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_026_IsActiveDashboardOverlay_params params =
     {
@@ -25115,7 +25115,7 @@ bool __thiscall winIVROverlay_IVROverlay_026_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_026_SetDashboardOverlaySceneProcess_params params =
     {
@@ -25128,7 +25128,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_026_GetDashboardOverlaySceneProcess_params params =
     {
@@ -25152,7 +25152,7 @@ void __thiscall winIVROverlay_IVROverlay_026_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_026_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_026_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_026_GetPrimaryDashboardDevice_params params =
     {
@@ -25181,7 +25181,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_026_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_026_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_026_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_026_ShowKeyboardForOverlay_params params =
     {
@@ -25235,7 +25235,7 @@ void __thiscall winIVROverlay_IVROverlay_026_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_026_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_026_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_026_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_026_SetKeyboardPositionForOverlay_params params =
     {
@@ -25570,7 +25570,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_027_SetKeyboardPositionForOverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_027_ShowMessageOverlay, 28)
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_027_CloseMessageOverlay, 4)
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_FindOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_FindOverlay_params params =
     {
@@ -25583,7 +25583,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_FindOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, VROverlayHandle_t *pOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_CreateOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayName, uint64_t *pOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_CreateOverlay_params params =
     {
@@ -25597,7 +25597,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_CreateOverlay(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_DestroyOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_DestroyOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_DestroyOverlay_params params =
     {
@@ -25609,7 +25609,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_DestroyOverlay(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayKey(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayKey(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayKey_params params =
     {
@@ -25624,7 +25624,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayKey(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, char *pchValue, uint32_t unBufferSize, uint32_t *pError)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayName_params params =
     {
@@ -25639,7 +25639,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayName(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchName)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayName(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchName)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayName_params params =
     {
@@ -25652,7 +25652,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayName(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayImageData(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayImageData(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unBufferSize, uint32_t *punWidth, uint32_t *punHeight)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayImageData_params params =
     {
@@ -25680,7 +25680,7 @@ const char * __thiscall winIVROverlay_IVROverlay_027_GetOverlayErrorNameFromEnum
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unPID)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayRenderingPid_params params =
     {
@@ -25693,7 +25693,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayRenderingPid(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayRenderingPid(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayRenderingPid_params params =
     {
@@ -25705,7 +25705,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayRenderingPid(struct w
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool bEnabled)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayFlag_params params =
     {
@@ -25719,7 +25719,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayFlag(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayFlag(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eOverlayFlag, bool *pbEnabled)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayFlag_params params =
     {
@@ -25733,7 +25733,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayFlag(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayFlags(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pFlags)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayFlags(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pFlags)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayFlags_params params =
     {
@@ -25746,7 +25746,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayFlags(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayColor_params params =
     {
@@ -25761,7 +25761,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayColor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayColor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRed, float *pfGreen, float *pfBlue)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayColor_params params =
     {
@@ -25776,7 +25776,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayColor(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fAlpha)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayAlpha_params params =
     {
@@ -25789,7 +25789,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayAlpha(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfAlpha)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayAlpha(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfAlpha)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayAlpha_params params =
     {
@@ -25802,7 +25802,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayAlpha(struct w_steam_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTexelAspect_params params =
     {
@@ -25815,7 +25815,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTexelAspect(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfTexelAspect)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTexelAspect(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfTexelAspect)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTexelAspect_params params =
     {
@@ -25828,7 +25828,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTexelAspect(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unSortOrder)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlaySortOrder_params params =
     {
@@ -25841,7 +25841,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlaySortOrder(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punSortOrder)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlaySortOrder(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punSortOrder)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlaySortOrder_params params =
     {
@@ -25854,7 +25854,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlaySortOrder(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayWidthInMeters_params params =
     {
@@ -25867,7 +25867,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayWidthInMeters(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfWidthInMeters)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayWidthInMeters(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfWidthInMeters)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayWidthInMeters_params params =
     {
@@ -25880,7 +25880,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayWidthInMeters(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fCurvature)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayCurvature_params params =
     {
@@ -25893,7 +25893,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayCurvature(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfCurvature)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayCurvature(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfCurvature)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayCurvature_params params =
     {
@@ -25906,7 +25906,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayCurvature(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayPreCurvePitch(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fRadians)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayPreCurvePitch(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fRadians)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayPreCurvePitch_params params =
     {
@@ -25919,7 +25919,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayPreCurvePitch(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayPreCurvePitch(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float *pfRadians)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayPreCurvePitch(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float *pfRadians)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayPreCurvePitch_params params =
     {
@@ -25932,7 +25932,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayPreCurvePitch(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTextureColorSpace_params params =
     {
@@ -25945,7 +25945,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureColorSpace(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTextureColorSpace)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureColorSpace(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTextureColorSpace)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTextureColorSpace_params params =
     {
@@ -25958,7 +25958,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureColorSpace(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTextureBounds_params params =
     {
@@ -25971,7 +25971,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureBounds(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureBounds(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VRTextureBounds_t *pOverlayTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTextureBounds_params params =
     {
@@ -25984,7 +25984,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureBounds(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformType(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTransformType)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformType(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTransformType)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTransformType_params params =
     {
@@ -25997,7 +25997,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformType(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTransformAbsolute_params params =
     {
@@ -26011,7 +26011,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformAbsolute(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformAbsolute(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peTrackingOrigin, HmdMatrix34_t *pmatTrackingOriginToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTransformAbsolute_params params =
     {
@@ -26025,7 +26025,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformAbsolute(str
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unTrackedDevice, const HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -26039,7 +26039,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceRelative(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punTrackedDevice, HmdMatrix34_t *pmatTrackedDeviceToOverlayTransform)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceRelative_params params =
     {
@@ -26053,7 +26053,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char *pchComponentName)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unDeviceIndex, const char *pchComponentName)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -26067,7 +26067,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceComponent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punDeviceIndex, char *pchComponentName, uint32_t unComponentNameSize)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDeviceComponent_params params =
     {
@@ -26082,7 +26082,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformTrackedDevic
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulCursorOverlayHandle, const HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTransformCursor_params params =
     {
@@ -26095,7 +26095,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformCursor(struc
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvHotspot)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvHotspot)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTransformCursor_params params =
     {
@@ -26108,7 +26108,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_027_GetOverlayTransformCurso
     return params._ret;
 }
 
-EVROverlayError __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformProjection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, const VROverlayProjection_t *pProjection, EVREye eEye)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformProjection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, const HmdMatrix34_t *pmatTrackingOriginToOverlayTransform, const VROverlayProjection_t *pProjection, uint32_t eEye)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayTransformProjection_params params =
     {
@@ -26124,7 +26124,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_027_SetOverlayTransformProje
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_ShowOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_ShowOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_ShowOverlay_params params =
     {
@@ -26136,7 +26136,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_ShowOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_HideOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_HideOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_HideOverlay_params params =
     {
@@ -26148,7 +26148,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_HideOverlay(struct w_steam_ifac
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_027_IsOverlayVisible(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_027_IsOverlayVisible(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_IsOverlayVisible_params params =
     {
@@ -26160,7 +26160,7 @@ bool __thiscall winIVROverlay_IVROverlay_027_IsOverlayVisible(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetTransformForOverlayCoordinates(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t *pmatTransform)
 {
     struct cppIVROverlay_IVROverlay_027_GetTransformForOverlayCoordinates_params params =
     {
@@ -26187,7 +26187,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_WaitFrameSync(struct w_steam_if
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_027_PollNextOverlayEvent(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1267 *pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_027_PollNextOverlayEvent(struct w_steam_iface *_this, uint64_t ulOverlayHandle, winVREvent_t_1267 *pEvent, uint32_t uncbVREvent)
 {
     struct cppIVROverlay_IVROverlay_027_PollNextOverlayEvent_params params =
     {
@@ -26201,7 +26201,7 @@ bool __thiscall winIVROverlay_IVROverlay_027_PollNextOverlayEvent(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *peInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *peInputMethod)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayInputMethod_params params =
     {
@@ -26214,7 +26214,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayInputMethod(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMethod)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayInputMethod(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMethod)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayInputMethod_params params =
     {
@@ -26227,7 +26227,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayInputMethod(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayMouseScale_params params =
     {
@@ -26240,7 +26240,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayMouseScale(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayMouseScale(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvecMouseScale)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayMouseScale_params params =
     {
@@ -26253,7 +26253,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayMouseScale(struct w_s
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_027_ComputeOverlayIntersection(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
+bool __thiscall winIVROverlay_IVROverlay_027_ComputeOverlayIntersection(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const VROverlayIntersectionParams_t *pParams, VROverlayIntersectionResults_t *pResults)
 {
     struct cppIVROverlay_IVROverlay_027_ComputeOverlayIntersection_params params =
     {
@@ -26267,7 +26267,7 @@ bool __thiscall winIVROverlay_IVROverlay_027_ComputeOverlayIntersection(struct w
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_027_IsHoverTargetOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_027_IsHoverTargetOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_IsHoverTargetOverlay_params params =
     {
@@ -26279,7 +26279,7 @@ bool __thiscall winIVROverlay_IVROverlay_027_IsHoverTargetOverlay(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayIntersectionMask(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayIntersectionMask(struct w_steam_iface *_this, uint64_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t *pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayIntersectionMask_params params =
     {
@@ -26294,7 +26294,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayIntersectionMask(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_TriggerLaserMouseHapticVibration(struct w_steam_iface *_this, uint64_t ulOverlayHandle, float fDurationSeconds, float fFrequency, float fAmplitude)
 {
     struct cppIVROverlay_IVROverlay_027_TriggerLaserMouseHapticVibration_params params =
     {
@@ -26309,7 +26309,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_TriggerLaserMouseHapticVibratio
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCursor(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulCursorHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCursor(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulCursorHandle)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayCursor_params params =
     {
@@ -26322,7 +26322,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCursor(struct w_steam
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const HmdVector2_t *pvCursor)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const HmdVector2_t *pvCursor)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayCursorPositionOverride_params params =
     {
@@ -26335,7 +26335,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayCursorPositionOverrid
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverride(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverride_params params =
     {
@@ -26347,9 +26347,9 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_ClearOverlayCursorPositionOverr
     return params._ret;
 }
 
-extern uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const Texture_t *pTexture);
+extern uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const Texture_t *pTexture);
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_ClearOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_ClearOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_ClearOverlayTexture_params params =
     {
@@ -26361,7 +26361,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_ClearOverlayTexture(struct w_st
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayRaw(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayRaw(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unBytesPerPixel)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayRaw_params params =
     {
@@ -26377,7 +26377,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayRaw(struct w_steam_if
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayFromFile(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, const char *pchFilePath)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayFromFile(struct w_steam_iface *_this, uint64_t ulOverlayHandle, const char *pchFilePath)
 {
     struct cppIVROverlay_IVROverlay_027_SetOverlayFromFile_params params =
     {
@@ -26392,7 +26392,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetOverlayFromFile(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTexture(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTexture(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void **pNativeTextureHandle, void *pNativeTextureRef, uint32_t *pWidth, uint32_t *pHeight, uint32_t *pNativeFormat, uint32_t *pAPIType, uint32_t *pColorSpace, VRTextureBounds_t *pTextureBounds)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTexture_params params =
     {
@@ -26412,7 +26412,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTexture(struct w_stea
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, void *pNativeTextureHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_ReleaseNativeOverlayHandle(struct w_steam_iface *_this, uint64_t ulOverlayHandle, void *pNativeTextureHandle)
 {
     struct cppIVROverlay_IVROverlay_027_ReleaseNativeOverlayHandle_params params =
     {
@@ -26425,7 +26425,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_ReleaseNativeOverlayHandle(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureSize(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureSize(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *pWidth, uint32_t *pHeight)
 {
     struct cppIVROverlay_IVROverlay_027_GetOverlayTextureSize_params params =
     {
@@ -26439,7 +26439,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_GetOverlayTextureSize(struct w_
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, VROverlayHandle_t *pMainHandle, VROverlayHandle_t *pThumbnailHandle)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_CreateDashboardOverlay(struct w_steam_iface *_this, const char *pchOverlayKey, const char *pchOverlayFriendlyName, uint64_t *pMainHandle, uint64_t *pThumbnailHandle)
 {
     struct cppIVROverlay_IVROverlay_027_CreateDashboardOverlay_params params =
     {
@@ -26465,7 +26465,7 @@ bool __thiscall winIVROverlay_IVROverlay_027_IsDashboardVisible(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVROverlay_IVROverlay_027_IsActiveDashboardOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle)
+bool __thiscall winIVROverlay_IVROverlay_027_IsActiveDashboardOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle)
 {
     struct cppIVROverlay_IVROverlay_027_IsActiveDashboardOverlay_params params =
     {
@@ -26477,7 +26477,7 @@ bool __thiscall winIVROverlay_IVROverlay_027_IsActiveDashboardOverlay(struct w_s
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_SetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t unProcessId)
 {
     struct cppIVROverlay_IVROverlay_027_SetDashboardOverlaySceneProcess_params params =
     {
@@ -26490,7 +26490,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_SetDashboardOverlaySceneProcess
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t *punProcessId)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetDashboardOverlaySceneProcess(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t *punProcessId)
 {
     struct cppIVROverlay_IVROverlay_027_GetDashboardOverlaySceneProcess_params params =
     {
@@ -26514,7 +26514,7 @@ void __thiscall winIVROverlay_IVROverlay_027_ShowDashboard(struct w_steam_iface 
     cppIVROverlay_IVROverlay_027_ShowDashboard( &params );
 }
 
-TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_027_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_GetPrimaryDashboardDevice(struct w_steam_iface *_this)
 {
     struct cppIVROverlay_IVROverlay_027_GetPrimaryDashboardDevice_params params =
     {
@@ -26543,7 +26543,7 @@ uint32_t __thiscall winIVROverlay_IVROverlay_027_ShowKeyboard(struct w_steam_ifa
     return params._ret;
 }
 
-uint32_t __thiscall winIVROverlay_IVROverlay_027_ShowKeyboardForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
+uint32_t __thiscall winIVROverlay_IVROverlay_027_ShowKeyboardForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint32_t eInputMode, uint32_t eLineInputMode, uint32_t unFlags, const char *pchDescription, uint32_t unCharMax, const char *pchExistingText, uint64_t uUserValue)
 {
     struct cppIVROverlay_IVROverlay_027_ShowKeyboardForOverlay_params params =
     {
@@ -26597,7 +26597,7 @@ void __thiscall winIVROverlay_IVROverlay_027_SetKeyboardTransformAbsolute(struct
     cppIVROverlay_IVROverlay_027_SetKeyboardTransformAbsolute( &params );
 }
 
-void __thiscall winIVROverlay_IVROverlay_027_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+void __thiscall winIVROverlay_IVROverlay_027_SetKeyboardPositionForOverlay(struct w_steam_iface *_this, uint64_t ulOverlayHandle, HmdRect2_t avoidRect)
 {
     struct cppIVROverlay_IVROverlay_027_SetKeyboardPositionForOverlay_params params =
     {

@@ -5,7 +5,7 @@ struct cppIVRClientCore_IVRClientCore_002_Init_params
 {
     void *linux_side;
     uint32_t _ret;
-    EVRApplicationType eApplicationType;
+    uint32_t eApplicationType;
 };
 extern void cppIVRClientCore_IVRClientCore_002_Init( struct cppIVRClientCore_IVRClientCore_002_Init_params *params );
 
@@ -43,7 +43,7 @@ struct cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError_params
 {
     void *linux_side;
     const char *_ret;
-    EVRInitError eError;
+    uint32_t eError;
 };
 extern void cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError( struct cppIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError_params *params );
 
@@ -51,7 +51,7 @@ struct cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError_params
 {
     void *linux_side;
     const char *_ret;
-    EVRInitError eError;
+    uint32_t eError;
 };
 extern void cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError( struct cppIVRClientCore_IVRClientCore_002_GetIDForVRInitError_params *params );
 

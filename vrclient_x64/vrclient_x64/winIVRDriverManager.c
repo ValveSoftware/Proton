@@ -34,7 +34,7 @@ uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverCount(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(struct w_steam_iface *_this, DriverId_t nDriver, char *pchValue, uint32_t unBufferSize)
+uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(struct w_steam_iface *_this, uint32_t nDriver, char *pchValue, uint32_t unBufferSize)
 {
     struct cppIVRDriverManager_IVRDriverManager_001_GetDriverName_params params =
     {
@@ -48,7 +48,7 @@ uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(struc
     return params._ret;
 }
 
-DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(struct w_steam_iface *_this, const char *pchDriverName)
+uint64_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(struct w_steam_iface *_this, const char *pchDriverName)
 {
     struct cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle_params params =
     {
@@ -60,7 +60,7 @@ DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHand
     return params._ret;
 }
 
-bool __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(struct w_steam_iface *_this, DriverId_t nDriver)
+bool __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(struct w_steam_iface *_this, uint32_t nDriver)
 {
     struct cppIVRDriverManager_IVRDriverManager_001_IsEnabled_params params =
     {

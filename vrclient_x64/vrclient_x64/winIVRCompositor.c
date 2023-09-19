@@ -291,7 +291,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_005_IsFullscreen(struct w_steam_i
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(struct w_steam_iface *_this, const Compositor_OverlaySettings *pSettings, float fAspectRatio, TrackingUniverseOrigin eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
+bool __thiscall winIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection(struct w_steam_iface *_this, const Compositor_OverlaySettings *pSettings, float fAspectRatio, uint32_t eOrigin, HmdVector3_t vSource, HmdVector3_t vDirection, HmdVector2_t *pvecIntersectionUV, HmdVector3_t *pvecIntersectionTrackingSpace)
 {
     struct cppIVRCompositor_IVRCompositor_005_ComputeOverlayIntersection_params params =
     {
@@ -2730,7 +2730,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_012_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_012_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -3131,7 +3131,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_013_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -3547,7 +3547,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_014_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -3996,7 +3996,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -4258,7 +4258,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_015_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_RequestScreenshot(struct w_steam_iface *_this, EVRScreenshotType type, const char *pchDestinationFileName, const char *pchVRDestinationFileName)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_RequestScreenshot(struct w_steam_iface *_this, uint32_t type, const char *pchDestinationFileName, const char *pchVRDestinationFileName)
 {
     struct cppIVRCompositor_IVRCompositor_015_RequestScreenshot_params params =
     {
@@ -4272,7 +4272,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_RequestScreensh
     return params._ret;
 }
 
-EVRScreenshotType __thiscall winIVRCompositor_IVRCompositor_015_GetCurrentScreenshotType(struct w_steam_iface *_this)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetCurrentScreenshotType(struct w_steam_iface *_this)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetCurrentScreenshotType_params params =
     {
@@ -4283,7 +4283,7 @@ EVRScreenshotType __thiscall winIVRCompositor_IVRCompositor_015_GetCurrentScreen
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetMirrorTextureD3D11_params params =
     {
@@ -4297,7 +4297,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetMirrorTextur
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_015_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_015_GetMirrorTextureGL_params params =
     {
@@ -4311,7 +4311,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture_params params =
     {
@@ -4324,7 +4324,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_015_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_015_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_015_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_015_LockGLSharedTextureForAccess_params params =
     {
@@ -4335,7 +4335,7 @@ void __thiscall winIVRCompositor_IVRCompositor_015_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_015_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_015_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_015_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_015_UnlockGLSharedTextureForAccess_params params =
     {
@@ -4546,7 +4546,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -4808,7 +4808,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_016_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetMirrorTextureD3D11_params params =
     {
@@ -4822,7 +4822,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetMirrorTextur
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_016_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_016_GetMirrorTextureGL_params params =
     {
@@ -4836,7 +4836,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture_params params =
     {
@@ -4849,7 +4849,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_016_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_016_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_016_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_016_LockGLSharedTextureForAccess_params params =
     {
@@ -4860,7 +4860,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_016_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_016_UnlockGLSharedTextureForAccess_params params =
     {
@@ -5068,7 +5068,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -5343,7 +5343,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_017_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetMirrorTextureD3D11_params params =
     {
@@ -5357,7 +5357,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetMirrorTextur
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_017_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_017_GetMirrorTextureGL_params params =
     {
@@ -5371,7 +5371,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_017_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture_params params =
     {
@@ -5384,7 +5384,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_017_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_017_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_017_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_017_LockGLSharedTextureForAccess_params params =
     {
@@ -5395,7 +5395,7 @@ void __thiscall winIVRCompositor_IVRCompositor_017_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_017_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_017_UnlockGLSharedTextureForAccess_params params =
     {
@@ -5607,7 +5607,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -5906,7 +5906,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_018_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetMirrorTextureD3D11_params params =
     {
@@ -5920,7 +5920,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetMirrorTextur
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_018_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_018_GetMirrorTextureGL_params params =
     {
@@ -5934,7 +5934,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture_params params =
     {
@@ -5947,7 +5947,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_018_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess_params params =
     {
@@ -5958,7 +5958,7 @@ void __thiscall winIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_018_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_018_UnlockGLSharedTextureForAccess_params params =
     {
@@ -6176,7 +6176,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -6475,7 +6475,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_019_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetMirrorTextureD3D11_params params =
     {
@@ -6489,7 +6489,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetMirrorTextur
     return params._ret;
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_019_GetMirrorTextureGL_params params =
     {
@@ -6503,7 +6503,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture_params params =
     {
@@ -6516,7 +6516,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_019_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_019_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_019_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_019_LockGLSharedTextureForAccess_params params =
     {
@@ -6527,7 +6527,7 @@ void __thiscall winIVRCompositor_IVRCompositor_019_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_019_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_019_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_019_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_019_UnlockGLSharedTextureForAccess_params params =
     {
@@ -6765,7 +6765,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -7064,7 +7064,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_020_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetMirrorTextureD3D11_params params =
     {
@@ -7089,7 +7089,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_ReleaseMirrorTextureD3D11(str
     cppIVRCompositor_IVRCompositor_020_ReleaseMirrorTextureD3D11( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_020_GetMirrorTextureGL_params params =
     {
@@ -7103,7 +7103,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture_params params =
     {
@@ -7116,7 +7116,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_020_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess_params params =
     {
@@ -7127,7 +7127,7 @@ void __thiscall winIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_020_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_020_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_020_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_020_UnlockGLSharedTextureForAccess_params params =
     {
@@ -7369,7 +7369,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -7668,7 +7668,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_021_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetMirrorTextureD3D11_params params =
     {
@@ -7693,7 +7693,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_ReleaseMirrorTextureD3D11(str
     cppIVRCompositor_IVRCompositor_021_ReleaseMirrorTextureD3D11( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_021_GetMirrorTextureGL_params params =
     {
@@ -7707,7 +7707,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture_params params =
     {
@@ -7720,7 +7720,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_021_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_021_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_021_LockGLSharedTextureForAccess_params params =
     {
@@ -7731,7 +7731,7 @@ void __thiscall winIVRCompositor_IVRCompositor_021_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_021_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_021_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_021_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_021_UnlockGLSharedTextureForAccess_params params =
     {
@@ -8002,7 +8002,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -8301,7 +8301,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_022_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetMirrorTextureD3D11_params params =
     {
@@ -8326,7 +8326,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_ReleaseMirrorTextureD3D11(str
     cppIVRCompositor_IVRCompositor_022_ReleaseMirrorTextureD3D11( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_022_GetMirrorTextureGL_params params =
     {
@@ -8340,7 +8340,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture_params params =
     {
@@ -8353,7 +8353,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_022_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_022_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_022_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_022_LockGLSharedTextureForAccess_params params =
     {
@@ -8364,7 +8364,7 @@ void __thiscall winIVRCompositor_IVRCompositor_022_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_022_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_022_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_022_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_022_UnlockGLSharedTextureForAccess_params params =
     {
@@ -8676,7 +8676,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -8975,7 +8975,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_024_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetMirrorTextureD3D11_params params =
     {
@@ -9000,7 +9000,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_ReleaseMirrorTextureD3D11(str
     cppIVRCompositor_IVRCompositor_024_ReleaseMirrorTextureD3D11( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_024_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_024_GetMirrorTextureGL_params params =
     {
@@ -9014,7 +9014,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_024_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture_params params =
     {
@@ -9027,7 +9027,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_024_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_024_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_024_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_024_LockGLSharedTextureForAccess_params params =
     {
@@ -9038,7 +9038,7 @@ void __thiscall winIVRCompositor_IVRCompositor_024_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_024_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_024_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_024_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_024_UnlockGLSharedTextureForAccess_params params =
     {
@@ -9384,7 +9384,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -9683,7 +9683,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_026_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetMirrorTextureD3D11_params params =
     {
@@ -9708,7 +9708,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_ReleaseMirrorTextureD3D11(str
     cppIVRCompositor_IVRCompositor_026_ReleaseMirrorTextureD3D11( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_026_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_026_GetMirrorTextureGL_params params =
     {
@@ -9722,7 +9722,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_026_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture_params params =
     {
@@ -9735,7 +9735,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_026_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_026_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_026_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_026_LockGLSharedTextureForAccess_params params =
     {
@@ -9746,7 +9746,7 @@ void __thiscall winIVRCompositor_IVRCompositor_026_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_026_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_026_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_026_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_026_UnlockGLSharedTextureForAccess_params params =
     {
@@ -10151,7 +10151,7 @@ uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoses(struct w_ste
     return params._ret;
 }
 
-uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDeviceIndex(struct w_steam_iface *_this, uint32_t unDeviceIndex, TrackedDevicePose_t *pOutputPose, TrackedDevicePose_t *pOutputGamePose)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetLastPoseForTrackedDeviceIndex_params params =
     {
@@ -10450,7 +10450,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_SuspendRendering(struct w_ste
     cppIVRCompositor_IVRCompositor_027_SuspendRendering( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetMirrorTextureD3D11(struct w_steam_iface *_this, EVREye eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetMirrorTextureD3D11(struct w_steam_iface *_this, uint32_t eEye, void *pD3D11DeviceOrResource, void **ppD3D11ShaderResourceView)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetMirrorTextureD3D11_params params =
     {
@@ -10475,7 +10475,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_ReleaseMirrorTextureD3D11(str
     cppIVRCompositor_IVRCompositor_027_ReleaseMirrorTextureD3D11( &params );
 }
 
-EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetMirrorTextureGL(struct w_steam_iface *_this, EVREye eEye, glUInt_t *pglTextureId, glSharedTextureHandle_t *pglSharedTextureHandle)
+uint32_t __thiscall winIVRCompositor_IVRCompositor_027_GetMirrorTextureGL(struct w_steam_iface *_this, uint32_t eEye, uint32_t *pglTextureId, void **pglSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_027_GetMirrorTextureGL_params params =
     {
@@ -10489,7 +10489,7 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_027_GetMirrorTextur
     return params._ret;
 }
 
-bool __thiscall winIVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture(struct w_steam_iface *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+bool __thiscall winIVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture(struct w_steam_iface *_this, uint32_t glTextureId, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture_params params =
     {
@@ -10502,7 +10502,7 @@ bool __thiscall winIVRCompositor_IVRCompositor_027_ReleaseSharedGLTexture(struct
     return params._ret;
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_027_LockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_027_LockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_027_LockGLSharedTextureForAccess_params params =
     {
@@ -10513,7 +10513,7 @@ void __thiscall winIVRCompositor_IVRCompositor_027_LockGLSharedTextureForAccess(
     cppIVRCompositor_IVRCompositor_027_LockGLSharedTextureForAccess( &params );
 }
 
-void __thiscall winIVRCompositor_IVRCompositor_027_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, glSharedTextureHandle_t glSharedTextureHandle)
+void __thiscall winIVRCompositor_IVRCompositor_027_UnlockGLSharedTextureForAccess(struct w_steam_iface *_this, void *glSharedTextureHandle)
 {
     struct cppIVRCompositor_IVRCompositor_027_UnlockGLSharedTextureForAccess_params params =
     {

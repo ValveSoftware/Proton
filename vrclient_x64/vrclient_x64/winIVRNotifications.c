@@ -36,7 +36,7 @@ uint32_t __thiscall winIVRNotifications_IVRNotifications_001_GetErrorString(stru
     return params._ret;
 }
 
-uint32_t __thiscall winIVRNotifications_IVRNotifications_001_CreateNotification(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, const NotificationBitmap *photo, VRNotificationId *notificationId)
+uint32_t __thiscall winIVRNotifications_IVRNotifications_001_CreateNotification(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulUserValue, const char *strType, const char *strText, const char *strCategory, const NotificationBitmap *photo, uint32_t *notificationId)
 {
     struct cppIVRNotifications_IVRNotifications_001_CreateNotification_params params =
     {
@@ -54,7 +54,7 @@ uint32_t __thiscall winIVRNotifications_IVRNotifications_001_CreateNotification(
     return params._ret;
 }
 
-uint32_t __thiscall winIVRNotifications_IVRNotifications_001_DismissNotification(struct w_steam_iface *_this, VRNotificationId notificationId)
+uint32_t __thiscall winIVRNotifications_IVRNotifications_001_DismissNotification(struct w_steam_iface *_this, uint32_t notificationId)
 {
     struct cppIVRNotifications_IVRNotifications_001_DismissNotification_params params =
     {
@@ -126,7 +126,7 @@ void destroy_winIVRNotifications_IVRNotifications_001_FnTable(struct w_steam_ifa
 DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_002_CreateNotification, 40)
 DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_002_RemoveNotification, 8)
 
-uint32_t __thiscall winIVRNotifications_IVRNotifications_002_CreateNotification(struct w_steam_iface *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, uint32_t type, const char *pchText, uint32_t style, const NotificationBitmap_t *pImage, VRNotificationId *pNotificationId)
+uint32_t __thiscall winIVRNotifications_IVRNotifications_002_CreateNotification(struct w_steam_iface *_this, uint64_t ulOverlayHandle, uint64_t ulUserValue, uint32_t type, const char *pchText, uint32_t style, const NotificationBitmap_t *pImage, uint32_t *pNotificationId)
 {
     struct cppIVRNotifications_IVRNotifications_002_CreateNotification_params params =
     {
@@ -144,7 +144,7 @@ uint32_t __thiscall winIVRNotifications_IVRNotifications_002_CreateNotification(
     return params._ret;
 }
 
-uint32_t __thiscall winIVRNotifications_IVRNotifications_002_RemoveNotification(struct w_steam_iface *_this, VRNotificationId notificationId)
+uint32_t __thiscall winIVRNotifications_IVRNotifications_002_RemoveNotification(struct w_steam_iface *_this, uint32_t notificationId)
 {
     struct cppIVRNotifications_IVRNotifications_002_RemoveNotification_params params =
     {
