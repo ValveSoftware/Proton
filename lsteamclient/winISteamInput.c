@@ -1223,7 +1223,7 @@ void __thiscall winISteamInput_SteamInput005_EnableDeviceCallbacks(struct w_stea
     cppISteamInput_SteamInput005_EnableDeviceCallbacks( &params );
 }
 
-void __thiscall winISteamInput_SteamInput005_EnableActionEventCallbacks(struct w_steam_iface *_this, SteamInputActionEventCallbackPointer pCallback)
+void __thiscall winISteamInput_SteamInput005_EnableActionEventCallbacks(struct w_steam_iface *_this, void (*__stdcall pCallback)(SteamInputActionEvent_t *))
 {
     struct cppISteamInput_SteamInput005_EnableActionEventCallbacks_params params =
     {
@@ -1935,7 +1935,7 @@ void __thiscall winISteamInput_SteamInput006_EnableDeviceCallbacks(struct w_stea
     cppISteamInput_SteamInput006_EnableDeviceCallbacks( &params );
 }
 
-void __thiscall winISteamInput_SteamInput006_EnableActionEventCallbacks(struct w_steam_iface *_this, SteamInputActionEventCallbackPointer pCallback)
+void __thiscall winISteamInput_SteamInput006_EnableActionEventCallbacks(struct w_steam_iface *_this, void (*__stdcall pCallback)(SteamInputActionEvent_t *))
 {
     struct cppISteamInput_SteamInput006_EnableActionEventCallbacks_params params =
     {

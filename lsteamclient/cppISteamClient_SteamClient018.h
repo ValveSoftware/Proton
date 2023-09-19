@@ -201,7 +201,7 @@ extern void cppISteamClient_SteamClient018_GetIPCCallCount( struct cppISteamClie
 struct cppISteamClient_SteamClient018_SetWarningMessageHook_params
 {
     void *linux_side;
-    SteamAPIWarningMessageHook_t pFunction;
+    void (*__cdecl pFunction)(int32_t, const char *);
 };
 extern void cppISteamClient_SteamClient018_SetWarningMessageHook( struct cppISteamClient_SteamClient018_SetWarningMessageHook_params *params );
 
@@ -295,21 +295,21 @@ extern void cppISteamClient_SteamClient018_GetISteamHTMLSurface( struct cppIStea
 struct cppISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     void *linux_side;
-    void *_a;
+    void (*__stdcall _a)(void);
 };
 extern void cppISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params *params );
 
 struct cppISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     void *linux_side;
-    void *_a;
+    void (*__stdcall _a)(void);
 };
 extern void cppISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params *params );
 
 struct cppISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
 {
     void *linux_side;
-    SteamAPI_CheckCallbackRegistered_t func;
+    uint32_t (*__stdcall func)(int32_t);
 };
 extern void cppISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess( struct cppISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params );
 

@@ -101,7 +101,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_p
 {
     void *linux_side;
     uint32_t eDetailLevel;
-    FSteamNetworkingSocketsDebugOutput pfnFunc;
+    void (*__stdcall pfnFunc)(uint32_t, const char *);
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction( struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_params *params );
 

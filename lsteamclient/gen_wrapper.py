@@ -558,14 +558,46 @@ def param_needs_conversion(decl):
            struct_needs_conversion(decl)
 
 
+def callconv(cursor):
+    if type(cursor) is not Cursor:
+        return ''
+    canon = cursor.type.get_canonical()
+    if canon.kind != TypeKind.POINTER:
+        return ''
+    canon = canon.get_pointee()
+    if canon.kind != TypeKind.FUNCTIONPROTO:
+        return ''
+    if cursor.type.kind == TypeKind.TYPEDEF:
+        cursor = cursor.type.get_declaration()
+
+    tokens = cursor.get_tokens()
+    while next(tokens).spelling != '(': pass
+    token = f'{next(tokens).spelling} '
+    return token.replace('*', '__stdcall') \
+                .replace('S_CALLTYPE', '__cdecl')
+
+
+def declspec_func(decl, name):
+    ret = declspec(decl.get_result(), "")
+    params = [declspec(a, "") for a in decl.argument_types()]
+    params = ", ".join(params) if len(params) else "void"
+    return f'{ret} ({name})({params})'
+
+
 def declspec(decl, name):
+    call = callconv(decl)
     if type(decl) is Cursor:
         decl = decl.type
+    canon = decl.get_canonical()
+
+    if canon.kind == TypeKind.POINTER and canon.get_pointee().kind == TypeKind.FUNCTIONPROTO:
+        canon = canon.get_pointee()
+        return declspec_func(canon, f"*{call}{name}")
 
     const = 'const ' if decl.is_const_qualified() else ''
     if decl.kind in (TypeKind.POINTER, TypeKind.LVALUEREFERENCE):
         decl = decl.get_pointee()
-        return declspec(decl, f"*{const}{name}")
+        return declspec(decl, f"*{call}{const}{name}")
     if decl.kind == TypeKind.CONSTANTARRAY:
         decl, count = decl.element_type, decl.element_count
         return declspec(decl, f"({const}{name})[{count}]")
@@ -658,9 +690,9 @@ def handle_method_cpp(method, classname, cppname, out):
 
     for name, param in sorted(manual_convert.items()):
         if name in MANUAL_PARAMS:
-            out(f'    params->{name} = manual_convert_{name}( params->{name} );\n')
+            out(f'    {param.type.spelling} lin_{name} = manual_convert_{name}( params->{name} );\n')
         else:
-            out(f'    params->{name} = ({param.type.spelling})manual_convert_{param.type.spelling}( (void *)params->{name} );\n')
+            out(f'    {param.type.spelling} lin_{name} = ({param.type.spelling})manual_convert_{param.type.spelling}( (void *)params->{name} );\n')
 
     if returns_void:
         out(u'    ')
@@ -672,6 +704,7 @@ def handle_method_cpp(method, classname, cppname, out):
     def param_call(name, param):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in need_convert: return f"{pfx}lin_{name}"
+        if name in manual_convert: return f"lin_{name}"
         if param.type.kind == TypeKind.LVALUEREFERENCE: return f'*params->{name}'
         return f"({param.type.spelling})params->{name}"
 

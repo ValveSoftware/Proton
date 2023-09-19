@@ -650,7 +650,7 @@ void /*ISteamNetworking*/ * __thiscall winISteamClient_SteamClient007_GetISteamN
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient007_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient007_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient007_SetWarningMessageHook_params params =
     {
@@ -1014,7 +1014,7 @@ uint32_t __thiscall winISteamClient_SteamClient008_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient008_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient008_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient008_SetWarningMessageHook_params params =
     {
@@ -1378,7 +1378,7 @@ uint32_t __thiscall winISteamClient_SteamClient009_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient009_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient009_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient009_SetWarningMessageHook_params params =
     {
@@ -1745,7 +1745,7 @@ uint32_t __thiscall winISteamClient_SteamClient010_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient010_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient010_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient010_SetWarningMessageHook_params params =
     {
@@ -2156,7 +2156,7 @@ uint32_t __thiscall winISteamClient_SteamClient011_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient011_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient011_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient011_SetWarningMessageHook_params params =
     {
@@ -2555,7 +2555,7 @@ uint32_t __thiscall winISteamClient_SteamClient012_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient012_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient012_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient012_SetWarningMessageHook_params params =
     {
@@ -3004,7 +3004,7 @@ uint32_t __thiscall winISteamClient_SteamClient013_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient013_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient013_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient013_SetWarningMessageHook_params params =
     {
@@ -3498,7 +3498,7 @@ uint32_t __thiscall winISteamClient_SteamClient014_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient014_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient014_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient014_SetWarningMessageHook_params params =
     {
@@ -3979,7 +3979,7 @@ uint32_t __thiscall winISteamClient_SteamClient015_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient015_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient015_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient015_SetWarningMessageHook_params params =
     {
@@ -4480,7 +4480,7 @@ uint32_t __thiscall winISteamClient_SteamClient016_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient016_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient016_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient016_SetWarningMessageHook_params params =
     {
@@ -4622,7 +4622,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient016_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, SteamAPI_PostAPIResultInProcess_t func)
+void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall func)(uint64_t, void *, uint32_t, int32_t))
 {
     struct cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -4633,7 +4633,7 @@ void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProc
     cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, SteamAPI_PostAPIResultInProcess_t func)
+void __thiscall winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall func)(uint64_t, void *, uint32_t, int32_t))
 {
     struct cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -4644,7 +4644,7 @@ void __thiscall winISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInP
     cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, SteamAPI_CheckCallbackRegistered_t func)
+void __thiscall winISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*__stdcall func)(int32_t))
 {
     struct cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -5036,7 +5036,7 @@ uint32_t __thiscall winISteamClient_SteamClient017_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient017_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient017_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient017_SetWarningMessageHook_params params =
     {
@@ -5177,7 +5177,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient017_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5188,7 +5188,7 @@ void __thiscall winISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIR
     cppISteamClient_SteamClient017_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5199,7 +5199,7 @@ void __thiscall winISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostA
     cppISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, SteamAPI_CheckCallbackRegistered_t func)
+void __thiscall winISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*__stdcall func)(int32_t))
 {
     struct cppISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -5657,7 +5657,7 @@ uint32_t __thiscall winISteamClient_SteamClient018_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient018_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient018_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient018_SetWarningMessageHook_params params =
     {
@@ -5798,7 +5798,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient018_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5809,7 +5809,7 @@ void __thiscall winISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIR
     cppISteamClient_SteamClient018_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -5820,7 +5820,7 @@ void __thiscall winISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostA
     cppISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, SteamAPI_CheckCallbackRegistered_t func)
+void __thiscall winISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*__stdcall func)(int32_t))
 {
     struct cppISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -6312,7 +6312,7 @@ uint32_t __thiscall winISteamClient_SteamClient019_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient019_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient019_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient019_SetWarningMessageHook_params params =
     {
@@ -6453,7 +6453,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient019_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -6464,7 +6464,7 @@ void __thiscall winISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIR
     cppISteamClient_SteamClient019_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -6475,7 +6475,7 @@ void __thiscall winISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostA
     cppISteamClient_SteamClient019_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient019_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, SteamAPI_CheckCallbackRegistered_t func)
+void __thiscall winISteamClient_SteamClient019_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*__stdcall func)(int32_t))
 {
     struct cppISteamClient_SteamClient019_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
@@ -6984,7 +6984,7 @@ uint32_t __thiscall winISteamClient_SteamClient020_GetIPCCallCount(struct w_stea
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient020_SetWarningMessageHook(struct w_steam_iface *_this, SteamAPIWarningMessageHook_t pFunction)
+void __thiscall winISteamClient_SteamClient020_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
 {
     struct cppISteamClient_SteamClient020_SetWarningMessageHook_params params =
     {
@@ -7125,7 +7125,7 @@ void /*ISteamHTMLSurface*/ * __thiscall winISteamClient_SteamClient020_GetISteam
     return params._ret;
 }
 
-void __thiscall winISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -7136,7 +7136,7 @@ void __thiscall winISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIR
     cppISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void *_a)
+void __thiscall winISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess(struct w_steam_iface *_this, void (*__stdcall _a)(void))
 {
     struct cppISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params params =
     {
@@ -7147,7 +7147,7 @@ void __thiscall winISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostA
     cppISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( &params );
 }
 
-void __thiscall winISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, SteamAPI_CheckCallbackRegistered_t func)
+void __thiscall winISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess(struct w_steam_iface *_this, uint32_t (*__cdecl func)(int32_t))
 {
     struct cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params params =
     {
