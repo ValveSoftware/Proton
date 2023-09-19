@@ -14,6 +14,7 @@ import os
 import re
 
 sdk_versions = [
+    "v1.26.7",
     "v1.23.7",
     "v1.16.8",
     "v1.14.15",
@@ -379,7 +380,8 @@ def ivroverlay_set_overlay_texture(cppname, method):
             "022" in cppname or \
             "024" in cppname or \
             "025" in cppname or \
-            "026" in cppname
+            "026" in cppname or \
+            "027" in cppname
     return "ivroverlay_set_overlay_texture"
 
 def ivrinput_get_digital_action_data(cppname, method):

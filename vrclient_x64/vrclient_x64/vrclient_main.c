@@ -37,10 +37,10 @@ typedef struct winRenderModel_t_1015 winRenderModel_t_1015;
 typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015;
 #include "cppIVRRenderModels_IVRRenderModels_005.h"
 
-/* this is converted to 1237 during load_linux_texture_map, so ensure new
+/* this is converted to 1267 during load_linux_texture_map, so ensure new
  * structure is compatible before updating this number */
-typedef struct winRenderModel_t_1237 winRenderModel_t_1237;
-typedef struct winRenderModel_TextureMap_t_1237 winRenderModel_TextureMap_t_1237;
+typedef struct winRenderModel_t_1267 winRenderModel_t_1267;
+typedef struct winRenderModel_TextureMap_t_1267 winRenderModel_TextureMap_t_1267;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 #include "wine/unixlib.h"
