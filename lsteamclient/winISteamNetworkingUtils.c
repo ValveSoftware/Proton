@@ -177,7 +177,7 @@ int64_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_GetLocalTime
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*__stdcall pfnFunc)(uint32_t, const char *))
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*W_STDCALL pfnFunc)(uint32_t, const char *))
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction_params params =
     {
@@ -519,7 +519,7 @@ int64_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_GetLocalTime
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*__stdcall pfnFunc)(uint32_t, const char *))
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*W_STDCALL pfnFunc)(uint32_t, const char *))
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils002_SetDebugOutputFunction_params params =
     {
@@ -874,7 +874,7 @@ int64_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_GetLocalTime
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*__stdcall pfnFunc)(uint32_t, const char *))
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*W_STDCALL pfnFunc)(uint32_t, const char *))
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction_params params =
     {
@@ -1233,7 +1233,7 @@ int64_t __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_GetLocalTime
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*__stdcall pfnFunc)(uint32_t, const char *))
+void __thiscall winISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction(struct w_steam_iface *_this, uint32_t eDetailLevel, void (*W_STDCALL pfnFunc)(uint32_t, const char *))
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils004_SetDebugOutputFunction_params params =
     {

@@ -182,7 +182,7 @@ void cppISteamClient_SteamClient016_GetIPCCallCount( struct cppISteamClient_Stea
 void cppISteamClient_SteamClient016_SetWarningMessageHook( struct cppISteamClient_SteamClient016_SetWarningMessageHook_params *params )
 {
     struct cppISteamClient_SteamClient016 *iface = (struct cppISteamClient_SteamClient016 *)params->linux_side;
-    void (*lin_pFunction)(int32_t, const char *) = (void (*)(int32_t, const char *))manual_convert_SteamAPIWarningMessageHook_t( (void *)params->pFunction );
+    void (*U_CDECL lin_pFunction)(int32_t, const char *) = manual_convert_SetWarningMessageHook_pFunction( params->pFunction );
     iface->SetWarningMessageHook( lin_pFunction );
 }
 
@@ -244,19 +244,21 @@ void cppISteamClient_SteamClient016_GetISteamHTMLSurface( struct cppISteamClient
 void cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess_params *params )
 {
     struct cppISteamClient_SteamClient016 *iface = (struct cppISteamClient_SteamClient016 *)params->linux_side;
-    iface->Set_SteamAPI_CPostAPIResultInProcess( (void (*)(uint64_t, void *, uint32_t, int32_t))params->func );
+    void (*U_STDCALL lin_func)(uint64_t, void *, uint32_t, int32_t) = manual_convert_Set_SteamAPI_CPostAPIResultInProcess_func( params->func );
+    iface->Set_SteamAPI_CPostAPIResultInProcess( lin_func );
 }
 
 void cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess_params *params )
 {
     struct cppISteamClient_SteamClient016 *iface = (struct cppISteamClient_SteamClient016 *)params->linux_side;
-    iface->Remove_SteamAPI_CPostAPIResultInProcess( (void (*)(uint64_t, void *, uint32_t, int32_t))params->func );
+    void (*U_STDCALL lin_func)(uint64_t, void *, uint32_t, int32_t) = manual_convert_Remove_SteamAPI_CPostAPIResultInProcess_func( params->func );
+    iface->Remove_SteamAPI_CPostAPIResultInProcess( lin_func );
 }
 
 void cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess( struct cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params )
 {
     struct cppISteamClient_SteamClient016 *iface = (struct cppISteamClient_SteamClient016 *)params->linux_side;
-    uint32_t (*lin_func)(int32_t) = (uint32_t (*)(int32_t))manual_convert_SteamAPI_CheckCallbackRegistered_t( (void *)params->func );
+    uint32_t (*U_STDCALL lin_func)(int32_t) = manual_convert_Set_SteamAPI_CCheckCallbackRegisteredInProcess_func( params->func );
     iface->Set_SteamAPI_CCheckCallbackRegisteredInProcess( lin_func );
 }
 

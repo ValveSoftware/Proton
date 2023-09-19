@@ -457,7 +457,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils004_GetIPCCallCount(struct w_steam_
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils004_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
+void __thiscall winISteamUtils_SteamUtils004_SetWarningMessageHook(struct w_steam_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
 {
     struct cppISteamUtils_SteamUtils004_SetWarningMessageHook_params params =
     {
@@ -743,7 +743,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils005_GetIPCCallCount(struct w_steam_
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils005_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
+void __thiscall winISteamUtils_SteamUtils005_SetWarningMessageHook(struct w_steam_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
 {
     struct cppISteamUtils_SteamUtils005_SetWarningMessageHook_params params =
     {
@@ -1100,7 +1100,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils006_GetIPCCallCount(struct w_steam_
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils006_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
+void __thiscall winISteamUtils_SteamUtils006_SetWarningMessageHook(struct w_steam_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
 {
     struct cppISteamUtils_SteamUtils006_SetWarningMessageHook_params params =
     {
@@ -1482,7 +1482,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils007_GetIPCCallCount(struct w_steam_
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils007_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
+void __thiscall winISteamUtils_SteamUtils007_SetWarningMessageHook(struct w_steam_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
 {
     struct cppISteamUtils_SteamUtils007_SetWarningMessageHook_params params =
     {
@@ -1880,7 +1880,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils008_GetIPCCallCount(struct w_steam_
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils008_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
+void __thiscall winISteamUtils_SteamUtils008_SetWarningMessageHook(struct w_steam_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
 {
     struct cppISteamUtils_SteamUtils008_SetWarningMessageHook_params params =
     {
@@ -2307,7 +2307,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils009_GetIPCCallCount(struct w_steam_
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils009_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
+void __thiscall winISteamUtils_SteamUtils009_SetWarningMessageHook(struct w_steam_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
 {
     struct cppISteamUtils_SteamUtils009_SetWarningMessageHook_params params =
     {
@@ -2815,7 +2815,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils010_GetIPCCallCount(struct w_steam_
     return params._ret;
 }
 
-void __thiscall winISteamUtils_SteamUtils010_SetWarningMessageHook(struct w_steam_iface *_this, void (*__cdecl pFunction)(int32_t, const char *))
+void __thiscall winISteamUtils_SteamUtils010_SetWarningMessageHook(struct w_steam_iface *_this, void (*W_CDECL pFunction)(int32_t, const char *))
 {
     struct cppISteamUtils_SteamUtils010_SetWarningMessageHook_params params =
     {

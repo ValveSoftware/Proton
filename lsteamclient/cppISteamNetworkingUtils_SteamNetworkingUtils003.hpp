@@ -118,7 +118,7 @@ void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetLocalTimestamp( struct 
 void cppISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SetDebugOutputFunction_params *params )
 {
     struct cppISteamNetworkingUtils_SteamNetworkingUtils003 *iface = (struct cppISteamNetworkingUtils_SteamNetworkingUtils003 *)params->linux_side;
-    void (*lin_pfnFunc)(uint32_t, const char *) = (void (*)(uint32_t, const char *))manual_convert_FSteamNetworkingSocketsDebugOutput( (void *)params->pfnFunc );
+    void (*U_STDCALL lin_pfnFunc)(uint32_t, const char *) = manual_convert_SetDebugOutputFunction_pfnFunc( params->pfnFunc );
     iface->SetDebugOutputFunction( params->eDetailLevel, lin_pfnFunc );
 }
 

@@ -229,6 +229,9 @@ MANUAL_METHODS = {
         Method("DestroyFakeUDPPort"),
         Method("ReceiveMessages"),
     ],
+    "cppISteamClient_SteamClient": [
+        Method("Set_SteamAPI_CCheckCallbackRegisteredInProcess", lambda version: version >= 20),
+    ],
 }
 
 
@@ -258,7 +261,9 @@ def post_execution_function(classname, method_name):
 MANUAL_TYPES = [
     "FSteamNetworkingSocketsDebugOutput",
     "SteamAPIWarningMessageHook_t",
-    "SteamAPI_CheckCallbackRegistered_t"
+    "SteamAPI_CheckCallbackRegistered_t",
+    "SteamAPI_PostAPIResultInProcess_t",
+    "void ()",
 ]
 
 # manual converters for specific parameters
@@ -592,9 +597,10 @@ def callconv(cursor, prefix):
 
     tokens = cursor.get_tokens()
     while next(tokens).spelling != '(': pass
-    token = f'{next(tokens).spelling} '
-    return token.replace('*', '__stdcall') \
-                .replace('S_CALLTYPE', '__cdecl')
+    token = next(tokens).spelling.strip('_')
+    token = token.replace('*', 'stdcall')
+    token = token.replace('S_CALLTYPE', 'cdecl')
+    return f'{prefix[0].upper()}_{token.upper()} '
 
 
 def declspec_func(decl, name, prefix):
@@ -691,27 +697,27 @@ def handle_method_cpp(method, classname, cppname, out):
         type_name = underlying_typename(param)
 
         if param.type.kind != TypeKind.POINTER:
-            out(f'    {declspec(param, f"lin_{name}", None)};\n')
+            out(f'    {declspec(param, f"lin_{name}", "u_")};\n')
             out(f'    win_to_lin_struct_{type_name}_{sdkver}( &params->{name}, &lin_{name} );\n')
             continue
 
         pointee = param.type.get_pointee()
         if pointee.kind == TypeKind.POINTER:
             need_output[name] = param
-            out(f'    {declspec(pointee, f"lin_{name}", None)};\n')
+            out(f'    {declspec(pointee, f"lin_{name}", "u_")};\n')
             continue
 
         if not pointee.is_const_qualified():
             need_output[name] = param
 
-        out(f'    {declspec(pointee, f"lin_{name}", None)};\n')
+        out(f'    {declspec(pointee, f"lin_{name}", "u_")};\n')
         out(f'    win_to_lin_struct_{type_name}_{sdkver}( params->{name}, &lin_{name} );\n')
 
     for name, param in sorted(manual_convert.items()):
         if name in MANUAL_PARAMS:
-            out(f'    {declspec(param, f"lin_{name}", None)} = manual_convert_{name}( params->{name} );\n')
+            out(f'    {declspec(param, f"lin_{name}", "u_")} = manual_convert_{name}( params->{name} );\n')
         else:
-            out(f'    {declspec(param, f"lin_{name}", None)} = ({declspec(param, "", None)})manual_convert_{param.type.spelling}( (void *)params->{name} );\n')
+            out(f'    {declspec(param, f"lin_{name}", "u_")} = manual_convert_{method.name}_{name}( params->{name} );\n')
 
     if returns_void:
         out(u'    ')
@@ -724,8 +730,6 @@ def handle_method_cpp(method, classname, cppname, out):
         pfx = '&' if param.type.kind == TypeKind.POINTER else ''
         if name in need_convert: return f"{pfx}lin_{name}"
         if name in manual_convert: return f"lin_{name}"
-        if underlying_type(param.type.get_canonical()).kind is TypeKind.FUNCTIONPROTO:
-            return f'({declspec(param, "", None)})params->{name}'
         return f'params->{name}'
 
     params = [param_call(n, p) for n, p in zip(names[1:], method.get_arguments())]

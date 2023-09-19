@@ -202,7 +202,7 @@ extern void cppISteamClient_SteamClient020_GetIPCCallCount( struct cppISteamClie
 struct cppISteamClient_SteamClient020_SetWarningMessageHook_params
 {
     void *linux_side;
-    void (*__cdecl pFunction)(int32_t, const char *);
+    void (*W_CDECL pFunction)(int32_t, const char *);
 };
 extern void cppISteamClient_SteamClient020_SetWarningMessageHook( struct cppISteamClient_SteamClient020_SetWarningMessageHook_params *params );
 
@@ -296,21 +296,21 @@ extern void cppISteamClient_SteamClient020_GetISteamHTMLSurface( struct cppIStea
 struct cppISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     void *linux_side;
-    void (*__stdcall _a)(void);
+    void (*W_STDCALL _a)(void);
 };
 extern void cppISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient020_DEPRECATED_Set_SteamAPI_CPostAPIResultInProcess_params *params );
 
 struct cppISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     void *linux_side;
-    void (*__stdcall _a)(void);
+    void (*W_STDCALL _a)(void);
 };
 extern void cppISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient020_DEPRECATED_Remove_SteamAPI_CPostAPIResultInProcess_params *params );
 
 struct cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
 {
     void *linux_side;
-    uint32_t (*__cdecl func)(int32_t);
+    uint32_t (*W_CDECL func)(int32_t);
 };
 extern void cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess( struct cppISteamClient_SteamClient020_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params );
 

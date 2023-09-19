@@ -62,7 +62,7 @@ extern void cppISteamInput_SteamInput006_EnableDeviceCallbacks( struct cppISteam
 struct cppISteamInput_SteamInput006_EnableActionEventCallbacks_params
 {
     void *linux_side;
-    void (*__stdcall pCallback)(SteamInputActionEvent_t *);
+    void (*W_STDCALL pCallback)(SteamInputActionEvent_t *);
 };
 extern void cppISteamInput_SteamInput006_EnableActionEventCallbacks( struct cppISteamInput_SteamInput006_EnableActionEventCallbacks_params *params );
 
