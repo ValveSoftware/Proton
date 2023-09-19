@@ -129,7 +129,7 @@ extern void cppISteamUtils_SteamUtils006_GetIPCCallCount( struct cppISteamUtils_
 struct cppISteamUtils_SteamUtils006_SetWarningMessageHook_params
 {
     void *linux_side;
-    void (*__cdecl pFunction)(int32_t, const char *);
+    void (*W_CDECL pFunction)(int32_t, const char *);
 };
 extern void cppISteamUtils_SteamUtils006_SetWarningMessageHook( struct cppISteamUtils_SteamUtils006_SetWarningMessageHook_params *params );
 

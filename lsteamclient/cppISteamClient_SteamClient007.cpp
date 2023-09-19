@@ -164,7 +164,7 @@ void cppISteamClient_SteamClient007_GetISteamNetworking( struct cppISteamClient_
 void cppISteamClient_SteamClient007_SetWarningMessageHook( struct cppISteamClient_SteamClient007_SetWarningMessageHook_params *params )
 {
     struct cppISteamClient_SteamClient007 *iface = (struct cppISteamClient_SteamClient007 *)params->linux_side;
-    void (*lin_pFunction)(int32_t, const char *) = (void (*)(int32_t, const char *))manual_convert_SteamAPIWarningMessageHook_t( (void *)params->pFunction );
+    void (*U_CDECL lin_pFunction)(int32_t, const char *) = manual_convert_SetWarningMessageHook_pFunction( params->pFunction );
     iface->SetWarningMessageHook( lin_pFunction );
 }
 

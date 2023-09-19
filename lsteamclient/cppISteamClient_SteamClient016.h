@@ -192,7 +192,7 @@ extern void cppISteamClient_SteamClient016_GetIPCCallCount( struct cppISteamClie
 struct cppISteamClient_SteamClient016_SetWarningMessageHook_params
 {
     void *linux_side;
-    void (*__cdecl pFunction)(int32_t, const char *);
+    void (*W_CDECL pFunction)(int32_t, const char *);
 };
 extern void cppISteamClient_SteamClient016_SetWarningMessageHook( struct cppISteamClient_SteamClient016_SetWarningMessageHook_params *params );
 
@@ -286,21 +286,21 @@ extern void cppISteamClient_SteamClient016_GetISteamHTMLSurface( struct cppIStea
 struct cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess_params
 {
     void *linux_side;
-    void (*__stdcall func)(uint64_t, void *, uint32_t, int32_t);
+    void (*W_STDCALL func)(uint64_t, void *, uint32_t, int32_t);
 };
 extern void cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess_params *params );
 
 struct cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess_params
 {
     void *linux_side;
-    void (*__stdcall func)(uint64_t, void *, uint32_t, int32_t);
+    void (*W_STDCALL func)(uint64_t, void *, uint32_t, int32_t);
 };
 extern void cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess( struct cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess_params *params );
 
 struct cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params
 {
     void *linux_side;
-    uint32_t (*__stdcall func)(int32_t);
+    uint32_t (*W_STDCALL func)(int32_t);
 };
 extern void cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess( struct cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess_params *params );
 

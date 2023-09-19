@@ -68,7 +68,6 @@ SOURCES = \
 	cppISteamClient_SteamClient017.cpp \
 	cppISteamClient_SteamClient018.cpp \
 	cppISteamClient_SteamClient019.cpp \
-	cppISteamClient_SteamClient020.cpp \
 	cppISteamController_SteamController003.cpp \
 	cppISteamController_SteamController004.cpp \
 	cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION.cpp \
@@ -297,3 +296,4 @@ SOURCES = \
 	struct_converters_156.cpp \
 	struct_converters_157.cpp \
 	struct_converters_158.cpp \
+	unix_steam_client_manual.cpp \

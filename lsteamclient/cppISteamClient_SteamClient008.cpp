@@ -163,7 +163,7 @@ void cppISteamClient_SteamClient008_GetIPCCallCount( struct cppISteamClient_Stea
 void cppISteamClient_SteamClient008_SetWarningMessageHook( struct cppISteamClient_SteamClient008_SetWarningMessageHook_params *params )
 {
     struct cppISteamClient_SteamClient008 *iface = (struct cppISteamClient_SteamClient008 *)params->linux_side;
-    void (*lin_pFunction)(int32_t, const char *) = (void (*)(int32_t, const char *))manual_convert_SteamAPIWarningMessageHook_t( (void *)params->pFunction );
+    void (*U_CDECL lin_pFunction)(int32_t, const char *) = manual_convert_SetWarningMessageHook_pFunction( params->pFunction );
     iface->SetWarningMessageHook( lin_pFunction );
 }
 
