@@ -29,7 +29,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_AddRowAttributeFloa
 DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_AddSessionAttributeInt64, 24)
 DEFINE_THISCALL_WRAPPER(winISteamGameStats_SteamGameStats001_AddRowAttributeInt64, 24)
 
-SteamAPICall_t __thiscall winISteamGameStats_SteamGameStats001_GetNewSession(struct w_steam_iface *_this, int8_t nAccountType, uint64_t ulAccountID, int32_t nAppID, RTime32 rtTimeStarted)
+uint64_t __thiscall winISteamGameStats_SteamGameStats001_GetNewSession(struct w_steam_iface *_this, int8_t nAccountType, uint64_t ulAccountID, int32_t nAppID, uint32_t rtTimeStarted)
 {
     struct cppISteamGameStats_SteamGameStats001_GetNewSession_params params =
     {
@@ -44,7 +44,7 @@ SteamAPICall_t __thiscall winISteamGameStats_SteamGameStats001_GetNewSession(str
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameStats_SteamGameStats001_EndSession(struct w_steam_iface *_this, uint64_t ulSessionID, RTime32 rtTimeEnded, int32_t nReasonCode)
+uint64_t __thiscall winISteamGameStats_SteamGameStats001_EndSession(struct w_steam_iface *_this, uint64_t ulSessionID, uint32_t rtTimeEnded, int32_t nReasonCode)
 {
     struct cppISteamGameStats_SteamGameStats001_EndSession_params params =
     {

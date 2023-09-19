@@ -1607,7 +1607,7 @@ void __thiscall winISteamGameServer_SteamGameServer009_SetGameData(struct w_stea
     cppISteamGameServer_SteamGameServer009_SetGameData( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer009_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer009_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamGameServer_SteamGameServer009_UserHasLicenseForApp_params params =
     {
@@ -1858,7 +1858,7 @@ void __thiscall winISteamGameServer_SteamGameServer010_GetGameplayStats(struct w
     cppISteamGameServer_SteamGameServer010_GetGameplayStats( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer010_GetServerReputation(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamGameServer_SteamGameServer010_GetServerReputation(struct w_steam_iface *_this)
 {
     struct cppISteamGameServer_SteamGameServer010_GetServerReputation_params params =
     {
@@ -1904,7 +1904,7 @@ void __thiscall winISteamGameServer_SteamGameServer010_SetGameData(struct w_stea
     cppISteamGameServer_SteamGameServer010_SetGameData( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer010_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer010_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamGameServer_SteamGameServer010_UserHasLicenseForApp_params params =
     {
@@ -1917,7 +1917,7 @@ EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer010_Us
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamGameServer_SteamGameServer010_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamGameServer_SteamGameServer010_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamGameServer_SteamGameServer010_GetAuthSessionTicket_params params =
     {
@@ -1931,7 +1931,7 @@ HAuthTicket __thiscall winISteamGameServer_SteamGameServer010_GetAuthSessionTick
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamGameServer_SteamGameServer010_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer010_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamGameServer_SteamGameServer010_BeginAuthSession_params params =
     {
@@ -1956,7 +1956,7 @@ void __thiscall winISteamGameServer_SteamGameServer010_EndAuthSession(struct w_s
     cppISteamGameServer_SteamGameServer010_EndAuthSession( &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer010_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamGameServer_SteamGameServer010_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamGameServer_SteamGameServer010_CancelAuthTicket_params params =
     {
@@ -2057,7 +2057,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer011_ForceHeartbeat, 4
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer011_AssociateWithClan, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility, 12)
 
-bool __thiscall winISteamGameServer_SteamGameServer011_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, AppId_t nGameAppId, const char *pchVersionString)
+bool __thiscall winISteamGameServer_SteamGameServer011_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct cppISteamGameServer_SteamGameServer011_InitGameServer_params params =
     {
@@ -2379,7 +2379,7 @@ bool __thiscall winISteamGameServer_SteamGameServer011_BUpdateUserData(struct w_
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamGameServer_SteamGameServer011_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamGameServer_SteamGameServer011_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamGameServer_SteamGameServer011_GetAuthSessionTicket_params params =
     {
@@ -2393,7 +2393,7 @@ HAuthTicket __thiscall winISteamGameServer_SteamGameServer011_GetAuthSessionTick
     return params._ret;
 }
 
-EBeginAuthSessionResult __thiscall winISteamGameServer_SteamGameServer011_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer011_BeginAuthSession(struct w_steam_iface *_this, const void *pAuthTicket, int32_t cbAuthTicket, CSteamID steamID)
 {
     struct cppISteamGameServer_SteamGameServer011_BeginAuthSession_params params =
     {
@@ -2418,7 +2418,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_EndAuthSession(struct w_s
     cppISteamGameServer_SteamGameServer011_EndAuthSession( &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer011_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamGameServer_SteamGameServer011_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamGameServer_SteamGameServer011_CancelAuthTicket_params params =
     {
@@ -2429,7 +2429,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer011_CancelAuthTicket( &params );
 }
 
-EUserHasLicenseForAppResult __thiscall winISteamGameServer_SteamGameServer011_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer011_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamGameServer_SteamGameServer011_UserHasLicenseForApp_params params =
     {
@@ -2465,7 +2465,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_GetGameplayStats(struct w
     cppISteamGameServer_SteamGameServer011_GetGameplayStats( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer011_GetServerReputation(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamGameServer_SteamGameServer011_GetServerReputation(struct w_steam_iface *_this)
 {
     struct cppISteamGameServer_SteamGameServer011_GetServerReputation_params params =
     {
@@ -2549,7 +2549,7 @@ void __thiscall winISteamGameServer_SteamGameServer011_ForceHeartbeat(struct w_s
     cppISteamGameServer_SteamGameServer011_ForceHeartbeat( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer011_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
+uint64_t __thiscall winISteamGameServer_SteamGameServer011_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamGameServer_SteamGameServer011_AssociateWithClan_params params =
     {
@@ -2561,7 +2561,7 @@ SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer011_AssociateWithCl
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
+uint64_t __thiscall winISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
 {
     struct cppISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility_params params =
     {
@@ -2684,7 +2684,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer012_ForceHeartbeat, 4
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer012_AssociateWithClan, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility, 12)
 
-bool __thiscall winISteamGameServer_SteamGameServer012_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, AppId_t nGameAppId, const char *pchVersionString)
+bool __thiscall winISteamGameServer_SteamGameServer012_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct cppISteamGameServer_SteamGameServer012_InitGameServer_params params =
     {
@@ -3005,7 +3005,7 @@ bool __thiscall winISteamGameServer_SteamGameServer012_BUpdateUserData(struct w_
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamGameServer_SteamGameServer012_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamGameServer_SteamGameServer012_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamGameServer_SteamGameServer012_GetAuthSessionTicket_params params =
     {
@@ -3044,7 +3044,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_EndAuthSession(struct w_s
     cppISteamGameServer_SteamGameServer012_EndAuthSession( &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer012_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamGameServer_SteamGameServer012_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamGameServer_SteamGameServer012_CancelAuthTicket_params params =
     {
@@ -3055,7 +3055,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer012_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamGameServer_SteamGameServer012_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer012_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamGameServer_SteamGameServer012_UserHasLicenseForApp_params params =
     {
@@ -3091,7 +3091,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_GetGameplayStats(struct w
     cppISteamGameServer_SteamGameServer012_GetGameplayStats( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer012_GetServerReputation(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamGameServer_SteamGameServer012_GetServerReputation(struct w_steam_iface *_this)
 {
     struct cppISteamGameServer_SteamGameServer012_GetServerReputation_params params =
     {
@@ -3175,7 +3175,7 @@ void __thiscall winISteamGameServer_SteamGameServer012_ForceHeartbeat(struct w_s
     cppISteamGameServer_SteamGameServer012_ForceHeartbeat( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer012_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
+uint64_t __thiscall winISteamGameServer_SteamGameServer012_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamGameServer_SteamGameServer012_AssociateWithClan_params params =
     {
@@ -3187,7 +3187,7 @@ SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer012_AssociateWithCl
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
+uint64_t __thiscall winISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
 {
     struct cppISteamGameServer_SteamGameServer012_ComputeNewPlayerCompatibility_params params =
     {
@@ -3310,7 +3310,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer013_ForceHeartbeat, 4
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer013_AssociateWithClan, 12)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility, 12)
 
-bool __thiscall winISteamGameServer_SteamGameServer013_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, AppId_t nGameAppId, const char *pchVersionString)
+bool __thiscall winISteamGameServer_SteamGameServer013_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct cppISteamGameServer_SteamGameServer013_InitGameServer_params params =
     {
@@ -3631,7 +3631,7 @@ bool __thiscall winISteamGameServer_SteamGameServer013_BUpdateUserData(struct w_
     return params._ret;
 }
 
-HAuthTicket __thiscall winISteamGameServer_SteamGameServer013_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamGameServer_SteamGameServer013_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamGameServer_SteamGameServer013_GetAuthSessionTicket_params params =
     {
@@ -3670,7 +3670,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_EndAuthSession(struct w_s
     cppISteamGameServer_SteamGameServer013_EndAuthSession( &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer013_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamGameServer_SteamGameServer013_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamGameServer_SteamGameServer013_CancelAuthTicket_params params =
     {
@@ -3681,7 +3681,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer013_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamGameServer_SteamGameServer013_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer013_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamGameServer_SteamGameServer013_UserHasLicenseForApp_params params =
     {
@@ -3717,7 +3717,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_GetGameplayStats(struct w
     cppISteamGameServer_SteamGameServer013_GetGameplayStats( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer013_GetServerReputation(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamGameServer_SteamGameServer013_GetServerReputation(struct w_steam_iface *_this)
 {
     struct cppISteamGameServer_SteamGameServer013_GetServerReputation_params params =
     {
@@ -3802,7 +3802,7 @@ void __thiscall winISteamGameServer_SteamGameServer013_ForceHeartbeat(struct w_s
     cppISteamGameServer_SteamGameServer013_ForceHeartbeat( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer013_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
+uint64_t __thiscall winISteamGameServer_SteamGameServer013_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamGameServer_SteamGameServer013_AssociateWithClan_params params =
     {
@@ -3814,7 +3814,7 @@ SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer013_AssociateWithCl
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
+uint64_t __thiscall winISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
 {
     struct cppISteamGameServer_SteamGameServer013_ComputeNewPlayerCompatibility_params params =
     {
@@ -3937,7 +3937,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer014_BUpdateUserData, 
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer014_SetMasterServerHeartbeatInterval_DEPRECATED, 8)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer014_ForceMasterServerHeartbeat_DEPRECATED, 4)
 
-bool __thiscall winISteamGameServer_SteamGameServer014_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, AppId_t nGameAppId, const char *pchVersionString)
+bool __thiscall winISteamGameServer_SteamGameServer014_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct cppISteamGameServer_SteamGameServer014_InitGameServer_params params =
     {
@@ -4217,7 +4217,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_SetAdvertiseServerActive(
     cppISteamGameServer_SteamGameServer014_SetAdvertiseServerActive( &params );
 }
 
-HAuthTicket __thiscall winISteamGameServer_SteamGameServer014_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
+uint32_t __thiscall winISteamGameServer_SteamGameServer014_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket)
 {
     struct cppISteamGameServer_SteamGameServer014_GetAuthSessionTicket_params params =
     {
@@ -4256,7 +4256,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_EndAuthSession(struct w_s
     cppISteamGameServer_SteamGameServer014_EndAuthSession( &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer014_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamGameServer_SteamGameServer014_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamGameServer_SteamGameServer014_CancelAuthTicket_params params =
     {
@@ -4267,7 +4267,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer014_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamGameServer_SteamGameServer014_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer014_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamGameServer_SteamGameServer014_UserHasLicenseForApp_params params =
     {
@@ -4303,7 +4303,7 @@ void __thiscall winISteamGameServer_SteamGameServer014_GetGameplayStats(struct w
     cppISteamGameServer_SteamGameServer014_GetGameplayStats( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer014_GetServerReputation(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamGameServer_SteamGameServer014_GetServerReputation(struct w_steam_iface *_this)
 {
     struct cppISteamGameServer_SteamGameServer014_GetServerReputation_params params =
     {
@@ -4356,7 +4356,7 @@ int32_t __thiscall winISteamGameServer_SteamGameServer014_GetNextOutgoingPacket(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer014_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
+uint64_t __thiscall winISteamGameServer_SteamGameServer014_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamGameServer_SteamGameServer014_AssociateWithClan_params params =
     {
@@ -4368,7 +4368,7 @@ SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer014_AssociateWithCl
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer014_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
+uint64_t __thiscall winISteamGameServer_SteamGameServer014_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
 {
     struct cppISteamGameServer_SteamGameServer014_ComputeNewPlayerCompatibility_params params =
     {
@@ -4564,7 +4564,7 @@ DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer015_BUpdateUserData, 
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer015_SetMasterServerHeartbeatInterval_DEPRECATED, 8)
 DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer015_ForceMasterServerHeartbeat_DEPRECATED, 4)
 
-bool __thiscall winISteamGameServer_SteamGameServer015_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, AppId_t nGameAppId, const char *pchVersionString)
+bool __thiscall winISteamGameServer_SteamGameServer015_InitGameServer(struct w_steam_iface *_this, uint32_t unIP, uint16_t usGamePort, uint16_t usQueryPort, uint32_t unFlags, uint32_t nGameAppId, const char *pchVersionString)
 {
     struct cppISteamGameServer_SteamGameServer015_InitGameServer_params params =
     {
@@ -4844,7 +4844,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetAdvertiseServerActive(
     cppISteamGameServer_SteamGameServer015_SetAdvertiseServerActive( &params );
 }
 
-HAuthTicket __thiscall winISteamGameServer_SteamGameServer015_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSnid)
+uint32_t __thiscall winISteamGameServer_SteamGameServer015_GetAuthSessionTicket(struct w_steam_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSnid)
 {
     struct cppISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params params =
     {
@@ -4884,7 +4884,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_EndAuthSession(struct w_s
     cppISteamGameServer_SteamGameServer015_EndAuthSession( &params );
 }
 
-void __thiscall winISteamGameServer_SteamGameServer015_CancelAuthTicket(struct w_steam_iface *_this, HAuthTicket hAuthTicket)
+void __thiscall winISteamGameServer_SteamGameServer015_CancelAuthTicket(struct w_steam_iface *_this, uint32_t hAuthTicket)
 {
     struct cppISteamGameServer_SteamGameServer015_CancelAuthTicket_params params =
     {
@@ -4895,7 +4895,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_CancelAuthTicket(struct w
     cppISteamGameServer_SteamGameServer015_CancelAuthTicket( &params );
 }
 
-uint32_t __thiscall winISteamGameServer_SteamGameServer015_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, AppId_t appID)
+uint32_t __thiscall winISteamGameServer_SteamGameServer015_UserHasLicenseForApp(struct w_steam_iface *_this, CSteamID steamID, uint32_t appID)
 {
     struct cppISteamGameServer_SteamGameServer015_UserHasLicenseForApp_params params =
     {
@@ -4931,7 +4931,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_GetGameplayStats(struct w
     cppISteamGameServer_SteamGameServer015_GetGameplayStats( &params );
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer015_GetServerReputation(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamGameServer_SteamGameServer015_GetServerReputation(struct w_steam_iface *_this)
 {
     struct cppISteamGameServer_SteamGameServer015_GetServerReputation_params params =
     {
@@ -4984,7 +4984,7 @@ int32_t __thiscall winISteamGameServer_SteamGameServer015_GetNextOutgoingPacket(
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer015_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
+uint64_t __thiscall winISteamGameServer_SteamGameServer015_AssociateWithClan(struct w_steam_iface *_this, CSteamID steamIDClan)
 {
     struct cppISteamGameServer_SteamGameServer015_AssociateWithClan_params params =
     {
@@ -4996,7 +4996,7 @@ SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer015_AssociateWithCl
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamGameServer_SteamGameServer015_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
+uint64_t __thiscall winISteamGameServer_SteamGameServer015_ComputeNewPlayerCompatibility(struct w_steam_iface *_this, CSteamID steamIDNewPlayer)
 {
     struct cppISteamGameServer_SteamGameServer015_ComputeNewPlayerCompatibility_params params =
     {

@@ -44,7 +44,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp_params
 {
     void *linux_side;
     bool _ret;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION002_BIsSubscribedApp_params *params );
 

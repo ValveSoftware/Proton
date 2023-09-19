@@ -47,31 +47,33 @@ struct gccServerListResponse {
     struct winServerListResponse *win_side;
 };
 
-void gccServerListResponse_ServerResponded(struct gccServerListResponse *_this, HServerListRequest hRequest, int iServer)
+void gccServerListResponse_ServerResponded( struct gccServerListResponse *_this, void *hRequest, int iServer )
 {
     TRACE("%p/%p\n", _this, _this->win_side);
-    CALL_VTBL_FUNC(_this->win_side, 0, void, (winServerListResponse *, HServerListRequest, int), (_this->win_side, hRequest, iServer));
+    CALL_VTBL_FUNC( _this->win_side, 0, void, (winServerListResponse *, void *, int),
+                    (_this->win_side, hRequest, iServer) );
 }
 
-void gccServerListResponse_ServerFailedToRespond(struct gccServerListResponse *_this, HServerListRequest hRequest, int iServer)
+void gccServerListResponse_ServerFailedToRespond( struct gccServerListResponse *_this, void *hRequest, int iServer )
 {
     TRACE("%p/%p\n", _this, _this->win_side);
-    CALL_VTBL_FUNC(_this->win_side, 4, void, (winServerListResponse *, HServerListRequest, int), (_this->win_side, hRequest, iServer));
+    CALL_VTBL_FUNC( _this->win_side, 4, void, (winServerListResponse *, void *, int),
+                    (_this->win_side, hRequest, iServer) );
 }
 
-void gccServerListResponse_RefreshComplete( struct gccServerListResponse *_this, HServerListRequest hRequest, uint32_t response )
+void gccServerListResponse_RefreshComplete( struct gccServerListResponse *_this, void *hRequest, uint32_t response )
 {
     TRACE("%p/%p\n", _this, _this->win_side);
-    CALL_VTBL_FUNC( _this->win_side, 8, void, (winServerListResponse *, HServerListRequest, uint32_t),
+    CALL_VTBL_FUNC( _this->win_side, 8, void, (winServerListResponse *, void *, uint32_t),
                     (_this->win_side, hRequest, response) );
 }
 
 struct gccServerListResponseVtbl {
-    void (*ServerResponded)(struct gccServerListResponse *, HServerListRequest, int);
+    void (*ServerResponded)( struct gccServerListResponse *, void *, int );
 
-    void (*ServerFailedToRespond)(struct gccServerListResponse *, HServerListRequest, int);
+    void (*ServerFailedToRespond)( struct gccServerListResponse *, void *, int );
 
-    void (*RefreshComplete)( struct gccServerListResponse *, HServerListRequest, uint32_t );
+    void (*RefreshComplete)( struct gccServerListResponse *, void *, uint32_t );
 } gccServerListResponse_vtbl = {
     gccServerListResponse_ServerResponded,
     gccServerListResponse_ServerFailedToRespond,

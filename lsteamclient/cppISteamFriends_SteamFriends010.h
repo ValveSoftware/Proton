@@ -132,7 +132,7 @@ extern void cppISteamFriends_SteamFriends010_GetClanActivityCounts( struct cppIS
 struct cppISteamFriends_SteamFriends010_DownloadClanActivityCounts_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID *psteamIDClans;
     int32_t cClansToRequest;
 };
@@ -197,7 +197,7 @@ extern void cppISteamFriends_SteamFriends010_ActivateGameOverlayToWebPage( struc
 struct cppISteamFriends_SteamFriends010_ActivateGameOverlayToStore_params
 {
     void *linux_side;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamFriends_SteamFriends010_ActivateGameOverlayToStore( struct cppISteamFriends_SteamFriends010_ActivateGameOverlayToStore_params *params );
 
@@ -251,7 +251,7 @@ extern void cppISteamFriends_SteamFriends010_RequestUserInformation( struct cppI
 struct cppISteamFriends_SteamFriends010_RequestClanOfficerList_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDClan;
 };
 extern void cppISteamFriends_SteamFriends010_RequestClanOfficerList( struct cppISteamFriends_SteamFriends010_RequestClanOfficerList_params *params );
@@ -364,7 +364,7 @@ extern void cppISteamFriends_SteamFriends010_GetFriendCoplayTime( struct cppISte
 struct cppISteamFriends_SteamFriends010_GetFriendCoplayGame_params
 {
     void *linux_side;
-    AppId_t _ret;
+    uint32_t _ret;
     CSteamID steamIDFriend;
 };
 extern void cppISteamFriends_SteamFriends010_GetFriendCoplayGame( struct cppISteamFriends_SteamFriends010_GetFriendCoplayGame_params *params );
@@ -372,7 +372,7 @@ extern void cppISteamFriends_SteamFriends010_GetFriendCoplayGame( struct cppISte
 struct cppISteamFriends_SteamFriends010_JoinClanChatRoom_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDClan;
 };
 extern void cppISteamFriends_SteamFriends010_JoinClanChatRoom( struct cppISteamFriends_SteamFriends010_JoinClanChatRoom_params *params );

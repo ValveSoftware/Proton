@@ -1,7 +1,7 @@
 struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScreenshot_params
 {
     void *linux_side;
-    ScreenshotHandle _ret;
+    uint32_t _ret;
     void *pubRGB;
     uint32_t cubRGB;
     int32_t nWidth;
@@ -12,7 +12,7 @@ extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_WriteScre
 struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary_params
 {
     void *linux_side;
-    ScreenshotHandle _ret;
+    uint32_t _ret;
     const char *pchFilename;
     const char *pchThumbnailFilename;
     int32_t nWidth;
@@ -37,7 +37,7 @@ struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation_pa
 {
     void *linux_side;
     bool _ret;
-    ScreenshotHandle hScreenshot;
+    uint32_t hScreenshot;
     const char *pchLocation;
 };
 extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_SetLocation_params *params );
@@ -46,7 +46,7 @@ struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser_params
 {
     void *linux_side;
     bool _ret;
-    ScreenshotHandle hScreenshot;
+    uint32_t hScreenshot;
     CSteamID steamID;
 };
 extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagUser_params *params );
@@ -55,8 +55,8 @@ struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFi
 {
     void *linux_side;
     bool _ret;
-    ScreenshotHandle hScreenshot;
-    PublishedFileId_t unPublishedFileID;
+    uint32_t hScreenshot;
+    uint64_t unPublishedFileID;
 };
 extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile( struct cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TagPublishedFile_params *params );
 

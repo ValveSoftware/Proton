@@ -1,7 +1,7 @@
 struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params
 {
     void *linux_side;
-    AppId_t unVideoAppID;
+    uint32_t unVideoAppID;
 };
 extern void cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL( struct cppISteamVideo_STEAMVIDEO_INTERFACE_V001_GetVideoURL_params *params );
 

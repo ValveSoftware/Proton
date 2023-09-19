@@ -113,7 +113,7 @@ extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_IndicateAchie
 struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     CSteamID steamIDUser;
 };
 extern void cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats( struct cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004_RequestUserStats_params *params );

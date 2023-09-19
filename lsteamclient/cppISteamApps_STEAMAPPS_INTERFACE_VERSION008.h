@@ -44,7 +44,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp_params
 {
     void *linux_side;
     bool _ret;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedApp_params *params );
 
@@ -52,7 +52,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled_params
 {
     void *linux_side;
     bool _ret;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsDlcInstalled_params *params );
 
@@ -60,7 +60,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime_
 {
     void *linux_side;
     uint32_t _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetEarliestPurchaseUnixTime_params *params );
 
@@ -83,7 +83,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex_params
     void *linux_side;
     bool _ret;
     int32_t iDLC;
-    AppId_t *pAppID;
+    uint32_t *pAppID;
     bool *pbAvailable;
     char *pchName;
     int32_t cchNameBufferSize;
@@ -93,21 +93,21 @@ extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BGetDLCDataByIndex( str
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC_params
 {
     void *linux_side;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_InstallDLC_params *params );
 
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC_params
 {
     void *linux_side;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_UninstallDLC_params *params );
 
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey_params
 {
     void *linux_side;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAppProofOfPurchaseKey_params *params );
 
@@ -132,8 +132,8 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots_params
 {
     void *linux_side;
     uint32_t _ret;
-    AppId_t appID;
-    DepotId_t *pvecDepots;
+    uint32_t appID;
+    uint32_t *pvecDepots;
     uint32_t cMaxDepots;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetInstalledDepots_params *params );
@@ -142,7 +142,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir_params
 {
     void *linux_side;
     uint32_t _ret;
-    AppId_t appID;
+    uint32_t appID;
     char *pchFolder;
     uint32_t cchFolderBufferSize;
 };
@@ -152,7 +152,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled_params
 {
     void *linux_side;
     bool _ret;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsAppInstalled_params *params );
 
@@ -175,7 +175,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress_param
 {
     void *linux_side;
     bool _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
     uint64_t *punBytesDownloaded;
     uint64_t *punBytesTotal;
 };
@@ -197,7 +197,7 @@ extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurcha
 struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails_params
 {
     void *linux_side;
-    SteamAPICall_t _ret;
+    uint64_t _ret;
     const char *pszFileName;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails_params *params );
@@ -231,7 +231,7 @@ struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext_params
 {
     void *linux_side;
     bool _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext( struct cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetDlcContext_params *params );
 

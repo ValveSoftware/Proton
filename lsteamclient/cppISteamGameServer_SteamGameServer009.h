@@ -148,9 +148,9 @@ extern void cppISteamGameServer_SteamGameServer009_SetGameData( struct cppISteam
 struct cppISteamGameServer_SteamGameServer009_UserHasLicenseForApp_params
 {
     void *linux_side;
-    EUserHasLicenseForAppResult _ret;
+    uint32_t _ret;
     CSteamID steamID;
-    AppId_t appID;
+    uint32_t appID;
 };
 extern void cppISteamGameServer_SteamGameServer009_UserHasLicenseForApp( struct cppISteamGameServer_SteamGameServer009_UserHasLicenseForApp_params *params );
 

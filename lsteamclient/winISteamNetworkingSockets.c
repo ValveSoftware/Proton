@@ -45,7 +45,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets002_Get
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets002_CreateHostedDedicatedServerListenSocket, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets002_destructor, 4)
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketIP_params params =
     {
@@ -57,7 +57,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ConnectByIPAddress_params params =
     {
@@ -69,7 +69,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_CreateListenSocketP2P_params params =
     {
@@ -81,7 +81,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ConnectP2P_params params =
     {
@@ -94,7 +94,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_AcceptConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_AcceptConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_AcceptConnection_params params =
     {
@@ -106,7 +106,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_AcceptC
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CloseConnection(struct w_steam_iface *_this, HSteamNetConnection hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CloseConnection(struct w_steam_iface *_this, uint32_t hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_CloseConnection_params params =
     {
@@ -121,7 +121,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CloseConnec
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CloseListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CloseListenSocket(struct w_steam_iface *_this, uint32_t hSocket)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_CloseListenSocket_params params =
     {
@@ -133,7 +133,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CloseListen
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer, int64_t nUserData)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer, int64_t nUserData)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionUserData_params params =
     {
@@ -146,7 +146,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SetConnecti
     return params._ret;
 }
 
-int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer)
+int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionUserData_params params =
     {
@@ -158,7 +158,7 @@ int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConne
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, const char *pszName)
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, const char *pszName)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionName_params params =
     {
@@ -170,7 +170,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SetConnecti
     cppISteamNetworkingSockets_SteamNetworkingSockets002_SetConnectionName( &params );
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, char *pszName, int32_t nMaxLen)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, char *pszName, int32_t nMaxLen)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionName_params params =
     {
@@ -184,7 +184,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnecti
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SendMessageToConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, const void *pData, uint32_t cbData, int32_t nSendFlags)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SendMessageToConnection(struct w_steam_iface *_this, uint32_t hConn, const void *pData, uint32_t cbData, int32_t nSendFlags)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_SendMessageToConnection_params params =
     {
@@ -199,7 +199,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_SendMes
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_FlushMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_FlushMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_FlushMessagesOnConnection_params params =
     {
@@ -211,7 +211,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_FlushMe
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, winSteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection_params params =
     {
@@ -225,7 +225,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveM
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket, winSteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, uint32_t hSocket, winSteamNetworkingMessage_t_144 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket_params params =
     {
@@ -239,7 +239,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveM
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetConnectionInfo_t *pInfo)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionInfo_t *pInfo)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo_params params =
     {
@@ -252,7 +252,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetConnecti
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetQuickConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetworkingQuickConnectionStatus *pStats)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetQuickConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, SteamNetworkingQuickConnectionStatus *pStats)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetQuickConnectionStatus_params params =
     {
@@ -265,7 +265,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetQuickCon
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetDetailedConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, char *pszBuf, int32_t cbBuf)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetDetailedConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, char *pszBuf, int32_t cbBuf)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetDetailedConnectionStatus_params params =
     {
@@ -279,7 +279,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetDetai
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetListenSocketAddress(struct w_steam_iface *_this, HSteamListenSocket hSocket, SteamNetworkingIPAddr *address)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetListenSocketAddress(struct w_steam_iface *_this, uint32_t hSocket, SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetListenSocketAddress_params params =
     {
@@ -292,7 +292,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetListenSo
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair(struct w_steam_iface *_this, HSteamNetConnection *pOutConnection1, HSteamNetConnection *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair(struct w_steam_iface *_this, uint32_t *pOutConnection1, uint32_t *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair_params params =
     {
@@ -348,7 +348,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_FindRela
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_ConnectToHostedDedicatedServer_params params =
     {
@@ -372,7 +372,7 @@ uint16_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetHost
     return params._ret;
 }
 
-SteamNetworkingPOPID __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_GetHostedDedicatedServerPOPID_params params =
     {
@@ -395,7 +395,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_GetHostedDe
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets002_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets002_CreateHostedDedicatedServerListenSocket_params params =
     {
@@ -494,7 +494,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets004_Cre
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets004_GetGameCoordinatorServerLogin, 16)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets004_destructor, 4)
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_CreateListenSocketIP_params params =
     {
@@ -506,7 +506,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ConnectByIPAddress_params params =
     {
@@ -518,7 +518,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_CreateListenSocketP2P_params params =
     {
@@ -530,7 +530,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ConnectP2P_params params =
     {
@@ -543,7 +543,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_AcceptConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_AcceptConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_AcceptConnection_params params =
     {
@@ -555,7 +555,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_AcceptC
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CloseConnection(struct w_steam_iface *_this, HSteamNetConnection hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CloseConnection(struct w_steam_iface *_this, uint32_t hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_CloseConnection_params params =
     {
@@ -570,7 +570,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CloseConnec
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CloseListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CloseListenSocket(struct w_steam_iface *_this, uint32_t hSocket)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_CloseListenSocket_params params =
     {
@@ -582,7 +582,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CloseListen
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer, int64_t nUserData)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer, int64_t nUserData)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionUserData_params params =
     {
@@ -595,7 +595,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SetConnecti
     return params._ret;
 }
 
-int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer)
+int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionUserData_params params =
     {
@@ -607,7 +607,7 @@ int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConne
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, const char *pszName)
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, const char *pszName)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionName_params params =
     {
@@ -619,7 +619,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SetConnecti
     cppISteamNetworkingSockets_SteamNetworkingSockets004_SetConnectionName( &params );
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, char *pszName, int32_t nMaxLen)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, char *pszName, int32_t nMaxLen)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionName_params params =
     {
@@ -633,7 +633,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnecti
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SendMessageToConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, const void *pData, uint32_t cbData, int32_t nSendFlags)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SendMessageToConnection(struct w_steam_iface *_this, uint32_t hConn, const void *pData, uint32_t cbData, int32_t nSendFlags)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_SendMessageToConnection_params params =
     {
@@ -648,7 +648,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_SendMes
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_FlushMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_FlushMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_FlushMessagesOnConnection_params params =
     {
@@ -660,7 +660,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_FlushMe
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_146 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, winSteamNetworkingMessage_t_146 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnConnection_params params =
     {
@@ -674,7 +674,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveM
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket, winSteamNetworkingMessage_t_146 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, uint32_t hSocket, winSteamNetworkingMessage_t_146 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveMessagesOnListenSocket_params params =
     {
@@ -688,7 +688,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ReceiveM
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionInfo(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetConnectionInfo_t *pInfo)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionInfo(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionInfo_t *pInfo)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetConnectionInfo_params params =
     {
@@ -701,7 +701,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetConnecti
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetQuickConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetworkingQuickConnectionStatus *pStats)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetQuickConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, SteamNetworkingQuickConnectionStatus *pStats)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetQuickConnectionStatus_params params =
     {
@@ -714,7 +714,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetQuickCon
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetDetailedConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, char *pszBuf, int32_t cbBuf)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetDetailedConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, char *pszBuf, int32_t cbBuf)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetDetailedConnectionStatus_params params =
     {
@@ -728,7 +728,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetDetai
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetListenSocketAddress(struct w_steam_iface *_this, HSteamListenSocket hSocket, SteamNetworkingIPAddr *address)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetListenSocketAddress(struct w_steam_iface *_this, uint32_t hSocket, SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetListenSocketAddress_params params =
     {
@@ -741,7 +741,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetListenSo
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair(struct w_steam_iface *_this, HSteamNetConnection *pOutConnection1, HSteamNetConnection *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair(struct w_steam_iface *_this, uint32_t *pOutConnection1, uint32_t *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair_params params =
     {
@@ -820,7 +820,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_FindRela
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_ConnectToHostedDedicatedServer_params params =
     {
@@ -844,7 +844,7 @@ uint16_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetHost
     return params._ret;
 }
 
-SteamNetworkingPOPID __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_GetHostedDedicatedServerPOPID_params params =
     {
@@ -867,7 +867,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_GetHost
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets004_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets004_CreateHostedDedicatedServerListenSocket_params params =
     {
@@ -986,7 +986,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets006_Con
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal, 16)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets006_destructor, 4)
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_CreateListenSocketIP_params params =
     {
@@ -1000,7 +1000,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ConnectByIPAddress_params params =
     {
@@ -1014,7 +1014,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_CreateListenSocketP2P_params params =
     {
@@ -1028,7 +1028,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2P_params params =
     {
@@ -1043,7 +1043,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_AcceptConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_AcceptConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_AcceptConnection_params params =
     {
@@ -1055,7 +1055,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_AcceptC
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CloseConnection(struct w_steam_iface *_this, HSteamNetConnection hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CloseConnection(struct w_steam_iface *_this, uint32_t hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_CloseConnection_params params =
     {
@@ -1070,7 +1070,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CloseConnec
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CloseListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CloseListenSocket(struct w_steam_iface *_this, uint32_t hSocket)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_CloseListenSocket_params params =
     {
@@ -1082,7 +1082,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CloseListen
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer, int64_t nUserData)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer, int64_t nUserData)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionUserData_params params =
     {
@@ -1095,7 +1095,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SetConnecti
     return params._ret;
 }
 
-int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer)
+int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionUserData_params params =
     {
@@ -1107,7 +1107,7 @@ int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConne
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, const char *pszName)
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, const char *pszName)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionName_params params =
     {
@@ -1119,7 +1119,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SetConnecti
     cppISteamNetworkingSockets_SteamNetworkingSockets006_SetConnectionName( &params );
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, char *pszName, int32_t nMaxLen)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, char *pszName, int32_t nMaxLen)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionName_params params =
     {
@@ -1133,7 +1133,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnecti
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SendMessageToConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SendMessageToConnection(struct w_steam_iface *_this, uint32_t hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessageToConnection_params params =
     {
@@ -1162,7 +1162,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SendMessage
     cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages( &params );
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_FlushMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_FlushMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_FlushMessagesOnConnection_params params =
     {
@@ -1174,7 +1174,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_FlushMe
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_147 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, winSteamNetworkingMessage_t_147 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnConnection_params params =
     {
@@ -1188,7 +1188,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveM
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket, winSteamNetworkingMessage_t_147 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket(struct w_steam_iface *_this, uint32_t hSocket, winSteamNetworkingMessage_t_147 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveMessagesOnListenSocket_params params =
     {
@@ -1202,7 +1202,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceiveM
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionInfo(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetConnectionInfo_t *pInfo)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionInfo(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionInfo_t *pInfo)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_GetConnectionInfo_params params =
     {
@@ -1215,7 +1215,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetConnecti
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetQuickConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetworkingQuickConnectionStatus *pStats)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetQuickConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, SteamNetworkingQuickConnectionStatus *pStats)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_GetQuickConnectionStatus_params params =
     {
@@ -1228,7 +1228,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetQuickCon
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetDetailedConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, char *pszBuf, int32_t cbBuf)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetDetailedConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, char *pszBuf, int32_t cbBuf)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_GetDetailedConnectionStatus_params params =
     {
@@ -1242,7 +1242,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetDetai
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetListenSocketAddress(struct w_steam_iface *_this, HSteamListenSocket hSocket, SteamNetworkingIPAddr *address)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetListenSocketAddress(struct w_steam_iface *_this, uint32_t hSocket, SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_GetListenSocketAddress_params params =
     {
@@ -1255,7 +1255,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetListenSo
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair(struct w_steam_iface *_this, HSteamNetConnection *pOutConnection1, HSteamNetConnection *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair(struct w_steam_iface *_this, uint32_t *pOutConnection1, uint32_t *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair_params params =
     {
@@ -1334,7 +1334,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_FindRela
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ConnectToHostedDedicatedServer_params params =
     {
@@ -1360,7 +1360,7 @@ uint16_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetHost
     return params._ret;
 }
 
-SteamNetworkingPOPID __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_GetHostedDedicatedServerPOPID_params params =
     {
@@ -1383,7 +1383,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetHost
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_CreateHostedDedicatedServerListenSocket_params params =
     {
@@ -1411,7 +1411,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_GetGame
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionCustomSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionCustomSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignaling_params params =
     {
@@ -1541,7 +1541,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets008_Get
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets008_SetCertificate, 16)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets008_destructor, 4)
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketIP_params params =
     {
@@ -1555,7 +1555,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectByIPAddress_params params =
     {
@@ -1569,7 +1569,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CreateListenSocketP2P_params params =
     {
@@ -1583,7 +1583,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2P_params params =
     {
@@ -1598,7 +1598,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_AcceptConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_AcceptConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_AcceptConnection_params params =
     {
@@ -1610,7 +1610,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_AcceptC
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CloseConnection(struct w_steam_iface *_this, HSteamNetConnection hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CloseConnection(struct w_steam_iface *_this, uint32_t hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CloseConnection_params params =
     {
@@ -1625,7 +1625,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CloseConnec
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CloseListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CloseListenSocket(struct w_steam_iface *_this, uint32_t hSocket)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CloseListenSocket_params params =
     {
@@ -1637,7 +1637,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CloseListen
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer, int64_t nUserData)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer, int64_t nUserData)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionUserData_params params =
     {
@@ -1650,7 +1650,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnecti
     return params._ret;
 }
 
-int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer)
+int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionUserData_params params =
     {
@@ -1662,7 +1662,7 @@ int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConne
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, const char *pszName)
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, const char *pszName)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionName_params params =
     {
@@ -1674,7 +1674,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnecti
     cppISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionName( &params );
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, char *pszName, int32_t nMaxLen)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, char *pszName, int32_t nMaxLen)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionName_params params =
     {
@@ -1688,7 +1688,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnecti
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SendMessageToConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SendMessageToConnection(struct w_steam_iface *_this, uint32_t hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_SendMessageToConnection_params params =
     {
@@ -1717,7 +1717,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SendMessage
     cppISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages( &params );
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_FlushMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_FlushMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_FlushMessagesOnConnection_params params =
     {
@@ -1729,7 +1729,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_FlushMe
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_149 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, winSteamNetworkingMessage_t_149 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection_params params =
     {
@@ -1743,7 +1743,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveM
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionInfo(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetConnectionInfo_t *pInfo)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionInfo(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionInfo_t *pInfo)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionInfo_params params =
     {
@@ -1756,7 +1756,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetConnecti
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetQuickConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetworkingQuickConnectionStatus *pStats)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetQuickConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, SteamNetworkingQuickConnectionStatus *pStats)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetQuickConnectionStatus_params params =
     {
@@ -1769,7 +1769,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetQuickCon
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetDetailedConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, char *pszBuf, int32_t cbBuf)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetDetailedConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, char *pszBuf, int32_t cbBuf)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetDetailedConnectionStatus_params params =
     {
@@ -1783,7 +1783,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetDetai
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetListenSocketAddress(struct w_steam_iface *_this, HSteamListenSocket hSocket, SteamNetworkingIPAddr *address)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetListenSocketAddress(struct w_steam_iface *_this, uint32_t hSocket, SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetListenSocketAddress_params params =
     {
@@ -1796,7 +1796,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetListenSo
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair(struct w_steam_iface *_this, HSteamNetConnection *pOutConnection1, HSteamNetConnection *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair(struct w_steam_iface *_this, uint32_t *pOutConnection1, uint32_t *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair_params params =
     {
@@ -1847,7 +1847,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetAuth
     return params._ret;
 }
 
-HSteamNetPollGroup __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreatePollGroup(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreatePollGroup(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CreatePollGroup_params params =
     {
@@ -1858,7 +1858,7 @@ HSteamNetPollGroup __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_DestroyPollGroup(struct w_steam_iface *_this, HSteamNetPollGroup hPollGroup)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_DestroyPollGroup(struct w_steam_iface *_this, uint32_t hPollGroup)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_DestroyPollGroup_params params =
     {
@@ -1870,7 +1870,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_DestroyPoll
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionPollGroup(struct w_steam_iface *_this, HSteamNetConnection hConn, HSteamNetPollGroup hPollGroup)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionPollGroup(struct w_steam_iface *_this, uint32_t hConn, uint32_t hPollGroup)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionPollGroup_params params =
     {
@@ -1883,7 +1883,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetConnecti
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup(struct w_steam_iface *_this, HSteamNetPollGroup hPollGroup, winSteamNetworkingMessage_t_149 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup(struct w_steam_iface *_this, uint32_t hPollGroup, winSteamNetworkingMessage_t_149 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup_params params =
     {
@@ -1925,7 +1925,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_FindRela
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectToHostedDedicatedServer_params params =
     {
@@ -1951,7 +1951,7 @@ uint16_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetHost
     return params._ret;
 }
 
-SteamNetworkingPOPID __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetHostedDedicatedServerPOPID_params params =
     {
@@ -1974,7 +1974,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetHost
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_CreateHostedDedicatedServerListenSocket_params params =
     {
@@ -2002,7 +2002,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetGame
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionCustomSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionCustomSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling_params params =
     {
@@ -2031,7 +2031,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2P
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest(struct w_steam_iface *_this, int32_t *pcbBlob, void *pBlob, SteamNetworkingErrMsg *errMsg)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest(struct w_steam_iface *_this, int32_t *pcbBlob, void *pBlob, char (*errMsg)[1024])
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_GetCertificateRequest_params params =
     {
@@ -2045,7 +2045,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_GetCertific
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetCertificate(struct w_steam_iface *_this, const void *pCertificate, int32_t cbCertificate, SteamNetworkingErrMsg *errMsg)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_SetCertificate(struct w_steam_iface *_this, const void *pCertificate, int32_t cbCertificate, char (*errMsg)[1024])
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets008_SetCertificate_params params =
     {
@@ -2166,7 +2166,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets009_Set
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets009_RunCallbacks, 4)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets009_destructor, 4)
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketIP_params params =
     {
@@ -2180,7 +2180,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectByIPAddress_params params =
     {
@@ -2194,7 +2194,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateListenSocketP2P_params params =
     {
@@ -2208,7 +2208,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P_params params =
     {
@@ -2223,7 +2223,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_AcceptConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_AcceptConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_AcceptConnection_params params =
     {
@@ -2235,7 +2235,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_AcceptC
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CloseConnection(struct w_steam_iface *_this, HSteamNetConnection hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CloseConnection(struct w_steam_iface *_this, uint32_t hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CloseConnection_params params =
     {
@@ -2250,7 +2250,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CloseConnec
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CloseListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CloseListenSocket(struct w_steam_iface *_this, uint32_t hSocket)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CloseListenSocket_params params =
     {
@@ -2262,7 +2262,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CloseListen
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer, int64_t nUserData)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer, int64_t nUserData)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionUserData_params params =
     {
@@ -2275,7 +2275,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnecti
     return params._ret;
 }
 
-int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer)
+int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionUserData_params params =
     {
@@ -2287,7 +2287,7 @@ int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConne
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, const char *pszName)
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, const char *pszName)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionName_params params =
     {
@@ -2299,7 +2299,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnecti
     cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionName( &params );
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, char *pszName, int32_t nMaxLen)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, char *pszName, int32_t nMaxLen)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionName_params params =
     {
@@ -2313,7 +2313,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnecti
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SendMessageToConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SendMessageToConnection(struct w_steam_iface *_this, uint32_t hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessageToConnection_params params =
     {
@@ -2342,7 +2342,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SendMessage
     cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages( &params );
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_FlushMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_FlushMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_FlushMessagesOnConnection_params params =
     {
@@ -2354,7 +2354,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_FlushMe
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_152 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, winSteamNetworkingMessage_t_152 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnConnection_params params =
     {
@@ -2368,7 +2368,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveM
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionInfo(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetConnectionInfo_t *pInfo)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionInfo(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionInfo_t *pInfo)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetConnectionInfo_params params =
     {
@@ -2381,7 +2381,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetConnecti
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetQuickConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetworkingQuickConnectionStatus *pStats)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetQuickConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, SteamNetworkingQuickConnectionStatus *pStats)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetQuickConnectionStatus_params params =
     {
@@ -2394,7 +2394,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetQuickCon
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetDetailedConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, char *pszBuf, int32_t cbBuf)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetDetailedConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, char *pszBuf, int32_t cbBuf)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetDetailedConnectionStatus_params params =
     {
@@ -2408,7 +2408,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetDetai
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetListenSocketAddress(struct w_steam_iface *_this, HSteamListenSocket hSocket, SteamNetworkingIPAddr *address)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetListenSocketAddress(struct w_steam_iface *_this, uint32_t hSocket, SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetListenSocketAddress_params params =
     {
@@ -2421,7 +2421,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetListenSo
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair(struct w_steam_iface *_this, HSteamNetConnection *pOutConnection1, HSteamNetConnection *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair(struct w_steam_iface *_this, uint32_t *pOutConnection1, uint32_t *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair_params params =
     {
@@ -2472,7 +2472,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetAuth
     return params._ret;
 }
 
-HSteamNetPollGroup __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreatePollGroup(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreatePollGroup(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreatePollGroup_params params =
     {
@@ -2483,7 +2483,7 @@ HSteamNetPollGroup __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_DestroyPollGroup(struct w_steam_iface *_this, HSteamNetPollGroup hPollGroup)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_DestroyPollGroup(struct w_steam_iface *_this, uint32_t hPollGroup)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_DestroyPollGroup_params params =
     {
@@ -2495,7 +2495,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_DestroyPoll
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionPollGroup(struct w_steam_iface *_this, HSteamNetConnection hConn, HSteamNetPollGroup hPollGroup)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionPollGroup(struct w_steam_iface *_this, uint32_t hConn, uint32_t hPollGroup)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetConnectionPollGroup_params params =
     {
@@ -2508,7 +2508,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetConnecti
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup(struct w_steam_iface *_this, HSteamNetPollGroup hPollGroup, winSteamNetworkingMessage_t_152 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup(struct w_steam_iface *_this, uint32_t hPollGroup, winSteamNetworkingMessage_t_152 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ReceiveMessagesOnPollGroup_params params =
     {
@@ -2550,7 +2550,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_FindRela
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedicatedServer_params params =
     {
@@ -2576,7 +2576,7 @@ uint16_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetHost
     return params._ret;
 }
 
-SteamNetworkingPOPID __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetHostedDedicatedServerPOPID_params params =
     {
@@ -2599,7 +2599,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetHost
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_CreateHostedDedicatedServerListenSocket_params params =
     {
@@ -2627,7 +2627,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetGame
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling_params params =
     {
@@ -2657,7 +2657,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2P
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetCertificateRequest(struct w_steam_iface *_this, int32_t *pcbBlob, void *pBlob, SteamNetworkingErrMsg *errMsg)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetCertificateRequest(struct w_steam_iface *_this, int32_t *pcbBlob, void *pBlob, char (*errMsg)[1024])
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_GetCertificateRequest_params params =
     {
@@ -2671,7 +2671,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_GetCertific
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate(struct w_steam_iface *_this, const void *pCertificate, int32_t cbCertificate, SteamNetworkingErrMsg *errMsg)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate(struct w_steam_iface *_this, const void *pCertificate, int32_t cbCertificate, char (*errMsg)[1024])
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets009_SetCertificate_params params =
     {
@@ -2810,7 +2810,7 @@ DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets012_Get
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort, 8)
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets012_destructor, 4)
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketIP(struct w_steam_iface *_this, const SteamNetworkingIPAddr *localAddress, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketIP_params params =
     {
@@ -2824,7 +2824,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectByIPAddress(struct w_steam_iface *_this, const SteamNetworkingIPAddr *address, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ConnectByIPAddress_params params =
     {
@@ -2838,7 +2838,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketP2P(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketP2P_params params =
     {
@@ -2852,7 +2852,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2P(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityRemote, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2P_params params =
     {
@@ -2867,7 +2867,7 @@ HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_AcceptConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_AcceptConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_AcceptConnection_params params =
     {
@@ -2879,7 +2879,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_AcceptC
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CloseConnection(struct w_steam_iface *_this, HSteamNetConnection hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CloseConnection(struct w_steam_iface *_this, uint32_t hPeer, int32_t nReason, const char *pszDebug, bool bEnableLinger)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CloseConnection_params params =
     {
@@ -2894,7 +2894,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CloseConnec
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CloseListenSocket(struct w_steam_iface *_this, HSteamListenSocket hSocket)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CloseListenSocket(struct w_steam_iface *_this, uint32_t hSocket)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CloseListenSocket_params params =
     {
@@ -2906,7 +2906,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CloseListen
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer, int64_t nUserData)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer, int64_t nUserData)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionUserData_params params =
     {
@@ -2919,7 +2919,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnecti
     return params._ret;
 }
 
-int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionUserData(struct w_steam_iface *_this, HSteamNetConnection hPeer)
+int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionUserData(struct w_steam_iface *_this, uint32_t hPeer)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionUserData_params params =
     {
@@ -2931,7 +2931,7 @@ int64_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConne
     return params._ret;
 }
 
-void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, const char *pszName)
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, const char *pszName)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionName_params params =
     {
@@ -2943,7 +2943,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnecti
     cppISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionName( &params );
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionName(struct w_steam_iface *_this, HSteamNetConnection hPeer, char *pszName, int32_t nMaxLen)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionName(struct w_steam_iface *_this, uint32_t hPeer, char *pszName, int32_t nMaxLen)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionName_params params =
     {
@@ -2957,7 +2957,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnecti
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessageToConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessageToConnection(struct w_steam_iface *_this, uint32_t hConn, const void *pData, uint32_t cbData, int32_t nSendFlags, int64_t *pOutMessageNumber)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessageToConnection_params params =
     {
@@ -2986,7 +2986,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessage
     cppISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages( &params );
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_FlushMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_FlushMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_FlushMessagesOnConnection_params params =
     {
@@ -2998,7 +2998,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_FlushMe
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_158 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection(struct w_steam_iface *_this, uint32_t hConn, winSteamNetworkingMessage_t_158 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnConnection_params params =
     {
@@ -3012,7 +3012,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveM
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionInfo(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetConnectionInfo_t *pInfo)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionInfo(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionInfo_t *pInfo)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionInfo_params params =
     {
@@ -3025,7 +3025,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnecti
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionRealTimeStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetConnectionRealTimeStatus_t *pStatus, int32_t nLanes, SteamNetConnectionRealTimeLaneStatus_t *pLanes)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionRealTimeStatus(struct w_steam_iface *_this, uint32_t hConn, SteamNetConnectionRealTimeStatus_t *pStatus, int32_t nLanes, SteamNetConnectionRealTimeLaneStatus_t *pLanes)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetConnectionRealTimeStatus_params params =
     {
@@ -3040,7 +3040,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetConn
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetDetailedConnectionStatus(struct w_steam_iface *_this, HSteamNetConnection hConn, char *pszBuf, int32_t cbBuf)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetDetailedConnectionStatus(struct w_steam_iface *_this, uint32_t hConn, char *pszBuf, int32_t cbBuf)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetDetailedConnectionStatus_params params =
     {
@@ -3054,7 +3054,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetDetai
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetListenSocketAddress(struct w_steam_iface *_this, HSteamListenSocket hSocket, SteamNetworkingIPAddr *address)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetListenSocketAddress(struct w_steam_iface *_this, uint32_t hSocket, SteamNetworkingIPAddr *address)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetListenSocketAddress_params params =
     {
@@ -3067,7 +3067,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetListenSo
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocketPair(struct w_steam_iface *_this, HSteamNetConnection *pOutConnection1, HSteamNetConnection *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocketPair(struct w_steam_iface *_this, uint32_t *pOutConnection1, uint32_t *pOutConnection2, bool bUseNetworkLoopback, const SteamNetworkingIdentity *pIdentity1, const SteamNetworkingIdentity *pIdentity2)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocketPair_params params =
     {
@@ -3083,7 +3083,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocke
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConfigureConnectionLanes(struct w_steam_iface *_this, HSteamNetConnection hConn, int32_t nNumLanes, const int32_t *pLanePriorities, const uint16_t *pLaneWeights)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConfigureConnectionLanes(struct w_steam_iface *_this, uint32_t hConn, int32_t nNumLanes, const int32_t *pLanePriorities, const uint16_t *pLaneWeights)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ConfigureConnectionLanes_params params =
     {
@@ -3133,7 +3133,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetAuth
     return params._ret;
 }
 
-HSteamNetPollGroup __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreatePollGroup(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreatePollGroup(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreatePollGroup_params params =
     {
@@ -3144,7 +3144,7 @@ HSteamNetPollGroup __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_DestroyPollGroup(struct w_steam_iface *_this, HSteamNetPollGroup hPollGroup)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_DestroyPollGroup(struct w_steam_iface *_this, uint32_t hPollGroup)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_DestroyPollGroup_params params =
     {
@@ -3156,7 +3156,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_DestroyPoll
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionPollGroup(struct w_steam_iface *_this, HSteamNetConnection hConn, HSteamNetPollGroup hPollGroup)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionPollGroup(struct w_steam_iface *_this, uint32_t hConn, uint32_t hPollGroup)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SetConnectionPollGroup_params params =
     {
@@ -3169,7 +3169,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetConnecti
     return params._ret;
 }
 
-int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup(struct w_steam_iface *_this, HSteamNetPollGroup hPollGroup, winSteamNetworkingMessage_t_158 **ppOutMessages, int32_t nMaxMessages)
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup(struct w_steam_iface *_this, uint32_t hPollGroup, winSteamNetworkingMessage_t_158 **ppOutMessages, int32_t nMaxMessages)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveMessagesOnPollGroup_params params =
     {
@@ -3211,7 +3211,7 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_FindRela
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectToHostedDedicatedServer(struct w_steam_iface *_this, const SteamNetworkingIdentity *identityTarget, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ConnectToHostedDedicatedServer_params params =
     {
@@ -3237,7 +3237,7 @@ uint16_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetHost
     return params._ret;
 }
 
-SteamNetworkingPOPID __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetHostedDedicatedServerPOPID(struct w_steam_iface *_this)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetHostedDedicatedServerPOPID_params params =
     {
@@ -3260,7 +3260,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetHost
     return params._ret;
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateHostedDedicatedServerListenSocket(struct w_steam_iface *_this, int32_t nLocalVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateHostedDedicatedServerListenSocket_params params =
     {
@@ -3288,7 +3288,7 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetGame
     return params._ret;
 }
 
-HSteamNetConnection __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignaling(struct w_steam_iface *_this, void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, const SteamNetworkingIdentity *pPeerIdentity, int32_t nRemoteVirtualPort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignaling_params params =
     {
@@ -3318,7 +3318,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2P
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest(struct w_steam_iface *_this, int32_t *pcbBlob, void *pBlob, SteamNetworkingErrMsg *errMsg)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest(struct w_steam_iface *_this, int32_t *pcbBlob, void *pBlob, char (*errMsg)[1024])
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest_params params =
     {
@@ -3332,7 +3332,7 @@ bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetCertific
     return params._ret;
 }
 
-bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetCertificate(struct w_steam_iface *_this, const void *pCertificate, int32_t cbCertificate, SteamNetworkingErrMsg *errMsg)
+bool __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SetCertificate(struct w_steam_iface *_this, const void *pCertificate, int32_t cbCertificate, char (*errMsg)[1024])
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_SetCertificate_params params =
     {
@@ -3391,7 +3391,7 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetFakeIP(s
     cppISteamNetworkingSockets_SteamNetworkingSockets012_GetFakeIP( &params );
 }
 
-HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketP2PFakeIP(struct w_steam_iface *_this, int32_t idxFakePort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketP2PFakeIP(struct w_steam_iface *_this, int32_t idxFakePort, int32_t nOptions, const SteamNetworkingConfigValue_t *pOptions)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketP2PFakeIP_params params =
     {
@@ -3405,7 +3405,7 @@ HSteamListenSocket __thiscall winISteamNetworkingSockets_SteamNetworkingSockets0
     return params._ret;
 }
 
-uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetRemoteFakeIPForConnection(struct w_steam_iface *_this, HSteamNetConnection hConn, SteamNetworkingIPAddr *pOutAddr)
+uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_GetRemoteFakeIPForConnection(struct w_steam_iface *_this, uint32_t hConn, SteamNetworkingIPAddr *pOutAddr)
 {
     struct cppISteamNetworkingSockets_SteamNetworkingSockets012_GetRemoteFakeIPForConnection_params params =
     {

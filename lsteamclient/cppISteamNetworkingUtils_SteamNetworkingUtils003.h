@@ -69,8 +69,8 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPingToDataCenter_para
 {
     void *linux_side;
     int32_t _ret;
-    SteamNetworkingPOPID popID;
-    SteamNetworkingPOPID *pViaRelayPoP;
+    uint32_t popID;
+    uint32_t *pViaRelayPoP;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPingToDataCenter( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPingToDataCenter_params *params );
 
@@ -78,7 +78,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetDirectPingToPOP_param
 {
     void *linux_side;
     int32_t _ret;
-    SteamNetworkingPOPID popID;
+    uint32_t popID;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetDirectPingToPOP( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetDirectPingToPOP_params *params );
 
@@ -93,7 +93,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPList_params
 {
     void *linux_side;
     int32_t _ret;
-    SteamNetworkingPOPID *list;
+    uint32_t *list;
     int32_t nListSz;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPList( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPList_params *params );
@@ -101,7 +101,7 @@ extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetPOPList( struct 
 struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetLocalTimestamp_params
 {
     void *linux_side;
-    SteamNetworkingMicroseconds _ret;
+    int64_t _ret;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetLocalTimestamp( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetLocalTimestamp_params *params );
 
@@ -134,7 +134,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue_params
     int32_t scopeObj;
     uint32_t *pOutDataType;
     void *pResult;
-    size_t *cbResult;
+    uint32_t *cbResult;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_GetConfigValue_params *params );
 
@@ -162,7 +162,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_To
     void *linux_side;
     const SteamNetworkingIPAddr *addr;
     char *buf;
-    size_t cbBuf;
+    uint32_t cbBuf;
     bool bWithPort;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_ToString( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr_ToString_params *params );
@@ -181,7 +181,7 @@ struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_
     void *linux_side;
     const SteamNetworkingIdentity *identity;
     char *buf;
-    size_t cbBuf;
+    uint32_t cbBuf;
 };
 extern void cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString( struct cppISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString_params *params );
 

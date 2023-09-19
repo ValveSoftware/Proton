@@ -1,7 +1,7 @@
 struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod_params
 {
     void *linux_side;
-    ClientUnifiedMessageHandle _ret;
+    uint64_t _ret;
     const char *pchServiceMethod;
     const void *pRequestBuffer;
     uint32_t unRequestBufferSize;
@@ -13,7 +13,7 @@ struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMet
 {
     void *linux_side;
     bool _ret;
-    ClientUnifiedMessageHandle hHandle;
+    uint64_t hHandle;
     uint32_t *punResponseSize;
     uint32_t *peResult;
 };
@@ -23,7 +23,7 @@ struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMet
 {
     void *linux_side;
     bool _ret;
-    ClientUnifiedMessageHandle hHandle;
+    uint64_t hHandle;
     void *pResponseBuffer;
     uint32_t unResponseBufferSize;
     bool bAutoRelease;
@@ -34,7 +34,7 @@ struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_Releas
 {
     void *linux_side;
     bool _ret;
-    ClientUnifiedMessageHandle hHandle;
+    uint64_t hHandle;
 };
 extern void cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod( struct cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_ReleaseMethod_params *params );
 

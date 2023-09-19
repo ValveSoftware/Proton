@@ -159,7 +159,7 @@ void __thiscall winISteamUtils_SteamUtils002_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils002_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils002_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils002_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils002_IsAPICallCompleted_params params =
     {
@@ -172,7 +172,7 @@ bool __thiscall winISteamUtils_SteamUtils002_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils002_GetAPICallFailureReason_params params =
     {
@@ -184,7 +184,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils002_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils002_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils002_GetAPICallResult_params params =
     {
@@ -393,7 +393,7 @@ void __thiscall winISteamUtils_SteamUtils004_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils004_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils004_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils004_IsAPICallCompleted_params params =
     {
@@ -406,7 +406,7 @@ bool __thiscall winISteamUtils_SteamUtils004_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils004_GetAPICallFailureReason_params params =
     {
@@ -418,7 +418,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils004_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils004_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils004_GetAPICallResult_params params =
     {
@@ -679,7 +679,7 @@ void __thiscall winISteamUtils_SteamUtils005_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils005_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils005_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils005_IsAPICallCompleted_params params =
     {
@@ -692,7 +692,7 @@ bool __thiscall winISteamUtils_SteamUtils005_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils005_GetAPICallFailureReason_params params =
     {
@@ -704,7 +704,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils005_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils005_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils005_GetAPICallResult_params params =
     {
@@ -783,7 +783,7 @@ bool __thiscall winISteamUtils_SteamUtils005_BOverlayNeedsPresent(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
+uint64_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     struct cppISteamUtils_SteamUtils005_CheckFileSignature_params params =
     {
@@ -1036,7 +1036,7 @@ void __thiscall winISteamUtils_SteamUtils006_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils006_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils006_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils006_IsAPICallCompleted_params params =
     {
@@ -1049,7 +1049,7 @@ bool __thiscall winISteamUtils_SteamUtils006_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils006_GetAPICallFailureReason_params params =
     {
@@ -1061,7 +1061,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils006_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils006_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils006_GetAPICallResult_params params =
     {
@@ -1140,7 +1140,7 @@ bool __thiscall winISteamUtils_SteamUtils006_BOverlayNeedsPresent(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
+uint64_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     struct cppISteamUtils_SteamUtils006_CheckFileSignature_params params =
     {
@@ -1418,7 +1418,7 @@ void __thiscall winISteamUtils_SteamUtils007_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils007_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils007_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils007_IsAPICallCompleted_params params =
     {
@@ -1431,7 +1431,7 @@ bool __thiscall winISteamUtils_SteamUtils007_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils007_GetAPICallFailureReason_params params =
     {
@@ -1443,7 +1443,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils007_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils007_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils007_GetAPICallResult_params params =
     {
@@ -1522,7 +1522,7 @@ bool __thiscall winISteamUtils_SteamUtils007_BOverlayNeedsPresent(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
+uint64_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     struct cppISteamUtils_SteamUtils007_CheckFileSignature_params params =
     {
@@ -1816,7 +1816,7 @@ void __thiscall winISteamUtils_SteamUtils008_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils008_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils008_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils008_IsAPICallCompleted_params params =
     {
@@ -1829,7 +1829,7 @@ bool __thiscall winISteamUtils_SteamUtils008_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils008_GetAPICallFailureReason_params params =
     {
@@ -1841,7 +1841,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils008_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils008_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils008_GetAPICallResult_params params =
     {
@@ -1920,7 +1920,7 @@ bool __thiscall winISteamUtils_SteamUtils008_BOverlayNeedsPresent(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
+uint64_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     struct cppISteamUtils_SteamUtils008_CheckFileSignature_params params =
     {
@@ -2243,7 +2243,7 @@ void __thiscall winISteamUtils_SteamUtils009_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils009_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils009_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils009_IsAPICallCompleted_params params =
     {
@@ -2256,7 +2256,7 @@ bool __thiscall winISteamUtils_SteamUtils009_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils009_GetAPICallFailureReason_params params =
     {
@@ -2268,7 +2268,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils009_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils009_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils009_GetAPICallResult_params params =
     {
@@ -2347,7 +2347,7 @@ bool __thiscall winISteamUtils_SteamUtils009_BOverlayNeedsPresent(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
+uint64_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     struct cppISteamUtils_SteamUtils009_CheckFileSignature_params params =
     {
@@ -2751,7 +2751,7 @@ void __thiscall winISteamUtils_SteamUtils010_SetOverlayNotificationPosition(stru
     cppISteamUtils_SteamUtils010_SetOverlayNotificationPosition( &params );
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_IsAPICallCompleted(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils010_IsAPICallCompleted(struct w_steam_iface *_this, uint64_t hSteamAPICall, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils010_IsAPICallCompleted_params params =
     {
@@ -2764,7 +2764,7 @@ bool __thiscall winISteamUtils_SteamUtils010_IsAPICallCompleted(struct w_steam_i
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureReason(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall)
+uint32_t __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureReason(struct w_steam_iface *_this, uint64_t hSteamAPICall)
 {
     struct cppISteamUtils_SteamUtils010_GetAPICallFailureReason_params params =
     {
@@ -2776,7 +2776,7 @@ uint32_t __thiscall winISteamUtils_SteamUtils010_GetAPICallFailureReason(struct 
     return params._ret;
 }
 
-bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(struct w_steam_iface *_this, SteamAPICall_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
+bool __thiscall winISteamUtils_SteamUtils010_GetAPICallResult(struct w_steam_iface *_this, uint64_t hSteamAPICall, void *pCallback, int32_t cubCallback, int32_t iCallbackExpected, bool *pbFailed)
 {
     struct cppISteamUtils_SteamUtils010_GetAPICallResult_params params =
     {
@@ -2855,7 +2855,7 @@ bool __thiscall winISteamUtils_SteamUtils010_BOverlayNeedsPresent(struct w_steam
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
+uint64_t __thiscall winISteamUtils_SteamUtils010_CheckFileSignature(struct w_steam_iface *_this, const char *szFileName)
 {
     struct cppISteamUtils_SteamUtils010_CheckFileSignature_params params =
     {

@@ -1,7 +1,7 @@
 struct cppISteamUser_SteamUser005_GetHSteamUser_params
 {
     void *linux_side;
-    HSteamUser _ret;
+    int32_t _ret;
 };
 extern void cppISteamUser_SteamUser005_GetHSteamUser( struct cppISteamUser_SteamUser005_GetHSteamUser_params *params );
 
@@ -181,7 +181,7 @@ struct cppISteamUser_SteamUser005_SendGuestPassByEmail_params
     void *linux_side;
     bool _ret;
     const char *pchEmailAccount;
-    GID_t gidGuestPassID;
+    uint64_t gidGuestPassID;
     bool bResending;
 };
 extern void cppISteamUser_SteamUser005_SendGuestPassByEmail( struct cppISteamUser_SteamUser005_SendGuestPassByEmail_params *params );
@@ -191,7 +191,7 @@ struct cppISteamUser_SteamUser005_SendGuestPassByAccountID_params
     void *linux_side;
     bool _ret;
     uint32_t uAccountID;
-    GID_t gidGuestPassID;
+    uint64_t gidGuestPassID;
     bool bResending;
 };
 extern void cppISteamUser_SteamUser005_SendGuestPassByAccountID( struct cppISteamUser_SteamUser005_SendGuestPassByAccountID_params *params );
@@ -229,7 +229,7 @@ extern void cppISteamUser_SteamUser005_GetGuestPassToRedeemCount( struct cppISte
 struct cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime_params
 {
     void *linux_side;
-    RTime32 _ret;
+    uint32_t _ret;
 };
 extern void cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime( struct cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime_params *params );
 
@@ -238,12 +238,12 @@ struct cppISteamUser_SteamUser005_GetGuestPassToGiveInfo_params
     void *linux_side;
     bool _ret;
     uint32_t nPassIndex;
-    GID_t *pgidGuestPassID;
-    PackageId_t *pnPackageID;
-    RTime32 *pRTime32Created;
-    RTime32 *pRTime32Expiration;
-    RTime32 *pRTime32Sent;
-    RTime32 *pRTime32Redeemed;
+    uint64_t *pgidGuestPassID;
+    uint32_t *pnPackageID;
+    uint32_t *pRTime32Created;
+    uint32_t *pRTime32Expiration;
+    uint32_t *pRTime32Sent;
+    uint32_t *pRTime32Redeemed;
     char *pchRecipientAddress;
     int32_t cRecipientAddressSize;
 };
@@ -254,12 +254,12 @@ struct cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo_params
     void *linux_side;
     bool _ret;
     uint32_t nPassIndex;
-    GID_t *pgidGuestPassID;
-    PackageId_t *pnPackageID;
-    RTime32 *pRTime32Created;
-    RTime32 *pRTime32Expiration;
-    RTime32 *pRTime32Sent;
-    RTime32 *pRTime32Redeemed;
+    uint64_t *pgidGuestPassID;
+    uint32_t *pnPackageID;
+    uint32_t *pRTime32Created;
+    uint32_t *pRTime32Expiration;
+    uint32_t *pRTime32Sent;
+    uint32_t *pRTime32Redeemed;
 };
 extern void cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo( struct cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo_params *params );
 
@@ -324,7 +324,7 @@ extern void cppISteamUser_SteamUser005_SetPassword( struct cppISteamUser_SteamUs
 struct cppISteamUser_SteamUser005_SetAccountCreationTime_params
 {
     void *linux_side;
-    RTime32 rt;
+    uint32_t rt;
 };
 extern void cppISteamUser_SteamUser005_SetAccountCreationTime( struct cppISteamUser_SteamUser005_SetAccountCreationTime_params *params );
 

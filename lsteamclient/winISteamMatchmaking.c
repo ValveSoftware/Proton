@@ -421,7 +421,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking002_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame_params params =
     {
@@ -439,7 +439,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame_params params =
     {
@@ -456,7 +456,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking002_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking002_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking002_RemoveFavoriteGame_params params =
     {
@@ -760,7 +760,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame_params params =
     {
@@ -778,7 +778,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame_params params =
     {
@@ -795,7 +795,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame_params params =
     {
@@ -1204,7 +1204,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking004_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame_params params =
     {
@@ -1222,7 +1222,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame_params params =
     {
@@ -1239,7 +1239,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking004_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking004_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking004_RemoveFavoriteGame_params params =
     {
@@ -1639,7 +1639,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking005_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame_params params =
     {
@@ -1657,7 +1657,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame_params params =
     {
@@ -1674,7 +1674,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking005_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking005_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking005_RemoveFavoriteGame_params params =
     {
@@ -2125,7 +2125,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking006_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame_params params =
     {
@@ -2143,7 +2143,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame_params params =
     {
@@ -2160,7 +2160,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame_params params =
     {
@@ -2176,7 +2176,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking006_RequestLobbyList(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking006_RequestLobbyList(struct w_steam_iface *_this)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_RequestLobbyList_params params =
     {
@@ -2237,7 +2237,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking006_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking006_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking006_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_CreateLobby_params params =
     {
@@ -2249,7 +2249,7 @@ SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking006_CreateLobby(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking006_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking006_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
 {
     struct cppISteamMatchmaking_SteamMatchMaking006_JoinLobby_params params =
     {
@@ -2584,7 +2584,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking007_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame_params params =
     {
@@ -2602,7 +2602,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame_params params =
     {
@@ -2619,7 +2619,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame_params params =
     {
@@ -2635,7 +2635,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking007_RequestLobbyList(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking007_RequestLobbyList(struct w_steam_iface *_this)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_RequestLobbyList_params params =
     {
@@ -2708,7 +2708,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking007_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking007_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int32_t cMaxMembers)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking007_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int32_t cMaxMembers)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_CreateLobby_params params =
     {
@@ -2721,7 +2721,7 @@ SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking007_CreateLobby(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking007_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking007_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
 {
     struct cppISteamMatchmaking_SteamMatchMaking007_JoinLobby_params params =
     {
@@ -3132,7 +3132,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking008_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame_params params =
     {
@@ -3150,7 +3150,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame_params params =
     {
@@ -3167,7 +3167,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame_params params =
     {
@@ -3183,7 +3183,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking008_RequestLobbyList(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking008_RequestLobbyList(struct w_steam_iface *_this)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_RequestLobbyList_params params =
     {
@@ -3278,7 +3278,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking008_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking008_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int32_t cMaxMembers)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking008_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int32_t cMaxMembers)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_CreateLobby_params params =
     {
@@ -3291,7 +3291,7 @@ SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking008_CreateLobby(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking008_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking008_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
 {
     struct cppISteamMatchmaking_SteamMatchMaking008_JoinLobby_params params =
     {
@@ -3706,7 +3706,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking009_GetFavoriteGameCount
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, AppId_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame(struct w_steam_iface *_this, int32_t iGame, uint32_t *pnAppID, uint32_t *pnIP, uint16_t *pnConnPort, uint16_t *pnQueryPort, uint32_t *punFlags, uint32_t *pRTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame_params params =
     {
@@ -3724,7 +3724,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame(struct 
     return params._ret;
 }
 
-int32_t __thiscall winISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
+int32_t __thiscall winISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags, uint32_t rTime32LastPlayedOnServer)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame_params params =
     {
@@ -3741,7 +3741,7 @@ int32_t __thiscall winISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame(stru
     return params._ret;
 }
 
-bool __thiscall winISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame(struct w_steam_iface *_this, AppId_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame(struct w_steam_iface *_this, uint32_t nAppID, uint32_t nIP, uint16_t nConnPort, uint16_t nQueryPort, uint32_t unFlags)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame_params params =
     {
@@ -3757,7 +3757,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame(stru
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking009_RequestLobbyList(struct w_steam_iface *_this)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking009_RequestLobbyList(struct w_steam_iface *_this)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_RequestLobbyList_params params =
     {
@@ -3863,7 +3863,7 @@ CSteamID * __thiscall winISteamMatchmaking_SteamMatchMaking009_GetLobbyByIndex(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking009_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int32_t cMaxMembers)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking009_CreateLobby(struct w_steam_iface *_this, uint32_t eLobbyType, int32_t cMaxMembers)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_CreateLobby_params params =
     {
@@ -3876,7 +3876,7 @@ SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking009_CreateLobby(s
     return params._ret;
 }
 
-SteamAPICall_t __thiscall winISteamMatchmaking_SteamMatchMaking009_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
+uint64_t __thiscall winISteamMatchmaking_SteamMatchMaking009_JoinLobby(struct w_steam_iface *_this, CSteamID steamIDLobby)
 {
     struct cppISteamMatchmaking_SteamMatchMaking009_JoinLobby_params params =
     {

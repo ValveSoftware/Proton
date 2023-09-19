@@ -9,7 +9,7 @@ struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps_param
 {
     void *linux_side;
     uint32_t _ret;
-    AppId_t *pvecAppID;
+    uint32_t *pvecAppID;
     uint32_t unMaxAppIDs;
 };
 extern void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetInstalledApps_params *params );
@@ -18,7 +18,7 @@ struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppName_params
 {
     void *linux_side;
     int32_t _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
     char *pchName;
     int32_t cchNameMax;
 };
@@ -28,7 +28,7 @@ struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir_param
 {
     void *linux_side;
     int32_t _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
     char *pchDirectory;
     int32_t cchNameMax;
 };
@@ -38,7 +38,7 @@ struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId_params
 {
     void *linux_side;
     int32_t _ret;
-    AppId_t nAppID;
+    uint32_t nAppID;
 };
 extern void cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId( struct cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId_params *params );
 

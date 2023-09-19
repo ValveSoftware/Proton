@@ -44,7 +44,7 @@ bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSIO
     return params._ret;
 }
 
-bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(struct w_steam_iface *_this, AppId_t nAppID)
+bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppBlocked_params params =
     {
@@ -56,7 +56,7 @@ bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSIO
     return params._ret;
 }
 
-bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(struct w_steam_iface *_this, AppId_t nAppID)
+bool __thiscall winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList(struct w_steam_iface *_this, uint32_t nAppID)
 {
     struct cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsAppInBlockList_params params =
     {
